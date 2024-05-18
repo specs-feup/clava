@@ -154,11 +154,14 @@ public class CxxActions {
     public static ClavaNode replace(ClavaNode target, ClavaNode newNode, CxxWeaver weaver) {
         weaver.clearUserField(target);
 
-        // Copy location from target to newNode if locations are invalid
+        // Set origin point from target to newNode if locations are invalid and no origin point is set
+        newNode.setOrigin(target);
+
+/*
         newNode.getDescendantsAndSelfStream()
                 .filter(node -> !node.get(ClavaNode.LOCATION).isValid())
-                .forEach(node -> node.set(ClavaNode.LOCATION, target.get(ClavaNode.LOCATION)));
-
+                .forEach(node -> node.set(ClavaNode.INSERTION_POINT, Optional.of(target)));
+*/
         return NodeInsertUtils.replace(target, newNode);
     }
 
@@ -192,6 +195,12 @@ public class CxxActions {
 
     public static AJoinPoint insert(AJoinPoint baseJp, AJoinPoint newJp, Insert position,
             BiConsumer<ClavaNode, ClavaNode> insertFunction) {
+
+        // Set origin point from target to newNode if locations are invalid and no origin point is set
+        var newNode = newJp.getNode();
+        var target = baseJp.getNode();
+        newNode.setOrigin(target);
+
 
         // Special case: if this node is a statement in a loop header, insert using a special function.
         if (baseJp.getIsInsideLoopHeaderImpl() && (position != Insert.REPLACE && position != Insert.AROUND)
@@ -314,6 +323,14 @@ public class CxxActions {
     // return stmt.get();
     // }
 
+    /**
+     *
+     * @param baseJp
+     * @param newJp
+     * @param position
+     * @param weaver
+     * @return
+     */
     public static AJoinPoint insertJpAsStatement(AJoinPoint baseJp, AJoinPoint newJp, String position,
             CxxWeaver weaver) {
 

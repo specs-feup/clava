@@ -1002,6 +1002,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
         CURRENTREGION("currentRegion"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

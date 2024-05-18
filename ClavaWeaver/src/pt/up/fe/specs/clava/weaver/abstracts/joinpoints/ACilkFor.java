@@ -887,6 +887,15 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
+     * Get value on attribute originNode
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aLoop.getOriginNodeImpl();
+    }
+
+    /**
      * Get value on attribute column
      * @return the attribute's value
      */
@@ -1608,6 +1617,7 @@ public abstract class ACilkFor extends ALoop {
         GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
         CURRENTREGION("currentRegion"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

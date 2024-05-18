@@ -173,6 +173,10 @@ export class Joinpoint extends LaraJoinPoint {
      */
     get numChildren() { return wrapJoinPoint(this._javaObject.getNumChildren()); }
     /**
+     * If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin
+     */
+    get originNode() { return wrapJoinPoint(this._javaObject.getOriginNode()); }
+    /**
      * Returns the parent node in the AST, or undefined if it is the root node
      */
     get parent() { return wrapJoinPoint(this._javaObject.getParent()); }

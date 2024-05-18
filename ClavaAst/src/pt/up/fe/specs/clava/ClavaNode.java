@@ -118,6 +118,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     public final static DataKey<String> PREVIOUS_ID = KeyFactory.string("previousId");
 
+    /**
+     * If this node was not originally from the AST, contains the node that was used as an insertion point.
+     */
+    public final static DataKey<ClavaNode> ORIGIN = KeyFactory.object("origin", ClavaNode.class);
+
     /// DATAKEYS END
 
     public static String toTree(Collection<? extends ClavaNode> nodes) {
@@ -339,6 +344,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         // the method version without arguments
         boolean overridesCopyPrivate = isCopyPrivateOverriden();
         ClavaNode newToken = overridesCopyPrivate ? copyPrivate() : copyPrivate(keepId);
+
+        // Set origin
+        newToken.set(ORIGIN, this);
 
         // Check new token does not have children
         if (newToken.getNumChildren() != 0) {
@@ -1509,5 +1517,29 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
         return Optional.of(siblings.get(leftIndex));
     }
+
+    /**
+     * Sets the key ORIGIN on this node and its descendents.
+     * @param target
+     */
+    public void setOrigin(ClavaNode target) {
+
+        // If target node does not have an origin, it becomes the origin
+        // Otherwise, use the origin of the target
+
+        var origin = target.hasValue(ORIGIN) ? target.get(ORIGIN) : target;
+
+        getDescendantsAndSelfStream()
+                .forEach(node -> node.set(ClavaNode.ORIGIN, origin));
+    }
+
+    /**
+     *
+     * @return the node set on the key ORIGIN, or itself if no origin is set
+     */
+    public ClavaNode getOrigin() {
+        return hasValue(ClavaNode.ORIGIN) ? get(ClavaNode.ORIGIN) : this;
+    }
+
 
 }

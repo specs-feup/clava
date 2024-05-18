@@ -543,6 +543,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -1513,6 +1522,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -2636,6 +2654,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -3773,6 +3800,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -4916,6 +4952,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -5987,6 +6032,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -7030,6 +7084,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -8108,6 +8171,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -9403,6 +9475,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -10384,6 +10465,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -11630,6 +11720,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -12865,6 +12964,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -14016,6 +14124,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -15118,6 +15235,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -16269,6 +16395,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -17673,6 +17808,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -18766,6 +18910,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -19975,6 +20128,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -21035,6 +21197,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -21994,6 +22165,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -22978,6 +23158,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -24206,6 +24395,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -25323,6 +25521,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -26299,6 +26506,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -27376,6 +27592,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -28412,6 +28637,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -29563,6 +29797,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -30613,6 +30856,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -31580,6 +31832,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -32661,6 +32922,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -33851,6 +34121,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -34942,6 +35221,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -35960,6 +36248,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -37037,6 +37334,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -38036,6 +38342,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -39175,6 +39490,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -40466,6 +40790,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -41672,6 +42005,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -43127,6 +43469,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -44233,6 +44584,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -45321,6 +45681,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -46465,6 +46834,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -47459,6 +47837,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -48466,6 +48853,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -49481,6 +49877,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -50479,6 +50884,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -51500,6 +51914,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -52587,6 +53010,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -53738,6 +54170,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -55016,6 +55457,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -56088,6 +56538,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -57263,6 +57722,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -58606,6 +59074,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -59934,6 +60411,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -60970,6 +61456,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -62159,6 +62654,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -63474,6 +63978,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -64535,6 +65048,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -65654,6 +66176,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -66781,6 +67312,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -68024,6 +68564,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -69126,6 +69675,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -70243,6 +70801,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -71564,6 +72131,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -72698,6 +73274,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -73734,6 +74319,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -74852,6 +75446,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -76112,6 +76715,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -77227,6 +77839,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -78291,6 +78912,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -79373,6 +80003,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -80535,6 +81174,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -81779,6 +82427,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -82920,6 +83577,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -83934,6 +84600,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -85057,6 +85732,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -86149,6 +86833,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -87185,6 +87878,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -88364,6 +89066,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -89496,6 +90207,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -90549,6 +91269,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -91673,6 +92402,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -92828,6 +93566,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{
@@ -94074,6 +94821,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -95256,6 +96012,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
 						"children": [
 									{
@@ -96257,6 +97022,15 @@
 									{
 										"type": "int",
 										"name": "numChildren"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "originNode"
 									}]
 					},
 					{

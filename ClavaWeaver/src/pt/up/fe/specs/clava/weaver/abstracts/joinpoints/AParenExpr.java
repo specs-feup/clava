@@ -554,6 +554,15 @@ public abstract class AParenExpr extends AExpression {
     }
 
     /**
+     * Get value on attribute originNode
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aExpression.getOriginNodeImpl();
+    }
+
+    /**
      * Get value on attribute column
      * @return the attribute's value
      */
@@ -1066,6 +1075,7 @@ public abstract class AParenExpr extends AExpression {
         GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
         CURRENTREGION("currentRegion"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

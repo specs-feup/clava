@@ -542,6 +542,15 @@ public abstract class AField extends ADeclarator {
     }
 
     /**
+     * Get value on attribute originNode
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aDeclarator.getOriginNodeImpl();
+    }
+
+    /**
      * Get value on attribute column
      * @return the attribute's value
      */
@@ -1070,6 +1079,7 @@ public abstract class AField extends ADeclarator {
         GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
         CURRENTREGION("currentRegion"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

@@ -55,7 +55,6 @@ import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.stringsplitter.StringSplitter;
-import pt.up.fe.specs.util.stringsplitter.StringSplitterRules;
 
 /**
  * Abstract class which can be edited by the developer. This class will not be overwritten.
@@ -1237,6 +1236,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     // return CxxSelects.select(joinPointClass, getNode().getChildren(), true, this, filter);
     // }
 
+    /**
+     *
+     */
     @Override
     public void removeChildrenImpl() {
         for (AJoinPoint child : getChildrenArrayImpl()) {
@@ -1417,5 +1419,10 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public Boolean getIsInSystemHeaderImpl() {
         return getNode().get(ClavaNode.IS_IN_SYSTEM_HEADER);
+    }
+
+    @Override
+    public AJoinPoint getOriginNodeImpl() {
+        return CxxJoinpoints.create(getNode().getOrigin());
     }
 }

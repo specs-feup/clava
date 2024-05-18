@@ -557,7 +557,7 @@ public class ClavaNodes {
         switch (position) {
         case BEFORE:
             Stmt beforeNode = snippetParser.parseStmt(code);
-
+            beforeNode.setOrigin(target);
             realTarget = getValidStatement(target, position);
             if (realTarget == null) {
                 return null;
@@ -571,6 +571,7 @@ public class ClavaNodes {
         case AFTER:
 
             Stmt afterNode = snippetParser.parseStmt(code);
+            afterNode.setOrigin(target);
             realTarget = getValidStatement(target, position);
             if (realTarget == null) {
                 return null;
@@ -581,6 +582,7 @@ public class ClavaNodes {
         case REPLACE:
             // Has to replace with a node of the same "kind" (e.g., Expr, Stmt...)
             ClavaNode replaceNode = ClavaNodes.toLiteral(code, target.getFactory().nullType(), target);
+            replaceNode.setOrigin(target);
             NodeInsertUtils.replace(target, replaceNode);
             return replaceNode;
         default:
