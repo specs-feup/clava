@@ -42,14 +42,14 @@ export default class ClavaDataStore extends WeaverDataStore {
   }
 
   /**
-   * @returns {J#java.util.List<String>} A list with the current extra system includes.
+   * @returns A list with the current extra system includes.
    */
   getSystemIncludes(): string[] {
     return this.get("library includes").getFiles();
   }
 
   /**
-   * @return {J#java.util.List<String>} A list with the current user includes.
+   * @returns A list with the current user includes.
    */
   getUserIncludes(): string[] {
     return this.get("header includes").getFiles();
