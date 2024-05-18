@@ -1420,15 +1420,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint getOriginNodeImpl() {
-        var currentNode = getNode();
-
-        // TODO: need to detect cycles?
-
-        // Travel insertion points until it finds an origin
-        while(currentNode.hasValue(ClavaNode.ORIGIN)) {
-            currentNode = currentNode.get(ClavaNode.ORIGIN);
-        }
-
-        return CxxJoinpoints.create(currentNode);
+        return CxxJoinpoints.create(getNode().getOrigin());
     }
 }

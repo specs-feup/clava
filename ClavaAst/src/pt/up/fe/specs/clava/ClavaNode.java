@@ -1524,24 +1524,22 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      */
     public void setOrigin(ClavaNode target) {
 
-        // No need to find previous app, when copying, automatically sets the origin
-/*
-        var previousApp = get(CONTEXT).getApp(1).orElse(null);
+        // If target node does not have an origin, it becomes the origin
+        // Otherwise, use the origin of the target
 
-        // Not setting insertion point
-        if(previousApp == null) {
-            return;
-        }
+        var origin = target.hasValue(ORIGIN) ? target.get(ORIGIN) : target;
 
-        // Find target node in previous app is target has valid location
-        var newTarget = target;
-        if(target.getLocation().isValid()) {
-            newTarget = previousApp.find(target).orElse(null);
-
-        }
-*/
         getDescendantsAndSelfStream()
-                //.filter(node -> !node.get(ClavaNode.LOCATION).isValid())
-                .forEach(node -> node.set(ClavaNode.ORIGIN, target));
+                .forEach(node -> node.set(ClavaNode.ORIGIN, origin));
     }
+
+    /**
+     *
+     * @return the node set on the key ORIGIN, or itself if no origin is set
+     */
+    public ClavaNode getOrigin() {
+        return hasValue(ClavaNode.ORIGIN) ? get(ClavaNode.ORIGIN) : this;
+    }
+
+
 }
