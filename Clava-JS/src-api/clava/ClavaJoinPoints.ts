@@ -221,7 +221,7 @@ export default class ClavaJoinPoints {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.callFromFunction(
         unwrapJoinPoint($function),
-        unwrapJoinPoint(flattenArgsArray(callArgs))
+        ...unwrapJoinPoint(flattenArgsArray(callArgs))
       )
     );
   }
