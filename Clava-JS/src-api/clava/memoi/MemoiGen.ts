@@ -130,8 +130,8 @@ class MemoiGen {
   setProfFromDir(dir: string) {
     this._isProf = true;
     this._isEmpty = false;
-    this._profReportFiles = Io.getFiles(dir, "*.json", false).map(
-      (f) => f.getAbsolutePath()
+    this._profReportFiles = Io.getFiles(dir, "*.json", false).map((f) =>
+      f.getAbsolutePath()
     );
   }
 
@@ -234,7 +234,7 @@ class MemoiGen {
         report !== undefined ? report.callSites[0] === l : true, // if there is a report, we also filter by site
     };
 
-    for (const $jp of Query.search("call", filter)) {
+    for (const $jp of Query.search(Call, filter)) {
       const $call = $jp as Call;
 
       const wrapperName = IdGenerator.next("mw_" + cSig);
@@ -255,7 +255,7 @@ class MemoiGen {
     const wrapperName = "mw_" + cSig;
     s.add(wrapperName);
 
-    for (const $jp of Query.search("call", {
+    for (const $jp of Query.search(Call, {
       signature: (s: Call["signature"]) =>
         this._target.sig === MemoiUtils.normalizeSig(s),
     })) {
@@ -274,7 +274,7 @@ class MemoiGen {
     const printName = "print_perfect_inst";
 
     // wrap every call to the target
-    for (const $jp of Query.search("call", {
+    for (const $jp of Query.search(Call, {
       signature: (s: string) => this._target.sig === MemoiUtils.normalizeSig(s),
     })) {
       const $call = $jp as Call;
@@ -282,9 +282,9 @@ class MemoiGen {
     }
 
     // change the wrapper by timing around the original call
-    for (const chain of Query.search("file")
-      .search("function", { name: wrapperName })
-      .search("call")
+    for (const chain of Query.search(FileJp)
+      .search(FunctionJp, { name: wrapperName })
+      .search(Call)
       .chain()) {
       const $file = chain["file"] as FileJp;
       const $function = chain["function"] as FunctionJp;
@@ -299,15 +299,15 @@ class MemoiGen {
     }
 
     // if print_perfect_inst function is found, some other target has dealt with the main code and we're done
-    for (const chain of Query.search("file", { hasMain: true })
-      .search("function", { name: printName })
+    for (const chain of Query.search(FileJp, { hasMain: true })
+      .search(FunctionJp, { name: printName })
       .chain()) {
       return;
     }
 
     // change the main function to print the time to a file
-    for (const chain of Query.search("file")
-      .search("function", { name: "main" })
+    for (const chain of Query.search(FileJp)
+      .search(FunctionJp, { name: "main" })
       .chain()) {
       const $file = chain["file"] as FileJp;
       const $main = chain["function"] as FunctionJp;
@@ -349,9 +349,9 @@ class MemoiGen {
     wrapperName: string,
     report?: ClavaJavaClasses.MemoiReport
   ) {
-    for (const chain of Query.search("file")
-      .search("function", { name: wrapperName })
-      .search("call")
+    for (const chain of Query.search(FileJp)
+      .search(FunctionJp, { name: wrapperName })
+      .search(Call)
       .chain()) {
       const $file = chain["file"] as FileJp;
       const $function = chain["function"] as FunctionJp;
@@ -462,8 +462,8 @@ class MemoiGen {
     updatesName: string | undefined,
     wrapperName: string
   ) {
-    const chain = Query.search("file")
-      .search("function", { name: "main" })
+    const chain = Query.search(FileJp)
+      .search(FunctionJp, { name: "main" })
       .chain();
     const firstAndOnly = chain[0];
 

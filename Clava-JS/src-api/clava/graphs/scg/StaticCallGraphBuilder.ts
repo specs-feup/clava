@@ -127,11 +127,11 @@ export default class StaticCallGraphBuilder {
         // Get all function/call pairs for functions that are not yet in the seen functions
         const functionCall = Query.searchFromInclusive(
           $jpToSearch,
-          "function",
+          FunctionJp,
           (self: LaraJoinPoint) =>
             !seenFunctions.has((self as FunctionJp).signature)
         )
-          .search("call")
+          .search(Call)
           .chain();
 
         for (const pair of functionCall) {

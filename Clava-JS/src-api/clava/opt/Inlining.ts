@@ -19,7 +19,7 @@ export default function Inlining(
 
   const inliner = new Inliner(options.inliner);
 
-  for (const $jp of Query.search("function", {
+  for (const $jp of Query.search(FunctionJp, {
     name: (name: string) => name !== "main",
     isImplementation: true, // Only inline if function has a body
   })) {
@@ -27,7 +27,7 @@ export default function Inlining(
     PrepareForInlining($function);
   }
 
-  for (const $jp of Query.search("function", "main")) {
+  for (const $jp of Query.search(FunctionJp, "main")) {
     const $function = $jp as FunctionJp;
     inliner.inlineFunctionTree($function);
   }

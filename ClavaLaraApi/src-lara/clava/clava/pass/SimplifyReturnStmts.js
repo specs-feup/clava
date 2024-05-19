@@ -1,6 +1,7 @@
 import Pass from "lara-js/api/lara/pass/Pass.js";
 import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
 import Query from "lara-js/api/weaver/Query.js";
+import { ReturnStmt } from "../../Joinpoints.js";
 // TODO: Refactor to use the SimplePass pattern
 export default class SimplifyReturnStmts extends Pass {
     _name = "SimplifyReturnStmts";
@@ -11,7 +12,7 @@ export default class SimplifyReturnStmts extends Pass {
     }
     _apply_impl($jp) {
         let appliedPass = false;
-        for (const jp of Query.searchFromInclusive($jp, "returnStmt")) {
+        for (const jp of Query.searchFromInclusive($jp, ReturnStmt)) {
             const $returnStmt = jp;
             const transformed = this.transform($returnStmt);
             // If any change, mark as applied

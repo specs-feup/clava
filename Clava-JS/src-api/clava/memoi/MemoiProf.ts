@@ -73,7 +73,7 @@ export default class MemoiProf {
     const monitorType = ClavaJoinPoints.typeLiteral("MemoiProf*");
 
     // make the wrapper
-    for (const $jp of Query.search("call", {
+    for (const $jp of Query.search(Call, {
       signature: (s: string) => this.target.sig === MemoiUtils.normalizeSig(s),
     })) {
       const $call = $jp as Call;
@@ -98,7 +98,7 @@ export default class MemoiProf {
     const monitorNameBase = "mp_" + cSig;
     const monitorType = ClavaJoinPoints.typeLiteral("MemoiProf*");
 
-    for (const $jp of Query.search("call", {
+    for (const $jp of Query.search(Call, {
       signature: (s: string) => this.target.sig === MemoiUtils.normalizeSig(s),
     })) {
       const $call = $jp as Call;
@@ -127,9 +127,9 @@ export default class MemoiProf {
     const numInputs = this.target.numInputs;
     const numOutputs = this.target.numOutputs;
 
-    const query = Query.search("file")
-      .search("function", { name: wrapperName })
-      .search("call")
+    const query = Query.search(FileJp)
+      .search(FunctionJp, { name: wrapperName })
+      .search(Call)
       .chain();
 
     for (const row of query) {
@@ -181,9 +181,9 @@ export default class MemoiProf {
       .join(",")
       .toUpperCase();
 
-    const query = Query.search("file")
-      .search("function", { name: "main" })
-      .children("scope")
+    const query = Query.search(FileJp)
+      .search(FunctionJp, { name: "main" })
+      .children(Scope)
       .chain()[0];
 
     if (query !== undefined) {

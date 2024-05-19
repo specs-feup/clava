@@ -60,7 +60,7 @@ export default class ClavaBenchmarkInstance extends BenchmarkInstance {
    * Looks for #pragma kernel, returns target of that pragma
    */
   getKernel() {
-    const $pragma = Query.search("pragma", "kernel").first() as
+    const $pragma = Query.search(Pragma, "kernel").first() as
       | Pragma
       | undefined;
 

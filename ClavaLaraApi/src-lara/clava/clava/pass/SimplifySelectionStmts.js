@@ -1,6 +1,7 @@
 import Pass from "lara-js/api/lara/pass/Pass.js";
 import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
 import Query from "lara-js/api/weaver/Query.js";
+import { If } from "../../Joinpoints.js";
 // TODO: Refactor to use the SimplePass pattern
 export default class SimplifySelectionStmts extends Pass {
     _name = "SimplifySelectionStmts";
@@ -11,7 +12,7 @@ export default class SimplifySelectionStmts extends Pass {
     }
     _apply_impl($jp) {
         let appliedPass = false;
-        for (const jp of Query.searchFromInclusive($jp, "if")) {
+        for (const jp of Query.searchFromInclusive($jp, If)) {
             const $if = jp;
             appliedPass = true;
             this.transform($if);

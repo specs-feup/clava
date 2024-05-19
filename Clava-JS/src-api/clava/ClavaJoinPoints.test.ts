@@ -14,11 +14,11 @@ describe("ClavaJoinPoints", () => {
   registerSourceCode(code);
 
   it("Creates a new Scope from ExpressionStatements", () => {
-    const exprStmts = Query.search("exprStmt").get() as ExprStmt[];
+    const exprStmts = Query.search(ExprStmt).get() as ExprStmt[];
 
     expect(exprStmts.length).toBe(2);
-    
-    const scope =  ClavaJoinPoints.scope(...exprStmts);
+
+    const scope = ClavaJoinPoints.scope(...exprStmts);
 
     expect(scope).toBeDefined();
     expect(scope.children.length).toBe(2);

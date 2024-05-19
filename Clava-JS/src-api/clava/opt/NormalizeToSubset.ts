@@ -40,10 +40,11 @@ export default function NormalizeToSubset(
   varDecls.apply($startJp);
   localStaticToGlobal.apply($startJp);
 
-  for (const $jp of Query.searchFrom($startJp, "binaryOp", {
-    self: (self: LaraJoinPoint) =>
-      self instanceof BinaryOp && self.isAssignment && self.operator !== "=",
-  })) {
+  for (const $jp of Query.searchFrom(
+    $startJp,
+    BinaryOp,
+    (jp) => jp.isAssignment && jp.operator !== "="
+  )) {
     const $assign = $jp as BinaryOp;
     SimplifyAssignment($assign);
   }

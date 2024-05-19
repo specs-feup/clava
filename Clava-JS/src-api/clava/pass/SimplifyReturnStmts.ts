@@ -16,7 +16,7 @@ export default class SimplifyReturnStmts extends Pass {
 
   protected _apply_impl($jp: Joinpoint): PassResult {
     let appliedPass = false;
-    for (const jp of Query.searchFromInclusive($jp, "returnStmt")) {
+    for (const jp of Query.searchFromInclusive($jp, ReturnStmt)) {
       const $returnStmt = jp as ReturnStmt;
 
       const transformed = this.transform($returnStmt);

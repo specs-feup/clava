@@ -1,6 +1,6 @@
 import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { BinaryOp, BuiltinType, FunctionJp, Loop, Param, } from "../../Joinpoints.js";
+import { BinaryOp, BuiltinType, Call, FunctionJp, Loop, Op, Param, Varref, } from "../../Joinpoints.js";
 import OpsBlock from "./OpsBlock.js";
 export default class StaticOpsCounter {
     // Whitelist of ops
@@ -102,7 +102,7 @@ export default class StaticOpsCounter {
         }
         // If stmt is not a loop, count ops
         // Apply to all ops found in the stmt
-        for (const $jp of Query.searchFrom($stmt, "op")) {
+        for (const $jp of Query.searchFrom($stmt, Op)) {
             const $op = $jp;
             // If not a valid op, continue
             if (!this.isValidOp($op)) {
@@ -120,7 +120,7 @@ export default class StaticOpsCounter {
             opsBlock.add(opsId);
         }
         // Call function recursively when function calls are found
-        for (const $jp of Query.searchFrom($stmt, "call")) {
+        for (const $jp of Query.searchFrom($stmt, Call)) {
             const $call = $jp;
             const $funcDef = $call.definition;
             if ($funcDef === undefined) {
@@ -163,7 +163,7 @@ export default class StaticOpsCounter {
     }
     analyseIterationsExpr($expr, $source) {
         const result = {};
-        for (const $jp of Query.searchFromInclusive($expr, "varref")) {
+        for (const $jp of Query.searchFromInclusive($expr, Varref)) {
             const $varref = $jp;
             if (result[$varref.name] !== undefined) {
                 continue;

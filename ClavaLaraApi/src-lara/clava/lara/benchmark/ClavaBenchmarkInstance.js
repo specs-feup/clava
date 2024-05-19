@@ -3,6 +3,7 @@ import BenchmarkInstance from "lara-js/api/lara/benchmark/BenchmarkInstance.js";
 import Query from "lara-js/api/weaver/Query.js";
 import Weaver from "lara-js/api/weaver/Weaver.js";
 import Clava from "../..//clava/Clava.js";
+import { Pragma } from "../../Joinpoints.js";
 import CMaker from "../../clava/cmake/CMaker.js";
 /**
  * Instance of a Clava benchmark.
@@ -44,7 +45,7 @@ export default class ClavaBenchmarkInstance extends BenchmarkInstance {
      * Looks for #pragma kernel, returns target of that pragma
      */
     getKernel() {
-        const $pragma = Query.search("pragma", "kernel").first();
+        const $pragma = Query.search(Pragma, "kernel").first();
         if ($pragma === undefined) {
             throw `ClavaBenchmarkInstance.getKernel: Could not find '#pragma kernel' in benchmark ${this.getName()}`;
         }

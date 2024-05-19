@@ -1,6 +1,6 @@
 import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { AdjustedType, ArrayType, BuiltinType, DeclStmt, FileJp, FunctionJp, PointerType, } from "../../Joinpoints.js";
+import { AdjustedType, ArrayType, BuiltinType, Decl, DeclStmt, FileJp, FunctionJp, Param, PointerType, ReturnStmt, Statement, Vardecl, Varref, } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 export default class Outliner {
     verbose = true;
@@ -202,7 +202,7 @@ export default class Outliner {
     }
     findGlobalVars() {
         const globals = [];
-        for (const jp of Query.search("vardecl")) {
+        for (const jp of Query.search(Vardecl)) {
             const decl = jp;
             if (decl.isGlobal) {
                 globals.push(decl);
@@ -219,13 +219,13 @@ export default class Outliner {
         const decls = [];
         // get decls from the prologue
         for (const stmt of prologue) {
-            for (const jp of Query.searchFrom(stmt, "vardecl")) {
+            for (const jp of Query.searchFrom(stmt, Vardecl)) {
                 const decl = jp;
                 decls.push(decl);
             }
         }
         // get decls from the parent function params
-        for (const jp of Query.searchFrom(parentFun, "param")) {
+        for (const jp of Query.searchFrom(parentFun, Param)) {
             const param = jp;
             decls.push(param.definition);
         }
@@ -275,7 +275,7 @@ export default class Outliner {
     findNonvoidReturnStmts(startingPoints) {
         const returnStmts = [];
         for (const stmt of startingPoints) {
-            for (const jp of Query.searchFrom(stmt, "returnStmt")) {
+            for (const jp of Query.searchFrom(stmt, ReturnStmt)) {
                 const ret = jp;
                 if (ret.numChildren > 0) {
                     returnStmts.push(ret);
@@ -286,7 +286,7 @@ export default class Outliner {
     }
     scalarsToPointers(region, params) {
         for (const stmt of region) {
-            for (const jp of Query.searchFrom(stmt, "varref")) {
+            for (const jp of Query.searchFrom(stmt, Varref)) {
                 const varref = jp;
                 for (const param of params) {
                     if (param.name === varref.name &&
@@ -325,7 +325,7 @@ export default class Outliner {
     findRefsInRegion(region) {
         const declsNames = [];
         for (const stmt of region) {
-            for (const jp of Query.searchFrom(stmt, "decl")) {
+            for (const jp of Query.searchFrom(stmt, Decl)) {
                 const decl = jp;
                 declsNames.push(decl.name);
             }
@@ -333,7 +333,7 @@ export default class Outliner {
         const varrefs = [];
         const varrefsNames = [];
         for (const stmt of region) {
-            for (const jp of Query.searchFrom(stmt, "varref")) {
+            for (const jp of Query.searchFrom(stmt, Varref)) {
                 const varref = jp;
                 // may need to filter for other types, like macros, etc
                 // select all varrefs with no matching decl in the region, except globals
@@ -363,7 +363,7 @@ export default class Outliner {
         const epilogueVarrefsNames = [];
         for (const stmt of epilogue) {
             // also gets function names... could it cause an issue?
-            for (const jp of Query.searchFrom(stmt, "varref")) {
+            for (const jp of Query.searchFrom(stmt, Varref)) {
                 const varref = jp;
                 epilogueVarrefsNames.push(varref.name);
             }
@@ -386,7 +386,7 @@ export default class Outliner {
         const epilogue = [];
         let inPrologue = true;
         let inRegion = false;
-        for (const jp of Query.searchFrom(fun, "statement")) {
+        for (const jp of Query.searchFrom(fun, Statement)) {
             const stmt = jp;
             if (inPrologue) {
                 if (stmt.astId == begin.astId) {

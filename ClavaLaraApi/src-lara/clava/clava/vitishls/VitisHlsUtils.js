@@ -1,8 +1,9 @@
 import Query from "lara-js/api/weaver/Query.js";
+import { WrapperStmt } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 export default class VitisHlsUtils {
     static activateAllDirectives(turnOn) {
-        const pragmas = Query.search("wrapperStmt", {
+        const pragmas = Query.search(WrapperStmt, {
             code: (code) => code.includes("#pragma HLS") || code.includes("#pragma hls"),
         }).get();
         if (pragmas == undefined) {

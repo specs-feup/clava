@@ -1,6 +1,6 @@
 import NodeData from "lara-js/api/lara/graphs/NodeData.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { FunctionJp } from "../../../Joinpoints.js";
+import { Call, FunctionJp } from "../../../Joinpoints.js";
 
 export default class ScgNodeData extends NodeData {
   /**
@@ -31,6 +31,6 @@ export default class ScgNodeData extends NodeData {
   }
 
   hasCalls(): boolean {
-    return Query.searchFrom(this.$function, "call").get().length > 0;
+    return Query.searchFrom(this.$function, Call).get().length > 0;
   }
 }

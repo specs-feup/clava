@@ -37,7 +37,7 @@ export default class MemoiAnalysis {
 
     const processed = {};
 
-    for (const $jp of Query.search("call")) {
+    for (const $jp of Query.search(Call)) {
       const $call = $jp as Call;
 
       // find function or skip

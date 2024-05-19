@@ -10,7 +10,7 @@ import KernelReplacer, {
 // called by a user, since it needs no configuration/parameterization
 export default function KernelReplacerAuto() {
   // look for pragma
-  for (const $p of Query.search("pragma", "clava")) {
+  for (const $p of Query.search(Pragma, "clava")) {
     const $pragma = $p as Pragma;
     const $file = $pragma.target.getAncestor("file") as FileJp;
 

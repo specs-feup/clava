@@ -199,7 +199,7 @@ export default class CfgBuilder {
     cytoscape.Core,
     Map<string, cytoscape.NodeSingular>,
     cytoscape.NodeSingular,
-    cytoscape.NodeSingular
+    cytoscape.NodeSingular,
   ] {
     this.addAuxComments();
     this.createNodes();
@@ -242,7 +242,7 @@ export default class CfgBuilder {
   protected createNodes() {
     // Test all statements for leadership
     // If they are leaders, create node
-    for (const $jp of Query.searchFromInclusive(this.jp, "statement")) {
+    for (const $jp of Query.searchFromInclusive(this.jp, Statement)) {
       const $stmt = $jp as Statement;
 
       if (CfgUtils.isLeader($stmt)) {
@@ -605,7 +605,7 @@ export default class CfgBuilder {
     }
 
     const labelName = $gotoStmt.label.name;
-    const $labelStmt = Query.searchFromInclusive(this.jp, "labelStmt", {
+    const $labelStmt = Query.searchFromInclusive(this.jp, LabelStmt, {
       decl: (decl: LaraJoinPoint) => (decl as LabelDecl).name == labelName,
     }).first() as LabelStmt | undefined;
 
