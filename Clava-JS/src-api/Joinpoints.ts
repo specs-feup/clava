@@ -18,7 +18,132 @@ import {
   unwrapJoinPoint,
 } from "lara-js/api/LaraJoinPoint.js";
 
+type PrivateMapper = {
+  "Joinpoint": typeof Joinpoint,
+  "Attribute": typeof Attribute,
+  "ClavaException": typeof ClavaException,
+  "Comment": typeof Comment,
+  "Decl": typeof Decl,
+  "Empty": typeof Empty,
+  "Expression": typeof Expression,
+  "FileJp": typeof FileJp,
+  "ImplicitValue": typeof ImplicitValue,
+  "Include": typeof Include,
+  "InitList": typeof InitList,
+  "Literal": typeof Literal,
+  "MemberAccess": typeof MemberAccess,
+  "NamedDecl": typeof NamedDecl,
+  "NewExpr": typeof NewExpr,
+  "Op": typeof Op,
+  "ParenExpr": typeof ParenExpr,
+  "Pragma": typeof Pragma,
+  "Program": typeof Program,
+  "RecordJp": typeof RecordJp,
+  "Statement": typeof Statement,
+  "Struct": typeof Struct,
+  "Switch": typeof Switch,
+  "Tag": typeof Tag,
+  "TernaryOp": typeof TernaryOp,
+  "This": typeof This,
+  "Type": typeof Type,
+  "TypedefNameDecl": typeof TypedefNameDecl,
+  "TypedefType": typeof TypedefType,
+  "UnaryExprOrType": typeof UnaryExprOrType,
+  "UnaryOp": typeof UnaryOp,
+  "UndefinedType": typeof UndefinedType,
+  "Varref": typeof Varref,
+  "WrapperStmt": typeof WrapperStmt,
+  "AccessSpecifier": typeof AccessSpecifier,
+  "AdjustedType": typeof AdjustedType,
+  "ArrayAccess": typeof ArrayAccess,
+  "ArrayType": typeof ArrayType,
+  "BinaryOp": typeof BinaryOp,
+  "BoolLiteral": typeof BoolLiteral,
+  "Break": typeof Break,
+  "BuiltinType": typeof BuiltinType,
+  "Call": typeof Call,
+  "Case": typeof Case,
+  "Cast": typeof Cast,
+  "CilkSpawn": typeof CilkSpawn,
+  "CilkSync": typeof CilkSync,
+  "Class": typeof Class,
+  "Continue": typeof Continue,
+  "CudaKernelCall": typeof CudaKernelCall,
+  "DeclStmt": typeof DeclStmt,
+  "Declarator": typeof Declarator,
+  "DeleteExpr": typeof DeleteExpr,
+  "ElaboratedType": typeof ElaboratedType,
+  "EmptyStmt": typeof EmptyStmt,
+  "EnumDecl": typeof EnumDecl,
+  "EnumeratorDecl": typeof EnumeratorDecl,
+  "ExprStmt": typeof ExprStmt,
+  "Field": typeof Field,
+  "FloatLiteral": typeof FloatLiteral,
+  "FunctionJp": typeof FunctionJp,
+  "FunctionType": typeof FunctionType,
+  "GotoStmt": typeof GotoStmt,
+  "If": typeof If,
+  "IntLiteral": typeof IntLiteral,
+  "LabelDecl": typeof LabelDecl,
+  "LabelStmt": typeof LabelStmt,
+  "Loop": typeof Loop,
+  "Marker": typeof Marker,
+  "MemberCall": typeof MemberCall,
+  "Method": typeof Method,
+  "Omp": typeof Omp,
+  "ParenType": typeof ParenType,
+  "PointerType": typeof PointerType,
+  "QualType": typeof QualType,
+  "ReturnStmt": typeof ReturnStmt,
+  "Scope": typeof Scope,
+  "TagType": typeof TagType,
+  "TemplateSpecializationType": typeof TemplateSpecializationType,
+  "TypedefDecl": typeof TypedefDecl,
+  "Vardecl": typeof Vardecl,
+  "VariableArrayType": typeof VariableArrayType,
+  "Body": typeof Body,
+  "CilkFor": typeof CilkFor,
+  "EnumType": typeof EnumType,
+  "Param": typeof Param,
+};
+
+type DefaultAttributeMap = {
+  FileJp: "name",
+  Include: "name",
+  NamedDecl: "name",
+  Pragma: "name",
+  Program: "name",
+  RecordJp: "name",
+  Struct: "name",
+  Tag: "id",
+  TypedefNameDecl: "name",
+  Varref: "name",
+  AccessSpecifier: "kind",
+  Call: "name",
+  CilkSpawn: "name",
+  Class: "name",
+  CudaKernelCall: "name",
+  Declarator: "name",
+  EnumDecl: "name",
+  EnumeratorDecl: "name",
+  Field: "name",
+  FunctionJp: "name",
+  LabelDecl: "name",
+  Loop: "kind",
+  Marker: "id",
+  MemberCall: "name",
+  Method: "name",
+  Omp: "kind",
+  TypedefDecl: "name",
+  Vardecl: "name",
+  CilkFor: "kind",
+  Param: "name",
+}
+
 export class Joinpoint extends LaraJoinPoint {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'
    */
@@ -402,6 +527,9 @@ export class Joinpoint extends LaraJoinPoint {
 }
 
 export class Attribute extends Joinpoint {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
 }
 
@@ -409,12 +537,18 @@ export class Attribute extends Joinpoint {
    * Utility joinpoint, to represent certain problems when generating join points
    */
 export class ClavaException extends Joinpoint {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get exception(): object { return wrapJoinPoint(this._javaObject.getException()) }
   get exceptionType(): string { return wrapJoinPoint(this._javaObject.getExceptionType()) }
   get message(): string { return wrapJoinPoint(this._javaObject.getMessage()) }
 }
 
 export class Comment extends Joinpoint {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get text(): string { return wrapJoinPoint(this._javaObject.getText()) }
   set text(value: string) { this._javaObject.setText(unwrapJoinPoint(value)); }
   setText(text: string): void { return wrapJoinPoint(this._javaObject.setText(unwrapJoinPoint(text))); }
@@ -424,6 +558,9 @@ export class Comment extends Joinpoint {
    * Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code
    */
 export class Decl extends Joinpoint {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * The attributes (e.g. Pure, CUDAGlobal) associated to this decl
    */
@@ -434,9 +571,15 @@ export class Decl extends Joinpoint {
    * Utility joinpoint, to represent empty nodes when directly accessing the tree
    */
 export class Empty extends Joinpoint {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
 }
 
 export class Expression extends Joinpoint {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * A 'decl' join point that represents the declaration associated with this expression, or undefined if there is none
    */
@@ -457,7 +600,9 @@ export class Expression extends Joinpoint {
    * Represents a source file (.c, .cpp., .cl, etc)
    */
 export class FileJp extends Joinpoint {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   /**
    * The path to the source folder that was given as the base folder of this file
    */
@@ -593,13 +738,18 @@ export class FileJp extends Joinpoint {
 }
 
 export class ImplicitValue extends Expression {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
 }
 
   /**
    * Represents an include directive (e.g., #include <stdio.h>)
    */
 export class Include extends Decl {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   /**
    * True if this is an angled include (i.e., system include)
    */
@@ -615,6 +765,9 @@ export class Include extends Decl {
 }
 
 export class InitList extends Expression {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * [May be undefined] If this initializer list initializes an array with more elements than there are initializers in the list, specifies an expression to be used for value initialization of the rest of the elements
    */
@@ -622,9 +775,15 @@ export class InitList extends Expression {
 }
 
 export class Literal extends Expression {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
 }
 
 export class MemberAccess extends Expression {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * True if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
    */
@@ -647,7 +806,9 @@ export class MemberAccess extends Expression {
    * Represents a decl with a name
    */
 export class NamedDecl extends Decl {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   get isPublic(): boolean { return wrapJoinPoint(this._javaObject.getIsPublic()) }
   get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
   set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
@@ -670,9 +831,15 @@ export class NamedDecl extends Decl {
 }
 
 export class NewExpr extends Expression {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
 }
 
 export class Op extends Expression {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get isBitwise(): boolean { return wrapJoinPoint(this._javaObject.getIsBitwise()) }
   /**
    * The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div, rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign, rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not, real, imag, extension, cowait.
@@ -682,6 +849,9 @@ export class Op extends Expression {
 }
 
 export class ParenExpr extends Expression {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * Returns the expression inside this parenthesis expression
    */
@@ -692,7 +862,9 @@ export class ParenExpr extends Expression {
    * Represents a pragma in the code (e.g., #pragma kernel)
    */
 export class Pragma extends Joinpoint {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   /**
    * Everything that is after the name of the pragma
    */
@@ -725,7 +897,9 @@ export class Pragma extends Joinpoint {
    * Represents the complete program and is the top-most joinpoint in the hierarchy
    */
 export class Program extends Joinpoint {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   get baseFolder(): string { return wrapJoinPoint(this._javaObject.getBaseFolder()) }
   get defaultFlags(): string[] { return wrapJoinPoint(this._javaObject.getDefaultFlags()) }
   /**
@@ -826,7 +1000,9 @@ export class Program extends Joinpoint {
    * Common class of struct, union and class
    */
 export class RecordJp extends NamedDecl {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   get fields(): Field[] { return wrapJoinPoint(this._javaObject.getFields()) }
   get functions(): FunctionJp[] { return wrapJoinPoint(this._javaObject.getFunctions()) }
   /**
@@ -845,6 +1021,9 @@ export class RecordJp extends NamedDecl {
 }
 
 export class Statement extends Joinpoint {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get isFirst(): boolean { return wrapJoinPoint(this._javaObject.getIsFirst()) }
   get isLast(): boolean { return wrapJoinPoint(this._javaObject.getIsLast()) }
 }
@@ -853,10 +1032,15 @@ export class Statement extends Joinpoint {
    * Represets a struct declaration
    */
 export class Struct extends RecordJp {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
 }
 
 export class Switch extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * The case statements inside this switch
    */
@@ -879,7 +1063,9 @@ export class Switch extends Statement {
    * A pragma that references a point in the code and sticks to it
    */
 export class Tag extends Pragma {
-  static readonly _defaultAttribute: string = "id";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "id",
+  };
   /**
    * The ID of the pragma
    */
@@ -887,15 +1073,24 @@ export class Tag extends Pragma {
 }
 
 export class TernaryOp extends Op {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get cond(): Expression { return wrapJoinPoint(this._javaObject.getCond()) }
   get falseExpr(): Expression { return wrapJoinPoint(this._javaObject.getFalseExpr()) }
   get trueExpr(): Expression { return wrapJoinPoint(this._javaObject.getTrueExpr()) }
 }
 
 export class This extends Expression {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
 }
 
 export class Type extends Joinpoint {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get arrayDims(): number[] { return wrapJoinPoint(this._javaObject.getArrayDims()) }
   get arraySize(): number { return wrapJoinPoint(this._javaObject.getArraySize()) }
   get constant(): boolean { return wrapJoinPoint(this._javaObject.getConstant()) }
@@ -971,13 +1166,18 @@ export class Type extends Joinpoint {
    * Base node for declarations which introduce a typedef-name
    */
 export class TypedefNameDecl extends NamedDecl {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
 }
 
   /**
    * Represents the type of a typedef.
    */
 export class TypedefType extends Type {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * The typedef declaration associated with this typedef type
    */
@@ -989,6 +1189,9 @@ export class TypedefType extends Type {
 }
 
 export class UnaryExprOrType extends Expression {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get argExpr(): Expression { return wrapJoinPoint(this._javaObject.getArgExpr()) }
   get argType(): Type { return wrapJoinPoint(this._javaObject.getArgType()) }
   set argType(value: Type) { this._javaObject.setArgType(unwrapJoinPoint(value)); }
@@ -999,18 +1202,26 @@ export class UnaryExprOrType extends Expression {
 }
 
 export class UnaryOp extends Op {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get isPointerDeref(): boolean { return wrapJoinPoint(this._javaObject.getIsPointerDeref()) }
   get operand(): Expression { return wrapJoinPoint(this._javaObject.getOperand()) }
 }
 
 export class UndefinedType extends Type {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
 }
 
   /**
    * A reference to a variable
    */
 export class Varref extends Expression {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   get declaration(): Declarator { return wrapJoinPoint(this._javaObject.getDeclaration()) }
   /**
    * True if this variable reference has a MS-style property, false otherwise
@@ -1035,12 +1246,17 @@ export class Varref extends Expression {
 }
 
 export class WrapperStmt extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get content(): Joinpoint { return wrapJoinPoint(this._javaObject.getContent()) }
   get kind(): "comment" | "pragma" { return wrapJoinPoint(this._javaObject.getKind()) }
 }
 
 export class AccessSpecifier extends Decl {
-  static readonly _defaultAttribute: string = "kind";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "kind",
+  };
   /**
    * The type of specifier. Can return 'public', 'protected', 'private' or 'none'
    */
@@ -1048,6 +1264,9 @@ export class AccessSpecifier extends Decl {
 }
 
 export class AdjustedType extends Type {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * The type that is being adjusted
    */
@@ -1055,6 +1274,9 @@ export class AdjustedType extends Type {
 }
 
 export class ArrayAccess extends Expression {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * Expression representing the variable of the array access (can be a varref, memberAccess...)
    */
@@ -1078,6 +1300,9 @@ export class ArrayAccess extends Expression {
 }
 
 export class ArrayType extends Type {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get elementType(): Type { return wrapJoinPoint(this._javaObject.getElementType()) }
   set elementType(value: Type) { this._javaObject.setElementType(unwrapJoinPoint(value)); }
   /**
@@ -1087,6 +1312,9 @@ export class ArrayType extends Type {
 }
 
 export class BinaryOp extends Op {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get isAssignment(): boolean { return wrapJoinPoint(this._javaObject.getIsAssignment()) }
   get left(): Expression { return wrapJoinPoint(this._javaObject.getLeft()) }
   set left(value: Expression) { this._javaObject.setLeft(unwrapJoinPoint(value)); }
@@ -1097,10 +1325,16 @@ export class BinaryOp extends Op {
 }
 
 export class BoolLiteral extends Literal {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get value(): boolean { return wrapJoinPoint(this._javaObject.getValue()) }
 }
 
 export class Break extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * The enclosing statement related to this break. It should be either a loop or a switch statement.
    */
@@ -1108,6 +1342,9 @@ export class Break extends Statement {
 }
 
 export class BuiltinType extends Type {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get builtinKind(): string { return wrapJoinPoint(this._javaObject.getBuiltinKind()) }
   /**
    * True, if ot is a floating type (e.g., float, double)
@@ -1132,7 +1369,9 @@ export class BuiltinType extends Type {
 }
 
 export class Call extends Expression {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   /**
    * An alias for 'args'
    */
@@ -1206,6 +1445,9 @@ export class Call extends Expression {
 }
 
 export class Case extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * The instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
    */
@@ -1233,6 +1475,9 @@ export class Case extends Statement {
 }
 
 export class Cast extends Expression {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get fromType(): Type { return wrapJoinPoint(this._javaObject.getFromType()) }
   /**
    * @deprecated Use expr.implicitCast instead
@@ -1243,17 +1488,24 @@ export class Cast extends Expression {
 }
 
 export class CilkSpawn extends Call {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
 }
 
 export class CilkSync extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
 }
 
   /**
    * Represents a C++ class
    */
 export class Class extends RecordJp {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   /**
    * All the classes this class inherits from
    */
@@ -1301,10 +1553,15 @@ export class Class extends RecordJp {
 }
 
 export class Continue extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
 }
 
 export class CudaKernelCall extends Call {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   get config(): Expression[] { return wrapJoinPoint(this._javaObject.getConfig()) }
   set config(value: Expression[]) { this._javaObject.setConfig(unwrapJoinPoint(value)); }
   setConfig(args: Expression[]): void { return wrapJoinPoint(this._javaObject.setConfig(unwrapJoinPoint(args))); }
@@ -1312,6 +1569,9 @@ export class CudaKernelCall extends Call {
 }
 
 export class DeclStmt extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * The declarations in this statement
    */
@@ -1322,16 +1582,24 @@ export class DeclStmt extends Statement {
    * Represents a decl that comes from a declarator (e.g., function, field, variable)
    */
 export class Declarator extends NamedDecl {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
 }
 
 export class DeleteExpr extends Expression {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
 }
 
   /**
    * Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name, e.g., N::M::type, or both. This type is used to keep track of a type name as written in the source code, including tag keywords and any nested-name-specifiers. The type itself is always 'sugar', used to express what was written in the source code but containing no additional semantic information.
    */
 export class ElaboratedType extends Type {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * The keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename
    */
@@ -1347,21 +1615,31 @@ export class ElaboratedType extends Type {
 }
 
 export class EmptyStmt extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
 }
 
   /**
    * Represents an enum
    */
 export class EnumDecl extends NamedDecl {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   get enumerators(): EnumeratorDecl[] { return wrapJoinPoint(this._javaObject.getEnumerators()) }
 }
 
 export class EnumeratorDecl extends NamedDecl {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
 }
 
 export class ExprStmt extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * The expression join point associated to this exprStmt
    */
@@ -1372,10 +1650,15 @@ export class ExprStmt extends Statement {
    * Represents a member of a struct/union/class
    */
 export class Field extends Declarator {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
 }
 
 export class FloatLiteral extends Literal {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get value(): number { return wrapJoinPoint(this._javaObject.getValue()) }
 }
 
@@ -1383,7 +1666,9 @@ export class FloatLiteral extends Literal {
    * Represents a function declaration or definition
    */
 export class FunctionJp extends Declarator {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   get body(): Scope { return wrapJoinPoint(this._javaObject.getBody()) }
   set body(value: Scope) { this._javaObject.setBody(unwrapJoinPoint(value)); }
   get calls(): Call[] { return wrapJoinPoint(this._javaObject.getCalls()) }
@@ -1530,6 +1815,9 @@ export class FunctionJp extends Declarator {
 }
 
 export class FunctionType extends Type {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get paramTypes(): Type[] { return wrapJoinPoint(this._javaObject.getParamTypes()) }
   get returnType(): Type { return wrapJoinPoint(this._javaObject.getReturnType()) }
   set returnType(value: Type) { this._javaObject.setReturnType(unwrapJoinPoint(value)); }
@@ -1544,6 +1832,9 @@ export class FunctionType extends Type {
 }
 
 export class GotoStmt extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get label(): LabelDecl { return wrapJoinPoint(this._javaObject.getLabel()) }
   set label(value: LabelDecl) { this._javaObject.setLabel(unwrapJoinPoint(value)); }
   /**
@@ -1553,6 +1844,9 @@ export class GotoStmt extends Statement {
 }
 
 export class If extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get cond(): Expression { return wrapJoinPoint(this._javaObject.getCond()) }
   set cond(value: Expression) { this._javaObject.setCond(unwrapJoinPoint(value)); }
   get condDecl(): Vardecl { return wrapJoinPoint(this._javaObject.getCondDecl()) }
@@ -1575,14 +1869,22 @@ export class If extends Statement {
 }
 
 export class IntLiteral extends Literal {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get value(): number { return wrapJoinPoint(this._javaObject.getValue()) }
 }
 
 export class LabelDecl extends NamedDecl {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
 }
 
 export class LabelStmt extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get decl(): LabelDecl { return wrapJoinPoint(this._javaObject.getDecl()) }
   set decl(value: LabelDecl) { this._javaObject.setDecl(unwrapJoinPoint(value)); }
   /**
@@ -1592,7 +1894,9 @@ export class LabelStmt extends Statement {
 }
 
 export class Loop extends Statement {
-  static readonly _defaultAttribute: string = "kind";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "kind",
+  };
   get body(): Scope { return wrapJoinPoint(this._javaObject.getBody()) }
   set body(value: Scope) { this._javaObject.setBody(unwrapJoinPoint(value)); }
   /**
@@ -1714,7 +2018,9 @@ export class Loop extends Statement {
    * Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)
    */
 export class Marker extends Pragma {
-  static readonly _defaultAttribute: string = "id";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "id",
+  };
   /**
    * A scope, associated with this marker
    */
@@ -1723,7 +2029,9 @@ export class Marker extends Pragma {
 }
 
 export class MemberCall extends Call {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   get base(): Expression { return wrapJoinPoint(this._javaObject.getBase()) }
   get rootBase(): Expression { return wrapJoinPoint(this._javaObject.getRootBase()) }
 }
@@ -1732,7 +2040,9 @@ export class MemberCall extends Call {
    * Represents a C++ class method declaration or definition
    */
 export class Method extends FunctionJp {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   get record(): Class { return wrapJoinPoint(this._javaObject.getRecord()) }
   /**
    * Removes the of the method
@@ -1744,7 +2054,9 @@ export class Method extends FunctionJp {
    * Represents an OpenMP pragma (e.g., #pragma omp parallel)
    */
 export class Omp extends Pragma {
-  static readonly _defaultAttribute: string = "kind";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "kind",
+  };
   /**
    * The names of the kinds of all clauses in the pragma, or empty array if no clause is defined
    */
@@ -1960,6 +2272,9 @@ export class Omp extends Pragma {
 }
 
 export class ParenType extends Type {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get innerType(): Type { return wrapJoinPoint(this._javaObject.getInnerType()) }
   set innerType(value: Type) { this._javaObject.setInnerType(unwrapJoinPoint(value)); }
   /**
@@ -1969,6 +2284,9 @@ export class ParenType extends Type {
 }
 
 export class PointerType extends Type {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get pointee(): Type { return wrapJoinPoint(this._javaObject.getPointee()) }
   set pointee(value: Type) { this._javaObject.setPointee(unwrapJoinPoint(value)); }
   /**
@@ -1982,11 +2300,17 @@ export class PointerType extends Type {
 }
 
 export class QualType extends Type {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get qualifiers(): string[] { return wrapJoinPoint(this._javaObject.getQualifiers()) }
   get unqualifiedType(): Type { return wrapJoinPoint(this._javaObject.getUnqualifiedType()) }
 }
 
 export class ReturnStmt extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get returnExpr(): Expression { return wrapJoinPoint(this._javaObject.getReturnExpr()) }
 }
 
@@ -1994,6 +2318,9 @@ export class ReturnStmt extends Statement {
    * Represents a group of statements
    */
 export class Scope extends Statement {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * Returns the descendant statements of this scope, excluding other scopes, loops, ifs and wrapper statements
    */
@@ -2061,6 +2388,9 @@ export class Scope extends Statement {
 }
 
 export class TagType extends Type {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   /**
    * A 'decl' join point that represents the declaration of this tag type
    */
@@ -2069,6 +2399,9 @@ export class TagType extends Type {
 }
 
 export class TemplateSpecializationType extends Type {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get args(): string[] { return wrapJoinPoint(this._javaObject.getArgs()) }
   get firstArgType(): Type { return wrapJoinPoint(this._javaObject.getFirstArgType()) }
   get numArgs(): number { return wrapJoinPoint(this._javaObject.getNumArgs()) }
@@ -2079,14 +2412,18 @@ export class TemplateSpecializationType extends Type {
    * Declaration of a typedef-name via the 'typedef' type specifier
    */
 export class TypedefDecl extends TypedefNameDecl {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
 }
 
   /**
    * Represents a variable declaration or definition
    */
 export class Vardecl extends Declarator {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
   /**
    * The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)
    */
@@ -2150,6 +2487,9 @@ export class Vardecl extends Declarator {
 }
 
 export class VariableArrayType extends ArrayType {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get sizeExpr(): Expression { return wrapJoinPoint(this._javaObject.getSizeExpr()) }
   set sizeExpr(value: Expression) { this._javaObject.setSizeExpr(unwrapJoinPoint(value)); }
   /**
@@ -2159,18 +2499,28 @@ export class VariableArrayType extends ArrayType {
 }
 
 export class Body extends Scope {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
 }
 
 export class CilkFor extends Loop {
-  static readonly _defaultAttribute: string = "kind";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "kind",
+  };
 }
 
 export class EnumType extends TagType {
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: null,
+  };
   get integerType(): Type { return wrapJoinPoint(this._javaObject.getIntegerType()) }
 }
 
 export class Param extends Vardecl {
-  static readonly _defaultAttribute: string = "name";
+  static readonly _defaultAttributeInfo: {map?: DefaultAttributeMap, name: string | null, type?: PrivateMapper} = {
+    name: "name",
+  };
 }
 
 export enum StorageClass {
@@ -2285,3 +2635,4 @@ if (!registered) {
   registerJoinpointMapper(JoinpointMapper);
   registered = true;
 }
+
