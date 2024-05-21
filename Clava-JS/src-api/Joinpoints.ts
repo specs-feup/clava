@@ -435,7 +435,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Inserts the given join point after this join point
    */
-  insertAfter(p1: Joinpoint | string): Joinpoint | Joinpoint { return wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(p1))); }
+  insertAfter(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(p1))); }
   /**
    * Inserts the given join point before this join point
    */
@@ -447,7 +447,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Inserts the given join point before this join point
    */
-  insertBefore(p1: Joinpoint | string): Joinpoint | Joinpoint { return wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(p1))); }
+  insertBefore(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(p1))); }
   /**
    * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
    */
@@ -471,7 +471,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Replaces this node with the given node
    */
-  replaceWith(p1: Joinpoint | string | Joinpoint[]): Joinpoint | Joinpoint | Joinpoint { return wrapJoinPoint(this._javaObject.replaceWith(unwrapJoinPoint(p1))); }
+  replaceWith(p1: Joinpoint | string | Joinpoint[]): Joinpoint { return wrapJoinPoint(this._javaObject.replaceWith(unwrapJoinPoint(p1))); }
   /**
    * Overload which accepts a list of strings
    */
@@ -495,7 +495,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Sets the commented that are embedded in a node
    */
-  setInlineComments(p1: string[] | string): void | void { return wrapJoinPoint(this._javaObject.setInlineComments(unwrapJoinPoint(p1))); }
+  setInlineComments(p1: string[] | string): void { return wrapJoinPoint(this._javaObject.setInlineComments(unwrapJoinPoint(p1))); }
   /**
    * Replaces the last child, or inserts the join point if no child is present
    */
@@ -515,7 +515,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Associates arbitrary values to nodes of the AST
    */
-  setUserField(p1: string | Record<string, any>, p2?: object): object | object { return wrapJoinPoint(this._javaObject.setUserField(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  setUserField(p1: string | Record<string, any>, p2?: object): object { return wrapJoinPoint(this._javaObject.setUserField(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
   /**
    * Sets the value associated with the given property key
    */
@@ -702,7 +702,7 @@ export class FileJp extends Joinpoint {
   /**
    * Adds the node in the join point to the start of the file
    */
-  insertBegin(p1: Joinpoint | string): void | void { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); }
+  insertBegin(p1: Joinpoint | string): void { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); }
   /**
    * Adds the node in the join point to the end of the file
    */
@@ -714,7 +714,7 @@ export class FileJp extends Joinpoint {
   /**
    * Adds the node in the join point to the end of the file
    */
-  insertEnd(p1: Joinpoint | string): void | void { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(p1))); }
+  insertEnd(p1: Joinpoint | string): void { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(p1))); }
   /**
    * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
    */
@@ -1427,7 +1427,7 @@ export class Call extends Expression {
   /**
    * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
    */
-  addArg(p1: string, p2?: Type | string): void | void { return wrapJoinPoint(this._javaObject.addArg(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  addArg(p1: string, p2?: Type | string): void { return wrapJoinPoint(this._javaObject.addArg(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
   /**
    * Tries to inline this call
    */
@@ -1743,7 +1743,7 @@ export class FunctionJp extends Declarator {
   /**
    * Adds a new parameter to the function
    */
-  addParam(p1: Param | string, p2?: Type): void | void { return wrapJoinPoint(this._javaObject.addParam(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  addParam(p1: Param | string, p2?: Type): void { return wrapJoinPoint(this._javaObject.addParam(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
   /**
    * Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class
    */
@@ -1759,7 +1759,7 @@ export class FunctionJp extends Declarator {
   /**
    * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
    */
-  cloneOnFile(p1: string, p2?: string | FileJp): FunctionJp | FunctionJp { return wrapJoinPoint(this._javaObject.cloneOnFile(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  cloneOnFile(p1: string, p2?: string | FileJp): FunctionJp { return wrapJoinPoint(this._javaObject.cloneOnFile(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
   /**
    * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
    */
@@ -1771,7 +1771,7 @@ export class FunctionJp extends Declarator {
   /**
    * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
    */
-  insertReturn(p1: Joinpoint | string): Joinpoint | Joinpoint { return wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(p1))); }
+  insertReturn(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(p1))); }
   /**
    * Creates a new call to this function
    */
@@ -1795,7 +1795,7 @@ export class FunctionJp extends Declarator {
   /**
    * Sets the parameter of the function at the given position
    */
-  setParam(p1: number, p2: Param | string, p3?: Type): void | void { return wrapJoinPoint(this._javaObject.setParam(unwrapJoinPoint(p1), unwrapJoinPoint(p2), unwrapJoinPoint(p3))); }
+  setParam(p1: number, p2: Param | string, p3?: Type): void { return wrapJoinPoint(this._javaObject.setParam(unwrapJoinPoint(p1), unwrapJoinPoint(p2), unwrapJoinPoint(p3))); }
   /**
    * Sets the type of a parameter of the function
    */
@@ -2204,7 +2204,7 @@ export class Omp extends Pragma {
   /**
    * Sets the value of the collapse clause of an OpenMP pragma
    */
-  setCollapse(p1: string | number): void | void { return wrapJoinPoint(this._javaObject.setCollapse(unwrapJoinPoint(p1))); }
+  setCollapse(p1: string | number): void { return wrapJoinPoint(this._javaObject.setCollapse(unwrapJoinPoint(p1))); }
   /**
    * Sets the variables of a copyin clause of an OpenMP pragma
    */
@@ -2256,7 +2256,7 @@ export class Omp extends Pragma {
   /**
    * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
    */
-  setScheduleChunkSize(p1: string | number): void | void { return wrapJoinPoint(this._javaObject.setScheduleChunkSize(unwrapJoinPoint(p1))); }
+  setScheduleChunkSize(p1: string | number): void { return wrapJoinPoint(this._javaObject.setScheduleChunkSize(unwrapJoinPoint(p1))); }
   /**
    * Sets the value of the schedule clause of an OpenMP pragma
    */
@@ -2365,10 +2365,10 @@ export class Scope extends Statement {
   dfg(): string { return wrapJoinPoint(this._javaObject.dfg()); }
   insertBegin(node: Joinpoint): Joinpoint;
   insertBegin(code: string): Joinpoint;
-  insertBegin(p1: Joinpoint | string): Joinpoint | Joinpoint { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); }
+  insertBegin(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); }
   insertEnd(node: Joinpoint): Joinpoint;
   insertEnd(code: string): Joinpoint;
-  insertEnd(p1: Joinpoint | string): Joinpoint | Joinpoint { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(p1))); }
+  insertEnd(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(p1))); }
   /**
    * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
    */
@@ -2380,7 +2380,7 @@ export class Scope extends Statement {
   /**
    * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
    */
-  insertReturn(p1: Joinpoint | string): Joinpoint | Joinpoint { return wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(p1))); }
+  insertReturn(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(p1))); }
   /**
    * Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)
    */
@@ -2475,7 +2475,7 @@ export class Vardecl extends Declarator {
   /**
    * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
    */
-  setInit(p1: Expression | string): void | void { return wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(p1))); }
+  setInit(p1: Expression | string): void { return wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(p1))); }
   /**
    * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
    */
