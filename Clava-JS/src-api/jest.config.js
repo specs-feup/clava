@@ -7,6 +7,7 @@ const config = {
   globalTeardown: "lara-js/jest/jestGlobalTeardown.js",
   setupFiles: ["lara-js/jest/setupFiles/sharedJavaModule.js"],
   moduleNameMapper: {
+    "clava-js/api/(.+).js": "clava-js/src-api/$1",
     "(.+)\\.js": "$1",
   },
   testEnvironmentOptions: {
