@@ -1,6 +1,6 @@
 import { registerSourceCode } from "lara-js/jest/jestHelpers.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { FunctionJp, Joinpoint, Loop } from "./Joinpoints.js";
+import { FunctionJp, Loop } from "./Joinpoints.js";
 
 const code = `void query_loop() {
     for(int i=0; i<10; i++) {
@@ -38,7 +38,7 @@ describe("Query", () => {
       .search(Loop)
       .search(Loop)
       .chain()) {
-      lst.push((query["loop"] as Loop).rank);
+      if (query["loop"]) lst.push(query["loop"].rank);
     }
     expect(lst.length).toBe(4);
     expect(lst[0]).toEqual([2, 1]);
@@ -54,7 +54,7 @@ describe("Query", () => {
       .search(Loop)
       .scope(Loop)
       .chain()) {
-      lst.push((query["loop"] as Loop).rank);
+      if (query["loop"]) lst.push(query["loop"].rank);
     }
     expect(lst.length).toBe(3);
     expect(lst[0]).toEqual([2, 1]);
@@ -69,7 +69,7 @@ describe("Query", () => {
       .search(Loop, { isOutermost: true })
       .scope(Loop)
       .chain()) {
-      lst.push((query["loop"] as Loop).rank);
+      if (query["loop"]) lst.push(query["loop"].rank);
     }
     expect(lst.length).toBe(2);
     expect(lst[0]).toEqual([2, 1]);
@@ -81,7 +81,7 @@ describe("Query", () => {
     for (const query of Query.search(FunctionJp, "query_empty")
       .scope()
       .chain()) {
-      lst.push((query["joinpoint"] as Joinpoint).joinPointType);
+      if (query["joinpoint"]) lst.push(query["joinpoint"].joinPointType);
     }
     expect(lst.length).toBe(2);
     expect(lst[0]).toBe("declStmt");
@@ -110,7 +110,7 @@ describe("Query", () => {
   it("should be able to search for a function6", () => {
     const lst: string[] = [];
     for (const query of Query.search(FunctionJp, /_regex/)) {
-      lst.push((query as FunctionJp).name);
+      lst.push(query.name);
     }
     expect(lst.length).toBe(1);
     expect(lst[0]).toBe("query_regex");
