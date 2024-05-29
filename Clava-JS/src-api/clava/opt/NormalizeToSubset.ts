@@ -40,12 +40,11 @@ export default function NormalizeToSubset(
   varDecls.apply($startJp);
   localStaticToGlobal.apply($startJp);
 
-  for (const $jp of Query.searchFrom(
+  for (const $assign of Query.searchFrom(
     $startJp,
     BinaryOp,
     (jp) => jp.isAssignment && jp.operator !== "="
   )) {
-    const $assign = $jp as BinaryOp;
     SimplifyAssignment($assign);
   }
 }

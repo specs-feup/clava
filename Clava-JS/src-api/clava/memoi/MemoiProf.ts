@@ -73,10 +73,9 @@ export default class MemoiProf {
     const monitorType = ClavaJoinPoints.typeLiteral("MemoiProf*");
 
     // make the wrapper
-    for (const $jp of Query.search(Call, {
+    for (const $call of Query.search(Call, {
       signature: (s: string) => this.target.sig === MemoiUtils.normalizeSig(s),
     })) {
-      const $call = $jp as Call;
       $call.wrap(wrapperName);
     }
 
@@ -98,11 +97,9 @@ export default class MemoiProf {
     const monitorNameBase = "mp_" + cSig;
     const monitorType = ClavaJoinPoints.typeLiteral("MemoiProf*");
 
-    for (const $jp of Query.search(Call, {
+    for (const $call of Query.search(Call, {
       signature: (s: string) => this.target.sig === MemoiUtils.normalizeSig(s),
     })) {
-      const $call = $jp as Call;
-
       // make the wrapper
       const wrapperName = IdGenerator.next(wrapperNameBase);
       $call.wrap(wrapperName);

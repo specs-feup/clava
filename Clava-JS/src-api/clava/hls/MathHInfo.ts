@@ -17,7 +17,7 @@ export default class MathHInfo {
 
     // Clear AST
     for (const $file of Query.search(FileJp)) {
-      ($file as FileJp).detach();
+      $file.detach();
     }
 
     // Prepare source file that will test math.h
@@ -39,7 +39,7 @@ export default class MathHInfo {
 
     // Clear AST
     for (const $file of Query.search(FileJp)) {
-      ($file as FileJp).detach();
+      $file.detach();
     }
 
     // Add math.h to the AST
@@ -49,11 +49,9 @@ export default class MathHInfo {
     Clava.rebuild();
 
     const results = [];
-    for (const $mathFunction of Query.search(FileJp, "math_copy.h").search(
+    for (const $fn of Query.search(FileJp, "math_copy.h").search(
       FunctionJp
     )) {
-      const $fn: FunctionJp = $mathFunction as FunctionJp;
-
       const paramTypes = [];
       for (const $param of $fn.params) {
         paramTypes.push($param.type.code);

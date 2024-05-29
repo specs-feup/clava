@@ -12,8 +12,7 @@ export default class SimplifyReturnStmts extends Pass {
     }
     _apply_impl($jp) {
         let appliedPass = false;
-        for (const jp of Query.searchFromInclusive($jp, ReturnStmt)) {
-            const $returnStmt = jp;
+        for (const $returnStmt of Query.searchFromInclusive($jp, ReturnStmt)) {
             const transformed = this.transform($returnStmt);
             // If any change, mark as applied
             if (transformed) {

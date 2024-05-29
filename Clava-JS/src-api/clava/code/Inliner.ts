@@ -341,8 +341,7 @@ export default class Inliner {
     // should be added
     const $parentFunction = $call.getAncestor("function") as FunctionJp;
     const addedDeclarations = new Set<string>();
-    for (const $jp of Query.searchFrom($newNodes, Call)) {
-      const $newCall = $jp as Call;
+    for (const $newCall of Query.searchFrom($newNodes, Call)) {
       // Ignore functions that are part of the system headers
       if ($newCall.function.isInSystemHeader) {
         continue;
@@ -418,8 +417,7 @@ export default class Inliner {
     }
 
     // If there are any label decls, rename them
-    for (const $jp of Query.search(LabelDecl)) {
-      const $labelDecl = $jp as LabelDecl;
+    for (const $labelDecl of Query.search(LabelDecl)) {
       const $newLabelDecl = newLabels[$labelDecl.name];
       $labelDecl.replaceWith($newLabelDecl);
     }
@@ -622,9 +620,7 @@ export default class Inliner {
       const $sizeExprCopy = type.sizeExpr.copy() as Varref;
 
       // Update any children of sizeExpr
-      for (const $jp of Query.searchFrom($sizeExprCopy, Varref)) {
-        const $varRef = $jp as Varref;
-
+      for (const $varRef of Query.searchFrom($sizeExprCopy, Varref)) {
         const $newVarref = this.updateVarRef($varRef, $call, newVariableMap);
         if ($newVarref !== $varRef) {
           hasChanges = true;

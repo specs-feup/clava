@@ -34,8 +34,7 @@ export default class MathHInfo {
         Query.root().addFile($mathFile);
         Clava.rebuild();
         const results = [];
-        for (const $mathFunction of Query.search(FileJp, "math_copy.h").search(FunctionJp)) {
-            const $fn = $mathFunction;
+        for (const $fn of Query.search(FileJp, "math_copy.h").search(FunctionJp)) {
             const paramTypes = [];
             for (const $param of $fn.params) {
                 paramTypes.push($param.type.code);

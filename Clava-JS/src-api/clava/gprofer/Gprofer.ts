@@ -11,14 +11,14 @@ function GproferGetCxxFunction(signature: string) {
   return Query.search(FunctionJp, {
     signature: signature,
     hasDefinition: true,
-  }).first() as FunctionJp | undefined;
+  }).first();
 }
 
 function GproferGetCFunction(signature: string) {
   return Query.search(FunctionJp, {
     name: signature,
     hasDefinition: true,
-  }).first() as FunctionJp | undefined;
+  }).first();
 }
 
 interface GproferProfileFileContents {

@@ -7,8 +7,7 @@ import KernelReplacer from "./KernelReplacer.js";
 // called by a user, since it needs no configuration/parameterization
 export default function KernelReplacerAuto() {
     // look for pragma
-    for (const $p of Query.search(Pragma, "clava")) {
-        const $pragma = $p;
+    for (const $pragma of Query.search(Pragma, "clava")) {
         const $file = $pragma.target.getAncestor("file");
         if (!$pragma.content.startsWith("opencl_call")) {
             continue;

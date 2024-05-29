@@ -234,9 +234,7 @@ class MemoiGen {
         report !== undefined ? report.callSites[0] === l : true, // if there is a report, we also filter by site
     };
 
-    for (const $jp of Query.search(Call, filter)) {
-      const $call = $jp as Call;
-
+    for (const $call of Query.search(Call, filter)) {
       const wrapperName = IdGenerator.next("mw_" + cSig);
       s.add(wrapperName);
 
@@ -255,11 +253,10 @@ class MemoiGen {
     const wrapperName = "mw_" + cSig;
     s.add(wrapperName);
 
-    for (const $jp of Query.search(Call, {
+    for (const $call of Query.search(Call, {
       signature: (s: Call["signature"]) =>
         this._target.sig === MemoiUtils.normalizeSig(s),
     })) {
-      const $call = $jp as Call;
       $call.wrap(wrapperName);
     }
     this.generateGeneric(wrapperName, report);
@@ -274,10 +271,9 @@ class MemoiGen {
     const printName = "print_perfect_inst";
 
     // wrap every call to the target
-    for (const $jp of Query.search(Call, {
+    for (const $call of Query.search(Call, {
       signature: (s: string) => this._target.sig === MemoiUtils.normalizeSig(s),
     })) {
-      const $call = $jp as Call;
       $call.wrap(wrapperName);
     }
 

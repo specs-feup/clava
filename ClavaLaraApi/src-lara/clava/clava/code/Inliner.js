@@ -227,8 +227,7 @@ export default class Inliner {
         // should be added
         const $parentFunction = $call.getAncestor("function");
         const addedDeclarations = new Set();
-        for (const $jp of Query.searchFrom($newNodes, Call)) {
-            const $newCall = $jp;
+        for (const $newCall of Query.searchFrom($newNodes, Call)) {
             // Ignore functions that are part of the system headers
             if ($newCall.function.isInSystemHeader) {
                 continue;
@@ -283,8 +282,7 @@ export default class Inliner {
             }
         }
         // If there are any label decls, rename them
-        for (const $jp of Query.search(LabelDecl)) {
-            const $labelDecl = $jp;
+        for (const $labelDecl of Query.search(LabelDecl)) {
             const $newLabelDecl = newLabels[$labelDecl.name];
             $labelDecl.replaceWith($newLabelDecl);
         }
@@ -429,8 +427,7 @@ export default class Inliner {
             // TODO: I have no idea if this type cast is correct.
             const $sizeExprCopy = type.sizeExpr.copy();
             // Update any children of sizeExpr
-            for (const $jp of Query.searchFrom($sizeExprCopy, Varref)) {
-                const $varRef = $jp;
+            for (const $varRef of Query.searchFrom($sizeExprCopy, Varref)) {
                 const $newVarref = this.updateVarRef($varRef, $call, newVariableMap);
                 if ($newVarref !== $varRef) {
                     hasChanges = true;

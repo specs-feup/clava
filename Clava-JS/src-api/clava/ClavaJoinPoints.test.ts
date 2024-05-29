@@ -14,7 +14,7 @@ describe("ClavaJoinPoints", () => {
   registerSourceCode(code);
 
   it("Creates a new Scope from ExpressionStatements", () => {
-    const exprStmts = Query.search(ExprStmt).get() as ExprStmt[];
+    const exprStmts = Query.search(ExprStmt).get();
 
     expect(exprStmts.length).toBe(2);
 

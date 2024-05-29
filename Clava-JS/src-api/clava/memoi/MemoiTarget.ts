@@ -73,13 +73,13 @@ export default class MemoiTarget {
     const $func = Query.search(FunctionJp, {
       signature: (signature: string) =>
         sig === MemoiUtils.normalizeSig(signature),
-    }).first() as FunctionJp | undefined;
+    }).first();
 
     if ($func === undefined) {
       const $call = Query.search(Call, {
         signature: (signature: string) =>
           sig === MemoiUtils.normalizeSig(signature),
-      }).first() as Call | undefined;
+      }).first();
 
       if ($call === undefined) {
         throw `Could not find function of sig '${sig}'`;

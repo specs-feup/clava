@@ -58,8 +58,7 @@ export default class ClavaCode {
     const includes = new Set<string>();
     let bodyCode = "";
 
-    for (const $f of Query.search(FileJp)) {
-      const $file = $f as FileJp;
+    for (const $file of Query.search(FileJp)) {
 
       if ($file.isHeader) {
         continue;

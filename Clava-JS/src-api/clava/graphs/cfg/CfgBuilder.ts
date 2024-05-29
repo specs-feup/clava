@@ -242,9 +242,7 @@ export default class CfgBuilder {
   protected createNodes() {
     // Test all statements for leadership
     // If they are leaders, create node
-    for (const $jp of Query.searchFromInclusive(this.jp, Statement)) {
-      const $stmt = $jp as Statement;
-
+    for (const $stmt of Query.searchFromInclusive(this.jp, Statement)) {
       if (CfgUtils.isLeader($stmt)) {
         if (
           this.splitInstList &&
@@ -607,7 +605,7 @@ export default class CfgBuilder {
     const labelName = $gotoStmt.label.name;
     const $labelStmt = Query.searchFromInclusive(this.jp, LabelStmt, {
       decl: (decl: LaraJoinPoint) => (decl as LabelDecl).name == labelName,
-    }).first() as LabelStmt | undefined;
+    }).first();
 
     if ($labelStmt === undefined) {
       throw new Error("Label statement is undefined");

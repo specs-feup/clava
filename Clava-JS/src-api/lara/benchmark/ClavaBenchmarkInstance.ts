@@ -60,9 +60,7 @@ export default class ClavaBenchmarkInstance extends BenchmarkInstance {
    * Looks for #pragma kernel, returns target of that pragma
    */
   getKernel() {
-    const $pragma = Query.search(Pragma, "kernel").first() as
-      | Pragma
-      | undefined;
+    const $pragma = Query.search(Pragma, "kernel").first();
 
     if ($pragma === undefined) {
       throw `ClavaBenchmarkInstance.getKernel: Could not find '#pragma kernel' in benchmark ${this.getName()}`;

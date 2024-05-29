@@ -159,8 +159,7 @@ export default class CfgBuilder {
     createNodes() {
         // Test all statements for leadership
         // If they are leaders, create node
-        for (const $jp of Query.searchFromInclusive(this.jp, Statement)) {
-            const $stmt = $jp;
+        for (const $stmt of Query.searchFromInclusive(this.jp, Statement)) {
             if (CfgUtils.isLeader($stmt)) {
                 if (this.splitInstList &&
                     CfgUtils.getNodeType($stmt) === CfgNodeType.INST_LIST) {

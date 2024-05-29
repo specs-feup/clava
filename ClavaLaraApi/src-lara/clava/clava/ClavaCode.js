@@ -37,8 +37,7 @@ export default class ClavaCode {
         const staticVerification = true;
         const includes = new Set();
         let bodyCode = "";
-        for (const $f of Query.search(FileJp)) {
-            const $file = $f;
+        for (const $file of Query.search(FileJp)) {
             if ($file.isHeader) {
                 continue;
             }

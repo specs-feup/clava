@@ -27,8 +27,7 @@ export default class MemoiAnalysis {
         const targets = [];
         const report = new FailReport();
         const processed = {};
-        for (const $jp of Query.search(Call)) {
-            const $call = $jp;
+        for (const $call of Query.search(Call)) {
             // find function or skip
             const $func = $call.function;
             if ($func === undefined) {

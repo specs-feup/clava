@@ -66,14 +66,14 @@ export default class TraceInstrumentation {
 
     //Get global vars as interfaces
     for (const elem of Query.search(Vardecl)) {
-      if ((elem as Vardecl).isGlobal) registerInterface(elem as Vardecl);
+      if (elem.isGlobal) registerInterface(elem);
     }
 
     //Get local vars
     for (const elem of Query.search(FunctionJp, { name: funName }).search(
       Vardecl
     )) {
-      registerLocal(elem as Vardecl);
+      registerLocal(elem);
     }
 
     //Begin graph and create counters

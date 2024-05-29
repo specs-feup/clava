@@ -190,8 +190,7 @@ class MemoiGen {
             signature: (s) => this._target.sig === MemoiUtils.normalizeSig(s),
             location: (l) => report !== undefined ? report.callSites[0] === l : true, // if there is a report, we also filter by site
         };
-        for (const $jp of Query.search(Call, filter)) {
-            const $call = $jp;
+        for (const $call of Query.search(Call, filter)) {
             const wrapperName = IdGenerator.next("mw_" + cSig);
             s.add(wrapperName);
             $call.wrap(wrapperName);
@@ -204,10 +203,9 @@ class MemoiGen {
         const cSig = MemoiUtils.cSig(this._target.sig);
         const wrapperName = "mw_" + cSig;
         s.add(wrapperName);
-        for (const $jp of Query.search(Call, {
+        for (const $call of Query.search(Call, {
             signature: (s) => this._target.sig === MemoiUtils.normalizeSig(s),
         })) {
-            const $call = $jp;
             $call.wrap(wrapperName);
         }
         this.generateGeneric(wrapperName, report);
@@ -219,10 +217,9 @@ class MemoiGen {
         const globalName = "memoi_target_timer";
         const printName = "print_perfect_inst";
         // wrap every call to the target
-        for (const $jp of Query.search(Call, {
+        for (const $call of Query.search(Call, {
             signature: (s) => this._target.sig === MemoiUtils.normalizeSig(s),
         })) {
-            const $call = $jp;
             $call.wrap(wrapperName);
         }
         // change the wrapper by timing around the original call

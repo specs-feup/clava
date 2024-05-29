@@ -250,7 +250,7 @@ export default class TransformSwitchToIf extends SimplePass {
         (enclosingStmt as Statement).astId === $jp.astId,
     });
     for (const $break of $breakStmts)
-      ($break as Break).replaceWith($switchExitGoTo);
+      $break.replaceWith($switchExitGoTo);
   }
 
   /**
