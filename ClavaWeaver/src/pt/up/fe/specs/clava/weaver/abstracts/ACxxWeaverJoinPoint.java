@@ -55,6 +55,7 @@ import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.stringsplitter.StringSplitter;
+import pt.up.fe.specs.util.stringsplitter.StringSplitterRules;
 
 /**
  * Abstract class which can be edited by the developer. This class will not be overwritten.
