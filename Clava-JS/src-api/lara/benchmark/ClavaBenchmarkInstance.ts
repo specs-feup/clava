@@ -24,6 +24,16 @@ export default class ClavaBenchmarkInstance extends BenchmarkInstance {
     return new CMaker(name);
   }
 
+  /**
+   * For compatibility reasons.
+   * 
+   * @param name 
+   * @returns 
+   */
+  protected getCMaker(name: string): CMaker {
+    return this.compilationEngineProvider(name);
+  }
+
   protected compilePrivate(): JavaClasses.File | undefined {
     const folder = this.getOutputFolder();
     Clava.writeCode(folder);
