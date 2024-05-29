@@ -30,6 +30,8 @@ AddressOf code: &a
 AddressOf code type: int *
 Deref code: *aPointer
 Deref code type: int
+Deref code: *x
+Deref code type: int const
 Builtin type: builtinType
 Literal type: class pt.up.fe.specs.clava.ast.type.LiteralType
 Same type: true

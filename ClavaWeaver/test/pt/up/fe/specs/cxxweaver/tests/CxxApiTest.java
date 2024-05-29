@@ -114,7 +114,7 @@ public class CxxApiTest {
 
     @Test
     public void testClavaJoinPointsTest() {
-        newTester().test("ClavaJoinPointsTest.lara", "clava_join_points.cpp");
+        newTester().test("ClavaJoinPointsTest.js", "clava_join_points.cpp");
     }
 
     @Test
