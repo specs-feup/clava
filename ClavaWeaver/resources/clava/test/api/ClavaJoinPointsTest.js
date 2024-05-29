@@ -1,5 +1,5 @@
 laraImport("clava.ClavaJoinPoints");
-laraImport("clava.ClavaNodes"); // Test if alias loads correctly
+laraImport("weaver.Query");
 
 var intType = ClavaJoinPoints.builtinType("int");
 var doubleType = ClavaJoinPoints.builtinType("double");
