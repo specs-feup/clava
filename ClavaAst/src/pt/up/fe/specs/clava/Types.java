@@ -297,10 +297,12 @@ public class Types {
         case AddrOf:
             return factory.pointerType(exprType);
         case Deref:
-            var desugared = exprType.desugarAll();
-            SpecsCheck.checkArgument(desugared instanceof PointerType,
-                    () -> "Expected type to be a pointer: " + desugared);
-            return ((PointerType) exprType).getPointeeType();
+            var unqualifiedType = exprType.desugarAll().unqualifiedType();
+
+            SpecsCheck.checkArgument(unqualifiedType instanceof PointerType,
+                    () -> "Expected type to be a pointer: " + unqualifiedType);
+
+            return ((PointerType) unqualifiedType).getPointeeType();
         default:
             throw new NotImplementedException("Unary op return type inference not implemented for '" + op + "'");
         }
