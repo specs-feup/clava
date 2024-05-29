@@ -106,3 +106,12 @@ task weaverGenerator(type: JavaExec) {
 			'-d'
 	]
 }
+
+// Clava
+task clava(type: JavaExec) {
+	group = "Execution"
+	description = "Launches Clava"
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = 'pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher'
+	args = []
+}
