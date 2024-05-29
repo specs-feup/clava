@@ -1,23 +1,12 @@
 import AnalyserResult from "./AnalyserResult.js";
+import ClavaJoinPoints from "clava-js/api/clava/ClavaJoinPoints.js";
 
 describe("AnalyserResult", () => {
-  describe("analyse", () => {
-    it("throws an exception for not being implemented", () => {
-      const analyserResultTest = new AnalyserResult(
-        "correct",
-        "test",
-        "test",
-        undefined
-      );
-      expect(analyserResultTest.analyse()).toThrow("Not implemented");
-    });
-  });
-
   describe("getName", () => {
     it("returns the name of the AnalyserResult", () => {
       const analyserResultTest = new AnalyserResult(
         "correct",
-        "test",
+        ClavaJoinPoints.emptyStmt(),
         "test",
         undefined
       );
@@ -27,13 +16,14 @@ describe("AnalyserResult", () => {
 
   describe("getNode", () => {
     it("returns the node of the AnalyserResult", () => {
+      const jp = ClavaJoinPoints.emptyStmt();
       const analyserResultTest = new AnalyserResult(
         "test",
-        "correct",
+        jp,
         "test",
         undefined
       );
-      expect(analyserResultTest.getNode()).toBe("correct");
+      expect(analyserResultTest.getNode()).toBe(jp);
     });
   });
 });
