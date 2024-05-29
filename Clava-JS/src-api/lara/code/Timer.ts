@@ -62,13 +62,13 @@ export default class Timer extends TimerBase<Joinpoint> {
     const timeIntervalVar = IdGenerator.next("clava_timing_duration_");
     // Create literal node with calculation of time interval
     const $timingResult = ClavaJoinPoints.exprLiteral(
-      this._timer_cpp_calc_interval(startVar, endVar, cppUnit, timeIntervalVar)
+      "long long " + this._timer_cpp_calc_interval(startVar, endVar, cppUnit, timeIntervalVar)
     );
 
     // Build message
     logger
       .append(prefix)
-      .appendLong(this._timer_cpp_print_interval(cppUnit, timeIntervalVar));
+      .appendLong(timeIntervalVar);
     if (this.printUnit) {
       logger.append(this.timeUnits.getUnitsString());
     }
@@ -87,15 +87,8 @@ export default class Timer extends TimerBase<Joinpoint> {
     const $endVarDecl = ClavaJoinPoints.stmtLiteral(
       this._timer_cpp_define_time_var(endVar)
     );
-    const $timingResultDecl = ClavaJoinPoints.varDeclNoInit(
-      timeIntervalVar,
-      ClavaJoinPoints.typeLiteral(
-        "std::chrono::high_resolution_clock::duration"
-      )
-    );
     $insertionTic.insertBefore($startVarDecl);
     $insertionTic.insertBefore($endVarDecl);
-    $insertionTic.insertBefore($timingResultDecl);
 
     let afterJp = undefined;
 
@@ -312,10 +305,6 @@ QueryPerformanceFrequency(&${timeFrequencyVar});`;
     unit: string,
     differentialVar: string
   ) {
-    return `${differentialVar} = ${endVar} - ${startVar}`;
-  }
-
-  private _timer_cpp_print_interval(unit: string, differentialVar: string) {
-    return `std::chrono::duration_cast<std::chrono::${unit}>(${differentialVar}).count()`;
+    return `${differentialVar} = std::chrono::duration_cast<std::chrono::${unit}>(${endVar} - ${startVar}).count()`;
   }
 }
