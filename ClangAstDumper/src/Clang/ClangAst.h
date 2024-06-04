@@ -19,8 +19,6 @@
 
 #include "../ClangAstDumper/ClangAstDumper.h"
 
-#include <fstream>
-
 using namespace clang;
 
 // Class for managing ClavaDump resources

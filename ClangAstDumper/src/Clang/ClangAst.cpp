@@ -9,23 +9,19 @@
 #include "../ClangAstDumper/ClangAstDumperConstants.h"
 #include "ClangNodes.h"
 
-#include "clang/AST/AST.h"
-#include "clang/AST/ASTConsumer.h"
-#include "clang/AST/Comment.h"
-#include "clang/AST/RecursiveASTVisitor.h"
-#include "clang/AST/Stmt.h"
-#include "clang/Basic/TargetInfo.h"
-#include "clang/Frontend/ASTConsumers.h"
-#include "clang/Frontend/CompilerInstance.h"
-#include "clang/Frontend/FrontendActions.h"
-#include "clang/Lex/Lexer.h"
-#include "clang/Lex/Preprocessor.h"
+#include <clang/AST/AST.h>
+#include <clang/AST/ASTConsumer.h>
+#include <clang/AST/Comment.h>
+#include <clang/AST/RecursiveASTVisitor.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/TargetInfo.h>
+#include <clang/Frontend/ASTConsumers.h>
+#include <clang/Frontend/CompilerInstance.h>
+#include <clang/Frontend/FrontendActions.h>
+#include <clang/Lex/Lexer.h>
+#include <clang/Lex/Preprocessor.h>
 
-#include <atomic>
 #include <fstream>
-#include <iostream>
-#include <sstream>
-#include <string>
 
 using namespace clang;
 
