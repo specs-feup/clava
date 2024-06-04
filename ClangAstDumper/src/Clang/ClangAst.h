@@ -51,11 +51,6 @@ class DumpResources {
  * Based on explanation from this website:
  * https://xaizek.github.io/2015-04-23/detecting-wrong-first-include/
  */
-class DumpIncludesAction : public PreprocessOnlyAction {
-  protected:
-    virtual void ExecuteAction();
-};
-
 class IncludeDumper : public PPCallbacks {
   public:
     IncludeDumper(CompilerInstance &compilerInstance);
@@ -156,8 +151,10 @@ class DumpAstAction : public PluginASTAction {
     }
 
     PluginASTAction::ActionType getActionType() override {
-        return AddBeforeMainAction;
+        return ReplaceAction;
     }
+
+    void ExecuteAction() override;
 
     void dumpCompilerInstanceData(CompilerInstance &CI, StringRef file);
 

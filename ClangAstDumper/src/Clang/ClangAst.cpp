@@ -250,6 +250,13 @@ DumpAstAction::CreateASTConsumer(CompilerInstance &CI, StringRef file) {
     return std::make_unique<MyASTConsumer>(Context, counter, dumper);
 }
 
+void DumpAstAction::ExecuteAction() {
+    CompilerInstance &CI = getCompilerInstance();
+    CI.getPreprocessor().addPPCallbacks(std::make_unique<IncludeDumper>(CI));
+
+    PluginASTAction::ExecuteAction();
+}
+
 void DumpAstAction::dumpCompilerInstanceData(CompilerInstance &CI,
                                              StringRef file) {
     clava::dump(COMPILER_INSTANCE_DATA);
@@ -289,16 +296,6 @@ void DumpAstAction::dumpCompilerInstanceData(CompilerInstance &CI,
     clava::dump(CI.getTarget().getIntWidth());
     clava::dump(CI.getTarget().getLongWidth());
     clava::dump(CI.getTarget().getLongLongWidth());
-}
-
-/*** DumpIncludesAction ***/
-// Based on explanation from this website
-// https://xaizek.github.io/2015-04-23/detecting-wrong-first-include/
-void DumpIncludesAction::ExecuteAction() {
-    CompilerInstance &CI = getCompilerInstance();
-    CI.getPreprocessor().addPPCallbacks(std::make_unique<IncludeDumper>(CI));
-
-    PreprocessOnlyAction::ExecuteAction();
 }
 
 /*** IncludeDumper ***/
