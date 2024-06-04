@@ -301,10 +301,8 @@ void DumpAstAction::dumpCompilerInstanceData(CompilerInstance &CI,
 // Based on explanation from this website
 // https://xaizek.github.io/2015-04-23/detecting-wrong-first-include/
 void DumpIncludesAction::ExecuteAction() {
-
-    IncludeDumper includeDumper(getCompilerInstance());
-    getCompilerInstance().getPreprocessor().addPPCallbacks(
-        includeDumper.createPreprocessorCallbacks());
+    CompilerInstance &CI = getCompilerInstance();
+    CI.getPreprocessor().addPPCallbacks(std::make_unique<IncludeDumper>(CI));
 
     PreprocessOnlyAction::ExecuteAction();
 }
@@ -314,10 +312,6 @@ void DumpIncludesAction::ExecuteAction() {
 IncludeDumper::IncludeDumper(CompilerInstance &compilerInstance)
     : compilerInstance(compilerInstance),
       sm(compilerInstance.getSourceManager()){};
-
-std::unique_ptr<PPCallbacks> IncludeDumper::createPreprocessorCallbacks() {
-    return std::unique_ptr<PPCallbacks>(new CallbacksProxy(*this));
-}
 
 void IncludeDumper::InclusionDirective(
     SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName,
@@ -359,37 +353,6 @@ void IncludeDumper::MacroExpands(const Token &MacroNameTok,
                                  const MacroDefinition &MD, SourceRange Range,
                                  const MacroArgs *Args) {}
 
-/*** CallbacksProxy ***/
-
-CallbacksProxy::CallbacksProxy(IncludeDumper &original) : original(original) {}
-
-void CallbacksProxy::InclusionDirective(
-    SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName,
-    bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File,
-    StringRef SearchPath, StringRef RelativePath, const Module *Imported,
-    SrcMgr::CharacteristicKind FileType) {
-
-    original.InclusionDirective(HashLoc, IncludeTok, FileName, IsAngled,
-                                FilenameRange, File, SearchPath, RelativePath,
-                                Imported, FileType);
-}
-
-void CallbacksProxy::MacroExpands(const Token &MacroNameTok,
-                                  const MacroDefinition &MD, SourceRange Range,
-                                  const MacroArgs *Args) {
-    original.MacroExpands(MacroNameTok, MD, Range, Args);
-}
-
-void CallbacksProxy::PragmaDirective(SourceLocation Loc,
-                                     PragmaIntroducerKind Introducer) {
-    original.PragmaDirective(Loc, Introducer);
-}
-
-void CallbacksProxy::FileChanged(SourceLocation Loc, FileChangeReason Reason,
-                                 SrcMgr::CharacteristicKind FileType,
-                                 FileID PrevFID) {
-    original.FileChanged(Loc, Reason, FileType, PrevFID);
-}
 
 /**
  * DumpResources Implementations

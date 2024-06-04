@@ -8,11 +8,12 @@
 #ifndef CLANGASTDUMPER_CLANGAST_H
 #define CLANGASTDUMPER_CLANGAST_H
 
-#include "../ClangAstDumper/ClangAstDumper.h"
+#include <clang/AST/AST.h>
+#include <clang/AST/RecursiveASTVisitor.h>
+#include <clang/Frontend/FrontendActions.h>
 
-#include "clang/AST/AST.h"
-#include "clang/AST/RecursiveASTVisitor.h"
-#include "clang/Frontend/FrontendActions.h"
+
+#include "../ClangAstDumper/ClangAstDumper.h"
 
 #include <fstream>
 
@@ -74,28 +75,6 @@ class IncludeDumper : public PPCallbacks {
   private:
     const CompilerInstance &compilerInstance;
     const clang::SourceManager &sm;
-};
-
-class CallbacksProxy : public PPCallbacks {
-  public:
-    CallbacksProxy(IncludeDumper &original);
-
-    virtual void InclusionDirective(
-        SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName,
-        bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File,
-        StringRef SearchPath, StringRef RelativePath, const Module *Imported,
-        SrcMgr::CharacteristicKind FileType);
-    virtual void MacroExpands(const Token &MacroNameTok,
-                              const MacroDefinition &MD, SourceRange Range,
-                              const MacroArgs *Args);
-    virtual void PragmaDirective(SourceLocation Loc,
-                                 PragmaIntroducerKind Introducer);
-    virtual void FileChanged(SourceLocation Loc, FileChangeReason Reason,
-                             SrcMgr::CharacteristicKind FileType,
-                             FileID PrevFID);
-
-  private:
-    IncludeDumper original;
 };
 
 // For each source file provided to the tool, a new FrontendAction is created.
