@@ -225,16 +225,10 @@ bool MyASTConsumer::HandleTopLevelDecl(DeclGroupRef DR) {
 
 void MyASTConsumer::HandleTranslationUnit(ASTContext &Ctx) {}
 
-// Not sure if Clang performs compilation of different translation units in
-// parallel, using atomic just in case.
-std::atomic<int> GLOBAL_COUNTER(1);
-
-/*** DumpAstAction ***/
-
 // For each source file provided to the tool, a new FrontendAction is created.
 std::unique_ptr<ASTConsumer>
 DumpAstAction::CreateASTConsumer(CompilerInstance &CI, StringRef file) {
-    int counter = GLOBAL_COUNTER.fetch_add(1);
+    int counter = Counter.fetch_and_increment();
 
     // If runId greater than 0, use it instead of global counter
     if (DumpResources::runId > 0) {
