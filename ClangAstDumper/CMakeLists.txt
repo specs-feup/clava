@@ -22,6 +22,7 @@ set(SOURCE_FILES
 	src/plugin.cpp
 	src/Clang/ClangAst.cpp
 	src/Clang/ClangNodes.cpp
+	src/ClangEnums/ClangEnums.cpp
 	src/TypeMarker/TypeMarker.cpp
 	src/Clava/ClavaConstants.cpp
 	src/Clava/ClavaDecl.cpp
@@ -46,7 +47,7 @@ set(SOURCE_FILES
 	)
 
 add_library(MyPlugin MODULE ${SOURCE_FILES})
-target_compile_features(MyPlugin PRIVATE cxx_std_17)
+target_compile_features(MyPlugin PRIVATE cxx_std_20)
 
 
 add_custom_target (

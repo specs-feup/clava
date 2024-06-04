@@ -4,5 +4,5 @@
 
 #include "ClangEnums.h"
 
-extern const std::string clava::DESIGNATOR_KIND[]{"Field", "Array",
+const std::string clava::DESIGNATOR_KIND[]{"Field", "Array",
                                                   "ArrayRange"};

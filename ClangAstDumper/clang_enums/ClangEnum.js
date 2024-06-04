@@ -71,7 +71,7 @@ export default class ClangEnum {
 
     let code = "";
 
-    code += "extern const std::string clava::" + this.cppVarName + "[] = {\n";
+    code += "const std::string clava::" + this.cppVarName + "[] = {\n";
 
     for (let enumValue of this.enumValues) {
       if (this.excludeSet.has(enumValue.toString())) {
