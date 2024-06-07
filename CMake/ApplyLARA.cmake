@@ -51,8 +51,9 @@ function(apply_lara_aspect LARA_INPUT_FILES LARA_GENERATED_FILES LARA_SYSTEM_INC
             PRE_BUILD
             OUTPUT ${LARA_GENERATED_FILES}
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-            COMMAND ${Java_JAVA_EXECUTABLE} -Djava.awt.headless=true
-            -jar ${CLAVA_JAR} ${LARA_ASPECT}
+			
+            COMMAND ${CLAVA_CMD} #${Java_JAVA_EXECUTABLE} -Djava.awt.headless=true -jar ${CLAVA_JAR} 
+			${LARA_ASPECT}
             -p ${CLAVA_INPUT}
             -is ${LARA_SYSTEM_INCLUDES}
             -o ${CMAKE_CURRENT_BINARY_DIR}

@@ -88,6 +88,20 @@ endif()
 set(CLAVA_JAR ${CLAVA_JAR_PATH})
 set(CLAVA_JAR_FOUND)
 
+
+## Set Clava command
+
+# Check if CLAVA_JAR ends with ".jar"
+string(REGEX MATCH "\\.jar$" IS_JAR "${CLAVA_JAR}")
+
+if(IS_JAR)
+	set(CLAVA_CMD "java ${CLAVA_WEAVE_JAVA_FLAGS} -jar ${CLAVA_JAR}")
+else()
+	set(CLAVA_CMD "${CLAVA_JAR}")
+endif()
+
+message(STATUS "Setting Clava command as ${CLAVA_CMD}")
+
 # Add current folder to the modules path
 #set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_LIST_DIR}")
 
