@@ -481,7 +481,14 @@ public class ParallelCodeParser extends CodeParser {
             }
 
             if (isInclude) {
-                sourceFolders.add(SpecsIo.getCanonicalFile(SpecsIo.existingFolder(parserOption)));
+                var includePath = new File(parserOption);
+
+                if (!includePath.exists()) {
+                    SpecsLogs.info("Include path not found, ignoring: '" + parserOption + "'");
+                } else {
+                    sourceFolders.add(SpecsIo.getCanonicalFile(SpecsIo.existingFolder(parserOption)));
+                }
+
                 continue;
             }
             // if (parserOption.startsWith("-I")) {
