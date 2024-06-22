@@ -8,6 +8,8 @@ project("${ORIG_TARGET}_weaving")
 
 	#message(STATUS "-------->COMMAND: ${CLAVA_CMD} \"${ASPECT}\" ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p  \"${PROC_ORIG_SOURCES}\" -o \"${WORKING_DIR}\" -of \"${WOVEN_DIR_NAME}\" ${INCLUDE_HEADERS_FLAG} \"${PROC_ORIG_INCLUDES}\" ${CLAVA_WEAVE_FLAGS}")
 
+	message(STATUS "Clava weaver flags: ${CLAVA_WEAVE_FLAGS}")
+
 	set(WEAVER_DEPENDENCIES ${PROC_ORIG_SOURCES} ${ASPECT})	
 	# to skip parsing header files: -sih 
 	add_custom_command(
