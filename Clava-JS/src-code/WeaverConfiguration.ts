@@ -11,4 +11,5 @@ export const weaverConfig: WeaverConfiguration = {
     "./java-binaries/"
   ),
   javaWeaverQualifiedName: "pt.up.fe.specs.clava.weaver.CxxWeaver",
+  importForSideEffects: ["clava-js/api/Joinpoints.js"],
 };
