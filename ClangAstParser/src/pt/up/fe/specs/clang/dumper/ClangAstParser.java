@@ -69,6 +69,7 @@ import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.utilities.LineStream;
+import pt.up.fe.specs.util.utilities.StringList;
 
 /**
  * Creates a Clava tree from information dumped by ClangAstDumper.
@@ -617,7 +618,10 @@ public class ClangAstParser {
         }
 
         // Build patterns
-        var headerExcludes = config.get(ClangAstKeys.IGNORE_HEADER_INCLUDES);
+        StringList headerExcludes = new StringList();
+        if (config != null && config.hasValue(ClangAstKeys.IGNORE_HEADER_INCLUDES)) {
+            headerExcludes = config.get(ClangAstKeys.IGNORE_HEADER_INCLUDES);
+        }
 
         headerExcludePatterns = headerExcludes.stream()
                 .map(Pattern::compile)
