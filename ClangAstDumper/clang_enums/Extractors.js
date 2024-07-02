@@ -6,8 +6,7 @@
  * @returns
  */
 export function simpleExtractor(enumName, lines, occurence) {
-  const regex = "enum\\s+(class\\s+)?" + enumName + "\\s.*{";
-  const enumNameRegex = new RegExp(regex);
+  const enumNameRegex = new RegExp(String.raw`enum\s+(class\s+)?` + enumName + String.raw`\s.*{`);
 
   const enums = [];
   let searching = true;

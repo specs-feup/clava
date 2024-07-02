@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(ClangAstDumper)
 
-set(CLANG_VERSION 14)
+set(CLANG_VERSION 12)
 
 SET(CMAKE_C_COMPILER "clang-${CLANG_VERSION}")
 SET(CMAKE_CXX_COMPILER "clang++-${CLANG_VERSION}")
@@ -52,6 +52,6 @@ target_compile_features(MyPlugin PRIVATE cxx_std_20)
 
 add_custom_target (
 	clang_enums
-	COMMAND node clang_enums/Main.js ${CLANG_VERSION} src/
+	COMMAND node --experimental-default-type="module" clang_enums/Main.js ${CLANG_VERSION} src/
 	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 add_dependencies(MyPlugin clang_enums)
