@@ -224,11 +224,11 @@ void MyASTConsumer::HandleTranslationUnit(ASTContext &Ctx) {}
 // For each source file provided to the tool, a new FrontendAction is created.
 std::unique_ptr<ASTConsumer>
 DumpAstAction::CreateASTConsumer(CompilerInstance &CI, StringRef file) {
-    int counter = Counter.fetch_and_increment();
-
-    // If runId greater than 0, use it instead of global counter
-    if (DumpResources::runId > 0) {
-        counter = DumpResources::runId;
+    int counter = DumpResources::runId;
+    
+    // If runId is 0 (default value), use the global counter instead
+    if (counter == 0) {
+        counter = Counter.fetch_and_increment();
     }
 
     dumpCompilerInstanceData(CI, file);
@@ -355,6 +355,14 @@ std::ofstream DumpResources::consumer_order;
 std::ofstream DumpResources::types_with_templates;
 int DumpResources::runId;
 int DumpResources::systemHeaderThreshold;
+
+void DumpResources::setRunId(int runId) {
+    DumpResources::runId = runId;
+}
+
+void DumpResources::setSystemHeaderThreshold(int systemHeaderThreshold) {
+    DumpResources::systemHeaderThreshold = systemHeaderThreshold;
+}
 
 void DumpResources::writeCounter(int id) {
 

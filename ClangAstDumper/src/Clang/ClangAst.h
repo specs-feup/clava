@@ -13,7 +13,9 @@
 #include <clang/Frontend/FrontendActions.h>
 
 #include <fcntl.h>
+#include <llvm-12/llvm/Support/raw_ostream.h>
 #include <pthread.h>
+#include <string>
 #include <sys/mman.h>
 #include <unistd.h>
 
@@ -39,6 +41,9 @@ class DumpResources {
     static std::ofstream types_with_templates;
     static int runId;
     static int systemHeaderThreshold;
+
+    static void setRunId(int runId);
+    static void setSystemHeaderThreshold(int systemHeaderThreshold);
 
   private:
 };
@@ -139,13 +144,27 @@ class SharedCounter {
 // For each source file provided to the tool, a new FrontendAction is created.
 class DumpAstAction : public PluginASTAction {
   public:
+    DumpAstAction() {
+        DumpResources::init(0, 0);
+    }
+    ~DumpAstAction() {
+        DumpResources::finish();
+    }
+
     virtual std::unique_ptr<ASTConsumer>
     CreateASTConsumer(CompilerInstance &CI, StringRef file) override;
 
     bool ParseArgs(const CompilerInstance &CI,
                    const std::vector<std::string> &args) override {
-        // No arguments to parse
-        return true;
+        for (const auto &Arg : args) {
+            if (Arg.find("-file-id=") == 0) {
+                DumpResources::setRunId(std::stoi(Arg.substr(strlen("-file-id="))));
+            } else if (Arg.find("-system-threshold=") == 0) {
+                DumpResources::setSystemHeaderThreshold(std::stoi(Arg.substr(strlen("-system-threshold="))));
+            }
+        }
+
+        return true; // Return true even if the argument is not found to continue execution
     }
 
     PluginASTAction::ActionType getActionType() override {
