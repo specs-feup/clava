@@ -21,13 +21,13 @@ const _TYPE_H = new HeaderEnums("../../../include/clang/AST/Type.h", [
   new ClangEnum(
     "ElaboratedTypeKeyword",
     "ELABORATED_TYPE_KEYWORD",
-    (value) => _removePrefix(value, "ETK_").toUpperCase(),
+    (value) => _removePrefix(value, "ETK_"),
     undefined
   ),
   new ClangEnum(
     "TagTypeKind",
     "TAG_KIND",
-    (value) => _removePrefix(value, "TTK_").toUpperCase(),
+    (value) => _removePrefix(value, "TTK_"),
     undefined
   ),
 ]);
@@ -241,7 +241,7 @@ const _EXPR_H = new HeaderEnums("../../../include/clang/AST/Expr.h", [
     (value) => value.toUpperCase(),
     undefined,
     "OffsetOfNode"
-  ).setOccurence(9),
+  ).setOccurence(10),
   new ClangEnum(
     "IdentKind",
     "PREDEFINED_ID_TYPE",
