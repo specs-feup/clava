@@ -246,10 +246,12 @@ void clava::ClavaDataDumper::dump(const QualType &T) {
   // Unqualified type
   clava::dump(clava::getId(T.getTypePtr(), id));
 
+  // TODO: The following code is valid but the ASTParser hasn't been updated
+  // to handle it. Removing it for now as it breaks the whole tool.
   // Single desugar step
-  clava::dump(clava::getId(
-      T.getSingleStepDesugaredType(*const_cast<const ASTContext *>(Context)),
-      id));
+  // clava::dump(clava::getId(
+  //     T.getSingleStepDesugaredType(*const_cast<const ASTContext *>(Context)),
+  //     id));
 }
 
 void clava::ClavaDataDumper::DumpBuiltinTypeData(const BuiltinType *T) {
