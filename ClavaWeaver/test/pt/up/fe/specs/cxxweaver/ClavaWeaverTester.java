@@ -40,11 +40,12 @@ import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.providers.ResourceProvider;
 
 public class ClavaWeaverTester {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = SpecsSystem.isDebug();
 
     private static final String WORK_FOLDER = "cxx_weaver_output";
 

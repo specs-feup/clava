@@ -139,7 +139,7 @@ int functionWithComments() {
 	return 1;
 }
 
-int functionWithNakedIf(a) {
+int functionWithNakedIf(int a) {
 	int b = 0;
 	if(a) b = functionWithComments();
 	return b;
