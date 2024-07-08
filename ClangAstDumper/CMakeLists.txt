@@ -3,12 +3,15 @@ project(ClangAstDumper)
 
 set(CLANG_VERSION 16)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 SET(CMAKE_C_COMPILER "clang-${CLANG_VERSION}")
 SET(CMAKE_CXX_COMPILER "clang++-${CLANG_VERSION}")
 
 SET(Clang_DIR "/usr/lib/cmake/clang-${CLANG_VERSION}")
 SET(LLVM_DIR "/usr/lib/llvm-${CLANG_VERSION}/lib/cmake/llvm")
 
+add_compile_options(-Wsuggest-override)
 
 find_package(Clang REQUIRED CONFIG)
 include_directories("/usr/lib/clang/${CLANG_VERSION}/include/")
