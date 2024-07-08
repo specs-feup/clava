@@ -6,7 +6,7 @@ const eventListener = new EventEmitter();
 
 let idx = 0;
 
-eventListener.on("storeAST", (data: string) => {
+eventListener.on("storeAST", () => {
   console.log(`Waypoint ${idx}`);
   fs.writeFileSync(`history/waypoint_${idx}.txt`, Clava.getProgram().code);
   idx++;

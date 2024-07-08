@@ -299,7 +299,10 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Removes the node associated to this joinpoint from the AST
    */
-  detach(): Joinpoint { return wrapJoinPoint(this._javaObject.detach()); }
+  detach(): Joinpoint { 
+    eventListener.emit("storeAST");    
+    return wrapJoinPoint(this._javaObject.detach()); 
+  }
   /**
    * Inserts the given join point after this join point
    */
@@ -312,7 +315,7 @@ export class Joinpoint extends LaraJoinPoint {
    * Inserts the given join point after this join point
    */
   insertAfter(p1: Joinpoint | string): Joinpoint | Joinpoint { 
-    eventListener.emit("storeAST", p1.toString());
+    eventListener.emit("storeAST");
     return wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(p1))); 
   }
   /**
@@ -327,7 +330,7 @@ export class Joinpoint extends LaraJoinPoint {
    * Inserts the given join point before this join point
    */
   insertBefore(p1: Joinpoint | string): Joinpoint | Joinpoint { 
-    eventListener.emit("storeAST", p1.toString());
+    eventListener.emit("storeAST");
     return wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(p1))); 
   }
   /**
