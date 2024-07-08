@@ -38,11 +38,11 @@ public class ClangCxxTester {
 
     @Test
     public void testBool() {
-        newClangCxxTester("cxx/ast-print-bool.c").test();
+        newClangCxxTester("cxx/ast-print-bool.cpp").test();
     }
 
     @Test
     public void testRecordDeclStruct() {
-        newClangCxxTester("cxx/ast-print-record-decl.c").addFlags("-DKW=struct", "-DBASES=\" : B\"").test();
+        newClangCxxTester("cxx/ast-print-record-decl.cpp").addFlags("-DKW=struct", "-DBASES=\" : B\"").test();
     }
 }
