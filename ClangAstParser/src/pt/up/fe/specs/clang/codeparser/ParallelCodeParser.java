@@ -34,6 +34,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
+import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clang.dumper.ClangAstParser;
@@ -118,6 +119,10 @@ public class ParallelCodeParser extends CodeParser {
         // Prepare resources before execution
         // ClangResources clangResources = new ClangResources(get(SHOW_CLANG_DUMP));
         ClangResources clangResources = new ClangResources(this);
+        if (SpecsSystem.isLinux()) {
+            set(ClangAstKeys.LIBC_CXX_MODE, LibcMode.SYSTEM);
+            ClavaLog.debug(() -> "In Linux, ClangAstDumper is a plugin. LIBC_CXX_MODE is reset to SYSTEM.");
+        }
         var clangFiles = clangResources.getClangFiles(version, get(ClangAstKeys.LIBC_CXX_MODE));
         // File clangExecutable = clangResources.prepareResources(version);
         // List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,
