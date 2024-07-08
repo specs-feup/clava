@@ -17,6 +17,7 @@ import {
   wrapJoinPoint,
   unwrapJoinPoint,
 } from "lara-js/api/LaraJoinPoint.js";
+import eventListener from "./clava/history/eventListener.js";
 
 export class Joinpoint extends LaraJoinPoint {
   /**
@@ -310,7 +311,10 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Inserts the given join point after this join point
    */
-  insertAfter(p1: Joinpoint | string): Joinpoint | Joinpoint { return wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(p1))); }
+  insertAfter(p1: Joinpoint | string): Joinpoint | Joinpoint { 
+    eventListener.emit("storeAST", p1.toString());
+    return wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(p1))); 
+  }
   /**
    * Inserts the given join point before this join point
    */
@@ -322,7 +326,10 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Inserts the given join point before this join point
    */
-  insertBefore(p1: Joinpoint | string): Joinpoint | Joinpoint { return wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(p1))); }
+  insertBefore(p1: Joinpoint | string): Joinpoint | Joinpoint { 
+    eventListener.emit("storeAST", p1.toString());
+    return wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(p1))); 
+  }
   /**
    * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
    */
