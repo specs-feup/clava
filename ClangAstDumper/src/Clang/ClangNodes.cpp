@@ -163,11 +163,11 @@ const std::string clava::getId(const Expr *addr, int id) {
 }
 
 const std::string clava::getId(Optional<const Expr *> addr, int id) {
-    if (!addr.hasValue()) {
+    if (!addr.has_value()) {
         return "nullptr_expr";
     }
 
-    return getId(addr.getValue(), id);
+    return getId(addr.value(), id);
 }
 
 const std::string clava::getId(const Type *addr, int id) {
@@ -400,7 +400,7 @@ void clava::dump(const TemplateName &templateName, int id,
         clava::dump(
             templateName.getAsQualifiedTemplateName()->hasTemplateKeyword());
         clava::dump(clava::getId(
-            templateName.getAsQualifiedTemplateName()->getTemplateDecl(), id));
+            templateName.getAsTemplateDecl(), id));
         break;
     case TemplateName::NameKind::SubstTemplateTemplateParm:
         clava::dump(clava::getId(

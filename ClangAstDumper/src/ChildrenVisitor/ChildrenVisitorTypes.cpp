@@ -308,7 +308,7 @@ void ClangAstDumper::VisitSubstTemplateTypeParmTypeChildren(
     // Hierarchy
     VisitTypeChildren(T, visitedChildren);
 
-    VisitTypeTop(T->getReplacedParameter());
+    VisitDeclTop(T->getReplacedParameter());
     VisitTypeTop(T->getReplacementType());
 };
 
@@ -320,8 +320,8 @@ void ClangAstDumper::VisitTemplateSpecializationTypeChildren(
     VisitTypeChildren(T, visitedChildren);
 
     // Visit each argument
-    for (unsigned i = 0; i < T->getNumArgs(); i++) {
-        VisitTemplateArgChildren(T->getArg(i));
+    for (auto &arg : T->template_arguments()) {
+        VisitTemplateArgChildren(arg);
     }
 
     // Visit type alias

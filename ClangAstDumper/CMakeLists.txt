@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(ClangAstDumper)
 
-set(CLANG_VERSION 14)
+set(CLANG_VERSION 16)
 
 SET(CMAKE_C_COMPILER "clang-${CLANG_VERSION}")
 SET(CMAKE_CXX_COMPILER "clang++-${CLANG_VERSION}")

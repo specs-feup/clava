@@ -13,7 +13,6 @@
 #include <clang/Frontend/FrontendActions.h>
 
 #include <fcntl.h>
-#include <llvm-12/llvm/Support/raw_ostream.h>
 #include <pthread.h>
 #include <string>
 #include <sys/mman.h>
@@ -58,21 +57,19 @@ class IncludeDumper : public PPCallbacks {
   public:
     IncludeDumper(CompilerInstance &compilerInstance);
 
-    std::unique_ptr<PPCallbacks> createPreprocessorCallbacks();
-
     virtual void InclusionDirective(
         SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName,
-        bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File,
+        bool IsAngled, CharSourceRange FilenameRange, OptionalFileEntryRef File,
         StringRef SearchPath, StringRef RelativePath, const Module *Imported,
-        SrcMgr::CharacteristicKind FileType);
+        SrcMgr::CharacteristicKind FileType) override;
     virtual void MacroExpands(const Token &MacroNameTok,
                               const MacroDefinition &MD, SourceRange Range,
-                              const MacroArgs *Args);
+                              const MacroArgs *Args) override;
     virtual void PragmaDirective(SourceLocation Loc,
-                                 PragmaIntroducerKind Introducer);
+                                 PragmaIntroducerKind Introducer) override;
     virtual void FileChanged(SourceLocation Loc, FileChangeReason Reason,
                              SrcMgr::CharacteristicKind FileType,
-                             FileID PrevFID);
+                             FileID PrevFID) override;
 
   private:
     const CompilerInstance &compilerInstance;

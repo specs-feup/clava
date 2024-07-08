@@ -413,10 +413,10 @@ void clava::ClavaDataDumper::DumpTemplateSpecializationTypeData(
   });
   clava::dump(clava::getId(T->getTemplateName().getAsTemplateDecl(), id));
 
-  int numArgs = T->getNumArgs();
+  int numArgs = T->template_arguments().size();
   clava::dump(numArgs);
-  for (int i = 0; i < numArgs; i++) {
-    clava::dump(T->getArg(i), id, Context);
+  for (auto &arg : T->template_arguments()) {
+    clava::dump(arg, id, Context);
   }
 }
 
@@ -470,8 +470,8 @@ void clava::ClavaDataDumper::DumpPackExpansionTypeData(
   // Hierarchy
   DumpTypeData(T);
 
-  if (T->getNumExpansions().hasValue()) {
-    clava::dump(T->getNumExpansions().getValue());
+  if (T->getNumExpansions().has_value()) {
+    clava::dump(T->getNumExpansions().value());
   } else {
     clava::dump(0);
   }

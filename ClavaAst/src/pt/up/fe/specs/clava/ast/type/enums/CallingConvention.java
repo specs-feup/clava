@@ -37,7 +37,9 @@ public enum CallingConvention implements StringProvider {
     SwiftAsync,
     PreserveMost,
     PreserveAll,
-    AArch64VectorCall;
+    AArch64VectorCall,
+    AArch64SVEPCS,
+    AMDGPUKernelCall;
 
     private static final Lazy<EnumHelperWithValue<CallingConvention>> HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(CallingConvention.class);

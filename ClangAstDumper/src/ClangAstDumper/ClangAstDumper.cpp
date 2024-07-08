@@ -505,7 +505,7 @@ void ClangAstDumper::VisitTemplateName(const TemplateName &templateName) {
     VisitDeclTop(templateName.getAsTemplateDecl());
     break;
   case TemplateName::NameKind::QualifiedTemplate:
-    VisitDeclTop(templateName.getAsQualifiedTemplateName()->getTemplateDecl());
+    VisitDeclTop(templateName.getAsTemplateDecl());
     break;
   case TemplateName::NameKind::SubstTemplateTemplateParm:
     VisitDeclTop(templateName.getAsSubstTemplateTemplateParm()->getParameter());

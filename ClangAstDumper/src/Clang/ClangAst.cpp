@@ -268,10 +268,11 @@ void DumpAstAction::dumpCompilerInstanceData(CompilerInstance &CI,
     clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus11);
     clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus14);
     clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus17);
+    clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus20);
+    clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus2b);
     clava::dump(CI.getInvocation().getLangOpts()->Digraphs);
     clava::dump(CI.getInvocation().getLangOpts()->GNUMode);
     clava::dump(CI.getInvocation().getLangOpts()->HexFloats);
-    clava::dump(CI.getInvocation().getLangOpts()->ImplicitInt);
 
     clava::dump(CI.getInvocation().getLangOpts()->OpenCL);
     clava::dump(CI.getInvocation().getLangOpts()->OpenCLVersion);
@@ -302,7 +303,7 @@ IncludeDumper::IncludeDumper(CompilerInstance &compilerInstance)
 
 void IncludeDumper::InclusionDirective(
     SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName,
-    bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File,
+    bool IsAngled, CharSourceRange FilenameRange, OptionalFileEntryRef File,
     StringRef SearchPath, StringRef RelativePath, const Module *Imported,
     SrcMgr::CharacteristicKind FileType) {
 
