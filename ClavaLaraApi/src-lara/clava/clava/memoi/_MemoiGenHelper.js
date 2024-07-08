@@ -1,6 +1,7 @@
 import { debug } from "lara-js/api/lara/core/LaraCore.js";
 import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
 import Query from "lara-js/api/weaver/Query.js";
+import { Call, FileJp, FunctionJp, Statement } from "../../Joinpoints.js";
 import ClavaJavaTypes from "../ClavaJavaTypes.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 import MemoiUtils from "./MemoiUtils.js";
@@ -27,8 +28,8 @@ export function _generate(insertPred, countComparator, report, isMemoiDebug, isM
 }
 export function _Memoi_WrapGlobalTarget(signature) {
     const wrapperName = `mw_${MemoiUtils.normalizeSig(signature)}`;
-    for (const chain of Query.search("stmt")
-        .search("call", {
+    for (const chain of Query.search(Statement)
+        .search(Call, {
         signature: (sig) => sig.replace(/ /g, "") == signature,
     })
         .chain()) {
@@ -39,8 +40,8 @@ export function _Memoi_WrapGlobalTarget(signature) {
     return { wrapperName };
 }
 export function _Memoi_WrapSingleTarget(signature, location) {
-    for (const chain of Query.search("stmt")
-        .search("call", {
+    for (const chain of Query.search(Statement)
+        .search(Call, {
         signature: (sig) => sig.replace(/ /g, "") == signature,
     })
         .chain()) {
@@ -53,9 +54,9 @@ export function _Memoi_WrapSingleTarget(signature, location) {
     throw `Did not find call to ${signature} at ${location}`;
 }
 export function _Memoi_InsertTableCode(insertPred, countComparator, report, wrapperName, isMemoiDebug, isMemoiOnline, isMemoiEmpty, isMemoiUpdateAlways, memoiApproxBits, tableSize) {
-    Query.search("file")
-        .search("function", { name: wrapperName })
-        .search("call")
+    Query.search(FileJp)
+        .search(FunctionJp, { name: wrapperName })
+        .search(Call)
         .chain()
         .forEach((chain) => {
         const $file = chain["file"];
@@ -80,8 +81,8 @@ export function _Memoi_InsertTableCode(insertPred, countComparator, report, wrap
     });
 }
 export function _Memoi_AddMainDebug(totalName, missesName, wrapperName) {
-    Query.search("file")
-        .search("function", { name: "main" })
+    Query.search(FileJp)
+        .search(FunctionJp, { name: "main" })
         .chain()
         .forEach((chain) => {
         const $file = chain["file"];

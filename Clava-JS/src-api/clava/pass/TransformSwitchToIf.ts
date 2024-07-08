@@ -229,7 +229,9 @@ export default class TransformSwitchToIf extends SimplePass {
       const $ifStmt = this.caseIfStmts[i];
 
       if ($ifStmt instanceof GotoStmt) {
-        throw new Error("Unexpected goto statement in the middle of the switch");
+        throw new Error(
+          "Unexpected goto statement in the middle of the switch"
+        );
       }
 
       const $nextIfStmt = this.caseIfStmts[i + 1];
@@ -243,12 +245,12 @@ export default class TransformSwitchToIf extends SimplePass {
    * @param $switchExitGoTo - The goto statement that corresponds to the switch exit. This statement will be used to replace the break statements
    */
   private replaceBreakWithGoto($jp: Switch, $switchExitGoTo: GotoStmt) {
-    const $breakStmts = Query.searchFromInclusive($jp, "break", {
+    const $breakStmts = Query.searchFromInclusive($jp, Break, {
       enclosingStmt: (enclosingStmt: LaraJoinPoint) =>
         (enclosingStmt as Statement).astId === $jp.astId,
     });
     for (const $break of $breakStmts)
-      ($break as Break).replaceWith($switchExitGoTo);
+      $break.replaceWith($switchExitGoTo);
   }
 
   /**

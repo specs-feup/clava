@@ -1,4 +1,4 @@
-import { Loop } from "../../Joinpoints.js";
+import { EmptyStmt, Loop } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 /**
  * Replaces for loop with an equivalent construct based on a while loop:
@@ -33,8 +33,17 @@ export default function ForToWhileStmt($forStmt, stepLabelSuffix) {
     const localContinues = [...findLocalContinue($forStmt.body)];
     let loopStepStatements;
     const initStmt = $forStmt.init ?? ClavaJoinPoints.emptyStmt();
-    const condStmt = $forStmt.cond ?? ClavaJoinPoints.integerLiteral(1);
+    const condStmt = ($forStmt.cond === undefined || $forStmt.cond instanceof EmptyStmt)
+        ? ClavaJoinPoints.exprStmt(ClavaJoinPoints.integerLiteral(1))
+        : $forStmt.cond;
     const stepStmt = $forStmt.step ?? ClavaJoinPoints.emptyStmt();
+    const scopeNodes = $forStmt.scopeNodes;
+    $forStmt.init?.replaceWith(ClavaJoinPoints.emptyStmt());
+    $forStmt.cond?.replaceWith(ClavaJoinPoints.emptyStmt());
+    $forStmt.step?.replaceWith(ClavaJoinPoints.emptyStmt());
+    for (const $node of scopeNodes) {
+        $node.detach();
+    }
     if (localContinues.length > 0) {
         const $labelDecl = ClavaJoinPoints.labelDecl(`__for_loop_step_${stepLabelSuffix}`);
         loopStepStatements = [ClavaJoinPoints.labelStmt($labelDecl), stepStmt];
@@ -45,7 +54,7 @@ export default function ForToWhileStmt($forStmt, stepLabelSuffix) {
     else {
         loopStepStatements = [stepStmt];
     }
-    const $scope = ClavaJoinPoints.scope(initStmt, ClavaJoinPoints.whileStmt(condStmt, ClavaJoinPoints.scope(...$forStmt.scopeNodes, ...loopStepStatements)));
+    const $scope = ClavaJoinPoints.scope(initStmt, ClavaJoinPoints.whileStmt(condStmt, ClavaJoinPoints.scope(...scopeNodes, ...loopStepStatements)));
     $forStmt.replaceWith($scope);
     return $scope;
 }

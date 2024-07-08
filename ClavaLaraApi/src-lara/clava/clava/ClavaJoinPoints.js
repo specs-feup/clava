@@ -124,7 +124,7 @@ export default class ClavaJoinPoints {
      * @param callArgs - The arguments of the function.
      */
     static call($function, ...callArgs) {
-        return wrapJoinPoint(ClavaJavaTypes.AstFactory.callFromFunction(unwrapJoinPoint($function), unwrapJoinPoint(flattenArgsArray(callArgs))));
+        return wrapJoinPoint(ClavaJavaTypes.AstFactory.callFromFunction(unwrapJoinPoint($function), ...unwrapJoinPoint(flattenArgsArray(callArgs))));
     }
     /**
      * Creates a new join point 'call'.

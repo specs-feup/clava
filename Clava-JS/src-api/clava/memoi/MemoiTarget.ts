@@ -70,15 +70,16 @@ export default class MemoiTarget {
   static fromSig(sig: string) {
     sig = MemoiUtils.normalizeSig(sig);
 
-    const $func = Query.search("function", {
-      signature: (signature: string) => sig === MemoiUtils.normalizeSig(signature),
-    }).first() as FunctionJp | undefined;
+    const $func = Query.search(FunctionJp, {
+      signature: (signature: string) =>
+        sig === MemoiUtils.normalizeSig(signature),
+    }).first();
 
     if ($func === undefined) {
-      const $call = Query.search("call", {
+      const $call = Query.search(Call, {
         signature: (signature: string) =>
           sig === MemoiUtils.normalizeSig(signature),
-      }).first() as Call | undefined;
+      }).first();
 
       if ($call === undefined) {
         throw `Could not find function of sig '${sig}'`;
@@ -91,7 +92,7 @@ export default class MemoiTarget {
   }
 
   private findNumCallSites(): number {
-    return Query.search("call", {
+    return Query.search(Call, {
       signature: (signature: string) =>
         this.sig === MemoiUtils.normalizeSig(signature),
     }).get().length;
@@ -134,9 +135,7 @@ export default class MemoiTarget {
     });
 
     if (inputsInvalid) {
-      throw (
-        `The inputs of the target function '${this.sig}' are not supported.`
-      );
+      throw `The inputs of the target function '${this.sig}' are not supported.`;
     }
 
     const outputTestArray = this.numOutputs == 1 ? normalTypes : pointerTypes;
@@ -145,9 +144,7 @@ export default class MemoiTarget {
     });
 
     if (outputsInvalid) {
-      throw (
-        `The outputs of the target function '${this.sig}' are not supported.`
-      );
+      throw `The outputs of the target function '${this.sig}' are not supported.`;
     }
 
     // if the output are valid, drop the pointer from the type

@@ -20,12 +20,11 @@ double foo() {
    for(int i = 0; i < 1000; i++) {
       std::chrono::high_resolution_clock::time_point clava_timing_start_0;
       std::chrono::high_resolution_clock::time_point clava_timing_end_0;
-      std::chrono::high_resolution_clock::duration clava_timing_duration_0;
       clava_timing_start_0 = std::chrono::high_resolution_clock::now();
       a += bar();
       clava_timing_end_0 = std::chrono::high_resolution_clock::now();
-      clava_timing_duration_0 = clava_timing_end_0 - clava_timing_start_0;
-      std::cout << "Time:" << std::chrono::duration_cast<std::chrono::milliseconds>(clava_timing_duration_0).count() << "ms" << "\n";
+      long long clava_timing_duration_0 = std::chrono::duration_cast<std::chrono::milliseconds>(clava_timing_end_0 - clava_timing_start_0).count();
+      std::cout << "Time:" << clava_timing_duration_0 << "ms" << "\n";
    }
    
    return a;
@@ -35,28 +34,26 @@ double foo() {
 int main() {
    std::chrono::high_resolution_clock::time_point clava_timing_start_1;
    std::chrono::high_resolution_clock::time_point clava_timing_end_1;
-   std::chrono::high_resolution_clock::duration clava_timing_duration_1;
    clava_timing_start_1 = std::chrono::high_resolution_clock::now();
    foo();
    clava_timing_end_1 = std::chrono::high_resolution_clock::now();
-   clava_timing_duration_1 = clava_timing_end_1 - clava_timing_start_1;
-   std::cout << "Time:" << std::chrono::duration_cast<std::chrono::milliseconds>(clava_timing_duration_1).count() << "ms" << "\n";
+   long long clava_timing_duration_1 = std::chrono::duration_cast<std::chrono::milliseconds>(clava_timing_end_1 - clava_timing_start_1).count();
+   std::cout << "Time:" << clava_timing_duration_1 << "ms" << "\n";
    
    std::chrono::high_resolution_clock::time_point clava_timing_start_2;
    std::chrono::high_resolution_clock::time_point clava_timing_end_2;
-   std::chrono::high_resolution_clock::duration clava_timing_duration_2;
    clava_timing_start_2 = std::chrono::high_resolution_clock::now();
    bar2();
    clava_timing_end_2 = std::chrono::high_resolution_clock::now();
-   clava_timing_duration_2 = clava_timing_end_2 - clava_timing_start_2;
+   long long clava_timing_duration_2 = std::chrono::duration_cast<std::chrono::milliseconds>(clava_timing_end_2 - clava_timing_start_2).count();
+   std::cout << "I want to print the value of the elapsed time (" << clava_timing_duration_2 << "), which is in the unit 'ms' and put other stuff after it" << "\n";
    
    std::chrono::high_resolution_clock::time_point clava_timing_start_3;
    std::chrono::high_resolution_clock::time_point clava_timing_end_3;
-   std::chrono::high_resolution_clock::duration clava_timing_duration_3;
    clava_timing_start_3 = std::chrono::high_resolution_clock::now();
    bar3();
    clava_timing_end_3 = std::chrono::high_resolution_clock::now();
-   clava_timing_duration_3 = clava_timing_end_3 - clava_timing_start_3;
-   std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(clava_timing_duration_3).count() << "ms" << "\n";
+   long long clava_timing_duration_3 = std::chrono::duration_cast<std::chrono::milliseconds>(clava_timing_end_3 - clava_timing_start_3).count();
+   std::cout << clava_timing_duration_3 << "ms" << "\n";
    std::cout << "This should appear after the timer print" << "\n";
 }

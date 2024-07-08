@@ -1,5 +1,19 @@
 import Query from "lara-js/api/weaver/Query.js";
-import { ArrayAccess, BinaryOp, Expression, FunctionJp, Joinpoint, Loop, MemberAccess, Param, Scope, Statement, UnaryOp, Vardecl, Varref } from "../../Joinpoints.js";
+import {
+  ArrayAccess,
+  BinaryOp,
+  Expression,
+  FunctionJp,
+  Joinpoint,
+  Loop,
+  MemberAccess,
+  Param,
+  Scope,
+  Statement,
+  UnaryOp,
+  Vardecl,
+  Varref,
+} from "../../Joinpoints.js";
 import Logger from "../../lara/code/Logger.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 
@@ -16,15 +30,15 @@ let logger: Logger;
  *  - No pointers
  */
 export default class TraceInstrumentation {
-
   static instrument(funName: string): void {
     //Get function root
     let root;
     const filename = funName + ".dot";
     logger = new Logger(undefined, filename);
 
-    for (const elem of Query.search("function").chain()) {
-      if ((elem["function"] as FunctionJp).name == funName) root = elem["function"];
+    for (const elem of Query.search(FunctionJp).chain()) {
+      if ((elem["function"] as FunctionJp).name == funName)
+        root = elem["function"];
     }
     if (root == undefined) {
       console.log("Function " + funName + " not found, terminating...");
@@ -37,7 +51,7 @@ export default class TraceInstrumentation {
       const child = root.children[i];
       if (child instanceof Scope) {
         scope = child;
-      } 
+      }
       if (child instanceof Param) {
         registerInterface(child);
       }
@@ -51,15 +65,15 @@ export default class TraceInstrumentation {
     const children = scope.children;
 
     //Get global vars as interfaces
-    for (const elem of Query.search("vardecl")) {
-      if ((elem as Vardecl).isGlobal) registerInterface(elem as Vardecl);
+    for (const elem of Query.search(Vardecl)) {
+      if (elem.isGlobal) registerInterface(elem);
     }
 
     //Get local vars
-    for (const elem of Query.search("function", { name: funName }).search(
-      "vardecl"
+    for (const elem of Query.search(FunctionJp, { name: funName }).search(
+      Vardecl
     )) {
-      registerLocal(elem as Vardecl);
+      registerLocal(elem);
     }
 
     //Begin graph and create counters
@@ -92,7 +106,7 @@ export default class TraceInstrumentation {
 function explore(children: Joinpoint[]): void {
   for (let i = 0; i < children.length; i++) {
     const child = children[i];
-    
+
     if (child instanceof Statement) {
       if (child.children.length == 1) {
         handleStatement(child.children[0]);
@@ -149,7 +163,11 @@ function splitMulti(str: string, tokens: string[]): string[] {
   return newStr;
 }
 
-function filterCommonKeywords(value: string, index: number, arr: string[]): boolean {
+function filterCommonKeywords(
+  value: string,
+  index: number,
+  arr: string[]
+): boolean {
   const common = ["const", "static", "unsigned"];
   return !common.includes(value);
 }
@@ -207,7 +225,11 @@ function refAnyExpr(code: string): Statement {
   return ClavaJoinPoints.stmtLiteral(code);
 }
 
-function incrementCounter(node: Joinpoint, variable: string, indexes?: string[]): void {
+function incrementCounter(
+  node: Joinpoint,
+  variable: string,
+  indexes?: string[]
+): void {
   if (indexes != undefined) {
     let access = "";
     for (let i = 0; i < indexes.length; i++) {
@@ -255,7 +277,11 @@ function storeVar(node: Joinpoint, variable: string): void {
     .log(node, true);
 }
 
-function storeArray(node: Joinpoint, variable: string, indexes: string[]): void {
+function storeArray(
+  node: Joinpoint,
+  variable: string,
+  indexes: string[]
+): void {
   incrementCounter(node, variable, indexes);
   const att1 = "var";
   let att2 = "";
@@ -336,7 +362,13 @@ function createSeparator(node: Joinpoint): void {
 //--------------------
 // Create edges
 //--------------------
-function createEdge(node: Joinpoint, source: string[], dest: string[], pos?: string, offset?: string): void {
+function createEdge(
+  node: Joinpoint,
+  source: string[],
+  dest: string[],
+  pos?: string,
+  offset?: string
+): void {
   incrementCounter(node, "ne");
   logger.text(CM);
   if (source.length == 1) {
@@ -481,10 +513,7 @@ function getInfo(node: Joinpoint): string[] {
 }
 
 function handleExpression(node: Joinpoint): string[] {
-  if (
-    node.children.length == 3 &&
-    node.children[0] instanceof Expression
-  ) {
+  if (node.children.length == 3 && node.children[0] instanceof Expression) {
     //Build comparison
     const cmpInfo = getInfo(node.children[0].children[0]);
 

@@ -1,6 +1,7 @@
 import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
 import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
 import Query from "lara-js/api/weaver/Query.js";
+import { Call, FileJp, FunctionJp, Scope } from "../../Joinpoints.js";
 import Clava from "../Clava.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 import MemoiUtils from "./MemoiUtils.js";
@@ -50,10 +51,9 @@ export default class MemoiProf {
         const monitorName = "mp_" + cSig;
         const monitorType = ClavaJoinPoints.typeLiteral("MemoiProf*");
         // make the wrapper
-        for (const $jp of Query.search("call", {
+        for (const $call of Query.search(Call, {
             signature: (s) => this.target.sig === MemoiUtils.normalizeSig(s),
         })) {
-            const $call = $jp;
             $call.wrap(wrapperName);
         }
         // instrument the wrapper
@@ -71,10 +71,9 @@ export default class MemoiProf {
         const wrapperNameBase = "mw_" + cSig;
         const monitorNameBase = "mp_" + cSig;
         const monitorType = ClavaJoinPoints.typeLiteral("MemoiProf*");
-        for (const $jp of Query.search("call", {
+        for (const $call of Query.search(Call, {
             signature: (s) => this.target.sig === MemoiUtils.normalizeSig(s),
         })) {
-            const $call = $jp;
             // make the wrapper
             const wrapperName = IdGenerator.next(wrapperNameBase);
             $call.wrap(wrapperName);
@@ -90,9 +89,9 @@ export default class MemoiProf {
     memoiInstrumentWrapper(wrapperName, monitorName, monitorType) {
         const numInputs = this.target.numInputs;
         const numOutputs = this.target.numOutputs;
-        const query = Query.search("file")
-            .search("function", { name: wrapperName })
-            .search("call")
+        const query = Query.search(FileJp)
+            .search(FunctionJp, { name: wrapperName })
+            .search(Call)
             .chain();
         for (const row of query) {
             let code = "mp_inc(" + monitorName;
@@ -131,9 +130,9 @@ export default class MemoiProf {
         })
             .join(",")
             .toUpperCase();
-        const query = Query.search("file")
-            .search("function", { name: "main" })
-            .children("scope")
+        const query = Query.search(FileJp)
+            .search(FunctionJp, { name: "main" })
+            .children(Scope)
             .chain()[0];
         if (query !== undefined) {
             throw new Error("MemoiProf: Could not find main function needed for setup");

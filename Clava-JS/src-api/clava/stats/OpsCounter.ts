@@ -85,13 +85,13 @@ export default class OpsCounter {
     );
 
     // Apply to all ops found in the region
-    for (const $op of Query.searchFrom($region, "op")) {
-      this.countOp($op as Op);
+    for (const $op of Query.searchFrom($region, Op)) {
+      this.countOp($op);
     }
 
     // Call function recursively when function calls are found
-    for (const $call of Query.searchFrom($region, "call")) {
-      const $funcDef = ($call as Call).definition;
+    for (const $call of Query.searchFrom($region, Call)) {
+      const $funcDef = $call.definition;
 
       if ($funcDef === undefined) {
         continue;
