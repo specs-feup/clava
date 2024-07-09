@@ -551,7 +551,10 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Replaces this join point with a comment with the same contents as .code
    */
-  toComment(prefix: string = "", suffix: string = ""): Joinpoint { return wrapJoinPoint(this._javaObject.toComment(unwrapJoinPoint(prefix), unwrapJoinPoint(suffix))); }
+  toComment(prefix: string = "", suffix: string = ""): Joinpoint { 
+    eventListener.emit("storeAST");
+    return wrapJoinPoint(this._javaObject.toComment(unwrapJoinPoint(prefix), unwrapJoinPoint(suffix))); 
+  }
 }
 
 export class Attribute extends Joinpoint {
