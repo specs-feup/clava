@@ -107,7 +107,7 @@ export default class BatchParser {
     return this.parseError(lines.subList(1, lines.length), $literalFile);
   }
 
-  private parseError(lines: JavaClasses.List, $literalFile: FileJp) {
+  private parseError(lines: JavaClasses.List<string>, $literalFile: FileJp) {
     const errorLine: string = lines[0];
     const filename = $literalFile.name;
 

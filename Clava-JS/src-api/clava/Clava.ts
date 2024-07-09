@@ -5,7 +5,7 @@ import { JavaClasses } from "lara-js/api/lara/util/JavaTypes.js";
 import Query from "lara-js/api/weaver/Query.js";
 import Weaver from "lara-js/api/weaver/Weaver.js";
 import WeaverOptions from "lara-js/api/weaver/WeaverOptions.js";
-import { FileJp, Joinpoint, Program } from "../Joinpoints.js";
+import { FileJp, Include, Joinpoint, Program } from "../Joinpoints.js";
 import ClavaJavaTypes from "./ClavaJavaTypes.js";
 import ClavaDataStore from "./util/ClavaDataStore.js";
 
@@ -87,7 +87,7 @@ extern "C" {
 
   /**
    * Launches a Clava weaving session.
-   * @param {(string|Array)} args - The arguments to pass to the weaver, as if it was launched from the command-line
+   * @param args - The arguments to pass to the weaver, as if it was launched from the command-line
    * @returns True if the weaver execution without problems, false otherwise
    */
   static runClava(args: string | any[]): boolean {
@@ -220,15 +220,15 @@ extern "C" {
 
   /**
    *
-   * @returns {J#List<include>} a list of join points representing available user includes
+   * @returns A list of join points representing available user includes
    */
-  static getAvailableIncludes() {
+  static getAvailableIncludes(): JavaClasses.List<Include> {
     return ClavaJavaTypes.CxxWeaverApi.getAvailableUserIncludes();
   }
 
   /**
    *
-   * @returns {J#Set<String>} a set with paths to the include folders of the current configuration.
+   * @returns {J#Set<String>} A set with paths to the include folders of the current configuration.
    */
   static getIncludeFolders() {
     return ClavaJavaTypes.CxxWeaverApi.getIncludeFolders();

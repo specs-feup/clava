@@ -1,6 +1,6 @@
 import Graphs from "lara-js/api/lara/graphs/Graphs.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { Call } from "../../../Joinpoints.js";
+import { Call, FunctionJp } from "../../../Joinpoints.js";
 import ScgEdgeData from "./ScgEdgeData.js";
 import ScgNodeData from "./ScgNodeData.js";
 export default class StaticCallGraphBuilder {
@@ -91,8 +91,8 @@ export default class StaticCallGraphBuilder {
             }
             for (const $jpToSearch of jpsToSearch) {
                 // Get all function/call pairs for functions that are not yet in the seen functions
-                const functionCall = Query.searchFromInclusive($jpToSearch, "function", (self) => !seenFunctions.has(self.signature))
-                    .search("call")
+                const functionCall = Query.searchFromInclusive($jpToSearch, FunctionJp, (self) => !seenFunctions.has(self.signature))
+                    .search(Call)
                     .chain();
                 for (const pair of functionCall) {
                     const $function = pair["function"];

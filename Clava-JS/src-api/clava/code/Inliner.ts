@@ -341,8 +341,7 @@ export default class Inliner {
     // should be added
     const $parentFunction = $call.getAncestor("function") as FunctionJp;
     const addedDeclarations = new Set<string>();
-    for (const $jp of Query.searchFrom($newNodes, "call")) {
-      const $newCall = $jp as Call;
+    for (const $newCall of Query.searchFrom($newNodes, Call)) {
       // Ignore functions that are part of the system headers
       if ($newCall.function.isInSystemHeader) {
         continue;
@@ -393,7 +392,7 @@ export default class Inliner {
     const newLabels: Record<string, LabelDecl> = {};
 
     // Visit all gotoStmt and labelStmt
-    for (const jp of Query.search("joinpoint", {
+    for (const jp of Query.search(Joinpoint, {
       self: ($jp: LaraJoinPoint) =>
         $jp instanceof GotoStmt || $jp instanceof LabelStmt,
     })) {
@@ -418,8 +417,7 @@ export default class Inliner {
     }
 
     // If there are any label decls, rename them
-    for (const $jp of Query.search("labelDecl")) {
-      const $labelDecl = $jp as LabelDecl;
+    for (const $labelDecl of Query.search(LabelDecl)) {
       const $newLabelDecl = newLabels[$labelDecl.name];
       $labelDecl.replaceWith($newLabelDecl);
     }
@@ -536,10 +534,10 @@ export default class Inliner {
           newVar instanceof Varref
             ? newVar
             : // For other expressions, if parent is already a parenthesis, does not need to add a new one
-            $varRef.parent instanceof ParenExpr
-            ? newVar
-            : // Add parenthesis
-              ClavaJoinPoints.parenthesis(newVar);
+              $varRef.parent instanceof ParenExpr
+              ? newVar
+              : // Add parenthesis
+                ClavaJoinPoints.parenthesis(newVar);
 
         $varRef.replaceWith($adaptedVar);
       } else {
@@ -622,9 +620,7 @@ export default class Inliner {
       const $sizeExprCopy = type.sizeExpr.copy() as Varref;
 
       // Update any children of sizeExpr
-      for (const $jp of Query.searchFrom($sizeExprCopy, "varref")) {
-        const $varRef = $jp as Varref;
-
+      for (const $varRef of Query.searchFrom($sizeExprCopy, Varref)) {
         const $newVarref = this.updateVarRef($varRef, $call, newVariableMap);
         if ($newVarref !== $varRef) {
           hasChanges = true;

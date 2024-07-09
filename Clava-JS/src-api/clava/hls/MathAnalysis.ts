@@ -27,16 +27,16 @@ export class MathAnalysis {
 function MathReport(mathFun: MathInfo[], csv: boolean = false, name?: string) {
   //Counter for occurences of each math.h function
   const occurrences: Record<string, number> = {};
-  mathFun.forEach(f => {
+  mathFun.forEach((f) => {
     occurrences[f.name] = 0;
   });
 
   //Count occurrences
-  for (const elem of Query.search("call").chain()) {
+  for (const elem of Query.search(Call).chain()) {
     const fun = (elem["call"] as Call).name;
     if (fun in occurrences) {
       occurrences[fun] += 1;
-    } 
+    }
   }
 
   //Report occurrences
@@ -73,7 +73,7 @@ function MathCompare(mathFun: MathInfo[]) {
   console.log(
     "Type of arguments being passed to each call to a math.h function:"
   );
-  for (const elem of Query.search("call").chain()) {
+  for (const elem of Query.search(Call).chain()) {
     const $call = elem["call"] as Call;
     const fun = $call.name;
     if (fun in mathFun) {
@@ -81,7 +81,9 @@ function MathCompare(mathFun: MathInfo[]) {
       const types = [];
       for (let i = 0; i < args.length; i++)
         types.push((args[i].type as BuiltinType).builtinKind);
-      console.log(`-----------\nSig: ${$call.signature}\nArgs: ${types.join(", ")}`);
+      console.log(
+        `-----------\nSig: ${$call.signature}\nArgs: ${types.join(", ")}`
+      );
     }
   }
   console.log("");
@@ -102,8 +104,7 @@ function MathCompare(mathFun: MathInfo[]) {
  * (see documentation of clava.hls.MathHInfo for the format)
  * */
 function MathReplace(mathFun: MathInfo[]) {
-  
-  for (const elem of Query.search("call").chain()) {
+  for (const elem of Query.search(Call).chain()) {
     const $call = elem["call"] as Call;
     const fun = $call.name;
     if (fun in mathFun) {

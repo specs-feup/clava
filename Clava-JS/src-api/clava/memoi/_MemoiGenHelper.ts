@@ -1,7 +1,7 @@
 import { debug } from "lara-js/api/lara/core/LaraCore.js";
 import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { Call, FileJp, FunctionJp } from "../../Joinpoints.js";
+import { Call, FileJp, FunctionJp, Statement } from "../../Joinpoints.js";
 import ClavaJavaTypes, { ClavaJavaClasses } from "../ClavaJavaTypes.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 import MemoiUtils from "./MemoiUtils.js";
@@ -55,8 +55,8 @@ export function _generate(
 export function _Memoi_WrapGlobalTarget(signature: string) {
   const wrapperName = `mw_${MemoiUtils.normalizeSig(signature)}`;
 
-  for (const chain of Query.search("stmt")
-    .search("call", {
+  for (const chain of Query.search(Statement)
+    .search(Call, {
       signature: (sig: string) => sig.replace(/ /g, "") == signature,
     })
     .chain()) {
@@ -69,8 +69,8 @@ export function _Memoi_WrapGlobalTarget(signature: string) {
 }
 
 export function _Memoi_WrapSingleTarget(signature: string, location: string) {
-  for (const chain of Query.search("stmt")
-    .search("call", {
+  for (const chain of Query.search(Statement)
+    .search(Call, {
       signature: (sig: string) => sig.replace(/ /g, "") == signature,
     })
     .chain()) {
@@ -99,9 +99,9 @@ export function _Memoi_InsertTableCode(
   memoiApproxBits: number,
   tableSize: number
 ) {
-  Query.search("file")
-    .search("function", { name: wrapperName })
-    .search("call")
+  Query.search(FileJp)
+    .search(FunctionJp, { name: wrapperName })
+    .search(Call)
     .chain()
     .forEach((chain) => {
       const $file = chain["file"] as FileJp;
@@ -150,8 +150,8 @@ export function _Memoi_AddMainDebug(
   missesName: string,
   wrapperName: string
 ) {
-  Query.search("file")
-    .search("function", { name: "main" })
+  Query.search(FileJp)
+    .search(FunctionJp, { name: "main" })
     .chain()
     .forEach((chain) => {
       const $file = chain["file"] as FileJp;
