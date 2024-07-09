@@ -340,7 +340,10 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Removes the children of this node
    */
-  removeChildren(): void { return wrapJoinPoint(this._javaObject.removeChildren()); }
+  removeChildren(): void { 
+    eventListener.emit("storeAST");
+    return wrapJoinPoint(this._javaObject.removeChildren()); 
+  }
   /**
    * Replaces this node with the given node
    */
@@ -356,11 +359,17 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Replaces this node with the given node
    */
-  replaceWith(p1: Joinpoint | string | Joinpoint[]): Joinpoint | Joinpoint | Joinpoint { return wrapJoinPoint(this._javaObject.replaceWith(unwrapJoinPoint(p1))); }
+  replaceWith(p1: Joinpoint | string | Joinpoint[]): Joinpoint | Joinpoint | Joinpoint { 
+    eventListener.emit("storeAST");
+    return wrapJoinPoint(this._javaObject.replaceWith(unwrapJoinPoint(p1))); 
+  }
   /**
    * Overload which accepts a list of strings
    */
-  replaceWithStrings(node: string[]): Joinpoint { return wrapJoinPoint(this._javaObject.replaceWithStrings(unwrapJoinPoint(node))); }
+  replaceWithStrings(node: string[]): Joinpoint { 
+    eventListener.emit("storeAST");
+    return wrapJoinPoint(this._javaObject.replaceWithStrings(unwrapJoinPoint(node))); 
+  }
   /**
    * Setting data directly is not supported, this action just emits a warning and does nothing
    */
@@ -368,7 +377,10 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Replaces the first child, or inserts the join point if no child is present
    */
-  setFirstChild(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); }
+  setFirstChild(node: Joinpoint): void { 
+    eventListener.emit("storeAST");
+    return wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); 
+  }
   /**
    * Sets the commented that are embedded in a node
    */
@@ -380,11 +392,17 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Sets the commented that are embedded in a node
    */
-  setInlineComments(p1: string[] | string): void | void { return wrapJoinPoint(this._javaObject.setInlineComments(unwrapJoinPoint(p1))); }
+  setInlineComments(p1: string[] | string): void | void { 
+    eventListener.emit("storeAST");
+    return wrapJoinPoint(this._javaObject.setInlineComments(unwrapJoinPoint(p1))); 
+  }
   /**
    * Replaces the last child, or inserts the join point if no child is present
    */
-  setLastChild(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); }
+  setLastChild(node: Joinpoint): void { 
+    eventListener.emit("storeAST");
+    return wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); 
+  }
   /**
    * Sets the type of a node, if it has a type
    */

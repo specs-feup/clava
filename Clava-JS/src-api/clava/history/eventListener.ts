@@ -8,7 +8,7 @@ let idx = 0;
 
 eventListener.on("storeAST", () => {
   console.log(`Waypoint ${idx}`);
-  fs.writeFileSync(`history/waypoint_${idx}.txt`, Clava.getProgram().code);
+  fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
   idx++;
 });
 
