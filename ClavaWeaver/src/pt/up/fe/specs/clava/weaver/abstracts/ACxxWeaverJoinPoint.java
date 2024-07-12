@@ -465,12 +465,16 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         var reverseNodes = Arrays.asList(node);
         Collections.reverse(reverseNodes);
 
+        AJoinPoint topInserted = null;
         for (var nodeToInsert : reverseNodes) {
-            insertAfter(nodeToInsert);
+            topInserted = insertAfter(nodeToInsert);
         }
 
-        // Remove current node from the tree and return it
-        return detach();
+        // Remove current node from the tree
+        detach();
+
+        // Return the first inserted element
+        return topInserted;
     }
 
     @Override
