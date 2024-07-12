@@ -23,7 +23,10 @@ export default class ClavaCode {
    * Writes the code corresponding to the current AST as a single file.
    *
    */
-  static toSingleFile(fileOrBaseFolder?: string | JavaClasses.File, optionalFile?: string | JavaClasses.File) {
+  static toSingleFile(
+    fileOrBaseFolder?: string | JavaClasses.File,
+    optionalFile?: string | JavaClasses.File
+  ) {
     if (fileOrBaseFolder === undefined) {
       fileOrBaseFolder = Clava.getWeavingFolder();
       const extension = Clava.isCxx() ? "cpp" : "c";
@@ -55,8 +58,7 @@ export default class ClavaCode {
     const includes = new Set<string>();
     let bodyCode = "";
 
-    for (const $f of Query.search("file")) {
-      const $file = $f as FileJp;
+    for (const $file of Query.search(FileJp)) {
 
       if ($file.isHeader) {
         continue;
@@ -91,7 +93,10 @@ export default class ClavaCode {
     return singleFileCode;
   }
 
-  private static renameStaticDeclarations($file: FileJp, staticVerification: boolean) {
+  private static renameStaticDeclarations(
+    $file: FileJp,
+    staticVerification: boolean
+  ) {
     if (!staticVerification) {
       return false;
     }
@@ -100,13 +105,19 @@ export default class ClavaCode {
 
     // Look for static declarations
     for (const child of $file.children) {
-      if (child instanceof FunctionJp && child.storageClass === StorageClass.STATIC) {
+      if (
+        child instanceof FunctionJp &&
+        child.storageClass === StorageClass.STATIC
+      ) {
         const newName = child.name + "_static_rename";
         child.name = newName;
         changedCode = true;
       }
 
-      if (child instanceof Vardecl && child.storageClass === StorageClass.STATIC) {
+      if (
+        child instanceof Vardecl &&
+        child.storageClass === StorageClass.STATIC
+      ) {
         console.log(child.code);
         throw "Not yet supported for static variable declarations";
       }

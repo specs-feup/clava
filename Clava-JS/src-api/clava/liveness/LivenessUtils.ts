@@ -143,7 +143,7 @@ export default class LivenessUtils {
    * @returns A set of variable names declared with initialization in the given joinpoint
    */
   static getVarDeclsWithInit($jp: Statement | Expression): Set<string> {
-    const $varDecls = Query.searchFromInclusive($jp, "vardecl", {
+    const $varDecls = Query.searchFromInclusive($jp, Vardecl, {
       hasInit: true,
     });
     const varNames = ([...$varDecls] as Vardecl[]).map(($decl) => $decl.name);
@@ -157,7 +157,7 @@ export default class LivenessUtils {
    * @returns A set containing the names of the local variables or parameters on the left-hand side (LHS) of each assignment present in the given joinpoint
    */
   static getAssignedVars($jp: Statement | Expression): Set<string> {
-    const $assignments = Query.searchFromInclusive($jp, "binaryOp", {
+    const $assignments = Query.searchFromInclusive($jp, BinaryOp, {
       isAssignment: true,
       left: (left: LaraJoinPoint) => left instanceof Varref,
     });
@@ -174,7 +174,7 @@ export default class LivenessUtils {
    * @returns A set containing the names of local variables or parameters referenced by varref joinpoints, excluding those present on the LHS of assignments.
    */
   static getVarRefs($jp: Statement | Expression): Set<string> {
-    const $varRefs = Query.searchFromInclusive($jp, "varref");
+    const $varRefs = Query.searchFromInclusive($jp, Varref);
     const varNames = ([...$varRefs] as Varref[])
       .filter(
         ($ref) =>

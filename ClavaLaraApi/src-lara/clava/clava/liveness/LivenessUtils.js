@@ -1,5 +1,5 @@
 import Query from "lara-js/api/weaver/Query.js";
-import { BinaryOp, Varref, } from "../../Joinpoints.js";
+import { BinaryOp, Vardecl, Varref, } from "../../Joinpoints.js";
 export default class LivenessUtils {
     /**
      * Checks if the given graph is a Cytoscape graph
@@ -106,7 +106,7 @@ export default class LivenessUtils {
      * @returns A set of variable names declared with initialization in the given joinpoint
      */
     static getVarDeclsWithInit($jp) {
-        const $varDecls = Query.searchFromInclusive($jp, "vardecl", {
+        const $varDecls = Query.searchFromInclusive($jp, Vardecl, {
             hasInit: true,
         });
         const varNames = [...$varDecls].map(($decl) => $decl.name);
@@ -118,7 +118,7 @@ export default class LivenessUtils {
      * @returns A set containing the names of the local variables or parameters on the left-hand side (LHS) of each assignment present in the given joinpoint
      */
     static getAssignedVars($jp) {
-        const $assignments = Query.searchFromInclusive($jp, "binaryOp", {
+        const $assignments = Query.searchFromInclusive($jp, BinaryOp, {
             isAssignment: true,
             left: (left) => left instanceof Varref,
         });
@@ -133,7 +133,7 @@ export default class LivenessUtils {
      * @returns A set containing the names of local variables or parameters referenced by varref joinpoints, excluding those present on the LHS of assignments.
      */
     static getVarRefs($jp) {
-        const $varRefs = Query.searchFromInclusive($jp, "varref");
+        const $varRefs = Query.searchFromInclusive($jp, Varref);
         const varNames = [...$varRefs]
             .filter(($ref) => !LivenessUtils.isAssignedVar($ref) &&
             LivenessUtils.isLocalOrParam($ref))

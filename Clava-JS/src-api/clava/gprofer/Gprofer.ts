@@ -8,23 +8,23 @@ import CMaker from "../cmake/CMaker.js";
 import { debug } from "lara-js/api/lara/core/LaraCore.js";
 
 function GproferGetCxxFunction(signature: string) {
-  return Query.search("function", {
+  return Query.search(FunctionJp, {
     signature: signature,
     hasDefinition: true,
-  }).first() as FunctionJp | undefined;
+  }).first();
 }
 
 function GproferGetCFunction(signature: string) {
-  return Query.search("function", {
+  return Query.search(FunctionJp, {
     name: signature,
     hasDefinition: true,
-  }).first() as FunctionJp | undefined;
+  }).first();
 }
 
 interface GproferProfileFileContents {
   data: Record<string, Record<string, number>>;
   hotspots: Record<number, string>;
-};
+}
 
 export default class Gprofer {
   private _runs: number;
@@ -153,7 +153,9 @@ export default class Gprofer {
   }
 
   readProfile(path: JavaClasses.File = Io.getPath("./gprofer.json")) {
-    const obj = Io.readJson(path.getAbsolutePath()) as GproferProfileFileContents;
+    const obj = Io.readJson(
+      path.getAbsolutePath()
+    ) as GproferProfileFileContents;
     this._data = obj.data;
     this._hotSpots = obj.hotspots;
   }

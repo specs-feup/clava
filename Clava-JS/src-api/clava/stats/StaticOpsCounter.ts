@@ -155,8 +155,7 @@ export default class StaticOpsCounter {
 
     // If stmt is not a loop, count ops
     // Apply to all ops found in the stmt
-    for (const $jp of Query.searchFrom($stmt, "op")) {
-      const $op = $jp as Op;
+    for (const $op of Query.searchFrom($stmt, Op)) {
       // If not a valid op, continue
       if (!this.isValidOp($op)) {
         continue;
@@ -177,8 +176,7 @@ export default class StaticOpsCounter {
     }
 
     // Call function recursively when function calls are found
-    for (const $jp of Query.searchFrom($stmt, "call")) {
-      const $call = $jp as Call;
+    for (const $call of Query.searchFrom($stmt, Call)) {
       const $funcDef = $call.definition;
 
       if ($funcDef === undefined) {
@@ -237,8 +235,7 @@ export default class StaticOpsCounter {
   ): Record<string, Expression> {
     const result: Record<string, Expression> = {};
 
-    for (const $jp of Query.searchFromInclusive($expr, "varref")) {
-      const $varref = $jp as Varref;
+    for (const $varref of Query.searchFromInclusive($expr, Varref)) {
       if (result[$varref.name] !== undefined) {
         continue;
       }

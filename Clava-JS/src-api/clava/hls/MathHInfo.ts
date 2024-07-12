@@ -16,8 +16,8 @@ export default class MathHInfo {
     Clava.pushAst();
 
     // Clear AST
-    for (const $file of Query.search("file")) {
-      ($file as FileJp).detach();
+    for (const $file of Query.search(FileJp)) {
+      $file.detach();
     }
 
     // Prepare source file that will test math.h
@@ -34,12 +34,12 @@ export default class MathHInfo {
     Clava.rebuild();
 
     // Seach for the abs call and obtain math.h file where it was declared
-    const $absCall = Query.search("call", "abs").first() as Call;
+    const $absCall = Query.search(Call, "abs").first() as Call;
     const mathIncludeFile = $absCall.declaration.filepath;
 
     // Clear AST
-    for (const $file of Query.search("file")) {
-      ($file as FileJp).detach();
+    for (const $file of Query.search(FileJp)) {
+      $file.detach();
     }
 
     // Add math.h to the AST
@@ -49,11 +49,9 @@ export default class MathHInfo {
     Clava.rebuild();
 
     const results = [];
-    for (const $mathFunction of Query.search("file", "math_copy.h").search(
-      "function"
+    for (const $fn of Query.search(FileJp, "math_copy.h").search(
+      FunctionJp
     )) {
-      const $fn: FunctionJp = $mathFunction as FunctionJp;
-
       const paramTypes = [];
       for (const $param of $fn.params) {
         paramTypes.push($param.type.code);

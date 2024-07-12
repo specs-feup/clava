@@ -4,7 +4,7 @@ import ClavaJoinPoints from "../ClavaJoinPoints.js";
 
 export default class VitisHlsUtils {
   static activateAllDirectives(turnOn: boolean) {
-    const pragmas = Query.search("wrapperStmt", {
+    const pragmas = Query.search(WrapperStmt, {
       code: (code: string) =>
         code.includes("#pragma HLS") || code.includes("#pragma hls"),
     }).get() as WrapperStmt[] | undefined;

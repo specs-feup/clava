@@ -16,8 +16,7 @@ export default class SimplifySelectionStmts extends Pass {
 
   protected _apply_impl($jp: Joinpoint): PassResult {
     let appliedPass = false;
-    for (const jp of Query.searchFromInclusive($jp, "if")) {
-      const $if = jp as If;
+    for (const $if of Query.searchFromInclusive($jp, If)) {
       appliedPass = true;
       this.transform($if);
     }
