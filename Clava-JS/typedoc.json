@@ -1,5 +1,0 @@
-{
-  "extends": ["../../lara-framework/Lara-JS/typedoc.base.json"],
-  "entryPoints": ["src-api/"],
-  "tsconfig": "src-api/tsconfig.json",
-}
