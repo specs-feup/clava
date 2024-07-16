@@ -1286,13 +1286,15 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint getLastChildImpl() {
-        ClavaNode node = getNode();
 
-        if (!node.hasChildren()) {
+        // Get last child from jp children, so that null nodes are ignored
+        var children = getChildrenArrayImpl();
+
+        if (children.length == 0) {
             return null;
         }
 
-        return CxxJoinpoints.create(node.getChild(node.getNumChildren() - 1));
+        return children[children.length-1];
     }
 
     @Override
