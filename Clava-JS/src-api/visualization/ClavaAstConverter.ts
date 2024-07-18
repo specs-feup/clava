@@ -13,7 +13,6 @@ export default class ClavaAstConverter implements GenericAstConverter {
     return new ToolJoinPoint(
       clavaJp.astId,
       clavaJp.joinPointType,
-      clavaJp.code,
       clavaJp.children.map(child => this.getToolAst(child)),
     );
   }
