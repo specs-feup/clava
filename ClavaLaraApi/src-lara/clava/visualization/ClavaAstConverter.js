@@ -5,33 +5,57 @@ export default class ClavaAstConverter {
         const clavaJp = root;
         return new ToolJoinPoint(clavaJp.astId, clavaJp.joinPointType, clavaJp.children.map(child => this.getToolAst(child)));
     }
-    toCodeMap(jp, codeMap) {
-        codeMap[jp.astId] = jp.code.trim();
-        jp.children.forEach(child => this.toCodeMap(child, codeMap));
-        return codeMap;
+    sortByLocation(codeNodes) {
+        return codeNodes.sort((node1, node2) => node1.jp.location.localeCompare(node2.jp.location, 'en', { numeric: true }));
+    }
+    toCodeNode(jp) {
+        return {
+            jp: jp,
+            code: jp.code.trim(),
+            children: jp.children.map(child => this.toCodeNode(child)),
+        };
     }
     addIdentation(code, indentation) {
         return code.split('\n').map((line, i) => i > 0 ? '   '.repeat(indentation) + line : line).join('\n');
     }
-    refineCodeMap(root, codeMap, indentation = 0) {
-        codeMap[root.astId] = this.addIdentation(codeMap[root.astId], indentation);
-        if (root.joinPointType == 'loop') {
-            root.children
-                .filter(child => child.joinPointType === 'exprStmt')
-                .forEach(child => codeMap[child.astId] = codeMap[child.astId].slice(0, -1)); // Remove semicolon from expression statements inside loop parentheses
+    refineCode(node, indentation = 0) {
+        node.code = this.addIdentation(node.code, indentation);
+        this.sortByLocation(node.children);
+        if (node.jp.joinPointType == 'loop') {
+            node.children
+                .filter(child => child.jp.joinPointType === 'exprStmt')
+                .forEach(child => child.code = child.code.slice(0, -1)); // Remove semicolon from expression statements inside loop parentheses
         }
-        if (root.joinPointType == 'declStmt') {
-            root.children
+        if (node.jp.joinPointType == 'declStmt') {
+            node.children
                 .slice(1)
                 .forEach(child => {
-                codeMap[child.astId] = codeMap[child.astId].match(/(?:\S+\s+)(\S.*)/)[1];
+                child.code = child.code.match(/^(?:\S+\s+)(\S.*)$/)[1];
             }); // Remove type from variable declarations
         }
-        for (const child of root.children) {
-            const newIndentation = ['body', 'class'].includes(root.joinPointType) ? indentation + 1 : indentation;
-            this.refineCodeMap(child, codeMap, newIndentation);
+        for (const child of node.children) {
+            const newIndentation = ['body', 'class'].includes(node.jp.joinPointType) ? indentation + 1 : indentation;
+            this.refineCode(child, newIndentation);
         }
-        return codeMap;
+        if (node.children.length >= 1 && node.children[0].jp.astName === 'TagDeclVars') {
+            const tagDeclVars = node.children[0];
+            const typedef = tagDeclVars.children[0];
+            if (typedef.jp.joinPointType === 'typedefDecl') {
+                const [, code1, code2] = typedef.code.match(/^(.*\S)\s+(\S+)$/);
+                tagDeclVars.code = typedef.code = code1;
+                const newChild = {
+                    jp: tagDeclVars.jp,
+                    code: code2,
+                    children: [{
+                            jp: typedef.jp,
+                            code: code2,
+                            children: [],
+                        }],
+                };
+                node.children.push(newChild);
+            } // Assign typedef code to TagDeclVars and split into two children
+        }
+        return node;
     }
     escapeHtml(text) {
         const specialCharMap = {
@@ -47,27 +71,20 @@ export default class ClavaAstConverter {
     getNodeCodeTags(nodeId) {
         return this.getSpanTags(['class="node-code"', `data-node-id="${nodeId}"`]);
     }
-    sortByLocation(jps) {
-        return jps.sort((jp1, jp2) => jp1.location.localeCompare(jp2.location, 'en', { numeric: true }));
-    }
-    linkCodeToAstNodes(root, codeMap, outerCode, outerCodeStart, outerCodeEnd) {
-        const nodeCode = codeMap[root.astId];
+    linkCodeToAstNodes(root, outerCode, outerCodeStart, outerCodeEnd) {
+        const nodeCode = root.code;
         const nodeCodeHtml = this.escapeHtml(nodeCode);
         const innerCodeStart = outerCode.indexOf(nodeCodeHtml, outerCodeStart);
         const innerCodeEnd = innerCodeStart + nodeCodeHtml.length;
         if (innerCodeStart === -1 || innerCodeEnd > outerCodeEnd) {
-            console.warn(`Code of node "${root.joinPointType}" not found in code container: "${nodeCodeHtml}"`);
+            console.warn(`Code of node "${root.jp.joinPointType}" not found in code container: "${nodeCodeHtml}"`);
             return [outerCodeStart, outerCodeStart, ""];
         }
-        if (root.joinPointType === 'varref' && nodeCode === 'i') {
-            console.warn(outerCode.slice(outerCodeStart, outerCodeEnd), innerCodeStart);
-        }
-        const [openingTag, closingTag] = this.getNodeCodeTags(root.astId);
+        const [openingTag, closingTag] = this.getNodeCodeTags(root.jp.astId);
         let newCode = openingTag;
         let newCodeIndex = innerCodeStart;
-        const sortedChildren = this.sortByLocation(root.children.slice());
-        for (const child of sortedChildren) {
-            const [childCodeStart, childCodeEnd, childCode] = this.linkCodeToAstNodes(child, codeMap, outerCode, newCodeIndex, innerCodeEnd);
+        for (const child of root.children) {
+            const [childCodeStart, childCodeEnd, childCode] = this.linkCodeToAstNodes(child, outerCode, newCodeIndex, innerCodeEnd);
             newCode += outerCode.slice(newCodeIndex, childCodeStart) + childCode;
             newCodeIndex = childCodeEnd;
         }
@@ -76,12 +93,11 @@ export default class ClavaAstConverter {
     }
     getPrettyHtmlCode() {
         const root = Clava.getProgram();
-        const codeMap = {};
-        this.toCodeMap(root, codeMap);
-        this.refineCodeMap(root, codeMap);
-        let code = codeMap[root.astId];
+        const rootCodeNode = this.toCodeNode(root);
+        this.refineCode(rootCodeNode);
+        let code = rootCodeNode.code;
         code = this.escapeHtml(code);
-        code = this.linkCodeToAstNodes(root, codeMap, code, 0, code.length)[2];
+        code = this.linkCodeToAstNodes(rootCodeNode, code, 0, code.length)[2];
         return code;
     }
 }
