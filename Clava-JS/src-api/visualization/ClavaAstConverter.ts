@@ -20,12 +20,38 @@ export default class ClavaAstConverter implements GenericAstConverter {
     );
   }
 
-  private refineJoinPoint(jp: ToolJoinPoint) {
-    
+  private addIdentation(code: string, indentation: number): string {
+    return code.split('\n').map((line, i) => i > 0 ? '   '.repeat(indentation) + line : line).join('\n');
+  }
+
+  private refineAstCode(root: ToolJoinPoint, indentation: number = 0): ToolJoinPoint {
+    root.code = this.addIdentation(root.code.trim(), indentation);
+
+    const children = root.children;
+    if (root.type == 'loop') {
+      children
+        .filter(child => child.type === 'exprStmt')
+        .forEach(child => child.code = child.code.slice(0, -1));	// Remove semicolon from expression statements inside loop parentheses
+    }
+
+    if (root.type == 'declStmt') {
+      root.children
+        .slice(1)
+        .forEach(child => {
+          child.code = child.code.match(/(?:\S+\s+)(\S.*)/)![1];
+        });  // Remove type from variable declarations
+    }
+
+
+    for (const child of root.children) {
+      this.refineAstCode(child, ['body', 'class'].includes(root.type) ? indentation + 1 : indentation);
+    }
+
+    return root;
   }
 
   public getToolAst(root: LaraJoinPoint): ToolJoinPoint {
-    return this.toToolJoinPoint(root);
+    return this.refineAstCode(this.toToolJoinPoint(root));
   }
 
   public getPrettyHtmlCode(): string {

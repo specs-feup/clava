@@ -8,10 +8,31 @@ export default class ClavaAstConverter {
         const sortedChildren = this.sortByLocation(clavaJp.children.slice());
         return new ToolJoinPoint(clavaJp.astId, clavaJp.joinPointType, clavaJp.code, sortedChildren.map(child => this.toToolJoinPoint(child)));
     }
-    refineJoinPoint(jp) {
+    addIdentation(code, indentation) {
+        return code.split('\n').map((line, i) => i > 0 ? '   '.repeat(indentation) + line : line).join('\n');
+    }
+    refineAstCode(root, indentation = 0) {
+        root.code = this.addIdentation(root.code.trim(), indentation);
+        const children = root.children;
+        if (root.type == 'loop') {
+            children
+                .filter(child => child.type === 'exprStmt')
+                .forEach(child => child.code = child.code.slice(0, -1)); // Remove semicolon from expression statements inside loop parentheses
+        }
+        if (root.type == 'declStmt') {
+            root.children
+                .slice(1)
+                .forEach(child => {
+                child.code = child.code.match(/(?:\S+\s+)(\S.*)/)[1];
+            }); // Remove type from variable declarations
+        }
+        for (const child of root.children) {
+            this.refineAstCode(child, ['body', 'class'].includes(root.type) ? indentation + 1 : indentation);
+        }
+        return root;
     }
     getToolAst(root) {
-        return this.toToolJoinPoint(root);
+        return this.refineAstCode(this.toToolJoinPoint(root));
     }
     getPrettyHtmlCode() {
         return '';
