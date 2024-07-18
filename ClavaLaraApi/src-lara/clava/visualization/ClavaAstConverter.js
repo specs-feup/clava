@@ -37,6 +37,13 @@ export default class ClavaAstConverter {
             const newIndentation = ['body', 'class'].includes(node.jp.joinPointType) ? indentation + 1 : indentation;
             this.refineCode(child, newIndentation);
         }
+        if (node.jp.joinPointType == 'body' && node.jp.naked) {
+            const match = node.code.match(/^([^\/]*\S)\s*(\/\/.*)$/);
+            if (match) {
+                const [, statement, comment] = match;
+                node.code = statement + '  ' + comment;
+            }
+        } // Fix space between statement and inline comment in naked body
         if (node.children.length >= 1 && node.children[0].jp.astName === 'TagDeclVars') {
             const tagDeclVars = node.children[0];
             const typedef = tagDeclVars.children[0];

@@ -1,7 +1,7 @@
 import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
 import GenericAstConverter from "lara-js/api/visualization/GenericAstConverter.js";
 import ToolJoinPoint from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
-import { Joinpoint } from "../Joinpoints.js";
+import { Body, Joinpoint } from "../Joinpoints.js";
 import Clava from "../clava/Clava.js";
 
 type CodeNode = {
@@ -60,6 +60,13 @@ export default class ClavaAstConverter implements GenericAstConverter {
       this.refineCode(child, newIndentation);
     }
 
+    if (node.jp.joinPointType == 'body' && (node.jp as Body).naked) {
+      const match = node.code.match(/^([^\/]*\S)\s*(\/\/.*)$/);
+      if (match) {
+        const [, statement, comment] = match;
+        node.code = statement + '  ' + comment;
+      }
+    }  // Fix space between statement and inline comment in naked body
     
     if (node.children.length >= 1 && node.children[0].jp.astName === 'TagDeclVars') {
       const tagDeclVars = node.children[0];
