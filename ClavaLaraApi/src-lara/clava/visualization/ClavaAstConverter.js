@@ -3,7 +3,7 @@ import Clava from "../clava/Clava.js";
 export default class ClavaAstConverter {
     getToolAst(root) {
         const clavaJp = root;
-        return new ToolJoinPoint(clavaJp.astId, clavaJp.joinPointType, clavaJp.code, clavaJp.children.map(child => this.getToolAst(child)));
+        return new ToolJoinPoint(clavaJp.astId, clavaJp.joinPointType, clavaJp.children.map(child => this.getToolAst(child)));
     }
     toCodeMap(jp, codeMap) {
         codeMap[jp.astId] = jp.code.trim();
