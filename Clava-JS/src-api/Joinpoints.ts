@@ -443,8 +443,10 @@ export class Joinpoint extends LaraJoinPoint {
    * Inserts the given join point after this join point
    */
   insertAfter(p1: Joinpoint | string): Joinpoint { 
-    eventListener.emit("storeAST");
-    return wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "insertAfter", this));  
+    const jp = wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "insertAfter", this, jp as Joinpoint, p1));
+    return jp;  
   }
   /**
    * Inserts the given join point before this join point
@@ -458,8 +460,10 @@ export class Joinpoint extends LaraJoinPoint {
    * Inserts the given join point before this join point
    */
   insertBefore(p1: Joinpoint | string): Joinpoint { 
-    eventListener.emit("storeAST");
-    return wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "insertBefore", this)); 
+    const jp = wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "insertBefore", this, jp as Joinpoint, p1));
+    return jp;
   }
   /**
    * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
@@ -469,8 +473,10 @@ export class Joinpoint extends LaraJoinPoint {
    * Removes the children of this node
    */
   removeChildren(): void { 
-    eventListener.emit("storeAST");
-    return wrapJoinPoint(this._javaObject.removeChildren()); 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "removeChildren", this)); 
+    const jp = wrapJoinPoint(this._javaObject.removeChildren()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "removeChildren", this, jp as Joinpoint));
+    return jp;
   }
   /**
    * Replaces this node with the given node
@@ -488,15 +494,19 @@ export class Joinpoint extends LaraJoinPoint {
    * Replaces this node with the given node
    */
   replaceWith(p1: Joinpoint | string | Joinpoint[]): Joinpoint { 
-    eventListener.emit("storeAST");
-    return wrapJoinPoint(this._javaObject.replaceWith(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "replaceWith", this)); 
+    const jp = wrapJoinPoint(this._javaObject.replaceWith(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "replaceWith", this, jp as Joinpoint, p1));
+    return jp;
   }
   /**
    * Overload which accepts a list of strings
    */
   replaceWithStrings(node: string[]): Joinpoint { 
-    eventListener.emit("storeAST");
-    return wrapJoinPoint(this._javaObject.replaceWithStrings(unwrapJoinPoint(node))); 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "replaceWithStrings", this)); 
+    const jp = wrapJoinPoint(this._javaObject.replaceWithStrings(unwrapJoinPoint(node)));
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "replaceWithStrings", this, jp as Joinpoint, node));
+    return jp;
   }
   /**
    * Setting data directly is not supported, this action just emits a warning and does nothing
@@ -506,8 +516,10 @@ export class Joinpoint extends LaraJoinPoint {
    * Replaces the first child, or inserts the join point if no child is present
    */
   setFirstChild(node: Joinpoint): void { 
-    eventListener.emit("storeAST");
-    return wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setFirstChild", this)); 
+    const jp = wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setFirstChild", this, jp as Joinpoint, node));
+    return jp;
   }
   /**
    * Sets the commented that are embedded in a node
@@ -521,20 +533,29 @@ export class Joinpoint extends LaraJoinPoint {
    * Sets the commented that are embedded in a node
    */
   setInlineComments(p1: string[] | string): void { 
-    eventListener.emit("storeAST");
-    return wrapJoinPoint(this._javaObject.setInlineComments(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setInlineComments", this)); 
+    const jp = wrapJoinPoint(this._javaObject.setInlineComments(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setInlineComments", this, jp as Joinpoint, p1));
+    return jp;
   }
   /**
    * Replaces the last child, or inserts the join point if no child is present
    */
   setLastChild(node: Joinpoint): void { 
-    eventListener.emit("storeAST");
-    return wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setLastChild", this)); 
+    const jp = wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setLastChild", this, jp as Joinpoint, node));
+    return jp;
   }
   /**
    * Sets the type of a node, if it has a type
    */
-  setType(type: Type): void { return wrapJoinPoint(this._javaObject.setType(unwrapJoinPoint(type))); }
+  setType(type: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setType", this)); 
+    const jp = wrapJoinPoint(this._javaObject.setType(unwrapJoinPoint(type))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setType", this, jp as Joinpoint, type));
+    return jp;
+  }
   /**
    * Associates arbitrary values to nodes of the AST
    */
@@ -546,17 +567,29 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Associates arbitrary values to nodes of the AST
    */
-  setUserField(p1: string | Record<string, any>, p2?: object): object { return wrapJoinPoint(this._javaObject.setUserField(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  setUserField(p1: string | Record<string, any>, p2?: object): object { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setUserField", this)); 
+    const jp = wrapJoinPoint(this._javaObject.setUserField(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setUserField", this, jp as Joinpoint, p1, p2));
+    return jp;
+  }
   /**
    * Sets the value associated with the given property key
    */
-  setValue(key: string, value: object): Joinpoint { return wrapJoinPoint(this._javaObject.setValue(unwrapJoinPoint(key), unwrapJoinPoint(value))); }
+  setValue(key: string, value: object): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setValue", this)); 
+    const jp = wrapJoinPoint(this._javaObject.setValue(unwrapJoinPoint(key), unwrapJoinPoint(value))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setValue", this, jp as Joinpoint, key, value));
+    return jp;
+  }
   /**
    * Replaces this join point with a comment with the same contents as .code
    */
   toComment(prefix: string = "", suffix: string = ""): Joinpoint { 
-    eventListener.emit("storeAST");
-    return wrapJoinPoint(this._javaObject.toComment(unwrapJoinPoint(prefix), unwrapJoinPoint(suffix))); 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "toComment", this)); 
+    const jp = wrapJoinPoint(this._javaObject.toComment(unwrapJoinPoint(prefix), unwrapJoinPoint(suffix))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "toComment", this, jp as Joinpoint, prefix, suffix));
+    return jp;
   }
 }
 
