@@ -11,3 +11,15 @@ export class InsertOperation implements Operation {
       this.newJP.detach();
   }
 }
+
+export class ReplaceOperation implements Operation {
+  constructor(private oldJP: Joinpoint, private newJP: Joinpoint, private count: number) {}
+
+  undo(): void {
+    const siblings: Joinpoint[] = this.newJP.siblingsRight;
+    for (let i = 0; i < this.count - 1; i++){
+      siblings.at(i)?.detach();
+    }
+    this.newJP.replaceWith(this.oldJP);
+  }
+}
