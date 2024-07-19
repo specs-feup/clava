@@ -17,7 +17,8 @@ import {
   wrapJoinPoint,
   unwrapJoinPoint,
 } from "lara-js/api/LaraJoinPoint.js";
-import eventListener from "./clava/history/eventListener.js";
+import eventListener from "./clava/history/EventListener.js";
+import { Event, EventTime } from "./clava/history/Events.js";
 
 type PrivateMapper = {
   "Joinpoint": typeof Joinpoint,
@@ -425,8 +426,10 @@ export class Joinpoint extends LaraJoinPoint {
    * Removes the node associated to this joinpoint from the AST
    */
   detach(): Joinpoint { 
-    eventListener.emit("storeAST");    
-    return wrapJoinPoint(this._javaObject.detach()); 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "detach", this));    
+    const jp = wrapJoinPoint(this._javaObject.detach()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "detach", this, jp as Joinpoint));  
+    return jp;
   }
   /**
    * Inserts the given join point after this join point
