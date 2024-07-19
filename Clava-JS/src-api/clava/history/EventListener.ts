@@ -19,7 +19,7 @@ eventListener.on("storeAST", () => {
 eventListener.on("ACTION", (e: Event) => {
   
   // Event Logs for debugging
-  
+  /*
   console.log("\nReceived ACTION event");
   console.log(e.timing);
   console.log(e.description);
@@ -27,7 +27,7 @@ eventListener.on("ACTION", (e: Event) => {
   console.log(e.returnJP);
   console.log(e.inputs);
   console.log("\n");
-  
+  */
 
   switch (e.timing) {
     case EventTime.BEFORE:
@@ -66,7 +66,7 @@ eventListener.on("ACTION", (e: Event) => {
   }
 
   // Manual testing the rollback
-  
+  /*
   console.log(`Waypoint ${idx}`);
   fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
   idx++;
@@ -76,7 +76,7 @@ eventListener.on("ACTION", (e: Event) => {
   console.log(`Waypoint ${idx}`);
   fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
   idx++;
-  
+  */
 });
 
 function insertOperationFromEvent(e: Event) {
