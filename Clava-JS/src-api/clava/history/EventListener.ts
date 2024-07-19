@@ -18,7 +18,7 @@ eventListener.on("storeAST", () => {
 eventListener.on("ACTION", (e: Event) => {
   
   // Event Logs for debugging
-
+  /*
   console.log("\nReceived ACTION event");
   console.log(e.timing);
   console.log(e.description);
@@ -26,6 +26,7 @@ eventListener.on("ACTION", (e: Event) => {
   console.log(e.returnJP);
   console.log(e.inputs);
   console.log("\n");
+  */
 
   switch (e.timing) {
     case EventTime.BEFORE:
