@@ -3,7 +3,7 @@ import * as fs from "fs";
 import Clava from "../Clava.js";
 import { Event, EventTime } from "./Events.js";
 import ophistory from "./History.js";
-import { InsertOperation, ReplaceOperation } from "./Operations.js";
+import { InsertOperation, ReplaceOperation, TypeChangeOperation } from "./Operations.js";
 import { Joinpoint } from "../../Joinpoints.js";
 
 const eventListener = new EventEmitter();
@@ -31,8 +31,13 @@ eventListener.on("ACTION", (e: Event) => {
 
   switch (e.timing) {
     case EventTime.BEFORE:
-      break;
-
+      switch (e.description) {
+        case "setType":
+          changeTypeFromEvent(e);
+          break;
+        default:
+          break;
+      }
     case EventTime.AFTER:
       switch (e.description){
         case "insertAfter":
@@ -95,6 +100,10 @@ function replaceMultipleOperationFromEvent(e: Event) {
   if (e.returnJP !== undefined){
     ophistory.newOperation(new ReplaceOperation(e.mainJP, e.returnJP, (e.inputs[0] as (Joinpoint[] | string[])).length));
   }
+}
+
+function changeTypeFromEvent(e: Event) {
+  ophistory.newOperation(new TypeChangeOperation(e.mainJP, e.mainJP.type))
 }
 
 export default eventListener;
