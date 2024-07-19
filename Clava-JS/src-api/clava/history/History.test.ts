@@ -2,7 +2,8 @@ import { registerSourceCode } from "lara-js/jest/jestHelpers";
 import Clava from "../../../api/clava/Clava";
 import Query from "lara-js/api/weaver/Query";
 import ophistory from "./History";
-import { Loop, ReturnStmt } from "../../Joinpoints";
+import { Loop, ReturnStmt, Vardecl } from "../../Joinpoints";
+import ClavaJoinPoints from "../../../api/clava/ClavaJoinPoints";
 
 const code: string = `void func() {
     for (int i = 0; i < 1; i++){
@@ -133,6 +134,21 @@ describe("History of Transformations", () => {
         
         expect(a).toEqual(c);
         expect(b).not.toEqual(c);
+    });
+
+    it("Change type and rollback comparison", () => {
+        const a: string = Clava.getProgram().code;        
+        
+        const vd = Query.search(Vardecl).first();
+        vd?.setType(ClavaJoinPoints.type("test"));
+
+        const b: string = Clava.getProgram().code;
+        
+        ophistory.rollback();
+        const c: string = Clava.getProgram().code;
+
+        expect(a).toEqual(c);
+        expect(a).not.toEqual(b);
     });
 });
 
