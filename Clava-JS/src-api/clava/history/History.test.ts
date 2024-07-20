@@ -239,5 +239,77 @@ describe("History of Transformations", () => {
         expect(a).toEqual(c);
         expect(a).not.toEqual(b);
     });
+
+    it("Initial code, set inline comment and rollback code comparison", () => {
+        const a = Clava.getProgram().code;
+    
+        const loopStmt = Query.search(Loop).get().at(0);
+        loopStmt?.setInlineComments("aaaaa");
+    
+        const b = Clava.getProgram().code;
+    
+        ophistory.rollback();
+        const c = Clava.getProgram().code;
+    
+        expect(a).toEqual(c);
+        expect(b).not.toEqual(c);
+    });
+
+    it("Initial code, set inline comments and rollback code comparison", () => {
+        const a = Clava.getProgram().code;
+
+        const loopStmt = Query.search(Loop).get().at(0);
+        loopStmt?.setInlineComments(["aaaaa", "bbbbb"]);
+
+        const b = Clava.getProgram().code;
+
+        ophistory.rollback();
+        const c = Clava.getProgram().code;
+
+        expect(a).toEqual(c);
+        expect(b).not.toEqual(c);
+    });
+
+    it("Initial code, set inline comments and rollback code comparison", () => {
+        const a = Clava.getProgram().code;
+
+        const loopStmt = Query.search(Loop).get().at(0);
+        
+        loopStmt?.setInlineComments(["aaaaa", "bbbbb"]);
+        const b = Clava.getProgram().code;
+
+        loopStmt?.setInlineComments([""]);
+        const c = Clava.getProgram().code;
+
+        loopStmt?.setInlineComments("ccccc");
+        const d = Clava.getProgram().code;
+
+        loopStmt?.setInlineComments("");
+        const e = Clava.getProgram().code;
+
+        ophistory.rollback();
+        const f = Clava.getProgram().code;
+
+        ophistory.rollback();
+        const g = Clava.getProgram().code;
+
+        ophistory.rollback();
+        const h = Clava.getProgram().code;
+
+        ophistory.rollback();
+        const i = Clava.getProgram().code;
+
+        expect(a).toEqual(i);
+        expect(a).toEqual(e);
+        expect(b).toEqual(h);
+        expect(c).toEqual(g);
+        expect(d).toEqual(f);
+        expect(a).not.toEqual(b);
+        expect(a).not.toEqual(c);
+        expect(a).not.toEqual(d);
+        expect(b).not.toEqual(c);
+        expect(b).not.toEqual(d);
+        expect(c).not.toEqual(d);
+  });
 });
 
