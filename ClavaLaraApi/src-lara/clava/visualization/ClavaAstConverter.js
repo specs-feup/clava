@@ -1,16 +1,16 @@
 import ToolJoinPoint from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
+import { IntLiteral, TypedefDecl } from "../Joinpoints.js";
 import Clava from "../clava/Clava.js";
 export default class ClavaAstConverter {
     getJoinPointInfo(jp) {
         const info = {
-            'astId': jp.astId,
-            'astName': jp.astName,
+            'AST ID': jp.astId,
+            'AST Name': jp.astName,
         };
-        switch (jp.joinPointType) {
-            case 'intLiteral':
-                const intLiteral = jp;
-                info['value'] = intLiteral.value.toString();
-                break;
+        if (jp instanceof IntLiteral) {
+            Object.assign(info, {
+                'Value': jp.value.toString(),
+            });
         }
         return info;
     }
@@ -29,7 +29,11 @@ export default class ClavaAstConverter {
         return code.split('\n').map((line, i) => i > 0 ? '   '.repeat(indentation) + line : line).join('\n');
     }
     sortByLocation(codeNodes) {
-        return codeNodes.sort((node1, node2) => node1.jp.location.localeCompare(node2.jp.location, 'en', { numeric: true }));
+        return codeNodes.sort((node1, node2) => {
+            if (node1.jp.line === node2.jp.line)
+                return (node1.jp.column ?? -1) - (node2.jp.column ?? -1);
+            return (node1.jp.line ?? -1) - (node2.jp.line ?? -1);
+        });
     }
     refineCode(node, indentation = 0) {
         node.code = this.addIdentation(node.code, indentation);
@@ -60,7 +64,7 @@ export default class ClavaAstConverter {
         if (node.children.length >= 1 && node.children[0].jp.astName === 'TagDeclVars') {
             const tagDeclVars = node.children[0];
             const typedef = tagDeclVars.children[0];
-            if (typedef.jp.joinPointType === 'typedefDecl') {
+            if (typedef.jp instanceof TypedefDecl) {
                 const [, code1, code2] = typedef.code.match(/^(.*\S)\s+(\S+)$/);
                 tagDeclVars.code = typedef.code = code1;
                 const newChild = {
