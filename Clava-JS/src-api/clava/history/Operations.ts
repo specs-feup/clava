@@ -24,6 +24,28 @@ export class ReplaceOperation implements Operation {
   }
 }
 
+export enum DetachReference {
+  LEFT = "Left",
+  RIGHT = "Right",
+  TOP = "Top"
+}
+
+export class DetachOperation implements Operation {
+  constructor(private mainJP: Joinpoint, private refJP: Joinpoint, private ref: string) {}
+
+  undo(): void {
+    if (this.ref === DetachReference.LEFT){
+      this.refJP.insertAfter(this.mainJP)
+    }
+    else if (this.ref === DetachReference.RIGHT){
+      this.refJP.insertBefore(this.mainJP);
+    }
+    else {
+      this.refJP.setFirstChild(this.mainJP);
+    }
+  }
+}
+
 export class SetChildOperation implements Operation {
   constructor(private newChildJP: Joinpoint, private oldChildJP?: Joinpoint) {}
 

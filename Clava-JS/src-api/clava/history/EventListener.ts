@@ -3,7 +3,7 @@ import * as fs from "fs";
 import Clava from "../Clava.js";
 import { Event, EventTime } from "./Events.js";
 import ophistory from "./History.js";
-import { InlineCommentOperation, InsertOperation, RemoveChildrenOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation } from "./Operations.js";
+import { DetachOperation, DetachReference, InlineCommentOperation, InsertOperation, RemoveChildrenOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation } from "./Operations.js";
 import { Joinpoint } from "../../Joinpoints.js";
 
 const eventListener = new EventEmitter();
@@ -13,6 +13,10 @@ let idx = 0;
 
 // Used for saving previous child in setFirstChild and setLastChild
 let auxJP: Joinpoint;
+
+// Used for saving reference JP in detach
+let refJP: Joinpoint;
+let ref: string;
 
 eventListener.on("storeAST", () => {
   console.log(`Waypoint ${idx}`);
@@ -36,6 +40,9 @@ eventListener.on("ACTION", (e: Event) => {
   switch (e.timing) {
     case EventTime.BEFORE:
       switch (e.description) {
+        case "detach":
+          detachOperationFromEvent(e);
+          break;
         case "removeChildren":
           removeChildrenOperationFromEvent(e);
           break;
@@ -95,7 +102,7 @@ eventListener.on("ACTION", (e: Event) => {
 
   // Manual testing the rollback
   /*
-  if (e.description === "setInlineComments" && e.timing === EventTime.AFTER) {
+  if (e.description === "detach" && e.timing === EventTime.AFTER) {
     console.log(`Waypoint ${idx}`);
     fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
     idx++;
@@ -125,6 +132,21 @@ function replaceMultipleOperationFromEvent(e: Event) {
   if (e.returnJP !== undefined){
     ophistory.newOperation(new ReplaceOperation(e.mainJP, e.returnJP, (e.inputs[0] as (Joinpoint[] | string[])).length));
   }
+}
+
+function detachOperationFromEvent(e: Event) {
+  let refJP: Joinpoint, ref: DetachReference;
+  if (e.mainJP.siblingsLeft.length >= 1){
+    refJP = e.mainJP.leftJp;
+    ref = DetachReference.LEFT;
+  } else if  (e.mainJP.siblingsRight.length >= 1) {
+    refJP = e.mainJP.rightJp;
+    ref = DetachReference.RIGHT;
+  } else {
+    refJP = e.mainJP.parent;
+    ref = DetachReference.TOP;
+  }
+  ophistory.newOperation(new DetachOperation(e.mainJP, refJP, ref));
 }
 
 function setFirstChildFromEvent(e: Event, aux: Joinpoint) {
