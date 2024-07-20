@@ -37,6 +37,24 @@ export class SetChildOperation implements Operation {
   }
 }
 
+export class RemoveChildrenOperation implements Operation {
+  constructor(private parentJP: Joinpoint, private childrenJPs: Joinpoint[]) {}
+
+  undo(): void {
+    if (this.childrenJPs.length > 0) {
+      if (this.childrenJPs.at(0)){
+        this.parentJP.setFirstChild(this.childrenJPs.at(0) as Joinpoint);
+        let prev = this.parentJP.firstChild;
+        for (let i = 1; i < this.childrenJPs.length; i++) {
+          if (i < this.childrenJPs.length && this.childrenJPs.at(i)) {
+            prev = prev.insertAfter(this.childrenJPs.at(i) as Joinpoint);
+          }
+        }
+      }
+    }
+  }
+}
+
 export class TypeChangeOperation implements Operation {
   constructor(private jp: Joinpoint, private oldType: Type) {}
 

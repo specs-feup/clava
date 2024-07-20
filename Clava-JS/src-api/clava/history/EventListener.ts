@@ -3,7 +3,7 @@ import * as fs from "fs";
 import Clava from "../Clava.js";
 import { Event, EventTime } from "./Events.js";
 import ophistory from "./History.js";
-import { InsertOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation } from "./Operations.js";
+import { InsertOperation, RemoveChildrenOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation } from "./Operations.js";
 import { Joinpoint } from "../../Joinpoints.js";
 
 const eventListener = new EventEmitter();
@@ -33,6 +33,9 @@ eventListener.on("ACTION", (e: Event) => {
   switch (e.timing) {
     case EventTime.BEFORE:
       switch (e.description) {
+        case "removeChildren":
+          removeChildrenOperationFromEvent(e);
+          break;
         case "setType":
           changeTypeFromEvent(e);
           break;
@@ -86,15 +89,17 @@ eventListener.on("ACTION", (e: Event) => {
 
   // Manual testing the rollback
   /*
-  console.log(`Waypoint ${idx}`);
-  fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
-  idx++;
-
-  ophistory.rollback();
-
-  console.log(`Waypoint ${idx}`);
-  fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
-  idx++;
+  if (e.description === "removeChildren" && e.timing === EventTime.AFTER) {
+    console.log(`Waypoint ${idx}`);
+    fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
+    idx++;
+    
+    ophistory.rollback();
+    
+    console.log(`Waypoint ${idx}`);
+    fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
+    idx++;
+  }
   */
 });
 
@@ -124,8 +129,12 @@ function setLastChildFromEvent(e: Event, aux: Joinpoint) {
   ophistory.newOperation(new SetChildOperation(e.mainJP.lastChild, aux));
 }
 
+function removeChildrenOperationFromEvent(e: Event) {
+  ophistory.newOperation(new RemoveChildrenOperation(e.mainJP, e.mainJP.children));
+}
+
 function changeTypeFromEvent(e: Event) {
-  ophistory.newOperation(new TypeChangeOperation(e.mainJP, e.mainJP.type))
+  ophistory.newOperation(new TypeChangeOperation(e.mainJP, e.mainJP.type));
 }
 
 export default eventListener;
