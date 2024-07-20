@@ -3,12 +3,15 @@ import * as fs from "fs";
 import Clava from "../Clava.js";
 import { Event, EventTime } from "./Events.js";
 import ophistory from "./History.js";
-import { InsertOperation, RemoveChildrenOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation } from "./Operations.js";
+import { InlineCommentOperation, InsertOperation, RemoveChildrenOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation } from "./Operations.js";
 import { Joinpoint } from "../../Joinpoints.js";
 
 const eventListener = new EventEmitter();
 
+// Used for counting number of waypoints
 let idx = 0;
+
+// Used for saving previous child in setFirstChild and setLastChild
 let auxJP: Joinpoint;
 
 eventListener.on("storeAST", () => {
@@ -44,6 +47,9 @@ eventListener.on("ACTION", (e: Event) => {
           break;
         case "setLastChild":
           auxJP = e.mainJP.lastChild;
+          break;
+        case "setInlineComments":
+          inlineCommentOperationFromEvent(e);
           break;
         default:
           break;
@@ -89,7 +95,7 @@ eventListener.on("ACTION", (e: Event) => {
 
   // Manual testing the rollback
   /*
-  if (e.description === "removeChildren" && e.timing === EventTime.AFTER) {
+  if (e.description === "setInlineComments" && e.timing === EventTime.AFTER) {
     console.log(`Waypoint ${idx}`);
     fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
     idx++;
@@ -135,6 +141,13 @@ function removeChildrenOperationFromEvent(e: Event) {
 
 function changeTypeFromEvent(e: Event) {
   ophistory.newOperation(new TypeChangeOperation(e.mainJP, e.mainJP.type));
+}
+
+function inlineCommentOperationFromEvent(e: Event) {
+  const comments = e.mainJP.inlineComments
+    .map((comment) => comment.text)
+    .filter((comment): comment is string => comment !== null);
+  ophistory.newOperation(new InlineCommentOperation(e.mainJP, comments));
 }
 
 export default eventListener;

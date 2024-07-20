@@ -62,3 +62,16 @@ export class TypeChangeOperation implements Operation {
     this.jp.setType(this.oldType);
   }
 }
+
+export class InlineCommentOperation implements Operation {
+  constructor(private jp: Joinpoint, private oldComments: string[]) {}
+
+  undo(): void {
+    if (this.oldComments.length === 0) {
+      this.jp.setInlineComments("");
+    }
+    else {
+      this.jp.setInlineComments(this.oldComments);
+    }
+  }
+}
