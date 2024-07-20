@@ -1,7 +1,7 @@
 import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
 import GenericAstConverter from "lara-js/api/visualization/GenericAstConverter.js";
 import ToolJoinPoint, { JoinPointInfo } from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
-import { Body, IntLiteral, Joinpoint } from "../Joinpoints.js";
+import { Body, IntLiteral, Joinpoint, TypedefDecl } from "../Joinpoints.js";
 import Clava from "../clava/Clava.js";
 
 type CodeNode = {
@@ -13,15 +13,14 @@ type CodeNode = {
 export default class ClavaAstConverter implements GenericAstConverter {
   private getJoinPointInfo(jp: Joinpoint): JoinPointInfo {
     const info: JoinPointInfo = {
-      'astId': jp.astId,
-      'astName': jp.astName,
+      'AST ID': jp.astId,
+      'AST Name': jp.astName,
     };
 
-    switch (jp.joinPointType) {
-      case 'intLiteral':
-        const intLiteral = jp as IntLiteral;
-        info['value'] = intLiteral.value.toString();
-        break;
+    if (jp instanceof IntLiteral) {
+      Object.assign(info, {
+        'Value': jp.value.toString(),
+      });
     }
 
     return info;
@@ -51,7 +50,11 @@ export default class ClavaAstConverter implements GenericAstConverter {
   }
 
   private sortByLocation(codeNodes: CodeNode[]): CodeNode[] {
-    return codeNodes.sort((node1, node2) => node1.jp.location.localeCompare(node2.jp.location, 'en', { numeric: true }));
+    return codeNodes.sort((node1, node2) => {
+      if (node1.jp.line === node2.jp.line)
+        return (node1.jp.column ?? -1) - (node2.jp.column ?? -1);
+      return (node1.jp.line ?? -1) - (node2.jp.line ?? -1);
+    });
   }
 
   private refineCode(node: CodeNode, indentation: number = 0): CodeNode {
@@ -88,7 +91,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
     if (node.children.length >= 1 && node.children[0].jp.astName === 'TagDeclVars') {
       const tagDeclVars = node.children[0];
       const typedef = tagDeclVars.children[0];
-      if (typedef.jp.joinPointType === 'typedefDecl') {
+      if (typedef.jp instanceof TypedefDecl) {
         const [, code1, code2] = typedef.code.match(/^(.*\S)\s+(\S+)$/)!;
         tagDeclVars.code = typedef.code = code1;
 
