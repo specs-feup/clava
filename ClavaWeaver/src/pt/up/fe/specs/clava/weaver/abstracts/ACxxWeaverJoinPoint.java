@@ -447,12 +447,16 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         var reverseNodes = Arrays.asList(node);
         Collections.reverse(reverseNodes);
 
+        AJoinPoint topInserted = null;
         for (var nodeToInsert : reverseNodes) {
-            insertAfter(nodeToInsert);
+            topInserted = insertAfter(nodeToInsert);
         }
 
-        // Remove current node from the tree and return it
-        return detach();
+        // Remove current node from the tree
+        detach();
+
+        // Return the first inserted element
+        return topInserted;
     }
 
     @Override
@@ -461,12 +465,16 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         var reverseNodes = Arrays.asList(node);
         Collections.reverse(reverseNodes);
 
+        AJoinPoint topInserted = null;
         for (var nodeToInsert : reverseNodes) {
-            insertAfter(nodeToInsert);
+            topInserted = insertAfter(nodeToInsert);
         }
 
-        // Remove current node from the tree and return it
-        return detach();
+        // Remove current node from the tree
+        detach();
+
+        // Return the first inserted element
+        return topInserted;
     }
 
     @Override
@@ -1278,13 +1286,15 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint getLastChildImpl() {
-        ClavaNode node = getNode();
 
-        if (!node.hasChildren()) {
+        // Get last child from jp children, so that null nodes are ignored
+        var children = getChildrenArrayImpl();
+
+        if (children.length == 0) {
             return null;
         }
 
-        return CxxJoinpoints.create(node.getChild(node.getNumChildren() - 1));
+        return children[children.length-1];
     }
 
     @Override

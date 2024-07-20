@@ -10,6 +10,9 @@
 /* eslint-disable @typescript-eslint/no-duplicate-type-constituents */
 import { LaraJoinPoint, registerJoinpointMapper, wrapJoinPoint, unwrapJoinPoint, } from "lara-js/api/LaraJoinPoint.js";
 export class Joinpoint extends LaraJoinPoint {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -351,6 +354,9 @@ export class Joinpoint extends LaraJoinPoint {
     toComment(prefix = "", suffix = "") { return wrapJoinPoint(this._javaObject.toComment(unwrapJoinPoint(prefix), unwrapJoinPoint(suffix))); }
 }
 export class Attribute extends Joinpoint {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -360,6 +366,9 @@ export class Attribute extends Joinpoint {
  * Utility joinpoint, to represent certain problems when generating join points
  */
 export class ClavaException extends Joinpoint {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -368,6 +377,9 @@ export class ClavaException extends Joinpoint {
     get message() { return wrapJoinPoint(this._javaObject.getMessage()); }
 }
 export class Comment extends Joinpoint {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -379,6 +391,9 @@ export class Comment extends Joinpoint {
  * Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code
  */
 export class Decl extends Joinpoint {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -391,11 +406,17 @@ export class Decl extends Joinpoint {
  * Utility joinpoint, to represent empty nodes when directly accessing the tree
  */
 export class Empty extends Joinpoint {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
 }
 export class Expression extends Joinpoint {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -418,6 +439,9 @@ export class Expression extends Joinpoint {
  * Represents a source file (.c, .cpp., .cl, etc)
  */
 export class FileJp extends Joinpoint {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -539,6 +563,9 @@ export class FileJp extends Joinpoint {
     write(destinationFoldername) { return wrapJoinPoint(this._javaObject.write(unwrapJoinPoint(destinationFoldername))); }
 }
 export class ImplicitValue extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -547,6 +574,9 @@ export class ImplicitValue extends Expression {
  * Represents an include directive (e.g., #include <stdio.h>)
  */
 export class Include extends Decl {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -564,6 +594,9 @@ export class Include extends Decl {
     get relativeFolderpath() { return wrapJoinPoint(this._javaObject.getRelativeFolderpath()); }
 }
 export class InitList extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -573,11 +606,17 @@ export class InitList extends Expression {
     get arrayFiller() { return wrapJoinPoint(this._javaObject.getArrayFiller()); }
 }
 export class Literal extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
 }
 export class MemberAccess extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -602,6 +641,9 @@ export class MemberAccess extends Expression {
  * Represents a decl with a name
  */
 export class NamedDecl extends Decl {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -626,11 +668,17 @@ export class NamedDecl extends Decl {
     setQualifiedPrefix(qualifiedPrefix) { return wrapJoinPoint(this._javaObject.setQualifiedPrefix(unwrapJoinPoint(qualifiedPrefix))); }
 }
 export class NewExpr extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
 }
 export class Op extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -642,6 +690,9 @@ export class Op extends Expression {
     get operator() { return wrapJoinPoint(this._javaObject.getOperator()); }
 }
 export class ParenExpr extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -654,6 +705,9 @@ export class ParenExpr extends Expression {
  * Represents a pragma in the code (e.g., #pragma kernel)
  */
 export class Pragma extends Joinpoint {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -688,6 +742,9 @@ export class Pragma extends Joinpoint {
  * Represents the complete program and is the top-most joinpoint in the hierarchy
  */
 export class Program extends Joinpoint {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -790,6 +847,9 @@ export class Program extends Joinpoint {
  * Common class of struct, union and class
  */
 export class RecordJp extends NamedDecl {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -810,6 +870,9 @@ export class RecordJp extends NamedDecl {
     addField(field) { return wrapJoinPoint(this._javaObject.addField(unwrapJoinPoint(field))); }
 }
 export class Statement extends Joinpoint {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -820,11 +883,17 @@ export class Statement extends Joinpoint {
  * Represets a struct declaration
  */
 export class Struct extends RecordJp {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
 }
 export class Switch extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -849,6 +918,9 @@ export class Switch extends Statement {
  * A pragma that references a point in the code and sticks to it
  */
 export class Tag extends Pragma {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "id",
     };
@@ -858,6 +930,9 @@ export class Tag extends Pragma {
     get id() { return wrapJoinPoint(this._javaObject.getId()); }
 }
 export class TernaryOp extends Op {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -866,11 +941,17 @@ export class TernaryOp extends Op {
     get trueExpr() { return wrapJoinPoint(this._javaObject.getTrueExpr()); }
 }
 export class This extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
 }
 export class Type extends Joinpoint {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -948,6 +1029,9 @@ export class Type extends Joinpoint {
  * Base node for declarations which introduce a typedef-name
  */
 export class TypedefNameDecl extends NamedDecl {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -956,6 +1040,9 @@ export class TypedefNameDecl extends NamedDecl {
  * Represents the type of a typedef.
  */
 export class TypedefType extends Type {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -969,6 +1056,9 @@ export class TypedefType extends Type {
     get underlyingType() { return wrapJoinPoint(this._javaObject.getUnderlyingType()); }
 }
 export class UnaryExprOrType extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -981,6 +1071,9 @@ export class UnaryExprOrType extends Expression {
     setArgType(argType) { return wrapJoinPoint(this._javaObject.setArgType(unwrapJoinPoint(argType))); }
 }
 export class UnaryOp extends Op {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -988,6 +1081,9 @@ export class UnaryOp extends Op {
     get operand() { return wrapJoinPoint(this._javaObject.getOperand()); }
 }
 export class UndefinedType extends Type {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -996,6 +1092,9 @@ export class UndefinedType extends Type {
  * A reference to a variable
  */
 export class Varref extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -1022,6 +1121,9 @@ export class Varref extends Expression {
     setName(name) { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
 }
 export class WrapperStmt extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1029,6 +1131,9 @@ export class WrapperStmt extends Statement {
     get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
 }
 export class AccessSpecifier extends Decl {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "kind",
     };
@@ -1038,6 +1143,9 @@ export class AccessSpecifier extends Decl {
     get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
 }
 export class AdjustedType extends Type {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1047,6 +1155,9 @@ export class AdjustedType extends Type {
     get originalType() { return wrapJoinPoint(this._javaObject.getOriginalType()); }
 }
 export class ArrayAccess extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1072,6 +1183,9 @@ export class ArrayAccess extends Expression {
     get subscript() { return wrapJoinPoint(this._javaObject.getSubscript()); }
 }
 export class ArrayType extends Type {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1083,6 +1197,9 @@ export class ArrayType extends Type {
     setElementType(arrayElementType) { return wrapJoinPoint(this._javaObject.setElementType(unwrapJoinPoint(arrayElementType))); }
 }
 export class BinaryOp extends Op {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1095,12 +1212,18 @@ export class BinaryOp extends Op {
     setRight(right) { return wrapJoinPoint(this._javaObject.setRight(unwrapJoinPoint(right))); }
 }
 export class BoolLiteral extends Literal {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
     get value() { return wrapJoinPoint(this._javaObject.getValue()); }
 }
 export class Break extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1110,6 +1233,9 @@ export class Break extends Statement {
     get enclosingStmt() { return wrapJoinPoint(this._javaObject.getEnclosingStmt()); }
 }
 export class BuiltinType extends Type {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1136,6 +1262,9 @@ export class BuiltinType extends Type {
     get isVoid() { return wrapJoinPoint(this._javaObject.getIsVoid()); }
 }
 export class Call extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -1203,6 +1332,9 @@ export class Call extends Expression {
     wrap(name) { return wrapJoinPoint(this._javaObject.wrap(unwrapJoinPoint(name))); }
 }
 export class Case extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1232,6 +1364,9 @@ export class Case extends Statement {
     get values() { return wrapJoinPoint(this._javaObject.getValues()); }
 }
 export class Cast extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1244,11 +1379,17 @@ export class Cast extends Expression {
     get toType() { return wrapJoinPoint(this._javaObject.getToType()); }
 }
 export class CilkSpawn extends Call {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
 }
 export class CilkSync extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1257,6 +1398,9 @@ export class CilkSync extends Statement {
  * Represents a C++ class
  */
 export class Class extends RecordJp {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -1306,11 +1450,17 @@ export class Class extends RecordJp {
     addMethod(method) { return wrapJoinPoint(this._javaObject.addMethod(unwrapJoinPoint(method))); }
 }
 export class Continue extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
 }
 export class CudaKernelCall extends Call {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -1320,6 +1470,9 @@ export class CudaKernelCall extends Call {
     setConfigFromStrings(args) { return wrapJoinPoint(this._javaObject.setConfigFromStrings(unwrapJoinPoint(args))); }
 }
 export class DeclStmt extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1332,11 +1485,17 @@ export class DeclStmt extends Statement {
  * Represents a decl that comes from a declarator (e.g., function, field, variable)
  */
 export class Declarator extends NamedDecl {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
 }
 export class DeleteExpr extends Expression {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1345,6 +1504,9 @@ export class DeleteExpr extends Expression {
  * Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name, e.g., N::M::type, or both. This type is used to keep track of a type name as written in the source code, including tag keywords and any nested-name-specifiers. The type itself is always 'sugar', used to express what was written in the source code but containing no additional semantic information.
  */
 export class ElaboratedType extends Type {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1362,6 +1524,9 @@ export class ElaboratedType extends Type {
     get qualifier() { return wrapJoinPoint(this._javaObject.getQualifier()); }
 }
 export class EmptyStmt extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1370,17 +1535,26 @@ export class EmptyStmt extends Statement {
  * Represents an enum
  */
 export class EnumDecl extends NamedDecl {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
     get enumerators() { return wrapJoinPoint(this._javaObject.getEnumerators()); }
 }
 export class EnumeratorDecl extends NamedDecl {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
 }
 export class ExprStmt extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1393,11 +1567,17 @@ export class ExprStmt extends Statement {
  * Represents a member of a struct/union/class
  */
 export class Field extends Declarator {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
 }
 export class FloatLiteral extends Literal {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1407,6 +1587,9 @@ export class FloatLiteral extends Literal {
  * Represents a function declaration or definition
  */
 export class FunctionJp extends Declarator {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -1523,6 +1706,9 @@ export class FunctionJp extends Declarator {
     setReturnType(returnType) { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(returnType))); }
 }
 export class FunctionType extends Type {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1539,6 +1725,9 @@ export class FunctionType extends Type {
     setReturnType(newType) { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(newType))); }
 }
 export class GotoStmt extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1550,6 +1739,9 @@ export class GotoStmt extends Statement {
     setLabel(label) { return wrapJoinPoint(this._javaObject.setLabel(unwrapJoinPoint(label))); }
 }
 export class If extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1574,17 +1766,26 @@ export class If extends Statement {
     setThen(then) { return wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then))); }
 }
 export class IntLiteral extends Literal {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
     get value() { return wrapJoinPoint(this._javaObject.getValue()); }
 }
 export class LabelDecl extends NamedDecl {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
 }
 export class LabelStmt extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1596,6 +1797,9 @@ export class LabelStmt extends Statement {
     setDecl(label) { return wrapJoinPoint(this._javaObject.setDecl(unwrapJoinPoint(label))); }
 }
 export class Loop extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "kind",
     };
@@ -1719,6 +1923,9 @@ export class Loop extends Statement {
  * Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)
  */
 export class Marker extends Pragma {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "id",
     };
@@ -1729,6 +1936,9 @@ export class Marker extends Pragma {
     get id() { return wrapJoinPoint(this._javaObject.getId()); }
 }
 export class MemberCall extends Call {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -1739,6 +1949,9 @@ export class MemberCall extends Call {
  * Represents a C++ class method declaration or definition
  */
 export class Method extends FunctionJp {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -1752,6 +1965,9 @@ export class Method extends FunctionJp {
  * Represents an OpenMP pragma (e.g., #pragma omp parallel)
  */
 export class Omp extends Pragma {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "kind",
     };
@@ -1953,6 +2169,9 @@ export class Omp extends Pragma {
     setShared(newVariables) { return wrapJoinPoint(this._javaObject.setShared(unwrapJoinPoint(newVariables))); }
 }
 export class ParenType extends Type {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1964,6 +2183,9 @@ export class ParenType extends Type {
     setInnerType(innerType) { return wrapJoinPoint(this._javaObject.setInnerType(unwrapJoinPoint(innerType))); }
 }
 export class PointerType extends Type {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1979,6 +2201,9 @@ export class PointerType extends Type {
     setPointee(pointeeType) { return wrapJoinPoint(this._javaObject.setPointee(unwrapJoinPoint(pointeeType))); }
 }
 export class QualType extends Type {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1986,6 +2211,9 @@ export class QualType extends Type {
     get unqualifiedType() { return wrapJoinPoint(this._javaObject.getUnqualifiedType()); }
 }
 export class ReturnStmt extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -1995,6 +2223,9 @@ export class ReturnStmt extends Statement {
  * Represents a group of statements
  */
 export class Scope extends Statement {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -2052,6 +2283,9 @@ export class Scope extends Statement {
     setNaked(isNaked) { return wrapJoinPoint(this._javaObject.setNaked(unwrapJoinPoint(isNaked))); }
 }
 export class TagType extends Type {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -2062,6 +2296,9 @@ export class TagType extends Type {
     get name() { return wrapJoinPoint(this._javaObject.getName()); }
 }
 export class TemplateSpecializationType extends Type {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -2074,6 +2311,9 @@ export class TemplateSpecializationType extends Type {
  * Declaration of a typedef-name via the 'typedef' type specifier
  */
 export class TypedefDecl extends TypedefNameDecl {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -2082,6 +2322,9 @@ export class TypedefDecl extends TypedefNameDecl {
  * Represents a variable declaration or definition
  */
 export class Vardecl extends Declarator {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };
@@ -2139,6 +2382,9 @@ export class Vardecl extends Declarator {
     varref() { return wrapJoinPoint(this._javaObject.varref()); }
 }
 export class VariableArrayType extends ArrayType {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
@@ -2150,22 +2396,34 @@ export class VariableArrayType extends ArrayType {
     setSizeExpr(sizeExpr) { return wrapJoinPoint(this._javaObject.setSizeExpr(unwrapJoinPoint(sizeExpr))); }
 }
 export class Body extends Scope {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
 }
 export class CilkFor extends Loop {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "kind",
     };
 }
 export class EnumType extends TagType {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: null,
     };
     get integerType() { return wrapJoinPoint(this._javaObject.getIntegerType()); }
 }
 export class Param extends Vardecl {
+    /**
+     * @hidden
+     */
     static _defaultAttributeInfo = {
         name: "name",
     };

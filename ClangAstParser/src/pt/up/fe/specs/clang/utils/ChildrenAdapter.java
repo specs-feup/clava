@@ -321,7 +321,7 @@ public class ChildrenAdapter {
                 return clavaNode;
             }
 
-            return context.get(ClavaContext.FACTORY).compoundStmt().set(CompoundStmt.IS_NAKED);
+            return context.get(ClavaContext.FACTORY).compoundStmt().set(CompoundStmt.IS_NAKED).setLocation(clavaNode.getLocation());
         }
 
         // Wrap Expr around Stmt
@@ -346,7 +346,7 @@ public class ChildrenAdapter {
             clavaNode.detach();
         }
 
-        return context.get(ClavaContext.FACTORY).compoundStmt((Stmt) clavaNode).set(CompoundStmt.IS_NAKED);
+        return context.get(ClavaContext.FACTORY).compoundStmt((Stmt) clavaNode).set(CompoundStmt.IS_NAKED).setLocation(clavaNode.getLocation());
     }
 
     static ClavaNode toStmt(ClavaNode clavaNode, ClavaContext context) {
