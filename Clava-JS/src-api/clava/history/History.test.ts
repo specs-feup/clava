@@ -2,7 +2,7 @@ import { registerSourceCode } from "lara-js/jest/jestHelpers";
 import Clava from "../../../api/clava/Clava";
 import Query from "lara-js/api/weaver/Query";
 import ophistory from "./History";
-import { Loop, ReturnStmt, Vardecl } from "../../Joinpoints";
+import { FunctionJp, Loop, ReturnStmt, Vardecl } from "../../Joinpoints";
 import ClavaJoinPoints from "../../../api/clava/ClavaJoinPoints";
 
 const code: string = `void func() {
@@ -13,6 +13,8 @@ const code: string = `void func() {
         i++;
     }
 }
+
+void test() {}
 
 int main(int argc, char *argv[]) {
     func();
@@ -126,6 +128,78 @@ describe("History of Transformations", () => {
     
         const loopStmt = Query.search(Loop).get().at(0);
         loopStmt?.toComment();
+    
+        const b: string = Clava.getProgram().code;
+        
+        ophistory.rollback();
+        const c: string = Clava.getProgram().code;
+        
+        expect(a).toEqual(c);
+        expect(b).not.toEqual(c);
+    });
+
+    it("Initial code, replace first child and rollback code comparison", () => {
+        const a: string = Clava.getProgram().code;
+    
+        const func = Query.search(FunctionJp).first();
+        const returnStmt = Query.search(ReturnStmt).first();
+        if (returnStmt !== undefined){
+            func?.body.setFirstChild(returnStmt);
+        }
+    
+        const b: string = Clava.getProgram().code;
+        
+        ophistory.rollback();
+        const c: string = Clava.getProgram().code;
+        
+        expect(a).toEqual(c);
+        expect(b).not.toEqual(c);
+    });
+
+    it("Initial code, set first child and rollback code comparison", () => {
+        const a: string = Clava.getProgram().code;
+    
+        const testFunc = Query.search(FunctionJp).get().at(1);
+        const returnStmt = Query.search(ReturnStmt).first();
+        if (returnStmt !== undefined){
+            testFunc?.body.setFirstChild(returnStmt);
+        }
+    
+        const b: string = Clava.getProgram().code;
+        
+        ophistory.rollback();
+        const c: string = Clava.getProgram().code;
+        
+        expect(a).toEqual(c);
+        expect(b).not.toEqual(c);
+    });
+
+    it("Initial code, replace last child and rollback code comparison", () => {
+        const a: string = Clava.getProgram().code;
+    
+        const func = Query.search(FunctionJp).first();
+        const returnStmt = Query.search(ReturnStmt).first();
+        if (returnStmt !== undefined){
+            func?.body.setLastChild(returnStmt);
+        }
+    
+        const b: string = Clava.getProgram().code;
+        
+        ophistory.rollback();
+        const c: string = Clava.getProgram().code;
+        
+        expect(a).toEqual(c);
+        expect(b).not.toEqual(c);
+    });
+
+    it("Initial code, set first child and rollback code comparison", () => {
+        const a: string = Clava.getProgram().code;
+    
+        const testFunc = Query.search(FunctionJp).get().at(1);
+        const returnStmt = Query.search(ReturnStmt).first();
+        if (returnStmt !== undefined){
+            testFunc?.body.setLastChild(returnStmt);
+        }
     
         const b: string = Clava.getProgram().code;
         
