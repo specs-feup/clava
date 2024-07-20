@@ -1,7 +1,7 @@
 import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
 import GenericAstConverter from "lara-js/api/visualization/GenericAstConverter.js";
-import ToolJoinPoint from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
-import { Body, Joinpoint } from "../Joinpoints.js";
+import ToolJoinPoint, { JoinPointInfo } from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
+import { Body, IntLiteral, Joinpoint } from "../Joinpoints.js";
 import Clava from "../clava/Clava.js";
 
 type CodeNode = {
@@ -11,13 +11,29 @@ type CodeNode = {
 };
 
 export default class ClavaAstConverter implements GenericAstConverter {
+  private getJoinPointInfo(jp: Joinpoint): JoinPointInfo {
+    const info: JoinPointInfo = {
+      'astId': jp.astId,
+      'astName': jp.astName,
+    };
+
+    switch (jp.joinPointType) {
+      case 'intLiteral':
+        const intLiteral = jp as IntLiteral;
+        info['value'] = intLiteral.value.toString();
+        break;
+    }
+
+    return info;
+  }
+
   public getToolAst(root: LaraJoinPoint): ToolJoinPoint {
     const clavaJp = root as Joinpoint;
     
     return new ToolJoinPoint(
       clavaJp.astId,
       clavaJp.joinPointType,
-      {},
+      this.getJoinPointInfo(clavaJp),
       clavaJp.children.map(child => this.getToolAst(child)),
     );
   }
