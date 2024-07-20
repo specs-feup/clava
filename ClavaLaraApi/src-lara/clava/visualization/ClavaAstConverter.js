@@ -3,10 +3,7 @@ import Clava from "../clava/Clava.js";
 export default class ClavaAstConverter {
     getToolAst(root) {
         const clavaJp = root;
-        return new ToolJoinPoint(clavaJp.astId, clavaJp.joinPointType, clavaJp.children.map(child => this.getToolAst(child)));
-    }
-    sortByLocation(codeNodes) {
-        return codeNodes.sort((node1, node2) => node1.jp.location.localeCompare(node2.jp.location, 'en', { numeric: true }));
+        return new ToolJoinPoint(clavaJp.astId, clavaJp.joinPointType, {}, clavaJp.children.map(child => this.getToolAst(child)));
     }
     toCodeNode(jp) {
         return {
@@ -17,6 +14,9 @@ export default class ClavaAstConverter {
     }
     addIdentation(code, indentation) {
         return code.split('\n').map((line, i) => i > 0 ? '   '.repeat(indentation) + line : line).join('\n');
+    }
+    sortByLocation(codeNodes) {
+        return codeNodes.sort((node1, node2) => node1.jp.location.localeCompare(node2.jp.location, 'en', { numeric: true }));
     }
     refineCode(node, indentation = 0) {
         node.code = this.addIdentation(node.code, indentation);
