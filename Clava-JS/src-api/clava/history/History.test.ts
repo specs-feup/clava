@@ -2,7 +2,7 @@ import { registerSourceCode } from "lara-js/jest/jestHelpers";
 import Clava from "../../../api/clava/Clava";
 import Query from "lara-js/api/weaver/Query";
 import ophistory from "./History";
-import { FunctionJp, Loop, ReturnStmt, Vardecl } from "../../Joinpoints";
+import { FunctionJp, Joinpoint, Loop, ReturnStmt, Vardecl } from "../../Joinpoints";
 import ClavaJoinPoints from "../../../api/clava/ClavaJoinPoints";
 
 const code: string = `void func() {
@@ -21,7 +21,6 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 `;
-
 
 describe("History of Transformations", () => {
     registerSourceCode(code);
@@ -128,6 +127,51 @@ describe("History of Transformations", () => {
     
         const loopStmt = Query.search(Loop).get().at(0);
         loopStmt?.toComment();
+    
+        const b: string = Clava.getProgram().code;
+        
+        ophistory.rollback();
+        const c: string = Clava.getProgram().code;
+        
+        expect(a).toEqual(c);
+        expect(b).not.toEqual(c);
+    });
+
+    it("Initial code, detach first child and rollback code comparison", () => {
+        const a: string = Clava.getProgram().code;
+    
+        const func = Query.search(FunctionJp).first();
+        func?.body.firstChild.detach();
+    
+        const b: string = Clava.getProgram().code;
+        
+        ophistory.rollback();
+        const c: string = Clava.getProgram().code;
+        
+        expect(a).toEqual(c);
+        expect(b).not.toEqual(c);
+    });
+
+    it("Initial code, detach only child and rollback code comparison", () => {
+        const a: string = Clava.getProgram().code;
+    
+        const func = Query.search(FunctionJp).first();
+        func?.body.detach();
+    
+        const b: string = Clava.getProgram().code;
+        
+        ophistory.rollback();
+        const c: string = Clava.getProgram().code;
+        
+        expect(a).toEqual(c);
+        expect(b).not.toEqual(c);
+    });
+
+    it("Initial code, detach last child and rollback code comparison", () => {
+        const a: string = Clava.getProgram().code;
+    
+        const func = Query.search(FunctionJp).first();
+        func?.body.lastChild.detach();
     
         const b: string = Clava.getProgram().code;
         
