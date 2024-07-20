@@ -192,7 +192,7 @@ describe("History of Transformations", () => {
         expect(b).not.toEqual(c);
     });
 
-    it("Initial code, set first child and rollback code comparison", () => {
+    it("Initial code, set last child and rollback code comparison", () => {
         const a: string = Clava.getProgram().code;
     
         const testFunc = Query.search(FunctionJp).get().at(1);
@@ -200,6 +200,21 @@ describe("History of Transformations", () => {
         if (returnStmt !== undefined){
             testFunc?.body.setLastChild(returnStmt);
         }
+    
+        const b: string = Clava.getProgram().code;
+        
+        ophistory.rollback();
+        const c: string = Clava.getProgram().code;
+        
+        expect(a).toEqual(c);
+        expect(b).not.toEqual(c);
+    });
+
+    it("Initial code, remove children and rollback code comparison", () => {
+        const a: string = Clava.getProgram().code;
+    
+        const func = Query.search(FunctionJp).first();
+        func?.body.removeChildren();
     
         const b: string = Clava.getProgram().code;
         
