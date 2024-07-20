@@ -17,12 +17,9 @@ export default class ClavaAstConverter implements GenericAstConverter {
     return new ToolJoinPoint(
       clavaJp.astId,
       clavaJp.joinPointType,
+      {},
       clavaJp.children.map(child => this.getToolAst(child)),
     );
-  }
-
-  private sortByLocation(codeNodes: CodeNode[]): CodeNode[] {
-    return codeNodes.sort((node1, node2) => node1.jp.location.localeCompare(node2.jp.location, 'en', { numeric: true }));
   }
 
   private toCodeNode(jp: Joinpoint): CodeNode {
@@ -35,6 +32,10 @@ export default class ClavaAstConverter implements GenericAstConverter {
 
   private addIdentation(code: string, indentation: number): string {
     return code.split('\n').map((line, i) => i > 0 ? '   '.repeat(indentation) + line : line).join('\n');
+  }
+
+  private sortByLocation(codeNodes: CodeNode[]): CodeNode[] {
+    return codeNodes.sort((node1, node2) => node1.jp.location.localeCompare(node2.jp.location, 'en', { numeric: true }));
   }
 
   private refineCode(node: CodeNode, indentation: number = 0): CodeNode {
