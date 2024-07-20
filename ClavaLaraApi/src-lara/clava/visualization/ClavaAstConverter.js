@@ -1,9 +1,22 @@
 import ToolJoinPoint from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
 import Clava from "../clava/Clava.js";
 export default class ClavaAstConverter {
+    getJoinPointInfo(jp) {
+        const info = {
+            'astId': jp.astId,
+            'astName': jp.astName,
+        };
+        switch (jp.joinPointType) {
+            case 'intLiteral':
+                const intLiteral = jp;
+                info['value'] = intLiteral.value.toString();
+                break;
+        }
+        return info;
+    }
     getToolAst(root) {
         const clavaJp = root;
-        return new ToolJoinPoint(clavaJp.astId, clavaJp.joinPointType, {}, clavaJp.children.map(child => this.getToolAst(child)));
+        return new ToolJoinPoint(clavaJp.astId, clavaJp.joinPointType, this.getJoinPointInfo(clavaJp), clavaJp.children.map(child => this.getToolAst(child)));
     }
     toCodeNode(jp) {
         return {
