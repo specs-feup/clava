@@ -24,6 +24,19 @@ export class ReplaceOperation implements Operation {
   }
 }
 
+export class SetChildOperation implements Operation {
+  constructor(private newChildJP: Joinpoint, private oldChildJP?: Joinpoint) {}
+
+  undo(): void {
+    if (this.oldChildJP){
+      this.newChildJP.replaceWith(this.oldChildJP);
+    }
+    else {
+      this.newChildJP.detach();
+    }
+  }
+}
+
 export class TypeChangeOperation implements Operation {
   constructor(private jp: Joinpoint, private oldType: Type) {}
 

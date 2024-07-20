@@ -3,12 +3,13 @@ import * as fs from "fs";
 import Clava from "../Clava.js";
 import { Event, EventTime } from "./Events.js";
 import ophistory from "./History.js";
-import { InsertOperation, ReplaceOperation, TypeChangeOperation } from "./Operations.js";
+import { InsertOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation } from "./Operations.js";
 import { Joinpoint } from "../../Joinpoints.js";
 
 const eventListener = new EventEmitter();
 
 let idx = 0;
+let auxJP: Joinpoint;
 
 eventListener.on("storeAST", () => {
   console.log(`Waypoint ${idx}`);
@@ -35,9 +36,16 @@ eventListener.on("ACTION", (e: Event) => {
         case "setType":
           changeTypeFromEvent(e);
           break;
+        case "setFirstChild":
+          auxJP = e.mainJP.firstChild;
+          break;
+        case "setLastChild":
+          auxJP = e.mainJP.lastChild;
+          break;
         default:
           break;
       }
+      break;
     case EventTime.AFTER:
       switch (e.description){
         case "insertAfter":
@@ -61,6 +69,12 @@ eventListener.on("ACTION", (e: Event) => {
           break;
         case "toComment":
           replaceSingleOperationFromEvent(e);
+          break;
+        case "setFirstChild":
+          setFirstChildFromEvent(e, auxJP);
+          break;
+        case "setLastChild":
+          setLastChildFromEvent(e, auxJP);
           break;
         default:
           break;
@@ -100,6 +114,14 @@ function replaceMultipleOperationFromEvent(e: Event) {
   if (e.returnJP !== undefined){
     ophistory.newOperation(new ReplaceOperation(e.mainJP, e.returnJP, (e.inputs[0] as (Joinpoint[] | string[])).length));
   }
+}
+
+function setFirstChildFromEvent(e: Event, aux: Joinpoint) {
+  ophistory.newOperation(new SetChildOperation(e.mainJP.firstChild, aux));
+}
+
+function setLastChildFromEvent(e: Event, aux: Joinpoint) {
+  ophistory.newOperation(new SetChildOperation(e.mainJP.lastChild, aux));
 }
 
 function changeTypeFromEvent(e: Event) {
