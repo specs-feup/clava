@@ -1,7 +1,7 @@
 import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
 import GenericAstConverter from "lara-js/api/visualization/GenericAstConverter.js";
 import ToolJoinPoint, { JoinPointInfo } from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
-import { Body, IntLiteral, Joinpoint, TypedefDecl } from "../Joinpoints.js";
+import { AdjustedType, Body, BoolLiteral, Call, Class, FileJp, FloatLiteral, Include, IntLiteral, Joinpoint, Loop, Marker, NamedDecl, Omp, Pragma, Program, Tag, Type, TypedefDecl, Varref, WrapperStmt } from "../Joinpoints.js";
 import Clava from "../clava/Clava.js";
 
 type CodeNode = {
@@ -14,12 +14,123 @@ export default class ClavaAstConverter implements GenericAstConverter {
   private getJoinPointInfo(jp: Joinpoint): JoinPointInfo {
     const info: JoinPointInfo = {
       'AST ID': jp.astId,
-      'AST Name': jp.astName,
+      'AST name': jp.astName,
     };
+
+    if (jp instanceof FileJp) {
+      Object.assign(info, {
+        'File name': jp.name,
+        'Source folder': jp.sourceFoldername,
+        'Relative path': jp.relativeFilepath,
+        'Is C++': jp.isCxx,
+        'Is header file': jp.isHeader,
+        'Has main': jp.hasMain
+      });
+    }
+
+    if (jp instanceof Include) {
+      Object.assign(info, {
+        'Include name': jp.name,
+      });
+    }
+
+    if (jp instanceof NamedDecl) {
+      Object.assign(info, {
+        'Name': jp.name,
+      });
+    }
+
+    if (jp instanceof Pragma) {
+      Object.assign(info, {
+        'Pragma name': jp.name,
+      });
+    }
+
+    if (jp instanceof Program) {
+      Object.assign(info, {
+        'Program name': jp.name,
+        'Standard': jp.standard,
+      });
+    }
+
+    if (jp instanceof Tag) {
+      Object.assign(info, {
+        'Pragma ID': jp.id,
+      });
+    }
+
+    if (jp instanceof Type) {
+      Object.assign(info, {
+        'Constant?': jp.constant,
+        'Is builtin': jp.isBuiltin,
+        'Has sugar': jp.hasSugar,
+      });
+    }
+
+    if (jp instanceof Varref) {
+      Object.assign(info, {
+        'Name': jp.name,
+      });
+    }
+
+    if (jp instanceof WrapperStmt) {
+      Object.assign(info, {
+        'Wrapper type': jp.kind,
+      });
+    }
+
+    if (jp instanceof AdjustedType) {
+      Object.assign(info, {
+        'Original type': jp.originalType,
+      });
+    }
+
+    if (jp instanceof BoolLiteral) {
+      Object.assign(info, {
+        'Value': jp.value.toString(),
+      });
+    }
+
+    if (jp instanceof Call) {
+      Object.assign(info, {
+        'Function name': jp.name,
+      });
+    }
+
+    if (jp instanceof Class) {
+      Object.assign(info, {
+        'Is interface': jp.isInterface,
+      });
+    }
+
+    if (jp instanceof FloatLiteral) {
+      Object.assign(info, {
+        'Value': jp.value.toString(),
+      });
+    }
 
     if (jp instanceof IntLiteral) {
       Object.assign(info, {
         'Value': jp.value.toString(),
+      });
+    }
+
+    if (jp instanceof Loop) {
+      Object.assign(info, {
+        'Loop ID': jp.id,
+        'Loop kind': jp.kind,
+      });
+    }
+
+    if (jp instanceof Marker) {
+      Object.assign(info, {
+        'Marker ID': jp.id,
+      });
+    }
+
+    if (jp instanceof Omp) {
+      Object.assign(info, {
+        'Omp kind': jp.kind,
       });
     }
 
