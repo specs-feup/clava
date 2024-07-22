@@ -23,17 +23,21 @@ class OperationHistory {
     }
   }
 
-  rollback() {
-    const op = this.operations.pop();
-    if (op !== undefined) {
-        try {
+  rollback(n: number = 1) {
+    if (n > 0){
+      while (n--){
+        const op = this.operations.pop();
+        if (op !== undefined) {
+          try {
             this.lock();
             op.undo();
-        } catch (error) {
+          } catch (error) {
             console.error("Failed to undo operation:", error);
-        } finally {
+          } finally {
             this.unlock();
+          }
         }
+      }
     }
   }
 }

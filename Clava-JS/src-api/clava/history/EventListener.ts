@@ -14,10 +14,6 @@ let idx = 0;
 // Used for saving previous child in setFirstChild and setLastChild
 let auxJP: Joinpoint;
 
-// Used for saving reference JP in detach
-let refJP: Joinpoint;
-let ref: string;
-
 eventListener.on("storeAST", () => {
   console.log(`Waypoint ${idx}`);
   fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
@@ -95,8 +91,6 @@ eventListener.on("ACTION", (e: Event) => {
         default:
           break;
       }
-      break;
-    default:
       break;
   }
 
