@@ -3,16 +3,7 @@ import * as fs from "fs";
 import Clava from "../Clava.js";
 import { Event, EventTime } from "./Events.js";
 import ophistory from "./History.js";
-import {
-  DetachOperation,
-  DetachReference,
-  InlineCommentOperation,
-  InsertOperation,
-  RemoveChildrenOperation,
-  ReplaceOperation,
-  SetChildOperation,
-  TypeChangeOperation,
-} from "./Operations.js";
+import { DetachOperation, DetachReference, InlineCommentOperation, InsertOperation, RemoveChildrenOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation } from "./Operations.js";
 import { Joinpoint } from "../../Joinpoints.js";
 
 const eventListener = new EventEmitter();
@@ -30,6 +21,7 @@ eventListener.on("storeAST", () => {
 });
 
 eventListener.on("ACTION", (e: Event) => {
+  
   // Event Logs for debugging
   /*
   console.log("\nReceived ACTION event");
@@ -67,25 +59,23 @@ eventListener.on("ACTION", (e: Event) => {
       }
       break;
     case EventTime.AFTER:
-      switch (e.description) {
+      switch (e.description){
         case "insertAfter":
         case "insertBefore":
           insertOperationFromEvent(e);
           break;
         case "replaceWith":
-          if (e.inputs.length > 0) {
-            if (
-              typeof e.inputs[0] === "string" ||
-              e.inputs[0] instanceof Joinpoint
-            ) {
+          if (e.inputs.length > 0){
+            if (typeof e.inputs[0] === 'string' || e.inputs[0] instanceof Joinpoint){
               replaceSingleOperationFromEvent(e);
-            } else {
+            }
+            else {
               replaceMultipleOperationFromEvent(e);
             }
           }
           break;
         case "replaceWithStrings":
-          if (e.inputs.length > 0) {
+          if (e.inputs.length > 0){
             replaceMultipleOperationFromEvent(e);
           }
           break;
@@ -121,35 +111,29 @@ eventListener.on("ACTION", (e: Event) => {
 });
 
 function insertOperationFromEvent(e: Event) {
-  if (e.returnValue !== undefined) {
-    ophistory.newOperation(new InsertOperation(e.returnValue));
+  if (e.returnValue !== undefined){
+    ophistory.newOperation(new InsertOperation(e.returnValue))
   }
 }
 
 function replaceSingleOperationFromEvent(e: Event) {
-  if (e.returnValue !== undefined) {
+  if (e.returnValue !== undefined){
     ophistory.newOperation(new ReplaceOperation(e.mainJP, e.returnValue, 1));
   }
 }
 
 function replaceMultipleOperationFromEvent(e: Event) {
-  if (e.returnValue !== undefined) {
-    ophistory.newOperation(
-      new ReplaceOperation(
-        e.mainJP,
-        e.returnValue,
-        (e.inputs[0] as Joinpoint[] | string[]).length
-      )
-    );
+  if (e.returnValue !== undefined){
+    ophistory.newOperation(new ReplaceOperation(e.mainJP, e.returnValue, (e.inputs[0] as (Joinpoint[] | string[])).length));
   }
 }
 
 function detachOperationFromEvent(e: Event) {
   let refJP: Joinpoint, ref: DetachReference;
-  if (e.mainJP.siblingsLeft.length >= 1) {
+  if (e.mainJP.siblingsLeft.length >= 1){
     refJP = e.mainJP.leftJp;
     ref = DetachReference.LEFT;
-  } else if (e.mainJP.siblingsRight.length >= 1) {
+  } else if  (e.mainJP.siblingsRight.length >= 1) {
     refJP = e.mainJP.rightJp;
     ref = DetachReference.RIGHT;
   } else {
@@ -168,9 +152,7 @@ function setLastChildFromEvent(e: Event, aux: Joinpoint) {
 }
 
 function removeChildrenOperationFromEvent(e: Event) {
-  ophistory.newOperation(
-    new RemoveChildrenOperation(e.mainJP, e.mainJP.children)
-  );
+  ophistory.newOperation(new RemoveChildrenOperation(e.mainJP, e.mainJP.children));
 }
 
 function changeTypeFromEvent(e: Event) {
