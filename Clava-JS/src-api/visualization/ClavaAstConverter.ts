@@ -2,7 +2,6 @@ import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
 import GenericAstConverter from "lara-js/api/visualization/GenericAstConverter.js";
 import ToolJoinPoint, { JoinPointInfo } from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
 import { AdjustedType, Body, BoolLiteral, Call, Class, FileJp, FloatLiteral, Include, IntLiteral, Joinpoint, Loop, Marker, NamedDecl, Omp, Pragma, Program, Tag, Type, TypedefDecl, Varref, WrapperStmt } from "../Joinpoints.js";
-import Clava from "../clava/Clava.js";
 
 type CodeNode = {
   jp: Joinpoint;
@@ -265,9 +264,8 @@ export default class ClavaAstConverter implements GenericAstConverter {
     return [innerCodeStart, innerCodeEnd, newCode];
   }
 
-  public getPrettyHtmlCode(): string {
-    const root = Clava.getProgram();
-    const rootCodeNode = this.toCodeNode(root);
+  public getPrettyHtmlCode(root: LaraJoinPoint): string {
+    const rootCodeNode = this.toCodeNode(root as Joinpoint);
     this.refineCode(rootCodeNode);
 
     let code = rootCodeNode.code;
