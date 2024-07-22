@@ -1,15 +1,15 @@
 import { Joinpoint } from "../../Joinpoints.js";
 
 export enum EventTime {
-    BEFORE = "Before",
-    AFTER = "After"
+  BEFORE = "Before",
+  AFTER = "After",
 }
 
 export class Event {
   public timing: EventTime;
   public description: string;
   public mainJP: Joinpoint;
-  public returnJP?: Joinpoint;
+  public returnValue?: Joinpoint;
   public inputs: unknown[];
 
   constructor(
@@ -22,7 +22,7 @@ export class Event {
     this.timing = timing;
     this.description = description;
     this.mainJP = mainJP;
-    this.returnJP = returnJP;
+    this.returnValue = returnJP;
     this.inputs = inputs;
   }
 }
