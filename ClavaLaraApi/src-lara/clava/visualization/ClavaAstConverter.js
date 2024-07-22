@@ -1,6 +1,5 @@
 import ToolJoinPoint from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
 import { AdjustedType, BoolLiteral, Call, Class, FileJp, FloatLiteral, Include, IntLiteral, Loop, Marker, NamedDecl, Omp, Pragma, Program, Tag, Type, TypedefDecl, Varref, WrapperStmt } from "../Joinpoints.js";
-import Clava from "../clava/Clava.js";
 export default class ClavaAstConverter {
     getJoinPointInfo(jp) {
         const info = {
@@ -209,8 +208,7 @@ export default class ClavaAstConverter {
         newCode += outerCode.slice(newCodeIndex, innerCodeEnd) + closingTag;
         return [innerCodeStart, innerCodeEnd, newCode];
     }
-    getPrettyHtmlCode() {
-        const root = Clava.getProgram();
+    getPrettyHtmlCode(root) {
         const rootCodeNode = this.toCodeNode(root);
         this.refineCode(rootCodeNode);
         let code = rootCodeNode.code;
