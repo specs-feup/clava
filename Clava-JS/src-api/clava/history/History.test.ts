@@ -88,7 +88,7 @@ describe("Transformation History: Multiple operations", () => {
         expect(b).not.toEqual(c);
     });
 
-    it("Log an error message on undo operation", () => {
+    it("Log an error message on undo operation (single rollback)", () => {
         const errorSpy = jest.spyOn(global.console, "error")
             .mockImplementation(() => {});
         
@@ -98,6 +98,45 @@ describe("Transformation History: Multiple operations", () => {
         loopStmt1.detach();
   
         ophistory.rollback(2);
+
+        expect(errorSpy).toHaveBeenCalledTimes(1);
+    
+        errorSpy.mockRestore();
+    });
+
+    it("Checkpoints code comparison", () => {
+        
+        const loopStmt1 = Query.search(Loop).get().at(0) as Joinpoint;
+        const loopStmt2 = Query.search(Loop).get().at(1) as Joinpoint;
+        loopStmt1.insertBefore(loopStmt2.deepCopy());
+        loopStmt2.insertAfter(loopStmt1.deepCopy());
+        
+        ophistory.checkpoint();
+        const a: string = Clava.getProgram().code;
+
+        loopStmt1.detach();
+        loopStmt2.detach();
+  
+        const b: string = Clava.getProgram().code;
+
+        ophistory.returnToLastCheckpoint();
+        const c: string = Clava.getProgram().code;
+  
+        expect(a).toEqual(c);
+        expect(b).not.toEqual(c);
+    });
+
+    it("Log an error message on undo operation (checkpoint rollback)", () => {
+        const errorSpy = jest.spyOn(global.console, "error")
+            .mockImplementation(() => {});
+        
+        const loopStmt1 = Query.search(Loop).get().at(0) as Joinpoint;
+        
+        ophistory.checkpoint();
+        loopStmt1.replaceWith("aaaa");
+        loopStmt1.detach();
+  
+        ophistory.returnToLastCheckpoint();
 
         expect(errorSpy).toHaveBeenCalledTimes(1);
     
