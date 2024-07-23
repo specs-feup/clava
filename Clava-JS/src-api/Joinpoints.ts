@@ -143,9 +143,6 @@ type DefaultAttributeMap = {
 }
 
 export class Joinpoint extends LaraJoinPoint {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -356,83 +353,173 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * True, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
    */
-  astIsInstance(className: string): boolean { return wrapJoinPoint(this._javaObject.astIsInstance(unwrapJoinPoint(className))); }
+  astIsInstance(className: string): boolean { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "astIsInstance", this, undefined, className)); 
+    const res = wrapJoinPoint(this._javaObject.astIsInstance(unwrapJoinPoint(className))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "astIsInstance", this, res, className));
+    return res;
+  }
   /**
    * True if the given node is a descendant of this node
    */
-  contains(jp: Joinpoint): boolean { return wrapJoinPoint(this._javaObject.contains(unwrapJoinPoint(jp))); }
+  contains(jp: Joinpoint): boolean { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "contains", this, undefined, jp)); 
+    const res = wrapJoinPoint(this._javaObject.contains(unwrapJoinPoint(jp))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "contains", this, res, jp));
+    return res;
+  }
   /**
    * Looks for an ancestor joinpoint name, walking back on the AST
    */
-  getAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getAncestor(unwrapJoinPoint(type))); }
+  getAncestor(type: string): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getAncestor", this, undefined, type)); 
+    const res = wrapJoinPoint(this._javaObject.getAncestor(unwrapJoinPoint(type))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getAncestor", this, res, type));
+    return res;
+  }
   /**
    * @deprecated Looks for an ancestor AST name, walking back on the AST
    */
-  getAstAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getAstAncestor(unwrapJoinPoint(type))); }
+  getAstAncestor(type: string): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getAstAncestor", this, undefined, type)); 
+    const res = wrapJoinPoint(this._javaObject.getAstAncestor(unwrapJoinPoint(type))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getAstAncestor", this, res, type));
+    return res;
+  }
   /**
    * Returns the child of the node at the given index, considering null nodes
    */
-  getAstChild(index: number): Joinpoint { return wrapJoinPoint(this._javaObject.getAstChild(unwrapJoinPoint(index))); }
+  getAstChild(index: number): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getAstChild", this, undefined, index)); 
+    const res = wrapJoinPoint(this._javaObject.getAstChild(unwrapJoinPoint(index))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getAstChild", this, res, index));
+    return res;
+  }
   /**
    * Looks for an ancestor joinpoint name, walking back on the joinpoint chain
    */
-  getChainAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getChainAncestor(unwrapJoinPoint(type))); }
+  getChainAncestor(type: string): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getChainAncestor", this, undefined, type)); 
+    const res = wrapJoinPoint(this._javaObject.getChainAncestor(unwrapJoinPoint(type))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getChainAncestor", this, res, type));
+    return res;
+  }
   /**
    * Returns the child of the node at the given index, ignoring null nodes
    */
-  getChild(index: number): Joinpoint { return wrapJoinPoint(this._javaObject.getChild(unwrapJoinPoint(index))); }
+  getChild(index: number): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getChild", this, undefined, index)); 
+    const res = wrapJoinPoint(this._javaObject.getChild(unwrapJoinPoint(index))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getChild", this, res, index));
+    return res;
+  }
   /**
    * Retrieves the descendants of the given type
    */
-  getDescendants(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getDescendants(unwrapJoinPoint(type))); }
+  getDescendants(type: string): Joinpoint[] { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getDescendants", this, undefined, type)); 
+    const res = wrapJoinPoint(this._javaObject.getDescendants(unwrapJoinPoint(type))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getDescendants", this, res, type));
+    return res;
+  }
   /**
    * Retrieves the descendants of the given type, including the node itself
    */
-  getDescendantsAndSelf(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getDescendantsAndSelf(unwrapJoinPoint(type))); }
+  getDescendantsAndSelf(type: string): Joinpoint[] { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getDescendantsAndSelf", this, undefined, type)); 
+    const res = wrapJoinPoint(this._javaObject.getDescendantsAndSelf(unwrapJoinPoint(type))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getDescendantsAndSelf", this, res, type));
+    return res;
+  }
   /**
    * Looks in the descendants for the first node of the given type
    */
-  getFirstJp(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getFirstJp(unwrapJoinPoint(type))); }
+  getFirstJp(type: string): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getFirstJp", this, undefined, type)); 
+    const res = wrapJoinPoint(this._javaObject.getFirstJp(unwrapJoinPoint(type))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getFirstJp", this, res, type));
+    return res;
+  }
   /**
    * String with the full Java class name of the type of the Java field with the provided name
    */
-  getJavaFieldType(fieldName: string): string { return wrapJoinPoint(this._javaObject.getJavaFieldType(unwrapJoinPoint(fieldName))); }
+  getJavaFieldType(fieldName: string): string { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getJavaFieldType", this, undefined, fieldName)); 
+    const res = wrapJoinPoint(this._javaObject.getJavaFieldType(unwrapJoinPoint(fieldName))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getJavaFieldType", this, res, fieldName));
+    return res;
+  }
   /**
    * Java Class instance with the type of the given key
    */
-  getKeyType(key: string): object { return wrapJoinPoint(this._javaObject.getKeyType(unwrapJoinPoint(key))); }
+  getKeyType(key: string): object { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getKeyType", this, undefined, key)); 
+    const res = wrapJoinPoint(this._javaObject.getKeyType(unwrapJoinPoint(key))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getKeyType", this, res, key));
+    return res;
+  }
   /**
    * Retrives values that have been associated to nodes of the AST with 'setUserField'
    */
-  getUserField(fieldName: string): object { return wrapJoinPoint(this._javaObject.getUserField(unwrapJoinPoint(fieldName))); }
+  getUserField(fieldName: string): object { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getUserField", this, undefined, fieldName)); 
+    const res = wrapJoinPoint(this._javaObject.getUserField(unwrapJoinPoint(fieldName))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getUserField", this, res, fieldName));
+    return res;
+  }
   /**
    * The value associated with the given property key
    */
-  getValue(key: string): object { return wrapJoinPoint(this._javaObject.getValue(unwrapJoinPoint(key))); }
+  getValue(key: string): object { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getValue", this, undefined, key)); 
+    const res = wrapJoinPoint(this._javaObject.getValue(unwrapJoinPoint(key))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getValue", this, res, key));
+    return res;
+  }
   /**
    * True, if the given join point or AST node is the same (== test) as the current join point AST node
    */
-  hasNode(nodeOrJp: object): boolean { return wrapJoinPoint(this._javaObject.hasNode(unwrapJoinPoint(nodeOrJp))); }
+  hasNode(nodeOrJp: object): boolean { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "hasNode", this, undefined, nodeOrJp)); 
+    const res = wrapJoinPoint(this._javaObject.hasNode(unwrapJoinPoint(nodeOrJp))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "hasNode", this, res, nodeOrJp));
+    return res;
+  }
   /**
    * Performs a copy of the node and its children, but not of the nodes in its fields
    */
-  copy(): Joinpoint { return wrapJoinPoint(this._javaObject.copy()); }
+  copy(): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "copy", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.copy()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "copy", this, res));
+    return res;
+  }
   /**
    * Clears all properties from the .data object
    */
-  dataClear(): void { return wrapJoinPoint(this._javaObject.dataClear()); }
+  dataClear(): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "dataClear", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.dataClear()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "dataClear", this, res));
+    return res;
+  }
   /**
    * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
    */
-  deepCopy(): Joinpoint { return wrapJoinPoint(this._javaObject.deepCopy()); }
+  deepCopy(): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "deepCopy", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.deepCopy()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "deepCopy", this, res));
+    return res;
+  }
   /**
    * Removes the node associated to this joinpoint from the AST
    */
   detach(): Joinpoint { 
-    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "detach", this, undefined));    
-    const jp = wrapJoinPoint(this._javaObject.detach()); 
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "detach", this, jp));  
-    return jp;
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "detach", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.detach()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "detach", this, res));
+    return res;
   }
   /**
    * Inserts the given join point after this join point
@@ -446,10 +533,10 @@ export class Joinpoint extends LaraJoinPoint {
    * Inserts the given join point after this join point
    */
   insertAfter(p1: Joinpoint | string): Joinpoint { 
-    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "insertAfter", this, undefined, p1));  
-    const jp = wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(p1))); 
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "insertAfter", this, jp, p1));
-    return jp;  
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "insertAfter", this, undefined, p1)); 
+    const res = wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "insertAfter", this, res, p1));
+    return res;
   }
   /**
    * Inserts the given join point before this join point
@@ -464,22 +551,27 @@ export class Joinpoint extends LaraJoinPoint {
    */
   insertBefore(p1: Joinpoint | string): Joinpoint { 
     eventListener.emit("ACTION", new Event(EventTime.BEFORE, "insertBefore", this, undefined, p1)); 
-    const jp = wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(p1))); 
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "insertBefore", this, jp, p1));
-    return jp;
+    const res = wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "insertBefore", this, res, p1));
+    return res;
   }
   /**
    * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
    */
-  messageToUser(message: string): void { return wrapJoinPoint(this._javaObject.messageToUser(unwrapJoinPoint(message))); }
+  messageToUser(message: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "messageToUser", this, undefined, message)); 
+    const res = wrapJoinPoint(this._javaObject.messageToUser(unwrapJoinPoint(message))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "messageToUser", this, res, message));
+    return res;
+  }
   /**
    * Removes the children of this node
    */
   removeChildren(): void { 
     eventListener.emit("ACTION", new Event(EventTime.BEFORE, "removeChildren", this, undefined)); 
-    const jp = wrapJoinPoint(this._javaObject.removeChildren()); 
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "removeChildren", this, jp));
-    return jp;
+    const res = wrapJoinPoint(this._javaObject.removeChildren()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "removeChildren", this, res));
+    return res;
   }
   /**
    * Replaces this node with the given node
@@ -498,31 +590,36 @@ export class Joinpoint extends LaraJoinPoint {
    */
   replaceWith(p1: Joinpoint | string | Joinpoint[]): Joinpoint { 
     eventListener.emit("ACTION", new Event(EventTime.BEFORE, "replaceWith", this, undefined, p1)); 
-    const jp = wrapJoinPoint(this._javaObject.replaceWith(unwrapJoinPoint(p1))); 
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "replaceWith", this, jp, p1));
-    return jp;
+    const res = wrapJoinPoint(this._javaObject.replaceWith(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "replaceWith", this, res, p1));
+    return res;
   }
   /**
    * Overload which accepts a list of strings
    */
   replaceWithStrings(node: string[]): Joinpoint { 
     eventListener.emit("ACTION", new Event(EventTime.BEFORE, "replaceWithStrings", this, undefined, node)); 
-    const jp = wrapJoinPoint(this._javaObject.replaceWithStrings(unwrapJoinPoint(node)));
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "replaceWithStrings", this, jp, node));
-    return jp;
+    const res = wrapJoinPoint(this._javaObject.replaceWithStrings(unwrapJoinPoint(node))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "replaceWithStrings", this, res, node));
+    return res;
   }
   /**
    * Setting data directly is not supported, this action just emits a warning and does nothing
    */
-  setData(source: object): void { return wrapJoinPoint(this._javaObject.setData(JSON.stringify(source))); }
+  setData(source: object): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setData", this, undefined, source)); 
+    const res = wrapJoinPoint(this._javaObject.setData(JSON.stringify(source))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setData", this, res, source));
+    return res;
+  }
   /**
    * Replaces the first child, or inserts the join point if no child is present
    */
   setFirstChild(node: Joinpoint): void { 
     eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setFirstChild", this, undefined, node)); 
-    const jp = wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); 
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setFirstChild", this, jp, node));
-    return jp;
+    const res = wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setFirstChild", this, res, node));
+    return res;
   }
   /**
    * Sets the commented that are embedded in a node
@@ -537,27 +634,27 @@ export class Joinpoint extends LaraJoinPoint {
    */
   setInlineComments(p1: string[] | string): void { 
     eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setInlineComments", this, undefined, p1)); 
-    const jp = wrapJoinPoint(this._javaObject.setInlineComments(unwrapJoinPoint(p1))); 
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setInlineComments", this, jp, p1));
-    return jp;
+    const res = wrapJoinPoint(this._javaObject.setInlineComments(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setInlineComments", this, res, p1));
+    return res;
   }
   /**
    * Replaces the last child, or inserts the join point if no child is present
    */
   setLastChild(node: Joinpoint): void { 
     eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setLastChild", this, undefined, node)); 
-    const jp = wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); 
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setLastChild", this, jp, node));
-    return jp;
+    const res = wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setLastChild", this, res, node));
+    return res;
   }
   /**
    * Sets the type of a node, if it has a type
    */
   setType(type: Type): void { 
     eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setType", this, undefined, type)); 
-    const jp = wrapJoinPoint(this._javaObject.setType(unwrapJoinPoint(type))); 
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setType", this, jp, type));
-    return jp;
+    const res = wrapJoinPoint(this._javaObject.setType(unwrapJoinPoint(type))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setType", this, res, type));
+    return res;
   }
   /**
    * Associates arbitrary values to nodes of the AST
@@ -572,34 +669,31 @@ export class Joinpoint extends LaraJoinPoint {
    */
   setUserField(p1: string | Record<string, any>, p2?: object): object { 
     eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setUserField", this, undefined, p1, p2)); 
-    const jp = wrapJoinPoint(this._javaObject.setUserField(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); 
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setUserField", this, jp, p1, p2));
-    return jp;
+    const res = wrapJoinPoint(this._javaObject.setUserField(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setUserField", this, res, p1, p2));
+    return res;
   }
   /**
    * Sets the value associated with the given property key
    */
   setValue(key: string, value: object): Joinpoint { 
     eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setValue", this, undefined, key, value)); 
-    const jp = wrapJoinPoint(this._javaObject.setValue(unwrapJoinPoint(key), unwrapJoinPoint(value))); 
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setValue", this, jp, key, value));
-    return jp;
+    const res = wrapJoinPoint(this._javaObject.setValue(unwrapJoinPoint(key), unwrapJoinPoint(value))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setValue", this, res, key, value));
+    return res;
   }
   /**
    * Replaces this join point with a comment with the same contents as .code
    */
   toComment(prefix: string = "", suffix: string = ""): Joinpoint { 
     eventListener.emit("ACTION", new Event(EventTime.BEFORE, "toComment", this, undefined, prefix, suffix)); 
-    const jp = wrapJoinPoint(this._javaObject.toComment(unwrapJoinPoint(prefix), unwrapJoinPoint(suffix))); 
-    eventListener.emit("ACTION", new Event(EventTime.AFTER, "toComment", this, jp, prefix, suffix));
-    return jp;
+    const res = wrapJoinPoint(this._javaObject.toComment(unwrapJoinPoint(prefix), unwrapJoinPoint(suffix))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "toComment", this, res, prefix, suffix));
+    return res;
   }
 }
 
 export class Attribute extends Joinpoint {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -610,9 +704,6 @@ export class Attribute extends Joinpoint {
    * Utility joinpoint, to represent certain problems when generating join points
    */
 export class ClavaException extends Joinpoint {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -622,24 +713,23 @@ export class ClavaException extends Joinpoint {
 }
 
 export class Comment extends Joinpoint {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
   get text(): string { return wrapJoinPoint(this._javaObject.getText()) }
   set text(value: string) { this._javaObject.setText(unwrapJoinPoint(value)); }
-  setText(text: string): void { return wrapJoinPoint(this._javaObject.setText(unwrapJoinPoint(text))); }
+  setText(text: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setText", this, undefined, text)); 
+    const res = wrapJoinPoint(this._javaObject.setText(unwrapJoinPoint(text))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setText", this, res, text));
+    return res;
+  }
 }
 
   /**
    * Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code
    */
 export class Decl extends Joinpoint {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -653,18 +743,12 @@ export class Decl extends Joinpoint {
    * Utility joinpoint, to represent empty nodes when directly accessing the tree
    */
 export class Empty extends Joinpoint {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
 }
 
 export class Expression extends Joinpoint {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -688,9 +772,6 @@ export class Expression extends Joinpoint {
    * Represents a source file (.c, .cpp., .cl, etc)
    */
 export class FileJp extends Joinpoint {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -761,27 +842,57 @@ export class FileJp extends Joinpoint {
   /**
    * The complete path to the file that will be generated by the weaver, given a destination folder
    */
-  getDestinationFilepath(destinationFolderpath?: string): string { return wrapJoinPoint(this._javaObject.getDestinationFilepath(unwrapJoinPoint(destinationFolderpath))); }
+  getDestinationFilepath(destinationFolderpath?: string): string { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getDestinationFilepath", this, undefined, destinationFolderpath)); 
+    const res = wrapJoinPoint(this._javaObject.getDestinationFilepath(unwrapJoinPoint(destinationFolderpath))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getDestinationFilepath", this, res, destinationFolderpath));
+    return res;
+  }
   /**
    * Adds a C include to the current file. If the file already has the include, it does nothing
    */
-  addCInclude(name: string, isAngled: boolean = false): void { return wrapJoinPoint(this._javaObject.addCInclude(unwrapJoinPoint(name), unwrapJoinPoint(isAngled))); }
+  addCInclude(name: string, isAngled: boolean = false): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addCInclude", this, undefined, name, isAngled)); 
+    const res = wrapJoinPoint(this._javaObject.addCInclude(unwrapJoinPoint(name), unwrapJoinPoint(isAngled))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addCInclude", this, res, name, isAngled));
+    return res;
+  }
   /**
    * Adds a function to the file that returns void and has no parameters
    */
-  addFunction(name: string): Joinpoint { return wrapJoinPoint(this._javaObject.addFunction(unwrapJoinPoint(name))); }
+  addFunction(name: string): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addFunction", this, undefined, name)); 
+    const res = wrapJoinPoint(this._javaObject.addFunction(unwrapJoinPoint(name))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addFunction", this, res, name));
+    return res;
+  }
   /**
    * Adds a global variable to this file
    */
-  addGlobal(name: string, type: Joinpoint, initValue: string): Vardecl { return wrapJoinPoint(this._javaObject.addGlobal(unwrapJoinPoint(name), unwrapJoinPoint(type), unwrapJoinPoint(initValue))); }
+  addGlobal(name: string, type: Joinpoint, initValue: string): Vardecl { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addGlobal", this, undefined, name, type, initValue)); 
+    const res = wrapJoinPoint(this._javaObject.addGlobal(unwrapJoinPoint(name), unwrapJoinPoint(type), unwrapJoinPoint(initValue))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addGlobal", this, res, name, type, initValue));
+    return res;
+  }
   /**
    * Adds an include to the current file. If the file already has the include, it does nothing
    */
-  addInclude(name: string, isAngled: boolean = false): void { return wrapJoinPoint(this._javaObject.addInclude(unwrapJoinPoint(name), unwrapJoinPoint(isAngled))); }
+  addInclude(name: string, isAngled: boolean = false): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addInclude", this, undefined, name, isAngled)); 
+    const res = wrapJoinPoint(this._javaObject.addInclude(unwrapJoinPoint(name), unwrapJoinPoint(isAngled))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addInclude", this, res, name, isAngled));
+    return res;
+  }
   /**
    * Overload of addInclude which accepts a join point
    */
-  addIncludeJp(jp: Joinpoint): void { return wrapJoinPoint(this._javaObject.addIncludeJp(unwrapJoinPoint(jp))); }
+  addIncludeJp(jp: Joinpoint): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addIncludeJp", this, undefined, jp)); 
+    const res = wrapJoinPoint(this._javaObject.addIncludeJp(unwrapJoinPoint(jp))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addIncludeJp", this, res, jp));
+    return res;
+  }
   /**
    * Adds the node in the join point to the start of the file
    */
@@ -793,7 +904,12 @@ export class FileJp extends Joinpoint {
   /**
    * Adds the node in the join point to the start of the file
    */
-  insertBegin(p1: Joinpoint | string): void { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); }
+  insertBegin(p1: Joinpoint | string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "insertBegin", this, undefined, p1)); 
+    const res = wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "insertBegin", this, res, p1));
+    return res;
+  }
   /**
    * Adds the node in the join point to the end of the file
    */
@@ -805,33 +921,60 @@ export class FileJp extends Joinpoint {
   /**
    * Adds the node in the join point to the end of the file
    */
-  insertEnd(p1: Joinpoint | string): void { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(p1))); }
+  insertEnd(p1: Joinpoint | string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "insertEnd", this, undefined, p1)); 
+    const res = wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "insertEnd", this, res, p1));
+    return res;
+  }
   /**
    * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
    */
-  rebuild(): FileJp { return wrapJoinPoint(this._javaObject.rebuild()); }
+  rebuild(): FileJp { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "rebuild", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.rebuild()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "rebuild", this, res));
+    return res;
+  }
   /**
    * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
    */
-  rebuildTry(): Joinpoint { return wrapJoinPoint(this._javaObject.rebuildTry()); }
+  rebuildTry(): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "rebuildTry", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.rebuildTry()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "rebuildTry", this, res));
+    return res;
+  }
   /**
    * Changes the name of the file
    */
-  setName(filename: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(filename))); }
+  setName(filename: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setName", this, undefined, filename)); 
+    const res = wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(filename))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setName", this, res, filename));
+    return res;
+  }
   /**
    * Sets the path to the folder of the source file relative to the base source path
    */
-  setRelativeFolderpath(path: string): void { return wrapJoinPoint(this._javaObject.setRelativeFolderpath(unwrapJoinPoint(path))); }
+  setRelativeFolderpath(path: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setRelativeFolderpath", this, undefined, path)); 
+    const res = wrapJoinPoint(this._javaObject.setRelativeFolderpath(unwrapJoinPoint(path))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setRelativeFolderpath", this, res, path));
+    return res;
+  }
   /**
    * Writes the code of this file to a given folder
    */
-  write(destinationFoldername: string): string { return wrapJoinPoint(this._javaObject.write(unwrapJoinPoint(destinationFoldername))); }
+  write(destinationFoldername: string): string { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "write", this, undefined, destinationFoldername)); 
+    const res = wrapJoinPoint(this._javaObject.write(unwrapJoinPoint(destinationFoldername))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "write", this, res, destinationFoldername));
+    return res;
+  }
 }
 
 export class ImplicitValue extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -841,9 +984,6 @@ export class ImplicitValue extends Expression {
    * Represents an include directive (e.g., #include <stdio.h>)
    */
 export class Include extends Decl {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -862,9 +1002,6 @@ export class Include extends Decl {
 }
 
 export class InitList extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -875,18 +1012,12 @@ export class InitList extends Expression {
 }
 
 export class Literal extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
 }
 
 export class MemberAccess extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -905,16 +1036,18 @@ export class MemberAccess extends Expression {
   get memberChain(): Expression[] { return wrapJoinPoint(this._javaObject.getMemberChain()) }
   get memberChainNames(): string[] { return wrapJoinPoint(this._javaObject.getMemberChainNames()) }
   get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
-  setArrow(isArrow: boolean): void { return wrapJoinPoint(this._javaObject.setArrow(unwrapJoinPoint(isArrow))); }
+  setArrow(isArrow: boolean): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setArrow", this, undefined, isArrow)); 
+    const res = wrapJoinPoint(this._javaObject.setArrow(unwrapJoinPoint(isArrow))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setArrow", this, res, isArrow));
+    return res;
+  }
 }
 
   /**
    * Represents a decl with a name
    */
 export class NamedDecl extends Decl {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -928,30 +1061,39 @@ export class NamedDecl extends Decl {
   /**
    * Sets the name of this namedDecl
    */
-  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
+  setName(name: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setName", this, undefined, name)); 
+    const res = wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setName", this, res, name));
+    return res;
+  }
   /**
    * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
    */
-  setQualifiedName(name: string): void { return wrapJoinPoint(this._javaObject.setQualifiedName(unwrapJoinPoint(name))); }
+  setQualifiedName(name: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setQualifiedName", this, undefined, name)); 
+    const res = wrapJoinPoint(this._javaObject.setQualifiedName(unwrapJoinPoint(name))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setQualifiedName", this, res, name));
+    return res;
+  }
   /**
    * Sets the qualified prefix of this namedDecl
    */
-  setQualifiedPrefix(qualifiedPrefix: string): void { return wrapJoinPoint(this._javaObject.setQualifiedPrefix(unwrapJoinPoint(qualifiedPrefix))); }
+  setQualifiedPrefix(qualifiedPrefix: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setQualifiedPrefix", this, undefined, qualifiedPrefix)); 
+    const res = wrapJoinPoint(this._javaObject.setQualifiedPrefix(unwrapJoinPoint(qualifiedPrefix))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setQualifiedPrefix", this, res, qualifiedPrefix));
+    return res;
+  }
 }
 
 export class NewExpr extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
 }
 
 export class Op extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -964,9 +1106,6 @@ export class Op extends Expression {
 }
 
 export class ParenExpr extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -980,9 +1119,6 @@ export class ParenExpr extends Expression {
    * Represents a pragma in the code (e.g., #pragma kernel)
    */
 export class Pragma extends Joinpoint {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -1009,18 +1145,30 @@ export class Pragma extends Joinpoint {
   /**
    * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
    */
-  getTargetNodes(endPragma?: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getTargetNodes(unwrapJoinPoint(endPragma))); }
-  setContent(content: string): void { return wrapJoinPoint(this._javaObject.setContent(unwrapJoinPoint(content))); }
-  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
+  getTargetNodes(endPragma?: string): Joinpoint[] { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getTargetNodes", this, undefined, endPragma)); 
+    const res = wrapJoinPoint(this._javaObject.getTargetNodes(unwrapJoinPoint(endPragma))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getTargetNodes", this, res, endPragma));
+    return res;
+  }
+  setContent(content: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setContent", this, undefined, content)); 
+    const res = wrapJoinPoint(this._javaObject.setContent(unwrapJoinPoint(content))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setContent", this, res, content));
+    return res;
+  }
+  setName(name: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setName", this, undefined, name)); 
+    const res = wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setName", this, res, name));
+    return res;
+  }
 }
 
   /**
    * Represents the complete program and is the top-most joinpoint in the hierarchy
    */
 export class Program extends Joinpoint {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -1069,64 +1217,126 @@ export class Program extends Joinpoint {
   /**
    * Adds a path to an include that the current program depends on
    */
-  addExtraInclude(path: string): void { return wrapJoinPoint(this._javaObject.addExtraInclude(unwrapJoinPoint(path))); }
+  addExtraInclude(path: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addExtraInclude", this, undefined, path)); 
+    const res = wrapJoinPoint(this._javaObject.addExtraInclude(unwrapJoinPoint(path))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addExtraInclude", this, res, path));
+    return res;
+  }
   /**
    * Adds a path based on a git repository to an include that the current program depends on
    */
-  addExtraIncludeFromGit(gitRepo: string, path?: string): void { return wrapJoinPoint(this._javaObject.addExtraIncludeFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(path))); }
+  addExtraIncludeFromGit(gitRepo: string, path?: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addExtraIncludeFromGit", this, undefined, gitRepo, path)); 
+    const res = wrapJoinPoint(this._javaObject.addExtraIncludeFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(path))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addExtraIncludeFromGit", this, res, gitRepo, path));
+    return res;
+  }
   /**
    * Adds a library (e.g., -pthreads) that the current program depends on
    */
-  addExtraLib(lib: string): void { return wrapJoinPoint(this._javaObject.addExtraLib(unwrapJoinPoint(lib))); }
+  addExtraLib(lib: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addExtraLib", this, undefined, lib)); 
+    const res = wrapJoinPoint(this._javaObject.addExtraLib(unwrapJoinPoint(lib))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addExtraLib", this, res, lib));
+    return res;
+  }
   /**
    * Adds a path to a source that the current program depends on
    */
-  addExtraSource(path: string): void { return wrapJoinPoint(this._javaObject.addExtraSource(unwrapJoinPoint(path))); }
+  addExtraSource(path: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addExtraSource", this, undefined, path)); 
+    const res = wrapJoinPoint(this._javaObject.addExtraSource(unwrapJoinPoint(path))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addExtraSource", this, res, path));
+    return res;
+  }
   /**
    * Adds a path based on a git repository to a source that the current program depends on
    */
-  addExtraSourceFromGit(gitRepo: string, path?: string): void { return wrapJoinPoint(this._javaObject.addExtraSourceFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(path))); }
+  addExtraSourceFromGit(gitRepo: string, path?: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addExtraSourceFromGit", this, undefined, gitRepo, path)); 
+    const res = wrapJoinPoint(this._javaObject.addExtraSourceFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(path))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addExtraSourceFromGit", this, res, gitRepo, path));
+    return res;
+  }
   /**
    * Adds a file join point to the current program
    */
-  addFile(file: FileJp): Joinpoint { return wrapJoinPoint(this._javaObject.addFile(unwrapJoinPoint(file))); }
+  addFile(file: FileJp): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addFile", this, undefined, file)); 
+    const res = wrapJoinPoint(this._javaObject.addFile(unwrapJoinPoint(file))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addFile", this, res, file));
+    return res;
+  }
   /**
    * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
    */
-  addFileFromPath(filepath: object): Joinpoint { return wrapJoinPoint(this._javaObject.addFileFromPath(unwrapJoinPoint(filepath))); }
+  addFileFromPath(filepath: object): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addFileFromPath", this, undefined, filepath)); 
+    const res = wrapJoinPoint(this._javaObject.addFileFromPath(unwrapJoinPoint(filepath))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addFileFromPath", this, res, filepath));
+    return res;
+  }
   /**
    * Adds a path based on a git repository to a project that the current program depends on
    */
-  addProjectFromGit(gitRepo: string, libs: string[], path?: string): void { return wrapJoinPoint(this._javaObject.addProjectFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(libs), unwrapJoinPoint(path))); }
+  addProjectFromGit(gitRepo: string, libs: string[], path?: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addProjectFromGit", this, undefined, gitRepo, libs, path)); 
+    const res = wrapJoinPoint(this._javaObject.addProjectFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(libs), unwrapJoinPoint(path))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addProjectFromGit", this, res, gitRepo, libs, path));
+    return res;
+  }
   /**
    * Registers a function to be executed when the program exits
    */
-  atexit(func: FunctionJp): void { return wrapJoinPoint(this._javaObject.atexit(unwrapJoinPoint(func))); }
+  atexit(func: FunctionJp): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "atexit", this, undefined, func)); 
+    const res = wrapJoinPoint(this._javaObject.atexit(unwrapJoinPoint(func))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "atexit", this, res, func));
+    return res;
+  }
   /**
    * Discards the AST at the top of the ASt stack
    */
-  pop(): void { return wrapJoinPoint(this._javaObject.pop()); }
+  pop(): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "pop", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.pop()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "pop", this, res));
+    return res;
+  }
   /**
    * Creates a copy of the current AST and pushes it to the top of the AST stack
    */
-  push(): void { return wrapJoinPoint(this._javaObject.push()); }
+  push(): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "push", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.push()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "push", this, res));
+    return res;
+  }
   /**
    * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
    */
-  rebuild(): boolean { return wrapJoinPoint(this._javaObject.rebuild()); }
+  rebuild(): boolean { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "rebuild", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.rebuild()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "rebuild", this, res));
+    return res;
+  }
   /**
    * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
    */
-  rebuildFuzzy(): void { return wrapJoinPoint(this._javaObject.rebuildFuzzy()); }
+  rebuildFuzzy(): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "rebuildFuzzy", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.rebuildFuzzy()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "rebuildFuzzy", this, res));
+    return res;
+  }
 }
 
   /**
    * Common class of struct, union and class
    */
 export class RecordJp extends NamedDecl {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -1144,13 +1354,15 @@ export class RecordJp extends NamedDecl {
   /**
    * Adds a field to a record (struct, class).
    */
-  addField(field: Field): void { return wrapJoinPoint(this._javaObject.addField(unwrapJoinPoint(field))); }
+  addField(field: Field): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addField", this, undefined, field)); 
+    const res = wrapJoinPoint(this._javaObject.addField(unwrapJoinPoint(field))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addField", this, res, field));
+    return res;
+  }
 }
 
 export class Statement extends Joinpoint {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1162,18 +1374,12 @@ export class Statement extends Joinpoint {
    * Represets a struct declaration
    */
 export class Struct extends RecordJp {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
 }
 
 export class Switch extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1199,9 +1405,6 @@ export class Switch extends Statement {
    * A pragma that references a point in the code and sticks to it
    */
 export class Tag extends Pragma {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "id",
   };
@@ -1212,9 +1415,6 @@ export class Tag extends Pragma {
 }
 
 export class TernaryOp extends Op {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1224,18 +1424,12 @@ export class TernaryOp extends Op {
 }
 
 export class This extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
 }
 
 export class Type extends Joinpoint {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1287,36 +1481,63 @@ export class Type extends Joinpoint {
   /**
    * Returns a new node based on this type with the qualifier const
    */
-  asConst(): Type { return wrapJoinPoint(this._javaObject.asConst()); }
+  asConst(): Type { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "asConst", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.asConst()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "asConst", this, res));
+    return res;
+  }
   /**
    * Sets the desugared type of this type
    */
-  setDesugar(desugaredType: Type): void { return wrapJoinPoint(this._javaObject.setDesugar(unwrapJoinPoint(desugaredType))); }
+  setDesugar(desugaredType: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setDesugar", this, undefined, desugaredType)); 
+    const res = wrapJoinPoint(this._javaObject.setDesugar(unwrapJoinPoint(desugaredType))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setDesugar", this, res, desugaredType));
+    return res;
+  }
   /**
    * Sets a single template argument type of a template type
    */
-  setTemplateArgType(index: number, templateArgType: Type): void { return wrapJoinPoint(this._javaObject.setTemplateArgType(unwrapJoinPoint(index), unwrapJoinPoint(templateArgType))); }
+  setTemplateArgType(index: number, templateArgType: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setTemplateArgType", this, undefined, index, templateArgType)); 
+    const res = wrapJoinPoint(this._javaObject.setTemplateArgType(unwrapJoinPoint(index), unwrapJoinPoint(templateArgType))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setTemplateArgType", this, res, index, templateArgType));
+    return res;
+  }
   /**
    * Sets the template argument types of a template type
    */
-  setTemplateArgsTypes(templateArgTypes: Type[]): void { return wrapJoinPoint(this._javaObject.setTemplateArgsTypes(unwrapJoinPoint(templateArgTypes))); }
+  setTemplateArgsTypes(templateArgTypes: Type[]): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setTemplateArgsTypes", this, undefined, templateArgTypes)); 
+    const res = wrapJoinPoint(this._javaObject.setTemplateArgsTypes(unwrapJoinPoint(templateArgTypes))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setTemplateArgsTypes", this, res, templateArgTypes));
+    return res;
+  }
   /**
    * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
    */
-  setTypeFieldByValueRecursive(currentValue: object, newValue: object): boolean { return wrapJoinPoint(this._javaObject.setTypeFieldByValueRecursive(unwrapJoinPoint(currentValue), unwrapJoinPoint(newValue))); }
+  setTypeFieldByValueRecursive(currentValue: object, newValue: object): boolean { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setTypeFieldByValueRecursive", this, undefined, currentValue, newValue)); 
+    const res = wrapJoinPoint(this._javaObject.setTypeFieldByValueRecursive(unwrapJoinPoint(currentValue), unwrapJoinPoint(newValue))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setTypeFieldByValueRecursive", this, res, currentValue, newValue));
+    return res;
+  }
   /**
    * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
    */
-  setUnderlyingType(oldValue: Type, newValue: Type): Type { return wrapJoinPoint(this._javaObject.setUnderlyingType(unwrapJoinPoint(oldValue), unwrapJoinPoint(newValue))); }
+  setUnderlyingType(oldValue: Type, newValue: Type): Type { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setUnderlyingType", this, undefined, oldValue, newValue)); 
+    const res = wrapJoinPoint(this._javaObject.setUnderlyingType(unwrapJoinPoint(oldValue), unwrapJoinPoint(newValue))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setUnderlyingType", this, res, oldValue, newValue));
+    return res;
+  }
 }
 
   /**
    * Base node for declarations which introduce a typedef-name
    */
 export class TypedefNameDecl extends NamedDecl {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -1326,9 +1547,6 @@ export class TypedefNameDecl extends NamedDecl {
    * Represents the type of a typedef.
    */
 export class TypedefType extends Type {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1343,9 +1561,6 @@ export class TypedefType extends Type {
 }
 
 export class UnaryExprOrType extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1355,13 +1570,15 @@ export class UnaryExprOrType extends Expression {
   get hasArgExpr(): boolean { return wrapJoinPoint(this._javaObject.getHasArgExpr()) }
   get hasTypeExpr(): boolean { return wrapJoinPoint(this._javaObject.getHasTypeExpr()) }
   get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
-  setArgType(argType: Type): void { return wrapJoinPoint(this._javaObject.setArgType(unwrapJoinPoint(argType))); }
+  setArgType(argType: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setArgType", this, undefined, argType)); 
+    const res = wrapJoinPoint(this._javaObject.setArgType(unwrapJoinPoint(argType))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setArgType", this, res, argType));
+    return res;
+  }
 }
 
 export class UnaryOp extends Op {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1370,9 +1587,6 @@ export class UnaryOp extends Op {
 }
 
 export class UndefinedType extends Type {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1382,9 +1596,6 @@ export class UndefinedType extends Type {
    * A reference to a variable
    */
 export class Varref extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -1408,13 +1619,15 @@ export class Varref extends Expression {
    * Expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
    */
   get useExpr(): Expression { return wrapJoinPoint(this._javaObject.getUseExpr()) }
-  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
+  setName(name: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setName", this, undefined, name)); 
+    const res = wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setName", this, res, name));
+    return res;
+  }
 }
 
 export class WrapperStmt extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1423,9 +1636,6 @@ export class WrapperStmt extends Statement {
 }
 
 export class AccessSpecifier extends Decl {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "kind",
   };
@@ -1436,9 +1646,6 @@ export class AccessSpecifier extends Decl {
 }
 
 export class AdjustedType extends Type {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1449,9 +1656,6 @@ export class AdjustedType extends Type {
 }
 
 export class ArrayAccess extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1478,9 +1682,6 @@ export class ArrayAccess extends Expression {
 }
 
 export class ArrayType extends Type {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1489,13 +1690,15 @@ export class ArrayType extends Type {
   /**
    * Sets the element type of the array
    */
-  setElementType(arrayElementType: Type): void { return wrapJoinPoint(this._javaObject.setElementType(unwrapJoinPoint(arrayElementType))); }
+  setElementType(arrayElementType: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setElementType", this, undefined, arrayElementType)); 
+    const res = wrapJoinPoint(this._javaObject.setElementType(unwrapJoinPoint(arrayElementType))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setElementType", this, res, arrayElementType));
+    return res;
+  }
 }
 
 export class BinaryOp extends Op {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1504,14 +1707,21 @@ export class BinaryOp extends Op {
   set left(value: Expression) { this._javaObject.setLeft(unwrapJoinPoint(value)); }
   get right(): Expression { return wrapJoinPoint(this._javaObject.getRight()) }
   set right(value: Expression) { this._javaObject.setRight(unwrapJoinPoint(value)); }
-  setLeft(left: Expression): void { return wrapJoinPoint(this._javaObject.setLeft(unwrapJoinPoint(left))); }
-  setRight(right: Expression): void { return wrapJoinPoint(this._javaObject.setRight(unwrapJoinPoint(right))); }
+  setLeft(left: Expression): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setLeft", this, undefined, left)); 
+    const res = wrapJoinPoint(this._javaObject.setLeft(unwrapJoinPoint(left))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setLeft", this, res, left));
+    return res;
+  }
+  setRight(right: Expression): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setRight", this, undefined, right)); 
+    const res = wrapJoinPoint(this._javaObject.setRight(unwrapJoinPoint(right))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setRight", this, res, right));
+    return res;
+  }
 }
 
 export class BoolLiteral extends Literal {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1519,9 +1729,6 @@ export class BoolLiteral extends Literal {
 }
 
 export class Break extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1532,9 +1739,6 @@ export class Break extends Statement {
 }
 
 export class BuiltinType extends Type {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1562,9 +1766,6 @@ export class BuiltinType extends Type {
 }
 
 export class Call extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -1611,7 +1812,12 @@ export class Call extends Expression {
    * Similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function
    */
   get signature(): string { return wrapJoinPoint(this._javaObject.getSignature()) }
-  getArg(index: number): Expression { return wrapJoinPoint(this._javaObject.getArg(unwrapJoinPoint(index))); }
+  getArg(index: number): Expression { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getArg", this, undefined, index)); 
+    const res = wrapJoinPoint(this._javaObject.getArg(unwrapJoinPoint(index))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getArg", this, res, index));
+    return res;
+  }
   /**
    * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
    */
@@ -1623,27 +1829,54 @@ export class Call extends Expression {
   /**
    * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
    */
-  addArg(p1: string, p2?: Type | string): void { return wrapJoinPoint(this._javaObject.addArg(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  addArg(p1: string, p2?: Type | string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addArg", this, undefined, p1, p2)); 
+    const res = wrapJoinPoint(this._javaObject.addArg(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addArg", this, res, p1, p2));
+    return res;
+  }
   /**
    * Tries to inline this call
    */
-  inline(): boolean { return wrapJoinPoint(this._javaObject.inline()); }
-  setArg(index: number, expr: Expression): void { return wrapJoinPoint(this._javaObject.setArg(unwrapJoinPoint(index), unwrapJoinPoint(expr))); }
-  setArgFromString(index: number, expr: string): void { return wrapJoinPoint(this._javaObject.setArgFromString(unwrapJoinPoint(index), unwrapJoinPoint(expr))); }
+  inline(): boolean { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "inline", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.inline()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "inline", this, res));
+    return res;
+  }
+  setArg(index: number, expr: Expression): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setArg", this, undefined, index, expr)); 
+    const res = wrapJoinPoint(this._javaObject.setArg(unwrapJoinPoint(index), unwrapJoinPoint(expr))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setArg", this, res, index, expr));
+    return res;
+  }
+  setArgFromString(index: number, expr: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setArgFromString", this, undefined, index, expr)); 
+    const res = wrapJoinPoint(this._javaObject.setArgFromString(unwrapJoinPoint(index), unwrapJoinPoint(expr))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setArgFromString", this, res, index, expr));
+    return res;
+  }
   /**
    * Changes the name of the call
    */
-  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
+  setName(name: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setName", this, undefined, name)); 
+    const res = wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setName", this, res, name));
+    return res;
+  }
   /**
    * Wraps this call with a possibly new wrapping function
    */
-  wrap(name: string): void { return wrapJoinPoint(this._javaObject.wrap(unwrapJoinPoint(name))); }
+  wrap(name: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "wrap", this, undefined, name)); 
+    const res = wrapJoinPoint(this._javaObject.wrap(unwrapJoinPoint(name))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "wrap", this, res, name));
+    return res;
+  }
 }
 
 export class Case extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1674,9 +1907,6 @@ export class Case extends Statement {
 }
 
 export class Cast extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1690,18 +1920,12 @@ export class Cast extends Expression {
 }
 
 export class CilkSpawn extends Call {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
 }
 
 export class CilkSync extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1711,9 +1935,6 @@ export class CilkSync extends Statement {
    * Represents a C++ class
    */
 export class Class extends RecordJp {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -1760,35 +1981,41 @@ export class Class extends RecordJp {
   /**
    * Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply added the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature.
    */
-  addMethod(method: Method): void { return wrapJoinPoint(this._javaObject.addMethod(unwrapJoinPoint(method))); }
+  addMethod(method: Method): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addMethod", this, undefined, method)); 
+    const res = wrapJoinPoint(this._javaObject.addMethod(unwrapJoinPoint(method))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addMethod", this, res, method));
+    return res;
+  }
 }
 
 export class Continue extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
 }
 
 export class CudaKernelCall extends Call {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
   get config(): Expression[] { return wrapJoinPoint(this._javaObject.getConfig()) }
   set config(value: Expression[]) { this._javaObject.setConfig(unwrapJoinPoint(value)); }
-  setConfig(args: Expression[]): void { return wrapJoinPoint(this._javaObject.setConfig(unwrapJoinPoint(args))); }
-  setConfigFromStrings(args: string[]): void { return wrapJoinPoint(this._javaObject.setConfigFromStrings(unwrapJoinPoint(args))); }
+  setConfig(args: Expression[]): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setConfig", this, undefined, args)); 
+    const res = wrapJoinPoint(this._javaObject.setConfig(unwrapJoinPoint(args))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setConfig", this, res, args));
+    return res;
+  }
+  setConfigFromStrings(args: string[]): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setConfigFromStrings", this, undefined, args)); 
+    const res = wrapJoinPoint(this._javaObject.setConfigFromStrings(unwrapJoinPoint(args))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setConfigFromStrings", this, res, args));
+    return res;
+  }
 }
 
 export class DeclStmt extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1802,18 +2029,12 @@ export class DeclStmt extends Statement {
    * Represents a decl that comes from a declarator (e.g., function, field, variable)
    */
 export class Declarator extends NamedDecl {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
 }
 
 export class DeleteExpr extends Expression {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1823,9 +2044,6 @@ export class DeleteExpr extends Expression {
    * Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name, e.g., N::M::type, or both. This type is used to keep track of a type name as written in the source code, including tag keywords and any nested-name-specifiers. The type itself is always 'sugar', used to express what was written in the source code but containing no additional semantic information.
    */
 export class ElaboratedType extends Type {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1844,9 +2062,6 @@ export class ElaboratedType extends Type {
 }
 
 export class EmptyStmt extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1856,9 +2071,6 @@ export class EmptyStmt extends Statement {
    * Represents an enum
    */
 export class EnumDecl extends NamedDecl {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -1866,18 +2078,12 @@ export class EnumDecl extends NamedDecl {
 }
 
 export class EnumeratorDecl extends NamedDecl {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
 }
 
 export class ExprStmt extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1891,18 +2097,12 @@ export class ExprStmt extends Statement {
    * Represents a member of a struct/union/class
    */
 export class Field extends Declarator {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
 }
 
 export class FloatLiteral extends Literal {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -1913,9 +2113,6 @@ export class FloatLiteral extends Literal {
    * Represents a function declaration or definition
    */
 export class FunctionJp extends Declarator {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -1981,7 +2178,12 @@ export class FunctionJp extends Declarator {
    */
   get signature(): string { return wrapJoinPoint(this._javaObject.getSignature()) }
   get storageClass(): StorageClass { return wrapJoinPoint(this._javaObject.getStorageClass()) }
-  getDeclaration(withReturnType: boolean): string { return wrapJoinPoint(this._javaObject.getDeclaration(unwrapJoinPoint(withReturnType))); }
+  getDeclaration(withReturnType: boolean): string { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getDeclaration", this, undefined, withReturnType)); 
+    const res = wrapJoinPoint(this._javaObject.getDeclaration(unwrapJoinPoint(withReturnType))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getDeclaration", this, res, withReturnType));
+    return res;
+  }
   /**
    * Adds a new parameter to the function
    */
@@ -1993,11 +2195,21 @@ export class FunctionJp extends Declarator {
   /**
    * Adds a new parameter to the function
    */
-  addParam(p1: Param | string, p2?: Type): void { return wrapJoinPoint(this._javaObject.addParam(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  addParam(p1: Param | string, p2?: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addParam", this, undefined, p1, p2)); 
+    const res = wrapJoinPoint(this._javaObject.addParam(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addParam", this, res, p1, p2));
+    return res;
+  }
   /**
    * Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class
    */
-  clone(newName: string, insert: boolean = true): FunctionJp { return wrapJoinPoint(this._javaObject.clone(unwrapJoinPoint(newName), unwrapJoinPoint(insert))); }
+  clone(newName: string, insert: boolean = true): FunctionJp { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "clone", this, undefined, newName, insert)); 
+    const res = wrapJoinPoint(this._javaObject.clone(unwrapJoinPoint(newName), unwrapJoinPoint(insert))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "clone", this, res, newName, insert));
+    return res;
+  }
   /**
    * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
    */
@@ -2009,7 +2221,12 @@ export class FunctionJp extends Declarator {
   /**
    * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
    */
-  cloneOnFile(p1: string, p2?: string | FileJp): FunctionJp { return wrapJoinPoint(this._javaObject.cloneOnFile(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  cloneOnFile(p1: string, p2?: string | FileJp): FunctionJp { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "cloneOnFile", this, undefined, p1, p2)); 
+    const res = wrapJoinPoint(this._javaObject.cloneOnFile(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "cloneOnFile", this, res, p1, p2));
+    return res;
+  }
   /**
    * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
    */
@@ -2021,19 +2238,39 @@ export class FunctionJp extends Declarator {
   /**
    * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
    */
-  insertReturn(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(p1))); }
+  insertReturn(p1: Joinpoint | string): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "insertReturn", this, undefined, p1)); 
+    const res = wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "insertReturn", this, res, p1));
+    return res;
+  }
   /**
    * Creates a new call to this function
    */
-  newCall(args: Joinpoint[]): Call { return wrapJoinPoint(this._javaObject.newCall(unwrapJoinPoint(args))); }
+  newCall(args: Joinpoint[]): Call { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "newCall", this, undefined, args)); 
+    const res = wrapJoinPoint(this._javaObject.newCall(unwrapJoinPoint(args))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "newCall", this, res, args));
+    return res;
+  }
   /**
    * Sets the body of the function
    */
-  setBody(body: Scope): void { return wrapJoinPoint(this._javaObject.setBody(unwrapJoinPoint(body))); }
+  setBody(body: Scope): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setBody", this, undefined, body)); 
+    const res = wrapJoinPoint(this._javaObject.setBody(unwrapJoinPoint(body))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setBody", this, res, body));
+    return res;
+  }
   /**
    * Sets the type of the function
    */
-  setFunctionType(functionType: FunctionType): void { return wrapJoinPoint(this._javaObject.setFunctionType(unwrapJoinPoint(functionType))); }
+  setFunctionType(functionType: FunctionType): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setFunctionType", this, undefined, functionType)); 
+    const res = wrapJoinPoint(this._javaObject.setFunctionType(unwrapJoinPoint(functionType))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setFunctionType", this, res, functionType));
+    return res;
+  }
   /**
    * Sets the parameter of the function at the given position
    */
@@ -2045,29 +2282,51 @@ export class FunctionJp extends Declarator {
   /**
    * Sets the parameter of the function at the given position
    */
-  setParam(p1: number, p2: Param | string, p3?: Type): void { return wrapJoinPoint(this._javaObject.setParam(unwrapJoinPoint(p1), unwrapJoinPoint(p2), unwrapJoinPoint(p3))); }
+  setParam(p1: number, p2: Param | string, p3?: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setParam", this, undefined, p1, p2, p3)); 
+    const res = wrapJoinPoint(this._javaObject.setParam(unwrapJoinPoint(p1), unwrapJoinPoint(p2), unwrapJoinPoint(p3))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setParam", this, res, p1, p2, p3));
+    return res;
+  }
   /**
    * Sets the type of a parameter of the function
    */
-  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(unwrapJoinPoint(index), unwrapJoinPoint(newType))); }
+  setParamType(index: number, newType: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setParamType", this, undefined, index, newType)); 
+    const res = wrapJoinPoint(this._javaObject.setParamType(unwrapJoinPoint(index), unwrapJoinPoint(newType))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setParamType", this, res, index, newType));
+    return res;
+  }
   /**
    * Sets the parameters of the function
    */
-  setParams(params: Param[]): void { return wrapJoinPoint(this._javaObject.setParams(unwrapJoinPoint(params))); }
+  setParams(params: Param[]): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setParams", this, undefined, params)); 
+    const res = wrapJoinPoint(this._javaObject.setParams(unwrapJoinPoint(params))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setParams", this, res, params));
+    return res;
+  }
   /**
    * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
    */
-  setParamsFromStrings(params: string[]): void { return wrapJoinPoint(this._javaObject.setParamsFromStrings(unwrapJoinPoint(params))); }
+  setParamsFromStrings(params: string[]): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setParamsFromStrings", this, undefined, params)); 
+    const res = wrapJoinPoint(this._javaObject.setParamsFromStrings(unwrapJoinPoint(params))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setParamsFromStrings", this, res, params));
+    return res;
+  }
   /**
    * Sets the return type of the function
    */
-  setReturnType(returnType: Type): void { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(returnType))); }
+  setReturnType(returnType: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setReturnType", this, undefined, returnType)); 
+    const res = wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(returnType))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setReturnType", this, res, returnType));
+    return res;
+  }
 }
 
 export class FunctionType extends Type {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2077,17 +2336,24 @@ export class FunctionType extends Type {
   /**
    * Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType
    */
-  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(unwrapJoinPoint(index), unwrapJoinPoint(newType))); }
+  setParamType(index: number, newType: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setParamType", this, undefined, index, newType)); 
+    const res = wrapJoinPoint(this._javaObject.setParamType(unwrapJoinPoint(index), unwrapJoinPoint(newType))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setParamType", this, res, index, newType));
+    return res;
+  }
   /**
    * Sets the return type of the FunctionType
    */
-  setReturnType(newType: Type): void { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(newType))); }
+  setReturnType(newType: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setReturnType", this, undefined, newType)); 
+    const res = wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(newType))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setReturnType", this, res, newType));
+    return res;
+  }
 }
 
 export class GotoStmt extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2096,13 +2362,15 @@ export class GotoStmt extends Statement {
   /**
    * Sets the label of the goto
    */
-  setLabel(label: LabelDecl): void { return wrapJoinPoint(this._javaObject.setLabel(unwrapJoinPoint(label))); }
+  setLabel(label: LabelDecl): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setLabel", this, undefined, label)); 
+    const res = wrapJoinPoint(this._javaObject.setLabel(unwrapJoinPoint(label))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setLabel", this, res, label));
+    return res;
+  }
 }
 
 export class If extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2116,21 +2384,33 @@ export class If extends Statement {
   /**
    * Sets the condition of the if
    */
-  setCond(cond: Expression): void { return wrapJoinPoint(this._javaObject.setCond(unwrapJoinPoint(cond))); }
+  setCond(cond: Expression): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setCond", this, undefined, cond)); 
+    const res = wrapJoinPoint(this._javaObject.setCond(unwrapJoinPoint(cond))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setCond", this, res, cond));
+    return res;
+  }
   /**
    * Sets the body of the else
    */
-  setElse(elseStatement: Statement): void { return wrapJoinPoint(this._javaObject.setElse(unwrapJoinPoint(elseStatement))); }
+  setElse(elseStatement: Statement): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setElse", this, undefined, elseStatement)); 
+    const res = wrapJoinPoint(this._javaObject.setElse(unwrapJoinPoint(elseStatement))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setElse", this, res, elseStatement));
+    return res;
+  }
   /**
    * Sets the body of the if
    */
-  setThen(then: Statement): void { return wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then))); }
+  setThen(then: Statement): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setThen", this, undefined, then)); 
+    const res = wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setThen", this, res, then));
+    return res;
+  }
 }
 
 export class IntLiteral extends Literal {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2138,18 +2418,12 @@ export class IntLiteral extends Literal {
 }
 
 export class LabelDecl extends NamedDecl {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
 }
 
 export class LabelStmt extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2158,13 +2432,15 @@ export class LabelStmt extends Statement {
   /**
    * Sets the label of the label statement
    */
-  setDecl(label: LabelDecl): void { return wrapJoinPoint(this._javaObject.setDecl(unwrapJoinPoint(label))); }
+  setDecl(label: LabelDecl): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setDecl", this, undefined, label)); 
+    const res = wrapJoinPoint(this._javaObject.setDecl(unwrapJoinPoint(label))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setDecl", this, res, label));
+    return res;
+  }
 }
 
 export class Loop extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "kind",
   };
@@ -2238,60 +2514,117 @@ export class Loop extends Statement {
   /**
    * Tests whether the loops are interchangeable. This is a conservative test.
    */
-  isInterchangeable(otherLoop: Loop): boolean { return wrapJoinPoint(this._javaObject.isInterchangeable(unwrapJoinPoint(otherLoop))); }
+  isInterchangeable(otherLoop: Loop): boolean { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "isInterchangeable", this, undefined, otherLoop)); 
+    const res = wrapJoinPoint(this._javaObject.isInterchangeable(unwrapJoinPoint(otherLoop))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "isInterchangeable", this, res, otherLoop));
+    return res;
+  }
   /**
    * Interchanges two for loops, if possible
    */
-  interchange(otherLoop: Loop): void { return wrapJoinPoint(this._javaObject.interchange(unwrapJoinPoint(otherLoop))); }
+  interchange(otherLoop: Loop): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "interchange", this, undefined, otherLoop)); 
+    const res = wrapJoinPoint(this._javaObject.interchange(unwrapJoinPoint(otherLoop))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "interchange", this, res, otherLoop));
+    return res;
+  }
   /**
    * Sets the body of the loop
    */
-  setBody(body: Scope): void { return wrapJoinPoint(this._javaObject.setBody(unwrapJoinPoint(body))); }
+  setBody(body: Scope): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setBody", this, undefined, body)); 
+    const res = wrapJoinPoint(this._javaObject.setBody(unwrapJoinPoint(body))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setBody", this, res, body));
+    return res;
+  }
   /**
    * Sets the conditional statement of the loop. Works with loops of kind 'for'
    */
-  setCond(condCode: string): void { return wrapJoinPoint(this._javaObject.setCond(unwrapJoinPoint(condCode))); }
+  setCond(condCode: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setCond", this, undefined, condCode)); 
+    const res = wrapJoinPoint(this._javaObject.setCond(unwrapJoinPoint(condCode))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setCond", this, res, condCode));
+    return res;
+  }
   /**
    * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
    */
-  setCondRelation(operator: Relation): void { return wrapJoinPoint(this._javaObject.setCondRelation(unwrapJoinPoint(operator))); }
+  setCondRelation(operator: Relation): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setCondRelation", this, undefined, operator)); 
+    const res = wrapJoinPoint(this._javaObject.setCondRelation(unwrapJoinPoint(operator))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setCondRelation", this, res, operator));
+    return res;
+  }
   /**
    * Sets the end value of the loop. Works with loops of kind 'for'
    */
-  setEndValue(initCode: string): void { return wrapJoinPoint(this._javaObject.setEndValue(unwrapJoinPoint(initCode))); }
+  setEndValue(initCode: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setEndValue", this, undefined, initCode)); 
+    const res = wrapJoinPoint(this._javaObject.setEndValue(unwrapJoinPoint(initCode))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setEndValue", this, res, initCode));
+    return res;
+  }
   /**
    * Sets the init statement of the loop
    */
-  setInit(initCode: string): void { return wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(initCode))); }
+  setInit(initCode: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setInit", this, undefined, initCode)); 
+    const res = wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(initCode))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setInit", this, res, initCode));
+    return res;
+  }
   /**
    * Sets the init value of the loop. Works with loops of kind 'for'
    */
-  setInitValue(initCode: string): void { return wrapJoinPoint(this._javaObject.setInitValue(unwrapJoinPoint(initCode))); }
+  setInitValue(initCode: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setInitValue", this, undefined, initCode)); 
+    const res = wrapJoinPoint(this._javaObject.setInitValue(unwrapJoinPoint(initCode))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setInitValue", this, res, initCode));
+    return res;
+  }
   /**
    * Sets the attribute 'isParallel' of the loop
    */
-  setIsParallel(isParallel: boolean): void { return wrapJoinPoint(this._javaObject.setIsParallel(unwrapJoinPoint(isParallel))); }
+  setIsParallel(isParallel: boolean): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setIsParallel", this, undefined, isParallel)); 
+    const res = wrapJoinPoint(this._javaObject.setIsParallel(unwrapJoinPoint(isParallel))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setIsParallel", this, res, isParallel));
+    return res;
+  }
   /**
    * Sets the kind of the loop
    */
-  setKind(kind: string): void { return wrapJoinPoint(this._javaObject.setKind(unwrapJoinPoint(kind))); }
+  setKind(kind: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setKind", this, undefined, kind)); 
+    const res = wrapJoinPoint(this._javaObject.setKind(unwrapJoinPoint(kind))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setKind", this, res, kind));
+    return res;
+  }
   /**
    * Sets the step statement of the loop. Works with loops of kind 'for'
    */
-  setStep(stepCode: string): void { return wrapJoinPoint(this._javaObject.setStep(unwrapJoinPoint(stepCode))); }
+  setStep(stepCode: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setStep", this, undefined, stepCode)); 
+    const res = wrapJoinPoint(this._javaObject.setStep(unwrapJoinPoint(stepCode))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setStep", this, res, stepCode));
+    return res;
+  }
   /**
    * Applies loop tiling to this loop.
    */
-  tile(blockSize: string, reference: Statement, useTernary: boolean = true): Statement { return wrapJoinPoint(this._javaObject.tile(unwrapJoinPoint(blockSize), unwrapJoinPoint(reference), unwrapJoinPoint(useTernary))); }
+  tile(blockSize: string, reference: Statement, useTernary: boolean = true): Statement { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "tile", this, undefined, blockSize, reference, useTernary)); 
+    const res = wrapJoinPoint(this._javaObject.tile(unwrapJoinPoint(blockSize), unwrapJoinPoint(reference), unwrapJoinPoint(useTernary))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "tile", this, res, blockSize, reference, useTernary));
+    return res;
+  }
 }
 
   /**
    * Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)
    */
 export class Marker extends Pragma {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "id",
   };
@@ -2303,9 +2636,6 @@ export class Marker extends Pragma {
 }
 
 export class MemberCall extends Call {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -2317,9 +2647,6 @@ export class MemberCall extends Call {
    * Represents a C++ class method declaration or definition
    */
 export class Method extends FunctionJp {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -2327,16 +2654,18 @@ export class Method extends FunctionJp {
   /**
    * Removes the of the method
    */
-  removeRecord(): void { return wrapJoinPoint(this._javaObject.removeRecord()); }
+  removeRecord(): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "removeRecord", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.removeRecord()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "removeRecord", this, res));
+    return res;
+  }
 }
 
   /**
    * Represents an OpenMP pragma (e.g., #pragma omp parallel)
    */
 export class Omp extends Pragma {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "kind",
   };
@@ -2463,19 +2792,39 @@ export class Omp extends Pragma {
   /**
    * The variable names for the given reduction kind, or empty array if no reduction of that kind is defined
    */
-  getReduction(kind: string): string[] { return wrapJoinPoint(this._javaObject.getReduction(unwrapJoinPoint(kind))); }
+  getReduction(kind: string): string[] { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getReduction", this, undefined, kind)); 
+    const res = wrapJoinPoint(this._javaObject.getReduction(unwrapJoinPoint(kind))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getReduction", this, res, kind));
+    return res;
+  }
   /**
    * True if the directive has at least one clause of the given clause kind, false otherwise
    */
-  hasClause(clauseName: string): boolean { return wrapJoinPoint(this._javaObject.hasClause(unwrapJoinPoint(clauseName))); }
+  hasClause(clauseName: string): boolean { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "hasClause", this, undefined, clauseName)); 
+    const res = wrapJoinPoint(this._javaObject.hasClause(unwrapJoinPoint(clauseName))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "hasClause", this, res, clauseName));
+    return res;
+  }
   /**
    * True if it is legal to use the given clause kind in this directive, false otherwise
    */
-  isClauseLegal(clauseName: string): boolean { return wrapJoinPoint(this._javaObject.isClauseLegal(unwrapJoinPoint(clauseName))); }
+  isClauseLegal(clauseName: string): boolean { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "isClauseLegal", this, undefined, clauseName)); 
+    const res = wrapJoinPoint(this._javaObject.isClauseLegal(unwrapJoinPoint(clauseName))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "isClauseLegal", this, res, clauseName));
+    return res;
+  }
   /**
    * Removes any clause of the given kind from the OpenMP pragma
    */
-  removeClause(clauseKind: string): void { return wrapJoinPoint(this._javaObject.removeClause(unwrapJoinPoint(clauseKind))); }
+  removeClause(clauseKind: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "removeClause", this, undefined, clauseKind)); 
+    const res = wrapJoinPoint(this._javaObject.removeClause(unwrapJoinPoint(clauseKind))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "removeClause", this, res, clauseKind));
+    return res;
+  }
   /**
    * Sets the value of the collapse clause of an OpenMP pragma
    */
@@ -2487,47 +2836,102 @@ export class Omp extends Pragma {
   /**
    * Sets the value of the collapse clause of an OpenMP pragma
    */
-  setCollapse(p1: string | number): void { return wrapJoinPoint(this._javaObject.setCollapse(unwrapJoinPoint(p1))); }
+  setCollapse(p1: string | number): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setCollapse", this, undefined, p1)); 
+    const res = wrapJoinPoint(this._javaObject.setCollapse(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setCollapse", this, res, p1));
+    return res;
+  }
   /**
    * Sets the variables of a copyin clause of an OpenMP pragma
    */
-  setCopyin(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setCopyin(unwrapJoinPoint(newVariables))); }
+  setCopyin(newVariables: string[]): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setCopyin", this, undefined, newVariables)); 
+    const res = wrapJoinPoint(this._javaObject.setCopyin(unwrapJoinPoint(newVariables))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setCopyin", this, res, newVariables));
+    return res;
+  }
   /**
    * Sets the value of the default clause of an OpenMP pragma
    */
-  setDefault(newDefault: string): void { return wrapJoinPoint(this._javaObject.setDefault(unwrapJoinPoint(newDefault))); }
+  setDefault(newDefault: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setDefault", this, undefined, newDefault)); 
+    const res = wrapJoinPoint(this._javaObject.setDefault(unwrapJoinPoint(newDefault))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setDefault", this, res, newDefault));
+    return res;
+  }
   /**
    * Sets the variables of a firstprivate clause of an OpenMP pragma
    */
-  setFirstprivate(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setFirstprivate(unwrapJoinPoint(newVariables))); }
+  setFirstprivate(newVariables: string[]): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setFirstprivate", this, undefined, newVariables)); 
+    const res = wrapJoinPoint(this._javaObject.setFirstprivate(unwrapJoinPoint(newVariables))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setFirstprivate", this, res, newVariables));
+    return res;
+  }
   /**
    * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
    */
-  setKind(directiveKind: string): void { return wrapJoinPoint(this._javaObject.setKind(unwrapJoinPoint(directiveKind))); }
+  setKind(directiveKind: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setKind", this, undefined, directiveKind)); 
+    const res = wrapJoinPoint(this._javaObject.setKind(unwrapJoinPoint(directiveKind))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setKind", this, res, directiveKind));
+    return res;
+  }
   /**
    * Sets the variables of a lastprivate clause of an OpenMP pragma
    */
-  setLastprivate(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setLastprivate(unwrapJoinPoint(newVariables))); }
+  setLastprivate(newVariables: string[]): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setLastprivate", this, undefined, newVariables)); 
+    const res = wrapJoinPoint(this._javaObject.setLastprivate(unwrapJoinPoint(newVariables))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setLastprivate", this, res, newVariables));
+    return res;
+  }
   /**
    * Sets the value of the num_threads clause of an OpenMP pragma
    */
-  setNumThreads(newExpr: string): void { return wrapJoinPoint(this._javaObject.setNumThreads(unwrapJoinPoint(newExpr))); }
+  setNumThreads(newExpr: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setNumThreads", this, undefined, newExpr)); 
+    const res = wrapJoinPoint(this._javaObject.setNumThreads(unwrapJoinPoint(newExpr))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setNumThreads", this, res, newExpr));
+    return res;
+  }
   /**
    * Sets the value of the ordered clause of an OpenMP pragma
    */
-  setOrdered(parameters?: string): void { return wrapJoinPoint(this._javaObject.setOrdered(unwrapJoinPoint(parameters))); }
+  setOrdered(parameters?: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setOrdered", this, undefined, parameters)); 
+    const res = wrapJoinPoint(this._javaObject.setOrdered(unwrapJoinPoint(parameters))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setOrdered", this, res, parameters));
+    return res;
+  }
   /**
    * Sets the variables of a private clause of an OpenMP pragma
    */
-  setPrivate(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setPrivate(unwrapJoinPoint(newVariables))); }
+  setPrivate(newVariables: string[]): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setPrivate", this, undefined, newVariables)); 
+    const res = wrapJoinPoint(this._javaObject.setPrivate(unwrapJoinPoint(newVariables))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setPrivate", this, res, newVariables));
+    return res;
+  }
   /**
    * Sets the value of the proc_bind clause of an OpenMP pragma
    */
-  setProcBind(newBind: string): void { return wrapJoinPoint(this._javaObject.setProcBind(unwrapJoinPoint(newBind))); }
+  setProcBind(newBind: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setProcBind", this, undefined, newBind)); 
+    const res = wrapJoinPoint(this._javaObject.setProcBind(unwrapJoinPoint(newBind))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setProcBind", this, res, newBind));
+    return res;
+  }
   /**
    * Sets the variables for a given kind of a reduction clause of an OpenMP pragma
    */
-  setReduction(kind: string, newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setReduction(unwrapJoinPoint(kind), unwrapJoinPoint(newVariables))); }
+  setReduction(kind: string, newVariables: string[]): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setReduction", this, undefined, kind, newVariables)); 
+    const res = wrapJoinPoint(this._javaObject.setReduction(unwrapJoinPoint(kind), unwrapJoinPoint(newVariables))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setReduction", this, res, kind, newVariables));
+    return res;
+  }
   /**
    * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
    */
@@ -2539,25 +2943,42 @@ export class Omp extends Pragma {
   /**
    * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
    */
-  setScheduleChunkSize(p1: string | number): void { return wrapJoinPoint(this._javaObject.setScheduleChunkSize(unwrapJoinPoint(p1))); }
+  setScheduleChunkSize(p1: string | number): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setScheduleChunkSize", this, undefined, p1)); 
+    const res = wrapJoinPoint(this._javaObject.setScheduleChunkSize(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setScheduleChunkSize", this, res, p1));
+    return res;
+  }
   /**
    * Sets the value of the schedule clause of an OpenMP pragma
    */
-  setScheduleKind(scheduleKind: string): void { return wrapJoinPoint(this._javaObject.setScheduleKind(unwrapJoinPoint(scheduleKind))); }
+  setScheduleKind(scheduleKind: string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setScheduleKind", this, undefined, scheduleKind)); 
+    const res = wrapJoinPoint(this._javaObject.setScheduleKind(unwrapJoinPoint(scheduleKind))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setScheduleKind", this, res, scheduleKind));
+    return res;
+  }
   /**
    * Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
    */
-  setScheduleModifiers(modifiers: string[]): void { return wrapJoinPoint(this._javaObject.setScheduleModifiers(unwrapJoinPoint(modifiers))); }
+  setScheduleModifiers(modifiers: string[]): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setScheduleModifiers", this, undefined, modifiers)); 
+    const res = wrapJoinPoint(this._javaObject.setScheduleModifiers(unwrapJoinPoint(modifiers))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setScheduleModifiers", this, res, modifiers));
+    return res;
+  }
   /**
    * Sets the variables of a shared clause of an OpenMP pragma
    */
-  setShared(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setShared(unwrapJoinPoint(newVariables))); }
+  setShared(newVariables: string[]): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setShared", this, undefined, newVariables)); 
+    const res = wrapJoinPoint(this._javaObject.setShared(unwrapJoinPoint(newVariables))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setShared", this, res, newVariables));
+    return res;
+  }
 }
 
 export class ParenType extends Type {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2566,13 +2987,15 @@ export class ParenType extends Type {
   /**
    * Sets the inner type of this paren type
    */
-  setInnerType(innerType: Type): void { return wrapJoinPoint(this._javaObject.setInnerType(unwrapJoinPoint(innerType))); }
+  setInnerType(innerType: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setInnerType", this, undefined, innerType)); 
+    const res = wrapJoinPoint(this._javaObject.setInnerType(unwrapJoinPoint(innerType))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setInnerType", this, res, innerType));
+    return res;
+  }
 }
 
 export class PointerType extends Type {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2585,13 +3008,15 @@ export class PointerType extends Type {
   /**
    * Sets the pointee type of this pointer type
    */
-  setPointee(pointeeType: Type): void { return wrapJoinPoint(this._javaObject.setPointee(unwrapJoinPoint(pointeeType))); }
+  setPointee(pointeeType: Type): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setPointee", this, undefined, pointeeType)); 
+    const res = wrapJoinPoint(this._javaObject.setPointee(unwrapJoinPoint(pointeeType))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setPointee", this, res, pointeeType));
+    return res;
+  }
 }
 
 export class QualType extends Type {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2600,9 +3025,6 @@ export class QualType extends Type {
 }
 
 export class ReturnStmt extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2613,9 +3035,6 @@ export class ReturnStmt extends Statement {
    * Represents a group of statements
    */
 export class Scope extends Statement {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2644,29 +3063,64 @@ export class Scope extends Statement {
   /**
    * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)
    */
-  getNumStatements(flat: boolean = false): number { return wrapJoinPoint(this._javaObject.getNumStatements(unwrapJoinPoint(flat))); }
+  getNumStatements(flat: boolean = false): number { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "getNumStatements", this, undefined, flat)); 
+    const res = wrapJoinPoint(this._javaObject.getNumStatements(unwrapJoinPoint(flat))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "getNumStatements", this, res, flat));
+    return res;
+  }
   /**
    * Adds a new local variable to this scope
    */
-  addLocal(name: string, type: Joinpoint, initValue?: string): Joinpoint { return wrapJoinPoint(this._javaObject.addLocal(unwrapJoinPoint(name), unwrapJoinPoint(type), unwrapJoinPoint(initValue))); }
+  addLocal(name: string, type: Joinpoint, initValue?: string): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "addLocal", this, undefined, name, type, initValue)); 
+    const res = wrapJoinPoint(this._javaObject.addLocal(unwrapJoinPoint(name), unwrapJoinPoint(type), unwrapJoinPoint(initValue))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "addLocal", this, res, name, type, initValue));
+    return res;
+  }
   /**
    * CFG tester
    */
-  cfg(): string { return wrapJoinPoint(this._javaObject.cfg()); }
+  cfg(): string { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "cfg", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.cfg()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "cfg", this, res));
+    return res;
+  }
   /**
    * Clears the contents of this scope (untested)
    */
-  clear(): void { return wrapJoinPoint(this._javaObject.clear()); }
+  clear(): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "clear", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.clear()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "clear", this, res));
+    return res;
+  }
   /**
    * DFG tester
    */
-  dfg(): string { return wrapJoinPoint(this._javaObject.dfg()); }
+  dfg(): string { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "dfg", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.dfg()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "dfg", this, res));
+    return res;
+  }
   insertBegin(node: Joinpoint): Joinpoint;
   insertBegin(code: string): Joinpoint;
-  insertBegin(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); }
+  insertBegin(p1: Joinpoint | string): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "insertBegin", this, undefined, p1)); 
+    const res = wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "insertBegin", this, res, p1));
+    return res;
+  }
   insertEnd(node: Joinpoint): Joinpoint;
   insertEnd(code: string): Joinpoint;
-  insertEnd(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(p1))); }
+  insertEnd(p1: Joinpoint | string): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "insertEnd", this, undefined, p1)); 
+    const res = wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "insertEnd", this, res, p1));
+    return res;
+  }
   /**
    * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
    */
@@ -2678,17 +3132,24 @@ export class Scope extends Statement {
   /**
    * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
    */
-  insertReturn(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(p1))); }
+  insertReturn(p1: Joinpoint | string): Joinpoint { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "insertReturn", this, undefined, p1)); 
+    const res = wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "insertReturn", this, res, p1));
+    return res;
+  }
   /**
    * Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)
    */
-  setNaked(isNaked: boolean): void { return wrapJoinPoint(this._javaObject.setNaked(unwrapJoinPoint(isNaked))); }
+  setNaked(isNaked: boolean): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setNaked", this, undefined, isNaked)); 
+    const res = wrapJoinPoint(this._javaObject.setNaked(unwrapJoinPoint(isNaked))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setNaked", this, res, isNaked));
+    return res;
+  }
 }
 
 export class TagType extends Type {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2700,9 +3161,6 @@ export class TagType extends Type {
 }
 
 export class TemplateSpecializationType extends Type {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2716,9 +3174,6 @@ export class TemplateSpecializationType extends Type {
    * Declaration of a typedef-name via the 'typedef' type specifier
    */
 export class TypedefDecl extends TypedefNameDecl {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -2728,9 +3183,6 @@ export class TypedefDecl extends TypedefNameDecl {
    * Represents a variable declaration or definition
    */
 export class Vardecl extends Declarator {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
@@ -2773,7 +3225,12 @@ export class Vardecl extends Declarator {
   /**
    * If vardecl already has an initialization, removes it.
    */
-  removeInit(removeConst: boolean = true): void { return wrapJoinPoint(this._javaObject.removeInit(unwrapJoinPoint(removeConst))); }
+  removeInit(removeConst: boolean = true): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "removeInit", this, undefined, removeConst)); 
+    const res = wrapJoinPoint(this._javaObject.removeInit(unwrapJoinPoint(removeConst))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "removeInit", this, res, removeConst));
+    return res;
+  }
   /**
    * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
    */
@@ -2785,21 +3242,33 @@ export class Vardecl extends Declarator {
   /**
    * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
    */
-  setInit(p1: Expression | string): void { return wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(p1))); }
+  setInit(p1: Expression | string): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setInit", this, undefined, p1)); 
+    const res = wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(p1))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setInit", this, res, p1));
+    return res;
+  }
   /**
    * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
    */
-  setStorageClass(storageClass: StorageClass): void { return wrapJoinPoint(this._javaObject.setStorageClass(unwrapJoinPoint(storageClass))); }
+  setStorageClass(storageClass: StorageClass): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setStorageClass", this, undefined, storageClass)); 
+    const res = wrapJoinPoint(this._javaObject.setStorageClass(unwrapJoinPoint(storageClass))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setStorageClass", this, res, storageClass));
+    return res;
+  }
   /**
    * Creates a new varref based on this vardecl
    */
-  varref(): Varref { return wrapJoinPoint(this._javaObject.varref()); }
+  varref(): Varref { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "varref", this, undefined)); 
+    const res = wrapJoinPoint(this._javaObject.varref()); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "varref", this, res));
+    return res;
+  }
 }
 
 export class VariableArrayType extends ArrayType {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2808,31 +3277,27 @@ export class VariableArrayType extends ArrayType {
   /**
    * Sets the size expression of this variable array type
    */
-  setSizeExpr(sizeExpr: Expression): void { return wrapJoinPoint(this._javaObject.setSizeExpr(unwrapJoinPoint(sizeExpr))); }
+  setSizeExpr(sizeExpr: Expression): void { 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setSizeExpr", this, undefined, sizeExpr)); 
+    const res = wrapJoinPoint(this._javaObject.setSizeExpr(unwrapJoinPoint(sizeExpr))); 
+    eventListener.emit("ACTION", new Event(EventTime.AFTER, "setSizeExpr", this, res, sizeExpr));
+    return res;
+  }
 }
 
 export class Body extends Scope {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
 }
 
 export class CilkFor extends Loop {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "kind",
   };
 }
 
 export class EnumType extends TagType {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
@@ -2840,9 +3305,6 @@ export class EnumType extends TagType {
 }
 
 export class Param extends Vardecl {
-  /**
-   * @hidden
-   */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
