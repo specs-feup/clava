@@ -355,5 +355,20 @@ describe("Transformation History: Operations", () => {
         expect(b).not.toEqual(d);
         expect(c).not.toEqual(d);
   });
+
+    it("Initial code, set id value and rollback value comparison", () => {
+        const key = "id";
+        const loopStmt = Query.search(Loop).get().at(0);
+        const a = loopStmt?.getValue(key);
+        loopStmt?.setValue(key, {});
+
+        const b = loopStmt?.getValue(key);
+
+        ophistory.rollback();
+        const c = loopStmt?.getValue(key);
+
+        expect(a).toEqual(c);
+        expect(b).not.toEqual(c);
+    });
 });
 
