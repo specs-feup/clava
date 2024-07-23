@@ -1,5 +1,5 @@
 import ToolJoinPoint from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
-import { AdjustedType, BoolLiteral, Call, Class, FileJp, FloatLiteral, Include, IntLiteral, Loop, Marker, NamedDecl, Omp, Pragma, Program, Tag, Type, TypedefDecl, Varref, WrapperStmt } from "../Joinpoints.js";
+import { AdjustedType, Body, BoolLiteral, Call, Class, DeclStmt, ExprStmt, FileJp, FloatLiteral, Include, IntLiteral, Loop, Marker, NamedDecl, Omp, Pragma, Program, Scope, Tag, Type, TypedefDecl, Varref, WrapperStmt } from "../Joinpoints.js";
 export default class ClavaAstConverter {
     getJoinPointInfo(jp) {
         const info = {
@@ -131,12 +131,12 @@ export default class ClavaAstConverter {
     refineCode(node, indentation = 0) {
         node.code = this.addIdentation(node.code, indentation);
         this.sortByLocation(node.children);
-        if (node.jp.joinPointType == 'loop') {
+        if (node.jp instanceof Loop) {
             node.children
-                .filter(child => child.jp.joinPointType === 'exprStmt')
+                .filter(child => child.jp instanceof ExprStmt)
                 .forEach(child => child.code = child.code.slice(0, -1)); // Remove semicolon from expression statements inside loop parentheses
         }
-        if (node.jp.joinPointType == 'declStmt') {
+        if (node.jp instanceof DeclStmt) {
             node.children
                 .slice(1)
                 .forEach(child => {
@@ -144,10 +144,10 @@ export default class ClavaAstConverter {
             }); // Remove type from variable declarations
         }
         for (const child of node.children) {
-            const newIndentation = ['body', 'class'].includes(node.jp.joinPointType) ? indentation + 1 : indentation;
+            const newIndentation = (node.jp instanceof Scope || node.jp instanceof Class) ? indentation + 1 : indentation;
             this.refineCode(child, newIndentation);
         }
-        if (node.jp.joinPointType == 'body' && node.jp.naked) {
+        if (node.jp instanceof Body && node.jp.naked) {
             const match = node.code.match(/^([^\/]*\S)\s*(\/\/.*)$/);
             if (match) {
                 const [, statement, comment] = match;
@@ -172,6 +172,9 @@ export default class ClavaAstConverter {
                 node.children.push(newChild);
             } // Assign typedef code to TagDeclVars and split into two children
         }
+        if (node.jp instanceof Program) {
+            node.children = node.children.map(file => ({ jp: node.jp, code: file.code, children: [file] }));
+        } // Divide program code into its files
         return node;
     }
     escapeHtml(text) {
@@ -211,10 +214,10 @@ export default class ClavaAstConverter {
     getPrettyHtmlCode(root) {
         const rootCodeNode = this.toCodeNode(root);
         this.refineCode(rootCodeNode);
-        let code = rootCodeNode.code;
+        let code = rootCodeNode.children[0].code;
         code = this.escapeHtml(code);
-        code = this.linkCodeToAstNodes(rootCodeNode, code, 0, code.length)[2];
-        return code;
+        code = this.linkCodeToAstNodes(rootCodeNode.children[0], code, 0, code.length)[2];
+        return { "": code };
     }
 }
 //# sourceMappingURL=ClavaAstConverter.js.map
