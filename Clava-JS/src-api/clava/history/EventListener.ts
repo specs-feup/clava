@@ -21,17 +21,6 @@ eventListener.on("storeAST", () => {
 });
 
 eventListener.on("ACTION", (e: Event) => {
-  
-  // Event Logs for debugging
-  /*
-  console.log("\nReceived ACTION event");
-  console.log(e.timing);
-  console.log(e.description);
-  console.log(e.mainJP);
-  console.log(e.returnValue);
-  console.log(e.inputs);
-  console.log("\n");
-  */
 
   switch (e.timing) {
     case EventTime.BEFORE:
@@ -96,25 +85,6 @@ eventListener.on("ACTION", (e: Event) => {
       }
       break;
   }
-
-  // Manual testing the rollback
-  /*
-  if (e.description === "setValue" && e.timing === EventTime.AFTER) {
-    console.log(`Waypoint ${idx}`);
-    fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
-    idx++;
-
-    console.log(e.mainJP.getValue(e.inputs.at(0) as string));
-    
-    ophistory.rollback();
-    
-    console.log(`Waypoint ${idx}`);
-    fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
-    idx++;
-    console.log(e.mainJP.getValue(e.inputs.at(0) as string));
-
-  }
-  */
 });
 
 function insertOperationFromEvent(e: Event) {

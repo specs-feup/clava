@@ -2,7 +2,7 @@ import { registerSourceCode } from "lara-js/jest/jestHelpers";
 import Clava from "../../../api/clava/Clava";
 import Query from "lara-js/api/weaver/Query";
 import ophistory from "./History";
-import { FunctionJp, Joinpoint, Loop, ReturnStmt, Vardecl } from "../../Joinpoints";
+import { FunctionJp, Loop, ReturnStmt, Vardecl } from "../../Joinpoints";
 import ClavaJoinPoints from "../../../api/clava/ClavaJoinPoints";
 
 const code: string = `void func() {
@@ -371,4 +371,3 @@ describe("Transformation History: Operations", () => {
         expect(b).not.toEqual(c);
     });
 });
-
