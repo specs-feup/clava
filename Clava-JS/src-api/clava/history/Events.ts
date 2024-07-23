@@ -9,7 +9,7 @@ export class Event {
   public timing: EventTime;
   public description: string;
   public mainJP: Joinpoint;
-  public returnValue?: Joinpoint;
+  public returnValue?: any;
   public inputs: unknown[];
 
   constructor(
