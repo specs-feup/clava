@@ -214,10 +214,23 @@ export default class ClavaAstConverter {
     getPrettyHtmlCode(root) {
         const rootCodeNode = this.toCodeNode(root);
         this.refineCode(rootCodeNode);
-        let code = rootCodeNode.children[0].code;
-        code = this.escapeHtml(code);
-        code = this.linkCodeToAstNodes(rootCodeNode.children[0], code, 0, code.length)[2];
-        return { "": code };
+        if (root instanceof Program) {
+            return Object.fromEntries(rootCodeNode.children.map(child => {
+                const file = child.children[0];
+                const filename = file.jp.name;
+                const fileCode = child.code; // same as file.code
+                const fileHtmlCode = this.escapeHtml(fileCode);
+                const fileLinkedHtmlCode = this.linkCodeToAstNodes(child, fileHtmlCode, 0, fileHtmlCode.length)[2];
+                return [filename, fileLinkedHtmlCode];
+            }));
+        }
+        else {
+            const filename = root.filename;
+            const code = rootCodeNode.code;
+            const htmlCode = this.escapeHtml(code);
+            const linkedHtmlCode = this.linkCodeToAstNodes(rootCodeNode, htmlCode, 0, htmlCode.length)[2];
+            return { [filename]: linkedHtmlCode };
+        }
     }
 }
 //# sourceMappingURL=ClavaAstConverter.js.map
