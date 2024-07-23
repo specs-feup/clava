@@ -3,7 +3,7 @@ import * as fs from "fs";
 import Clava from "../Clava.js";
 import { Event, EventTime } from "./Events.js";
 import ophistory from "./History.js";
-import { DetachOperation, DetachReference, InlineCommentOperation, InsertOperation, RemoveChildrenOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation } from "./Operations.js";
+import { DetachOperation, DetachReference, InlineCommentOperation, InsertOperation, RemoveChildrenOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation, ValueOperation } from "./Operations.js";
 import { Joinpoint } from "../../Joinpoints.js";
 
 const eventListener = new EventEmitter();
@@ -28,7 +28,7 @@ eventListener.on("ACTION", (e: Event) => {
   console.log(e.timing);
   console.log(e.description);
   console.log(e.mainJP);
-  console.log(e.returnJP);
+  console.log(e.returnValue);
   console.log(e.inputs);
   console.log("\n");
   */
@@ -53,6 +53,9 @@ eventListener.on("ACTION", (e: Event) => {
           break;
         case "setInlineComments":
           inlineCommentOperationFromEvent(e);
+          break;
+        case "setValue":
+          setValueOperationFromEvent(e);
           break;
         default:
           break;
@@ -96,16 +99,20 @@ eventListener.on("ACTION", (e: Event) => {
 
   // Manual testing the rollback
   /*
-  if (e.description === "detach" && e.timing === EventTime.AFTER) {
+  if (e.description === "setValue" && e.timing === EventTime.AFTER) {
     console.log(`Waypoint ${idx}`);
     fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
     idx++;
+
+    console.log(e.mainJP.getValue(e.inputs.at(0) as string));
     
     ophistory.rollback();
     
     console.log(`Waypoint ${idx}`);
     fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
     idx++;
+    console.log(e.mainJP.getValue(e.inputs.at(0) as string));
+
   }
   */
 });
@@ -164,6 +171,12 @@ function inlineCommentOperationFromEvent(e: Event) {
     .map((comment) => comment.text)
     .filter((comment): comment is string => comment !== null);
   ophistory.newOperation(new InlineCommentOperation(e.mainJP, comments));
+}
+
+function setValueOperationFromEvent(e: Event) {
+  if (e.inputs && e.inputs.at(0)) {
+    ophistory.newOperation(new ValueOperation(e.mainJP, e.inputs.at(0) as string, e.mainJP.getValue(e.inputs.at(0) as string)));
+  }
 }
 
 export default eventListener;

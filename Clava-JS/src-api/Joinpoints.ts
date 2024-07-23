@@ -571,7 +571,7 @@ export class Joinpoint extends LaraJoinPoint {
    * Associates arbitrary values to nodes of the AST
    */
   setUserField(p1: string | Record<string, any>, p2?: object): object { 
-    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setUserField", this)); 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setUserField", this, undefined, p1, p2)); 
     const jp = wrapJoinPoint(this._javaObject.setUserField(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); 
     eventListener.emit("ACTION", new Event(EventTime.AFTER, "setUserField", this, jp as Joinpoint, p1, p2));
     return jp;
@@ -580,7 +580,7 @@ export class Joinpoint extends LaraJoinPoint {
    * Sets the value associated with the given property key
    */
   setValue(key: string, value: object): Joinpoint { 
-    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setValue", this)); 
+    eventListener.emit("ACTION", new Event(EventTime.BEFORE, "setValue", this, undefined, key, value)); 
     const jp = wrapJoinPoint(this._javaObject.setValue(unwrapJoinPoint(key), unwrapJoinPoint(value))); 
     eventListener.emit("ACTION", new Event(EventTime.AFTER, "setValue", this, jp as Joinpoint, key, value));
     return jp;

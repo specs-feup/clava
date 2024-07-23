@@ -97,3 +97,11 @@ export class InlineCommentOperation implements Operation {
     }
   }
 }
+
+export class ValueOperation implements Operation {
+  constructor(private jp: Joinpoint, private key: string, private oldValue: object) {}
+
+  undo(): void {
+    this.jp.setValue(this.key, this.oldValue);
+  }
+}
