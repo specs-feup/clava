@@ -17,6 +17,20 @@ class OperationHistory {
     this.locked = false;
   }
 
+  private undo() {
+    const op = this.operations.pop();
+    if (op !== undefined) {
+      try {
+        this.lock();
+        op.undo();
+      } catch (error) {
+        console.error("Failed to undo operation:", error);
+      } finally {
+        this.unlock();
+      }
+    }
+  }
+
   newOperation(operation: Operation) {
     if (!this.locked) {
       this.operations.push(operation);
@@ -26,17 +40,7 @@ class OperationHistory {
   rollback(n: number = 1) {
     if (n > 0){
       while (n--){
-        const op = this.operations.pop();
-        if (op !== undefined) {
-          try {
-            this.lock();
-            op.undo();
-          } catch (error) {
-            console.error("Failed to undo operation:", error);
-          } finally {
-            this.unlock();
-          }
-        }
+        this.undo();
       }
     }
   }
@@ -47,17 +51,7 @@ class OperationHistory {
 
   returnToLastCheckpoint() {
     while (this.operations.length > 0) {
-      const op = this.operations.pop();
-      if (op !== undefined) {
-        try {
-          this.lock();
-          op.undo();
-        } catch (error) {
-          console.error("Failed to undo operation:", error);
-        } finally {
-          this.unlock();
-        }
-      }
+      this.undo();
     }
   }
 }
