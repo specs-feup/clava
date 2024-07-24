@@ -5,6 +5,7 @@ import { AdjustedType, Body, BoolLiteral, Call, Class, DeclStmt, ExprStmt, FileJ
 
 type CodeNode = {
   jp: Joinpoint;
+  id: string;
   code: string;
   children: CodeNode[];
 };
@@ -137,23 +138,32 @@ export default class ClavaAstConverter implements GenericAstConverter {
   }
 
   public getToolAst(root: LaraJoinPoint): ToolJoinPoint {
-    const clavaJp = root as Joinpoint;
-    
-    return new ToolJoinPoint(
-      clavaJp.astId,
-      clavaJp.joinPointType,
-      clavaJp.filename,
-      this.getJoinPointInfo(clavaJp),
-      clavaJp.children.map(child => this.getToolAst(child)),
-    );
+    let nextId = 0;
+    const toToolJoinPoint = (jp: Joinpoint): ToolJoinPoint => {
+      return new ToolJoinPoint(
+        (nextId++).toString(),
+        jp.joinPointType,
+        jp.filename,
+        this.getJoinPointInfo(jp),
+        jp.children.map(child => toToolJoinPoint(child)),
+      );
+    };
+
+    return toToolJoinPoint(root as Joinpoint);
   }
 
   private toCodeNode(jp: Joinpoint): CodeNode {
-    return {
-      jp: jp,
-      code: jp.code.trim(),
-      children: jp.children.map(child => this.toCodeNode(child)),
+    let nextId = 0;
+    const toCodeNode = (jp: Joinpoint): CodeNode => {
+      return {
+        jp: jp,
+        id: (nextId++).toString(),
+        code: jp.code.trim(),
+        children: jp.children.map(child => toCodeNode(child)),
+      };
     };
+
+    return toCodeNode(jp);
   }
 
   private addIdentation(code: string, indentation: number): string {
@@ -208,9 +218,11 @@ export default class ClavaAstConverter implements GenericAstConverter {
 
         const newChild = {
           jp: tagDeclVars.jp,
+          id: tagDeclVars.id,
           code: code2,
           children: [{
             jp: typedef.jp,
+            id: typedef.id,
             code: code2,
             children: [],
           }],
@@ -220,7 +232,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
     }
 
     if (node.jp instanceof Program) {
-      node.children = node.children.map(file => ({ jp: node.jp, code: file.code, children: [file] }));
+      node.children = node.children.map(file => ({ jp: node.jp, id: node.id, code: file.code, children: [file] }));
     }  // Divide program code into its files
 
     return node;
@@ -254,7 +266,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
       return [outerCodeStart, outerCodeStart, ""];
     }
 
-    const [openingTag, closingTag] = this.getNodeCodeTags(root.jp.astId);
+    const [openingTag, closingTag] = this.getNodeCodeTags(root.id);
 
     let newCode = openingTag;
     let newCodeIndex = innerCodeStart;
