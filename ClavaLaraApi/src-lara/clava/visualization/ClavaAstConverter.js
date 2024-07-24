@@ -1,5 +1,5 @@
 import ToolJoinPoint from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
-import { AdjustedType, Body, BoolLiteral, Call, Class, Comment, Decl, DeclStmt, ExprStmt, FileJp, FloatLiteral, Include, IntLiteral, Literal, Loop, Marker, NamedDecl, Omp, Pragma, Program, Scope, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
+import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, DeclStmt, EnumDecl, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Literal, Loop, Marker, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
 export default class ClavaAstConverter {
     getJoinPointInfo(jp) {
         const info = {
@@ -214,15 +214,41 @@ export default class ClavaAstConverter {
             const [openingTag, closingTag] = this.getSpanTags('class="comment"');
             return openingTag + code + closingTag;
         }
-        if (node.jp instanceof NamedDecl) {
-            if (node.jp instanceof Vardecl && node.jp.leftJp instanceof Vardecl)
-                return code; // Ignore variable declarations without type
-            const [openingTag, closingTag] = this.getSpanTags('class="type"');
-            return code.replace(/^(\S*)(\s.*)$/s, `${openingTag}$1${closingTag}$2`);
-        }
-        if (node.jp instanceof Decl) {
+        if (node.jp instanceof Statement || node.jp instanceof Decl) {
             const [openingTag, closingTag] = this.getSpanTags('class="keyword"');
-            return code.replace(/^(\S*)(\s.*)$/s, `${openingTag}$1${closingTag}$2`);
+            if (node.jp instanceof Switch || node.jp instanceof Break || node.jp instanceof Case
+                || node.jp instanceof Continue || node.jp instanceof GotoStmt || node.jp instanceof ReturnStmt
+                || node.jp instanceof EnumDecl || node.jp instanceof AccessSpecifier) {
+                return code.replace(/^(\w+)(\W.*)$/s, `${openingTag}$1${closingTag}$2`); // Highlight first word
+            }
+            if (node.jp instanceof If) {
+                const elsePos = code.indexOf('else');
+                if (elsePos !== -1) {
+                    return openingTag + 'if' + closingTag + code.slice(2, elsePos) + openingTag + 'else' + closingTag + code.slice(elsePos + 4);
+                }
+                else {
+                    return openingTag + 'if' + closingTag + code.slice(2);
+                }
+            }
+            if (node.jp instanceof Loop) {
+                if (node.jp.kind == "dowhile") {
+                    const loopBodyEndPos = code.indexOf(node.children[0].code) + node.children[0].code.length;
+                    const whilePos = code.indexOf('while', loopBodyEndPos);
+                    return openingTag + 'do' + closingTag + code.slice(2, whilePos) + openingTag + 'while' + closingTag + code.slice(whilePos + 5);
+                }
+                else {
+                    return code.replace(/^(\w+)(\W.*)$/s, `${openingTag}$1${closingTag}$2`); // Highlight first word
+                }
+            }
+            if (node.jp instanceof TypedefDecl && node.code.startsWith('typedef')) {
+                return openingTag + 'typedef' + closingTag + code.slice(7);
+            }
+            if (node.jp instanceof RecordJp) {
+                return code.replace(/^(.*?)(class(?!=)|struct)(.*)$/s, `$1${openingTag}$2${closingTag}$3`); // Highlight 'class' or 'struct' in declaration
+            }
+            if (node.jp instanceof Include || node.jp instanceof Pragma) {
+                return code.replace(/^(#\w+)(\W.*)$/s, `${openingTag}$1${closingTag}$2`);
+            }
         }
         return code;
     }
@@ -242,6 +268,10 @@ export default class ClavaAstConverter {
             newCodeIndex = outerCode.slice(innerCodeStart, innerCodeEnd).search(/[=;]/) + innerCodeStart + 1;
             newCode += outerCode.slice(innerCodeStart, newCodeIndex);
         } // Ignore variable type and name in declaration
+        if (root.jp instanceof FunctionJp) {
+            newCodeIndex = outerCode.indexOf('(', innerCodeStart) + 1;
+            newCode += outerCode.slice(innerCodeStart, newCodeIndex);
+        } // Ignore function return type and name in declaration
         for (const child of root.children) {
             const [childCodeStart, childCodeEnd, childCode] = this.linkCodeToAstNodes(child, outerCode, newCodeIndex, innerCodeEnd);
             newCode += outerCode.slice(newCodeIndex, childCodeStart) + childCode;
