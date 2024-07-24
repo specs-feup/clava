@@ -142,6 +142,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
     return new ToolJoinPoint(
       clavaJp.astId,
       clavaJp.joinPointType,
+      clavaJp.filename,
       this.getJoinPointInfo(clavaJp),
       clavaJp.children.map(child => this.getToolAst(child)),
     );
@@ -235,12 +236,12 @@ export default class ClavaAstConverter implements GenericAstConverter {
     return text.replace(/[&<>]/g, (match) => specialCharMap[match]);
   }
 
-  private getSpanTags(attrs: string[]): string[] {
+  private getSpanTags(...attrs: string[]): string[] {
     return [`<span ${attrs.join(' ')}>`, '</span>'];
   }
 
   private getNodeCodeTags(nodeId: string): string[] {
-    return this.getSpanTags(['class="node-code"', `data-node-id="${nodeId}"`]);
+    return this.getSpanTags('class="node-code"', `data-node-id="${nodeId}"`);
   }
 
   private linkCodeToAstNodes(root: CodeNode, outerCode: string, outerCodeStart: number, outerCodeEnd: number): any[] {
