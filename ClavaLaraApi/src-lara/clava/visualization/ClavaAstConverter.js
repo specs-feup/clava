@@ -1,5 +1,5 @@
 import ToolJoinPoint from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
-import { AdjustedType, Body, BoolLiteral, Call, Class, DeclStmt, ExprStmt, FileJp, FloatLiteral, Include, IntLiteral, Loop, Marker, NamedDecl, Omp, Pragma, Program, Scope, Tag, Type, TypedefDecl, Varref, WrapperStmt } from "../Joinpoints.js";
+import { AdjustedType, Body, BoolLiteral, Call, Class, Comment, Decl, DeclStmt, ExprStmt, FileJp, FloatLiteral, Include, IntLiteral, Literal, Loop, Marker, NamedDecl, Omp, Pragma, Program, Scope, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
 export default class ClavaAstConverter {
     getJoinPointInfo(jp) {
         const info = {
@@ -201,6 +201,31 @@ export default class ClavaAstConverter {
     getNodeCodeTags(nodeId) {
         return this.getSpanTags('class="node-code"', `data-node-id="${nodeId}"`);
     }
+    syntaxHighlight(code, node) {
+        if (node.jp.astName === "StringLiteral") {
+            const [openingTag, closingTag] = this.getSpanTags('class="string"');
+            return openingTag + code + closingTag;
+        }
+        if (node.jp instanceof Literal) {
+            const [openingTag, closingTag] = this.getSpanTags('class="literal"');
+            return openingTag + code + closingTag;
+        }
+        if (node.jp instanceof Comment) {
+            const [openingTag, closingTag] = this.getSpanTags('class="comment"');
+            return openingTag + code + closingTag;
+        }
+        if (node.jp instanceof NamedDecl) {
+            if (node.jp instanceof Vardecl && node.jp.leftJp instanceof Vardecl)
+                return code; // Ignore variable declarations without type
+            const [openingTag, closingTag] = this.getSpanTags('class="type"');
+            return code.replace(/^(\S*)(\s.*)$/s, `${openingTag}$1${closingTag}$2`);
+        }
+        if (node.jp instanceof Decl) {
+            const [openingTag, closingTag] = this.getSpanTags('class="keyword"');
+            return code.replace(/^(\S*)(\s.*)$/s, `${openingTag}$1${closingTag}$2`);
+        }
+        return code;
+    }
     linkCodeToAstNodes(root, outerCode, outerCodeStart, outerCodeEnd) {
         const nodeCode = root.code;
         const nodeCodeHtml = this.escapeHtml(nodeCode);
@@ -211,15 +236,20 @@ export default class ClavaAstConverter {
             return [outerCodeStart, outerCodeStart, ""];
         }
         const [openingTag, closingTag] = this.getNodeCodeTags(root.id);
-        let newCode = openingTag;
+        let newCode = '';
         let newCodeIndex = innerCodeStart;
+        if (root.jp instanceof Vardecl) {
+            newCodeIndex = outerCode.slice(innerCodeStart, innerCodeEnd).search(/[=;]/) + innerCodeStart + 1;
+            newCode += outerCode.slice(innerCodeStart, newCodeIndex);
+        } // Ignore variable type and name in declaration
         for (const child of root.children) {
             const [childCodeStart, childCodeEnd, childCode] = this.linkCodeToAstNodes(child, outerCode, newCodeIndex, innerCodeEnd);
             newCode += outerCode.slice(newCodeIndex, childCodeStart) + childCode;
             newCodeIndex = childCodeEnd;
         }
-        newCode += outerCode.slice(newCodeIndex, innerCodeEnd) + closingTag;
-        return [innerCodeStart, innerCodeEnd, newCode];
+        newCode += outerCode.slice(newCodeIndex, innerCodeEnd);
+        newCode = this.syntaxHighlight(newCode, root);
+        return [innerCodeStart, innerCodeEnd, openingTag + newCode + closingTag];
     }
     getPrettyHtmlCode(root) {
         const rootCodeNode = this.toCodeNode(root);
