@@ -109,7 +109,7 @@ export default class ClavaAstConverter {
     }
     getToolAst(root) {
         const clavaJp = root;
-        return new ToolJoinPoint(clavaJp.astId, clavaJp.joinPointType, this.getJoinPointInfo(clavaJp), clavaJp.children.map(child => this.getToolAst(child)));
+        return new ToolJoinPoint(clavaJp.astId, clavaJp.joinPointType, clavaJp.filename, this.getJoinPointInfo(clavaJp), clavaJp.children.map(child => this.getToolAst(child)));
     }
     toCodeNode(jp) {
         return {
@@ -185,11 +185,11 @@ export default class ClavaAstConverter {
         };
         return text.replace(/[&<>]/g, (match) => specialCharMap[match]);
     }
-    getSpanTags(attrs) {
+    getSpanTags(...attrs) {
         return [`<span ${attrs.join(' ')}>`, '</span>'];
     }
     getNodeCodeTags(nodeId) {
-        return this.getSpanTags(['class="node-code"', `data-node-id="${nodeId}"`]);
+        return this.getSpanTags('class="node-code"', `data-node-id="${nodeId}"`);
     }
     linkCodeToAstNodes(root, outerCode, outerCodeStart, outerCodeEnd) {
         const nodeCode = root.code;
