@@ -6,7 +6,7 @@ import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Cl
 type CodeNode = {
   jp: Joinpoint;
   id: string;
-  code: string;
+  code: string | undefined;
   children: CodeNode[];
 };
 
@@ -117,14 +117,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
 
     if (jp instanceof Loop) {
       Object.assign(info, {
-        'Loop ID': jp.id,
         'Loop kind': jp.kind,
-      });
-    }
-
-    if (jp instanceof Marker) {
-      Object.assign(info, {
-        'Marker ID': jp.id,
       });
     }
 
@@ -155,10 +148,18 @@ export default class ClavaAstConverter implements GenericAstConverter {
   private toCodeNode(jp: Joinpoint): CodeNode {
     let nextId = 0;
     const toCodeNode = (jp: Joinpoint): CodeNode => {
+      let code;
+      try {
+        code = jp.code.trim();
+      } catch (e) {
+        console.error(`Could not get code of node '${jp.joinPointType}': ${e}`);
+        code = undefined;
+      }
+
       return {
         jp: jp,
         id: (nextId++).toString(),
-        code: jp.code.trim(),
+        code: code,
         children: jp.children.map(child => toCodeNode(child)),
       };
     };
@@ -179,20 +180,21 @@ export default class ClavaAstConverter implements GenericAstConverter {
   }
 
   private refineCode(node: CodeNode, indentation: number = 0): CodeNode {
-    node.code = this.addIdentation(node.code, indentation);
+    if (node.code)
+      node.code = this.addIdentation(node.code, indentation);
     this.sortByLocation(node.children);
 
     if (node.jp instanceof Loop) {
       node.children
         .filter(child => child.jp instanceof ExprStmt)
-        .forEach(child => child.code = child.code.slice(0, -1));	// Remove semicolon from expression statements inside loop parentheses
+        .forEach(child => child.code = child.code!.slice(0, -1));	// Remove semicolon from expression statements inside loop parentheses
     }
 
     if (node.jp instanceof DeclStmt) {
       node.children
         .slice(1)
         .forEach(child => {
-          child.code = child.code.match(/^(?:\S+\s+)(\S.*)$/)![1];
+          child.code = child.code!.match(/^(?:\S+\s+)(\S.*)$/)![1];
         });  // Remove type from variable declarations
     }
 
@@ -202,7 +204,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
     }
 
     if (node.jp instanceof Body && (node.jp as Body).naked) {
-      const match = node.code.match(/^([^\/]*\S)\s*(\/\/.*)$/);
+      const match = node.code!.match(/^([^\/]*\S)\s*(\/\/.*)$/);
       if (match) {
         const [, statement, comment] = match;
         node.code = statement + '  ' + comment;
@@ -213,7 +215,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
       const tagDeclVars = node.children[0];
       const typedef = tagDeclVars.children[0];
       if (typedef.jp instanceof TypedefDecl) {
-        const [, code1, code2] = typedef.code.match(/^(.*\S)\s+(\S+)$/)!;
+        const [, code1, code2] = typedef.code!.match(/^(.*\S)\s+(\S+)$/)!;
         tagDeclVars.code = typedef.code = code1;
 
         const newChild = {
@@ -256,7 +258,10 @@ export default class ClavaAstConverter implements GenericAstConverter {
     return this.getSpanTags('class="node-code"', `data-node-id="${nodeId}"`);
   }
 
-  private syntaxHighlight(code: string, node: CodeNode): string {
+  private syntaxHighlight(code: string | undefined, node: CodeNode): string | undefined {
+    if (code === undefined)
+      return undefined;
+
     if (node.jp.astName === "StringLiteral") {
       const [openingTag, closingTag] = this.getSpanTags('class="string"');
       return openingTag + code + closingTag;
@@ -284,13 +289,13 @@ export default class ClavaAstConverter implements GenericAstConverter {
         if (elsePos !== -1) {
           return openingTag + 'if' + closingTag + code.slice(2, elsePos) + openingTag + 'else' + closingTag + code.slice(elsePos + 4);
         } else {
-          return openingTag + 'if' + closingTag + code.slice(2);
+        return openingTag + 'if' + closingTag + code.slice(2);
         }
       }
 
       if (node.jp instanceof Loop) {
         if (node.jp.kind == "dowhile") {
-          const loopBodyEndPos = code.indexOf(node.children[0].code) + node.children[0].code.length;
+          const loopBodyEndPos = code.indexOf(node.children[0].code!) + node.children[0].code!.length;
           const whilePos = code.indexOf('while', loopBodyEndPos);
           return openingTag + 'do' + closingTag + code.slice(2, whilePos) + openingTag + 'while' + closingTag + code.slice(whilePos + 5);
         } else {
@@ -298,7 +303,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
         }
       }
 
-      if (node.jp instanceof TypedefDecl && node.code.startsWith('typedef')) {
+      if (node.jp instanceof TypedefDecl && node.code!.startsWith('typedef')) {
         return openingTag + 'typedef' + closingTag + code.slice(7);
       }
 
@@ -309,15 +314,16 @@ export default class ClavaAstConverter implements GenericAstConverter {
       if (node.jp instanceof Include || node.jp instanceof Pragma) {
         return code.replace(/^(#\w+)(\W.*)$/s, `${openingTag}$1${closingTag}$2`);
       }
-
-      
     }
 
     return code;
   }
 
-  private linkCodeToAstNodes(root: CodeNode, outerCode: string, outerCodeStart: number, outerCodeEnd: number): any[] {
+  private linkCodeToAstNodes(root: CodeNode, outerCode: string | undefined, outerCodeStart: number, outerCodeEnd: number): any[] {
     const nodeCode = root.code;
+    if (!nodeCode || !outerCode)
+      return [outerCodeStart, outerCodeStart, ""];
+
     const nodeCodeHtml = this.escapeHtml(nodeCode);
     const innerCodeStart = outerCode.indexOf(nodeCodeHtml, outerCodeStart);
     const innerCodeEnd = innerCodeStart + nodeCodeHtml.length;
@@ -345,7 +351,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
       newCodeIndex = childCodeEnd;
     }
     newCode += outerCode.slice(newCodeIndex, innerCodeEnd);
-    newCode = this.syntaxHighlight(newCode, root);
+    newCode = this.syntaxHighlight(newCode, root)!;
 
     return [innerCodeStart, innerCodeEnd, openingTag + newCode + closingTag];
   }
@@ -359,7 +365,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
         const file = child.children[0];
         const filename = (file.jp as FileJp).name;
 
-        const fileCode = child.code;  // same as file.code
+        const fileCode = child.code!;  // same as file.code!
         const fileHtmlCode = this.escapeHtml(fileCode);
         const fileLinkedHtmlCode = this.linkCodeToAstNodes(child, fileHtmlCode, 0, fileHtmlCode.length)[2];
         return [filename, fileLinkedHtmlCode];
@@ -367,7 +373,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
     } else {
       const filename = (root as Joinpoint).filename;
       const code = rootCodeNode.code;
-      const htmlCode = this.escapeHtml(code);
+      const htmlCode = code ? this.escapeHtml(code) : "";
       const linkedHtmlCode = this.linkCodeToAstNodes(rootCodeNode, htmlCode, 0, htmlCode.length)[2];
 
       return { [filename]: linkedHtmlCode };
