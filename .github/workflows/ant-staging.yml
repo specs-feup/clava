@@ -9,6 +9,10 @@ on:
   pull_request:
     branches: [ staging ]
 
+  # Daily at midnight
+  schedule:
+    - cron: '0 0 * * *'
+
 permissions:
   checks: write
 
