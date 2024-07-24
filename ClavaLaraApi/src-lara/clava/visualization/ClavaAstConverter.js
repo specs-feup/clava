@@ -1,5 +1,5 @@
 import ToolJoinPoint from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
-import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, DeclStmt, EnumDecl, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Literal, Loop, Marker, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
+import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, DeclStmt, EnumDecl, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Literal, Loop, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
 export default class ClavaAstConverter {
     getJoinPointInfo(jp) {
         const info = {
@@ -91,13 +91,7 @@ export default class ClavaAstConverter {
         }
         if (jp instanceof Loop) {
             Object.assign(info, {
-                'Loop ID': jp.id,
                 'Loop kind': jp.kind,
-            });
-        }
-        if (jp instanceof Marker) {
-            Object.assign(info, {
-                'Marker ID': jp.id,
             });
         }
         if (jp instanceof Omp) {
@@ -117,10 +111,18 @@ export default class ClavaAstConverter {
     toCodeNode(jp) {
         let nextId = 0;
         const toCodeNode = (jp) => {
+            let code;
+            try {
+                code = jp.code.trim();
+            }
+            catch (e) {
+                console.error(`Could not get code of node '${jp.joinPointType}': ${e}`);
+                code = undefined;
+            }
             return {
                 jp: jp,
                 id: (nextId++).toString(),
-                code: jp.code.trim(),
+                code: code,
                 children: jp.children.map(child => toCodeNode(child)),
             };
         };
@@ -137,7 +139,8 @@ export default class ClavaAstConverter {
         });
     }
     refineCode(node, indentation = 0) {
-        node.code = this.addIdentation(node.code, indentation);
+        if (node.code)
+            node.code = this.addIdentation(node.code, indentation);
         this.sortByLocation(node.children);
         if (node.jp instanceof Loop) {
             node.children
@@ -202,6 +205,8 @@ export default class ClavaAstConverter {
         return this.getSpanTags('class="node-code"', `data-node-id="${nodeId}"`);
     }
     syntaxHighlight(code, node) {
+        if (code === undefined)
+            return undefined;
         if (node.jp.astName === "StringLiteral") {
             const [openingTag, closingTag] = this.getSpanTags('class="string"');
             return openingTag + code + closingTag;
@@ -254,6 +259,8 @@ export default class ClavaAstConverter {
     }
     linkCodeToAstNodes(root, outerCode, outerCodeStart, outerCodeEnd) {
         const nodeCode = root.code;
+        if (!nodeCode || !outerCode)
+            return [outerCodeStart, outerCodeStart, ""];
         const nodeCodeHtml = this.escapeHtml(nodeCode);
         const innerCodeStart = outerCode.indexOf(nodeCodeHtml, outerCodeStart);
         const innerCodeEnd = innerCodeStart + nodeCodeHtml.length;
@@ -288,7 +295,7 @@ export default class ClavaAstConverter {
             return Object.fromEntries(rootCodeNode.children.map(child => {
                 const file = child.children[0];
                 const filename = file.jp.name;
-                const fileCode = child.code; // same as file.code
+                const fileCode = child.code; // same as file.code!
                 const fileHtmlCode = this.escapeHtml(fileCode);
                 const fileLinkedHtmlCode = this.linkCodeToAstNodes(child, fileHtmlCode, 0, fileHtmlCode.length)[2];
                 return [filename, fileLinkedHtmlCode];
@@ -297,7 +304,7 @@ export default class ClavaAstConverter {
         else {
             const filename = root.filename;
             const code = rootCodeNode.code;
-            const htmlCode = this.escapeHtml(code);
+            const htmlCode = code ? this.escapeHtml(code) : "";
             const linkedHtmlCode = this.linkCodeToAstNodes(rootCodeNode, htmlCode, 0, htmlCode.length)[2];
             return { [filename]: linkedHtmlCode };
         }
