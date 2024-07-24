@@ -1,7 +1,7 @@
 import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
 import GenericAstConverter, { FilesCode } from "lara-js/api/visualization/GenericAstConverter.js";
 import ToolJoinPoint, { JoinPointInfo } from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
-import { AdjustedType, Body, BoolLiteral, Call, Class, DeclStmt, ExprStmt, FileJp, FloatLiteral, Include, IntLiteral, Joinpoint, Loop, Marker, NamedDecl, Omp, Pragma, Program, Scope, Tag, Type, TypedefDecl, Varref, WrapperStmt } from "../Joinpoints.js";
+import { AdjustedType, Body, BoolLiteral, Call, Class, Comment, Decl, DeclStmt, ExprStmt, FileJp, FloatLiteral, Include, IntLiteral, Joinpoint, Literal, Loop, Marker, NamedDecl, Omp, Pragma, Program, Scope, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
 
 type CodeNode = {
   jp: Joinpoint;
@@ -256,6 +256,34 @@ export default class ClavaAstConverter implements GenericAstConverter {
     return this.getSpanTags('class="node-code"', `data-node-id="${nodeId}"`);
   }
 
+  private syntaxHighlight(code: string, node: CodeNode): string {
+    if (node.jp.astName === "StringLiteral") {
+      const [openingTag, closingTag] = this.getSpanTags('class="string"');
+      return openingTag + code + closingTag;
+    }
+    if (node.jp instanceof Literal) {
+      const [openingTag, closingTag] = this.getSpanTags('class="literal"');
+      return openingTag + code + closingTag;
+    }
+    if (node.jp instanceof Comment) {
+      const [openingTag, closingTag] = this.getSpanTags('class="comment"');
+      return openingTag + code + closingTag;
+    }
+    if (node.jp instanceof NamedDecl) {
+      if (node.jp instanceof Vardecl && node.jp.leftJp instanceof Vardecl)
+        return code;  // Ignore variable declarations without type
+
+      const [openingTag, closingTag] = this.getSpanTags('class="type"');
+      return code.replace(/^(\S*)(\s.*)$/s, `${openingTag}$1${closingTag}$2`);
+    }
+    if (node.jp instanceof Decl) {
+      const [openingTag, closingTag] = this.getSpanTags('class="keyword"');
+      return code.replace(/^(\S*)(\s.*)$/s, `${openingTag}$1${closingTag}$2`);
+    }
+
+    return code;
+  }
+
   private linkCodeToAstNodes(root: CodeNode, outerCode: string, outerCodeStart: number, outerCodeEnd: number): any[] {
     const nodeCode = root.code;
     const nodeCodeHtml = this.escapeHtml(nodeCode);
@@ -268,17 +296,22 @@ export default class ClavaAstConverter implements GenericAstConverter {
 
     const [openingTag, closingTag] = this.getNodeCodeTags(root.id);
 
-    let newCode = openingTag;
+    let newCode = '';
     let newCodeIndex = innerCodeStart;
+    if (root.jp instanceof Vardecl) {
+      newCodeIndex = outerCode.slice(innerCodeStart, innerCodeEnd).search(/[=;]/) + innerCodeStart + 1;
+      newCode += outerCode.slice(innerCodeStart, newCodeIndex);
+    }  // Ignore variable type and name in declaration
 
     for (const child of root.children) {
       const [childCodeStart, childCodeEnd, childCode] = this.linkCodeToAstNodes(child, outerCode, newCodeIndex, innerCodeEnd);
       newCode += outerCode.slice(newCodeIndex, childCodeStart) + childCode;
       newCodeIndex = childCodeEnd;
     }
-    newCode += outerCode.slice(newCodeIndex, innerCodeEnd) + closingTag;
+    newCode += outerCode.slice(newCodeIndex, innerCodeEnd);
+    newCode = this.syntaxHighlight(newCode, root);
 
-    return [innerCodeStart, innerCodeEnd, newCode];
+    return [innerCodeStart, innerCodeEnd, openingTag + newCode + closingTag];
   }
 
   public getPrettyHtmlCode(root: LaraJoinPoint): FilesCode {
