@@ -1,5 +1,4 @@
-import Clava from "../Clava.js";
-import ProcessExecutor from "../../../../../lara-js/api/lara/util/ProcessExecutor.js";
+import ProcessExecutor from "../../../../../lara-framework/Lara-JS/api/lara/util/ProcessExecutor.js";
 import { fileURLToPath } from 'url';
 import { dirname } from "path";
 
@@ -40,14 +39,11 @@ function runPrePushCommands(commands) {
 }
 
 // Function to commit the changes to git
-function gitCommand(){
-
-    Clava.writeCode("teste2");
+function gitCommand(commitMessage){
 
     const prePushCommands = [
-        ['git', 'checkout', process.env.BRANCH],
-        ['git', 'add', process.env.FILE],
-        ['git', 'commit', '-m', process.env.MESSAGE]
+        ['git', 'add', '.'],
+        ['git', 'commit', '-m', `'${commitMessage.replace(/'/g, "'\\''")}'`]
     ];
 
     if (!runPrePushCommands(prePushCommands)) {
@@ -55,10 +51,10 @@ function gitCommand(){
     }
 
     // Try to push the changes
-    if (!executeGitCommand(['git', 'push', '-u', 'origin', process.env.BRANCH])) {
+    if (!executeGitCommand(['git', 'push'])) {
         // If the push fails, reset the last commit
         executeGitCommand(['git', 'reset', '--hard', 'HEAD^']);
     }
 }
 
-gitCommand();
+export { gitCommand };
