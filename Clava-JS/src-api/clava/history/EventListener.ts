@@ -8,17 +8,8 @@ import { Joinpoint } from "../../Joinpoints.js";
 
 const eventListener = new EventEmitter();
 
-// Used for counting number of waypoints
-let idx = 0;
-
 // Used for saving previous child in setFirstChild and setLastChild
 let auxJP: Joinpoint;
-
-eventListener.on("storeAST", () => {
-  console.log(`Waypoint ${idx}`);
-  fs.writeFileSync(`history/waypoint_${idx}.cpp`, Clava.getProgram().code);
-  idx++;
-});
 
 eventListener.on("ACTION", (e: Event) => {
 
