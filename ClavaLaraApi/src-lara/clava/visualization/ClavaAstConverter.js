@@ -108,15 +108,23 @@ export default class ClavaAstConverter {
         return info;
     }
     getToolAst(root) {
-        const clavaJp = root;
-        return new ToolJoinPoint(clavaJp.astId, clavaJp.joinPointType, clavaJp.filename, this.getJoinPointInfo(clavaJp), clavaJp.children.map(child => this.getToolAst(child)));
+        let nextId = 0;
+        const toToolJoinPoint = (jp) => {
+            return new ToolJoinPoint((nextId++).toString(), jp.joinPointType, jp.filename, this.getJoinPointInfo(jp), jp.children.map(child => toToolJoinPoint(child)));
+        };
+        return toToolJoinPoint(root);
     }
     toCodeNode(jp) {
-        return {
-            jp: jp,
-            code: jp.code.trim(),
-            children: jp.children.map(child => this.toCodeNode(child)),
+        let nextId = 0;
+        const toCodeNode = (jp) => {
+            return {
+                jp: jp,
+                id: (nextId++).toString(),
+                code: jp.code.trim(),
+                children: jp.children.map(child => toCodeNode(child)),
+            };
         };
+        return toCodeNode(jp);
     }
     addIdentation(code, indentation) {
         return code.split('\n').map((line, i) => i > 0 ? '   '.repeat(indentation) + line : line).join('\n');
@@ -162,9 +170,11 @@ export default class ClavaAstConverter {
                 tagDeclVars.code = typedef.code = code1;
                 const newChild = {
                     jp: tagDeclVars.jp,
+                    id: tagDeclVars.id,
                     code: code2,
                     children: [{
                             jp: typedef.jp,
+                            id: typedef.id,
                             code: code2,
                             children: [],
                         }],
@@ -173,7 +183,7 @@ export default class ClavaAstConverter {
             } // Assign typedef code to TagDeclVars and split into two children
         }
         if (node.jp instanceof Program) {
-            node.children = node.children.map(file => ({ jp: node.jp, code: file.code, children: [file] }));
+            node.children = node.children.map(file => ({ jp: node.jp, id: node.id, code: file.code, children: [file] }));
         } // Divide program code into its files
         return node;
     }
@@ -200,7 +210,7 @@ export default class ClavaAstConverter {
             console.warn(`Code of node "${root.jp.joinPointType}" not found in code container: "${nodeCodeHtml}"`);
             return [outerCodeStart, outerCodeStart, ""];
         }
-        const [openingTag, closingTag] = this.getNodeCodeTags(root.jp.astId);
+        const [openingTag, closingTag] = this.getNodeCodeTags(root.id);
         let newCode = openingTag;
         let newCodeIndex = innerCodeStart;
         for (const child of root.children) {
