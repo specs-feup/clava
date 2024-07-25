@@ -294,7 +294,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
       }
 
       if (node.jp instanceof If) {
-        const elsePos = code.indexOf('else');
+        const elsePos = code.search(/(?<!(\/\/.*|>))\belse\b/);
         if (elsePos !== -1) {
           return openingTag + 'if' + closingTag + code.slice(2, elsePos) + openingTag + 'else' + closingTag + code.slice(elsePos + 4);
         } else {
