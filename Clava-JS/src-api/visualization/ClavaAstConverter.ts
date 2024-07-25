@@ -1,7 +1,7 @@
 import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
 import GenericAstConverter, { FilesCode } from "lara-js/api/visualization/GenericAstConverter.js";
 import ToolJoinPoint, { JoinPointInfo } from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
-import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, Declarator, DeclStmt, EnumDecl, EnumeratorDecl, Expression, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Joinpoint, Literal, Loop, Marker, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
+import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, Declarator, DeclStmt, EnumDecl, EnumeratorDecl, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Joinpoint, Literal, Loop, Marker, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
 
 type CodeNode = {
   jp: Joinpoint;
@@ -145,7 +145,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
         (nextId++).toString(),
         jp.joinPointType,
         code,
-        jp.filename,
+        jp.filepath,
         this.getJoinPointInfo(jp),
         jp.children.map(child => toToolJoinPoint(child)),
       );
@@ -385,20 +385,20 @@ export default class ClavaAstConverter implements GenericAstConverter {
     if (root instanceof Program) {
       return Object.fromEntries(rootCodeNode.children.map(child => {
         const file = child.children[0];
-        const filename = (file.jp as FileJp).name;
+        const filepath = (file.jp as FileJp).path;
 
         const fileCode = child.code!;  // same as file.code!
         const fileHtmlCode = this.escapeHtml(fileCode);
         const fileLinkedHtmlCode = this.linkCodeToAstNodes(child, fileHtmlCode, 0, fileHtmlCode.length)[2];
-        return [filename, fileLinkedHtmlCode];
+        return [filepath, fileLinkedHtmlCode];
       }));
     } else {
-      const filename = (root as Joinpoint).filename;
+      const filepath = (root as Joinpoint).filepath;
       const code = rootCodeNode.code;
-      const htmlCode = code ? this.escapeHtml(code) : "";
+      const htmlCode = code ? this.escapeHtml(code) : '';
       const linkedHtmlCode = this.linkCodeToAstNodes(rootCodeNode, htmlCode, 0, htmlCode.length)[2];
 
-      return { [filename]: linkedHtmlCode };
+      return { [filepath]: linkedHtmlCode };
     }
   }
 }
