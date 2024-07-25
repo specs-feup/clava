@@ -310,7 +310,8 @@ export default class ClavaAstConverter {
         if (root instanceof Program) {
             return Object.fromEntries(rootCodeNode.children.map(child => {
                 const file = child.children[0];
-                const filepath = file.jp.path;
+                const fileJp = file.jp;
+                const filepath = fileJp.filepath;
                 const fileCode = child.code; // same as file.code!
                 const fileHtmlCode = this.escapeHtml(fileCode);
                 const fileLinkedHtmlCode = this.linkCodeToAstNodes(child, fileHtmlCode, 0, fileHtmlCode.length)[2];

@@ -385,7 +385,8 @@ export default class ClavaAstConverter implements GenericAstConverter {
     if (root instanceof Program) {
       return Object.fromEntries(rootCodeNode.children.map(child => {
         const file = child.children[0];
-        const filepath = (file.jp as FileJp).path;
+        const fileJp = file.jp as FileJp;
+        const filepath = fileJp.filepath;
 
         const fileCode = child.code!;  // same as file.code!
         const fileHtmlCode = this.escapeHtml(fileCode);
