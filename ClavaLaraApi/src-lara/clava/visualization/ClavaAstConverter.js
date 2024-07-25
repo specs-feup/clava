@@ -1,6 +1,10 @@
 import ToolJoinPoint from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
 import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, Declarator, DeclStmt, EnumDecl, EnumeratorDecl, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Literal, Loop, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
+import Clava from "../clava/Clava.js";
 export default class ClavaAstConverter {
+    updateAst() {
+        Clava.rebuild();
+    }
     getJoinPointInfo(jp) {
         const info = {
             'AST ID': jp.astId,
