@@ -303,12 +303,13 @@ export default class ClavaAstConverter implements GenericAstConverter {
         || node.jp instanceof EnumDecl || node.jp instanceof AccessSpecifier
         || node.jp.astName == "FunctionTemplateDecl" || node.jp.astName == "TemplateTypeParmDecl") {
 
-        return code.replace(/^(\w+)(?=\W)/s, `${openingTag}$1${closingTag}`);  // Highlight first word
+        return code.replace(/^(\w+)\b/s, `${openingTag}$1${closingTag}`);  // Highlight first word
       }
 
       if (node.jp instanceof If) {
-        const elsePos = code.search(/(?<!>)\belse\b/);
-        if (elsePos !== -1) {
+        const elseMatch = code.match(/^(([^/]|\/[^/*]|\/\/.*|\/\*([^*]|\*[^/])*\*\/)*?)(?<!>)\belse\b/);
+        if (elseMatch) {
+          const elsePos = elseMatch[1].length;
           return openingTag + 'if' + closingTag + code.slice(2, elsePos) + openingTag + 'else' + closingTag + code.slice(elsePos + 4);
         } else {
         return openingTag + 'if' + closingTag + code.slice(2);
@@ -317,7 +318,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
 
       if (node.jp instanceof Loop) {
         if (node.jp.kind == "dowhile") {
-          const whilePos = code.search(/(?<!>)\while\b/);
+          const whilePos = code.match(/^(([^/]|\/[^/*]|\/\/.*|\/\*([^*]|\*[^/])*\*\/)*?)(?<!>)\bwhile\b/)![1].length;
           return openingTag + 'do' + closingTag + code.slice(2, whilePos) + openingTag + 'while' + closingTag + code.slice(whilePos + 5);
         } else {
           return code.replace(/^(\w+)(?=\W)/s, `${openingTag}$1${closingTag}`);  // Highlight first word
@@ -329,11 +330,11 @@ export default class ClavaAstConverter implements GenericAstConverter {
       }
 
       if (node.jp instanceof RecordJp) {
-        return code.replace(/^(.*?)(class(?!=)|struct)(.*)$/s, `$1${openingTag}$2${closingTag}$3`);  // Highlight 'class' or 'struct' in declaration
+        return code.replace(/(class(?!=)|struct)/s, `$1${openingTag}$2${closingTag}$3`);  // Highlight 'class' or 'struct' in declaration
       }
 
       if (node.jp instanceof Include || node.jp instanceof Pragma) {
-        return code.replace(/^(#\w+)(?=\W)/s, `${openingTag}$1${closingTag}`);
+        return code.replace(/^(#\w+)\b/s, `${openingTag}$1${closingTag}`);
       }
     }
 
