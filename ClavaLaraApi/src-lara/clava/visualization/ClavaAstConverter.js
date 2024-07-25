@@ -1,5 +1,5 @@
 import ToolJoinPoint from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
-import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, DeclStmt, EnumDecl, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Literal, Loop, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
+import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, Declarator, DeclStmt, EnumDecl, EnumeratorDecl, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Literal, Loop, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
 export default class ClavaAstConverter {
     getJoinPointInfo(jp) {
         const info = {
@@ -228,12 +228,19 @@ export default class ClavaAstConverter {
             return openingTag + code + closingTag;
         code = code.replaceAll(/(?<!>)(\/\/.*)/g, `${openingTag}$1${closingTag}`);
         code = code.replaceAll(/(?<!>)(\/\*.*?\*\/)/g, `${openingTag}$1${closingTag}`);
+        if (node.jp instanceof Declarator || node.jp instanceof EnumeratorDecl) {
+            const [openingTag, closingTag] = this.getSpanTags('class="type"');
+            const regex = new RegExp(`\\s*[&*]*${node.jp.name}\\b`);
+            const namePos = code.search(regex);
+            return namePos <= 0 ? code : openingTag + code.slice(0, namePos) + closingTag + code.slice(namePos);
+        }
         if (node.jp instanceof Statement || node.jp instanceof Decl) {
             const [openingTag, closingTag] = this.getSpanTags('class="keyword"');
             if (node.jp instanceof Switch || node.jp instanceof Break || node.jp instanceof Case
                 || node.jp instanceof Continue || node.jp instanceof GotoStmt || node.jp instanceof ReturnStmt
-                || node.jp instanceof EnumDecl || node.jp instanceof AccessSpecifier) {
-                return code.replace(/^(\w+)(\W.*)$/s, `${openingTag}$1${closingTag}$2`); // Highlight first word
+                || node.jp instanceof EnumDecl || node.jp instanceof AccessSpecifier
+                || node.jp.astName == "FunctionTemplateDecl" || node.jp.astName == "TemplateTypeParmDecl") {
+                return code.replace(/^(\w+)(?=\W)/s, `${openingTag}$1${closingTag}`); // Highlight first word
             }
             if (node.jp instanceof If) {
                 const elsePos = code.search(/(?<!>)\belse\b/);
@@ -250,17 +257,17 @@ export default class ClavaAstConverter {
                     return openingTag + 'do' + closingTag + code.slice(2, whilePos) + openingTag + 'while' + closingTag + code.slice(whilePos + 5);
                 }
                 else {
-                    return code.replace(/^(\w+)(\W.*)$/s, `${openingTag}$1${closingTag}$2`); // Highlight first word
+                    return code.replace(/^(\w+)(?=\W)/s, `${openingTag}$1${closingTag}`); // Highlight first word
                 }
             }
-            if (node.jp instanceof TypedefDecl && node.code.startsWith('typedef')) {
+            if (node.jp instanceof TypedefDecl && node.code.startsWith('typedef')) { // The code of a TypedefDecl can be divided, and the second part does not have the keyword
                 return openingTag + 'typedef' + closingTag + code.slice(7);
             }
             if (node.jp instanceof RecordJp) {
                 return code.replace(/^(.*?)(class(?!=)|struct)(.*)$/s, `$1${openingTag}$2${closingTag}$3`); // Highlight 'class' or 'struct' in declaration
             }
             if (node.jp instanceof Include || node.jp instanceof Pragma) {
-                return code.replace(/^(#\w+)(\W.*)$/s, `${openingTag}$1${closingTag}$2`);
+                return code.replace(/^(#\w+)(?=\W)/s, `${openingTag}$1${closingTag}`);
             }
         }
         return code;
