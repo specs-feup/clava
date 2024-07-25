@@ -144,7 +144,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
       return new ToolJoinPoint(
         (nextId++).toString(),
         jp.joinPointType,
-        code ?? '',
+        code,
         jp.filename,
         this.getJoinPointInfo(jp),
         jp.children.map(child => toToolJoinPoint(child)),
