@@ -290,7 +290,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
     if (node.jp instanceof Declarator || node.jp instanceof EnumeratorDecl) {
       const [openingTag, closingTag] = this.getSpanTags('class="type"');
 
-      const regex = new RegExp(`\\s*[&*]*${node.jp.name}\\b`);
+      const regex = new RegExp(`\\s*[&*]*\\b${node.jp.name}\\b`);
       const namePos = code.search(regex);
       return namePos <= 0 ? code : openingTag + code.slice(0, namePos) + closingTag + code.slice(namePos);
     }
