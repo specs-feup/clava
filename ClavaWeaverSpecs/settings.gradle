@@ -1,4 +1,4 @@
-rootProject.name = 'ClavaWeaver'
+rootProject.name = 'ClavaWeaverSpecs'
 
 includeBuild("../../specs-java-libs/CommonsLangPlus")
 includeBuild("../../specs-java-libs/GsonPlus")
@@ -18,10 +18,3 @@ includeBuild("../../lara-framework/LaraUnit")
 includeBuild("../../lara-framework/LaraUtils")
 includeBuild("../../lara-framework/WeaverGenerator")
 includeBuild("../../lara-framework/WeaverInterface")
-
-includeBuild("../../clava/AntarexClavaApi")
-includeBuild("../../clava/ClangAstParser")
-includeBuild("../../clava/ClavaAst")
-includeBuild("../../clava/ClavaHls")
-includeBuild("../../clava/ClavaLaraApi")
-includeBuild("../../clava/ClavaWeaverSpecs")
