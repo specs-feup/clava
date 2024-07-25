@@ -3,6 +3,7 @@ import GenericAstConverter, { FilesCode } from "lara-js/api/visualization/Generi
 import ToolJoinPoint, { JoinPointInfo } from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
 import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, Declarator, DeclStmt, EnumDecl, EnumeratorDecl, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Joinpoint, Literal, Loop, Marker, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
 import Clava from "../clava/Clava.js";
+import { addIdentation, escapeHtml, getNodeCodeTags, getSpanTags } from "lara-js/api/visualization/AstConverterUtils.js"
 
 type CodeNode = {
   jp: Joinpoint;
@@ -14,6 +15,19 @@ type CodeNode = {
 export default class ClavaAstConverter implements GenericAstConverter {
   public updateAst(): void {
     Clava.rebuild();
+  }
+
+  private getCode(node: Joinpoint): string | undefined {
+    // When hasCode implementation is ready, replace this method with the following line:
+    // return node.hasCode ? node.code.trim() : undefined
+    let code;
+    try {
+      code = node.code.trim();
+    } catch (e) {
+      console.error(`Could not get code of node '${node.joinPointType}': ${e}`);
+      code = undefined;
+    }
+    return code;
   }
 
   private getJoinPointInfo(jp: Joinpoint): JoinPointInfo {
@@ -138,18 +152,10 @@ export default class ClavaAstConverter implements GenericAstConverter {
   public getToolAst(root: LaraJoinPoint): ToolJoinPoint {
     let nextId = 0;
     const toToolJoinPoint = (jp: Joinpoint): ToolJoinPoint => {
-      let code;
-      try {
-        code = jp.code.trim();
-      } catch (e) {
-        console.error(`Could not get code of node '${jp.joinPointType}': ${e}`);
-        code = undefined;
-      }
-
       return new ToolJoinPoint(
         (nextId++).toString(),
         jp.joinPointType,
-        code,
+        this.getCode(jp),
         jp.filepath,
         this.getJoinPointInfo(jp),
         jp.children.map(child => toToolJoinPoint(child)),
@@ -162,27 +168,15 @@ export default class ClavaAstConverter implements GenericAstConverter {
   private toCodeNode(jp: Joinpoint): CodeNode {
     let nextId = 0;
     const toCodeNode = (jp: Joinpoint): CodeNode => {
-      let code;
-      try {
-        code = jp.code.trim();
-      } catch (e) {
-        console.error(`Could not get code of node '${jp.joinPointType}': ${e}`);
-        code = undefined;
-      }
-
       return {
         jp: jp,
         id: (nextId++).toString(),
-        code: code,
+        code: this.getCode(jp),
         children: jp.children.map(child => toCodeNode(child)),
       };
     };
 
     return toCodeNode(jp);
-  }
-
-  private addIdentation(code: string, indentation: number): string {
-    return code.split('\n').map((line, i) => i > 0 ? '   '.repeat(indentation) + line : line).join('\n');
   }
 
   private sortByLocation(codeNodes: CodeNode[]): CodeNode[] {
@@ -195,7 +189,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
 
   private refineCode(node: CodeNode, indentation: number = 0): CodeNode {
     if (node.code)
-      node.code = this.addIdentation(node.code, indentation);
+      node.code = addIdentation(node.code, indentation);
     this.sortByLocation(node.children);
 
     if (node.jp instanceof Loop) {
@@ -254,46 +248,27 @@ export default class ClavaAstConverter implements GenericAstConverter {
     return node;
   }
 
-  private escapeHtml(text: string): string {
-    const specialCharMap: { [char: string]: string } = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-    };
-    
-    return text.replace(/[&<>]/g, (match) => specialCharMap[match]);
-  }
-
-  private getSpanTags(...attrs: string[]): string[] {
-    return [`<span ${attrs.join(' ')}>`, '</span>'];
-  }
-
-  private getNodeCodeTags(nodeId: string): string[] {
-    return this.getSpanTags('class="node-code"', `data-node-id="${nodeId}"`);
-  }
-
   private syntaxHighlight(code: string | undefined, node: CodeNode): string | undefined {
     if (code === undefined)
       return undefined;
 
     if (node.jp.astName === "StringLiteral") {
-      const [openingTag, closingTag] = this.getSpanTags('class="string"');
+      const [openingTag, closingTag] = getSpanTags('class="string"');
       return openingTag + code + closingTag;
     }
     if (node.jp instanceof Literal) {
-      const [openingTag, closingTag] = this.getSpanTags('class="literal"');
+      const [openingTag, closingTag] = getSpanTags('class="literal"');
       return openingTag + code + closingTag;
     }
 
-    const [openingTag, closingTag] = this.getSpanTags('class="comment"');
+    const [openingTag, closingTag] = getSpanTags('class="comment"');
     if (node.jp instanceof Comment)
       return openingTag + code + closingTag;
-
     code = code.replaceAll(/(?<!>)(\/\/.*)/g, `${openingTag}$1${closingTag}`);
     code = code.replaceAll(/(?<!>)(\/\*.*?\*\/)/g, `${openingTag}$1${closingTag}`);
 
     if (node.jp instanceof Declarator || node.jp instanceof EnumeratorDecl) {
-      const [openingTag, closingTag] = this.getSpanTags('class="type"');
+      const [openingTag, closingTag] = getSpanTags('class="type"');
 
       const regex = new RegExp(`\\s*[&*]*\\b${node.jp.name}\\b`);
       const namePos = code.search(regex);
@@ -301,7 +276,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
     }
     
     if (node.jp instanceof Statement || node.jp instanceof Decl) {
-      const [openingTag, closingTag] = this.getSpanTags('class="keyword"');
+      const [openingTag, closingTag] = getSpanTags('class="keyword"');
 
       if (node.jp instanceof Switch || node.jp instanceof Break || node.jp instanceof Case
         || node.jp instanceof Continue || node.jp instanceof GotoStmt || node.jp instanceof ReturnStmt
@@ -351,7 +326,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
     if (!nodeCode || !outerCode)
       return [outerCodeStart, outerCodeStart, ""];
 
-    const nodeCodeHtml = this.escapeHtml(nodeCode);
+    const nodeCodeHtml = escapeHtml(nodeCode);
     const innerCodeStart = outerCode.indexOf(nodeCodeHtml, outerCodeStart);
     const innerCodeEnd = innerCodeStart + nodeCodeHtml.length;
     if (innerCodeStart === -1 || innerCodeEnd > outerCodeEnd) {
@@ -359,10 +334,11 @@ export default class ClavaAstConverter implements GenericAstConverter {
       return [outerCodeStart, outerCodeStart, ""];
     }
 
-    const [openingTag, closingTag] = this.getNodeCodeTags(root.id);
+    const [openingTag, closingTag] = getNodeCodeTags(root.id);
 
     let newCode = '';
     let newCodeIndex = innerCodeStart;
+
     if (root.jp instanceof Vardecl) {
       newCodeIndex = outerCode.slice(innerCodeStart, innerCodeEnd).search(/[=;]/) + innerCodeStart + 1;
       newCode += outerCode.slice(innerCodeStart, newCodeIndex);
@@ -394,14 +370,14 @@ export default class ClavaAstConverter implements GenericAstConverter {
         const filepath = fileJp.filepath;
 
         const fileCode = child.code!;  // same as file.code!
-        const fileHtmlCode = this.escapeHtml(fileCode);
+        const fileHtmlCode = escapeHtml(fileCode);
         const fileLinkedHtmlCode = this.linkCodeToAstNodes(child, fileHtmlCode, 0, fileHtmlCode.length)[2];
         return [filepath, fileLinkedHtmlCode];
-      }));
+      }));  // Associate code with each file
     } else {
       const filepath = (root as Joinpoint).filepath;
       const code = rootCodeNode.code;
-      const htmlCode = code ? this.escapeHtml(code) : '';
+      const htmlCode = code ? escapeHtml(code) : '';
       const linkedHtmlCode = this.linkCodeToAstNodes(rootCodeNode, htmlCode, 0, htmlCode.length)[2];
 
       return { [filepath]: linkedHtmlCode };
