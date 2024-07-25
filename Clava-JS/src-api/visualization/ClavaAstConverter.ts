@@ -279,10 +279,14 @@ export default class ClavaAstConverter implements GenericAstConverter {
       const [openingTag, closingTag] = this.getSpanTags('class="literal"');
       return openingTag + code + closingTag;
     }
-    if (node.jp instanceof Comment) {
-      const [openingTag, closingTag] = this.getSpanTags('class="comment"');
+
+    const [openingTag, closingTag] = this.getSpanTags('class="comment"');
+    if (node.jp instanceof Comment)
       return openingTag + code + closingTag;
-    }
+
+    code = code.replaceAll(/(?<!>)(\/\/.*)/g, `${openingTag}$1${closingTag}`);
+    code = code.replaceAll(/(?<!>)(\/\*.*?\*\/)/g, `${openingTag}$1${closingTag}`);
+    
     if (node.jp instanceof Statement || node.jp instanceof Decl) {
       const [openingTag, closingTag] = this.getSpanTags('class="keyword"');
 
@@ -294,7 +298,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
       }
 
       if (node.jp instanceof If) {
-        const elsePos = code.search(/(?<!(\/\/.*|>))\belse\b/);
+        const elsePos = code.search(/(?<!>)\belse\b/);
         if (elsePos !== -1) {
           return openingTag + 'if' + closingTag + code.slice(2, elsePos) + openingTag + 'else' + closingTag + code.slice(elsePos + 4);
         } else {
@@ -304,8 +308,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
 
       if (node.jp instanceof Loop) {
         if (node.jp.kind == "dowhile") {
-          const loopBodyEndPos = code.indexOf(node.children[0].code!) + node.children[0].code!.length;
-          const whilePos = code.indexOf('while', loopBodyEndPos);
+          const whilePos = code.search(/(?<!>)\while\b/);
           return openingTag + 'do' + closingTag + code.slice(2, whilePos) + openingTag + 'while' + closingTag + code.slice(whilePos + 5);
         } else {
           return code.replace(/^(\w+)(\W.*)$/s, `${openingTag}$1${closingTag}$2`);  // Highlight first word
