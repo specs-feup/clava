@@ -2,6 +2,7 @@ import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
 import GenericAstConverter, { FilesCode } from "lara-js/api/visualization/GenericAstConverter.js";
 import ToolJoinPoint, { JoinPointInfo } from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
 import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, Declarator, DeclStmt, EnumDecl, EnumeratorDecl, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Joinpoint, Literal, Loop, Marker, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
+import Clava from "../clava/Clava.js";
 
 type CodeNode = {
   jp: Joinpoint;
@@ -11,6 +12,10 @@ type CodeNode = {
 };
 
 export default class ClavaAstConverter implements GenericAstConverter {
+  public updateAst(): void {
+    Clava.rebuild();
+  }
+
   private getJoinPointInfo(jp: Joinpoint): JoinPointInfo {
     const info: JoinPointInfo = {
       'AST ID': jp.astId,
