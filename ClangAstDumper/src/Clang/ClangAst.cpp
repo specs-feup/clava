@@ -17,6 +17,7 @@
 #include <clang/Basic/TargetInfo.h>
 #include <clang/Frontend/ASTConsumers.h>
 #include <clang/Frontend/CompilerInstance.h>
+#include <clang/Frontend/FrontendAction.h>
 #include <clang/Frontend/FrontendActions.h>
 #include <clang/Lex/Lexer.h>
 #include <clang/Lex/Preprocessor.h>
@@ -250,7 +251,7 @@ void DumpAstAction::ExecuteAction() {
     CompilerInstance &CI = getCompilerInstance();
     CI.getPreprocessor().addPPCallbacks(std::make_unique<IncludeDumper>(CI));
 
-    PluginASTAction::ExecuteAction();
+    ASTFrontendAction::ExecuteAction();
 }
 
 void DumpAstAction::dumpCompilerInstanceData(CompilerInstance &CI,

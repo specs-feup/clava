@@ -14,7 +14,6 @@
 
 #include <fcntl.h>
 #include <pthread.h>
-#include <string>
 #include <sys/mman.h>
 #include <unistd.h>
 
@@ -139,34 +138,10 @@ class SharedCounter {
 };
 
 // For each source file provided to the tool, a new FrontendAction is created.
-class DumpAstAction : public PluginASTAction {
+class DumpAstAction : public ASTFrontendAction {
   public:
-    DumpAstAction() {
-        DumpResources::init(0, 0);
-    }
-    ~DumpAstAction() {
-        DumpResources::finish();
-    }
-
     virtual std::unique_ptr<ASTConsumer>
     CreateASTConsumer(CompilerInstance &CI, StringRef file) override;
-
-    bool ParseArgs(const CompilerInstance &CI,
-                   const std::vector<std::string> &args) override {
-        for (const auto &Arg : args) {
-            if (Arg.find("-file-id=") == 0) {
-                DumpResources::setRunId(std::stoi(Arg.substr(strlen("-file-id="))));
-            } else if (Arg.find("-system-threshold=") == 0) {
-                DumpResources::setSystemHeaderThreshold(std::stoi(Arg.substr(strlen("-system-threshold="))));
-            }
-        }
-
-        return true; // Return true even if the argument is not found to continue execution
-    }
-
-    PluginASTAction::ActionType getActionType() override {
-        return ReplaceAction;
-    }
 
     void ExecuteAction() override;
 
