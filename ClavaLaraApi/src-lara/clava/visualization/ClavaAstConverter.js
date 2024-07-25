@@ -112,7 +112,7 @@ export default class ClavaAstConverter {
                 console.error(`Could not get code of node '${jp.joinPointType}': ${e}`);
                 code = undefined;
             }
-            return new ToolJoinPoint((nextId++).toString(), jp.joinPointType, code ?? '', jp.filename, this.getJoinPointInfo(jp), jp.children.map(child => toToolJoinPoint(child)));
+            return new ToolJoinPoint((nextId++).toString(), jp.joinPointType, code, jp.filepath, this.getJoinPointInfo(jp), jp.children.map(child => toToolJoinPoint(child)));
         };
         return toToolJoinPoint(root);
     }
@@ -310,19 +310,19 @@ export default class ClavaAstConverter {
         if (root instanceof Program) {
             return Object.fromEntries(rootCodeNode.children.map(child => {
                 const file = child.children[0];
-                const filename = file.jp.name;
+                const filepath = file.jp.path;
                 const fileCode = child.code; // same as file.code!
                 const fileHtmlCode = this.escapeHtml(fileCode);
                 const fileLinkedHtmlCode = this.linkCodeToAstNodes(child, fileHtmlCode, 0, fileHtmlCode.length)[2];
-                return [filename, fileLinkedHtmlCode];
+                return [filepath, fileLinkedHtmlCode];
             }));
         }
         else {
-            const filename = root.filename;
+            const filepath = root.filepath;
             const code = rootCodeNode.code;
-            const htmlCode = code ? this.escapeHtml(code) : "";
+            const htmlCode = code ? this.escapeHtml(code) : '';
             const linkedHtmlCode = this.linkCodeToAstNodes(rootCodeNode, htmlCode, 0, htmlCode.length)[2];
-            return { [filename]: linkedHtmlCode };
+            return { [filepath]: linkedHtmlCode };
         }
     }
 }
