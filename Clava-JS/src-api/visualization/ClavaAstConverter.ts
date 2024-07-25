@@ -303,7 +303,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
         || node.jp instanceof EnumDecl || node.jp instanceof AccessSpecifier
         || node.jp.astName == "FunctionTemplateDecl" || node.jp.astName == "TemplateTypeParmDecl") {
 
-        return code.replace(/^(\w+)\b/s, `${openingTag}$1${closingTag}`);  // Highlight first word
+        return code.replace(/^(\w+)\b/, `${openingTag}$1${closingTag}`);  // Highlight first word
       }
 
       if (node.jp instanceof If) {
@@ -321,7 +321,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
           const whilePos = code.match(/^(([^/]|\/[^/*]|\/\/.*|\/\*([^*]|\*[^/])*\*\/)*?)(?<!>)\bwhile\b/)![1].length;
           return openingTag + 'do' + closingTag + code.slice(2, whilePos) + openingTag + 'while' + closingTag + code.slice(whilePos + 5);
         } else {
-          return code.replace(/^(\w+)(?=\W)/s, `${openingTag}$1${closingTag}`);  // Highlight first word
+          return code.replace(/^(\w+)\b/, `${openingTag}$1${closingTag}`);  // Highlight first word
         }
       }
 
@@ -330,11 +330,11 @@ export default class ClavaAstConverter implements GenericAstConverter {
       }
 
       if (node.jp instanceof RecordJp) {
-        return code.replace(/(class(?!=)|struct)/s, `$1${openingTag}$2${closingTag}$3`);  // Highlight 'class' or 'struct' in declaration
+        return code.replace(/(class(?!=)|struct)/, `${openingTag}$1${closingTag}`);  // Highlight 'class' or 'struct' in declaration
       }
 
       if (node.jp instanceof Include || node.jp instanceof Pragma) {
-        return code.replace(/^(#\w+)\b/s, `${openingTag}$1${closingTag}`);
+        return code.replace(/^(#\w+)\b/, `${openingTag}$1${closingTag}`);
       }
     }
 
