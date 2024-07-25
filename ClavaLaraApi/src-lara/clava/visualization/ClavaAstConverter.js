@@ -104,7 +104,15 @@ export default class ClavaAstConverter {
     getToolAst(root) {
         let nextId = 0;
         const toToolJoinPoint = (jp) => {
-            return new ToolJoinPoint((nextId++).toString(), jp.joinPointType, jp.filename, this.getJoinPointInfo(jp), jp.children.map(child => toToolJoinPoint(child)));
+            let code;
+            try {
+                code = jp.code.trim();
+            }
+            catch (e) {
+                console.error(`Could not get code of node '${jp.joinPointType}': ${e}`);
+                code = undefined;
+            }
+            return new ToolJoinPoint((nextId++).toString(), jp.joinPointType, code ?? '', jp.filename, this.getJoinPointInfo(jp), jp.children.map(child => toToolJoinPoint(child)));
         };
         return toToolJoinPoint(root);
     }

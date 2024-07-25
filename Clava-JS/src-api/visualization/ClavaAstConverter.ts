@@ -133,9 +133,18 @@ export default class ClavaAstConverter implements GenericAstConverter {
   public getToolAst(root: LaraJoinPoint): ToolJoinPoint {
     let nextId = 0;
     const toToolJoinPoint = (jp: Joinpoint): ToolJoinPoint => {
+      let code;
+      try {
+        code = jp.code.trim();
+      } catch (e) {
+        console.error(`Could not get code of node '${jp.joinPointType}': ${e}`);
+        code = undefined;
+      }
+
       return new ToolJoinPoint(
         (nextId++).toString(),
         jp.joinPointType,
+        code ?? '',
         jp.filename,
         this.getJoinPointInfo(jp),
         jp.children.map(child => toToolJoinPoint(child)),
