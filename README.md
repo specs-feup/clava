@@ -150,4 +150,4 @@ This work has been partially funded by the [ANTAREX project](http://antarex-proj
 
 # Contacts
 
-[João Bispo](mailto://jbispo@fe.up.pt)
+[João Bispo](mailto:jbispo@fe.up.pt)

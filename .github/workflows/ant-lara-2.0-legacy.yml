@@ -1,18 +1,18 @@
 # This workflow will build a Java project with Ant
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
 
-name: Java CI - Staging
+name: Java CI - Lara 2.0 Legacy
 
 on:
   push:
-    branches: [ staging ]
+    branches: [ lara-2.0-legacy ]
   pull_request:
-    branches: [ staging ]
-
+    branches: [ lara-2.0-legacy ]
+    
   # Daily at midnight
   schedule:
     - cron: '0 0 * * *'
-
+    
 permissions:
   checks: write
 
@@ -47,7 +47,7 @@ jobs:
     - name: Generate build.xml
       run: | 
         wget -q -N http://specs.fe.up.pt/tools/eclipse-build.jar
-        java -jar eclipse-build.jar https://github.com/specs-feup/specs-java-libs https://github.com/specs-feup/lara-framework?commit=staging ./
+        java -jar eclipse-build.jar https://github.com/specs-feup/specs-java-libs https://github.com/specs-feup/lara-framework?commit=lara-2.0-legacy ./
         wget -N -O /usr/share/ant/lib/ivy-2.5.0.jar specs.fe.up.pt/libs/ivy-2.5.0.jar
     - name: Build with Ant
       run: |
