@@ -257,7 +257,7 @@ public class CxxProgram extends AProgram {
         // Create file join point
         TranslationUnit newTu = getFactory().translationUnit(file, Arrays.asList(code));
 
-        return addFile(new CxxFile(newTu));
+        return addFileImpl(new CxxFile(newTu));
     }
 
     private File getFile(Object filepath) {

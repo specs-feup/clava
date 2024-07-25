@@ -1,6 +1,6 @@
 import { debug } from "lara-js/api/lara/core/LaraCore.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { BinaryOp, Call, Expression, GotoStmt, Joinpoint, LabelDecl, LabelStmt, ParenExpr, ParenType, PointerType, StorageClass, Vardecl, VariableArrayType, Varref, } from "../../Joinpoints.js";
+import { BinaryOp, Call, Expression, GotoStmt, LabelStmt, ParenExpr, ParenType, PointerType, StorageClass, Vardecl, VariableArrayType, Varref, } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 export default class Inliner {
     options;
@@ -227,7 +227,8 @@ export default class Inliner {
         // should be added
         const $parentFunction = $call.getAncestor("function");
         const addedDeclarations = new Set();
-        for (const $newCall of Query.searchFrom($newNodes, Call)) {
+        for (const $jp of Query.searchFrom($newNodes, "call")) {
+            const $newCall = $jp;
             // Ignore functions that are part of the system headers
             if ($newCall.function.isInSystemHeader) {
                 continue;
@@ -260,7 +261,7 @@ export default class Inliner {
         // Maps label names to new LabelDecl
         const newLabels = {};
         // Visit all gotoStmt and labelStmt
-        for (const jp of Query.search(Joinpoint, {
+        for (const jp of Query.search("joinpoint", {
             self: ($jp) => $jp instanceof GotoStmt || $jp instanceof LabelStmt,
         })) {
             const $jp = jp;
@@ -282,7 +283,8 @@ export default class Inliner {
             }
         }
         // If there are any label decls, rename them
-        for (const $labelDecl of Query.search(LabelDecl)) {
+        for (const $jp of Query.search("labelDecl")) {
+            const $labelDecl = $jp;
             const $newLabelDecl = newLabels[$labelDecl.name];
             $labelDecl.replaceWith($newLabelDecl);
         }
@@ -427,7 +429,8 @@ export default class Inliner {
             // TODO: I have no idea if this type cast is correct.
             const $sizeExprCopy = type.sizeExpr.copy();
             // Update any children of sizeExpr
-            for (const $varRef of Query.searchFrom($sizeExprCopy, Varref)) {
+            for (const $jp of Query.searchFrom($sizeExprCopy, "varref")) {
+                const $varRef = $jp;
                 const $newVarref = this.updateVarRef($varRef, $call, newVariableMap);
                 if ($newVarref !== $varRef) {
                     hasChanges = true;

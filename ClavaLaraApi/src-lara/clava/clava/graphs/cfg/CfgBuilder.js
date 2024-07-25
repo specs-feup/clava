@@ -1,7 +1,7 @@
 import { debug } from "lara-js/api/lara/core/LaraCore.js";
 import Graphs from "lara-js/api/lara/graphs/Graphs.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { FunctionJp, LabelStmt, Loop, Scope, Statement, } from "../../../Joinpoints.js";
+import { FunctionJp, Loop, Scope, Statement, } from "../../../Joinpoints.js";
 import ClavaJoinPoints from "../../ClavaJoinPoints.js";
 import CfgEdge from "./CfgEdge.js";
 import CfgEdgeType from "./CfgEdgeType.js";
@@ -159,7 +159,8 @@ export default class CfgBuilder {
     createNodes() {
         // Test all statements for leadership
         // If they are leaders, create node
-        for (const $stmt of Query.searchFromInclusive(this.jp, Statement)) {
+        for (const $jp of Query.searchFromInclusive(this.jp, "statement")) {
+            const $stmt = $jp;
             if (CfgUtils.isLeader($stmt)) {
                 if (this.splitInstList &&
                     CfgUtils.getNodeType($stmt) === CfgNodeType.INST_LIST) {
@@ -438,7 +439,7 @@ export default class CfgBuilder {
             throw new Error("Goto statement is undefined");
         }
         const labelName = $gotoStmt.label.name;
-        const $labelStmt = Query.searchFromInclusive(this.jp, LabelStmt, {
+        const $labelStmt = Query.searchFromInclusive(this.jp, "labelStmt", {
             decl: (decl) => decl.name == labelName,
         }).first();
         if ($labelStmt === undefined) {

@@ -340,7 +340,7 @@ public abstract class AScope extends AStatement {
      * 
      * @param node 
      */
-    public final AJoinPoint insertBegin(AJoinPoint node) {
+    public final Object insertBegin(AJoinPoint node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertBegin", this, Optional.empty(), node);
@@ -349,7 +349,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertBegin", this, Optional.ofNullable(result), node);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertBegin", e);
         }
@@ -367,7 +367,7 @@ public abstract class AScope extends AStatement {
      * 
      * @param code 
      */
-    public final AJoinPoint insertBegin(String code) {
+    public final Object insertBegin(String code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertBegin", this, Optional.empty(), code);
@@ -376,7 +376,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertBegin", this, Optional.ofNullable(result), code);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertBegin", e);
         }
@@ -394,7 +394,7 @@ public abstract class AScope extends AStatement {
      * 
      * @param node 
      */
-    public final AJoinPoint insertEnd(AJoinPoint node) {
+    public final Object insertEnd(AJoinPoint node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertEnd", this, Optional.empty(), node);
@@ -403,7 +403,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertEnd", this, Optional.ofNullable(result), node);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertEnd", e);
         }
@@ -421,7 +421,7 @@ public abstract class AScope extends AStatement {
      * 
      * @param code 
      */
-    public final AJoinPoint insertEnd(String code) {
+    public final Object insertEnd(String code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertEnd", this, Optional.empty(), code);
@@ -430,7 +430,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertEnd", this, Optional.ofNullable(result), code);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertEnd", e);
         }
@@ -448,7 +448,7 @@ public abstract class AScope extends AStatement {
      * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
      * @param code 
      */
-    public final AJoinPoint insertReturn(AJoinPoint code) {
+    public final Object insertReturn(AJoinPoint code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
@@ -457,7 +457,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -475,7 +475,7 @@ public abstract class AScope extends AStatement {
      * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
      * @param code 
      */
-    public final AJoinPoint insertReturn(String code) {
+    public final Object insertReturn(String code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
@@ -484,7 +484,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -506,7 +506,7 @@ public abstract class AScope extends AStatement {
      * @param type 
      * @param initValue 
      */
-    public final AJoinPoint addLocal(String name, AJoinPoint type, String initValue) {
+    public final Object addLocal(String name, AJoinPoint type, String initValue) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "addLocal", this, Optional.empty(), name, type, initValue);
@@ -515,7 +515,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "addLocal", this, Optional.ofNullable(result), name, type, initValue);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addLocal", e);
         }
@@ -581,7 +581,7 @@ public abstract class AScope extends AStatement {
     /**
      * CFG tester
      */
-    public final String cfg() {
+    public final Object cfg() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "cfg", this, Optional.empty());
@@ -590,7 +590,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "cfg", this, Optional.ofNullable(result));
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cfg", e);
         }
@@ -606,7 +606,7 @@ public abstract class AScope extends AStatement {
     /**
      * DFG tester
      */
-    public final String dfg() {
+    public final Object dfg() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "dfg", this, Optional.empty());
@@ -615,7 +615,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "dfg", this, Optional.ofNullable(result));
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "dfg", e);
         }
@@ -1484,21 +1484,21 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Replaces the first child, or inserts the join point if no child is present
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public void setFirstChildImpl(AJoinPoint node) {
-        this.aStatement.setFirstChildImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aStatement.setFirstChildImpl(node);
     }
 
     /**
-     * Replaces the last child, or inserts the join point if no child is present
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public void setLastChildImpl(AJoinPoint node) {
-        this.aStatement.setLastChildImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aStatement.setLastChildImpl(node);
     }
 
     /**

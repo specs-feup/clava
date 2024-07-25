@@ -484,9 +484,9 @@ export class Joinpoint extends LaraJoinPoint {
    */
   setData(source: object): void { return wrapJoinPoint(this._javaObject.setData(JSON.stringify(source))); }
   /**
-   * Replaces the first child, or inserts the join point if no child is present
+   * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
    */
-  setFirstChild(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); }
+  setFirstChild(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); }
   /**
    * Sets the commented that are embedded in a node
    */
@@ -500,9 +500,9 @@ export class Joinpoint extends LaraJoinPoint {
    */
   setInlineComments(p1: string[] | string): void { return wrapJoinPoint(this._javaObject.setInlineComments(unwrapJoinPoint(p1))); }
   /**
-   * Replaces the last child, or inserts the join point if no child is present
+   * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
    */
-  setLastChild(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); }
+  setLastChild(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); }
   /**
    * Sets the type of a node, if it has a type
    */

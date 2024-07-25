@@ -28,7 +28,10 @@ export default function NormalizeToSubset($startJp, options = { simplifyLoops: {
     declStmt.apply($startJp);
     varDecls.apply($startJp);
     localStaticToGlobal.apply($startJp);
-    for (const $assign of Query.searchFrom($startJp, BinaryOp, (jp) => jp.isAssignment && jp.operator !== "=")) {
+    for (const $jp of Query.searchFrom($startJp, "binaryOp", {
+        self: (self) => self instanceof BinaryOp && self.isAssignment && self.operator !== "=",
+    })) {
+        const $assign = $jp;
         SimplifyAssignment($assign);
     }
 }

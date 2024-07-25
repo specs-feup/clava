@@ -139,7 +139,7 @@ public class CxxExpression extends AExpression {
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
         // If node to replace is statement, check if this expression is inside an ExprStmt
         if (node instanceof AStatement && node.getNode().getParent() instanceof ExprStmt) {
-            return node.getParentImpl().replaceWith(node);
+            return node.getParentImpl().replaceWithImpl(node);
         }
 
         return super.replaceWithImpl(node);

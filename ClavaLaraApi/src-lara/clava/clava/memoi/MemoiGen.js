@@ -3,7 +3,6 @@ import { arrayFromArgs } from "lara-js/api/lara/core/LaraCore.js";
 import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
 import { TimerUnit } from "lara-js/api/lara/util/TimeUnits.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { Call, FileJp, FunctionJp } from "../../Joinpoints.js";
 import Timer from "../../lara/code/Timer.js";
 import ClavaJavaTypes from "../ClavaJavaTypes.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
@@ -190,7 +189,8 @@ class MemoiGen {
             signature: (s) => this._target.sig === MemoiUtils.normalizeSig(s),
             location: (l) => report !== undefined ? report.callSites[0] === l : true, // if there is a report, we also filter by site
         };
-        for (const $call of Query.search(Call, filter)) {
+        for (const $jp of Query.search("call", filter)) {
+            const $call = $jp;
             const wrapperName = IdGenerator.next("mw_" + cSig);
             s.add(wrapperName);
             $call.wrap(wrapperName);
@@ -203,9 +203,10 @@ class MemoiGen {
         const cSig = MemoiUtils.cSig(this._target.sig);
         const wrapperName = "mw_" + cSig;
         s.add(wrapperName);
-        for (const $call of Query.search(Call, {
+        for (const $jp of Query.search("call", {
             signature: (s) => this._target.sig === MemoiUtils.normalizeSig(s),
         })) {
+            const $call = $jp;
             $call.wrap(wrapperName);
         }
         this.generateGeneric(wrapperName, report);
@@ -217,15 +218,16 @@ class MemoiGen {
         const globalName = "memoi_target_timer";
         const printName = "print_perfect_inst";
         // wrap every call to the target
-        for (const $call of Query.search(Call, {
+        for (const $jp of Query.search("call", {
             signature: (s) => this._target.sig === MemoiUtils.normalizeSig(s),
         })) {
+            const $call = $jp;
             $call.wrap(wrapperName);
         }
         // change the wrapper by timing around the original call
-        for (const chain of Query.search(FileJp)
-            .search(FunctionJp, { name: wrapperName })
-            .search(Call)
+        for (const chain of Query.search("file")
+            .search("function", { name: wrapperName })
+            .search("call")
             .chain()) {
             const $file = chain["file"];
             const $function = chain["function"];
@@ -236,14 +238,14 @@ class MemoiGen {
             $function.insertReturn(`memoi_target_timer += ${tVar};`);
         }
         // if print_perfect_inst function is found, some other target has dealt with the main code and we're done
-        for (const chain of Query.search(FileJp, { hasMain: true })
-            .search(FunctionJp, { name: printName })
+        for (const chain of Query.search("file", { hasMain: true })
+            .search("function", { name: printName })
             .chain()) {
             return;
         }
         // change the main function to print the time to a file
-        for (const chain of Query.search(FileJp)
-            .search(FunctionJp, { name: "main" })
+        for (const chain of Query.search("file")
+            .search("function", { name: "main" })
             .chain()) {
             const $file = chain["file"];
             const $main = chain["function"];
@@ -277,9 +279,9 @@ class MemoiGen {
         }
     }
     generateGeneric(wrapperName, report) {
-        for (const chain of Query.search(FileJp)
-            .search(FunctionJp, { name: wrapperName })
-            .search(Call)
+        for (const chain of Query.search("file")
+            .search("function", { name: wrapperName })
+            .search("call")
             .chain()) {
             const $file = chain["file"];
             const $function = chain["function"];
@@ -332,8 +334,8 @@ class MemoiGen {
         }
     }
     addMainDebug(totalName, missesName, updatesName, wrapperName) {
-        const chain = Query.search(FileJp)
-            .search(FunctionJp, { name: "main" })
+        const chain = Query.search("file")
+            .search("function", { name: "main" })
             .chain();
         const firstAndOnly = chain[0];
         if (firstAndOnly === undefined) {

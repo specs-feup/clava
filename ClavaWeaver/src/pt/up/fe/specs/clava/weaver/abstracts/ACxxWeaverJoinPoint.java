@@ -449,7 +449,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         AJoinPoint topInserted = null;
         for (var nodeToInsert : reverseNodes) {
-            topInserted = insertAfter(nodeToInsert);
+            topInserted = insertAfterImpl(nodeToInsert);
         }
 
         // Remove current node from the tree
@@ -467,7 +467,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         AJoinPoint topInserted = null;
         for (var nodeToInsert : reverseNodes) {
-            topInserted = insertAfter(nodeToInsert);
+            topInserted = insertAfterImpl(nodeToInsert);
         }
 
         // Remove current node from the tree
@@ -1268,20 +1268,21 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public void defFirstChildImpl(AJoinPoint value) {
-
-        // If no children, just insert the node
-        if (!getHasChildrenImpl()) {
-            getNode().addChild(value.getNode());
-            return;
-        }
-
-        // Otherwise, replace node
-        getFirstChildImpl().replaceWith(value);
+        setFirstChildImpl(value);
     }
 
     @Override
-    public void setFirstChildImpl(AJoinPoint node) {
-        defFirstChildImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint value) {
+        // If no children, just insert the node
+        if (!getHasChildrenImpl()) {
+            getNode().addChild(value.getNode());
+            return null;
+        }
+
+        // Otherwise, replace node
+        var firstChild = getFirstChildImpl();
+        firstChild.replaceWith(value);
+        return firstChild;
     }
 
     @Override
@@ -1299,19 +1300,21 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public void defLastChildImpl(AJoinPoint value) {
-        // If no children, just insert the node
-        if (!getHasChildrenImpl()) {
-            getNode().addChild(value.getNode());
-            return;
-        }
-
-        // Otherwise, replace node
-        getLastChildImpl().replaceWith(value);
+        setLastChildImpl(value);
     }
 
     @Override
-    public void setLastChildImpl(AJoinPoint node) {
-        defLastChildImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint value) {
+        // If no children, just insert the node
+        if (!getHasChildrenImpl()) {
+            getNode().addChild(value.getNode());
+            return null;
+        }
+
+        // Otherwise, replace node
+        var lastChild =getLastChildImpl();
+        lastChild.replaceWith(value);
+        return lastChild;
     }
 
     @Override

@@ -3,7 +3,7 @@ import GlobalVariable from "../code/GlobalVariable.js";
 import Query from "lara-js/api/weaver/Query.js";
 import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
 import Logger from "../../lara/code/Logger.js";
-import { BuiltinType, Call, FunctionJp, Op, } from "../../Joinpoints.js";
+import { BuiltinType, FunctionJp, } from "../../Joinpoints.js";
 /**
  * Instruments an application so that it counts total operations in a region of code.
  *
@@ -62,11 +62,11 @@ export default class OpsCounter {
         this.instrumentedFunctions.add($function.jpId);
         console.log(`OpsCounter.instrument: Instrumenting  function ${$function.jpId}`);
         // Apply to all ops found in the region
-        for (const $op of Query.searchFrom($region, Op)) {
+        for (const $op of Query.searchFrom($region, "op")) {
             this.countOp($op);
         }
         // Call function recursively when function calls are found
-        for (const $call of Query.searchFrom($region, Call)) {
+        for (const $call of Query.searchFrom($region, "call")) {
             const $funcDef = $call.definition;
             if ($funcDef === undefined) {
                 continue;

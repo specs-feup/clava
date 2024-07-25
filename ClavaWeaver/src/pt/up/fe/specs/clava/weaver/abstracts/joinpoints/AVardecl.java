@@ -293,7 +293,7 @@ public abstract class AVardecl extends ADeclarator {
     /**
      * Creates a new varref based on this vardecl
      */
-    public final AVarref varref() {
+    public final Object varref() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "varref", this, Optional.empty());
@@ -302,7 +302,7 @@ public abstract class AVardecl extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "varref", this, Optional.ofNullable(result));
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "varref", e);
         }
@@ -1110,21 +1110,21 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
-     * Replaces the first child, or inserts the join point if no child is present
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public void setFirstChildImpl(AJoinPoint node) {
-        this.aDeclarator.setFirstChildImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aDeclarator.setFirstChildImpl(node);
     }
 
     /**
-     * Replaces the last child, or inserts the join point if no child is present
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public void setLastChildImpl(AJoinPoint node) {
-        this.aDeclarator.setLastChildImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aDeclarator.setLastChildImpl(node);
     }
 
     /**

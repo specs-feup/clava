@@ -32,13 +32,13 @@ export default class ClavaDataStore extends WeaverDataStore {
         this.put("Compiler Flags", flags);
     }
     /**
-     * @returns A list with the current extra system includes.
+     * @returns {J#java.util.List<String>} A list with the current extra system includes.
      */
     getSystemIncludes() {
         return this.get("library includes").getFiles();
     }
     /**
-     * @returns A list with the current user includes.
+     * @return {J#java.util.List<String>} A list with the current user includes.
      */
     getUserIncludes() {
         return this.get("header includes").getFiles();

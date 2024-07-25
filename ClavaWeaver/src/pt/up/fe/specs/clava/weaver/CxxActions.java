@@ -462,12 +462,12 @@ public class CxxActions {
 
         for (ReturnStmt returnStmt : returnStatements) {
             ACxxWeaverJoinPoint returnJp = CxxJoinpoints.create(returnStmt);
-            lastInsertPoint = returnJp.insertBefore(code);
+            lastInsertPoint = returnJp.insertBeforeImpl(code);
         }
 
         // If there is no return in the body, add at the end of the function
         if (lastReturnStmt == null) {
-            lastInsertPoint = scope.insertEnd(code);
+            lastInsertPoint = scope.insertEndImpl(code);
         }
 
         return lastInsertPoint;
