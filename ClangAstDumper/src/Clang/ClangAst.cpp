@@ -208,13 +208,12 @@ MyASTConsumer::~MyASTConsumer() {
 // Override the method that gets called for each parsed top-level declaration.
 bool MyASTConsumer::HandleTopLevelDecl(DeclGroupRef DR) {
 
-    for (DeclGroupRef::iterator b = DR.begin(), e = DR.end(); b != e; ++b) {
-        // Traverse the declaration using our AST visitor.
-        topLevelDeclVisitor.TraverseDecl(*b);
+    for (auto *D : DR) {
+        topLevelDeclVisitor.TraverseDecl(D);
     }
 
-    for (DeclGroupRef::iterator b = DR.begin(), e = DR.end(); b != e; ++b) {
-        printRelationsVisitor.TraverseDecl(*b);
+    for (auto *D : DR) {
+        printRelationsVisitor.TraverseDecl(D);
     }
 
     return true;
