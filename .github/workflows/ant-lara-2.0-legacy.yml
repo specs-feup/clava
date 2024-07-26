@@ -26,7 +26,10 @@ jobs:
     #    working-directory: ./..
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+      # Because of scheduled runs, by default run on default branch
+      with:
+        ref: lara-2.0-legacy
 
     - name: Cache ivy dependencies
       id: cache-nivy
