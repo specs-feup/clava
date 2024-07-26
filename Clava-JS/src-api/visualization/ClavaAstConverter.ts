@@ -3,7 +3,7 @@ import GenericAstConverter, { FilesCode } from "lara-js/api/visualization/Generi
 import ToolJoinPoint, { JoinPointInfo } from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
 import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, Declarator, DeclStmt, EnumDecl, EnumeratorDecl, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Joinpoint, Literal, Loop, Marker, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
 import Clava from "../clava/Clava.js";
-import { addIdentation, escapeHtml, getNodeCodeTags, getSpanTags } from "lara-js/api/visualization/AstConverterUtils.js"
+import { addIdentation, escapeHtml, getNodeCodeTags, getSyntaxHighlightTags } from "lara-js/api/visualization/AstConverterUtils.js"
 
 type CodeNode = {
   jp: Joinpoint;
@@ -18,7 +18,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
   }
 
   private getCode(node: Joinpoint): string | undefined {
-    // When hasCode implementation is ready, replace this method with the following line:
+    // TODO: When hasCode implementation is ready, replace this body with the following line:
     // return node.hasCode ? node.code.trim() : undefined
     let code;
     try {
@@ -253,22 +253,22 @@ export default class ClavaAstConverter implements GenericAstConverter {
       return undefined;
 
     if (node.jp.astName === "StringLiteral") {
-      const [openingTag, closingTag] = getSpanTags('class="string"');
+      const [openingTag, closingTag] = getSyntaxHighlightTags('string');
       return openingTag + code + closingTag;
     }
     if (node.jp instanceof Literal) {
-      const [openingTag, closingTag] = getSpanTags('class="literal"');
+      const [openingTag, closingTag] = getSyntaxHighlightTags('literal');
       return openingTag + code + closingTag;
     }
 
-    const [openingTag, closingTag] = getSpanTags('class="comment"');
+    const [openingTag, closingTag] = getSyntaxHighlightTags('comment');
     if (node.jp instanceof Comment)
       return openingTag + code + closingTag;
     code = code.replaceAll(/(?<!>)(\/\/.*)/g, `${openingTag}$1${closingTag}`);
     code = code.replaceAll(/(?<!>)(\/\*.*?\*\/)/g, `${openingTag}$1${closingTag}`);
 
     if (node.jp instanceof Declarator || node.jp instanceof EnumeratorDecl) {
-      const [openingTag, closingTag] = getSpanTags('class="type"');
+      const [openingTag, closingTag] = getSyntaxHighlightTags('type');
 
       const regex = new RegExp(`\\s*[&*]*\\b${node.jp.name}\\b`);
       const namePos = code.search(regex);
@@ -276,7 +276,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
     }
     
     if (node.jp instanceof Statement || node.jp instanceof Decl) {
-      const [openingTag, closingTag] = getSpanTags('class="keyword"');
+      const [openingTag, closingTag] = getSyntaxHighlightTags('keyword');
 
       if (node.jp instanceof Switch || node.jp instanceof Break || node.jp instanceof Case
         || node.jp instanceof Continue || node.jp instanceof GotoStmt || node.jp instanceof ReturnStmt
@@ -297,7 +297,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
       }
 
       if (node.jp instanceof Loop) {
-        if (node.jp.kind == "dowhile") {
+        if (node.jp.kind == 'dowhile') {
           const whilePos = code.match(/^(([^/]|\/[^/*]|\/\/.*|\/\*([^*]|\*[^/])*\*\/)*?)(?<!>)\bwhile\b/)![1].length;
           return openingTag + 'do' + closingTag + code.slice(2, whilePos) + openingTag + 'while' + closingTag + code.slice(whilePos + 5);
         } else {
