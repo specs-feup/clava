@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import { Event, EventTime } from "./Events.js";
-import ophistory from "./History.js";
-import { DetachOperation, DetachReference, InlineCommentOperation, InsertOperation, RemoveChildrenOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation, ValueOperation } from "./Operations.js";
+import ophistory from  "../history/History.js"
+import { DetachOperation, DetachReference, InlineCommentOperation, InsertOperation, RemoveChildrenOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation, ValueOperation } from "../history/Operations.js";
 import { Joinpoint } from "../../Joinpoints.js";
 
 const eventListener = new EventEmitter();

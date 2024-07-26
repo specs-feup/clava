@@ -17,8 +17,8 @@ import {
   wrapJoinPoint,
   unwrapJoinPoint,
 } from "lara-js/api/LaraJoinPoint.js";
-import eventListener from "./clava/history/EventListener.js";
-import { Event, EventTime } from "./clava/history/Events.js";
+import eventListener from "./clava/events/EventListener.js";
+import { Event, EventTime } from "./clava/events/Events.js";
 
 type PrivateMapper = {
   "Joinpoint": typeof Joinpoint,
