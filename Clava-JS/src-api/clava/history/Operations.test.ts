@@ -90,8 +90,7 @@ describe("Transformation History: Operations", () => {
     });
 
     it("Initial code, replace multiple joinpoints and rollback code comparison", () => {
-        // TODO: fix error regarding Joinpoint[] overload not found
-        /*const a: string = Clava.getProgram().code;
+        const a: string = Clava.getProgram().code;
     
         const loopStmt = Query.search(Loop).get().at(0);
         const returnStmt = Query.search(ReturnStmt).first();
@@ -105,7 +104,7 @@ describe("Transformation History: Operations", () => {
         const c: string = Clava.getProgram().code;
         
         expect(a).toEqual(c);
-        expect(b).not.toEqual(c);*/
+        expect(b).not.toEqual(c);
     });
 
     it("Initial code, replace multiple strings and rollback code comparison", () => {
