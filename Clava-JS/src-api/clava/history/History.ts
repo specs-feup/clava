@@ -32,12 +32,13 @@ class OperationHistory {
   }
 
   start() {
+    this.operations.length = 0;
     this.unlock();
   }
 
   stop() {
     this.lock();
-    this.checkpoint();
+    this.operations.length = 0;
   }
 
   newOperation(operation: Operation) {
@@ -56,6 +57,7 @@ class OperationHistory {
 
   checkpoint() {
     this.operations.length = 0;
+    this.unlock();
   }
 
   returnToLastCheckpoint() {

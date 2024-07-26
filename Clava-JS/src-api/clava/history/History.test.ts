@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 
 describe("Transformation History: Multiple operations", () => {
     registerSourceCode(code);
-    ophistory.start();
+    ophistory.checkpoint();
   
     it("Inserts and detaches code comparison", () => {
         const a: string = Clava.getProgram().code;
