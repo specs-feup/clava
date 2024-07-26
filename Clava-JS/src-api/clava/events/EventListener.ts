@@ -6,8 +6,6 @@ import { Joinpoint } from "../../Joinpoints.js";
 
 const eventListener = new EventEmitter();
 
-// Used for saving previous child in setFirstChild and setLastChild
-let auxJP: Joinpoint;
 
 eventListener.on("ACTION", (e: Event) => {
 
@@ -22,12 +20,6 @@ eventListener.on("ACTION", (e: Event) => {
           break;
         case "setType":
           changeTypeFromEvent(e);
-          break;
-        case "setFirstChild":
-          auxJP = e.mainJP.firstChild;
-          break;
-        case "setLastChild":
-          auxJP = e.mainJP.lastChild;
           break;
         case "setInlineComments":
           inlineCommentOperationFromEvent(e);
@@ -64,10 +56,10 @@ eventListener.on("ACTION", (e: Event) => {
           replaceSingleOperationFromEvent(e);
           break;
         case "setFirstChild":
-          setFirstChildFromEvent(e, auxJP);
+          setFirstChildFromEvent(e);
           break;
         case "setLastChild":
-          setLastChildFromEvent(e, auxJP);
+          setLastChildFromEvent(e);
           break;
         default:
           break;
@@ -109,12 +101,12 @@ function detachOperationFromEvent(e: Event) {
   ophistory.newOperation(new DetachOperation(e.mainJP, refJP, ref));
 }
 
-function setFirstChildFromEvent(e: Event, aux: Joinpoint) {
-  ophistory.newOperation(new SetChildOperation(e.mainJP.firstChild, aux));
+function setFirstChildFromEvent(e: Event) {
+  ophistory.newOperation(new SetChildOperation(e.mainJP.firstChild, e.returnValue));
 }
 
-function setLastChildFromEvent(e: Event, aux: Joinpoint) {
-  ophistory.newOperation(new SetChildOperation(e.mainJP.lastChild, aux));
+function setLastChildFromEvent(e: Event) {
+  ophistory.newOperation(new SetChildOperation(e.mainJP.lastChild, e.returnValue));
 }
 
 function removeChildrenOperationFromEvent(e: Event) {
