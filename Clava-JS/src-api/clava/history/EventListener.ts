@@ -1,6 +1,4 @@
 import { EventEmitter } from "events";
-import * as fs from "fs";
-import Clava from "../Clava.js";
 import { Event, EventTime } from "./Events.js";
 import ophistory from "./History.js";
 import { DetachOperation, DetachReference, InlineCommentOperation, InsertOperation, RemoveChildrenOperation, ReplaceOperation, SetChildOperation, TypeChangeOperation, ValueOperation } from "./Operations.js";

@@ -6,7 +6,7 @@ class OperationHistory {
 
   constructor() {
     this.operations = [];
-    this.locked = false;
+    this.locked = true;
   }
 
   private lock() {
@@ -29,6 +29,15 @@ class OperationHistory {
         this.unlock();
       }
     }
+  }
+
+  start() {
+    this.unlock();
+  }
+
+  stop() {
+    this.lock();
+    this.checkpoint();
   }
 
   newOperation(operation: Operation) {

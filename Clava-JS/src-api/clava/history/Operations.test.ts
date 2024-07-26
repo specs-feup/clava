@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
 
 describe("Transformation History: Operations", () => {
     registerSourceCode(code);
+    ophistory.start();
   
     it("Initial code, insert before and rollback code comparison", () => {
         const a: string = Clava.getProgram().code;

@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
 
 describe("Transformation History: Multiple operations", () => {
     registerSourceCode(code);
+    ophistory.start();
   
     it("Inserts and detaches code comparison", () => {
         const a: string = Clava.getProgram().code;
@@ -141,6 +142,38 @@ describe("Transformation History: Multiple operations", () => {
         expect(errorSpy).toHaveBeenCalledTimes(1);
     
         errorSpy.mockRestore();
+    });
+
+    it("Start and stop history recording", () => {
+        ophistory.stop();
+
+        const a: string = Clava.getProgram().code;
+        
+        const loopStmt1 = Query.search(Loop).get().at(0) as Joinpoint;
+        loopStmt1.replaceWith("aaaa");
+        
+        const b: string = Clava.getProgram().code;
+
+        ophistory.start();
+
+        const returnStmt = Query.search(Loop).get().at(0) as Joinpoint;
+        const comment = returnStmt.toComment();
+        ophistory.checkpoint();
+        const c: string = Clava.getProgram().code;
+        
+        comment.detach();
+        const d: string = Clava.getProgram().code;
+
+        ophistory.returnToLastCheckpoint();
+        const e: string = Clava.getProgram().code;
+
+        expect(c).toEqual(e);
+        expect(a).not.toEqual(b);
+        expect(a).not.toEqual(c);
+        expect(a).not.toEqual(d);
+        expect(b).not.toEqual(c);
+        expect(b).not.toEqual(d);
+        expect(c).not.toEqual(d);
     });
 
 });
