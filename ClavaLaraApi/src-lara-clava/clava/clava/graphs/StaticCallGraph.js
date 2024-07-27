@@ -8,56 +8,59 @@ laraImport("weaver.Query");
 laraImport("clava.graphs.scg.StaticCallGraphBuilder");
 
 class StaticCallGraph extends Graph {
-  static #dotFormatter = undefined;
+    static #dotFormatter = undefined;
 
-  // Maps functions to graph nodes
-  #functions;
+    // Maps functions to graph nodes
+    #functions;
 
-  constructor(graph, functions) {
-    super(graph);
-    this.#functions = functions;
-  }
-
-  /**
-   *
-   * @param {$jp} $jp
-   * @param {boolean} [visitCalls = true] - If true, recursively visits the functions of each call, building a call graph of the available code
-   * @returns
-   */
-  static build($jp, visitCalls = true) {
-    const builder = new StaticCallGraphBuilder();
-
-    const graph = builder.build($jp, visitCalls);
-
-    return new StaticCallGraph(graph, builder.nodes);
-  }
-
-  get functions() {
-    return this.#functions;
-  }
-
-  getNode($function) {
-    // Normalize function
-    return this.#functions[$function.canonical.astId];
-  }
-
-  static get dotFormatter() {
-    if (StaticCallGraph.#dotFormatter === undefined) {
-      StaticCallGraph.#dotFormatter = new DotFormatter();
-      StaticCallGraph.#dotFormatter.addNodeAttribute(
-        "style=dashed",
-        (node) => Graphs.isLeaf(node) && !node.data().hasImplementation()
-      );
-      StaticCallGraph.#dotFormatter.addNodeAttribute(
-        "style=filled",
-        (node) => Graphs.isLeaf(node) && node.data().hasCalls()
-      );
+    constructor(graph, functions) {
+        super(graph);
+        this.#functions = functions;
     }
 
-    return StaticCallGraph.#dotFormatter;
-  }
+    /**
+     *
+     * @param {$jp} $jp
+     * @param {boolean} [visitCalls = true] - If true, recursively visits the functions of each call, building a call graph of the available code
+     * @returns
+     */
+    static build($jp, visitCalls = true) {
+        const builder = new StaticCallGraphBuilder();
 
-  toDot() {
-    return super.toDot(StaticCallGraph.dotFormatter);
-  }
+        const graph = builder.build($jp, visitCalls);
+
+        return new StaticCallGraph(graph, builder.nodes);
+    }
+
+    get functions() {
+        return this.#functions;
+    }
+
+    getNode($function) {
+        // Normalize function
+        return this.#functions[$function.canonical.astId];
+    }
+
+    static get dotFormatter() {
+        if (StaticCallGraph.#dotFormatter === undefined) {
+            StaticCallGraph.#dotFormatter = new DotFormatter();
+            StaticCallGraph.#dotFormatter.addNodeAttribute(
+                "style=dashed",
+                (node) => Graphs.isLeaf(node) && !node.data().hasImplementation()
+            );
+            StaticCallGraph.#dotFormatter.addNodeAttribute(
+                "style=filled",
+                (node) => Graphs.isLeaf(node) && node.data().hasCalls()
+            );
+        }
+
+        return StaticCallGraph.#dotFormatter;
+    }
+
+    toDot(rankdir = "TB") {
+        const formatter = StaticCallGraph.dotFormatter;
+        formatter.setLayoutOption("rankdir", rankdir);
+
+        return super.toDot(formatter);
+    }
 }
