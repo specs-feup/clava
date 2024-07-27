@@ -5,6 +5,9 @@ import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Cl
 import Clava from "../clava/Clava.js";
 import { addIdentation, escapeHtml, getNodeCodeTags, getSyntaxHighlightTags } from "lara-js/api/visualization/AstConverterUtils.js"
 
+/**
+ * @brief Intermediate AST representation, used to store the (processed) code of each node.
+ */
 type CodeNode = {
   jp: Joinpoint;
   id: string;
@@ -12,11 +15,21 @@ type CodeNode = {
   children: CodeNode[];
 };
 
+/**
+ * @brief Clava specialization of GenericAstConverter.
+ */
 export default class ClavaAstConverter implements GenericAstConverter {
   public updateAst(): void {
     Clava.rebuild();
   }
 
+  /**
+   * @brief Returns the code of the given node.
+   * @details If the node has no code, returns undefined, instead of raising an error.
+   * 
+   * @param node Node
+   * @returns The code of the node, or undefined if it has no code
+   */
   private getCode(node: Joinpoint): string | undefined {
     // TODO: When hasCode implementation is ready, replace this body with the following line:
     // return node.hasCode ? node.code.trim() : undefined
@@ -30,6 +43,12 @@ export default class ClavaAstConverter implements GenericAstConverter {
     return code;
   }
 
+  /**
+   * @brief Returns the information of the given join point, according to its type.
+   * 
+   * @param jp Join point
+   * @returns The information of the join point
+   */
   private getJoinPointInfo(jp: Joinpoint): JoinPointInfo {
     const info: JoinPointInfo = {
       'AST ID': jp.astId,
@@ -83,6 +102,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
         'Constant?': jp.constant,
         'Is builtin': jp.isBuiltin,
         'Has sugar': jp.hasSugar,
+        'Type kind': jp.kind
       });
     }
 
@@ -165,6 +185,14 @@ export default class ClavaAstConverter implements GenericAstConverter {
     return toToolJoinPoint(root as Joinpoint);
   }
 
+  /**
+   * @brief Converts the given join point to a CodeNode.
+   * @details This function assigns ids to the nodes in pre-order, and it MUST
+   * be the same as the order used for getToolAst.
+   * 
+   * @param jp Join point
+   * @returns The CodeNode representation of the join point
+   */
   private toCodeNode(jp: Joinpoint): CodeNode {
     let nextId = 0;
     const toCodeNode = (jp: Joinpoint): CodeNode => {
@@ -179,6 +207,15 @@ export default class ClavaAstConverter implements GenericAstConverter {
     return toCodeNode(jp);
   }
 
+  /**
+   * @brief Sorts the given code nodes by location.
+   * @details This function uses the join points' line and column, instead of
+   * location attribute. If a node does not have a location (line and code),
+   * it is placed before all the others.
+   * 
+   * @param codeNodes Array of code nodes
+   * @returns Reference to the original (sorted) array
+   */
   private sortByLocation(codeNodes: CodeNode[]): CodeNode[] {
     return codeNodes.sort((node1, node2) => {
       if (node1.jp.line === node2.jp.line)
@@ -187,6 +224,17 @@ export default class ClavaAstConverter implements GenericAstConverter {
     });
   }
 
+  /**
+   * @brief Applies refinements and corrections to the node code and order of
+   * the children.
+   * @details This is necessary because some nodes do not have its designated
+   * code equal to the matching code in the container. For example, the code
+   * inside code blocks do not have its indentation.
+   * 
+   * @param node The node code
+   * @param indentation The current indentation to use
+   * @returns Reference to the original (refined) node
+   */
   private refineCode(node: CodeNode, indentation: number = 0): CodeNode {
     if (node.code)
       node.code = addIdentation(node.code, indentation);
@@ -195,15 +243,15 @@ export default class ClavaAstConverter implements GenericAstConverter {
     if (node.jp instanceof Loop) {
       node.children
         .filter(child => child.jp instanceof ExprStmt)
-        .forEach(child => child.code = child.code!.slice(0, -1));	// Remove semicolon from expression statements inside loop parentheses
+        .forEach(child => child.code = child.code!.slice(0, -1)); 	// Remove semicolon from expression statements inside loop parentheses
     }
 
     if (node.jp instanceof DeclStmt) {
       node.children
         .slice(1)
         .forEach(child => {
-          child.code = child.code!.match(/^(?:\S+\s+)(\S.*)$/)![1];
-        });  // Remove type from variable declarations
+          child.code = child.code!.match(/^(?:\S+\s+)(\S.*)$/)![1];    // Remove type from variable declarations
+        });
     }
 
     for (const child of node.children) {
@@ -215,9 +263,9 @@ export default class ClavaAstConverter implements GenericAstConverter {
       const match = node.code!.match(/^([^\/]*\S)\s*(\/\/.*)$/);
       if (match) {
         const [, statement, comment] = match;
-        node.code = statement + '  ' + comment;
+        node.code = statement + '  ' + comment;  // Fix space between statement and inline comment in naked body
       }
-    }  // Fix space between statement and inline comment in naked body
+    }
     
     if (node.children.length >= 1 && node.children[0].jp.astName === 'TagDeclVars') {
       const tagDeclVars = node.children[0];
@@ -248,6 +296,16 @@ export default class ClavaAstConverter implements GenericAstConverter {
     return node;
   }
 
+  /**
+   * @brief Performs C/C++ syntax hioverlighting on the given code.
+   * @details This is done by inserting the appropriate span tags around the
+   * code to be highlighted, using the HTML code as a string
+   * 
+   * @param code The code to be highlighted, with the code of its children
+   * already linked and syntax highlighted
+   * @param node The node that the code belongs to
+   * @returns The syntax highlighted code
+   */
   private syntaxHighlight(code: string | undefined, node: CodeNode): string | undefined {
     if (code === undefined)
       return undefined;
@@ -264,13 +322,15 @@ export default class ClavaAstConverter implements GenericAstConverter {
     const [openingTag, closingTag] = getSyntaxHighlightTags('comment');
     if (node.jp instanceof Comment)
       return openingTag + code + closingTag;
-    code = code.replaceAll(/(?<!>)(\/\/.*)/g, `${openingTag}$1${closingTag}`);
-    code = code.replaceAll(/(?<!>)(\/\*.*?\*\/)/g, `${openingTag}$1${closingTag}`);
+
+    code = code.replaceAll(/(?<!>)(\/\/.*)/g, `${openingTag}$1${closingTag}`);       // Highlight unhighlighted single-line comments
+    code = code.replaceAll(/(?<!>)(\/\*.*?\*\/)/g, `${openingTag}$1${closingTag}`);  // Highlight unhighlighted multi-line comments
+    // We know that a piece of code is not highlighted if it is not preceded by a '>' (from the opening span tag)
 
     if (node.jp instanceof Declarator || node.jp instanceof EnumeratorDecl) {
       const [openingTag, closingTag] = getSyntaxHighlightTags('type');
 
-      const regex = new RegExp(`\\s*[&*]*\\b${node.jp.name}\\b`);
+      const regex = new RegExp(`\\s*[&*]*\\b${node.jp.name}\\b`);  // Match the declaration name with the '&' and '*' prefixes
       const namePos = code.search(regex);
       return namePos <= 0 ? code : openingTag + code.slice(0, namePos) + closingTag + code.slice(namePos);
     }
@@ -287,7 +347,9 @@ export default class ClavaAstConverter implements GenericAstConverter {
       }
 
       if (node.jp instanceof If) {
-        const elseMatch = code.match(/^(([^/]|\/[^/*]|\/\/.*|\/\*([^*]|\*[^/])*\*\/)*?)(?<!>)\belse\b/);
+        const elseMatch = code.match(/^(([^/]|\/[^/*]|\/\/.*|\/\*([^*]|\*[^/])*\*\/)*?)(?<!>)\belse\b/);  // Match first unhighlighted 'else' that is not inside a comment (single or multi-line)
+        // Note that the function is meant to be called recursively, so the 'else' of child ifs are already highlighted
+
         if (elseMatch) {
           const elsePos = elseMatch[1].length;
           return openingTag + 'if' + closingTag + code.slice(2, elsePos) + openingTag + 'else' + closingTag + code.slice(elsePos + 4);
@@ -298,7 +360,9 @@ export default class ClavaAstConverter implements GenericAstConverter {
 
       if (node.jp instanceof Loop) {
         if (node.jp.kind == 'dowhile') {
-          const whilePos = code.match(/^(([^/]|\/[^/*]|\/\/.*|\/\*([^*]|\*[^/])*\*\/)*?)(?<!>)\bwhile\b/)![1].length;
+          const whilePos = code.match(/^(([^/]|\/[^/*]|\/\/.*|\/\*([^*]|\*[^/])*\*\/)*?)(?<!>)\bwhile\b/)![1].length;    // Match first unhighlighted 'while' that is not inside a comment (single or multi-line)
+          // Same logic as the 'else' keyword
+
           return openingTag + 'do' + closingTag + code.slice(2, whilePos) + openingTag + 'while' + closingTag + code.slice(whilePos + 5);
         } else {
           return code.replace(/^(\w+)\b/, `${openingTag}$1${closingTag}`);  // Highlight first word
@@ -314,24 +378,36 @@ export default class ClavaAstConverter implements GenericAstConverter {
       }
 
       if (node.jp instanceof Include || node.jp instanceof Pragma) {
-        return code.replace(/^(#\w+)\b/, `${openingTag}$1${closingTag}`);
+        return code.replace(/^(#\w+)\b/, `${openingTag}$1${closingTag}`);  // Highlight the directive
       }
     }
 
     return code;
   }
 
+  /**
+   * @brief Links the nodes of the given AST to their respective portion of code.
+   * 
+   * @param root The root node of the AST
+   * @param outerCode The outer code, which should contain the code of all the
+   * nodes
+   * @param outerCodeStart The start index of the outer code section to be used
+   * @param outerCodeEnd The end index of the outer code section to be used
+   * @returns Array with three elements: the start index of the node code in the
+   * outer code, the end index of the node code in the outer code, and the
+   * linked code.
+   */
   private linkCodeToAstNodes(root: CodeNode, outerCode: string | undefined, outerCodeStart: number, outerCodeEnd: number): any[] {
     const nodeCode = root.code;
     if (!nodeCode || !outerCode)
-      return [outerCodeStart, outerCodeStart, ""];
+      return [outerCodeStart, outerCodeStart, ""];  // Return empty string if the node has no code
 
     const nodeCodeHtml = escapeHtml(nodeCode);
     const innerCodeStart = outerCode.indexOf(nodeCodeHtml, outerCodeStart);
     const innerCodeEnd = innerCodeStart + nodeCodeHtml.length;
     if (innerCodeStart === -1 || innerCodeEnd > outerCodeEnd) {
       console.warn(`Code of node "${root.jp.joinPointType}" not found in code container: "${nodeCodeHtml}"`);
-      return [outerCodeStart, outerCodeStart, ""];
+      return [outerCodeStart, outerCodeStart, ""];   // Return empty string if the node code is not found
     }
 
     const [openingTag, closingTag] = getNodeCodeTags(root.id);
@@ -350,10 +426,10 @@ export default class ClavaAstConverter implements GenericAstConverter {
 
     for (const child of root.children) {
       const [childCodeStart, childCodeEnd, childCode] = this.linkCodeToAstNodes(child, outerCode, newCodeIndex, innerCodeEnd);
-      newCode += outerCode.slice(newCodeIndex, childCodeStart) + childCode;
+      newCode += outerCode.slice(newCodeIndex, childCodeStart) + childCode;  // Add portion behind children that is not matched and the linked child code
       newCodeIndex = childCodeEnd;
     }
-    newCode += outerCode.slice(newCodeIndex, innerCodeEnd);
+    newCode += outerCode.slice(newCodeIndex, innerCodeEnd);  // Add the remaining unmatched code
     newCode = this.syntaxHighlight(newCode, root)!;
 
     return [innerCodeStart, innerCodeEnd, openingTag + newCode + closingTag];
