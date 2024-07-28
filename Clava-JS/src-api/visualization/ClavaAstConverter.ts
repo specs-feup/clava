@@ -1,7 +1,7 @@
 import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
 import GenericAstConverter, { FilesCode } from "lara-js/api/visualization/GenericAstConverter.js";
 import ToolJoinPoint, { JoinPointInfo } from "lara-js/api/visualization/public/js/ToolJoinPoint.js";
-import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, Declarator, DeclStmt, EnumDecl, EnumeratorDecl, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Joinpoint, Literal, Loop, Marker, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
+import { AccessSpecifier, AdjustedType, Body, BoolLiteral, Break, Call, Case, Class, Comment, Continue, Decl, Declarator, DeclStmt, DeleteExpr, EnumDecl, EnumeratorDecl, Expression, ExprStmt, FileJp, FloatLiteral, FunctionJp, GotoStmt, If, Include, IntLiteral, Joinpoint, Literal, Loop, Marker, NamedDecl, Omp, Pragma, Program, RecordJp, ReturnStmt, Scope, Statement, Switch, Tag, Type, TypedefDecl, Vardecl, Varref, WrapperStmt } from "../Joinpoints.js";
 import Clava from "../clava/Clava.js";
 import { addIdentation, escapeHtml, getNodeCodeTags, getSyntaxHighlightTags } from "lara-js/api/visualization/AstConverterUtils.js"
 
@@ -330,18 +330,19 @@ export default class ClavaAstConverter implements GenericAstConverter {
     if (node.jp instanceof Declarator || node.jp instanceof EnumeratorDecl) {
       const [openingTag, closingTag] = getSyntaxHighlightTags('type');
 
-      const regex = new RegExp(`\\s*[&*]*\\b${node.jp.name}\\b`);  // Match the declaration name with the '&' and '*' prefixes
+      const escapedName = node.jp.name?.replace(/\[[^\]]*]$/, "")  // Remove array suffix from variable name
+      const regex = new RegExp(`\\s*[&*]*\\s*` + (escapedName ? `\\b${escapedName}\\b` : "$"));  // Match the declaration name (if one exists) with the '&' and '*' prefixes
       const namePos = code.search(regex);
       return namePos <= 0 ? code : openingTag + code.slice(0, namePos) + closingTag + code.slice(namePos);
     }
     
-    if (node.jp instanceof Statement || node.jp instanceof Decl) {
+    if (node.jp instanceof Statement || node.jp instanceof Decl || node.jp instanceof Expression) {
       const [openingTag, closingTag] = getSyntaxHighlightTags('keyword');
 
       if (node.jp instanceof Switch || node.jp instanceof Break || node.jp instanceof Case
         || node.jp instanceof Continue || node.jp instanceof GotoStmt || node.jp instanceof ReturnStmt
-        || node.jp instanceof EnumDecl || node.jp instanceof AccessSpecifier
-        || node.jp.astName == "FunctionTemplateDecl" || node.jp.astName == "TemplateTypeParmDecl") {
+        || node.jp instanceof EnumDecl || node.jp instanceof AccessSpecifier || node.jp instanceof DeleteExpr
+        || ["FunctionTemplateDecl", "TemplateTypeParmDecl", "NamespaceDecl"].includes(node.jp.astName)) {
 
         return code.replace(/^(\w+)\b/, `${openingTag}$1${closingTag}`);  // Highlight first word
       }
