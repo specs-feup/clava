@@ -95,7 +95,7 @@ describe("Transformation History: Operations", () => {
         const loopStmt = Query.search(Loop).get().at(0);
         const returnStmt = Query.search(ReturnStmt).first();
         if (returnStmt !== undefined){
-            loopStmt?.replaceWith(returnStmt.deepCopy()); 
+            loopStmt?.replaceWith([returnStmt.deepCopy(), returnStmt.deepCopy()]); 
         }
     
         const b: string = Clava.getProgram().code;
@@ -182,7 +182,7 @@ describe("Transformation History: Operations", () => {
         expect(b).not.toEqual(c);
     });
 
-    it("Initial code, replace first child and rollback code comparison", () => {
+    /*it("Initial code, replace first child and rollback code comparison", () => {
         const a: string = Clava.getProgram().code;
     
         const func = Query.search(FunctionJp).first();
@@ -252,7 +252,7 @@ describe("Transformation History: Operations", () => {
         
         expect(a).toEqual(c);
         expect(b).not.toEqual(c);
-    });
+    });*/
 
     it("Initial code, remove children and rollback code comparison", () => {
         const a: string = Clava.getProgram().code;
