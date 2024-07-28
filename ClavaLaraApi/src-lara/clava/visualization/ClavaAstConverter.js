@@ -217,6 +217,12 @@ export default class ClavaAstConverter {
                 node.code = statement + '  ' + comment; // Fix space between statement and inline comment in naked body
             }
         }
+        if (node.jp.astName === 'LambdaExpr' && node.children.length >= 1) {
+            const body = node.children[0];
+            if (body.jp instanceof Body && !node.code?.includes(body.code)) {
+                body.code = body.code.replaceAll(/\n */g, ' ');
+            }
+        }
         if (node.children.length >= 1 && node.children[0].jp.astName === 'TagDeclVars') {
             const tagDeclVars = node.children[0];
             const typedef = tagDeclVars.children[0];

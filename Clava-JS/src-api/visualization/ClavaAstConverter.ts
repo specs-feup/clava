@@ -259,11 +259,18 @@ export default class ClavaAstConverter implements GenericAstConverter {
       this.refineCode(child, newIndentation);
     }
 
-    if (node.jp instanceof Body && (node.jp as Body).naked) {
+    if (node.jp instanceof Body && node.jp.naked) {
       const match = node.code!.match(/^([^\/]*\S)\s*(\/\/.*)$/);
       if (match) {
         const [, statement, comment] = match;
         node.code = statement + '  ' + comment;  // Fix space between statement and inline comment in naked body
+      }
+    }
+
+    if (node.jp.astName === 'LambdaExpr' && node.children.length >= 1) {
+      const body = node.children[0];
+      if (body.jp instanceof Body && !node.code?.includes(body.code!)) {
+        body.code = body.code!.replaceAll(/\n */g, ' ');  // Remove newlines and indentation from lambda body
       }
     }
     
