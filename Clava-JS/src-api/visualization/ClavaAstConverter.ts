@@ -268,8 +268,8 @@ export default class ClavaAstConverter implements GenericAstConverter {
     }
 
     if (node.jp.astName === 'LambdaExpr' && node.children.length >= 1) {
-      const body = node.children[0];
-      if (body.jp instanceof Body && !node.code?.includes(body.code!)) {
+      const body = node.children.find(child => child.jp instanceof Body);
+      if (body && body.jp instanceof Body && !node.code?.includes(body.code!)) {
         body.code = body.code!.replaceAll(/\n */g, ' ');  // Remove newlines and indentation from lambda body
       }
     }
@@ -338,7 +338,7 @@ export default class ClavaAstConverter implements GenericAstConverter {
       const [openingTag, closingTag] = getSyntaxHighlightTags('type');
 
       const escapedName = node.jp.name?.replace(/\[[^\]]*]$/, "")  // Remove array suffix from variable name
-      const regex = new RegExp(`\\s*[&*]*\\s*` + (escapedName ? `\\b${escapedName}\\b` : "$"));  // Match the declaration name (if one exists) with the '&' and '*' prefixes
+      const regex = new RegExp(`\\s*(&amp;|\\*)*\\s*` + (escapedName ? `\\b${escapedName}\\b` : "$"));  // Match the declaration name (if one exists) with the '&' and '*' prefixes
       const namePos = code.search(regex);
       return namePos <= 0 ? code : openingTag + code.slice(0, namePos) + closingTag + code.slice(namePos);
     }
@@ -431,6 +431,10 @@ export default class ClavaAstConverter implements GenericAstConverter {
       newCodeIndex = outerCode.indexOf('(', innerCodeStart) + 1;
       newCode += outerCode.slice(innerCodeStart, newCodeIndex);
     }  // Ignore function return type and name in declaration
+    if (root.jp instanceof ReturnStmt) {
+      newCodeIndex = outerCode.indexOf(' ', innerCodeStart) + 1;
+      newCode += outerCode.slice(innerCodeStart, newCodeIndex);
+    }  // Ignore keyword in return statement
 
     for (const child of root.children) {
       const [childCodeStart, childCodeEnd, childCode] = this.linkCodeToAstNodes(child, outerCode, newCodeIndex, innerCodeEnd);
