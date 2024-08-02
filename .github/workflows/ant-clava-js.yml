@@ -44,9 +44,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Install CMake
+    - name: Install build essentials and CMake
       run: |
         sudo apt-get update
+        sudo apt-get install build-essential 
         sudo apt-get install -y cmake
 
     - name: Generate build.xml
