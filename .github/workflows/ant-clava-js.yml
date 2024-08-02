@@ -44,6 +44,11 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Install CMake
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake
+
     - name: Generate build.xml
       run: | 
         wget -q -N http://specs.fe.up.pt/tools/eclipse-build.jar
