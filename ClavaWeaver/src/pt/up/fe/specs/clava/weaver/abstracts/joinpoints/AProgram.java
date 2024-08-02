@@ -475,7 +475,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     /**
      * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
      */
-    public final boolean rebuild() {
+    public final Object rebuild() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
@@ -526,7 +526,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      * Adds a file join point to the current program
      * @param file 
      */
-    public final AJoinPoint addFile(AFile file) {
+    public final Object addFile(AFile file) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "addFile", this, Optional.empty(), file);
@@ -535,7 +535,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "addFile", this, Optional.ofNullable(result), file);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addFile", e);
         }
@@ -553,7 +553,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
      * @param filepath 
      */
-    public final AJoinPoint addFileFromPath(Object filepath) {
+    public final Object addFileFromPath(Object filepath) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "addFileFromPath", this, Optional.empty(), filepath);
@@ -562,7 +562,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "addFileFromPath", this, Optional.ofNullable(result), filepath);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addFileFromPath", e);
         }

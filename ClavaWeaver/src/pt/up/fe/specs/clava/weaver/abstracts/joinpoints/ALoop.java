@@ -822,7 +822,7 @@ public abstract class ALoop extends AStatement {
      * @param reference 
      * @param useTernary 
      */
-    public final AStatement tile(String blockSize, AStatement reference, Boolean useTernary) {
+    public final Object tile(String blockSize, AStatement reference, Boolean useTernary) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "tile", this, Optional.empty(), blockSize, reference, useTernary);
@@ -831,7 +831,7 @@ public abstract class ALoop extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "tile", this, Optional.ofNullable(result), blockSize, reference, useTernary);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "tile", e);
         }
