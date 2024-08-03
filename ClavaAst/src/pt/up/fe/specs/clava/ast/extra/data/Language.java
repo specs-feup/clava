@@ -61,6 +61,16 @@ public class Language extends ADataClass<Language> {
     public static final DataKey<Boolean> C_PLUS_PLUS_17 = KeyFactory.bool("c++17");
 
     /**
+     * True if is a C++20 variant (or later).
+     */
+    public static final DataKey<Boolean> C_PLUS_PLUS_20 = KeyFactory.bool("c++20");
+
+    /**
+     * True if is a C++23 variant (or later).
+     */
+    public static final DataKey<Boolean> C_PLUS_PLUS_23 = KeyFactory.bool("c++23");
+
+    /**
      * True if supports digraphs.
      */
     public static final DataKey<Boolean> HAS_DIGRAPHS = KeyFactory.bool("hasDigraphs");
@@ -74,11 +84,6 @@ public class Language extends ADataClass<Language> {
      * True if supports hexadecimal float constants.
      */
     public static final DataKey<Boolean> HEX_FLOATS = KeyFactory.bool("hexFloats");
-
-    /**
-     * True if allows variables to be typed as int implicitly.
-     */
-    public static final DataKey<Boolean> IMPLICIT_INT = KeyFactory.bool("implicitInt");
 
     /**
      * True if is an OpenCL variant.

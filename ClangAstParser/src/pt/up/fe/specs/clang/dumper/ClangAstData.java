@@ -66,7 +66,7 @@ public class ClangAstData extends ADataClass<ClangAstData> {
 
     public final static DataKey<Map<String, String>> ID_TO_FILENAME_MAP = KeyFactory.generic(
             "clang_parser_stream_id_to_filename_map",
-            new HashMap<>());
+            new HashMap<String, String>());
 
     public final static DataKey<List<Include>> INCLUDES = KeyFactory.generic("clang_parser_stream_includes",
             new ArrayList<>());

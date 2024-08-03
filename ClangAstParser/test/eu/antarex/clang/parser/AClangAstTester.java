@@ -39,7 +39,7 @@ import pt.up.fe.specs.util.providers.ResourceProvider;
 
 public abstract class AClangAstTester {
 
-    private static final boolean CLEAN_CLANG_FILES = true;
+    private static final boolean CLEAN_CLANG_FILES = !SpecsSystem.isDebug();
     private static final String OUTPUT_FOLDERNAME = "temp-clang-ast";
 
     private final Collection<ResourceProvider> resources;

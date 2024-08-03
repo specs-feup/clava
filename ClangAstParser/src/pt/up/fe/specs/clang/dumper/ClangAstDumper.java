@@ -145,15 +145,37 @@ public class ClangAstDumper {
                 LocalOptionsKeys.getProvider().getStoreDefinition());
 
         List<String> arguments = new ArrayList<>();
-        arguments.add(clangExecutable.getAbsolutePath());
+        if (SpecsPlatforms.isLinux()) {
+            arguments.add("clang-16");
+            arguments.add("-c");
 
-        arguments.add(sourceFile.getAbsolutePath());
+            arguments.add("-Xclang");
+            arguments.add("-load");
+            arguments.add("-Xclang");
+            arguments.add(clangExecutable.getAbsolutePath());
+            arguments.add("-Xclang");
+            arguments.add("-plugin");
+            arguments.add("-Xclang");
+            arguments.add("DumpAst");
+            arguments.add("-Xclang");
+            arguments.add("-plugin-arg-DumpAst");
+            arguments.add("-Xclang");
+            arguments.add("-file-id=" + id);
+            arguments.add("-Xclang");
+            arguments.add("-plugin-arg-DumpAst");
+            arguments.add("-Xclang");
+            arguments.add("-system-threshold=" + systemIncludesThreshold);
+        } else {
+            arguments.add(clangExecutable.getAbsolutePath());
 
-        arguments.add("-id=" + id);
+            arguments.add(sourceFile.getAbsolutePath());
 
-        arguments.add("-system-header-threshold=" + systemIncludesThreshold);
+            arguments.add("-id=" + id);
 
-        arguments.add("--");
+            arguments.add("-system-header-threshold=" + systemIncludesThreshold);
+
+            arguments.add("--");
+        }
 
         var extension = SpecsIo.getExtension(sourceFile);
         boolean isOpenCL = extension.equals("cl");
@@ -223,23 +245,28 @@ public class ClangAstDumper {
             arguments.add(standard.isCxx() ? "c++" : "c");
         }
 
+        if (SpecsPlatforms.isLinux()) {
+            arguments.add(sourceFile.getAbsolutePath());
+        } else {
+
         List<String> systemIncludes = new ArrayList<>();
 
-        // Add includes bundled with program
-        // (only on Windows, it is expected that a Linux system has its own headers for libc/libc++)
-        // if (Platforms.isWindows()) {
-        // systemIncludes.addAll(clangAstParser.prepareIncludes(clangExecutable, usePlatformLibc));
-        systemIncludes.addAll(builtinIncludes);
-        // }
+            // Add includes bundled with program
+            // (only on Windows, it is expected that a Linux system has its own headers for libc/libc++)
+            // if (Platforms.isWindows()) {
+            // systemIncludes.addAll(clangAstParser.prepareIncludes(clangExecutable, usePlatformLibc));
+            systemIncludes.addAll(builtinIncludes);
+            // }
 
-        // Add custom includes
-        systemIncludes.addAll(localData.get(LocalOptionsKeys.SYSTEM_INCLUDES).getStringList());
+            // Add custom includes
+            systemIncludes.addAll(localData.get(LocalOptionsKeys.SYSTEM_INCLUDES).getStringList());
 
-        // Add local system includes
-        // for (String systemInclude : localData.get(LocalOptionsKeys.SYSTEM_INCLUDES)) {
-        for (String systemInclude : systemIncludes) {
-            arguments.add("-isystem");
-            arguments.add(systemInclude);
+            // Add local system includes
+            // for (String systemInclude : localData.get(LocalOptionsKeys.SYSTEM_INCLUDES)) {
+            for (String systemInclude : systemIncludes) {
+                arguments.add("-isystem");
+                arguments.add(systemInclude);
+            }
         }
 
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
