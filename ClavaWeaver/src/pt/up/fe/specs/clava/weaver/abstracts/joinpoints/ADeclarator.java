@@ -801,21 +801,21 @@ public abstract class ADeclarator extends ANamedDecl {
     }
 
     /**
-     * Replaces the first child, or inserts the join point if no child is present
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public void setFirstChildImpl(AJoinPoint node) {
-        this.aNamedDecl.setFirstChildImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aNamedDecl.setFirstChildImpl(node);
     }
 
     /**
-     * Replaces the last child, or inserts the join point if no child is present
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public void setLastChildImpl(AJoinPoint node) {
-        this.aNamedDecl.setLastChildImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aNamedDecl.setLastChildImpl(node);
     }
 
     /**

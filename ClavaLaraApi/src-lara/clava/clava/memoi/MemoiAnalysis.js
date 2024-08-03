@@ -1,7 +1,6 @@
 import { JSONtoFile } from "lara-js/api/core/output.js";
 import { debug } from "lara-js/api/lara/core/LaraCore.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { Call } from "../../Joinpoints.js";
 import MemoiTarget from "./MemoiTarget.js";
 import MemoiUtils from "./MemoiUtils.js";
 /**
@@ -27,7 +26,8 @@ export default class MemoiAnalysis {
         const targets = [];
         const report = new FailReport();
         const processed = {};
-        for (const $call of Query.search(Call)) {
+        for (const $jp of Query.search("call")) {
+            const $call = $jp;
             // find function or skip
             const $func = $call.function;
             if ($func === undefined) {

@@ -1,5 +1,4 @@
 import Query from "lara-js/api/weaver/Query.js";
-import { Call, FunctionJp } from "../../Joinpoints.js";
 import MemoiUtils from "./MemoiUtils.js";
 export default class MemoiTarget {
     sig;
@@ -43,11 +42,11 @@ export default class MemoiTarget {
     }
     static fromSig(sig) {
         sig = MemoiUtils.normalizeSig(sig);
-        const $func = Query.search(FunctionJp, {
+        const $func = Query.search("function", {
             signature: (signature) => sig === MemoiUtils.normalizeSig(signature),
         }).first();
         if ($func === undefined) {
-            const $call = Query.search(Call, {
+            const $call = Query.search("call", {
                 signature: (signature) => sig === MemoiUtils.normalizeSig(signature),
             }).first();
             if ($call === undefined) {
@@ -58,7 +57,7 @@ export default class MemoiTarget {
         return MemoiTarget.fromFunction($func);
     }
     findNumCallSites() {
-        return Query.search(Call, {
+        return Query.search("call", {
             signature: (signature) => this.sig === MemoiUtils.normalizeSig(signature),
         }).get().length;
     }
@@ -94,14 +93,14 @@ export default class MemoiTarget {
             return !normalTypes.includes(e);
         });
         if (inputsInvalid) {
-            throw `The inputs of the target function '${this.sig}' are not supported.`;
+            throw (`The inputs of the target function '${this.sig}' are not supported.`);
         }
         const outputTestArray = this.numOutputs == 1 ? normalTypes : pointerTypes;
         const outputsInvalid = this.outputTypes.some(function (e) {
             return !outputTestArray.includes(e);
         });
         if (outputsInvalid) {
-            throw `The outputs of the target function '${this.sig}' are not supported.`;
+            throw (`The outputs of the target function '${this.sig}' are not supported.`);
         }
         // if the output are valid, drop the pointer from the type
         this.outputTypes = this.outputTypes.map(function (e) {

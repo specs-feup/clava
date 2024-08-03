@@ -1,5 +1,5 @@
 import Query from "lara-js/api/weaver/Query.js";
-import { ArrayAccess, BinaryOp, Expression, FunctionJp, Loop, Param, Scope, Statement, UnaryOp, Vardecl, Varref, } from "../../Joinpoints.js";
+import { ArrayAccess, BinaryOp, Expression, Loop, Param, Scope, Statement, UnaryOp, Vardecl, Varref } from "../../Joinpoints.js";
 import Logger from "../../lara/code/Logger.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 const interfaces = {};
@@ -19,7 +19,7 @@ export default class TraceInstrumentation {
         let root;
         const filename = funName + ".dot";
         logger = new Logger(undefined, filename);
-        for (const elem of Query.search(FunctionJp).chain()) {
+        for (const elem of Query.search("function").chain()) {
             if (elem["function"].name == funName)
                 root = elem["function"];
         }
@@ -44,12 +44,12 @@ export default class TraceInstrumentation {
         }
         const children = scope.children;
         //Get global vars as interfaces
-        for (const elem of Query.search(Vardecl)) {
+        for (const elem of Query.search("vardecl")) {
             if (elem.isGlobal)
                 registerInterface(elem);
         }
         //Get local vars
-        for (const elem of Query.search(FunctionJp, { name: funName }).search(Vardecl)) {
+        for (const elem of Query.search("function", { name: funName }).search("vardecl")) {
             registerLocal(elem);
         }
         //Begin graph and create counters
@@ -445,7 +445,8 @@ function getInfo(node) {
     return info;
 }
 function handleExpression(node) {
-    if (node.children.length == 3 && node.children[0] instanceof Expression) {
+    if (node.children.length == 3 &&
+        node.children[0] instanceof Expression) {
         //Build comparison
         const cmpInfo = getInfo(node.children[0].children[0]);
         //Build true value

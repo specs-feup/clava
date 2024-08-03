@@ -50,11 +50,11 @@ export default class Timer extends TimerBase {
         // Declare variable for time interval, which uses calculation as initialization
         const timeIntervalVar = IdGenerator.next("clava_timing_duration_");
         // Create literal node with calculation of time interval
-        const $timingResult = ClavaJoinPoints.exprLiteral("long long " + this._timer_cpp_calc_interval(startVar, endVar, cppUnit, timeIntervalVar));
+        const $timingResult = ClavaJoinPoints.exprLiteral(this._timer_cpp_calc_interval(startVar, endVar, cppUnit, timeIntervalVar));
         // Build message
         logger
             .append(prefix)
-            .appendLong(timeIntervalVar);
+            .appendLong(this._timer_cpp_print_interval(cppUnit, timeIntervalVar));
         if (this.printUnit) {
             logger.append(this.timeUnits.getUnitsString());
         }
@@ -68,8 +68,10 @@ export default class Timer extends TimerBase {
         }
         const $startVarDecl = ClavaJoinPoints.stmtLiteral(this._timer_cpp_define_time_var(startVar));
         const $endVarDecl = ClavaJoinPoints.stmtLiteral(this._timer_cpp_define_time_var(endVar));
+        const $timingResultDecl = ClavaJoinPoints.varDeclNoInit(timeIntervalVar, ClavaJoinPoints.typeLiteral("std::chrono::high_resolution_clock::duration"));
         $insertionTic.insertBefore($startVarDecl);
         $insertionTic.insertBefore($endVarDecl);
+        $insertionTic.insertBefore($timingResultDecl);
         let afterJp = undefined;
         // Check if $end is a scope
         if ($end instanceof Scope) {
@@ -199,7 +201,10 @@ QueryPerformanceFrequency(&${timeFrequencyVar});`;
         return `${timeVar} = std::chrono::high_resolution_clock::now();`;
     }
     _timer_cpp_calc_interval(startVar, endVar, unit, differentialVar) {
-        return `${differentialVar} = std::chrono::duration_cast<std::chrono::${unit}>(${endVar} - ${startVar}).count()`;
+        return `${differentialVar} = ${endVar} - ${startVar}`;
+    }
+    _timer_cpp_print_interval(unit, differentialVar) {
+        return `std::chrono::duration_cast<std::chrono::${unit}>(${differentialVar}).count()`;
     }
 }
 //# sourceMappingURL=Timer.js.map
