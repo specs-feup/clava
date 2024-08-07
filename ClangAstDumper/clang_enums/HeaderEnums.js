@@ -47,11 +47,6 @@ export default class HeaderEnums {
       path.join(llvmFolder, "../../../include"),
     ];
 
-    const cmd = [compilerCmd, ...args];
-
-    const fullCmd = cmd.join(" ").replaceAll("\\", "/");
-
-    console.log("Executing command '" + [compilerCmd, ...args].join(" ") + "'");
     const result = spawnSync(compilerCmd, args, {
       shell: true,
       maxBuffer: 1024 * 1024 * 1024,

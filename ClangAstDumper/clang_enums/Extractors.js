@@ -19,7 +19,6 @@ export function simpleExtractor(enumName, lines, occurence) {
     if (searching) {
       // Find enum
       const matchResult = line.match(enumNameRegex);
-
       if (matchResult == null) {
         continue;
       }

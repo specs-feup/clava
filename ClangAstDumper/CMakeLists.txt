@@ -66,7 +66,6 @@ add_custom_target (
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 
-# Plugin target is not compiling on Windows (MinGW), compile only the 'tool' target
 add_library(plugin MODULE ${SOURCE_FILES} src/plugin.cpp)
 target_compile_features(plugin PRIVATE cxx_std_20)
 add_dependencies(plugin clang_enums)
@@ -82,9 +81,7 @@ else()
 	set(PROCESSOR_PREFIX "X86")
 endif()
 
-
-
-target_link_libraries( tool
+SET( LINKER_LIBS
     clangAnalysis
     clangAPINotes
     clangARCMigrate
@@ -207,3 +204,6 @@ target_link_libraries( tool
     LLVMSupport
     LLVMDemangle
 )
+
+target_link_libraries(plugin PRIVATE ${LINKER_LIBS})
+target_link_libraries(tool PRIVATE ${LINKER_LIBS})
