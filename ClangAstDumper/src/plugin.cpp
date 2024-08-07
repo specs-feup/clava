@@ -8,7 +8,7 @@ public:
   ~Plugin() override { DumpResources::finish(); }
 
   virtual std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI,
-                                                         StringRef file);
+                                                         StringRef file) override;
 
   bool ParseArgs(const CompilerInstance &CI,
                  const std::vector<std::string> &args) override {
