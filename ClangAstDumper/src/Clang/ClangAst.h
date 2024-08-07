@@ -12,11 +12,6 @@
 #include <clang/AST/RecursiveASTVisitor.h>
 #include <clang/Frontend/FrontendActions.h>
 
-#include <fcntl.h>
-#include <pthread.h>
-#include <sys/mman.h>
-#include <unistd.h>
-
 #include "../ClangAstDumper/ClangAstDumper.h"
 
 using namespace clang;
@@ -75,68 +70,6 @@ class IncludeDumper : public PPCallbacks {
     const clang::SourceManager &sm;
 };
 
-struct SharedData {
-    pthread_mutex_t mutex;
-    int counter;
-};
-
-static const char *const SHM_NAME = "/clang_shared_counter";
-static const size_t SHM_SIZE = sizeof(struct SharedData);
-
-class SharedCounter {
-  public:
-    SharedCounter() {
-      // Open shared memory object
-      shm_fd = shm_open(SHM_NAME, O_CREAT | O_RDWR, 0666);
-      if (shm_fd == -1) {
-        perror("shm_open");
-        exit(1);
-      }
-
-      // Set the size of the shared memory object
-      if (ftruncate(shm_fd, SHM_SIZE) == -1) {
-        perror("ftruncate");
-        exit(1);
-      }
-
-      // Map shared memory object
-      shm_ptr =
-          mmap(0, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
-      if (shm_ptr == MAP_FAILED) {
-        perror("mmap");
-        exit(1);
-      }
-
-      // Initialize shared memory
-      data = (SharedData *)shm_ptr;
-
-      // Initialize the mutex only if it's the first process creating it
-      if (pthread_mutex_init(&data->mutex, nullptr) != 0 && errno != EBUSY) {
-        perror("pthread_mutex_init");
-        exit(1);
-      }
-    }
-
-    ~SharedCounter() {
-      // Unmap shared memory
-      munmap(shm_ptr, SHM_SIZE);
-      // Close shared memory object
-      close(shm_fd);
-    }
-
-    int fetch_and_increment() {
-      pthread_mutex_lock(&data->mutex);
-      int ret = data->counter++;
-      pthread_mutex_unlock(&data->mutex);
-      return ret;
-    }
-
-  private:
-    int shm_fd;
-    void *shm_ptr;
-    SharedData *data;
-};
-
 // For each source file provided to the tool, a new FrontendAction is created.
 class DumpAstAction : public ASTFrontendAction {
   public:
@@ -146,9 +79,6 @@ class DumpAstAction : public ASTFrontendAction {
     void ExecuteAction() override;
 
     void dumpCompilerInstanceData(CompilerInstance &CI, StringRef file);
-
-  private:
-    SharedCounter Counter;
 };
 
 // By implementing RecursiveASTVisitor, we can specify which AST nodes

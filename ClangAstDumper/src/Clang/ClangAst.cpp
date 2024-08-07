@@ -228,7 +228,7 @@ DumpAstAction::CreateASTConsumer(CompilerInstance &CI, StringRef file) {
     
     // If runId is 0 (default value), use the global counter instead
     if (counter == 0) {
-        counter = Counter.fetch_and_increment();
+        // TODO: Replace with a global counter. Necessary to enable usage in Clava Node.
     }
 
     dumpCompilerInstanceData(CI, file);
