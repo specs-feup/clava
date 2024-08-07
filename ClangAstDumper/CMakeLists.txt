@@ -62,11 +62,11 @@ set(SOURCE_FILES
 
 add_custom_target (
     clang_enums
-    COMMAND node --experimental-default-type="module" clang_enums/Main.js ${CLANG_VERSION} src/
+    COMMAND node clang_enums/Main.mjs ${CLANG_VERSION} src/	
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 
-
+# Plugin target is not compiling on Windows (MinGW), compile only the 'tool' target
 add_library(plugin MODULE ${SOURCE_FILES} src/plugin.cpp)
 target_compile_features(plugin PRIVATE cxx_std_20)
 add_dependencies(plugin clang_enums)
@@ -81,6 +81,8 @@ if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
 else()
 	set(PROCESSOR_PREFIX "X86")
 endif()
+
+
 
 target_link_libraries( tool
     clangAnalysis

@@ -39,22 +39,25 @@ export default class HeaderEnums {
   process(compilerCmd, llvmFolder) {
     const headerFile = path.join(llvmFolder, this.headerFilename);
 
-    // Clean folder and set working directory
-    const result = spawnSync(
-      compilerCmd,
-      [
-        "-E",
-        path.resolve(headerFile),
-        "-isystem",
-        path.join(llvmFolder, "../../../include"),
-      ],
-      {
-        stdio: ["ignore", "pipe", "pipe"],
-        maxBuffer: 1024 * 1024 * 1024,
-      }
-    );
+    const args = [
+      "-Wno-deprecated",
+      "-E",
+      path.resolve(headerFile),
+      "-isystem",
+      path.join(llvmFolder, "../../../include"),
+    ];
 
-    if (result.status !== 0) {
+    const cmd = [compilerCmd, ...args];
+
+    const fullCmd = cmd.join(" ").replaceAll("\\", "/");
+
+    console.log("Executing command '" + [compilerCmd, ...args].join(" ") + "'");
+    const result = spawnSync(compilerCmd, args, {
+      shell: true,
+      maxBuffer: 1024 * 1024 * 1024,
+    });
+
+    if (result.status !== null && result.status !== 0) {
       throw new Error(
         "Could not process header '" +
           path.resolve(headerFile) +
@@ -118,11 +121,7 @@ export default class HeaderEnums {
       const enumValues = this.enumMap[enumName].getEnumValues();
 
       const filename =
-        "enums_" +
-        headerFile.replace(".", "_") +
-        "_" +
-        enumName +
-        ".txt";
+        "enums_" + headerFile.replace(".", "_") + "_" + enumName + ".txt";
 
       const code = enumValues.join(",\n") + ";";
 
