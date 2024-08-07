@@ -213,26 +213,22 @@ export default class CMaker extends BenchmarkCompilationEngine {
         Io.writeFile(cmakeFile, this.getCode());
         const builderFolderpath = Io.mkdir(builderFolder).getAbsolutePath();
         // Execute CMake
-        let cmakeCmd = 'cmake "' + cmakeFile.getParentFile().getAbsolutePath() + '"';
+        let cmakeCmd = ["cmake", `"${cmakeFile.getParentFile().getAbsolutePath()}"`];
         if (cmakeFlags !== undefined) {
-            cmakeCmd += " " + cmakeFlags;
+            cmakeCmd.push(cmakeFlags);
         }
         if (this.generator !== undefined) {
-            cmakeCmd += ` -G "${this.generator}"`;
+            cmakeCmd.push(`-G "${this.generator}"`);
         }
         if (this.compiler !== undefined) {
-            cmakeCmd += " " + this.compiler.getCommandArgs();
+            cmakeCmd.push(this.compiler.getCommandArgs());
         }
-        debug("Executing CMake, calling '" +
-            cmakeCmd +
-            "' at ' " +
-            builderFolderpath +
-            " '");
+        debug(() => `Executing CMake, calling '${cmakeCmd.join(" ")}' at '${builderFolderpath}'`);
         const cmakeOutput = new ProcessExecutor();
         cmakeOutput
             .setPrintToConsole(this.printToConsole)
             .setWorkingDir(builderFolderpath)
-            .execute(cmakeCmd);
+            .execute(...cmakeCmd);
         const consoleOutput = cmakeOutput.getConsoleOutput();
         if (cmakeOutput.getReturnValue() === 0 && consoleOutput != undefined) {
             debug("CMake output:");
