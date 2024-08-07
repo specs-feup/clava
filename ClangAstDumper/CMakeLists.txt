@@ -81,7 +81,7 @@ else()
 	set(PROCESSOR_PREFIX "X86")
 endif()
 
-SET( LINKER_LIBS
+target_link_libraries( tool
     clangAnalysis
     clangAPINotes
     clangARCMigrate
@@ -204,6 +204,3 @@ SET( LINKER_LIBS
     LLVMSupport
     LLVMDemangle
 )
-
-target_link_libraries(plugin PRIVATE ${LINKER_LIBS})
-target_link_libraries(tool PRIVATE ${LINKER_LIBS})
