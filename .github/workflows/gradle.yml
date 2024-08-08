@@ -1,0 +1,68 @@
+# This workflow will build a Java project with Ant
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
+
+name: Java
+
+on:
+  push:
+  pull_request:
+
+  # Daily at midnight
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  checks: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      DEFAULT_BRANCH: ${{ github.base_ref || 'master' }}
+
+    steps:
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 17
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: current
+        dependency-graph: generate-and-submit
+
+    - name: Checkout Clava
+      uses: actions/checkout@v4
+      with:
+        path: clava
+
+    - name: Check if branch exists on lara-framework
+      id: Branch-lara-framework
+      run: git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l
+
+    - name: Check if branch exists on specs-java-libs
+      id: Branch-specs-java-libs
+      run: git ls-remote --heads https://github.com/specs-feup/specs-java-libs.git refs/heads/${{ env.BRANCH_NAME }} | wc -l
+
+    - name: Checkout lara-framework
+      uses: actions/checkout@v4
+      with:
+        repository: specs-feup/lara-framework
+        path: lara-framework
+        ref: ${{ steps.Branch-lara-framework.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+        
+    - name: Checkout specs-java-libs
+      uses: actions/checkout@v4
+      with:
+        repository: specs-feup/specs-java-libs
+        path: specs-java-libs
+        ref: ${{ steps.Branch-specs-java-libs.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+
+    - name: Build with Gradle
+      run: |
+        cd clava/ClavaWeaver
+        gradle build --no-daemon
