@@ -772,9 +772,14 @@ public class AstFactory {
     }
 
 
+    public static AEmptyStmt emptyStmt() {
+        var stmt = CxxWeaver.getFactory().emptyStmt();
+        return CxxJoinpoints.create(stmt, AEmptyStmt.class);
+    }
+
     public static AProgram program() {
         var app = CxxWeaver.getFactory().app(Collections.emptyList());
         return CxxJoinpoints.create(app, AProgram.class);
     }
-
+    
 }
