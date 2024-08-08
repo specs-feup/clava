@@ -853,4 +853,13 @@ export default class ClavaJoinPoints {
   static declLiteral(declString: string): Joinpoints.Decl {
     return wrapJoinPoint(ClavaJavaTypes.AstFactory.declLiteral(declString));
   }
+
+ /**
+   * Creates a new empty join point 'program'.
+   *
+   * @param declString - The literal code of the decl.
+   */
+    static program(): Joinpoints.Program {
+      return wrapJoinPoint(ClavaJavaTypes.AstFactory.program());
+    }
 }
