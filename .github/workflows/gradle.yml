@@ -79,9 +79,10 @@ jobs:
 
   build-js:
     name: Build JS
+    needs: build-java
     strategy:
+      fail-fast: false
       matrix:
-        fail-fast: false
         node-version: ['20.x', '18.x']
         os: [ubuntu-latest, windows-latest, macos-latest]
 
