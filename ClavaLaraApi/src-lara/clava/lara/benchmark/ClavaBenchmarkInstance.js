@@ -5,6 +5,7 @@ import Weaver from "lara-js/api/weaver/Weaver.js";
 import Clava from "../..//clava/Clava.js";
 import { Pragma } from "../../Joinpoints.js";
 import CMaker from "../../clava/cmake/CMaker.js";
+import ClavaJoinPoints from "../../clava/ClavaJoinPoints.js";
 /**
  * Instance of a Clava benchmark.
  *
@@ -40,8 +41,25 @@ export default class ClavaBenchmarkInstance extends BenchmarkInstance {
         }
         return exe;
     }
-    loadPrivate() { }
-    closePrivate() { }
+    /**
+     * Speciallized implementation for Clava that automatically saves and restores the AST, extending classes just need to implement addCode() and loadPrologue().
+     */
+    loadPrivate() {
+        // Execute configuration for current instance
+        this.loadPrologue();
+        // Pust an empty AST to the top of the stack
+        Clava.pushAst(ClavaJoinPoints.program());
+        // Add code
+        this.addCode();
+        // Rebuild
+        Clava.rebuild();
+    }
+    closePrivate() {
+        // Restore any necessary configurations
+        this.closeEpilogue();
+        // Restore previous AST
+        Clava.popAst();
+    }
     loadCached(astFile) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         console.log(`Loading cached AST from file ${astFile.getAbsolutePath()}...`);
