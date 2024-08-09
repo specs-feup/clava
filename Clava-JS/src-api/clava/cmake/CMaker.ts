@@ -286,20 +286,27 @@ export default class CMaker extends BenchmarkCompilationEngine {
     const builderFolderpath = Io.mkdir(builderFolder).getAbsolutePath();
 
     // Execute CMake
-    let cmakeCmd = ["cmake", `"${cmakeFile.getParentFile().getAbsolutePath()}"`];
+    let cmakeCmd = [
+      "cmake",
+      `"${cmakeFile.getParentFile().getAbsolutePath()}"`,
+    ];
     if (cmakeFlags !== undefined) {
       cmakeCmd.push(cmakeFlags);
     }
 
     if (this.generator !== undefined) {
-      cmakeCmd.push(`-G "${this.generator}"`);
+      cmakeCmd.push(`-G`);
+      cmakeCmd.push(`"${this.generator}"`);
     }
 
     if (this.compiler !== undefined) {
       cmakeCmd.push(this.compiler.getCommandArgs());
     }
 
-    debug(() =>`Executing CMake, calling '${cmakeCmd.join(" ")}' at '${builderFolderpath}'`);
+    debug(
+      () =>
+        `Executing CMake, calling '${cmakeCmd.join(" ")}' at '${builderFolderpath}'`
+    );
     const cmakeOutput = new ProcessExecutor();
 
     cmakeOutput

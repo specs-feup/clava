@@ -14,6 +14,23 @@ import ClavaJoinPoints from "../../clava/ClavaJoinPoints.js";
  * Implements _compilePrivate and .getKernel().
  */
 export default abstract class ClavaBenchmarkInstance extends BenchmarkInstance {
+  cmaker: CMaker | undefined;
+  cmakerProvider: () => CMaker;
+
+  constructor(name: string) {
+    super(name);
+
+    this.cmaker = undefined;
+    this.cmakerProvider = () => new CMaker(name);
+  }
+
+  setCMakerProvider(cmakerProvider: () => CMaker): void {
+    this.cmakerProvider = cmakerProvider;
+
+    // New provider set, remove CMaker
+    this.cmaker = undefined;
+  }
+
   /**
    * The output folder for this BenchmarkInstance.
    */
@@ -26,20 +43,25 @@ export default abstract class ClavaBenchmarkInstance extends BenchmarkInstance {
   }
 
   /**
-   * For compatibility reasons.
-   * 
-   * @param name 
-   * @returns 
+   * Allows to customize the CMake options used during compilation.
+   *
+   * @param name
+   * @returns
    */
-  protected getCMaker(name: string): CMaker {
-    return this.compilationEngineProvider(name);
+  protected getCMaker(): CMaker {
+    if (this.cmaker === undefined) {
+      this.cmaker = this.cmakerProvider();
+    }
+
+    return this.cmaker;
   }
 
   protected compilePrivate(): JavaClasses.File | undefined {
     const folder = this.getOutputFolder();
     Clava.writeCode(folder);
 
-    const cmaker = this.getCompilationEngine() as CMaker;
+    //const cmaker = this.getCompilationEngine() as CMaker;
+    const cmaker = this.getCMaker();
 
     cmaker.addCurrentAst();
 
@@ -51,9 +73,6 @@ export default abstract class ClavaBenchmarkInstance extends BenchmarkInstance {
 
     return exe;
   }
-
-
-
 
   /**
    * Speciallized implementation for Clava that automatically saves and restores the AST, extending classes just need to implement addCode() and loadPrologue().
@@ -72,16 +91,13 @@ export default abstract class ClavaBenchmarkInstance extends BenchmarkInstance {
     Clava.rebuild();
   }
 
-
   protected closePrivate(): void {
-      // Restore any necessary configurations
-      this.closeEpilogue();
+    // Restore any necessary configurations
+    this.closeEpilogue();
 
-      // Restore previous AST
-      Clava.popAst();
+    // Restore previous AST
+    Clava.popAst();
   }
-
-  
 
   protected loadCached(astFile: JavaClasses.File) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -107,7 +123,6 @@ export default abstract class ClavaBenchmarkInstance extends BenchmarkInstance {
     return $pragma.target;
   }
 
-    
   /*** FUNCTIONS TO IMPLEMENT ***/
 
   /**
@@ -121,8 +136,7 @@ export default abstract class ClavaBenchmarkInstance extends BenchmarkInstance {
   protected abstract addCode(): void;
 
   /**
-   * 
+   *
    */
   protected abstract closeEpilogue(): void;
-  
 }

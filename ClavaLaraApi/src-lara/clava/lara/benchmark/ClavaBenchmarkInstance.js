@@ -12,6 +12,18 @@ import ClavaJoinPoints from "../../clava/ClavaJoinPoints.js";
  * Implements _compilePrivate and .getKernel().
  */
 export default class ClavaBenchmarkInstance extends BenchmarkInstance {
+    cmaker;
+    cmakerProvider;
+    constructor(name) {
+        super(name);
+        this.cmaker = undefined;
+        this.cmakerProvider = () => new CMaker(name);
+    }
+    setCMakerProvider(cmakerProvider) {
+        this.cmakerProvider = cmakerProvider;
+        // New provider set, remove CMaker
+        this.cmaker = undefined;
+    }
     /**
      * The output folder for this BenchmarkInstance.
      */
@@ -22,18 +34,22 @@ export default class ClavaBenchmarkInstance extends BenchmarkInstance {
         return new CMaker(name);
     }
     /**
-     * For compatibility reasons.
+     * Allows to customize the CMake options used during compilation.
      *
      * @param name
      * @returns
      */
-    getCMaker(name) {
-        return this.compilationEngineProvider(name);
+    getCMaker() {
+        if (this.cmaker === undefined) {
+            this.cmaker = this.cmakerProvider();
+        }
+        return this.cmaker;
     }
     compilePrivate() {
         const folder = this.getOutputFolder();
         Clava.writeCode(folder);
-        const cmaker = this.getCompilationEngine();
+        //const cmaker = this.getCompilationEngine() as CMaker;
+        const cmaker = this.getCMaker();
         cmaker.addCurrentAst();
         const exe = cmaker.build(folder);
         if (exe !== undefined) {

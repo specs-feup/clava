@@ -213,12 +213,16 @@ export default class CMaker extends BenchmarkCompilationEngine {
         Io.writeFile(cmakeFile, this.getCode());
         const builderFolderpath = Io.mkdir(builderFolder).getAbsolutePath();
         // Execute CMake
-        let cmakeCmd = ["cmake", `"${cmakeFile.getParentFile().getAbsolutePath()}"`];
+        let cmakeCmd = [
+            "cmake",
+            `"${cmakeFile.getParentFile().getAbsolutePath()}"`,
+        ];
         if (cmakeFlags !== undefined) {
             cmakeCmd.push(cmakeFlags);
         }
         if (this.generator !== undefined) {
-            cmakeCmd.push(`-G "${this.generator}"`);
+            cmakeCmd.push(`-G`);
+            cmakeCmd.push(`"${this.generator}"`);
         }
         if (this.compiler !== undefined) {
             cmakeCmd.push(this.compiler.getCommandArgs());
