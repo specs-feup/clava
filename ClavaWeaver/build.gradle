@@ -1,5 +1,5 @@
 plugins {
- 	id 'distribution'
+    id 'distribution'
 }
 
 // Java project
@@ -14,77 +14,84 @@ java {
 }
 
 
+application {
+
+    // For most input codes this is not necessary, but for the largest example we have tested (LSU-gcc, ~700.000 LoC)
+    // it needs a large amount of memory
+    applicationDefaultJvmArgs = ["-Xmx6g"]
+}
+
 // Repositories providers
 repositories {
-	// Gearman
-	maven { url "https://oss.sonatype.org/content/repositories/snapshots"}
+    // Gearman
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 
     mavenCentral()
 }
 
 dependencies {
-	implementation "junit:junit:4.12"     
+    implementation "junit:junit:4.12"
 
 
-	implementation ":CommonsLangPlus"
-	implementation ":GsonPlus"
-	implementation ":jOptions"
-	implementation ":JsEngine"
-	implementation ":SpecsUtils"
-	implementation ":XStreamPlus"
-	implementation ":tdrcLibrary"
+    implementation ":CommonsLangPlus"
+    implementation ":GsonPlus"
+    implementation ":jOptions"
+    implementation ":JsEngine"
+    implementation ":SpecsUtils"
+    implementation ":XStreamPlus"
+    implementation ":tdrcLibrary"
 
-	implementation ":LanguageSpecification"
-	implementation ":LaraCommonLanguageApi"
-	implementation ":LaraDoc"
-	implementation ":LaraFramework"
-	implementation ":LARAI"
-	implementation ":LaraLoc"
-	implementation ":LaraUnit"
-	implementation ":LaraUtils"
-	implementation ":WeaverGenerator"
-	implementation ":WeaverInterface"
-	
-	implementation ":AntarexClavaApi"
-	implementation ":ClangAstParser"
-	implementation ":ClavaAst"
-	implementation ":ClavaHls"
-	implementation ":ClavaLaraApi"
-	implementation ":ClavaWeaverSpecs"
+    implementation ":LanguageSpecification"
+    implementation ":LaraCommonLanguageApi"
+    implementation ":LaraDoc"
+    implementation ":LaraFramework"
+    implementation ":LARAI"
+    implementation ":LaraLoc"
+    implementation ":LaraUnit"
+    implementation ":LaraUtils"
+    implementation ":WeaverGenerator"
+    implementation ":WeaverInterface"
+
+    implementation ":AntarexClavaApi"
+    implementation ":ClangAstParser"
+    implementation ":ClavaAst"
+    implementation ":ClavaHls"
+    implementation ":ClavaLaraApi"
+    implementation ":ClavaWeaverSpecs"
 
 
-	implementation group: 'com.google.guava', name: 'guava', version: '19.0'	
-	implementation group: 'com.google.code.gson', name: 'gson', version: '2.4'		
+    implementation group: 'com.google.guava', name: 'guava', version: '19.0'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.4'
 }
 
 java {
-	withSourcesJar()
+    withSourcesJar()
 }
 
 // Project sources
 sourceSets {
-   main {
-      java {
-         srcDir 'src'
-         srcDir 'test'		 
-      }
+    main {
+        java {
+            srcDir 'src'
+            srcDir 'test'
+        }
 
-	  resources {
-		srcDir 'resources'
-	  }      
-   }
-	
-   
-   test {
-      java {
-         srcDir 'test'
-      }
-	  
-	  resources {
-		srcDir 'resources'
-	  }
-   }
-   
+        resources {
+            srcDir 'resources'
+        }
+    }
+
+
+    test {
+        java {
+            srcDir 'test'
+        }
+
+        resources {
+            srcDir 'resources'
+        }
+    }
+
 }
 
 application {
@@ -93,9 +100,9 @@ application {
 
 // Clava
 task clava(type: JavaExec) {
-	group = "Execution"
-	description = "Launches Clava"
-	classpath = sourceSets.main.runtimeClasspath
-	mainClass = 'pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher'
-	args = []
+    group = "Execution"
+    description = "Launches Clava"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher'
+    args = []
 }
