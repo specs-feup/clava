@@ -1,4 +1,4 @@
-import { unwrapJoinPoint, wrapJoinPoint, } from "lara-js/api/LaraJoinPoint.js";
+import { unwrapJoinPoint, wrapJoinPoint } from "lara-js/api/LaraJoinPoint.js";
 import { arrayFromArgs, flattenArgsArray, } from "lara-js/api/lara/core/LaraCore.js";
 import * as Joinpoints from "../Joinpoints.js";
 import Clava from "./Clava.js";
@@ -124,7 +124,10 @@ export default class ClavaJoinPoints {
      * @param callArgs - The arguments of the function.
      */
     static call($function, ...callArgs) {
-        return wrapJoinPoint(ClavaJavaTypes.AstFactory.callFromFunction(unwrapJoinPoint($function), ...unwrapJoinPoint(flattenArgsArray(callArgs))));
+        return wrapJoinPoint(ClavaJavaTypes.AstFactory.callFromFunction(unwrapJoinPoint($function), 
+        // TODO: Made this change without testing. Similar case to scope()
+        //...unwrapJoinPoint(flattenArgsArray(callArgs))
+        unwrapJoinPoint(flattenArgsArray(callArgs))));
     }
     /**
      * Creates a new join point 'call'.
@@ -158,7 +161,7 @@ export default class ClavaJoinPoints {
             }
             return $normalizedStmt;
         });
-        return wrapJoinPoint(ClavaJavaTypes.AstFactory.scope(...unwrapJoinPoint($stmts)));
+        return wrapJoinPoint(ClavaJavaTypes.AstFactory.scope(unwrapJoinPoint($stmts)));
     }
     static varRef(decl, $type) {
         if (typeof decl === "string") {
@@ -465,10 +468,10 @@ export default class ClavaJoinPoints {
         return wrapJoinPoint(ClavaJavaTypes.AstFactory.declLiteral(declString));
     }
     /**
-      * Creates a new empty join point 'program'.
-      *
-      * @param declString - The literal code of the decl.
-      */
+     * Creates a new empty join point 'program'.
+     *
+     * @param declString - The literal code of the decl.
+     */
     static program() {
         return wrapJoinPoint(ClavaJavaTypes.AstFactory.program());
     }

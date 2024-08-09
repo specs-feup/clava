@@ -1,7 +1,4 @@
-import {
-  unwrapJoinPoint,
-  wrapJoinPoint,
-} from "lara-js/api/LaraJoinPoint.js";
+import { unwrapJoinPoint, wrapJoinPoint } from "lara-js/api/LaraJoinPoint.js";
 import {
   arrayFromArgs,
   flattenArgsArray,
@@ -221,7 +218,9 @@ export default class ClavaJoinPoints {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.callFromFunction(
         unwrapJoinPoint($function),
-        ...unwrapJoinPoint(flattenArgsArray(callArgs))
+        // TODO: Made this change without testing. Similar case to scope()
+        //...unwrapJoinPoint(flattenArgsArray(callArgs))
+        unwrapJoinPoint(flattenArgsArray(callArgs))
       )
     );
   }
@@ -286,7 +285,7 @@ export default class ClavaJoinPoints {
     });
 
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.scope(...unwrapJoinPoint($stmts))
+      ClavaJavaTypes.AstFactory.scope(unwrapJoinPoint($stmts))
     );
   }
 
@@ -795,7 +794,7 @@ export default class ClavaJoinPoints {
 
     throw new Error(
       "ClavaJoinPoints.type: source is join point but is not a type, nor has a .type property: " +
-      source.joinPointType
+        source.joinPointType
     );
   }
 
@@ -854,12 +853,12 @@ export default class ClavaJoinPoints {
     return wrapJoinPoint(ClavaJavaTypes.AstFactory.declLiteral(declString));
   }
 
- /**
+  /**
    * Creates a new empty join point 'program'.
    *
    * @param declString - The literal code of the decl.
    */
-    static program(): Joinpoints.Program {
-      return wrapJoinPoint(ClavaJavaTypes.AstFactory.program());
-    }
+  static program(): Joinpoints.Program {
+    return wrapJoinPoint(ClavaJavaTypes.AstFactory.program());
+  }
 }

@@ -159,9 +159,13 @@ public class AstFactory {
                 AExpression.class);
     }
 
-    public static ACall callFromFunction(AFunction function, AJoinPoint... args) {
+    public static ACall callFromFunction(AFunction function, Object[] args) {
+        return callFromFunction(function, SpecsCollections.asListT(AJoinPoint.class, args));
+    }
+
+    public static ACall callFromFunction(AFunction function, List<? extends AJoinPoint> args) {
         var functionDecl = (FunctionDecl) function.getNode();
-        List<Expr> exprArgs = Arrays.stream(args)
+        List<Expr> exprArgs = args.stream()
                 .map(arg -> (Expr) arg.getNode())
                 .collect(Collectors.toList());
 
@@ -426,8 +430,8 @@ public class AstFactory {
         return CxxJoinpoints.create(intLiteral, AExpression.class);
     }
 
-    public static AScope scope(AStatement... statements) {
-        return scope(Arrays.asList(statements));
+    public static AScope scope(Object[] statements) {
+        return scope(SpecsCollections.asListT(AStatement.class, statements));
     }
 
     public static AScope scope(List<? extends AStatement> statements) {
@@ -781,5 +785,5 @@ public class AstFactory {
         var app = CxxWeaver.getFactory().app(Collections.emptyList());
         return CxxJoinpoints.create(app, AProgram.class);
     }
-    
+
 }
