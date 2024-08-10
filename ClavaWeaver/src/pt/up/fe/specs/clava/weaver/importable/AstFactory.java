@@ -430,6 +430,10 @@ public class AstFactory {
         return CxxJoinpoints.create(intLiteral, AExpression.class);
     }
 
+    public static AScope scope() {
+        return scope(Collections.emptyList());
+    }
+
     public static AScope scope(Object[] statements) {
         return scope(SpecsCollections.asListT(AStatement.class, statements));
     }
