@@ -30,7 +30,7 @@ aspectdef checkForOpenMPCanonicalForm
 			throw "Not a for stmt: " + $loop.astName;
 		}
 
-		var innerloopindex = $loop.astAncestor('FunctionDecl').name + '_' + $loop.rank.join('_');
+		var innerloopindex = $loop.getAstAncestor('FunctionDecl').name + '_' + $loop.rank.join('_');
 		if (LoopOmpAttributes[innerloopindex] === undefined)
 			call checkForOpenMPCanonicalForm($loop);
 
@@ -297,7 +297,7 @@ aspectdef checkForOpenMPCanonicalForm
 	LoopOmpAttributes[loopindex].DepArrays = [];
 	select $ForStmt.arrayAccess.subscript end
 	apply
-		for($varref of $subscript.descendantsAndSelf("varref"))
+		for($varref of $subscript.getDescendantsAndSelf("varref"))
 		{
 			if (LoopOmpAttributes[loopindex].loopControlVarname === $varref.name &&
 				LoopOmpAttributes[loopindex].DepArrays.indexOf($arrayAccess.arrayVar.name) === -1)

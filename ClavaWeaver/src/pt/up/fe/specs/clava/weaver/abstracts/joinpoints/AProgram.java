@@ -475,7 +475,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     /**
      * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
      */
-    public final boolean rebuild() {
+    public final Object rebuild() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
@@ -526,7 +526,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      * Adds a file join point to the current program
      * @param file 
      */
-    public final AJoinPoint addFile(AFile file) {
+    public final Object addFile(AFile file) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "addFile", this, Optional.empty(), file);
@@ -535,7 +535,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "addFile", this, Optional.ofNullable(result), file);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addFile", e);
         }
@@ -553,7 +553,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
      * @param filepath 
      */
-    public final AJoinPoint addFileFromPath(Object filepath) {
+    public final Object addFileFromPath(Object filepath) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "addFileFromPath", this, Optional.empty(), filepath);
@@ -562,7 +562,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "addFileFromPath", this, Optional.ofNullable(result), filepath);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addFileFromPath", e);
         }
@@ -645,32 +645,6 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     /**
      * Adds a path based on a git repository to an include that the current program depends on
      * @param gitRepo 
-     */
-    public void addExtraIncludeFromGitImpl(String gitRepo) {
-        throw new UnsupportedOperationException(get_class()+": Action addExtraIncludeFromGit not implemented ");
-    }
-
-    /**
-     * Adds a path based on a git repository to an include that the current program depends on
-     * @param gitRepo 
-     */
-    public final void addExtraIncludeFromGit(String gitRepo) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraIncludeFromGit", this, Optional.empty(), gitRepo);
-        	}
-        	this.addExtraIncludeFromGitImpl(gitRepo);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addExtraIncludeFromGit", this, Optional.empty(), gitRepo);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addExtraIncludeFromGit", e);
-        }
-    }
-
-    /**
-     * Adds a path based on a git repository to an include that the current program depends on
-     * @param gitRepo 
      * @param path 
      */
     public void addExtraIncludeFromGitImpl(String gitRepo, String path) {
@@ -725,32 +699,6 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     /**
      * Adds a path based on a git repository to a source that the current program depends on
      * @param gitRepo 
-     */
-    public void addExtraSourceFromGitImpl(String gitRepo) {
-        throw new UnsupportedOperationException(get_class()+": Action addExtraSourceFromGit not implemented ");
-    }
-
-    /**
-     * Adds a path based on a git repository to a source that the current program depends on
-     * @param gitRepo 
-     */
-    public final void addExtraSourceFromGit(String gitRepo) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraSourceFromGit", this, Optional.empty(), gitRepo);
-        	}
-        	this.addExtraSourceFromGitImpl(gitRepo);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addExtraSourceFromGit", this, Optional.empty(), gitRepo);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addExtraSourceFromGit", e);
-        }
-    }
-
-    /**
-     * Adds a path based on a git repository to a source that the current program depends on
-     * @param gitRepo 
      * @param path 
      */
     public void addExtraSourceFromGitImpl(String gitRepo, String path) {
@@ -773,34 +721,6 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addExtraSourceFromGit", e);
-        }
-    }
-
-    /**
-     * Adds a path based on a git repository to a project that the current program depends on
-     * @param gitRepo 
-     * @param libs 
-     */
-    public void addProjectFromGitImpl(String gitRepo, String[] libs) {
-        throw new UnsupportedOperationException(get_class()+": Action addProjectFromGit not implemented ");
-    }
-
-    /**
-     * Adds a path based on a git repository to a project that the current program depends on
-     * @param gitRepo 
-     * @param libs 
-     */
-    public final void addProjectFromGit(String gitRepo, String[] libs) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addProjectFromGit", this, Optional.empty(), gitRepo, libs);
-        	}
-        	this.addProjectFromGitImpl(gitRepo, libs);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addProjectFromGit", this, Optional.empty(), gitRepo, libs);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addProjectFromGit", e);
         }
     }
 
@@ -997,12 +917,9 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         actions.add("void push()");
         actions.add("void pop()");
         actions.add("void addExtraInclude(String)");
-        actions.add("void addExtraIncludeFromGit(String)");
         actions.add("void addExtraIncludeFromGit(String, String)");
         actions.add("void addExtraSource(String)");
-        actions.add("void addExtraSourceFromGit(String)");
         actions.add("void addExtraSourceFromGit(String, String)");
-        actions.add("void addProjectFromGit(String, String[])");
         actions.add("void addProjectFromGit(String, String[], String)");
         actions.add("void addExtraLib(String)");
         actions.add("void atexit(function)");
@@ -1036,39 +953,35 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         MAIN("main"),
         FILES("files"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1077,24 +990,24 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         KEYS("keys"),
         ISINSIDEHEADER("isInsideHeader"),
         ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
-        KEYTYPE("keyType"),
-        CHAINANCESTOR("chainAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
-        JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
+        GETASTANCESTOR("getAstAncestor"),
         DEPTH("depth"),
-        JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),

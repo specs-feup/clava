@@ -22,17 +22,17 @@ aspectdef SetVariableAccess
 
 	LoopOmpAttributes[loopindex].varAccess = [];
 
-	var $forFunction = $ForStmt.astAncestor('FunctionDecl');
+	var $forFunction = $ForStmt.getAstAncestor('FunctionDecl');
 	if($forFunction === undefined)
 	{
-		var $forRoot = $ForStmt.astParent;
-		while($forRoot.astParent !== undefined)
+		var $forRoot = $ForStmt.parent;
+		while($forRoot.parent !== undefined)
 		{
-			$forRoot = $forRoot.astParent;
+			$forRoot = $forRoot.parent;
 		}
 	}
 
-	var functionvarrefset = orderedVarrefs3($ForStmt.astAncestor('FunctionDecl'));
+	var functionvarrefset = orderedVarrefs3($ForStmt.getAstAncestor('FunctionDecl'));
 	var loopvarrefset = orderedVarrefs3($ForStmt);
 
 
@@ -61,8 +61,8 @@ aspectdef SetVariableAccess
 		var useExpr = (varUse === 'read') ? 'R' : (varUse === 'write') ? 'W' : 'RW';
 
 //		if(vardecl !== null && vardecl.currentRegion === undefined) {
-//			println("UNDEFINED REGION IN VARDECL " + vardecl.name +"@" + vardecl.location);
-//			println("VARDECL ROOT: " + vardecl.root.ast);
+//			console.log("UNDEFINED REGION IN VARDECL " + vardecl.name +"@" + vardecl.location);
+//			console.log("VARDECL ROOT: " + vardecl.root.ast);
 //		}
 		
 //		if (vardecl !== null || vardecl === undefined)
@@ -88,7 +88,7 @@ aspectdef SetVariableAccess
 				declpos = 'outside';
 			else if (vardeclRegion === 'scope')
 				declpos = 'inside';
-			else if (vardecl.astAncestor('FunctionDecl').name === $ForStmt.astAncestor('FunctionDecl').name)
+			else if (vardecl.getAstAncestor('FunctionDecl').name === $ForStmt.getAstAncestor('FunctionDecl').name)
 				declpos = 'outside';			
 			else
 				{
@@ -107,7 +107,7 @@ aspectdef SetVariableAccess
 			continue;
 		if ($varref.isFunctionArgument === true)
 		{
-			var callJP = $varref.ancestor('call');
+			var callJP = $varref.getAncestor('call');
 			if (safefunctionCallslist.indexOf(callJP.name) === -1)
 			{
 				Add_msgError(LoopOmpAttributes, $ForStmt,'Variable Access for ' + $varref.name + ' Can not be traced inside of function ' + callJP.name + ' called at line #' + callJP.line);
@@ -116,7 +116,7 @@ aspectdef SetVariableAccess
 		}
 		
 		var hasDescendantOfArrayAccess = false;
-		if ($varref.descendantsAndSelf('arrayAccess').length > 0)
+		if ($varref.getDescendantsAndSelf('arrayAccess').length > 0)
 			hasDescendantOfArrayAccess = true;					
 
 		var varUsage = null;
@@ -127,7 +127,7 @@ aspectdef SetVariableAccess
 					use : useExpr, 
 					code : $varref.code, 
 					isInsideLoopHeader : $varref.isInsideLoopHeader,
-					parentlooprank : $varref.astAncestor('ForStmt').rank
+					parentlooprank : $varref.getAstAncestor('ForStmt').rank
 					};		
 
 		if (varTypeAccess === 'memberArrayAccess' || varTypeAccess === 'arrayAccess')
@@ -154,7 +154,7 @@ aspectdef SetVariableAccess
 			varUsage.subscriptcurrentloop = o.subscriptstr;
 
 			var subscriptVarNamelist = [];
-			for(var arrayAccessobj of  $varref.descendantsAndSelf('arrayAccess'))
+			for(var arrayAccessobj of  $varref.getDescendantsAndSelf('arrayAccess'))
 			{
 				call retsubscriptVars(arrayAccessobj,subscriptVarNamelist);
 			}
@@ -317,7 +317,7 @@ aspectdef retsubscriptVars
 
 	select $stmt.subscript end
 	apply
-		for($varref of $subscript.descendantsAndSelf("varref"))
+		for($varref of $subscript.getDescendantsAndSelf("varref"))
 			if (varNamelist.indexOf($varref.name) === -1)
 				varNamelist.push($varref.name);
 	end
@@ -333,7 +333,7 @@ aspectdef retsubscriptcurrentloop
 
 	select $varref.subscript  end
 	apply
-		for($varref of $subscript.descendantsAndSelf("varref"))
+		for($varref of $subscript.getDescendantsAndSelf("varref"))
 			if ( $varref.name === loopControlVarname)
 			{
 				this.subscriptstr += '[' + $subscript.code +']';

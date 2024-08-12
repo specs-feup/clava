@@ -33,6 +33,12 @@ Although Clava is mainly a Java program, which should run on any compatible Java
 For a sample of Clava examples, please check the [Unit Tests](https://github.com/specs-feup/clava/tree/master/ClavaWeaver/resources/clava/test).
 
 
+# NPM Development Flow
+
+When adding new join points and attributes, besides the weaver generator (Java side), it is also necessary to run the join point generator (TS side). To do this, execute `npm run build-interfaces` on Clava-JS folder.
+
+
+
 # Installing
 
 A ZIP file with the last compiled JAR for Clava can be downloaded from [here](http://specs.fe.up.pt/tools/clava.zip) ([previous releases](https://drive.google.com/drive/folders/1X3JeYB783ZfqoqIYrCitqABDWhM5bV_Y?usp=sharing)).

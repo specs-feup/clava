@@ -2,29 +2,6 @@ import clava.autopar.Parallelize;
 import clava.Clava;
 
 aspectdef AutoParTest
-/*
-    select program.function{"foo"}.loop.call end
-    apply
-
-        //println("Def:" + $call.definition);
-		$call.inline();
-        //call ParallelizeLoop($loop);
-		//println("program:" + $program.code);
-    end	
-	
-	Clava.rebuild();
-	*/
-/*
-	select program.function{"foo"}.loop end
-    apply
-
-        //println("Def:" + $call.definition);
-		//$call.inline();
-        call ParallelizeLoop($loop);
-		println("program:" + $program.code);
-    end	
-*/
-
 	Parallelize.forLoops();
 	
 	select omp end

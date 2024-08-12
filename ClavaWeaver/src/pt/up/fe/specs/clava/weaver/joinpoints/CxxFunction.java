@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,21 +13,11 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.attr.CUDAGlobalAttr;
-import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
-import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.*;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -39,24 +29,22 @@ import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABody;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
 import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.treenode.TreeNodeUtils;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CxxFunction extends AFunction {
 
@@ -95,7 +83,7 @@ public class CxxFunction extends AFunction {
 
     @Override
     public ACall newCallImpl(AJoinPoint[] args) {
-        return AstFactory.callFromFunction(this, args);
+        return AstFactory.callFromFunction(this, SpecsCollections.asListT(AJoinPoint.class, (Object[]) args));
     }
 
     @Override
@@ -163,20 +151,20 @@ public class CxxFunction extends AFunction {
 
     private AJoinPoint[] insertStmt(Stmt newNode, String position) {
         switch (position) {
-        case "before":
-            NodeInsertUtils.insertBefore(function, newNode);
-            return null;
+            case "before":
+                NodeInsertUtils.insertBefore(function, newNode);
+                return null;
 
-        case "after":
-            NodeInsertUtils.insertAfter(function, newNode);
-            return null;
+            case "after":
+                NodeInsertUtils.insertAfter(function, newNode);
+                return null;
 
-        case "around":
-        case "replace":
-            NodeInsertUtils.replace(function, newNode);
-            return new AJoinPoint[] { CxxJoinpoints.create(newNode) };
-        default:
-            throw new RuntimeException("Case not defined:" + position);
+            case "around":
+            case "replace":
+                NodeInsertUtils.replace(function, newNode);
+                return new AJoinPoint[]{CxxJoinpoints.create(newNode)};
+            default:
+                throw new RuntimeException("Case not defined:" + position);
         }
     }
 
@@ -188,7 +176,7 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public String declarationImpl(Boolean withReturnType) {
+    public String getDeclarationImpl(Boolean withReturnType) {
         return function.getDeclarationId(withReturnType);
     }
 
@@ -199,12 +187,6 @@ public class CxxFunction extends AFunction {
         }
 
         return (ABody) CxxJoinpoints.create(function.getBody().get());
-    }
-
-    // TODO check if the new name clashes with other symbol?
-    @Override
-    public AFunction cloneImpl(String newName) {
-        return cloneImpl(newName, true);
     }
 
     @Override
@@ -229,24 +211,17 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AFunction cloneOnFileImpl(String newName) {
-
-        boolean isCxx = function.getAncestor(TranslationUnit.class).isCXXUnit();
-        String extension = getIsPrototypeImpl() ? ".h" : isCxx ? ".cpp" : ".c";
-
-        String prefix = newName;
-
-        String fileName = prefix + extension;
-
-        // var newFile = AstFactory.file(fileName, null);
-
-        return cloneOnFileImpl(newName, fileName);
-        // return cloneOnFileImpl(newName, fileName);
-
-    }
-
-    @Override
     public AFunction cloneOnFileImpl(String newName, String fileName) {
+        if (fileName == null) {
+            boolean isCxx = function.getAncestor(TranslationUnit.class).isCXXUnit();
+            String extension = getIsPrototypeImpl() ? ".h" : isCxx ? ".cpp" : ".c";
+
+            String prefix = newName;
+
+            fileName = prefix + extension;
+        }
+
+
         // First, check if the given filename is the same as a file in the AST
         App app = (App) getRootImpl().getNode();
         var currentFile = new File(fileName);
@@ -438,7 +413,7 @@ public class CxxFunction extends AFunction {
      */
     @Override
     public String getIdImpl() {
-        return declarationImpl(false);
+        return getDeclarationImpl(false);
     }
 
     @Override
@@ -498,8 +473,8 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public StorageClass getStorageClassImpl() {
-        return STORAGE_CLASS.get().fromValue(function.get(FunctionDecl.STORAGE_CLASS).name().toLowerCase());
+    public String getStorageClassImpl() {
+        return function.get(FunctionDecl.STORAGE_CLASS).getString();
     }
 
     @Override
@@ -608,7 +583,7 @@ public class CxxFunction extends AFunction {
     @Override
     public void defReturnTypeImpl(AType value) {
         function.setReturnType((Type) value.getNode());
-    };
+    }
 
     @Override
     public void setReturnTypeImpl(AType returnType) {
@@ -616,7 +591,7 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void setParamTypeImpl(Integer index, AType newType) {
+    public void setParamTypeImpl(int index, AType newType) {
         function.setParamType(index, (Type) newType.getNode());
     }
 
@@ -631,19 +606,18 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void addParamImpl(String param) {
-        var paramNode = ClavaNodes.toParam(param, function);
-        addParamImpl(CxxJoinpoints.create(paramNode, AParam.class));
-    }
-
-    @Override
     public void addParamImpl(String name, AType type) {
-        var paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
+        ClavaNode paramNode;
+        if (type == null) {
+            paramNode = ClavaNodes.toParam(name, function);
+        } else {
+            paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
+        }
         addParamImpl(CxxJoinpoints.create(paramNode, AParam.class));
     }
 
     @Override
-    public void setParamImpl(Integer index, AParam param) {
+    public void setParamImpl(int index, AParam param) {
         var params = getParamsArrayImpl();
 
         if (index >= params.length) {
@@ -658,14 +632,15 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void setParamImpl(Integer index, String name, AType type) {
-        var paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
-        setParamImpl(index, CxxJoinpoints.create(paramNode, AParam.class));
-    }
+    public void setParamImpl(int index, String name, AType type) {
+        ClavaNode paramNode;
 
-    @Override
-    public void setParamImpl(Integer index, String param) {
-        var paramNode = ClavaNodes.toParam(param, function);
+        if (type == null) {
+            paramNode = ClavaNodes.toParam(name, function);
+        } else {
+            paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
+        }
+
         setParamImpl(index, CxxJoinpoints.create(paramNode, AParam.class));
     }
 

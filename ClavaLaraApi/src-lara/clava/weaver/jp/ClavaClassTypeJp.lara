@@ -16,8 +16,8 @@ ClassTypeJp = function(astNode, getDefinition) {
 	//	astNode = astNode.getDefinition().get();
 	
 	// var name = Weaver.AST_METHODS.toJavaJoinPoint(astNode).name;
-	// println("CLASS TYPE " + name);
-	// if (name != 'basic_string') println("CLASS TYPE " + astNode.getCode());
+	// console.log("CLASS TYPE " + name);
+	// if (name != 'basic_string') console.log("CLASS TYPE " + astNode.getCode());
 		
 	// Parent constructor
     DeclJp.call(this,astNode);

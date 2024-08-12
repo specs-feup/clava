@@ -8,6 +8,7 @@
 import antarex.utils.messages;
 import antarex.memoi.Memoization;
 import antarex.memoi.MemoizationAutoFuncs;
+import antarex.memoi.LaraObject;
 
 var stackCall=[];
 var callGraph=new LaraObject();
@@ -92,7 +93,7 @@ aspectdef BuildStaticCallGraph
    if ($def !== undefined) { 
 	  if (! $def.isInline)
 	    {
-	      target = getIdId($def.ancestor("file").name, $def.line);
+	      target = getIdId($def.getAncestor("file").name, $def.line);
 	      callGraph.inc(source, target);
 	    }
     }
@@ -112,7 +113,7 @@ aspectdef printMemoizables
 input
   memoiFuncs
 end
-   println( '\n \n Memoizable functions { ' );
+   console.log( '\n \n Memoizable functions { ' );
    select file.function  end
    apply
      currentfunction = getidfunction($file, $function);
@@ -120,10 +121,10 @@ end
       {
 	   var T = currentfunction.split('%');
 	   if ($function.astName  === 'CXXMethodDecl') mf = "method" ; else mf="function";
-	   println( "\t * The " + mf + ' ' + $function.name + " at line " + T[1]  + " of the file " + T[0]);
+	   console.log( "\t * The " + mf + ' ' + $function.name + " at line " + T[1]  + " of the file " + T[0]);
       }
    end
-    println( '}\n \n');
+    console.log( '}\n \n');
 end
 
 /** 

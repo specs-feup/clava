@@ -6,6 +6,8 @@
    It is provided under the MIT license (https://opensource.org/licenses/MIT).
 */
 
+import clava.ClavaJoinPoints;
+
 /**  This module defines  
       - the management of the modified files to avoid the complete Clava.rebuild().
       - the system interface access.
@@ -51,7 +53,7 @@ function rebuildModifiedFiles()
 function rebuildFiles(varray)
 {
   for (var afile of varray) { 
-  	println( " **** rebuild = " + afile.filepath);
+  	console.log( " **** rebuild = " + afile.filepath);
   	afile.rebuild();
   }	
 }
@@ -61,7 +63,7 @@ function rebuildFiles(varray)
 */
 function mkNewFile($name, $fp)
 {
-     var nf = AstFactory.file($name, $fp);
+     var nf = ClavaJoinPoints.file($name, $fp);
      Clava.addFile(nf);
      return nf;
 }

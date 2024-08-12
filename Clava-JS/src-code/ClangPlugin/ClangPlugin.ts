@@ -146,7 +146,7 @@ export default class ClangPlugin {
     }, new Map<string, string>());
 
     const commandArgs = [
-      ...args.map((arg) => this.#ensureAbsolutePath(arg.toString())),
+      ...args.map((arg) => this.ensureAbsolutePath(arg.toString())),
       "-Xclang",
       "-load",
       "-Xclang",
@@ -163,7 +163,7 @@ export default class ClangPlugin {
    * @param argument - String containing the argument to check
    * @returns The absolute path to the argument if it exists, otherwise the argument itself
    */
-  static #ensureAbsolutePath(argument: string): string {
+  private static ensureAbsolutePath(argument: string): string {
     if (fs.existsSync(argument)) {
       return path.resolve(argument);
     } else {

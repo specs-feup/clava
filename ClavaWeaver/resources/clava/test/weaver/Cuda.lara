@@ -24,7 +24,7 @@ aspectdef Cuda
 	
 	// Add parameter to CUDA kernel
 	$cudaKernel.addParam("bool inst0");
-	println("After adding param: " + $cudaKernel.declaration(false));
+	println("After adding param: " + $cudaKernel.getDeclaration(false));
 
 	// Add argumento to call
 	var $cudaKernelCall = Query.search("function", "main").search("cudaKernelCall").first();

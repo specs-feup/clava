@@ -1,3 +1,5 @@
+import clava.ClavaJoinPoints;
+
 aspectdef test
 
     select omp end
@@ -9,8 +11,8 @@ aspectdef test
         println("num_threads:" + $omp.numThreads);
         println("proc_bind:" + $omp.procBind);
 		println("private:" + $omp.private);
-		println("reduction +:" + $omp.reduction('+'));
-		println("reduction max:" + $omp.reduction('MAX'));
+		println("reduction +:" + $omp.getReduction('+'));
+		println("reduction max:" + $omp.getReduction('MAX'));
 		println("reduction kinds:" + $omp.reductionKinds);
 		println("firstprivate:" + $omp.firstprivate);
 		println("lastprivate:" + $omp.lastprivate);
@@ -26,9 +28,9 @@ aspectdef test
 	
 	select omp{'for'} end
 	apply
-		$omp.insertAfter(AstFactory.omp('master'));
-		$omp.target.insertAfter(AstFactory.omp('barrier'));
-		println($omp.ancestor('function').body.code);
+		$omp.insertAfter(ClavaJoinPoints.omp('master'));
+		$omp.target.insertAfter(ClavaJoinPoints.omp('barrier'));
+		println($omp.getAncestor('function').body.code);
 	end
 /*
 	select program end

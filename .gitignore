@@ -62,7 +62,10 @@ deps/*/*/*
 **/build/*
 **/build-*/*
 **/cmake-build*/*
-
+**/.gradle/*
+**/gradle/*
+gradlew
+gradlew.bat
 
 # Idea IDEs
 **/.idea/misc.xml

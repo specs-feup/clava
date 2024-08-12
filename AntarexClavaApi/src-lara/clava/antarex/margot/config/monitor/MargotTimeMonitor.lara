@@ -1,5 +1,6 @@
 import antarex.margot.config.monitor.MargotMonitor;
 import antarex.margot.dse.metric.MargotMetric;
+import antarex.margot.Enum;
 
 import lara.units.TimeUnit;
 import lara.units.TimeModifier;

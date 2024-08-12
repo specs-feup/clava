@@ -1,6 +1,6 @@
 import clava.Clava;
 import lara.Io;
-//import clava.ClavaJoinPoints;
+import clava.ClavaJoinPoints;
 import weaver.JoinPoints;
 
 aspectdef ClavaTest
@@ -77,7 +77,7 @@ aspectdef JpCreateTest
 
 	// Create join point
 	//var $newLoopJp = ClavaJoinPoints.create(astNode);
-	var $newLoopJp = JoinPoints.getInstance().toJoinPoint(astNode);	
+	var $newLoopJp = ClavaJoinPoints.toJoinPoint(astNode);	
 
 	println("Are JPs equal? " + $newLoopJp.equals($loopJp));
 end

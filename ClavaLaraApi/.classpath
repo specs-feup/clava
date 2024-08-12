@@ -15,6 +15,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ClavaAst"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CommonsLangPlus"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JacksonPlus"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/SymjaPlus" />
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=ClavaLaraApi&amp;ivyXmlPath=ivy.xml&amp;confs=*"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -12,14 +12,14 @@ import antarex.utils.sysfile;
   @return the file of an ast object.
 */
 function getFileOf($vtree){
-    return $vtree.ancestor("file");
+    return $vtree.getAncestor("file");
 }
 /**
   @return the function, the method or undefined of a statement ($stmt).
 */
 function getFunctionOrMethod($stmt){
-    var $obj = $stmt.ancestor("function");
-    if ($obj === undefined) $obj = $stmt.ancestor("method");
+    var $obj = $stmt.getAncestor("function");
+    if ($obj === undefined) $obj = $stmt.getAncestor("method");
     return $obj;
 }
 
@@ -53,7 +53,7 @@ function getClassNameMethod(m)
 */
 function isGlobalVariable($vardecl) {
     if ($vardecl.isParam) return false;
-    return ( $vardecl.astParent.astParent.astName === "TranslationUnit");  // global ?
+    return ( $vardecl.parent.parent.astName === "TranslationUnit");  // global ?
    }
    
 /**
@@ -156,7 +156,7 @@ function getStrClassOf($fm) {
 /** Debugging */
 function printChildrenOf($statement){
   for ( var i = 0; i < $statement.astNumChildren; i++)
-  	 println(" Child " + i +  $statement.astChild(i).code);
+  	 console.log(" Child " + i +  $statement.getAstChild(i).code);
 }
 
 
@@ -196,7 +196,7 @@ function printArray(varray, message)
     if (first) { first= false; } else print(',');
     print(f.code);
   }
- println(')'); 
+ console.log(')'); 
 }
 
 function getFileSeparator() {

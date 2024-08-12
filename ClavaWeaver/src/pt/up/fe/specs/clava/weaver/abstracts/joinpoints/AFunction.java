@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
@@ -213,25 +212,25 @@ public abstract class AFunction extends ADeclarator {
      * @param withReturnType
      * @return 
      */
-    public abstract String declarationImpl(Boolean withReturnType);
+    public abstract String getDeclarationImpl(Boolean withReturnType);
 
     /**
      * 
      * @param withReturnType
      * @return 
      */
-    public final Object declaration(Boolean withReturnType) {
+    public final Object getDeclaration(Boolean withReturnType) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declaration", Optional.empty(), withReturnType);
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getDeclaration", Optional.empty(), withReturnType);
         	}
-        	String result = this.declarationImpl(withReturnType);
+        	String result = this.getDeclarationImpl(withReturnType);
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result), withReturnType);
+        		eventTrigger().triggerAttribute(Stage.END, this, "getDeclaration", Optional.ofNullable(result), withReturnType);
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "declaration", e);
+        	throw new AttributeException(get_class(), "getDeclaration", e);
         }
     }
 
@@ -505,7 +504,7 @@ public abstract class AFunction extends ADeclarator {
      * Get value on attribute storageClass
      * @return the attribute's value
      */
-    public abstract StorageClass getStorageClassImpl();
+    public abstract String getStorageClassImpl();
 
     /**
      * Get value on attribute storageClass
@@ -516,7 +515,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
         	}
-        	StorageClass result = this.getStorageClassImpl();
+        	String result = this.getStorageClassImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
         	}
@@ -725,7 +724,7 @@ public abstract class AFunction extends ADeclarator {
      * @param newName 
      * @param insert 
      */
-    public final AFunction clone(String newName, Boolean insert) {
+    public final Object clone(String newName, Boolean insert) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "clone", this, Optional.empty(), newName, insert);
@@ -734,68 +733,14 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "clone", this, Optional.ofNullable(result), newName, insert);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "clone", e);
         }
     }
 
     /**
-     * Overload which inserts the cloned function by default
-     * @param newName 
-     */
-    public AFunction cloneImpl(String newName) {
-        throw new UnsupportedOperationException(get_class()+": Action clone not implemented ");
-    }
-
-    /**
-     * Overload which inserts the cloned function by default
-     * @param newName 
-     */
-    public final AFunction clone(String newName) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "clone", this, Optional.empty(), newName);
-        	}
-        	AFunction result = this.cloneImpl(newName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "clone", this, Optional.ofNullable(result), newName);
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "clone", e);
-        }
-    }
-
-    /**
-     * Generates a clone of the provided function on a new file (with a weaver-generated name).
-     * @param newName 
-     */
-    public AFunction cloneOnFileImpl(String newName) {
-        throw new UnsupportedOperationException(get_class()+": Action cloneOnFile not implemented ");
-    }
-
-    /**
-     * Generates a clone of the provided function on a new file (with a weaver-generated name).
-     * @param newName 
-     */
-    public final AFunction cloneOnFile(String newName) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "cloneOnFile", this, Optional.empty(), newName);
-        	}
-        	AFunction result = this.cloneOnFileImpl(newName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "cloneOnFile", this, Optional.ofNullable(result), newName);
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "cloneOnFile", e);
-        }
-    }
-
-    /**
-     * Generates a clone of the provided function on a new file (with the provided name).
+     * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
      * @param newName 
      * @param fileName 
      */
@@ -804,11 +749,11 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Generates a clone of the provided function on a new file (with the provided name).
+     * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
      * @param newName 
      * @param fileName 
      */
-    public final AFunction cloneOnFile(String newName, String fileName) {
+    public final Object cloneOnFile(String newName, String fileName) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "cloneOnFile", this, Optional.empty(), newName, fileName);
@@ -817,7 +762,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "cloneOnFile", this, Optional.ofNullable(result), newName, fileName);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cloneOnFile", e);
         }
@@ -837,7 +782,7 @@ public abstract class AFunction extends ADeclarator {
      * @param newName 
      * @param fileName 
      */
-    public final AFunction cloneOnFile(String newName, AFile fileName) {
+    public final Object cloneOnFile(String newName, AFile fileName) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "cloneOnFile", this, Optional.empty(), newName, fileName);
@@ -846,7 +791,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "cloneOnFile", this, Optional.ofNullable(result), newName, fileName);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cloneOnFile", e);
         }
@@ -864,7 +809,7 @@ public abstract class AFunction extends ADeclarator {
      * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      * @param code 
      */
-    public final AJoinPoint insertReturn(AJoinPoint code) {
+    public final Object insertReturn(AJoinPoint code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
@@ -873,7 +818,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -891,7 +836,7 @@ public abstract class AFunction extends ADeclarator {
      * Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      * @param code 
      */
-    public final AJoinPoint insertReturn(String code) {
+    public final Object insertReturn(String code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
@@ -900,7 +845,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -963,7 +908,7 @@ public abstract class AFunction extends ADeclarator {
      * @param index 
      * @param param 
      */
-    public void setParamImpl(Integer index, AParam param) {
+    public void setParamImpl(int index, AParam param) {
         throw new UnsupportedOperationException(get_class()+": Action setParam not implemented ");
     }
 
@@ -972,7 +917,7 @@ public abstract class AFunction extends ADeclarator {
      * @param index 
      * @param param 
      */
-    public final void setParam(Integer index, AParam param) {
+    public final void setParam(int index, AParam param) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setParam", this, Optional.empty(), index, param);
@@ -987,50 +932,22 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Sets the parameter of the function at the given position (overload that accepts a String)
-     * @param index 
-     * @param param 
-     */
-    public void setParamImpl(Integer index, String param) {
-        throw new UnsupportedOperationException(get_class()+": Action setParam not implemented ");
-    }
-
-    /**
-     * Sets the parameter of the function at the given position (overload that accepts a String)
-     * @param index 
-     * @param param 
-     */
-    public final void setParam(Integer index, String param) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParam", this, Optional.empty(), index, param);
-        	}
-        	this.setParamImpl(index, param);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParam", this, Optional.empty(), index, param);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setParam", e);
-        }
-    }
-
-    /**
-     * Sets the parameter of the function at the given position (overload that accepts a String and a Type)
+     * Sets the parameter of the function at the given position
      * @param index 
      * @param name 
      * @param type 
      */
-    public void setParamImpl(Integer index, String name, AType type) {
+    public void setParamImpl(int index, String name, AType type) {
         throw new UnsupportedOperationException(get_class()+": Action setParam not implemented ");
     }
 
     /**
-     * Sets the parameter of the function at the given position (overload that accepts a String and a Type)
+     * Sets the parameter of the function at the given position
      * @param index 
      * @param name 
      * @param type 
      */
-    public final void setParam(Integer index, String name, AType type) {
+    public final void setParam(int index, String name, AType type) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setParam", this, Optional.empty(), index, name, type);
@@ -1082,7 +999,7 @@ public abstract class AFunction extends ADeclarator {
      * Creates a new call to this function
      * @param args 
      */
-    public final ACall newCall(AJoinPoint[] args) {
+    public final Object newCall(AJoinPoint[] args) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), new Object[] { args});
@@ -1091,7 +1008,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), new Object[] { args});
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "newCall", e);
         }
@@ -1154,7 +1071,7 @@ public abstract class AFunction extends ADeclarator {
      * @param index 
      * @param newType 
      */
-    public void setParamTypeImpl(Integer index, AType newType) {
+    public void setParamTypeImpl(int index, AType newType) {
         throw new UnsupportedOperationException(get_class()+": Action setParamType not implemented ");
     }
 
@@ -1163,7 +1080,7 @@ public abstract class AFunction extends ADeclarator {
      * @param index 
      * @param newType 
      */
-    public final void setParamType(Integer index, AType newType) {
+    public final void setParamType(int index, AType newType) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setParamType", this, Optional.empty(), index, newType);
@@ -1174,32 +1091,6 @@ public abstract class AFunction extends ADeclarator {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setParamType", e);
-        }
-    }
-
-    /**
-     * Adds a new parameter to the function
-     * @param param 
-     */
-    public void addParamImpl(String param) {
-        throw new UnsupportedOperationException(get_class()+": Action addParam not implemented ");
-    }
-
-    /**
-     * Adds a new parameter to the function
-     * @param param 
-     */
-    public final void addParam(String param) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), param);
-        	}
-        	this.addParamImpl(param);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), param);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addParam", e);
         }
     }
 
@@ -1333,15 +1224,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aDeclarator.astAncestorImpl(type);
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
@@ -1378,12 +1260,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute descendantsAndSelfArrayImpl
+     * Get value on attribute getAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
-        return this.aDeclarator.descendantsAndSelfArrayImpl(type);
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aDeclarator.getAncestorImpl(type);
     }
 
     /**
@@ -1441,21 +1323,21 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aDeclarator.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
         return this.aDeclarator.getChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aDeclarator.getJavaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -1477,12 +1359,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute ancestor
+     * Get value on attribute getChild
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint ancestorImpl(String type) {
-        return this.aDeclarator.ancestorImpl(type);
+    public AJoinPoint getChildImpl(int index) {
+        return this.aDeclarator.getChildImpl(index);
     }
 
     /**
@@ -1501,15 +1383,6 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public AComment[] getInlineCommentsArrayImpl() {
         return this.aDeclarator.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astChildImpl(Integer index) {
-        return this.aDeclarator.astChildImpl(index);
     }
 
     /**
@@ -1537,6 +1410,15 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public String getAstIdImpl() {
         return this.aDeclarator.getAstIdImpl();
+    }
+
+    /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aDeclarator.getKeyTypeImpl(key);
     }
 
     /**
@@ -1585,15 +1467,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aDeclarator.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -1603,30 +1476,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute userField
-     * @return the attribute's value
-     */
-    @Override
-    public Object userFieldImpl(String fieldName) {
-        return this.aDeclarator.userFieldImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute hasNode
      * @return the attribute's value
      */
     @Override
     public Boolean hasNodeImpl(Object nodeOrJp) {
         return this.aDeclarator.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute child
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint childImpl(Integer index) {
-        return this.aDeclarator.childImpl(index);
     }
 
     /**
@@ -1702,12 +1557,21 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aDeclarator.getChainAncestorImpl(type);
+    }
+
+    /**
      * Get value on attribute descendantsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aDeclarator.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aDeclarator.getDescendantsArrayImpl();
     }
 
     /**
@@ -1717,6 +1581,24 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public AJoinPoint[] getAstChildrenArrayImpl() {
         return this.aDeclarator.getAstChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aDeclarator.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aDeclarator.getFirstJpImpl(type);
     }
 
     /**
@@ -1747,30 +1629,21 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute javaValue
+     * Get value on attribute getAstChild
      * @return the attribute's value
      */
     @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aDeclarator.javaValueImpl(fieldName);
+    public AJoinPoint getAstChildImpl(int index) {
+        return this.aDeclarator.getAstChildImpl(index);
     }
 
     /**
-     * Get value on attribute keyType
+     * Get value on attribute getDescendantsAndSelfArrayImpl
      * @return the attribute's value
      */
     @Override
-    public Object keyTypeImpl(String key) {
-        return this.aDeclarator.keyTypeImpl(key);
-    }
-
-    /**
-     * Get value on attribute chainAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint chainAncestorImpl(String type) {
-        return this.aDeclarator.chainAncestorImpl(type);
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aDeclarator.getDescendantsAndSelfArrayImpl(type);
     }
 
     /**
@@ -1783,15 +1656,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute joinpointType
-     * @return the attribute's value
-     */
-    @Override
-    public String getJoinpointTypeImpl() {
-        return this.aDeclarator.getJoinpointTypeImpl();
-    }
-
-    /**
      * Get value on attribute currentRegion
      * @return the attribute's value
      */
@@ -1801,12 +1665,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute hasAstParent
+     * Get value on attribute originNode
      * @return the attribute's value
      */
     @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aDeclarator.getHasAstParentImpl();
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aDeclarator.getOriginNodeImpl();
     }
 
     /**
@@ -1837,12 +1701,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute firstJp
+     * Get value on attribute getAstAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint firstJpImpl(String type) {
-        return this.aDeclarator.firstJpImpl(type);
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aDeclarator.getAstAncestorImpl(type);
     }
 
     /**
@@ -1852,15 +1716,6 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public Integer getDepthImpl() {
         return this.aDeclarator.getDepthImpl();
-    }
-
-    /**
-     * Get value on attribute javaFieldType
-     * @return the attribute's value
-     */
-    @Override
-    public String javaFieldTypeImpl(String fieldName) {
-        return this.aDeclarator.javaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -2088,23 +1943,6 @@ public abstract class AFunction extends ADeclarator {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aDeclarator.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aDeclarator.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -2138,15 +1976,6 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public void setDataImpl(Object source) {
         this.aDeclarator.setDataImpl(source);
-    }
-
-    /**
-     * Copies all enumerable own properties from the source object to the .data object
-     * @param source 
-     */
-    @Override
-    public void dataAssignImpl(Object source) {
-        this.aDeclarator.dataAssignImpl(source);
     }
 
     /**
@@ -2323,7 +2152,7 @@ public abstract class AFunction extends ADeclarator {
         attributes.add("declarationJp");
         attributes.add("declarationJps");
         attributes.add("definitionJp");
-        attributes.add("declaration");
+        attributes.add("getDeclaration");
         attributes.add("body");
         attributes.add("paramNames");
         attributes.add("params");
@@ -2360,23 +2189,19 @@ public abstract class AFunction extends ADeclarator {
     protected void fillWithActions(List<String> actions) {
         this.aDeclarator.fillWithActions(actions);
         actions.add("function clone(String, Boolean)");
-        actions.add("function clone(String)");
-        actions.add("function cloneOnFile(String)");
         actions.add("function cloneOnFile(String, String)");
         actions.add("function cloneOnFile(String, file)");
         actions.add("joinpoint insertReturn(joinpoint)");
         actions.add("joinpoint insertReturn(String)");
         actions.add("void setParams(param[])");
         actions.add("void setParamsFromStrings(String[])");
-        actions.add("void setParam(Integer, param)");
-        actions.add("void setParam(Integer, String)");
-        actions.add("void setParam(Integer, String, type)");
+        actions.add("void setParam(int, param)");
+        actions.add("void setParam(int, String, type)");
         actions.add("void setBody(scope)");
         actions.add("call newCall(joinpoint[])");
         actions.add("void setFunctionType(functionType)");
         actions.add("void setReturnType(type)");
-        actions.add("void setParamType(Integer, type)");
-        actions.add("void addParam(String)");
+        actions.add("void setParamType(int, type)");
         actions.add("void addParam(param)");
         actions.add("void addParam(String, type)");
     }
@@ -2413,7 +2238,7 @@ public abstract class AFunction extends ADeclarator {
         DECLARATIONJP("declarationJp"),
         DECLARATIONJPS("declarationJps"),
         DEFINITIONJP("definitionJp"),
-        DECLARATION("declaration"),
+        GETDECLARATION("getDeclaration"),
         BODY("body"),
         PARAMNAMES("paramNames"),
         PARAMS("params"),
@@ -2436,39 +2261,35 @@ public abstract class AFunction extends ADeclarator {
         QUALIFIEDNAME("qualifiedName"),
         ATTRS("attrs"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -2477,24 +2298,24 @@ public abstract class AFunction extends ADeclarator {
         KEYS("keys"),
         ISINSIDEHEADER("isInsideHeader"),
         ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
-        KEYTYPE("keyType"),
-        CHAINANCESTOR("chainAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
-        JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
+        GETASTANCESTOR("getAstAncestor"),
         DEPTH("depth"),
-        JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),

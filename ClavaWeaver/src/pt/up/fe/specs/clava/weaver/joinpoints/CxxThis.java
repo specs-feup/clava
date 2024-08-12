@@ -42,7 +42,7 @@ public class CxxThis extends AThis {
         var type = getTypeImpl();
 
         if (!(type instanceof APointerType)) {
-            throw new RuntimeException("Not implemented with type is " + type.getJoinpointTypeImpl());
+            throw new RuntimeException("Not implemented with type is " + type.getJoinPointType());
         }
 
         // Get class type

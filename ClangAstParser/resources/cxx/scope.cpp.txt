@@ -17,8 +17,8 @@ int main() {
    if(x) {
       a++;
    }
-   if(x);
-   if(x);
+   if(x) ;
+   if(x) ;
    if(x) {
    }
    for(;;) 

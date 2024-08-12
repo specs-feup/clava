@@ -4,6 +4,7 @@ import antarex.margot.config.monitor.MargotThroughputMonitor;
 import antarex.margot.config.MargotState;
 import antarex.margot.config.MargotKnob;
 import antarex.margot.config.MargotDataFeature;
+import antarex.margot.Enum;
 
 /**
  * This holds information about a mARGOt configuration block.

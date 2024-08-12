@@ -32,10 +32,10 @@ aspectdef LoopInductionVariables
 
 			if (
 				$binaryOp.isInsideLoopHeader === false &&
-				$binaryOp.ancestor('if') === undefined && 
-				$binaryOp.descendantsAndSelf("arrayAccess").length === 0 && 
-				$binaryOp.descendantsAndSelf("call").length === 0 && 
-				$binaryOp.descendantsAndSelf("unaryOp").length === 0 &&
+				$binaryOp.getAncestor('if') === undefined && 
+				$binaryOp.getDescendantsAndSelf("arrayAccess").length === 0 && 
+				$binaryOp.getDescendantsAndSelf("call").length === 0 && 
+				$binaryOp.getDescendantsAndSelf("unaryOp").length === 0 &&
 				$binaryOp.code.indexOf('>>')  === -1 &&
 				$binaryOp.code.indexOf('<<')  === -1				
 				)

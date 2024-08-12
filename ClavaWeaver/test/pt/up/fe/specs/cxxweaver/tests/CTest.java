@@ -219,4 +219,9 @@ public class CTest {
     public void testTraversal() {
         newTester().test("Traversal.js", "traversal.c");
     }
+
+    @Test
+    public void testIf() {
+        newTester().test("If.js", "if.c");
+    }
 }

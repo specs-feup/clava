@@ -7,6 +7,8 @@ laraImport("lara.pass.composition.Passes");
 
 laraImport("weaver.Query");
 
+// This type of pass is no longer supported. It is now mandatory to create a class for the pass
+/*
 function SimplifyAssignments($startJp) {
   for (const $op of Query.searchFromInclusive($startJp, "binaryOp")) {
     SimplifyAssignment($op);
@@ -20,26 +22,15 @@ function DummyPass($startJp, options) {
       "' for the key 'foo'"
   );
 }
-
-const statementDecomposer = new StatementDecomposer();
-
-/*
-const simplifyIfs = new SimplifySelectionStmts(statementDecomposer);
-const declStmt = new DecomposeDeclStmt();	
-SimplifyAssignments(Query.root());
-simplifyIfs.apply(Query.root());
-declStmt.apply(Query.root());
 */
 
 const passes = [
-  SimplifyAssignments,
-  [SimplifySelectionStmts, statementDecomposer],
+  //SimplifyAssignments,
+  new SimplifySelectionStmts(new StatementDecomposer()),
   new DecomposeDeclStmt(),
-  [DummyPass, { foo: "bar" }],
+  //[DummyPass, { foo: "bar" }],
 ];
 
 const results = Passes.apply(Query.root(), passes);
-
-//println("Results: " + results)
 
 println(Query.root().code);

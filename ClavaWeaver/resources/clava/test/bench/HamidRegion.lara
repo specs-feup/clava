@@ -14,8 +14,8 @@ aspectdef HamidRegion
         println('\t' + 'arrayAccess.arrayVar.code : ' + $arrayAccess.arrayVar.code);
         
         // 1 
-        println('\t' + 'vardecl.code : ' + $arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.code);
-        println('\t' + 'vardecl.currentRegion : ' + $arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.currentRegion);
+        println('\t' + 'vardecl.code : ' + $arrayAccess.arrayVar.getDescendantsAndSelf('varref')[0].vardecl.code);
+        println('\t' + 'vardecl.currentRegion : ' + $arrayAccess.arrayVar.getDescendantsAndSelf('varref')[0].vardecl.currentRegion);
         
         // 2 
         println('\t' + 'arrayAccess.arrayVar.vardecl.code : ' + $arrayAccess.arrayVar.vardecl.code);

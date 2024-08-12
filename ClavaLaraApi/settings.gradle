@@ -3,6 +3,7 @@ rootProject.name = 'ClavaLaraApi'
 includeBuild("../../specs-java-libs/CommonsLangPlus")
 includeBuild("../../specs-java-libs/JacksonPlus")
 includeBuild("../../specs-java-libs/SpecsUtils")
+includeBuild("../../specs-java-libs/SymjaPlus")
 
 includeBuild("../../lara-framework/LaraApi")
 includeBuild("../../lara-framework/LaraUtils")

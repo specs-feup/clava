@@ -168,12 +168,7 @@ public class CxxScope extends AScope {
     }
 
     @Override
-    public Long getNumStatementsImpl() {
-        return numStatementsImpl(false);
-    }
-
-    @Override
-    public Long numStatementsImpl(Boolean flat) {
+    public Long getNumStatementsImpl(Boolean flat) {
         var nodesStream = flat ? scope.getChildrenStream() : scope.getDescendantsStream();
 
         return nodesStream.filter(Stmt.class::isInstance)
@@ -262,12 +257,6 @@ public class CxxScope extends AScope {
     }
 
     @Override
-    public AJoinPoint addLocalImpl(String name, AJoinPoint type) {
-
-        return addLocalImpl(name, type, null);
-    }
-
-    @Override
     public AJoinPoint addLocalImpl(String name, AJoinPoint type, String initValue) {
 
         // Check if joinpoint is a CxxType
@@ -334,7 +323,7 @@ public class CxxScope extends AScope {
     @Override
     public AJoinPoint getOwnerImpl() {
         // TODO: This should generically work, but corner cases have not been checked
-        return getAstParentImpl();
+        return getParentImpl();
     }
 
     @Override

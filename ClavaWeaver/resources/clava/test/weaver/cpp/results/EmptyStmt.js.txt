@@ -11,7 +11,7 @@ int main() {
    if(true) {
    }
    while(true);
-   if(false);
+   if(false) ;
    
    {
       // Another empty statement

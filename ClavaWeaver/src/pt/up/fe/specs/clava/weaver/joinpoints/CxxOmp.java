@@ -138,7 +138,7 @@ public class CxxOmp extends AOmp {
     }
 
     @Override
-    public String[] reductionArrayImpl(String kind) {
+    public String[] getReductionArrayImpl(String kind) {
         return ompPragma.clauses().getReduction(kind).toArray(new String[0]);
     }
 
@@ -239,8 +239,8 @@ public class CxxOmp extends AOmp {
     }
 
     @Override
-    public void setScheduleChunkSizeImpl(Integer chunkSize) {
-        setScheduleChunkSize(chunkSize.toString());
+    public void setScheduleChunkSizeImpl(int chunkSize) {
+        setScheduleChunkSize(Integer.toString(chunkSize));
     }
 
     @Override
@@ -265,19 +265,13 @@ public class CxxOmp extends AOmp {
     }
 
     @Override
-    public void setCollapseImpl(Integer newExpr) {
-        setCollapseImpl(newExpr.toString());
+    public void setCollapseImpl(int newExpr) {
+        setCollapseImpl(Integer.toString(newExpr));
     }
 
     @Override
     public String getOrderedImpl() {
         return ompPragma.clauses().getOrdered().orElse(null);
-
-    }
-
-    @Override
-    public void setOrderedImpl() {
-        ompPragma.clauses().setOrdered();
 
     }
 

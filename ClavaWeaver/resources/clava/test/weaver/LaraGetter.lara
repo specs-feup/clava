@@ -7,7 +7,7 @@ aspectdef LaraGetterTest
 	var descendants = Clava.getProgram().descendants;
 	// descendants() does not work in newer versions of GraalVM
 	// For some reason, laraGetter is not being used in that case
-	//var descendants2 = Clava.getProgram().descendants('vardecl');
+	//var descendants2 = Clava.getProgram().getDescendants('vardecl');
 	
 	var $app = Clava.getProgram();
 	var $file = ClavaJoinPoints.file("dummy.c", "lib");
@@ -17,7 +17,7 @@ aspectdef LaraGetterTest
 	$app.addFile($file);
 	
 	$app.firstChild.relativeFolderpath = $app.firstChild.relativeFolderpath;
-	$app.firstChild.firstJp('comment').text = "hello 2";
+	$app.firstChild.getFirstJp('comment').text = "hello 2";
 	
 	var obj = {i: 10};
 	obj.i++;

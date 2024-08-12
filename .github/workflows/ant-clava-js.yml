@@ -40,13 +40,18 @@ jobs:
           # ivy dependencies cache files are stored in `~/.ivy2` on Linux/macOS
           path: ~/.ivy2
           key: ${{ runner.os }}-build-${{ env.cache-name }}        
-    
+
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Install build essentials and CMake
+      run: |
+        sudo apt-get update
+        sudo apt-get install build-essential 
+        sudo apt-get install -y cmake
     - name: Generate build.xml
       run: | 
         wget -q -N http://specs.fe.up.pt/tools/eclipse-build.jar
@@ -55,7 +60,6 @@ jobs:
     - name: Build with Ant
       run: |
         ant -noinput -buildfile build.xml
-
     - name: List directory
       run: |
         echo "Current folder"

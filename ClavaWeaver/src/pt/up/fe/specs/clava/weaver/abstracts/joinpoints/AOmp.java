@@ -235,15 +235,15 @@ public abstract class AOmp extends APragma {
      * @param kind
      * @return 
      */
-    public abstract String[] reductionArrayImpl(String kind);
+    public abstract String[] getReductionArrayImpl(String kind);
 
     /**
      * 
      * @param kind
      * @return 
      */
-    public Object reductionImpl(String kind) {
-        String[] stringArrayImpl0 = reductionArrayImpl(kind);
+    public Object getReductionImpl(String kind) {
+        String[] stringArrayImpl0 = getReductionArrayImpl(kind);
         Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
@@ -253,18 +253,18 @@ public abstract class AOmp extends APragma {
      * @param kind
      * @return 
      */
-    public final Object reduction(String kind) {
+    public final Object getReduction(String kind) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "reduction", Optional.empty(), kind);
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getReduction", Optional.empty(), kind);
         	}
-        	Object result = this.reductionImpl(kind);
+        	Object result = this.getReductionImpl(kind);
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "reduction", Optional.ofNullable(result), kind);
+        		eventTrigger().triggerAttribute(Stage.END, this, "getReduction", Optional.ofNullable(result), kind);
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "reduction", e);
+        	throw new AttributeException(get_class(), "getReduction", e);
         }
     }
 
@@ -925,7 +925,7 @@ public abstract class AOmp extends APragma {
      * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
      * @param chunkSize 
      */
-    public void setScheduleChunkSizeImpl(Integer chunkSize) {
+    public void setScheduleChunkSizeImpl(int chunkSize) {
         throw new UnsupportedOperationException(get_class()+": Action setScheduleChunkSize not implemented ");
     }
 
@@ -933,7 +933,7 @@ public abstract class AOmp extends APragma {
      * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
      * @param chunkSize 
      */
-    public final void setScheduleChunkSize(Integer chunkSize) {
+    public final void setScheduleChunkSize(int chunkSize) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
@@ -1003,7 +1003,7 @@ public abstract class AOmp extends APragma {
      * Sets the value of the collapse clause of an OpenMP pragma
      * @param newExpr 
      */
-    public void setCollapseImpl(Integer newExpr) {
+    public void setCollapseImpl(int newExpr) {
         throw new UnsupportedOperationException(get_class()+": Action setCollapse not implemented ");
     }
 
@@ -1011,7 +1011,7 @@ public abstract class AOmp extends APragma {
      * Sets the value of the collapse clause of an OpenMP pragma
      * @param newExpr 
      */
-    public final void setCollapse(Integer newExpr) {
+    public final void setCollapse(int newExpr) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setCollapse", this, Optional.empty(), newExpr);
@@ -1026,49 +1026,25 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Sets an ordered clause without parameters in the OpenMP pragma
-     */
-    public void setOrderedImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action setOrdered not implemented ");
-    }
-
-    /**
-     * Sets an ordered clause without parameters in the OpenMP pragma
-     */
-    public final void setOrdered() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setOrdered", this, Optional.empty());
-        	}
-        	this.setOrderedImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setOrdered", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setOrdered", e);
-        }
-    }
-
-    /**
      * Sets the value of the ordered clause of an OpenMP pragma
-     * @param newExpr 
+     * @param parameters 
      */
-    public void setOrderedImpl(String newExpr) {
+    public void setOrderedImpl(String parameters) {
         throw new UnsupportedOperationException(get_class()+": Action setOrdered not implemented ");
     }
 
     /**
      * Sets the value of the ordered clause of an OpenMP pragma
-     * @param newExpr 
+     * @param parameters 
      */
-    public final void setOrdered(String newExpr) {
+    public final void setOrdered(String parameters) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setOrdered", this, Optional.empty(), newExpr);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setOrdered", this, Optional.empty(), parameters);
         	}
-        	this.setOrderedImpl(newExpr);
+        	this.setOrderedImpl(parameters);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setOrdered", this, Optional.empty(), newExpr);
+        		eventTrigger().triggerAction(Stage.END, "setOrdered", this, Optional.empty(), parameters);
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setOrdered", e);
@@ -1103,21 +1079,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute targetNodesArrayImpl
+     * Get value on attribute getTargetNodesArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getTargetNodesArrayImpl() {
-        return this.aPragma.getTargetNodesArrayImpl();
-    }
-
-    /**
-     * Get value on attribute targetNodesArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] targetNodesArrayImpl(String endPragma) {
-        return this.aPragma.targetNodesArrayImpl(endPragma);
+    public AJoinPoint[] getTargetNodesArrayImpl(String endPragma) {
+        return this.aPragma.getTargetNodesArrayImpl(endPragma);
     }
 
     /**
@@ -1136,15 +1103,6 @@ public abstract class AOmp extends APragma {
     @Override
     public AJoinPoint getParentImpl() {
         return this.aPragma.getParentImpl();
-    }
-
-    /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aPragma.astAncestorImpl(type);
     }
 
     /**
@@ -1184,12 +1142,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute descendantsAndSelfArrayImpl
+     * Get value on attribute getAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
-        return this.aPragma.descendantsAndSelfArrayImpl(type);
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aPragma.getAncestorImpl(type);
     }
 
     /**
@@ -1247,21 +1205,21 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aPragma.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
         return this.aPragma.getChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aPragma.getJavaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -1283,12 +1241,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute ancestor
+     * Get value on attribute getChild
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint ancestorImpl(String type) {
-        return this.aPragma.ancestorImpl(type);
+    public AJoinPoint getChildImpl(int index) {
+        return this.aPragma.getChildImpl(index);
     }
 
     /**
@@ -1307,15 +1265,6 @@ public abstract class AOmp extends APragma {
     @Override
     public AComment[] getInlineCommentsArrayImpl() {
         return this.aPragma.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astChildImpl(Integer index) {
-        return this.aPragma.astChildImpl(index);
     }
 
     /**
@@ -1343,6 +1292,15 @@ public abstract class AOmp extends APragma {
     @Override
     public String getAstIdImpl() {
         return this.aPragma.getAstIdImpl();
+    }
+
+    /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aPragma.getKeyTypeImpl(key);
     }
 
     /**
@@ -1391,15 +1349,6 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aPragma.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -1409,30 +1358,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute userField
-     * @return the attribute's value
-     */
-    @Override
-    public Object userFieldImpl(String fieldName) {
-        return this.aPragma.userFieldImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute hasNode
      * @return the attribute's value
      */
     @Override
     public Boolean hasNodeImpl(Object nodeOrJp) {
         return this.aPragma.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute child
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint childImpl(Integer index) {
-        return this.aPragma.childImpl(index);
     }
 
     /**
@@ -1508,12 +1439,21 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aPragma.getChainAncestorImpl(type);
+    }
+
+    /**
      * Get value on attribute descendantsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aPragma.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aPragma.getDescendantsArrayImpl();
     }
 
     /**
@@ -1523,6 +1463,24 @@ public abstract class AOmp extends APragma {
     @Override
     public AJoinPoint[] getAstChildrenArrayImpl() {
         return this.aPragma.getAstChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aPragma.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aPragma.getFirstJpImpl(type);
     }
 
     /**
@@ -1553,30 +1511,21 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute javaValue
+     * Get value on attribute getAstChild
      * @return the attribute's value
      */
     @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aPragma.javaValueImpl(fieldName);
+    public AJoinPoint getAstChildImpl(int index) {
+        return this.aPragma.getAstChildImpl(index);
     }
 
     /**
-     * Get value on attribute keyType
+     * Get value on attribute getDescendantsAndSelfArrayImpl
      * @return the attribute's value
      */
     @Override
-    public Object keyTypeImpl(String key) {
-        return this.aPragma.keyTypeImpl(key);
-    }
-
-    /**
-     * Get value on attribute chainAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint chainAncestorImpl(String type) {
-        return this.aPragma.chainAncestorImpl(type);
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aPragma.getDescendantsAndSelfArrayImpl(type);
     }
 
     /**
@@ -1589,15 +1538,6 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute joinpointType
-     * @return the attribute's value
-     */
-    @Override
-    public String getJoinpointTypeImpl() {
-        return this.aPragma.getJoinpointTypeImpl();
-    }
-
-    /**
      * Get value on attribute currentRegion
      * @return the attribute's value
      */
@@ -1607,12 +1547,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute hasAstParent
+     * Get value on attribute originNode
      * @return the attribute's value
      */
     @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aPragma.getHasAstParentImpl();
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aPragma.getOriginNodeImpl();
     }
 
     /**
@@ -1643,12 +1583,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute firstJp
+     * Get value on attribute getAstAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint firstJpImpl(String type) {
-        return this.aPragma.firstJpImpl(type);
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aPragma.getAstAncestorImpl(type);
     }
 
     /**
@@ -1658,15 +1598,6 @@ public abstract class AOmp extends APragma {
     @Override
     public Integer getDepthImpl() {
         return this.aPragma.getDepthImpl();
-    }
-
-    /**
-     * Get value on attribute javaFieldType
-     * @return the attribute's value
-     */
-    @Override
-    public String javaFieldTypeImpl(String fieldName) {
-        return this.aPragma.javaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -1894,23 +1825,6 @@ public abstract class AOmp extends APragma {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aPragma.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aPragma.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -1944,15 +1858,6 @@ public abstract class AOmp extends APragma {
     @Override
     public void setDataImpl(Object source) {
         this.aPragma.setDataImpl(source);
-    }
-
-    /**
-     * Copies all enumerable own properties from the source object to the .data object
-     * @param source 
-     */
-    @Override
-    public void dataAssignImpl(Object source) {
-        this.aPragma.dataAssignImpl(source);
     }
 
     /**
@@ -2102,7 +2007,7 @@ public abstract class AOmp extends APragma {
         attributes.add("hasClause");
         attributes.add("isClauseLegal");
         attributes.add("clauseKinds");
-        attributes.add("reduction");
+        attributes.add("getReduction");
         attributes.add("reductionKinds");
         attributes.add("default");
         attributes.add("firstprivate");
@@ -2143,11 +2048,10 @@ public abstract class AOmp extends APragma {
         actions.add("void setCopyin(String[])");
         actions.add("void setScheduleKind(String)");
         actions.add("void setScheduleChunkSize(String)");
-        actions.add("void setScheduleChunkSize(Integer)");
+        actions.add("void setScheduleChunkSize(int)");
         actions.add("void setScheduleModifiers(String[])");
         actions.add("void setCollapse(String)");
-        actions.add("void setCollapse(Integer)");
-        actions.add("void setOrdered()");
+        actions.add("void setCollapse(int)");
         actions.add("void setOrdered(String)");
     }
 
@@ -2183,7 +2087,7 @@ public abstract class AOmp extends APragma {
         HASCLAUSE("hasClause"),
         ISCLAUSELEGAL("isClauseLegal"),
         CLAUSEKINDS("clauseKinds"),
-        REDUCTION("reduction"),
+        GETREDUCTION("getReduction"),
         REDUCTIONKINDS("reductionKinds"),
         DEFAULT("default"),
         FIRSTPRIVATE("firstprivate"),
@@ -2198,41 +2102,37 @@ public abstract class AOmp extends APragma {
         NAME("name"),
         TARGET("target"),
         CONTENT("content"),
-        TARGETNODES("targetNodes"),
+        GETTARGETNODES("getTargetNodes"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -2241,24 +2141,24 @@ public abstract class AOmp extends APragma {
         KEYS("keys"),
         ISINSIDEHEADER("isInsideHeader"),
         ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
-        KEYTYPE("keyType"),
-        CHAINANCESTOR("chainAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
-        JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
+        GETASTANCESTOR("getAstAncestor"),
         DEPTH("depth"),
-        JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),

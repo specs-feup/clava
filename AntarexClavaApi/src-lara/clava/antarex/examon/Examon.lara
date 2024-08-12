@@ -198,13 +198,13 @@ ExamonCollector.prototype._includeHeaders = function($jp) {
 	var code1 = "collector/collector.h";
 	//var code2 = "collector/sendmsg.hpp";
 	
-	var $parentFile = $jp.ancestor('file');
+	var $parentFile = $jp.getAncestor('file');
 	
 	$parentFile.exec addInclude(code1, true);
 	//$parentFile.exec addInclude(code2, true);
 	
 	// Adds Examon include
-	Compilation.addExtraIncludeFromGit("https://github.com/fbeneventi/examon.git", "");
+	Clava.getProgram().addExtraIncludeFromGit("https://github.com/fbeneventi/examon.git", "");
 	
 }
 

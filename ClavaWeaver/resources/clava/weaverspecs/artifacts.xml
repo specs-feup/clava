@@ -1,911 +1,1046 @@
 <?xml version="1.0"?>
 <!-- When changing the joinpoint model, do not forget to update the Clava 
-	document. https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/edit#heading=h.hii8b3kunout -->
+    document.
+https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/edit#heading=h.hii8b3kunout -->
 <artifacts>
 
 
+    <!-- Global Joinpoint -->
+    <!-- These properties are shared by all joinpoints -->
+    <global>
+        <attribute name="root" type="program"
+        tooltip="Returns the 'program' joinpoint" />
+        <attribute name="parent" type="joinpoint"
+        tooltip="Returns the parent node in the AST, or undefined if it is the root node" />
+        <attribute name="getAncestor" type="joinpoint"
+            tooltip="Looks for an ancestor joinpoint name, walking back on the AST">
+            <parameter name="type" type="String" />
+        </attribute>
+        <attribute name="descendants" type="joinpoint[]"
+            tooltip="Retrieves all descendants of the join point" />
+        <attribute name="getDescendants" type="joinpoint[]"
+            tooltip="Retrieves the descendants of the given type">
+            <parameter name="type" type="String" />
+        </attribute>
+        <attribute name="getDescendantsAndSelf" type="joinpoint[]"
+            tooltip="Retrieves the descendants of the given type, including the node itself">
+            <parameter name="type" type="String" />
+        </attribute>
+        <attribute name="getChainAncestor" type="joinpoint"
+            tooltip="Looks for an ancestor joinpoint name, walking back on the joinpoint chain">
+            <parameter name="type" type="String" />
+        </attribute>
+        <attribute name="getAstAncestor" type="joinpoint"
+            tooltip="[DEPRECATED: Looks for an ancestor AST name, walking back on the AST]">
+            <parameter name="type" type="String" />
+        </attribute>
+        <attribute name="contains" type="Boolean"
+            tooltip="true if the given node is a descendant of this node">
+            <parameter name="jp" type="joinpoint" />
+        </attribute>
+        <attribute name="hasParent" type="boolean" tooltip="true if this node has a parent" />
+        <attribute name="getFirstJp" type="joinpoint"
+            tooltip="Looks in the descendants for the first node of the given type">
+            <parameter name="type" type="String" />
+        </attribute>
+        <attribute name="line" type="int"
+            tooltip="The starting line of the current node in the original code" />
+        <attribute name="column" type="int"
+            tooltip="The starting column of the current node in the original code" />
+        <attribute name="endLine" type="int"
+            tooltip="The ending line of the current node in the original code" />
+        <attribute name="endColumn" type="int"
+            tooltip="The ending column of the current node in the original code" />
+        <attribute name="location" type="String"
+            tooltip="A string with information about the file and code position of this node, if available" />
+        <attribute name="filename" type="String"
+            tooltip="The name of the file where the code of this node is located, if available" />
+        <attribute name="filepath" type="String"
+            tooltip="the complete path to the file where the code of this node comes from" />
+        <attribute name="astId" type="String" tooltip="String that uniquely identifies this node" />
+        <attribute name="ast" type="String"
+            tooltip="String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'" />
+        <attribute name="code" type="String" tooltip="String with the code represented by this node" />
+        <attribute name="type" type="type">
+            <def />
+        </attribute>
+        <attribute name="hasType" type="Boolean" tooltip="true, if the join point has a type" />
+        <attribute name="bitWidth" type="int"
+            tooltip="The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit" />
 
-	<!-- Global Joinpoint -->
-	<!-- These properties are shared by all joinpoints -->
-	<global>
-		<attribute name="root" type="program"
-			tooltip="Returns the 'program' joinpoint" />
-		<attribute name="parent" type="joinpoint" tooltip="Returns the parent node in the AST, or undefined if it is the root node"/>
-		<attribute name="ancestor" type="joinpoint"
-			tooltip="Looks for an ancestor joinpoint name, walking back on the AST">
-			<parameter name="type" type="String" />
-		</attribute>
-		<attribute name="descendants" type="joinpoint[]"
-			tooltip="Retrieves all descendants of the join point">
-		</attribute>
-		<attribute name="descendants" type="joinpoint[]"
-			tooltip="Retrieves the descendants of the given type">
-			<parameter name="type" type="String" />
-		</attribute>
-		<attribute name="laraDescendants" type="joinpoint[]"
-			tooltip="[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type">
-			<parameter name="type" type="String" />
-		</attribute>
-		
-		<attribute name="descendantsAndSelf" type="joinpoint[]"
-			tooltip="Retrieves the descendants of the given type, including the node itself">
-			<parameter name="type" type="String" />
-		</attribute>
-		<attribute name="chainAncestor" type="joinpoint"
-			tooltip="Looks for an ancestor joinpoint name, walking back on the joinpoint chain">
-			<parameter name="type" type="String" />
-		</attribute>
-		<attribute name="astParent" type="joinpoint" tooltip="Returns the parent node in the AST, or undefined if it is the root node"/>
-		<attribute name="astAncestor" type="joinpoint"
-			tooltip="Looks for an ancestor AST name, walking back on the AST">
-			<parameter name="type" type="String" />
-		</attribute>
-		<attribute name="contains" type="Boolean" tooltip="true if the given node is a descendant of this node">
-			<parameter name="jp" type="joinpoint" />
-		</attribute>
-		<attribute name="hasParent" type="boolean" tooltip="true if this node has a parent"/>
-		<attribute name="hasAstParent" type="boolean" tooltip="[DEPRECATED: use hasParent instead]"/>
-		<attribute name="firstJp" type="joinpoint"
-			tooltip="Looks in the descendants for the first node of the given type">
-			<parameter name="type" type="String" />
-		</attribute>
-		<attribute name="line" type="Integer" tooltip="The starting line of the current node in the original code"/>
-		<attribute name="column" type="Integer" tooltip="The starting column of the current node in the original code"/>
-		<attribute name="endLine" type="Integer" tooltip="The ending line of the current node in the original code"/>
-		<attribute name="endColumn" type="Integer" tooltip="The ending column of the current node in the original code"/>		
-		<attribute name="location" type="String" tooltip="A string with information about the file and code position of this node, if available"/>
-		<attribute name="filename" type="String" tooltip="The name of the file where the code of this node is located, if available"/>
-		<attribute name="filepath" type="String" tooltip="the complete path to the file where the code of this node comes from"/>
-		<attribute name="astId" type="String" tooltip="String that uniquely identifies this node"/>
-		<attribute name="ast" type="String" tooltip="String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'"/>
-		<attribute name="code" type="String" tooltip="String with the code represented by this node"/>
-		<attribute name="joinpointType" type="String" tooltip="[DEPRECATED: use joinPointType instead (uppercase P)]"/>
-		<attribute name="type" type="type">
-			<def/>
-		</attribute>
-		<attribute name="hasType" type="Boolean" tooltip="true, if the join point has a type"/>
-		<attribute name="bitWidth" type="Integer" tooltip="The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit"/>
-		
-		<attribute name="astName" type="String" tooltip="The name of the Java class of this node, which is similar to the equivalent node in Clang AST"/>
-		<attribute name="astNumChildren" type="Integer" tooltip="Returns the number of children of the node, considering null nodes"/>
-		<attribute name="astChildren" type="joinpoint[]" tooltip="Returns an array with the children of the node, considering null nodes" />
-		<attribute name="astChild" type="joinpoint" tooltip="Returns the child of the node at the given index, considering null nodes">
-			<parameter name="index" type="Integer" />
-		</attribute>
-		<attribute name="numChildren" type="Integer" tooltip="Returns the number of children of the node, ignoring null nodes"/>
-		<attribute name="children" type="joinpoint[]" tooltip="Returns an array with the children of the node, ignoring null nodes"/>
-		<attribute name="child" type="joinpoint" tooltip="Returns the child of the node at the given index, ignoring null nodes">
-			<parameter name="index" type="Integer" />
-		</attribute>		
-		<attribute name="siblingsLeft" type="joinpoint[]" tooltip="Returns an array with the siblings that came before this node"/>
-		<attribute name="siblingsRight" type="joinpoint[]" tooltip="Returns an array with the siblings that come after this node"/>
-		<attribute name="leftJp" type="joinpoint" tooltip="Returns the node that came before this node, or undefined if there is none"/>
-		<attribute name="rightJp" type="joinpoint" tooltip="Returns the node that comes after this node, or undefined if there is none"/>		
-		<attribute name="astIsInstance" type="boolean" tooltip="true, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'">
-			<parameter name="className" type="String" />
-		</attribute>
-		<attribute name="hasNode" type="Boolean" tooltip="true, if the given join point or AST node is the same (== test) as the current join point AST node">
-			<parameter name="nodeOrJp" type="object" />
-		</attribute>
-		<attribute name="chain" type="String[]" tooltip="String list of the names of the join points that form a path from the root to this node"/>
-		<attribute name="javaFields" type="String[]" tooltip="[DEPRECATED: used attribute 'keys' instead, together with 'getValue'] The names of the Java fields of this node. Can be used as key of the attribute 'javaValue'"/>
-		<attribute name="javaValue" type="Object" tooltip="[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name">
-			<parameter name="fieldName" type="String" />
-		</attribute>
-		<attribute name="javaFieldType" type="String" tooltip="String with the full Java class name of the type of the Java field with the provided name">
-			<parameter name="fieldName" type="String" />
-		</attribute>
-		<attribute name="isInsideLoopHeader" type="Boolean" tooltip="true, if the join point is inside a loop header (e.g., for, while)"/>
-		<attribute name="isInsideHeader" type="Boolean" tooltip = "true, if the join point is inside a header (e.g., if condition, for, while)"/>
-		<attribute name="isInSystemHeader" type="Boolean" tooltip = "true, if the join point is part of a system header file"/>
-		 <!--  
-		<attribute name="setUserField" type="Object">
-			<parameter name="fieldName" type="String" />
-			<parameter name="value" type="Object" />	
-		</attribute> 
-		  -->
-		<attribute name="getUserField" type="Object" tooltip="[DEPRECATED: use 'userField' instead]">
-			<parameter name="fieldName" type="String" />	
-		</attribute>
-		<attribute name="userField" type="Object" tooltip="Retrives values that have been associated to nodes of the AST with 'setUserField'">
-			<parameter name="fieldName" type="String" />	
-		</attribute>
-		<attribute name="parentRegion" type="joinpoint" tooltip="Returns the node that declares the scope that is a parent of the scope of this node"/>
-		<attribute name="currentRegion" type="joinpoint" tooltip="Returns the node that declares the scope of this node"/>
-		<attribute name="pragmas" type="pragma[]" tooltip="The pragmas associated with this node"/>
-		<attribute name="data" type="Object" tooltip="JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.">
-			<def/>
-		</attribute>
-		<attribute name="keys" type="String[]" tooltip="A list of the properties currently supported by this node. Can be used as parameter of the attribute 'getValue'"/>
-		<attribute name="getValue" type="Object" tooltip="The value associated with the given property key">
-			<parameter name="key" type="String" />	
-		</attribute>
-		<attribute name="keyType" type="Object" tooltip="Java Class instance with the type of the given key">		
-			<parameter name="key" type="String" />	
-		</attribute>
-		<attribute name="isMacro" type="Boolean"
-			tooltip="true if any descendant or the node itself was defined as a macro">
-		</attribute>
-		<attribute name="firstChild" type="joinpoint" tooltip="Returns the first child of this node, or undefined if it has no child">
-			<def/>
-		</attribute>
-		<attribute name="lastChild" type="joinpoint" tooltip="Returns the last child of this node, or undefined if it has no child">
-			<def/>
-		</attribute>		
-		<attribute name="hasChildren" type="Boolean" 		tooltip="true if the node has children, false otherwise">
-		</attribute>
-		<attribute name="isCilk" type="Boolean" 		tooltip="true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)">
-		</attribute>
-		<!--
-		<attribute name="setValue" type="joinpoint" tooltip="Sets the value associated with the given property key">
-			<parameter name="key" type="String" />	
-			<parameter name="value" type="Object" />				
-		</attribute>
-		-->		
-		<attribute name="depth" type="Integer" tooltip="the depth of this join point in the AST. If it is the root join point returns 0, if it is a child of the root node returns 1, etc.">
-		</attribute>
-		<attribute name="jpId" type="String" tooltip="Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)">
-		</attribute>	
-		<attribute name="scopeNodes" type="joinpoint[]" tooltip="the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array">
-		</attribute>			
-		<attribute name="stmt" type="statement" tooltip="Converts this join point to a statement, or returns undefined if it was not possible"/>
-		<attribute name="inlineComments" type="comment[]" tooltip="Returns comments that are not explicitly in the AST, but embedded in other nodes">
-			<!-- <def type="comment[]"/>  -->
-			<def type="string[]"/>
-			<def type="string"/>			
-		</attribute>		
-	</global>
-
-
-
-	<!-- CLAVA EXCEPTION -->
-	<artifact class="clavaException">
-		<attribute name="message" type="String" />
-		<attribute name="exceptionType" type="String" />
-		<attribute name="exception" type="Object" />				
-	</artifact>
-
-	<!-- PROGRAM -->
-	<artifact class="program" default="name">
-		<attribute name="name" type="String" />
-		<attribute name="isCxx" type="Boolean" tooltip="true if the program was compiled with a C++ standard"/>
-		<attribute name="standard" type="String" tooltip="The name of the standard (e.g., c99, c++11)"/>
-		<attribute name="stdFlag" type="String" tooltip="The flag of the standard (e.g., -std=c++11)" />
-		<attribute name="defaultFlags" type="String[]" />
-		<attribute name="userFlags" type="String[]" />
-		<attribute name="includeFolders" type="String[]" />
-		<attribute name="baseFolder" type="String" />
-		<attribute name="weavingFolder" type="String" />
-		<attribute name="extraSources" type="String[]" tooltip="paths to sources that the current program depends on"/>
-		<attribute name="extraIncludes" type="String[]" tooltip="paths to includes that the current program depends on"/>
-		<attribute name="extraProjects" type="String[]" tooltip="paths to folders of projects that the current program depends on"/>
-		<attribute name="extraLibs" type="String[]" tooltip="link libraries of external projects the current program depends on"/>		
-		<attribute name="main" type="function" tooltip="a function join point with the main function of the program, if one is available"/>		
-		<attribute name="files" type="file[]" tooltip="the source files in this program"/>		
-	</artifact>
+        <attribute name="astName" type="String"
+            tooltip="The name of the Java class of this node, which is similar to the equivalent node in Clang AST" />
+        <attribute name="astNumChildren" type="int"
+            tooltip="Returns the number of children of the node, considering null nodes" />
+        <attribute name="astChildren" type="joinpoint[]"
+            tooltip="Returns an array with the children of the node, considering null nodes" />
+        <attribute name="getAstChild" type="joinpoint"
+            tooltip="Returns the child of the node at the given index, considering null nodes">
+            <parameter name="index" type="int" />
+        </attribute>
+        <attribute name="numChildren" type="int"
+            tooltip="Returns the number of children of the node, ignoring null nodes" />
+        <attribute name="children" type="joinpoint[]"
+            tooltip="Returns an array with the children of the node, ignoring null nodes" />
+        <attribute name="getChild" type="joinpoint"
+            tooltip="Returns the child of the node at the given index, ignoring null nodes">
+            <parameter name="index" type="int" />
+        </attribute>
+        <attribute name="siblingsLeft" type="joinpoint[]"
+            tooltip="Returns an array with the siblings that came before this node" />
+        <attribute name="siblingsRight" type="joinpoint[]"
+            tooltip="Returns an array with the siblings that come after this node" />
+        <attribute name="leftJp" type="joinpoint"
+            tooltip="Returns the node that came before this node, or undefined if there is none" />
+        <attribute name="rightJp" type="joinpoint"
+            tooltip="Returns the node that comes after this node, or undefined if there is none" />
+        <attribute name="astIsInstance" type="Boolean"
+            tooltip="true, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'">
+            <parameter name="className" type="String" />
+        </attribute>
+        <attribute name="hasNode" type="Boolean"
+            tooltip="true, if the given join point or AST node is the same (== test) as the current join point AST node">
+            <parameter name="nodeOrJp" type="object" />
+        </attribute>
+        <attribute name="chain" type="String[]"
+            tooltip="String list of the names of the join points that form a path from the root to this node" />
+        <attribute name="javaFields" type="String[]"
+            tooltip="[DEPRECATED: used attribute 'keys' instead, together with 'getValue'] The names of the Java fields of this node. Can be used as key of the attribute 'javaValue'" />
+        <attribute name="getJavaFieldType" type="String"
+            tooltip="String with the full Java class name of the type of the Java field with the provided name">
+            <parameter name="fieldName" type="String" />
+        </attribute>
+        <attribute name="isInsideLoopHeader" type="Boolean"
+            tooltip="true, if the join point is inside a loop header (e.g., for, while)" />
+        <attribute name="isInsideHeader" type="Boolean"
+            tooltip="true, if the join point is inside a header (e.g., if condition, for, while)" />
+        <attribute name="isInSystemHeader" type="Boolean"
+            tooltip="true, if the join point is part of a system header file" />
+        <attribute name="getUserField" type="Object"
+            tooltip="Retrives values that have been associated to nodes of the AST with 'setUserField'">
+            <parameter name="fieldName" type="String" />
+        </attribute>
+        <attribute name="parentRegion" type="joinpoint"
+            tooltip="Returns the node that declares the scope that is a parent of the scope of this node" />
+        <attribute name="currentRegion" type="joinpoint"
+            tooltip="Returns the node that declares the scope of this node" />
+        <attribute name="pragmas" type="pragma[]" tooltip="The pragmas associated with this node" />
+        <attribute name="data" type="Object"
+            tooltip="JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.">
+            <def />
+        </attribute>
+        <attribute name="keys" type="String[]"
+            tooltip="A list of the properties currently supported by this node. Can be used as parameter of the attribute 'getValue'" />
+            <attribute name="getValue" type="Object"
+            tooltip="The value associated with the given property key">
+            <parameter name="key" type="String" />
+        </attribute>
+        <attribute name="getKeyType" type="Object"
+            tooltip="Java Class instance with the type of the given key">
+            <parameter name="key" type="String" />
+        </attribute>
+        <attribute name="isMacro" type="Boolean"
+            tooltip="true if any descendant or the node itself was defined as a macro">
+        </attribute>
+        <attribute name="firstChild" type="joinpoint"
+            tooltip="Returns the first child of this node, or undefined if it has no child">
+            <def />
+        </attribute>
+        <attribute name="lastChild" type="joinpoint"
+            tooltip="Returns the last child of this node, or undefined if it has no child">
+            <def />
+        </attribute>
+        <attribute name="hasChildren" type="Boolean"
+            tooltip="true if the node has children, false otherwise">
+        </attribute>
+        <attribute name="isCilk" type="Boolean"
+            tooltip="true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)">
+        </attribute>
+        <attribute name="depth" type="int"
+            tooltip="the depth of this join point in the AST. If it is the root join point returns 0, if it is a child of the root node returns 1, etc.">
+        </attribute>
+        <attribute name="jpId" type="String"
+            tooltip="Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)">
+        </attribute>
+        <attribute name="scopeNodes" type="joinpoint[]"
+            tooltip="the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array">
+        </attribute>
+        <attribute name="stmt" type="statement"
+            tooltip="Converts this join point to a statement, or returns undefined if it was not possible" />
+        <attribute name="inlineComments" type="comment[]"
+            tooltip="Returns comments that are not explicitly in the AST, but embedded in other nodes">
+            <!-- <def type="comment[]"/>  -->
+            <def type="string[]" />
+            <def type="string" />
+        </attribute>
+        <attribute name="originNode" type="joinpoint"
+                   tooltip="If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin">
+        </attribute>
+    </global>
 
 
-	<!-- FILE -->
-	<artifact class="file" default="name">
-		<attribute name="name" type="String" tooltip="the name of the file"/>
-		<attribute name="file" type="Object" tooltip="a Java file to the file that originated this translation unit"/>
-		<attribute name="hasMain" type="Boolean" tooltip="true if this file contains a 'main' method"/>
-		<!-- <attribute name="filename" type="String"/> -->
-		<attribute name="path" type="String" tooltip="the folder of the source file"/>
-		<!--  <attribute name="filepath" type="String" tooltip="the complete path to the file"/> -->
-		<attribute name="relativeFilepath" type="String" tooltip="the path to the file relative to the base source path"/>
-		<attribute name="relativeFolderpath" type="String" tooltip="the path to the folder of the source file relative to the base source path">
-			<def/>
-		</attribute>
-		<attribute name="baseSourcePath" type="String" tooltip="the path to the source folder that was given as the base folder of this file"/>
-		<attribute name="isCxx" type="Boolean" tooltip="true if this file is considered a C++ file"/>
-		<attribute name="isHeader" type="Boolean" tooltip="true if this file is considered a header file"/>
-		<attribute name="isOpenCL" type="Boolean" tooltip="true if this file is an OpenCL filetype"/>
-		<attribute name="destinationFilepath" type="String" tooltip="the complete path to the file that will be generated by the weaver"/>
-		<attribute name="destinationFilepath" type="String" tooltip="the complete path to the generated file, given a destination folder">
-			<parameter name="destinationFolderpath" type="String" />			
-		</attribute>		
-		<attribute name="sourceFoldername" type="String" tooltip="the name of the source folder of this file, or undefined if it has none"/>
-		<attribute name="hasParsingErrors" type="Boolean" tooltip="true if there were errors during parsing"/>
-		<attribute name="errorOutput" type="String" tooltip="the output of the parser if there were errors during parsing"/>
-		<attribute name="includes" type="include[]" tooltip="the includes of this file"/>
-	</artifact>
-
-	<!-- INCLUDE -->
-	<artifact class="include" default="name">
-		<attribute name="name" type="String" tooltip="the name of the include"/>
-		<attribute name="isAngled" type="Boolean" tooltip="true if this is an angled include (i.e., system include)"/>
-		<!-- <attribute name="filepath" type="String" tooltip="the complete path to the file"/>  -->
-		<attribute name="relativeFolderpath" type="String" tooltip="the path to the folder of the source file of the include, relative to the name of the include"/>
-	</artifact>
-
-	<!-- RECORD -->
-	<artifact class="record" default="name">
-		<!--  
-		<attribute name="name" type="String">
-			<def/>
-		</attribute>
-		 -->
-		<attribute name="kind" type="String" />
-		<!-- <attribute name="name" type="{struct,interface,union,class,enum}"/> -->
-		<attribute name="fields" type="joinpoint[]" />
-		<attribute name="functions" type="function[]" />
-		<attribute name="isImplementation" type="Boolean" tooltip="true if this particular join point is an implementation (i.e. has its body fully specified), false otherwise" />
-		<attribute name="isPrototype" type="Boolean" tooltip="true if this particular join point is a prototype (i.e. does not have its body fully specified), false otherwise" />				
-	</artifact>
-	
-	<!-- CLASS -->
-	<artifact class="class" default="name">
-		<attribute name="methods" type="method[]" tooltip="The methods declared by this class"/>	
-		<attribute name="bases" type="class[]" tooltip="The classes this class directly inherits from"/>
-		<attribute name="allMethods" type="method[]" tooltip="All the methods of this class, including inherited ones"/>	
-		<attribute name="allBases" type="class[]" tooltip="All the classes this class inherits from"/>					
-		<attribute name="isAbstract" type="boolean" tooltip="True, if contains at least one pure function"/>							
-		<attribute name="isInterface" type="boolean" tooltip="True, if all functions are pure"/>
-		<attribute name="prototypes" type="class[]" tooltip="The prototypes (or declarations) of this class present in the AST, if any"/>
-		<attribute name="implementation" type="class" tooltip="The implementation (or definition) of this class present in the AST, or undefined if none is found"/>													
-		<attribute name="canonical" type="class" tooltip="Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present"/>				
-		<attribute name="isCanonical" type="Boolean" tooltip="true if this is the class returned by the 'canonical' attribute"/>
-		<!-- <attribute name="isImplementation" type="Boolean" tooltip="true if this class is completely defined, false otherwise"/> -->		
-	</artifact>
-	
-	<!-- METHOD -->
-	<artifact class="method" default="name">
-			<attribute name="record" type="class"/>
-<!-- 
-		<attribute name="record" type="class">
-			<def/>
-		</attribute>	
- -->
-	</artifact>
-
-
-	<!-- DECLARATION -->
-	<artifact class="decl">
-		<attribute name="attrs" type="attribute[]" tooltip="The attributes (e.g. Pure, CUDAGlobal) associated to this decl"/>
-	</artifact>
-
-	<!-- NAMED DECLARATION -->
-	<artifact class="namedDecl" default="name">
-		<attribute name="name" type="String">
-			<def/>
-		</attribute>
-		<attribute name="isPublic" type="Boolean" />
-		<attribute name="qualifiedPrefix" type="String">
-			<def/>
-		</attribute>
-		<attribute name="qualifiedName" type="String">
-			<def/>		
-		</attribute>		
-	</artifact>
-
-	<!-- DECLARATOR DECLARATION -->
-	<artifact class="declarator">
-	</artifact>
-
-
-	<!-- ENUM DECL -->
-	<artifact class="enumDecl" default="name">
-		<attribute name="enumerators" type="enumeratorDecl[]" />
-	</artifact>
-
-
-	<!-- LOOP -->
-	<artifact class="loop" default="kind">
-		<attribute name="kind" type="{for,while,dowhile,foreach}" />
-		<attribute name="id" type="String" tooltip="Uniquely identifies the loop inside the program"/>
-		<attribute name="isInnermost" type="Boolean" />
-		<attribute name="isOutermost" type="Boolean" />
-		<attribute name="nestedLevel" type="Integer" />
-		<attribute name="controlVar" type="String" />
-		<attribute name="rank" type="Integer[]" />
-		<attribute name="isParallel" type="Boolean">
-			<def/>
-			<def type="string"/>
-		</attribute>
-		<attribute name="iterations" type="Integer" />
-		<attribute name="iterationsExpr" type="expression" />
-		<attribute name="isInterchangeable" type="Boolean" tooltip="Tests whether the loops are interchangeable. This is a conservative test.">
-			<parameter name="otherLoop" type="loop" />	
-		</attribute>
-		<attribute name="init" type="statement" tooltip="The statement of the loop initialization">
-			<def type="string"/>
-		</attribute>
-		<attribute name="initValue" type="String" tooltip="The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')">
-			<def/>
-		</attribute>		
-		<attribute name="cond" type="statement" tooltip="The statement of the loop condition"/>
-		<attribute name="step" type="statement" tooltip="The statement of the loop step"/>
-		<attribute name="endValue" type="String" tooltip="The expression of the last value of the control variable (e.g. 'length' in 'i &lt; length;')"/>
-		<attribute name="stepValue" type="String" tooltip="The expression of the iteration step"/>		
-		<attribute name="hasCondRelation" type="Boolean" tooltip="True if the condition of the loop in the canonical format, and is one of: &lt;, &lt;=, >, >="/>
-		<attribute name="condRelation" type="Relation">
-			<def/>
-			<def type="string"/>
-		</attribute>
-		<attribute name="body" type="scope">
-			<def/>
-		</attribute>
-	</artifact>
-
-
-	<!-- SCOPE -->
-	<artifact class="scope">
-		<attribute name="numStatements" type="Long" tooltip="The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas"/>
-		<attribute name="numStatements" type="Long" tooltip="The number of statements in the scope, not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)">
-			<parameter name="flat" type="Boolean" />	
-		</attribute>
-		<attribute name="naked" type="Boolean" tooltip="true if the scope does not have curly braces">
-			<def/>
-		</attribute>
-		<attribute name="stmts" type="statement[]" tooltip="Returns the direct (children) statements of this scope"/>
-		<attribute name="allStmts" type="statement[]" tooltip="Returns the descendant statements of this scope, excluding other scopes, loops, ifs and wrapper statements"/>
-		<attribute name="firstStmt" type="statement" />
-		<attribute name="lastStmt" type="statement" />
-		<attribute name="owner" type="joinpoint" tooltip="The statement that owns the scope (e.g., function, loop...)"/>
-	</artifact>
-
-	<!-- EXPR STMT -->
-	<artifact class="exprStmt">
-		<attribute name="expr" type="expression" tooltip="The expression join point associated to this exprStmt"/>		
-	</artifact>
-	
-	<!-- DECL STMT -->
-	<artifact class="declStmt">
-		<attribute name="decls" type="decl[]" tooltip="The declarations in this statement"/>		
-	</artifact>
-
-
-
-	<!-- EXPRESSION -->
-	<artifact class="expression">
-		<!-- If this expression represents a declared variable, returns the name 
-			of the variable -->
-		<!-- <attribute name="refname" type="String"/> -->
-		<!-- If this expression represents a declared variable, returns a joinpoint 
-			representing the declaration of the variable -->
-		<attribute name="decl" type="decl" tooltip="a 'decl' join point that represents the declaration associated with this expression, or undefined if there is none"/>
-		<attribute name="vardecl" type="vardecl" />
-		<attribute name="use" type="{read,write,readwrite}" />
-		<attribute name="isFunctionArgument" type="Boolean" 
-			tooltip="true if the expression is part of an argument of a function call"/>
-		<attribute name="implicitCast" type="cast" tooltip="returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise"/>
+    <!-- CLAVA EXCEPTION -->
+    <artifact class="clavaException">
+        <attribute name="message" type="String" />
+        <attribute name="exceptionType" type="String" />
+        <attribute name="exception" type="Object" />
     </artifact>
 
-	<!-- CALL -->
-	<artifact class="call" default="name">
-		<attribute name="name" type="String">
-			<def/>
-		</attribute>		
-		<attribute name="numArgs" type="Integer" />
-		<attribute name="memberNames" type="String[]" />
-<!-- 		<attribute name="decl" type="function"
-			tooltip="a 'function' join point that represents the function declaration or definition of the call, whatever appears first; 'undefined' if nothing was found"/>  -->
-		<!-- <attribute name="declarations" type="function[]" tooltip="an array of 'function' join point that represents the prototypes of the call; empty array if no prototype was found"/>  -->
-		<attribute name="declaration" type="function" 
-			tooltip="a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found"/>
-		<attribute name="definition" type="function" 
-			tooltip="a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found"/>
-		<attribute name="argList" type="expression[]" tooltip="an alias for 'args'"/>
-		<attribute name="args" type="expression[]" tooltip="an array with the arguments of the call"/>
-		<attribute name="arg" type="expression">
-			<parameter name="index" type="int" />	
-		</attribute>
-		<attribute name="returnType" type="type" tooltip="the return type of the call"/>
-		<attribute name="functionType" type="functionType" tooltip="the function type of the call, which includes the return type and the types of the parameters"/>
-		<attribute name="isMemberAccess" type="boolean"/>
-		<attribute name="memberAccess" type="memberAccess"/>
-		<attribute name="isStmtCall" type="boolean"/>
-		<attribute name="function" type="function" tooltip="a function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration"/>		
-		<attribute name="signature" type="String" tooltip="similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function"/>
-		<attribute name="directCallee" type="function" tooltip="a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)"/>		
-	</artifact>
-	
-	<!-- MEMBER CALL -->	
-	<artifact class="memberCall" default="name">
-		<attribute name="base" type="expression" />
-		<attribute name="rootBase" type="expression" />
-	</artifact>	
-
-	<artifact class="cudaKernelCall" default="name">
-		<attribute name="config" type="expression[]">
-			<def type="expression[]"/>
-		</attribute>
-	</artifact>	
-
-
-
-	<!-- VARDECL -->
-	<artifact class="vardecl" default="name">
-		<attribute name="hasInit" type="Boolean" tooltip="true, if vardecl has an initialization value" />
-		<attribute name="init" type="expression" tooltip="If vardecl has an initialization value, returns an expression with that value"/>
-		<attribute name="initStyle" type="String" tooltip="The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit"/>
-		<attribute name="isParam" type="Boolean" tooltip="true, if vardecl is a function parameter" />
-		<attribute name="storageClass" type="String" tooltip="Storage class specifier, which can be none, extern, static, __private_extern__, auto, register">
-			<def/>
-		</attribute>
-		<attribute name="isGlobal" type="Boolean" tooltip="true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function." />
-		<attribute name="definition" type="vardecl" tooltip="The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)"/>		
-	</artifact>
-
-	<artifact class="accessSpecifier" default="kind">
-		<attribute name="kind" type="String" tooltip="the type of specifier. Can return 'public', 'protected', 'private' or 'none'"/>
-	</artifact>
-
-
-
-	<!-- VARREF -->
-	<artifact class="varref" default="name">
-		<attribute name="name" type="String">
-			<def/>
-		</attribute>
-		<attribute name="kind" type="String" />
-		<attribute name="useExpr" type="expression"
-			tooltip="expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node" />
-		<attribute name="isFunctionCall" type="Boolean" 
-			tooltip="true if this varref represents a function call" />
-		<attribute name="declaration" type="declarator" />
-		<attribute name="property" type="String" tooltip="if this variable reference has a MS-style property, returns the property name. Returns undefined otherwise" />
-		<attribute name="hasProperty" type="Boolean" tooltip="true if this variable reference has a MS-style property, false otherwise"/>				
-	</artifact>
-
-	<!-- FUNCTION -->
-	<artifact class="function" default="name">
-		<!--  <attribute name="name" type="String" />  -->
-		<attribute name="hasDefinition" type="Boolean" tooltip="[DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise" />
-		<attribute name="isImplementation" type="Boolean" tooltip="true if this particular function join point is an implementation (i.e. has a body), false otherwise" />
-		<attribute name="isPrototype" type="Boolean" tooltip="true if this particular function join point is a prototype (i.e. does not have a body), false otherwise" />
-		<attribute name="functionType" type="functionType" tooltip="the type of the call, which includes the return type and the types of the parameters">
-			<def/>			
-		</attribute>	
-		<attribute name="declarationJp" type="function" tooltip="Returns the first prototype of this function that could be found, or undefined if there is none"/>
-		<attribute name="declarationJps" type="function[]" tooltip="Returns the prototypes of this function that are present in the code. If there are none, returns an empty array"/>
-		<attribute name="definitionJp" type="function" tooltip="Returns the implementation of this function if there is one, or undefined otherwise"/>		
-		<attribute name="declaration" type="String">
-			<parameter name="withReturnType" type="Boolean" />
-		</attribute>
-		<attribute name="body" type="scope">
-			<def/>
-		</attribute>
-		<attribute name="paramNames" type="String[]"/>
-		<attribute name="params" type="param[]">
-			<def type="param[]"/>
-			<def type="String[]"/>		
-		</attribute>
-		<attribute name="id" type="String"/>
-		<attribute name="isInline" type="Boolean"/>
-		<attribute name="isVirtual" type="Boolean"/>
-		<attribute name="isModulePrivate" type="Boolean"/>
-		<attribute name="isPure" type="Boolean"/>
-		<attribute name="isDelete" type="Boolean"/>
-		<attribute name="storageClass" type="StorageClass"/>
-		<attribute name="calls" type="call[]"/>		
-		<attribute name="signature" type="String" tooltip="a string with the signature of this function (e.g., name of the function, plus the parameters types)"/>
-		<attribute name="returnType" type="type">
-			<def/>
-		</attribute>
-		<attribute name="isCudaKernel" type="Boolean"/>
-		<attribute name="canonical" type="function" tooltip="Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present"/>				
-		<attribute name="isCanonical" type="Boolean" tooltip="true, if this is the function returned by the 'canonical' attribute"/>
-	</artifact>
-
-
-	<!-- IF -->
-	<artifact class="if">
-		<attribute name="cond" type="expression">
-			<def/>
-		</attribute>
-		<attribute name="condDecl" type="vardecl" />
-		<attribute name="then" type="scope">
-			<def type="statement"/>
-		</attribute>		
-		<attribute name="else" type="scope">
-			<def type="statement"/>
-		</attribute>		
-	</artifact>
-
-	<!-- GOTO -->
-	<artifact class="gotoStmt">
-		<attribute name="label" type="labelDecl">
-			<def/>
-		</attribute>
-	</artifact>
-
-	<!-- LABEL -->	
-	<artifact class="labelStmt">
-		<attribute name="decl" type="labelDecl">
-			<def/>
-		</attribute>
-	</artifact>
-
-	<!-- BREAK -->	
-	<artifact class="break">
-		<attribute name="enclosingStmt" type="statement" tooltip="The enclosing statement related to this break. It should be either a loop or a switch statement."/>
-	</artifact>
-
-	<!-- SWITCH -->
-	<artifact class="switch">
-		<attribute name="hasDefaultCase" type="Boolean" tooltip="true if there is a default case in this switch statement, false otherwise"/>		
-		<attribute name="getDefaultCase" type="case" tooltip="the default case statement of this switch statement or undefined if it does not have a default case"/>				
-		<attribute name="cases" type="case[]" tooltip="the case statements inside this switch"/>				
-		<attribute name="condition" type="expression" tooltip="the condition of this switch statement"/>				
-		</artifact>
-
-	<!-- CASE -->
-	<artifact class="case">
-		<attribute name="isDefault" type="Boolean" tooltip="true if this is a default case, false otherwise"/>		
-		<attribute name="isEmpty" type="Boolean" tooltip="true if this case does not contain instructions (i.e., it is directly above another case), false otherwise"/>				
-		<attribute name="nextInstruction" type="statement" tooltip="the first statement that is not a case that will be executed by this case statement"/>						
-		<attribute name="instructions" type="statement[]" tooltip="the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)"/>						
-		<attribute name="nextCase" type="case" tooltip="the case statement that comes after this case, or undefined if there are no more case statements"/>						
-		<attribute name="values" type="expression[]" tooltip="the values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case"/>
-	</artifact>
-	
-	
-	<!-- STATEMENT -->
-	<artifact class="statement">
-		<attribute name="isFirst" type="Boolean" />
-		<attribute name="isLast" type="Boolean" />
-		<!-- <attribute name="stmts" type="joinpoint[]"/> -->
-	</artifact>
-	
-	<artifact class="wrapperStmt">
-		<attribute name="kind" type="{comment,pragma}" />
-		<attribute name="content" type="joinpoint" />
-	</artifact>
-	
-	
-
-
-	<!-- PRAGMA -->
-	<artifact class="pragma" default="name">
-		<attribute name="name" type="String" tooltip="The name of the pragma. E.g. for #pragma foo bar, returns 'foo'"/>
-		<attribute name="target" type="joinpoint" tooltip="The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations"/>
-		<attribute name="content" type="String" tooltip="Everything that is after the name of the pragma"/>
-		<attribute name="targetNodes" type="joinpoint[]" tooltip="All the nodes below the target node, including the target node"/>
-		<attribute name="targetNodes" type="joinpoint[]" tooltip="All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument">
-			<parameter name="endPragma" type="String" />
-		</attribute>
-	</artifact>
-
-	<artifact class="returnStmt">
-		<attribute name="returnExpr" type="expression">
-<!-- 			<def/>  -->
-		</attribute>
-	</artifact>
-
-
-	<!-- MARKER -->
-	<artifact class="marker" default="id">
-		<attribute name="id" type="String" />
-		<attribute name="contents" type="joinpoint"
-			tooltip="A scope, associated with this marker" />
-	</artifact>
-
-	<!-- TAG -->
-	<artifact class="tag" default="id">
-		<attribute name="id" type="String" tooltip="The ID of the pragma"/>
-	</artifact>
-
-	<artifact class="op">
-		<attribute name="operator" type="String" />	
-		<attribute name="kind" type="String" tooltip="The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div, rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign, rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not, real, imag, extension, cowait."/>
-		<attribute name="isBitwise" type="Boolean" />
-	</artifact>
-	
-	<!-- BINARY OPERATOR -->
-	<artifact class="binaryOp">
-		<attribute name="left" type="expression">
-			<def/>
-		</attribute>
-		<attribute name="right" type="expression">
-			<def/>
-		</attribute>
-		<attribute name="isAssignment" type="Boolean" />
-		
-	</artifact>
-
-
-	<!-- UNARY OPERATOR -->
-	<artifact class="unaryOp">
-		<attribute name="operand" type="expression" />
-		<attribute name="isPointerDeref" type="Boolean" />
-	</artifact>
-
-
-	<!-- TERNARY OPERATOR -->
-	<artifact class="ternaryOp">
-		<attribute name="cond" type="expression">
-			<def/>
-		</attribute>		
-		<attribute name="trueExpr" type="expression">
-			<def/>
-		</attribute>
-		<attribute name="falseExpr" type="expression">
-			<def/>
-		</attribute>
-	</artifact>
-
-
-
-	<!-- CAST -->
-	<artifact class="cast">
-		<attribute name="isImplicitCast" type="Boolean" tooltip="[DEPRECATED: Use expr.implicitCast instead]"/> 
-		<attribute name="fromType" type="type" />
-		<attribute name="toType" type="type" />
-		<attribute name="subExpr" type="expression" />
-	</artifact>
-	
-	<!-- PAREN EXPR -->
-	<artifact class="parenExpr">
-		<attribute name="subExpr" type="expression" tooltip="Returns the expression inside this parenthesis expression"/> 
-	</artifact>
-
-	<!-- ARRAY ACCESS -->
-	<artifact class="arrayAccess">
-		<attribute name="arrayVar" type="expression"
-			tooltip="expression representing the variable of the array access (can be a varref, memberAccess...)" />
-		<attribute name="subscript" type="expression[]"
-			tooltip="expression of the array access subscript" />	
-		<attribute name="parentAccess" type="arrayAccess"
-			tooltip="A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript" />			
-		<attribute name="numSubscripts" type="int"
-			tooltip="The number of subscripts of this array access" />						
-		<attribute name="name" type="string"
-			tooltip="If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name" />									
-	</artifact>
-
-
-	<!-- MEMBER ACCESS -->
-	<artifact class="memberAccess">
-		<attribute name="name" type="String" />
-		<attribute name="memberChain" type="expression[]" />
-		<attribute name="memberChainNames" type="String[]" />
-		<attribute name="base" type="expression" tooltip="expression of the base of this member access" />
-		<attribute name="arrow" type="Boolean" tooltip="true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)">
-			<def/>
-		</attribute>
-	</artifact>
-
-
-	<!-- UnaryExprOrType -->
-	<artifact class="unaryExprOrType">
-		<attribute name="kind" type="String" />
-		<attribute name="hasTypeExpr" type="Boolean" />
-		<attribute name="hasArgExpr" type="Boolean" />
-		<attribute name="argType" type="type">
-			<def/>
-		</attribute>
-		<attribute name="argExpr" type="expression" />
-	</artifact>
-
-
-	<!-- LITERAL -->
-	<artifact class="literal">
-	</artifact>
-
-	<!-- INT LITERAL -->
-	<artifact class="intLiteral">
-		<attribute name="value" type="Long" />
-	</artifact>
-
-	<!-- FLOAT LITERAL -->
-	<artifact class="floatLiteral">
-		<attribute name="value" type="Double" />
-	</artifact>
-
-	<!-- BOOL LITERAL -->
-	<artifact class="boolLiteral">
-		<attribute name="value" type="Boolean" />
-	</artifact>
-
-	<!-- COMMENT -->
-	<artifact class="comment">
-		<attribute name="text" type="String">
-			<def/>
-		</attribute>
-	</artifact>
-
-	<!-- ATTRIBUTE -->
-	<artifact class="attribute">
-		<attribute name="kind" type="String"/>
-	</artifact>
-
-
-	<!-- TYPES -->
-
-	<!-- TYPE -->
-	<artifact class="type">
-		<attribute name="kind" type="String" />
-		<attribute name="isTopLevel" type="Boolean" />
-		<attribute name="isArray" type="Boolean" />
-		<attribute name="isPointer" type="Boolean" />
-		<attribute name="isAuto" type="Boolean" tooltip="True if this is a type declared with the 'auto' keyword"/>		
-		<attribute name="arraySize" type="Integer" />
-		<attribute name="arrayDims" type="Integer[]" />		
-		<!-- <attribute name="elementType" type="joinpoint" />  -->
-		<attribute name="hasTemplateArgs" type="Boolean" />
-		<attribute name="templateArgsStrings" type="String[]" />
-		<attribute name="templateArgsTypes" type="type[]">
-		 	<!-- <def/> -->
-			<def type="type[]"/>
-		</attribute>		
-		<attribute name="hasSugar" type="Boolean" />
-		<attribute name="desugar" type="type" tooltip="Single-step desugar. Returns the type itself if it does not have sugar" >
-			<def/>
-		</attribute>
-		<attribute name="desugarAll" type="type" tooltip="Completely desugars the type"/>
-		<attribute name="isBuiltin" type="Boolean" />
-		<attribute name="constant" type="Boolean" />
-		<attribute name="unwrap" type="type" tooltip="If the type encapsulates another type, returns the encapsulated type" />
-		<attribute name="normalize" type="type" tooltip="Ignores certain types (e.g., DecayedType)" />
-		<attribute name="typeFields" type="Map" tooltip="Maps names of join point fields that represent type join points, to their respective values"/>		
-		<attribute name="fieldTree" type="String" tooltip="A tree representation of the fields of this type"/>
-		<attribute name="bitWidth" type="Integer" tooltip="The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined">
-			<parameter name="reference" type="Joinpoint" />
-		</attribute>
-	</artifact>
-
-
-
-	<!-- POINTER TYPE -->
-	<artifact class="pointerType">
-		<attribute name="pointee" type="type">
-			<def/>
-		</attribute>
-		<attribute name="pointerLevels" type="Integer" tooltip="Number of pointer levels from this pointer" />
-	</artifact>
-	
-	
-	<!-- ARRAY TYPE -->
-	<artifact class="arrayType">
-		<attribute name="elementType" type="type">
-			<def/>
-		</attribute>
-	</artifact>
-	
-	<!-- VARIABLE ARRAY TYPE -->
-	<artifact class="variableArrayType">
-		<attribute name="sizeExpr" type="expression">
-			<def/>
-		</attribute>
-	</artifact>
-
-	<!-- TAG TYPE -->
-	<artifact class="tagType">
-		<attribute name="name" type="String" />
-		<attribute name="decl" type="decl" tooltip="a 'decl' join point that represents the declaration of this tag type"/>		
-	</artifact>
-
-	<!-- ENUM TYPE -->
-	<artifact class="enumType">
-		<attribute name="integerType" type="type" />
-	</artifact>
-
-
-	<!-- TEMPLATE SPECIALIZATION TYPE -->
-	<artifact class="templateSpecializationType">
-		<attribute name="templateName" type="String" />
-		<attribute name="numArgs" type="Integer" />
-		<attribute name="args" type="String[]" />
-		<attribute name="firstArgType" type="type" />
-	</artifact>
-
-	<!-- FUNCTION TYPE -->
-	<artifact class="functionType">
-		<attribute name="returnType" type="type">
-			<def/>
-		</attribute>
-		<attribute name="paramTypes" type="joinpoint[]" />
-	</artifact>
-
-
-
-
-	<!-- QUAL TYPE -->
-	<artifact class="qualType">
-		<attribute name="qualifiers" type="String[]" />
-		<attribute name="unqualifiedType" type="type" />
-	</artifact>
-	
-	<!-- BUILTIN TYPE -->
-	<artifact class="builtinType">
-		<attribute name="builtinKind" type="String" />
-		<attribute name="isInteger" type="Boolean" tooltip="true, if it is an integer type"/>
-		<attribute name="isFloat" type="Boolean" tooltip="true, if ot is a floating type (e.g., float, double)"/>
-		<attribute name="isSigned" type="Boolean" tooltip="true, if it is a signed integer type" />
-		<attribute name="isUnsigned" type="Boolean" tooltip="true, if it is an unsigned integer type" />
-		<attribute name="isVoid" type="Boolean" tooltip="true, if it is the type 'void'" />		
-	</artifact>	
-
-	<!-- PAREN TYPE -->
-	<artifact class="parenType">
-		<attribute name="innerType" type="type">
-			<def/>	
-		</attribute>
-	</artifact>
-
-	
-	<!-- ADJUSTED TYPE -->
-	<artifact class="adjustedType">
-		<attribute name="originalType" type="type" tooltip="the type that is being adjusted"/>
-	</artifact>
-	
-	<!-- ELABORATED TYPE -->
-	<artifact class="elaboratedType">
-		<attribute name="keyword" type="String" tooltip="the keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename"/>
-		<attribute name="qualifier" type="String" tooltip="the qualifier of this elaborated type, if present (e.g., A::)"/>
-		<attribute name="namedType" type="type" tooltip="the type that is being prefixed with the qualifier"/>
-	</artifact>
-	
-	<artifact class="typedefType">
-		<attribute name="decl" type="typedefNameDecl" tooltip="the typedef declaration associated with this typedef type"/>
-		<attribute name="underlyingType" type="type" tooltip="the type that is being typedef'd"/>
-	</artifact>
-
-
-	<!-- OPENMP -->
-
-	<!-- OMP -->
-	<artifact class="omp" default="kind">
-		<attribute name="kind" type="String" tooltip="The kind of the directive"/>
-		<attribute name="numThreads" type="String" tooltip="An integer expression, or undefined if no 'num_threads' clause is defined">
-			<def/>
-		</attribute>
-		<attribute name="procBind" type="String" tooltip="One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined">
-			<def/>
-		</attribute>
-		<attribute name="private" type="String[]" tooltip="The variable names of all private clauses, or empty array if no private clause is defined"/>
-		<attribute name="hasClause" type="Boolean" tooltip="True if the directive has at least one clause of the given clause kind, false otherwise">
-			<parameter name="clauseName" type="String" />
-		</attribute>
-		<attribute name="isClauseLegal" type="Boolean" tooltip="True if it is legal to use the given clause kind in this directive, false otherwise">
-			<parameter name="clauseName" type="String" />
-		</attribute>
-		<attribute name="clauseKinds" type="String[]"  tooltip="The names of the kinds of all clauses in the pragma, or empty array if no clause is defined"/>
-		<attribute name="reduction" type="String[]" tooltip="The variable names for the given reduction kind, or empty array if no reduction of that kind is defined">
-			<parameter name="kind" type="String" />
-		</attribute>	
-		<attribute name="reductionKinds" type="String[]" tooltip="The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined"/>
-		<attribute name="default" type="String" tooltip="One of 'shared' or 'none', or undefined if no 'default' clause is defined"/>
-		<attribute name="firstprivate" type="String[]" tooltip="The variable names of all firstprivate clauses, or empty array if no firstprivate clause is defined"/>
-		<attribute name="lastprivate" type="String[]" tooltip="The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined"/>
-		<attribute name="shared" type="String[]" tooltip="The variable names of all shared clauses, or empty array if no shared clause is defined"/>
-		<attribute name="copyin" type="String[]" tooltip="The variable names of all copyin clauses, or empty array if no copyin clause is defined"/>
-		<attribute name="scheduleKind" type="String" tooltip="One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined"/>
-		<attribute name="scheduleChunkSize" type="String" tooltip="An integer expression, or undefined if no 'schedule' clause with chunk size is defined"/>
-		<attribute name="scheduleModifiers" type="String[]" tooltip="A list with possible values of 'monotonic', 'nonmonotonic' or 'simd', or undefined if no 'schedule' clause with modifiers is defined"/>
-		<attribute name="collapse" type="String" tooltip="An integer expression, or undefined if no 'collapse' clause is defined"/>
-		<attribute name="ordered" type="String" tooltip="An integer expression, or undefined if no 'ordered' clause with a parameter is defined"/>		
-	</artifact>
-
-
-	<!-- ENUMS -->
-	<!--  <enum name="StorageClass" class="pt.up.fe.specs.clava.ast.decl.data.StorageClass">  -->
-	<enum name="StorageClass">	
-		<value name="NONE"/>
-		<value name="AUTO"/>
-		<value name="EXTERN"/>
-		<value name="PRIVATE_EXTERN"/>
-		<value name="REGISTER"/>
-		<value name="STATIC"/>
-	</enum>
-	
-	<enum name="Relation">	
-		<value name="LE"/>
-		<value name="LT"/>
-		<value name="GE"/>
-		<value name="GT"/>
-		<value name="EQ"/>		
-		<value name="NE"/>
-	</enum>
-	<!--
-	<enum name="InitializationStyle">	
-		<value name="NO_INIT"/>
-		<value name="CINIT"/>
-		<value name="CALL_INIT"/>
-		<value name="LIST_INIT"/>
-	</enum>
+    <!-- PROGRAM -->
+    <artifact class="program" default="name">
+        <attribute name="name" type="String" />
+        <attribute name="isCxx" type="Boolean"
+            tooltip="true if the program was compiled with a C++ standard" />
+        <attribute name="standard" type="String"
+            tooltip="The name of the standard (e.g., c99, c++11)" />
+        <attribute name="stdFlag" type="String"
+            tooltip="The flag of the standard (e.g., -std=c++11)" />
+        <attribute name="defaultFlags" type="String[]" />
+        <attribute name="userFlags" type="String[]" />
+        <attribute name="includeFolders" type="String[]" />
+        <attribute name="baseFolder" type="String" />
+        <attribute name="weavingFolder" type="String" />
+        <attribute name="extraSources" type="String[]"
+            tooltip="paths to sources that the current program depends on" />
+        <attribute name="extraIncludes" type="String[]"
+            tooltip="paths to includes that the current program depends on" />
+        <attribute name="extraProjects" type="String[]"
+            tooltip="paths to folders of projects that the current program depends on" />
+        <attribute name="extraLibs" type="String[]"
+            tooltip="link libraries of external projects the current program depends on" />
+        <attribute name="main" type="function"
+            tooltip="a function join point with the main function of the program, if one is available" />
+        <attribute name="files" type="file[]" tooltip="the source files in this program" />
+    </artifact>
+
+
+    <!-- FILE -->
+    <artifact class="file" default="name">
+        <attribute name="name" type="String" tooltip="the name of the file" />
+        <attribute name="file" type="Object"
+            tooltip="a Java file to the file that originated this translation unit" />
+        <attribute name="hasMain" type="Boolean"
+            tooltip="true if this file contains a 'main' method" />
+        <!-- <attribute name="filename" type="String"/> -->
+        <attribute name="path" type="String" tooltip="the folder of the source file" />
+        <!--  <attribute name="filepath" type="String" tooltip="the complete path to the file"/> -->
+        <attribute name="relativeFilepath" type="String"
+            tooltip="the path to the file relative to the base source path" />
+        <attribute name="relativeFolderpath" type="String"
+            tooltip="the path to the folder of the source file relative to the base source path">
+            <def />
+        </attribute>
+        <attribute name="baseSourcePath" type="String"
+            tooltip="the path to the source folder that was given as the base folder of this file" />
+        <attribute name="isCxx" type="Boolean" tooltip="true if this file is considered a C++ file" />
+        <attribute name="isHeader" type="Boolean"
+            tooltip="true if this file is considered a header file" />
+        <attribute name="isOpenCL" type="Boolean" tooltip="true if this file is an OpenCL filetype" />
+        <attribute name="getDestinationFilepath" type="String"
+            tooltip="the complete path to the file that will be generated by the weaver, given a destination folder">
+            <parameter name="destinationFolderpath" type="String" default="null" />
+        </attribute>
+        <attribute name="sourceFoldername" type="String"
+            tooltip="the name of the source folder of this file, or undefined if it has none" />
+        <attribute name="hasParsingErrors" type="Boolean"
+            tooltip="true if there were errors during parsing" />
+        <attribute name="errorOutput" type="String"
+            tooltip="the output of the parser if there were errors during parsing" />
+        <attribute name="includes" type="include[]" tooltip="the includes of this file" />
+    </artifact>
+
+    <!-- INCLUDE -->
+    <artifact class="include" default="name">
+        <attribute name="name" type="String" tooltip="the name of the include" />
+        <attribute name="isAngled" type="Boolean"
+            tooltip="true if this is an angled include (i.e., system include)" />
+        <!-- <attribute name="filepath" type="String" tooltip="the complete path to the file"/>  -->
+        <attribute name="relativeFolderpath" type="String"
+            tooltip="the path to the folder of the source file of the include, relative to the name of the include" />
+    </artifact>
+
+    <!-- RECORD -->
+    <artifact class="record" default="name">
+        <!--  
+        <attribute name="name" type="String">
+            <def/>
+        </attribute>
+         -->
+        <attribute name="kind" type="String" />
+        <!-- <attribute name="name" type="{struct,interface,union,class,enum}"/> -->
+        <attribute name="fields" type="field[]" />
+        <attribute name="functions" type="function[]" />
+        <attribute name="isImplementation" type="Boolean"
+            tooltip="true if this particular join point is an implementation (i.e. has its body fully specified), false otherwise" />
+        <attribute name="isPrototype" type="Boolean"
+            tooltip="true if this particular join point is a prototype (i.e. does not have its body fully specified), false otherwise" />
+    </artifact>
+
+    <!-- CLASS -->
+    <artifact class="class" default="name">
+        <attribute name="methods" type="method[]" tooltip="The methods declared by this class" />
+        <attribute name="bases" type="class[]"
+            tooltip="The classes this class directly inherits from" />
+        <attribute name="allMethods" type="method[]"
+            tooltip="All the methods of this class, including inherited ones" />
+        <attribute name="allBases" type="class[]" tooltip="All the classes this class inherits from" />
+        <attribute name="isAbstract" type="boolean"
+            tooltip="True, if contains at least one pure function" />
+        <attribute name="isInterface" type="boolean" tooltip="True, if all functions are pure" />
+        <attribute name="prototypes" type="class[]"
+            tooltip="The prototypes (or declarations) of this class present in the AST, if any" />
+        <attribute name="implementation" type="class"
+            tooltip="The implementation (or definition) of this class present in the AST, or undefined if none is found" />
+        <attribute name="canonical" type="class"
+            tooltip="Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present" />
+        <attribute name="isCanonical" type="Boolean"
+            tooltip="true if this is the class returned by the 'canonical' attribute" />
+        <!-- <attribute name="isImplementation" type="Boolean" tooltip="true if this class is
+        completely defined, false otherwise"/> -->
+    </artifact>
+
+    <!-- METHOD -->
+    <artifact class="method" default="name">
+        <attribute name="record" type="class" />
+        <!-- 
+        <attribute name="record" type="class">
+            <def/>
+        </attribute>	
+ -->
+    </artifact>
+
+
+    <!-- DECLARATION -->
+    <artifact class="decl">
+        <attribute name="attrs" type="attribute[]"
+            tooltip="The attributes (e.g. Pure, CUDAGlobal) associated to this decl" />
+    </artifact>
+
+    <!-- NAMED DECLARATION -->
+    <artifact class="namedDecl" default="name">
+        <attribute name="name" type="String">
+            <def />
+        </attribute>
+        <attribute name="isPublic" type="Boolean" />
+        <attribute name="qualifiedPrefix" type="String">
+            <def />
+        </attribute>
+        <attribute name="qualifiedName" type="String">
+            <def />
+        </attribute>
+    </artifact>
+
+    <!-- DECLARATOR DECLARATION -->
+    <artifact class="declarator">
+    </artifact>
+
+
+    <!-- ENUM DECL -->
+    <artifact class="enumDecl" default="name">
+        <attribute name="enumerators" type="enumeratorDecl[]" />
+    </artifact>
+
+
+    <!-- LOOP -->
+    <artifact class="loop" default="kind">
+        <attribute name="kind" type="{for,while,dowhile,foreach}" />
+        <attribute name="id" type="String" tooltip="Uniquely identifies the loop inside the program" />
+        <attribute name="isInnermost" type="Boolean" />
+        <attribute name="isOutermost" type="Boolean" />
+        <attribute name="nestedLevel" type="int" />
+        <attribute name="controlVar" type="String" />
+        <attribute name="rank" type="int[]" />
+        <attribute name="isParallel" type="Boolean">
+            <def />
+            <def type="string" />
+        </attribute>
+        <attribute name="iterations" type="int" />
+        <attribute name="iterationsExpr" type="expression" />
+        <attribute name="isInterchangeable" type="Boolean"
+            tooltip="Tests whether the loops are interchangeable. This is a conservative test.">
+            <parameter name="otherLoop" type="loop" />
+        </attribute>
+        <attribute name="init" type="statement" tooltip="The statement of the loop initialization">
+            <def type="string" />
+        </attribute>
+        <attribute name="initValue" type="String"
+            tooltip="The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')">
+            <def />
+        </attribute>
+        <attribute name="cond" type="statement" tooltip="The statement of the loop condition" />
+        <attribute name="step" type="statement" tooltip="The statement of the loop step" />
+        <attribute name="endValue" type="String"
+            tooltip="The expression of the last value of the control variable (e.g. 'length' in 'i &lt; length;')" />
+        <attribute name="stepValue" type="String" tooltip="The expression of the iteration step" />
+        <attribute name="hasCondRelation" type="Boolean"
+            tooltip="True if the condition of the loop in the canonical format, and is one of: &lt;, &lt;=, >, >=" />
+        <attribute name="condRelation" type="Relation">
+            <def />
+        </attribute>
+        <attribute name="body" type="scope">
+            <def />
+        </attribute>
+    </artifact>
+
+
+    <!-- SCOPE -->
+    <artifact class="scope">
+        <attribute name="getNumStatements" type="Long"
+            tooltip="The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)">
+            <parameter name="flat" type="Boolean" default="false" />
+        </attribute>
+        <attribute name="naked" type="Boolean"
+            tooltip="true if the scope does not have curly braces">
+            <def />
+        </attribute>
+        <attribute name="stmts" type="statement[]"
+            tooltip="Returns the direct (children) statements of this scope" />
+        <attribute name="allStmts" type="statement[]"
+            tooltip="Returns the descendant statements of this scope, excluding other scopes, loops, ifs and wrapper statements" />
+        <attribute name="firstStmt" type="statement" />
+        <attribute name="lastStmt" type="statement" />
+        <attribute name="owner" type="joinpoint"
+            tooltip="The statement that owns the scope (e.g., function, loop...)" />
+    </artifact>
+
+    <!-- EXPR STMT -->
+    <artifact class="exprStmt">
+        <attribute name="expr" type="expression"
+            tooltip="The expression join point associated to this exprStmt" />
+    </artifact>
+
+    <!-- DECL STMT -->
+    <artifact class="declStmt">
+        <attribute name="decls" type="decl[]" tooltip="The declarations in this statement" />
+    </artifact>
+
+
+    <!-- EXPRESSION -->
+    <artifact class="expression">
+        <!-- If this expression represents a declared variable, returns the name 
+            of the variable -->
+        <!-- <attribute name="refname" type="String"/> -->
+        <!-- If this expression represents a declared variable, returns a joinpoint 
+            representing the declaration of the variable -->
+        <attribute name="decl" type="decl"
+            tooltip="a 'decl' join point that represents the declaration associated with this expression, or undefined if there is none" />
+        <attribute name="vardecl" type="vardecl" />
+        <attribute name="use" type="{read,write,readwrite}" />
+        <attribute name="isFunctionArgument" type="Boolean"
+            tooltip="true if the expression is part of an argument of a function call" />
+        <attribute name="implicitCast" type="cast"
+            tooltip="returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise" />
+    </artifact>
+
+    <!-- CALL -->
+    <artifact class="call" default="name">
+        <attribute name="name" type="String">
+            <def />
+        </attribute>
+        <attribute name="numArgs" type="int" />
+        <attribute name="memberNames" type="String[]" />
+        <!-- 		<attribute name="decl" type="function"
+            tooltip="a 'function' join point that represents the function declaration or definition of the
+        call, whatever appears first; 'undefined' if nothing was found"/>  -->
+        <!-- <attribute name="declarations" type="function[]" tooltip="an array of 'function' join
+        point that represents the prototypes of the call; empty array if no prototype was found"/>  -->
+        <attribute name="declaration" type="function"
+            tooltip="a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found" />
+        <attribute name="definition" type="function"
+            tooltip="a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found" />
+        <attribute name="argList" type="expression[]" tooltip="an alias for 'args'" />
+        <attribute name="args" type="expression[]" tooltip="an array with the arguments of the call" />
+        <attribute name="getArg" type="expression">
+            <parameter name="index" type="int" />
+        </attribute>
+        <attribute name="returnType" type="type" tooltip="the return type of the call" />
+        <attribute name="functionType" type="functionType"
+            tooltip="the function type of the call, which includes the return type and the types of the parameters" />
+        <attribute name="isMemberAccess" type="boolean" />
+        <attribute name="memberAccess" type="memberAccess" />
+        <attribute name="isStmtCall" type="boolean" />
+        <attribute name="function" type="function"
+            tooltip="a function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration" />
+        <attribute name="signature" type="String"
+            tooltip="similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function" />
+        <attribute name="directCallee" type="function"
+            tooltip="a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)" />
+    </artifact>
+
+    <!-- MEMBER CALL -->
+    <artifact class="memberCall" default="name">
+        <attribute name="base" type="expression" />
+        <attribute name="rootBase" type="expression" />
+    </artifact>
+
+    <artifact class="cudaKernelCall" default="name">
+        <attribute name="config" type="expression[]">
+            <def type="expression[]" />
+        </attribute>
+    </artifact>
+
+
+    <!-- VARDECL -->
+    <artifact class="vardecl" default="name">
+        <attribute name="hasInit" type="Boolean"
+            tooltip="true, if vardecl has an initialization value" />
+        <attribute name="init" type="expression"
+            tooltip="If vardecl has an initialization value, returns an expression with that value" />
+        <attribute name="initStyle" type="String"
+            tooltip="The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit" />
+        <attribute name="isParam" type="Boolean" tooltip="true, if vardecl is a function parameter" />
+        <attribute name="storageClass" type="StorageClass"
+            tooltip="Storage class specifier, which can be none, extern, static, __private_extern__, auto, register">
+            <def />
+        </attribute>
+        <attribute name="isGlobal" type="Boolean"
+            tooltip="true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function." />
+        <attribute name="definition" type="vardecl"
+            tooltip="The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)" />
+    </artifact>
+
+    <artifact class="accessSpecifier" default="kind">
+        <attribute name="kind" type="String"
+            tooltip="the type of specifier. Can return 'public', 'protected', 'private' or 'none'" />
+    </artifact>
+
+
+    <!-- VARREF -->
+    <artifact class="varref" default="name">
+        <attribute name="name" type="String">
+            <def />
+        </attribute>
+        <attribute name="kind" type="String" />
+        <attribute name="useExpr" type="expression"
+            tooltip="expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node" />
+        <attribute name="isFunctionCall" type="Boolean"
+            tooltip="true if this varref represents a function call" />
+        <attribute name="declaration" type="declarator" />
+        <attribute name="property" type="String"
+            tooltip="if this variable reference has a MS-style property, returns the property name. Returns undefined otherwise" />
+        <attribute name="hasProperty" type="Boolean"
+            tooltip="true if this variable reference has a MS-style property, false otherwise" />
+    </artifact>
+    
+    <artifact class="initList">
+        <attribute name="arrayFiller" type="expression" tooltip="[May be undefined] If this initializer list initializes an array with more elements than there are initializers in the list, specifies an expression to be used for value initialization of the rest of the elements" />		
+<!--
+        <attribute name="initializedFieldInUnion" type="field" />		
+        <attribute name="isExplicit" type="Boolean"/>
+        <attribute name="isStringLiteral" type="Boolean"/>        
+        <attribute name="syntacticForm" type="initList" default="null" tooltip="Represents the initializer list as written by the user, which may contain C99 designated initializers (represented as DesignatedInitExprs), initializations of sub-object members without explicit braces, and so on. If the syntactic and semantic forms are the same for this initializer, it returns empty" />		
+        <attribute name="semanticForm" type="initList" default="null" tooltip="Represents the initializer list as written by the user, which may contain C99 designated initializers (represented as DesignatedInitExprs), initializations of sub-object members without explicit braces, and so on. If the syntactic and semantic forms are the same for this initializer, it returns empty" />		
+-->
+	</artifact>		
+    
+
+    <!-- FUNCTION -->
+    <artifact class="function" default="name">
+        <!--  <attribute name="name" type="String" />  -->
+        <attribute name="hasDefinition" type="Boolean"
+            tooltip="[DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise" />
+        <attribute name="isImplementation" type="Boolean"
+            tooltip="true if this particular function join point is an implementation (i.e. has a body), false otherwise" />
+        <attribute name="isPrototype" type="Boolean"
+            tooltip="true if this particular function join point is a prototype (i.e. does not have a body), false otherwise" />
+        <attribute name="functionType" type="functionType"
+            tooltip="the type of the call, which includes the return type and the types of the parameters">
+            <def />
+        </attribute>
+        <attribute name="declarationJp" type="function"
+            tooltip="Returns the first prototype of this function that could be found, or undefined if there is none" />
+        <attribute name="declarationJps" type="function[]"
+            tooltip="Returns the prototypes of this function that are present in the code. If there are none, returns an empty array" />
+        <attribute name="definitionJp" type="function"
+            tooltip="Returns the implementation of this function if there is one, or undefined otherwise" />
+        <attribute name="getDeclaration" type="String">
+            <parameter name="withReturnType" type="Boolean" />
+        </attribute>
+        <attribute name="body" type="scope">
+            <def />
+        </attribute>
+        <attribute name="paramNames" type="String[]" />
+        <attribute name="params" type="param[]">
+            <def type="param[]" />
+            <def type="String[]" />
+        </attribute>
+        <attribute name="id" type="String" />
+        <attribute name="isInline" type="Boolean" />
+        <attribute name="isVirtual" type="Boolean" />
+        <attribute name="isModulePrivate" type="Boolean" />
+        <attribute name="isPure" type="Boolean" />
+        <attribute name="isDelete" type="Boolean" />
+        <attribute name="storageClass" type="StorageClass" />
+        <attribute name="calls" type="call[]" />
+        <attribute name="signature" type="String"
+            tooltip="a string with the signature of this function (e.g., name of the function, plus the parameters types)" />
+        <attribute name="returnType" type="type">
+            <def />
+        </attribute>
+        <attribute name="isCudaKernel" type="Boolean" />
+        <attribute name="canonical" type="function"
+            tooltip="Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present" />
+        <attribute name="isCanonical" type="Boolean"
+            tooltip="true, if this is the function returned by the 'canonical' attribute" />
+    </artifact>
+
+
+    <!-- IF -->
+    <artifact class="if">
+        <attribute name="cond" type="expression">
+            <def />
+        </attribute>
+        <attribute name="condDecl" type="vardecl" />
+        <attribute name="then" type="scope">
+            <def type="statement" />
+        </attribute>
+        <attribute name="else" type="scope">
+            <def type="statement" />
+        </attribute>
+    </artifact>
+
+    <!-- GOTO -->
+    <artifact class="gotoStmt">
+        <attribute name="label" type="labelDecl">
+            <def />
+        </attribute>
+    </artifact>
+
+    <!-- LABEL -->
+    <artifact class="labelStmt">
+        <attribute name="decl" type="labelDecl">
+            <def />
+        </attribute>
+    </artifact>
+
+    <!-- BREAK -->
+    <artifact class="break">
+        <attribute name="enclosingStmt" type="statement"
+            tooltip="The enclosing statement related to this break. It should be either a loop or a switch statement." />
+    </artifact>
+
+    <!-- SWITCH -->
+    <artifact class="switch">
+        <attribute name="hasDefaultCase" type="Boolean"
+            tooltip="true if there is a default case in this switch statement, false otherwise" />
+        <attribute name="getDefaultCase" type="case"
+            tooltip="the default case statement of this switch statement or undefined if it does not have a default case" />
+        <attribute name="cases" type="case[]" tooltip="the case statements inside this switch" />
+        <attribute name="condition" type="expression"
+            tooltip="the condition of this switch statement" />
+    </artifact>
+
+    <!-- CASE -->
+    <artifact class="case">
+        <attribute name="isDefault" type="Boolean"
+            tooltip="true if this is a default case, false otherwise" />
+        <attribute name="isEmpty" type="Boolean"
+            tooltip="true if this case does not contain instructions (i.e., it is directly above another case), false otherwise" />
+        <attribute name="nextInstruction" type="statement"
+            tooltip="the first statement that is not a case that will be executed by this case statement" />
+        <attribute name="instructions" type="statement[]"
+            tooltip="the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)" />
+        <attribute name="nextCase" type="case"
+            tooltip="the case statement that comes after this case, or undefined if there are no more case statements" />
+        <attribute name="values" type="expression[]"
+            tooltip="the values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case" />
+    </artifact>
+
+
+    <!-- STATEMENT -->
+    <artifact class="statement">
+        <attribute name="isFirst" type="Boolean" />
+        <attribute name="isLast" type="Boolean" />
+        <!-- <attribute name="stmts" type="joinpoint[]"/> -->
+    </artifact>
+
+    <artifact class="wrapperStmt">
+        <attribute name="kind" type="{comment,pragma}" />
+        <attribute name="content" type="joinpoint" />
+    </artifact>
+
+
+    <!-- PRAGMA -->
+    <artifact class="pragma" default="name">
+        <attribute name="name" type="String"
+            tooltip="The name of the pragma. E.g. for #pragma foo bar, returns 'foo'" />
+        <attribute name="target" type="joinpoint"
+            tooltip="The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations" />
+        <attribute name="content" type="String"
+            tooltip="Everything that is after the name of the pragma" />
+        <attribute name="getTargetNodes" type="joinpoint[]"
+            tooltip="All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument">
+            <parameter name="endPragma" type="String" default="null" />
+        </attribute>
+    </artifact>
+
+    <artifact class="returnStmt">
+        <attribute name="returnExpr" type="expression">
+            <!-- 			<def/>  -->
+        </attribute>
+    </artifact>
+
+
+    <!-- MARKER -->
+    <artifact class="marker" default="id">
+        <attribute name="id" type="String" />
+        <attribute name="contents" type="joinpoint"
+            tooltip="A scope, associated with this marker" />
+    </artifact>
+
+    <!-- TAG -->
+    <artifact class="tag" default="id">
+        <attribute name="id" type="String" tooltip="The ID of the pragma" />
+    </artifact>
+
+    <artifact class="op">
+        <attribute name="operator" type="String" />
+        <attribute name="kind" type="String"
+            tooltip="The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div, rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign, rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not, real, imag, extension, cowait." />
+        <attribute name="isBitwise" type="Boolean" />
+    </artifact>
+
+    <!-- BINARY OPERATOR -->
+    <artifact class="binaryOp">
+        <attribute name="left" type="expression">
+            <def />
+        </attribute>
+        <attribute name="right" type="expression">
+            <def />
+        </attribute>
+        <attribute name="isAssignment" type="Boolean" />
+
+    </artifact>
+
+
+    <!-- UNARY OPERATOR -->
+    <artifact class="unaryOp">
+        <attribute name="operand" type="expression" />
+        <attribute name="isPointerDeref" type="Boolean" />
+    </artifact>
+
+
+    <!-- TERNARY OPERATOR -->
+    <artifact class="ternaryOp">
+        <attribute name="cond" type="expression">
+            <def />
+        </attribute>
+        <attribute name="trueExpr" type="expression">
+            <def />
+        </attribute>
+        <attribute name="falseExpr" type="expression">
+            <def />
+        </attribute>
+    </artifact>
+
+
+    <!-- CAST -->
+    <artifact class="cast">
+        <attribute name="isImplicitCast" type="Boolean"
+            tooltip="[DEPRECATED: Use expr.implicitCast instead]" />
+        <attribute name="fromType" type="type" />
+        <attribute name="toType" type="type" />
+        <attribute name="subExpr" type="expression" />
+    </artifact>
+
+    <!-- PAREN EXPR -->
+    <artifact class="parenExpr">
+        <attribute name="subExpr" type="expression"
+            tooltip="Returns the expression inside this parenthesis expression" />
+    </artifact>
+
+    <!-- ARRAY ACCESS -->
+    <artifact class="arrayAccess">
+        <attribute name="arrayVar" type="expression"
+            tooltip="expression representing the variable of the array access (can be a varref, memberAccess...)" />
+        <attribute name="subscript" type="expression[]"
+            tooltip="expression of the array access subscript" />
+        <attribute name="parentAccess" type="arrayAccess"
+            tooltip="A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript" />
+        <attribute name="numSubscripts" type="int"
+            tooltip="The number of subscripts of this array access" />
+        <attribute name="name" type="string"
+            tooltip="If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name" />
+    </artifact>
+
+
+    <!-- MEMBER ACCESS -->
+    <artifact class="memberAccess">
+        <attribute name="name" type="String" />
+        <attribute name="memberChain" type="expression[]" />
+        <attribute name="memberChainNames" type="String[]" />
+        <attribute name="base" type="expression"
+            tooltip="expression of the base of this member access" />
+        <attribute name="arrow" type="Boolean"
+            tooltip="true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)">
+            <def />
+        </attribute>
+    </artifact>
+
+
+    <!-- UnaryExprOrType -->
+    <artifact class="unaryExprOrType">
+        <attribute name="kind" type="String" />
+        <attribute name="hasTypeExpr" type="Boolean" />
+        <attribute name="hasArgExpr" type="Boolean" />
+        <attribute name="argType" type="type">
+            <def />
+        </attribute>
+        <attribute name="argExpr" type="expression" />
+    </artifact>
+
+
+    <!-- LITERAL -->
+    <artifact class="literal">
+    </artifact>
+
+    <!-- INT LITERAL -->
+    <artifact class="intLiteral">
+        <attribute name="value" type="Long" />
+    </artifact>
+
+    <!-- FLOAT LITERAL -->
+    <artifact class="floatLiteral">
+        <attribute name="value" type="Double" />
+    </artifact>
+
+    <!-- BOOL LITERAL -->
+    <artifact class="boolLiteral">
+        <attribute name="value" type="Boolean" />
+    </artifact>
+
+    <!-- COMMENT -->
+    <artifact class="comment">
+        <attribute name="text" type="String">
+            <def />
+        </attribute>
+    </artifact>
+
+    <!-- ATTRIBUTE -->
+    <artifact class="attribute">
+        <attribute name="kind" type="String" />
+    </artifact>
+
+
+    <!-- TYPES -->
+
+    <!-- TYPE -->
+    <artifact class="type">
+        <attribute name="kind" type="String" />
+        <attribute name="isTopLevel" type="Boolean" />
+        <attribute name="isArray" type="Boolean" />
+        <attribute name="isPointer" type="Boolean" />
+        <attribute name="isAuto" type="Boolean"
+            tooltip="True if this is a type declared with the 'auto' keyword" />
+        <attribute name="arraySize" type="int" />
+        <attribute name="arrayDims" type="int[]" />
+        <!-- <attribute name="elementType" type="joinpoint" />  -->
+        <attribute name="hasTemplateArgs" type="Boolean" />
+        <attribute name="templateArgsStrings" type="String[]" />
+        <attribute name="templateArgsTypes" type="type[]">
+            <!-- <def/> -->
+            <def type="type[]" />
+        </attribute>
+        <attribute name="hasSugar" type="Boolean" />
+        <attribute name="desugar" type="type"
+            tooltip="Single-step desugar. Returns the type itself if it does not have sugar">
+            <def />
+        </attribute>
+        <attribute name="desugarAll" type="type" tooltip="Completely desugars the type" />
+        <attribute name="isBuiltin" type="Boolean" />
+        <attribute name="constant" type="Boolean" />
+        <attribute name="unwrap" type="type"
+            tooltip="If the type encapsulates another type, returns the encapsulated type" />
+        <attribute name="normalize" type="type" tooltip="Ignores certain types (e.g., DecayedType)" />
+        <attribute name="typeFields" type="Map"
+            tooltip="Maps names of join point fields that represent type join points, to their respective values" />
+        <attribute name="fieldTree" type="String"
+            tooltip="A tree representation of the fields of this type" />
+    </artifact>
+
+
+    <!-- POINTER TYPE -->
+    <artifact class="pointerType">
+        <attribute name="pointee" type="type">
+            <def />
+        </attribute>
+        <attribute name="pointerLevels" type="int"
+            tooltip="Number of pointer levels from this pointer" />
+    </artifact>
+
+
+    <!-- ARRAY TYPE -->
+    <artifact class="arrayType">
+        <attribute name="elementType" type="type">
+            <def />
+        </attribute>
+    </artifact>
+
+    <!-- VARIABLE ARRAY TYPE -->
+    <artifact class="variableArrayType">
+        <attribute name="sizeExpr" type="expression">
+            <def />
+        </attribute>
+    </artifact>
+
+    <!-- TAG TYPE -->
+    <artifact class="tagType">
+        <attribute name="name" type="String" />
+        <attribute name="decl" type="decl"
+            tooltip="a 'decl' join point that represents the declaration of this tag type" />
+    </artifact>
+
+    <!-- ENUM TYPE -->
+    <artifact class="enumType">
+        <attribute name="integerType" type="type" />
+    </artifact>
+
+
+    <!-- TEMPLATE SPECIALIZATION TYPE -->
+    <artifact class="templateSpecializationType">
+        <attribute name="templateName" type="String" />
+        <attribute name="numArgs" type="int" />
+        <attribute name="args" type="String[]" />
+        <attribute name="firstArgType" type="type" />
+    </artifact>
+
+    <!-- FUNCTION TYPE -->
+    <artifact class="functionType">
+        <attribute name="returnType" type="type">
+            <def />
+        </attribute>
+        <attribute name="paramTypes" type="type[]" />
+    </artifact>
+
+
+    <!-- QUAL TYPE -->
+    <artifact class="qualType">
+        <attribute name="qualifiers" type="String[]" />
+        <attribute name="unqualifiedType" type="type" />
+    </artifact>
+
+    <!-- BUILTIN TYPE -->
+    <artifact class="builtinType">
+        <attribute name="builtinKind" type="String" />
+        <attribute name="isInteger" type="Boolean" tooltip="true, if it is an integer type" />
+        <attribute name="isFloat" type="Boolean"
+            tooltip="true, if ot is a floating type (e.g., float, double)" />
+        <attribute name="isSigned" type="Boolean" tooltip="true, if it is a signed integer type" />
+        <attribute name="isUnsigned" type="Boolean"
+            tooltip="true, if it is an unsigned integer type" />
+        <attribute name="isVoid" type="Boolean" tooltip="true, if it is the type 'void'" />
+    </artifact>
+
+    <!-- PAREN TYPE -->
+    <artifact class="parenType">
+        <attribute name="innerType" type="type">
+            <def />
+        </attribute>
+    </artifact>
+
+
+    <!-- ADJUSTED TYPE -->
+    <artifact class="adjustedType">
+        <attribute name="originalType" type="type" tooltip="the type that is being adjusted" />
+    </artifact>
+
+    <!-- ELABORATED TYPE -->
+    <artifact class="elaboratedType">
+        <attribute name="keyword" type="String"
+            tooltip="the keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename" />
+        <attribute name="qualifier" type="String"
+            tooltip="the qualifier of this elaborated type, if present (e.g., A::)" />
+        <attribute name="namedType" type="type"
+            tooltip="the type that is being prefixed with the qualifier" />
+    </artifact>
+
+    <artifact class="typedefType">
+        <attribute name="decl" type="typedefNameDecl"
+            tooltip="the typedef declaration associated with this typedef type" />
+        <attribute name="underlyingType" type="type" tooltip="the type that is being typedef'd" />
+    </artifact>
+
+
+    <!-- OPENMP -->
+
+    <!-- OMP -->
+    <artifact class="omp" default="kind">
+        <attribute name="kind" type="String" tooltip="The kind of the directive" />
+        <attribute name="numThreads" type="String"
+            tooltip="An integer expression, or undefined if no 'num_threads' clause is defined">
+            <def />
+        </attribute>
+        <attribute name="procBind" type="String"
+            tooltip="One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined">
+            <def />
+        </attribute>
+        <attribute name="private" type="String[]"
+            tooltip="The variable names of all private clauses, or empty array if no private clause is defined" />
+        <attribute name="hasClause" type="Boolean"
+            tooltip="True if the directive has at least one clause of the given clause kind, false otherwise">
+            <parameter name="clauseName" type="String" />
+        </attribute>
+        <attribute name="isClauseLegal" type="Boolean"
+            tooltip="True if it is legal to use the given clause kind in this directive, false otherwise">
+            <parameter name="clauseName" type="String" />
+        </attribute>
+        <attribute name="clauseKinds" type="String[]"
+            tooltip="The names of the kinds of all clauses in the pragma, or empty array if no clause is defined" />
+        <attribute name="getReduction" type="String[]"
+            tooltip="The variable names for the given reduction kind, or empty array if no reduction of that kind is defined">
+            <parameter name="kind" type="String" />
+        </attribute>
+        <attribute name="reductionKinds" type="String[]"
+            tooltip="The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined" />
+        <attribute name="default" type="String"
+            tooltip="One of 'shared' or 'none', or undefined if no 'default' clause is defined" />
+        <attribute name="firstprivate" type="String[]"
+            tooltip="The variable names of all firstprivate clauses, or empty array if no firstprivate clause is defined" />
+        <attribute name="lastprivate" type="String[]"
+            tooltip="The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined" />
+        <attribute name="shared" type="String[]"
+            tooltip="The variable names of all shared clauses, or empty array if no shared clause is defined" />
+        <attribute name="copyin" type="String[]"
+            tooltip="The variable names of all copyin clauses, or empty array if no copyin clause is defined" />
+        <attribute name="scheduleKind" type="String"
+            tooltip="One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined" />
+        <attribute name="scheduleChunkSize" type="String"
+            tooltip="An integer expression, or undefined if no 'schedule' clause with chunk size is defined" />
+        <attribute name="scheduleModifiers" type="String[]"
+            tooltip="A list with possible values of 'monotonic', 'nonmonotonic' or 'simd', or undefined if no 'schedule' clause with modifiers is defined" />
+        <attribute name="collapse" type="String"
+            tooltip="An integer expression, or undefined if no 'collapse' clause is defined" />
+        <attribute name="ordered" type="String"
+            tooltip="An integer expression, or undefined if no 'ordered' clause with a parameter is defined" />
+    </artifact>
+
+
+    <!-- ENUMS -->
+    <!--  <enum name="StorageClass" class="pt.up.fe.specs.clava.ast.decl.data.StorageClass">  -->
+    <enum name="StorageClass">
+        <value name="NONE" />
+        <value name="AUTO" />
+        <value name="EXTERN" />
+        <value name="PRIVATE_EXTERN" />
+        <value name="REGISTER" />
+        <value name="STATIC" />
+    </enum>
+
+    <enum name="Relation">
+        <value name="LE" />
+        <value name="LT" />
+        <value name="GE" />
+        <value name="GT" />
+        <value name="EQ" />
+        <value name="NE" />
+    </enum>
+    <!--
+    <enum name="InitializationStyle">	
+        <value name="NO_INIT"/>
+        <value name="CINIT"/>
+        <value name="CALL_INIT"/>
+        <value name="LIST_INIT"/>
+    </enum>
    -->
 
 </artifacts>

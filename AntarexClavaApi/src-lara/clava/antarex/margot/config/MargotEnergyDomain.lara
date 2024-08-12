@@ -1,3 +1,5 @@
+import antarex.margot.Enum;
+
 /**
  * Enum that represents the domain of the time monitor.
  * @enum

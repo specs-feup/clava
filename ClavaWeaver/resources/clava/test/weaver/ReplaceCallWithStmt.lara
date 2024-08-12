@@ -1,4 +1,4 @@
-//import clava.Clava;
+import clava.ClavaJoinPoints;
 
 aspectdef ReplaceCallWithStmt
 
@@ -6,7 +6,7 @@ aspectdef ReplaceCallWithStmt
 	apply
 		var varName = $stmtCall.name + "Result";
 	
-		var $varDecl = AstFactory.varDecl(varName, $stmtCall);
+		var $varDecl = ClavaJoinPoints.varDecl(varName, $stmtCall);
 		$stmt.exec replaceWith($varDecl);
 	end
 	

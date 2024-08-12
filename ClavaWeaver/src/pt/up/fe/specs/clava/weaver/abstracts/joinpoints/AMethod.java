@@ -4,7 +4,6 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
-import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -142,12 +141,12 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute declaration
+     * Get value on attribute getDeclaration
      * @return the attribute's value
      */
     @Override
-    public String declarationImpl(Boolean withReturnType) {
-        return this.aFunction.declarationImpl(withReturnType);
+    public String getDeclarationImpl(Boolean withReturnType) {
+        return this.aFunction.getDeclarationImpl(withReturnType);
     }
 
     /**
@@ -236,7 +235,7 @@ public abstract class AMethod extends AFunction {
      * @return the attribute's value
      */
     @Override
-    public StorageClass getStorageClassImpl() {
+    public String getStorageClassImpl() {
         return this.aFunction.getStorageClassImpl();
     }
 
@@ -432,15 +431,6 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aFunction.astAncestorImpl(type);
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
@@ -477,12 +467,12 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute descendantsAndSelfArrayImpl
+     * Get value on attribute getAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
-        return this.aFunction.descendantsAndSelfArrayImpl(type);
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aFunction.getAncestorImpl(type);
     }
 
     /**
@@ -540,21 +530,21 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aFunction.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
         return this.aFunction.getChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aFunction.getJavaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -576,12 +566,12 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute ancestor
+     * Get value on attribute getChild
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint ancestorImpl(String type) {
-        return this.aFunction.ancestorImpl(type);
+    public AJoinPoint getChildImpl(int index) {
+        return this.aFunction.getChildImpl(index);
     }
 
     /**
@@ -600,15 +590,6 @@ public abstract class AMethod extends AFunction {
     @Override
     public AComment[] getInlineCommentsArrayImpl() {
         return this.aFunction.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astChildImpl(Integer index) {
-        return this.aFunction.astChildImpl(index);
     }
 
     /**
@@ -636,6 +617,15 @@ public abstract class AMethod extends AFunction {
     @Override
     public String getAstIdImpl() {
         return this.aFunction.getAstIdImpl();
+    }
+
+    /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aFunction.getKeyTypeImpl(key);
     }
 
     /**
@@ -684,15 +674,6 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aFunction.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -702,30 +683,12 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute userField
-     * @return the attribute's value
-     */
-    @Override
-    public Object userFieldImpl(String fieldName) {
-        return this.aFunction.userFieldImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute hasNode
      * @return the attribute's value
      */
     @Override
     public Boolean hasNodeImpl(Object nodeOrJp) {
         return this.aFunction.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute child
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint childImpl(Integer index) {
-        return this.aFunction.childImpl(index);
     }
 
     /**
@@ -801,12 +764,21 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aFunction.getChainAncestorImpl(type);
+    }
+
+    /**
      * Get value on attribute descendantsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aFunction.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aFunction.getDescendantsArrayImpl();
     }
 
     /**
@@ -816,6 +788,24 @@ public abstract class AMethod extends AFunction {
     @Override
     public AJoinPoint[] getAstChildrenArrayImpl() {
         return this.aFunction.getAstChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aFunction.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aFunction.getFirstJpImpl(type);
     }
 
     /**
@@ -846,30 +836,21 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute javaValue
+     * Get value on attribute getAstChild
      * @return the attribute's value
      */
     @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aFunction.javaValueImpl(fieldName);
+    public AJoinPoint getAstChildImpl(int index) {
+        return this.aFunction.getAstChildImpl(index);
     }
 
     /**
-     * Get value on attribute keyType
+     * Get value on attribute getDescendantsAndSelfArrayImpl
      * @return the attribute's value
      */
     @Override
-    public Object keyTypeImpl(String key) {
-        return this.aFunction.keyTypeImpl(key);
-    }
-
-    /**
-     * Get value on attribute chainAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint chainAncestorImpl(String type) {
-        return this.aFunction.chainAncestorImpl(type);
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aFunction.getDescendantsAndSelfArrayImpl(type);
     }
 
     /**
@@ -882,15 +863,6 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute joinpointType
-     * @return the attribute's value
-     */
-    @Override
-    public String getJoinpointTypeImpl() {
-        return this.aFunction.getJoinpointTypeImpl();
-    }
-
-    /**
      * Get value on attribute currentRegion
      * @return the attribute's value
      */
@@ -900,12 +872,12 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute hasAstParent
+     * Get value on attribute originNode
      * @return the attribute's value
      */
     @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aFunction.getHasAstParentImpl();
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aFunction.getOriginNodeImpl();
     }
 
     /**
@@ -936,12 +908,12 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute firstJp
+     * Get value on attribute getAstAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint firstJpImpl(String type) {
-        return this.aFunction.firstJpImpl(type);
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aFunction.getAstAncestorImpl(type);
     }
 
     /**
@@ -951,15 +923,6 @@ public abstract class AMethod extends AFunction {
     @Override
     public Integer getDepthImpl() {
         return this.aFunction.getDepthImpl();
-    }
-
-    /**
-     * Get value on attribute javaFieldType
-     * @return the attribute's value
-     */
-    @Override
-    public String javaFieldTypeImpl(String fieldName) {
-        return this.aFunction.javaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -1187,23 +1150,6 @@ public abstract class AMethod extends AFunction {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aFunction.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aFunction.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -1240,15 +1186,6 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Copies all enumerable own properties from the source object to the .data object
-     * @param source 
-     */
-    @Override
-    public void dataAssignImpl(Object source) {
-        this.aFunction.dataAssignImpl(source);
-    }
-
-    /**
      * Clears all properties from the .data object
      */
     @Override
@@ -1267,25 +1204,7 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Overload which inserts the cloned function by default
-     * @param newName 
-     */
-    @Override
-    public AFunction cloneImpl(String newName) {
-        return this.aFunction.cloneImpl(newName);
-    }
-
-    /**
-     * Generates a clone of the provided function on a new file (with a weaver-generated name).
-     * @param newName 
-     */
-    @Override
-    public AFunction cloneOnFileImpl(String newName) {
-        return this.aFunction.cloneOnFileImpl(newName);
-    }
-
-    /**
-     * Generates a clone of the provided function on a new file (with the provided name).
+     * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
      * @param newName 
      * @param fileName 
      */
@@ -1346,28 +1265,18 @@ public abstract class AMethod extends AFunction {
      * @param param 
      */
     @Override
-    public void setParamImpl(Integer index, AParam param) {
+    public void setParamImpl(int index, AParam param) {
         this.aFunction.setParamImpl(index, param);
     }
 
     /**
-     * Sets the parameter of the function at the given position (overload that accepts a String)
-     * @param index 
-     * @param param 
-     */
-    @Override
-    public void setParamImpl(Integer index, String param) {
-        this.aFunction.setParamImpl(index, param);
-    }
-
-    /**
-     * Sets the parameter of the function at the given position (overload that accepts a String and a Type)
+     * Sets the parameter of the function at the given position
      * @param index 
      * @param name 
      * @param type 
      */
     @Override
-    public void setParamImpl(Integer index, String name, AType type) {
+    public void setParamImpl(int index, String name, AType type) {
         this.aFunction.setParamImpl(index, name, type);
     }
 
@@ -1413,17 +1322,8 @@ public abstract class AMethod extends AFunction {
      * @param newType 
      */
     @Override
-    public void setParamTypeImpl(Integer index, AType newType) {
+    public void setParamTypeImpl(int index, AType newType) {
         this.aFunction.setParamTypeImpl(index, newType);
-    }
-
-    /**
-     * Adds a new parameter to the function
-     * @param param 
-     */
-    @Override
-    public void addParamImpl(String param) {
-        this.aFunction.addParamImpl(param);
     }
 
     /**
@@ -1657,7 +1557,7 @@ public abstract class AMethod extends AFunction {
         DECLARATIONJP("declarationJp"),
         DECLARATIONJPS("declarationJps"),
         DEFINITIONJP("definitionJp"),
-        DECLARATION("declaration"),
+        GETDECLARATION("getDeclaration"),
         BODY("body"),
         PARAMNAMES("paramNames"),
         PARAMS("params"),
@@ -1680,39 +1580,35 @@ public abstract class AMethod extends AFunction {
         QUALIFIEDNAME("qualifiedName"),
         ATTRS("attrs"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1721,24 +1617,24 @@ public abstract class AMethod extends AFunction {
         KEYS("keys"),
         ISINSIDEHEADER("isInsideHeader"),
         ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
-        KEYTYPE("keyType"),
-        CHAINANCESTOR("chainAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
-        JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
+        GETASTANCESTOR("getAstAncestor"),
         DEPTH("depth"),
-        JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),

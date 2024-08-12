@@ -1,6 +1,7 @@
 import lara.code.Timer;
 import clava.Clava;
 import clava.ClavaJoinPoints;
+import lara.code.Logger;
 
 aspectdef TimerTest
 
@@ -24,7 +25,7 @@ aspectdef TimerTest
 	
 	select call{"bar2"} end
 	apply
-		var bar2TimeVar = timer.time($call);		
+		var bar2TimeVar = timer.time($call);
 		var logger = new Logger();
 		logger.text("I want to print the value of the elapsed time (")
 			.double(bar2TimeVar)

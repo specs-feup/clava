@@ -1,3 +1,5 @@
+import antarex.margot.Enum;
+
 /**
  * Enum that holds the names of the metrics supported by mARGOt.
  * 

@@ -7,6 +7,6 @@ aspectdef CloneOnFile
 	
 	var $foo2 = $foo.cloneOnFile("foo2", "bar/newFile.cpp");
 
-	println($foo2.ancestor("file").includes.map(inc => inc.code));
+	println($foo2.getAncestor("file").includes.map(inc => inc.code));
 
 end

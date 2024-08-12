@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,21 +13,16 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.weaver.CxxAttributes;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class CxxExpression extends AExpression {
 
@@ -139,7 +134,7 @@ public class CxxExpression extends AExpression {
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
         // If node to replace is statement, check if this expression is inside an ExprStmt
         if (node instanceof AStatement && node.getNode().getParent() instanceof ExprStmt) {
-            return node.getParentImpl().replaceWith(node);
+            return node.getParentImpl().replaceWithImpl(node);
         }
 
         return super.replaceWithImpl(node);

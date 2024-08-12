@@ -22,7 +22,7 @@ aspectdef checkForInvalidStmts
 	apply
 		if (
 			$stmt.astName === 'ReturnStmt'  ||
-			($stmt.astName === 'BreakStmt' && $stmt.astAncestor('ForStmt').line === $ForStmt.line)
+			($stmt.astName === 'BreakStmt' && $stmt.getAstAncestor('ForStmt').line === $ForStmt.line)
 			)
 			{
 				this.InvalidStmts.push($stmt.astName + '#' + $stmt.line);

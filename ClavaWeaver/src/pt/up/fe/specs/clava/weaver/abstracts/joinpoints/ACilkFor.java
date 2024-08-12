@@ -1,6 +1,5 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import pt.up.fe.specs.clava.weaver.enums.Relation;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -85,7 +84,7 @@ public abstract class ACilkFor extends ALoop {
      * @return the attribute's value
      */
     @Override
-    public Integer[] getRankArrayImpl() {
+    public int[] getRankArrayImpl() {
         return this.aLoop.getRankArrayImpl();
     }
 
@@ -193,7 +192,7 @@ public abstract class ACilkFor extends ALoop {
      * @return the attribute's value
      */
     @Override
-    public Relation getCondRelationImpl() {
+    public String getCondRelationImpl() {
         return this.aLoop.getCondRelationImpl();
     }
 
@@ -426,13 +425,6 @@ public abstract class ACilkFor extends ALoop {
     /**
      * 
      */
-    public void defCondRelationImpl(Relation value) {
-        this.aLoop.defCondRelationImpl(value);
-    }
-
-    /**
-     * 
-     */
     public void defCondRelationImpl(String value) {
         this.aLoop.defCondRelationImpl(value);
     }
@@ -451,15 +443,6 @@ public abstract class ACilkFor extends ALoop {
     @Override
     public AJoinPoint getParentImpl() {
         return this.aLoop.getParentImpl();
-    }
-
-    /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aLoop.astAncestorImpl(type);
     }
 
     /**
@@ -499,12 +482,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute descendantsAndSelfArrayImpl
+     * Get value on attribute getAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
-        return this.aLoop.descendantsAndSelfArrayImpl(type);
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aLoop.getAncestorImpl(type);
     }
 
     /**
@@ -562,21 +545,21 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aLoop.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
         return this.aLoop.getChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aLoop.getJavaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -598,12 +581,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute ancestor
+     * Get value on attribute getChild
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint ancestorImpl(String type) {
-        return this.aLoop.ancestorImpl(type);
+    public AJoinPoint getChildImpl(int index) {
+        return this.aLoop.getChildImpl(index);
     }
 
     /**
@@ -622,15 +605,6 @@ public abstract class ACilkFor extends ALoop {
     @Override
     public AComment[] getInlineCommentsArrayImpl() {
         return this.aLoop.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astChildImpl(Integer index) {
-        return this.aLoop.astChildImpl(index);
     }
 
     /**
@@ -658,6 +632,15 @@ public abstract class ACilkFor extends ALoop {
     @Override
     public String getAstIdImpl() {
         return this.aLoop.getAstIdImpl();
+    }
+
+    /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aLoop.getKeyTypeImpl(key);
     }
 
     /**
@@ -706,15 +689,6 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aLoop.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -724,30 +698,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute userField
-     * @return the attribute's value
-     */
-    @Override
-    public Object userFieldImpl(String fieldName) {
-        return this.aLoop.userFieldImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute hasNode
      * @return the attribute's value
      */
     @Override
     public Boolean hasNodeImpl(Object nodeOrJp) {
         return this.aLoop.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute child
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint childImpl(Integer index) {
-        return this.aLoop.childImpl(index);
     }
 
     /**
@@ -823,12 +779,21 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aLoop.getChainAncestorImpl(type);
+    }
+
+    /**
      * Get value on attribute descendantsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aLoop.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aLoop.getDescendantsArrayImpl();
     }
 
     /**
@@ -838,6 +803,24 @@ public abstract class ACilkFor extends ALoop {
     @Override
     public AJoinPoint[] getAstChildrenArrayImpl() {
         return this.aLoop.getAstChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aLoop.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aLoop.getFirstJpImpl(type);
     }
 
     /**
@@ -868,30 +851,21 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute javaValue
+     * Get value on attribute getAstChild
      * @return the attribute's value
      */
     @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aLoop.javaValueImpl(fieldName);
+    public AJoinPoint getAstChildImpl(int index) {
+        return this.aLoop.getAstChildImpl(index);
     }
 
     /**
-     * Get value on attribute keyType
+     * Get value on attribute getDescendantsAndSelfArrayImpl
      * @return the attribute's value
      */
     @Override
-    public Object keyTypeImpl(String key) {
-        return this.aLoop.keyTypeImpl(key);
-    }
-
-    /**
-     * Get value on attribute chainAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint chainAncestorImpl(String type) {
-        return this.aLoop.chainAncestorImpl(type);
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aLoop.getDescendantsAndSelfArrayImpl(type);
     }
 
     /**
@@ -904,15 +878,6 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute joinpointType
-     * @return the attribute's value
-     */
-    @Override
-    public String getJoinpointTypeImpl() {
-        return this.aLoop.getJoinpointTypeImpl();
-    }
-
-    /**
      * Get value on attribute currentRegion
      * @return the attribute's value
      */
@@ -922,12 +887,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute hasAstParent
+     * Get value on attribute originNode
      * @return the attribute's value
      */
     @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aLoop.getHasAstParentImpl();
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aLoop.getOriginNodeImpl();
     }
 
     /**
@@ -958,12 +923,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute firstJp
+     * Get value on attribute getAstAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint firstJpImpl(String type) {
-        return this.aLoop.firstJpImpl(type);
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aLoop.getAstAncestorImpl(type);
     }
 
     /**
@@ -973,15 +938,6 @@ public abstract class ACilkFor extends ALoop {
     @Override
     public Integer getDepthImpl() {
         return this.aLoop.getDepthImpl();
-    }
-
-    /**
-     * Get value on attribute javaFieldType
-     * @return the attribute's value
-     */
-    @Override
-    public String javaFieldTypeImpl(String fieldName) {
-        return this.aLoop.javaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -1209,23 +1165,6 @@ public abstract class ACilkFor extends ALoop {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aLoop.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aLoop.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -1262,29 +1201,11 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Copies all enumerable own properties from the source object to the .data object
-     * @param source 
-     */
-    @Override
-    public void dataAssignImpl(Object source) {
-        this.aLoop.dataAssignImpl(source);
-    }
-
-    /**
      * Clears all properties from the .data object
      */
     @Override
     public void dataClearImpl() {
         this.aLoop.dataClearImpl();
-    }
-
-    /**
-     * DEPRECATED: use 'setKind' instead
-     * @param kind 
-     */
-    @Override
-    public void changeKindImpl(String kind) {
-        this.aLoop.changeKindImpl(kind);
     }
 
     /**
@@ -1360,16 +1281,6 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Applies loop tiling to this loop
-     * @param blockSize 
-     * @param reference 
-     */
-    @Override
-    public AStatement tileImpl(String blockSize, AStatement reference) {
-        return this.aLoop.tileImpl(blockSize, reference);
-    }
-
-    /**
      * Applies loop tiling to this loop.
      * @param blockSize 
      * @param reference 
@@ -1382,15 +1293,6 @@ public abstract class ACilkFor extends ALoop {
 
     /**
      * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
-     * @param operator 
-     */
-    @Override
-    public void setCondRelationImpl(Relation operator) {
-        this.aLoop.setCondRelationImpl(operator);
-    }
-
-    /**
-     * Changes the operator of a canonical condition, if possible. Supported operators: <, <=, >, >=
      * @param operator 
      */
     @Override
@@ -1577,10 +1479,6 @@ public abstract class ACilkFor extends ALoop {
         	this.unsupportedTypeForDef(attribute, value);
         }
         case "condRelation": {
-        	if(value instanceof Relation){
-        		this.defCondRelationImpl((Relation)value);
-        		return;
-        	}
         	if(value instanceof String){
         		this.defCondRelationImpl((String)value);
         		return;
@@ -1670,39 +1568,35 @@ public abstract class ACilkFor extends ALoop {
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1711,24 +1605,24 @@ public abstract class ACilkFor extends ALoop {
         KEYS("keys"),
         ISINSIDEHEADER("isInsideHeader"),
         ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
-        KEYTYPE("keyType"),
-        CHAINANCESTOR("chainAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
-        JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
+        GETASTANCESTOR("getAstAncestor"),
         DEPTH("depth"),
-        JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),

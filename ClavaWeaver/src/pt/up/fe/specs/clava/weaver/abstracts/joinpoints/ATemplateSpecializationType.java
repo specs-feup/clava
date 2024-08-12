@@ -195,7 +195,7 @@ public abstract class ATemplateSpecializationType extends AType {
      * @return the attribute's value
      */
     @Override
-    public Integer[] getArrayDimsArrayImpl() {
+    public int[] getArrayDimsArrayImpl() {
         return this.aType.getArrayDimsArrayImpl();
     }
 
@@ -308,15 +308,6 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
-     * Get value on attribute bitWidth
-     * @return the attribute's value
-     */
-    @Override
-    public Integer bitWidthImpl(AJoinPoint reference) {
-        return this.aType.bitWidthImpl(reference);
-    }
-
-    /**
      * 
      */
     public void defTemplateArgsTypesImpl(AType[] value) {
@@ -337,15 +328,6 @@ public abstract class ATemplateSpecializationType extends AType {
     @Override
     public AJoinPoint getParentImpl() {
         return this.aType.getParentImpl();
-    }
-
-    /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aType.astAncestorImpl(type);
     }
 
     /**
@@ -385,12 +367,12 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
-     * Get value on attribute descendantsAndSelfArrayImpl
+     * Get value on attribute getAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
-        return this.aType.descendantsAndSelfArrayImpl(type);
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aType.getAncestorImpl(type);
     }
 
     /**
@@ -448,21 +430,21 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aType.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
         return this.aType.getChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aType.getJavaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -484,12 +466,12 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
-     * Get value on attribute ancestor
+     * Get value on attribute getChild
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint ancestorImpl(String type) {
-        return this.aType.ancestorImpl(type);
+    public AJoinPoint getChildImpl(int index) {
+        return this.aType.getChildImpl(index);
     }
 
     /**
@@ -508,15 +490,6 @@ public abstract class ATemplateSpecializationType extends AType {
     @Override
     public AComment[] getInlineCommentsArrayImpl() {
         return this.aType.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astChildImpl(Integer index) {
-        return this.aType.astChildImpl(index);
     }
 
     /**
@@ -544,6 +517,15 @@ public abstract class ATemplateSpecializationType extends AType {
     @Override
     public String getAstIdImpl() {
         return this.aType.getAstIdImpl();
+    }
+
+    /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aType.getKeyTypeImpl(key);
     }
 
     /**
@@ -592,15 +574,6 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aType.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -610,30 +583,12 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
-     * Get value on attribute userField
-     * @return the attribute's value
-     */
-    @Override
-    public Object userFieldImpl(String fieldName) {
-        return this.aType.userFieldImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute hasNode
      * @return the attribute's value
      */
     @Override
     public Boolean hasNodeImpl(Object nodeOrJp) {
         return this.aType.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute child
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint childImpl(Integer index) {
-        return this.aType.childImpl(index);
     }
 
     /**
@@ -709,12 +664,21 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aType.getChainAncestorImpl(type);
+    }
+
+    /**
      * Get value on attribute descendantsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aType.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aType.getDescendantsArrayImpl();
     }
 
     /**
@@ -724,6 +688,24 @@ public abstract class ATemplateSpecializationType extends AType {
     @Override
     public AJoinPoint[] getAstChildrenArrayImpl() {
         return this.aType.getAstChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aType.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aType.getFirstJpImpl(type);
     }
 
     /**
@@ -754,30 +736,21 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
-     * Get value on attribute javaValue
+     * Get value on attribute getAstChild
      * @return the attribute's value
      */
     @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aType.javaValueImpl(fieldName);
+    public AJoinPoint getAstChildImpl(int index) {
+        return this.aType.getAstChildImpl(index);
     }
 
     /**
-     * Get value on attribute keyType
+     * Get value on attribute getDescendantsAndSelfArrayImpl
      * @return the attribute's value
      */
     @Override
-    public Object keyTypeImpl(String key) {
-        return this.aType.keyTypeImpl(key);
-    }
-
-    /**
-     * Get value on attribute chainAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint chainAncestorImpl(String type) {
-        return this.aType.chainAncestorImpl(type);
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aType.getDescendantsAndSelfArrayImpl(type);
     }
 
     /**
@@ -790,15 +763,6 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
-     * Get value on attribute joinpointType
-     * @return the attribute's value
-     */
-    @Override
-    public String getJoinpointTypeImpl() {
-        return this.aType.getJoinpointTypeImpl();
-    }
-
-    /**
      * Get value on attribute currentRegion
      * @return the attribute's value
      */
@@ -808,12 +772,12 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
-     * Get value on attribute hasAstParent
+     * Get value on attribute originNode
      * @return the attribute's value
      */
     @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aType.getHasAstParentImpl();
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aType.getOriginNodeImpl();
     }
 
     /**
@@ -844,12 +808,12 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
-     * Get value on attribute firstJp
+     * Get value on attribute getAstAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint firstJpImpl(String type) {
-        return this.aType.firstJpImpl(type);
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aType.getAstAncestorImpl(type);
     }
 
     /**
@@ -859,15 +823,6 @@ public abstract class ATemplateSpecializationType extends AType {
     @Override
     public Integer getDepthImpl() {
         return this.aType.getDepthImpl();
-    }
-
-    /**
-     * Get value on attribute javaFieldType
-     * @return the attribute's value
-     */
-    @Override
-    public String javaFieldTypeImpl(String fieldName) {
-        return this.aType.javaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -1095,23 +1050,6 @@ public abstract class ATemplateSpecializationType extends AType {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aType.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aType.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -1148,15 +1086,6 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
-     * Copies all enumerable own properties from the source object to the .data object
-     * @param source 
-     */
-    @Override
-    public void dataAssignImpl(Object source) {
-        this.aType.dataAssignImpl(source);
-    }
-
-    /**
      * Clears all properties from the .data object
      */
     @Override
@@ -1179,8 +1108,8 @@ public abstract class ATemplateSpecializationType extends AType {
      * @param templateArgType 
      */
     @Override
-    public void setTemplateArgsTypesImpl(Integer index, AType templateArgType) {
-        this.aType.setTemplateArgsTypesImpl(index, templateArgType);
+    public void setTemplateArgTypeImpl(int index, AType templateArgType) {
+        this.aType.setTemplateArgTypeImpl(index, templateArgType);
     }
 
     /**
@@ -1401,40 +1330,36 @@ public abstract class ATemplateSpecializationType extends AType {
         NORMALIZE("normalize"),
         TYPEFIELDS("typeFields"),
         FIELDTREE("fieldTree"),
-        BITWIDTH("bitWidth"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
-        USERFIELD("userField"),
+        BITWIDTH("bitWidth"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1443,24 +1368,24 @@ public abstract class ATemplateSpecializationType extends AType {
         KEYS("keys"),
         ISINSIDEHEADER("isInsideHeader"),
         ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
-        KEYTYPE("keyType"),
-        CHAINANCESTOR("chainAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
-        JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
+        GETASTANCESTOR("getAstAncestor"),
         DEPTH("depth"),
-        JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),

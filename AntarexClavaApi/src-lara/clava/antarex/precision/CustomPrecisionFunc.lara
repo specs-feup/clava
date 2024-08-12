@@ -61,7 +61,7 @@ function  genConstants( $vf, bval){
 function genCodePrecisionDefsOriginalVersion() {
  var targetVers, v;
    var vfile = FILENAME_PRECISION_PREFIX + '_' + srcType + '.h';
-   var $vf = AstFactory.file(vfile, filepath);
+   var $vf = ClavaJoinPoints.file(vfile, filepath);
    Clava.addFile($vf);
    
    $vf.exec insertBefore%{}%;
@@ -96,7 +96,7 @@ function genCodePrecisionDefsOriginalVersion() {
 function genCodePrecisionDefsTemplate() {
   var targetVers, v;
   var vname = FILENAME_PRECISION_PREFIX + '_' + getDataType() + '_template.h';
-  $newFileJp_PRECISION_DEFS_template = AstFactory.file(vname, filepath);
+  $newFileJp_PRECISION_DEFS_template = ClavaJoinPoints.file(vname, filepath);
   var $vf = $newFileJp_PRECISION_DEFS_template;
    Clava.addFile($vf);
    
@@ -136,7 +136,7 @@ function genCodePrecisionDefsAsked(vtype) {
    
    var targetVers, v;
    var fname= FILENAME_PRECISION_PREFIX + '_'+ vtype + ".h";
-   var $vf = AstFactory.file(fname, filepath);
+   var $vf = ClavaJoinPoints.file(fname, filepath);
    Clava.addFile($vf);
    
    $vf.exec insertBefore%{}%;

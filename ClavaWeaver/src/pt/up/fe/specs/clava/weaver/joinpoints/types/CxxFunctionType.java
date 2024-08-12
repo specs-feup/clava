@@ -40,11 +40,11 @@ public class CxxFunctionType extends AFunctionType {
     }
 
     @Override
-    public AJoinPoint[] getParamTypesArrayImpl() {
+    public AType[] getParamTypesArrayImpl() {
 
         return type.getParamTypes().stream()
                 .map(paramType -> CxxJoinpoints.create(paramType))
-                .toArray(size -> new AJoinPoint[size]);
+                .toArray(size -> new AType[size]);
 
     }
 
@@ -60,7 +60,7 @@ public class CxxFunctionType extends AFunctionType {
     }
 
     @Override
-    public void setParamTypeImpl(Integer index, AType newType) {
+    public void setParamTypeImpl(int index, AType newType) {
         type.setParamType(index, (Type) newType.getNode());
     }
 

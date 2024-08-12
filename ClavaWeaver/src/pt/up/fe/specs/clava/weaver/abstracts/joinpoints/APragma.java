@@ -90,52 +90,19 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute targetNodes
-     * @return the attribute's value
+     * 
+     * @param endPragma
+     * @return 
      */
-    public abstract AJoinPoint[] getTargetNodesArrayImpl();
-
-    /**
-     * All the nodes below the target node, including the target node
-     */
-    public Object getTargetNodesImpl() {
-        AJoinPoint[] aJoinPointArrayImpl0 = getTargetNodesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * All the nodes below the target node, including the target node
-     */
-    public final Object getTargetNodes() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "targetNodes", Optional.empty());
-        	}
-        	Object result = this.getTargetNodesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "targetNodes", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "targetNodes", e);
-        }
-    }
+    public abstract AJoinPoint[] getTargetNodesArrayImpl(String endPragma);
 
     /**
      * 
      * @param endPragma
      * @return 
      */
-    public abstract AJoinPoint[] targetNodesArrayImpl(String endPragma);
-
-    /**
-     * 
-     * @param endPragma
-     * @return 
-     */
-    public Object targetNodesImpl(String endPragma) {
-        AJoinPoint[] aJoinPointArrayImpl0 = targetNodesArrayImpl(endPragma);
+    public Object getTargetNodesImpl(String endPragma) {
+        AJoinPoint[] aJoinPointArrayImpl0 = getTargetNodesArrayImpl(endPragma);
         Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
@@ -145,18 +112,18 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      * @param endPragma
      * @return 
      */
-    public final Object targetNodes(String endPragma) {
+    public final Object getTargetNodes(String endPragma) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "targetNodes", Optional.empty(), endPragma);
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getTargetNodes", Optional.empty(), endPragma);
         	}
-        	Object result = this.targetNodesImpl(endPragma);
+        	Object result = this.getTargetNodesImpl(endPragma);
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "targetNodes", Optional.ofNullable(result), endPragma);
+        		eventTrigger().triggerAttribute(Stage.END, this, "getTargetNodes", Optional.ofNullable(result), endPragma);
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "targetNodes", e);
+        	throw new AttributeException(get_class(), "getTargetNodes", e);
         }
     }
 
@@ -295,8 +262,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         attributes.add("name");
         attributes.add("target");
         attributes.add("content");
-        attributes.add("targetNodes");
-        attributes.add("targetNodes");
+        attributes.add("getTargetNodes");
     }
 
     /**
@@ -333,41 +299,37 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         NAME("name"),
         TARGET("target"),
         CONTENT("content"),
-        TARGETNODES("targetNodes"),
+        GETTARGETNODES("getTargetNodes"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -376,24 +338,24 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         KEYS("keys"),
         ISINSIDEHEADER("isInsideHeader"),
         ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
-        KEYTYPE("keyType"),
-        CHAINANCESTOR("chainAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
-        JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
+        GETASTANCESTOR("getAstAncestor"),
         DEPTH("depth"),
-        JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),

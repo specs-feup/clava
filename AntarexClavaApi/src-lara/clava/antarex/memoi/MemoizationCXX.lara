@@ -62,7 +62,7 @@ end
           WARNING("Several methods called " + aMethod + " in the class " + aClass );
           WARNING("Details: -------------------------  ");
           for (var i=0; i< nb; i++) {
-            println ( "\t \t" + tmethods[i].declaration(true) ); // functionType.code);
+            println ( "\t \t" + tmethods[i].getDeclaration(true) ); // functionType.code);
           }
           WARNING(" *** Please use the Memoize_Method_overloading aspect to be more precise");
           return;
@@ -215,11 +215,11 @@ aspectdef CPP_UpdateCallMemoization
   select call{aMethod} end
      apply
         if ($call.isMemberAccess) {
-         // println("MemberAccess is = " + $call.code + "   $call.definition=" + $call.definition + " --- Call declaration:" + $call.declaration);
+         // console.log("MemberAccess is = " + $call.code + "   $call.definition=" + $call.definition + " --- Call declaration:" + $call.declaration);
 	 // not a reference to a _wrapper
          if ($call.definition !== undefined)
        	  { 
-	    println("Call definition:" + $call.definition.location);
+	    console.log("Call definition:" + $call.definition.location);
             if ($call.declaration.location === locationOfTheselectedMethod )
                          $call.exec setName(getFuncWrapperName(aMethod));
          }

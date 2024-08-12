@@ -104,7 +104,7 @@ function keepInitDeclarations($Decls)
 	   if (initMustBeKept($f))
 	     {
 		  TRACE_HERE(" Declaration = " + $f.code + " at " + $f.location);
-		  var $father = $f.astParent;  // DeclStmt
+		  var $father = $f.parent;  // DeclStmt
 		  var $vinit = $f.init;
 		  var code = $vinit.code;
 		  // For aClass obj; and aClass a class, the added statement will be obj=aClass();
@@ -133,15 +133,15 @@ function cleanCode($Decls) {
     TRACE_HERE( "  cleanCode BEGIN");
     for (var $f of $Decls)  {
 	  if (! isfilteredDeclaration($f)) {
-       var $DeclStmt = $f.astParent; 
+       var $DeclStmt = $f.parent; 
        if ( ! $f.isInsideLoopHeader) {
           if ($DeclStmt.astNumChildren === 1) $DeclStmt.detach(); else $f.detach();
         }
 	    else {  		         
-  		  var $DeclStmt = $f.astParent;  // DeclStmt 
-  		  var $vloop = $DeclStmt.astParent;  
+  		  var $DeclStmt = $f.parent;  // DeclStmt 
+  		  var $vloop = $DeclStmt.parent;  
           if ($vloop.astIsInstance('ForStmt'))
-          if ($vloop.astChild(0).location === $DeclStmt.location)
+          if ($vloop.getAstChild(0).location === $DeclStmt.location)
              $vloop.setInit ( $f.name + ' = ' + $f.init.code );
           else
              NYI("cleanCode for " + $f.code + " at " + $f.location);
@@ -177,7 +177,7 @@ function getImportedIncludes($vFile, id)
 {
    var Includes = [];
    for (var x = 0; x <  $vFile.astNumChildren ; x++) {
-	  var $stmt =  $vFile.astChild(x);
+	  var $stmt =  $vFile.getAstChild(x);
 	  if ($stmt.astId === id) break; 
 	  if (($stmt.astName === "IncludeDecl") || ($stmt.astName === "TypeAliasDecl") ) {
 	    TRACE(" ImportIncludes, Include = " + $stmt.code);
@@ -185,7 +185,7 @@ function getImportedIncludes($vFile, id)
 	  }
 	 else
 	   if ($stmt.astName === "DeclStmt") {  // 
-	     var ch = $stmt.astChild(0);
+	     var ch = $stmt.getAstChild(0);
 		 if (ch.astName === "UsingDirectiveDecl") 
 		 	Includes.push($stmt);
 	 	 }
@@ -198,7 +198,7 @@ function getImportedIncludes($vFile, id)
 */
 function ImportIncludes($aStmt, $afile)
 {
-   var Includes = getImportedIncludes( $aStmt.ancestor("file"), $aStmt.astId);
+   var Includes = getImportedIncludes( $aStmt.getAncestor("file"), $aStmt.astId);
    // Adding declaration in the original file.
    for (f= Includes.length; f >0; f--) {
        $afile.insertBefore(Includes[f-1].code);
@@ -266,9 +266,9 @@ function ImportDeclarations($st, $splittedfile)
 	        $splittedfile.insertBegin(refFunc.code);
 	      else {
               if (refFunc.isPublic) 
-                 $vcode = refFunc.declaration(true) + ';';
+                 $vcode = refFunc.getDeclaration(true) + ';';
               else 
-                 $vcode = "extern " + refFunc.declaration(true) + ';';
+                 $vcode = "extern " + refFunc.getDeclaration(true) + ';';
               $splittedfile.insertBegin($vcode);
 	      }
 	    }
@@ -286,7 +286,7 @@ function getNewId(name)
 
 function TRACE_HERE(mess)
 {
-  if (LOC_DEBUG_MODE)  println(mess); else TRACE(mess);
+  if (LOC_DEBUG_MODE)  console.log(mess); else TRACE(mess);
 
 }
 

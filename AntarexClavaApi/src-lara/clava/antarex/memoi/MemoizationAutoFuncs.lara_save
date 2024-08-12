@@ -276,7 +276,7 @@ function exprReferencesLocalsOrConstants($expr, $function) {
 function isConstantDeclaration($decl)
 {
   var $vardeclType = $decl.type;
-  // println(" isConstantDeclaration :: vtype = " + $vardeclType.code);
+  // console.log(" isConstantDeclaration :: vtype = " + $vardeclType.code);
   return ($vardeclType.astIsInstance("QualType"));
   //return ( $vardeclType.kind === "QualType");
 }
@@ -287,13 +287,13 @@ function isConstantDeclaration($decl)
   * */
 function printCallGraph(callGraph) {
     if ( is_mode_trace_on())  {
-      println('Static call graph {\n');
+      console.log('Static call graph {\n');
 	  for (f in callGraph) { 
 		for (c in callGraph[f]) {
-		  println('\t' + f + '->' + c + ' [label="' + callGraph[f][c] + '"];');
+		  console.log('\t' + f + '->' + c + ' [label="' + callGraph[f][c] + '"];');
 		}
 	  }
-	  println('}');
+	  console.log('}');
     }
 }
 

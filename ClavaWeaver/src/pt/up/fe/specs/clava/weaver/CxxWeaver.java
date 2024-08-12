@@ -21,9 +21,9 @@ import org.lara.interpreter.profile.WeavingReport;
 import org.lara.interpreter.weaver.ast.AstMethods;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import org.lara.interpreter.weaver.interf.WeaverEngine;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import org.lara.interpreter.weaver.options.WeaverOption;
+import org.lara.interpreter.weaver.utils.LaraResourceProvider;
 import org.lara.language.specification.LanguageSpecification;
 import org.lara.language.specification.dsl.LanguageSpecificationV2;
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -43,6 +43,7 @@ import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.pragma.ClavaData;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.Standard;
@@ -52,16 +53,10 @@ import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
 import pt.up.fe.specs.clava.weaver.gears.CacheHandlerGear;
 import pt.up.fe.specs.clava.weaver.gears.InsideApplyGear;
 import pt.up.fe.specs.clava.weaver.gears.ModifiedFilesGear;
-import pt.up.fe.specs.clava.weaver.importable.AstFactory;
-import pt.up.fe.specs.clava.weaver.importable.ClavaPlatforms;
-import pt.up.fe.specs.clava.weaver.importable.Format;
-import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.clava.weaver.utils.ClavaAstMethods;
-import pt.up.fe.specs.lang.SpecsPlatforms;
-import pt.up.fe.specs.lara.LaraExtraApis;
 import pt.up.fe.specs.lara.langspec.LangSpecsXmlParser;
 import pt.up.fe.specs.lara.lcl.LaraCommonLanguageApis;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
@@ -71,14 +66,10 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.collections.AccumulatorMap;
-import pt.up.fe.specs.util.csv.CsvField;
-import pt.up.fe.specs.util.csv.CsvWriter;
 import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
 import pt.up.fe.specs.util.providers.ResourceProvider;
 import pt.up.fe.specs.util.utilities.Buffer;
 import pt.up.fe.specs.util.utilities.LineStream;
-import pt.up.fe.specs.util.utilities.ProgressCounter;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 /**
@@ -184,21 +175,9 @@ public class CxxWeaver extends ACxxWeaver {
 
     private static final List<ResourceProvider> CLAVA_LARA_API = new ArrayList<>();
     static {
-        CLAVA_LARA_API.addAll(LaraExtraApis.getApis());
         CLAVA_LARA_API.addAll(LaraCommonLanguageApis.getApis());
         CLAVA_LARA_API.addAll(ClavaLaraApis.getApis());
         CLAVA_LARA_API.addAll(AntarexClavaLaraApis.getApis());
-    }
-
-    private static final List<Class<?>> CLAVA_IMPORTABLE_CLASSES = new ArrayList<>();
-    static {
-        CLAVA_IMPORTABLE_CLASSES.addAll(LaraExtraApis.getImportableClasses());
-        CLAVA_IMPORTABLE_CLASSES.addAll(ClavaLaraApis.getImportableClasses());
-        CLAVA_IMPORTABLE_CLASSES.addAll(
-                Arrays.asList(SpecsPlatforms.class, AstFactory.class, Format.class, LowLevelApi.class, CsvWriter.class,
-                        CsvField.class, ProgressCounter.class, ClavaPlatforms.class, ClavaWeaverLauncher.class,
-                        ArgumentsParser.class, CxxWeaverApi.class));
-
     }
 
     /**
@@ -295,8 +274,8 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     @Override
-    protected void addWeaverApis() {
-        addApis(CLAVA_API_NAME, CLAVA_LARA_API);
+    public String getWeaverApiName() {
+        return CLAVA_API_NAME;
     }
 
     private void reset() {
@@ -1429,9 +1408,8 @@ public class CxxWeaver extends ACxxWeaver {
     public TranslationUnit rebuildFile(TranslationUnit tUnit) {
 
         // Clear data object for the ids of this file
-        var ids = tUnit.getDescendantsAndSelfStream().map(node -> node.getId())
-                .collect(Collectors.joining("', '", "'", "'"));
-        WeaverEngine.getThreadLocalWeaver().getScriptEngine().eval("_clearClavaDataCache([" + ids + "]);");
+        var nodes = tUnit.getDescendantsAndSelfStream().collect(Collectors.toList());
+        ClavaData.clearAllCaches(nodes);
 
         // Write current tree to a temporary folder
         File tempFolder = REBUILD_WEAVING_FOLDERS.get().next();
@@ -1676,7 +1654,7 @@ public class CxxWeaver extends ACxxWeaver {
         context.popApp();
 
         // Clear data
-        WeaverEngine.getThreadLocalWeaver().getScriptEngine().eval("_clearClavaDataCache();");
+        ClavaData.clearAllCaches();
 
         // if (update) {
         // // Top app is the one we want, pop the app before that one
@@ -1764,12 +1742,6 @@ public class CxxWeaver extends ACxxWeaver {
         SpecsIo.deleteOnExit(tempFolder);
 
         return tempFolder.getAbsoluteFile();
-    }
-
-    @Override
-    public List<Class<?>> getImportableClasses() {
-        return CLAVA_IMPORTABLE_CLASSES;
-
     }
 
     @Override
@@ -2098,6 +2070,11 @@ public class CxxWeaver extends ACxxWeaver {
 
         return new ClavaAstMethods(this, ClavaNode.class, node -> CxxJoinpoints.create(node),
                 node -> ClavaCommonLanguage.getJoinPointName(node), node -> node.getScopeChildren());
+    }
+
+    @Override
+    protected List<LaraResourceProvider> getWeaverNpmResources() {
+        return Arrays.asList(ClavaApiJsResource.values());
     }
 
 }

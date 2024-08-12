@@ -1,6 +1,7 @@
 {
   "prettier.tabWidth": 2,
   "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
   "search.exclude": {
     "**/node_modules": true,
     "**/bower_components": true,
@@ -8,5 +9,15 @@
     "./api/**": true,
     "./code/**": true
   },
-  "cmake.configureOnOpen": false
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true,
+    "./api/**": true,
+    "./code/**": true,
+    "./coverage/**": true,
+    "./woven_code/**": true
+  },
+  "cmake.configureOnOpen": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

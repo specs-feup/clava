@@ -47,8 +47,8 @@ public class CxxRecord extends ARecord {
     }
 
     @Override
-    public AJoinPoint[] getFieldsArrayImpl() {
-        return selectField().toArray(new AJoinPoint[0]);
+    public AField[] getFieldsArrayImpl() {
+        return selectField().toArray(new AField[0]);
     }
 
     @Override

@@ -16,7 +16,7 @@ function duplicate($vclass, idNewClass) {
   var $newClass = ClavaJoinPoints.classDecl(idNewClass);
   $vclass.insertAfter($newClass);
   for (var i=0; i < $vclass.astNumChildren; i++) {
-   var $vtchild = $vclass.child(i);
+   var $vtchild = $vclass.getChild(i);
    var astName =  $vtchild.astName;
    switch (astName) {
       case "CXXMethodDecl":
@@ -29,7 +29,7 @@ function duplicate($vclass, idNewClass) {
           $newClass.addField($nf);
        break;
        default: //  AccessSpecDecl , InlineComment 
-          var $vcopy = $vtchild.deepCopy ;
+          var $vcopy = $vtchild.deepCopy();
           if ( $newClass.astNumChildren == 0 )  
             $newClass.setFirstChild($vcopy);
           else

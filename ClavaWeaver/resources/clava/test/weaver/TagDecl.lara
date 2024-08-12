@@ -19,7 +19,7 @@ aspectdef TagDecl
 	    // Obtain the struct itself.
         var $struct = $elaboratedType.desugarAll.decl; 
 
-        var $newStruct = $struct.copy; // Copy struct
+        var $newStruct = $struct.copy(); // Copy struct
         $newStruct.name = "new_struct"; // Change name	        
         $struct.insertAfter($newStruct); // Insert new struct in the code
 

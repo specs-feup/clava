@@ -29,52 +29,29 @@ public abstract class AScope extends AStatement {
         this.aStatement = aStatement;
     }
     /**
-     * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas
+     * 
+     * @param flat
+     * @return 
      */
-    public abstract Long getNumStatementsImpl();
-
-    /**
-     * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas
-     */
-    public final Object getNumStatements() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numStatements", Optional.empty());
-        	}
-        	Long result = this.getNumStatementsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "numStatements", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "numStatements", e);
-        }
-    }
+    public abstract Long getNumStatementsImpl(Boolean flat);
 
     /**
      * 
      * @param flat
      * @return 
      */
-    public abstract Long numStatementsImpl(Boolean flat);
-
-    /**
-     * 
-     * @param flat
-     * @return 
-     */
-    public final Object numStatements(Boolean flat) {
+    public final Object getNumStatements(Boolean flat) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numStatements", Optional.empty(), flat);
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getNumStatements", Optional.empty(), flat);
         	}
-        	Long result = this.numStatementsImpl(flat);
+        	Long result = this.getNumStatementsImpl(flat);
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "numStatements", Optional.ofNullable(result), flat);
+        		eventTrigger().triggerAttribute(Stage.END, this, "getNumStatements", Optional.ofNullable(result), flat);
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "numStatements", e);
+        	throw new AttributeException(get_class(), "getNumStatements", e);
         }
     }
 
@@ -363,7 +340,7 @@ public abstract class AScope extends AStatement {
      * 
      * @param node 
      */
-    public final AJoinPoint insertBegin(AJoinPoint node) {
+    public final Object insertBegin(AJoinPoint node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertBegin", this, Optional.empty(), node);
@@ -372,7 +349,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertBegin", this, Optional.ofNullable(result), node);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertBegin", e);
         }
@@ -390,7 +367,7 @@ public abstract class AScope extends AStatement {
      * 
      * @param code 
      */
-    public final AJoinPoint insertBegin(String code) {
+    public final Object insertBegin(String code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertBegin", this, Optional.empty(), code);
@@ -399,7 +376,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertBegin", this, Optional.ofNullable(result), code);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertBegin", e);
         }
@@ -417,7 +394,7 @@ public abstract class AScope extends AStatement {
      * 
      * @param node 
      */
-    public final AJoinPoint insertEnd(AJoinPoint node) {
+    public final Object insertEnd(AJoinPoint node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertEnd", this, Optional.empty(), node);
@@ -426,7 +403,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertEnd", this, Optional.ofNullable(result), node);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertEnd", e);
         }
@@ -444,7 +421,7 @@ public abstract class AScope extends AStatement {
      * 
      * @param code 
      */
-    public final AJoinPoint insertEnd(String code) {
+    public final Object insertEnd(String code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertEnd", this, Optional.empty(), code);
@@ -453,7 +430,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertEnd", this, Optional.ofNullable(result), code);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertEnd", e);
         }
@@ -471,7 +448,7 @@ public abstract class AScope extends AStatement {
      * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
      * @param code 
      */
-    public final AJoinPoint insertReturn(AJoinPoint code) {
+    public final Object insertReturn(AJoinPoint code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
@@ -480,7 +457,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -498,7 +475,7 @@ public abstract class AScope extends AStatement {
      * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
      * @param code 
      */
-    public final AJoinPoint insertReturn(String code) {
+    public final Object insertReturn(String code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
@@ -507,7 +484,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -529,7 +506,7 @@ public abstract class AScope extends AStatement {
      * @param type 
      * @param initValue 
      */
-    public final AJoinPoint addLocal(String name, AJoinPoint type, String initValue) {
+    public final Object addLocal(String name, AJoinPoint type, String initValue) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "addLocal", this, Optional.empty(), name, type, initValue);
@@ -538,36 +515,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "addLocal", this, Optional.ofNullable(result), name, type, initValue);
         	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addLocal", e);
-        }
-    }
-
-    /**
-     * Overload which does not initialize the local variable
-     * @param name 
-     * @param type 
-     */
-    public AJoinPoint addLocalImpl(String name, AJoinPoint type) {
-        throw new UnsupportedOperationException(get_class()+": Action addLocal not implemented ");
-    }
-
-    /**
-     * Overload which does not initialize the local variable
-     * @param name 
-     * @param type 
-     */
-    public final AJoinPoint addLocal(String name, AJoinPoint type) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addLocal", this, Optional.empty(), name, type);
-        	}
-        	AJoinPoint result = this.addLocalImpl(name, type);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addLocal", this, Optional.ofNullable(result), name, type);
-        	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addLocal", e);
         }
@@ -633,7 +581,7 @@ public abstract class AScope extends AStatement {
     /**
      * CFG tester
      */
-    public final String cfg() {
+    public final Object cfg() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "cfg", this, Optional.empty());
@@ -642,7 +590,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "cfg", this, Optional.ofNullable(result));
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cfg", e);
         }
@@ -658,7 +606,7 @@ public abstract class AScope extends AStatement {
     /**
      * DFG tester
      */
-    public final String dfg() {
+    public final Object dfg() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "dfg", this, Optional.empty());
@@ -667,7 +615,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "dfg", this, Optional.ofNullable(result));
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "dfg", e);
         }
@@ -836,15 +784,6 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aStatement.astAncestorImpl(type);
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
@@ -881,12 +820,12 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute descendantsAndSelfArrayImpl
+     * Get value on attribute getAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
-        return this.aStatement.descendantsAndSelfArrayImpl(type);
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aStatement.getAncestorImpl(type);
     }
 
     /**
@@ -944,21 +883,21 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aStatement.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
         return this.aStatement.getChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aStatement.getJavaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -980,12 +919,12 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute ancestor
+     * Get value on attribute getChild
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint ancestorImpl(String type) {
-        return this.aStatement.ancestorImpl(type);
+    public AJoinPoint getChildImpl(int index) {
+        return this.aStatement.getChildImpl(index);
     }
 
     /**
@@ -1004,15 +943,6 @@ public abstract class AScope extends AStatement {
     @Override
     public AComment[] getInlineCommentsArrayImpl() {
         return this.aStatement.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astChildImpl(Integer index) {
-        return this.aStatement.astChildImpl(index);
     }
 
     /**
@@ -1040,6 +970,15 @@ public abstract class AScope extends AStatement {
     @Override
     public String getAstIdImpl() {
         return this.aStatement.getAstIdImpl();
+    }
+
+    /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aStatement.getKeyTypeImpl(key);
     }
 
     /**
@@ -1088,15 +1027,6 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aStatement.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -1106,30 +1036,12 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute userField
-     * @return the attribute's value
-     */
-    @Override
-    public Object userFieldImpl(String fieldName) {
-        return this.aStatement.userFieldImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute hasNode
      * @return the attribute's value
      */
     @Override
     public Boolean hasNodeImpl(Object nodeOrJp) {
         return this.aStatement.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute child
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint childImpl(Integer index) {
-        return this.aStatement.childImpl(index);
     }
 
     /**
@@ -1205,12 +1117,21 @@ public abstract class AScope extends AStatement {
     }
 
     /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aStatement.getChainAncestorImpl(type);
+    }
+
+    /**
      * Get value on attribute descendantsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aStatement.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aStatement.getDescendantsArrayImpl();
     }
 
     /**
@@ -1220,6 +1141,24 @@ public abstract class AScope extends AStatement {
     @Override
     public AJoinPoint[] getAstChildrenArrayImpl() {
         return this.aStatement.getAstChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aStatement.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aStatement.getFirstJpImpl(type);
     }
 
     /**
@@ -1250,30 +1189,21 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute javaValue
+     * Get value on attribute getAstChild
      * @return the attribute's value
      */
     @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aStatement.javaValueImpl(fieldName);
+    public AJoinPoint getAstChildImpl(int index) {
+        return this.aStatement.getAstChildImpl(index);
     }
 
     /**
-     * Get value on attribute keyType
+     * Get value on attribute getDescendantsAndSelfArrayImpl
      * @return the attribute's value
      */
     @Override
-    public Object keyTypeImpl(String key) {
-        return this.aStatement.keyTypeImpl(key);
-    }
-
-    /**
-     * Get value on attribute chainAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint chainAncestorImpl(String type) {
-        return this.aStatement.chainAncestorImpl(type);
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aStatement.getDescendantsAndSelfArrayImpl(type);
     }
 
     /**
@@ -1286,15 +1216,6 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute joinpointType
-     * @return the attribute's value
-     */
-    @Override
-    public String getJoinpointTypeImpl() {
-        return this.aStatement.getJoinpointTypeImpl();
-    }
-
-    /**
      * Get value on attribute currentRegion
      * @return the attribute's value
      */
@@ -1304,12 +1225,12 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute hasAstParent
+     * Get value on attribute originNode
      * @return the attribute's value
      */
     @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aStatement.getHasAstParentImpl();
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aStatement.getOriginNodeImpl();
     }
 
     /**
@@ -1340,12 +1261,12 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute firstJp
+     * Get value on attribute getAstAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint firstJpImpl(String type) {
-        return this.aStatement.firstJpImpl(type);
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aStatement.getAstAncestorImpl(type);
     }
 
     /**
@@ -1355,15 +1276,6 @@ public abstract class AScope extends AStatement {
     @Override
     public Integer getDepthImpl() {
         return this.aStatement.getDepthImpl();
-    }
-
-    /**
-     * Get value on attribute javaFieldType
-     * @return the attribute's value
-     */
-    @Override
-    public String javaFieldTypeImpl(String fieldName) {
-        return this.aStatement.javaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -1591,23 +1503,6 @@ public abstract class AScope extends AStatement {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aStatement.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aStatement.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -1641,15 +1536,6 @@ public abstract class AScope extends AStatement {
     @Override
     public void setDataImpl(Object source) {
         this.aStatement.setDataImpl(source);
-    }
-
-    /**
-     * Copies all enumerable own properties from the source object to the .data object
-     * @param source 
-     */
-    @Override
-    public void dataAssignImpl(Object source) {
-        this.aStatement.dataAssignImpl(source);
     }
 
     /**
@@ -1848,8 +1734,7 @@ public abstract class AScope extends AStatement {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
-        attributes.add("numStatements");
-        attributes.add("numStatements");
+        attributes.add("getNumStatements");
         attributes.add("naked");
         attributes.add("stmts");
         attributes.add("allStmts");
@@ -1892,7 +1777,6 @@ public abstract class AScope extends AStatement {
         actions.add("joinpoint insertReturn(joinpoint)");
         actions.add("joinpoint insertReturn(string)");
         actions.add("joinpoint addLocal(String, joinpoint, String)");
-        actions.add("joinpoint addLocal(String, joinpoint)");
         actions.add("void setNaked(Boolean)");
         actions.add("void clear()");
         actions.add("string cfg()");
@@ -1924,7 +1808,7 @@ public abstract class AScope extends AStatement {
      * 
      */
     protected enum ScopeAttributes {
-        NUMSTATEMENTS("numStatements"),
+        GETNUMSTATEMENTS("getNumStatements"),
         NAKED("naked"),
         STMTS("stmts"),
         ALLSTMTS("allStmts"),
@@ -1934,39 +1818,35 @@ public abstract class AScope extends AStatement {
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1975,24 +1855,24 @@ public abstract class AScope extends AStatement {
         KEYS("keys"),
         ISINSIDEHEADER("isInsideHeader"),
         ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
-        KEYTYPE("keyType"),
-        CHAINANCESTOR("chainAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
-        JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
+        GETASTANCESTOR("getAstAncestor"),
         DEPTH("depth"),
-        JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),

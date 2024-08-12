@@ -30,19 +30,25 @@ aspectdef PragmaData
 
 	// Setting data without pragma creates a pragma
 	var $loopWithoutPragma = Query.search("function", "insertWithoutPragma").first();
-	$loopWithoutPragma.data.a = 42;
-	$loopWithoutPragma.data.b = 43;	
+	var obj = $loopWithoutPragma.data;
+	obj.a = 42;
+	obj.b = 43;
+	$loopWithoutPragma.setData(obj);
 	println("Loop without pragma after setting data: " + $loopWithoutPragma.pragmas.map(p => p.code));
 
 	// Setting already existing data updates pragma
 	var $loopWithUpdatedPragma = Query.search("function", "updatePragma").first();
-	$loopWithUpdatedPragma.data.a = 200;
+	obj = $loopWithUpdatedPragma.data;
+	obj.a = 200;
+	$loopWithUpdatedPragma.setData(obj);
 	println("Loop with updated pragma: " + $loopWithUpdatedPragma.pragmas.map(p => p.code));
 
 	// Information persists after rebuilds
 	var $loopBeforeRebuild = Query.search("function", "rebuild").first();
 	println("Is parallel before set and rebuild: " + $loopBeforeRebuild.data.isParallel);
-	$loopBeforeRebuild.data.isParallel = true;
+	obj = $loopBeforeRebuild.data;
+	obj.isParallel = true;
+	$loopBeforeRebuild.setData(obj);
 
 /*
 	var $op = Query.search("function", "dataInExpressions").search("binaryOp").first();
@@ -60,28 +66,31 @@ aspectdef PragmaData
 
 	// Data on expression nodes
 	var $op = Query.search("function", "dataInExpressions").search("binaryOp").first();
-	$op.data.a = 1000;
-	$op.data.b = 2000;	
+	obj = $op.data;
+	obj.a = 1000;
+	obj.b = 2000;
+	$op.setData(obj);
 	println("ExprData before push");
 	printlnObject($op.data);
 	Clava.pushAst();
 	var $opAfterPush = Query.search("function", "dataInExpressions").search("binaryOp").first();
-	$opAfterPush.data.c = 3000;
+	obj = $opAfterPush.data;
+	obj.c = 3000;
+	$opAfterPush.setData(obj);
 	Clava.popAst();
 	var $opAfterPop = Query.search("function", "dataInExpressions").search("binaryOp").first();
 	println("ExprData after pop");
 	printlnObject($op.data);
 	
 	var $fileRebuildOp = Query.search("function", "fileRebuild").search("binaryOp").first();
-	$fileRebuildOp.data.opRebuild = true;
+	obj = $fileRebuildOp.data;
+	obj.opRebuild = true;
+	$fileRebuildOp.setData(obj);
 	
 	var $fileRebuildLoop = Query.search("function", "fileRebuild2").search("loop").first();
-	$fileRebuildLoop.data.loopRebuild = true;
-	
-	var dataCacheSizeBefore = Object.keys(_CLAVA_DATA_CACHE).length;
-	Query.search("file", "pragma_data_2.cpp").first().rebuild();
-	var dataCacheSizeAfter = Object.keys(_CLAVA_DATA_CACHE).length;	
-	println("Number of cached data objects deleted after file rebuild: " + (dataCacheSizeBefore-dataCacheSizeAfter));
-	
+	obj = $fileRebuildLoop.data;
+	obj.loopRebuild = true;
+	$fileRebuildLoop.setData(obj);
+
 //from nothing adds pragma; changes reflected in pragma; push/pop preserve; rebuild preserves for ones with pragma
 end

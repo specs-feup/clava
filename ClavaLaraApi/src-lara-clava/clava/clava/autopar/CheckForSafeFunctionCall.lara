@@ -27,9 +27,9 @@ aspectdef CheckForSafeFunctionCall
 			continue;
 		}
 		
-		var currentRegion = $arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.currentRegion;
+		var currentRegion = $arrayAccess.arrayVar.getDescendantsAndSelf('varref')[0].vardecl.currentRegion;
 		if((currentRegion !== undefined && currentRegion.joinPointType === 'file')
-			|| $arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.isParam) {
+			|| $arrayAccess.arrayVar.getDescendantsAndSelf('varref')[0].vardecl.isParam) {
 			
 			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);
 		}
@@ -38,9 +38,9 @@ aspectdef CheckForSafeFunctionCall
 		if (
 			$arrayAccess.use.indexOf('write') !== -1 && 
 				(
-					$arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.currentRegion.joinPointType === 'file'
+					$arrayAccess.arrayVar.getDescendantsAndSelf('varref')[0].vardecl.currentRegion.joinPointType === 'file'
 					||
-					$arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.isParam
+					$arrayAccess.arrayVar.getDescendantsAndSelf('varref')[0].vardecl.isParam
 				)
 			)
 			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);
@@ -54,7 +54,7 @@ aspectdef CheckForSafeFunctionCall
 			continue;
 		}
 		
-		var currentRegion = $memberAccess.descendantsAndSelf('varref')[0].vardecl.currentRegion;
+		var currentRegion = $memberAccess.getDescendantsAndSelf('varref')[0].vardecl.currentRegion;
 		if(currentRegion !== undefined && currentRegion.joinPointType === 'file') {
 			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);
 		}
@@ -62,7 +62,7 @@ aspectdef CheckForSafeFunctionCall
 	/*
 		if (
 			$memberAccess.use.indexOf('write') !== -1 &&
-			$memberAccess.descendantsAndSelf('varref')[0].vardecl.currentRegion.joinPointType === 'file'
+			$memberAccess.getDescendantsAndSelf('varref')[0].vardecl.currentRegion.joinPointType === 'file'
 			)
 			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);		
 	*/

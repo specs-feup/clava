@@ -40,7 +40,7 @@ public class CxxAdjustedType extends AAdjustedType {
     }
 
     @Override
-    public Integer[] getArrayDimsArrayImpl() {
+    public int[] getArrayDimsArrayImpl() {
         return getOriginalTypeImpl().getArrayDimsArrayImpl();
     }
 

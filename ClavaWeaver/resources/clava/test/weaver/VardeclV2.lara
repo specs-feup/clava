@@ -16,12 +16,12 @@ aspectdef VardeclV2Test
 	println("Is varref: " + $vardeclToVarref.varref().instanceOf("varref"));
 /*
 	for(var $vardecl of Query.search("vardecl", "GRAD_FILTER")) {
-		println($vardecl.getNode());
+		println($vardecl.node);
 	}
 */
 /*
 	for(var $vardecl of Query.search("vardecl")) {
-		println("Vardecl: " + $vardecl.getNode().getNodeSignature());
+		println("Vardecl: " + $vardecl.node.getNodeSignature());
 		var global = getGlobalDecl($vardecl);
 		if(global !== undefined) {
 			println("global location: " + global.location);

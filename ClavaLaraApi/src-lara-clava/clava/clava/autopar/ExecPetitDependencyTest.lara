@@ -5,6 +5,7 @@
 **************************************************************/
 import clava.autopar.AutoParUtils;
 import lara.util.ProcessExecutor;
+import clava.ClavaJavaTypes;
 
 
 aspectdef ExecPetitDependencyTest
@@ -15,10 +16,10 @@ aspectdef ExecPetitDependencyTest
 		return;
 
 	LoopOmpAttributes[loopindex].petitInputFileAddress = Clava.getWeavingFolder() + 
-		'/Petitdeploop#' + $ForStmt.line + '[' + $ForStmt.astAncestor('FunctionDecl').name + ']' + '.t';
+		'/Petitdeploop#' + $ForStmt.line + '[' + $ForStmt.getAstAncestor('FunctionDecl').name + ']' + '.t';
 
 	LoopOmpAttributes[loopindex].petitOutputFileAddress = Clava.getWeavingFolder() + 
-		'/Petitdeploop#' + $ForStmt.line + '[' + $ForStmt.astAncestor('FunctionDecl').name + ']' +'_output.t';
+		'/Petitdeploop#' + $ForStmt.line + '[' + $ForStmt.getAstAncestor('FunctionDecl').name + ']' +'_output.t';
 
 	var petit_input_file = [];
 	for(var i=0; i < LoopOmpAttributes[loopindex].ForStmtToPetit.length ; i++)
@@ -33,7 +34,7 @@ aspectdef ExecPetitDependencyTest
 	// RUN petit dependency test 
 	var printToConsole = false;
 	var timeoutSeconds = 60;
-	var consoleOutput = ClavaPetit.execute(petitArgs, Clava.getWeavingFolder() + '/', printToConsole, timeoutSeconds);
+	var consoleOutput = ClavaJavaTypes.ClavaPetit.execute(petitArgs, Clava.getWeavingFolder() + '/', printToConsole, timeoutSeconds);
 		
 
 	if (consoleOutput.length === 0)
