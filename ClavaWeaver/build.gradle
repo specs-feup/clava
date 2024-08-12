@@ -18,7 +18,7 @@ application {
 
     // For most input codes this is not necessary, but for the largest example we have tested (LSU-gcc, ~700.000 LoC)
     // it needs a large amount of memory
-    applicationDefaultJvmArgs = ["-Xmx6g"]
+    //applicationDefaultJvmArgs = ["-Xmx6g"]
 }
 
 // Repositories providers
