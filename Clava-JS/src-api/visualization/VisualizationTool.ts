@@ -3,7 +3,7 @@ import GenericVisualizationTool from 'lara-js/api/visualization/GenericVisualiza
 import ClavaAstConverter from './ClavaAstConverter.js';
 
 export class VisualizationTool extends GenericVisualizationTool {
-  private joinPointConverter = new ClavaAstConverter();
+  private astConverter = new ClavaAstConverter();
   private static instance: VisualizationTool = new VisualizationTool();
 
   public static getInstance(): VisualizationTool {
@@ -11,7 +11,7 @@ export class VisualizationTool extends GenericVisualizationTool {
   }
 
   protected override getAstConverter(): GenericAstConverter {
-    return this.joinPointConverter;
+    return this.astConverter;
   }
 }
 
