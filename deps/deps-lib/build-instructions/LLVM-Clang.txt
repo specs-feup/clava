@@ -5,9 +5,11 @@ CLANG
 
 Was able to build Clang+LLVM using the instructions on GitHub, with the following commands:
 
-cmake -S llvm -B build -G "MinGW Makefiles" -DLLVM_ENABLE_PROJECTS='clang' -DCMAKE_BUILD_TYPE=Release  -DLLVM_ENABLE_ASSERTIONS=On
+(could also build libcas a projet, but last time it did not work)
 
-cmake --build build
+cmake -S llvm -B build -G "MinGW Makefiles" -DLLVM_ENABLE_PROJECTS='clang;openmp' -DCMAKE_BUILD_TYPE=Release  -DLLVM_ENABLE_ASSERTIONS=On -DLLVM_TARGETS_TO_BUILD=X86
+
+cmake --build build -j 7
 
 (llvm7)
 

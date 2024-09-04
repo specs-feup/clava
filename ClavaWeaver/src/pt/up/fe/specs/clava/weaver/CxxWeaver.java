@@ -783,44 +783,6 @@ public class CxxWeaver extends ACxxWeaver {
         ClavaLog.debug(() -> "Creating App using the following options: " + parserOptions);
         ClavaLog.debug(() -> "Creating App using the following extra options: " + extraOptions);
 
-        /*
-        // List<File> adaptedSources = adaptSources(sources, parserOptions);
-        // ClavaLog.debug(() -> "Adapted sources: " + adaptedSources);
-        
-        // System.out.println("ADAPTED SOURCES:" + adaptedSources);
-        
-        // App newApp = new CodeParser().parseParallel(sources, parserOptions);
-        // System.out.println("APP SOURCE:" + newApp.getCode());
-        
-        // List<File> allSourceFolders = getInputSourceFolders(sources, parserOptions);
-        // Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
-        // System.out.println("ALL SOURCE FOLDERS:" + allSourceFolders);
-        // System.out.println("ALL SOURCES:" + allSources);
-        
-        // All files specified by the user, header and implementation
-        Set<String> extensions = SourceType.getPermittedExtensions();
-        // Map<String, File> allFilesMap = SpecsIo.getFileMap(adaptedSources, true, extensions, this::isCutoffFolder);
-        Map<String, File> allUserFilesMap = SpecsIo.getFileMap(sources, true, extensions, this::isCutoffFolder);
-        ClavaLog.debug(() -> "All user sources: " + allUserFilesMap.values());
-        
-        // Map<String, File> allFilesMap = SpecsIo.getFileMap(adaptedSources, SourceType.getPermittedExtensions());
-        // System.out.println("ALL FILES MAP:" + allFilesMap);
-        
-        // List<String> implementationFilenames = processSources(sources);
-        
-        // Convert to list, add header files in include folders if enabled
-        List<String> allFiles = processSources(allUserFilesMap, parserOptions);
-        ClavaLog.debug(() -> "All sources: " + allFiles);
-        
-        // System.out.println("ALL FILES:" + allFiles);
-        
-        // TODO: If option to separe include folders in generation is on, it should return just that folder
-        // List<File> includeFolders = sources;
-        
-        // addFlagsFromFiles(includeFolders, filenames, parserOptions);
-        // addFlagsFromFiles(allFiles, parserOptions);
-        */
-
         // Collect additional include folders
         Set<String> sourceIncludeFolders = getSourceIncludes(sources);
         ClavaLog.debug(() -> "Source include folders: " + sourceIncludeFolders);
@@ -873,57 +835,6 @@ public class CxxWeaver extends ACxxWeaver {
                 .setDisableRemoteDependencies(getConfig().get(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES));
 
         return app;
-
-        /*
-        // TODO: parse should receive File instead of String?
-        long tic = System.nanoTime();
-        
-        // boolean disableNewParsingMethod = getConfig().get(ClavaOptions.DISABLE_CLAVA_DATA_NODES);
-        // ClangRootNode ast = new ClangAstParser(false, useCustomResources, disableNewParsingMethod).parse(
-        ClangRootNode ast = new ClangAstParser(false, useCustomResources).parse(
-                implementationFilenames,
-                parserOptions);
-        
-        SpecsLogs.msgInfo(SpecsStrings.takeTime("Clang Parsing and Dump", tic));
-        if (SHOW_MEMORY_USAGE) {
-            SpecsLogs
-                    .msgInfo("Current memory used (Java):" + SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
-        }
-        
-        try (ClavaParser clavaParser = new ClavaParser(ast)) {
-            tic = System.nanoTime();
-            App app = clavaParser.parse();
-            // System.out.println("ALL FILES: " + allFiles);
-            // Set source paths of each TranslationUnit
-            app.setSourcesFromStrings(allFiles);
-        
-            // Set options
-        
-            // Set external dependencies
-            app.getExternalDependencies()
-                    .setDisableRemoteDependencies(getConfig().get(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES));
-        
-            // app.setSources(sources);
-            SpecsLogs.msgInfo(SpecsStrings.takeTime("Clang AST to Clava", tic));
-        
-            // tic = System.nanoTime();
-            // ClavaPragmas.processClavaPragmas(app);
-            // SpecsLogs.msgInfo(SpecsStrings.takeTime("Weaver AST processing", tic));
-        
-            if (SHOW_MEMORY_USAGE) {
-                SpecsLogs.msgInfo("Current memory used (Java):"
-                        + SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
-                // LoggingUtils.msgInfo("Heap size (Java):" + ParseUtils.parseSize(Runtime.getRuntime().maxMemory()));
-            }
-        
-            System.out.println("APP:" + app.toTree());
-        
-            return app;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        */
-
     }
 
     private Set<String> getSourceIncludes(List<File> sources) {

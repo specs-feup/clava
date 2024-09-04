@@ -25,25 +25,21 @@ public interface ClangAstWebResource {
         return WebResourceProvider.newInstance("http://specs.fe.up.pt/resources/clangast/", resourceUrl);
     }
 
-    WebResourceProvider BUILTIN_INCLUDES = create("clang_builtin_includes_v12.0.1.zip", "v12.0.1");
+    WebResourceProvider BUILTIN_INCLUDES = create("clang_builtin_includes_v14.0.6.zip_", "v14.0.6_3");
     // WebResourceProvider LIBC_CXX = create("libcxx_7.0.1.zip", "v1.0");
-    WebResourceProvider LIBC_CXX = create("libc_cxx.zip", "v12.0.1");
+    WebResourceProvider LIBC_CXX = create("libc_cxx.zip", "v14.0.6");
 
     // WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip", "v1.0");
-    WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip_", "v12.0.1");
+    WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx.zip", "v14.0.6");
 
     // For some reason, on Linux, this file no longer downloads
     WebResourceProvider CUDA_LIB = create("cudalib.zip_", "v11.3.0");
 
-    // WebResourceProvider LIBC_CXX_MAC_OS = create("libc_cxx_mac_os.zip", "v1.0");
-    // WebResourceProvider LIBC_CXX_LINUX = create("libc_cxx_linux.zip", "v1.0");
-    // WebResourceProvider LIBC_CXX_CENTOS6 = create("libc_cxx_centos6.zip", "v1.0");
-
-    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v12.0.7");
+    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v14.0.6_0");
     WebResourceProvider WIN_DLL1 = create("windows/libwinpthread-1.dll");
     WebResourceProvider WIN_DLL2 = create("windows/zlib1.dll");
 
-    WebResourceProvider LINUX_EXE = create("linux_ubuntu_18/clang_ast", "v12.0.7");
+    WebResourceProvider LINUX_EXE = create("linux_ubuntu_18/clang-plugin.so", "16");
 
     // Disabled while we do not have an updated Odroid
     WebResourceProvider LINUX_ARMV7_EXE = create("linux_ubuntu_14_armv7/clang_ast", "v4.2.19");

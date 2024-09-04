@@ -232,7 +232,7 @@ public class TypeDataParser {
         DataStore data = parseTypeData(lines, parserData);
 
         data.add(TypeWithKeyword.ELABORATED_TYPE_KEYWORD,
-                LineStreamParsers.enumFromName(ElaboratedTypeKeyword.class, lines));
+                LineStreamParsers.enumFromName(ElaboratedTypeKeyword.getHelper(), lines));
 
         return data;
     }

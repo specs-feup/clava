@@ -65,7 +65,7 @@ describe("ClangPlugin", () => {
       const testDir = path.join(projectDir, "clang-plugin-binaries");
 
       const expectedMap = {
-        "14.0.0": `${testDir}/ClangASTDumper_14.0.0.so`,
+        "14.0.6": `${testDir}/ClangASTDumper_14.0.6.so`,
         //"15.0.0": `${testDir}/ClangASTDumper_15.0.0.so`,
       };
 
