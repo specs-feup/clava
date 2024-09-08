@@ -1,26 +1,11 @@
 package pt.up.fe.specs.clava.weaver.abstracts;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import com.google.common.base.Preconditions;
 import org.lara.interpreter.utils.DefMap;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
-
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -37,18 +22,8 @@ import pt.up.fe.specs.clava.utils.ClassesService;
 import pt.up.fe.specs.clava.utils.NodeWithScope;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.utils.Typable;
-import pt.up.fe.specs.clava.weaver.CxxActions;
-import pt.up.fe.specs.clava.weaver.CxxAttributes;
-import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
-import pt.up.fe.specs.clava.weaver.CxxSelects;
-import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.Insert;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AProgram;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
+import pt.up.fe.specs.clava.weaver.*;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -56,6 +31,12 @@ import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.stringsplitter.StringSplitter;
 import pt.up.fe.specs.util.stringsplitter.StringSplitterRules;
+
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Abstract class which can be edited by the developer. This class will not be overwritten.
@@ -71,6 +52,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     // }
 
     private static final Set<Class<? extends ClavaNode>> IGNORE_NODES;
+
     static {
         IGNORE_NODES = new HashSet<>();
         IGNORE_NODES.add(ImplicitCastExpr.class);
@@ -131,7 +113,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     /**
-     *
      * @return the parent joinpoint
      */
     @Override
@@ -304,7 +285,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         Insert insert = Insert.getHelper().fromValue(position);
         // CxxActions.in
 
-        return new AJoinPoint[] { CxxActions.insertAsStmt(getNode(), code, insert, getWeaverEngine()) };
+        return new AJoinPoint[]{CxxActions.insertAsStmt(getNode(), code, insert, getWeaverEngine())};
         //
         // if (insert == Insert.AFTER || insert == Insert.BEFORE) {
         // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
@@ -449,7 +430,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         AJoinPoint topInserted = null;
         for (var nodeToInsert : reverseNodes) {
-            topInserted = insertAfter(nodeToInsert);
+            topInserted = insertAfterImpl(nodeToInsert);
         }
 
         // Remove current node from the tree
@@ -467,7 +448,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         AJoinPoint topInserted = null;
         for (var nodeToInsert : reverseNodes) {
-            topInserted = insertAfter(nodeToInsert);
+            topInserted = insertAfterImpl(nodeToInsert);
         }
 
         // Remove current node from the tree
@@ -684,7 +665,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     /**
      * Handles special cases, such as nodes with bodies (Loops, Functions) which return the body contents instead of the
      * body itself as children.
-     * 
+     *
      * @return
      */
     @Override
@@ -989,7 +970,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     /**
-     *
      * @return the base ClavaAst class for this kind of nodes.
      */
     private String getBaseClavaNodePackage() {
@@ -1105,13 +1085,13 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public void setDataImpl(Object source) {
         var dataPragma = ClavaData.getClavaData(getNode());
-        
+
         if (dataPragma == null) {
             ClavaData.buildClavaData(getNode());
         }
-        
+
         String sanitizedJson = ClavaData.sanitizeJsonString(source.toString());
-        
+
         ClavaData.setData(getNode(), sanitizedJson);
     }
 
@@ -1294,7 +1274,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             return null;
         }
 
-        return children[children.length-1];
+        return children[children.length - 1];
     }
 
     @Override
@@ -1419,7 +1399,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             return;
         }
 
-        defInlineCommentsImpl(new String[] { value });
+        defInlineCommentsImpl(new String[]{value});
     }
 
     @Override

@@ -1,0 +1,147 @@
+# This workflow will build a Java project with Ant
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
+
+name: Java
+
+on:
+  push:
+  pull_request:
+
+  # Daily at midnight
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  checks: write
+  contents: write
+
+env:
+  JAVA_VERSION: 17
+
+jobs:
+  build-java:
+    name: Build Java
+    runs-on: ubuntu-latest
+
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      DEFAULT_BRANCH: ${{ github.base_ref || 'master' }}
+
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: current
+          dependency-graph: generate-and-submit
+
+      - name: Checkout Clava
+        uses: actions/checkout@v4
+        with:
+          path: clava
+
+      - name: Check if branch exists on lara-framework
+        id: Branch-lara-framework
+        run: git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l
+
+      - name: Check if branch exists on specs-java-libs
+        id: Branch-specs-java-libs
+        run: git ls-remote --heads https://github.com/specs-feup/specs-java-libs.git refs/heads/${{ env.BRANCH_NAME }} | wc -l
+
+      - name: Checkout lara-framework
+        uses: actions/checkout@v4
+        with:
+          repository: specs-feup/lara-framework
+          path: lara-framework
+          #ref: ${{ steps.Branch-lara-framework.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }} Disabled until PR is merged
+          ref: "feature/lara-js"
+          
+      - name: Checkout specs-java-libs
+        uses: actions/checkout@v4
+        with:
+          repository: specs-feup/specs-java-libs
+          path: specs-java-libs
+          ref: ${{ steps.Branch-specs-java-libs.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+
+      - name: Build with Gradle
+        run: |
+          cd clava/ClavaWeaver
+          gradle installDist
+
+      - name: Upload ClavaWeaver artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-binaries
+          path: clava/ClavaWeaver/build/install/ClavaWeaver
+
+
+  build-js:
+    name: Build JS
+    needs: build-java
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['latest']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Checkout Clava
+        uses: actions/checkout@v4
+        with:
+          path: clava
+
+      - name: Check if branch exists on lara-framework
+        id: Branch-lara-framework
+        run: git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l
+
+      - name: Checkout lara-framework
+        uses: actions/checkout@v4
+        with:
+          repository: specs-feup/lara-framework
+          path: lara-framework
+          #ref: ${{ steps.Branch-lara-framework.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }} Disabled until PR is merged
+          ref: "feature/lara-js"
+
+      - name: Setup js workspace
+        run: |
+          echo '{ "name": "SPeCS Workspace", "type": "module", "workspaces": [ "clava/Clava-JS", "lara-framework/Lara-JS" ] }' > package.json
+          npm install
+
+      - name: Build Lara-JS
+        run: |
+          cd lara-framework/Lara-JS
+          npm run build
+
+      - name: Build Clava-JS
+        run: |
+          cd clava/Clava-JS
+          npm run build
+
+      - name: Pull java-binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: java-binaries
+          path: clava/Clava-JS/java-binaries
+
+      - name: Test JS
+        run: |
+          cd clava/Clava-JS
+          npm run test

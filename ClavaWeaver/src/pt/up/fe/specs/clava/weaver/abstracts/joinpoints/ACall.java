@@ -527,7 +527,7 @@ public abstract class ACall extends AExpression {
     /**
      * Tries to inline this call
      */
-    public final boolean inline() {
+    public final Object inline() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "inline", this, Optional.empty());

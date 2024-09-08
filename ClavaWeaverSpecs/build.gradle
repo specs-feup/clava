@@ -1,0 +1,43 @@
+plugins {
+ 	id 'distribution'
+}
+
+// Java project
+apply plugin: 'java'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+
+// Repositories providers
+repositories {
+	// Gearman
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots"}
+
+    mavenCentral()
+}
+
+dependencies {
+	implementation ":WeaverGenerator"
+}
+
+
+// Weaver Generator
+task weaverGenerator(type: JavaExec) {
+	group = "Execution"
+	description = "Generates the join point classes from the Language Specification"
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = 'org.lara.interpreter.weaver.generator.commandline.WeaverGenerator'
+	args = [
+			'-w', 'CxxWeaver',
+			'-x', '../ClavaWeaver/resources/clava/weaverspecs',
+			'-o', '../ClavaWeaver/src',
+			'-p', 'pt.up.fe.specs.clava.weaver',
+			'-n', 'pt.up.fe.specs.clava.ClavaNode',
+			'-j',
+			'-e',
+			'-d'
+	]
+}

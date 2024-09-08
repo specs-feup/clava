@@ -293,7 +293,7 @@ public abstract class AVardecl extends ADeclarator {
     /**
      * Creates a new varref based on this vardecl
      */
-    public final AVarref varref() {
+    public final Object varref() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "varref", this, Optional.empty());
@@ -302,7 +302,7 @@ public abstract class AVardecl extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "varref", this, Optional.ofNullable(result));
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "varref", e);
         }

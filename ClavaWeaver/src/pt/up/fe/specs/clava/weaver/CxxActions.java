@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,30 +13,16 @@
 
 package pt.up.fe.specs.clava.weaver;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
-
+import com.google.common.base.Preconditions;
 import org.lara.interpreter.weaver.interf.WeaverEngine;
 import org.lara.interpreter.weaver.interf.events.Stage;
-
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
-import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
-import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
-import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
+import pt.up.fe.specs.clava.ast.stmt.*;
 import pt.up.fe.specs.clava.utils.NodePosition;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
@@ -47,12 +33,19 @@ import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+
 /**
  * Class with utility methods related with weaver actions.
  *
  * TODO: Move methods that require the weaver to a new class that receives the weaver during construction and is
  * available in the weaver.
- * 
+ *
  * TODO: There are many inserts here, check if they can be reduced.
  *
  * @author JoaoBispo
@@ -67,7 +60,7 @@ public class CxxActions {
      * <p>
      * Minimum granularity level of insert before/after is at the statement level.
      *
-     * 
+     *
      * @param target
      * @param position
      * @param from
@@ -118,32 +111,32 @@ public class CxxActions {
         });
 
         switch (position) {
-        case "before":
-            // Insert before all statements in body
-            base.addChild(0, node);
-            return null;
+            case "before":
+                // Insert before all statements in body
+                base.addChild(0, node);
+                return null;
 
-        case "after":
-            if (base.hasChildren()) {
-                checkInsertAfterReturn(base.getChild(base.getNumChildren() - 1), node);
-            }
+            case "after":
+                if (base.hasChildren()) {
+                    checkInsertAfterReturn(base.getChild(base.getNumChildren() - 1), node);
+                }
 
-            base.addChild(node);
-            return null;
+                base.addChild(node);
+                return null;
 
-        case "around":
-        case "replace":
-            removeChildren(base, weaver);
-            // // Clear use fields
-            // for (ClavaNode child : base.getChildren()) {
-            // weaver.clearUserField(child);
-            // }
-            // // Remove all children
-            // base.removeChildren(0, base.getNumChildren());
-            base.addChild(node);
-            return new AJoinPoint[] { CxxJoinpoints.create(node) };
-        default:
-            throw new RuntimeException("Case not defined:" + position);
+            case "around":
+            case "replace":
+                removeChildren(base, weaver);
+                // // Clear use fields
+                // for (ClavaNode child : base.getChildren()) {
+                // weaver.clearUserField(child);
+                // }
+                // // Remove all children
+                // base.removeChildren(0, base.getNumChildren());
+                base.addChild(node);
+                return new AJoinPoint[]{CxxJoinpoints.create(node)};
+            default:
+                throw new RuntimeException("Case not defined:" + position);
         }
     }
 
@@ -194,7 +187,7 @@ public class CxxActions {
     }
 
     public static AJoinPoint insert(AJoinPoint baseJp, AJoinPoint newJp, Insert position,
-            BiConsumer<ClavaNode, ClavaNode> insertFunction) {
+                                    BiConsumer<ClavaNode, ClavaNode> insertFunction) {
 
         // Set origin point from target to newNode if locations are invalid and no origin point is set
         var newNode = newJp.getNode();
@@ -332,7 +325,7 @@ public class CxxActions {
      * @return
      */
     public static AJoinPoint insertJpAsStatement(AJoinPoint baseJp, AJoinPoint newJp, String position,
-            CxxWeaver weaver) {
+                                                 CxxWeaver weaver) {
 
         AStatement stmtJp = CxxJoinpoints.create(ClavaNodes.toStmt(newJp.getNode()), AStatement.class);
 
@@ -356,23 +349,23 @@ public class CxxActions {
         });
 
         switch (position) {
-        case "before":
-            var newBase = ClavaNodes.getFirstNodeOfTargetRegion(baseJp.getNode(), newJp.getNode());
-            NodeInsertUtils.insertBefore(newBase, newJp.getNode());
-            break;
+            case "before":
+                var newBase = ClavaNodes.getFirstNodeOfTargetRegion(baseJp.getNode(), newJp.getNode());
+                NodeInsertUtils.insertBefore(newBase, newJp.getNode());
+                break;
 
-        case "after":
-            NodeInsertUtils.insertAfter(baseJp.getNode(), newJp.getNode());
-            break;
+            case "after":
+                NodeInsertUtils.insertAfter(baseJp.getNode(), newJp.getNode());
+                break;
 
-        case "around":
-        case "replace":
-            weaver.clearUserField(baseJp.getNode());
-            NodeInsertUtils.replace(baseJp.getNode(), newJp.getNode());
-            break;
+            case "around":
+            case "replace":
+                weaver.clearUserField(baseJp.getNode());
+                NodeInsertUtils.replace(baseJp.getNode(), newJp.getNode());
+                break;
 
-        default:
-            throw new RuntimeException("Case not defined:" + position);
+            default:
+                throw new RuntimeException("Case not defined:" + position);
         }
 
         return newJp;
@@ -390,29 +383,29 @@ public class CxxActions {
         });
 
         switch (position) {
-        case "before":
-            // Insert before all statements in body
-            body.addChild(0, stmt);
-            break;
+            case "before":
+                // Insert before all statements in body
+                body.addChild(0, stmt);
+                break;
 
-        case "after":
+            case "after":
 
-            if (body.hasChildren()) {
-                checkInsertAfterReturn(body.getChild(body.getNumChildren() - 1), stmt);
-            }
+                if (body.hasChildren()) {
+                    checkInsertAfterReturn(body.getChild(body.getNumChildren() - 1), stmt);
+                }
 
-            body.addChild(stmt);
-            break;
+                body.addChild(stmt);
+                break;
 
-        case "around":
-        case "replace":
-            // Remove all children
-            removeChildren(body, weaver);
-            // Add given statement
-            body.addChild(stmt);
-            break;
-        default:
-            throw new RuntimeException("Case not defined:" + position);
+            case "around":
+            case "replace":
+                // Remove all children
+                removeChildren(body, weaver);
+                // Add given statement
+                body.addChild(stmt);
+                break;
+            default:
+                throw new RuntimeException("Case not defined:" + position);
         }
     }
 
@@ -462,12 +455,12 @@ public class CxxActions {
 
         for (ReturnStmt returnStmt : returnStatements) {
             ACxxWeaverJoinPoint returnJp = CxxJoinpoints.create(returnStmt);
-            lastInsertPoint = returnJp.insertBefore(code);
+            lastInsertPoint = returnJp.insertBeforeImpl(code);
         }
 
         // If there is no return in the body, add at the end of the function
         if (lastReturnStmt == null) {
-            lastInsertPoint = scope.insertEnd(code);
+            lastInsertPoint = scope.insertEndImpl(code);
         }
 
         return lastInsertPoint;

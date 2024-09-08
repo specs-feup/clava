@@ -619,7 +619,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * @param currentValue 
      * @param newValue 
      */
-    public final boolean setTypeFieldByValueRecursive(Object currentValue, Object newValue) {
+    public final Object setTypeFieldByValueRecursive(Object currentValue, Object newValue) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setTypeFieldByValueRecursive", this, Optional.empty(), currentValue, newValue);
@@ -648,7 +648,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * @param oldValue 
      * @param newValue 
      */
-    public final AType setUnderlyingType(AType oldValue, AType newValue) {
+    public final Object setUnderlyingType(AType oldValue, AType newValue) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setUnderlyingType", this, Optional.empty(), oldValue, newValue);
@@ -657,7 +657,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setUnderlyingType", this, Optional.ofNullable(result), oldValue, newValue);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setUnderlyingType", e);
         }
@@ -673,7 +673,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     /**
      * Returns a new node based on this type with the qualifier const
      */
-    public final AType asConst() {
+    public final Object asConst() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "asConst", this, Optional.empty());
@@ -682,7 +682,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "asConst", this, Optional.ofNullable(result));
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "asConst", e);
         }
