@@ -1,4 +1,5 @@
 import { Operation } from "./Operations.js"
+import "./OperationEvents.js"
 
 class OperationHistory {
   private operations: Operation[];
