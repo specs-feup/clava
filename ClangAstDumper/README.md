@@ -17,7 +17,7 @@ The target `tool` has been successfully built in Ubuntu and Windows (MinGW), mak
 
 ```sh
 # Required for all targets
-sudo apt install clang-16 libclang-16-dev llvm-16-dev
+sudo apt install clang-16 libclang-16-dev llvm-16-dev zlib1g-dev
 
 # Required for building the stand-alone tool
 sudo apt install libpolly-16-dev libedit-dev libzstd-dev
