@@ -91,12 +91,12 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <action name="removeChildren" tooltip="Removes the children of this node" />
 
-    <action name="setFirstChild"
-        tooltip="Replaces the first child, or inserts the join point if no child is present">
+    <action name="setFirstChild" return="joinpoint"
+        tooltip="Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.">
         <parameter name="node" type="Joinpoint" />
     </action>
-    <action name="setLastChild"
-        tooltip="Replaces the last child, or inserts the join point if no child is present">
+    <action name="setLastChild" return="joinpoint"
+        tooltip="Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.">
         <parameter name="node" type="Joinpoint" />
     </action>
 

@@ -579,52 +579,54 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Replaces the first child, or inserts the join point if no child is present
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
-    public void setFirstChildImpl(AJoinPoint node) {
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
         throw new UnsupportedOperationException(get_class()+": Action setFirstChild not implemented ");
     }
 
     /**
-     * Replaces the first child, or inserts the join point if no child is present
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
-    public final void setFirstChild(AJoinPoint node) {
+    public final Object setFirstChild(AJoinPoint node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setFirstChild", this, Optional.empty(), node);
         	}
-        	this.setFirstChildImpl(node);
+        	AJoinPoint result = this.setFirstChildImpl(node);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setFirstChild", this, Optional.empty(), node);
+        		eventTrigger().triggerAction(Stage.END, "setFirstChild", this, Optional.ofNullable(result), node);
         	}
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setFirstChild", e);
         }
     }
 
     /**
-     * Replaces the last child, or inserts the join point if no child is present
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
-    public void setLastChildImpl(AJoinPoint node) {
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
         throw new UnsupportedOperationException(get_class()+": Action setLastChild not implemented ");
     }
 
     /**
-     * Replaces the last child, or inserts the join point if no child is present
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
-    public final void setLastChild(AJoinPoint node) {
+    public final Object setLastChild(AJoinPoint node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setLastChild", this, Optional.empty(), node);
         	}
-        	this.setLastChildImpl(node);
+        	AJoinPoint result = this.setLastChildImpl(node);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setLastChild", this, Optional.empty(), node);
+        		eventTrigger().triggerAction(Stage.END, "setLastChild", this, Optional.ofNullable(result), node);
         	}
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setLastChild", e);
         }

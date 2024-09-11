@@ -1,6 +1,5 @@
 import Io from "lara-js/api/lara/Io.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { Call, FileJp, FunctionJp } from "../../Joinpoints.js";
 import Clava from "../Clava.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 export default class MathHInfo {
@@ -8,7 +7,7 @@ export default class MathHInfo {
         // Save current AST
         Clava.pushAst();
         // Clear AST
-        for (const $file of Query.search(FileJp)) {
+        for (const $file of Query.search("file")) {
             $file.detach();
         }
         // Prepare source file that will test math.h
@@ -22,10 +21,10 @@ export default class MathHInfo {
         Query.root().addFile($testFile);
         Clava.rebuild();
         // Seach for the abs call and obtain math.h file where it was declared
-        const $absCall = Query.search(Call, "abs").first();
+        const $absCall = Query.search("call", "abs").first();
         const mathIncludeFile = $absCall.declaration.filepath;
         // Clear AST
-        for (const $file of Query.search(FileJp)) {
+        for (const $file of Query.search("file")) {
             $file.detach();
         }
         // Add math.h to the AST
@@ -34,7 +33,8 @@ export default class MathHInfo {
         Query.root().addFile($mathFile);
         Clava.rebuild();
         const results = [];
-        for (const $fn of Query.search(FileJp, "math_copy.h").search(FunctionJp)) {
+        for (const $mathFunction of Query.search("file", "math_copy.h").search("function")) {
+            const $fn = $mathFunction;
             const paramTypes = [];
             for (const $param of $fn.params) {
                 paramTypes.push($param.type.code);

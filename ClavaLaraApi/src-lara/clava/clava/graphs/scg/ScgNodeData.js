@@ -1,6 +1,5 @@
 import NodeData from "lara-js/api/lara/graphs/NodeData.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { Call } from "../../../Joinpoints.js";
 export default class ScgNodeData extends NodeData {
     /**
      * The function represented by this node
@@ -24,7 +23,7 @@ export default class ScgNodeData extends NodeData {
         return this.$function.isImplementation;
     }
     hasCalls() {
-        return Query.searchFrom(this.$function, Call).get().length > 0;
+        return Query.searchFrom(this.$function, "call").get().length > 0;
     }
 }
 //# sourceMappingURL=ScgNodeData.js.map

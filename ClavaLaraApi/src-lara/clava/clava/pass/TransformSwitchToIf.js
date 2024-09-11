@@ -2,7 +2,7 @@ import Query from "lara-js/api/weaver/Query.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 import SimplePass from "lara-js/api/lara/pass/SimplePass.js";
 import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
-import { Break, GotoStmt, Switch, } from "../../Joinpoints.js";
+import { GotoStmt, Switch, } from "../../Joinpoints.js";
 /**
  * Transforms a switch statement into an if statement.
  *
@@ -188,7 +188,7 @@ export default class TransformSwitchToIf extends SimplePass {
      * @param $switchExitGoTo - The goto statement that corresponds to the switch exit. This statement will be used to replace the break statements
      */
     replaceBreakWithGoto($jp, $switchExitGoTo) {
-        const $breakStmts = Query.searchFromInclusive($jp, Break, {
+        const $breakStmts = Query.searchFromInclusive($jp, "break", {
             enclosingStmt: (enclosingStmt) => enclosingStmt.astId === $jp.astId,
         });
         for (const $break of $breakStmts)

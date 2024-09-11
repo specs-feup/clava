@@ -1,9 +1,3 @@
-/**
- * This file is used only in Clava Classic to load the core API.
- * This is done for compatibility with the previous version of Clava.
- * Do not use this file in new (clava-js) projects.
- * Remove this file if Clava Classic has died out.
- */
 const prefix = "clava-js/api/";
 const coreImports = [];
 const sideEffectsOnlyImports = ["Joinpoints.js"];
