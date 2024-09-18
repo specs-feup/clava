@@ -1,5 +1,6 @@
 import Io from "lara-js/api/lara/Io.js";
 import Query from "lara-js/api/weaver/Query.js";
+import { Call } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 import MathHInfo from "./MathHInfo.js";
 export class MathAnalysis {
@@ -23,11 +24,11 @@ export class MathAnalysis {
 function MathReport(mathFun, csv = false, name) {
     //Counter for occurences of each math.h function
     const occurrences = {};
-    mathFun.forEach(f => {
+    mathFun.forEach((f) => {
         occurrences[f.name] = 0;
     });
     //Count occurrences
-    for (const elem of Query.search("call").chain()) {
+    for (const elem of Query.search(Call).chain()) {
         const fun = elem["call"].name;
         if (fun in occurrences) {
             occurrences[fun] += 1;
@@ -67,7 +68,7 @@ function MathReport(mathFun, csv = false, name) {
 function MathCompare(mathFun) {
     //Compare, for each call, the type of arguments and the function signature
     console.log("Type of arguments being passed to each call to a math.h function:");
-    for (const elem of Query.search("call").chain()) {
+    for (const elem of Query.search(Call).chain()) {
         const $call = elem["call"];
         const fun = $call.name;
         if (fun in mathFun) {
@@ -95,7 +96,7 @@ function MathCompare(mathFun) {
  * (see documentation of clava.hls.MathHInfo for the format)
  * */
 function MathReplace(mathFun) {
-    for (const elem of Query.search("call").chain()) {
+    for (const elem of Query.search(Call).chain()) {
         const $call = elem["call"];
         const fun = $call.name;
         if (fun in mathFun) {

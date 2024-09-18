@@ -67,7 +67,7 @@ extern "C" {
 #endif`;
     /**
      * Launches a Clava weaving session.
-     * @param {(string|Array)} args - The arguments to pass to the weaver, as if it was launched from the command-line
+     * @param args - The arguments to pass to the weaver, as if it was launched from the command-line
      * @returns True if the weaver execution without problems, false otherwise
      */
     static runClava(args) {
@@ -163,14 +163,14 @@ extern "C" {
     }
     /**
      *
-     * @returns {J#List<include>} a list of join points representing available user includes
+     * @returns A list of join points representing available user includes
      */
     static getAvailableIncludes() {
         return ClavaJavaTypes.CxxWeaverApi.getAvailableUserIncludes();
     }
     /**
      *
-     * @returns {J#Set<String>} a set with paths to the include folders of the current configuration.
+     * @returns {J#Set<String>} A set with paths to the include folders of the current configuration.
      */
     static getIncludeFolders() {
         return ClavaJavaTypes.CxxWeaverApi.getIncludeFolders();

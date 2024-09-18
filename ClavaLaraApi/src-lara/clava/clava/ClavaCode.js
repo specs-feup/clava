@@ -1,7 +1,7 @@
 import Io from "lara-js/api/lara/Io.js";
 import { debug } from "lara-js/api/lara/core/LaraCore.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { FunctionJp, If, Loop, StorageClass, Vardecl, } from "../Joinpoints.js";
+import { FileJp, FunctionJp, If, Loop, StorageClass, Vardecl, } from "../Joinpoints.js";
 import Clava from "./Clava.js";
 /**
  * Utility methods related with the source code.
@@ -37,8 +37,7 @@ export default class ClavaCode {
         const staticVerification = true;
         const includes = new Set();
         let bodyCode = "";
-        for (const $f of Query.search("file")) {
-            const $file = $f;
+        for (const $file of Query.search(FileJp)) {
             if ($file.isHeader) {
                 continue;
             }
@@ -70,12 +69,14 @@ export default class ClavaCode {
         let changedCode = false;
         // Look for static declarations
         for (const child of $file.children) {
-            if (child instanceof FunctionJp && child.storageClass === StorageClass.STATIC) {
+            if (child instanceof FunctionJp &&
+                child.storageClass === StorageClass.STATIC) {
                 const newName = child.name + "_static_rename";
                 child.name = newName;
                 changedCode = true;
             }
-            if (child instanceof Vardecl && child.storageClass === StorageClass.STATIC) {
+            if (child instanceof Vardecl &&
+                child.storageClass === StorageClass.STATIC) {
                 console.log(child.code);
                 throw "Not yet supported for static variable declarations";
             }

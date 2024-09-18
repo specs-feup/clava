@@ -1,13 +1,13 @@
 import Io from "lara-js/api/lara/Io.js";
 import Strings from "lara-js/api/lara/Strings.js";
 import Query from "lara-js/api/weaver/Query.js";
+import { Pragma } from "../../Joinpoints.js";
 import KernelReplacer from "./KernelReplacer.js";
 //	This aspect can be included in a library, imported and
 // called by a user, since it needs no configuration/parameterization
 export default function KernelReplacerAuto() {
     // look for pragma
-    for (const $p of Query.search("pragma", "clava")) {
-        const $pragma = $p;
+    for (const $pragma of Query.search(Pragma, "clava")) {
         const $file = $pragma.target.getAncestor("file");
         if (!$pragma.content.startsWith("opencl_call")) {
             continue;

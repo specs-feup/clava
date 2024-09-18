@@ -1,6 +1,6 @@
 import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { AdjustedType, ArrayType, BuiltinType, DeclStmt, FileJp, FunctionJp, PointerType, } from "../../Joinpoints.js";
+import { AdjustedType, ArrayType, BuiltinType, Decl, DeclStmt, FileJp, FunctionJp, Param, PointerType, ReturnStmt, Statement, Vardecl, Varref, } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 export default class Outliner {
     verbose = true;
@@ -202,8 +202,7 @@ export default class Outliner {
     }
     findGlobalVars() {
         const globals = [];
-        for (const jp of Query.search("vardecl")) {
-            const decl = jp;
+        for (const decl of Query.search(Vardecl)) {
             if (decl.isGlobal) {
                 globals.push(decl);
             }
@@ -219,14 +218,12 @@ export default class Outliner {
         const decls = [];
         // get decls from the prologue
         for (const stmt of prologue) {
-            for (const jp of Query.searchFrom(stmt, "vardecl")) {
-                const decl = jp;
+            for (const decl of Query.searchFrom(stmt, Vardecl)) {
                 decls.push(decl);
             }
         }
         // get decls from the parent function params
-        for (const jp of Query.searchFrom(parentFun, "param")) {
-            const param = jp;
+        for (const param of Query.searchFrom(parentFun, Param)) {
             decls.push(param.definition);
         }
         // no need to handle global vars - they are not parameters
@@ -275,8 +272,7 @@ export default class Outliner {
     findNonvoidReturnStmts(startingPoints) {
         const returnStmts = [];
         for (const stmt of startingPoints) {
-            for (const jp of Query.searchFrom(stmt, "returnStmt")) {
-                const ret = jp;
+            for (const ret of Query.searchFrom(stmt, ReturnStmt)) {
                 if (ret.numChildren > 0) {
                     returnStmts.push(ret);
                 }
@@ -286,8 +282,7 @@ export default class Outliner {
     }
     scalarsToPointers(region, params) {
         for (const stmt of region) {
-            for (const jp of Query.searchFrom(stmt, "varref")) {
-                const varref = jp;
+            for (const varref of Query.searchFrom(stmt, Varref)) {
                 for (const param of params) {
                     if (param.name === varref.name &&
                         varref.type instanceof BuiltinType) {
@@ -325,16 +320,14 @@ export default class Outliner {
     findRefsInRegion(region) {
         const declsNames = [];
         for (const stmt of region) {
-            for (const jp of Query.searchFrom(stmt, "decl")) {
-                const decl = jp;
+            for (const decl of Query.searchFrom(stmt, Decl)) {
                 declsNames.push(decl.name);
             }
         }
         const varrefs = [];
         const varrefsNames = [];
         for (const stmt of region) {
-            for (const jp of Query.searchFrom(stmt, "varref")) {
-                const varref = jp;
+            for (const varref of Query.searchFrom(stmt, Varref)) {
                 // may need to filter for other types, like macros, etc
                 // select all varrefs with no matching decl in the region, except globals
                 if (!varrefsNames.includes(varref.name) &&
@@ -363,8 +356,7 @@ export default class Outliner {
         const epilogueVarrefsNames = [];
         for (const stmt of epilogue) {
             // also gets function names... could it cause an issue?
-            for (const jp of Query.searchFrom(stmt, "varref")) {
-                const varref = jp;
+            for (const varref of Query.searchFrom(stmt, Varref)) {
                 epilogueVarrefsNames.push(varref.name);
             }
         }
@@ -386,8 +378,7 @@ export default class Outliner {
         const epilogue = [];
         let inPrologue = true;
         let inRegion = false;
-        for (const jp of Query.searchFrom(fun, "statement")) {
-            const stmt = jp;
+        for (const stmt of Query.searchFrom(fun, Statement)) {
             if (inPrologue) {
                 if (stmt.astId == begin.astId) {
                     region.push(stmt);

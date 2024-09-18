@@ -1,7 +1,7 @@
 import Pass from "lara-js/api/lara/pass/Pass.js";
 import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { BuiltinType, FunctionJp, ReturnStmt } from "../../Joinpoints.js";
+import { BuiltinType, FunctionJp, ReturnStmt, } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 import DecomposeVarDeclarations from "./DecomposeVarDeclarations.js";
 export default class SingleReturnFunction extends Pass {
@@ -16,7 +16,7 @@ export default class SingleReturnFunction extends Pass {
             return this.new_result($jp, false);
         }
         const $body = $jp.body;
-        const $returnStmts = Query.searchFrom($body, "returnStmt").get();
+        const $returnStmts = Query.searchFrom($body, ReturnStmt).get();
         if ($returnStmts.length === 0 ||
             ($returnStmts.length === 1 && $body.lastChild instanceof ReturnStmt)) {
             return this.new_result($jp, false);
@@ -53,7 +53,10 @@ export default class SingleReturnFunction extends Pass {
         return this.new_result($jp, true);
     }
     new_result($jp, appliedPass) {
-        return new PassResult(this, $jp, { appliedPass: appliedPass, insertedLiteralCode: false });
+        return new PassResult(this, $jp, {
+            appliedPass: appliedPass,
+            insertedLiteralCode: false,
+        });
     }
 }
 //# sourceMappingURL=SingleReturnFunction.js.map
