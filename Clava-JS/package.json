@@ -1,6 +1,6 @@
 {
-  "name": "clava-js",
-  "version": "0.0.1",
+  "name": "@specs-feup/clava",
+  "version": "3.0.0",
   "description": "A C/C++ source-to-source compiler written in Typescript",
   "type": "module",
   "files": [
@@ -8,18 +8,19 @@
     "code",
     "src-api",
     "src-code",
-    "clang-plugin-binaries",
     "java-binaries",
     ".gitignore",
-    "jest.config.json",
+    "eslint.config.js",
+    "jest.config.js",
     "LICENSE",
     "package.json",
     "README.md",
     "tsconfig.jest.json",
-    "tsconfig.json"
+    "tsconfig.json",
+    "typedoc.config.js"
   ],
   "bin": {
-    "clava-js": "./code/index.js"
+    "clava": "./code/index.js"
   },
   "scripts": {
     "run": "node ./code/index.js",
@@ -55,7 +56,7 @@
   },
   "homepage": "https://github.com/specs-feup/clava#readme",
   "dependencies": {
-    "lara-js": "^0.0.1"
+    "@specs-feup/lara": "^3.0.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
