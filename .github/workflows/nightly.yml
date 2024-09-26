@@ -1,7 +1,9 @@
-# This workflow will build a Java project with Ant
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
+# This workflow will build a the whole project every day at midnight
+# It will build the Java part and the JS part
+# Every push to a branch will trigger the build
+# Every pull request will trigger the build
 
-name: Java
+name: nightly
 
 on:
   push:
@@ -59,7 +61,7 @@ jobs:
           repository: specs-feup/lara-framework
           path: lara-framework
           ref: ${{ steps.Branch-lara-framework.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
-          
+
       - name: Checkout specs-java-libs
         uses: actions/checkout@v4
         with:
@@ -71,6 +73,13 @@ jobs:
         run: |
           cd clava/ClavaWeaver
           gradle installDist
+
+      - name: Test with Gradle
+        run: |
+          cd clava/ClavaWeaver
+          gradle test
+        env:
+          GITHUB_DEPENDENCY_GRAPH_ENABLED: false
 
       - name: Upload ClavaWeaver artifacts
         uses: actions/upload-artifact@v4
