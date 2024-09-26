@@ -58,8 +58,7 @@ jobs:
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          #ref: ${{ steps.Branch-lara-framework.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }} Disabled until PR is merged
-          ref: "feature/lara-js"
+          ref: ${{ steps.Branch-lara-framework.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
           
       - name: Checkout specs-java-libs
         uses: actions/checkout@v4
@@ -117,8 +116,7 @@ jobs:
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          #ref: ${{ steps.Branch-lara-framework.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }} Disabled until PR is merged
-          ref: "feature/lara-js"
+          ref: ${{ steps.Branch-lara-framework.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
 
       - name: Setup js workspace
         run: |
