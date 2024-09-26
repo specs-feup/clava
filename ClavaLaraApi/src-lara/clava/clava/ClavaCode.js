@@ -1,6 +1,6 @@
-import Io from "lara-js/api/lara/Io.js";
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
-import Query from "lara-js/api/weaver/Query.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { FileJp, FunctionJp, If, Loop, StorageClass, Vardecl, } from "../Joinpoints.js";
 import Clava from "./Clava.js";
 /**

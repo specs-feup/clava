@@ -1,5 +1,5 @@
-import { unwrapJoinPoint, wrapJoinPoint } from "lara-js/api/LaraJoinPoint.js";
-import { arrayFromArgs, flattenArgsArray, } from "lara-js/api/lara/core/LaraCore.js";
+import { unwrapJoinPoint, wrapJoinPoint, } from "@specs-feup/lara/api/LaraJoinPoint.js";
+import { arrayFromArgs, flattenArgsArray, } from "@specs-feup/lara/api/lara/core/LaraCore.js";
 import * as Joinpoints from "../Joinpoints.js";
 import Clava from "./Clava.js";
 import ClavaJavaTypes from "./ClavaJavaTypes.js";

@@ -1,4 +1,4 @@
-import EdgeData from "lara-js/api/lara/graphs/EdgeData.js";
+import EdgeData from "@specs-feup/lara/api/lara/graphs/EdgeData.js";
 import CfgEdgeType from "./CfgEdgeType.js";
 /**
  * An edge of the CFG

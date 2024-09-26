@@ -1,4 +1,4 @@
-import JavaTypes from "lara-js/api/lara/util/JavaTypes.js";
+import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import { Expression } from "../Joinpoints.js";
 import ClavaJavaTypes from "./ClavaJavaTypes.js";
 

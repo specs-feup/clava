@@ -1,10 +1,10 @@
-import EnergyBase from "lara-js/api/lara/code/EnergyBase.js";
+import EnergyBase from "@specs-feup/lara/api/lara/code/EnergyBase.js";
 
 import Clava from "../../clava/Clava.js";
 import Logger from "./Logger.js";
 
-import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
-import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
+import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
+import PrintOnce from "@specs-feup/lara/api/lara/util/PrintOnce.js";
 import { FileJp, Joinpoint } from "../../Joinpoints.js";
 
 export default class Energy extends EnergyBase<Joinpoint> {
@@ -47,7 +47,8 @@ export default class Energy extends EnergyBase<Joinpoint> {
     const $file = $start.getAncestor("file") as FileJp | undefined;
     if ($file === undefined) {
       console.log(
-        "Could not find the corresponding file of the given joinpoint: " + $start.joinPointType
+        "Could not find the corresponding file of the given joinpoint: " +
+          $start.joinPointType
       );
       return;
     }

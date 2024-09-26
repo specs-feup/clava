@@ -1,8 +1,8 @@
-import Io from "lara-js/api/lara/Io.js";
-import { arrayFromArgs } from "lara-js/api/lara/core/LaraCore.js";
-import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
-import { TimerUnit } from "lara-js/api/lara/util/TimeUnits.js";
-import Query from "lara-js/api/weaver/Query.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import { arrayFromArgs } from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
+import { TimerUnit } from "@specs-feup/lara/api/lara/util/TimeUnits.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { Call, FileJp, FunctionJp } from "../../Joinpoints.js";
 import Timer from "../../lara/code/Timer.js";
 import ClavaJavaTypes from "../ClavaJavaTypes.js";

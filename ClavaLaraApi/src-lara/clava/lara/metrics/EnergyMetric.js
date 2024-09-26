@@ -1,6 +1,6 @@
-import Strings from "lara-js/api/lara/Strings.js";
-import Metric from "lara-js/api/lara/metrics/Metric.js";
-import MetricResult from "lara-js/api/lara/metrics/MetricResult.js";
+import Strings from "@specs-feup/lara/api/lara/Strings.js";
+import Metric from "@specs-feup/lara/api/lara/metrics/Metric.js";
+import MetricResult from "@specs-feup/lara/api/lara/metrics/MetricResult.js";
 import Energy from "../code/Energy.js";
 /**
  * Measures energy consumed during an application.

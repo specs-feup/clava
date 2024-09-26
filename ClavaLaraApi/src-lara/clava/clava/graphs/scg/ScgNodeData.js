@@ -1,5 +1,5 @@
-import NodeData from "lara-js/api/lara/graphs/NodeData.js";
-import Query from "lara-js/api/weaver/Query.js";
+import NodeData from "@specs-feup/lara/api/lara/graphs/NodeData.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { Call } from "../../../Joinpoints.js";
 export default class ScgNodeData extends NodeData {
     /**

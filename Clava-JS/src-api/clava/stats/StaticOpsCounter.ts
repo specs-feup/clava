@@ -1,5 +1,5 @@
-import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
-import Query from "lara-js/api/weaver/Query.js";
+import PrintOnce from "@specs-feup/lara/api/lara/util/PrintOnce.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import {
   BinaryOp,
   BuiltinType,

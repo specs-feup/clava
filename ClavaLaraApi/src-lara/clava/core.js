@@ -4,7 +4,7 @@
  * Do not use this file in new (clava-js) projects.
  * Remove this file if Clava Classic has died out.
  */
-const prefix = "clava-js/api/";
+const prefix = "@specs-feup/clava/api/";
 const coreImports = [];
 const sideEffectsOnlyImports = ["Joinpoints.js"];
 for (const sideEffectsOnlyImport of sideEffectsOnlyImports) {

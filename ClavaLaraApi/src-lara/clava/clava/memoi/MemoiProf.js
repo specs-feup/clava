@@ -1,6 +1,6 @@
-import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
-import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
-import Query from "lara-js/api/weaver/Query.js";
+import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
+import PrintOnce from "@specs-feup/lara/api/lara/util/PrintOnce.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { Call, FileJp, FunctionJp, Scope } from "../../Joinpoints.js";
 import Clava from "../Clava.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";

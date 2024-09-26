@@ -1,6 +1,6 @@
-import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
-import Query from "lara-js/api/weaver/Query.js";
+import { LaraJoinPoint } from "@specs-feup/lara/api/LaraJoinPoint.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import {
   BinaryOp,
   Call,

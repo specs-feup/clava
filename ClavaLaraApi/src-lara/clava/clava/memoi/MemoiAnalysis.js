@@ -1,6 +1,6 @@
-import { JSONtoFile } from "lara-js/api/core/output.js";
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
-import Query from "lara-js/api/weaver/Query.js";
+import { JSONtoFile } from "@specs-feup/lara/api/core/output.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { Call } from "../../Joinpoints.js";
 import MemoiTarget from "./MemoiTarget.js";
 import MemoiUtils from "./MemoiUtils.js";

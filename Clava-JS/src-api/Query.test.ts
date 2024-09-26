@@ -1,5 +1,5 @@
-import { registerSourceCode } from "lara-js/jest/jestHelpers.js";
-import Query from "lara-js/api/weaver/Query.js";
+import { registerSourceCode } from "@specs-feup/lara/jest/jestHelpers.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { FunctionJp, Loop } from "./Joinpoints.js";
 
 const code = `void query_loop() {

@@ -1,4 +1,4 @@
-import NodeData from "lara-js/api/lara/graphs/NodeData.js";
+import NodeData from "@specs-feup/lara/api/lara/graphs/NodeData.js";
 /**
  * The data of a CFG node.
  */

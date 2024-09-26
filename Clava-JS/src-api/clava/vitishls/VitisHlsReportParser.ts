@@ -1,4 +1,4 @@
-import Io from "lara-js/api/lara/Io.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
 
 export default class VitisHlsReportParser {
   private reportPath: string;

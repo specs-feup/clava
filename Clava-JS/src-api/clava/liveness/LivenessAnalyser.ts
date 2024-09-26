@@ -1,4 +1,4 @@
-import cytoscape from "lara-js/api/libs/cytoscape-3.26.0.js";
+import cytoscape from "@specs-feup/lara/api/libs/cytoscape-3.26.0.js";
 import { Case, Expression, If, Statement, Switch } from "../../Joinpoints.js";
 import ControlFlowGraph from "../graphs/ControlFlowGraph.js";
 import CfgNodeData from "../graphs/cfg/CfgNodeData.js";
@@ -73,7 +73,7 @@ export default class LivenessAnalyser {
     Map<string, Set<string>>,
     Map<string, Set<string>>,
     Map<string, Set<string>>,
-    Map<string, Set<string>>
+    Map<string, Set<string>>,
   ] {
     this.computeDefs();
     this.computeUses();

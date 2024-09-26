@@ -1,6 +1,6 @@
-import Io from "lara-js/api/lara/Io.js";
-import Platforms from "lara-js/api/lara/Platforms.js";
-import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import Platforms from "@specs-feup/lara/api/lara/Platforms.js";
+import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
 import OpenCLCallVariables from "./OpenCLCallVariables.js";
 export default class OpenCLCall {
     $kernel = undefined;

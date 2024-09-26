@@ -1,7 +1,7 @@
-import Platforms from "lara-js/api/lara/Platforms.js";
-import TimerBase from "lara-js/api/lara/code/TimerBase.js";
-import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
-import { TimerUnit } from "lara-js/api/lara/util/TimeUnits.js";
+import Platforms from "@specs-feup/lara/api/lara/Platforms.js";
+import TimerBase from "@specs-feup/lara/api/lara/code/TimerBase.js";
+import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
+import { TimerUnit } from "@specs-feup/lara/api/lara/util/TimeUnits.js";
 import { FileJp, Joinpoint, Scope } from "../../Joinpoints.js";
 import Clava from "../../clava/Clava.js";
 import ClavaJoinPoints from "../../clava/ClavaJoinPoints.js";
@@ -62,13 +62,17 @@ export default class Timer extends TimerBase<Joinpoint> {
     const timeIntervalVar = IdGenerator.next("clava_timing_duration_");
     // Create literal node with calculation of time interval
     const $timingResult = ClavaJoinPoints.exprLiteral(
-      "long long " + this._timer_cpp_calc_interval(startVar, endVar, cppUnit, timeIntervalVar)
+      "long long " +
+        this._timer_cpp_calc_interval(
+          startVar,
+          endVar,
+          cppUnit,
+          timeIntervalVar
+        )
     );
 
     // Build message
-    logger
-      .append(prefix)
-      .appendLong(timeIntervalVar);
+    logger.append(prefix).appendLong(timeIntervalVar);
     if (this.printUnit) {
       logger.append(this.timeUnits.getUnitsString());
     }

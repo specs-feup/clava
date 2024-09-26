@@ -1,5 +1,5 @@
-import SimplePass from "lara-js/api/lara/pass/SimplePass.js";
-import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
+import SimplePass from "@specs-feup/lara/api/lara/pass/SimplePass.js";
+import PassResult from "@specs-feup/lara/api/lara/pass/results/PassResult.js";
 import { DeclStmt } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 /**

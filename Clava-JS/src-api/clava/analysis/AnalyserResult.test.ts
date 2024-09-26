@@ -1,5 +1,5 @@
 import AnalyserResult from "./AnalyserResult.js";
-import ClavaJoinPoints from "clava-js/api/clava/ClavaJoinPoints.js";
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
 
 describe("AnalyserResult", () => {
   describe("getName", () => {
