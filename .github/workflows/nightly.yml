@@ -47,11 +47,11 @@ jobs:
 
       - name: Check if branch exists on lara-framework
         id: Branch-lara-framework
-        run: echo $(git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l) >> $GITHUB_OUTPUT
+        run: git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l | read GITHUB_OUTPUT
 
       - name: Check if branch exists on specs-java-libs
         id: Branch-specs-java-libs
-        run: echo $(git ls-remote --heads https://github.com/specs-feup/specs-java-libs.git refs/heads/${{ env.BRANCH_NAME }} | wc -l) >> $GITHUB_OUTPUT
+        run: git ls-remote --heads https://github.com/specs-feup/specs-java-libs.git refs/heads/${{ env.BRANCH_NAME }} | wc -l | read GITHUB_OUTPUT
 
       - name: Echo checks
         run: |
@@ -123,7 +123,7 @@ jobs:
 
       - name: Check if branch exists on lara-framework
         id: Branch-lara-framework
-        run: echo $(git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l) >> $GITHUB_OUTPUT
+        run: git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l | read GITHUB_OUTPUT
 
       - name: Checkout lara-framework
         uses: actions/checkout@v4
