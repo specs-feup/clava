@@ -58,14 +58,14 @@ jobs:
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          ref: ${{ steps.Branch-lara-framework.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ startsWith(steps.Branch-lara-framework.outputs.stdout, '1') && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
 
       - name: Checkout specs-java-libs
         uses: actions/checkout@v4
         with:
           repository: specs-feup/specs-java-libs
           path: specs-java-libs
-          ref: ${{ steps.Branch-specs-java-libs.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ startsWith(steps.Branch-specs-java-libs.outputs.stdout, '1') && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
 
       - name: Build with Gradle
         run: |
@@ -123,7 +123,7 @@ jobs:
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          ref: ${{ steps.Branch-lara-framework.outputs.stdout == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ startsWith(steps.Branch-lara-framework.outputs.stdout, '1') && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
 
       - name: Setup js workspace
         run: |
