@@ -53,6 +53,13 @@ jobs:
         id: Branch-specs-java-libs
         run: git ls-remote --heads https://github.com/specs-feup/specs-java-libs.git refs/heads/${{ env.BRANCH_NAME }} | wc -l
 
+      - name: Echo checks
+        run: |
+          echo "Branch-lara-framework: ${{ steps.Branch-lara-framework.outputs.stdout }}"
+          echo "Branch-specs-java-libs: ${{ steps.Branch-specs-java-libs.outputs.stdout }}"
+          echo "Branch name: ${{ env.BRANCH_NAME }}"
+          echo "Default branch: ${{ env.DEFAULT_BRANCH }}"
+
       - name: Checkout lara-framework
         uses: actions/checkout@v4
         with:
