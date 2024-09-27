@@ -19,15 +19,13 @@ permissions:
 
 env:
   JAVA_VERSION: 17
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  DEFAULT_BRANCH: ${{ github.base_ref || 'master' }}
 
 jobs:
   build-java:
     name: Build Java
     runs-on: ubuntu-latest
-
-    env:
-      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-      DEFAULT_BRANCH: ${{ github.base_ref || 'master' }}
 
     steps:
       - name: Setup Java
