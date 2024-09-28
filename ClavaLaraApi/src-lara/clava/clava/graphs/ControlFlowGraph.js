@@ -1,4 +1,4 @@
-import Graph from "lara-js/api/lara/graphs/Graph.js";
+import Graph from "@specs-feup/lara/api/lara/graphs/Graph.js";
 import CfgBuilder from "./cfg/CfgBuilder.js";
 export default class ControlFlowGraph extends Graph {
     /**

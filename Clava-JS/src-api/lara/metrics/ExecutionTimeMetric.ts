@@ -1,8 +1,8 @@
-import Strings from "lara-js/api/lara/Strings.js";
-import Metric from "lara-js/api/lara/metrics/Metric.js";
-import MetricResult from "lara-js/api/lara/metrics/MetricResult.js";
-import ProcessExecutor from "lara-js/api/lara/util/ProcessExecutor.js";
-import { TimerUnit } from "lara-js/api/lara/util/TimeUnits.js";
+import Strings from "@specs-feup/lara/api/lara/Strings.js";
+import Metric from "@specs-feup/lara/api/lara/metrics/Metric.js";
+import MetricResult from "@specs-feup/lara/api/lara/metrics/MetricResult.js";
+import ProcessExecutor from "@specs-feup/lara/api/lara/util/ProcessExecutor.js";
+import { TimerUnit } from "@specs-feup/lara/api/lara/util/TimeUnits.js";
 import { Joinpoint } from "../../Joinpoints.js";
 import Timer from "../code/Timer.js";
 

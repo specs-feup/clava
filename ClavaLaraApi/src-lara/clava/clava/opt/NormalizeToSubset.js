@@ -1,4 +1,4 @@
-import Query from "lara-js/api/weaver/Query.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { BinaryOp } from "../../Joinpoints.js";
 import SimplifyAssignment from "../code/SimplifyAssignment.js";
 import StatementDecomposer from "../code/StatementDecomposer.js";

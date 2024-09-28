@@ -1,6 +1,6 @@
-import DotFormatter from "lara-js/api/lara/graphs/DotFormatter.js";
-import Graph from "lara-js/api/lara/graphs/Graph.js";
-import Graphs from "lara-js/api/lara/graphs/Graphs.js";
+import DotFormatter from "@specs-feup/lara/api/lara/graphs/DotFormatter.js";
+import Graph from "@specs-feup/lara/api/lara/graphs/Graph.js";
+import Graphs from "@specs-feup/lara/api/lara/graphs/Graphs.js";
 import StaticCallGraphBuilder from "./scg/StaticCallGraphBuilder.js";
 export default class StaticCallGraph extends Graph {
     static dotFormatterInstance = undefined;

@@ -1,4 +1,4 @@
-import Query from "lara-js/api/weaver/Query.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { BinaryOp, Vardecl, Varref, } from "../../Joinpoints.js";
 export default class LivenessUtils {
     /**

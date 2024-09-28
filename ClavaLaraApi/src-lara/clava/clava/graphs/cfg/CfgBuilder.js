@@ -1,6 +1,6 @@
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
-import Graphs from "lara-js/api/lara/graphs/Graphs.js";
-import Query from "lara-js/api/weaver/Query.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import Graphs from "@specs-feup/lara/api/lara/graphs/Graphs.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { FunctionJp, LabelStmt, Loop, Scope, Statement, } from "../../../Joinpoints.js";
 import ClavaJoinPoints from "../../ClavaJoinPoints.js";
 import CfgEdge from "./CfgEdge.js";

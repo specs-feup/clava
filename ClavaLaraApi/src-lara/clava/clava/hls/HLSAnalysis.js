@@ -1,4 +1,4 @@
-import { unwrapJoinPoint } from "lara-js/api/LaraJoinPoint.js";
+import { unwrapJoinPoint } from "@specs-feup/lara/api/LaraJoinPoint.js";
 import ClavaJavaTypes from "../ClavaJavaTypes.js";
 export default class HLSAnalysis {
     /**

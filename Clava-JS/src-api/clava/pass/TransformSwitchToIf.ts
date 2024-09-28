@@ -1,7 +1,7 @@
-import Query from "lara-js/api/weaver/Query.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
-import SimplePass from "lara-js/api/lara/pass/SimplePass.js";
-import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
+import SimplePass from "@specs-feup/lara/api/lara/pass/SimplePass.js";
+import PassResult from "@specs-feup/lara/api/lara/pass/results/PassResult.js";
 import {
   Break,
   Case,
@@ -11,7 +11,7 @@ import {
   Statement,
   Switch,
 } from "../../Joinpoints.js";
-import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
+import { LaraJoinPoint } from "@specs-feup/lara/api/LaraJoinPoint.js";
 
 /**
  * Transforms a switch statement into an if statement.
@@ -249,8 +249,7 @@ export default class TransformSwitchToIf extends SimplePass {
       enclosingStmt: (enclosingStmt: LaraJoinPoint) =>
         (enclosingStmt as Statement).astId === $jp.astId,
     });
-    for (const $break of $breakStmts)
-      $break.replaceWith($switchExitGoTo);
+    for (const $break of $breakStmts) $break.replaceWith($switchExitGoTo);
   }
 
   /**

@@ -8,7 +8,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-duplicate-type-constituents */
-import { LaraJoinPoint, registerJoinpointMapper, wrapJoinPoint, unwrapJoinPoint, } from "lara-js/api/LaraJoinPoint.js";
+import { LaraJoinPoint, registerJoinpointMapper, wrapJoinPoint, unwrapJoinPoint, } from "@specs-feup/lara/api/LaraJoinPoint.js";
 export class Joinpoint extends LaraJoinPoint {
     /**
      * @internal

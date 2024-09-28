@@ -1,5 +1,5 @@
-import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
-import Query from "lara-js/api/weaver/Query.js";
+import { LaraJoinPoint } from "@specs-feup/lara/api/LaraJoinPoint.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { BinaryOp, Joinpoint } from "../../Joinpoints.js";
 import SimplifyAssignment from "../code/SimplifyAssignment.js";
 import StatementDecomposer from "../code/StatementDecomposer.js";

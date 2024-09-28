@@ -1,9 +1,9 @@
 import Clava from "../Clava.js";
-import ProcessExecutor from "lara-js/api/lara/util/ProcessExecutor.js";
+import ProcessExecutor from "@specs-feup/lara/api/lara/util/ProcessExecutor.js";
 import VitisHlsReportParser from "./VitisHlsReportParser.js";
-import Tool from "lara-js/api/lara/tool/Tool.js";
-import ToolUtils from "lara-js/api/lara/tool/ToolUtils.js";
-import Io from "lara-js/api/lara/Io.js";
+import Tool from "@specs-feup/lara/api/lara/tool/Tool.js";
+import ToolUtils from "@specs-feup/lara/api/lara/tool/ToolUtils.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
 export default class VitisHls extends Tool {
     topFunction;
     platform;
@@ -59,7 +59,10 @@ export default class VitisHls extends Tool {
         Io.deleteFolderContents(this.vitisDir);
     }
     getSynthesisReportPath() {
-        return this.vitisDir + "/" + this.vitisProjName + "/solution1/syn/report/csynth.xml";
+        return (this.vitisDir +
+            "/" +
+            this.vitisProjName +
+            "/solution1/syn/report/csynth.xml");
     }
     executeVitis(verbose) {
         console.log(`${this.getTimestamp()} Executing Vitis HLS`);

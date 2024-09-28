@@ -1,10 +1,10 @@
-import { wrapJoinPoint } from "lara-js/api/LaraJoinPoint.js";
-import Io from "lara-js/api/lara/Io.js";
-import JavaInterop from "lara-js/api/lara/JavaInterop.js";
-import { JavaClasses } from "lara-js/api/lara/util/JavaTypes.js";
-import Query from "lara-js/api/weaver/Query.js";
-import Weaver from "lara-js/api/weaver/Weaver.js";
-import WeaverOptions from "lara-js/api/weaver/WeaverOptions.js";
+import { wrapJoinPoint } from "@specs-feup/lara/api/LaraJoinPoint.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import JavaInterop from "@specs-feup/lara/api/lara/JavaInterop.js";
+import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import Weaver from "@specs-feup/lara/api/weaver/Weaver.js";
+import WeaverOptions from "@specs-feup/lara/api/weaver/WeaverOptions.js";
 import { FileJp, Include, Joinpoint, Program } from "../Joinpoints.js";
 import ClavaJavaTypes from "./ClavaJavaTypes.js";
 import ClavaDataStore from "./util/ClavaDataStore.js";
