@@ -29,7 +29,7 @@
     "build:code": "tsc -b src-code",
     "build:watch": "npm run build -- --watch",
     "lint": "eslint .",
-    "test": "cross-env NODE_OPTIONS='$NODE_OPTIONS --experimental-vm-modules' jest --detectOpenHandles --forceExit",
+    "test": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --detectOpenHandles --forceExit",
     "test:api": "npm run test -- src-api",
     "test:code": "npm run test -- src-code",
     "test:cov": "npm run test -- --coverage",
