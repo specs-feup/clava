@@ -27,6 +27,10 @@ jobs:
     name: Build Java
     runs-on: ubuntu-latest
 
+    outputs:
+      branch-exists-lara-framework: ${{ steps.Branch-lara-framework.outputs.value }}
+      branch-exists-specs-java-libs: ${{ steps.Branch-specs-java-libs.outputs.value }}
+
     steps:
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -47,16 +51,16 @@ jobs:
 
       - name: Check if branch exists on lara-framework
         id: Branch-lara-framework
-        run: git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l | read GITHUB_OUTPUT
+        run: echo "value=$(git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l)" >> $GITHUB_OUTPUT
 
       - name: Check if branch exists on specs-java-libs
         id: Branch-specs-java-libs
-        run: git ls-remote --heads https://github.com/specs-feup/specs-java-libs.git refs/heads/${{ env.BRANCH_NAME }} | wc -l | read GITHUB_OUTPUT
+        run: echo "value=$(git ls-remote --heads https://github.com/specs-feup/specs-java-libs.git refs/heads/${{ env.BRANCH_NAME }} | wc -l)" >> $GITHUB_OUTPUT
 
       - name: Echo checks
         run: |
-          echo "Branch-lara-framework: ${{ steps.Branch-lara-framework.outputs.stdout }}"
-          echo "Branch-specs-java-libs: ${{ steps.Branch-specs-java-libs.outputs.stdout }}"
+          echo "Branch-lara-framework: ${{ steps.Branch-lara-framework.outputs.value }}"
+          echo "Branch-specs-java-libs: ${{ steps.Branch-specs-java-libs.outputs.value }}"
           echo "Branch name: ${{ env.BRANCH_NAME }}"
           echo "Default branch: ${{ env.DEFAULT_BRANCH }}"
 
@@ -65,14 +69,14 @@ jobs:
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          ref: ${{ startsWith(steps.Branch-lara-framework.outputs.stdout, '1') && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ steps.Branch-lara-framework.outputs.value == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
 
       - name: Checkout specs-java-libs
         uses: actions/checkout@v4
         with:
           repository: specs-feup/specs-java-libs
           path: specs-java-libs
-          ref: ${{ startsWith(steps.Branch-specs-java-libs.outputs.stdout, '1') && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ steps.Branch-specs-java-libs.outputs.value == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
 
       - name: Build with Gradle
         run: |
@@ -121,16 +125,12 @@ jobs:
         with:
           path: clava
 
-      - name: Check if branch exists on lara-framework
-        id: Branch-lara-framework
-        run: git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l | read GITHUB_OUTPUT
-
       - name: Checkout lara-framework
         uses: actions/checkout@v4
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          ref: ${{ startsWith(steps.Branch-lara-framework.outputs.stdout, '1') && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ needs.build-java.outputs.branch-exists-lara-framework == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
 
       - name: Setup js workspace
         run: |
