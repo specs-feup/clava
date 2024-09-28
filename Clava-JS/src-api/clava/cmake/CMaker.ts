@@ -1,18 +1,18 @@
-import Io from "lara-js/api/lara/Io.js";
-import Platforms from "lara-js/api/lara/Platforms.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import Platforms from "@specs-feup/lara/api/lara/Platforms.js";
 import {
   arrayFromArgs,
   debug,
   debugObject,
-} from "lara-js/api/lara/core/LaraCore.js";
-import { JavaClasses } from "lara-js/api/lara/util/JavaTypes.js";
-import ProcessExecutor from "lara-js/api/lara/util/ProcessExecutor.js";
+} from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import ProcessExecutor from "@specs-feup/lara/api/lara/util/ProcessExecutor.js";
 import { FileJp } from "../../Joinpoints.js";
 import Clava from "../Clava.js";
 import CMakerSources from "./CMakerSources.js";
 import CMakerUtils from "./CMakerUtils.js";
 import CMakeCompiler from "./compilers/CMakeCompiler.js";
-import BenchmarkCompilationEngine from "lara-js/api/lara/benchmark/BenchmarkCompilationEngine.js";
+import BenchmarkCompilationEngine from "@specs-feup/lara/api/lara/benchmark/BenchmarkCompilationEngine.js";
 
 /**
  * Builds CMake configurations.

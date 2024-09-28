@@ -1,5 +1,5 @@
-import Io from "lara-js/api/lara/Io.js";
-import Query from "lara-js/api/weaver/Query.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { Call, FileJp, FunctionJp, Program } from "../../Joinpoints.js";
 import Clava from "../Clava.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
@@ -49,9 +49,7 @@ export default class MathHInfo {
     Clava.rebuild();
 
     const results = [];
-    for (const $fn of Query.search(FileJp, "math_copy.h").search(
-      FunctionJp
-    )) {
+    for (const $fn of Query.search(FileJp, "math_copy.h").search(FunctionJp)) {
       const paramTypes = [];
       for (const $param of $fn.params) {
         paramTypes.push($param.type.code);

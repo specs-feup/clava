@@ -1,11 +1,11 @@
-import Io from "lara-js/api/lara/Io.js";
-import Check from "lara-js/api/lara/Check.js";
-import System from "lara-js/api/lara/System.js";
-import Strings from "lara-js/api/lara/Strings.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import Check from "@specs-feup/lara/api/lara/Check.js";
+import System from "@specs-feup/lara/api/lara/System.js";
+import Strings from "@specs-feup/lara/api/lara/Strings.js";
 import Clava from "../Clava.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
-import { JavaClasses } from "lara-js/api/lara/util/JavaTypes.js";
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
+import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
 import { ClavaException, FileJp } from "../../Joinpoints.js";
 
 /**

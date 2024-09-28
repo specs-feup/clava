@@ -1,4 +1,4 @@
-import Query from "lara-js/api/weaver/Query.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { ArrayAccess, BinaryOp, Expression, FunctionJp, Loop, Param, Scope, Statement, UnaryOp, Vardecl, Varref, } from "../../Joinpoints.js";
 import Logger from "../../lara/code/Logger.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";

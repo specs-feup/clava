@@ -1,8 +1,8 @@
-import WeaverDataStore from "lara-js/api/weaver/util/WeaverDataStore.js";
+import WeaverDataStore from "@specs-feup/lara/api/weaver/util/WeaverDataStore.js";
 import ClavaJavaTypes from "../ClavaJavaTypes.js";
-import JavaTypes from "lara-js/api/lara/util/JavaTypes.js";
-import Io from "lara-js/api/lara/Io.js";
-import { arrayFromArgs } from "lara-js/api/lara/core/LaraCore.js";
+import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import { arrayFromArgs } from "@specs-feup/lara/api/lara/core/LaraCore.js";
 /**
  * DataStore used in Clava.
  *

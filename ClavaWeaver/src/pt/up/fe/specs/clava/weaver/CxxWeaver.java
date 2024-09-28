@@ -171,7 +171,7 @@ public class CxxWeaver extends ACxxWeaver {
         return DEFAULT_DUMPER_FLAGS;
     }
 
-    private static final String CLAVA_API_NAME = "clava-js";
+    private static final String CLAVA_API_NAME = "@specs-feup/clava";
 
     private static final List<ResourceProvider> CLAVA_LARA_API = new ArrayList<>();
     static {

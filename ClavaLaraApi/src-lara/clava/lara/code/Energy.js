@@ -1,8 +1,8 @@
-import EnergyBase from "lara-js/api/lara/code/EnergyBase.js";
+import EnergyBase from "@specs-feup/lara/api/lara/code/EnergyBase.js";
 import Clava from "../../clava/Clava.js";
 import Logger from "./Logger.js";
-import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
-import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
+import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
+import PrintOnce from "@specs-feup/lara/api/lara/util/PrintOnce.js";
 export default class Energy extends EnergyBase {
     /**
      * Current SpecsRapl library measures uJ.
@@ -26,7 +26,8 @@ export default class Energy extends EnergyBase {
         // Add include
         const $file = $start.getAncestor("file");
         if ($file === undefined) {
-            console.log("Could not find the corresponding file of the given joinpoint: " + $start.joinPointType);
+            console.log("Could not find the corresponding file of the given joinpoint: " +
+                $start.joinPointType);
             return;
         }
         $file.addInclude("rapl.h", false);

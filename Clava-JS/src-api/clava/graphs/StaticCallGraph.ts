@@ -1,7 +1,7 @@
-import DotFormatter from "lara-js/api/lara/graphs/DotFormatter.js";
-import Graph from "lara-js/api/lara/graphs/Graph.js";
-import Graphs from "lara-js/api/lara/graphs/Graphs.js";
-import cytoscape from "lara-js/api/libs/cytoscape-3.26.0.js";
+import DotFormatter from "@specs-feup/lara/api/lara/graphs/DotFormatter.js";
+import Graph from "@specs-feup/lara/api/lara/graphs/Graph.js";
+import Graphs from "@specs-feup/lara/api/lara/graphs/Graphs.js";
+import cytoscape from "@specs-feup/lara/api/libs/cytoscape-3.26.0.js";
 import { FunctionJp, Joinpoint } from "../../Joinpoints.js";
 import ScgNodeData from "./scg/ScgNodeData.js";
 import StaticCallGraphBuilder from "./scg/StaticCallGraphBuilder.js";

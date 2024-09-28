@@ -1,4 +1,4 @@
-import Io from "lara-js/api/lara/Io.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
 import Clava from "../Clava.js";
 import AnalyserResult from "./AnalyserResult.js";
 import ResultList from "./ResultList.js";

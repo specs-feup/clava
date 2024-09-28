@@ -106,3 +106,22 @@ task clava(type: JavaExec) {
     mainClass = 'pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher'
     args = []
 }
+
+// Clava Doc (old version)
+task clavadoc(type: JavaExec) {
+    group = "Execution"
+    description = "Generates Documentation (Legacy)"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher'
+    args = [
+            '-doc',
+            '--output',
+            '"../docs/api"',
+            '--clean',
+            '--exclude',
+            '_',
+            '--packages',
+//            '{"Clava API": ["../ClavaLaraApi/src-lara-clava/clava"], "LARA API": ["../LaraApi/src-lara-base","../LaraApi}/src-lara","../LARAI/src-lara","../LaraExtraApi/src-lara","../ClavaLaraApi/src-lara/clava"], "LARA Common Language API": ["../LaraCommonLanguageApi/src-lara"], "ANTAREX API": ["../AntarexClavaApi/src-lara/clava"]}',
+            '{\'Clava API\': [\'../ClavaLaraApi/src-lara-clava/clava\'], \'LARA API\': [\'../LaraApi/src-lara-base\',\'../LaraApi}/src-lara\',\'../LARAI/src-lara\',\'../LaraExtraApi/src-lara\',\'../ClavaLaraApi/src-lara/clava\'], \'LARA Common Language API\': [\'../LaraCommonLanguageApi/src-lara\'], \'ANTAREX API\': [\'../AntarexClavaApi/src-lara/clava\']}',
+    ]
+}

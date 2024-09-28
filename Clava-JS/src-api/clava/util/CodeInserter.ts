@@ -1,5 +1,5 @@
-import Io from "lara-js/api/lara/Io.js";
-import LineInserter from "lara-js/api/lara/util/LineInserter.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import LineInserter from "@specs-feup/lara/api/lara/util/LineInserter.js";
 import { FileJp } from "../../Joinpoints.js";
 import Clava from "../Clava.js";
 

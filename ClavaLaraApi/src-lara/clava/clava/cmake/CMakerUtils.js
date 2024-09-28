@@ -1,4 +1,4 @@
-import ToolUtils from "lara-js/api/lara/tool/ToolUtils.js";
+import ToolUtils from "@specs-feup/lara/api/lara/tool/ToolUtils.js";
 import GenericCMakeCompiler from "./compilers/GenericCMakeCompiler.js";
 export default class CMakerUtils extends ToolUtils {
     static compilerTable = {

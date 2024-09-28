@@ -826,10 +826,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -868,10 +868,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -1809,10 +1809,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -1851,10 +1851,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -3035,10 +3035,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -3077,10 +3077,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -4104,10 +4104,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -4146,10 +4146,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -5343,10 +5343,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -5385,10 +5385,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -6315,10 +6315,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -6357,10 +6357,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -7412,10 +7412,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -7454,10 +7454,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -8743,10 +8743,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -8785,10 +8785,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -9763,10 +9763,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -9805,10 +9805,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -10827,10 +10827,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -10869,10 +10869,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -12097,10 +12097,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -12139,10 +12139,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -13373,10 +13373,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -13415,10 +13415,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -14482,10 +14482,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -14524,10 +14524,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -15527,10 +15527,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -15569,10 +15569,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -16941,10 +16941,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -16983,10 +16983,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -18217,10 +18217,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -18259,10 +18259,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -19272,10 +19272,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -19314,10 +19314,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -20491,10 +20491,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -20533,10 +20533,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -21480,10 +21480,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -21522,10 +21522,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -22465,10 +22465,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -22507,10 +22507,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -23520,10 +23520,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -23562,10 +23562,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -24830,10 +24830,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -24872,10 +24872,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -25804,10 +25804,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -25846,10 +25846,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -26868,10 +26868,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -26910,10 +26910,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -27917,10 +27917,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -27959,10 +27959,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -28929,10 +28929,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -28971,10 +28971,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -30174,10 +30174,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -30216,10 +30216,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -31139,10 +31139,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -31181,10 +31181,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -32194,10 +32194,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -32236,10 +32236,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -33256,10 +33256,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -33298,10 +33298,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -34498,10 +34498,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -34540,10 +34540,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -35546,10 +35546,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -35588,10 +35588,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -36610,10 +36610,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -36652,10 +36652,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -37622,10 +37622,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -37664,10 +37664,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -38671,10 +38671,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -38713,10 +38713,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -40058,10 +40058,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -40100,10 +40100,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -41078,10 +41078,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -41120,10 +41120,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -42613,10 +42613,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -42655,10 +42655,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -43879,10 +43879,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -43921,10 +43921,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -44956,10 +44956,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -44998,10 +44998,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -46110,10 +46110,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -46152,10 +46152,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -47122,10 +47122,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -47164,10 +47164,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -48124,10 +48124,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -48166,10 +48166,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -49145,10 +49145,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -49187,10 +49187,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -50165,10 +50165,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -50207,10 +50207,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -51213,10 +51213,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -51255,10 +51255,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -52290,10 +52290,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -52332,10 +52332,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -53302,10 +53302,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -53344,10 +53344,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -54716,10 +54716,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -54758,10 +54758,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -55776,10 +55776,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -55818,10 +55818,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -56843,10 +56843,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -56885,10 +56885,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -58135,10 +58135,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -58177,10 +58177,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -59687,10 +59687,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -59729,10 +59729,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -60736,10 +60736,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -60778,10 +60778,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -61748,10 +61748,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -61790,10 +61790,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -63229,10 +63229,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -63271,10 +63271,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -64266,10 +64266,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -64308,10 +64308,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -65447,10 +65447,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -65489,10 +65489,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -66468,10 +66468,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -66510,10 +66510,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -67707,10 +67707,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -67749,10 +67749,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -68955,10 +68955,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -68997,10 +68997,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -69993,10 +69993,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -70035,10 +70035,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -71275,10 +71275,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -71317,10 +71317,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -72508,10 +72508,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -72550,10 +72550,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -73618,10 +73618,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -73660,10 +73660,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -74686,10 +74686,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -74728,10 +74728,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -76018,10 +76018,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -76060,10 +76060,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -77073,10 +77073,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -77115,10 +77115,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -78183,10 +78183,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -78225,10 +78225,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -79274,10 +79274,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -79316,10 +79316,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -80321,10 +80321,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -80363,10 +80363,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -81555,10 +81555,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -81597,10 +81597,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -82804,10 +82804,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -82846,10 +82846,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -83880,10 +83880,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -83922,10 +83922,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -84892,10 +84892,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -84934,10 +84934,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -86109,10 +86109,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -86151,10 +86151,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -87158,10 +87158,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -87200,10 +87200,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -88207,10 +88207,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -88249,10 +88249,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -89443,10 +89443,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -89485,10 +89485,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -90508,10 +90508,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -90550,10 +90550,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -91566,10 +91566,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -91608,10 +91608,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -92783,10 +92783,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -92825,10 +92825,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -93965,10 +93965,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -94007,10 +94007,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -95226,10 +95226,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -95268,10 +95268,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -96313,10 +96313,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -96355,10 +96355,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{
@@ -97384,10 +97384,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the first child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setFirstChild"
 									},
 									{
@@ -97426,10 +97426,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces the last child, or inserts the join point if no child is present",
+						"tooltip": "Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.",
 						"children": [
 									{
-										"type": "void",
+										"type": "joinpoint",
 										"name": "setLastChild"
 									},
 									{

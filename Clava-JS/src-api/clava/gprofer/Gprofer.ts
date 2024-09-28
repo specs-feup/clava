@@ -1,11 +1,13 @@
-import Io from "lara-js/api/lara/Io.js";
-import Strings from "lara-js/api/lara/Strings.js";
-import JavaTypes, { JavaClasses } from "lara-js/api/lara/util/JavaTypes.js";
-import Query from "lara-js/api/weaver/Query.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import Strings from "@specs-feup/lara/api/lara/Strings.js";
+import JavaTypes, {
+  JavaClasses,
+} from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { FileJp, FunctionJp } from "../../Joinpoints.js";
 import Clava from "../Clava.js";
 import CMaker from "../cmake/CMaker.js";
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
 
 function GproferGetCxxFunction(signature: string) {
   return Query.search(FunctionJp, {

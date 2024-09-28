@@ -1,6 +1,6 @@
-import LoggerBase from "lara-js/api/lara/code/LoggerBase.js";
-import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
-import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
+import LoggerBase from "@specs-feup/lara/api/lara/code/LoggerBase.js";
+import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
+import PrintOnce from "@specs-feup/lara/api/lara/util/PrintOnce.js";
 import Clava from "../../clava/Clava.js";
 import { FunctionJp, Scope, } from "../../Joinpoints.js";
 export default class Logger extends LoggerBase {

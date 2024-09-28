@@ -1,6 +1,6 @@
-import Io from "lara-js/api/lara/Io.js";
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
-import { JavaClasses } from "lara-js/api/lara/util/JavaTypes.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import { FileJp } from "../../Joinpoints.js";
 import Clava from "../Clava.js";
 

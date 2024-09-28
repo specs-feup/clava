@@ -1,7 +1,7 @@
-import Io from "lara-js/api/lara/Io.js";
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
-import { JavaClasses } from "lara-js/api/lara/util/JavaTypes.js";
-import Query from "lara-js/api/weaver/Query.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import {
   FileJp,
   FunctionJp,
@@ -59,7 +59,6 @@ export default class ClavaCode {
     let bodyCode = "";
 
     for (const $file of Query.search(FileJp)) {
-
       if ($file.isHeader) {
         continue;
       }

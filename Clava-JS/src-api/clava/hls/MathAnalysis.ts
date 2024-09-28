@@ -1,5 +1,5 @@
-import Io from "lara-js/api/lara/Io.js";
-import Query from "lara-js/api/weaver/Query.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { BuiltinType, Call, Expression } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 import MathHInfo, { MathInfo } from "./MathHInfo.js";
