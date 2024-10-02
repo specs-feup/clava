@@ -43,11 +43,8 @@ dependencies {
 
     implementation ":LanguageSpecification"
     implementation ":LaraCommonLanguageApi"
-    implementation ":LaraDoc"
     implementation ":LaraFramework"
     implementation ":LARAI"
-    implementation ":LaraLoc"
-    implementation ":LaraUnit"
     implementation ":LaraUtils"
     implementation ":WeaverGenerator"
     implementation ":WeaverInterface"

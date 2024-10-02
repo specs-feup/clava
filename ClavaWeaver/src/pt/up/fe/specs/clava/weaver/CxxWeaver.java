@@ -59,7 +59,6 @@ import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.clava.weaver.utils.ClavaAstMethods;
 import pt.up.fe.specs.lara.langspec.LangSpecsXmlParser;
 import pt.up.fe.specs.lara.lcl.LaraCommonLanguageApis;
-import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
@@ -1875,13 +1874,6 @@ public class CxxWeaver extends ACxxWeaver {
     // public static String getRelativeFolderpath(TranslationUnit tunit) {
     // return tunit.getRelativeFolderpath(CxxWeaver.getCxxWeaver().getBaseSourceFolder());
     // }
-
-    @Override
-    public boolean executeUnitTestMode(DataStore dataStore) {
-        int unitResults = LaraUnitLauncher.execute(dataStore, getClass().getName());
-
-        return unitResults == 0;
-    }
 
     public static ClavaFactory getFactory() {
         return getContex().get(ClavaContext.FACTORY);
