@@ -272,8 +272,6 @@ public class NodeDataParser {
 
         // TODO: Consider removing
         boolean isMacro = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
-        SourceRange spellingLocation = isMacro ? ClavaDataParsers.parseLocation(lines, dataStore)
-                : SourceRange.invalidRange();
 
         boolean isInSystemHeader = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
 

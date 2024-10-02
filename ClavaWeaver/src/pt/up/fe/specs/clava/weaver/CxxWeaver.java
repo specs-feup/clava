@@ -391,7 +391,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Add normal include folders to the sources
         // sources.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
 
-        weaverData = new ClavaWeaverData(args);
+        weaverData = new ClavaWeaverData();
 
         accMap = new AccumulatorMap<>();
 
