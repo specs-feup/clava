@@ -273,6 +273,11 @@ public class NodeDataParser {
         // TODO: Consider removing
         boolean isMacro = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
 
+        // Do not remove. I know its value is not being used, but it is being parsed
+        // Will break the parser if removed
+        SourceRange spellingLocation = isMacro ? ClavaDataParsers.parseLocation(lines, dataStore)
+                : SourceRange.invalidRange();
+
         boolean isInSystemHeader = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
 
         // DataStore data = DataStore.newInstance("Data from Parser");
