@@ -1,14 +1,10 @@
-import clava.ClavaJoinPoints;
-import weaver.Query;
+laraImport("clava.ClavaJoinPoints");
+laraImport("weaver.Query");
 
-
-aspectdef CudaMatrixMul
-
-	var $vardecl = Query.search("function", "multiMatrix").search("vardecl", "s_a").first();
-	for(var $attr of $vardecl.attrs) {
-		println("Attr kind: " + $attr.kind);	
-		println("Attr code: " + $attr.code);	
-	}	
-
-
-end
+const $vardecl = Query.search("function", "multiMatrix")
+    .search("vardecl", "s_a")
+    .first();
+for (const $attr of $vardecl.attrs) {
+    console.log("Attr kind: " + $attr.kind);
+    console.log("Attr code: " + $attr.code);
+}

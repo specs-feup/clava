@@ -1,15 +1,12 @@
-aspectdef AddParamTest
+laraImport("weaver.Query");
 
-	select function{'foo'} end
-	apply
-		$function.exec addParam("char* str");
-		println($function.code);
-	end
+for (const $function of Query.search("function", "foo")) {
+    $function.addParam("char* str");
+    console.log($function.code);
+}
 
-	select function{'bar'} end
-	apply
-		$function.exec addParam("int num");
-		println($function.code);
-		println("---------------");
-	end
-end
+for (const $function of Query.search("function", "bar")) {
+    $function.addParam("int num");
+    console.log($function.code);
+    console.log("---------------");
+}

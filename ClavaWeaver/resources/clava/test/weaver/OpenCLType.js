@@ -1,11 +1,7 @@
-aspectdef OpenCLType
-    select decl end
-    apply
-        println($decl.type.ast);
-    end
-	
-	select program end
-	apply
-		println($program.code);
-	end
-end
+laraImport("weaver.Query");
+
+for (const $decl of Query.search("decl")) {
+    console.log($decl.type.ast);
+}
+
+console.log(Query.root().code);

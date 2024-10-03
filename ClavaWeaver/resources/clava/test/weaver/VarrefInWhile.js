@@ -1,12 +1,14 @@
-aspectdef VarrefInWhile
-    select loop{'while'}.cond end
-    apply
-        println('while line#' + $loop.line);
-        println('while cond.code = ' + $cond.code);
-    end
-    
-    select loop{'while'}.cond.varref end
-    apply
-        println($varref.name);
-    end
-end
+laraImport("weaver.Query");
+
+for (const $loop of Query.search("loop", "while")) {
+    const $cond = $loop.cond;
+    console.log("while line#" + $loop.line);
+    console.log("while cond.code = " + $cond.code);
+}
+
+for (const $loop of Query.search("loop", "while")) {
+    const $cond = $loop.cond;
+    for (const $varref of Query.searchFrom($cond, "varref")) {
+        console.log($varref.name);
+    }
+}

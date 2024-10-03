@@ -1,24 +1,23 @@
-import weaver.Query;
-
-aspectdef ExpressionDecls
-
-	for(var $expr of Query.search("function", "expressionDecls").search("expression")) {
-		printExprDecl($expr);
-	}
-	
-	for(var $expr of Query.search("function", "temporaryExpressionDecl").search("expression")) {
-		printExprDecl($expr);
-	}	
-
-end
+laraImport("weaver.Query");
 
 function printExprDecl($expr) {
-	var $exprDecl = $expr.decl;
-	if($exprDecl === undefined) {
-		return;
-	}
-	
-	println("Expr: " + $expr.node.getClass());
-	println("Decl: " + $exprDecl.node.getClass());	
+    const $exprDecl = $expr.decl;
+    if ($exprDecl === undefined) {
+        return;
+    }
 
+    console.log("Expr: " + $expr.node.getClass());
+    console.log("Decl: " + $exprDecl.node.getClass());
+}
+
+for (const $expr of Query.search("function", "expressionDecls").search(
+    "expression"
+)) {
+    printExprDecl($expr);
+}
+
+for (const $expr of Query.search("function", "temporaryExpressionDecl").search(
+    "expression"
+)) {
+    printExprDecl($expr);
 }

@@ -1,28 +1,22 @@
-import weaver.Query;
+laraImport("weaver.Query");
 
-aspectdef GlobalAttributes
+for (const $vardecl of Query.search("function", "main").search(
+    "vardecl",
+    "a"
+)) {
+    console.log("- Testing keys, setValue, getValue -");
+    const $type = $vardecl.type;
+    console.log("type keys: " + $type.keys);
+    console.log("type builtin kind: " + $type.getValue("builtinKind"));
+    $vardecl.type = $type.copy().setValue("builtinKind", "float");
+    console.log("Changed vardecl: " + $vardecl.code);
+}
 
-	select function{"main"}.vardecl{"a"} end
-	apply
-		println("- Testing keys, setValue, getValue -");
-		var $type = $vardecl.type;
-		println("type keys: " + $type.keys);
-		println("type builtin kind: " + $type.getValue('builtinKind'));
-		$vardecl.type = $type.copy().setValue('builtinKind', 'float');
-		println("Changed vardecl: " + $vardecl.code);		
-	end
-
-
-	println("Inside header:");
-	for(var $function of Query.search('function', 'insideHeader')) {
-		for(var $jp of $function.descendants) {
-			if($jp.isInsideHeader) {
-				println($jp.joinPointType + " -> " + $jp.code);
-			}
-		}
-
-	}
-	
-	//println(Query.root().ast);
-
-end
+console.log("Inside header:");
+for (const $function of Query.search("function", "insideHeader")) {
+    for (const $jp of $function.descendants) {
+        if ($jp.isInsideHeader) {
+            console.log($jp.joinPointType + " -> " + $jp.code);
+        }
+    }
+}

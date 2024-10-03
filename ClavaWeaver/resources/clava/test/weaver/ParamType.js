@@ -1,12 +1,10 @@
-aspectdef ParamType
+laraImport("weaver.Query");
 
-   select function{'error_norm'}.body.loop.varref end
-   apply
-       println('varref_name : ' + $varref.name + ' #' + $varref.line);
-       println('\t\tisArray = ' + $varref.vardecl.type.isArray);
-       println('\t\tisArray = ' + $varref.type.isArray);
-       println($varref.ast);
-   end
-   condition $varref.name!= 'm' end
-
-end
+for (const $varref of Query.search("function", "error_norm")
+    .search("loop")
+    .search("varref", (varref) => varref.name != "m")) {
+    console.log("varref_name : " + $varref.name + " #" + $varref.line);
+    console.log("\t\tisArray = " + $varref.vardecl.type.isArray);
+    console.log("\t\tisArray = " + $varref.type.isArray);
+    console.log($varref.ast);
+}

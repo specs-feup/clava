@@ -1,10 +1,7 @@
-aspectdef test
+laraImport("weaver.Query");
 
-    select omp end
-    apply
-        println("OMP:" + $omp.name);
-        println("OMP CONTENT:" + $omp.content);
-        println("OMP TARGET:" + $omp.target.code);
-    end
-
-end
+for (const $omp of Query.search("omp")) {
+    console.log("OMP:" + $omp.name);
+    console.log("OMP CONTENT:" + $omp.content);
+    console.log("OMP TARGET:" + $omp.target.code);
+}

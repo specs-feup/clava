@@ -1,17 +1,9 @@
-aspectdef DataClass
+laraImport("weaver.Query");
 
-	select method end
-    apply
-       var tinits = $method.getValue("constructorInits"); 
-       //println("TINITS CLASS: " + tinits.getClass());
-       for(var tinit of tinits) {
-        
-        //println("TINIT: " + typeof tinit);       
-        //println("Class: " + tinit.getClass());
-        //tinit.getRaw("anyMemberDecl");
-        println("InitExpr class: " + tinit.getValue("initExpr").getClass());
-       }
+for (const $method of Query.search("method")) {
+    const tinits = $method.getValue("constructorInits");
 
-    end
-
-end
+    for (const tinit of tinits) {
+        console.log("InitExpr class: " + tinit.getValue("initExpr").getClass());
+    }
+}

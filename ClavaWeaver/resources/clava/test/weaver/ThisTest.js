@@ -1,11 +1,8 @@
-import weaver.Query;
+laraImport("weaver.Query");
 
-aspectdef ThisTest
-
-	println("This decl");
-	for(var $memberAccess of Query.search("function", "getVolume").search("memberAccess")) {
-		println($memberAccess.base.decl.name);
-	}
-
-
-end
+console.log("This decl");
+for (const $memberAccess of Query.search("function", "getVolume").search(
+    "memberAccess"
+)) {
+    console.log($memberAccess.base.decl.name);
+}

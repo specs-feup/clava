@@ -1,23 +1,15 @@
+laraImport("weaver.Query");
 
-aspectdef Wrap
+let lastWrapped = undefined;
 
-	var lastWrapped = undefined;
-	select call end
-	apply
-		$call.exec wrap("wrap_" + $call.name);
-		// At this point, the call joinpoint changed and became the wrapped call
-		lastWrapped = $call.name;
-	end
+for (const $call of Query.search("call")) {
+    $call.wrap("wrap_" + $call.name);
+    // At this point, the call joinpoint changed and became the wrapped call
+    lastWrapped = $call.name;
+}
 
-	select function{lastWrapped}.call end
-	apply
-		$call.insert before "// Before call";
-	end
-	
-	select program end
-	apply
-		println($program.code);
-	end
-	
+for (const $call of Query.search("function", lastWrapped).search("call")) {
+    $call.insertBefore("// Before call");
+}
 
-end
+console.log(Query.root().code);

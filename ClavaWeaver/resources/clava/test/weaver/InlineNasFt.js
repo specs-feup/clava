@@ -1,10 +1,5 @@
-aspectdef InlineNasFt
+laraImport("weaver.Query");
 
-	select loop.call end
-	apply
-		$call.inline();
-	end
-
-	
-end
-
+for (const $call of Query.search("loop").search("call")) {
+    $call.inline();
+}

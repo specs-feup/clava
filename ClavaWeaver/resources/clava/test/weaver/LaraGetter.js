@@ -1,27 +1,23 @@
-import weaver.Weaver;
-import clava.Clava;
-import clava.ClavaJoinPoints;
+laraImport("weaver.Weaver");
+laraImport("clava.Clava");
+laraImport("clava.ClavaJoinPoints");
 
-aspectdef LaraGetterTest
+const descendants = Clava.getProgram().descendants;
+// descendants() does not work in newer versions of GraalVM
+// For some reason, laraGetter is not being used in that case
+//var descendants2 = Clava.getProgram().getDescendants('vardecl');
 
-	var descendants = Clava.getProgram().descendants;
-	// descendants() does not work in newer versions of GraalVM
-	// For some reason, laraGetter is not being used in that case
-	//var descendants2 = Clava.getProgram().getDescendants('vardecl');
-	
-	var $app = Clava.getProgram();
-	var $file = ClavaJoinPoints.file("dummy.c", "lib");
-	//$file.insertBefore("// Hello");
-	$file.insert before "// Hello";
+const $app = Clava.getProgram();
+const $file = ClavaJoinPoints.file("dummy.c", "lib");
+$file.insertBefore("// Hello");
 
-	$app.addFile($file);
-	
-	$app.firstChild.relativeFolderpath = $app.firstChild.relativeFolderpath;
-	$app.firstChild.getFirstJp('comment').text = "hello 2";
-	
-	var obj = {i: 10};
-	obj.i++;
-	obj.i--;
-	
-	println($app.code);
-end
+$app.addFile($file);
+
+$app.firstChild.relativeFolderpath = $app.firstChild.relativeFolderpath;
+$app.firstChild.getFirstJp("comment").text = "hello 2";
+
+const obj = { i: 10 };
+obj.i++;
+obj.i--;
+
+console.log($app.code);

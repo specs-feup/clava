@@ -1,14 +1,9 @@
-import weaver.Query;
+laraImport("weaver.Query");
 
-aspectdef TemplateSpecializationType
+for (const $class of Query.search("class")) {
+    console.log("Class: " + $class.name);
 
-	for(var $class of Query.search("class")) {
-		println("Class: " + $class.name);
-		
-		for(var $base of $class.bases) {
-			println("- " + $base.name);		
-		}
-
-	}
-
-end
+    for (const $base of $class.bases) {
+        console.log("- " + $base.name);
+    }
+}

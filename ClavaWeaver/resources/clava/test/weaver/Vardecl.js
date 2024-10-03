@@ -1,22 +1,20 @@
-aspectdef Vardecl
+laraImport("weaver.Query");
 
-	select vardecl end
-	apply
-		println("vardecl " + $vardecl.name);
-		println("is param? " + $vardecl.isParam);
-	end
-	
-	select call end
-	apply
-		if($call.declaration !== undefined) {
-			println("Call '" + $call.name + "' declaration:" + $call.declaration.line);
-		}
+for (const $vardecl of Query.search("vardecl")) {
+    console.log("vardecl " + $vardecl.name);
+    console.log("is param? " + $vardecl.isParam);
+}
 
-		if($call.definition !== undefined) {
-			println("Call '" + $call.name + "' definition:" + $call.definition.line);
-		}
+for (const $call of Query.search("call")) {
+    if ($call.declaration !== undefined) {
+        console.log(
+            "Call '" + $call.name + "' declaration:" + $call.declaration.line
+        );
+    }
 
-	end
-
-
-end
+    if ($call.definition !== undefined) {
+        console.log(
+            "Call '" + $call.name + "' definition:" + $call.definition.line
+        );
+    }
+}

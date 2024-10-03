@@ -1,104 +1,71 @@
-import clava.ClavaJoinPoints;
-import clava.Clava;
-import weaver.Query;
+laraImport("clava.ClavaJoinPoints");
+laraImport("clava.Clava");
+laraImport("weaver.Query");
 
-aspectdef ClassManipulation
+function testCopyMethodDeclaration() {
+    const $class = Query.search("class", "originalClass").first();
 
-	testCopyMethodDeclaration();
-	testCopyMethodDefinition();
-	testCopyTypedef();
-	testAddField();
-	testBases();
-end
+    const $method = Query.searchFrom($class, "method", "foo").first();
 
+    const $newMethod = $method.clone("new_" + $method.name, false);
 
-function testCopyMethodDeclaration()  {
+    const $newClass = ClavaJoinPoints.classDecl("newClass");
+    $newClass.addMethod($newMethod);
 
-	var $class = Query.search("class", "originalClass").first();
-
-	
-	var $method = Query.searchFrom($class, "method", "foo").first();
-
-	var $newMethod = $method.clone("new_" + $method.name, false);
-
-	var $newClass = ClavaJoinPoints.classDecl("newClass");
-	$newClass.addMethod($newMethod);
-	
-	println("Test Copy Method Declaration");
-	println("CLASS: " + $class.code);
-	println("NEW CLASS: " + $newClass.code);
-
+    console.log("Test Copy Method Declaration");
+    console.log("CLASS: " + $class.code);
+    console.log("NEW CLASS: " + $newClass.code);
 }
 
-function testCopyMethodDefinition()  {
+function testCopyMethodDefinition() {
+    const $class = Query.search("class", "originalClass2").first();
 
-	var $class = Query.search("class", "originalClass2").first();
+    const $method = Query.search("method", {
+        name: "foo2",
+        hasDefinition: true,
+    }).first();
 
-	
-	var $method = Query.search("method", {name: "foo2", hasDefinition: true}).first();
+    const $newMethod = $method.clone("new_" + $method.name, false);
 
+    const $newClass = ClavaJoinPoints.classDecl("newClass2");
+    $newClass.addMethod($newMethod);
 
+    console.log("Test Copy Method Definition");
+    console.log("CLASS: " + $class.code);
+    console.log("METHOD: " + $method.code);
+    console.log("NEW CLASS: " + $newClass.code);
+    console.log("NEW METHOD: " + $newMethod.code);
 
-	var $newMethod = $method.clone("new_" + $method.name, false);
-
-	//var $newMethod = $method.deepCopy();
-	var $newClass = ClavaJoinPoints.classDecl("newClass2");
-	$newClass.addMethod($newMethod);
-
-
-
-	println("Test Copy Method Definition");
-	println("CLASS: " + $class.code);
-	println("METHOD: " + $method.code);
-	println("NEW CLASS: " + $newClass.code);
-	println("NEW METHOD: " + $newMethod.code);
-	
-	
-	// If $newMethod.declarationJp is called before adding $newClass to the program, 
-	// it will returned undefined due to Clava caching queries to declarationJp/definitionJp 
-	println("METHOD DECL BEFORE ADDING CLASS: " + $newMethod.declarationJp);		
-	$class.getAncestor("file").insertAfter($newClass);
-	println("METHOD DECL AFTER ADDING CLASS: " + $newMethod.declarationJp);	
-
-	
-	
-	//$newMethod.name = "new_" + $newMethod.name;
-
+    // If $newMethod.declarationJp is called before adding $newClass to the program,
+    // it will returned undefined due to Clava caching queries to declarationJp/definitionJp
+    console.log("METHOD DECL BEFORE ADDING CLASS: " + $newMethod.declarationJp);
+    $class.getAncestor("file").insertAfter($newClass);
+    console.log("METHOD DECL AFTER ADDING CLASS: " + $newMethod.declarationJp);
 }
 
-
-function testCopyTypedef()  {
-	// This should trigger a case where a copy() override in TypeDecl needs to handle a case with a typedef
-	var $typedefCopy = Query.search("typedefDecl").first().deepCopy();
-	println("Typedef: " + $typedefCopy.code);
-/*
-	var $class = Query.search("class", "originalClass3").first();
-
-	
-	var $method = Query.searchFrom($class, "method", "foo3").first();
-
-	var $newMethod = $method.clone("new_" + $method.name, false);
-
-	var $newClass = ClavaJoinPoints.classDecl("newClass3");
-	$newClass.addMethod($newMethod);
-	
-	println("Test Copy Method With Typedef");
-	println("CLASS: " + $class.code);
-	println("NEW CLASS: " + $newClass.code);
-*/
+function testCopyTypedef() {
+    // This should trigger a case where a copy() override in TypeDecl needs to handle a case with a typedef
+    const $typedefCopy = Query.search("typedefDecl").first().deepCopy();
+    console.log("Typedef: " + $typedefCopy.code);
 }
 
-function testAddField()  {
-	var $class = Query.search("class", "originalClass4").first();
-	var $newField = ClavaJoinPoints.field("b", ClavaJoinPoints.builtinType("double"));
-	$class.addField($newField);
-	println("CLASS WITH NEW FIELD: " + $class.code);
+function testAddField() {
+    const $class = Query.search("class", "originalClass4").first();
+    const $newField = ClavaJoinPoints.field(
+        "b",
+        ClavaJoinPoints.builtinType("double")
+    );
+    $class.addField($newField);
+    console.log("CLASS WITH NEW FIELD: " + $class.code);
 }
 
-
-function testBases()  {
-
-	var pig = Query.search("class", "Pig").first();
-	println("Pig bases: " + pig.bases[0].name);
-
+function testBases() {
+    const pig = Query.search("class", "Pig").first();
+    console.log("Pig bases: " + pig.bases[0].name);
 }
+
+testCopyMethodDeclaration();
+testCopyMethodDefinition();
+testCopyTypedef();
+testAddField();
+testBases();

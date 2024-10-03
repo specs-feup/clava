@@ -1,27 +1,25 @@
-import weaver.Query;
-import weaver.Ast;
+laraImport("weaver.Query");
+laraImport("weaver.Ast");
 
-aspectdef AstNodes
+for (const $if of Query.search("function", "testNodes").search("if")) {
+    console.log("astNumChildren  = " + $if.astNumChildren);
+    console.log("astChildren = " + $if.astChildren);
+    console.log("astChild(0) = " + $if.getAstChild(0));
+    console.log("numChildren  = " + $if.numChildren);
+    console.log("children = " + $if.children);
+    console.log("child(0) = " + $if.getChild(0));
+    console.log('astAncestor("Decl") = ' + $if.getAstAncestor("Decl").name);
+}
 
-    select function{"testNodes"}.if end
-    apply
-        println('astNumChildren  = ' +  $if.astNumChildren);
-        println('astChildren = ' + $if.astChildren);
-        println('astChild(0) = ' + $if.getAstChild(0));
-        println('numChildren  = ' +  $if.numChildren);
-        println('children = ' + $if.children);
-        println('child(0) = ' + $if.getChild(0));
-		println('astAncestor("Decl") = ' + $if.getAstAncestor('Decl').name);        
-    end
-	
-	println("\n\nAst API:");
-	for(var $if of Query.search("function", "testNodes").search("if")) {
-		var astNode = $if.node;
-		
-        println('astNumChildren  = ' +  Ast.getNumChildren(astNode));		
-        println('astChildren = ' + Ast.getChildren(astNode).map(node => node.getClass().getSimpleName()));		
-	}
-	
-end
+console.log("\n\nAst API:");
+for (const $if of Query.search("function", "testNodes").search("if")) {
+    const astNode = $if.node;
 
-
+    console.log("astNumChildren  = " + Ast.getNumChildren(astNode));
+    console.log(
+        "astChildren = " +
+            Ast.getChildren(astNode).map((node) =>
+                node.getClass().getSimpleName()
+            )
+    );
+}

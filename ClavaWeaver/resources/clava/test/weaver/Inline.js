@@ -1,18 +1,9 @@
-aspectdef Inline
-	
-	select function{"main"}.call end
-	apply
-		$call.exec inline;
-	end
+laraImport("weaver.Query");
 
-	select function{"main"} end
-	apply
-		println($function.code);
-	end
-	/*
-	select function{"main"} end
-	apply
-		println($function.ast);
-	end
-	*/
-end
+for (const $call of Query.search("function", "main").search("call")) {
+    $call.inline();
+}
+
+for (const $function of Query.search("function", "main")) {
+    console.log($function.code);
+}

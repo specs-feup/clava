@@ -1,12 +1,8 @@
-import clava.Clava;
-import weaver.Query;
+laraImport("clava.Clava");
+laraImport("weaver.Query");
 
-aspectdef CloneOnFile
+const $foo = Query.search("function", "foo").first();
 
-	var $foo = Query.search("function", "foo").first();
-	
-	var $foo2 = $foo.cloneOnFile("foo2", "bar/newFile.cpp");
+const $foo2 = $foo.cloneOnFile("foo2", "bar/newFile.cpp");
 
-	println($foo2.getAncestor("file").includes.map(inc => inc.code));
-
-end
+console.log($foo2.getAncestor("file").includes.map((inc) => inc.code));

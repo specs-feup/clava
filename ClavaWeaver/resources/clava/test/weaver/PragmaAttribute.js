@@ -1,9 +1,3 @@
-aspectdef PragmaAttribute
+laraImport("weaver.Query");
 
-	select program end
-	apply
-		println($program.code);
-	end
-	
-
-end
+console.log(Query.root().code);
