@@ -42,27 +42,27 @@ public class CxxBenchTest {
 
     @Test
     public void testLoicEx1() {
-        newTester().test("LoicEx1.lara", "loic_ex1.cpp");
+        newTester().test("LoicEx1.js", "loic_ex1.cpp");
     }
 
     @Test
     public void testLoicEx2() {
-        newTester().setCheckWovenCodeSyntax(false).checkExpectedOutput(false).test("LoicEx2.lara", "loic_ex2.cpp");
+        newTester().setCheckWovenCodeSyntax(false).checkExpectedOutput(false).test("LoicEx2.js", "loic_ex2.cpp");
     }
 
     @Test
     public void testLoicEx3() {
-        // newTester().setCheckWovenCodeSyntax(false).test("LoicEx3.lara", "loic_ex3.cpp");
-        newTester().test("LoicEx3.lara", "loic_ex3.cpp");
+        // newTester().setCheckWovenCodeSyntax(false).test("LoicEx3.js", "loic_ex3.cpp");
+        newTester().test("LoicEx3.js", "loic_ex3.cpp");
     }
 
     @Test
     public void testLSIssue2() {
-        newTester().test("LSIssue2.lara", "ls_issue2.cpp");
+        newTester().test("LSIssue2.js", "ls_issue2.cpp");
     }
 
     @Test
     public void testCbMultios() {
-        newTester().test("CbMultios.lara", "cb_multios.cpp");
+        newTester().test("CbMultios.js", "cb_multios.cpp");
     }
 }
