@@ -1,41 +1,31 @@
-import clava.ClavaJoinPoints;
-import weaver.Query;
+laraImport("clava.ClavaJoinPoints");
+laraImport("weaver.Query");
 
-aspectdef AddArgTest
+for (const $function of Query.search("function", "foo")) {
+    if (!$function.isImplementation) {
+        continue;
+    }
+
+    $function.addParam("char* str");
+}
+
+for (const $function of Query.search("function", "bar")) {
+    if ($function.isImplementation) {
+        continue;
+    }
+
+    $function.addParam("int num");
+}
+
+for (const $call of Query.search("call", "bar")) {
+    $call.addArg("0", ClavaJoinPoints.builtinType("int"));
+}
+
+for (const $call of Query.search("call", "foo")) {
+    const type = ClavaJoinPoints.pointerFromBuiltin("unsigned char");
+    $call.addArg('"foo"', type);
+}
 
 
-	select function{'foo'} end
-	apply
-		if(!$function.isImplementation) {
-			continue;
-		}
-		
-		$function.exec addParam("char* str");
-	end
-
-	select function{'bar'} end
-	apply
-		if($function.isImplementation) {
-			continue;
-		}
-		
-		$function.exec addParam("int num");
-	end
-	
-	select call{'bar'} end
-	apply
-		$call.exec addArg("0", ClavaJoinPoints.builtinType("int"));
-	end	
-	
-	select call{'foo'} end
-	apply
-		var type = ClavaJoinPoints.pointerFromBuiltin("unsigned char");
-		$call.exec addArg('"foo"', type);
-	end
-
-	select program end
-	apply
-		println($program.code);
-		println("---------------");
-	end
-end
+console.log(Query.root().code);
+console.log("---------------");

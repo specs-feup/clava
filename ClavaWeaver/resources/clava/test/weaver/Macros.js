@@ -1,10 +1,3 @@
-aspectdef Macros
+laraImport("weaver.Query");
 
-	select program end
-	apply
-		println("Code:\n" + $program.code);
-		//println("AST:\n" + $program.ast);
-	end
-
-
-end
+console.log("Code:\n" + Query.root().code);

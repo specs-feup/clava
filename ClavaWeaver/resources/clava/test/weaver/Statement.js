@@ -1,13 +1,11 @@
-aspectdef Statement
+laraImport("weaver.Query");
 
-	select loop.cond.childExpr end
-	apply
-	
-		if($childExpr.joinPointType !== "binaryOp") {
-			continue;
-		}
-		
-		println("Condition Kind:" + $childExpr.kind);
-	end
+for (const $loop of Query.search("loop")) {
+    for (const $childExpr of Query.searchFrom($loop.cond, "expression")) {
+        if ($childExpr.joinPointType !== "binaryOp") {
+            continue;
+        }
 
-end
+        console.log("Condition Kind:" + $childExpr.kind);
+    }
+}

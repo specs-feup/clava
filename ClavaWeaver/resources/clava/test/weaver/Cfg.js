@@ -1,29 +1,13 @@
-import weaver.Query;
+laraImport("weaver.Query");
 
-aspectdef Test
+for (const chain of Query.search("function").search("call").chain()) {
+    const $function = chain["function"];
+    const $call = chain["call"];
 
-	for(var chain of Query.search("function").search("call").chain()) {
-		var $function = chain["function"];
-		var $call = chain["call"];
-		
-		println($function.name + " -> " + $call.name);
-		println($function.location + " -> " + $call.location);		
-		var location = $call.decl.location;
-		if(!location.includes(".h")) {
-			println(location);
-		}
-
-/*
-    for(var $function of Query.search("function")) {
-
-
-        try {
-			println($function.body.cfg);
-        } catch(e) {
-            println("Could not generate cfg for scope in location " + $scope.location);
-            println(e);
-        }
-*/
+    console.log($function.name + " -> " + $call.name);
+    console.log($function.location + " -> " + $call.location);
+    const location = $call.decl.location;
+    if (!location.includes(".h")) {
+        console.log(location);
     }
-
-end
+}

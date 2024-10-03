@@ -1,135 +1,24 @@
-import clava.ClavaType;
-//import lara.util.StringSet;
+laraImport("clava.ClavaType");
+laraImport("weaver.Query");
 
-aspectdef TypeRenamer
+const $fn = Query.search("function", "inputInCast").first();
 
-	select function{"inputInCast"}.vardecl end
-	apply		
-		var varrefs = [];
+for (const $vardecl of Query.searchFrom($fn.body, "vardecl")) {
+    const varrefs = [];
 
-		var $typeCopy = ClavaType.getVarrefsInTypeCopy($vardecl.type, varrefs);
+    const $typeCopy = ClavaType.getVarrefsInTypeCopy($vardecl.type, varrefs);
 
-		for(var $varref of varrefs) {
-			//println("Varref name: " + $varref.name);
-			//println("Vardecl name: " + $varref.declaration.name);
-			//println("Vardecl loc: " + $varref.declaration.location);
-			
-			//$varref.name = $varref.name + "_renamed";
-			var $vdecl = $varref.declaration;
-			if($vdecl.name.endsWith("_renamed")) {
-				continue;
-			}
-			
-			$vdecl.name = $vdecl.name + "_renamed";
-		}
-				
-		println("Original type: " + $vardecl.type.code);		
-		$vardecl.type = $typeCopy;
-	end
+    for (const $varref of varrefs) {
+        const $vdecl = $varref.declaration;
+        if ($vdecl.name.endsWith("_renamed")) {
+            continue;
+        }
 
-	select program end
-	apply
-		println($program.code);
-	end
-	
-end
+        $vdecl.name = $vdecl.name + "_renamed";
+    }
 
-//		println("Original type:" + $vardecl.type.code);
-//		println("Renamed type:" + $typeCopy.code);
-
-	//var renameMap = {'ldmx' : 'ldmx_renamed'};
-		//var $originalType = $vardecl.type;
-		// var $renamedType = renameType($vardecl.type, renameMap);
-		//$vardecl.type = $renamedType;	
-
-		
-/*
-// Visit $expr in type
-function renameType($type, renameMap) {
-	println("Type:" + $type.astName);
-
-	if($type.instanceOf("pointerType")) {
-	//if($type.astName === "PointerType") {
-		var $typeCopy = $type.deepCopy();
-		//$typeCopy.setValue('pointeeType', renameType($typeCopy.getValue('pointeeType'), renameMap));
-		$typeCopy.pointee = renameType($typeCopy.pointee, renameMap);	
-		return $typeCopy;
-	}
-	
-	if($type.instanceOf("parenType")) {
-	// if ($type.astName === "ParenType") {
-		var $typeCopy = $type.deepCopy();
-		$typeCopy.desugar = renameType($typeCopy.desugar, renameMap);		
-		return $typeCopy;
-	}
-	
-	if($type.instanceOf("variableArrayType")) {
-	 //if ($type.astName === "VariableArrayType") {
-		var $typeCopy = $type.deepCopy();
-		renameVarrefs($typeCopy.sizeExpr, renameMap);
-		return $typeCopy;
-     }
-
-	return $type;
+    console.log("Original type: " + $vardecl.type.code);
+    $vardecl.type = $typeCopy;
 }
 
-function renameVarrefs($expr, renameMap) {
-	for(var $varref of $expr.getDescendantsAndSelf("varref")) {
-		var newName = renameMap[$varref.name];
-		
-		if(newName === undefined) {
-			continue;
-		}
-
-		$varref.name = newName;
-	}
-}
-*/
-
-/*
-function visitExprInTypeCopy($type, exprFunction) {
-
-	if($type.instanceOf("pointerType")) {
-		var $typeCopy = $type.deepCopy();
-		$typeCopy.pointee = visitExprInTypeCopy($typeCopy.pointee, exprFunction);	
-		return $typeCopy;
-	}
-	
-	if($type.instanceOf("parenType")) {
-		var $typeCopy = $type.deepCopy();
-		$typeCopy.desugar = visitExprInTypeCopy($typeCopy.desugar, exprFunction);		
-		return $typeCopy;
-	}
-	
-	if($type.instanceOf("variableArrayType")) {
-		var $typeCopy = $type.deepCopy();
-		exprFunction($typeCopy.sizeExpr);
-		return $typeCopy;
-     }
-
-	return $type;
-}
-*/
-
-/**
- * @param type a type join point that will be visited looking for $expr join points. Any visited nodes in the type (e.g., desugar) will be copied, so that the returned varrefs can be safely modified.
- * 
- * @param varrefs an array (possibly empty) where the $varref join points found in the given type will be stored
- *
- * @return a copy of the given $type, to which the varrefs refer to
- */
- /*
-function getVarrefsInTypeCopy($type, varrefs) {
-	
-	//var varrefs = [];
-	
-	var exprFunction = function($expr) {
-
-		for(var $varref of $expr.getDescendantsAndSelf("varref")) {
-			varrefs.push($varref);
-		}
-	};
-	
-	return visitExprInTypeCopy($type, exprFunction);
-}
-*/
+console.log(Query.root().code);

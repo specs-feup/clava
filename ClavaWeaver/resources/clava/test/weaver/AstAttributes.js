@@ -1,10 +1,7 @@
-aspectdef AstAttributes
+laraImport("weaver.Query");
 
-	select vardecl{"a"} end
-	apply
-		println("Type kind:" + $vardecl.type.kind);
-		println("Is builtin? " + $vardecl.type.astIsInstance("BuiltinType"));
-		println("Is decl? " + $vardecl.astIsInstance("Decl"));
-	end
-	
-end
+for (const $vardecl of Query.search("vardecl", "a")) {
+    console.log("Type kind:" + $vardecl.type.kind);
+    console.log("Is builtin? " + $vardecl.type.astIsInstance("BuiltinType"));
+    console.log("Is decl? " + $vardecl.astIsInstance("Decl"));
+}
