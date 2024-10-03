@@ -1,46 +1,47 @@
-import lara.Io;
-import clava.Clava;
-import clava.ClavaJoinPoints;
+laraImport("lara.Io");
+laraImport("clava.Clava");
+laraImport("clava.ClavaJoinPoints");
+laraImport("weaver.Query");
 
-aspectdef Launcher
-   select file.function end
-   apply
-	  replaceTypesTemplatesInCall($function);
-   end
-   
-end
- 
 function replaceTypesTemplatesInCall($function) {
-    var cpt = 0;
-    var vcalls = $function.calls;
-    for (var aCall of vcalls) { 
-      var $vargTemplate=undefined;
-      try {  
-       var $fc = aCall.children[0];
-       println(" === The first child of the call is : " + $fc.code);
-       var targs = $fc.getValue("templateArguments");
-       for (var x of targs) {
-        var $vargTemplate = undefined;
-        try { 
-           $vargTemplate = x.getValue("expr");
-           println( " *** expression detected = " + x);
-           } catch(e) {  } 
-        
-        if ( $vargTemplate === undefined) 
-         try { 
-           $vargTemplate = x.getValue("type");
-           println( " *** type  detected  = " + x);
-           try { 
-            x.setValue("type", ClavaJoinPoints.typeLiteral("newType" + cpt));
-            cpt++;
-            println(" === AFTER MY TRANSFO, The first child of the call is : " + $fc.code);
-           }
-           catch(e) { println(e);  }
-         }
-         catch(e) {   }
-        
-         
-       }
-      } catch(e) {  }
-     }
+    let cpt = 0;
+    const vcalls = $function.calls;
+    for (const aCall of vcalls) {
+        const $vargTemplate = undefined;
+        try {
+            const $fc = aCall.children[0];
+            console.log(" === The first child of the call is : " + $fc.code);
+            const targs = $fc.getValue("templateArguments");
+            for (const x of targs) {
+                let $vargTemplate = undefined;
+                try {
+                    $vargTemplate = x.getValue("expr");
+                    console.log(" *** expression detected = " + x);
+                } catch (e) {}
+
+                if ($vargTemplate === undefined)
+                    try {
+                        $vargTemplate = x.getValue("type");
+                        console.log(" *** type  detected  = " + x);
+                        try {
+                            x.setValue(
+                                "type",
+                                ClavaJoinPoints.typeLiteral("newType" + cpt)
+                            );
+                            cpt++;
+                            console.log(
+                                " === AFTER MY TRANSFO, The first child of the call is : " +
+                                    $fc.code
+                            );
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    } catch (e) {}
+            }
+        } catch (e) {}
+    }
+}
+
+for (const $function of Query.search("function").get()) {
+    replaceTypesTemplatesInCall($function);
 }

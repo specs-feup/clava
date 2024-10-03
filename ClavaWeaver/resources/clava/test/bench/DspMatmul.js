@@ -1,7 +1,3 @@
-import weaver.Query;
+laraImport("weaver.Query");
 
-aspectdef DspMatmul
-
-	println(Query.root().code);
-
-end
+console.log(Query.root().code);
