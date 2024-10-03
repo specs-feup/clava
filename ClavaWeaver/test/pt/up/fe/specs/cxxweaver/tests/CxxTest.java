@@ -44,32 +44,32 @@ public class CxxTest {
 
     @Test
     public void testStatement() {
-        newTester().test("Statement.lara", "statement.cpp");
+        newTester().test("Statement.js", "statement.cpp");
     }
 
     @Test
     public void testLoop() {
-        newTester().test("Loop.lara", "loop.cpp");
+        newTester().test("Loop.js", "loop.cpp");
     }
 
     @Test
     public void testReplaceCallWithStmt() {
-        newTester().test("ReplaceCallWithStmt.lara", "ReplaceCallWithStmt.cpp");
+        newTester().test("ReplaceCallWithStmt.js", "ReplaceCallWithStmt.cpp");
     }
 
     @Test
     public void testInsertsLiteral() {
-        newTester().test("InsertsLiteral.lara", "inserts.cpp");
+        newTester().test("InsertsLiteral.js", "inserts.cpp");
     }
 
     @Test
     public void testInsertsJp() {
-        newTester().test("InsertsJp.lara", "inserts.cpp");
+        newTester().test("InsertsJp.js", "inserts.cpp");
     }
 
     @Test
     public void testPragmas() {
-        newTester().test("Pragmas.lara", "pragma.cpp");
+        newTester().test("Pragmas.js", "pragma.cpp");
     }
 
     @Test
@@ -79,17 +79,17 @@ public class CxxTest {
 
     @Test
     public void testActions() {
-        newTester().test("Actions.lara", "actions.cpp");
+        newTester().test("Actions.js", "actions.cpp");
     }
 
     @Test
     public void testArrayAccess() {
-        newTester().test("ArrayAccess.lara", "array_access.cpp", "array_access.h");
+        newTester().test("ArrayAccess.js", "array_access.cpp", "array_access.h");
     }
 
     @Test
     public void testAttributeUse() {
-        newTester().test("AttributeUse.lara", "attribute_use.cpp");
+        newTester().test("AttributeUse.js", "attribute_use.cpp");
     }
 
     @Test
@@ -98,64 +98,64 @@ public class CxxTest {
                 // Disable syntax checking, since test system may not have HDF5 includes automatically available
                 .setCheckWovenCodeSyntax(false)
                 .set(CxxWeaverOption.PARSE_INCLUDES)
-                .test("Hdf5Types.lara", "hdf5types.cpp");
+                .test("Hdf5Types.js", "hdf5types.cpp");
     }
 
     @Test
     public void testOmpThreadsExplore() {
-        newTester().test("OmpThreadsExplore.lara", "omp_threads_explore.cpp");
+        newTester().test("OmpThreadsExplore.js", "omp_threads_explore.cpp");
     }
 
     @Test
     public void testHamidCfg() {
-        newTester().test("HamidCfg.lara", "dijkstra.cpp");
+        newTester().test("HamidCfg.js", "dijkstra.cpp");
     }
 
     @Test
     public void testClone() {
         newTester()
                 .set(CxxWeaverOption.PARSE_INCLUDES)
-                .test("Clone.lara", "clone.cpp", "clone.h");
+                .test("Clone.js", "clone.cpp", "clone.h");
     }
 
     @Test
     public void testAddGlobal() {
-        newTester().test("AddGlobal.lara", "add_global_1.cpp", "add_global_2.cpp");
+        newTester().test("AddGlobal.js", "add_global_1.cpp", "add_global_2.cpp");
     }
 
     @Test
     public void testOmp() {
-        newTester().test("Omp.lara", "omp.cpp");
+        newTester().test("Omp.js", "omp.cpp");
     }
 
     @Test
     public void testOmpAttributes() {
-        newTester().test("OmpAttributes.lara", "omp_attributes.cpp");
+        newTester().test("OmpAttributes.js", "omp_attributes.cpp");
     }
 
     @Test
     public void testOmpSetAttributes() {
-        newTester().test("OmpSetAttributes.lara", "omp_set_attributes.cpp");
+        newTester().test("OmpSetAttributes.js", "omp_set_attributes.cpp");
     }
 
     @Test
     public void testExpressions() {
-        newTester().test("Expressions.lara", "expressions.cpp", "classA.h");
+        newTester().test("Expressions.js", "expressions.cpp", "classA.h");
     }
 
     @Test
     public void testParentRegion() {
-        newTester().test("ParentRegion.lara", "parent_region.cpp");
+        newTester().test("ParentRegion.js", "parent_region.cpp");
     }
 
     @Test
     public void testVarDecl() {
-        newTester().test("Vardecl.lara", "vardecl.cpp");
+        newTester().test("Vardecl.js", "vardecl.cpp");
     }
 
     @Test
     public void testParamType() {
-        newTester().checkExpectedOutput(false).test("ParamType.lara", "param_type.cpp");
+        newTester().checkExpectedOutput(false).test("ParamType.js", "param_type.cpp");
     }
 
     @Test
@@ -165,99 +165,99 @@ public class CxxTest {
             return;
         }
 
-        // newTester().test("Wrap.lara", "wrap.cpp", "wrap.h", "lib/lib.h", "lib/lib.cpp");
+        // newTester().test("Wrap.js", "wrap.cpp", "wrap.h", "lib/lib.h", "lib/lib.cpp");
         newTester()
                 .set(CxxWeaverOption.PARSE_INCLUDES)
-                .test("Wrap.lara", "wrap.cpp", "wrap.h");
+                .test("Wrap.js", "wrap.cpp", "wrap.h");
     }
 
     @Test
     public void testSelectVarDecl() {
-        newTester().test("SelectVardecl.lara", "select_vardecl.cpp");
+        newTester().test("SelectVardecl.js", "select_vardecl.cpp");
     }
 
     @Test
     public void testMacros() {
-        newTester().setCheckWovenCodeSyntax(false).test("Macros.lara", "macros.cpp");
+        newTester().setCheckWovenCodeSyntax(false).test("Macros.js", "macros.cpp");
     }
 
     @Test
     public void testCall() {
-        newTester().test("Call.lara", "call.cpp");
+        newTester().test("Call.js", "call.cpp");
     }
 
     @Test
     public void testPragmaClavaAttribute() {
-        newTester().test("PragmaAttribute.lara", "pragma_attribute.cpp");
+        newTester().test("PragmaAttribute.js", "pragma_attribute.cpp");
     }
 
     @Test
     public void testTypeTemplate() {
-        newTester().test("TypeTemplate.lara", "type_template.cpp");
+        newTester().test("TypeTemplate.js", "type_template.cpp");
     }
 
     @Test
     public void testFunction() {
-        newTester().test("Function.lara", "function.cpp", "function.h");
+        newTester().test("Function.js", "function.cpp", "function.h");
     }
 
     @Test
     public void testAstAttributes() {
-        newTester().test("AstAttributes.lara", "ast_attributes.cpp");
+        newTester().test("AstAttributes.js", "ast_attributes.cpp");
     }
 
     // @Test
     // public void testClass() {
-    // newTester().test("Class.lara", "class.cpp");
+    // newTester().test("Class.js", "class.cpp");
     // }
 
     @Test
     public void testPragmaData() {
-        newTester().test("PragmaData.lara", "pragma_data.cpp", "pragma_data_2.cpp");
+        newTester().test("PragmaData.js", "pragma_data.cpp", "pragma_data_2.cpp");
     }
 
     @Test
     public void testGlobalAttributes() {
-        newTester().test("GlobalAttributes.lara", "global_attributes.cpp");
+        newTester().test("GlobalAttributes.js", "global_attributes.cpp");
     }
 
     @Test
     public void testSetType() {
-        newTester().test("SetTypeCxx.lara", "set_type.cpp");
+        newTester().test("SetTypeCxx.js", "set_type.cpp");
     }
 
     @Test
     public void testMultiFile() {
         newTester()
                 .set(CxxWeaverOption.PARSE_INCLUDES)
-                .test("MultiFile.lara", "multiFile.cpp", "multiFile.h");
+                .test("MultiFile.js", "multiFile.cpp", "multiFile.h");
     }
 
     @Test
     public void testField() {
-        newTester().test("Field.lara", "field.hpp");
+        newTester().test("Field.js", "field.hpp");
     }
 
     @Test
     public void testFileRebuild() {
         newTester()
                 .set(CxxWeaverOption.PARSE_INCLUDES)
-                .test("FileRebuild.lara", "file_rebuild.cpp", "file_rebuild.h", "file_rebuild_2.h");
+                .test("FileRebuild.js", "file_rebuild.cpp", "file_rebuild.h", "file_rebuild_2.h");
     }
 
     @Test
     public void testSetters() {
-        newTester().test("Setters.lara", "setters.cpp");
+        newTester().test("Setters.js", "setters.cpp");
     }
 
     @Test
     public void testSkipParsingHeaders() {
-        newTester().test("SkipParsingHeaders.lara", "skip_parsing_headers.cpp", "skip_parsing_headers.h");
+        newTester().test("SkipParsingHeaders.js", "skip_parsing_headers.cpp", "skip_parsing_headers.h");
     }
 
     @Test
     public void testNoParsing() {
-        newTester().test("NoParsing.lara");
+        newTester().test("NoParsing.js");
     }
 
     @Test
@@ -266,64 +266,64 @@ public class CxxTest {
                 // .set(LaraiKeys.DEBUG_MODE)
                 // .set(LaraiKeys.VERBOSE, VerboseLevel.all)
                 // .set(LaraiKeys.TRACE_MODE, false)
-                .test("LaraGetter.lara");
+                .test("LaraGetter.js");
     }
 
     @Test
     public void testVarDeclV2() {
-        newTester().test("VardeclV2.lara", "vardeclv2.cpp", "vardeclv2_2.cpp");
+        newTester().test("VardeclV2.js", "vardeclv2.cpp", "vardeclv2_2.cpp");
     }
 
     @Test
     public void testFile() {
-        newTester().test("File.lara", "file.cpp");
+        newTester().test("File.js", "file.cpp");
     }
 
     @Test
     public void testDataClass() {
-        newTester().test("DataClass.lara", "dataclass.cpp");
+        newTester().test("DataClass.js", "dataclass.cpp");
     }
 
     @Test
     public void testClassManipulation() {
         newTester()
                 .set(CxxWeaverOption.PARSE_INCLUDES)
-                .test("ClassManipulation.lara", "class_manipulation.cpp", "class_manipulation.h");
+                .test("ClassManipulation.js", "class_manipulation.cpp", "class_manipulation.h");
     }
 
     @Test
     public void testThis() {
-        newTester().test("ThisTest.lara", "this.cpp");
+        newTester().test("ThisTest.js", "this.cpp");
     }
 
     @Test
     public void testMember() {
-        newTester().test("Member.lara", "member.cpp");
+        newTester().test("Member.js", "member.cpp");
     }
 
     @Test
     public void testFieldRef() {
-        newTester().checkExpectedOutput(false).test("FieldRef.lara", "fieldRef.cpp");
+        newTester().checkExpectedOutput(false).test("FieldRef.js", "fieldRef.cpp");
     }
 
     @Test
     public void testExpressionDecls() {
-        newTester().test("ExpressionDecls.lara", "expressionDecls.cpp");
+        newTester().test("ExpressionDecls.js", "expressionDecls.cpp");
     }
 
     @Test
     public void testTemplateSpecializationType() {
-        newTester().test("TemplateSpecializationType.lara", "template_specialization_type.cpp");
+        newTester().test("TemplateSpecializationType.js", "template_specialization_type.cpp");
     }
 
     @Test
     public void testReverseIterator() {
-        newTester().test("ReverseIterator.lara", "reverse_iterator.cpp");
+        newTester().test("ReverseIterator.js", "reverse_iterator.cpp");
     }
 
     @Test
     public void testFunction2() {
-        newTester().test("Function2.lara", "function2.cpp");
+        newTester().test("Function2.js", "function2.cpp");
     }
 
     @Test
@@ -332,7 +332,7 @@ public class CxxTest {
                 // Generates a file in another folder, needs to generate the header file otherwise it will not parse
                 // correctly the second time
                 .set(CxxWeaverOption.PARSE_INCLUDES)
-                .test("CloneOnFile.lara", "clone_on_file.cpp",
+                .test("CloneOnFile.js", "clone_on_file.cpp",
                         "clone_on_file.h");
     }
 

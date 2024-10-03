@@ -52,17 +52,17 @@ public class CudaTest {
 
     @Test
     public void testCuda() {
-        newTester().test("Cuda.lara", "atomicAdd.cu");
+        newTester().test("Cuda.js", "atomicAdd.cu");
     }
 
     @Test
     public void testCudaMatrixMul() {
-        newTester().test("CudaMatrixMul.lara", "mult_matrix.cu");
+        newTester().test("CudaMatrixMul.js", "mult_matrix.cu");
     }
 
     @Test
     public void testCudaQuery() {
-        newTester().test("CudaQuery.lara", "sample.cu");
+        newTester().test("CudaQuery.js", "sample.cu");
     }
 
     // Not implemented

@@ -46,69 +46,69 @@ public class CTest {
     // TODO: Temporarily disabled, Jenkins fails with "Cannot inherit from final class"
     // @Test
     public void testLoop() {
-        newTester().test("Loop.lara", "loop.c");
+        newTester().test("Loop.js", "loop.c");
     }
 
     @Test
     public void testReplaceCallWithStmt() {
-        newTester().test("ReplaceCallWithStmt.lara", "ReplaceCallWithStmt.c");
+        newTester().test("ReplaceCallWithStmt.js", "ReplaceCallWithStmt.c");
     }
 
     @Test
     public void testInsertsLiteral() {
-        newTester().test("InsertsLiteral.lara", "inserts.c");
+        newTester().test("InsertsLiteral.js", "inserts.c");
     }
 
     @Test
     public void testInsertsJp() {
-        newTester().test("InsertsJp.lara", "inserts.c");
+        newTester().test("InsertsJp.js", "inserts.c");
     }
 
     @Test
     public void testClone() {
-        newTester().test("Clone.lara", "clone.c");
+        newTester().test("Clone.js", "clone.c");
     }
 
     @Test
     public void testAddGlobal() {
-        newTester().test("AddGlobal.lara", "add_global_1.c", "add_global_2.c");
+        newTester().test("AddGlobal.js", "add_global_1.c", "add_global_2.c");
     }
 
     @Test
     public void testExpressions() {
-        newTester().test("Expressions.lara", "expressions.c");
+        newTester().test("Expressions.js", "expressions.c");
     }
 
     @Test
     public void testDijkstra() {
-        newTester().setCheckWovenCodeSyntax(false).checkExpectedOutput(false).test("Dijkstra.lara", "dijkstra.c");
+        newTester().setCheckWovenCodeSyntax(false).checkExpectedOutput(false).test("Dijkstra.js", "dijkstra.c");
     }
 
     @Test
     public void testWrap() {
         newTester()
                 .set(CxxWeaverOption.PARSE_INCLUDES)
-                .test("Wrap.lara", "wrap.c", "wrap.h");
+                .test("Wrap.js", "wrap.c", "wrap.h");
     }
 
     @Test
     public void testVarrefInWhile() {
-        newTester().test("VarrefInWhile.lara", "varref_in_while.c");
+        newTester().test("VarrefInWhile.js", "varref_in_while.c");
     }
 
     @Test
     public void testInline() {
-        newTester().test("Inline.lara", "inline.c", "inline_utils.h", "inline_utils.c");
+        newTester().test("Inline.js", "inline.c", "inline_utils.h", "inline_utils.c");
     }
 
     @Test
     public void testSetType() {
-        newTester().test("SetType.lara", "set_type.c");
+        newTester().test("SetType.js", "set_type.c");
     }
 
     @Test
     public void testDetach() {
-        newTester().test("Detach.lara", "detach.c");
+        newTester().test("Detach.js", "detach.c");
     }
 
     @Test
@@ -118,43 +118,43 @@ public class CTest {
             return;
         }
 
-        newTester().checkExpectedOutput(false).test("InlineNasLu.lara", "inline_nas_lu.c");
+        newTester().checkExpectedOutput(false).test("InlineNasLu.js", "inline_nas_lu.c");
     }
 
     @Test
     public void testInlineNasFt() {
-        newTester().checkExpectedOutput(false).test("InlineNasFt.lara", "inline_nas_ft.c");
+        newTester().checkExpectedOutput(false).test("InlineNasFt.js", "inline_nas_ft.c");
     }
 
     @Test
     public void testNullNodes() {
-        newTester().test("NullNodes.lara", "null_nodes.c");
+        newTester().test("NullNodes.js", "null_nodes.c");
     }
 
     @Test
     public void testTypeRenamer() {
-        newTester().test("TypeRenamer.lara", "type_renamer.c");
+        newTester().test("TypeRenamer.js", "type_renamer.c");
     }
 
     @Test
     public void testAstNodes() {
-        newTester().test("AstNodes.lara", "ast_nodes.c");
+        newTester().test("AstNodes.js", "ast_nodes.c");
     }
 
     @Test
     public void testRemoveInclude() {
-        newTester().test("RemoveInclude.lara", "remove_include.c", "remove_include_0.h", "remove_include_1.h",
+        newTester().test("RemoveInclude.js", "remove_include.c", "remove_include_0.h", "remove_include_1.h",
                 "remove_include_2.h");
     }
 
     @Test
     public void testDynamicCallGraph() {
-        newTester().test("DynamicCallGraph.lara", "dynamic_call_graph.c");
+        newTester().test("DynamicCallGraph.js", "dynamic_call_graph.c");
     }
 
     @Test
     public void testSelects() {
-        newTester().test("Selects.lara", "selects.c");
+        newTester().test("Selects.js", "selects.c");
     }
 
     @Test
@@ -164,50 +164,50 @@ public class CTest {
 
     @Test
     public void testArray() {
-        newTester().test("ArrayTest.lara", "array_test.c");
+        newTester().test("ArrayTest.js", "array_test.c");
     }
 
     // @Test
     public void testOpenCLType() {
         // TODO: Certain attributes are not supported yet (e.g., ReqdWorkGroupSizeAttr, WorkGroupSizeHintAttr,
         // VecTypeHintAttr)
-        newTester().set(ClavaOptions.STANDARD, Standard.OPENCL20).test("OpenCLType.lara", "opencl_type.cl");
+        newTester().set(ClavaOptions.STANDARD, Standard.OPENCL20).test("OpenCLType.js", "opencl_type.cl");
     }
 
     @Test
     public void testCilk() {
         // Generated code has Cilk directives
-        newTester().set(ClavaOptions.FLAGS, "-fcilkplus").test("Cilk.lara", "cilk.c");
+        newTester().set(ClavaOptions.FLAGS, "-fcilkplus").test("Cilk.js", "cilk.c");
     }
 
     @Test
     public void testTagDecl() {
-        newTester().test("TagDecl.lara", "tag_decl.c");
+        newTester().test("TagDecl.js", "tag_decl.c");
     }
 
     @Test
     public void testFile() {
-        newTester().test("File.lara", "file.c");
+        newTester().test("File.js", "file.c");
     }
 
     @Test
     public void testSwitch() {
-        newTester().test("SwitchTest.lara", "switch.c");
+        newTester().test("SwitchTest.js", "switch.c");
     }
 
     @Test
     public void testAddParam() {
-        newTester().test("AddParamTest.lara", "add_param.c");
+        newTester().test("AddParamTest.js", "add_param.c");
     }
 
     @Test
     public void testAddArg() {
-        newTester().test("AddArgTest.lara", "add_arg.c");
+        newTester().test("AddArgTest.js", "add_arg.c");
     }
 
     @Test
     public void testCfg() {
-        newTester().test("Cfg.lara", "cfg.c");
+        newTester().test("Cfg.js", "cfg.c");
     }
 
     @Test
