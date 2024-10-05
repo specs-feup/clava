@@ -1,39 +1,40 @@
-aspectdef ParentRegion
+laraImport("weaver.Query");
 
-	select vardecl end
-	apply
-		var $currentRegion = $vardecl.currentRegion;
-		var $parentRegion = $vardecl.parentRegion;
-		
-		printMessage($vardecl, $currentRegion, $parentRegion);
-	end
+for (const $vardecl of Query.search("vardecl")) {
+    printMessage($vardecl);
+}
 
-	select varref end
-	apply
-		var $currentRegion = $varref.currentRegion;
-		var $parentRegion = $varref.parentRegion;
-		
-		printMessage($varref, $currentRegion, $parentRegion);
-	end
-	
+for (const $varref of Query.search("varref")) {
+    printMessage($varref);
+}
 
-	select function end
-	apply
-		var $currentRegion = $function.currentRegion;
-		var $parentRegion = $function.parentRegion;
-		
-		printMessage($function, $currentRegion, $parentRegion);
-	end
-	
-end
+for (const $function of Query.search("function")) {
+    printMessage($function);
+}
 
-var printMessage = function($jp, $currentRegion, $parentRegion) {
-	var initMessage = $jp.joinPointType + " '"+$jp.name+"' is in region '" + $currentRegion.joinPointType + "' at line " + $jp.line;
-	
-	if($parentRegion === undefined) {
-		println(initMessage +" and does not have a parentRegion");
-		return;
-	}
-	
-	println(initMessage +", parentRegion is a '" + $parentRegion.joinPointType + "' at line " + $parentRegion.line);
-};
+function printMessage($jp) {
+    const $currentRegion = $jp.currentRegion;
+    const $parentRegion = $jp.parentRegion;
+
+    const initMessage =
+        $jp.joinPointType +
+        " '" +
+        $jp.name +
+        "' is in region '" +
+        $currentRegion.joinPointType +
+        "' at line " +
+        $jp.line;
+
+    if ($parentRegion === undefined) {
+        console.log(initMessage + " and does not have a parentRegion");
+        return;
+    }
+
+    console.log(
+        initMessage +
+            ", parentRegion is a '" +
+            $parentRegion.joinPointType +
+            "' at line " +
+            $parentRegion.line
+    );
+}
