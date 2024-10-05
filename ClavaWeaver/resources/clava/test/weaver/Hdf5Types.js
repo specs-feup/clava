@@ -1,154 +1,131 @@
-import clava.hdf5.Hdf5;
-import clava.Clava;
-import clava.ClavaJoinPoints;
-import clava.Format;
+laraImport("clava.hdf5.Hdf5");
+laraImport("clava.Clava");
+laraImport("clava.ClavaJoinPoints");
+laraImport("clava.Format");
+laraImport("weaver.Query");
 
-aspectdef Launcher
+Launcher();
+Hdf5Types(undefined, undefined);
 
-	var $records = [];
-	select record end
-	apply
-		$records.push($record);
-	end
-	
-	var $hdf5LibFiles = Hdf5.toLibrary($records);
+function Launcher() {
+    let $records = [];
+    for (const $record of Query.search("record")) {
+        $records.push($record);
+    }
 
-	
-	// Output
-	for(var $file of $hdf5LibFiles) {
-		println($file.code);	
-	
-		// Add files so that their syntax can be checked
-		Clava.getProgram().addFile($file);
-	}
-	
-	// Example 
-	//call Hdf5Types("./", "Routing");
-/*
-	// Output
-	select file{"CompType.h"} end
-	apply
-	        println("Header File:");
-	        println($file.code);
-	end
-	
-	select file{"CompType.cpp"} end
-	apply
-	        println("Implementation File:");
-	        println($file.code);
-	end
-end
-*/
-end
+    const $hdf5LibFiles = Hdf5.toLibrary($records);
 
-aspectdef Hdf5Types
-	input 
-		srcFolder,
-		namespace
-	end
+    // Output
+    for (const $file of $hdf5LibFiles) {
+        console.log($file.code);
 
-	// Folder for the generated files
-	var filepath = srcFolder + "/lara-generated";
-	
-	// Create files for generated code
-	var $compTypeC = ClavaJoinPoints.file("CompType.cpp", filepath);
-	var $compTypeH = ClavaJoinPoints.file("CompType.h", filepath);
+        // Add files so that their syntax can be checked
+        Clava.getProgram().addFile($file);
+    }
+}
 
-	// Add files to the program
-	
-	select program end
-	apply
-		$program.exec addFile($compTypeC);
-		$program.exec addFile($compTypeH);
-	end
-	
+function Hdf5Types(srcFolder, namespace) {
+    // Folder for the generated files
+    const filepath = srcFolder + "/lara-generated";
 
-	var hDeclarationsCode = "";
+    // Create files for generated code
+    const $compTypeC = ClavaJoinPoints.file("CompType.cpp", filepath);
+    const $compTypeH = ClavaJoinPoints.file("CompType.h", filepath);
 
-	// Add include for CompTypes
-	$compTypeC.exec addInclude("CompType.h", false);
-	$compTypeC.exec addInclude("H5CompType.h", true);
+    // Add files to the program
 
-	
-	// For each record, create code
-	//var recordCounter = 0;
-	select file.record{kind === "class", kind === "struct"} end
-	apply
-		//recordCounter++;
-		var className = $record.name + "Type";
-		var typeName = "itype";
-		
-		/* Generate code for .h file */
+    const $program = Clava.getProgram();
+    $program.addFile($compTypeC);
+    $program.addFile($compTypeH);
 
-		// Create declaration
-		hDeclarationsCode += HDeclaration($file.name, className);
-		
-		/* Generate code for .cpp file */
-	
-		// Add include to the file where record is
-		$compTypeC.exec addIncludeJp($record);
+    let hDeclarationsCode = "";
 
-		// Create code for translating C/C++ type to HDF5 type
-		
-		call result : RecordToHdf5($record, typeName);
-		var cxxFunction = CImplementation(namespace, className, Format.addPrefix(result.code, "    "));
+    // Add include for CompTypes
+    $compTypeC.addInclude("CompType.h", false);
+    $compTypeC.addInclude("H5CompType.h", true);
 
-		$compTypeC.exec insertAfter(ClavaJoinPoints.declLiteral(cxxFunction));
-	end
-	
-	/* Generate code for .h file */
-	
-	// Add include to HDF5 CPP library
-	$compTypeH.exec addInclude("H5Cpp.h", true);
+    // For each record, create code
+    for (const $record of Query.search("file").search("record", {
+        kind: ["class", "struct"],
+    })) {
+        const className = $record.name + "Type";
+        const typeName = "itype";
 
-	// Create header code inside the target namespace
- 	hDeclarationsCode = '\nnamespace '+namespace +' {\n\n' + Format.addPrefix(hDeclarationsCode, "    ") + "\n}\n";
+        /* Generate code for .h file */
 
-	// Insert code inside header file
- 	$compTypeH.exec insertAfter(ClavaJoinPoints.declLiteral(hDeclarationsCode));
+        // Create declaration
+        hDeclarationsCode += HDeclaration($file.name, className);
 
-end
+        /* Generate code for .cpp file */
 
-codedef HDeclaration(filename, className) %{
-//  [[filename]]
-class [[className]] {
-	public:
-	static H5::CompType GetCompType();
+        // Add include to the file where record is
+        $compTypeC.addIncludeJp($record);
+
+        // Create code for translating C/C++ type to HDF5 type
+
+        const result = RecordToHdf5($record, typeName);
+        const cxxFunction = CImplementation(
+            namespace,
+            className,
+            Format.addPrefix(result.code, "    ")
+        );
+
+        $compTypeC.insertAfter(ClavaJoinPoints.declLiteral(cxxFunction));
+    }
+
+    /* Generate code for .h file */
+
+    // Add include to HDF5 CPP library
+    $compTypeH.addInclude("H5Cpp.h", true);
+
+    // Create header code inside the target namespace
+    hDeclarationsCode =
+        "\nnamespace " +
+        namespace +
+        " {\n\n" +
+        Format.addPrefix(hDeclarationsCode, "    ") +
+        "\n}\n";
+
+    // Insert code inside header file
+    $compTypeH.insertAfter(ClavaJoinPoints.declLiteral(hDeclarationsCode));
+}
+
+function HDeclaration(filename, className) {
+    return `
+//  ${filename}
+class ${className} {
+    public:
+    static H5::CompType GetCompType();
 };
 
-}% end
+`;
+}
 
-
-codedef CImplementation(namespace, className, body) %{
-H5::CompType [[namespace]]::[[className]]::GetCompType() {
-[[body]]
+function CImplementation(namespace, className, body) {
+    return `
+H5::CompType ${namespace}::${className}::GetCompType() {
+${body}
 
     return itype;
 }
 
-}% end
+`;
+}
 
+function RecordToHdf5($record, typeName) {
+    const recordName = $record.type.code;
+    let code = "H5::CompType " + typeName + "(sizeof(" + recordName + "));\n";
 
-aspectdef RecordToHdf5
-	input $record, typeName end
-	output code end
+    for (const $field of Query.search("record").search("field")) {
+        if ($field.type.constant) continue; // Ignore constant fields
+        if (!$field.isPublic) continue; // Ignore private fields
 
-	var recordName = $record.type.code;
-	code = "H5::CompType "+ typeName +"(sizeof("+recordName+"));\n";
+        fieldName = $field.name;
+        const HDF5Type = toHdf5($field.type);
+        if (HDF5Type === undefined) continue; // Warning message omitted for the example
+        const params = `"${fieldName}",offsetof(${recordName}, ${fieldName}), ${HDF5Type}`;
+        code += `${typeName}.insertMember(${params});` + "\n";
+    }
 
-	select $record.field end
-	apply
-		if($field.type.constant) continue; // Ignore constant fields
-		if(!$field.isPublic) continue; // Ignore private fields
-	
-		fieldName = $field.name;
-		var HDF5Type = toHdf5($field.type);
-		if(HDF5Type === undefined) continue; // Warning message omitted for the example
-		var params = %{"[[fieldName]]",offsetof([[recordName]], [[fieldName]]), [[HDF5Type]]}%;
-		code += %{[[typeName]].insertMember([[params]]);}% + "\n";
-	end
-
-end
-
-
-
+    return code;
+}
