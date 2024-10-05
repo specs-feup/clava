@@ -44,17 +44,17 @@ public class CApiTest {
 
     @Test
     public void testLogger() {
-        newTester().test("LoggerTest.lara", "logger_test.c");
+        newTester().test("LoggerTest.js", "logger_test.c");
     }
 
     @Test
     public void testTimer() {
         ClavaWeaverTester tester = newTester();
         if (SpecsPlatforms.isUnix()) {
-            tester.setResultsFile("TimerTest.lara.unix.txt");
+            tester.setResultsFile("TimerTest.js.unix.txt");
         }
 
-        tester.test("TimerTest.lara", "timer_test.c");
+        tester.test("TimerTest.js", "timer_test.c");
     }
 
     /**
@@ -66,17 +66,17 @@ public class CApiTest {
         if (SpecsPlatforms.isUnix()) {
             // Test not working on Unix
             return;
-            // tester.set(ClavaOptions.STANDARD, Standard.C11).setResultsFile("TimerTest.lara.unix.txt");
+            // tester.set(ClavaOptions.STANDARD, Standard.C11).setResultsFile("TimerTest.js.unix.txt");
         }
 
-        tester.set(ClavaOptions.STANDARD, Standard.CXX11).test("TimerTest.lara", "timer_test.c");
+        tester.set(ClavaOptions.STANDARD, Standard.CXX11).test("TimerTest.js", "timer_test.c");
     }
 
     @Test
     public void testEnergy() {
         // Disable syntax check of woven code, rapl include is not available
         newTester().setCheckWovenCodeSyntax(false)
-                .test("EnergyTest.lara", "energy_test.c");
+                .test("EnergyTest.js", "energy_test.c");
     }
 
     @Test
@@ -85,7 +85,7 @@ public class CApiTest {
             // Enable restrict mode, to test if it works
             // Using AutoPar example since it needs to call an external program
             newTester().set(LaraiKeys.RESTRICT_MODE, Boolean.TRUE)
-                    .test("AutoParTest.lara", "autopar_test.c");
+                    .test("AutoParTest.js", "autopar_test.c");
         }
 
     }
@@ -100,30 +100,30 @@ public class CApiTest {
 
     @Test
     public void testArrayLinearizer() {
-        // newTester().test("ArrayLinearizerTest.lara", "2d_array.c");
-        // newTester().test("ArrayLinearizerTest.lara", "3d_array.c");
-        newTester().test("ArrayLinearizerTest.lara", "qr.c");
+        // newTester().test("ArrayLinearizerTest.js", "2d_array.c");
+        // newTester().test("ArrayLinearizerTest.js", "3d_array.c");
+        newTester().test("ArrayLinearizerTest.js", "qr.c");
     }
 
     @Test
     public void testSelector() {
-        newTester().test("SelectorTest.lara", "selector_test.c");
+        newTester().test("SelectorTest.js", "selector_test.c");
     }
 
     @Test
     public void testAutoParInline() {
         // TODO: No expected output, code has bugs to solve - does not take into account existing variable names
-        newTester().test("AutoParInlineTest.lara", "autopar_inline.c");
+        newTester().test("AutoParInlineTest.js", "autopar_inline.c");
     }
 
     @Test
     public void testHls() {
-        newTester().test("HlsTest.lara", "hls.c");
+        newTester().test("HlsTest.js", "hls.c");
     }
 
     @Test
     public void testStrcpyChecker() {
-        newTester().test("StrcpyChecker.lara", "strcpy.c");
+        newTester().test("StrcpyChecker.js", "strcpy.c");
     }
 
     @Test
