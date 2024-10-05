@@ -1,19 +1,21 @@
-import lara.util.JavaTypes;
+laraImport("lara.util.JavaTypes");
+laraImport("weaver.Query");
 
-aspectdef Dijkstra
+const tic = JavaTypes.LaraI.getThreadLocalLarai().getWeaver().currentTime();
+let acc = 0;
 
-		var tic = JavaTypes.LaraI.getThreadLocalLarai().getWeaver().currentTime();
-		select function{"exact_rhs"}.body.childStmt.varref{"i"} end
-		var toc = JavaTypes.LaraI.getThreadLocalLarai().getWeaver().currentTime();
-		println("Time:" + (toc-tic));
-		var acc = 0;
-		apply
-			acc += 1;
-			//println("VARREF:" + $varref.name);
-		end
-		var toc2 = JavaTypes.LaraI.getThreadLocalLarai().getWeaver().currentTime();
-		println("Time 2:" + (toc2-toc));
-				
-		println("Found " + acc + " variables");
+let toc;
+for (const $function of Query.search("function", { name: "exact_rhs" })) {
+    for (const _ of Query.searchFrom($function.body, "varref")) {
+        toc = JavaTypes.LaraI.getThreadLocalLarai()
+            .getWeaver()
+            .currentTime();
+        console.log("Time:" + (toc - tic));
+        acc += 1;
+    }
+}
 
-end
+const toc2 = JavaTypes.LaraI.getThreadLocalLarai().getWeaver().currentTime();
+console.log("Time 2:" + (toc2 - toc));
+
+console.log("Found " + acc + " variables");
