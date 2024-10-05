@@ -49,31 +49,31 @@ public class CxxApiTest {
 
     @Test
     public void testLogger() {
-        newTester().test("LoggerTest.lara", "logger_test.cpp");
+        newTester().test("LoggerTest.js", "logger_test.cpp");
     }
 
     @Test
     public void testLoggerWithLibrary() {
         // Disable syntax check of woven code, SpecsLogger includes are not available
         newTester().setCheckWovenCodeSyntax(false)
-                .test("LoggerTestWithLib.lara", "logger_test.cpp");
+                .test("LoggerTestWithLib.js", "logger_test.cpp");
     }
 
     @Test
     public void testEnergy() {
         // Disable syntax check of woven code, rapl include is not available
         newTester().setCheckWovenCodeSyntax(false)
-                .test("EnergyTest.lara", "energy_test.cpp");
+                .test("EnergyTest.js", "energy_test.cpp");
     }
 
     @Test
     public void testTimer() {
-        newTester().test("TimerTest.lara", "timer_test.cpp");
+        newTester().test("TimerTest.js", "timer_test.cpp");
     }
 
     @Test
     public void testClavaFindJp() {
-        newTester().test("ClavaFindJpTest.lara", "clava_find_jptest.cpp");
+        newTester().test("ClavaFindJpTest.js", "clava_find_jptest.cpp");
     }
 
     @Test
@@ -89,27 +89,27 @@ public class CxxApiTest {
 
     @Test
     public void testMathExtra() {
-        newTester().test("MathExtraTest.lara", "math_extra_test.cpp");
+        newTester().test("MathExtraTest.js", "math_extra_test.cpp");
     }
 
     @Test
     public void testWeaverLauncher() {
-        newTester().test("WeaverLauncherTest.lara", "weaver_launcher_test.cpp");
+        newTester().test("WeaverLauncherTest.js", "weaver_launcher_test.cpp");
     }
 
     @Test
     public void testClavaDataStore() {
-        newTester().test("ClavaDataStoreTest.lara", "clava_data_store_test.cpp");
+        newTester().test("ClavaDataStoreTest.js", "clava_data_store_test.cpp");
     }
 
     @Test
     public void testUserValues() {
-        newTester().test("UserValuesTest.lara", "user_values.cpp");
+        newTester().test("UserValuesTest.js", "user_values.cpp");
     }
 
     @Test
     public void testClavaCode() {
-        newTester().test("ClavaCodeTest.lara", "clava_code.cpp");
+        newTester().test("ClavaCodeTest.js", "clava_code.cpp");
     }
 
     @Test
@@ -121,39 +121,33 @@ public class CxxApiTest {
     public void testJpFilter() {
         newTester()
                 .set(CxxWeaverOption.PARSE_INCLUDES)
-                .test("JpFilter.lara", "jp_filter.hpp");
+                .test("JpFilter.js", "jp_filter.hpp");
     }
 
     @Test
     public void testRebuild() {
-        newTester().test("RebuildTest.lara", "rebuild.cpp");
+        newTester().test("RebuildTest.js", "rebuild.cpp");
     }
 
     @Test
     public void testFileIterator() {
-        newTester().test("FileIteratorTest.lara", "file_iterator_1.cpp", "file_iterator_2.cpp");
+        newTester().test("FileIteratorTest.js", "file_iterator_1.cpp", "file_iterator_2.cpp");
     }
 
     @Test
     public void testAddHeaderFile() {
-        newTester().test("AddHeaderFileTest.lara", "add_header_file.h");
+        newTester().test("AddHeaderFileTest.js", "add_header_file.h");
     }
 
     @Test
     public void testClava() {
-        newTester().test("ClavaTest.lara", "clava.cpp");
+        newTester().test("ClavaTest.js", "clava.cpp");
     }
 
     @Test
     public void testQuery() {
-        newTester().test("QueryTest.lara", "query.cpp");
-    }
-    
-    @Test
-    public void testQueryJs() {
         newTester().test("QueryTest.js", "query.cpp");
     }
-
 
     @Test
     public void testLaraCommonLanguage() {
@@ -164,7 +158,7 @@ public class CxxApiTest {
 
     @Test
     public void testClavaType() {
-        newTester().test("ClavaTypeTest.lara");
+        newTester().test("ClavaTypeTest.js");
     }
 
     @Test
@@ -179,7 +173,7 @@ public class CxxApiTest {
 
     @Test
     public void testSimplifyVarDeclarations() {
-        newTester().test("PassSimplifyVarDeclarations.lara", "pass_simplify_var_declarations.cpp");
+        newTester().test("PassSimplifyVarDeclarations.js", "pass_simplify_var_declarations.cpp");
     }
 
     @Test
