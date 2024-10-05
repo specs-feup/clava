@@ -1,18 +1,13 @@
-aspectdef CilkTest
+laraImport("weaver.Query");
 
-	select cilkFor end
-	apply
-		println("CilkFor: " + $cilkFor.location);
-	end
+for (const $cilkFor of Query.search("cilkFor")) {
+    console.log("CilkFor: " + $cilkFor.location);
+}
 
-	select cilkSpawn end
-	apply
-		println("CilkSpawn: " + $cilkSpawn.location);
-	end
+for (const $cilkSpawn of Query.search("cilkSpawn")) {
+    console.log("CilkSpawn: " + $cilkSpawn.location);
+}
 
-	select cilkSync end
-	apply
-		println("CilkSync: " + $cilkSync.location);
-	end
-
-end
+for (const $cilkSync of Query.search("cilkSync")) {
+    console.log("CilkSync: " + $cilkSync.location);
+}

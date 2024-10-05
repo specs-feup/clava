@@ -1,12 +1,9 @@
-aspectdef ClavaSandbox
+laraImport("weaver.Query");
 
-	select function{hasDefinition === true} end
-	apply
-		$function.exec clone('new_' + $function.name);
-	end
-	
-	select file end
-	apply
-		println($file.code);
-	end
-end
+for (const $function of Query.search("function", { hasDefinition: true })) {
+    $function.clone("new_" + $function.name);
+}
+
+for (const $file of Query.search("file")) {
+    console.log($file.code);
+}

@@ -1,32 +1,25 @@
-import clava.ClavaJoinPoints;
+laraImport("clava.ClavaJoinPoints");
+laraImport("weaver.Query");
 
-aspectdef Launcher
 
-	var $floatType = ClavaJoinPoints.builtinType("float");
+const $floatType = ClavaJoinPoints.builtinType("float");
 
-	select function{"cstyle_cast"}.expr end
-	apply
-		if($expr.astName === "CStyleCastExpr") {
-			 $expr.setType($floatType); 
-		}
-	end
+for (const $expr of Query.search("function", "cstyle_cast").search("expression")) {
+    if($expr.astName === "CStyleCastExpr") {
+            $expr.setType($floatType); 
+    }
+}
 
-	select function{"static_cast_foo"}.expr end
-	apply
-		if($expr.astName === "CXXStaticCastExpr") {
-			 $expr.setType($floatType); 
-		}
-	end
-	
-	select typedefDecl end
-	apply
-		$typedefDecl.type = $floatType;
-		$typedefDecl.name = "x_float";
-	end
-	
-	select program end
-	apply
-		println($program.code);
-	end
-	
-end
+for (const $expr of Query.search("function", "static_cast_foo").search("expression")) {
+    if($expr.astName === "CXXStaticCastExpr") {
+            $expr.setType($floatType); 
+    }
+}
+
+for (const $typedefDecl of Query.search("typedefDecl")) {
+    $typedefDecl.type = $floatType;
+    $typedefDecl.name = "x_float";
+}
+
+console.log(Query.root().code);
+

@@ -1,26 +1,23 @@
-aspectdef Test
+laraImport("weaver.Query");
 
-    select function{'main'}.body.childStmt.expr end
-    apply
-        println('#' + $expr.line + '\texpr -> ' + $expr.code );
-        call exractExprVardecl($expr);
-        
-    end
-    condition $childStmt.line === 4 end
-    
-end
+for (const $expr of Query.search("function", "main")
+    .search("statement", {line: 4})
+    .search("expression")) {
+    console.log("#" + $expr.line + "  expr -> " + $expr.code);
+    exractExprVardecl($expr);
+}
 
-aspectdef exractExprVardecl
-    input $expr end
-    println('\tIn exractExprVardecl  expr : ' + $expr);
-    println('\tIn exractExprVardecl  expr.joinPointType : ' + $expr.joinPointType);
-    println('\tIn exractExprVardecl  expr.selects : ' + $expr.selects);
-    println('\tIn exractExprVardecl  expr.vardecl : ' + $expr.vardecl);
-    
-    select $expr.vardecl end
-    apply
-        println('\t>>>> vardecl#' + $expr.line + '\t' + $vardecl.code);
-    end
-    
-    println();
-end
+function exractExprVardecl($expr) {
+    console.log("\tIn exractExprVardecl  expr : " + $expr);
+    console.log(
+        "\tIn exractExprVardecl  expr.joinPointType : " + $expr.joinPointType
+    );
+    console.log("\tIn exractExprVardecl  expr.selects : " + $expr.selects);
+    console.log("\tIn exractExprVardecl  expr.vardecl : " + $expr.vardecl);
+
+    if ($expr.vardecl) {
+        console.log("\t>>>> vardecl#" + $expr.line + "  " + $expr.vardecl.code);
+    }
+
+    console.log();
+}

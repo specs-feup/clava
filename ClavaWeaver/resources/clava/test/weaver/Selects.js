@@ -1,23 +1,18 @@
-aspectdef Selects
+laraImport("weaver.Query");
 
-	select function end
-	apply
-		println("Select function " + $function.name);
-	end
-	
-	select function{"foo"} end
-	apply
-		println("Select function foo");	
-	end
-	
-	select function{line === 1} end
-	apply
-		println("Select function at line 1");	
-	end
+for (const $function of Query.search("function")) {
+    console.log("Select function " + $function.name);
+}
 
-	select function.call end
-	apply
-		println("Select calls");
-	end
+for (const _ of Query.search("function", "foo")) {
+    console.log("Select function foo");
+}
 
-end
+for (const _ of Query.search("function", {line: 1})) {
+    console.log("Select function at line 1");	
+}
+
+for (const _ of Query.search("function").search("call")) {
+    console.log("Select calls");
+}
+
