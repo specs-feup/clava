@@ -1,14 +1,11 @@
-aspectdef AttributeUse
+laraImport("weaver.Query");
 
-	println("VARREF:");
-	select stmt.varref end
-	apply
-		println($varref.code + "->" + $varref.use);
-	end
+console.log("VARREF:");
+for (const $varref of Query.search("varref")) {
+    console.log($varref.code + "->" + $varref.use);
+}
 
-	println("ARRAY ACCESS:");
-	select stmt.arrayAccess end
-	apply
-		println($arrayAccess.code + "->" + $arrayAccess.use);
-	end
-end
+console.log("ARRAY ACCESS:");
+for (const $arrayAccess of Query.search("arrayAccess")) {
+    console.log($arrayAccess.code + "->" + $arrayAccess.use);
+}

@@ -1,60 +1,22 @@
-import weaver.Query;
+laraImport("weaver.Query");
 
-aspectdef VardeclV2Test
+for (const chain of Query.search("function", "removeInit").search(
+    "vardecl",
+    "array1"
+).chain()) {
+    const $function = chain["function"];
+    const $vardecl = chain["vardecl"];
 
-	select function{"removeInit"}.vardecl{"array1"} end
-	apply
-		$vardecl.removeInit();
-		println("After removing init:\n" + $function.code);
-	end
-	
-	
-	var globalRef = Query.search("function", "externalVar").search("varref").first();
-	println(globalRef.decl.definition.location);
-	
-	var $vardeclToVarref = Query.search("function", "varref").search("vardecl").first();
-	println("Is varref: " + $vardeclToVarref.varref().instanceOf("varref"));
-/*
-	for(var $vardecl of Query.search("vardecl", "GRAD_FILTER")) {
-		println($vardecl.node);
-	}
-*/
-/*
-	for(var $vardecl of Query.search("vardecl")) {
-		println("Vardecl: " + $vardecl.node.getNodeSignature());
-		var global = getGlobalDecl($vardecl);
-		if(global !== undefined) {
-			println("global location: " + global.location);
-		}
-	}
-	*/
-
-end
-
-/*
-function getGlobalDecl($vardecl) {
-	if(!$vardecl.isGlobal) {
-		debug("$vardecl.globalDecl: vardecl '"+$vardecl.name+"' is not global");
-		return undefined;
-	}
-	
-	var storageClass = $vardecl.storageClass;
-	
-	// Is global and storageClass is 'none', this is the global declaration
-	if(storageClass === "none") {
-		return $vardecl;
-	}
-	
-	if(storageClass === "extern") {
-		// Search for the vardecl with storageClass none
-		for(var $vardecl of Query.search("vardecl", $vardecl.name)) {
-			if($vardecl.storageClass === "none") {
-				return $vardecl;
-			}
-		}
-		
-	}
-
-	println("storage class not implemented: " + $vardecl.storageClass);
+    $vardecl.removeInit();
+    console.log("After removing init:\n" + $function.code);
 }
-*/
+
+const globalRef = Query.search("function", "externalVar")
+    .search("varref")
+    .first();
+console.log(globalRef.decl.definition.location);
+
+const $vardeclToVarref = Query.search("function", "varref")
+    .search("vardecl")
+    .first();
+console.log("Is varref: " + $vardeclToVarref.varref().instanceOf("varref"));
