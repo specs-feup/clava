@@ -1,18 +1,13 @@
-aspectdef FieldTest
+laraImport("weaver.Query");
 
-	println("AClass fields");
-	select record{"AClass"}.field end
-	apply
-		println("Field: "  + $field.name);
-		println("Is public: "  + $field.isPublic);
-	end	
-	
-	println("AStruct fields");
-	select record{"AStruct"}.field end
-	apply
-		println("Field: "  + $field.name);
-		println("Is public: "  + $field.isPublic);
-	end	
-	
+console.log("AClass fields");
+for (const $field of Query.search("record", "AClass").search("field")) {
+    console.log("Field: " + $field.name);
+    console.log("Is public: " + $field.isPublic);
+}
 
-end
+console.log("AStruct fields");
+for (const $field of Query.search("record", "AStruct").search("field")) {
+    console.log("Field: " + $field.name);
+    console.log("Is public: " + $field.isPublic);
+}

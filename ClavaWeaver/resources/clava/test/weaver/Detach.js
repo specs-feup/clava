@@ -1,21 +1,13 @@
-aspectdef Detach
+laraImport("weaver.Query");
 
-    select loop end
-    apply
-        $loop.insert before "#pragma omp parallel for";
-    end
-    
+for (const $loop of Query.search("loop")) {
+    $loop.insertBefore("#pragma omp parallel for");
+}
 
-    select omp end
-    apply
-        if($omp.target.isInnermost) {
-            $omp.detach();
-        }
-    end
+for (const $omp of Query.search("omp")) {
+    if ($omp.target.isInnermost) {
+        $omp.detach();
+    }
+}
 
-    select program end	
-	apply
-		println($program.code);
-	end
-	
-end
+console.log(Query.root().code);

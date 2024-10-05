@@ -1,32 +1,19 @@
-aspectdef Pragmas
+laraImport("weaver.Query");
 
-/*
-	select function{"fooCallBeforeAfter"} end
-	apply
-		println("AST:"+$function.ast);
-	end
-*/
-	select marker end
-	apply
-		var $scope = $marker.contents;
-		$scope.insert before '// Before scope - [[$marker.id]]';
-		$scope.insert after '// After scope - [[$marker.id]]';
+for (const $marker of Query.search("marker")) {
+    const $scope = $marker.contents;
+    $scope.insertBefore(`// Before scope - ${$marker.id}`);
+    $scope.insertAfter(`// After scope - ${$marker.id}`);
 
-		$scope.exec insertBegin("// Scope start - " + $marker.id);
-		$scope.exec insertEnd("// Scope end - " + $marker.id);
-	end
-		//println("name:"+$pragma.name);
-		//println("target:"+$pragma.target.joinPointType);
-		
-	select file end
-	apply
-		println("Code:\n" + $file.code);
-	end
-	
-	select marker{'foo'} end
-	apply
-		println('default marker attribute "id" is working: ' + $marker.id);
-		println('marker contents: ' + $marker.contents.code);
-	end
-	
-end
+    $scope.insertBegin("// Scope start - " + $marker.id);
+    $scope.insertEnd("// Scope end - " + $marker.id);
+}
+
+for (const $file of Query.search("file")) {
+    console.log($file.code);
+}
+
+for (const $marker of Query.search("marker", "foo")) {
+    console.log('default marker attribute "id" is working: ' + $marker.id);
+    console.log("marker contents: " + $marker.contents.code);
+}

@@ -1,36 +1,36 @@
-aspectdef FunctionTest
-	
-	select function end
-	apply
-		var fName = $function.name;
-		if(fName != "Max" && fName != "MaxNoInline") {
-			continue;
-		}
-		
-		println($function.name + " is inline: " + $function.isInline);
-	end
+laraImport("weaver.Query");
 
-	// Set name
-	select file{"function.cpp"}.function end
-	apply
-	
-		var fName = $function.name;
-		if(fName != "defOnly" && fName != "declOnly" && fName != "declAndDef" && fName != "notCalled") {
-			continue;
-		}
-		
-		//println("FILE BEFORE SET:\n" + $file.code);
-		var newName = fName + "New";
-		$function.name = newName;	
-		//println("FILE AFTER SET:\n" + $file.code);
+for (const $function of Query.search("function")) {
+    const fName = $function.name;
+    if (fName != "Max" && fName != "MaxNoInline") {
+        continue;
+    }
 
-		println("Function new name: " + $function.name);
-	end
-	
-	select function{"caller"}.body end
-	apply
-		println("Caller body: " + $body.code);
-	end
-	
+    console.log($function.name + " is inline: " + $function.isInline);
+}
 
-end
+// Set name
+for (const $function of Query.search("file", "function.cpp").search(
+    "function"
+)) {
+    const fName = $function.name;
+    if (
+        fName != "defOnly" &&
+        fName != "declOnly" &&
+        fName != "declAndDef" &&
+        fName != "notCalled"
+    ) {
+        continue;
+    }
+
+    //console.log("FILE BEFORE SET:\n" + $file.code);
+    const newName = fName + "New";
+    $function.name = newName;
+    //console.log("FILE AFTER SET:\n" + $file.code);
+
+    console.log("Function new name: " + $function.name);
+}
+
+for (const $function of Query.search("function", "caller")) {
+    console.log("Caller body: " + $function.body.code);
+}
