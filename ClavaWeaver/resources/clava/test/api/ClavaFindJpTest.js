@@ -1,83 +1,74 @@
-import clava.Clava;
-import lara.Io;
-import clava.ClavaJoinPoints;
-import weaver.JoinPoints;
+laraImport("clava.Clava");
+laraImport("lara.Io");
+laraImport("clava.ClavaJoinPoints");
+laraImport("weaver.JoinPoints");
+laraImport("weaver.Query");
 
-aspectdef ClavaTest
 
-	var $aLoop = undefined;
+function test() {
+    let $aLoop;
 
-	// Get a join point
-	select loop end
-	apply 
-		$aLoop = $loop;
-	end
+    // Get a join point
+    for (const $loop of Query.search("loop")) {
+        $aLoop = $loop;
+    }
 
-	var $aScope = undefined;
-	select scope end
-	apply 
-		$aScope = $scope;
-	end
-	
-	// Push AST
-	Clava.pushAst();
-	
-	// Find equivalent join point
-	var $eqLoop = Clava.findJp($aLoop);
-	if($eqLoop === undefined) {
-		println("Could not find loop");
-		return;
-	}
-	
-	// Find equivalent join point scope
-	var $eqScope = Clava.findJp($aScope);
-	if($eqScope === undefined) {
-		println("Could not find scope");
-		return;
-	}
-	
-	$eqLoop.insertBefore("// Pushed AST");
-	
-	select program end
-	apply
-		println("Pushed AST:\n" + $program.code);
-	end
-			
-	Clava.popAst();
-	
-	select program end
-	apply
-		println("Original AST:\n" + $program.code);
-	end
-	
-	
-	//////
-	
-	call JpCreateTest();
-	
-end
+    let $aScope;
+    for (const $scope of Query.search("scope")) {
+        $aScope = $scope;
+    }
 
-aspectdef JpCreateTest
+    // Push AST
+    Clava.pushAst();
 
-	// New line
-	println("JpCreateTest");
+    // Find equivalent join point
+    const $eqLoop = Clava.findJp($aLoop);
+    if ($eqLoop === undefined) {
+        console.log("Could not find loop");
+        return;
+    }
 
-	// Create join point
-	var astNode = undefined;
-	var $loopJp = undefined;
-	select loop end
-	apply
-		$loopJp = $loop;
-		astNode = $loop.node;
-		// Finish after first loop
-	end
+    // Find equivalent join point scope
+    const $eqScope = Clava.findJp($aScope);
+    if ($eqScope === undefined) {
+        console.log("Could not find scope");
+        return;
+    }
 
-	// Check if loop has node
-	println("Has node? " + $loopJp.hasNode(astNode));
+    $eqLoop.insertBefore("// Pushed AST");
 
-	// Create join point
-	//var $newLoopJp = ClavaJoinPoints.create(astNode);
-	var $newLoopJp = ClavaJoinPoints.toJoinPoint(astNode);	
+    console.log("Pushed AST:\n" + Query.root().code);
 
-	println("Are JPs equal? " + $newLoopJp.equals($loopJp));
-end
+    Clava.popAst();
+
+    console.log("Original AST:\n" + Query.root().code);
+
+    //////
+
+    JpCreateTest();
+}
+
+
+function JpCreateTest() {
+    // New line
+    console.log("JpCreateTest");
+
+    // Create join point
+    let astNode;
+    let $loopJp;
+    for (const $loop of Query.search("loop")) {
+        $loopJp = $loop;
+        astNode = $loop.node;
+        // Finish after first loop
+    }
+
+    // Check if loop has node
+    console.log("Has node? " + $loopJp.hasNode(astNode));
+
+    // Create join point
+    const $newLoopJp = ClavaJoinPoints.toJoinPoint(astNode);
+
+    console.log("Are JPs equal? " + $newLoopJp.equals($loopJp));
+}
+
+test();
