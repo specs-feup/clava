@@ -1,16 +1,12 @@
-import clava.ClavaCode;
+laraImport("clava.ClavaCode");
+laraImport("weaver.Query");
 
-aspectdef ClavaCodeTest
+for (const $pragma of Query.search("pragma", { name: "foo_loop_once" })) {
+    console.log("Executes once: " + ClavaCode.isExecutedOnce($pragma.target));
+}
 
-	select pragma{"foo_loop_once"} end
-	apply
-		println("Executes once: " + ClavaCode.isExecutedOnce($pragma.target));
-	end
-
-	select pragma{"foo_loop_not_once"} end
-	apply
-		println("Cannot prove one exec: " + ClavaCode.isExecutedOnce($pragma.target));
-	end
-
-end
-
+for (const $pragma of Query.search("pragma", { name: "foo_loop_not_once" })) {
+    console.log(
+        "Cannot prove one exec: " + ClavaCode.isExecutedOnce($pragma.target)
+    );
+}

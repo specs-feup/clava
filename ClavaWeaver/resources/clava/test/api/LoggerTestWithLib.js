@@ -1,36 +1,35 @@
-import lara.code.Logger;
-import clava.Clava;
+laraImport("lara.code.Logger");
+laraImport("clava.Clava");
+laraImport("weaver.Query");
 
-aspectdef Launcher
+// Enable SpecsLogger, for testing
+Clava.useSpecsLogger = true;
 
-	// Enable SpecsLogger, for testing
-	Clava.useSpecsLogger = true;
+const loggerConsole = new Logger();
+const loggerFile = new Logger(false, "log.txt");
 
-	var loggerConsole = new Logger();
-	var loggerFile = new Logger(false, "log.txt");
-	
-	// Disable SpecsLogger, in order to compile again woven code
-	loggerConsole.useSpecsLogger = false;
-	loggerFile.useSpecsLogger = false;
-	
-    select file.stmt.call end
-    apply
-        loggerConsole.append("Print double ").appendDouble(2).append(" after " + $call.name).ln();
-        loggerConsole.log($call, true);
-		
-		loggerConsole.append("Printing again").ln();
-		loggerConsole.log($call);
-		
-		loggerFile.append("Logging to a file").ln();
-		loggerFile.log($call, true);
-		
-		loggerFile.append("Logging again to a file").ln();
-		loggerFile.log($call);
-    end
+// Disable SpecsLogger, in order to compile again woven code
+loggerConsole.useSpecsLogger = false;
+loggerFile.useSpecsLogger = false;
 
-	select file end
-	apply
-		println($file.code);
-	end
+for (const $call of Query.search("file").search("call")) {
+    loggerConsole
+        .append("Print double ")
+        .appendDouble(2)
+        .append(" after " + $call.name)
+        .ln();
+    loggerConsole.log($call, true);
 
-end
+    loggerConsole.append("Printing again").ln();
+    loggerConsole.log($call);
+
+    loggerFile.append("Logging to a file").ln();
+    loggerFile.log($call, true);
+
+    loggerFile.append("Logging again to a file").ln();
+    loggerFile.log($call);
+}
+
+for (const $file of Query.search("file")) {
+    console.log($file.code);
+}

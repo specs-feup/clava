@@ -1,55 +1,51 @@
-import lara.code.Timer;
-import clava.Clava;
-import clava.ClavaJoinPoints;
-import lara.code.Logger;
+laraImport("lara.code.Timer");
+laraImport("clava.Clava");
+laraImport("clava.ClavaJoinPoints");
+laraImport("lara.code.Logger");
+laraImport("weaver.Query");
 
-aspectdef TimerTest
+// Disable SpecsLogger, in order to be able to compile woven code without the project
+Clava.useSpecsLogger = false;
 
-	// Disable SpecsLogger, in order to be able to compile woven code without the project
-	Clava.useSpecsLogger = false;
+// Instrument call to 'Calculate'
+const timer = new Timer();
 
-	// Instrument call to 'Calculate'
-	var timer = new Timer();
+for (const $call of Query.search("call")) {
+    if ($call.name !== "bar" && $call.name !== "foo") {
+        continue;
+    }
 
-	select stmt.call end
-	apply
-		if($call.name !== "bar" && $call.name !== "foo") {
-			continue;
-		}
-	
-		timer.time($call, "Time:");
-	end
-	
-	// Disable printing result
-	timer.setPrint(false);
-	
-	select call{"bar2"} end
-	apply
-		var bar2TimeVar = timer.time($call);
-		var logger = new Logger();
-		logger.text("I want to print the value of the elapsed time (")
-			.double(bar2TimeVar)
-			.text("), which is in the unit '" + timer.getUnit().getUnitsString() + "' and put other stuff after it")
-			.ln()
-			.log(timer.getAfterJp());
-	end
-	
-	
-	// Enable printing again
-	timer.setPrint(true);
-	select call{"bar3"} end
-	apply
-		timer.time($call);		
-		var logger = new Logger();
-		logger.text("This should appear after the timer print")
-			.ln()
-			.log(timer.getAfterJp());
-	end	
-	
-	
-	select file end
-	apply
-		println($file.code);
-	end
+    timer.time($call, "Time:");
+}
 
-end
+// Disable printing result
+timer.setPrint(false);
+
+let $call = Query.search("call", "bar2").first();
+const bar2TimeVar = timer.time($call);
+let logger = new Logger();
+logger
+    .text("I want to print the value of the elapsed time (")
+    .double(bar2TimeVar)
+    .text(
+        "), which is in the unit '" +
+            timer.getUnit().getUnitsString() +
+            "' and put other stuff after it"
+    )
+    .ln()
+    .log(timer.getAfterJp());
+
+// Enable printing again
+timer.setPrint(true);
+
+$call = Query.search("call", "bar3").first();
+timer.time($call);
+logger = new Logger();
+logger
+    .text("This should appear after the timer print")
+    .ln()
+    .log(timer.getAfterJp());
+
+for (const $file of Query.search("file")) {
+    console.log($file.code);
+}
