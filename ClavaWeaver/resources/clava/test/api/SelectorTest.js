@@ -1,17 +1,16 @@
-import weaver.Query;
+laraImport("weaver.Query");
 
-aspectdef SelectorTest
+for (const $chain of Query.search("function", "loops")
+    .search("loop")
+    .children("scope")
+    .children("loop")
+    .chain()) {
+    console.log("Loop:\n" + $chain["loop"].init.code);
+}
 
-	for(var $chain of Query.search("function", "loops").search("loop").children("scope").children("loop").chain()) {	
-		println("Loop:\n"+$chain["loop"].init.code);
-	}
-
-
-	// Test iterator
-	var iteratorsStmts = 0;
-	for(var $stmt of Query.search("function", "iterators").search("statement")) {	
-		iteratorsStmts++;
-	}
-	println("Stmts in iterators: " + iteratorsStmts);
-
-end
+// Test iterator
+let iteratorsStmts = 0;
+for (const _ of Query.search("function", "iterators").search("statement")) {
+    iteratorsStmts++;
+}
+console.log("Stmts in iterators: " + iteratorsStmts);

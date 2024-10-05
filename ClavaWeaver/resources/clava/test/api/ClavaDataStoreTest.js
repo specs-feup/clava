@@ -1,23 +1,18 @@
-import lara.util.DataStore;
-import clava.util.ClavaDataStore;
-import weaver.WeaverOptions;
+laraImport("lara.util.DataStore");
+laraImport("clava.util.ClavaDataStore");
+laraImport("weaver.WeaverOptions");
 
-aspectdef DataStoreTest
-	
-	
-	var dataStore = new ClavaDataStore(WeaverOptions.getData());
-	println("GET:" + dataStore.get("javascript"));
-	println("TYPE:" + dataStore.getType("javascript"));
-	dataStore.put("javascript", false);
-	println("GET AFTER PUT:" + dataStore.get("javascript"));
-	dataStore.put("javascript", true);
-	//println("Keys:" + dataStore.getKeys());
-	println("Disable info:" + dataStore.get("disable_info"));
-	println("System includes:" + dataStore.getSystemIncludes());
-	dataStore.setSystemIncludes("extra_system_include");
-	println("System includes after:" + dataStore.getSystemIncludes());
-	println("Flags:" + dataStore.getFlags());
-	var flags = dataStore.getFlags() + " -O3";
-	dataStore.setFlags(flags);
-	println("Flags after:" + dataStore.getFlags());
-end
+const dataStore = new ClavaDataStore(WeaverOptions.getData());
+console.log("GET:" + dataStore.get("javascript"));
+console.log("TYPE:" + dataStore.getType("javascript"));
+dataStore.put("javascript", false);
+console.log("GET AFTER PUT:" + dataStore.get("javascript"));
+dataStore.put("javascript", true);
+console.log("Disable info:" + dataStore.get("disable_info"));
+console.log("System includes:" + dataStore.getSystemIncludes());
+dataStore.setSystemIncludes("extra_system_include");
+console.log("System includes after:" + dataStore.getSystemIncludes());
+console.log("Flags:" + dataStore.getFlags());
+const flags = dataStore.getFlags() + " -O3";
+dataStore.setFlags(flags);
+console.log("Flags after:" + dataStore.getFlags());

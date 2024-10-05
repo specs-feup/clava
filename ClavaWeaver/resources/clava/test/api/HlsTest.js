@@ -1,18 +1,15 @@
-import clava.hls.HLSAnalysis;
-import weaver.Query;
+laraImport("clava.hls.HLSAnalysis");
+laraImport("weaver.Query");
 
-aspectdef HlsTestTest
+const filter = {
+    joinPointType: "function",
+    qualifiedName: (name) => name.endsWith("_Kernel"),
+};
+const $fnKernelArray = Query.search("function", filter).get();
 
-	var filter = {joinPointType: "function", 
-                  qualifiedName: name => name.endsWith("_Kernel")};
-	var $fnKernelArray = Query.search("function", filter).get();
-	
+for (const $fnKernel of $fnKernelArray) {
+    console.log($fnKernel.joinPointType + " --> " + $fnKernel.qualifiedName);
+    HLSAnalysis.applyGenericStrategies($fnKernel);
+}
 
-	for (var $fnKernel of $fnKernelArray) {
-		println($fnKernel.joinPointType + " --> " + $fnKernel.qualifiedName);
-		HLSAnalysis.applyGenericStrategies($fnKernel);
-	}
-
-	println(Query.root().code);
-
-end
+console.log(Query.root().code);

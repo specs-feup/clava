@@ -1,18 +1,13 @@
-import lara.code.Energy;
+laraImport("lara.code.Energy");
+laraImport("weaver.Query");
 
-aspectdef InstrumentCode
-	
-	// Instrument call
-	var energy = new Energy();
+// Instrument call
+const energy = new Energy();
 
-	select call end
-	apply
-		energy.measure($call, "Energy:");
-	end
-	
-	select file end
-	apply
-		println($file.code);
-	end
-	
-end
+for (const $call of Query.search("call")) {
+    energy.measure($call, "Energy:");
+}
+
+for (const $file of Query.search("file")) {
+    console.log($file.code);
+}

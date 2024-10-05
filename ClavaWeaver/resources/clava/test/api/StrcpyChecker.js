@@ -1,26 +1,21 @@
-import weaver.Query;
-import clava.analysis.checkers.StrcpyChecker;
-import clava.analysis.CheckBasedAnalyser;
-import clava.analysis.MessageGenerator;
+laraImport("weaver.Query");
+laraImport("clava.analysis.checkers.StrcpyChecker");
+laraImport("clava.analysis.CheckBasedAnalyser");
+laraImport("clava.analysis.MessageGenerator");
 
-aspectdef StrcpyCheckerTest
+const analyser = new CheckBasedAnalyser();
+analyser.addChecker(new StrcpyChecker());
 
-    var analyser = new CheckBasedAnalyser();
-    analyser.addChecker(new StrcpyChecker());
+const result = analyser.analyse(Query.search("file").first());
 
-    var result = analyser.analyse(Query.search("file").first());    
-        
-    var messageManager = new MessageGenerator(false);
-    messageManager.append(result);
-    var allMessages = messageManager.generateReport();
-    
-    for(var filename in allMessages) {
-        var fileMessages = allMessages[filename];
+const messageManager = new MessageGenerator(false);
+messageManager.append(result);
+const allMessages = messageManager.generateReport();
 
-		for(var message of fileMessages) {
-			println(message.substring(0, message.indexOf(":")));
-		}
+for (const filename in allMessages) {
+    const fileMessages = allMessages[filename];
+
+    for (const message of fileMessages) {
+        console.log(message.substring(0, message.indexOf(":")));
     }
-	
-end
-	
+}

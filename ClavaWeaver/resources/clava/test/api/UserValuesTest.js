@@ -1,50 +1,37 @@
-import clava.Clava;
+laraImport("clava.Clava");
 
-aspectdef UserValues
+let $program = Clava.getProgram();
+// Previous way of using userField
+$program.setUserField("test", "test string");
+// Deprecated get
+console.log("User field: " + $program.getUserField("test"));
 
-	select program end
-	apply
-		// Previous way of using userField
-		$program.setUserField("test", "test string");		
-		// Deprecated get
-		println("User field: " + $program.getUserField("test"));
+// Now this is also supported
+$program.setUserField("test", "test string 2");
+console.log("User field: " + $program.getUserField("test"));
 
-		// Now this is also supported
-		$program.setUserField("test", "test string 2");
-		println("User field: " + $program.getUserField("test"));
-		
-		var anArray = ["Hello", "World"];
-		$program.setUserField("anArray", anArray);
-		
-		var aMap = {"field1" : "field1_value", "field2" : 2};
-		$program.setUserField("aMap", aMap);
-	end
-	
-	Clava.pushAst();
+let anArray = ["Hello", "World"];
+$program.setUserField("anArray", anArray);
 
-	select program end
-	apply
-		println("User field after push: " + $program.getUserField("test"));
-		println("Array after push:");
-		printObject($program.getUserField("anArray"));
-		println("\nMap after push:");
-		printObject($program.getUserField("aMap"));
-		println();
-		// Changes array
-		var anArray = $program.getUserField("anArray");
-		anArray.push("pushed");
-		$program.setUserField("anArray", anArray);
-	end
-	
-	Clava.popAst();
-	
-	select program end
-	apply
-		println("Array after pop:");
-		printObject($program.getUserField("anArray"));
-	end
-	
-	//println("PROGRAM:" + Clava.getProgram().extraIncludes);
-	//println("Standard:" + Clava.getStandard());
-end
+const aMap = { field1: "field1_value", field2: 2 };
+$program.setUserField("aMap", aMap);
 
+Clava.pushAst();
+
+$program = Clava.getProgram();
+console.log("User field after push: " + $program.getUserField("test"));
+console.log("Array after push:");
+printObject($program.getUserField("anArray"));
+console.log("\nMap after push:");
+printObject($program.getUserField("aMap"));
+console.log();
+// Changes array
+anArray = $program.getUserField("anArray");
+anArray.push("pushed");
+$program.setUserField("anArray", anArray);
+
+Clava.popAst();
+
+$program = Clava.getProgram();
+console.log("Array after pop:");
+printObject($program.getUserField("anArray"));

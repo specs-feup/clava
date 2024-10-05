@@ -1,72 +1,72 @@
-import lara.util.JpFilter;
-import weaver.Query;
-import weaver.Weaver;
-
-aspectdef JpFilterTest
-
-	var $records = [];
-	select record end
-	apply
-		$records.push($record);
-	end
-
-	
-	var filter1 = new JpFilter({name: 'A'});
-	println(convert(filter1.filter($records)));
-	
-	var filter2 = new JpFilter({name: /A/});
-	println(convert(filter2.filter($records)));
-	
-	var filter3 = new JpFilter({name: /A/, kind: 'class'});
-	println(convert(filter3.filter($records)));
-
-	var filter4 = new JpFilter({name: /A/});
-	println(convert(filter4.filter($records)));
-	
-	var filter5 = new JpFilter({name: /A/, line: function(line){return line > 7;}});
-	println(convert(filter5.filter($records)));
-	
-	var $jps = Query.search("record", {name: /A/}).search("field", {name: 'x'}).get();
-	
-	for(var $selected of $jps) {
-		println("Select function: " + $selected.code);
-	}
-	
-	//println("FILTER:");
-	//printObject(filter2);
-
-
-	// Test search inclusive
-	var $foo2 = Query.search("function", {name: "foo2"}).first();
-	var $secondFoo2 = Query.searchFromInclusive($foo2, "function", {name: "foo2"}).first();
-	println("Search inclusive: " + $secondFoo2.name);
-
-	// Test retrieving default attribute of join point
-	println("Default attribute of 'function': " + Weaver.getDefaultAttribute("function"));
-	println("Search with default: " + Query.search("function", "foo2").first().name);
-
-end
+laraImport("lara.util.JpFilter");
+laraImport("weaver.Query");
+laraImport("weaver.Weaver");
 
 function convert($jps) {
-	var string = "";
-	
-	var first = true;
-	for(var $jp of $jps) {
-		//println("JP:" + $jp);
-		//println("JP NAME:" + $jp.name);	
-		if(first) {
-			first = false;
-		} else {
-			string += ", ";
-		}
-		
-		string += $jp.name;
-	}
-	
-	return string;
-	//return $jps.map(jpName).join(", ");
+    let string = "";
+
+    let first = true;
+    for (const $jp of $jps) {
+        if (first) {
+            first = false;
+        } else {
+            string += ", ";
+        }
+
+        string += $jp.name;
+    }
+
+    return string;
 }
 
 function jpName($jp) {
-	return $jp.name;
+    return $jp.name;
 }
+
+const $records = [];
+for (const $record of Query.search("record")) {
+    $records.push($record);
+}
+
+const filter1 = new JpFilter({ name: "A" });
+console.log(convert(filter1.filter($records)));
+
+const filter2 = new JpFilter({ name: /A/ });
+console.log(convert(filter2.filter($records)));
+
+const filter3 = new JpFilter({ name: /A/, kind: "class" });
+console.log(convert(filter3.filter($records)));
+
+const filter4 = new JpFilter({ name: /A/ });
+console.log(convert(filter4.filter($records)));
+
+const filter5 = new JpFilter({
+    name: /A/,
+    line: function (line) {
+        return line > 7;
+    },
+});
+console.log(convert(filter5.filter($records)));
+
+const $jps = Query.search("record", { name: /A/ })
+    .search("field", { name: "x" })
+    .get();
+
+for (const $selected of $jps) {
+    console.log("Select function: " + $selected.code);
+}
+
+// Test search inclusive
+const $foo2 = Query.search("function", { name: "foo2" }).first();
+const $secondFoo2 = Query.searchFromInclusive($foo2, "function", {
+    name: "foo2",
+}).first();
+console.log("Search inclusive: " + $secondFoo2.name);
+
+// Test retrieving default attribute of join point
+console.log(
+    "Default attribute of 'function': " + Weaver.getDefaultAttribute("function")
+);
+console.log(
+    "Search with default: " + Query.search("function", "foo2").first().name
+);

@@ -1,70 +1,30 @@
-import clava.Clava;
-import clava.ClavaJoinPoints;
-import lara.Io;
+laraImport("clava.Clava");
+laraImport("clava.ClavaJoinPoints");
+laraImport("lara.Io");
+laraImport("weaver.Query");
 
-aspectdef RebuildTest
+// Manually add header file
+const headerFile = Io.getPath("cxx_weaver_output/rebuild.h");
 
-	// Manually add header file
-	var headerFile = Io.getPath("cxx_weaver_output/rebuild.h");
-	//println("header exists? " + Io.isFile(headerFile));
-	var $file = ClavaJoinPoints.file(headerFile);
-	Clava.addFile($file, "cxx_weaver_output");
-	
-	//println("Header code: " + $file.code);
+const $file = ClavaJoinPoints.file(headerFile);
+Clava.addFile($file, "cxx_weaver_output");
 
-	//println("Pushing");
-	println("Stack size before push: " + Clava.getStackSize());
-	Clava.pushAst();
-	println("Stack size after push: " + Clava.getStackSize());
-	
-	select function{"main"} end
-	apply
-		$function.insert before "// Hello";
-	end
+console.log("Stack size before push: " + Clava.getStackSize());
+Clava.pushAst();
+console.log("Stack size after push: " + Clava.getStackSize());
 
-	//println("Rebuilding");
-	Clava.rebuild();
-	println("Temporary code:\n" + Clava.getProgram().code);
-	
-	//println("Poping");
-	Clava.popAst();
-	println("Stack size after pop: " + Clava.getStackSize());
-	//println("Rebuilding");
-	
-	
-	// Rebuild two times, to stress test rebuild
-	Clava.rebuild();
-	Clava.rebuild();
-	
-	println("Original code:\n" + Clava.getProgram().code);
+for (const $function of Query.search("function", "main")) {
+    $function.insertBefore("// Hello");
+}
 
-	
+Clava.rebuild();
+console.log("Temporary code:\n" + Clava.getProgram().code);
 
-/*	
-	// Insert error in the code to parse
-	select function{"main"}.body end
-	apply
-		$body.insertBegin("a = 0;\nb = 0;");
-	
-	end
-	
-	// Should give an error
-	Clava.rebuild();
-	/*
-	try {
-		Clava.rebuild();
-		println("Did not find compilation error");		
-	} catch(e) {
-		println("Found compilation error");
-	}
-	*/
-	
-//	select program end
-//	apply
-//		$program.rebuild();
-//	end
+Clava.popAst();
+console.log("Stack size after pop: " + Clava.getStackSize());
 
+// Rebuild two times, to stress test rebuild
+Clava.rebuild();
+Clava.rebuild();
 
-
-end
-
+console.log("Original code:\n" + Clava.getProgram().code);

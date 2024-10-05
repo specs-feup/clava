@@ -1,14 +1,13 @@
-import clava.MathExtra;
+laraImport("clava.MathExtra");
 
-aspectdef MathExtraTest
+console.log("Original expression: a - (b - c)");
+console.log("Simplified  expression: " + MathExtra.simplify("a - (b - c)"));
+console.log("Original expression: a - (b - c)^2");
+console.log("Simplified  expression: " + MathExtra.simplify("a - (b - c)^2"));
 
-	println("Original expression: a - (b - c)");
-	println("Simplified  expression: " + MathExtra.simplify("a - (b - c)"));
-	println("Original expression: a - (b - c)^2");
-	println("Simplified  expression: " + MathExtra.simplify("a - (b - c)^2"));
-	
-	var constants = {};
-	constants["a"] = 2;
-	println("Original expression: a - (b - c), with a=2");
-	println("Simplified  expression: " + MathExtra.simplify("a - (b - c)", constants));
-end
+const constants = {};
+constants["a"] = 2;
+console.log("Original expression: a - (b - c), with a=2");
+console.log(
+    "Simplified  expression: " + MathExtra.simplify("a - (b - c)", constants)
+);

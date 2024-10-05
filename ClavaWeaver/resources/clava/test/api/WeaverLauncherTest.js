@@ -1,8 +1,5 @@
-import weaver.WeaverLauncher;
+laraImport("weaver.WeaverLauncher");
 
-aspectdef WeaverLauncherTest
-
-	var weaverLauncher = new WeaverLauncher("cxx");
-	var weaverResult = weaverLauncher.execute("--help");
-	println("result:" + weaverResult);
-end
+const weaverLauncher = new WeaverLauncher("cxx");
+const weaverResult = weaverLauncher.execute("--help");
+console.log("result:" + weaverResult);

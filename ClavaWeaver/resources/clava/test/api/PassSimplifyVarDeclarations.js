@@ -1,10 +1,6 @@
-import weaver.Query;
-import clava.pass.DecomposeVarDeclarations;
+laraImport("weaver.Query");
+laraImport("clava.pass.DecomposeVarDeclarations");
 
-aspectdef PassSimplifyVarDeclarations
-
-	var result = (new DecomposeVarDeclarations()).apply();
-	println("Result: " + result);
-	println(Query.root().code);
-
-end
+const result = new DecomposeVarDeclarations().apply();
+console.log("Result: " + result);
+console.log(Query.root().code);
