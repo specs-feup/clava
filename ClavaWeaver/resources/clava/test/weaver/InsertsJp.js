@@ -1,78 +1,81 @@
-import clava.ClavaJoinPoints;
+laraImport("clava.ClavaJoinPoints");
+laraImport("weaver.Query");
 
-aspectdef InsertsJp
+const $bDecl = ClavaJoinPoints.varDecl("b", ClavaJoinPoints.integerLiteral(10));
+const $cDecl = ClavaJoinPoints.varDecl(
+    "c",
+    ClavaJoinPoints.integerLiteral("20")
+);
 
-	
-	var $bDecl = ClavaJoinPoints.varDecl("b", ClavaJoinPoints.integerLiteral(10));
-	var $cDecl = ClavaJoinPoints.varDecl("c", ClavaJoinPoints.integerLiteral("20"));
+for (const $function of Query.search("function", "fooStmtBeforeAfter")) {
+    for (const $stmt of Query.searchFrom($function.body, "statement")) {
+        $stmt.insertBefore($bDecl);
+        $stmt.insertAfter($cDecl);
+    }
+}
 
-	select function{"fooStmtBeforeAfter"}.stmt end
-	apply
-		$stmt.exec insertBefore($bDecl);
-		$stmt.exec insertAfter($cDecl);
-	end
-	
-	select function{"fooStmtReplace"}.stmt end
-	apply
-		$stmt.exec replaceWith($bDecl);
-	end
+for (const $function of Query.search("function", "fooStmtReplace")) {
+    for (const $stmt of Query.searchFrom($function.body, "statement")) {
+        $stmt.replaceWith($bDecl);
+    }
+}
 
-	select function{"fooBodyBeforeAfter"}.body end
-	apply
-		$body.exec insertBegin($bDecl);
-		$body.exec insertEnd($cDecl);
-	end
-	
-	select function{"fooBodyReplace"}.body end
-	apply
-		$body.exec replaceWith($bDecl);
-	end
-	
-	select function{"fooBodyEmptyBeforeAfter"}.body end
-	apply
-		$body.exec insertBegin($bDecl);
-		$body.exec insertEnd($cDecl);
-	end
-	
-	select function{"fooBodyEmptyReplace"}.body end
-	apply
-		$body.exec replaceWith($bDecl);
-	end
-	
-	select function{"fooCallBeforeAfter"}.stmt.call end
-	apply
-		$call.exec insertBefore($bDecl);
-		$call.exec insertAfter($cDecl);
-	end
-	
+for (const $function of Query.search("function", "fooBodyBeforeAfter")) {
+    $function.body.insertBegin($bDecl);
+    $function.body.insertEnd($cDecl);
+}
 
-	var $double2 = ClavaJoinPoints.doubleLiteral(2.0);
-	var $double3 = ClavaJoinPoints.doubleLiteral("3.0");
-	var $doubleType = ClavaJoinPoints.builtinType("double");
-	var $powCall = ClavaJoinPoints.callFromName("pow", $doubleType, $double2, $double3);
-	
-	select function{"fooCallReplace"}.stmt.call end
-	apply
-		$call.exec replaceWith($powCall);
-	end
-	
-	select function{"fooBeforeAfter"} end
-	apply
-		$function.exec insertBefore($bDecl);
-		$function.exec insertAfter($cDecl);
-	end
-	
-	var $dDecl = ClavaJoinPoints.varDecl("d", ClavaJoinPoints.integerLiteral(30));
-	select function{"fooReplace"} end
-	apply
-		$function.exec replaceWith($dDecl);
-	end
-	
-	
-	
-	// Output code
-	select file end
-	apply
-		println($file.code);
-	end
-end
+for (const $function of Query.search("function", "fooBodyReplace")) {
+    $function.body.replaceWith($bDecl);
+}
+
+for (const $function of Query.search("function", "fooBodyEmptyBeforeAfter")) {
+    $function.body.insertBegin($bDecl);
+    $function.body.insertEnd($cDecl);
+}
+
+for (const $function of Query.search("function", "fooBodyEmptyReplace")) {
+    $function.body.replaceWith($bDecl);
+}
+
+for (const $function of Query.search("function", "fooCallBeforeAfter")) {
+    for (const $call of Query.searchFrom($function.body, "statement").search(
+        "call"
+    )) {
+        $call.insertBefore($bDecl);
+        $call.insertAfter($cDecl);
+    }
+}
+
+const $double2 = ClavaJoinPoints.doubleLiteral(2.0);
+const $double3 = ClavaJoinPoints.doubleLiteral("3.0");
+const $doubleType = ClavaJoinPoints.builtinType("double");
+const $powCall = ClavaJoinPoints.callFromName(
+    "pow",
+    $doubleType,
+    $double2,
+    $double3
+);
+
+for (const $function of Query.search("function", "fooCallReplace")) {
+    for (const $call of Query.searchFrom($function.body, "statement").search(
+        "call"
+    )) {
+        $call.replaceWith($powCall);
+    }
+}
+
+for (const $function of Query.search("function", "fooBeforeAfter")) {
+    $function.insertBefore($bDecl);
+    $function.insertAfter($cDecl);
+}
+
+const $dDecl = ClavaJoinPoints.varDecl("d", ClavaJoinPoints.integerLiteral(30));
+for (const $function of Query.search("function", "fooReplace")) {
+    $function.replaceWith($dDecl);
+}
+
+// Output code
+for (const $file of Query.search("file")) {
+    console.log($file.code);
+}
