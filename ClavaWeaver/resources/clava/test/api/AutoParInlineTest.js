@@ -1,41 +1,31 @@
-import clava.autopar.RunInlineFunctionCalls;
-import weaver.Query;
-import clava.Clava;
+laraImport("clava.autopar.RunInlineFunctionCalls");
+laraImport("weaver.Query");
+laraImport("clava.Clava");
 
-aspectdef AutoParInlineTest
+const $call = Query.search("call", { name: "bar" }).first();
+if ($call === undefined) {
+    throw new Error("Could not find call to 'bar'");
+}
 
-	var $call = Query.search('call', {name: 'bar'}).first();
-	if($call === undefined) {
-		throw "Could not find call to 'bar'";
-	}
-	
-	var exprStmt = $call.getAstAncestor('ExprStmt');
+const exprStmt = $call.getAstAncestor("ExprStmt");
 
+const o = inlinePreparation("bar", $call, exprStmt);
 
-	var o = undefined;
-	call o : inlinePreparation("bar", $call, exprStmt);
-				
+if (o.$newStmts.length > 0) {
+    const replacedCallStr =
+        "// ClavaInlineFunction : " +
+        exprStmt.code +
+        "  countCallInlinedFunction : " +
+        countCallInlinedFunction;
+    exprStmt.insertBefore(replacedCallStr);
 
-	if(o.$newStmts.length > 0)
-	{
-		var replacedCallStr = '// ClavaInlineFunction : ' + exprStmt.code + '  countCallInlinedFunction : ' + countCallInlinedFunction;
-		//println("REPLACED CALL STR:\n" + replacedCallStr);
-		exprStmt.insert before replacedCallStr;
+    for (const $newStmt of o.$newStmts) {
+        exprStmt.insertBefore($newStmt);
+    }
 
-		//var insertedCode = "";
-		for(var $newStmt of o.$newStmts)
-		{
-			//insertedCode += $newStmt.code + "\n";
-			exprStmt.insertBefore($newStmt);	
-		}
-		//println("INSERTED CODE:\n" + insertedCode);
+    exprStmt.detach();
+}
 
-		exprStmt.detach();
-		
-	}
-	
-	println("Code:\n" + Clava.getProgram().code);
-	
-	Clava.rebuild();
+console.log("Code:\n" + Clava.getProgram().code);
 
-end
+Clava.rebuild();

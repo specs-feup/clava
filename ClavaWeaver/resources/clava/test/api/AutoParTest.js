@@ -1,11 +1,9 @@
-import clava.autopar.Parallelize;
-import clava.Clava;
+laraImport("clava.autopar.Parallelize");
+laraImport("clava.Clava");
+laraImport("weaver.Query");
 
-aspectdef AutoParTest
-	Parallelize.forLoops();
-	
-	select omp end
-	apply
-		println("Inserted OpenMP pragma: " + $omp.code);
-	end
-end
+Parallelize.forLoops();
+
+for (const $omp of Query.search("omp")) {
+    console.log("Inserted OpenMP pragma: " + $omp.code);
+}
