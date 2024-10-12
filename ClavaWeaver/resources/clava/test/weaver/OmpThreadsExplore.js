@@ -70,7 +70,7 @@ ${ompThreadMeasure} << omp_thread_measure;
 
 function scopeExit(ompThreadMeasure, variables) {
     let streamCode = "";
-    for (variable of variables) {
+    for (const variable of variables) {
         streamCode = streamCode + '<< "," << ' + variable;
     }
 
