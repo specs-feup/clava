@@ -3,7 +3,7 @@ laraImport("clava.ClavaJoinPoints");
 
 // Add file
 const $file = ClavaJoinPoints.file("no_parsing.cpp");
-$file.insertAfter("int main() { return 0;}");
+$file.insert("after", "int main() { return 0;}");
 
 Query.root().addFile($file);
 

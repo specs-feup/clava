@@ -1,8 +1,8 @@
 laraImport("clava.ClavaJoinPoints");
 laraImport("weaver.Query");
 
-for (const chain of Query.search("function", "main")
-    .search("statement")
+const $main = Query.search("function", "main").first();
+for (const chain of Query.searchFrom($main.body, "statement")
     .search("call").chain()) {
 
     const $call = chain["call"];

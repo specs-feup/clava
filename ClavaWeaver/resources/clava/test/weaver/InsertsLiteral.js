@@ -1,4 +1,5 @@
 laraImport("weaver.Query");
+laraImport("clava.ClavaJoinPoints");
 
 for (const $function of Query.search("function", "fooStmtBeforeAfter")) {
     for (const $stmt of Query.searchFrom($function.body, "statement")) {
@@ -9,26 +10,26 @@ for (const $function of Query.search("function", "fooStmtBeforeAfter")) {
 
 for (const $function of Query.search("function", "fooStmtReplace")) {
     for (const $stmt of Query.searchFrom($function.body, "statement")) {
-        $stmt.replaceWith("int a = 100;");
+        $stmt.replaceWith(ClavaJoinPoints.stmtLiteral("int a = 100;"));
     }
 }
 
 for (const $function of Query.search("function", "fooBodyBeforeAfter")) {
-    $function.body.insertBefore("int b = 1;");
-    $function.body.insertAfter("int c = a + b;");
+    $function.body.insert("before", "int b = 1;");
+    $function.body.insert("after", "int c = a + b;");
 }
 
 for (const $function of Query.search("function", "fooBodyReplace")) {
-    $function.body.replaceWith("int a = 100;");
+    $function.body.replaceWith(ClavaJoinPoints.scope(ClavaJoinPoints.stmtLiteral("int a = 100;")));
 }
 
 for (const $function of Query.search("function", "fooBodyEmptyBeforeAfter")) {
-    $function.body.insertBefore("int b = 1;");
-    $function.body.insertAfter("int c = 2 + b;");
+    $function.body.insert("before", "int b = 1;");
+    $function.body.insert("after", "int c = 2 + b;");
 }
 
 for (const $function of Query.search("function", "fooBodyEmptyReplace")) {
-    $function.body.replaceWith("int a = 100;");
+    $function.body.replaceWith(ClavaJoinPoints.scope(ClavaJoinPoints.stmtLiteral("int a = 100;")));
 }
 
 for (const $function of Query.search("function", "fooCallBeforeAfter")) {
