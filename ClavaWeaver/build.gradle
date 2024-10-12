@@ -54,7 +54,6 @@ dependencies {
     implementation ":ClavaAst"
     implementation ":ClavaHls"
     implementation ":ClavaLaraApi"
-    implementation ":ClavaWeaverSpecs"
 
 
     implementation group: 'com.google.guava', name: 'guava', version: '19.0'
