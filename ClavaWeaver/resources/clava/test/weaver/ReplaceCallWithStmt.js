@@ -1,23 +1,16 @@
-import clava.ClavaJoinPoints;
+laraImport("clava.ClavaJoinPoints");
+laraImport("weaver.Query");
 
-aspectdef ReplaceCallWithStmt
+for (const chain of Query.search("function", "main")
+    .search("statement")
+    .search("call").chain()) {
 
-	select function{"main"}.stmt.stmtCall end
-	apply
-		var varName = $stmtCall.name + "Result";
-	
-		var $varDecl = ClavaJoinPoints.varDecl(varName, $stmtCall);
-		$stmt.exec replaceWith($varDecl);
-	end
-	
-	
-	//Clava.rebuild();
+    const $call = chain["call"];
+    const $stmt = chain["statement"];
 
-	select function{"main"} end
-	apply
-		print($function.code);
-	end
+    const varName = $call.name + "Result";
+    const $varDecl = ClavaJoinPoints.varDecl(varName, $call);
+    $stmt.replaceWith($varDecl);
+}
 
-
-	
-end
+console.log(Query.search("function", "main").first().code);

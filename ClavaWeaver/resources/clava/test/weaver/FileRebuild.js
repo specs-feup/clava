@@ -1,29 +1,21 @@
-aspectdef FileRebuild
+laraImport("weaver.Query");
 
+// Add literal stmt
+Query.search("file", "file_rebuild.h").first().insertAfter("void foo2();");
 
+console.log("file_rebuild.h before:");
+for (const $function of Query.search("file", "file_rebuild.h").search(
+    "function"
+)) {
+    console.log("Function: " + $function.signature);
+}
 
-	// Add literal stmt
-	select file{"file_rebuild.h"} end
-	apply
-		$file.insert after "void foo2();";
-	end
-	
-	println("file_rebuild.h before:");
-	select file{"file_rebuild.h"}.function end
-	apply
-		println("Function: " + $function.signature);
-	end
+// Rebuild file
+Query.search("file", "file_rebuild.h").first().rebuild();
 
-	// Rebuild file
-	select file{"file_rebuild.h"} end
-	apply		
-		$file.rebuild();
-	end
-	
-	println("file_rebuild.h after:");
-	select file{"file_rebuild.h"}.function end
-	apply
-		println("Function: " + $function.signature);
-	end
-
-end
+console.log("file_rebuild.h after:");
+for (const $function of Query.search("file", "file_rebuild.h").search(
+    "function"
+)) {
+    console.log("Function: " + $function.signature);
+}

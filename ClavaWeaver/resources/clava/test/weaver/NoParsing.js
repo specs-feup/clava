@@ -1,13 +1,10 @@
-import clava.Clava;
-import clava.ClavaJoinPoints;
+laraImport("weaver.Query");
+laraImport("clava.ClavaJoinPoints");
 
-aspectdef NoParsing
+// Add file
+const $file = ClavaJoinPoints.file("no_parsing.cpp");
+$file.insertAfter("int main() { return 0;}");
 
-	// Add file
-	var $file = ClavaJoinPoints.file("no_parsing.cpp");
-	$file.insert after "int main() { return 0;}";
-	
-	Clava.getProgram().addFile($file);
-	
-	println(Clava.getProgram().code);
-end
+Query.root().addFile($file);
+
+console.log(Query.root().code);
