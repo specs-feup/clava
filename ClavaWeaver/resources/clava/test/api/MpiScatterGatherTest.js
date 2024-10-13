@@ -12,4 +12,4 @@ const mpiGsl = new MpiScatterGatherLoop(
 
 mpiGsl.execute();
 
-println(Query.root().code);
+console.log(Query.root().code);

@@ -5,4 +5,4 @@ import Query from "@specs-feup/lara/api/weaver/Query.js";
 NormalizeToSubset(Query.root());
 
 // Print code
-println(Query.root().code);
+console.log(Query.root().code);

@@ -16,7 +16,7 @@ function SimplifyAssignments($startJp) {
 }
 
 function DummyPass($startJp, options) {
-  println(
+  console.log(
     "Dummy pass that has received an option object with the value '" +
       options["foo"] +
       "' for the key 'foo'"
@@ -33,4 +33,4 @@ const passes = [
 
 const results = Passes.apply(Query.root(), passes);
 
-println(Query.root().code);
+console.log(Query.root().code);

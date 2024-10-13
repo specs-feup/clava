@@ -18,25 +18,25 @@ buildAndVerifyCfg($gotoLabelFunction, cfgOptions);
 
 // Stress test
 for(const $stmt of Query.search("function", "foo").search("statement")) {
-//	println("CFG for stmt:\n" + $stmt.code)
+//	console.log("CFG for stmt:\n" + $stmt.code)
 //	const smallCfg = 
 	ControlFlowGraph.build($stmt, true);	
-//	println(Graphs.toDot(smallCfg.graph));
+//	console.log(Graphs.toDot(smallCfg.graph));
 }
 
 function buildAndVerifyCfg($function, options) {
 	const cfg = ControlFlowGraph.build($function, true, options);
 
 	if (options !== undefined) {
-		println(`Options used and Graph for ${$function.name}:`)
-		println(`${JSON.stringify(options, null, 2)}`);
+		console.log(`Options used and Graph for ${$function.name}:`)
+		console.log(`${JSON.stringify(options, null, 2)}`);
 	}
 	else	
-		println(`Graph for ${$function.name}:`)
+		console.log(`Graph for ${$function.name}:`)
 
-	println(Graphs.toDot(cfg.graph));
+	console.log(Graphs.toDot(cfg.graph));
 	verifyGraph(cfg)
-	println(`Verification completed for ${$function.name}\n`)
+	console.log(`Verification completed for ${$function.name}\n`)
 }
 
 function verifyGraph(cfg) {
@@ -46,12 +46,12 @@ function verifyGraph(cfg) {
 		for(const stmt of node.data().stmts) {
 			const graphNode= cfg.getNode(stmt);
 			if(graphNode === undefined) {
-				println("Stmt "+stmt.astId+" " + stmt.joinPointType + "@" + stmt.location + " does not have a graph node");
+				console.log("Stmt "+stmt.astId+" " + stmt.joinPointType + "@" + stmt.location + " does not have a graph node");
 				continue;
 			}
 
 			if(!node.equals(graphNode)) {
-				println("Stmt " + stmt.joinPointType + "@" + stmt.location + " has a graph node but is not the same");
+				console.log("Stmt " + stmt.joinPointType + "@" + stmt.location + " has a graph node but is not the same");
 				continue;
 			}
 		}

@@ -10,4 +10,4 @@ for (const $switch of Query.search("switch")) {
 }
 
 Clava.rebuild();
-println(Query.search("function", "foo").first().code);
+console.log(Query.search("function", "foo").first().code);

@@ -7,4 +7,4 @@ for (const $stmt of Query.search("exprStmt")) {
 }
 
 Clava.rebuild();
-println(Query.root().code);
+console.log(Query.root().code);

@@ -8,4 +8,4 @@ for (var $stmt of Query.search("function", "foo").search("statement")) {
   decomposer.decomposeAndReplace($stmt);
 }
 
-println(Query.search("function", "foo").first().code);
+console.log(Query.search("function", "foo").first().code);

@@ -17,7 +17,7 @@ if (Platforms.isWindows()) {
 const executable = cmaker.build();
 
 if (executable !== undefined) {
-  println("Created executable: " + Io.removeExtension(executable.getName()));
+  console.log("Created executable: " + Io.removeExtension(executable.getName()));
 } else {
-  println("Could not create executable");
+  console.log("Could not create executable");
 }

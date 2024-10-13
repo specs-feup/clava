@@ -9,4 +9,4 @@ const pass = new SimplifyLoops(statementDecomposer);
 
 pass.apply(Query.root());
 
-println(Query.root().code);
+console.log(Query.root().code);

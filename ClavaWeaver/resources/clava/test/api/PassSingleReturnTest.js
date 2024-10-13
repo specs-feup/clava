@@ -8,4 +8,4 @@ for (const $function of Query.search("function")) {
 }
 
 Clava.rebuild();
-println(Query.root().code);
+console.log(Query.root().code);

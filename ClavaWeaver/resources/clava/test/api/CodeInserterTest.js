@@ -30,16 +30,16 @@ codeInserter.add($file, 1, "#include <omp.h>");
 codeInserter.write(outputFolder);
 
 // Check file (first element is the folder)
-//println("PATHS:");
+//console.log("PATHS:");
 //printObject(Io.getFilesRecursive(outputFolder));
-//println("PATHS *.c:");
+//console.log("PATHS *.c:");
 //printObject(Io.getFilesRecursive(outputFolder, "*.c"));
 
 //var outputFile = Io.getFilesRecursive(outputFolder)[0];
 var outputFile = Io.getFiles(outputFolder, undefined, true)[0];
 
 // Print file
-println(Io.readFile(outputFile));
+console.log(Io.readFile(outputFile));
 
 // Clean
 //Io.deleteFolder(outputFolder);

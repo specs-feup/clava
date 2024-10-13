@@ -7,4 +7,4 @@ for (const $op of Query.search("binaryOp")) {
 }
 
 Clava.rebuild();
-println(Query.root().code);
+console.log(Query.root().code);

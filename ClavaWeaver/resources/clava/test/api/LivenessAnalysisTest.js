@@ -6,7 +6,7 @@ const $fooFunction = Query.search("function", "foo").first();
 const cfgOptions = {splitInstList: true};
 const cfg = ControlFlowGraph.build($fooFunction, true, cfgOptions);
 
-println("Liveness results for foo:")
+console.log("Liveness results for foo:")
 
 const analysisResult = LivenessAnalysis.analyse(cfg.graph);
 for (const node of cfg.graph.nodes()) {
@@ -15,13 +15,13 @@ for (const node of cfg.graph.nodes()) {
     const liveIn = analysisResult.liveIn.get(node.id());
     const liveOut = analysisResult.liveOut.get(node.id());
 
-    println("Node id: " + node.id());
-    println("Node stmt: " + node.data().toString());
-    println("Def: "+  [...sortSet(def)]);
-    println("Use: " + [...sortSet(use)]);
-    println("Live in: " + [...sortSet(liveIn)]);
-    println("Live out: " + [...sortSet(liveOut)]);
-    println();
+    console.log("Node id: " + node.id());
+    console.log("Node stmt: " + node.data().toString());
+    console.log("Def: "+  [...sortSet(def)]);
+    console.log("Use: " + [...sortSet(use)]);
+    console.log("Live in: " + [...sortSet(liveIn)]);
+    console.log("Live out: " + [...sortSet(liveOut)]);
+    console.log();
 }
 
 function sortSet(set) {
