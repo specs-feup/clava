@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 /**
  * @return static array declarations that have constant size

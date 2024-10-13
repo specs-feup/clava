@@ -1,7 +1,7 @@
-laraImport("clava.util.FileIterator");
-laraImport("lara.Io");
-laraImport("clava.Clava");
-laraImport("weaver.Query");
+import FileIterator from "@specs-feup/clava/api/clava/util/FileIterator.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 // Write source files to a temporary folder
 const tempFolder = Io.getTempFolder("ClavaFileIteratorTest");

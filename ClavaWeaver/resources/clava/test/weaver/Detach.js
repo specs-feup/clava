@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 for (const $loop of Query.search("loop")) {
     $loop.insertBefore("#pragma omp parallel for");

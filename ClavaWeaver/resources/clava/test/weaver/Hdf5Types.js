@@ -1,8 +1,8 @@
-laraImport("clava.hdf5.Hdf5");
-laraImport("clava.Clava");
-laraImport("clava.ClavaJoinPoints");
-laraImport("clava.Format");
-laraImport("weaver.Query");
+import Hdf5 from "@specs-feup/clava/api/clava/hdf5/Hdf5.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
+import Format from "@specs-feup/clava/api/clava/Format.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 Launcher();
 Hdf5Types(undefined, undefined);

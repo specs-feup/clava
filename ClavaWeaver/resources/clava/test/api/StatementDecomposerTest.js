@@ -1,5 +1,5 @@
-laraImport("clava.code.StatementDecomposer");
-laraImport("weaver.Query");
+import StatementDecomposer from "@specs-feup/clava/api/clava/code/StatementDecomposer.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 //setDebug();
 var decomposer = new StatementDecomposer();

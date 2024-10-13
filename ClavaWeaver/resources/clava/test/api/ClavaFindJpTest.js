@@ -1,8 +1,8 @@
-laraImport("clava.Clava");
-laraImport("lara.Io");
-laraImport("clava.ClavaJoinPoints");
-laraImport("weaver.JoinPoints");
-laraImport("weaver.Query");
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
+import JoinPoints from "@specs-feup/lara/api/weaver/JoinPoints.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 
 function test() {

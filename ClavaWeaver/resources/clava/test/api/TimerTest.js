@@ -1,8 +1,8 @@
-laraImport("lara.code.Timer");
-laraImport("clava.Clava");
-laraImport("clava.ClavaJoinPoints");
-laraImport("lara.code.Logger");
-laraImport("weaver.Query");
+import Timer from "@specs-feup/clava/api/lara/code/Timer.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
+import Logger from "@specs-feup/clava/api/lara/code/Logger.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 // Disable SpecsLogger, in order to be able to compile woven code without the project
 Clava.useSpecsLogger = false;

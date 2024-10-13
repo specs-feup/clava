@@ -1,6 +1,6 @@
-laraImport("lara.code.Logger");
-laraImport("clava.Clava");
-laraImport("weaver.Query");
+import Logger from "@specs-feup/clava/api/lara/code/Logger.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 const loggerConsole = new Logger();
 const loggerFile = new Logger(false, "log.txt");

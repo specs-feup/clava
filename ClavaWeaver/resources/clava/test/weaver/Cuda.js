@@ -1,5 +1,5 @@
-laraImport("clava.ClavaJoinPoints");
-laraImport("weaver.Query");
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 // Test CUDA kernel call
 for (const $call of Query.search("function", "main").search("cudaKernelCall")) {

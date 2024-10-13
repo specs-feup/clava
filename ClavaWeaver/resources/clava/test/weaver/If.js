@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 for(const $if of Query.search("function", "scope_test").search("if")) {
     console.log("then", $if.then?.joinPointType);

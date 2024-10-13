@@ -1,8 +1,8 @@
-laraImport("clava.ClavaJoinPoints");
-laraImport("clava.Clava");
-laraImport("lara.code.Logger");
-laraImport("lara.util.TupleId");
-laraImport("weaver.Query");
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import Logger from "@specs-feup/clava/api/lara/code/Logger.js";
+import TupleId from "@specs-feup/lara/api/lara/util/TupleId.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 /**
  * Inserts code for increments as a comma operator,

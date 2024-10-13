@@ -1,5 +1,5 @@
-laraImport("weaver.Query");
-laraImport("clava.ClavaJoinPoints");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
 
 // Add file
 const $file = ClavaJoinPoints.file("no_parsing.cpp");

@@ -1,7 +1,7 @@
-laraImport("weaver.Query");
-laraImport("clava.analysis.checkers.StrcpyChecker");
-laraImport("clava.analysis.CheckBasedAnalyser");
-laraImport("clava.analysis.MessageGenerator");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import StrcpyChecker from "@specs-feup/clava/api/clava/analysis/checkers/StrcpyChecker.js";
+import CheckBasedAnalyser from "@specs-feup/clava/api/clava/analysis/CheckBasedAnalyser.js";
+import MessageGenerator from "@specs-feup/clava/api/clava/analysis/MessageGenerator.js";
 
 const analyser = new CheckBasedAnalyser();
 analyser.addChecker(new StrcpyChecker());

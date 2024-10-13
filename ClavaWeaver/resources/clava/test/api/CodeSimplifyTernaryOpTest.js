@@ -1,6 +1,6 @@
-laraImport("clava.Clava");
-laraImport("clava.code.SimplifyTernaryOp");
-laraImport("weaver.Query");
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import SimplifyTernaryOp from "@specs-feup/clava/api/clava/code/SimplifyTernaryOp.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 for (const $stmt of Query.search("exprStmt")) {
   SimplifyTernaryOp($stmt);

@@ -1,7 +1,7 @@
-laraImport("clava.Clava");
-laraImport("clava.ClavaJoinPoints");
-laraImport("lara.Io");
-laraImport("weaver.Query");
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 // Manually add header file
 const headerFile = Io.getPath("cxx_weaver_output/rebuild.h");

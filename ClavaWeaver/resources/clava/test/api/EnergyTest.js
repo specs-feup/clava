@@ -1,5 +1,5 @@
-laraImport("lara.code.Energy");
-laraImport("weaver.Query");
+import Energy from "@specs-feup/clava/api/lara/code/Energy.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 // Instrument call
 const energy = new Energy();

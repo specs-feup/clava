@@ -1,5 +1,5 @@
-laraImport("weaver.Query");
-laraImport("clava.ClavaJoinPoints");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
 
 for (const $function of Query.search("function", "fooStmtBeforeAfter")) {
     for (const $stmt of Query.searchFrom($function.body, "statement")) {

@@ -1,6 +1,6 @@
-laraImport("clava.liveness.LivenessAnalysis");
-laraImport("clava.graphs.ControlFlowGraph");
-laraImport("weaver.Query");
+import LivenessAnalysis from "@specs-feup/clava/api/clava/liveness/LivenessAnalysis.js";
+import ControlFlowGraph from "@specs-feup/clava/api/clava/graphs/ControlFlowGraph.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 const $fooFunction = Query.search("function", "foo").first();
 const cfgOptions = {splitInstList: true};

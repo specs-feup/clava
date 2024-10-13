@@ -1,5 +1,5 @@
-laraImport("weaver.Query");
-laraImport("clava.Clava");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
 
 for (const $loop of Query.search("function", "foo").search("loop")) {
     console.log("Data:");

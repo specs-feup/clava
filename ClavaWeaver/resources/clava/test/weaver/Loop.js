@@ -1,5 +1,5 @@
-laraImport("weaver.Query");
-laraImport("clava.ClavaJoinPoints");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
 
 for (const $loop of Query.search("function", "main").search("loop")) {
     console.log("loop control var: " + $loop.controlVar);

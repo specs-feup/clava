@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 const cl = Query.search("class", "Foo3").first();
 console.log("CLASS: " + cl.ast);

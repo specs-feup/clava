@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 for (const $cilkFor of Query.search("cilkFor")) {
     console.log("CilkFor: " + $cilkFor.location);

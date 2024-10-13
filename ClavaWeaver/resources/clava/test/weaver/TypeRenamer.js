@@ -1,5 +1,5 @@
-laraImport("clava.ClavaType");
-laraImport("weaver.Query");
+import ClavaType from "@specs-feup/clava/api/clava/ClavaType.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 const $fn = Query.search("function", "inputInCast").first();
 

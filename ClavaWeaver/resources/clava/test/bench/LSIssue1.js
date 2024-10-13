@@ -1,7 +1,7 @@
-laraImport("weaver.Query");
-laraImport("clava.ClavaJoinPoints");
-laraImport("clava.hls.HLSAnalysis");
-laraImport("clava.Clava");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
+import HLSAnalysis from "@specs-feup/clava/api/clava/hls/HLSAnalysis.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
 
 const $t = Query.search("function", {
     qualifiedName: (name) => name.endsWith("_Kernel"),

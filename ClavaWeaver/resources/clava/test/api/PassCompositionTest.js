@@ -1,11 +1,11 @@
-laraImport("clava.pass.DecomposeDeclStmt");
-laraImport("clava.pass.SimplifySelectionStmts");
-laraImport("clava.code.SimplifyAssignment");
-laraImport("clava.code.StatementDecomposer");
+import DecomposeDeclStmt from "@specs-feup/clava/api/clava/pass/DecomposeDeclStmt.js";
+import SimplifySelectionStmts from "@specs-feup/clava/api/clava/pass/SimplifySelectionStmts.js";
+import SimplifyAssignment from "@specs-feup/clava/api/clava/code/SimplifyAssignment.js";
+import StatementDecomposer from "@specs-feup/clava/api/clava/code/StatementDecomposer.js";
 
-laraImport("lara.pass.composition.Passes");
+import Passes from "@specs-feup/lara/api/lara/pass/composition/Passes.js";
 
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 // This type of pass is no longer supported. It is now mandatory to create a class for the pass
 /*

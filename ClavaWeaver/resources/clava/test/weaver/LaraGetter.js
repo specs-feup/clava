@@ -1,6 +1,6 @@
-laraImport("weaver.Weaver");
-laraImport("clava.Clava");
-laraImport("clava.ClavaJoinPoints");
+import Weaver from "@specs-feup/lara/api/weaver/Weaver.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
 
 const descendants = Clava.getProgram().descendants;
 // descendants() does not work in newer versions of GraalVM

@@ -1,6 +1,6 @@
-laraImport("clava.graphs.StaticCallGraph");
-laraImport("lara.graphs.Graphs");
-laraImport("weaver.Query");
+import StaticCallGraph from "@specs-feup/clava/api/clava/graphs/StaticCallGraph.js";
+import Graphs from "@specs-feup/lara/api/lara/graphs/Graphs.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
  
 
 var fullGraph = StaticCallGraph.build();

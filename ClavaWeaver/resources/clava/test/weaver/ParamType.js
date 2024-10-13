@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 for (const $varref of Query.search("function", "error_norm")
     .search("loop")

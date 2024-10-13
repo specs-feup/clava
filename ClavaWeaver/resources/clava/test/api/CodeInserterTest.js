@@ -1,7 +1,7 @@
-laraImport("clava.util.CodeInserter");
-laraImport("clava.Clava");
-laraImport("weaver.Query");
-laraImport("lara.Io");
+import CodeInserter from "@specs-feup/clava/api/clava/util/CodeInserter.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
 
 var codeInserter = new CodeInserter();
 

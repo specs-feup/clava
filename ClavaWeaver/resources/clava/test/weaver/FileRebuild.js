@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 // Add literal stmt
 Query.search("file", "file_rebuild.h").first().insert("after", "void foo2();");

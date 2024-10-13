@@ -1,5 +1,5 @@
-laraImport("clava.ClavaJoinPoints");
-laraImport("weaver.Query");
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 const $bDecl = ClavaJoinPoints.varDecl("b", ClavaJoinPoints.integerLiteral(10));
 const $cDecl = ClavaJoinPoints.varDecl(

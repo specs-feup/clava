@@ -1,6 +1,6 @@
-laraImport("lara.util.DataStore");
-laraImport("clava.util.ClavaDataStore");
-laraImport("weaver.WeaverOptions");
+import DataStore from "@specs-feup/lara/api/lara/util/DataStore.js";
+import ClavaDataStore from "@specs-feup/clava/api/clava/util/ClavaDataStore.js";
+import WeaverOptions from "@specs-feup/lara/api/weaver/WeaverOptions.js";
 
 const dataStore = new ClavaDataStore(WeaverOptions.getData());
 console.log("GET:" + dataStore.get("javascript"));

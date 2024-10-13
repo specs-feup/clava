@@ -1,6 +1,6 @@
-laraImport("clava.autopar.RunInlineFunctionCalls");
-laraImport("weaver.Query");
-laraImport("clava.Clava");
+import RunInlineFunctionCalls from "@specs-feup/clava/api/clava/autopar/RunInlineFunctionCalls.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
 
 const $call = Query.search("call", { name: "bar" }).first();
 if ($call === undefined) {

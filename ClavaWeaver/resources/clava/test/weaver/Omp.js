@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 for (const $omp of Query.search("omp")) {
     console.log("OMP:" + $omp.name);

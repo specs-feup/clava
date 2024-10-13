@@ -1,6 +1,6 @@
-laraImport("lara.util.JpFilter");
-laraImport("weaver.Query");
-laraImport("weaver.Weaver");
+import JpFilter from "@specs-feup/lara/api/lara/util/JpFilter.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import Weaver from "@specs-feup/lara/api/weaver/Weaver.js";
 
 function convert($jps) {
     let string = "";

@@ -1,5 +1,5 @@
-laraImport("weaver.Query");
-laraImport("clava.MathExtra");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import MathExtra from "@specs-feup/clava/api/clava/MathExtra.js";
 
 /**
  * Based on the challenges in https://github.com/trailofbits/cb-multios/

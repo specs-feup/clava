@@ -1,5 +1,5 @@
-laraImport("weaver.Query");
-laraImport("weaver.Ast");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import Ast from "@specs-feup/lara/api/weaver/Ast.js";
 
 for (const $if of Query.search("function", "testNodes").search("if")) {
     console.log("astNumChildren  = " + $if.astNumChildren);

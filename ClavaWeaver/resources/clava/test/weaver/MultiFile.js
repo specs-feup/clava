@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 // Rename record in a header, change should propagate
 Query.search("record", "A").first().name = "A_renamed";

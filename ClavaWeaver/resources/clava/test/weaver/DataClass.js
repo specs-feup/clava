@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 for (const $method of Query.search("method")) {
     const tinits = $method.getValue("constructorInits");

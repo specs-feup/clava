@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 function testSwitch($switch) {
     console.log("hasDefaultCase: " + $switch.hasDefaultCase);

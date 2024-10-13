@@ -1,5 +1,5 @@
-laraImport("lara.util.JavaTypes");
-laraImport("weaver.Query");
+import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 const tic = JavaTypes.LaraI.getThreadLocalLarai().getWeaver().currentTime();
 let acc = 0;

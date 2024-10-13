@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 let $firstOp = undefined;
 for (const $binaryOp of Query.search("binaryOp")) {

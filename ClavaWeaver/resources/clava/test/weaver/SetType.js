@@ -1,5 +1,5 @@
-laraImport("clava.ClavaJoinPoints");
-laraImport("weaver.Query");
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 const doubleType = ClavaJoinPoints.builtinType("double");
 for (const $function of Query.search("file").search("function", "fooType")) {

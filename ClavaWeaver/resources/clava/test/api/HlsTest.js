@@ -1,5 +1,5 @@
-laraImport("clava.hls.HLSAnalysis");
-laraImport("weaver.Query");
+import HLSAnalysis from "@specs-feup/clava/api/clava/hls/HLSAnalysis.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 const filter = {
     joinPointType: "function",

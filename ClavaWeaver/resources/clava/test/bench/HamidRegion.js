@@ -1,5 +1,4 @@
-//import Query from "@specs-feup/lara/api/weaver/Query";
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 for (const chain of Query.search("file", "hamid_region.c")
     .search("function")

@@ -1,6 +1,6 @@
-laraImport("clava.autopar.Parallelize");
-laraImport("clava.Clava");
-laraImport("weaver.Query");
+import Parallelize from "@specs-feup/clava/api/clava/autopar/Parallelize.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 Parallelize.forLoops();
 

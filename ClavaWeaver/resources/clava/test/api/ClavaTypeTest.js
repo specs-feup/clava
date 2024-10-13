@@ -1,5 +1,5 @@
-laraImport("clava.ClavaJoinPoints");
-laraImport("clava.ClavaType");
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
+import ClavaType from "@specs-feup/clava/api/clava/ClavaType.js";
 
 const intType = ClavaJoinPoints.builtinType("int");
 const intExpr = ClavaJoinPoints.exprLiteral("2 + 3", intType);

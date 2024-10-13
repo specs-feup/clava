@@ -1,5 +1,5 @@
-laraImport("clava.Format");
-laraImport("weaver.Query");
+import Format from "@specs-feup/clava/api/clava/Format.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 const Nodes = [];
 let curr_node_ID = -1;

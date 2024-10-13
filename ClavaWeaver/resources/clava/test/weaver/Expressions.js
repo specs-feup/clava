@@ -1,4 +1,4 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 // MemberAccess chains
 for (const $memberAccess of Query.search("function", "analyse").search(

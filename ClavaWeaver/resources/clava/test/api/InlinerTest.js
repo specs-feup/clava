@@ -1,10 +1,10 @@
 "use strict";
 
-laraImport("clava.opt.NormalizeToSubset");
-laraImport("clava.code.Inliner");
-laraImport("clava.opt.PrepareForInlining");
+import NormalizeToSubset from "@specs-feup/clava/api/clava/opt/NormalizeToSubset.js";
+import Inliner from "@specs-feup/clava/api/clava/code/Inliner.js";
+import PrepareForInlining from "@specs-feup/clava/api/clava/opt/PrepareForInlining.js";
 
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 //setDebug(true);
 

@@ -1,4 +1,4 @@
-laraImport("clava.MathExtra");
+import MathExtra from "@specs-feup/clava/api/clava/MathExtra.js";
 
 console.log("Original expression: a - (b - c)");
 console.log("Simplified  expression: " + MathExtra.simplify("a - (b - c)"));
