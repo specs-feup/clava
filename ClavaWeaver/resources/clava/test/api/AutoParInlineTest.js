@@ -1,4 +1,3 @@
-import RunInlineFunctionCalls from "@specs-feup/clava/api/clava/autopar/RunInlineFunctionCalls.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import Clava from "@specs-feup/clava/api/clava/Clava.js";
 

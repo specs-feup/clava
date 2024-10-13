@@ -1,7 +1,6 @@
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import Platforms from "@specs-feup/lara/api/lara/Platforms.js";
 import CMaker from "@specs-feup/clava/api/clava/cmake/CMaker.js";
-import Clava from "@specs-feup/clava/api/clava/Clava.js";
 
 const cmaker = new CMaker("testapp")
   .setMinimumVersion("3.0.2")

@@ -1,4 +1,3 @@
-import DataStore from "@specs-feup/lara/api/lara/util/DataStore.js";
 import ClavaDataStore from "@specs-feup/clava/api/clava/util/ClavaDataStore.js";
 import WeaverOptions from "@specs-feup/lara/api/weaver/WeaverOptions.js";
 

@@ -1,6 +1,4 @@
 import ControlFlowGraph from "@specs-feup/clava/api/clava/graphs/ControlFlowGraph.js";
-import CfgUtils from "@specs-feup/clava/api/clava/graphs/cfg/CfgUtils.js";
-import CfgEdgeType from "@specs-feup/clava/api/clava/graphs/cfg/CfgEdgeType.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import Graphs from "@specs-feup/lara/api/lara/graphs/Graphs.js";
 

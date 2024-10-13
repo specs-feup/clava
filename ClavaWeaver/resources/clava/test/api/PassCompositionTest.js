@@ -1,6 +1,5 @@
 import DecomposeDeclStmt from "@specs-feup/clava/api/clava/pass/DecomposeDeclStmt.js";
 import SimplifySelectionStmts from "@specs-feup/clava/api/clava/pass/SimplifySelectionStmts.js";
-import SimplifyAssignment from "@specs-feup/clava/api/clava/code/SimplifyAssignment.js";
 import StatementDecomposer from "@specs-feup/clava/api/clava/code/StatementDecomposer.js";
 
 import Passes from "@specs-feup/lara/api/lara/pass/composition/Passes.js";

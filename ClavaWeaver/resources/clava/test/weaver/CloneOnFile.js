@@ -1,4 +1,3 @@
-import Clava from "@specs-feup/clava/api/clava/Clava.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 const $foo = Query.search("function", "foo").first();

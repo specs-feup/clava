@@ -1,6 +1,5 @@
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
-import ClavaType from "@specs-feup/clava/api/clava/ClavaType.js";
 
 const $jp = Query.search("call").first();
 const $var1 = ClavaJoinPoints.varDeclNoInit(
