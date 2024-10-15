@@ -697,12 +697,12 @@ public abstract class AOmp extends APragma {
      * Sets the variables of a private clause of an OpenMP pragma
      * @param newVariables 
      */
-    public final void setPrivate(String[] newVariables) {
+    public final void setPrivate(Object[] newVariables) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setPrivate", this, Optional.empty(), new Object[] { newVariables});
         	}
-        	this.setPrivateImpl(newVariables);
+        	this.setPrivateImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setPrivate", this, Optional.empty(), new Object[] { newVariables});
         	}
@@ -725,12 +725,12 @@ public abstract class AOmp extends APragma {
      * @param kind 
      * @param newVariables 
      */
-    public final void setReduction(String kind, String[] newVariables) {
+    public final void setReduction(String kind, Object[] newVariables) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setReduction", this, Optional.empty(), kind, newVariables);
         	}
-        	this.setReductionImpl(kind, newVariables);
+        	this.setReductionImpl(kind, pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setReduction", this, Optional.empty(), kind, newVariables);
         	}
@@ -777,12 +777,12 @@ public abstract class AOmp extends APragma {
      * Sets the variables of a firstprivate clause of an OpenMP pragma
      * @param newVariables 
      */
-    public final void setFirstprivate(String[] newVariables) {
+    public final void setFirstprivate(Object[] newVariables) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setFirstprivate", this, Optional.empty(), new Object[] { newVariables});
         	}
-        	this.setFirstprivateImpl(newVariables);
+        	this.setFirstprivateImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setFirstprivate", this, Optional.empty(), new Object[] { newVariables});
         	}
@@ -803,12 +803,12 @@ public abstract class AOmp extends APragma {
      * Sets the variables of a lastprivate clause of an OpenMP pragma
      * @param newVariables 
      */
-    public final void setLastprivate(String[] newVariables) {
+    public final void setLastprivate(Object[] newVariables) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setLastprivate", this, Optional.empty(), new Object[] { newVariables});
         	}
-        	this.setLastprivateImpl(newVariables);
+        	this.setLastprivateImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setLastprivate", this, Optional.empty(), new Object[] { newVariables});
         	}
@@ -829,12 +829,12 @@ public abstract class AOmp extends APragma {
      * Sets the variables of a shared clause of an OpenMP pragma
      * @param newVariables 
      */
-    public final void setShared(String[] newVariables) {
+    public final void setShared(Object[] newVariables) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setShared", this, Optional.empty(), new Object[] { newVariables});
         	}
-        	this.setSharedImpl(newVariables);
+        	this.setSharedImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setShared", this, Optional.empty(), new Object[] { newVariables});
         	}
@@ -855,12 +855,12 @@ public abstract class AOmp extends APragma {
      * Sets the variables of a copyin clause of an OpenMP pragma
      * @param newVariables 
      */
-    public final void setCopyin(String[] newVariables) {
+    public final void setCopyin(Object[] newVariables) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setCopyin", this, Optional.empty(), new Object[] { newVariables});
         	}
-        	this.setCopyinImpl(newVariables);
+        	this.setCopyinImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setCopyin", this, Optional.empty(), new Object[] { newVariables});
         	}
@@ -959,12 +959,12 @@ public abstract class AOmp extends APragma {
      * Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
      * @param modifiers 
      */
-    public final void setScheduleModifiers(String[] modifiers) {
+    public final void setScheduleModifiers(Object[] modifiers) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleModifiers", this, Optional.empty(), new Object[] { modifiers});
         	}
-        	this.setScheduleModifiersImpl(modifiers);
+        	this.setScheduleModifiersImpl(pt.up.fe.specs.util.SpecsCollections.cast(modifiers, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setScheduleModifiers", this, Optional.empty(), new Object[] { modifiers});
         	}

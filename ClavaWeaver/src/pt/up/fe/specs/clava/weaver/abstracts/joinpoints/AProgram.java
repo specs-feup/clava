@@ -740,12 +740,12 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      * @param libs 
      * @param path 
      */
-    public final void addProjectFromGit(String gitRepo, String[] libs, String path) {
+    public final void addProjectFromGit(String gitRepo, Object[] libs, String path) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "addProjectFromGit", this, Optional.empty(), gitRepo, libs, path);
         	}
-        	this.addProjectFromGitImpl(gitRepo, libs, path);
+        	this.addProjectFromGitImpl(gitRepo, pt.up.fe.specs.util.SpecsCollections.cast(libs, String.class), path);
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "addProjectFromGit", this, Optional.empty(), gitRepo, libs, path);
         	}
