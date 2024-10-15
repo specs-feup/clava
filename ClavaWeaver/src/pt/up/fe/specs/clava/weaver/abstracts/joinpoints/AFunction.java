@@ -863,12 +863,12 @@ public abstract class AFunction extends ADeclarator {
      * Sets the parameters of the function
      * @param params 
      */
-    public final void setParams(AParam[] params) {
+    public final void setParams(Object[] params) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), new Object[] { params});
         	}
-        	this.setParamsImpl(params);
+        	this.setParamsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, AParam.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), new Object[] { params});
         	}
@@ -889,12 +889,12 @@ public abstract class AFunction extends ADeclarator {
      * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
      * @param params 
      */
-    public final void setParamsFromStrings(String[] params) {
+    public final void setParamsFromStrings(Object[] params) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
         	}
-        	this.setParamsFromStringsImpl(params);
+        	this.setParamsFromStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
         	}
@@ -999,12 +999,12 @@ public abstract class AFunction extends ADeclarator {
      * Creates a new call to this function
      * @param args 
      */
-    public final Object newCall(AJoinPoint[] args) {
+    public final Object newCall(Object[] args) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), new Object[] { args});
         	}
-        	ACall result = this.newCallImpl(args);
+        	ACall result = this.newCallImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AJoinPoint.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), new Object[] { args});
         	}

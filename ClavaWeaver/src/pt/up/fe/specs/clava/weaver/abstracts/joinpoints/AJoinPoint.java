@@ -192,12 +192,12 @@ public abstract class AJoinPoint extends JoinPoint {
      * Overload which accepts a list of join points
      * @param node 
      */
-    public final Object replaceWith(AJoinPoint[] node) {
+    public final Object replaceWith(Object[] node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "replaceWith", this, Optional.empty(), new Object[] { node});
         	}
-        	AJoinPoint result = this.replaceWithImpl(node);
+        	AJoinPoint result = this.replaceWithImpl(pt.up.fe.specs.util.SpecsCollections.cast(node, AJoinPoint.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "replaceWith", this, Optional.ofNullable(result), new Object[] { node});
         	}
@@ -219,12 +219,12 @@ public abstract class AJoinPoint extends JoinPoint {
      * Overload which accepts a list of strings
      * @param node 
      */
-    public final Object replaceWithStrings(String[] node) {
+    public final Object replaceWithStrings(Object[] node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "replaceWithStrings", this, Optional.empty(), new Object[] { node});
         	}
-        	AJoinPoint result = this.replaceWithStringsImpl(node);
+        	AJoinPoint result = this.replaceWithStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(node, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "replaceWithStrings", this, Optional.ofNullable(result), new Object[] { node});
         	}
@@ -673,12 +673,12 @@ public abstract class AJoinPoint extends JoinPoint {
      * Sets the commented that are embedded in a node
      * @param comments 
      */
-    public final void setInlineComments(String[] comments) {
+    public final void setInlineComments(Object[] comments) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setInlineComments", this, Optional.empty(), new Object[] { comments});
         	}
-        	this.setInlineCommentsImpl(comments);
+        	this.setInlineCommentsImpl(pt.up.fe.specs.util.SpecsCollections.cast(comments, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setInlineComments", this, Optional.empty(), new Object[] { comments});
         	}
