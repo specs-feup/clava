@@ -1,4 +1,5 @@
 import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import { printObject } from "@specs-feup/lara/api/core/output.js";
 
 let $program = Clava.getProgram();
 // Previous way of using userField
