@@ -1,17 +1,14 @@
-import lara.metrics.ExecutionTimeMetric;
-import lara.metrics.EnergyMetric;
-
-import lara.dse.DseLoop;
-import lara.dse.DseValuesList;
-import lara.dse.DseValuesSet;
-import lara.dse.VariableVariant;
-import lat.LatDseLoop;
-
-import antarex.margot.dse.metric.MargotMetric;
-import lara.units.TimeUnit;
-import lara.units.TimeModifier;
-
-import antarex.margot.config.MargotConfig;
+import ExecutionTimeMetric from  "@specs-feup/lara/api/lara/metrics/ExecutionTimeMetric.js";
+import EnergyMetric from  "@specs-feup/lara/api/lara/metrics/EnergyMetric.js";
+import DseLoop from  "@specs-feup/lara/api/lara/dse/DseLoop.js";
+import DseValuesList from  "@specs-feup/lara/api/lara/dse/DseValuesList.js";
+import DseValuesSet from  "@specs-feup/lara/api/lara/dse/DseValuesSet.js";
+import VariableVariant from  "@specs-feup/lara/api/lara/dse/VariableVariant.js";
+import LatDseLoop from  "@specs-feup/lara/api/lat/LatDseLoop.js";
+import MargotMetric from "@specs-feup/antarex/api/antarex/margot/dse/metric/MargotMetric.js";
+import TimeUnit from  "@specs-feup/lara/api/lara/units/TimeUnit.js";
+import TimeModifier from  "@specs-feup/lara/api/lara/units/TimeModifier.js";
+import MargotConfig from "@specs-feup/antarex/api/antarex/margot/config/MargotConfig.js";
 
 /**
  * Class that holds information for the DSE step needed in mARGOt's toolflow. This concerns a single block.

@@ -1,34 +1,17 @@
-import clava.ClavaJoinPoints;
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
-aspectdef _MVP_DeclarePointers_
+export function _MVP_DeclarePointers_($file, name, typeName, typedef, dims) {
+    var pointersType = ClavaJoinPoints.constArrayType(typeName, dims);
+    $file.addGlobal(name, pointersType, "{}");
 
-	input
-		$file,
-		name,
-		typeName,
-		typedef,
-		dims
-	end
+    for (const $vardecl of Query.search("file").search("vardecl", name)) {
+        $vardecl.insert("before", typedef);
+    }
+}
 
-
-	var pointersType = ClavaJoinPoints.constArrayType(typeName, dims);
-	$file.exec addGlobal(name, pointersType, '{}');
-	
-	select $file.vardecl{name} end
-	apply
-		insert before typedef;
-	end
-end
-
-aspectdef _MVP_InitPointers_
-
-	input
-		$function,
-		code
-	end
-	
-	select $function.body end
-	apply
-		$function.exec insertBegin(code);
-	end
-end
+export function _MVP_InitPointers_($function, code) {
+    for (const $function of Query.search("function")) {
+        $function.body.insertBegin(code);
+    }
+}

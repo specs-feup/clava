@@ -1,16 +1,17 @@
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+
 /**
  * Calls the initialization function of mARGOt at the start of the main function.
- * 
+ *
  * @param {MargotStringsGen} gen - the code generation instance
  * @aspect
  * */
-aspectdef MargotInitMain
-	
-	input gen end
-	
-    select file.function{'main'}.body end
-    apply
-        $body.exec insertBegin(gen.init());
-        $file.exec addInclude(gen.inc(), true);
-    end
-end
+export default function MargotInitMain(gen) {
+    for (const chain of Query.search("file").search("function").chain()) {
+        const $body = chain["function"].body;
+        const $file = chain["file"];
+
+        $body.insertBegin(gen.init());
+        $file.addInclude(gen.inc(), true);
+    }
+}

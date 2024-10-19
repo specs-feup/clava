@@ -5,55 +5,53 @@
    This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
    It is provided under the MIT license (https://opensource.org/licenses/MIT).
 */
-var $INLINE_PRAGMA="INLINE";
-var $ID_INLINE_PRAGMA="INRIA_INLINE_";
-var $CPT_INLINE=-1;
+var $INLINE_PRAGMA = "INLINE";
+var $ID_INLINE_PRAGMA = "INRIA_INLINE_";
+var $CPT_INLINE = -1;
 var $CURRENT_ID_INLINE;
 
 /**
   @return true if a pragma ($apragma) is named $INLINE_PRAGMA
 */
-function isInlinePragma($apragma){
-  return ($apragma.name === $INLINE_PRAGMA);  
+function isInlinePragma($apragma) {
+    return $apragma.name === $INLINE_PRAGMA;
 }
 
 /**
   Inline a method or a function ($target).
 */
 function inlineObject($target) {
-  if (isaFunction($target))  {
-     inlineFunction($target);
-     return true;
-   }
-  if (isaMethod($target)) {
-    inlineMethod($target);
-    return true;
-  }
-  return false;
+    if (isaFunction($target)) {
+        inlineFunction($target);
+        return true;
+    }
+    if (isaMethod($target)) {
+        inlineMethod($target);
+        return true;
+    }
+    return false;
 }
-
 
 /**
   Inline a function ($target).
 */
 function inlineFunction($target) {
     mkNewInlineName();
-    if ($target.declarationJp === undefined ) {
-      $target.insert before "#ifdef " + $CURRENT_ID_INLINE ;
-      $target.insert before "inline ";
-      $target.insert before "#endif";
-    }
-    else {
-       var $decl =  $target.declarationJp;
-       $target.insert before "#ifndef " + $CURRENT_ID_INLINE ;      
-       $target.insert after "#endif";
+    if ($target.declarationJp === undefined) {
+        $target.insert("before", "#ifdef " + $CURRENT_ID_INLINE);
+        $target.insert("before", "inline ");
+        $target.insert("before", "#endif");
+    } else {
+        var $decl = $target.declarationJp;
+        $target.insert("before", "#ifndef " + $CURRENT_ID_INLINE);
+        $target.insert("after", "#endif");
 
-       var $cp = $target.copy();
-       $cp.setValue("isInline", true);
-       $decl.insert before "#ifdef " + $CURRENT_ID_INLINE ;
-       $decl.insert before $cp.code;
-       $decl.insert before "#else";
-       $decl.insert after "#endif";
+        var $cp = $target.copy();
+        $cp.setValue("isInline", true);
+        $decl.insert("before", "#ifdef " + $CURRENT_ID_INLINE);
+        $decl.insert("before", $cp.code);
+        $decl.insert("before", "#else");
+        $decl.insert("after", "#endif");
     }
 }
 
@@ -61,22 +59,31 @@ function inlineFunction($target) {
   Inline a method ($target).
 */
 function inlineMethod($target) {
-  mkNewInlineName();
-  $target.insert before "#ifndef " + $CURRENT_ID_INLINE ;      
-  $target.insert after "#endif";
-       
-  var $decl =  $target.declarationJp;
-  var $body =  $target.body;
-  var returnType = getStrReturnType($target);
-  var codeParams = getStrParams($target);
-  var vattr="";
-  if ($target.functionType.constant) vattr = " const ";
-  var codeDecl = "inline " + returnType + ' '+  $decl.getName() + ' ' + codeParams + vattr + $body.code + ';';
-  // console.log(" functionType = " + $target.functionType.constant);
-  $decl.insert before "#ifndef " + $CURRENT_ID_INLINE ;      
-  $decl.insert after "#endif";
-  $decl.insert after codeDecl;
-  $decl.insert after "#else";
+    mkNewInlineName();
+    $target.insert("before", "#ifndef " + $CURRENT_ID_INLINE);
+    $target.insert("after", "#endif");
+
+    var $decl = $target.declarationJp;
+    var $body = $target.body;
+    var returnType = getStrReturnType($target);
+    var codeParams = getStrParams($target);
+    var vattr = "";
+    if ($target.functionType.constant) vattr = " const ";
+    var codeDecl =
+        "inline " +
+        returnType +
+        " " +
+        $decl.getName() +
+        " " +
+        codeParams +
+        vattr +
+        $body.code +
+        ";";
+    // console.log(" functionType = " + $target.functionType.constant);
+    $decl.insert("before", "#ifndef " + $CURRENT_ID_INLINE);
+    $decl.insert("after", "#endif");
+    $decl.insert("after", codeDecl);
+    $decl.insert("after", "#else");
 }
 
 /**
@@ -86,10 +93,7 @@ function inlineMethod($target) {
   
   #endif
 */
- function mkNewInlineName()
- {
-   $CPT_INLINE ++;
-  $CURRENT_ID_INLINE = $ID_INLINE_PRAGMA + + $CPT_INLINE;
- }
-
-
+function mkNewInlineName() {
+    $CPT_INLINE++;
+    $CURRENT_ID_INLINE = $ID_INLINE_PRAGMA + +$CPT_INLINE;
+}

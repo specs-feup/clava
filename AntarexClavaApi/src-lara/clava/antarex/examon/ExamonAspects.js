@@ -1,19 +1,18 @@
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+
 /**
  * Declares a variable globally.
- * 
+ *
  * @param {string} varName - the name of the variable
- * 
+ *
  * @private
  * @aspect
  * */
-aspectdef ExamonCollectorDeclareGlobal
-    input varName end
+export default function ExamonCollectorDeclareGlobal(varName) {
+    var type = ClavaJoinPoints.typeLiteral("struct collector_val");
+    var init = "{ NULL, NULL, false, 0, 0, 0, {0}, {0} }";
 
-    var type = ClavaJoinPoints.typeLiteral('struct collector_val');
-    var init = '{ NULL, NULL, false, 0, 0, 0, {0}, {0} }';
-
-    select file end
-    apply
-        $file.exec addGlobal(varName, type, init);
-    end
-end
+    for (const $file of Query.search("file")) {
+        $file.addGlobal(varName, type, init);
+    }
+}
