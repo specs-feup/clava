@@ -26,8 +26,8 @@ function inlineObject($target) {
      return true;
    }
   if (isaMethod($target)) {
-	  inlineMethod($target);
-	  return true;
+    inlineMethod($target);
+    return true;
   }
   return false;
 }
@@ -88,8 +88,8 @@ function inlineMethod($target) {
 */
  function mkNewInlineName()
  {
- 	$CPT_INLINE ++;
-	$CURRENT_ID_INLINE = $ID_INLINE_PRAGMA + + $CPT_INLINE;
+   $CPT_INLINE ++;
+  $CURRENT_ID_INLINE = $ID_INLINE_PRAGMA + + $CPT_INLINE;
  }
 
 

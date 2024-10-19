@@ -2,8 +2,8 @@
  * Object that contains the strings used to generate calls to the Cxx interface of mARGOt.
  * */
 var MargotCxxStrings = {
-	
-	ns: 'margot',
+    
+    ns: 'margot',
     sep: '::',
     initCode: 'init();',
     incCode: 'margot.hpp',
@@ -19,16 +19,16 @@ var MargotCxxStrings = {
     setCode: '.set',
     
     makeVarList: function(vars) {
-		return vars.toString();
-	}
+        return vars.toString();
+    }
 };
 
 /**
  * Object that contains the strings used to generate calls to the C interface of mARGOt.
  * */
 var MargotCStrings = {
-	
-	ns: 'margot',
+    
+    ns: 'margot',
     sep: '_',
     initCode: 'init();',
     incCode: 'margot.h',
@@ -44,10 +44,10 @@ var MargotCStrings = {
     setCode: '.set',
     
     makeVarList: function(vars) {
-		return vars
-			.map(function(v){return '&'+v;})
-			.toString();
-	}
+        return vars
+            .map(function(v){return '&'+v;})
+            .toString();
+    }
 };
 
 
@@ -69,14 +69,14 @@ var MargotStringsGen = function(strings) {
  * Generates the code for the init call.
  * */
 MargotStringsGen.prototype.init = function() {
-	return this._strings.ns + this._strings.sep + this._strings.initCode;
+    return this._strings.ns + this._strings.sep + this._strings.initCode;
 };
 
 /**
  * Generates the code for the header inclusion.
  * */
 MargotStringsGen.prototype.inc = function() {
-	return this._strings.incCode;
+    return this._strings.incCode;
 };
 
 /**
@@ -89,27 +89,27 @@ MargotStringsGen.prototype.inc = function() {
  * 
  * */
 MargotStringsGen.prototype.update = function(block, vars, features, additionalCode) {
-	
-	var code = 'if(';
-	
-	code += this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.updCode;
-	code += '(';
-	code += this._strings.makeVarList(vars);
-	
-	if(features !== undefined) {
-		for(var f of features) {
-			code += ', ' + f;
-		}
-	}
-	
-	code += ')';
-	
-	code += ') {\n';
-	for(var ac of additionalCode) {
-		code += ac + '\n';
-	}
-	code += this._strings.ns + this._strings.sep + block  +this._strings.sep + this._strings.appliedCode + '\n}';
-	return code;
+    
+    var code = 'if(';
+    
+    code += this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.updCode;
+    code += '(';
+    code += this._strings.makeVarList(vars);
+    
+    if(features !== undefined) {
+        for(var f of features) {
+            code += ', ' + f;
+        }
+    }
+    
+    code += ')';
+    
+    code += ') {\n';
+    for(var ac of additionalCode) {
+        code += ac + '\n';
+    }
+    code += this._strings.ns + this._strings.sep + block  +this._strings.sep + this._strings.appliedCode + '\n}';
+    return code;
 };
 
 /**
@@ -122,16 +122,16 @@ MargotStringsGen.prototype.update = function(block, vars, features, additionalCo
  * */
 MargotStringsGen.prototype.startMonitor = function(block, monitorName, args) {
 
-	var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.monitorCode + this._strings.sep + monitorName + this._strings.startCode;
-	code += '(';
-	
-	if(args !== undefined) {
-		code += args.toString();
-	}
-	
-	code += ');';
-	
-	return code;
+    var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.monitorCode + this._strings.sep + monitorName + this._strings.startCode;
+    code += '(';
+    
+    if(args !== undefined) {
+        code += args.toString();
+    }
+    
+    code += ');';
+    
+    return code;
 };
 
 /**
@@ -143,17 +143,17 @@ MargotStringsGen.prototype.startMonitor = function(block, monitorName, args) {
  * 
  * */
 MargotStringsGen.prototype.stopMonitor = function(block, monitorName, args) {
-	
-	var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.monitorCode + this._strings.sep + monitorName + this._strings.stopCode;
-	code += '(';
-	
-	if(args !== undefined) {
-		code += args.toString();
-	}
-	
-	code += ');';
-	
-	return code;
+    
+    var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.monitorCode + this._strings.sep + monitorName + this._strings.stopCode;
+    code += '(';
+    
+    if(args !== undefined) {
+        code += args.toString();
+    }
+    
+    code += ');';
+    
+    return code;
 };
     
 /**
@@ -163,7 +163,7 @@ MargotStringsGen.prototype.stopMonitor = function(block, monitorName, args) {
  * 
  * */
 MargotStringsGen.prototype.log = function(block) {
-	return this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.logCode;
+    return this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.logCode;
 };
 
 /**
@@ -174,17 +174,17 @@ MargotStringsGen.prototype.log = function(block) {
  * 
  * */
 MargotStringsGen.prototype.startAllMonitors = function(block, args) {
-		
-	var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.startAllCode;
-	code += '(';
-	
-	if(args !== undefined) {
-		code += args.toString();
-	}
-	
-	code += ');';
-	
-	return code;
+        
+    var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.startAllCode;
+    code += '(';
+    
+    if(args !== undefined) {
+        code += args.toString();
+    }
+    
+    code += ');';
+    
+    return code;
 };
 
 /**
@@ -195,17 +195,17 @@ MargotStringsGen.prototype.startAllMonitors = function(block, args) {
  * 
  * */
 MargotStringsGen.prototype.stopAllMonitors = function(block, args) {
-		
-	var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.stopAllCode;
-	code += '(';
-	
-	if(args !== undefined) {
-		code += args.toString();
-	}
-	
-	code += ');';
-	
-	return code;
+        
+    var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.stopAllCode;
+    code += '(';
+    
+    if(args !== undefined) {
+        code += args.toString();
+    }
+    
+    code += ');';
+    
+    return code;
 };
 
 /**
@@ -217,8 +217,8 @@ MargotStringsGen.prototype.stopAllMonitors = function(block, args) {
  * 
  * */
 MargotStringsGen.prototype.setGoal = function(block, goalName, goalValue) {
-		
-	var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.goalCode + this._strings.sep + goalName + this._strings.setCode;
-	code += '(' + goalValue + ');';
-	return code;
+        
+    var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.goalCode + this._strings.sep + goalName + this._strings.setCode;
+    code += '(' + goalValue + ');';
+    return code;
 };
