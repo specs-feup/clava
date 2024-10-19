@@ -20,24 +20,24 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
  *
  */
 public enum LaraAntarexApiResource implements LaraResourceProvider {
-    TEST("_Test.lara"),
+    TEST("_Test.js"),
 
     // Examon
-    EXAMON("examon/Examon.lara"),
-    EXAMON_ASPECTS("examon/ExamonAspects.lara"),
+    EXAMON("examon/Examon.js"),
+    EXAMON_ASPECTS("examon/ExamonAspects.js"),
 
     // Inline
     INLINE_ASPECTS("inline/inlineAspects.lara"),
-    INLINE_FUNCS("inline/inlineFuncs.lara"),
+    INLINE_FUNCS("inline/inlineFuncs.js"),
 
     // LIBVC
-    LIBVC("libvc/LibVC.lara"),
-    LIBVC_ASPECTS("libvc/_internal/LibVCAspects.lara"),
+    LIBVC("libvc/LibVC.js"),
+    LIBVC_ASPECTS("libvc/_internal/LibVCAspects.js"),
 
     // mARGOt codegen
-    MARGOT_CODE_GEN("margot/codegen/MargotCodeGen.lara"),
-    MARGOT_CODE_GEN_ASPECTS("margot/codegen/_internal/MargotCodeGenAspects.lara"),
-    MARGOT_CODE_GEN_STRINGS("margot/codegen/_internal/MargotStringsGen.lara"),
+    MARGOT_CODE_GEN("margot/codegen/MargotCodeGen.js"),
+    MARGOT_CODE_GEN_ASPECTS("margot/codegen/_internal/MargotCodeGenAspects.js"),
+    MARGOT_CODE_GEN_STRINGS("margot/codegen/_internal/MargotStringsGen.js"),
 
     // mARGOt config
     MARGOT_CONFIG_BLOCK("margot/config/MargotBlock.lara"),
@@ -54,8 +54,8 @@ public enum LaraAntarexApiResource implements LaraResourceProvider {
     MARGOT_CONFIG_TIME_MONITOR("margot/config/monitor/MargotTimeMonitor.lara"),
 
     // mARGOt DSE
-    MARGOT_DSE_INFO("margot/dse/MargotDseInfo.lara"),
-    MARGOT_DSE_METRIC("margot/dse/metric/MargotMetric.lara"),
+    MARGOT_DSE_INFO("margot/dse/MargotDseInfo.js"),
+    MARGOT_DSE_METRIC("margot/dse/metric/MargotMetric.js"),
 
     // mARGOt Helpers
     ENUM("margot/Enum.js"),
@@ -73,8 +73,8 @@ public enum LaraAntarexApiResource implements LaraResourceProvider {
     LARA_OBJECT("memoi/LaraObject.js"),
 
     // MultiVersioning
-    MULTI_POINTERS("multi/MultiVersionPointers.lara"),
-    MULTI_POINTERS_ASPECTS("multi/MultiVersionPointersAspects.lara"),
+    MULTI_POINTERS("multi/MultiVersionPointers.js"),
+    MULTI_POINTERS_ASPECTS("multi/MultiVersionPointersAspects.js"),
 
     // Precision
     CUSTOM_PRECISION("precision/CustomPrecision.lara"),
@@ -84,32 +84,29 @@ public enum LaraAntarexApiResource implements LaraResourceProvider {
 
     // Split
     EXTRACT_CODE_ASPECTS("split/extractCodeAspects.lara"),
-    EXTRACT_CODE_FUNCS("split/extractCodeFuncs.lara"),
-    SPLIT_DECLARATIONS("split/splitDeclarations.lara"),
-    SPLIT_LOOP_ASPECTS("split/splitLoopAspects.lara"),
-    SPLIT_LOOP_FUNCS("split/splitLoopFuncs.lara"),
+    EXTRACT_CODE_FUNCS("split/extractCodeFuncs.js"),
+    SPLIT_DECLARATIONS("split/splitDeclarations.js"),
+    SPLIT_LOOP_ASPECTS("split/splitLoopAspects.js"),
+    SPLIT_LOOP_FUNCS("split/splitLoopFuncs.js"),
 
     // Utils
-    IDENT_REFERENCES("utils/IdentReferences.lara"),
-    LOW_LEVEL_FUNCS("utils/lowLevelFuncs.lara"),
-    MANGLING("utils/mangling.lara"),
-    MESSAGES("utils/messages.lara"),
-    SYSFILE("utils/sysfile.lara");
-    // MISC_ASPECTS("utils/miscAspects.lara"),
-    // MISC_FUNCS("utils/miscFuncs.lara");
+    IDENT_REFERENCES("utils/IdentReferences.js"),
+    LOW_LEVEL_FUNCS("utils/lowLevelFuncs.js"),
+    MANGLING("utils/mangling.js"),
+    MESSAGES("utils/messages.js"),
+    SYSFILE("utils/sysfile.js");
+    // MISC_ASPECTS("utils/miscAspects.js"),
+    // MISC_FUNCS("utils/miscFuncs.js");
 
     private final String resource;
 
-    private static final String WEAVER_PACKAGE = "clava/";
-    // This is the prefix that will appear in the LARA import, WEAVER_PACKAGE will be ignored
-    // E.g., import antarex.Test;
-    private static final String BASE_PACKAGE = "antarex/";
+    private static final String WEAVER_PACKAGE = "antarex/";
 
     /**
      * @param resource
      */
     private LaraAntarexApiResource(String resource) {
-        this.resource = WEAVER_PACKAGE + getSeparatorChar() + BASE_PACKAGE + resource;
+        this.resource = WEAVER_PACKAGE + getSeparatorChar() + resource;
     }
 
     /* (non-Javadoc)
