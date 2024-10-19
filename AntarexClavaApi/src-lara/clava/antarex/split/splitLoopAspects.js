@@ -27,13 +27,15 @@
       call splitLoops_finalize();
     end
   * */
-  
-import antarex.utils.messages;
-import antarex.utils.mangling;
-import antarex.utils.lowLevelFuncs;
-import antarex.utils.sysfile;
-import antarex.split.splitDeclarations;
-import antarex.split.splitLoopFuncs;
+
+import messages from "@specs-feup/antarex/api/utils/messages.js";
+import mangling from "@specs-feup/antarex/api/utils/mangling.js";
+import lowLevelFuncs from "@specs-feup/antarex/api/utils/lowLevelFuncs.js";
+import sysfile from "@specs-feup/antarex/api/utils/sysfile.js";
+import splitDeclarations from "@specs-feup/antarex/api/split/splitDeclarations.js";
+import splitLoopFuncs from "@specs-feup/antarex/api/split/splitLoopFuncs.js";
+
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 /**
    Split the loops annotated with the pragma named SPLITLOOP. 
@@ -42,32 +44,35 @@ import antarex.split.splitLoopFuncs;
    where NBPARTS is the number of parts.
 
    It calls the following aspects:   	 
-   	  - normalizeLoopsToBeSplitted(): normalize of the loops to split.
-   	  - splitLoop_Declarations(): synthetize the interface of the loops.
+       - normalizeLoopsToBeSplitted(): normalize of the loops to split.
+       - splitLoop_Declarations(): synthetize the interface of the loops.
       - splitLoop_ExtractCode(): extract the code in new files.
     
      and it also generates the algorithm required to select the best choice (function generateBestChoiceCode())
       
    Example:
-   	#pragma  SPLITLOOP 3  
+     #pragma  SPLITLOOP 3  
     for (i=vmin, i <= vmax, i++) { .... }
 */
-aspectdef splitLoops
-  call nn:normalizeLoopsToBeSplitted();
-  if (! nn.found)
-    MESSAGE("", " No loops to split !!!", "");
-  else	
-    if ( ! nn.allNormalized)  
-  	 MESSAGE(" Some loops that cannot be splitted.", 
-  	  " Remove the pragma " + $SPLITPRAGMA, " for them and retry !");
-  else {
-	if (nn.modified) Clava.rebuild();
-    call splitLoop_Declarations();
-    Clava.rebuild();
-    call splitLoop_ExtractCode();
-    generateBestChoiceCode();
+export function splitLoops() {
+    const nn = normalizeLoopsToBeSplitted();
+    if (!nn.found) MESSAGE("", " No loops to split !!!", "");
+    else if (!nn.allNormalized)
+        MESSAGE(
+            " Some loops that cannot be splitted.",
+            " Remove the pragma " + $SPLITPRAGMA,
+            " for them and retry !"
+        );
+    else {
+        if (nn.modified) {
+            Clava.rebuild();
+        }
+        splitLoop_Declarations();
+        Clava.rebuild();
+        splitLoop_ExtractCode();
+        generateBestChoiceCode();
     }
-end
+}
 
 /**
  It normalized the loops annotated with the pragma named SPLITLOOP
@@ -81,42 +86,42 @@ end
           allNormalized set to true if all the annotated loops are in normal form, false otherwise
           found to true if it exists a loop to split, false otherwise.
  */
-aspectdef normalizeLoopsToBeSplitted
-output
-  modified,
-  allNormalized,
-  found
-end
-  var op="normalizeLoopToBeSplitted";
-  TRACE_BEGIN_OP(op);
-  found = false;
-  modified = false;
-  allNormalized = true;
-  select loop end
-  apply
-    var vpragma = getSplipLoopPragma($loop);
-    if (vpragma !== undefined) {
-     found = true;
-     var nbParts = vpragma.content;
-      if (nbParts < 2) { 
-      	WARNING(  " The value assigned to the splitting loop pragma at " + $loop.location + " must be > 1 !!!");
-	    vpragma.detach(); 
-	    modified= true;
-     }
-     else if (! satisfiesSplitLoopsCriteria($loop)) {  
-        if (tryToNormalizeLoopForSplitting($loop))
-          modified= true;
-        else {
-          MESSAGE(" ++++++  The loop at = ", $loop.location," cannot be splitted (currently) ");
-          allNormalized = false;
-        }
+export function normalizeLoopsToBeSplitted() {
+    var op = "normalizeLoopToBeSplitted";
+    TRACE_BEGIN_OP(op);
+    found = false;
+    modified = false;
+    allNormalized = true;
+    for (const $loop of Query.search("loop")) {
+        var vpragma = getSplipLoopPragma($loop);
+        if (vpragma !== undefined) {
+            found = true;
+            var nbParts = vpragma.content;
+            if (nbParts < 2) {
+                WARNING(
+                    " The value assigned to the splitting loop pragma at " +
+                        $loop.location +
+                        " must be > 1 !!!"
+                );
+                vpragma.detach();
+                modified = true;
+            } else if (!satisfiesSplitLoopsCriteria($loop)) {
+                if (tryToNormalizeLoopForSplitting($loop)) modified = true;
+                else {
+                    MESSAGE(
+                        " ++++++  The loop at = ",
+                        $loop.location,
+                        " cannot be splitted (currently) "
+                    );
+                    allNormalized = false;
+                }
+            }
         }
     }
-    end
-	TRACE_END_OP (op);
-end
+    TRACE_END_OP(op);
 
- 
+    return { modified, allNormalized, found };
+}
 
 /**
   Extract the code of the loops to be splitted.
@@ -125,62 +130,59 @@ end
   The original code then is replaced by a set of calls, depending on the number of parts specified in 
   the pragma. The pragma is then removed from the code.
 */
-aspectdef splitLoop_ExtractCode
-  var bapply;
-  var op="splitLoop_ExtractCode aspect";
-  TRACE_BEGIN_OP(op);
-  select loop  end
-  apply
-    var vpragma = getSplipLoopPragma($loop);
-    if (vpragma !== undefined) {
-      var nbParts = vpragma.content;
-        MESSAGE(" ++++++  Splitting the loop at = ", $loop.location," in " + nbParts + " parts");
-        var RefParams = getReferencedParameters($loop);
-        // printArray(RefParams, " referenced parameters ");
-        declareLoopAsNewFunctionOrMethod($loop, RefParams);
-        replaceLoop( $loop, nbParts, RefParams);
-    	vpragma.detach(); // The pragma is removed.
-	  }
-    end
-  TRACE_END_OP (op);
-end
+export function splitLoop_ExtractCode() {
+    var bapply;
+    var op = "splitLoop_ExtractCode aspect";
+    TRACE_BEGIN_OP(op);
+    for (const $loop of Query.search("loop")) {
+        var vpragma = getSplipLoopPragma($loop);
+        if (vpragma !== undefined) {
+            var nbParts = vpragma.content;
+            MESSAGE(
+                " ++++++  Splitting the loop at = ",
+                $loop.location,
+                " in " + nbParts + " parts"
+            );
+            var RefParams = getReferencedParameters($loop);
+            // printArray(RefParams, " referenced parameters ");
+            declareLoopAsNewFunctionOrMethod($loop, RefParams);
+            replaceLoop($loop, nbParts, RefParams);
+            vpragma.detach(); // The pragma is removed.
+        }
+    }
+    TRACE_END_OP(op);
+}
 
 /** 
   The interface (external references) of the loops to split is computed.
   These symbols are managed as global variables of the application: new symbols are used for that.
   The new symbols will be used in the extracted phasis of code to declared them as external symbols.
  */
-aspectdef splitLoop_Declarations
-  var bapply;
-  var op="splitLoop_Declarations aspect";
-  var $externDecls;
-  
-  TRACE_BEGIN_OP(op);
-  select loop end
-  apply
-    var vpragma = getSplipLoopPragma($loop);
-    var $FunctionDecls = [];
-    if (vpragma !== undefined) 
-       $externDecls = getExternalDeclsOf($loop, $FunctionDecls );
-  end
-  substituteSymbols($externDecls);
-  declNewSymbolsAsGlobals($externDecls);
-  keepInitDeclarations($externDecls);
-  cleanCode($externDecls);
-  TRACE_END_OP(op);
-end
- 
+export function splitLoop_Declarations() {
+    var bapply;
+    var op = "splitLoop_Declarations aspect";
+    var $externDecls;
+
+    TRACE_BEGIN_OP(op);
+    for (const $loop of Query.search("loop")) {
+        var vpragma = getSplipLoopPragma($loop);
+        var $FunctionDecls = [];
+        if (vpragma !== undefined)
+            $externDecls = getExternalDeclsOf($loop, $FunctionDecls);
+    }
+    substituteSymbols($externDecls);
+    declNewSymbolsAsGlobals($externDecls);
+    keepInitDeclarations($externDecls);
+    cleanCode($externDecls);
+    TRACE_END_OP(op);
+}
+
 /**
   Initialize the components of the split compilation.
 */
-aspectdef splitLoops_initialize
-
-end
+export function splitLoops_initialize() {}
 
 /**
   Finalize the components of the split compilation.
 */
-aspectdef splitLoops_finalize
-
-end
-
+export function splitLoops_finalize() {}
