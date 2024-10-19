@@ -6,7 +6,7 @@
    It is provided under the MIT license (https://opensource.org/licenses/MIT).
 */
 
-import clava.ClavaJoinPoints;
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
 
 /**  This module defines  
       - the management of the modified files to avoid the complete Clava.rebuild().
@@ -16,56 +16,53 @@ import clava.ClavaJoinPoints;
 /** Current modified files managed by functions addModifiedFiles(), resetModifiedFiles()  and getModifiedFiles().
     To rebuild, call rebuildModifiedFiles() function.
     */
-var _INRIA_MODFIED_FILES_=[];
+export var _INRIA_MODFIED_FILES_ = [];
 
 /**
   Add a file ($target) to the modified ones.
 */
-function addModifiedFiles($target){
-   insertElem(_INRIA_MODFIED_FILES_, getFileOf($target));
+export function addModifiedFiles($target) {
+    insertElem(_INRIA_MODFIED_FILES_, getFileOf($target));
 }
 
 /**
   @return the files added to the modified ones since the last resetModifiedFiles() call.
 */
-function getModifiedFiles() {
-  return _INRIA_MODFIED_FILES_;
+export function getModifiedFiles() {
+    return _INRIA_MODFIED_FILES_;
 }
 
 /**
   Reset the set of the modified files.
 */
-function resetModifiedFiles() {
-  if (_INRIA_MODFIED_FILES_.length !== 0 ) _INRIA_MODFIED_FILES_.clear();
+export function resetModifiedFiles() {
+    if (_INRIA_MODFIED_FILES_.length !== 0) _INRIA_MODFIED_FILES_.clear();
 }
 
 /**
   Rebuilt the modified files (elements of the global array _INRIA_MODFIED_FILES_.
 */
-function rebuildModifiedFiles()
-{
-  rebuildFiles(getModifiedFiles());
+export function rebuildModifiedFiles() {
+    rebuildFiles(getModifiedFiles());
 }
 
 /**
   Rebuilt the AST of the files of an array (varray).
 */
-function rebuildFiles(varray)
-{
-  for (var afile of varray) { 
-  	console.log( " **** rebuild = " + afile.filepath);
-  	afile.rebuild();
-  }	
+export function rebuildFiles(varray) {
+    for (var afile of varray) {
+        console.log(" **** rebuild = " + afile.filepath);
+        afile.rebuild();
+    }
 }
 
 /**
    Declare a new file in Clava, $fp/$name ($fp : file path, $name: the name of the file). 
 */
-function mkNewFile($name, $fp)
-{
-     var nf = ClavaJoinPoints.file($name, $fp);
-     Clava.addFile(nf);
-     return nf;
+export function mkNewFile($name, $fp) {
+    var nf = ClavaJoinPoints.file($name, $fp);
+    Clava.addFile(nf);
+    return nf;
 }
 
 /**
@@ -73,8 +70,7 @@ function mkNewFile($name, $fp)
   os DEPENDENT:
     -for linux: lib<libname>.so
 */
-function getOSLibName(libname)
-{
- return 'lib' + libname +'.so';
- // libhost.so (Unix), host.dll (Windows), libhost.jnilib (mac OS).
+export function getOSLibName(libname) {
+    return "lib" + libname + ".so";
+    // libhost.so (Unix), host.dll (Windows), libhost.jnilib (mac OS).
 }

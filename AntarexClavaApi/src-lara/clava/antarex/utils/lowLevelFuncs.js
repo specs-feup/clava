@@ -6,18 +6,18 @@
    It is provided under the MIT license (https://opensource.org/licenses/MIT).
 */
 
-import antarex.utils.sysfile;
+import * as sysfile from "./sysfile.js";
 
 /**
   @return the file of an ast object.
 */
-function getFileOf($vtree){
+export function getFileOf($vtree) {
     return $vtree.getAncestor("file");
 }
 /**
   @return the function, the method or undefined of a statement ($stmt).
 */
-function getFunctionOrMethod($stmt){
+export function getFunctionOrMethod($stmt) {
     var $obj = $stmt.getAncestor("function");
     if ($obj === undefined) $obj = $stmt.getAncestor("method");
     return $obj;
@@ -26,183 +26,165 @@ function getFunctionOrMethod($stmt){
 /**
   @return true if $vFunction is a method, false otherwise.
 */
-function isaMethod($vFunction)
-{ 
-  return ($vFunction.astName === "CXXMethodDecl");
+export function isaMethod($vFunction) {
+    return $vFunction.astName === "CXXMethodDecl";
 }
-
 
 /**
   @return true if $vFunction is a function, false otherwise.
 */
-function isaFunction($vFunction)
-{ 
-  return ($vFunction.astName === "FunctionDecl");
+export function isaFunction($vFunction) {
+    return $vFunction.astName === "FunctionDecl";
 }
 
 /**
  @return the name of the class of a method (m)
 */
-function getClassNameMethod(m)
- {
-  return  m.record.name; 
- }
+export function getClassNameMethod(m) {
+    return m.record.name;
+}
 
 /**
  @return true if a declaration ($vardecl) is a global one, false otherwise.
 */
-function isGlobalVariable($vardecl) {
+export function isGlobalVariable($vardecl) {
     if ($vardecl.isParam) return false;
-    return ( $vardecl.parent.parent.astName === "TranslationUnit");  // global ?
-   }
-   
+    return $vardecl.parent.parent.astName === "TranslationUnit"; // global ?
+}
+
 /**
   @return true if a statement ($vstmt) is a declaration of a constant, false otherwise.
 */
-function isAConstantDecl($vstmt)
-{
-  if ($vstmt.astName !== 'VarDecl') return false;
-  $vardeclType = $vstmt.type;
-  return $vardeclType.astIsInstance("QualType");
+export function isAConstantDecl($vstmt) {
+    if ($vstmt.astName !== "VarDecl") return false;
+    $vardeclType = $vstmt.type;
+    return $vardeclType.astIsInstance("QualType");
 }
 
 /**
   Renames a function or a method ($fm) by name.
 */
-function renameFunctionMethod($fm, name)
-{
- if (isaFunction($fm))
- 	$fm.setName(name); 
- else {  
-  var x = $fm.record.name; 
-  $fm.setValue('qualifiedName', x + "::" + name);
-  $fm.setValue('declName', name);
-  }
+export function renameFunctionMethod($fm, name) {
+    if (isaFunction($fm)) $fm.setName(name);
+    else {
+        var x = $fm.record.name;
+        $fm.setValue("qualifiedName", x + "::" + name);
+        $fm.setValue("declName", name);
+    }
 }
-
 
 /**
   @return the code of the returned type of a function/method ($target).
 */
-function getStrReturnType($target)
-{
-   return $target.functionType.returnType.code;
+export function getStrReturnType($target) {
+    return $target.functionType.returnType.code;
 }
-
 
 /**
  @return a string delc1,...decln where decli is the i-th formal parameter a function/method ($target).
 */
-function getStrParams0($params, bprefix) {
-  var first=true;
-  var codeParams = "";
-  if (bprefix) codeParams = ',';
-  for (var i = 0; i < $params.length; i++) {
-    if (!first) codeParams = codeParams + ','; 
-    first = false;
-    codeParams = codeParams  + $params[i].code; 
-  }
-  return codeParams;
+export function getStrParams0($params, bprefix) {
+    var first = true;
+    var codeParams = "";
+    if (bprefix) codeParams = ",";
+    for (var i = 0; i < $params.length; i++) {
+        if (!first) codeParams = codeParams + ",";
+        first = false;
+        codeParams = codeParams + $params[i].code;
+    }
+    return codeParams;
 }
 
 /**
  @return a string (delc1,...decln) where decli is the i-th formal parameter a function/method ($target).
 */
-function getStrParams($target)
-{
-  return '(' + getStrParams0 ($target.params, false) + ')';
+export function getStrParams($target) {
+    return "(" + getStrParams0($target.params, false) + ")";
 }
 
 /*  @return a string p1,...pn where the pi is a name of 
-	the i-th parameter of a function ($target).
+  the i-th parameter of a function ($target).
 */
-function getStrNameParams0($params, bprefix){ 
- if ($params.length === 0) return "";
- var first=true;
- var codeParams = "";
- if (bprefix) codeParams = ',';
- for (var i = 0; i < $params.length; i++) {
-    if (!first) codeParams = codeParams + ','; 
-    first = false;
-    codeParams = codeParams  + $params[i].name; 
-  }
- return codeParams;
+export function getStrNameParams0($params, bprefix) {
+    if ($params.length === 0) return "";
+    var first = true;
+    var codeParams = "";
+    if (bprefix) codeParams = ",";
+    for (var i = 0; i < $params.length; i++) {
+        if (!first) codeParams = codeParams + ",";
+        first = false;
+        codeParams = codeParams + $params[i].name;
+    }
+    return codeParams;
 }
 
 /**
  @return a string (p1,...pn) where the pi is a name of 
-	the i-th parameter of a function ($target).
+  the i-th parameter of a function ($target).
 */
-function getStrNameParams($target) {
-  return '(' + getStrNameParams0 ( $target.params, false) + ')';
- }
+export function getStrNameParams($target) {
+    return "(" + getStrNameParams0($target.params, false) + ")";
+}
 
 /**
-	@return a call $name(p1,...pn) where the pi is a name of 
-	the i-th parameter of a function ($function).
+  @return a call $name(p1,...pn) where the pi is a name of 
+  the i-th parameter of a function ($function).
 */
-function mkCallToRenamed($function, $name)  {
-	return $name + getStrNameParams($function);
+export function mkCallToRenamed($function, $name) {
+    return $name + getStrNameParams($function);
 }
 
 /**
   @return the name of the class of a method, empty string for a function.
-*/	
-function getStrClassOf($fm) {
-  if (isaFunction($fm)) return "";
-  return getClassNameMethod($fm);
+*/
+export function getStrClassOf($fm) {
+    if (isaFunction($fm)) return "";
+    return getClassNameMethod($fm);
 }
 
 /** Debugging */
-function printChildrenOf($statement){
-  for ( var i = 0; i < $statement.astNumChildren; i++)
-  	 console.log(" Child " + i +  $statement.getAstChild(i).code);
-}
-
-
-/**
- Insert a element ($velem) in an array (tabDecl). It ensures the unicity of element in varray.
-*/
-function insertElem(varray, velem)
-{
-  for (var f of varray)
-   if (f  ===  velem)  return;
-  varray.push(velem);
-}
-
-function getFormalParameters($target){
- var $fm = getFunctionOrMethod($target);
-return getStrParams($fm);
-}
-    
-function getEffectiveParameters($target) {
-  var $fm = getFunctionOrMethod($target);
-  return getStrNameParams($fm);
-}
-
-
-function isParameterDeclaration($aDecl) {
-  return ( $aDecl.astName === 'ParmVarDecl'); 
+export function printChildrenOf($statement) {
+    for (var i = 0; i < $statement.astNumChildren; i++)
+        console.log(" Child " + i + $statement.getAstChild(i).code);
 }
 
 /**
  Insert a element ($velem) in an array (tabDecl). It ensures the unicity of element in varray.
 */
-function printArray(varray, message)
-{
-  print( message + '(');
-  var first=true;
-  for (var f of varray) {
-    if (first) { first= false; } else print(',');
-    print(f.code);
-  }
- console.log(')'); 
+export function insertElem(varray, velem) {
+    for (var f of varray) if (f === velem) return;
+    varray.push(velem);
 }
 
-function getFileSeparator() {
-return '/';
+export function getFormalParameters($target) {
+    var $fm = getFunctionOrMethod($target);
+    return getStrParams($fm);
 }
 
+export function getEffectiveParameters($target) {
+    var $fm = getFunctionOrMethod($target);
+    return getStrNameParams($fm);
+}
 
+export function isParameterDeclaration($aDecl) {
+    return $aDecl.astName === "ParmVarDecl";
+}
 
+/**
+ Insert a element ($velem) in an array (tabDecl). It ensures the unicity of element in varray.
+*/
+export function printArray(varray, message) {
+    print(message + "(");
+    var first = true;
+    for (var f of varray) {
+        if (first) {
+            first = false;
+        } else print(",");
+        print(f.code);
+    }
+    console.log(")");
+}
 
+export function getFileSeparator() {
+    return "/";
+}

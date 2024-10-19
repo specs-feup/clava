@@ -6,31 +6,31 @@
    It is provided under the MIT license (https://opensource.org/licenses/MIT).
 */
 
-import lara.util.ProcessExecutor;
+import ProcessExecutor from "@specs-feup/lara/api/lara/util/ProcessExecutor.js";
 
 // Used for computing the mangling
-var C_COMPILER='gcc';
-var CXX_COMPILER='g++';
+export var C_COMPILER = "gcc";
+export var CXX_COMPILER = "g++";
 
 // ---------------------------
 // Must be set to "true" for a C code compiled with a C++ compiler.
-var manglingForC = false; 
+export var manglingForC = false;
 
 /**
-  * Set the mangling for C mode.
-  * @param {boolean} when true the mangling for C function name is activated, not activated otherwise.
-  * It must be activated when a  C code is compiled with a C++ compiler.
-  * */
-function setManglingForC(b) {
-  manglingForC = b; 
+ * Set the mangling for C mode.
+ * @param {boolean} when true the mangling for C function name is activated, not activated otherwise.
+ * It must be activated when a  C code is compiled with a C++ compiler.
+ * */
+export function setManglingForC(b) {
+    manglingForC = b;
 }
 
 /**
    @return the value of the mangling mode for C, set by a call to  the manglingForC function (default false).
    When this value is true, it specifies that the mangling is required for C code. 
    */
-function getManglingForC() {
-  return manglingForC;
+export function getManglingForC() {
+    return manglingForC;
 }
 
 /**
@@ -39,32 +39,37 @@ function getManglingForC() {
   
   Restricted to Linux currently. 
   */
-function getMangledName(vfile, includes , name, ccompiler) {
- if (ccompiler) $compiler=C_COMPILER; else $compiler=CXX_COMPILER;
- var line="\n";
- var codesh = "#!/bin/sh";
- var TMPFILENAME="INRIA_IRISA_MANGLING";
- var TMPFILE= Io.getTempFolder()+ getFileSeparator() + TMPFILENAME;
- var scriptFile= TMPFILE +".sh";
- if (! Io.isFile(scriptFile)) {
-   // console.log(" CREATION DU SCRIPT MANGLING");
-   Io.writeFile(scriptFile, codesh+line);
-   Io.appendFile(scriptFile, 'VTMPFILE=' + TMPFILE + line);
-   Io.appendFile(scriptFile, 'rm -f ${VTMPFILE}.s' + line);
-   Io.appendFile(scriptFile, 'rm -f ${VTMPFILE}.res' + line);
-  
-   Io.appendFile(scriptFile, $compiler + ' ${2} -S ${1} -o ${VTMPFILE}.s' + line );
-   Io.appendFile(scriptFile, "grep ${3} ${VTMPFILE}.s | grep \".glob\" | awk '{print $2}'" + line);
- }
- var executor = new ProcessExecutor();
- executor.execute("chmod +x " + scriptFile); 
- executor.setOutputFile("output.txt"); 
- executor.setWorkingDir("/tmp");
- var Incl="";
- for (incl of includes)
-  Incl = Incl + " -I"+  incl;
- var code = scriptFile + ' ' + vfile + Incl + ' '+ name ;
- executor.execute(code); 
- return executor.getStdOut(); 
-}
+export function getMangledName(vfile, includes, name, ccompiler) {
+    if (ccompiler) $compiler = C_COMPILER;
+    else $compiler = CXX_COMPILER;
+    var line = "\n";
+    var codesh = "#!/bin/sh";
+    var TMPFILENAME = "INRIA_IRISA_MANGLING";
+    var TMPFILE = Io.getTempFolder() + getFileSeparator() + TMPFILENAME;
+    var scriptFile = TMPFILE + ".sh";
+    if (!Io.isFile(scriptFile)) {
+        // console.log(" CREATION DU SCRIPT MANGLING");
+        Io.writeFile(scriptFile, codesh + line);
+        Io.appendFile(scriptFile, "VTMPFILE=" + TMPFILE + line);
+        Io.appendFile(scriptFile, "rm -f ${VTMPFILE}.s" + line);
+        Io.appendFile(scriptFile, "rm -f ${VTMPFILE}.res" + line);
 
+        Io.appendFile(
+            scriptFile,
+            $compiler + " ${2} -S ${1} -o ${VTMPFILE}.s" + line
+        );
+        Io.appendFile(
+            scriptFile,
+            "grep ${3} ${VTMPFILE}.s | grep \".glob\" | awk '{print $2}'" + line
+        );
+    }
+    var executor = new ProcessExecutor();
+    executor.execute("chmod +x " + scriptFile);
+    executor.setOutputFile("output.txt");
+    executor.setWorkingDir("/tmp");
+    var Incl = "";
+    for (incl of includes) Incl = Incl + " -I" + incl;
+    var code = scriptFile + " " + vfile + Incl + " " + name;
+    executor.execute(code);
+    return executor.getStdOut();
+}
