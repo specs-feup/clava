@@ -58,7 +58,6 @@ import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.clava.weaver.utils.ClavaAstMethods;
 import pt.up.fe.specs.lara.langspec.LangSpecsXmlParser;
-import pt.up.fe.specs.lara.lcl.LaraCommonLanguageApis;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
@@ -174,7 +173,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     private static final List<ResourceProvider> CLAVA_LARA_API = new ArrayList<>();
     static {
-        CLAVA_LARA_API.addAll(LaraCommonLanguageApis.getApis());
         CLAVA_LARA_API.addAll(ClavaLaraApis.getApis());
         CLAVA_LARA_API.addAll(AntarexClavaLaraApis.getApis());
     }

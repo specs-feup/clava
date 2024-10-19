@@ -24,7 +24,6 @@
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/tdrcLibrary"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/AntarexClavaApi"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LaraCommonLanguageApi"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LaraFramework"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/WeaverGenerator"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/GsonPlus"/>

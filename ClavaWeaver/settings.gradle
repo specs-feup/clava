@@ -9,7 +9,6 @@ includeBuild("../../specs-java-libs/XStreamPlus")
 includeBuild("../../specs-java-libs/tdrcLibrary")
 
 includeBuild("../../lara-framework/LanguageSpecification")
-includeBuild("../../lara-framework/LaraCommonLanguageApi")
 includeBuild("../../lara-framework/LaraFramework")
 includeBuild("../../lara-framework/LARAI")
 includeBuild("../../lara-framework/LaraUtils")

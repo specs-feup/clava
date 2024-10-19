@@ -150,13 +150,6 @@ public class CxxApiTest {
     }
 
     @Test
-    public void testLaraCommonLanguage() {
-        newTester()
-                .set(CxxWeaverOption.PARSE_INCLUDES)
-                .test("LaraCommonLanguageTest.js", "lara_common_language.cpp", "lara_common_language.h");
-    }
-
-    @Test
     public void testClavaType() {
         newTester().test("ClavaTypeTest.js");
     }
@@ -164,11 +157,6 @@ public class CxxApiTest {
     @Test
     public void testStatementDecomposer() {
         newTester().test("StatementDecomposerTest.js", "stmt_decomposer.cpp");
-    }
-
-    @Test
-    public void testCode2Vec() {
-        newTester().test("Code2VecTest.js", "code2vec.cpp");
     }
 
     @Test

@@ -39,7 +39,6 @@ dependencies {
     implementation ":tdrcLibrary"
 
     implementation ":LanguageSpecification"
-    implementation ":LaraCommonLanguageApi"
     implementation ":LaraFramework"
     implementation ":LARAI"
     implementation ":LaraUtils"
@@ -106,6 +105,6 @@ task clavadoc(type: JavaExec) {
             '--exclude',
             '_',
             '--packages',
-            '{\'Clava API\': [\'../ClavaLaraApi/src-lara-clava/clava\'], \'LARA API\': [\'../LaraApi/src-lara-base\',\'../LaraApi}/src-lara\',\'../LARAI/src-lara\',\'../LaraExtraApi/src-lara\',\'../ClavaLaraApi/src-lara/clava\'], \'LARA Common Language API\': [\'../LaraCommonLanguageApi/src-lara\'], \'ANTAREX API\': [\'../AntarexClavaApi/src-lara/clava\']}',
+            '{\'Clava API\': [\'../ClavaLaraApi/src-lara-clava/clava\'], \'LARA API\': [\'../LaraApi/src-lara-base\',\'../LaraApi}/src-lara\',\'../LARAI/src-lara\',\'../LaraExtraApi/src-lara\',\'../ClavaLaraApi/src-lara/clava\'], \'ANTAREX API\': [\'../AntarexClavaApi/src-lara/clava\']}',
     ]
 }
