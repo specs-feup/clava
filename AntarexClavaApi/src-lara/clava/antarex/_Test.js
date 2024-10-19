@@ -1,3 +1,1 @@
-aspectdef Test
-
-end
+export default function Test () {}
