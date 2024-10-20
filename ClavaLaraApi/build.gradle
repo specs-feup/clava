@@ -22,7 +22,7 @@ dependencies {
 	implementation ':SpecsUtils'
 	implementation ':CommonsLangPlus'
 	implementation ':JacksonPlus'
-    implementation ':SymjaPlus'
+   implementation ':SymjaPlus'
 	implementation ':LaraApi'
 	implementation ':LaraUtils'		
 	implementation ':ClavaAst'		
@@ -44,8 +44,6 @@ sourceSets {
 
       resources {
          srcDir 'src-lara'
-         srcDir 'src-lara-clava'
-         srcDir 'src-js'		 
       }
 	  
    }   

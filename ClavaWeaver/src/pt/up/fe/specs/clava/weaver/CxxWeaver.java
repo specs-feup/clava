@@ -173,7 +173,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     private static final List<ResourceProvider> CLAVA_LARA_API = new ArrayList<>();
     static {
-        CLAVA_LARA_API.addAll(ClavaLaraApis.getApis());
         CLAVA_LARA_API.addAll(AntarexClavaLaraApis.getApis());
     }
 
@@ -1748,7 +1747,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public List<ResourceProvider> getImportableScripts() {
-        return ResourceProvider.getResourcesFromEnum(Arrays.asList(JsApiResource.class, JsAntarexApiResource.class));
+        return ResourceProvider.getResourcesFromEnum(Arrays.asList(JsAntarexApiResource.class));
     }
 
     @Override

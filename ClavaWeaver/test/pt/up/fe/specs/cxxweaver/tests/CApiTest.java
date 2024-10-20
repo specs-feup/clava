@@ -16,7 +16,6 @@ package pt.up.fe.specs.cxxweaver.tests;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
@@ -80,17 +79,6 @@ public class CApiTest {
     }
 
     @Test
-    public void testAutoPar() {
-        if (SpecsPlatforms.isUnix()) {
-            // Enable restrict mode, to test if it works
-            // Using AutoPar example since it needs to call an external program
-            newTester().set(LaraiKeys.RESTRICT_MODE, Boolean.TRUE)
-                    .test("AutoParTest.js", "autopar_test.c");
-        }
-
-    }
-
-    @Test
     public void testCodeInserter() {
         newTester()
                 // .set(LaraiKeys.DEBUG_MODE)
@@ -108,12 +96,6 @@ public class CApiTest {
     @Test
     public void testSelector() {
         newTester().test("SelectorTest.js", "selector_test.c");
-    }
-
-    @Test
-    public void testAutoParInline() {
-        // TODO: No expected output, code has bugs to solve - does not take into account existing variable names
-        newTester().test("AutoParInlineTest.js", "autopar_inline.c");
     }
 
     @Test
