@@ -19,10 +19,10 @@ import { normalizeVarName } from "./allReplace.js";
 export default function get_varTypeAccess($varJP: Joinpoint, op?: string) {
     op = typeof op !== "undefined" ? op : "all";
 
-    let varTypeAccess = null;
-    let varUse = null;
-    let varName = null;
-    let vardecl = null;
+    let varTypeAccess = undefined;
+    let varUse = undefined;
+    let varName = undefined;
+    let vardecl = undefined;
 
     if (
         $varJP instanceof ArrayAccess &&
@@ -79,7 +79,7 @@ export default function get_varTypeAccess($varJP: Joinpoint, op?: string) {
         varName = normalizeVarName($varJP.code);
     }
 
-    if (op !== "all") return;
+    if (op !== "all") return { varTypeAccess };
 
     return { varTypeAccess, varUse, varName, vardecl };
 }

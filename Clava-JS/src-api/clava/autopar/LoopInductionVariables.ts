@@ -1,79 +1,102 @@
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import {
+    ArrayAccess,
+    BinaryOp,
+    Body,
+    FileJp,
+    FunctionJp,
+    Loop,
+    Varref,
+} from "../../Joinpoints.js";
+import AutoParStats from "./AutoParStats.js";
+
 /**************************************************************
-* 
-*                       LoopInductionVariables
-* 
-**************************************************************/
-aspectdef LoopInductionVariables
+ *
+ *                       LoopInductionVariables
+ *
+ **************************************************************/
 
-	var inductionVariables = {};
-	var inductionVariablesName = [];
-	var functionNames = [];
+export interface VarAccess {
+    line: number,
+    replaceCode: string
+};
 
-	select file.function.loop.binaryOp end
-	apply
-		if (
-				$binaryOp.left.joinPointType === 'varref'
-			)
-		{
-			$varref = $binaryOp.left;
-			astId = $varref.vardecl.astId;		
-			
-			if (inductionVariables[astId] === undefined)
-			{
-				inductionVariables[astId] = {};
-				inductionVariables[astId].varName = $varref.name;
-				inductionVariables[astId].varAccess = [];
-				
-				inductionVariablesName.push($varref.name);
+export interface InductionVariable {
+    varName: string,
+    varAccess: VarAccess[]
+}
 
-				if ( functionNames.indexOf($function.name) === -1)
-					functionNames.push($function.name);
-			}
+export default function LoopInductionVariables() {
+    const inductionVariables: Record<string, InductionVariable> = {};
+    const inductionVariablesName = [];
+    const functionNames = [];
 
-			if (
-				$binaryOp.isInsideLoopHeader === false &&
-				$binaryOp.getAncestor('if') === undefined && 
-				$binaryOp.getDescendantsAndSelf("arrayAccess").length === 0 && 
-				$binaryOp.getDescendantsAndSelf("call").length === 0 && 
-				$binaryOp.getDescendantsAndSelf("unaryOp").length === 0 &&
-				$binaryOp.code.indexOf('>>')  === -1 &&
-				$binaryOp.code.indexOf('<<')  === -1				
-				)
-			{
-				inductionVariables[astId].varAccess.push({
-											line : $varref.line,
-											replaceCode : $binaryOp.right.code
-											});
-			}
-			else
-			{
-				inductionVariables[astId].varAccess.push({
-											line : $varref.line,
-											replaceCode : $varref.name
-											});				
-			}
-		}
+    for (const chain of Query.search(FileJp)
+        .search(FunctionJp)
+        .search(Loop, { nestedLevel: 0 })
+        .search(BinaryOp, { kind: "assign" })
+        .chain()) {
+        const $function = chain["function"]!;
+        const $binaryOp = chain["binaryOp"]!;
 
-	end
-	condition $loop.nestedLevel === 0 && $binaryOp.kind === 'assign' end
+        if ($binaryOp.left instanceof Varref) {
+            const $varref = $binaryOp.left;
+            const astId = $varref.vardecl.astId;
 
-	select file.function.loop.body.arrayAccess.subscript end
-	apply
-		if (inductionVariables[$subscript.vardecl.astId] !== undefined )
-		{
-			var replaceCode = null;
-			for(obj of inductionVariables[$subscript.vardecl.astId].varAccess)
-				if (obj.line < $subscript.line)
-					replaceCode = obj.replaceCode;
+            if (inductionVariables[astId] === undefined) {
+                inductionVariables[astId] = {
+                    varName: $varref.name,
+                    varAccess: []
+                };
 
-			if (replaceCode !== null && replaceCode !== $subscript.name )
-			{
-				strbefor = $arrayAccess.code;
-				$subscript.insert replace replaceCode;
-				AutoParStats.get().incIndunctionVariableReplacements();
-			}
-		}
-	end
-	condition $loop.nestedLevel === 0 && $subscript.joinPointType === 'varref' end
+                inductionVariablesName.push($varref.name);
 
-end
+                if (functionNames.indexOf($function.name) === -1)
+                    functionNames.push($function.name);
+            }
+
+            if (
+                $binaryOp.isInsideLoopHeader === false &&
+                $binaryOp.getAncestor("if") === undefined &&
+                $binaryOp.getDescendantsAndSelf("arrayAccess").length === 0 &&
+                $binaryOp.getDescendantsAndSelf("call").length === 0 &&
+                $binaryOp.getDescendantsAndSelf("unaryOp").length === 0 &&
+                $binaryOp.code.indexOf(">>") === -1 &&
+                $binaryOp.code.indexOf("<<") === -1
+            ) {
+                inductionVariables[astId].varAccess.push({
+                    line: $varref.line,
+                    replaceCode: $binaryOp.right.code,
+                });
+            } else {
+                inductionVariables[astId].varAccess.push({
+                    line: $varref.line,
+                    replaceCode: $varref.name,
+                });
+            }
+        }
+    }
+
+    for (const $arrayAccess of Query.search(FileJp)
+        .search(FunctionJp)
+        .search(Loop, { nestedLevel: 0 })
+        .search(Body)
+        .search(ArrayAccess)) {
+        const $subscript = $arrayAccess.subscript;
+        if ($subscript instanceof Varref) {
+            if (inductionVariables[$subscript.vardecl.astId] !== undefined) {
+                let replaceCode = null;
+                for (const obj of inductionVariables[$subscript.vardecl.astId]
+                    .varAccess)
+                    if (obj.line < $subscript.line)
+                        replaceCode = obj.replaceCode;
+
+                if (replaceCode !== null && replaceCode !== $subscript.name) {
+                    const strbefor = $arrayAccess.code;
+                    $subscript.insert("replace", replaceCode);
+                    AutoParStats.get().incIndunctionVariableReplacements();
+                }
+            }
+        }
+    }
+}

@@ -3,40 +3,33 @@
 *                       ParallelizeLoop
 * 
 **************************************************************/
-import clava.autopar.checkForOpenMPCanonicalForm;
-import clava.autopar.AddOpenMPDirectivesForLoop;
-import clava.autopar.SetVariableAccess;
-import clava.autopar.additionalConditionsCheck;
-import clava.autopar.SetVarrefOpenMPscoping;
-import clava.autopar.SetMemberAccessOpenMPscoping;
-import clava.autopar.BuildPetitFileInput;
-import clava.autopar.ExecPetitDependencyTest;
-import clava.autopar.SetArrayAccessOpenMPscoping;
+import checkForOpenMPCanonicalForm from "./checkForOpenMPCanonicalForm.js";
+import AddOpenMPDirectivesForLoop from "./AddOpenMPDirectivesForLoop.js";
+import SetVariableAccess from "./SetVariableAccess.js";
+import additionalConditionsCheck from "./additionalConditionsCheck.js";
+import SetVarrefOpenMPscoping from "./SetVarrefOpenMPscoping.js";
+import BuildPetitFileInput from "./BuildPetitFileInput.js";
+import ExecPetitDependencyTest from "./ExecPetitDependencyTest.js";
+import SetArrayAccessOpenMPscoping from "./SetArrayAccessOpenMPscoping.js";
+import { Loop } from "../../Joinpoints.js";
 
-var LoopOmpAttributes = {};
+export default function ParallelizeLoop($ForStmt: Loop) {
 
-aspectdef ParallelizeLoop
-	input $ForStmt end
-	
-	var loopindex = GetLoopIndex($ForStmt);
+    checkForOpenMPCanonicalForm($ForStmt);
 
-	call checkForOpenMPCanonicalForm($ForStmt);
+    additionalConditionsCheck($ForStmt);
+    
+    SetVariableAccess($ForStmt);
 
-	call additionalConditionsCheck($ForStmt);
-	
-	call SetVariableAccess($ForStmt);
+    SetVarrefOpenMPscoping($ForStmt);
 
-	call SetVarrefOpenMPscoping($ForStmt);
+    BuildPetitFileInput($ForStmt);
+    
+    ExecPetitDependencyTest($ForStmt);
+    
+    SetArrayAccessOpenMPscoping($ForStmt);
 
-	call BuildPetitFileInput($ForStmt);
-	
-	call ExecPetitDependencyTest($ForStmt);
-	
-	call SetArrayAccessOpenMPscoping($ForStmt);
+    // remove all variable declared inside loop , i changed SetVariableAccess code!!!!
+    AddOpenMPDirectivesForLoop($ForStmt);
 
-	// remove all variable declared inside loop , i changed SetVariableAccess code!!!!
-	call AddOpenMPDirectivesForLoop($ForStmt);
-
-
-
-end 
+}

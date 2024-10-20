@@ -3,13 +3,10 @@
  *
  * @class
  */
-var OmegaConfig = {};
+export default class OmegaConfig {
+    static petitExecutable = null;
 
-OmegaConfig.petitExecutable = null;
-
-/*
- *
- */
-OmegaConfig.setPetitExecutable = function(petitExecutable) {
-	OmegaConfig.petitExecutable = petitExecutable;
+    static setPetitExecutable(petitExecutable) {
+        OmegaConfig.petitExecutable = petitExecutable;
+    }
 }
