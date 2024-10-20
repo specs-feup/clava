@@ -1,47 +1,56 @@
+import { printObject } from "@specs-feup/lara/api/core/output.js";
+import Add_msgError from "./Add_msgError.js";
+import SearchStruct from "./SearchStruct.js";
+import GetLoopIndex from "./GetLoopIndex.js";
+import { Loop } from "../../Joinpoints.js";
+import { LoopOmpAttributes } from "./checkForOpenMPCanonicalForm.js";
+
 /**************************************************************
-* 
-*                       SetMemberAccessOpenMPscoping
-* 
-**************************************************************/
+ *
+ *                       SetMemberAccessOpenMPscoping
+ *
+ **************************************************************/
+export default function SetMemberAccessOpenMPscoping($ForStmt: Loop) {
+    const loopindex = GetLoopIndex($ForStmt);
+    if (LoopOmpAttributes[loopindex].msgError?.length !== 0) return;
 
-aspectdef SetMemberAccessOpenMPscoping
-	input $ForStmt end
+    const varreflist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {
+        varTypeAccess: "memberAccess",
+    });
 
-	var loopindex = GetLoopIndex($ForStmt);
-	if (LoopOmpAttributes[loopindex].msgError.length !== 0)
-		return;
+    printObject(
+        varreflist,
+        "aspectdef SetMemberAccessOpenMPscoping : varAccess for For#" +
+            $ForStmt.line
+    );
 
+    for (const element of varreflist) {
+        const varObj = element;
+        if (
+            varObj.hasDescendantOfArrayAccess === false &&
+            varObj.usedInClause === false &&
+            varObj.nextUse !== "R" &&
+            (varObj.use === "WR" || varObj.use === "W")
+        ) {
+            varObj.usedInClause = true;
+        }
+    }
 
-	var varreflist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'memberAccess'});
+    for (const element of varreflist) {
+        if (element.usedInClause === false) {
+            Add_msgError(
+                LoopOmpAttributes,
+                $ForStmt,
+                "Variable " +
+                    element.name +
+                    " could not be categorized into any OpenMP Variable Scope"
+            );
+        }
+    }
 
-	print_obj(varreflist, 'aspectdef SetMemberAccessOpenMPscoping : varAccess for For#' + $ForStmt.line);
-
-
-
-
-	
-	for(var i = 0; i < varreflist.length; i++)
-	{
-		var varObj = varreflist[i];
-		if (
-				varObj.hasDescendantOfArrayAccess === false &&
-				varObj.usedInClause === false &&
-				varObj.nextUse !== 'R' &&
-				(varObj.use === 'WR' || varObj.use === 'W')
-			)
-		{
-			varObj.usedInClause = true;
-		}
-	}
-
-	for(var i = 0; i < varreflist.length; i++)
-		if (varreflist[i].usedInClause === false)
-		{
-			Add_msgError(LoopOmpAttributes, $ForStmt,'Variable ' + varreflist[i].name + ' could not be categorized into any OpenMP Variable Scope');
-		}
-	
-
-
-	print_obj(varreflist, 'aspectdef SetMemberAccessOpenMPscoping : varAccess for For#' + $ForStmt.line);
-end
-
+    printObject(
+        varreflist,
+        "aspectdef SetMemberAccessOpenMPscoping : varAccess for For#" +
+            $ForStmt.line
+    );
+}

@@ -1,33 +1,36 @@
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import { Body, FileJp, FunctionJp, If, Loop } from "../../Joinpoints.js";
+
 /**************************************************************
-* 
-*                       RemoveNakedloops
-* 
-**************************************************************/
-aspectdef RemoveNakedloops
+ *
+ *                       RemoveNakedloops
+ *
+ **************************************************************/
+export default function RemoveNakedloops() {
+    for (const $body of Query.search(FileJp)
+        .search(FunctionJp)
+        .search(Loop)
+        .search(Body, { naked: true })) {
+        $body.setNaked(false);
+    }
 
-    select file.function.loop.body end
-    apply
-        $body.exec setNaked(false);
-        //$body.insert before '{';
-        //$body.insert after '}';
-    end
-    condition $body.naked === true end
+    for (const $if of Query.search(FileJp)
+        .search(FunctionJp)
+        .search(Body)
+        .search(If)) {
+        const $then = $if.then;
+        if ($then.naked === true) {
+            $then.setNaked(false);
+        }
+    }
 
-
-    //select file.function.loop.body.if.then end
-    select file.function.body.if.then end
-    apply
-        $then.exec setNaked(false);
-    end
-    condition $then.naked === true end
-    
-
-
-    //select file.function.loop.body.if.else end
-    select file.function.body.if.else end
-    apply
-        $else.exec setNaked(false);
-    end    
-    condition $else.naked === true end
-
-end
+    for (const $if of Query.search(FileJp)
+        .search(FunctionJp)
+        .search(Body)
+        .search(If)) {
+        const $else = $if.else;
+        if ($else.naked === true) {
+            $else.setNaked(false);
+        }
+    }
+}

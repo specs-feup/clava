@@ -1,115 +1,123 @@
-/**************************************************************
-* 
-*                       orderedVarrefs3
-* 
-**************************************************************/
-var orderedVarrefs3 = function($jp) 
-{
+import {
+    ArrayAccess,
+    BinaryOp,
+    Expression,
+    Joinpoint,
+    MemberAccess,
+    Statement,
+    Varref,
+} from "../../Joinpoints.js";
 
-    var varrefs = [];
-    if($jp.instanceOf("expression") || $jp.joinPointType === "statement")
-    {
+/**************************************************************
+ *
+ *                       orderedVarrefs3
+ *
+ **************************************************************/
+export function orderedVarrefs3($jp: Joinpoint): Varref[] {
+    let varrefs: Varref[] = [];
+    if ($jp instanceof Expression || $jp instanceof Statement) {
         return orderedVarrefsBase3($jp);
     }
-    
-    for(var i=0; i<$jp.numChildren; i++)
-	{
-        var astChild = $jp.getChild(i);
-        if(astChild === undefined) {
+
+    for (let i = 0; i < $jp.numChildren; i++) {
+        const astChild = $jp.getChild(i);
+        if (astChild === undefined) {
             continue;
         }
-        varrefs = varrefs.concat( orderedVarrefs3(astChild) );
+        varrefs = varrefs.concat(orderedVarrefs3(astChild));
     }
     return varrefs;
-};
-var orderedVarrefsBase3 = function($stmt)
-{
-    varrefTable = {};
-    var maxLevel = varrefUsageOrder3($stmt, 0, varrefTable);
-    var orderedExprs = [];
-    for(var i=maxLevel; i>=0; i--)
-    {
-        var exprList = varrefTable[i];
-        if(exprList === undefined)
-        {
+}
+
+function orderedVarrefsBase3($stmt: Expression | Statement): Varref[] {
+    const varrefTable: Record<number, Varref[]> = {};
+    const maxLevel = varrefUsageOrder3($stmt, 0, varrefTable);
+    let orderedExprs: Varref[] = [];
+    for (let i = maxLevel; i >= 0; i--) {
+        const exprList = varrefTable[i];
+        if (exprList === undefined) {
             continue;
-        }            
+        }
         orderedExprs = orderedExprs.concat(exprList);
     }
-    return orderedExprs; 
-};
-var varrefUsageOrder3 = function($jp, currentLevel, varrefTable)
-{   
-    if($jp.joinPointType === "binaryOp") 
-    {
-        if($jp.kind === "assign") 
-        {
-            var rightLevel = varrefUsageOrder3($jp.getChild(1), currentLevel+1, varrefTable);
-            var leftLevel = varrefUsageOrder3($jp.getChild(0), currentLevel+1, varrefTable);
+    return orderedExprs;
+}
+
+export function varrefUsageOrder3(
+    $jp: Joinpoint,
+    currentLevel: number,
+    varrefTable: Record<number, Expression[]>
+): number {
+    if ($jp instanceof BinaryOp) {
+        let leftLevel: number;
+        let rightLevel: number;
+        if ($jp.kind === "assign") {
+            rightLevel = varrefUsageOrder3(
+                $jp.getChild(1),
+                currentLevel + 1,
+                varrefTable
+            );
+            leftLevel = varrefUsageOrder3(
+                $jp.getChild(0),
+                currentLevel + 1,
+                varrefTable
+            );
             return rightLevel > leftLevel ? rightLevel : leftLevel;
-        }
-        else
-        {
-            var leftLevel = varrefUsageOrder3($jp.getChild(0), currentLevel+1, varrefTable);
-            var rightLevel = varrefUsageOrder3($jp.getChild(1), currentLevel+1, varrefTable);
+        } else {
+            leftLevel = varrefUsageOrder3(
+                $jp.getChild(0),
+                currentLevel + 1,
+                varrefTable
+            );
+            rightLevel = varrefUsageOrder3(
+                $jp.getChild(1),
+                currentLevel + 1,
+                varrefTable
+            );
 
             return rightLevel > leftLevel ? rightLevel : leftLevel;
         }
-
-    } 
-    else if(
-            $jp.joinPointType === "varref" && $jp.isFunctionCall === false
-            )
-    {        
-        var currentVarrefs = varrefTable[currentLevel];
-        if(currentVarrefs === undefined)
-        {
+    } else if ($jp instanceof Varref && $jp.isFunctionCall === false) {
+        let currentVarrefs = varrefTable[currentLevel];
+        if (currentVarrefs === undefined) {
             currentVarrefs = [];
             varrefTable[currentLevel] = currentVarrefs;
         }
         currentVarrefs.push($jp);
         return currentLevel;
-    }
-    else
-    {
-        if (['arrayAccess','memberAccess'].indexOf($jp.joinPointType) !== -1)
-        {
-            var maxLevel = currentLevel;
-            for(var i=0; i<$jp.numChildren; i++)
-            {
-                var lastLevel = varrefUsageOrder3($jp.getChild(i), currentLevel, varrefTable);
-                if(lastLevel > maxLevel)
-                {
-                    maxLevel = lastLevel;
-                }
+    } else if ($jp instanceof ArrayAccess || $jp instanceof MemberAccess) {
+        let maxLevel = currentLevel;
+        for (let i = 0; i < $jp.numChildren; i++) {
+            const lastLevel = varrefUsageOrder3(
+                $jp.getChild(i),
+                currentLevel,
+                varrefTable
+            );
+            if (lastLevel > maxLevel) {
+                maxLevel = lastLevel;
             }
-
-
-            var currentVarrefs = varrefTable[currentLevel];
-            if(currentVarrefs === undefined)
-            {
-                currentVarrefs = [];
-                varrefTable[currentLevel] = currentVarrefs;
-            }
-            currentVarrefs.push($jp);
-
-            return maxLevel;
-        }
-        else
-            {
-            var maxLevel = currentLevel;
-            for(var i=0; i<$jp.numChildren; i++)
-            {
-                var lastLevel = varrefUsageOrder3($jp.getChild(i), currentLevel+1, varrefTable);
-                if(lastLevel > maxLevel)
-                {
-                    maxLevel = lastLevel;
-                }
-            }
-            return maxLevel;
         }
 
+        let currentVarrefs = varrefTable[currentLevel];
+        if (currentVarrefs === undefined) {
+            currentVarrefs = [];
+            varrefTable[currentLevel] = currentVarrefs;
+        }
+        currentVarrefs.push($jp);
+
+        return maxLevel;
+    } else {
+        let maxLevel = currentLevel;
+        for (let i = 0; i < $jp.numChildren; i++) {
+            const lastLevel = varrefUsageOrder3(
+                $jp.getChild(i),
+                currentLevel + 1,
+                varrefTable
+            );
+            if (lastLevel > maxLevel) {
+                maxLevel = lastLevel;
+            }
+        }
+        return maxLevel;
     }
-};
-
-
+}

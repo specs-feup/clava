@@ -1,26 +1,32 @@
 /**************************************************************
-* 
-*                       NormalizedBinaryOp
-* 
-**************************************************************/
-aspectdef NormalizedBinaryOp
-	
-	select file.function.body.binaryOp end
-	apply
-			var Op = null;
-			if ($binaryOp.kind === 'add')
-				Op = '+';
-			else if ($binaryOp.kind === 'sub')
-				Op = '-';
-			else if ($binaryOp.kind === 'mul')
-				Op = '*';
-			else if ($binaryOp.kind === 'div')
-				Op = '/';
+ *
+ *                       NormalizedBinaryOp
+ *
+ **************************************************************/
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import { BinaryOp, FileJp, FunctionJp } from "../../Joinpoints.js";
 
-			if (Op !== null)
-				$binaryOp.insert replace $binaryOp.left.code + '=' + $binaryOp.left.code  + Op + '(' +  $binaryOp.right.code + ')';
-	end
-	condition $binaryOp.astName === 'CompoundAssignOperator' end
+export default function NormalizedBinaryOp() {
+    for (const $binaryOp of Query.search(FileJp)
+        .search(FunctionJp)
+        .search(BinaryOp, { astName: "CompoundAssignOperator" })) {
+        let Op = null;
+        if ($binaryOp.kind === "add") Op = "+";
+        else if ($binaryOp.kind === "sub") Op = "-";
+        else if ($binaryOp.kind === "mul") Op = "*";
+        else if ($binaryOp.kind === "div") Op = "/";
 
-
-end
+        if (Op !== null) {
+            $binaryOp.insert(
+                "replace",
+                $binaryOp.left.code +
+                    "=" +
+                    $binaryOp.left.code +
+                    Op +
+                    "(" +
+                    $binaryOp.right.code +
+                    ")"
+            );
+        }
+    }
+}

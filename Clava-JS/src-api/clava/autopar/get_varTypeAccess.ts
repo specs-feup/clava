@@ -1,94 +1,85 @@
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import {
+    ArrayAccess,
+    BuiltinType,
+    Joinpoint,
+    MemberAccess,
+    PointerType,
+    QualType,
+    TypedefType,
+    Varref,
+} from "../../Joinpoints.js";
+import { normalizeVarName } from "./allReplace.js";
+
 /**************************************************************
-* 
-*                       get_varTypeAccess
-* 
-**************************************************************/
-aspectdef get_varTypeAccess
-	input $varJP, op end
-	output varTypeAccess, varUse, varName, vardecl end
+ *
+ *                       get_varTypeAccess
+ *
+ **************************************************************/
+export default function get_varTypeAccess($varJP: Joinpoint, op?: string) {
+    op = typeof op !== "undefined" ? op : "all";
 
+    let varTypeAccess = null;
+    let varUse = null;
+    let varName = null;
+    let vardecl = null;
 
-	op = (typeof op !== 'undefined') ? op : 'all';
+    if (
+        $varJP instanceof ArrayAccess &&
+        ($varJP.type instanceof BuiltinType ||
+            $varJP.type instanceof QualType ||
+            $varJP.type instanceof TypedefType)
+    ) {
+        if ($varJP.arrayVar.joinPointType === "memberAccess") {
+            varTypeAccess = "memberArrayAccess";
+            varUse = $varJP.use;
+            varName = normalizeVarName($varJP.code);
+        } else if ($varJP.arrayVar.joinPointType === "varref") {
+            varTypeAccess = "arrayAccess";
+            vardecl = $varJP.arrayVar.vardecl;
+            if (vardecl === undefined) {
+                debug(
+                    "autopar.get_varTypeAccess: Could not find vardecl of arrayVar@" +
+                        $varJP.arrayVar.location
+                );
+                vardecl = null;
+            }
+            varUse = $varJP.use;
+            varName = normalizeVarName($varJP.code);
+        }
+    }
 
-	this.varTypeAccess = null;
-	this.varUse = null;
-	this.varName = null;
-	this.vardecl = null;
+    if (
+        $varJP instanceof MemberAccess &&
+        ($varJP.type instanceof BuiltinType || $varJP instanceof QualType)
+    ) {
+        varTypeAccess = "memberAccess";
+        varUse = $varJP.use;
+        varName = normalizeVarName($varJP.code);
+    }
 
-	if (
-			$varJP.joinPointType === 'arrayAccess' && 
-			['BuiltinType','QualType','TypedefType'].indexOf($varJP.type.astName) !== -1
-			//$varJP.type.astName !== 'RecordType' && 
-			//$varJP.type.astName === 'BuiltinType'
-		)
-		{
-			if ($varJP.arrayVar.joinPointType === 'memberAccess')
-			{
-				this.varTypeAccess = 'memberArrayAccess';
-			}
-			else if ($varJP.arrayVar.joinPointType === 'varref')
-			{
-				this.varTypeAccess = 'arrayAccess';
-			}
-		}
+    if (
+        $varJP instanceof Varref &&
+        ($varJP.type instanceof BuiltinType ||
+            $varJP.type instanceof QualType ||
+            $varJP.type instanceof PointerType ||
+            $varJP.type instanceof TypedefType)
+    ) {
+        varTypeAccess = "varref";
+        varUse = $varJP.useExpr.use;
+        vardecl = $varJP.vardecl;
+        if (vardecl === undefined) {
+            debug(
+                "autopar.get_varTypeAccess: Could not find vardecl of var@" +
+                    $varJP.location
+            );
+            vardecl = null;
+        }
 
-	if (
-			$varJP.joinPointType === 'memberAccess' && 
-			['BuiltinType','QualType'].indexOf($varJP.type.astName) !== -1
-			//$varJP.type.astName === 'BuiltinType'
-		)
-		{
-			this.varTypeAccess = 'memberAccess';
-		}
+        varName = normalizeVarName($varJP.code);
+    }
 
-	if (
-			$varJP.joinPointType === 'varref' && 
-			['BuiltinType','QualType','PointerType','TypedefType'].indexOf($varJP.type.astName) !== -1
-			//$varJP.type.astName === 'BuiltinType'
-		)
-		{
-			this.varTypeAccess = 'varref';
-		}
+    if (op !== "all") return;
 
-
-	if (op !== 'all')
-		return;
-
-	if (this.varTypeAccess === 'memberArrayAccess')
-	{
-		this.varUse = $varJP.use;
-		//varName = $varJP.arrayVar.name;
-		this.varName = normalizeVarName($varJP.code);
-	}
-	else if (this.varTypeAccess === 'arrayAccess')
-	{
-		this.vardecl = $varJP.arrayVar.vardecl;
-		if(this.vardecl === undefined) {
-			debug("autopar.get_varTypeAccess: Could not find vardecl of arrayVar@" + $varJP.arrayVar.location);
-			this.vardecl = null;
-		}
-		this.varUse = $varJP.use;
-		//varName = $varJP.arrayVar.name;
-		this.varName = normalizeVarName($varJP.code);
-	}
-	else if (this.varTypeAccess === 'memberAccess')
-	{
-		this.varUse = $varJP.use;
-		//varName = $varJP.name;
-		this.varName = normalizeVarName($varJP.code);
-	}
-	else if (this.varTypeAccess === 'varref')
-	{
-		this.varUse = $varJP.useExpr.use;
-		this.vardecl = $varJP.vardecl;
-		if(this.vardecl === undefined) {
-			debug("autopar.get_varTypeAccess: Could not find vardecl of var@" + $varJP.location);
-			this.vardecl = null;
-		}
-		
-		//varName = $varJP.name;
-		this.varName = normalizeVarName($varJP.code);
-	}
-
-end
-
+    return { varTypeAccess, varUse, varName, vardecl };
+}
