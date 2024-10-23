@@ -21,6 +21,8 @@ env:
   JAVA_VERSION: 17
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   DEFAULT_BRANCH: ${{ github.base_ref || 'master' }}
+  #SPECS_JAVA_LIBS_BRANCH: ${{ 'master' }}
+  #LARA_FRAMEWORK_BRANCH: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   build-java:
@@ -89,6 +91,13 @@ jobs:
           gradle test
         env:
           GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: always()
+        with:
+            report_paths: './**/build/test-results/test/TEST-*.xml'
+            summary: true
 
       - name: Upload ClavaWeaver artifacts
         uses: actions/upload-artifact@v4
