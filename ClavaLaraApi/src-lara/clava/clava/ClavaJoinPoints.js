@@ -124,10 +124,7 @@ export default class ClavaJoinPoints {
      * @param callArgs - The arguments of the function.
      */
     static call($function, ...callArgs) {
-        return wrapJoinPoint(ClavaJavaTypes.AstFactory.callFromFunction(unwrapJoinPoint($function), 
-        // TODO: Made this change without testing. Similar case to scope()
-        //...unwrapJoinPoint(flattenArgsArray(callArgs))
-        unwrapJoinPoint(flattenArgsArray(callArgs))));
+        return wrapJoinPoint(ClavaJavaTypes.AstFactory.callFromFunction(unwrapJoinPoint($function), unwrapJoinPoint(flattenArgsArray(callArgs))));
     }
     /**
      * Creates a new join point 'call'.
@@ -137,7 +134,7 @@ export default class ClavaJoinPoints {
      * @param callArgs - The arguments of the function.
      */
     static callFromName(functionName, $returnType, ...callArgs) {
-        return wrapJoinPoint(ClavaJavaTypes.AstFactory.call(functionName, unwrapJoinPoint($returnType), ...flattenArgsArray(callArgs).map(unwrapJoinPoint)));
+        return wrapJoinPoint(ClavaJavaTypes.AstFactory.call(functionName, unwrapJoinPoint($returnType), flattenArgsArray(callArgs).map(unwrapJoinPoint)));
     }
     /**
      * Creates a new join point 'switch'

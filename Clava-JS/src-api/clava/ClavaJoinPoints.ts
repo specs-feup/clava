@@ -221,8 +221,6 @@ export default class ClavaJoinPoints {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.callFromFunction(
         unwrapJoinPoint($function),
-        // TODO: Made this change without testing. Similar case to scope()
-        //...unwrapJoinPoint(flattenArgsArray(callArgs))
         unwrapJoinPoint(flattenArgsArray(callArgs))
       )
     );
@@ -244,7 +242,7 @@ export default class ClavaJoinPoints {
       ClavaJavaTypes.AstFactory.call(
         functionName,
         unwrapJoinPoint($returnType),
-        ...flattenArgsArray(callArgs).map(unwrapJoinPoint)
+        flattenArgsArray(callArgs).map(unwrapJoinPoint)
       )
     );
   }
