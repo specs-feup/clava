@@ -82,12 +82,12 @@ public abstract class ACudaKernelCall extends ACall {
      * 
      * @param args 
      */
-    public final void setConfig(AExpression[] args) {
+    public final void setConfig(Object[] args) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setConfig", this, Optional.empty(), new Object[] { args});
         	}
-        	this.setConfigImpl(args);
+        	this.setConfigImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AExpression.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setConfig", this, Optional.empty(), new Object[] { args});
         	}
@@ -108,12 +108,12 @@ public abstract class ACudaKernelCall extends ACall {
      * 
      * @param args 
      */
-    public final void setConfigFromStrings(String[] args) {
+    public final void setConfigFromStrings(Object[] args) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setConfigFromStrings", this, Optional.empty(), new Object[] { args});
         	}
-        	this.setConfigFromStringsImpl(args);
+        	this.setConfigFromStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setConfigFromStrings", this, Optional.empty(), new Object[] { args});
         	}

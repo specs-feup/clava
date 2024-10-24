@@ -537,12 +537,12 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
-    public final void setTemplateArgsTypes(AType[] templateArgTypes) {
+    public final void setTemplateArgsTypes(Object[] templateArgTypes) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
         	}
-        	this.setTemplateArgsTypesImpl(templateArgTypes);
+        	this.setTemplateArgsTypesImpl(pt.up.fe.specs.util.SpecsCollections.cast(templateArgTypes, AType.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
         	}
