@@ -354,17 +354,6 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     /**
-     * Warns the lara interpreter if the weaver accepts a folder as the application or only one file at a time.
-     *
-     * @return true if the weaver is able to work with several files, false if only works with one file
-     */
-    @Override
-    public boolean handlesApplicationFolder() {
-        // Can the weaver handle an application folder?
-        return true;
-    }
-
-    /**
      * Set a file/folder in the weaver if it is valid file/folder type for the weaver.
      *
      * @param source
