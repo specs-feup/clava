@@ -293,6 +293,10 @@ public class AstFactory {
         return constArrayType(CxxWeaver.getFactory().literalType(typeCode), standard, dims);
     }
 
+    public static ACxxWeaverJoinPoint constArrayType(String typeCode, String standard, Object[] dims) {
+        return constArrayType(typeCode, standard, SpecsCollections.asListT(Integer.class, dims));
+    }
+
     /**
      * TODO: Standard string not required
      *
@@ -316,6 +320,11 @@ public class AstFactory {
 
         return CxxJoinpoints.create(outType);
     }
+
+    public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, Object[] dims) {
+        return constArrayType(outType, standardString, SpecsCollections.asListT(Integer.class, dims));
+    }
+
 
     public static AType variableArrayType(AType elementType, AExpression sizeExpr) {
         Type variableArrayType = CxxWeaver.getFactory().variableArrayType((Type) elementType.getNode(),
