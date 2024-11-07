@@ -153,6 +153,13 @@ extern "C" {
   }
 
   /**
+   * Clears all ASTs except for the one at the top of the stack. If there is one of none AST on the stack does nothing.
+   */
+  static clearAstHistory() {
+    Weaver.getWeaverEngine().clearAppHistory();
+  }
+
+  /**
    * The current number of elements in the AST stack.
    */
   static getStackSize() {
