@@ -1781,6 +1781,7 @@ export class LabelDecl extends NamedDecl {
     static _defaultAttributeInfo = {
         name: "name",
     };
+    get labelStmt() { return wrapJoinPoint(this._javaObject.getLabelStmt()); }
 }
 export class LabelStmt extends Statement {
     /**

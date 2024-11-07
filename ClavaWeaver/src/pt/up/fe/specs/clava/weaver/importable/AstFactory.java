@@ -617,6 +617,19 @@ public class AstFactory {
         return CxxJoinpoints.create(parenExpr, AExpression.class);
     }
 
+    public static AArrayAccess arrayAccess(AExpression base, List<AExpression> subscripts) {
+        var subscriptsExpr = subscripts.stream()
+                .map(arg -> ((Expr) arg.getNode()))
+                .collect(Collectors.toList());
+
+        var arraySubscriptExpr = CxxWeaver.getFactory().arraySubscriptExpr((Expr) base.getNode(), subscriptsExpr);
+        return CxxJoinpoints.create(arraySubscriptExpr, AArrayAccess.class);
+    }
+
+    public static AArrayAccess arrayAccess(AExpression base, Object[] subscripts) {
+        return arrayAccess(base, SpecsCollections.asListT(AExpression.class, subscripts));
+    }
+
     /**
      * Creates a join point representing a type of a typedef.
      *

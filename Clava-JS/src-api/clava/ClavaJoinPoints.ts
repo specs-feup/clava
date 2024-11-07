@@ -673,6 +673,25 @@ export default class ClavaJoinPoints {
   }
 
   /**
+   * Creates an array access from the given base that represents an array, and several subscripts.
+   *
+   * Must provide at least one subscript
+   *
+   */
+  static arrayAccess(
+    base: Joinpoints.Expression,
+    ...subscripts: Joinpoints.Expression[]
+  ): Joinpoints.ArrayAccess {
+    const flattenedSubscripts = flattenArgsArray(subscripts);
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.arrayAccess(
+        unwrapJoinPoint(base),
+        unwrapJoinPoint(flattenedSubscripts)
+      )
+    );
+  }
+
+  /**
    * Creates a field for a class.
    *
    */
