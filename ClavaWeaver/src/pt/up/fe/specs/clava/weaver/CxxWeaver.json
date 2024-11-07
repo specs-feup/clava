@@ -50315,6 +50315,14 @@
 						"type": "attribute",
 						"children": [
 									{
+										"type": "labelStmt",
+										"name": "labelStmt"
+									}]
+					},
+					{
+						"type": "attribute",
+						"children": [
+									{
 										"type": "Boolean",
 										"name": "isPublic"
 									}]
