@@ -346,7 +346,9 @@ export default class ClavaJoinPoints {
     /**
      * Creates an array access from the given base that represents an array, and several subscripts.
      *
-     * Must provide at least one subscript
+     * Must provide at least one subscript, base expression must be of type array,
+     * and have a defined number of dimensions. The number of subscripts must be lower or equal
+     * than the number of dimensions of the array type.
      *
      */
     static arrayAccess(base, ...subscripts) {
