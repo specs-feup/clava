@@ -20,7 +20,9 @@ permissions:
 env:
   JAVA_VERSION: 17
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  DEFAULT_BRANCH: ${{ github.base_ref || 'master' }}
+  # Setting default branch to staging assuming PRs will be done against the staging versions of the repository
+  # main versions will just receive what comes from the staging
+  DEFAULT_BRANCH: ${{ github.base_ref || 'staging' }}
   #SPECS_JAVA_LIBS_BRANCH: ${{ 'master' }}
   #LARA_FRAMEWORK_BRANCH: ${{ github.head_ref || github.ref_name }}
 

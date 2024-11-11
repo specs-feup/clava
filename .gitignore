@@ -87,3 +87,6 @@ stderr.txt
 
 #JavaScript
 java-binaries/
+
+# Automatic node_modules inside CalvaWeaver when running tests
+**/ClavaWeaver/node_modules/*
