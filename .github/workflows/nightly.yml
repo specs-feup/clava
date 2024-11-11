@@ -65,6 +65,7 @@ jobs:
           echo "Branch-specs-java-libs: ${{ steps.Branch-specs-java-libs.outputs.value }}"
           echo "Branch name: ${{ env.BRANCH_NAME }}"
           echo "Default branch: ${{ env.DEFAULT_BRANCH }}"
+          echo "Branch base_ref: ${{ github.base_ref }}"          
 
       - name: Checkout lara-framework
         uses: actions/checkout@v4
