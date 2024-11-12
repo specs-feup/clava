@@ -27,7 +27,7 @@ In the `workspace` directory, edit the `package.json` file and add the following
 }
 ```
 
-Finally, starting from the `workspace` directory, execute the following commands:
+Starting from the `workspace` directory, execute the following commands to build Clava-JS:
 
 ```bash
 npm install
@@ -55,6 +55,12 @@ It should now be available as a command in the terminal:
 
 ```bash
 npx clava classic <your CLI options, pass a non-existing flag, such as -dummy, to check the options>
+```
+
+If you want to reflect local changes in Clava-JS (or Lara-JS) in the installed command, use the `link` option:
+
+```bash
+npm link @specs-feup/clava
 ```
 
 ## Executing Clava-JS
