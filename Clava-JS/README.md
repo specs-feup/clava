@@ -33,6 +33,7 @@ Starting from the `workspace` directory, execute the following commands to build
 npm install
 npm run build -w lara-framework/Lara-JS
 npm run build -w clava/Clava-JS
+npm install
 cd clava/ClavaWeaver
 gradle installDist
 cd ../..
