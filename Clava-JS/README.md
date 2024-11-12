@@ -68,3 +68,18 @@ This variable is used by the [debug](https://www.npmjs.com/package/debug) module
 ```bash
 DEBUG="*" npm run run -- <scriptfile.js> -- clang++ <c++ files>
 ```
+
+### Install as a command 
+
+Install the package globally:
+
+```bash
+npm install -g @specs-feup/clava
+```
+
+It should now be available as a command in the terminal:
+
+```bash
+npx clava classic <your CLI options, pass a non-existing flag, such as -dummy, to check the options>
+```
+
