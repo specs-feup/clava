@@ -79,9 +79,14 @@ elseif(LOCAL_CLAVA)
     set(CLAVA_JAR_PATH ${LOCAL_CLAVA})
 endif()
 
-if(NOT EXISTS ${CLAVA_JAR_PATH})
-    message(SEND_ERROR "File ${CLAVA_JAR_PATH} does not exits")
-    set(CLAVA_JAR_NOTFOUND)
+# LOCAL_CLAVA can be any command string, does not need to exist as a path
+if(LOCAL_CLAVA)
+
+else()
+	if(NOT EXISTS ${CLAVA_JAR_PATH})
+		message(SEND_ERROR "File ${CLAVA_JAR_PATH} does not exits")
+		set(CLAVA_JAR_NOTFOUND)
+	endif()
 endif()
 
 # Set the result variables
