@@ -1,18 +1,18 @@
 # Clava-JS
 
-A rewrite of the Clava source-to-source compiler in JS for better compatibility.
+Clava source-to-source compiler running on top of Node.js.
 
 ## Installing dev environment
 
-Execute the following commands to download all the required code:
+Execute the following commands to build Clava-JS in a folder called `workspace`:
 
 ```bash
 mkdir workspace
 cd workspace
 touch package.json
-git clone https://github.com/lm-sousa/Clava-JS.git
-git clone https://github.com/lm-sousa/clavaAPI.git
+git clone https://github.com/specs-feup/specs-java-libs.git
 git clone https://github.com/specs-feup/lara-framework.git
+git clone https://github.com/specs-feup/clava.git
 ```
 
 In the `workspace` directory, edit the `package.json` file and add the following:
@@ -21,8 +21,7 @@ In the `workspace` directory, edit the `package.json` file and add the following
 {
   "type": "module",
   "workspaces": [
-    "Clava-JS",
-    "clavaAPI"
+    "clava/Clava-JS",
     "lara-framework/Lara-JS",
   ]
 }
@@ -32,44 +31,19 @@ Finally, starting from the `workspace` directory, execute the following commands
 
 ```bash
 npm install
-cd lara-framework/Lara-JS
-npm run build
-cd ../../clavaAPI
-npm run build
-cd ../Clava-JS
-npm run build
+npm run build -w lara-framework/Lara-JS
+npm run build -w clava/Clava-JS
+cd clava/ClavaWeaver
+gradle installDist
+cd ../..
 ```
 
-## Executing Clava-JS
-
-You can execute Clava-JS by running the following on your terminal
+Finally, copy the folder `./clava/ClavaWeaver/build/install/ClavaWeaver` into a new folder called java-binaries in `./clava/Clava-JS`:
 
 ```bash
-npm run run -- <scriptfile.js> -- clang++ <c++ files>
+mkdir clava/Clava-JS/java-binaries
+cp -r ./clava/ClavaWeaver/build/install/ClavaWeaver ./clava/Clava-JS/java-binaries
 ```
-
-Additionally, if you would like to see the help menu
-
-```bash
-npm run run -- --help
-```
-
-or run in watch mode
-
-```bash
-npm run run -- <scriptfile.js> -w <directory/file to watch> -- clang++ <c++ files>
-```
-
-## Debugging
-
-You can get debugging information using a `DEBUG` environment variable.
-This variable is used by the [debug](https://www.npmjs.com/package/debug) module to determine what to expose.
-
-```bash
-DEBUG="*" npm run run -- <scriptfile.js> -- clang++ <c++ files>
-```
-
-### Install as a command 
 
 Install the package globally:
 
@@ -83,3 +57,41 @@ It should now be available as a command in the terminal:
 npx clava classic <your CLI options, pass a non-existing flag, such as -dummy, to check the options>
 ```
 
+## Executing Clava-JS
+
+You can execute Clava-JS by running the following on your terminal
+
+```bash
+npx clava classic <scriptfile.js> -p "<c++ files or folders>"
+```
+
+Additionally, if you would like to see the help menu
+
+```bash
+npx clava --help
+```
+
+or run in watch mode
+
+```bash
+npx clava classic <scriptfile.js> -w <directory/file to watch> -c <clava config file>
+```
+
+To create a Clava config file, launch the Java-based GUI:
+
+```bash
+./clava/ClavaWeaver/build/install/ClavaWeaver/bin/ClavaWeaver
+```
+
+## Debugging
+
+You can get debugging information using a `DEBUG` environment variable.
+This variable is used by the [debug](https://www.npmjs.com/package/debug) module to determine what to expose.
+
+```bash
+DEBUG="*" npx clava classic <scriptfile.js> <your CLI options>
+```
+
+## CMake
+
+Clava has a [CMake package](https://github.com/specs-feup/clava/tree/staging/CMake), check the link for more details on how to use it.
