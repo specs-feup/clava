@@ -116,3 +116,10 @@ println("ArrayAccess2 code: " + $arrayAccess2.code);
 println("ArrayAccess2 type: " + $arrayAccess2.type.code);
 println("ArrayAccess3 code: " + $arrayAccess3.code);
 println("ArrayAccess3 type: " + $arrayAccess3.type.code);
+
+
+// InitList
+const $literalTwo = ClavaJoinPoints.integerLiteral(2)
+const $initList = ClavaJoinPoints.initList($literalTwo, $literalTwo, $literalTwo, $literalTwo, $literalTwo);
+println("InitList code: " + $initList.code);
+println("InitList type: " + $initList.type.code);

@@ -472,6 +472,18 @@ public class ClavaFactory {
         return currentArraySubscript;
     }
 
+    public InitListExpr initListExpr(List<Expr> values) {
+        if (values.isEmpty()) {
+            throw new RuntimeException("To create an initList expression we need at least one value");
+        }
+
+        DataStore data = newDataStore(InitListExpr.class)
+                .put(Expr.TYPE, Optional.of(constantArrayType(values.get(0).getType(), values.size())))
+                .put(InitListExpr.IS_EXPLICIT, true);
+
+        return new InitListExpr(data, values);
+    }
+
     /// DECLS
 
     public NullDecl nullDecl() {

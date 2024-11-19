@@ -630,6 +630,19 @@ public class AstFactory {
         return arrayAccess(base, SpecsCollections.asListT(AExpression.class, subscripts));
     }
 
+    public static AInitList initList(List<AExpression> values) {
+        var valuesExpr = values.stream()
+                .map(arg -> ((Expr) arg.getNode()))
+                .collect(Collectors.toList());
+
+        var initList = CxxWeaver.getFactory().initListExpr((valuesExpr));
+        return CxxJoinpoints.create(initList, AInitList.class);
+    }
+
+    public static AInitList initList(Object[] values) {
+        return initList(SpecsCollections.asListT(AExpression.class, values));
+    }
+
     /**
      * Creates a join point representing a type of a typedef.
      *

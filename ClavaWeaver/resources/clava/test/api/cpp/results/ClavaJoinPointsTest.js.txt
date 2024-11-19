@@ -48,3 +48,5 @@ ArrayAccess2 code: a[3][4]
 ArrayAccess2 type: int[10]
 ArrayAccess3 code: a[5]
 ArrayAccess3 type: int [10][10]
+InitList code: {2, 2, 2, 2, 2}
+InitList type: int[5]

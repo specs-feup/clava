@@ -356,6 +356,16 @@ export default class ClavaJoinPoints {
         return wrapJoinPoint(ClavaJavaTypes.AstFactory.arrayAccess(unwrapJoinPoint(base), unwrapJoinPoint(flattenedSubscripts)));
     }
     /**
+     * Creates a initialization list expression (initList) from the values.
+     *
+     * Must provide at least one value, the element type of the initList will be the same as the type of the first element.
+     *
+     */
+    static initList(...values) {
+        const flattenedValues = flattenArgsArray(values);
+        return wrapJoinPoint(ClavaJavaTypes.AstFactory.initList(unwrapJoinPoint(flattenedValues)));
+    }
+    /**
      * Creates a field for a class.
      *
      */
