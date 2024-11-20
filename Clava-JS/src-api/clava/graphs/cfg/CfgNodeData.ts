@@ -1,11 +1,13 @@
-import NodeData from "lara-js/api/lara/graphs/NodeData.js";
+import NodeData from "@specs-feup/lara/api/lara/graphs/NodeData.js";
 import { Statement } from "../../../Joinpoints.js";
 import CfgNodeType from "./CfgNodeType.js";
 
 /**
  * The data of a CFG node.
  */
-export default class CfgNodeData<T extends Statement = Statement> extends NodeData {
+export default class CfgNodeData<
+  T extends Statement = Statement,
+> extends NodeData {
   /**
    * The statement join point of the CFG node
    */

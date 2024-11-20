@@ -82,12 +82,12 @@ public abstract class ACudaKernelCall extends ACall {
      * 
      * @param args 
      */
-    public final void setConfig(AExpression[] args) {
+    public final void setConfig(Object[] args) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setConfig", this, Optional.empty(), new Object[] { args});
         	}
-        	this.setConfigImpl(args);
+        	this.setConfigImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AExpression.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setConfig", this, Optional.empty(), new Object[] { args});
         	}
@@ -108,12 +108,12 @@ public abstract class ACudaKernelCall extends ACall {
      * 
      * @param args 
      */
-    public final void setConfigFromStrings(String[] args) {
+    public final void setConfigFromStrings(Object[] args) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setConfigFromStrings", this, Optional.empty(), new Object[] { args});
         	}
-        	this.setConfigFromStringsImpl(args);
+        	this.setConfigFromStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setConfigFromStrings", this, Optional.empty(), new Object[] { args});
         	}
@@ -1055,21 +1055,21 @@ public abstract class ACudaKernelCall extends ACall {
     }
 
     /**
-     * Replaces the first child, or inserts the join point if no child is present
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public void setFirstChildImpl(AJoinPoint node) {
-        this.aCall.setFirstChildImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aCall.setFirstChildImpl(node);
     }
 
     /**
-     * Replaces the last child, or inserts the join point if no child is present
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public void setLastChildImpl(AJoinPoint node) {
-        this.aCall.setLastChildImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aCall.setLastChildImpl(node);
     }
 
     /**

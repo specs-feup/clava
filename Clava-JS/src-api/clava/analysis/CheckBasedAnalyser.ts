@@ -1,7 +1,7 @@
 import Analyser from "./Analyser.js";
 import Checker from "./Checker.js";
 import ResultFormatManager from "./ResultFormatManager.js";
-import Query from "lara-js/api/weaver/Query.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { FileJp, Joinpoint, Program } from "../../Joinpoints.js";
 import AnalyserResult from "./AnalyserResult.js";
 

@@ -1,5 +1,5 @@
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
-import Query from "lara-js/api/weaver/Query.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { BinaryOp, Call, Expression, GotoStmt, Joinpoint, LabelDecl, LabelStmt, ParenExpr, ParenType, PointerType, StorageClass, Vardecl, VariableArrayType, Varref, } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 export default class Inliner {

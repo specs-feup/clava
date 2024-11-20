@@ -1,6 +1,6 @@
-import Pass from "lara-js/api/lara/pass/Pass.js";
-import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
-import Query from "lara-js/api/weaver/Query.js";
+import Pass from "@specs-feup/lara/api/lara/pass/Pass.js";
+import PassResult from "@specs-feup/lara/api/lara/pass/results/PassResult.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import {
   BuiltinType,
   FunctionJp,
@@ -25,10 +25,7 @@ export default class SingleReturnFunction extends Pass {
       return this.new_result($jp, false);
     }
     const $body = $jp.body;
-    const $returnStmts = Query.searchFrom(
-      $body,
-      ReturnStmt
-    ).get();
+    const $returnStmts = Query.searchFrom($body, ReturnStmt).get();
     if (
       $returnStmts.length === 0 ||
       ($returnStmts.length === 1 && $body.lastChild instanceof ReturnStmt)

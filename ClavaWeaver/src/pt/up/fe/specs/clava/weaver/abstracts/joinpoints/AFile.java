@@ -604,7 +604,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      * @param type 
      * @param initValue 
      */
-    public final AVardecl addGlobal(String name, AJoinPoint type, String initValue) {
+    public final Object addGlobal(String name, AJoinPoint type, String initValue) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "addGlobal", this, Optional.empty(), name, type, initValue);
@@ -613,7 +613,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "addGlobal", this, Optional.ofNullable(result), name, type, initValue);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addGlobal", e);
         }
@@ -631,7 +631,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      * Writes the code of this file to a given folder
      * @param destinationFoldername 
      */
-    public final String write(String destinationFoldername) {
+    public final Object write(String destinationFoldername) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "write", this, Optional.empty(), destinationFoldername);
@@ -640,7 +640,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "write", this, Optional.ofNullable(result), destinationFoldername);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "write", e);
         }
@@ -682,7 +682,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     /**
      * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
      */
-    public final AFile rebuild() {
+    public final Object rebuild() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
@@ -691,7 +691,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.ofNullable(result));
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "rebuild", e);
         }
@@ -707,7 +707,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     /**
      * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
      */
-    public final AJoinPoint rebuildTry() {
+    public final Object rebuildTry() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "rebuildTry", this, Optional.empty());
@@ -716,7 +716,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "rebuildTry", this, Optional.ofNullable(result));
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "rebuildTry", e);
         }
@@ -838,7 +838,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      * Adds a function to the file that returns void and has no parameters
      * @param name 
      */
-    public final AJoinPoint addFunction(String name) {
+    public final Object addFunction(String name) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "addFunction", this, Optional.empty(), name);
@@ -847,7 +847,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "addFunction", this, Optional.ofNullable(result), name);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addFunction", e);
         }

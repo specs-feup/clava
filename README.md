@@ -8,7 +8,7 @@ Clava also supports LARA files (`.lara`), but the LARA DSL is now considered leg
 
 # Compatibility
 
-Currently Clava requires Java 11.
+Currently Clava requires Java 17
 
 Although Clava is mainly a Java program, which should run on any compatible Java runtime, it also uses compiled binaries. These have operating system restrictions. Currently Clava is supported in Windows 10, Ubuntu 20.04, CentOS 7 and MacOS 11 (Big Sur).
 
@@ -146,8 +146,8 @@ If you want to reference Clava in your work, please use the following publicatio
 
 # Acknowledgments
 
-This work has been partially funded by the [ANTAREX project](http://antarex-project.eu) through the EU H2020 FET-HPC program under grant no. 671623. João Bispo acknowledges the support provided by Fundação para a Ciência e a Tecnologia, Portugal, under Post-Doctoral grant SFRH/BPD/118211/2016.
+This work has been partially funded by the [ANTAREX](https://antarex.fe.up.pt) project through the EU H2020 FET-HPC program under grant no. 671623. João Bispo acknowledges the support provided by Fundação para a Ciência e a Tecnologia, Portugal, under Post-Doctoral grant SFRH/BPD/118211/2016.
 
 # Contacts
 
-[João Bispo](mailto://jbispo@fe.up.pt)
+[João Bispo](mailto:jbispo@fe.up.pt)

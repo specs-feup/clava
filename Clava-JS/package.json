@@ -1,6 +1,6 @@
 {
-  "name": "clava-js",
-  "version": "0.0.1",
+  "name": "@specs-feup/clava",
+  "version": "3.0.1",
   "description": "A C/C++ source-to-source compiler written in Typescript",
   "type": "module",
   "files": [
@@ -8,18 +8,19 @@
     "code",
     "src-api",
     "src-code",
-    "clang-plugin-binaries",
     "java-binaries",
     ".gitignore",
-    "jest.config.json",
+    "eslint.config.js",
+    "jest.config.js",
     "LICENSE",
     "package.json",
     "README.md",
     "tsconfig.jest.json",
-    "tsconfig.json"
+    "tsconfig.json",
+    "typedoc.config.js"
   ],
   "bin": {
-    "clava-js": "./code/index.js"
+    "clava": "./code/index.js"
   },
   "scripts": {
     "run": "node ./code/index.js",
@@ -28,13 +29,13 @@
     "build:code": "tsc -b src-code",
     "build:watch": "npm run build -- --watch",
     "lint": "eslint .",
-    "test": "cross-env NODE_OPTIONS='$NODE_OPTIONS --experimental-vm-modules' jest --detectOpenHandles --forceExit",
+    "test": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --detectOpenHandles --forceExit",
     "test:api": "npm run test -- src-api",
     "test:code": "npm run test -- src-code",
     "test:cov": "npm run test -- --coverage",
     "test:watch": "npm run test -- --watch",
     "java-dist": "npx lara-java-dist --jsSourceFolder api --jsDestinationFolder ../ClavaLaraApi/src-lara/clava/ --javaClassname ClavaApiJsResource --javaPackageName pt.up.fe.specs.clava.weaver --javaDestinationFolder ../ClavaLaraApi/src-java/pt/up/fe/specs/clava/weaver/ --javaResourceNamespace clava",
-    "build-interfaces": "npx lara-build-interfaces --input ../ClavaWeaver/src/pt/up/fe/specs/clava/weaver/CxxWeaver.json --lara lara-js/LaraJoinPointSpecification.json --output src-api/Joinpoints.ts"
+    "build-interfaces": "npx lara-build-interfaces --input ../ClavaWeaver/src/pt/up/fe/specs/clava/weaver/CxxWeaver.json --lara @specs-feup/lara/LaraJoinPointSpecification.json --output src-api/Joinpoints.ts"
   },
   "repository": {
     "type": "git",
@@ -55,7 +56,7 @@
   },
   "homepage": "https://github.com/specs-feup/clava#readme",
   "dependencies": {
-    "lara-js": "^0.0.1"
+    "@specs-feup/lara": "^3.0.2"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

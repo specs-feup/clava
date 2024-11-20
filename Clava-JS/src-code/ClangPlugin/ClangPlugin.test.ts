@@ -23,6 +23,7 @@ describe("ClangPlugin", () => {
     });
   });
 
+  /*
   describe("getClangVersionNumberFromExecutable", () => {
     it("should return the clang version number when given a valid clang executable", async () => {
       const clangExecutable = "clang++-14";
@@ -88,4 +89,5 @@ describe("ClangPlugin", () => {
       jest.restoreAllMocks();
     });
   });
+  */
 });

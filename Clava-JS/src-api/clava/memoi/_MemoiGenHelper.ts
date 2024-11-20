@@ -1,6 +1,6 @@
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
-import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
-import Query from "lara-js/api/weaver/Query.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { Call, FileJp, FunctionJp, Statement } from "../../Joinpoints.js";
 import ClavaJavaTypes, { ClavaJavaClasses } from "../ClavaJavaTypes.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";

@@ -1,6 +1,6 @@
 import Analyser from "./Analyser.js";
 import ResultFormatManager from "./ResultFormatManager.js";
-import Query from "lara-js/api/weaver/Query.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 /**
  * Analyser that scan code to detect unsafe functions
  */

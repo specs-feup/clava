@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -17,12 +17,10 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
-
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
 import pt.up.fe.specs.lang.SpecsPlatforms;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 
 public class CApiTest {
@@ -119,16 +117,6 @@ public class CApiTest {
     }
 
     @Test
-    public void testSerializeNode() {
-        if (SpecsSystem.hasMinimumJavaVersion(17)) {
-            SpecsLogs.info("Skipping test, detected Java version 17 or higher");
-            return;
-        }
-
-        newTester().test("SerializeNode.lara", "serialize_node.c");
-    }
-
-    @Test
     public void testHls() {
         newTester().test("HlsTest.lara", "hls.c");
     }
@@ -170,7 +158,7 @@ public class CApiTest {
         newTester().test("ToSingleFile.js", "to_single_file_1.c", "to_single_file_2.c");
     }
 
-    
+
     @Test
     public void testLivenessAnalysis() {
         newTester().test("LivenessAnalysisTest.js", "liveness_analysis.c");

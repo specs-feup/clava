@@ -1,5 +1,5 @@
-import Io from "lara-js/api/lara/Io.js";
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
 import Clava from "../Clava.js";
 /**
  * Given a folder, collects sources in that folder, parses and returns one each time next() is called.

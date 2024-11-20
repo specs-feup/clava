@@ -1,5 +1,5 @@
-import Graph from "lara-js/api/lara/graphs/Graph.js";
-import cytoscape from "lara-js/api/libs/cytoscape-3.26.0.js";
+import Graph from "@specs-feup/lara/api/lara/graphs/Graph.js";
+import cytoscape from "@specs-feup/lara/api/libs/cytoscape-3.26.0.js";
 import { Statement } from "../../Joinpoints.js";
 import CfgBuilder from "./cfg/CfgBuilder.js";
 

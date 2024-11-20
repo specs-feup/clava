@@ -1,4 +1,4 @@
-import cytoscape from "lara-js/api/libs/cytoscape-3.26.0.js";
+import cytoscape from "@specs-feup/lara/api/libs/cytoscape-3.26.0.js";
 import {
   Case,
   FunctionJp,
@@ -24,7 +24,11 @@ export default class NextCfgNode {
    */
   private endNode: cytoscape.NodeSingular;
 
-  constructor($entryPoint: Statement, nodes: Map<string, cytoscape.NodeSingular>, endNode: cytoscape.NodeSingular) {
+  constructor(
+    $entryPoint: Statement,
+    nodes: Map<string, cytoscape.NodeSingular>,
+    endNode: cytoscape.NodeSingular
+  ) {
     this.entryPoint = $entryPoint;
     this.nodes = nodes;
     this.endNode = endNode;
@@ -142,7 +146,6 @@ export default class NextCfgNode {
     if (rightStmts.length > 0) {
       return rightStmts[0];
     }
-
 
     // If scope parent is not a statement, there is no next statement
     if ($scopeParent instanceof Statement) {

@@ -1,8 +1,10 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
+import org.lara.interpreter.weaver.interf.events.Stage;
+import java.util.Optional;
+import org.lara.interpreter.exception.AttributeException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -25,6 +27,31 @@ public abstract class ALabelDecl extends ANamedDecl {
         super(aNamedDecl);
         this.aNamedDecl = aNamedDecl;
     }
+    /**
+     * Get value on attribute labelStmt
+     * @return the attribute's value
+     */
+    public abstract ALabelStmt getLabelStmtImpl();
+
+    /**
+     * Get value on attribute labelStmt
+     * @return the attribute's value
+     */
+    public final Object getLabelStmt() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "labelStmt", Optional.empty());
+        	}
+        	ALabelStmt result = this.getLabelStmtImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "labelStmt", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "labelStmt", e);
+        }
+    }
+
     /**
      * Get value on attribute name
      * @return the attribute's value
@@ -801,21 +828,21 @@ public abstract class ALabelDecl extends ANamedDecl {
     }
 
     /**
-     * Replaces the first child, or inserts the join point if no child is present
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public void setFirstChildImpl(AJoinPoint node) {
-        this.aNamedDecl.setFirstChildImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aNamedDecl.setFirstChildImpl(node);
     }
 
     /**
-     * Replaces the last child, or inserts the join point if no child is present
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public void setLastChildImpl(AJoinPoint node) {
-        this.aNamedDecl.setLastChildImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aNamedDecl.setLastChildImpl(node);
     }
 
     /**
@@ -1008,6 +1035,7 @@ public abstract class ALabelDecl extends ANamedDecl {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aNamedDecl.fillWithAttributes(attributes);
+        attributes.add("labelStmt");
     }
 
     /**
@@ -1051,6 +1079,7 @@ public abstract class ALabelDecl extends ANamedDecl {
      * 
      */
     protected enum LabelDeclAttributes {
+        LABELSTMT("labelStmt"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

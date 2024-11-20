@@ -1,5 +1,5 @@
-import Io from "lara-js/api/lara/Io.js";
-import LineInserter from "lara-js/api/lara/util/LineInserter.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import LineInserter from "@specs-feup/lara/api/lara/util/LineInserter.js";
 import Clava from "../Clava.js";
 /**
  * Writes the original code of the application, with the possibility of inserting new lines of code.

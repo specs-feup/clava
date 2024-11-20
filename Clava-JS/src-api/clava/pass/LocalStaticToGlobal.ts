@@ -1,6 +1,6 @@
-import PassTransformationError from "lara-js/api/lara/pass/PassTransformationError.js";
-import SimplePass from "lara-js/api/lara/pass/SimplePass.js";
-import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
+import PassTransformationError from "@specs-feup/lara/api/lara/pass/PassTransformationError.js";
+import SimplePass from "@specs-feup/lara/api/lara/pass/SimplePass.js";
+import PassResult from "@specs-feup/lara/api/lara/pass/results/PassResult.js";
 import {
   DeclStmt,
   FunctionJp,

@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,58 +13,18 @@
 
 package pt.up.fe.specs.clava.weaver.importable;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.stream.Collectors;
-
 import org.suikasoft.jOptions.Interfaces.DataStore;
-
-import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ClavaOptions;
-import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.FieldDecl;
-import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.ast.decl.LabelDecl;
-import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
-import pt.up.fe.specs.clava.ast.decl.NamedDecl;
-import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
-import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
-import pt.up.fe.specs.clava.ast.decl.ValueDecl;
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.*;
+import pt.up.fe.specs.clava.ast.decl.*;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
-import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
-import pt.up.fe.specs.clava.ast.expr.CallExpr;
-import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
-import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
-import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
-import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
-import pt.up.fe.specs.clava.ast.expr.ParenExpr;
-import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
+import pt.up.fe.specs.clava.ast.expr.*;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
-import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
-import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
-import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
-import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
-import pt.up.fe.specs.clava.ast.stmt.IfStmt;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.type.BuiltinType;
-import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
-import pt.up.fe.specs.clava.ast.type.FunctionType;
-import pt.up.fe.specs.clava.ast.type.NullType;
-import pt.up.fe.specs.clava.ast.type.PointerType;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.stmt.*;
+import pt.up.fe.specs.clava.ast.type.*;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
@@ -74,46 +34,14 @@ import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AAccessSpecifier;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEmptyStmt;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeclStmt;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AElaboratedType;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExprStmt;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AGotoStmt;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALabelDecl;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALabelStmt;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANamedDecl;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATernaryOp;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryOp;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
-import pt.up.fe.specs.util.Preconditions;
-import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.SpecsEnums;
-import pt.up.fe.specs.util.SpecsIo;
-import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.*;
 import pt.up.fe.specs.util.utilities.StringLines;
+
+import java.io.File;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AstFactory {
 
@@ -222,8 +150,12 @@ public class AstFactory {
         return CxxJoinpoints.create(CxxWeaver.getFactory().literalExpr(code, astType), AExpression.class);
     }
 
-    public static AExpression cxxConstructExpr(AType type, AJoinPoint... constructorArguments) {
-        List<Expr> exprArgs = Arrays.stream(constructorArguments)
+    public static AExpression cxxConstructExpr(AType type, Object[] constructorArguments) {
+        return cxxConstructExpr(type, SpecsCollections.asListT(AJoinPoint.class, constructorArguments));
+    }
+
+    public static AExpression cxxConstructExpr(AType type, List<AJoinPoint> constructorArguments) {
+        List<Expr> exprArgs = constructorArguments.stream()
                 .map(arg -> (Expr) arg.getNode())
                 .collect(Collectors.toList());
 
@@ -231,9 +163,13 @@ public class AstFactory {
                 AExpression.class);
     }
 
-    public static ACall callFromFunction(AFunction function, AJoinPoint... args) {
+    public static ACall callFromFunction(AFunction function, Object[] args) {
+        return callFromFunction(function, SpecsCollections.asListT(AJoinPoint.class, args));
+    }
+
+    public static ACall callFromFunction(AFunction function, List<? extends AJoinPoint> args) {
         var functionDecl = (FunctionDecl) function.getNode();
-        List<Expr> exprArgs = Arrays.stream(args)
+        List<Expr> exprArgs = args.stream()
                 .map(arg -> (Expr) arg.getNode())
                 .collect(Collectors.toList());
 
@@ -242,19 +178,24 @@ public class AstFactory {
         return CxxJoinpoints.create(call, ACall.class);
     }
 
-    public static ACall call(String functionName, AType typeJp, AJoinPoint... args) {
+    public static ACall call(String functionName, AType typeJp, Object[] args) {
+        return call(functionName, typeJp, SpecsCollections.asListT(AJoinPoint.class, args));
+    }
+
+
+    public static ACall call(String functionName, AType typeJp, List<AJoinPoint> args) {
 
         Type returnType = (Type) typeJp.getNode();
 
         DeclRefExpr declRef = CxxWeaver.getFactory().declRefExpr(functionName, returnType);
 
-        List<Type> argTypes = Arrays.stream(args)
+        List<Type> argTypes = args.stream()
                 .map(arg -> ((Typable) arg.getNode()).getType())
                 .collect(Collectors.toList());
 
         FunctionProtoType type = CxxWeaver.getFactory().functionProtoType(returnType, argTypes);
 
-        List<Expr> exprArgs = Arrays.stream(args)
+        List<Expr> exprArgs = args.stream()
                 .map(arg -> (Expr) arg.getNode())
                 .collect(Collectors.toList());
 
@@ -298,7 +239,7 @@ public class AstFactory {
 
     /**
      * Overload that accepts the contents of the file, to be inserted literally.
-     * 
+     *
      * @param filename
      * @param contents
      * @param relativePath
@@ -352,6 +293,10 @@ public class AstFactory {
         return constArrayType(CxxWeaver.getFactory().literalType(typeCode), standard, dims);
     }
 
+    public static ACxxWeaverJoinPoint constArrayType(String typeCode, String standard, Object[] dims) {
+        return constArrayType(typeCode, standard, SpecsCollections.asListT(Integer.class, dims));
+    }
+
     /**
      * TODO: Standard string not required
      *
@@ -376,6 +321,11 @@ public class AstFactory {
         return CxxJoinpoints.create(outType);
     }
 
+    public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, Object[] dims) {
+        return constArrayType(outType, standardString, SpecsCollections.asListT(Integer.class, dims));
+    }
+
+
     public static AType variableArrayType(AType elementType, AExpression sizeExpr) {
         Type variableArrayType = CxxWeaver.getFactory().variableArrayType((Type) elementType.getNode(),
                 (Expr) sizeExpr.getNode());
@@ -399,7 +349,6 @@ public class AstFactory {
     }
 
     /**
-     *
      * @param value
      * @param expr
      * @return a list with a case statement and a break statement
@@ -426,7 +375,9 @@ public class AstFactory {
         return CxxJoinpoints.create(switchStmt, AStatement.class);
     }
 
-    public static AStatement switchStmt(AExpression condition, AExpression[] cases) {
+    public static AStatement switchStmt(AExpression condition, Object[] casesArray) {
+        var cases = SpecsCollections.cast(casesArray, AExpression.class);
+
         if (cases.length % 2 != 0) {
             ClavaLog.info("The number of join points for the cases must be even (expression-stmt pairs)");
             return null;
@@ -499,8 +450,12 @@ public class AstFactory {
         return CxxJoinpoints.create(intLiteral, AExpression.class);
     }
 
-    public static AScope scope(AStatement... statements) {
-        return scope(Arrays.asList(statements));
+    public static AScope scope() {
+        return scope(Collections.emptyList());
+    }
+
+    public static AScope scope(Object[] statements) {
+        return scope(SpecsCollections.asListT(AStatement.class, statements));
     }
 
     public static AScope scope(List<? extends AStatement> statements) {
@@ -534,11 +489,16 @@ public class AstFactory {
         return CxxJoinpoints.create(CxxWeaver.getFactory().returnStmt(), AStatement.class);
     }
 
-    public static AFunctionType functionType(AType returnTypeJp, AType... argTypesJps) {
+    public static AFunctionType functionType(AType returnTypeJp, Object[] argTypesJps) {
+        return functionType(returnTypeJp, SpecsCollections.asListT(AType.class, argTypesJps));
+    }
+
+
+    public static AFunctionType functionType(AType returnTypeJp, List<AType> argTypesJps) {
 
         Type returnType = (Type) returnTypeJp.getNode();
 
-        List<Type> argTypes = Arrays.stream(argTypesJps)
+        List<Type> argTypes = argTypesJps.stream()
                 .map(arg -> ((Type) arg.getNode()))
                 .collect(Collectors.toList());
 
@@ -553,12 +513,16 @@ public class AstFactory {
                 AFunction.class);
     }
 
-    public static AFunction functionDecl(String functionName, AType returnTypeJp, AJoinPoint... namedDeclJps) {
+    public static AFunction functionDecl(String functionName, AType returnTypeJp, Object[] namedDeclJps) {
+        return functionDecl(functionName, returnTypeJp, SpecsCollections.asListT(AJoinPoint.class, namedDeclJps));
+    }
+
+    public static AFunction functionDecl(String functionName, AType returnTypeJp, List<AJoinPoint> namedDeclJps) {
 
         Type returnType = (Type) returnTypeJp.getNode();
 
         // Get the arg types and create the parameters
-        List<Type> argTypes = new ArrayList<>(namedDeclJps.length);
+        List<Type> argTypes = new ArrayList<>(namedDeclJps.size());
         List<ParmVarDecl> params = new ArrayList<>();
 
         for (AJoinPoint namedDeclJp : namedDeclJps) {
@@ -653,6 +617,32 @@ public class AstFactory {
         return CxxJoinpoints.create(parenExpr, AExpression.class);
     }
 
+    public static AArrayAccess arrayAccess(AExpression base, List<AExpression> subscripts) {
+        var subscriptsExpr = subscripts.stream()
+                .map(arg -> ((Expr) arg.getNode()))
+                .collect(Collectors.toList());
+
+        var arraySubscriptExpr = CxxWeaver.getFactory().arraySubscriptExpr((Expr) base.getNode(), subscriptsExpr);
+        return CxxJoinpoints.create(arraySubscriptExpr, AArrayAccess.class);
+    }
+
+    public static AArrayAccess arrayAccess(AExpression base, Object[] subscripts) {
+        return arrayAccess(base, SpecsCollections.asListT(AExpression.class, subscripts));
+    }
+
+    public static AInitList initList(List<AExpression> values) {
+        var valuesExpr = values.stream()
+                .map(arg -> ((Expr) arg.getNode()))
+                .collect(Collectors.toList());
+
+        var initList = CxxWeaver.getFactory().initListExpr((valuesExpr));
+        return CxxJoinpoints.create(initList, AInitList.class);
+    }
+
+    public static AInitList initList(Object[] values) {
+        return initList(SpecsCollections.asListT(AExpression.class, values));
+    }
+
     /**
      * Creates a join point representing a type of a typedef.
      *
@@ -683,6 +673,10 @@ public class AstFactory {
         return CxxJoinpoints.create(cast, ACast.class);
     }
 
+    public static AClass classDecl(String className, Object[] fields) {
+        return classDecl(className, SpecsCollections.asListT(AField.class, fields));
+    }
+
     /**
      * Creates a join point representing a new class.
      *
@@ -690,8 +684,8 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static AClass classDecl(String className, AField... fields) {
-        var fieldsNodes = Arrays.stream(fields).map(field -> (FieldDecl) field.getNode())
+    public static AClass classDecl(String className, List<AField> fields) {
+        var fieldsNodes = fields.stream().map(field -> (FieldDecl) field.getNode())
                 .collect(Collectors.toList());
 
         var classDecl = CxxWeaver.getFactory().cxxRecordDecl(className, fieldsNodes);
@@ -791,8 +785,12 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static ADeclStmt declStmt(ADecl... decls) {
-        var declNodes = Arrays.stream(decls).map(decl -> (Decl) decl.getNode())
+    public static ADeclStmt declStmt(Object[] decls) {
+        return declStmt(SpecsCollections.asListT(ADecl.class, decls));
+    }
+
+    public static ADeclStmt declStmt(List<ADecl> decls) {
+        var declNodes = decls.stream().map(decl -> (Decl) decl.getNode())
                 .collect(Collectors.toList());
 
         var declStmt = CxxWeaver.getFactory().declStmt(declNodes);
@@ -803,9 +801,8 @@ public class AstFactory {
     /**
      * Creates a joinpoint representing a declaration of a label. This is not a `label:` statement. For that, you must
      * create a `labelStmt` with returned `labelDecl`. This joinpoint is also used to create `gotoStmt`s.
-     * 
-     * @param name
-     *            Name of the label
+     *
+     * @param name Name of the label
      * @return The created label declaration
      */
     public static ALabelDecl labelDecl(String name) {
@@ -815,9 +812,8 @@ public class AstFactory {
 
     /**
      * Creates a join point representing a label statement in the code.
-     * 
-     * @param decl
-     *            The declaration for this statement
+     *
+     * @param decl The declaration for this statement
      * @return The label statement to be used in the code.
      */
     public static ALabelStmt labelStmt(ALabelDecl decl) {
@@ -827,9 +823,8 @@ public class AstFactory {
 
     /**
      * Convenience method to create at once a label statement and its declaration
-     * 
-     * @param name
-     *            Name of the label
+     *
+     * @param name Name of the label
      * @return The created
      */
     public static ALabelStmt labelStmt(String name) {
@@ -838,18 +833,24 @@ public class AstFactory {
 
     /**
      * Create a joinpoint representing a goto statement.
-     * 
-     * @param label
-     *            The declaration of the label to jump to
+     *
+     * @param label The declaration of the label to jump to
      * @return The created goto statement
      */
     public static AGotoStmt gotoStmt(ALabelDecl label) {
         var stmt = label.getFactory().gotoStmt((LabelDecl) label.getNode());
         return CxxJoinpoints.create(stmt, AGotoStmt.class);
     }
-    
+
+
     public static AEmptyStmt emptyStmt() {
         var stmt = CxxWeaver.getFactory().emptyStmt();
         return CxxJoinpoints.create(stmt, AEmptyStmt.class);
     }
+
+    public static AProgram program() {
+        var app = CxxWeaver.getFactory().app(Collections.emptyList());
+        return CxxJoinpoints.create(app, AProgram.class);
+    }
+
 }

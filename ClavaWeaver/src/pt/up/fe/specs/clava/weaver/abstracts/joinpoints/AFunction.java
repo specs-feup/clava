@@ -724,7 +724,7 @@ public abstract class AFunction extends ADeclarator {
      * @param newName 
      * @param insert 
      */
-    public final AFunction clone(String newName, Boolean insert) {
+    public final Object clone(String newName, Boolean insert) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "clone", this, Optional.empty(), newName, insert);
@@ -733,7 +733,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "clone", this, Optional.ofNullable(result), newName, insert);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "clone", e);
         }
@@ -753,7 +753,7 @@ public abstract class AFunction extends ADeclarator {
      * @param newName 
      * @param fileName 
      */
-    public final AFunction cloneOnFile(String newName, String fileName) {
+    public final Object cloneOnFile(String newName, String fileName) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "cloneOnFile", this, Optional.empty(), newName, fileName);
@@ -762,7 +762,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "cloneOnFile", this, Optional.ofNullable(result), newName, fileName);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cloneOnFile", e);
         }
@@ -782,7 +782,7 @@ public abstract class AFunction extends ADeclarator {
      * @param newName 
      * @param fileName 
      */
-    public final AFunction cloneOnFile(String newName, AFile fileName) {
+    public final Object cloneOnFile(String newName, AFile fileName) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "cloneOnFile", this, Optional.empty(), newName, fileName);
@@ -791,7 +791,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "cloneOnFile", this, Optional.ofNullable(result), newName, fileName);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cloneOnFile", e);
         }
@@ -809,7 +809,7 @@ public abstract class AFunction extends ADeclarator {
      * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      * @param code 
      */
-    public final AJoinPoint insertReturn(AJoinPoint code) {
+    public final Object insertReturn(AJoinPoint code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
@@ -818,7 +818,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -836,7 +836,7 @@ public abstract class AFunction extends ADeclarator {
      * Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      * @param code 
      */
-    public final AJoinPoint insertReturn(String code) {
+    public final Object insertReturn(String code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
@@ -845,7 +845,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -863,12 +863,12 @@ public abstract class AFunction extends ADeclarator {
      * Sets the parameters of the function
      * @param params 
      */
-    public final void setParams(AParam[] params) {
+    public final void setParams(Object[] params) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), new Object[] { params});
         	}
-        	this.setParamsImpl(params);
+        	this.setParamsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, AParam.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), new Object[] { params});
         	}
@@ -889,12 +889,12 @@ public abstract class AFunction extends ADeclarator {
      * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
      * @param params 
      */
-    public final void setParamsFromStrings(String[] params) {
+    public final void setParamsFromStrings(Object[] params) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
         	}
-        	this.setParamsFromStringsImpl(params);
+        	this.setParamsFromStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
         	}
@@ -999,16 +999,16 @@ public abstract class AFunction extends ADeclarator {
      * Creates a new call to this function
      * @param args 
      */
-    public final ACall newCall(AJoinPoint[] args) {
+    public final Object newCall(Object[] args) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), new Object[] { args});
         	}
-        	ACall result = this.newCallImpl(args);
+        	ACall result = this.newCallImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AJoinPoint.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), new Object[] { args});
         	}
-        	return result;
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "newCall", e);
         }
@@ -1924,21 +1924,21 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Replaces the first child, or inserts the join point if no child is present
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public void setFirstChildImpl(AJoinPoint node) {
-        this.aDeclarator.setFirstChildImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aDeclarator.setFirstChildImpl(node);
     }
 
     /**
-     * Replaces the last child, or inserts the join point if no child is present
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public void setLastChildImpl(AJoinPoint node) {
-        this.aDeclarator.setLastChildImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aDeclarator.setLastChildImpl(node);
     }
 
     /**

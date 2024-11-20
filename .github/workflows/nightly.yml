@@ -1,0 +1,173 @@
+# This workflow will build a the whole project every day at midnight
+# It will build the Java part and the JS part
+# Every push to a branch will trigger the build
+# Every pull request will trigger the build
+
+name: nightly
+
+on:
+  push:
+  pull_request:
+
+  # Daily at midnight
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  checks: write
+  contents: write
+
+env:
+  JAVA_VERSION: 17
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  # Setting default branch to staging assuming PRs will be done against the staging versions of the repository
+  # main versions will just receive what comes from the staging
+  DEFAULT_BRANCH: ${{ github.base_ref || 'staging' }}
+  #SPECS_JAVA_LIBS_BRANCH: ${{ 'master' }}
+  #LARA_FRAMEWORK_BRANCH: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  build-java:
+    name: Build Java
+    runs-on: ubuntu-latest
+
+    outputs:
+      branch-exists-lara-framework: ${{ steps.Branch-lara-framework.outputs.value }}
+      branch-exists-specs-java-libs: ${{ steps.Branch-specs-java-libs.outputs.value }}
+
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: current
+          dependency-graph: generate-and-submit
+
+      - name: Checkout Clava
+        uses: actions/checkout@v4
+        with:
+          path: clava
+
+      - name: Check if branch exists on lara-framework
+        id: Branch-lara-framework
+        run: echo "value=$(git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l)" >> $GITHUB_OUTPUT
+
+      - name: Check if branch exists on specs-java-libs
+        id: Branch-specs-java-libs
+        run: echo "value=$(git ls-remote --heads https://github.com/specs-feup/specs-java-libs.git refs/heads/${{ env.BRANCH_NAME }} | wc -l)" >> $GITHUB_OUTPUT
+
+      - name: Echo checks
+        run: |
+          echo "Branch-lara-framework: ${{ steps.Branch-lara-framework.outputs.value }}"
+          echo "Branch-specs-java-libs: ${{ steps.Branch-specs-java-libs.outputs.value }}"
+          echo "Branch name: ${{ env.BRANCH_NAME }}"
+          echo "Default branch: ${{ env.DEFAULT_BRANCH }}"
+          echo "Branch base_ref: ${{ github.base_ref }}"          
+
+      - name: Checkout lara-framework
+        uses: actions/checkout@v4
+        with:
+          repository: specs-feup/lara-framework
+          path: lara-framework
+          ref: ${{ steps.Branch-lara-framework.outputs.value == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+
+      - name: Checkout specs-java-libs
+        uses: actions/checkout@v4
+        with:
+          repository: specs-feup/specs-java-libs
+          path: specs-java-libs
+          # This is causing problems in PRs, for now it will always be the default branch
+          #ref: ${{ steps.Branch-specs-java-libs.outputs.value == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+
+      - name: Build with Gradle
+        run: |
+          cd clava/ClavaWeaver
+          gradle installDist
+
+      - name: Test with Gradle
+        run: |
+          cd clava/ClavaWeaver
+          gradle test
+        env:
+          GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: always()
+        with:
+            report_paths: './**/build/test-results/test/TEST-*.xml'
+            summary: true
+
+      - name: Upload ClavaWeaver artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-binaries
+          path: clava/ClavaWeaver/build/install/ClavaWeaver
+
+
+  build-js:
+    name: Build JS
+    needs: build-java
+    strategy:
+      fail-fast: false
+      matrix:
+        #node-version: ['latest', '20.x', '18.x']
+        node-version: ['20.x', '18.x']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Checkout Clava
+        uses: actions/checkout@v4
+        with:
+          path: clava
+
+      - name: Checkout lara-framework
+        uses: actions/checkout@v4
+        with:
+          repository: specs-feup/lara-framework
+          path: lara-framework
+          ref: ${{ needs.build-java.outputs.branch-exists-lara-framework == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+
+      - name: Setup js workspace
+        run: |
+          echo '{ "name": "SPeCS Workspace", "type": "module", "workspaces": [ "clava/Clava-JS", "lara-framework/Lara-JS" ] }' > package.json
+          npm install
+
+      - name: Build Lara-JS
+        run: |
+          cd lara-framework/Lara-JS
+          npm run build
+
+      - name: Build Clava-JS
+        run: |
+          cd clava/Clava-JS
+          npm run build
+
+      - name: Pull java-binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: java-binaries
+          path: clava/Clava-JS/java-binaries
+
+      - name: Test JS
+        run: |
+          cd clava/Clava-JS
+          npm run test

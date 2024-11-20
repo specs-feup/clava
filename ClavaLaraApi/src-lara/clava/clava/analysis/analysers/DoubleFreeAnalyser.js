@@ -1,4 +1,4 @@
-import Query from "lara-js/api/weaver/Query.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { BinaryOp, Call, FunctionJp, Vardecl, } from "../../../Joinpoints.js";
 import Analyser from "../Analyser.js";
 import ResultFormatManager from "../ResultFormatManager.js";

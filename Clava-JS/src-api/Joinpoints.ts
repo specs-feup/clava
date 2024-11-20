@@ -16,7 +16,7 @@ import {
   registerJoinpointMapper,
   wrapJoinPoint,
   unwrapJoinPoint,
-} from "lara-js/api/LaraJoinPoint.js";
+} from "@specs-feup/lara/api/LaraJoinPoint.js";
 
 type PrivateMapper = {
   "Joinpoint": typeof Joinpoint,
@@ -142,7 +142,7 @@ type DefaultAttributeMap = {
 
 export class Joinpoint extends LaraJoinPoint {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -484,9 +484,9 @@ export class Joinpoint extends LaraJoinPoint {
    */
   setData(source: object): void { return wrapJoinPoint(this._javaObject.setData(JSON.stringify(source))); }
   /**
-   * Replaces the first child, or inserts the join point if no child is present
+   * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
    */
-  setFirstChild(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); }
+  setFirstChild(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); }
   /**
    * Sets the commented that are embedded in a node
    */
@@ -500,9 +500,9 @@ export class Joinpoint extends LaraJoinPoint {
    */
   setInlineComments(p1: string[] | string): void { return wrapJoinPoint(this._javaObject.setInlineComments(unwrapJoinPoint(p1))); }
   /**
-   * Replaces the last child, or inserts the join point if no child is present
+   * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
    */
-  setLastChild(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); }
+  setLastChild(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); }
   /**
    * Sets the type of a node, if it has a type
    */
@@ -531,7 +531,7 @@ export class Joinpoint extends LaraJoinPoint {
 
 export class Attribute extends Joinpoint {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -544,7 +544,7 @@ export class Attribute extends Joinpoint {
    */
 export class ClavaException extends Joinpoint {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -556,7 +556,7 @@ export class ClavaException extends Joinpoint {
 
 export class Comment extends Joinpoint {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -571,7 +571,7 @@ export class Comment extends Joinpoint {
    */
 export class Decl extends Joinpoint {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -587,7 +587,7 @@ export class Decl extends Joinpoint {
    */
 export class Empty extends Joinpoint {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -596,7 +596,7 @@ export class Empty extends Joinpoint {
 
 export class Expression extends Joinpoint {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -622,7 +622,7 @@ export class Expression extends Joinpoint {
    */
 export class FileJp extends Joinpoint {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -763,7 +763,7 @@ export class FileJp extends Joinpoint {
 
 export class ImplicitValue extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -775,7 +775,7 @@ export class ImplicitValue extends Expression {
    */
 export class Include extends Decl {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -796,7 +796,7 @@ export class Include extends Decl {
 
 export class InitList extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -809,7 +809,7 @@ export class InitList extends Expression {
 
 export class Literal extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -818,7 +818,7 @@ export class Literal extends Expression {
 
 export class MemberAccess extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -846,7 +846,7 @@ export class MemberAccess extends Expression {
    */
 export class NamedDecl extends Decl {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -874,7 +874,7 @@ export class NamedDecl extends Decl {
 
 export class NewExpr extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -883,7 +883,7 @@ export class NewExpr extends Expression {
 
 export class Op extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -898,7 +898,7 @@ export class Op extends Expression {
 
 export class ParenExpr extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -914,7 +914,7 @@ export class ParenExpr extends Expression {
    */
 export class Pragma extends Joinpoint {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -952,7 +952,7 @@ export class Pragma extends Joinpoint {
    */
 export class Program extends Joinpoint {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1058,7 +1058,7 @@ export class Program extends Joinpoint {
    */
 export class RecordJp extends NamedDecl {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1082,7 +1082,7 @@ export class RecordJp extends NamedDecl {
 
 export class Statement extends Joinpoint {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1096,7 +1096,7 @@ export class Statement extends Joinpoint {
    */
 export class Struct extends RecordJp {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1105,7 +1105,7 @@ export class Struct extends RecordJp {
 
 export class Switch extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1133,7 +1133,7 @@ export class Switch extends Statement {
    */
 export class Tag extends Pragma {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "id",
@@ -1146,7 +1146,7 @@ export class Tag extends Pragma {
 
 export class TernaryOp extends Op {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1158,7 +1158,7 @@ export class TernaryOp extends Op {
 
 export class This extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1167,7 +1167,7 @@ export class This extends Expression {
 
 export class Type extends Joinpoint {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1248,7 +1248,7 @@ export class Type extends Joinpoint {
    */
 export class TypedefNameDecl extends NamedDecl {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1260,7 +1260,7 @@ export class TypedefNameDecl extends NamedDecl {
    */
 export class TypedefType extends Type {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1277,7 +1277,7 @@ export class TypedefType extends Type {
 
 export class UnaryExprOrType extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1293,7 +1293,7 @@ export class UnaryExprOrType extends Expression {
 
 export class UnaryOp extends Op {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1304,7 +1304,7 @@ export class UnaryOp extends Op {
 
 export class UndefinedType extends Type {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1316,7 +1316,7 @@ export class UndefinedType extends Type {
    */
 export class Varref extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1346,7 +1346,7 @@ export class Varref extends Expression {
 
 export class WrapperStmt extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1357,7 +1357,7 @@ export class WrapperStmt extends Statement {
 
 export class AccessSpecifier extends Decl {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "kind",
@@ -1370,7 +1370,7 @@ export class AccessSpecifier extends Decl {
 
 export class AdjustedType extends Type {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1383,7 +1383,7 @@ export class AdjustedType extends Type {
 
 export class ArrayAccess extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1412,7 +1412,7 @@ export class ArrayAccess extends Expression {
 
 export class ArrayType extends Type {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1427,7 +1427,7 @@ export class ArrayType extends Type {
 
 export class BinaryOp extends Op {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1443,7 +1443,7 @@ export class BinaryOp extends Op {
 
 export class BoolLiteral extends Literal {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1453,7 +1453,7 @@ export class BoolLiteral extends Literal {
 
 export class Break extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1466,7 +1466,7 @@ export class Break extends Statement {
 
 export class BuiltinType extends Type {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1496,7 +1496,7 @@ export class BuiltinType extends Type {
 
 export class Call extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1575,7 +1575,7 @@ export class Call extends Expression {
 
 export class Case extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1608,7 +1608,7 @@ export class Case extends Statement {
 
 export class Cast extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1624,7 +1624,7 @@ export class Cast extends Expression {
 
 export class CilkSpawn extends Call {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1633,7 +1633,7 @@ export class CilkSpawn extends Call {
 
 export class CilkSync extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1645,7 +1645,7 @@ export class CilkSync extends Statement {
    */
 export class Class extends RecordJp {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1698,7 +1698,7 @@ export class Class extends RecordJp {
 
 export class Continue extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1707,7 +1707,7 @@ export class Continue extends Statement {
 
 export class CudaKernelCall extends Call {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1720,7 +1720,7 @@ export class CudaKernelCall extends Call {
 
 export class DeclStmt extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1736,7 +1736,7 @@ export class DeclStmt extends Statement {
    */
 export class Declarator extends NamedDecl {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1745,7 +1745,7 @@ export class Declarator extends NamedDecl {
 
 export class DeleteExpr extends Expression {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1757,7 +1757,7 @@ export class DeleteExpr extends Expression {
    */
 export class ElaboratedType extends Type {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1778,7 +1778,7 @@ export class ElaboratedType extends Type {
 
 export class EmptyStmt extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1790,7 +1790,7 @@ export class EmptyStmt extends Statement {
    */
 export class EnumDecl extends NamedDecl {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1800,7 +1800,7 @@ export class EnumDecl extends NamedDecl {
 
 export class EnumeratorDecl extends NamedDecl {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1809,7 +1809,7 @@ export class EnumeratorDecl extends NamedDecl {
 
 export class ExprStmt extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1825,7 +1825,7 @@ export class ExprStmt extends Statement {
    */
 export class Field extends Declarator {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1834,7 +1834,7 @@ export class Field extends Declarator {
 
 export class FloatLiteral extends Literal {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -1847,7 +1847,7 @@ export class FloatLiteral extends Literal {
    */
 export class FunctionJp extends Declarator {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -1999,7 +1999,7 @@ export class FunctionJp extends Declarator {
 
 export class FunctionType extends Type {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2019,7 +2019,7 @@ export class FunctionType extends Type {
 
 export class GotoStmt extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2034,7 +2034,7 @@ export class GotoStmt extends Statement {
 
 export class If extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2062,7 +2062,7 @@ export class If extends Statement {
 
 export class IntLiteral extends Literal {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2072,16 +2072,17 @@ export class IntLiteral extends Literal {
 
 export class LabelDecl extends NamedDecl {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
+  get labelStmt(): LabelStmt { return wrapJoinPoint(this._javaObject.getLabelStmt()) }
 }
 
 export class LabelStmt extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2096,7 +2097,7 @@ export class LabelStmt extends Statement {
 
 export class Loop extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "kind",
@@ -2223,7 +2224,7 @@ export class Loop extends Statement {
    */
 export class Marker extends Pragma {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "id",
@@ -2237,7 +2238,7 @@ export class Marker extends Pragma {
 
 export class MemberCall extends Call {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -2251,7 +2252,7 @@ export class MemberCall extends Call {
    */
 export class Method extends FunctionJp {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -2268,7 +2269,7 @@ export class Method extends FunctionJp {
    */
 export class Omp extends Pragma {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "kind",
@@ -2489,7 +2490,7 @@ export class Omp extends Pragma {
 
 export class ParenType extends Type {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2504,7 +2505,7 @@ export class ParenType extends Type {
 
 export class PointerType extends Type {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2523,7 +2524,7 @@ export class PointerType extends Type {
 
 export class QualType extends Type {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2534,7 +2535,7 @@ export class QualType extends Type {
 
 export class ReturnStmt extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2547,7 +2548,7 @@ export class ReturnStmt extends Statement {
    */
 export class Scope extends Statement {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2620,7 +2621,7 @@ export class Scope extends Statement {
 
 export class TagType extends Type {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2634,7 +2635,7 @@ export class TagType extends Type {
 
 export class TemplateSpecializationType extends Type {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2650,7 +2651,7 @@ export class TemplateSpecializationType extends Type {
    */
 export class TypedefDecl extends TypedefNameDecl {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -2662,7 +2663,7 @@ export class TypedefDecl extends TypedefNameDecl {
    */
 export class Vardecl extends Declarator {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
@@ -2731,7 +2732,7 @@ export class Vardecl extends Declarator {
 
 export class VariableArrayType extends ArrayType {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2746,7 +2747,7 @@ export class VariableArrayType extends ArrayType {
 
 export class Body extends Scope {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2755,7 +2756,7 @@ export class Body extends Scope {
 
 export class CilkFor extends Loop {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "kind",
@@ -2764,7 +2765,7 @@ export class CilkFor extends Loop {
 
 export class EnumType extends TagType {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
@@ -2774,7 +2775,7 @@ export class EnumType extends TagType {
 
 export class Param extends Vardecl {
   /**
-   * @hidden
+   * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",

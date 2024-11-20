@@ -1,4 +1,4 @@
-import Query from "lara-js/api/weaver/Query.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { FunctionJp, Joinpoint } from "../../Joinpoints.js";
 import Inliner from "../code/Inliner.js";
 import NormalizeToSubset from "./NormalizeToSubset.js";
