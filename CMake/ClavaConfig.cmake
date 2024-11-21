@@ -35,7 +35,7 @@ if(DEFINED CLAVA_NODE AND CLAVA_NODE)
 		set(NPM_CMD "npm")			
 	endif()
 
-	execute_process(COMMAND ${NPM_CMD} list -g @specs-feup/clava
+	execute_process(COMMAND ${NPM_CMD} list @specs-feup/clava
 		#WORKING_DIRECTORY "${aspectParentDir}"
 		OUTPUT_VARIABLE NPM_OUTPUT
 		ERROR_VARIABLE NPM_ERROR
@@ -47,13 +47,13 @@ if(DEFINED CLAVA_NODE AND CLAVA_NODE)
 
 		# Could not find package, install globally
 		if(INDEX GREATER_EQUAL 0)
-			execute_process(COMMAND ${NPM_CMD} install -g @specs-feup/clava
+			execute_process(COMMAND ${NPM_CMD} install @specs-feup/clava
 			OUTPUT_VARIABLE NPM_OUTPUT
 			ERROR_VARIABLE NPM_ERROR
 			RESULT_VARIABLE NPM_RESULT		
 		)
 			if(NOT ${NPM_RESULT} STREQUAL "0")
-				message(SEND_ERROR "npm install -g @specs-feup/clava error: ${NPM_ERROR}")							
+				message(SEND_ERROR "npm install @specs-feup/clava error: ${NPM_ERROR}")							
 			endif()
 			
 		endif()
@@ -62,7 +62,7 @@ if(DEFINED CLAVA_NODE AND CLAVA_NODE)
 		message(SEND_ERROR "npm find error: ${NPM_ERROR}")				
 	endif()	
 	
-	set(LOCAL_CLAVA "clava classic")
+	set(LOCAL_CLAVA "npx clava classic")
 endif()
 
 # Check if installation file with JAR path exists
