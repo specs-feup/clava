@@ -49,7 +49,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 			if(${NPM_RESULT} STREQUAL "0")
 				message(STATUS "${NPM_OUTPUT}")
 			else()
-				message(STATUS "npm install error: ${NPM_ERROR}")				
+				message(SEND_ERROR "npm install error: ${NPM_ERROR}")				
 			endif()
 
 		endif()

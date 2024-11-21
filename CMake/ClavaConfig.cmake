@@ -24,10 +24,45 @@ find_package(Java COMPONENTS Runtime REQUIRED)
 set(CLAVA_CMAKE_HOME ${CMAKE_CURRENT_LIST_DIR})
 message(STATUS "Clava home: ${CLAVA_CMAKE_HOME}")
 
-# Check if Node mode. If so, LOCAL_CLAVA becomes 'npx clava classic'
+# Check if Node mode. If so, LOCAL_CLAVA becomes 'clava classic'
 if(DEFINED CLAVA_NODE AND CLAVA_NODE)
 	message(STATUS "Enabling Clava Node mode")
-	set(LOCAL_CLAVA "npx clava classic")
+	
+	# Check if clava is globally installed
+	if(WIN32)
+		set(NPM_CMD "npm.cmd")
+	else()
+		set(NPM_CMD "npm")			
+	endif()
+
+	execute_process(COMMAND ${NPM_CMD} list -g @specs-feup/clava
+		#WORKING_DIRECTORY "${aspectParentDir}"
+		OUTPUT_VARIABLE NPM_OUTPUT
+		ERROR_VARIABLE NPM_ERROR
+		RESULT_VARIABLE NPM_RESULT				
+	)	
+
+	if(${NPM_RESULT} STREQUAL "0")
+		string(FIND "${NPM_OUTPUT}" "(empty)" INDEX)
+
+		# Could not find package, install globally
+		if(INDEX GREATER_EQUAL 0)
+			execute_process(COMMAND ${NPM_CMD} install -g @specs-feup/clava
+			OUTPUT_VARIABLE NPM_OUTPUT
+			ERROR_VARIABLE NPM_ERROR
+			RESULT_VARIABLE NPM_RESULT		
+		)
+			if(NOT ${NPM_RESULT} STREQUAL "0")
+				message(SEND_ERROR "npm install -g @specs-feup/clava error: ${NPM_ERROR}")							
+			endif()
+			
+		endif()
+
+	else()
+		message(SEND_ERROR "npm find error: ${NPM_ERROR}")				
+	endif()	
+	
+	set(LOCAL_CLAVA "clava classic")
 endif()
 
 # Check if installation file with JAR path exists
