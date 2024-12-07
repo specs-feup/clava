@@ -1,37 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="test-experimental"/>
-	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="src" path="resources"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+	<classpathentry kind="src" output="bin/test" path="test">
 		<attributes>
-			<attribute name="module" value="true"/>
+			<attribute name="gradle_scope" value="test"/>
+			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=ClavaWeaver&amp;ivyXmlPath=ivy.xml&amp;confs=*"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tdrcLibrary"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/AntarexClavaApi"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LaraCommonLanguageApi"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LaraFramework"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LaraLoc"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/WeaverGenerator"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/GsonPlus"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LaraUnit"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/XStreamPlus"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LaraDoc"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/CommonsLangPlus"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ClavaLaraApi"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jOptions"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LARAI"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/WeaverInterface"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SpecsUtils"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ClavaAst"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ClangAstParser"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LanguageSpecification"/>
-	<classpathentry kind="src" path="/ClavaHls"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LaraUtils"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/JsEngine"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="src" output="bin/main" path="src">
+		<attributes>
+			<attribute name="gradle_scope" value="main"/>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="bin/test" path="resources">
+		<attributes>
+			<attribute name="gradle_scope" value="test"/>
+			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="test" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17/"/>
+	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
+	<classpathentry kind="output" path="bin/default"/>
 </classpath>
