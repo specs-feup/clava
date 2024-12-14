@@ -2112,6 +2112,10 @@ export class Loop extends Statement {
    * The statement of the loop condition
    */
   set cond(value: string) { this._javaObject.setCond(unwrapJoinPoint(value)); }
+  /**
+   * The expression of the loop condition
+   */
+  get condExpr(): Expression { return wrapJoinPoint(this._javaObject.getCondExpr()) }
   get condRelation(): Relation { return wrapJoinPoint(this._javaObject.getCondRelation()) }
   set condRelation(value: Relation) { this._javaObject.setCondRelation(unwrapJoinPoint(value)); }
   get controlVar(): string { return wrapJoinPoint(this._javaObject.getControlVar()) }
@@ -2160,7 +2164,7 @@ export class Loop extends Statement {
   /**
    * The statement of the loop step
    */
-  get step(): Statement { return wrapJoinPoint(this._javaObject.getStep()) }
+  get step(): ExprStmt { return wrapJoinPoint(this._javaObject.getStep()) }
   /**
    * The statement of the loop step
    */

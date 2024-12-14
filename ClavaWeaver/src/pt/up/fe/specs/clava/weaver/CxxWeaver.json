@@ -15692,6 +15692,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The expression of the loop condition",
+						"children": [
+									{
+										"type": "expression",
+										"name": "condExpr"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Relation",
@@ -15834,7 +15843,7 @@
 						"tooltip": "The statement of the loop step",
 						"children": [
 									{
-										"type": "statement",
+										"type": "exprStmt",
 										"name": "step"
 									}]
 					},
@@ -53475,6 +53484,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The expression of the loop condition",
+						"children": [
+									{
+										"type": "expression",
+										"name": "condExpr"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Relation",
@@ -53617,7 +53635,7 @@
 						"tooltip": "The statement of the loop step",
 						"children": [
 									{
-										"type": "statement",
+										"type": "exprStmt",
 										"name": "step"
 									}]
 					},

@@ -411,9 +411,32 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * The expression of the loop condition
+     */
+    public abstract AExpression getCondExprImpl();
+
+    /**
+     * The expression of the loop condition
+     */
+    public final Object getCondExpr() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "condExpr", Optional.empty());
+        	}
+        	AExpression result = this.getCondExprImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "condExpr", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "condExpr", e);
+        }
+    }
+
+    /**
      * The statement of the loop step
      */
-    public abstract AStatement getStepImpl();
+    public abstract AExprStmt getStepImpl();
 
     /**
      * The statement of the loop step
@@ -423,7 +446,7 @@ public abstract class ALoop extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "step", Optional.empty());
         	}
-        	AStatement result = this.getStepImpl();
+        	AExprStmt result = this.getStepImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "step", Optional.ofNullable(result));
         	}
@@ -2021,6 +2044,7 @@ public abstract class ALoop extends AStatement {
         attributes.add("init");
         attributes.add("initValue");
         attributes.add("cond");
+        attributes.add("condExpr");
         attributes.add("step");
         attributes.add("endValue");
         attributes.add("stepValue");
@@ -2099,6 +2123,7 @@ public abstract class ALoop extends AStatement {
         INIT("init"),
         INITVALUE("initValue"),
         COND("cond"),
+        CONDEXPR("condExpr"),
         STEP("step"),
         ENDVALUE("endValue"),
         STEPVALUE("stepValue"),
