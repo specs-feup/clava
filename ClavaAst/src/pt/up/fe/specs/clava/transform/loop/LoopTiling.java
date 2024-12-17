@@ -101,8 +101,8 @@ public class LoopTiling {
 
         // make header parts
         var init = factory.literalStmt("int " + blockVarName + " = " + oldLowerBound.getCode() + ";");
-        var cond = factory.exprStmt(factory.literalExpr(blockVarName + " < " + oldUpperBound.getCode(), factory.builtinType(BuiltinKind.Int)));
-        var inc = factory.exprStmt(factory.literalExpr(blockVarName + " += " + blockSize, factory.builtinType(BuiltinKind.Int)));
+        var cond = factory.literalExpr(blockVarName + " < " + oldUpperBound.getCode(), factory.builtinType(BuiltinKind.Int));
+        var inc = factory.literalExpr(blockVarName + " += " + blockSize, factory.builtinType(BuiltinKind.Int));
 
         // make for loop
         CompoundStmt emptyBody = factory.compoundStmt();
