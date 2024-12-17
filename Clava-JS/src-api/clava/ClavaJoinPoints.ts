@@ -742,28 +742,33 @@ export default class ClavaJoinPoints {
    */
   static forStmt(
     $init?: Joinpoints.Statement | string,
-    $condition?: Joinpoints.Statement | string,
-    $inc?: Joinpoints.Statement | string,
+    $condition?: Joinpoints.Expression | string,
+    $inc?: Joinpoints.Expression | string,
     $body?: Joinpoints.Statement | string
   ): Joinpoints.Loop {
     if (typeof $init === "string") {
       $init = ClavaJoinPoints.stmtLiteral($init);
     }
     if (typeof $condition === "string") {
-      $condition = ClavaJoinPoints.stmtLiteral($condition);
+      $condition = ClavaJoinPoints.exprLiteral($condition);
     }
     if (typeof $inc === "string") {
-      $inc = ClavaJoinPoints.stmtLiteral($inc);
+      $inc = ClavaJoinPoints.exprLiteral($inc);
     }
     if (typeof $body === "string") {
       $body = ClavaJoinPoints.stmtLiteral($body);
     }
 
+    // cond and inc must be wrapped around an ExprStmt
+    let $condExprStmt = $condition != undefined ? this.exprStmt($condition) : undefined;
+    let $incExprStmt = $inc != undefined ? this.exprStmt($inc) : undefined;
+
+
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.forStmt(
         unwrapJoinPoint($init),
-        unwrapJoinPoint($condition),
-        unwrapJoinPoint($inc),
+        unwrapJoinPoint($condExprStmt),
+        unwrapJoinPoint($incExprStmt),
         unwrapJoinPoint($body)
       )
     );

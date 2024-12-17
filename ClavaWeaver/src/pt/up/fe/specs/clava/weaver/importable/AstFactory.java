@@ -721,12 +721,12 @@ public class AstFactory {
         return CxxJoinpoints.create(accessSpecifierDecl, AAccessSpecifier.class);
     }
 
-    public static ALoop forStmt(AStatement init, AStatement condition, AStatement inc, AStatement body) {
+    public static ALoop forStmt(AStatement init, AExprStmt condition, AExprStmt inc, AStatement body) {
 
         // If null, create NullStmt
         var initStmt = init != null ? (Stmt) init.getNode() : CxxWeaver.getFactory().nullStmt();
-        var condStmt = condition != null ? (Stmt) condition.getNode() : CxxWeaver.getFactory().nullStmt();
-        var incStmt = inc != null ? (Stmt) inc.getNode() : CxxWeaver.getFactory().nullStmt();
+        var condStmt = condition != null ? (ExprStmt) condition.getNode() : null;
+        var incStmt = inc != null ? (ExprStmt) inc.getNode() : null;
         var bodyStmt = body != null ? (Stmt) body.getNode() : CxxWeaver.getFactory().nullStmt();
 
         // If body is not a CompoundStmt, make it

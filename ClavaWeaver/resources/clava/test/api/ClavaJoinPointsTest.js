@@ -47,7 +47,7 @@ println(
 println("Empty for:\n" + ClavaJoinPoints.forStmt().code);
 println(
     "Complete for:\n" +
-    ClavaJoinPoints.forStmt("int i=0;", "i<10;", "i++;", "i = i+1;\ni = i - 1;")
+    ClavaJoinPoints.forStmt("int i=0;", "i<10", "i++", "i = i+1;\ni = i - 1;")
         .code
 );
 

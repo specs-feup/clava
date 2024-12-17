@@ -95,7 +95,7 @@ public class ForStmt extends LoopStmt {
 
         // Get 'inc' code
         String incCode = getInc()
-                .map(init -> " " + removeSemicolon(init.getCode()))
+                .map(init -> " " + init.getExpr().getCode())
                 .orElse("");
 
         code.append(incCode);
