@@ -759,16 +759,11 @@ export default class ClavaJoinPoints {
       $body = ClavaJoinPoints.stmtLiteral($body);
     }
 
-    // cond and inc must be wrapped around an ExprStmt
-    let $condExprStmt = $condition != undefined ? this.exprStmt($condition) : undefined;
-    let $incExprStmt = $inc != undefined ? this.exprStmt($inc) : undefined;
-
-
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.forStmt(
         unwrapJoinPoint($init),
-        unwrapJoinPoint($condExprStmt),
-        unwrapJoinPoint($incExprStmt),
+        unwrapJoinPoint($condition),
+        unwrapJoinPoint($inc),
         unwrapJoinPoint($body)
       )
     );

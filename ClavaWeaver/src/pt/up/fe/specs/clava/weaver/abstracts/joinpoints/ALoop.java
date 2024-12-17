@@ -388,12 +388,12 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * The statement of the loop condition
+     * (deprecated) The expression of the loop condition wrapped around a new exprStmt
      */
     public abstract AStatement getCondImpl();
 
     /**
-     * The statement of the loop condition
+     * (deprecated) The expression of the loop condition wrapped around a new exprStmt
      */
     public final Object getCond() {
         try {
@@ -434,12 +434,12 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * The statement of the loop step
+     * (deprecated) The expression of the loop step wrapped around a new exprStmt
      */
     public abstract AExprStmt getStepImpl();
 
     /**
-     * The statement of the loop step
+     * (deprecated) The expression of the loop step wrapped around a new exprStmt
      */
     public final Object getStep() {
         try {
@@ -453,6 +453,29 @@ public abstract class ALoop extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "step", e);
+        }
+    }
+
+    /**
+     * The expression of the loop step
+     */
+    public abstract AExpression getStepExprImpl();
+
+    /**
+     * The expression of the loop step
+     */
+    public final Object getStepExpr() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "stepExpr", Optional.empty());
+        	}
+        	AExpression result = this.getStepExprImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "stepExpr", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "stepExpr", e);
         }
     }
 
@@ -2046,6 +2069,7 @@ public abstract class ALoop extends AStatement {
         attributes.add("cond");
         attributes.add("condExpr");
         attributes.add("step");
+        attributes.add("stepExpr");
         attributes.add("endValue");
         attributes.add("stepValue");
         attributes.add("hasCondRelation");
@@ -2125,6 +2149,7 @@ public abstract class ALoop extends AStatement {
         COND("cond"),
         CONDEXPR("condExpr"),
         STEP("step"),
+        STEPEXPR("stepExpr"),
         ENDVALUE("endValue"),
         STEPVALUE("stepValue"),
         HASCONDRELATION("hasCondRelation"),

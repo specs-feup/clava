@@ -45,12 +45,12 @@ public class ForStmt extends LoopStmt {
         return getOptionalChild(Stmt.class, 0);
     }
 
-    public Optional<ExprStmt> getCond() {
-        return getOptionalChild(ExprStmt.class, 1);
+    public Optional<Expr> getCond() {
+        return getOptionalChild(Expr.class, 1);
     }
 
-    public Optional<ExprStmt> getInc() {
-        return getOptionalChild(ExprStmt.class, 2);
+    public Optional<Expr> getInc() {
+        return getOptionalChild(Expr.class, 2);
     }
 
     @Override
@@ -87,15 +87,15 @@ public class ForStmt extends LoopStmt {
         // System.out.println("COND CODE: " + getCond().map(cond -> " " + cond.getCode()).orElse(";"));
         // System.out.println("VARDECL CODE: " + condVar.map(var -> var.getCode()).orElse("<no code>"));
 
-        var condCode = condVar.map(var -> var.getCode() + ";")
-                .orElse(getCond().map(cond -> " " + cond.getCode()).orElse(";"));
+        var condCode = condVar.map(var -> var.getCode())
+                .orElse(getCond().map(cond -> " " + cond.getCode()).orElse("")) + ";";
 
         code.append(condCode);
         // code.append(getCond().map(cond -> " " + cond.getCode()).orElse(";"));
 
         // Get 'inc' code
         String incCode = getInc()
-                .map(init -> " " + init.getExpr().getCode())
+                .map(init -> " " + init.getCode())
                 .orElse("");
 
         code.append(incCode);
@@ -136,7 +136,6 @@ public class ForStmt extends LoopStmt {
 
     public Optional<BinaryOperator> getCondOperator() {
         return getCond()
-                .map(cond -> cond.getChild(0))
                 .filter(BinaryOperator.class::isInstance)
                 .map(BinaryOperator.class::cast);
 
@@ -259,7 +258,7 @@ public class ForStmt extends LoopStmt {
      * Supports values for increment expressions of Canonical Loop Forms as defined by the OpenMP standard.
      */
     public Optional<Expr> getStepValueExpr() {
-        return getInc().flatMap(inc -> getStepValueExpr(inc.getChild(0)));
+        return getInc().flatMap(inc -> getStepValueExpr(inc));
     }
 
     private Optional<Expr> getStepValueExpr(ClavaNode incExpr) {
@@ -318,6 +317,6 @@ public class ForStmt extends LoopStmt {
 
     @Override
     public Optional<Expr> getStmtCondExpr() {
-        return getCond().map(ExprStmt::getExpr);
+        return getCond();
     }
 }

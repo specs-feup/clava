@@ -257,7 +257,22 @@ public class CxxLoop extends ALoop {
 
         }
 
-        return CxxJoinpoints.create(inc, AExprStmt.class);
+        return CxxJoinpoints.create(getFactory().exprStmt(inc), AExprStmt.class);
+    }
+
+    @Override
+    public AExpression getStepExprImpl() {
+        if (!(loop instanceof ForStmt)) {
+            return null;
+        }
+
+        var inc = ((ForStmt) loop).getInc().orElse(null);
+        if (inc == null) {
+            return null;
+
+        }
+
+        return CxxJoinpoints.create(inc, AExpression.class);
     }
 
     @Override
@@ -340,7 +355,7 @@ public class CxxLoop extends ALoop {
             // WhileStmt whileStmt = ClavaNodeFactory.whileStmt(loop.getInfo(), ((ForStmt) loop).getCond().orElse(null),
             // loop.getBody());
             Stmt cond = ((ForStmt) loop).getCond()
-                    .map(Stmt.class::cast)
+                    .map(expr -> (Stmt) getFactory().exprStmt(expr))
                     .orElse(CxxWeaver.getFactory().nullStmt());
 
             WhileStmt whileStmt = CxxWeaver.getFactory().whileStmt(cond, loop.getBody());
