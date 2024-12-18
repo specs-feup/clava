@@ -388,12 +388,12 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * (deprecated) The expression of the loop condition wrapped around a new exprStmt
+     * The statement of the loop condition
      */
     public abstract AStatement getCondImpl();
 
     /**
-     * (deprecated) The expression of the loop condition wrapped around a new exprStmt
+     * The statement of the loop condition
      */
     public final Object getCond() {
         try {
@@ -411,71 +411,25 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * The expression of the loop condition
+     * The statement of the loop step
      */
-    public abstract AExpression getCondExprImpl();
+    public abstract AStatement getStepImpl();
 
     /**
-     * The expression of the loop condition
-     */
-    public final Object getCondExpr() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "condExpr", Optional.empty());
-        	}
-        	AExpression result = this.getCondExprImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "condExpr", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "condExpr", e);
-        }
-    }
-
-    /**
-     * (deprecated) The expression of the loop step wrapped around a new exprStmt
-     */
-    public abstract AExprStmt getStepImpl();
-
-    /**
-     * (deprecated) The expression of the loop step wrapped around a new exprStmt
+     * The statement of the loop step
      */
     public final Object getStep() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "step", Optional.empty());
         	}
-        	AExprStmt result = this.getStepImpl();
+        	AStatement result = this.getStepImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "step", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "step", e);
-        }
-    }
-
-    /**
-     * The expression of the loop step
-     */
-    public abstract AExpression getStepExprImpl();
-
-    /**
-     * The expression of the loop step
-     */
-    public final Object getStepExpr() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "stepExpr", Optional.empty());
-        	}
-        	AExpression result = this.getStepExprImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "stepExpr", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "stepExpr", e);
         }
     }
 
@@ -2067,9 +2021,7 @@ public abstract class ALoop extends AStatement {
         attributes.add("init");
         attributes.add("initValue");
         attributes.add("cond");
-        attributes.add("condExpr");
         attributes.add("step");
-        attributes.add("stepExpr");
         attributes.add("endValue");
         attributes.add("stepValue");
         attributes.add("hasCondRelation");
@@ -2147,9 +2099,7 @@ public abstract class ALoop extends AStatement {
         INIT("init"),
         INITVALUE("initValue"),
         COND("cond"),
-        CONDEXPR("condExpr"),
         STEP("step"),
-        STEPEXPR("stepExpr"),
         ENDVALUE("endValue"),
         STEPVALUE("stepValue"),
         HASCONDRELATION("hasCondRelation"),

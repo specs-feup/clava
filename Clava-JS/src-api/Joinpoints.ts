@@ -2105,17 +2105,13 @@ export class Loop extends Statement {
   get body(): Scope { return wrapJoinPoint(this._javaObject.getBody()) }
   set body(value: Scope) { this._javaObject.setBody(unwrapJoinPoint(value)); }
   /**
-   * (deprecated) The expression of the loop condition wrapped around a new exprStmt
+   * The statement of the loop condition
    */
   get cond(): Statement { return wrapJoinPoint(this._javaObject.getCond()) }
   /**
-   * (deprecated) The expression of the loop condition wrapped around a new exprStmt
+   * The statement of the loop condition
    */
   set cond(value: string) { this._javaObject.setCond(unwrapJoinPoint(value)); }
-  /**
-   * The expression of the loop condition
-   */
-  get condExpr(): Expression { return wrapJoinPoint(this._javaObject.getCondExpr()) }
   get condRelation(): Relation { return wrapJoinPoint(this._javaObject.getCondRelation()) }
   set condRelation(value: Relation) { this._javaObject.setCondRelation(unwrapJoinPoint(value)); }
   get controlVar(): string { return wrapJoinPoint(this._javaObject.getControlVar()) }
@@ -2162,17 +2158,13 @@ export class Loop extends Statement {
   get nestedLevel(): number { return wrapJoinPoint(this._javaObject.getNestedLevel()) }
   get rank(): number[] { return wrapJoinPoint(this._javaObject.getRank()) }
   /**
-   * (deprecated) The expression of the loop step wrapped around a new exprStmt
+   * The statement of the loop step
    */
-  get step(): ExprStmt { return wrapJoinPoint(this._javaObject.getStep()) }
+  get step(): Statement { return wrapJoinPoint(this._javaObject.getStep()) }
   /**
-   * (deprecated) The expression of the loop step wrapped around a new exprStmt
+   * The statement of the loop step
    */
   set step(value: string) { this._javaObject.setStep(unwrapJoinPoint(value)); }
-  /**
-   * The expression of the loop step
-   */
-  get stepExpr(): Expression { return wrapJoinPoint(this._javaObject.getStepExpr()) }
   /**
    * The expression of the iteration step
    */

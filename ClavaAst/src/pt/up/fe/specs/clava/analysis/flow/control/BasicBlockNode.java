@@ -129,7 +129,7 @@ public class BasicBlockNode extends FlowNode {
             builder.append("for").append("(");
 
             builder.append(f.getInit().map(init -> init.getCode()).orElse(";"));
-            builder.append(f.getCond().map(init -> " " + init.getCode()).orElse("")).append(";");
+            builder.append(f.getCond().map(init -> " " + init.getCode()).orElse(";"));
             String incCode = f.getInc().map(init -> " " + init.getCode()).orElse("");
             if (incCode.endsWith(";")) {
                 incCode = incCode.substring(0, incCode.length() - 1);

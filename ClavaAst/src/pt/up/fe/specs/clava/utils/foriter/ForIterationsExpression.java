@@ -1,11 +1,11 @@
 /**
  * Copyright 2020 SPeCS.
- * <p>
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * <p>
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,18 +13,24 @@
 
 package pt.up.fe.specs.clava.utils.foriter;
 
+import java.util.Optional;
+
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.expr.*;
+import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
+import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.Literal;
+import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
+import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
-
-import java.util.Optional;
 
 public class ForIterationsExpression {
 
@@ -36,7 +42,7 @@ public class ForIterationsExpression {
     private final ConditionData conditionData;
 
     public ForIterationsExpression(String iterVarName, Type iterVarType, Expr initExpr,
-                                   StepData stepData, ConditionData conditionData) {
+            StepData stepData, ConditionData conditionData) {
         // this.iterVar = iterVar;
         this.iterVarName = iterVarName;
         this.iterVarType = iterVarType;
@@ -113,14 +119,14 @@ public class ForIterationsExpression {
         Expr boundary = null;
 
         switch (stepData.getDirection()) {
-            case INC:
-                boundary = isStart ? initExpr : conditionData.getValue();
-                break;
-            case DEC:
-                boundary = isStart ? conditionData.getValue() : initExpr;
-                break;
-            default:
-                throw new NotImplementedException(stepData.getDirection());
+        case INC:
+            boundary = isStart ? initExpr : conditionData.getValue();
+            break;
+        case DEC:
+            boundary = isStart ? conditionData.getValue() : initExpr;
+            break;
+        default:
+            throw new NotImplementedException(stepData.getDirection());
         }
 
         // Add parenthesis, if necessary
@@ -169,7 +175,7 @@ public class ForIterationsExpression {
         }
 
         // Get step value and step direction
-        var stepData = forStmt.getInc().flatMap(incExpr -> getStepData(incExpr, iterVarName)).orElse(null);
+        var stepData = forStmt.getInc().flatMap(incStmt -> getStepData(incStmt, iterVarName)).orElse(null);
         if (stepData == null) {
             ClavaLog.debug(
                     "ForIterationsExpression: could not determine step data of 'for' at " + forStmt.getLocation());
@@ -203,18 +209,18 @@ public class ForIterationsExpression {
 
         // LT and LE should only be used with INC, GT and GE should only be used with DEC
         switch (forIterations.getStepData().getDirection()) {
-            case INC:
-                if (condRelation == ForCondRelation.GE || condRelation == ForCondRelation.GT) {
-                    ClavaLog.debug(() -> "ForIterationsExpression: cannot use > or >= in condition when step increases");
-                    return false;
-                }
-                break;
-            case DEC:
-                if (condRelation == ForCondRelation.LE || condRelation == ForCondRelation.LT) {
-                    ClavaLog.debug(() -> "ForIterationsExpression: cannot use < or <= in condition when step decreases");
-                    return false;
-                }
-                break;
+        case INC:
+            if (condRelation == ForCondRelation.GE || condRelation == ForCondRelation.GT) {
+                ClavaLog.debug(() -> "ForIterationsExpression: cannot use > or >= in condition when step increases");
+                return false;
+            }
+            break;
+        case DEC:
+            if (condRelation == ForCondRelation.LE || condRelation == ForCondRelation.LT) {
+                ClavaLog.debug(() -> "ForIterationsExpression: cannot use < or <= in condition when step decreases");
+                return false;
+            }
+            break;
         }
 
         // LE and GE are only supported when iteration variable in an integer
@@ -243,8 +249,15 @@ public class ForIterationsExpression {
         return true;
     }
 
-    private static Optional<ConditionData> getConditionData(Expr condExpr, String iterVarName) {
+    private static Optional<ConditionData> getConditionData(Stmt conditionStmt, String iterVarName) {
 
+        // Only supports ExprStmt
+        if (!(conditionStmt instanceof ExprStmt)) {
+            ClavaLog.debug(() -> "ForIterationsExpression: cond statement is not an ExprStmt, " + conditionStmt);
+            return Optional.empty();
+        }
+
+        var condExpr = ((ExprStmt) conditionStmt).getExpr();
 
         if (!(condExpr instanceof BinaryOperator)) {
             ClavaLog.debug(() -> "ForIterationsExpression: cond expr is not a binary operator, " + condExpr);
@@ -272,19 +285,19 @@ public class ForIterationsExpression {
 
     private static ForCondRelation getCondRelation(BinaryOperatorKind op, int iterVarIndex) {
         switch (op) {
-            case LT:
-                return iterVarIndex == 0 ? ForCondRelation.LT : ForCondRelation.GT;
-            case GT:
-                return iterVarIndex == 0 ? ForCondRelation.GT : ForCondRelation.LT;
-            case LE:
-                return iterVarIndex == 0 ? ForCondRelation.LE : ForCondRelation.GE;
-            case GE:
-                return iterVarIndex == 0 ? ForCondRelation.GE : ForCondRelation.LE;
-            default:
-                ClavaLog.debug(
-                        () -> "ForIterationsExpression: unsupported binary operator in condition  expression, "
-                                + op.getOpString());
-                return null;
+        case LT:
+            return iterVarIndex == 0 ? ForCondRelation.LT : ForCondRelation.GT;
+        case GT:
+            return iterVarIndex == 0 ? ForCondRelation.GT : ForCondRelation.LT;
+        case LE:
+            return iterVarIndex == 0 ? ForCondRelation.LE : ForCondRelation.GE;
+        case GE:
+            return iterVarIndex == 0 ? ForCondRelation.GE : ForCondRelation.LE;
+        default:
+            ClavaLog.debug(
+                    () -> "ForIterationsExpression: unsupported binary operator in condition  expression, "
+                            + op.getOpString());
+            return null;
         }
     }
 
@@ -320,7 +333,15 @@ public class ForIterationsExpression {
         return -1;
     }
 
-    private static Optional<StepData> getStepData(Expr incExpr, String iterVarName) {
+    private static Optional<StepData> getStepData(Stmt incStmt, String iterVarName) {
+
+        // Only supports ExprStmt
+        if (!(incStmt instanceof ExprStmt)) {
+            ClavaLog.debug(() -> "ForIterationsExpression: step statement is not an ExprStmt, " + incStmt);
+            return Optional.empty();
+        }
+
+        var incExpr = ((ExprStmt) incStmt).getExpr();
 
         // var += incr
         // var -= incr

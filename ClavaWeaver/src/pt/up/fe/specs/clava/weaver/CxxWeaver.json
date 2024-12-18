@@ -15683,20 +15683,11 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "(deprecated) The expression of the loop condition wrapped around a new exprStmt",
+						"tooltip": "The statement of the loop condition",
 						"children": [
 									{
 										"type": "statement",
 										"name": "cond"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "The expression of the loop condition",
-						"children": [
-									{
-										"type": "expression",
-										"name": "condExpr"
 									}]
 					},
 					{
@@ -15840,20 +15831,11 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "(deprecated) The expression of the loop step wrapped around a new exprStmt",
+						"tooltip": "The statement of the loop step",
 						"children": [
 									{
-										"type": "exprStmt",
+										"type": "statement",
 										"name": "step"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "The expression of the loop step",
-						"children": [
-									{
-										"type": "expression",
-										"name": "stepExpr"
 									}]
 					},
 					{
@@ -53484,20 +53466,11 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "(deprecated) The expression of the loop condition wrapped around a new exprStmt",
+						"tooltip": "The statement of the loop condition",
 						"children": [
 									{
 										"type": "statement",
 										"name": "cond"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "The expression of the loop condition",
-						"children": [
-									{
-										"type": "expression",
-										"name": "condExpr"
 									}]
 					},
 					{
@@ -53641,20 +53614,11 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "(deprecated) The expression of the loop step wrapped around a new exprStmt",
+						"tooltip": "The statement of the loop step",
 						"children": [
 									{
-										"type": "exprStmt",
+										"type": "statement",
 										"name": "step"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "The expression of the loop step",
-						"children": [
-									{
-										"type": "expression",
-										"name": "stepExpr"
 									}]
 					},
 					{

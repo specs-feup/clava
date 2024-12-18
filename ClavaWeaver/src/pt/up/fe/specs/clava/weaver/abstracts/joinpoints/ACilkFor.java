@@ -152,30 +152,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute condExpr
-     * @return the attribute's value
-     */
-    @Override
-    public AExpression getCondExprImpl() {
-        return this.aLoop.getCondExprImpl();
-    }
-
-    /**
      * Get value on attribute step
      * @return the attribute's value
      */
     @Override
-    public AExprStmt getStepImpl() {
+    public AStatement getStepImpl() {
         return this.aLoop.getStepImpl();
-    }
-
-    /**
-     * Get value on attribute stepExpr
-     * @return the attribute's value
-     */
-    @Override
-    public AExpression getStepExprImpl() {
-        return this.aLoop.getStepExprImpl();
     }
 
     /**
@@ -1577,9 +1559,7 @@ public abstract class ACilkFor extends ALoop {
         INIT("init"),
         INITVALUE("initValue"),
         COND("cond"),
-        CONDEXPR("condExpr"),
         STEP("step"),
-        STEPEXPR("stepExpr"),
         ENDVALUE("endValue"),
         STEPVALUE("stepValue"),
         HASCONDRELATION("hasCondRelation"),
