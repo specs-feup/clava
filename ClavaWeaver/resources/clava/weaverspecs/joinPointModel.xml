@@ -13,49 +13,49 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- EMPTY -->
     <joinpoint class="empty"
-        tooltip="Utility joinpoint, to represent empty nodes when directly accessing the tree" />
+               tooltip="Utility joinpoint, to represent empty nodes when directly accessing the tree"/>
 
     <!--  CLAVA EXCEPTION -->
     <joinpoint class="clavaException"
-        tooltip="Utility joinpoint, to represent certain problems when generating join points" />
+               tooltip="Utility joinpoint, to represent certain problems when generating join points"/>
 
     <!-- PROGRAM -->
     <joinpoint class="program"
-        tooltip="Represents the complete program and is the top-most joinpoint in the hierarchy">
-        <select class="file" />
+               tooltip="Represents the complete program and is the top-most joinpoint in the hierarchy">
+        <select class="file"/>
     </joinpoint>
 
     <!-- FILE-->
     <joinpoint class="file" tooltip="Represents a source file (.c, .cpp., .cl, etc)">
-        <select alias="stmt" class="statement" />
-        <select alias="childStmt" class="statement" />
-        <select class="function" />
-        <select class="method" />
-        <select class="record" />
-        <select class="struct" />
-        <select class="class" />
-        <select class="pragma" />
-        <select class="marker" />
-        <select class="tag" />
-        <select class="vardecl" />
-        <select class="comment" />
-        <select class="include" />
-        <select class="typedefDecl" />
-        <select class="decl" />
+        <select alias="stmt" class="statement"/>
+        <select alias="childStmt" class="statement"/>
+        <select class="function"/>
+        <select class="method"/>
+        <select class="record"/>
+        <select class="struct"/>
+        <select class="class"/>
+        <select class="pragma"/>
+        <select class="marker"/>
+        <select class="tag"/>
+        <select class="vardecl"/>
+        <select class="comment"/>
+        <select class="include"/>
+        <select class="typedefDecl"/>
+        <select class="decl"/>
     </joinpoint>
 
     <joinpoint class="include" extends="decl"
-        tooltip="Represents an include directive (e.g., #include &lt;stdio.h&gt;)">
+               tooltip="Represents an include directive (e.g., #include &lt;stdio.h&gt;)">
     </joinpoint>
 
     <!-- RECORD -->
     <joinpoint class="record" extends="namedDecl" tooltip="Common class of struct, union and class">
-        <select class="field" />
+        <select class="field"/>
     </joinpoint>
 
     <!-- FIELD -->
     <joinpoint class="field" extends="declarator"
-        tooltip="Represents a member of a struct/union/class">
+               tooltip="Represents a member of a struct/union/class">
     </joinpoint>
 
     <!-- STRUCT -->
@@ -66,64 +66,64 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- CLASS -->
     <joinpoint class="class" extends="record" tooltip="Represents a C++ class">
-        <select class="method" />
+        <select class="method"/>
     </joinpoint>
 
     <!-- PRAGMA -->
     <joinpoint class="pragma" tooltip="Represents a pragma in the code (e.g., #pragma kernel)">
-        <select alias="target" class="joinpoint" />
+        <select alias="target" class="joinpoint"/>
     </joinpoint>
 
 
     <!-- MARKER -->
     <joinpoint class="marker" extends="pragma"
-        tooltip="Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)">
-        <select alias="contents" class="scope" />
+               tooltip="Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)">
+        <select alias="contents" class="scope"/>
     </joinpoint>
 
     <!-- TAG -->
     <joinpoint class="tag" extends="pragma"
-        tooltip="A pragma that references a point in the code and sticks to it">
+               tooltip="A pragma that references a point in the code and sticks to it">
     </joinpoint>
 
     <!-- OMP PRAGMA -->
     <joinpoint class="omp" extends="pragma"
-        tooltip="Represents an OpenMP pragma (e.g., #pragma omp parallel)">
+               tooltip="Represents an OpenMP pragma (e.g., #pragma omp parallel)">
     </joinpoint>
 
 
     <!-- DECL -->
     <joinpoint class="decl"
-        tooltip="Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code" />
+               tooltip="Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code"/>
 
     <!-- NAMED DECL -->
-    <joinpoint class="namedDecl" extends="decl" tooltip="Represents a decl with a name" />
+    <joinpoint class="namedDecl" extends="decl" tooltip="Represents a decl with a name"/>
 
     <!-- DECLARATOR DECL -->
     <joinpoint class="declarator" extends="namedDecl"
-        tooltip="Represents a decl that comes from a declarator (e.g., function, field, variable)" />
+               tooltip="Represents a decl that comes from a declarator (e.g., function, field, variable)"/>
 
 
     <!-- VAR DECLARATION -->
     <joinpoint class="vardecl" extends="declarator"
-        tooltip="Represents a variable declaration or definition">
-        <select alias="init" class="expression" />
+               tooltip="Represents a variable declaration or definition">
+        <select alias="init" class="expression"/>
     </joinpoint>
 
 
     <!-- TYPEDEF NAME DECL -->
     <joinpoint class="typedefNameDecl" extends="namedDecl"
-        tooltip="Base node for declarations which introduce a typedef-name">
+               tooltip="Base node for declarations which introduce a typedef-name">
     </joinpoint>
 
     <!-- TYPEDEF DECL -->
     <joinpoint class="typedefDecl" extends="typedefNameDecl"
-        tooltip="Declaration of a typedef-name via the 'typedef' type specifier">
+               tooltip="Declaration of a typedef-name via the 'typedef' type specifier">
     </joinpoint>
 
     <!-- ENUM DECL -->
     <joinpoint class="enumDecl" extends="namedDecl" tooltip="Represents an enum">
-        <select alias="enumerator" class="enumeratorDecl" />
+        <select alias="enumerator" class="enumeratorDecl"/>
     </joinpoint>
 
     <!-- ENUMERATOR DECL -->
@@ -145,16 +145,16 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- FUNCTION -->
     <joinpoint class="function" extends="declarator"
-        tooltip="Represents a function declaration or definition">
-        <select class="body" />
+               tooltip="Represents a function declaration or definition">
+        <select class="body"/>
         <!--  <select alias="body" 			class="scope"/> -->
-        <select class="param" />
-        <select class="decl" />
+        <select class="param"/>
+        <select class="decl"/>
     </joinpoint>
 
     <!-- METHOD -->
     <joinpoint class="method" extends="function"
-        tooltip="Represents a C++ class method declaration or definition">
+               tooltip="Represents a C++ class method declaration or definition">
     </joinpoint>
 
     <!-- CUDA KERNEL -->
@@ -166,20 +166,20 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- SCOPE-->
     <joinpoint class="scope" extends="statement" tooltip="Represents a group of statements">
-        <select alias="stmt" class="statement" />
-        <select alias="childStmt" class="statement" />
+        <select alias="stmt" class="statement"/>
+        <select alias="childStmt" class="statement"/>
 
-        <select class="scope" />
-        <select class="if" />
-        <select class="loop" />
-        <select class="pragma" />
-        <select class="marker" />
-        <select class="tag" />
-        <select class="omp" />
-        <select class="comment" />
-        <select class="returnStmt" />
-        <select class="cilkFor" />
-        <select class="cilkSync" />
+        <select class="scope"/>
+        <select class="if"/>
+        <select class="loop"/>
+        <select class="pragma"/>
+        <select class="marker"/>
+        <select class="tag"/>
+        <select class="omp"/>
+        <select class="comment"/>
+        <select class="returnStmt"/>
+        <select class="cilkFor"/>
+        <select class="cilkSync"/>
     </joinpoint>
 
     <!-- BODY -->
@@ -189,41 +189,41 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- STATEMENT -->
     <joinpoint class="statement">
-        <select alias="expr" class="expression" />
-        <select alias="childExpr" class="expression" />
-        <select class="call" />
-        <select alias="stmtCall" class="call" />
-        <select class="memberCall" />
-        <select class="memberAccess" />
-        <select class="arrayAccess" />
-        <select class="vardecl" />
-        <select class="varref" />
-        <select class="op" />
-        <select class="binaryOp" />
-        <select class="unaryOp" />
-        <select class="newExpr" />
-        <select class="deleteExpr" />
-        <select class="cilkSpawn" />
+        <select alias="expr" class="expression"/>
+        <select alias="childExpr" class="expression"/>
+        <select class="call"/>
+        <select alias="stmtCall" class="call"/>
+        <select class="memberCall"/>
+        <select class="memberAccess"/>
+        <select class="arrayAccess"/>
+        <select class="vardecl"/>
+        <select class="varref"/>
+        <select class="op"/>
+        <select class="binaryOp"/>
+        <select class="unaryOp"/>
+        <select class="newExpr"/>
+        <select class="deleteExpr"/>
+        <select class="cilkSpawn"/>
     </joinpoint>
 
 
     <!-- LOOP -->
     <joinpoint class="loop" extends="statement">
-        <select alias="init" class="statement" />
-        <select alias="cond" class="statement" />
-        <select alias="step" class="statement" />
-        <select alias="body" class="scope" />
+        <select alias="init" class="statement"/>
+        <select alias="cond" class="expression"/>
+        <select alias="step" class="expression"/>
+        <select alias="body" class="scope"/>
         <!-- <select 			 			class="body"/>  -->
     </joinpoint>
 
 
     <!-- IF -->
     <joinpoint class="if" extends="statement">
-        <select alias="cond" class="expression" />
-        <select alias="condDecl" class="vardecl" />
-        <select alias="then" class="scope" />
-        <select alias="else" class="scope" />
-        <select alias="body" class="scope" />
+        <select alias="cond" class="expression"/>
+        <select alias="condDecl" class="vardecl"/>
+        <select alias="then" class="scope"/>
+        <select alias="else" class="scope"/>
+        <select alias="body" class="scope"/>
         <!-- <select 			 			class="body"/> -->
     </joinpoint>
 
@@ -233,40 +233,40 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- RETURN STMT -->
     <joinpoint class="returnStmt" extends="statement">
-        <select alias="returnExpr" class="expression" />
+        <select alias="returnExpr" class="expression"/>
     </joinpoint>
 
     <!-- SWITCH -->
-    <joinpoint class="switch" extends="statement" />
+    <joinpoint class="switch" extends="statement"/>
 
     <!-- CASE -->
-    <joinpoint class="case" extends="statement" />
+    <joinpoint class="case" extends="statement"/>
 
     <!-- DECL STMT-->
-    <joinpoint class="declStmt" extends="statement" />
+    <joinpoint class="declStmt" extends="statement"/>
 
     <!-- EXPR STMT -->
-    <joinpoint class="exprStmt" extends="statement" />
+    <joinpoint class="exprStmt" extends="statement"/>
 
     <!-- GOTO STMT -->
-    <joinpoint class="gotoStmt" extends="statement" />
+    <joinpoint class="gotoStmt" extends="statement"/>
 
     <!-- LABEL STMT -->
-    <joinpoint class="labelStmt" extends="statement" />
+    <joinpoint class="labelStmt" extends="statement"/>
 
     <!-- EMPTY STMT -->
-    <joinpoint class="emptyStmt" extends="statement" />
+    <joinpoint class="emptyStmt" extends="statement"/>
 
     <!-- CONTINUE STMT -->
-    <joinpoint class="continue" extends="statement" />
+    <joinpoint class="continue" extends="statement"/>
 
     <!-- BREAK STMT -->
-    <joinpoint class="break" extends="statement" />
+    <joinpoint class="break" extends="statement"/>
 
     <!-- CALL -->
     <joinpoint class="call" extends="expression">
-        <select alias="callee" class="expression" />
-        <select alias="arg" class="expression" />
+        <select alias="callee" class="expression"/>
+        <select alias="arg" class="expression"/>
     </joinpoint>
 
     <!-- MEMBER CALL -->
@@ -283,20 +283,20 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- BINARY OPERATOR -->
     <joinpoint class="binaryOp" extends="op">
-        <select alias="left" class="expression" />
-        <select alias="right" class="expression" />
+        <select alias="left" class="expression"/>
+        <select alias="right" class="expression"/>
     </joinpoint>
 
     <!-- UNARY OPERATOR -->
     <joinpoint class="unaryOp" extends="op">
-        <select alias="operand" class="expression" />
+        <select alias="operand" class="expression"/>
     </joinpoint>
 
     <!-- TERNARY OPERATOR -->
     <joinpoint class="ternaryOp" extends="op">
-        <select alias="cond" class="expression" />
-        <select alias="trueExpr" class="expression" />
-        <select alias="falseExpr" class="expression" />
+        <select alias="cond" class="expression"/>
+        <select alias="trueExpr" class="expression"/>
+        <select alias="falseExpr" class="expression"/>
     </joinpoint>
 
     <!-- NEW EXPR -->
@@ -310,7 +310,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- EXPRESSION -->
     <joinpoint class="expression">
-        <select class="vardecl" />
+        <select class="vardecl"/>
     </joinpoint>
 
     <!-- VAR REFERENCE -->
@@ -318,66 +318,66 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     </joinpoint>
 
     <!-- CAST -->
-    <joinpoint class="cast" extends="expression" />
+    <joinpoint class="cast" extends="expression"/>
 
 
     <!-- PAREN EXPR -->
-    <joinpoint class="parenExpr" extends="expression" />
+    <joinpoint class="parenExpr" extends="expression"/>
 
     <!-- ArrayAccess -->
     <joinpoint class="arrayAccess" extends="expression">
         <select alias="arrayVar" class="expression"
-            tooltip="varref to the variable of the array access" />
+                tooltip="varref to the variable of the array access"/>
         <select alias="subscript" class="expression"
-            tooltip="expression of the array access subscript" />
+                tooltip="expression of the array access subscript"/>
     </joinpoint>
 
     <!-- MemberAccess -->
-    <joinpoint class="memberAccess" extends="expression" />
+    <joinpoint class="memberAccess" extends="expression"/>
 
     <!-- UnaryExprOrType -->
-    <joinpoint class="unaryExprOrType" extends="expression" />
+    <joinpoint class="unaryExprOrType" extends="expression"/>
 
 
     <!-- THIS -->
-    <joinpoint class="this" extends="expression" />
+    <joinpoint class="this" extends="expression"/>
 
     <!-- LITERAL -->
-    <joinpoint class="literal" extends="expression" />
+    <joinpoint class="literal" extends="expression"/>
 
     <!-- INTEGER_LITERAL -->
-    <joinpoint class="intLiteral" extends="literal" />
+    <joinpoint class="intLiteral" extends="literal"/>
 
     <!-- FLOAT_LITERAL -->
-    <joinpoint class="floatLiteral" extends="literal" />
+    <joinpoint class="floatLiteral" extends="literal"/>
 
     <!-- BOOL_LITERAL -->
-    <joinpoint class="boolLiteral" extends="literal" />
+    <joinpoint class="boolLiteral" extends="literal"/>
 
 
     <!-- INIT_LIST -->
-    <joinpoint class="initList" extends="expression" />
-    
+    <joinpoint class="initList" extends="expression"/>
+
     <!-- IMPLICIT_VALUE -->
-    <joinpoint class="implicitValue" extends="expression" />
+    <joinpoint class="implicitValue" extends="expression"/>
 
 
     <!-- COMMENT -->
-    <joinpoint class="comment" />
+    <joinpoint class="comment"/>
 
 
     <!-- CILK_FOR -->
-    <joinpoint class="cilkFor" extends="loop" />
+    <joinpoint class="cilkFor" extends="loop"/>
 
     <!-- CILK_SYNC -->
-    <joinpoint class="cilkSync" extends="statement" />
+    <joinpoint class="cilkSync" extends="statement"/>
 
     <!-- CILK_SPAWN -->
-    <joinpoint class="cilkSpawn" extends="call" />
+    <joinpoint class="cilkSpawn" extends="call"/>
 
 
     <!-- ATTRIBUTE -->
-    <joinpoint class="attribute" />
+    <joinpoint class="attribute"/>
 
     <!-- TYPE -->
     <joinpoint class="type">
@@ -435,7 +435,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- ELABORATED TYPE -->
     <joinpoint class="elaboratedType" extends="type"
-        tooltip="Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name, e.g., N::M::type, or both. This type is used to keep track of a type name as written in the source code, including tag keywords and any nested-name-specifiers. The type itself is always 'sugar', used to express what was written in the source code but containing no additional semantic information.">
+               tooltip="Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name, e.g., N::M::type, or both. This type is used to keep track of a type name as written in the source code, including tag keywords and any nested-name-specifiers. The type itself is always 'sugar', used to express what was written in the source code but containing no additional semantic information.">
     </joinpoint>
 
     <!-- TYPEDEF TYPE -->

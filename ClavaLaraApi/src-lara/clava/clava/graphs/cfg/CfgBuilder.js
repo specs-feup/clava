@@ -296,7 +296,7 @@ export default class CfgBuilder {
         if ($loop === undefined) {
             throw new Error("Loop is undefined");
         }
-        const $afterStmt = $loop.kind === "for" ? $loop.step : $loop.cond;
+        const $afterStmt = $loop.kind === "for" ? $loop.stepExpr : $loop.condExpr;
         const afterNode = this.nodes.get($afterStmt.astId) ?? this.endNode;
         this.addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
     }

@@ -768,10 +768,17 @@ public class ClavaFactory {
 
     }
 
-    public ForStmt forStmt(Stmt init, Stmt cond, Stmt inc, CompoundStmt body) {
+    /**
+     * @param init
+     * @param cond may use null, Java does not allow ExprStmt | NullStmt
+     * @param inc  may use null, Java does not allow ExprStmt | NullStmt
+     * @param body
+     * @return
+     */
+    public ForStmt forStmt(Stmt init, Expr cond, Expr inc, CompoundStmt body) {
         DataStore forStmtData = newDataStore(ForStmt.class);
 
-        return new ForStmt(forStmtData, Arrays.asList(init, cond, inc, body, nullDecl()));
+        return new ForStmt(forStmtData, Arrays.asList(init, cond != null ? cond : nullStmt(), inc != null ? inc : nullStmt(), body, nullDecl()));
     }
 
     public WhileStmt whileStmt(Stmt cond, CompoundStmt body) {

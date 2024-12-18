@@ -742,18 +742,18 @@ export default class ClavaJoinPoints {
    */
   static forStmt(
     $init?: Joinpoints.Statement | string,
-    $condition?: Joinpoints.Statement | string,
-    $inc?: Joinpoints.Statement | string,
+    $condition?: Joinpoints.Expression | string,
+    $inc?: Joinpoints.Expression | string,
     $body?: Joinpoints.Statement | string
   ): Joinpoints.Loop {
     if (typeof $init === "string") {
       $init = ClavaJoinPoints.stmtLiteral($init);
     }
     if (typeof $condition === "string") {
-      $condition = ClavaJoinPoints.stmtLiteral($condition);
+      $condition = ClavaJoinPoints.exprLiteral($condition);
     }
     if (typeof $inc === "string") {
-      $inc = ClavaJoinPoints.stmtLiteral($inc);
+      $inc = ClavaJoinPoints.exprLiteral($inc);
     }
     if (typeof $body === "string") {
       $body = ClavaJoinPoints.stmtLiteral($body);

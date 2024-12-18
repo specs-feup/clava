@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,13 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Optional;
-import java.util.Set;
-
 import org.suikasoft.jOptions.Interfaces.DataStore;
-
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -32,6 +26,11 @@ import pt.up.fe.specs.clava.utils.Nameable;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.utils.foriter.ForIterationsExpression;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
+
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class ForStmt extends LoopStmt {
 
@@ -46,12 +45,12 @@ public class ForStmt extends LoopStmt {
         return getOptionalChild(Stmt.class, 0);
     }
 
-    public Optional<Stmt> getCond() {
-        return getOptionalChild(Stmt.class, 1);
+    public Optional<Expr> getCond() {
+        return getOptionalChild(Expr.class, 1);
     }
 
-    public Optional<Stmt> getInc() {
-        return getOptionalChild(Stmt.class, 2);
+    public Optional<Expr> getInc() {
+        return getOptionalChild(Expr.class, 2);
     }
 
     @Override
@@ -88,15 +87,15 @@ public class ForStmt extends LoopStmt {
         // System.out.println("COND CODE: " + getCond().map(cond -> " " + cond.getCode()).orElse(";"));
         // System.out.println("VARDECL CODE: " + condVar.map(var -> var.getCode()).orElse("<no code>"));
 
-        var condCode = condVar.map(var -> var.getCode() + ";")
-                .orElse(getCond().map(cond -> " " + cond.getCode()).orElse(";"));
+        var condCode = condVar.map(var -> var.getCode())
+                .orElse(getCond().map(cond -> " " + cond.getCode()).orElse("")) + ";";
 
         code.append(condCode);
         // code.append(getCond().map(cond -> " " + cond.getCode()).orElse(";"));
 
         // Get 'inc' code
         String incCode = getInc()
-                .map(init -> " " + removeSemicolon(init.getCode()))
+                .map(init -> " " + init.getCode())
                 .orElse("");
 
         code.append(incCode);
@@ -137,7 +136,6 @@ public class ForStmt extends LoopStmt {
 
     public Optional<BinaryOperator> getCondOperator() {
         return getCond()
-                .map(cond -> cond.getChild(0))
                 .filter(BinaryOperator.class::isInstance)
                 .map(BinaryOperator.class::cast);
 
@@ -145,11 +143,11 @@ public class ForStmt extends LoopStmt {
 
     /**
      * The value expression of the test relation in the condition of an OpenM canonical loop form.
-     * 
+     *
      * <p>
      * The value expression is define if the condition expression is a binary operator with one of the following
      * operators: <, <=, >, >=
-     * 
+     *
      * @return
      */
     public Optional<Expr> getConditionValueExpr() {
@@ -177,7 +175,7 @@ public class ForStmt extends LoopStmt {
 
     /**
      * A ClavaNode that implements Nameable, that represents the iteration variable.
-     * 
+     *
      * @return
      */
     public Optional<ClavaNode> getIterationVarNode() {
@@ -255,12 +253,12 @@ public class ForStmt extends LoopStmt {
 
     /**
      * The value by which the iteration variable changes each iteration.
-     * 
+     *
      * <p>
      * Supports values for increment expressions of Canonical Loop Forms as defined by the OpenMP standard.
      */
     public Optional<Expr> getStepValueExpr() {
-        return getInc().flatMap(inc -> getStepValueExpr(inc.getChild(0)));
+        return getInc().flatMap(inc -> getStepValueExpr(inc));
     }
 
     private Optional<Expr> getStepValueExpr(ClavaNode incExpr) {
@@ -310,11 +308,15 @@ public class ForStmt extends LoopStmt {
     }
 
     /**
-     * 
      * @return an expression that represents the number of iterations of the loop
      */
     @Override
     public Optional<Expr> getIterationsExpr() {
         return ForIterationsExpression.newInstance(this).flatMap(iter -> iter.getIterationsExpr());
+    }
+
+    @Override
+    public Optional<Expr> getStmtCondExpr() {
+        return getCond();
     }
 }

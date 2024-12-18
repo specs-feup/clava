@@ -1,11 +1,11 @@
 /**
  * Copyright 2018 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,30 +13,12 @@
 
 package pt.up.fe.specs.clang.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.BiFunction;
-
 import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.stmt.CXXCatchStmt;
-import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
-import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
-import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
-import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
-import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
-import pt.up.fe.specs.clava.ast.stmt.DefaultStmt;
-import pt.up.fe.specs.clava.ast.stmt.DoStmt;
-import pt.up.fe.specs.clava.ast.stmt.ForStmt;
-import pt.up.fe.specs.clava.ast.stmt.IfStmt;
-import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
+import pt.up.fe.specs.clava.ast.stmt.*;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.util.SpecsCheck;
@@ -44,6 +26,11 @@ import pt.up.fe.specs.util.classmap.ClassMap;
 import pt.up.fe.specs.util.classmap.ClassSet;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.BiFunction;
 
 public class ChildrenAdapter {
 
@@ -58,6 +45,7 @@ public class ChildrenAdapter {
     // }
 
     private final static ClassMap<ClavaNode, BiFunction<List<ClavaNode>, ClavaContext, List<ClavaNode>>> CHILDREN_ADAPTERS;
+
     static {
         CHILDREN_ADAPTERS = new ClassMap<>((list, context) -> list);
         CHILDREN_ADAPTERS.put(IfStmt.class, ChildrenAdapter::adaptIfStmt);
@@ -110,7 +98,7 @@ public class ChildrenAdapter {
 
     /**
      * Checks if the given Clava node is an instance of the expected class. Throws an exception if it is not.
-     * 
+     *
      * @param <T>
      * @param node
      * @param expectedClass
@@ -152,8 +140,8 @@ public class ChildrenAdapter {
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
         adaptedChildren.add(toStmt(check(children.get(0), STMT_OR_EXPR), context));
-        adaptedChildren.add(toStmt(check(children.get(1), Expr.class), context));
-        adaptedChildren.add(toStmt(check(children.get(2), Expr.class), context));
+        adaptedChildren.add(check(children.get(1), Expr.class));
+        adaptedChildren.add(check(children.get(2), Expr.class));
         adaptedChildren.add(toCompoundStmt(check(children.get(3), STMT_OR_EXPR), false, context));
         adaptedChildren.add(check(children.get(4), OPTIONAL_VARDECL));
 

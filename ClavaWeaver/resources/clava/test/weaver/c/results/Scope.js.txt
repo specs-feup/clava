@@ -1,2 +1,2 @@
-numStatements (depth): 9
+numStatements (depth): 7
 numStatements (flat): 3

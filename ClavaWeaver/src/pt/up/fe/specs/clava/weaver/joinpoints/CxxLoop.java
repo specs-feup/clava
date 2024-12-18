@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,32 +13,14 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import org.lara.interpreter.utils.DefMap;
-
 import com.google.common.base.Preconditions;
-
+import org.lara.interpreter.utils.DefMap;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
-import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
-import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
-import pt.up.fe.specs.clava.ast.stmt.DoStmt;
-import pt.up.fe.specs.clava.ast.stmt.ForStmt;
-import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
-import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
+import pt.up.fe.specs.clava.ast.stmt.*;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.transform.loop.LoopAnalysisUtils;
@@ -46,10 +28,7 @@ import pt.up.fe.specs.clava.transform.loop.LoopInterchange;
 import pt.up.fe.specs.clava.transform.loop.LoopTiling;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.ALoopKindEnum;
 import pt.up.fe.specs.clava.weaver.defs.CxxLoopDefs;
 import pt.up.fe.specs.clava.weaver.enums.Relation;
@@ -57,6 +36,8 @@ import pt.up.fe.specs.util.SpecsEnums;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.lazy.ThreadSafeLazy;
+
+import java.util.*;
 
 public class CxxLoop extends ALoop {
 
@@ -251,6 +232,13 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
+    public AExpression getCondExprImpl() {
+        return loop.getStmtCondExpr()
+                .map(expr -> CxxJoinpoints.create(expr, AExpression.class))
+                .orElse(null);
+    }
+
+    @Override
     public List<? extends AStatement> selectStep() {
         var step = getStepImpl();
 
@@ -258,18 +246,23 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public AStatement getStepImpl() {
+    public AExpression getStepImpl() {
         if (!(loop instanceof ForStmt)) {
             return null;
         }
 
-        Stmt inc = ((ForStmt) loop).getInc().orElse(null);
+        var inc = ((ForStmt) loop).getInc().orElse(null);
         if (inc == null) {
             return null;
 
         }
 
-        return CxxJoinpoints.create(inc, AStatement.class);
+        return CxxJoinpoints.create(inc, AExpression.class);
+    }
+
+    @Override
+    public AExpression getStepExprImpl() {
+        return getStepImpl();
     }
 
     @Override
@@ -330,11 +323,11 @@ public class CxxLoop extends ALoop {
         }
 
         switch (loopKind) {
-        case WHILE:
-            convertToWhile();
-            break;
-        default:
-            throw new RuntimeException("Not implemented: " + loopKind);
+            case WHILE:
+                convertToWhile();
+                break;
+            default:
+                throw new RuntimeException("Not implemented: " + loopKind);
         }
 
     }
@@ -351,7 +344,10 @@ public class CxxLoop extends ALoop {
 
             // WhileStmt whileStmt = ClavaNodeFactory.whileStmt(loop.getInfo(), ((ForStmt) loop).getCond().orElse(null),
             // loop.getBody());
-            Stmt cond = ((ForStmt) loop).getCond().orElse(CxxWeaver.getFactory().nullStmt());
+            Stmt cond = ((ForStmt) loop).getCond()
+                    .map(expr -> (Stmt) getFactory().exprStmt(expr))
+                    .orElse(CxxWeaver.getFactory().nullStmt());
+
             WhileStmt whileStmt = CxxWeaver.getFactory().whileStmt(cond, loop.getBody());
 
             replaceWith(CxxJoinpoints.create(whileStmt));
@@ -634,20 +630,20 @@ public class CxxLoop extends ALoop {
 
     private BinaryOperatorKind getOpKind(Relation relation) {
         switch (relation) {
-        case EQ:
-            return BinaryOperatorKind.EQ;
-        case GE:
-            return BinaryOperatorKind.GE;
-        case GT:
-            return BinaryOperatorKind.GT;
-        case LE:
-            return BinaryOperatorKind.LE;
-        case LT:
-            return BinaryOperatorKind.LT;
-        case NE:
-            return BinaryOperatorKind.NE;
-        default:
-            throw new NotImplementedException(relation);
+            case EQ:
+                return BinaryOperatorKind.EQ;
+            case GE:
+                return BinaryOperatorKind.GE;
+            case GT:
+                return BinaryOperatorKind.GT;
+            case LE:
+                return BinaryOperatorKind.LE;
+            case LT:
+                return BinaryOperatorKind.LT;
+            case NE:
+                return BinaryOperatorKind.NE;
+            default:
+                throw new NotImplementedException(relation);
         }
     }
 

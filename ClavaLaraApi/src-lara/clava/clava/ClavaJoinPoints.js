@@ -395,10 +395,10 @@ export default class ClavaJoinPoints {
             $init = ClavaJoinPoints.stmtLiteral($init);
         }
         if (typeof $condition === "string") {
-            $condition = ClavaJoinPoints.stmtLiteral($condition);
+            $condition = ClavaJoinPoints.exprLiteral($condition);
         }
         if (typeof $inc === "string") {
-            $inc = ClavaJoinPoints.stmtLiteral($inc);
+            $inc = ClavaJoinPoints.exprLiteral($inc);
         }
         if (typeof $body === "string") {
             $body = ClavaJoinPoints.stmtLiteral($body);
