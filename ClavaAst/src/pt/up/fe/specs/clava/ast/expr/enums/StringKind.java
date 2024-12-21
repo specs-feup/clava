@@ -19,7 +19,7 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public enum StringKind {
 
-    ASCII,
+    ORDINARY,
     WIDE,
     UTF8(true),
     UTF16(true),
@@ -37,7 +37,7 @@ public enum StringKind {
 
     public String getPrefix() {
         switch (this) {
-        case ASCII:
+        case ORDINARY:
             return "";
         case WIDE:
             return "L";
