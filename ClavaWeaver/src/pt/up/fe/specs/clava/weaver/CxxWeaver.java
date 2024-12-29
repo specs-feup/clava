@@ -8,7 +8,6 @@ import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.interpreter.weaver.utils.LaraResourceProvider;
-import org.lara.language.specification.LanguageSpecification;
 import org.lara.language.specification.dsl.LanguageSpecificationV2;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
@@ -40,7 +39,6 @@ import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.clava.weaver.utils.ClavaAstMethods;
-import pt.up.fe.specs.lara.langspec.LangSpecsXmlParser;
 import pt.up.fe.specs.lara.lcl.LaraCommonLanguageApis;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
 import pt.up.fe.specs.util.*;
@@ -76,14 +74,8 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public static LanguageSpecificationV2 buildLanguageSpecification() {
-        // var langSpecV1 = LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS,
-        // ClavaWeaverResource.ARTIFACTS,
-        // ClavaWeaverResource.ACTIONS, true);
-        //
-        // return JoinPointFactory.fromOld(langSpecV1);
-        // System.out.println("JPS: " + ClavaWeaverResource.JOINPOINTS.read());
-        return LangSpecsXmlParser.parse(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
-                ClavaWeaverResource.ACTIONS, true);
+        return LanguageSpecificationV2.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
+                ClavaWeaverResource.ACTIONS);
     }
 
     private static final List<String> CLAVA_PREDEFINED_EXTERNAL_DEPS = Arrays.asList("LAT - Lara Autotuning Tool",
@@ -104,15 +96,6 @@ public class CxxWeaver extends ACxxWeaver {
             "Benchmark - Rosetta (import lara.benchmark.RosettaBenchmarkSet)",
             "https://github.com/specs-feup/clava-benchmarks.git?folder=Rosetta");
 
-    /**
-     * @return
-     * @deprecated
-     */
-    @Deprecated
-    public static LanguageSpecification buildLanguageSpecificationOld() {
-        return LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
-                ClavaWeaverResource.ACTIONS, true);
-    }
 
     private static final String TEMP_WEAVING_FOLDER = "__clava_woven";
     private static final String TEMP_SRC_FOLDER = "__clava_src";
@@ -1371,11 +1354,6 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     @Override
-    public LanguageSpecification getLanguageSpecification() {
-        return buildLanguageSpecificationOld();
-    }
-
-    @Override
     public String getName() {
         // v1.2.2
         return "Clava";
@@ -2026,7 +2004,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     @Override
-    protected LanguageSpecificationV2 buildLangSpecsV2() {
+    protected LanguageSpecificationV2 buildLangSpecs() {
         return buildLanguageSpecification();
     }
 
