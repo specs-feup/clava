@@ -133,6 +133,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org/'
 
       - name: Checkout Clava
         uses: actions/checkout@v4
@@ -184,11 +185,10 @@ jobs:
                     TIMESTAMP=$(date +"%Y%m%d%H%M%S")
                     npm version prerelease --preid="$TIMESTAMP"
                     npm publish --tag staging --access public
+                # Not updating automatically the version since this would make the staging branch diverge from the main branch
                 elif [ "${{ github.ref }}" == "refs/heads/master" ]; then
-                    echo "Publishing from main, incrementing patch version before publishing"
-                    npm version patch
+                    echo "Publishing from main, assumes version was changed before publishing"
                     npm publish
-                    git push --follow-tags # Push updated version
                 else
                     echo "Not master or staging branches, not publishing even if it is a push event"
                 fi
