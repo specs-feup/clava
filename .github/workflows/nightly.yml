@@ -178,11 +178,12 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == '20.x'
         run: | 
             cd clava/Clava-JS
+            npm whoami
             echo "Attempt to publish while running on ${{ matrix.os }} and Node.js ${{matrix.node-version}}"
             if [[ "${{ github.event_name }}" == "push" ]]; then
                 if [ "${{ github.ref }}" == "refs/heads/staging" ]; then
                     echo "Publishing from staging, creating timestamped prerelease and updating tag 'staging'"
-                    TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+                    TIMESTAMP=$(date +"%Y%m%d%H%M")
                     npm version prerelease --preid="$TIMESTAMP"
                     npm publish --tag staging --access public
                 # Not updating automatically the version since this would make the staging branch diverge from the main branch
