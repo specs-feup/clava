@@ -149,7 +149,7 @@ jobs:
       - name: Setup js workspace
         run: |
           echo '{ "name": "SPeCS Workspace", "type": "module", "workspaces": [ "clava/Clava-JS", "lara-framework/Lara-JS" ] }' > package.json
-          npm ci
+          npm install
 
       - name: Build Lara-JS
         run: |
