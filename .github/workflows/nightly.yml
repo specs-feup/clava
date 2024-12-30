@@ -176,7 +176,8 @@ jobs:
       - name: Publish JS
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == '20.x'
         run: | 
-            echo "Attempt to publish while running on {{ matrix.os }} and Node.js {matrix.node-version}"
+            cd clava/Clava-JS
+            echo "Attempt to publish while running on ${{ matrix.os }} and Node.js ${{matrix.node-version}}"
             if [[ "${{ github.event_name }}" == "push" ]]; then
                 if [ "${{ github.ref }}" == "refs/heads/staging" ]; then
                     echo "Publishing from staging, creating timestamped prerelease and updating tag 'staging'"
@@ -187,7 +188,9 @@ jobs:
                     echo "Publishing from main, incrementing patch version before publishing"
                     npm version patch
                     npm publish
-                    git push # Push updated version
+                    git push --follow-tags # Push updated version
+                else
+                    echo "Not master or staging branches, not publishing even if it is a push event"
                 fi
             else
                 echo "Not a push event, skipping publish."
