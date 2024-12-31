@@ -98,7 +98,12 @@ public class PatcherProducer {
         // Always compile as C++
         command.add("-x");
         command.add("c++");
+        command.add("-nostdinc");
+        command.add("-isysroot");
+        command.add("\"\""); // Empty string to disable system root
+        command.add("-I" + "/home/specs/Desktop/pedrojsilva/code-mending/results/tupatcher_includes");
 
+        System.out.println("COMMAND: " + command);
         var workingDir = dumperExe.getAbsoluteFile().getParentFile();
 
         int n = 0;
@@ -114,7 +119,9 @@ public class PatcherProducer {
                         inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
                 patchData.write(sourceFile, patchedFile);
                 n++;
-
+                if (output.getStdErr() == null) {
+                    throw new RuntimeException("Could not run patcher");
+                }
                 // No more errors, break
                 if (output.getStdErr().get(TUErrorsData.ERRORS).isEmpty()) {
                     break;

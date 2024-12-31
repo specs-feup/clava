@@ -14,6 +14,7 @@
 package pt.up.fe.specs.tupatcher.parallel;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.collections.concurrentchannel.ConcurrentChannel;
+import pt.up.fe.specs.util.csv.CsvWriter;
 
 public class ParallelPatcher {
 
@@ -115,6 +117,8 @@ public class ParallelPatcher {
     }
 
     public int executeV2() {
+        var stats = new CsvWriter("File", "Success", "Iterations", "Execution Time (ns)");
+
         long startTime = System.nanoTime();
 
         var sourcePaths = config.get(TUPatcherConfig.SOURCE_PATHS).getStringList();
@@ -152,6 +156,13 @@ public class ParallelPatcher {
             System.out.println("Collected result for file " + acc);
             acc++;
         }
+
+        for (var result : results) {
+            stats.addLine(SpecsIo.getCanonicalPath(result.getFile()), Boolean.toString(result.isSuccess()), Integer.toString(result.getIterations()),
+                    Long.toString(result.getExecutionTime()));
+        }
+        SpecsIo.write(
+                Paths.get(config.get(TUPatcherConfig.OUTPUT_FOLDER).getAbsolutePath(), "tu_patcher_stats.csv").toFile(), stats.buildCsv());
 
         System.out.println("FINISHED!");
 

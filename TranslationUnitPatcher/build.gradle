@@ -1,13 +1,16 @@
 plugins {
+    id "java"
  	id 'distribution'
+    id "com.github.johnrengelman.shadow" version "8.1.0" // TODO Replace with the latest version
+
 }
 
 // Java project
 apply plugin: 'java'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 
@@ -23,10 +26,6 @@ dependencies {
     implementation ':ClangAstParser'
     implementation ':jOptions'
     implementation ':SpecsUtils'
-}
-
-java {
-	withSourcesJar()
 }
 
 // Project sources
@@ -51,4 +50,18 @@ sourceSets {
 		srcDir 'resources'
 	  }
    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'pt.up.fe.specs.tupatcher.TUPatcherLauncher'
+        )
+    }
+}
+
+shadowJar {
+    archiveBaseName.set("tupatcher-uber")
+    archiveClassifier.set('')
+    archiveVersion.set('')
 }

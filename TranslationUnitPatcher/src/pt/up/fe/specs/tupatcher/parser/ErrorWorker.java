@@ -51,6 +51,9 @@ public class ErrorWorker implements LineStreamWorker<TUErrorsData> {
             argKind = lineStream.nextLine();
             argValue = lineStream.nextLine();
 
+            System.out.println("ARG KIND: " + argKind + " " + "ARG VALUE: " + argValue);
+
+
             // System.out.println("ARG KIND: " + argKind);
             // System.out.println("ARG VALUE: " + argValue);
 

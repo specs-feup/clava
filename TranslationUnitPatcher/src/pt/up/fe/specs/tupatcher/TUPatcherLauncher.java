@@ -15,6 +15,7 @@ package pt.up.fe.specs.tupatcher;
 
 import java.io.File;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,6 +44,7 @@ import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
 import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
 import pt.up.fe.specs.util.utilities.ProgressCounter;
+import pt.up.fe.specs.util.utilities.StringList;
 
 public class TUPatcherLauncher {
 
@@ -132,12 +134,41 @@ public class TUPatcherLauncher {
 
         SpecsSystem.programStandardInit();
 
-        var storeDefinition = TUPatcherConfig.getDefinition();
+        /*var storeDefinition = TUPatcherConfig.getDefinition();
         var app = App.newInstance("Translation Unit Patcher", storeDefinition,
                 new PropertiesPersistence(storeDefinition),
                 dataStore -> new TUPatcherLauncher(new TUPatcherConfig(dataStore)).execute());
+        JOptionsUtils.executeApp(app, Arrays.asList(args));*/
 
-        JOptionsUtils.executeApp(app, Arrays.asList(args));
+        var config = new TUPatcherConfig();
+
+        // print current working directory
+        System.out.println("Current working directory: " + System.getProperty("user.dir"));
+
+        var output = SpecsIo.mkdir(new File("output"));
+        var file1 = new File(
+                "/home/specs/Desktop/pedrojsilva/code-mending/repos/repos_output/dataset/projects/id-Software_DOOM_master/");
+        var file2 = new File(
+                "/home/specs/Desktop/pedrojsilva/code-mending/repos/repos_output/dataset/projects/git_git_master/");
+        var file3 = new File(
+                "/home/specs/Desktop/pedrojsilva/code-mending/repos/repos_output/dataset/projects/torvalds_linux_master/");
+        var file4 = new File(
+        "/home/specs/Desktop/pedrojsilva/code-mending/repos/repos_output/dataset/projects/OpenVPN_openvpn_master/");
+        var file5 = new File(
+        "/home/specs/Desktop/pedrojsilva/code-mending/repos/repos_output/dataset/projects/openssl_openssl_master/");
+                //       "/home/specs/Desktop/pedrojsilva/code-mending/repos/repos_output/dataset/projects/id-Software_DOOM_master/linuxdoom-1.10_am_map.c");
+        config.set(TUPatcherConfig.SOURCE_PATHS, StringList.newInstance(
+                file1.getAbsolutePath(), file2.getAbsolutePath(), file3.getAbsolutePath(), file4.getAbsolutePath(), file5.getAbsolutePath()));
+        config.set(TUPatcherConfig.OUTPUT_FOLDER, output);
+        config.set(TUPatcherConfig.MAX_FILES, 4000);
+        config.set(TUPatcherConfig.MAX_ITERATIONS, 100);
+        config.set(TUPatcherConfig.PARALLEL, false);
+        //config.set(TUPatcherConfig.NUM_THREADS, 4);
+        config.set(TUPatcherConfig.SOURCE_EXTENSIONS, StringList.newInstance("c"));
+
+        new TUPatcherLauncher(config).execute();
+
+
 
         // File propertiesFile = new File("patcher.properties");
         // SpecsProperties properties = propertiesFile.isFile() ? SpecsProperties.newInstance(propertiesFile)
@@ -220,7 +251,7 @@ public class TUPatcherLauncher {
             // TODO: Does some pre-processing on the files... this should be moved to patchOneFile
             SpecsLogs.info("Processing file '" + sourceFile + "' " + counter.next());
 
-            String fileContent = SpecsIo.read(sourceFile);
+            /*String fileContent = SpecsIo.read(sourceFile);
             if (!(fileContent.substring(0, 4).equals("void")
                     || fileContent.substring(0, 13).equals("TYPE_PATCH_00"))) {
                 // assure the function declaration has a return type
@@ -230,7 +261,7 @@ public class TUPatcherLauncher {
                 } else if (fileContent.contains("return")) {
                     SpecsIo.write(sourceFile, "TYPE_PATCH_00 " + fileContent);
                 }
-            }
+            }*/
             // String a = path + "/" + arg;
             // PatchData patchData = null;
             try {
@@ -298,6 +329,7 @@ public class TUPatcherLauncher {
         // command.add(DUMPER_EXE);
         command.add(dumperExe.getAbsolutePath());
         command.add(patchedFile.getAbsolutePath());
+
         command.add("--");
         command.add("-ferror-limit=1");
 
@@ -305,6 +337,12 @@ public class TUPatcherLauncher {
         // Always compile as C++
         command.add("-x");
         command.add("c++");
+        command.add("-nostdinc");
+        command.add("-isysroot");
+        command.add("\"\""); // Empty string to disable system root
+        command.add("-I" + "/home/specs/Desktop/pedrojsilva/code-mending/results/tupatcher_includes");
+
+        System.out.println("COMMAND: " + command);
 
         // // System.out.println("RUNNING... " + command);
         // var output = SpecsSystem.runProcess(command, TUPatcherLauncher::outputProcessor,
@@ -347,6 +385,10 @@ public class TUPatcherLauncher {
                 // }
                 // System.out.print('.');
 
+                if (output.getStdErr() == null) {
+                    throw new RuntimeException("Could not run patcher");
+                }
+
                 // No more errors, break
                 if (output.getStdErr().get(TUErrorsData.ERRORS).isEmpty()) {
                     break;
@@ -354,6 +396,9 @@ public class TUPatcherLauncher {
             } catch (Exception e) {
                 var endTime = System.nanoTime();
                 addStats(filepath, false, n, endTime - startTime);
+                SpecsIo.write(
+                        Paths.get(config.get(TUPatcherConfig.OUTPUT_FOLDER).getAbsolutePath(), "tu_patcher_stats.csv").toFile(), stats.buildCsv());
+
                 throw new RuntimeException("Could not patch file", e);
             }
 
@@ -369,7 +414,11 @@ public class TUPatcherLauncher {
         addStats(filepath, success, n, endTime - startTime);
 
         // Write file
-        SpecsIo.write(new File("tu_patcher_stats.csv"), stats.buildCsv());
+
+
+
+        SpecsIo.write(
+                Paths.get(config.get(TUPatcherConfig.OUTPUT_FOLDER).getAbsolutePath(), "tu_patcher_stats.csv").toFile(), stats.buildCsv());
 
         if (n >= maxIterations) {
             System.out.println("!Maximum number of iterations exceeded. Could not solve all errors");
@@ -474,8 +523,8 @@ public class TUPatcherLauncher {
         try (var lines = LineStream.newInstance(stream, "Input Stream");) {
             while (lines.hasNextLine()) {
                 lines.nextLine();
-                // var line = lines.nextLine();
-                // System.out.println("StdOut: " + line);
+                var line = lines.nextLine();
+                System.out.println("StdOut: " + line);
             }
         }
 
