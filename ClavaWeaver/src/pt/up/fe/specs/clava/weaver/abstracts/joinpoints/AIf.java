@@ -1372,8 +1372,8 @@ public abstract class AIf extends AStatement {
         this.aStatement.fillWithAttributes(attributes);
         attributes.add("cond");
         attributes.add("condDecl");
-        attributes.add("then");
         attributes.add("else");
+        attributes.add("then");
     }
 
     /**

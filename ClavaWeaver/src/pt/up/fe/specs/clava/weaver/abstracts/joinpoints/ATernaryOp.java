@@ -1132,8 +1132,8 @@ public abstract class ATernaryOp extends AOp {
     protected final void fillWithAttributes(List<String> attributes) {
         this.aOp.fillWithAttributes(attributes);
         attributes.add("cond");
-        attributes.add("trueExpr");
         attributes.add("falseExpr");
+        attributes.add("trueExpr");
     }
 
     /**

@@ -1291,8 +1291,8 @@ public abstract class ABuiltinType extends AType {
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
         attributes.add("builtinKind");
-        attributes.add("isInteger");
         attributes.add("isFloat");
+        attributes.add("isInteger");
         attributes.add("isSigned");
         attributes.add("isUnsigned");
         attributes.add("isVoid");

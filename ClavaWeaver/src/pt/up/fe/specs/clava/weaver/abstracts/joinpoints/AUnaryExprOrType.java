@@ -1118,11 +1118,11 @@ public abstract class AUnaryExprOrType extends AExpression {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
-        attributes.add("kind");
-        attributes.add("hasTypeExpr");
-        attributes.add("hasArgExpr");
-        attributes.add("argType");
         attributes.add("argExpr");
+        attributes.add("argType");
+        attributes.add("hasArgExpr");
+        attributes.add("hasTypeExpr");
+        attributes.add("kind");
     }
 
     /**

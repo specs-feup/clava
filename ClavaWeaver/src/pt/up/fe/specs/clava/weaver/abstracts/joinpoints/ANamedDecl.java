@@ -1125,10 +1125,10 @@ public abstract class ANamedDecl extends ADecl {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aDecl.fillWithAttributes(attributes);
-        attributes.add("name");
         attributes.add("isPublic");
-        attributes.add("qualifiedPrefix");
+        attributes.add("name");
         attributes.add("qualifiedName");
+        attributes.add("qualifiedPrefix");
     }
 
     /**

@@ -1134,11 +1134,11 @@ public abstract class AMemberAccess extends AExpression {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
-        attributes.add("name");
+        attributes.add("arrow");
+        attributes.add("base");
         attributes.add("memberChain");
         attributes.add("memberChainNames");
-        attributes.add("base");
-        attributes.add("arrow");
+        attributes.add("name");
     }
 
     /**

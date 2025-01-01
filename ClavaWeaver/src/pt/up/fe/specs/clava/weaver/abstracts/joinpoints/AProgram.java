@@ -878,21 +878,21 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
-        attributes.add("name");
+        attributes.add("baseFolder");
+        attributes.add("defaultFlags");
+        attributes.add("extraIncludes");
+        attributes.add("extraLibs");
+        attributes.add("extraProjects");
+        attributes.add("extraSources");
+        attributes.add("files");
+        attributes.add("includeFolders");
         attributes.add("isCxx");
+        attributes.add("main");
+        attributes.add("name");
         attributes.add("standard");
         attributes.add("stdFlag");
-        attributes.add("defaultFlags");
         attributes.add("userFlags");
-        attributes.add("includeFolders");
-        attributes.add("baseFolder");
         attributes.add("weavingFolder");
-        attributes.add("extraSources");
-        attributes.add("extraIncludes");
-        attributes.add("extraProjects");
-        attributes.add("extraLibs");
-        attributes.add("main");
-        attributes.add("files");
     }
 
     /**

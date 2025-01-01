@@ -1101,10 +1101,10 @@ public abstract class AArrayAccess extends AExpression {
     protected final void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
         attributes.add("arrayVar");
-        attributes.add("subscript");
-        attributes.add("parentAccess");
-        attributes.add("numSubscripts");
         attributes.add("name");
+        attributes.add("numSubscripts");
+        attributes.add("parentAccess");
+        attributes.add("subscript");
     }
 
     /**

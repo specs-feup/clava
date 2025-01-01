@@ -1190,11 +1190,11 @@ public abstract class ARecord extends ANamedDecl {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aNamedDecl.fillWithAttributes(attributes);
-        attributes.add("kind");
         attributes.add("fields");
         attributes.add("functions");
         attributes.add("isImplementation");
         attributes.add("isPrototype");
+        attributes.add("kind");
     }
 
     /**

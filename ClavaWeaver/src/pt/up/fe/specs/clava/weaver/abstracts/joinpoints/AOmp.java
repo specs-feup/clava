@@ -2000,25 +2000,25 @@ public abstract class AOmp extends APragma {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aPragma.fillWithAttributes(attributes);
-        attributes.add("kind");
-        attributes.add("numThreads");
-        attributes.add("procBind");
-        attributes.add("private");
-        attributes.add("hasClause");
-        attributes.add("isClauseLegal");
         attributes.add("clauseKinds");
-        attributes.add("getReduction");
-        attributes.add("reductionKinds");
+        attributes.add("collapse");
+        attributes.add("copyin");
         attributes.add("default");
         attributes.add("firstprivate");
+        attributes.add("getReduction");
+        attributes.add("hasClause");
+        attributes.add("isClauseLegal");
+        attributes.add("kind");
         attributes.add("lastprivate");
-        attributes.add("shared");
-        attributes.add("copyin");
-        attributes.add("scheduleKind");
-        attributes.add("scheduleChunkSize");
-        attributes.add("scheduleModifiers");
-        attributes.add("collapse");
+        attributes.add("numThreads");
         attributes.add("ordered");
+        attributes.add("private");
+        attributes.add("procBind");
+        attributes.add("reductionKinds");
+        attributes.add("scheduleChunkSize");
+        attributes.add("scheduleKind");
+        attributes.add("scheduleModifiers");
+        attributes.add("shared");
     }
 
     /**

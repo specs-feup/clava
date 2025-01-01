@@ -771,25 +771,25 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
-        attributes.add("kind");
-        attributes.add("isTopLevel");
-        attributes.add("isArray");
-        attributes.add("isPointer");
-        attributes.add("isAuto");
-        attributes.add("arraySize");
         attributes.add("arrayDims");
-        attributes.add("hasTemplateArgs");
-        attributes.add("templateArgsStrings");
-        attributes.add("templateArgsTypes");
-        attributes.add("hasSugar");
+        attributes.add("arraySize");
+        attributes.add("constant");
         attributes.add("desugar");
         attributes.add("desugarAll");
-        attributes.add("isBuiltin");
-        attributes.add("constant");
-        attributes.add("unwrap");
-        attributes.add("normalize");
-        attributes.add("typeFields");
         attributes.add("fieldTree");
+        attributes.add("hasSugar");
+        attributes.add("hasTemplateArgs");
+        attributes.add("isArray");
+        attributes.add("isAuto");
+        attributes.add("isBuiltin");
+        attributes.add("isPointer");
+        attributes.add("isTopLevel");
+        attributes.add("kind");
+        attributes.add("normalize");
+        attributes.add("templateArgsStrings");
+        attributes.add("templateArgsTypes");
+        attributes.add("typeFields");
+        attributes.add("unwrap");
     }
 
     /**

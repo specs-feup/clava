@@ -973,8 +973,8 @@ public abstract class AInclude extends ADecl {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aDecl.fillWithAttributes(attributes);
-        attributes.add("name");
         attributes.add("isAngled");
+        attributes.add("name");
         attributes.add("relativeFolderpath");
     }
 

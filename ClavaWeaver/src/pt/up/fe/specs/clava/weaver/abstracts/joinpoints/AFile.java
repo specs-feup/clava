@@ -1000,21 +1000,21 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
-        attributes.add("name");
-        attributes.add("file");
-        attributes.add("hasMain");
-        attributes.add("path");
-        attributes.add("relativeFilepath");
-        attributes.add("relativeFolderpath");
         attributes.add("baseSourcePath");
+        attributes.add("errorOutput");
+        attributes.add("file");
+        attributes.add("getDestinationFilepath");
+        attributes.add("hasMain");
+        attributes.add("hasParsingErrors");
+        attributes.add("includes");
         attributes.add("isCxx");
         attributes.add("isHeader");
         attributes.add("isOpenCL");
-        attributes.add("getDestinationFilepath");
+        attributes.add("name");
+        attributes.add("path");
+        attributes.add("relativeFilepath");
+        attributes.add("relativeFolderpath");
         attributes.add("sourceFoldername");
-        attributes.add("hasParsingErrors");
-        attributes.add("errorOutput");
-        attributes.add("includes");
     }
 
     /**

@@ -162,9 +162,9 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
-        attributes.add("message");
-        attributes.add("exceptionType");
         attributes.add("exception");
+        attributes.add("exceptionType");
+        attributes.add("message");
     }
 
     /**

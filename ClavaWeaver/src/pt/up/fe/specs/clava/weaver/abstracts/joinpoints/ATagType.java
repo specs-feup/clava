@@ -1198,8 +1198,8 @@ public abstract class ATagType extends AType {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
-        attributes.add("name");
         attributes.add("decl");
+        attributes.add("name");
     }
 
     /**

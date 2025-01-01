@@ -1160,13 +1160,13 @@ public abstract class AVarref extends AExpression {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
-        attributes.add("name");
-        attributes.add("kind");
-        attributes.add("useExpr");
-        attributes.add("isFunctionCall");
         attributes.add("declaration");
-        attributes.add("property");
         attributes.add("hasProperty");
+        attributes.add("isFunctionCall");
+        attributes.add("kind");
+        attributes.add("name");
+        attributes.add("property");
+        attributes.add("useExpr");
     }
 
     /**

@@ -1251,11 +1251,11 @@ public abstract class ACase extends AStatement {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
+        attributes.add("instructions");
         attributes.add("isDefault");
         attributes.add("isEmpty");
-        attributes.add("nextInstruction");
-        attributes.add("instructions");
         attributes.add("nextCase");
+        attributes.add("nextInstruction");
         attributes.add("values");
     }
 

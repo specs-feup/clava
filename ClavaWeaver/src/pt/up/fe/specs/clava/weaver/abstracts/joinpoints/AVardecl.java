@@ -1300,13 +1300,13 @@ public abstract class AVardecl extends ADeclarator {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aDeclarator.fillWithAttributes(attributes);
+        attributes.add("definition");
         attributes.add("hasInit");
         attributes.add("init");
         attributes.add("initStyle");
+        attributes.add("isGlobal");
         attributes.add("isParam");
         attributes.add("storageClass");
-        attributes.add("isGlobal");
-        attributes.add("definition");
     }
 
     /**

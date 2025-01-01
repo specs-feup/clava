@@ -1260,10 +1260,10 @@ public abstract class ATemplateSpecializationType extends AType {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
-        attributes.add("templateName");
-        attributes.add("numArgs");
         attributes.add("args");
         attributes.add("firstArgType");
+        attributes.add("numArgs");
+        attributes.add("templateName");
     }
 
     /**

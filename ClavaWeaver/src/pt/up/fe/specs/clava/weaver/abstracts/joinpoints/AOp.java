@@ -1025,9 +1025,9 @@ public abstract class AOp extends AExpression {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
-        attributes.add("operator");
-        attributes.add("kind");
         attributes.add("isBitwise");
+        attributes.add("kind");
+        attributes.add("operator");
     }
 
     /**

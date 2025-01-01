@@ -1279,8 +1279,8 @@ public abstract class AFunctionType extends AType {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
-        attributes.add("returnType");
         attributes.add("paramTypes");
+        attributes.add("returnType");
     }
 
     /**

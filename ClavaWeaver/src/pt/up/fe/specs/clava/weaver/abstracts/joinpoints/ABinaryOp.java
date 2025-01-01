@@ -1159,9 +1159,9 @@ public abstract class ABinaryOp extends AOp {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aOp.fillWithAttributes(attributes);
+        attributes.add("isAssignment");
         attributes.add("left");
         attributes.add("right");
-        attributes.add("isAssignment");
     }
 
     /**

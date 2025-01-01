@@ -219,10 +219,10 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
     protected void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
         attributes.add("decl");
-        attributes.add("vardecl");
-        attributes.add("use");
-        attributes.add("isFunctionArgument");
         attributes.add("implicitCast");
+        attributes.add("isFunctionArgument");
+        attributes.add("use");
+        attributes.add("vardecl");
     }
 
     /**

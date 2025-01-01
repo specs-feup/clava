@@ -1021,8 +1021,8 @@ public abstract class AMarker extends APragma {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aPragma.fillWithAttributes(attributes);
-        attributes.add("id");
         attributes.add("contents");
+        attributes.add("id");
     }
 
     /**

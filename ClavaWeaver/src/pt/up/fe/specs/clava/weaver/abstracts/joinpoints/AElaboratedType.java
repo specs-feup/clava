@@ -1220,8 +1220,8 @@ public abstract class AElaboratedType extends AType {
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
         attributes.add("keyword");
-        attributes.add("qualifier");
         attributes.add("namedType");
+        attributes.add("qualifier");
     }
 
     /**

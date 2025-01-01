@@ -259,10 +259,10 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
-        attributes.add("name");
-        attributes.add("target");
         attributes.add("content");
         attributes.add("getTargetNodes");
+        attributes.add("name");
+        attributes.add("target");
     }
 
     /**

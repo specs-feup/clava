@@ -2145,30 +2145,30 @@ public abstract class AFunction extends ADeclarator {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aDeclarator.fillWithAttributes(attributes);
-        attributes.add("hasDefinition");
-        attributes.add("isImplementation");
-        attributes.add("isPrototype");
-        attributes.add("functionType");
+        attributes.add("body");
+        attributes.add("calls");
+        attributes.add("canonical");
         attributes.add("declarationJp");
         attributes.add("declarationJps");
         attributes.add("definitionJp");
+        attributes.add("functionType");
         attributes.add("getDeclaration");
-        attributes.add("body");
+        attributes.add("hasDefinition");
+        attributes.add("id");
+        attributes.add("isCanonical");
+        attributes.add("isCudaKernel");
+        attributes.add("isDelete");
+        attributes.add("isImplementation");
+        attributes.add("isInline");
+        attributes.add("isModulePrivate");
+        attributes.add("isPrototype");
+        attributes.add("isPure");
+        attributes.add("isVirtual");
         attributes.add("paramNames");
         attributes.add("params");
-        attributes.add("id");
-        attributes.add("isInline");
-        attributes.add("isVirtual");
-        attributes.add("isModulePrivate");
-        attributes.add("isPure");
-        attributes.add("isDelete");
-        attributes.add("storageClass");
-        attributes.add("calls");
-        attributes.add("signature");
         attributes.add("returnType");
-        attributes.add("isCudaKernel");
-        attributes.add("canonical");
-        attributes.add("isCanonical");
+        attributes.add("signature");
+        attributes.add("storageClass");
     }
 
     /**

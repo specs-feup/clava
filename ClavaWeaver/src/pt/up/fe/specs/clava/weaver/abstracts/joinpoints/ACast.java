@@ -1050,10 +1050,10 @@ public abstract class ACast extends AExpression {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
-        attributes.add("isImplicitCast");
         attributes.add("fromType");
-        attributes.add("toType");
+        attributes.add("isImplicitCast");
         attributes.add("subExpr");
+        attributes.add("toType");
     }
 
     /**

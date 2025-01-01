@@ -1593,22 +1593,22 @@ public abstract class ACall extends AExpression {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
-        attributes.add("name");
-        attributes.add("numArgs");
-        attributes.add("memberNames");
-        attributes.add("declaration");
-        attributes.add("definition");
         attributes.add("argList");
         attributes.add("args");
-        attributes.add("getArg");
-        attributes.add("returnType");
-        attributes.add("functionType");
-        attributes.add("isMemberAccess");
-        attributes.add("memberAccess");
-        attributes.add("isStmtCall");
-        attributes.add("function");
-        attributes.add("signature");
+        attributes.add("declaration");
+        attributes.add("definition");
         attributes.add("directCallee");
+        attributes.add("function");
+        attributes.add("functionType");
+        attributes.add("getArg");
+        attributes.add("isMemberAccess");
+        attributes.add("isStmtCall");
+        attributes.add("memberAccess");
+        attributes.add("memberNames");
+        attributes.add("name");
+        attributes.add("numArgs");
+        attributes.add("returnType");
+        attributes.add("signature");
     }
 
     /**

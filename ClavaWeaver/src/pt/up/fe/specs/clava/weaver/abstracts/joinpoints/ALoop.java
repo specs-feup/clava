@@ -2007,26 +2007,26 @@ public abstract class ALoop extends AStatement {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
-        attributes.add("kind");
-        attributes.add("id");
-        attributes.add("isInnermost");
-        attributes.add("isOutermost");
-        attributes.add("nestedLevel");
+        attributes.add("body");
+        attributes.add("cond");
+        attributes.add("condRelation");
         attributes.add("controlVar");
-        attributes.add("rank");
+        attributes.add("endValue");
+        attributes.add("hasCondRelation");
+        attributes.add("id");
+        attributes.add("init");
+        attributes.add("initValue");
+        attributes.add("isInnermost");
+        attributes.add("isInterchangeable");
+        attributes.add("isOutermost");
         attributes.add("isParallel");
         attributes.add("iterations");
         attributes.add("iterationsExpr");
-        attributes.add("isInterchangeable");
-        attributes.add("init");
-        attributes.add("initValue");
-        attributes.add("cond");
+        attributes.add("kind");
+        attributes.add("nestedLevel");
+        attributes.add("rank");
         attributes.add("step");
-        attributes.add("endValue");
         attributes.add("stepValue");
-        attributes.add("hasCondRelation");
-        attributes.add("condRelation");
-        attributes.add("body");
     }
 
     /**

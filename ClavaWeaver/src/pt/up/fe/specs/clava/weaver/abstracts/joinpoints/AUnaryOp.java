@@ -1042,8 +1042,8 @@ public abstract class AUnaryOp extends AOp {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aOp.fillWithAttributes(attributes);
-        attributes.add("operand");
         attributes.add("isPointerDeref");
+        attributes.add("operand");
     }
 
     /**

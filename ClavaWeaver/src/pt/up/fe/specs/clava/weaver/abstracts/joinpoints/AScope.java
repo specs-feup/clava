@@ -1734,13 +1734,13 @@ public abstract class AScope extends AStatement {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
-        attributes.add("getNumStatements");
-        attributes.add("naked");
-        attributes.add("stmts");
         attributes.add("allStmts");
         attributes.add("firstStmt");
+        attributes.add("getNumStatements");
         attributes.add("lastStmt");
+        attributes.add("naked");
         attributes.add("owner");
+        attributes.add("stmts");
     }
 
     /**

@@ -1368,16 +1368,16 @@ public abstract class AClass extends ARecord {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aRecord.fillWithAttributes(attributes);
-        attributes.add("methods");
-        attributes.add("bases");
-        attributes.add("allMethods");
         attributes.add("allBases");
-        attributes.add("isAbstract");
-        attributes.add("isInterface");
-        attributes.add("prototypes");
-        attributes.add("implementation");
+        attributes.add("allMethods");
+        attributes.add("bases");
         attributes.add("canonical");
+        attributes.add("implementation");
+        attributes.add("isAbstract");
         attributes.add("isCanonical");
+        attributes.add("isInterface");
+        attributes.add("methods");
+        attributes.add("prototypes");
     }
 
     /**
