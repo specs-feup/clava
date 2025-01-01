@@ -1,8 +1,8 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
 import java.util.List;
-import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -729,6 +729,120 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * Performs a copy of the node and its children, but not of the nodes in its fields
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aVardecl.copyImpl();
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    @Override
+    public void dataClearImpl() {
+        this.aVardecl.dataClearImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    @Override
+    public AJoinPoint deepCopyImpl() {
+        return this.aVardecl.deepCopyImpl();
+    }
+
+    /**
+     * Removes the node associated to this joinpoint from the AST
+     */
+    @Override
+    public AJoinPoint detachImpl() {
+        return this.aVardecl.detachImpl();
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aVardecl.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aVardecl.insertImpl(position, code);
+    }
+
+    /**
+     * Inserts the given join point after this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        return this.aVardecl.insertAfterImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(String code) {
+        return this.aVardecl.insertAfterImpl(code);
+    }
+
+    /**
+     * Inserts the given join point before this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        return this.aVardecl.insertBeforeImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(String node) {
+        return this.aVardecl.insertBeforeImpl(node);
+    }
+
+    /**
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
+     * @param message 
+     */
+    @Override
+    public void messageToUserImpl(String message) {
+        this.aVardecl.messageToUserImpl(message);
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aVardecl.removeChildrenImpl();
+    }
+
+    /**
+     * If vardecl already has an initialization, removes it.
+     * @param removeConst 
+     */
+    @Override
+    public void removeInitImpl(boolean removeConst) {
+        this.aVardecl.removeInitImpl(removeConst);
+    }
+
+    /**
      * Replaces this node with the given node
      * @param node 
      */
@@ -765,47 +879,75 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
-     * Inserts the given join point before this join point
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    @Override
+    public void setDataImpl(Object source) {
+        this.aVardecl.setDataImpl(source);
+    }
+
+    /**
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aVardecl.insertBeforeImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aVardecl.setFirstChildImpl(node);
     }
 
     /**
-     * Overload which accepts a string
+     * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
+     * @param init 
+     */
+    @Override
+    public void setInitImpl(AExpression init) {
+        this.aVardecl.setInitImpl(init);
+    }
+
+    /**
+     * Converts the given string to a literal expression and sets it as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
+     * @param init 
+     */
+    @Override
+    public void setInitImpl(String init) {
+        this.aVardecl.setInitImpl(init);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aVardecl.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aVardecl.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(String node) {
-        return this.aVardecl.insertBeforeImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aVardecl.setLastChildImpl(node);
     }
 
     /**
-     * Inserts the given join point after this join point
-     * @param node 
+     * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
+     * @param storageClass 
      */
     @Override
-    public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aVardecl.insertAfterImpl(node);
-    }
-
-    /**
-     * Overload which accepts a string
-     * @param code 
-     */
-    @Override
-    public AJoinPoint insertAfterImpl(String code) {
-        return this.aVardecl.insertAfterImpl(code);
-    }
-
-    /**
-     * Removes the node associated to this joinpoint from the AST
-     */
-    @Override
-    public AJoinPoint detachImpl() {
-        return this.aVardecl.detachImpl();
+    public void setStorageClassImpl(String storageClass) {
+        this.aVardecl.setStorageClassImpl(storageClass);
     }
 
     /**
@@ -815,22 +957,6 @@ public abstract class AParam extends AVardecl {
     @Override
     public void setTypeImpl(AType type) {
         this.aVardecl.setTypeImpl(type);
-    }
-
-    /**
-     * Performs a copy of the node and its children, but not of the nodes in its fields
-     */
-    @Override
-    public AJoinPoint copyImpl() {
-        return this.aVardecl.copyImpl();
-    }
-
-    /**
-     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
-     */
-    @Override
-    public AJoinPoint deepCopyImpl() {
-        return this.aVardecl.deepCopyImpl();
     }
 
     /**
@@ -863,41 +989,6 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
-     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
-     * @param message 
-     */
-    @Override
-    public void messageToUserImpl(String message) {
-        this.aVardecl.messageToUserImpl(message);
-    }
-
-    /**
-     * Removes the children of this node
-     */
-    @Override
-    public void removeChildrenImpl() {
-        this.aVardecl.removeChildrenImpl();
-    }
-
-    /**
-     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
-        return this.aVardecl.setFirstChildImpl(node);
-    }
-
-    /**
-     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setLastChildImpl(AJoinPoint node) {
-        return this.aVardecl.setLastChildImpl(node);
-    }
-
-    /**
      * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
@@ -908,102 +999,11 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String[] comments) {
-        this.aVardecl.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String comments) {
-        this.aVardecl.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Setting data directly is not supported, this action just emits a warning and does nothing
-     * @param source 
-     */
-    @Override
-    public void setDataImpl(Object source) {
-        this.aVardecl.setDataImpl(source);
-    }
-
-    /**
-     * Clears all properties from the .data object
-     */
-    @Override
-    public void dataClearImpl() {
-        this.aVardecl.dataClearImpl();
-    }
-
-    /**
-     * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
-     * @param init 
-     */
-    @Override
-    public void setInitImpl(AExpression init) {
-        this.aVardecl.setInitImpl(init);
-    }
-
-    /**
-     * Converts the given string to a literal expression and sets it as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
-     * @param init 
-     */
-    @Override
-    public void setInitImpl(String init) {
-        this.aVardecl.setInitImpl(init);
-    }
-
-    /**
-     * If vardecl already has an initialization, removes it.
-     * @param removeConst 
-     */
-    @Override
-    public void removeInitImpl(boolean removeConst) {
-        this.aVardecl.removeInitImpl(removeConst);
-    }
-
-    /**
      * Creates a new varref based on this vardecl
      */
     @Override
     public AVarref varrefImpl() {
         return this.aVardecl.varrefImpl();
-    }
-
-    /**
-     * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
-     * @param storageClass 
-     */
-    @Override
-    public void setStorageClassImpl(String storageClass) {
-        this.aVardecl.setStorageClassImpl(storageClass);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aVardecl.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aVardecl.insertImpl(position, code);
     }
 
     /**

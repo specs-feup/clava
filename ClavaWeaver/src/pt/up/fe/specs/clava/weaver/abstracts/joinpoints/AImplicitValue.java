@@ -1,8 +1,8 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
 import java.util.List;
-import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -637,6 +637,111 @@ public abstract class AImplicitValue extends AExpression {
     }
 
     /**
+     * Performs a copy of the node and its children, but not of the nodes in its fields
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aExpression.copyImpl();
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    @Override
+    public void dataClearImpl() {
+        this.aExpression.dataClearImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    @Override
+    public AJoinPoint deepCopyImpl() {
+        return this.aExpression.deepCopyImpl();
+    }
+
+    /**
+     * Removes the node associated to this joinpoint from the AST
+     */
+    @Override
+    public AJoinPoint detachImpl() {
+        return this.aExpression.detachImpl();
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aExpression.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aExpression.insertImpl(position, code);
+    }
+
+    /**
+     * Inserts the given join point after this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        return this.aExpression.insertAfterImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(String code) {
+        return this.aExpression.insertAfterImpl(code);
+    }
+
+    /**
+     * Inserts the given join point before this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        return this.aExpression.insertBeforeImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(String node) {
+        return this.aExpression.insertBeforeImpl(node);
+    }
+
+    /**
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
+     * @param message 
+     */
+    @Override
+    public void messageToUserImpl(String message) {
+        this.aExpression.messageToUserImpl(message);
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aExpression.removeChildrenImpl();
+    }
+
+    /**
      * Replaces this node with the given node
      * @param node 
      */
@@ -673,47 +778,48 @@ public abstract class AImplicitValue extends AExpression {
     }
 
     /**
-     * Inserts the given join point before this join point
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    @Override
+    public void setDataImpl(Object source) {
+        this.aExpression.setDataImpl(source);
+    }
+
+    /**
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aExpression.insertBeforeImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aExpression.setFirstChildImpl(node);
     }
 
     /**
-     * Overload which accepts a string
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aExpression.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aExpression.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(String node) {
-        return this.aExpression.insertBeforeImpl(node);
-    }
-
-    /**
-     * Inserts the given join point after this join point
-     * @param node 
-     */
-    @Override
-    public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aExpression.insertAfterImpl(node);
-    }
-
-    /**
-     * Overload which accepts a string
-     * @param code 
-     */
-    @Override
-    public AJoinPoint insertAfterImpl(String code) {
-        return this.aExpression.insertAfterImpl(code);
-    }
-
-    /**
-     * Removes the node associated to this joinpoint from the AST
-     */
-    @Override
-    public AJoinPoint detachImpl() {
-        return this.aExpression.detachImpl();
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aExpression.setLastChildImpl(node);
     }
 
     /**
@@ -723,22 +829,6 @@ public abstract class AImplicitValue extends AExpression {
     @Override
     public void setTypeImpl(AType type) {
         this.aExpression.setTypeImpl(type);
-    }
-
-    /**
-     * Performs a copy of the node and its children, but not of the nodes in its fields
-     */
-    @Override
-    public AJoinPoint copyImpl() {
-        return this.aExpression.copyImpl();
-    }
-
-    /**
-     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
-     */
-    @Override
-    public AJoinPoint deepCopyImpl() {
-        return this.aExpression.deepCopyImpl();
     }
 
     /**
@@ -771,41 +861,6 @@ public abstract class AImplicitValue extends AExpression {
     }
 
     /**
-     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
-     * @param message 
-     */
-    @Override
-    public void messageToUserImpl(String message) {
-        this.aExpression.messageToUserImpl(message);
-    }
-
-    /**
-     * Removes the children of this node
-     */
-    @Override
-    public void removeChildrenImpl() {
-        this.aExpression.removeChildrenImpl();
-    }
-
-    /**
-     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
-        return this.aExpression.setFirstChildImpl(node);
-    }
-
-    /**
-     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setLastChildImpl(AJoinPoint node) {
-        return this.aExpression.setLastChildImpl(node);
-    }
-
-    /**
      * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
@@ -813,61 +868,6 @@ public abstract class AImplicitValue extends AExpression {
     @Override
     public AJoinPoint toCommentImpl(String prefix, String suffix) {
         return this.aExpression.toCommentImpl(prefix, suffix);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String[] comments) {
-        this.aExpression.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String comments) {
-        this.aExpression.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Setting data directly is not supported, this action just emits a warning and does nothing
-     * @param source 
-     */
-    @Override
-    public void setDataImpl(Object source) {
-        this.aExpression.setDataImpl(source);
-    }
-
-    /**
-     * Clears all properties from the .data object
-     */
-    @Override
-    public void dataClearImpl() {
-        this.aExpression.dataClearImpl();
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aExpression.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aExpression.insertImpl(position, code);
     }
 
     /**

@@ -4,8 +4,8 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
-import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Map;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -794,6 +794,111 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
+     * Performs a copy of the node and its children, but not of the nodes in its fields
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aDecl.copyImpl();
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    @Override
+    public void dataClearImpl() {
+        this.aDecl.dataClearImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    @Override
+    public AJoinPoint deepCopyImpl() {
+        return this.aDecl.deepCopyImpl();
+    }
+
+    /**
+     * Removes the node associated to this joinpoint from the AST
+     */
+    @Override
+    public AJoinPoint detachImpl() {
+        return this.aDecl.detachImpl();
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aDecl.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aDecl.insertImpl(position, code);
+    }
+
+    /**
+     * Inserts the given join point after this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        return this.aDecl.insertAfterImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(String code) {
+        return this.aDecl.insertAfterImpl(code);
+    }
+
+    /**
+     * Inserts the given join point before this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        return this.aDecl.insertBeforeImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(String node) {
+        return this.aDecl.insertBeforeImpl(node);
+    }
+
+    /**
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
+     * @param message 
+     */
+    @Override
+    public void messageToUserImpl(String message) {
+        this.aDecl.messageToUserImpl(message);
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aDecl.removeChildrenImpl();
+    }
+
+    /**
      * Replaces this node with the given node
      * @param node 
      */
@@ -830,47 +935,48 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
-     * Inserts the given join point before this join point
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    @Override
+    public void setDataImpl(Object source) {
+        this.aDecl.setDataImpl(source);
+    }
+
+    /**
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aDecl.insertBeforeImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aDecl.setFirstChildImpl(node);
     }
 
     /**
-     * Overload which accepts a string
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aDecl.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aDecl.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(String node) {
-        return this.aDecl.insertBeforeImpl(node);
-    }
-
-    /**
-     * Inserts the given join point after this join point
-     * @param node 
-     */
-    @Override
-    public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aDecl.insertAfterImpl(node);
-    }
-
-    /**
-     * Overload which accepts a string
-     * @param code 
-     */
-    @Override
-    public AJoinPoint insertAfterImpl(String code) {
-        return this.aDecl.insertAfterImpl(code);
-    }
-
-    /**
-     * Removes the node associated to this joinpoint from the AST
-     */
-    @Override
-    public AJoinPoint detachImpl() {
-        return this.aDecl.detachImpl();
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aDecl.setLastChildImpl(node);
     }
 
     /**
@@ -880,22 +986,6 @@ public abstract class ANamedDecl extends ADecl {
     @Override
     public void setTypeImpl(AType type) {
         this.aDecl.setTypeImpl(type);
-    }
-
-    /**
-     * Performs a copy of the node and its children, but not of the nodes in its fields
-     */
-    @Override
-    public AJoinPoint copyImpl() {
-        return this.aDecl.copyImpl();
-    }
-
-    /**
-     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
-     */
-    @Override
-    public AJoinPoint deepCopyImpl() {
-        return this.aDecl.deepCopyImpl();
     }
 
     /**
@@ -928,41 +1018,6 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
-     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
-     * @param message 
-     */
-    @Override
-    public void messageToUserImpl(String message) {
-        this.aDecl.messageToUserImpl(message);
-    }
-
-    /**
-     * Removes the children of this node
-     */
-    @Override
-    public void removeChildrenImpl() {
-        this.aDecl.removeChildrenImpl();
-    }
-
-    /**
-     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
-        return this.aDecl.setFirstChildImpl(node);
-    }
-
-    /**
-     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setLastChildImpl(AJoinPoint node) {
-        return this.aDecl.setLastChildImpl(node);
-    }
-
-    /**
      * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
@@ -970,61 +1025,6 @@ public abstract class ANamedDecl extends ADecl {
     @Override
     public AJoinPoint toCommentImpl(String prefix, String suffix) {
         return this.aDecl.toCommentImpl(prefix, suffix);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String[] comments) {
-        this.aDecl.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String comments) {
-        this.aDecl.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Setting data directly is not supported, this action just emits a warning and does nothing
-     * @param source 
-     */
-    @Override
-    public void setDataImpl(Object source) {
-        this.aDecl.setDataImpl(source);
-    }
-
-    /**
-     * Clears all properties from the .data object
-     */
-    @Override
-    public void dataClearImpl() {
-        this.aDecl.dataClearImpl();
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aDecl.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aDecl.insertImpl(position, code);
     }
 
     /**

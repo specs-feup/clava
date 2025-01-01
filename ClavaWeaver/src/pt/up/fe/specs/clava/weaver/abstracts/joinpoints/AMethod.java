@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
 import java.util.List;
-import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -980,6 +980,187 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Adds a new parameter to the function
+     * @param param 
+     */
+    @Override
+    public void addParamImpl(AParam param) {
+        this.aFunction.addParamImpl(param);
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param name 
+     * @param type 
+     */
+    @Override
+    public void addParamImpl(String name, AType type) {
+        this.aFunction.addParamImpl(name, type);
+    }
+
+    /**
+     * Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class
+     * @param newName 
+     * @param insert 
+     */
+    @Override
+    public AFunction cloneImpl(String newName, Boolean insert) {
+        return this.aFunction.cloneImpl(newName, insert);
+    }
+
+    /**
+     * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
+     * @param newName 
+     * @param fileName 
+     */
+    @Override
+    public AFunction cloneOnFileImpl(String newName, String fileName) {
+        return this.aFunction.cloneOnFileImpl(newName, fileName);
+    }
+
+    /**
+     * Generates a clone of the provided function on a new file (with the provided join point).
+     * @param newName 
+     * @param fileName 
+     */
+    @Override
+    public AFunction cloneOnFileImpl(String newName, AFile fileName) {
+        return this.aFunction.cloneOnFileImpl(newName, fileName);
+    }
+
+    /**
+     * Performs a copy of the node and its children, but not of the nodes in its fields
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aFunction.copyImpl();
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    @Override
+    public void dataClearImpl() {
+        this.aFunction.dataClearImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    @Override
+    public AJoinPoint deepCopyImpl() {
+        return this.aFunction.deepCopyImpl();
+    }
+
+    /**
+     * Removes the node associated to this joinpoint from the AST
+     */
+    @Override
+    public AJoinPoint detachImpl() {
+        return this.aFunction.detachImpl();
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aFunction.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aFunction.insertImpl(position, code);
+    }
+
+    /**
+     * Inserts the given join point after this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        return this.aFunction.insertAfterImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(String code) {
+        return this.aFunction.insertAfterImpl(code);
+    }
+
+    /**
+     * Inserts the given join point before this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        return this.aFunction.insertBeforeImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(String node) {
+        return this.aFunction.insertBeforeImpl(node);
+    }
+
+    /**
+     * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertReturnImpl(AJoinPoint code) {
+        return this.aFunction.insertReturnImpl(code);
+    }
+
+    /**
+     * Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertReturnImpl(String code) {
+        return this.aFunction.insertReturnImpl(code);
+    }
+
+    /**
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
+     * @param message 
+     */
+    @Override
+    public void messageToUserImpl(String message) {
+        this.aFunction.messageToUserImpl(message);
+    }
+
+    /**
+     * Creates a new call to this function
+     * @param args 
+     */
+    @Override
+    public ACall newCallImpl(AJoinPoint[] args) {
+        return this.aFunction.newCallImpl(args);
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aFunction.removeChildrenImpl();
+    }
+
+    /**
      * Replaces this node with the given node
      * @param node 
      */
@@ -1016,47 +1197,124 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Inserts the given join point before this join point
+     * Sets the body of the function
+     * @param body 
+     */
+    @Override
+    public void setBodyImpl(AScope body) {
+        this.aFunction.setBodyImpl(body);
+    }
+
+    /**
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    @Override
+    public void setDataImpl(Object source) {
+        this.aFunction.setDataImpl(source);
+    }
+
+    /**
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aFunction.insertBeforeImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aFunction.setFirstChildImpl(node);
     }
 
     /**
-     * Overload which accepts a string
+     * Sets the type of the function
+     * @param functionType 
+     */
+    @Override
+    public void setFunctionTypeImpl(AFunctionType functionType) {
+        this.aFunction.setFunctionTypeImpl(functionType);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aFunction.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aFunction.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(String node) {
-        return this.aFunction.insertBeforeImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aFunction.setLastChildImpl(node);
     }
 
     /**
-     * Inserts the given join point after this join point
-     * @param node 
+     * Sets the parameter of the function at the given position
+     * @param index 
+     * @param param 
      */
     @Override
-    public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aFunction.insertAfterImpl(node);
+    public void setParamImpl(int index, AParam param) {
+        this.aFunction.setParamImpl(index, param);
     }
 
     /**
-     * Overload which accepts a string
-     * @param code 
+     * Sets the parameter of the function at the given position
+     * @param index 
+     * @param name 
+     * @param type 
      */
     @Override
-    public AJoinPoint insertAfterImpl(String code) {
-        return this.aFunction.insertAfterImpl(code);
+    public void setParamImpl(int index, String name, AType type) {
+        this.aFunction.setParamImpl(index, name, type);
     }
 
     /**
-     * Removes the node associated to this joinpoint from the AST
+     * Sets the type of a parameter of the function
+     * @param index 
+     * @param newType 
      */
     @Override
-    public AJoinPoint detachImpl() {
-        return this.aFunction.detachImpl();
+    public void setParamTypeImpl(int index, AType newType) {
+        this.aFunction.setParamTypeImpl(index, newType);
+    }
+
+    /**
+     * Sets the parameters of the function
+     * @param params 
+     */
+    @Override
+    public void setParamsImpl(AParam[] params) {
+        this.aFunction.setParamsImpl(params);
+    }
+
+    /**
+     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
+     * @param params 
+     */
+    @Override
+    public void setParamsFromStringsImpl(String[] params) {
+        this.aFunction.setParamsFromStringsImpl(params);
+    }
+
+    /**
+     * Sets the return type of the function
+     * @param returnType 
+     */
+    @Override
+    public void setReturnTypeImpl(AType returnType) {
+        this.aFunction.setReturnTypeImpl(returnType);
     }
 
     /**
@@ -1066,22 +1324,6 @@ public abstract class AMethod extends AFunction {
     @Override
     public void setTypeImpl(AType type) {
         this.aFunction.setTypeImpl(type);
-    }
-
-    /**
-     * Performs a copy of the node and its children, but not of the nodes in its fields
-     */
-    @Override
-    public AJoinPoint copyImpl() {
-        return this.aFunction.copyImpl();
-    }
-
-    /**
-     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
-     */
-    @Override
-    public AJoinPoint deepCopyImpl() {
-        return this.aFunction.deepCopyImpl();
     }
 
     /**
@@ -1114,41 +1356,6 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
-     * @param message 
-     */
-    @Override
-    public void messageToUserImpl(String message) {
-        this.aFunction.messageToUserImpl(message);
-    }
-
-    /**
-     * Removes the children of this node
-     */
-    @Override
-    public void removeChildrenImpl() {
-        this.aFunction.removeChildrenImpl();
-    }
-
-    /**
-     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
-        return this.aFunction.setFirstChildImpl(node);
-    }
-
-    /**
-     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setLastChildImpl(AJoinPoint node) {
-        return this.aFunction.setLastChildImpl(node);
-    }
-
-    /**
      * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
@@ -1156,213 +1363,6 @@ public abstract class AMethod extends AFunction {
     @Override
     public AJoinPoint toCommentImpl(String prefix, String suffix) {
         return this.aFunction.toCommentImpl(prefix, suffix);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String[] comments) {
-        this.aFunction.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String comments) {
-        this.aFunction.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Setting data directly is not supported, this action just emits a warning and does nothing
-     * @param source 
-     */
-    @Override
-    public void setDataImpl(Object source) {
-        this.aFunction.setDataImpl(source);
-    }
-
-    /**
-     * Clears all properties from the .data object
-     */
-    @Override
-    public void dataClearImpl() {
-        this.aFunction.dataClearImpl();
-    }
-
-    /**
-     * Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class
-     * @param newName 
-     * @param insert 
-     */
-    @Override
-    public AFunction cloneImpl(String newName, Boolean insert) {
-        return this.aFunction.cloneImpl(newName, insert);
-    }
-
-    /**
-     * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
-     * @param newName 
-     * @param fileName 
-     */
-    @Override
-    public AFunction cloneOnFileImpl(String newName, String fileName) {
-        return this.aFunction.cloneOnFileImpl(newName, fileName);
-    }
-
-    /**
-     * Generates a clone of the provided function on a new file (with the provided join point).
-     * @param newName 
-     * @param fileName 
-     */
-    @Override
-    public AFunction cloneOnFileImpl(String newName, AFile fileName) {
-        return this.aFunction.cloneOnFileImpl(newName, fileName);
-    }
-
-    /**
-     * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
-     * @param code 
-     */
-    @Override
-    public AJoinPoint insertReturnImpl(AJoinPoint code) {
-        return this.aFunction.insertReturnImpl(code);
-    }
-
-    /**
-     * Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
-     * @param code 
-     */
-    @Override
-    public AJoinPoint insertReturnImpl(String code) {
-        return this.aFunction.insertReturnImpl(code);
-    }
-
-    /**
-     * Sets the parameters of the function
-     * @param params 
-     */
-    @Override
-    public void setParamsImpl(AParam[] params) {
-        this.aFunction.setParamsImpl(params);
-    }
-
-    /**
-     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
-     * @param params 
-     */
-    @Override
-    public void setParamsFromStringsImpl(String[] params) {
-        this.aFunction.setParamsFromStringsImpl(params);
-    }
-
-    /**
-     * Sets the parameter of the function at the given position
-     * @param index 
-     * @param param 
-     */
-    @Override
-    public void setParamImpl(int index, AParam param) {
-        this.aFunction.setParamImpl(index, param);
-    }
-
-    /**
-     * Sets the parameter of the function at the given position
-     * @param index 
-     * @param name 
-     * @param type 
-     */
-    @Override
-    public void setParamImpl(int index, String name, AType type) {
-        this.aFunction.setParamImpl(index, name, type);
-    }
-
-    /**
-     * Sets the body of the function
-     * @param body 
-     */
-    @Override
-    public void setBodyImpl(AScope body) {
-        this.aFunction.setBodyImpl(body);
-    }
-
-    /**
-     * Creates a new call to this function
-     * @param args 
-     */
-    @Override
-    public ACall newCallImpl(AJoinPoint[] args) {
-        return this.aFunction.newCallImpl(args);
-    }
-
-    /**
-     * Sets the type of the function
-     * @param functionType 
-     */
-    @Override
-    public void setFunctionTypeImpl(AFunctionType functionType) {
-        this.aFunction.setFunctionTypeImpl(functionType);
-    }
-
-    /**
-     * Sets the return type of the function
-     * @param returnType 
-     */
-    @Override
-    public void setReturnTypeImpl(AType returnType) {
-        this.aFunction.setReturnTypeImpl(returnType);
-    }
-
-    /**
-     * Sets the type of a parameter of the function
-     * @param index 
-     * @param newType 
-     */
-    @Override
-    public void setParamTypeImpl(int index, AType newType) {
-        this.aFunction.setParamTypeImpl(index, newType);
-    }
-
-    /**
-     * Adds a new parameter to the function
-     * @param param 
-     */
-    @Override
-    public void addParamImpl(AParam param) {
-        this.aFunction.addParamImpl(param);
-    }
-
-    /**
-     * Adds a new parameter to the function
-     * @param name 
-     * @param type 
-     */
-    @Override
-    public void addParamImpl(String name, AType type) {
-        this.aFunction.addParamImpl(name, type);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aFunction.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aFunction.insertImpl(position, code);
     }
 
     /**

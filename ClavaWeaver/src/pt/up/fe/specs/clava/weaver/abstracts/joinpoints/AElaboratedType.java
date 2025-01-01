@@ -839,6 +839,119 @@ public abstract class AElaboratedType extends AType {
     }
 
     /**
+     * Returns a new node based on this type with the qualifier const
+     */
+    @Override
+    public AType asConstImpl() {
+        return this.aType.asConstImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, but not of the nodes in its fields
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aType.copyImpl();
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    @Override
+    public void dataClearImpl() {
+        this.aType.dataClearImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    @Override
+    public AJoinPoint deepCopyImpl() {
+        return this.aType.deepCopyImpl();
+    }
+
+    /**
+     * Removes the node associated to this joinpoint from the AST
+     */
+    @Override
+    public AJoinPoint detachImpl() {
+        return this.aType.detachImpl();
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aType.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aType.insertImpl(position, code);
+    }
+
+    /**
+     * Inserts the given join point after this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        return this.aType.insertAfterImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(String code) {
+        return this.aType.insertAfterImpl(code);
+    }
+
+    /**
+     * Inserts the given join point before this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        return this.aType.insertBeforeImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(String node) {
+        return this.aType.insertBeforeImpl(node);
+    }
+
+    /**
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
+     * @param message 
+     */
+    @Override
+    public void messageToUserImpl(String message) {
+        this.aType.messageToUserImpl(message);
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aType.removeChildrenImpl();
+    }
+
+    /**
      * Replaces this node with the given node
      * @param node 
      */
@@ -875,47 +988,76 @@ public abstract class AElaboratedType extends AType {
     }
 
     /**
-     * Inserts the given join point before this join point
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    @Override
+    public void setDataImpl(Object source) {
+        this.aType.setDataImpl(source);
+    }
+
+    /**
+     * Sets the desugared type of this type
+     * @param desugaredType 
+     */
+    @Override
+    public void setDesugarImpl(AType desugaredType) {
+        this.aType.setDesugarImpl(desugaredType);
+    }
+
+    /**
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aType.insertBeforeImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aType.setFirstChildImpl(node);
     }
 
     /**
-     * Overload which accepts a string
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aType.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aType.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(String node) {
-        return this.aType.insertBeforeImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aType.setLastChildImpl(node);
     }
 
     /**
-     * Inserts the given join point after this join point
-     * @param node 
+     * Sets a single template argument type of a template type
+     * @param index 
+     * @param templateArgType 
      */
     @Override
-    public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aType.insertAfterImpl(node);
+    public void setTemplateArgTypeImpl(int index, AType templateArgType) {
+        this.aType.setTemplateArgTypeImpl(index, templateArgType);
     }
 
     /**
-     * Overload which accepts a string
-     * @param code 
+     * Sets the template argument types of a template type
+     * @param templateArgTypes 
      */
     @Override
-    public AJoinPoint insertAfterImpl(String code) {
-        return this.aType.insertAfterImpl(code);
-    }
-
-    /**
-     * Removes the node associated to this joinpoint from the AST
-     */
-    @Override
-    public AJoinPoint detachImpl() {
-        return this.aType.detachImpl();
+    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
+        this.aType.setTemplateArgsTypesImpl(templateArgTypes);
     }
 
     /**
@@ -928,19 +1070,23 @@ public abstract class AElaboratedType extends AType {
     }
 
     /**
-     * Performs a copy of the node and its children, but not of the nodes in its fields
+     * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
+     * @param currentValue 
+     * @param newValue 
      */
     @Override
-    public AJoinPoint copyImpl() {
-        return this.aType.copyImpl();
+    public boolean setTypeFieldByValueRecursiveImpl(Object currentValue, Object newValue) {
+        return this.aType.setTypeFieldByValueRecursiveImpl(currentValue, newValue);
     }
 
     /**
-     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
+     * @param oldValue 
+     * @param newValue 
      */
     @Override
-    public AJoinPoint deepCopyImpl() {
-        return this.aType.deepCopyImpl();
+    public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
+        return this.aType.setUnderlyingTypeImpl(oldValue, newValue);
     }
 
     /**
@@ -973,41 +1119,6 @@ public abstract class AElaboratedType extends AType {
     }
 
     /**
-     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
-     * @param message 
-     */
-    @Override
-    public void messageToUserImpl(String message) {
-        this.aType.messageToUserImpl(message);
-    }
-
-    /**
-     * Removes the children of this node
-     */
-    @Override
-    public void removeChildrenImpl() {
-        this.aType.removeChildrenImpl();
-    }
-
-    /**
-     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
-        return this.aType.setFirstChildImpl(node);
-    }
-
-    /**
-     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setLastChildImpl(AJoinPoint node) {
-        return this.aType.setLastChildImpl(node);
-    }
-
-    /**
      * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
@@ -1015,117 +1126,6 @@ public abstract class AElaboratedType extends AType {
     @Override
     public AJoinPoint toCommentImpl(String prefix, String suffix) {
         return this.aType.toCommentImpl(prefix, suffix);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String[] comments) {
-        this.aType.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String comments) {
-        this.aType.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Setting data directly is not supported, this action just emits a warning and does nothing
-     * @param source 
-     */
-    @Override
-    public void setDataImpl(Object source) {
-        this.aType.setDataImpl(source);
-    }
-
-    /**
-     * Clears all properties from the .data object
-     */
-    @Override
-    public void dataClearImpl() {
-        this.aType.dataClearImpl();
-    }
-
-    /**
-     * Sets the template argument types of a template type
-     * @param templateArgTypes 
-     */
-    @Override
-    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
-        this.aType.setTemplateArgsTypesImpl(templateArgTypes);
-    }
-
-    /**
-     * Sets a single template argument type of a template type
-     * @param index 
-     * @param templateArgType 
-     */
-    @Override
-    public void setTemplateArgTypeImpl(int index, AType templateArgType) {
-        this.aType.setTemplateArgTypeImpl(index, templateArgType);
-    }
-
-    /**
-     * Sets the desugared type of this type
-     * @param desugaredType 
-     */
-    @Override
-    public void setDesugarImpl(AType desugaredType) {
-        this.aType.setDesugarImpl(desugaredType);
-    }
-
-    /**
-     * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
-     * @param currentValue 
-     * @param newValue 
-     */
-    @Override
-    public boolean setTypeFieldByValueRecursiveImpl(Object currentValue, Object newValue) {
-        return this.aType.setTypeFieldByValueRecursiveImpl(currentValue, newValue);
-    }
-
-    /**
-     * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
-     * @param oldValue 
-     * @param newValue 
-     */
-    @Override
-    public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
-        return this.aType.setUnderlyingTypeImpl(oldValue, newValue);
-    }
-
-    /**
-     * Returns a new node based on this type with the qualifier const
-     */
-    @Override
-    public AType asConstImpl() {
-        return this.aType.asConstImpl();
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aType.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aType.insertImpl(position, code);
     }
 
     /**

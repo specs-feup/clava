@@ -1,8 +1,8 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
 import java.util.List;
-import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -995,6 +995,120 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
+     * Performs a copy of the node and its children, but not of the nodes in its fields
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aLoop.copyImpl();
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    @Override
+    public void dataClearImpl() {
+        this.aLoop.dataClearImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    @Override
+    public AJoinPoint deepCopyImpl() {
+        return this.aLoop.deepCopyImpl();
+    }
+
+    /**
+     * Removes the node associated to this joinpoint from the AST
+     */
+    @Override
+    public AJoinPoint detachImpl() {
+        return this.aLoop.detachImpl();
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aLoop.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aLoop.insertImpl(position, code);
+    }
+
+    /**
+     * Inserts the given join point after this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        return this.aLoop.insertAfterImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(String code) {
+        return this.aLoop.insertAfterImpl(code);
+    }
+
+    /**
+     * Inserts the given join point before this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        return this.aLoop.insertBeforeImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(String node) {
+        return this.aLoop.insertBeforeImpl(node);
+    }
+
+    /**
+     * Interchanges two for loops, if possible
+     * @param otherLoop 
+     */
+    @Override
+    public void interchangeImpl(ALoop otherLoop) {
+        this.aLoop.interchangeImpl(otherLoop);
+    }
+
+    /**
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
+     * @param message 
+     */
+    @Override
+    public void messageToUserImpl(String message) {
+        this.aLoop.messageToUserImpl(message);
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aLoop.removeChildrenImpl();
+    }
+
+    /**
      * Replaces this node with the given node
      * @param node 
      */
@@ -1031,47 +1145,129 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Inserts the given join point before this join point
+     * Sets the body of the loop
+     * @param body 
+     */
+    @Override
+    public void setBodyImpl(AScope body) {
+        this.aLoop.setBodyImpl(body);
+    }
+
+    /**
+     * Sets the conditional statement of the loop. Works with loops of kind 'for'
+     * @param condCode 
+     */
+    @Override
+    public void setCondImpl(String condCode) {
+        this.aLoop.setCondImpl(condCode);
+    }
+
+    /**
+     * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
+     * @param operator 
+     */
+    @Override
+    public void setCondRelationImpl(String operator) {
+        this.aLoop.setCondRelationImpl(operator);
+    }
+
+    /**
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    @Override
+    public void setDataImpl(Object source) {
+        this.aLoop.setDataImpl(source);
+    }
+
+    /**
+     * Sets the end value of the loop. Works with loops of kind 'for'
+     * @param initCode 
+     */
+    @Override
+    public void setEndValueImpl(String initCode) {
+        this.aLoop.setEndValueImpl(initCode);
+    }
+
+    /**
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aLoop.insertBeforeImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aLoop.setFirstChildImpl(node);
     }
 
     /**
-     * Overload which accepts a string
+     * Sets the init statement of the loop
+     * @param initCode 
+     */
+    @Override
+    public void setInitImpl(String initCode) {
+        this.aLoop.setInitImpl(initCode);
+    }
+
+    /**
+     * Sets the init value of the loop. Works with loops of kind 'for'
+     * @param initCode 
+     */
+    @Override
+    public void setInitValueImpl(String initCode) {
+        this.aLoop.setInitValueImpl(initCode);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aLoop.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aLoop.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the attribute 'isParallel' of the loop
+     * @param isParallel 
+     */
+    @Override
+    public void setIsParallelImpl(Boolean isParallel) {
+        this.aLoop.setIsParallelImpl(isParallel);
+    }
+
+    /**
+     * Sets the kind of the loop
+     * @param kind 
+     */
+    @Override
+    public void setKindImpl(String kind) {
+        this.aLoop.setKindImpl(kind);
+    }
+
+    /**
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(String node) {
-        return this.aLoop.insertBeforeImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aLoop.setLastChildImpl(node);
     }
 
     /**
-     * Inserts the given join point after this join point
-     * @param node 
+     * Sets the step statement of the loop. Works with loops of kind 'for'
+     * @param stepCode 
      */
     @Override
-    public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aLoop.insertAfterImpl(node);
-    }
-
-    /**
-     * Overload which accepts a string
-     * @param code 
-     */
-    @Override
-    public AJoinPoint insertAfterImpl(String code) {
-        return this.aLoop.insertAfterImpl(code);
-    }
-
-    /**
-     * Removes the node associated to this joinpoint from the AST
-     */
-    @Override
-    public AJoinPoint detachImpl() {
-        return this.aLoop.detachImpl();
+    public void setStepImpl(String stepCode) {
+        this.aLoop.setStepImpl(stepCode);
     }
 
     /**
@@ -1081,22 +1277,6 @@ public abstract class ACilkFor extends ALoop {
     @Override
     public void setTypeImpl(AType type) {
         this.aLoop.setTypeImpl(type);
-    }
-
-    /**
-     * Performs a copy of the node and its children, but not of the nodes in its fields
-     */
-    @Override
-    public AJoinPoint copyImpl() {
-        return this.aLoop.copyImpl();
-    }
-
-    /**
-     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
-     */
-    @Override
-    public AJoinPoint deepCopyImpl() {
-        return this.aLoop.deepCopyImpl();
     }
 
     /**
@@ -1129,158 +1309,6 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
-     * @param message 
-     */
-    @Override
-    public void messageToUserImpl(String message) {
-        this.aLoop.messageToUserImpl(message);
-    }
-
-    /**
-     * Removes the children of this node
-     */
-    @Override
-    public void removeChildrenImpl() {
-        this.aLoop.removeChildrenImpl();
-    }
-
-    /**
-     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
-        return this.aLoop.setFirstChildImpl(node);
-    }
-
-    /**
-     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setLastChildImpl(AJoinPoint node) {
-        return this.aLoop.setLastChildImpl(node);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     * @param suffix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix, String suffix) {
-        return this.aLoop.toCommentImpl(prefix, suffix);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String[] comments) {
-        this.aLoop.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String comments) {
-        this.aLoop.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Setting data directly is not supported, this action just emits a warning and does nothing
-     * @param source 
-     */
-    @Override
-    public void setDataImpl(Object source) {
-        this.aLoop.setDataImpl(source);
-    }
-
-    /**
-     * Clears all properties from the .data object
-     */
-    @Override
-    public void dataClearImpl() {
-        this.aLoop.dataClearImpl();
-    }
-
-    /**
-     * Sets the kind of the loop
-     * @param kind 
-     */
-    @Override
-    public void setKindImpl(String kind) {
-        this.aLoop.setKindImpl(kind);
-    }
-
-    /**
-     * Sets the init statement of the loop
-     * @param initCode 
-     */
-    @Override
-    public void setInitImpl(String initCode) {
-        this.aLoop.setInitImpl(initCode);
-    }
-
-    /**
-     * Sets the init value of the loop. Works with loops of kind 'for'
-     * @param initCode 
-     */
-    @Override
-    public void setInitValueImpl(String initCode) {
-        this.aLoop.setInitValueImpl(initCode);
-    }
-
-    /**
-     * Sets the end value of the loop. Works with loops of kind 'for'
-     * @param initCode 
-     */
-    @Override
-    public void setEndValueImpl(String initCode) {
-        this.aLoop.setEndValueImpl(initCode);
-    }
-
-    /**
-     * Sets the conditional statement of the loop. Works with loops of kind 'for'
-     * @param condCode 
-     */
-    @Override
-    public void setCondImpl(String condCode) {
-        this.aLoop.setCondImpl(condCode);
-    }
-
-    /**
-     * Sets the step statement of the loop. Works with loops of kind 'for'
-     * @param stepCode 
-     */
-    @Override
-    public void setStepImpl(String stepCode) {
-        this.aLoop.setStepImpl(stepCode);
-    }
-
-    /**
-     * Sets the attribute 'isParallel' of the loop
-     * @param isParallel 
-     */
-    @Override
-    public void setIsParallelImpl(Boolean isParallel) {
-        this.aLoop.setIsParallelImpl(isParallel);
-    }
-
-    /**
-     * Interchanges two for loops, if possible
-     * @param otherLoop 
-     */
-    @Override
-    public void interchangeImpl(ALoop otherLoop) {
-        this.aLoop.interchangeImpl(otherLoop);
-    }
-
-    /**
      * Applies loop tiling to this loop.
      * @param blockSize 
      * @param reference 
@@ -1292,41 +1320,13 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
-     * @param operator 
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
      */
     @Override
-    public void setCondRelationImpl(String operator) {
-        this.aLoop.setCondRelationImpl(operator);
-    }
-
-    /**
-     * Sets the body of the loop
-     * @param body 
-     */
-    @Override
-    public void setBodyImpl(AScope body) {
-        this.aLoop.setBodyImpl(body);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aLoop.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aLoop.insertImpl(position, code);
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aLoop.toCommentImpl(prefix, suffix);
     }
 
     /**
