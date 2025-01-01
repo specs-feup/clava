@@ -1046,10 +1046,10 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     @Override
     protected final void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
-        actions.add("void addCInclude(string, boolean)");
+        actions.add("void addCInclude(String, boolean)");
         actions.add("joinpoint addFunction(String)");
         actions.add("vardecl addGlobal(String, joinpoint, String)");
-        actions.add("void addInclude(string, boolean)");
+        actions.add("void addInclude(String, boolean)");
         actions.add("void addIncludeJp(joinpoint)");
         actions.add("void insertBegin(joinpoint)");
         actions.add("void insertBegin(String)");

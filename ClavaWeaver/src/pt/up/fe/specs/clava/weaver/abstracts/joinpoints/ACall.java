@@ -1631,9 +1631,9 @@ public abstract class ACall extends AExpression {
         actions.add("void addArg(String, String)");
         actions.add("boolean inline()");
         actions.add("void setArg(int, expression)");
-        actions.add("void setArgFromString(int, string)");
-        actions.add("void setName(string)");
-        actions.add("void wrap(string)");
+        actions.add("void setArgFromString(int, String)");
+        actions.add("void setName(String)");
+        actions.add("void wrap(String)");
     }
 
     /**
