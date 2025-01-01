@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
-import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -846,14 +846,6 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Returns a new node based on this type with the qualifier const
-     */
-    @Override
-    public AType asConstImpl() {
-        return this.aArrayType.asConstImpl();
-    }
-
-    /**
      * Performs a copy of the node and its children, but not of the nodes in its fields
      */
     @Override
@@ -883,6 +875,26 @@ public abstract class AVariableArrayType extends AArrayType {
     @Override
     public AJoinPoint detachImpl() {
         return this.aArrayType.detachImpl();
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aArrayType.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aArrayType.insertImpl(position, code);
     }
 
     /**
@@ -984,15 +996,6 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Sets the desugared type of this type
-     * @param desugaredType 
-     */
-    @Override
-    public void setDesugarImpl(AType desugaredType) {
-        this.aArrayType.setDesugarImpl(desugaredType);
-    }
-
-    /**
      * Sets the element type of the array
      * @param arrayElementType 
      */
@@ -1038,51 +1041,12 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Sets a single template argument type of a template type
-     * @param index 
-     * @param templateArgType 
-     */
-    @Override
-    public void setTemplateArgTypeImpl(int index, AType templateArgType) {
-        this.aArrayType.setTemplateArgTypeImpl(index, templateArgType);
-    }
-
-    /**
-     * Sets the template argument types of a template type
-     * @param templateArgTypes 
-     */
-    @Override
-    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
-        this.aArrayType.setTemplateArgsTypesImpl(templateArgTypes);
-    }
-
-    /**
      * Sets the type of a node, if it has a type
      * @param type 
      */
     @Override
     public void setTypeImpl(AType type) {
         this.aArrayType.setTypeImpl(type);
-    }
-
-    /**
-     * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
-     * @param currentValue 
-     * @param newValue 
-     */
-    @Override
-    public boolean setTypeFieldByValueRecursiveImpl(Object currentValue, Object newValue) {
-        return this.aArrayType.setTypeFieldByValueRecursiveImpl(currentValue, newValue);
-    }
-
-    /**
-     * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
-     * @param oldValue 
-     * @param newValue 
-     */
-    @Override
-    public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
-        return this.aArrayType.setUnderlyingTypeImpl(oldValue, newValue);
     }
 
     /**

@@ -1,9 +1,9 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
 import java.util.List;
+import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
 import java.util.Optional;
-import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -988,6 +988,26 @@ public abstract class ABody extends AScope {
     @Override
     public String dfgImpl() {
         return this.aScope.dfgImpl();
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aScope.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aScope.insertImpl(position, code);
     }
 
     /**

@@ -6,8 +6,8 @@ import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
-import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -1063,6 +1063,26 @@ public abstract class AClass extends ARecord {
     }
 
     /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aRecord.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aRecord.insertImpl(position, code);
+    }
+
+    /**
      * Inserts the given join point after this join point
      * @param node 
      */
@@ -1194,33 +1214,6 @@ public abstract class AClass extends ARecord {
     @Override
     public AJoinPoint setLastChildImpl(AJoinPoint node) {
         return this.aRecord.setLastChildImpl(node);
-    }
-
-    /**
-     * Sets the name of this namedDecl
-     * @param name 
-     */
-    @Override
-    public void setNameImpl(String name) {
-        this.aRecord.setNameImpl(name);
-    }
-
-    /**
-     * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
-     * @param name 
-     */
-    @Override
-    public void setQualifiedNameImpl(String name) {
-        this.aRecord.setQualifiedNameImpl(name);
-    }
-
-    /**
-     * Sets the qualified prefix of this namedDecl
-     * @param qualifiedPrefix 
-     */
-    @Override
-    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
-        this.aRecord.setQualifiedPrefixImpl(qualifiedPrefix);
     }
 
     /**

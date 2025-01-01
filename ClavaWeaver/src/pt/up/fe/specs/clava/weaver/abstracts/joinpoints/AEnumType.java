@@ -4,8 +4,8 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.Map;
-import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -814,14 +814,6 @@ public abstract class AEnumType extends ATagType {
     }
 
     /**
-     * Returns a new node based on this type with the qualifier const
-     */
-    @Override
-    public AType asConstImpl() {
-        return this.aTagType.asConstImpl();
-    }
-
-    /**
      * Performs a copy of the node and its children, but not of the nodes in its fields
      */
     @Override
@@ -851,6 +843,26 @@ public abstract class AEnumType extends ATagType {
     @Override
     public AJoinPoint detachImpl() {
         return this.aTagType.detachImpl();
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aTagType.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aTagType.insertImpl(position, code);
     }
 
     /**
@@ -952,15 +964,6 @@ public abstract class AEnumType extends ATagType {
     }
 
     /**
-     * Sets the desugared type of this type
-     * @param desugaredType 
-     */
-    @Override
-    public void setDesugarImpl(AType desugaredType) {
-        this.aTagType.setDesugarImpl(desugaredType);
-    }
-
-    /**
      * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
@@ -997,51 +1000,12 @@ public abstract class AEnumType extends ATagType {
     }
 
     /**
-     * Sets a single template argument type of a template type
-     * @param index 
-     * @param templateArgType 
-     */
-    @Override
-    public void setTemplateArgTypeImpl(int index, AType templateArgType) {
-        this.aTagType.setTemplateArgTypeImpl(index, templateArgType);
-    }
-
-    /**
-     * Sets the template argument types of a template type
-     * @param templateArgTypes 
-     */
-    @Override
-    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
-        this.aTagType.setTemplateArgsTypesImpl(templateArgTypes);
-    }
-
-    /**
      * Sets the type of a node, if it has a type
      * @param type 
      */
     @Override
     public void setTypeImpl(AType type) {
         this.aTagType.setTypeImpl(type);
-    }
-
-    /**
-     * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
-     * @param currentValue 
-     * @param newValue 
-     */
-    @Override
-    public boolean setTypeFieldByValueRecursiveImpl(Object currentValue, Object newValue) {
-        return this.aTagType.setTypeFieldByValueRecursiveImpl(currentValue, newValue);
-    }
-
-    /**
-     * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
-     * @param oldValue 
-     * @param newValue 
-     */
-    @Override
-    public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
-        return this.aTagType.setUnderlyingTypeImpl(oldValue, newValue);
     }
 
     /**
