@@ -134,15 +134,15 @@ public abstract class AStruct extends ARecord {
     /**
      * 
      */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aRecord.defQualifiedPrefixImpl(value);
+    public void defQualifiedNameImpl(String value) {
+        this.aRecord.defQualifiedNameImpl(value);
     }
 
     /**
      * 
      */
-    public void defQualifiedNameImpl(String value) {
-        this.aRecord.defQualifiedNameImpl(value);
+    public void defQualifiedPrefixImpl(String value) {
+        this.aRecord.defQualifiedPrefixImpl(value);
     }
 
     /**

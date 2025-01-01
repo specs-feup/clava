@@ -244,15 +244,15 @@ public abstract class AEnumType extends ATagType {
     /**
      * 
      */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aTagType.defTemplateArgsTypesImpl(value);
+    public void defDesugarImpl(AType value) {
+        this.aTagType.defDesugarImpl(value);
     }
 
     /**
      * 
      */
-    public void defDesugarImpl(AType value) {
-        this.aTagType.defDesugarImpl(value);
+    public void defTemplateArgsTypesImpl(AType[] value) {
+        this.aTagType.defTemplateArgsTypesImpl(value);
     }
 
     /**

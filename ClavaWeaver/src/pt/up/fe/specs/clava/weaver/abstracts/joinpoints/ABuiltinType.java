@@ -340,15 +340,15 @@ public abstract class ABuiltinType extends AType {
     /**
      * 
      */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aType.defTemplateArgsTypesImpl(value);
+    public void defDesugarImpl(AType value) {
+        this.aType.defDesugarImpl(value);
     }
 
     /**
      * 
      */
-    public void defDesugarImpl(AType value) {
-        this.aType.defDesugarImpl(value);
+    public void defTemplateArgsTypesImpl(AType[] value) {
+        this.aType.defTemplateArgsTypesImpl(value);
     }
 
     /**

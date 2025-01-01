@@ -1203,15 +1203,15 @@ public abstract class AFunction extends ADeclarator {
     /**
      * 
      */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aDeclarator.defQualifiedPrefixImpl(value);
+    public void defQualifiedNameImpl(String value) {
+        this.aDeclarator.defQualifiedNameImpl(value);
     }
 
     /**
      * 
      */
-    public void defQualifiedNameImpl(String value) {
-        this.aDeclarator.defQualifiedNameImpl(value);
+    public void defQualifiedPrefixImpl(String value) {
+        this.aDeclarator.defQualifiedPrefixImpl(value);
     }
 
     /**

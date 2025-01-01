@@ -80,15 +80,15 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
     /**
      * 
      */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aTypedefNameDecl.defQualifiedPrefixImpl(value);
+    public void defQualifiedNameImpl(String value) {
+        this.aTypedefNameDecl.defQualifiedNameImpl(value);
     }
 
     /**
      * 
      */
-    public void defQualifiedNameImpl(String value) {
-        this.aTypedefNameDecl.defQualifiedNameImpl(value);
+    public void defQualifiedPrefixImpl(String value) {
+        this.aTypedefNameDecl.defQualifiedPrefixImpl(value);
     }
 
     /**

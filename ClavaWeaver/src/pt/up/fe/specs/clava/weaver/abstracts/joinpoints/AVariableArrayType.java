@@ -269,15 +269,15 @@ public abstract class AVariableArrayType extends AArrayType {
     /**
      * 
      */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aArrayType.defTemplateArgsTypesImpl(value);
+    public void defDesugarImpl(AType value) {
+        this.aArrayType.defDesugarImpl(value);
     }
 
     /**
      * 
      */
-    public void defDesugarImpl(AType value) {
-        this.aArrayType.defDesugarImpl(value);
+    public void defTemplateArgsTypesImpl(AType[] value) {
+        this.aArrayType.defTemplateArgsTypesImpl(value);
     }
 
     /**

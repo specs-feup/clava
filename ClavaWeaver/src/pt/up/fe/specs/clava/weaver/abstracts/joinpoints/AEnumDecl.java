@@ -126,15 +126,15 @@ public abstract class AEnumDecl extends ANamedDecl {
     /**
      * 
      */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aNamedDecl.defQualifiedPrefixImpl(value);
+    public void defQualifiedNameImpl(String value) {
+        this.aNamedDecl.defQualifiedNameImpl(value);
     }
 
     /**
      * 
      */
-    public void defQualifiedNameImpl(String value) {
-        this.aNamedDecl.defQualifiedNameImpl(value);
+    public void defQualifiedPrefixImpl(String value) {
+        this.aNamedDecl.defQualifiedPrefixImpl(value);
     }
 
     /**

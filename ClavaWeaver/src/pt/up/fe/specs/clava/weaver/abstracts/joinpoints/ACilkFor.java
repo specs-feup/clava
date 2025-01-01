@@ -397,15 +397,15 @@ public abstract class ACilkFor extends ALoop {
     /**
      * 
      */
-    public void defIsParallelImpl(Boolean value) {
-        this.aLoop.defIsParallelImpl(value);
+    public void defBodyImpl(AScope value) {
+        this.aLoop.defBodyImpl(value);
     }
 
     /**
      * 
      */
-    public void defIsParallelImpl(String value) {
-        this.aLoop.defIsParallelImpl(value);
+    public void defCondRelationImpl(String value) {
+        this.aLoop.defCondRelationImpl(value);
     }
 
     /**
@@ -425,15 +425,15 @@ public abstract class ACilkFor extends ALoop {
     /**
      * 
      */
-    public void defCondRelationImpl(String value) {
-        this.aLoop.defCondRelationImpl(value);
+    public void defIsParallelImpl(Boolean value) {
+        this.aLoop.defIsParallelImpl(value);
     }
 
     /**
      * 
      */
-    public void defBodyImpl(AScope value) {
-        this.aLoop.defBodyImpl(value);
+    public void defIsParallelImpl(String value) {
+        this.aLoop.defIsParallelImpl(value);
     }
 
     /**

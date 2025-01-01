@@ -152,15 +152,15 @@ public abstract class AParam extends AVardecl {
     /**
      * 
      */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aVardecl.defQualifiedPrefixImpl(value);
+    public void defQualifiedNameImpl(String value) {
+        this.aVardecl.defQualifiedNameImpl(value);
     }
 
     /**
      * 
      */
-    public void defQualifiedNameImpl(String value) {
-        this.aVardecl.defQualifiedNameImpl(value);
+    public void defQualifiedPrefixImpl(String value) {
+        this.aVardecl.defQualifiedPrefixImpl(value);
     }
 
     /**

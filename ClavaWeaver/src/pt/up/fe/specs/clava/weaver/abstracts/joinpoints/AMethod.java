@@ -375,13 +375,6 @@ public abstract class AMethod extends AFunction {
     /**
      * 
      */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aFunction.defQualifiedPrefixImpl(value);
-    }
-
-    /**
-     * 
-     */
     public void defQualifiedNameImpl(String value) {
         this.aFunction.defQualifiedNameImpl(value);
     }
@@ -389,8 +382,8 @@ public abstract class AMethod extends AFunction {
     /**
      * 
      */
-    public void defFunctionTypeImpl(AFunctionType value) {
-        this.aFunction.defFunctionTypeImpl(value);
+    public void defQualifiedPrefixImpl(String value) {
+        this.aFunction.defQualifiedPrefixImpl(value);
     }
 
     /**
@@ -398,6 +391,13 @@ public abstract class AMethod extends AFunction {
      */
     public void defBodyImpl(AScope value) {
         this.aFunction.defBodyImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defFunctionTypeImpl(AFunctionType value) {
+        this.aFunction.defFunctionTypeImpl(value);
     }
 
     /**
