@@ -942,6 +942,33 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * Sets the name of this namedDecl
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aVardecl.setNameImpl(name);
+    }
+
+    /**
+     * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
+     * @param name 
+     */
+    @Override
+    public void setQualifiedNameImpl(String name) {
+        this.aVardecl.setQualifiedNameImpl(name);
+    }
+
+    /**
+     * Sets the qualified prefix of this namedDecl
+     * @param qualifiedPrefix 
+     */
+    @Override
+    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
+        this.aVardecl.setQualifiedPrefixImpl(qualifiedPrefix);
+    }
+
+    /**
      * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
      * @param storageClass 
      */

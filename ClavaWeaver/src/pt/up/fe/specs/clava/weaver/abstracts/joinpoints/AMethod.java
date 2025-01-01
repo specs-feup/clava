@@ -1260,6 +1260,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Sets the name of this namedDecl
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aFunction.setNameImpl(name);
+    }
+
+    /**
      * Sets the parameter of the function at the given position
      * @param index 
      * @param param 
@@ -1306,6 +1315,24 @@ public abstract class AMethod extends AFunction {
     @Override
     public void setParamsFromStringsImpl(String[] params) {
         this.aFunction.setParamsFromStringsImpl(params);
+    }
+
+    /**
+     * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
+     * @param name 
+     */
+    @Override
+    public void setQualifiedNameImpl(String name) {
+        this.aFunction.setQualifiedNameImpl(name);
+    }
+
+    /**
+     * Sets the qualified prefix of this namedDecl
+     * @param qualifiedPrefix 
+     */
+    @Override
+    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
+        this.aFunction.setQualifiedPrefixImpl(qualifiedPrefix);
     }
 
     /**

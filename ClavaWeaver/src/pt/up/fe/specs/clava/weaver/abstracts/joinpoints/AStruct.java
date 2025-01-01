@@ -899,6 +899,33 @@ public abstract class AStruct extends ARecord {
     }
 
     /**
+     * Sets the name of this namedDecl
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aRecord.setNameImpl(name);
+    }
+
+    /**
+     * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
+     * @param name 
+     */
+    @Override
+    public void setQualifiedNameImpl(String name) {
+        this.aRecord.setQualifiedNameImpl(name);
+    }
+
+    /**
+     * Sets the qualified prefix of this namedDecl
+     * @param qualifiedPrefix 
+     */
+    @Override
+    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
+        this.aRecord.setQualifiedPrefixImpl(qualifiedPrefix);
+    }
+
+    /**
      * Sets the type of a node, if it has a type
      * @param type 
      */
