@@ -100,30 +100,287 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     @Override
     protected void fillWithActions(List<String> actions) {
+        actions.add("copy()");
+        actions.add("dataClear()");
+        actions.add("deepCopy()");
+        actions.add("detach()");
+        actions.add("insertAfter(AJoinPoint node)");
+        actions.add("insertAfter(String code)");
+        actions.add("insertBefore(AJoinPoint node)");
+        actions.add("insertBefore(String node)");
+        actions.add("messageToUser(String message)");
+        actions.add("removeChildren()");
         actions.add("replaceWith(AJoinPoint node)");
         actions.add("replaceWith(String node)");
         actions.add("replaceWith(AJoinPoint[] node)");
         actions.add("replaceWithStrings(String[] node)");
-        actions.add("insertBefore(AJoinPoint node)");
-        actions.add("insertBefore(String node)");
-        actions.add("insertAfter(AJoinPoint node)");
-        actions.add("insertAfter(String code)");
-        actions.add("detach()");
+        actions.add("setData(Object source)");
+        actions.add("setFirstChild(AJoinPoint node)");
+        actions.add("setInlineComments(String[] comments)");
+        actions.add("setInlineComments(String comments)");
+        actions.add("setLastChild(AJoinPoint node)");
         actions.add("setType(AType type)");
-        actions.add("copy()");
-        actions.add("deepCopy()");
         actions.add("setUserField(String fieldName, Object value)");
         actions.add("setUserField(Map<?, ?> fieldNameAndValue)");
         actions.add("setValue(String key, Object value)");
-        actions.add("messageToUser(String message)");
-        actions.add("removeChildren()");
-        actions.add("setFirstChild(AJoinPoint node)");
-        actions.add("setLastChild(AJoinPoint node)");
         actions.add("toComment(String prefix, String suffix)");
-        actions.add("setInlineComments(String[] comments)");
-        actions.add("setInlineComments(String comments)");
-        actions.add("setData(Object source)");
-        actions.add("dataClear()");
+    }
+
+    /**
+     * Performs a copy of the node and its children, but not of the nodes in its fields
+     */
+    public AJoinPoint copyImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action copy not implemented ");
+    }
+
+    /**
+     * Performs a copy of the node and its children, but not of the nodes in its fields
+     */
+    public final Object copy() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "copy", this, Optional.empty());
+        	}
+        	AJoinPoint result = this.copyImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "copy", this, Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "copy", e);
+        }
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    public void dataClearImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action dataClear not implemented ");
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    public final void dataClear() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "dataClear", this, Optional.empty());
+        	}
+        	this.dataClearImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "dataClear", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "dataClear", e);
+        }
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    public AJoinPoint deepCopyImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action deepCopy not implemented ");
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    public final Object deepCopy() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "deepCopy", this, Optional.empty());
+        	}
+        	AJoinPoint result = this.deepCopyImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "deepCopy", this, Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "deepCopy", e);
+        }
+    }
+
+    /**
+     * Removes the node associated to this joinpoint from the AST
+     */
+    public AJoinPoint detachImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action detach not implemented ");
+    }
+
+    /**
+     * Removes the node associated to this joinpoint from the AST
+     */
+    public final Object detach() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "detach", this, Optional.empty());
+        	}
+        	AJoinPoint result = this.detachImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "detach", this, Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "detach", e);
+        }
+    }
+
+    /**
+     * Inserts the given join point after this join point
+     * @param node 
+     */
+    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        throw new UnsupportedOperationException(get_class()+": Action insertAfter not implemented ");
+    }
+
+    /**
+     * Inserts the given join point after this join point
+     * @param node 
+     */
+    public final Object insertAfter(AJoinPoint node) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "insertAfter", this, Optional.empty(), node);
+        	}
+        	AJoinPoint result = this.insertAfterImpl(node);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "insertAfter", this, Optional.ofNullable(result), node);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "insertAfter", e);
+        }
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param code 
+     */
+    public AJoinPoint insertAfterImpl(String code) {
+        throw new UnsupportedOperationException(get_class()+": Action insertAfter not implemented ");
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param code 
+     */
+    public final Object insertAfter(String code) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "insertAfter", this, Optional.empty(), code);
+        	}
+        	AJoinPoint result = this.insertAfterImpl(code);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "insertAfter", this, Optional.ofNullable(result), code);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "insertAfter", e);
+        }
+    }
+
+    /**
+     * Inserts the given join point before this join point
+     * @param node 
+     */
+    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        throw new UnsupportedOperationException(get_class()+": Action insertBefore not implemented ");
+    }
+
+    /**
+     * Inserts the given join point before this join point
+     * @param node 
+     */
+    public final Object insertBefore(AJoinPoint node) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "insertBefore", this, Optional.empty(), node);
+        	}
+        	AJoinPoint result = this.insertBeforeImpl(node);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "insertBefore", this, Optional.ofNullable(result), node);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "insertBefore", e);
+        }
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param node 
+     */
+    public AJoinPoint insertBeforeImpl(String node) {
+        throw new UnsupportedOperationException(get_class()+": Action insertBefore not implemented ");
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param node 
+     */
+    public final Object insertBefore(String node) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "insertBefore", this, Optional.empty(), node);
+        	}
+        	AJoinPoint result = this.insertBeforeImpl(node);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "insertBefore", this, Optional.ofNullable(result), node);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "insertBefore", e);
+        }
+    }
+
+    /**
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
+     * @param message 
+     */
+    public void messageToUserImpl(String message) {
+        throw new UnsupportedOperationException(get_class()+": Action messageToUser not implemented ");
+    }
+
+    /**
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
+     * @param message 
+     */
+    public final void messageToUser(String message) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "messageToUser", this, Optional.empty(), message);
+        	}
+        	this.messageToUserImpl(message);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "messageToUser", this, Optional.empty(), message);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "messageToUser", e);
+        }
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    public void removeChildrenImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action removeChildren not implemented ");
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    public final void removeChildren() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "removeChildren", this, Optional.empty());
+        	}
+        	this.removeChildrenImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "removeChildren", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "removeChildren", e);
+        }
     }
 
     /**
@@ -235,135 +492,134 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Inserts the given join point before this join point
-     * @param node 
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
      */
-    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        throw new UnsupportedOperationException(get_class()+": Action insertBefore not implemented ");
+    public void setDataImpl(Object source) {
+        throw new UnsupportedOperationException(get_class()+": Action setData not implemented ");
     }
 
     /**
-     * Inserts the given join point before this join point
-     * @param node 
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
      */
-    public final Object insertBefore(AJoinPoint node) {
+    public final void setData(Object source) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "insertBefore", this, Optional.empty(), node);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setData", this, Optional.empty(), source);
         	}
-        	AJoinPoint result = this.insertBeforeImpl(node);
+        	this.setDataImpl(source);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertBefore", this, Optional.ofNullable(result), node);
+        		eventTrigger().triggerAction(Stage.END, "setData", this, Optional.empty(), source);
         	}
-        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "insertBefore", e);
+        	throw new ActionException(get_class(), "setData", e);
         }
     }
 
     /**
-     * Overload which accepts a string
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
-    public AJoinPoint insertBeforeImpl(String node) {
-        throw new UnsupportedOperationException(get_class()+": Action insertBefore not implemented ");
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        throw new UnsupportedOperationException(get_class()+": Action setFirstChild not implemented ");
     }
 
     /**
-     * Overload which accepts a string
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
-    public final Object insertBefore(String node) {
+    public final Object setFirstChild(AJoinPoint node) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "insertBefore", this, Optional.empty(), node);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setFirstChild", this, Optional.empty(), node);
         	}
-        	AJoinPoint result = this.insertBeforeImpl(node);
+        	AJoinPoint result = this.setFirstChildImpl(node);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertBefore", this, Optional.ofNullable(result), node);
+        		eventTrigger().triggerAction(Stage.END, "setFirstChild", this, Optional.ofNullable(result), node);
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "insertBefore", e);
+        	throw new ActionException(get_class(), "setFirstChild", e);
         }
     }
 
     /**
-     * Inserts the given join point after this join point
-     * @param node 
+     * Sets the commented that are embedded in a node
+     * @param comments 
      */
-    public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        throw new UnsupportedOperationException(get_class()+": Action insertAfter not implemented ");
+    public void setInlineCommentsImpl(String[] comments) {
+        throw new UnsupportedOperationException(get_class()+": Action setInlineComments not implemented ");
     }
 
     /**
-     * Inserts the given join point after this join point
-     * @param node 
+     * Sets the commented that are embedded in a node
+     * @param comments 
      */
-    public final Object insertAfter(AJoinPoint node) {
+    public final void setInlineComments(Object[] comments) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "insertAfter", this, Optional.empty(), node);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setInlineComments", this, Optional.empty(), new Object[] { comments});
         	}
-        	AJoinPoint result = this.insertAfterImpl(node);
+        	this.setInlineCommentsImpl(pt.up.fe.specs.util.SpecsCollections.cast(comments, String.class));
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertAfter", this, Optional.ofNullable(result), node);
+        		eventTrigger().triggerAction(Stage.END, "setInlineComments", this, Optional.empty(), new Object[] { comments});
         	}
-        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "insertAfter", e);
+        	throw new ActionException(get_class(), "setInlineComments", e);
         }
     }
 
     /**
-     * Overload which accepts a string
-     * @param code 
+     * Sets the commented that are embedded in a node
+     * @param comments 
      */
-    public AJoinPoint insertAfterImpl(String code) {
-        throw new UnsupportedOperationException(get_class()+": Action insertAfter not implemented ");
+    public void setInlineCommentsImpl(String comments) {
+        throw new UnsupportedOperationException(get_class()+": Action setInlineComments not implemented ");
     }
 
     /**
-     * Overload which accepts a string
-     * @param code 
+     * Sets the commented that are embedded in a node
+     * @param comments 
      */
-    public final Object insertAfter(String code) {
+    public final void setInlineComments(String comments) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "insertAfter", this, Optional.empty(), code);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setInlineComments", this, Optional.empty(), comments);
         	}
-        	AJoinPoint result = this.insertAfterImpl(code);
+        	this.setInlineCommentsImpl(comments);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertAfter", this, Optional.ofNullable(result), code);
+        		eventTrigger().triggerAction(Stage.END, "setInlineComments", this, Optional.empty(), comments);
         	}
-        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "insertAfter", e);
+        	throw new ActionException(get_class(), "setInlineComments", e);
         }
     }
 
     /**
-     * Removes the node associated to this joinpoint from the AST
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
+     * @param node 
      */
-    public AJoinPoint detachImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action detach not implemented ");
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        throw new UnsupportedOperationException(get_class()+": Action setLastChild not implemented ");
     }
 
     /**
-     * Removes the node associated to this joinpoint from the AST
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
+     * @param node 
      */
-    public final Object detach() {
+    public final Object setLastChild(AJoinPoint node) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "detach", this, Optional.empty());
+        		eventTrigger().triggerAction(Stage.BEGIN, "setLastChild", this, Optional.empty(), node);
         	}
-        	AJoinPoint result = this.detachImpl();
+        	AJoinPoint result = this.setLastChildImpl(node);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "detach", this, Optional.ofNullable(result));
+        		eventTrigger().triggerAction(Stage.END, "setLastChild", this, Optional.ofNullable(result), node);
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "detach", e);
+        	throw new ActionException(get_class(), "setLastChild", e);
         }
     }
 
@@ -390,56 +646,6 @@ public abstract class AJoinPoint extends JoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setType", e);
-        }
-    }
-
-    /**
-     * Performs a copy of the node and its children, but not of the nodes in its fields
-     */
-    public AJoinPoint copyImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action copy not implemented ");
-    }
-
-    /**
-     * Performs a copy of the node and its children, but not of the nodes in its fields
-     */
-    public final Object copy() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "copy", this, Optional.empty());
-        	}
-        	AJoinPoint result = this.copyImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "copy", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "copy", e);
-        }
-    }
-
-    /**
-     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
-     */
-    public AJoinPoint deepCopyImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action deepCopy not implemented ");
-    }
-
-    /**
-     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
-     */
-    public final Object deepCopy() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "deepCopy", this, Optional.empty());
-        	}
-        	AJoinPoint result = this.deepCopyImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "deepCopy", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "deepCopy", e);
         }
     }
 
@@ -529,110 +735,6 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
-     * @param message 
-     */
-    public void messageToUserImpl(String message) {
-        throw new UnsupportedOperationException(get_class()+": Action messageToUser not implemented ");
-    }
-
-    /**
-     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
-     * @param message 
-     */
-    public final void messageToUser(String message) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "messageToUser", this, Optional.empty(), message);
-        	}
-        	this.messageToUserImpl(message);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "messageToUser", this, Optional.empty(), message);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "messageToUser", e);
-        }
-    }
-
-    /**
-     * Removes the children of this node
-     */
-    public void removeChildrenImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action removeChildren not implemented ");
-    }
-
-    /**
-     * Removes the children of this node
-     */
-    public final void removeChildren() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "removeChildren", this, Optional.empty());
-        	}
-        	this.removeChildrenImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "removeChildren", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "removeChildren", e);
-        }
-    }
-
-    /**
-     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
-        throw new UnsupportedOperationException(get_class()+": Action setFirstChild not implemented ");
-    }
-
-    /**
-     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    public final Object setFirstChild(AJoinPoint node) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setFirstChild", this, Optional.empty(), node);
-        	}
-        	AJoinPoint result = this.setFirstChildImpl(node);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setFirstChild", this, Optional.ofNullable(result), node);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setFirstChild", e);
-        }
-    }
-
-    /**
-     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    public AJoinPoint setLastChildImpl(AJoinPoint node) {
-        throw new UnsupportedOperationException(get_class()+": Action setLastChild not implemented ");
-    }
-
-    /**
-     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    public final Object setLastChild(AJoinPoint node) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setLastChild", this, Optional.empty(), node);
-        	}
-        	AJoinPoint result = this.setLastChildImpl(node);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setLastChild", this, Optional.ofNullable(result), node);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setLastChild", e);
-        }
-    }
-
-    /**
      * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
@@ -658,108 +760,6 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "toComment", e);
-        }
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    public void setInlineCommentsImpl(String[] comments) {
-        throw new UnsupportedOperationException(get_class()+": Action setInlineComments not implemented ");
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    public final void setInlineComments(Object[] comments) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setInlineComments", this, Optional.empty(), new Object[] { comments});
-        	}
-        	this.setInlineCommentsImpl(pt.up.fe.specs.util.SpecsCollections.cast(comments, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setInlineComments", this, Optional.empty(), new Object[] { comments});
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setInlineComments", e);
-        }
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    public void setInlineCommentsImpl(String comments) {
-        throw new UnsupportedOperationException(get_class()+": Action setInlineComments not implemented ");
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    public final void setInlineComments(String comments) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setInlineComments", this, Optional.empty(), comments);
-        	}
-        	this.setInlineCommentsImpl(comments);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setInlineComments", this, Optional.empty(), comments);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setInlineComments", e);
-        }
-    }
-
-    /**
-     * Setting data directly is not supported, this action just emits a warning and does nothing
-     * @param source 
-     */
-    public void setDataImpl(Object source) {
-        throw new UnsupportedOperationException(get_class()+": Action setData not implemented ");
-    }
-
-    /**
-     * Setting data directly is not supported, this action just emits a warning and does nothing
-     * @param source 
-     */
-    public final void setData(Object source) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setData", this, Optional.empty(), source);
-        	}
-        	this.setDataImpl(source);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setData", this, Optional.empty(), source);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setData", e);
-        }
-    }
-
-    /**
-     * Clears all properties from the .data object
-     */
-    public void dataClearImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action dataClear not implemented ");
-    }
-
-    /**
-     * Clears all properties from the .data object
-     */
-    public final void dataClear() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "dataClear", this, Optional.empty());
-        	}
-        	this.dataClearImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "dataClear", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "dataClear", e);
         }
     }
 
