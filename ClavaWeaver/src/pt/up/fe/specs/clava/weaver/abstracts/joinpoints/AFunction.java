@@ -2188,22 +2188,22 @@ public abstract class AFunction extends ADeclarator {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aDeclarator.fillWithActions(actions);
+        actions.add("void addParam(param)");
+        actions.add("void addParam(String, type)");
         actions.add("function clone(String, Boolean)");
         actions.add("function cloneOnFile(String, String)");
         actions.add("function cloneOnFile(String, file)");
         actions.add("joinpoint insertReturn(joinpoint)");
         actions.add("joinpoint insertReturn(String)");
-        actions.add("void setParams(param[])");
-        actions.add("void setParamsFromStrings(String[])");
+        actions.add("call newCall(joinpoint[])");
+        actions.add("void setBody(scope)");
+        actions.add("void setFunctionType(functionType)");
         actions.add("void setParam(int, param)");
         actions.add("void setParam(int, String, type)");
-        actions.add("void setBody(scope)");
-        actions.add("call newCall(joinpoint[])");
-        actions.add("void setFunctionType(functionType)");
-        actions.add("void setReturnType(type)");
         actions.add("void setParamType(int, type)");
-        actions.add("void addParam(param)");
-        actions.add("void addParam(String, type)");
+        actions.add("void setParams(param[])");
+        actions.add("void setParamsFromStrings(String[])");
+        actions.add("void setReturnType(type)");
     }
 
     /**

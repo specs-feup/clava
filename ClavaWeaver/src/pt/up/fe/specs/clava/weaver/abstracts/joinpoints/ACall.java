@@ -1627,13 +1627,13 @@ public abstract class ACall extends AExpression {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aExpression.fillWithActions(actions);
-        actions.add("void setName(string)");
-        actions.add("void wrap(string)");
-        actions.add("boolean inline()");
-        actions.add("void setArgFromString(int, string)");
-        actions.add("void setArg(int, expression)");
         actions.add("void addArg(String, type)");
         actions.add("void addArg(String, String)");
+        actions.add("boolean inline()");
+        actions.add("void setArg(int, expression)");
+        actions.add("void setArgFromString(int, string)");
+        actions.add("void setName(string)");
+        actions.add("void wrap(string)");
     }
 
     /**

@@ -280,8 +280,8 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
     @Override
     protected void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
-        actions.add("void setName(String)");
         actions.add("void setContent(String)");
+        actions.add("void setName(String)");
     }
 
     /**

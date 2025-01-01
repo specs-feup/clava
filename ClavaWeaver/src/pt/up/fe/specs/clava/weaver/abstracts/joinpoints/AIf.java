@@ -1396,8 +1396,8 @@ public abstract class AIf extends AStatement {
     protected final void fillWithActions(List<String> actions) {
         this.aStatement.fillWithActions(actions);
         actions.add("void setCond(expression)");
-        actions.add("void setThen(statement)");
         actions.add("void setElse(statement)");
+        actions.add("void setThen(statement)");
     }
 
     /**

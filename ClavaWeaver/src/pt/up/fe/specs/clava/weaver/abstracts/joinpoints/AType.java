@@ -806,12 +806,12 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     @Override
     protected void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
-        actions.add("void setTemplateArgsTypes(type[])");
-        actions.add("void setTemplateArgType(int, type)");
+        actions.add("type asConst()");
         actions.add("void setDesugar(type)");
+        actions.add("void setTemplateArgType(int, type)");
+        actions.add("void setTemplateArgsTypes(type[])");
         actions.add("boolean setTypeFieldByValueRecursive(Object, Object)");
         actions.add("type setUnderlyingType(type, type)");
-        actions.add("type asConst()");
     }
 
     /**

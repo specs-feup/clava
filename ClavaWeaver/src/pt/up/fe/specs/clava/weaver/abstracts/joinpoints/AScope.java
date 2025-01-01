@@ -1770,17 +1770,17 @@ public abstract class AScope extends AStatement {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aStatement.fillWithActions(actions);
+        actions.add("joinpoint addLocal(String, joinpoint, String)");
+        actions.add("string cfg()");
+        actions.add("void clear()");
+        actions.add("string dfg()");
         actions.add("joinpoint insertBegin(joinpoint)");
         actions.add("joinpoint insertBegin(String)");
         actions.add("joinpoint insertEnd(joinpoint)");
         actions.add("joinpoint insertEnd(string)");
         actions.add("joinpoint insertReturn(joinpoint)");
         actions.add("joinpoint insertReturn(string)");
-        actions.add("joinpoint addLocal(String, joinpoint, String)");
         actions.add("void setNaked(Boolean)");
-        actions.add("void clear()");
-        actions.add("string cfg()");
-        actions.add("string dfg()");
     }
 
     /**

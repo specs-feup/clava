@@ -1324,11 +1324,11 @@ public abstract class AVardecl extends ADeclarator {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aDeclarator.fillWithActions(actions);
+        actions.add("void removeInit(boolean)");
         actions.add("void setInit(expression)");
         actions.add("void setInit(String)");
-        actions.add("void removeInit(boolean)");
-        actions.add("varref varref()");
         actions.add("void setStorageClass(StorageClass)");
+        actions.add("varref varref()");
     }
 
     /**

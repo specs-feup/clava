@@ -1146,8 +1146,8 @@ public abstract class ANamedDecl extends ADecl {
     protected void fillWithActions(List<String> actions) {
         this.aDecl.fillWithActions(actions);
         actions.add("void setName(String)");
-        actions.add("void setQualifiedPrefix(String)");
         actions.add("void setQualifiedName(String)");
+        actions.add("void setQualifiedPrefix(String)");
     }
 
     /**

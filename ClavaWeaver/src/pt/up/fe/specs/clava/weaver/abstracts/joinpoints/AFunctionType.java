@@ -1297,8 +1297,8 @@ public abstract class AFunctionType extends AType {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aType.fillWithActions(actions);
-        actions.add("void setReturnType(type)");
         actions.add("void setParamType(int, type)");
+        actions.add("void setReturnType(type)");
     }
 
     /**

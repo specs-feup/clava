@@ -2035,24 +2035,24 @@ public abstract class AOmp extends APragma {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aPragma.fillWithActions(actions);
-        actions.add("void setKind(String)");
         actions.add("void removeClause(String)");
-        actions.add("void setNumThreads(String)");
-        actions.add("void setProcBind(String)");
-        actions.add("void setPrivate(String[])");
-        actions.add("void setReduction(String, String[])");
-        actions.add("void setDefault(String)");
-        actions.add("void setFirstprivate(String[])");
-        actions.add("void setLastprivate(String[])");
-        actions.add("void setShared(String[])");
-        actions.add("void setCopyin(String[])");
-        actions.add("void setScheduleKind(String)");
-        actions.add("void setScheduleChunkSize(String)");
-        actions.add("void setScheduleChunkSize(int)");
-        actions.add("void setScheduleModifiers(String[])");
         actions.add("void setCollapse(String)");
         actions.add("void setCollapse(int)");
+        actions.add("void setCopyin(String[])");
+        actions.add("void setDefault(String)");
+        actions.add("void setFirstprivate(String[])");
+        actions.add("void setKind(String)");
+        actions.add("void setLastprivate(String[])");
+        actions.add("void setNumThreads(String)");
         actions.add("void setOrdered(String)");
+        actions.add("void setPrivate(String[])");
+        actions.add("void setProcBind(String)");
+        actions.add("void setReduction(String, String[])");
+        actions.add("void setScheduleChunkSize(String)");
+        actions.add("void setScheduleChunkSize(int)");
+        actions.add("void setScheduleKind(String)");
+        actions.add("void setScheduleModifiers(String[])");
+        actions.add("void setShared(String[])");
     }
 
     /**

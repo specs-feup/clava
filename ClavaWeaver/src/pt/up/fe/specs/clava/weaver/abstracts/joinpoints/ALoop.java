@@ -2047,17 +2047,17 @@ public abstract class ALoop extends AStatement {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aStatement.fillWithActions(actions);
-        actions.add("void setKind(String)");
+        actions.add("void interchange(loop)");
+        actions.add("void setBody(scope)");
+        actions.add("void setCond(String)");
+        actions.add("void setCondRelation(Relation)");
+        actions.add("void setEndValue(String)");
         actions.add("void setInit(String)");
         actions.add("void setInitValue(String)");
-        actions.add("void setEndValue(String)");
-        actions.add("void setCond(String)");
-        actions.add("void setStep(String)");
         actions.add("void setIsParallel(Boolean)");
-        actions.add("void interchange(loop)");
+        actions.add("void setKind(String)");
+        actions.add("void setStep(String)");
         actions.add("statement tile(String, statement, Boolean)");
-        actions.add("void setCondRelation(Relation)");
-        actions.add("void setBody(scope)");
     }
 
     /**

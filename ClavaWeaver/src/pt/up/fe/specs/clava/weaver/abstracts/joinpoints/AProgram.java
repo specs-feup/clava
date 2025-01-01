@@ -910,19 +910,19 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     @Override
     protected final void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
-        actions.add("boolean rebuild()");
-        actions.add("void rebuildFuzzy()");
-        actions.add("joinpoint addFile(file)");
-        actions.add("joinpoint addFileFromPath(Object)");
-        actions.add("void push()");
-        actions.add("void pop()");
         actions.add("void addExtraInclude(String)");
         actions.add("void addExtraIncludeFromGit(String, String)");
+        actions.add("void addExtraLib(String)");
         actions.add("void addExtraSource(String)");
         actions.add("void addExtraSourceFromGit(String, String)");
+        actions.add("joinpoint addFile(file)");
+        actions.add("joinpoint addFileFromPath(Object)");
         actions.add("void addProjectFromGit(String, String[], String)");
-        actions.add("void addExtraLib(String)");
         actions.add("void atexit(function)");
+        actions.add("void pop()");
+        actions.add("void push()");
+        actions.add("boolean rebuild()");
+        actions.add("void rebuildFuzzy()");
     }
 
     /**
