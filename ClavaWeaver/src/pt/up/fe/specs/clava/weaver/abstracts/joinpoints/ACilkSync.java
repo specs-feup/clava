@@ -1134,6 +1134,8 @@ public abstract class ACilkSync extends AStatement {
      * 
      */
     protected enum CilkSyncAttributes {
+        ISFIRST("isFirst"),
+        ISLAST("isLast"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1173,11 +1175,9 @@ public abstract class ACilkSync extends AStatement {
         HASTYPE("hasType"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
-        ISFIRST("isFirst"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        ISLAST("isLast"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
         JPID("jpId"),

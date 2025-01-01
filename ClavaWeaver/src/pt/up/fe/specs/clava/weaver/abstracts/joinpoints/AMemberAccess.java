@@ -1184,13 +1184,21 @@ public abstract class AMemberAccess extends AExpression {
      */
     protected enum MemberAccessAttributes {
         ARROW("arrow"),
+        BASE("base"),
+        MEMBERCHAIN("memberChain"),
+        MEMBERCHAINNAMES("memberChainNames"),
+        NAME("name"),
+        DECL("decl"),
+        IMPLICITCAST("implicitCast"),
+        ISFUNCTIONARGUMENT("isFunctionArgument"),
+        USE("use"),
+        VARDECL("vardecl"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
         ASTISINSTANCE("astIsInstance"),
         ASTNAME("astName"),
         ASTNUMCHILDREN("astNumChildren"),
-        BASE("base"),
         BITWIDTH("bitWidth"),
         CHAIN("chain"),
         CHILDREN("children"),
@@ -1199,7 +1207,6 @@ public abstract class AMemberAccess extends AExpression {
         CONTAINS("contains"),
         CURRENTREGION("currentRegion"),
         DATA("data"),
-        DECL("decl"),
         DEPTH("depth"),
         DESCENDANTS("descendants"),
         ENDCOLUMN("endColumn"),
@@ -1223,10 +1230,8 @@ public abstract class AMemberAccess extends AExpression {
         HASNODE("hasNode"),
         HASPARENT("hasParent"),
         HASTYPE("hasType"),
-        IMPLICITCAST("implicitCast"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
-        ISFUNCTIONARGUMENT("isFunctionArgument"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
@@ -1238,9 +1243,6 @@ public abstract class AMemberAccess extends AExpression {
         LEFTJP("leftJp"),
         LINE("line"),
         LOCATION("location"),
-        MEMBERCHAIN("memberChain"),
-        MEMBERCHAINNAMES("memberChainNames"),
-        NAME("name"),
         NUMCHILDREN("numChildren"),
         ORIGINNODE("originNode"),
         PARENT("parent"),
@@ -1252,9 +1254,7 @@ public abstract class AMemberAccess extends AExpression {
         SIBLINGSLEFT("siblingsLeft"),
         SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        TYPE("type"),
-        USE("use"),
-        VARDECL("vardecl");
+        TYPE("type");
         private String name;
 
         /**

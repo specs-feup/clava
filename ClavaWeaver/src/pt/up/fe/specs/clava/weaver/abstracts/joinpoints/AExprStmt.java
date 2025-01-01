@@ -1160,6 +1160,9 @@ public abstract class AExprStmt extends AStatement {
      * 
      */
     protected enum ExprStmtAttributes {
+        EXPR("expr"),
+        ISFIRST("isFirst"),
+        ISLAST("isLast"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1178,7 +1181,6 @@ public abstract class AExprStmt extends AStatement {
         DESCENDANTS("descendants"),
         ENDCOLUMN("endColumn"),
         ENDLINE("endLine"),
-        EXPR("expr"),
         FILENAME("filename"),
         FILEPATH("filepath"),
         FIRSTCHILD("firstChild"),
@@ -1200,11 +1202,9 @@ public abstract class AExprStmt extends AStatement {
         HASTYPE("hasType"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
-        ISFIRST("isFirst"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        ISLAST("isLast"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
         JPID("jpId"),

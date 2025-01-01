@@ -993,6 +993,11 @@ public abstract class AImplicitValue extends AExpression {
      * 
      */
     protected enum ImplicitValueAttributes {
+        DECL("decl"),
+        IMPLICITCAST("implicitCast"),
+        ISFUNCTIONARGUMENT("isFunctionArgument"),
+        USE("use"),
+        VARDECL("vardecl"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1007,7 +1012,6 @@ public abstract class AImplicitValue extends AExpression {
         CONTAINS("contains"),
         CURRENTREGION("currentRegion"),
         DATA("data"),
-        DECL("decl"),
         DEPTH("depth"),
         DESCENDANTS("descendants"),
         ENDCOLUMN("endColumn"),
@@ -1031,10 +1035,8 @@ public abstract class AImplicitValue extends AExpression {
         HASNODE("hasNode"),
         HASPARENT("hasParent"),
         HASTYPE("hasType"),
-        IMPLICITCAST("implicitCast"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
-        ISFUNCTIONARGUMENT("isFunctionArgument"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
@@ -1057,9 +1059,7 @@ public abstract class AImplicitValue extends AExpression {
         SIBLINGSLEFT("siblingsLeft"),
         SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        TYPE("type"),
-        USE("use"),
-        VARDECL("vardecl");
+        TYPE("type");
         private String name;
 
         /**

@@ -1204,6 +1204,9 @@ public abstract class AGotoStmt extends AStatement {
      * 
      */
     protected enum GotoStmtAttributes {
+        LABEL("label"),
+        ISFIRST("isFirst"),
+        ISLAST("isLast"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1243,16 +1246,13 @@ public abstract class AGotoStmt extends AStatement {
         HASTYPE("hasType"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
-        ISFIRST("isFirst"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        ISLAST("isLast"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
         JPID("jpId"),
         KEYS("keys"),
-        LABEL("label"),
         LASTCHILD("lastChild"),
         LEFTJP("leftJp"),
         LINE("line"),

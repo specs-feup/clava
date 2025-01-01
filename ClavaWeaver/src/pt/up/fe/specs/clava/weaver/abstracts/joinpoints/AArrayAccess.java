@@ -1151,6 +1151,15 @@ public abstract class AArrayAccess extends AExpression {
      */
     protected enum ArrayAccessAttributes {
         ARRAYVAR("arrayVar"),
+        NAME("name"),
+        NUMSUBSCRIPTS("numSubscripts"),
+        PARENTACCESS("parentAccess"),
+        SUBSCRIPT("subscript"),
+        DECL("decl"),
+        IMPLICITCAST("implicitCast"),
+        ISFUNCTIONARGUMENT("isFunctionArgument"),
+        USE("use"),
+        VARDECL("vardecl"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1165,7 +1174,6 @@ public abstract class AArrayAccess extends AExpression {
         CONTAINS("contains"),
         CURRENTREGION("currentRegion"),
         DATA("data"),
-        DECL("decl"),
         DEPTH("depth"),
         DESCENDANTS("descendants"),
         ENDCOLUMN("endColumn"),
@@ -1189,10 +1197,8 @@ public abstract class AArrayAccess extends AExpression {
         HASNODE("hasNode"),
         HASPARENT("hasParent"),
         HASTYPE("hasType"),
-        IMPLICITCAST("implicitCast"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
-        ISFUNCTIONARGUMENT("isFunctionArgument"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
@@ -1204,12 +1210,9 @@ public abstract class AArrayAccess extends AExpression {
         LEFTJP("leftJp"),
         LINE("line"),
         LOCATION("location"),
-        NAME("name"),
         NUMCHILDREN("numChildren"),
-        NUMSUBSCRIPTS("numSubscripts"),
         ORIGINNODE("originNode"),
         PARENT("parent"),
-        PARENTACCESS("parentAccess"),
         PARENTREGION("parentRegion"),
         PRAGMAS("pragmas"),
         RIGHTJP("rightJp"),
@@ -1218,10 +1221,7 @@ public abstract class AArrayAccess extends AExpression {
         SIBLINGSLEFT("siblingsLeft"),
         SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        SUBSCRIPT("subscript"),
-        TYPE("type"),
-        USE("use"),
-        VARDECL("vardecl");
+        TYPE("type");
         private String name;
 
         /**

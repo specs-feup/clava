@@ -1088,6 +1088,16 @@ public abstract class AUnaryOp extends AOp {
      * 
      */
     protected enum UnaryOpAttributes {
+        ISPOINTERDEREF("isPointerDeref"),
+        OPERAND("operand"),
+        ISBITWISE("isBitwise"),
+        KIND("kind"),
+        OPERATOR("operator"),
+        DECL("decl"),
+        IMPLICITCAST("implicitCast"),
+        ISFUNCTIONARGUMENT("isFunctionArgument"),
+        USE("use"),
+        VARDECL("vardecl"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1102,7 +1112,6 @@ public abstract class AUnaryOp extends AOp {
         CONTAINS("contains"),
         CURRENTREGION("currentRegion"),
         DATA("data"),
-        DECL("decl"),
         DEPTH("depth"),
         DESCENDANTS("descendants"),
         ENDCOLUMN("endColumn"),
@@ -1126,27 +1135,20 @@ public abstract class AUnaryOp extends AOp {
         HASNODE("hasNode"),
         HASPARENT("hasParent"),
         HASTYPE("hasType"),
-        IMPLICITCAST("implicitCast"),
         INLINECOMMENTS("inlineComments"),
-        ISBITWISE("isBitwise"),
         ISCILK("isCilk"),
-        ISFUNCTIONARGUMENT("isFunctionArgument"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
-        ISPOINTERDEREF("isPointerDeref"),
         JAVAFIELDS("javaFields"),
         JPID("jpId"),
         KEYS("keys"),
-        KIND("kind"),
         LASTCHILD("lastChild"),
         LEFTJP("leftJp"),
         LINE("line"),
         LOCATION("location"),
         NUMCHILDREN("numChildren"),
-        OPERAND("operand"),
-        OPERATOR("operator"),
         ORIGINNODE("originNode"),
         PARENT("parent"),
         PARENTREGION("parentRegion"),
@@ -1157,9 +1159,7 @@ public abstract class AUnaryOp extends AOp {
         SIBLINGSLEFT("siblingsLeft"),
         SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        TYPE("type"),
-        USE("use"),
-        VARDECL("vardecl");
+        TYPE("type");
         private String name;
 
         /**

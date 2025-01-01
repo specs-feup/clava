@@ -143,6 +143,7 @@ public abstract class AAttribute extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum AttributeAttributes {
+        KIND("kind"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -189,7 +190,6 @@ public abstract class AAttribute extends ACxxWeaverJoinPoint {
         JAVAFIELDS("javaFields"),
         JPID("jpId"),
         KEYS("keys"),
-        KIND("kind"),
         LASTCHILD("lastChild"),
         LEFTJP("leftJp"),
         LINE("line"),

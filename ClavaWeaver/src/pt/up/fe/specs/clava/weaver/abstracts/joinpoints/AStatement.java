@@ -350,6 +350,8 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum StatementAttributes {
+        ISFIRST("isFirst"),
+        ISLAST("isLast"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -389,11 +391,9 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         HASTYPE("hasType"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
-        ISFIRST("isFirst"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        ISLAST("isLast"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
         JPID("jpId"),

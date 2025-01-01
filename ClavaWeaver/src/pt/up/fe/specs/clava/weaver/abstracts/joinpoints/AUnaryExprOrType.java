@@ -1169,6 +1169,14 @@ public abstract class AUnaryExprOrType extends AExpression {
     protected enum UnaryExprOrTypeAttributes {
         ARGEXPR("argExpr"),
         ARGTYPE("argType"),
+        HASARGEXPR("hasArgExpr"),
+        HASTYPEEXPR("hasTypeExpr"),
+        KIND("kind"),
+        DECL("decl"),
+        IMPLICITCAST("implicitCast"),
+        ISFUNCTIONARGUMENT("isFunctionArgument"),
+        USE("use"),
+        VARDECL("vardecl"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1183,7 +1191,6 @@ public abstract class AUnaryExprOrType extends AExpression {
         CONTAINS("contains"),
         CURRENTREGION("currentRegion"),
         DATA("data"),
-        DECL("decl"),
         DEPTH("depth"),
         DESCENDANTS("descendants"),
         ENDCOLUMN("endColumn"),
@@ -1203,16 +1210,12 @@ public abstract class AUnaryExprOrType extends AExpression {
         GETKEYTYPE("getKeyType"),
         GETUSERFIELD("getUserField"),
         GETVALUE("getValue"),
-        HASARGEXPR("hasArgExpr"),
         HASCHILDREN("hasChildren"),
         HASNODE("hasNode"),
         HASPARENT("hasParent"),
         HASTYPE("hasType"),
-        HASTYPEEXPR("hasTypeExpr"),
-        IMPLICITCAST("implicitCast"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
-        ISFUNCTIONARGUMENT("isFunctionArgument"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
@@ -1220,7 +1223,6 @@ public abstract class AUnaryExprOrType extends AExpression {
         JAVAFIELDS("javaFields"),
         JPID("jpId"),
         KEYS("keys"),
-        KIND("kind"),
         LASTCHILD("lastChild"),
         LEFTJP("leftJp"),
         LINE("line"),
@@ -1236,9 +1238,7 @@ public abstract class AUnaryExprOrType extends AExpression {
         SIBLINGSLEFT("siblingsLeft"),
         SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        TYPE("type"),
-        USE("use"),
-        VARDECL("vardecl");
+        TYPE("type");
         private String name;
 
         /**

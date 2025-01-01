@@ -1300,6 +1300,14 @@ public abstract class ACase extends AStatement {
      * 
      */
     protected enum CaseAttributes {
+        INSTRUCTIONS("instructions"),
+        ISDEFAULT("isDefault"),
+        ISEMPTY("isEmpty"),
+        NEXTCASE("nextCase"),
+        NEXTINSTRUCTION("nextInstruction"),
+        VALUES("values"),
+        ISFIRST("isFirst"),
+        ISLAST("isLast"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1338,15 +1346,10 @@ public abstract class ACase extends AStatement {
         HASPARENT("hasParent"),
         HASTYPE("hasType"),
         INLINECOMMENTS("inlineComments"),
-        INSTRUCTIONS("instructions"),
         ISCILK("isCilk"),
-        ISDEFAULT("isDefault"),
-        ISEMPTY("isEmpty"),
-        ISFIRST("isFirst"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        ISLAST("isLast"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
         JPID("jpId"),
@@ -1355,8 +1358,6 @@ public abstract class ACase extends AStatement {
         LEFTJP("leftJp"),
         LINE("line"),
         LOCATION("location"),
-        NEXTCASE("nextCase"),
-        NEXTINSTRUCTION("nextInstruction"),
         NUMCHILDREN("numChildren"),
         ORIGINNODE("originNode"),
         PARENT("parent"),
@@ -1368,8 +1369,7 @@ public abstract class ACase extends AStatement {
         SIBLINGSLEFT("siblingsLeft"),
         SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        TYPE("type"),
-        VALUES("values");
+        TYPE("type");
         private String name;
 
         /**

@@ -1204,6 +1204,9 @@ public abstract class ALabelStmt extends AStatement {
      * 
      */
     protected enum LabelStmtAttributes {
+        DECL("decl"),
+        ISFIRST("isFirst"),
+        ISLAST("isLast"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1218,7 +1221,6 @@ public abstract class ALabelStmt extends AStatement {
         CONTAINS("contains"),
         CURRENTREGION("currentRegion"),
         DATA("data"),
-        DECL("decl"),
         DEPTH("depth"),
         DESCENDANTS("descendants"),
         ENDCOLUMN("endColumn"),
@@ -1244,11 +1246,9 @@ public abstract class ALabelStmt extends AStatement {
         HASTYPE("hasType"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
-        ISFIRST("isFirst"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        ISLAST("isLast"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
         JPID("jpId"),

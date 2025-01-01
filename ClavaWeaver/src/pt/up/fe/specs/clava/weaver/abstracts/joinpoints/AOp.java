@@ -1071,6 +1071,14 @@ public abstract class AOp extends AExpression {
      * 
      */
     protected enum OpAttributes {
+        ISBITWISE("isBitwise"),
+        KIND("kind"),
+        OPERATOR("operator"),
+        DECL("decl"),
+        IMPLICITCAST("implicitCast"),
+        ISFUNCTIONARGUMENT("isFunctionArgument"),
+        USE("use"),
+        VARDECL("vardecl"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1085,7 +1093,6 @@ public abstract class AOp extends AExpression {
         CONTAINS("contains"),
         CURRENTREGION("currentRegion"),
         DATA("data"),
-        DECL("decl"),
         DEPTH("depth"),
         DESCENDANTS("descendants"),
         ENDCOLUMN("endColumn"),
@@ -1109,11 +1116,8 @@ public abstract class AOp extends AExpression {
         HASNODE("hasNode"),
         HASPARENT("hasParent"),
         HASTYPE("hasType"),
-        IMPLICITCAST("implicitCast"),
         INLINECOMMENTS("inlineComments"),
-        ISBITWISE("isBitwise"),
         ISCILK("isCilk"),
-        ISFUNCTIONARGUMENT("isFunctionArgument"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
@@ -1121,13 +1125,11 @@ public abstract class AOp extends AExpression {
         JAVAFIELDS("javaFields"),
         JPID("jpId"),
         KEYS("keys"),
-        KIND("kind"),
         LASTCHILD("lastChild"),
         LEFTJP("leftJp"),
         LINE("line"),
         LOCATION("location"),
         NUMCHILDREN("numChildren"),
-        OPERATOR("operator"),
         ORIGINNODE("originNode"),
         PARENT("parent"),
         PARENTREGION("parentRegion"),
@@ -1138,9 +1140,7 @@ public abstract class AOp extends AExpression {
         SIBLINGSLEFT("siblingsLeft"),
         SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        TYPE("type"),
-        USE("use"),
-        VARDECL("vardecl");
+        TYPE("type");
         private String name;
 
         /**

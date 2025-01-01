@@ -1425,6 +1425,12 @@ public abstract class AIf extends AStatement {
      * 
      */
     protected enum IfAttributes {
+        COND("cond"),
+        CONDDECL("condDecl"),
+        ELSE("else"),
+        THEN("then"),
+        ISFIRST("isFirst"),
+        ISLAST("isLast"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1436,14 +1442,11 @@ public abstract class AIf extends AStatement {
         CHILDREN("children"),
         CODE("code"),
         COLUMN("column"),
-        COND("cond"),
-        CONDDECL("condDecl"),
         CONTAINS("contains"),
         CURRENTREGION("currentRegion"),
         DATA("data"),
         DEPTH("depth"),
         DESCENDANTS("descendants"),
-        ELSE("else"),
         ENDCOLUMN("endColumn"),
         ENDLINE("endLine"),
         FILENAME("filename"),
@@ -1467,11 +1470,9 @@ public abstract class AIf extends AStatement {
         HASTYPE("hasType"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
-        ISFIRST("isFirst"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        ISLAST("isLast"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
         JPID("jpId"),
@@ -1491,7 +1492,6 @@ public abstract class AIf extends AStatement {
         SIBLINGSLEFT("siblingsLeft"),
         SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        THEN("then"),
         TYPE("type");
         private String name;
 

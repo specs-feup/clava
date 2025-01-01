@@ -296,6 +296,10 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum PragmaAttributes {
+        CONTENT("content"),
+        GETTARGETNODES("getTargetNodes"),
+        NAME("name"),
+        TARGET("target"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -308,7 +312,6 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         CODE("code"),
         COLUMN("column"),
         CONTAINS("contains"),
-        CONTENT("content"),
         CURRENTREGION("currentRegion"),
         DATA("data"),
         DEPTH("depth"),
@@ -328,7 +331,6 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         GETFIRSTJP("getFirstJp"),
         GETJAVAFIELDTYPE("getJavaFieldType"),
         GETKEYTYPE("getKeyType"),
-        GETTARGETNODES("getTargetNodes"),
         GETUSERFIELD("getUserField"),
         GETVALUE("getValue"),
         HASCHILDREN("hasChildren"),
@@ -348,7 +350,6 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         LEFTJP("leftJp"),
         LINE("line"),
         LOCATION("location"),
-        NAME("name"),
         NUMCHILDREN("numChildren"),
         ORIGINNODE("originNode"),
         PARENT("parent"),
@@ -360,7 +361,6 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         SIBLINGSLEFT("siblingsLeft"),
         SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        TARGET("target"),
         TYPE("type");
         private String name;
 

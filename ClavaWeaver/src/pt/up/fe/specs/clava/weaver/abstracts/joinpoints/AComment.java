@@ -185,6 +185,7 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum CommentAttributes {
+        TEXT("text"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -246,7 +247,6 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
         SIBLINGSLEFT("siblingsLeft"),
         SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        TEXT("text"),
         TYPE("type");
         private String name;
 

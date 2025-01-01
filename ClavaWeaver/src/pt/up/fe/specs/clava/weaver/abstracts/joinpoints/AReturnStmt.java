@@ -1175,6 +1175,9 @@ public abstract class AReturnStmt extends AStatement {
      * 
      */
     protected enum ReturnStmtAttributes {
+        RETURNEXPR("returnExpr"),
+        ISFIRST("isFirst"),
+        ISLAST("isLast"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1214,11 +1217,9 @@ public abstract class AReturnStmt extends AStatement {
         HASTYPE("hasType"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
-        ISFIRST("isFirst"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        ISLAST("isLast"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
         JPID("jpId"),
@@ -1232,7 +1233,6 @@ public abstract class AReturnStmt extends AStatement {
         PARENT("parent"),
         PARENTREGION("parentRegion"),
         PRAGMAS("pragmas"),
-        RETURNEXPR("returnExpr"),
         RIGHTJP("rightJp"),
         ROOT("root"),
         SCOPENODES("scopeNodes"),

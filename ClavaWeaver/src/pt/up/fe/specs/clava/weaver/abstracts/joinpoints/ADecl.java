@@ -151,13 +151,13 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum DeclAttributes {
+        ATTRS("attrs"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
         ASTISINSTANCE("astIsInstance"),
         ASTNAME("astName"),
         ASTNUMCHILDREN("astNumChildren"),
-        ATTRS("attrs"),
         BITWIDTH("bitWidth"),
         CHAIN("chain"),
         CHILDREN("children"),

@@ -1160,6 +1160,9 @@ public abstract class ABreak extends AStatement {
      * 
      */
     protected enum BreakAttributes {
+        ENCLOSINGSTMT("enclosingStmt"),
+        ISFIRST("isFirst"),
+        ISLAST("isLast"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1176,7 +1179,6 @@ public abstract class ABreak extends AStatement {
         DATA("data"),
         DEPTH("depth"),
         DESCENDANTS("descendants"),
-        ENCLOSINGSTMT("enclosingStmt"),
         ENDCOLUMN("endColumn"),
         ENDLINE("endLine"),
         FILENAME("filename"),
@@ -1200,11 +1202,9 @@ public abstract class ABreak extends AStatement {
         HASTYPE("hasType"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
-        ISFIRST("isFirst"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         ISINSIDEHEADER("isInsideHeader"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        ISLAST("isLast"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
         JPID("jpId"),

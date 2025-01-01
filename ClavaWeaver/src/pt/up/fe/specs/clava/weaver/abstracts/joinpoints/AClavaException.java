@@ -195,6 +195,9 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum ClavaExceptionAttributes {
+        EXCEPTION("exception"),
+        EXCEPTIONTYPE("exceptionType"),
+        MESSAGE("message"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -213,8 +216,6 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
         DESCENDANTS("descendants"),
         ENDCOLUMN("endColumn"),
         ENDLINE("endLine"),
-        EXCEPTION("exception"),
-        EXCEPTIONTYPE("exceptionType"),
         FILENAME("filename"),
         FILEPATH("filepath"),
         FIRSTCHILD("firstChild"),
@@ -247,7 +248,6 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
         LEFTJP("leftJp"),
         LINE("line"),
         LOCATION("location"),
-        MESSAGE("message"),
         NUMCHILDREN("numChildren"),
         ORIGINNODE("originNode"),
         PARENT("parent"),

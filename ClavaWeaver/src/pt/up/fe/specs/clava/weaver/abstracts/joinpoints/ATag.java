@@ -1028,6 +1028,11 @@ public abstract class ATag extends APragma {
      * 
      */
     protected enum TagAttributes {
+        ID("id"),
+        CONTENT("content"),
+        GETTARGETNODES("getTargetNodes"),
+        NAME("name"),
+        TARGET("target"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
@@ -1040,7 +1045,6 @@ public abstract class ATag extends APragma {
         CODE("code"),
         COLUMN("column"),
         CONTAINS("contains"),
-        CONTENT("content"),
         CURRENTREGION("currentRegion"),
         DATA("data"),
         DEPTH("depth"),
@@ -1060,14 +1064,12 @@ public abstract class ATag extends APragma {
         GETFIRSTJP("getFirstJp"),
         GETJAVAFIELDTYPE("getJavaFieldType"),
         GETKEYTYPE("getKeyType"),
-        GETTARGETNODES("getTargetNodes"),
         GETUSERFIELD("getUserField"),
         GETVALUE("getValue"),
         HASCHILDREN("hasChildren"),
         HASNODE("hasNode"),
         HASPARENT("hasParent"),
         HASTYPE("hasType"),
-        ID("id"),
         INLINECOMMENTS("inlineComments"),
         ISCILK("isCilk"),
         ISINSYSTEMHEADER("isInSystemHeader"),
@@ -1081,7 +1083,6 @@ public abstract class ATag extends APragma {
         LEFTJP("leftJp"),
         LINE("line"),
         LOCATION("location"),
-        NAME("name"),
         NUMCHILDREN("numChildren"),
         ORIGINNODE("originNode"),
         PARENT("parent"),
@@ -1093,7 +1094,6 @@ public abstract class ATag extends APragma {
         SIBLINGSLEFT("siblingsLeft"),
         SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        TARGET("target"),
         TYPE("type");
         private String name;
 

@@ -971,13 +971,14 @@ public abstract class AAccessSpecifier extends ADecl {
      * 
      */
     protected enum AccessSpecifierAttributes {
+        KIND("kind"),
+        ATTRS("attrs"),
         AST("ast"),
         ASTCHILDREN("astChildren"),
         ASTID("astId"),
         ASTISINSTANCE("astIsInstance"),
         ASTNAME("astName"),
         ASTNUMCHILDREN("astNumChildren"),
-        ATTRS("attrs"),
         BITWIDTH("bitWidth"),
         CHAIN("chain"),
         CHILDREN("children"),
@@ -1018,7 +1019,6 @@ public abstract class AAccessSpecifier extends ADecl {
         JAVAFIELDS("javaFields"),
         JPID("jpId"),
         KEYS("keys"),
-        KIND("kind"),
         LASTCHILD("lastChild"),
         LEFTJP("leftJp"),
         LINE("line"),
