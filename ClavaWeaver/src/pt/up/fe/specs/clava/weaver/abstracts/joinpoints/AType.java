@@ -526,28 +526,53 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Sets the template argument types of a template type
-     * @param templateArgTypes 
+     * Returns a new node based on this type with the qualifier const
      */
-    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
-        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgsTypes not implemented ");
+    public AType asConstImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action asConst not implemented ");
     }
 
     /**
-     * Sets the template argument types of a template type
-     * @param templateArgTypes 
+     * Returns a new node based on this type with the qualifier const
      */
-    public final void setTemplateArgsTypes(Object[] templateArgTypes) {
+    public final Object asConst() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
+        		eventTrigger().triggerAction(Stage.BEGIN, "asConst", this, Optional.empty());
         	}
-        	this.setTemplateArgsTypesImpl(pt.up.fe.specs.util.SpecsCollections.cast(templateArgTypes, AType.class));
+        	AType result = this.asConstImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
+        		eventTrigger().triggerAction(Stage.END, "asConst", this, Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "asConst", e);
+        }
+    }
+
+    /**
+     * Sets the desugared type of this type
+     * @param desugaredType 
+     */
+    public void setDesugarImpl(AType desugaredType) {
+        throw new UnsupportedOperationException(get_class()+": Action setDesugar not implemented ");
+    }
+
+    /**
+     * Sets the desugared type of this type
+     * @param desugaredType 
+     */
+    public final void setDesugar(AType desugaredType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setDesugar", this, Optional.empty(), desugaredType);
+        	}
+        	this.setDesugarImpl(desugaredType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setDesugar", this, Optional.empty(), desugaredType);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setTemplateArgsTypes", e);
+        	throw new ActionException(get_class(), "setDesugar", e);
         }
     }
 
@@ -580,28 +605,28 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Sets the desugared type of this type
-     * @param desugaredType 
+     * Sets the template argument types of a template type
+     * @param templateArgTypes 
      */
-    public void setDesugarImpl(AType desugaredType) {
-        throw new UnsupportedOperationException(get_class()+": Action setDesugar not implemented ");
+    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
+        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgsTypes not implemented ");
     }
 
     /**
-     * Sets the desugared type of this type
-     * @param desugaredType 
+     * Sets the template argument types of a template type
+     * @param templateArgTypes 
      */
-    public final void setDesugar(AType desugaredType) {
+    public final void setTemplateArgsTypes(Object[] templateArgTypes) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setDesugar", this, Optional.empty(), desugaredType);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
         	}
-        	this.setDesugarImpl(desugaredType);
+        	this.setTemplateArgsTypesImpl(pt.up.fe.specs.util.SpecsCollections.cast(templateArgTypes, AType.class));
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setDesugar", this, Optional.empty(), desugaredType);
+        		eventTrigger().triggerAction(Stage.END, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setDesugar", e);
+        	throw new ActionException(get_class(), "setTemplateArgsTypes", e);
         }
     }
 
@@ -660,31 +685,6 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setUnderlyingType", e);
-        }
-    }
-
-    /**
-     * Returns a new node based on this type with the qualifier const
-     */
-    public AType asConstImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action asConst not implemented ");
-    }
-
-    /**
-     * Returns a new node based on this type with the qualifier const
-     */
-    public final Object asConst() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "asConst", this, Optional.empty());
-        	}
-        	AType result = this.asConstImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "asConst", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "asConst", e);
         }
     }
 

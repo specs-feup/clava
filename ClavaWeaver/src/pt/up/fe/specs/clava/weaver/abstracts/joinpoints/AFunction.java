@@ -711,6 +711,60 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Adds a new parameter to the function
+     * @param param 
+     */
+    public void addParamImpl(AParam param) {
+        throw new UnsupportedOperationException(get_class()+": Action addParam not implemented ");
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param param 
+     */
+    public final void addParam(AParam param) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), param);
+        	}
+        	this.addParamImpl(param);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), param);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addParam", e);
+        }
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param name 
+     * @param type 
+     */
+    public void addParamImpl(String name, AType type) {
+        throw new UnsupportedOperationException(get_class()+": Action addParam not implemented ");
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param name 
+     * @param type 
+     */
+    public final void addParam(String name, AType type) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), name, type);
+        	}
+        	this.addParamImpl(name, type);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), name, type);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addParam", e);
+        }
+    }
+
+    /**
      * Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class
      * @param newName 
      * @param insert 
@@ -852,54 +906,81 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Sets the parameters of the function
-     * @param params 
+     * Creates a new call to this function
+     * @param args 
      */
-    public void setParamsImpl(AParam[] params) {
-        throw new UnsupportedOperationException(get_class()+": Action setParams not implemented ");
+    public ACall newCallImpl(AJoinPoint[] args) {
+        throw new UnsupportedOperationException(get_class()+": Action newCall not implemented ");
     }
 
     /**
-     * Sets the parameters of the function
-     * @param params 
+     * Creates a new call to this function
+     * @param args 
      */
-    public final void setParams(Object[] params) {
+    public final Object newCall(Object[] args) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), new Object[] { params});
+        		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), new Object[] { args});
         	}
-        	this.setParamsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, AParam.class));
+        	ACall result = this.newCallImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AJoinPoint.class));
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), new Object[] { params});
+        		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), new Object[] { args});
         	}
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setParams", e);
+        	throw new ActionException(get_class(), "newCall", e);
         }
     }
 
     /**
-     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
-     * @param params 
+     * Sets the body of the function
+     * @param body 
      */
-    public void setParamsFromStringsImpl(String[] params) {
-        throw new UnsupportedOperationException(get_class()+": Action setParamsFromStrings not implemented ");
+    public void setBodyImpl(AScope body) {
+        throw new UnsupportedOperationException(get_class()+": Action setBody not implemented ");
     }
 
     /**
-     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
-     * @param params 
+     * Sets the body of the function
+     * @param body 
      */
-    public final void setParamsFromStrings(Object[] params) {
+    public final void setBody(AScope body) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
+        		eventTrigger().triggerAction(Stage.BEGIN, "setBody", this, Optional.empty(), body);
         	}
-        	this.setParamsFromStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, String.class));
+        	this.setBodyImpl(body);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
+        		eventTrigger().triggerAction(Stage.END, "setBody", this, Optional.empty(), body);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setParamsFromStrings", e);
+        	throw new ActionException(get_class(), "setBody", e);
+        }
+    }
+
+    /**
+     * Sets the type of the function
+     * @param functionType 
+     */
+    public void setFunctionTypeImpl(AFunctionType functionType) {
+        throw new UnsupportedOperationException(get_class()+": Action setFunctionType not implemented ");
+    }
+
+    /**
+     * Sets the type of the function
+     * @param functionType 
+     */
+    public final void setFunctionType(AFunctionType functionType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setFunctionType", this, Optional.empty(), functionType);
+        	}
+        	this.setFunctionTypeImpl(functionType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setFunctionType", this, Optional.empty(), functionType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setFunctionType", e);
         }
     }
 
@@ -962,111 +1043,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Sets the body of the function
-     * @param body 
-     */
-    public void setBodyImpl(AScope body) {
-        throw new UnsupportedOperationException(get_class()+": Action setBody not implemented ");
-    }
-
-    /**
-     * Sets the body of the function
-     * @param body 
-     */
-    public final void setBody(AScope body) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setBody", this, Optional.empty(), body);
-        	}
-        	this.setBodyImpl(body);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setBody", this, Optional.empty(), body);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setBody", e);
-        }
-    }
-
-    /**
-     * Creates a new call to this function
-     * @param args 
-     */
-    public ACall newCallImpl(AJoinPoint[] args) {
-        throw new UnsupportedOperationException(get_class()+": Action newCall not implemented ");
-    }
-
-    /**
-     * Creates a new call to this function
-     * @param args 
-     */
-    public final Object newCall(Object[] args) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), new Object[] { args});
-        	}
-        	ACall result = this.newCallImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AJoinPoint.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), new Object[] { args});
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "newCall", e);
-        }
-    }
-
-    /**
-     * Sets the type of the function
-     * @param functionType 
-     */
-    public void setFunctionTypeImpl(AFunctionType functionType) {
-        throw new UnsupportedOperationException(get_class()+": Action setFunctionType not implemented ");
-    }
-
-    /**
-     * Sets the type of the function
-     * @param functionType 
-     */
-    public final void setFunctionType(AFunctionType functionType) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setFunctionType", this, Optional.empty(), functionType);
-        	}
-        	this.setFunctionTypeImpl(functionType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setFunctionType", this, Optional.empty(), functionType);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setFunctionType", e);
-        }
-    }
-
-    /**
-     * Sets the return type of the function
-     * @param returnType 
-     */
-    public void setReturnTypeImpl(AType returnType) {
-        throw new UnsupportedOperationException(get_class()+": Action setReturnType not implemented ");
-    }
-
-    /**
-     * Sets the return type of the function
-     * @param returnType 
-     */
-    public final void setReturnType(AType returnType) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setReturnType", this, Optional.empty(), returnType);
-        	}
-        	this.setReturnTypeImpl(returnType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setReturnType", this, Optional.empty(), returnType);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setReturnType", e);
-        }
-    }
-
-    /**
      * Sets the type of a parameter of the function
      * @param index 
      * @param newType 
@@ -1095,56 +1071,80 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Adds a new parameter to the function
-     * @param param 
+     * Sets the parameters of the function
+     * @param params 
      */
-    public void addParamImpl(AParam param) {
-        throw new UnsupportedOperationException(get_class()+": Action addParam not implemented ");
+    public void setParamsImpl(AParam[] params) {
+        throw new UnsupportedOperationException(get_class()+": Action setParams not implemented ");
     }
 
     /**
-     * Adds a new parameter to the function
-     * @param param 
+     * Sets the parameters of the function
+     * @param params 
      */
-    public final void addParam(AParam param) {
+    public final void setParams(Object[] params) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), param);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), new Object[] { params});
         	}
-        	this.addParamImpl(param);
+        	this.setParamsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, AParam.class));
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), param);
+        		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), new Object[] { params});
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "addParam", e);
+        	throw new ActionException(get_class(), "setParams", e);
         }
     }
 
     /**
-     * Adds a new parameter to the function
-     * @param name 
-     * @param type 
+     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
+     * @param params 
      */
-    public void addParamImpl(String name, AType type) {
-        throw new UnsupportedOperationException(get_class()+": Action addParam not implemented ");
+    public void setParamsFromStringsImpl(String[] params) {
+        throw new UnsupportedOperationException(get_class()+": Action setParamsFromStrings not implemented ");
     }
 
     /**
-     * Adds a new parameter to the function
-     * @param name 
-     * @param type 
+     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
+     * @param params 
      */
-    public final void addParam(String name, AType type) {
+    public final void setParamsFromStrings(Object[] params) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), name, type);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
         	}
-        	this.addParamImpl(name, type);
+        	this.setParamsFromStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, String.class));
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), name, type);
+        		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "addParam", e);
+        	throw new ActionException(get_class(), "setParamsFromStrings", e);
+        }
+    }
+
+    /**
+     * Sets the return type of the function
+     * @param returnType 
+     */
+    public void setReturnTypeImpl(AType returnType) {
+        throw new UnsupportedOperationException(get_class()+": Action setReturnType not implemented ");
+    }
+
+    /**
+     * Sets the return type of the function
+     * @param returnType 
+     */
+    public final void setReturnType(AType returnType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setReturnType", this, Optional.empty(), returnType);
+        	}
+        	this.setReturnTypeImpl(returnType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setReturnType", this, Optional.empty(), returnType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setReturnType", e);
         }
     }
 

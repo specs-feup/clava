@@ -137,32 +137,6 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
 
     /**
      * 
-     * @param name 
-     */
-    public void setNameImpl(String name) {
-        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
-    }
-
-    /**
-     * 
-     * @param name 
-     */
-    public final void setName(String name) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
-        	}
-        	this.setNameImpl(name);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setName", e);
-        }
-    }
-
-    /**
-     * 
      * @param content 
      */
     public void setContentImpl(String content) {
@@ -184,6 +158,32 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setContent", e);
+        }
+    }
+
+    /**
+     * 
+     * @param name 
+     */
+    public void setNameImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
+    }
+
+    /**
+     * 
+     * @param name 
+     */
+    public final void setName(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
+        	}
+        	this.setNameImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setName", e);
         }
     }
 

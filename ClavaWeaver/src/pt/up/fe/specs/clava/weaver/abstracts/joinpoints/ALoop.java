@@ -599,28 +599,132 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the kind of the loop
-     * @param kind 
+     * Interchanges two for loops, if possible
+     * @param otherLoop 
      */
-    public void setKindImpl(String kind) {
-        throw new UnsupportedOperationException(get_class()+": Action setKind not implemented ");
+    public void interchangeImpl(ALoop otherLoop) {
+        throw new UnsupportedOperationException(get_class()+": Action interchange not implemented ");
     }
 
     /**
-     * Sets the kind of the loop
-     * @param kind 
+     * Interchanges two for loops, if possible
+     * @param otherLoop 
      */
-    public final void setKind(String kind) {
+    public final void interchange(ALoop otherLoop) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setKind", this, Optional.empty(), kind);
+        		eventTrigger().triggerAction(Stage.BEGIN, "interchange", this, Optional.empty(), otherLoop);
         	}
-        	this.setKindImpl(kind);
+        	this.interchangeImpl(otherLoop);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setKind", this, Optional.empty(), kind);
+        		eventTrigger().triggerAction(Stage.END, "interchange", this, Optional.empty(), otherLoop);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setKind", e);
+        	throw new ActionException(get_class(), "interchange", e);
+        }
+    }
+
+    /**
+     * Sets the body of the loop
+     * @param body 
+     */
+    public void setBodyImpl(AScope body) {
+        throw new UnsupportedOperationException(get_class()+": Action setBody not implemented ");
+    }
+
+    /**
+     * Sets the body of the loop
+     * @param body 
+     */
+    public final void setBody(AScope body) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setBody", this, Optional.empty(), body);
+        	}
+        	this.setBodyImpl(body);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setBody", this, Optional.empty(), body);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setBody", e);
+        }
+    }
+
+    /**
+     * Sets the conditional statement of the loop. Works with loops of kind 'for'
+     * @param condCode 
+     */
+    public void setCondImpl(String condCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setCond not implemented ");
+    }
+
+    /**
+     * Sets the conditional statement of the loop. Works with loops of kind 'for'
+     * @param condCode 
+     */
+    public final void setCond(String condCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setCond", this, Optional.empty(), condCode);
+        	}
+        	this.setCondImpl(condCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setCond", this, Optional.empty(), condCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setCond", e);
+        }
+    }
+
+    /**
+     * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
+     * @param operator 
+     */
+    public void setCondRelationImpl(String operator) {
+        throw new UnsupportedOperationException(get_class()+": Action setCondRelation not implemented ");
+    }
+
+    /**
+     * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
+     * @param operator 
+     */
+    public final void setCondRelation(String operator) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setCondRelation", this, Optional.empty(), operator);
+        	}
+        	this.setCondRelationImpl(operator);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setCondRelation", this, Optional.empty(), operator);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setCondRelation", e);
+        }
+    }
+
+    /**
+     * Sets the end value of the loop. Works with loops of kind 'for'
+     * @param initCode 
+     */
+    public void setEndValueImpl(String initCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setEndValue not implemented ");
+    }
+
+    /**
+     * Sets the end value of the loop. Works with loops of kind 'for'
+     * @param initCode 
+     */
+    public final void setEndValue(String initCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setEndValue", this, Optional.empty(), initCode);
+        	}
+        	this.setEndValueImpl(initCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setEndValue", this, Optional.empty(), initCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setEndValue", e);
         }
     }
 
@@ -677,84 +781,6 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the end value of the loop. Works with loops of kind 'for'
-     * @param initCode 
-     */
-    public void setEndValueImpl(String initCode) {
-        throw new UnsupportedOperationException(get_class()+": Action setEndValue not implemented ");
-    }
-
-    /**
-     * Sets the end value of the loop. Works with loops of kind 'for'
-     * @param initCode 
-     */
-    public final void setEndValue(String initCode) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setEndValue", this, Optional.empty(), initCode);
-        	}
-        	this.setEndValueImpl(initCode);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setEndValue", this, Optional.empty(), initCode);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setEndValue", e);
-        }
-    }
-
-    /**
-     * Sets the conditional statement of the loop. Works with loops of kind 'for'
-     * @param condCode 
-     */
-    public void setCondImpl(String condCode) {
-        throw new UnsupportedOperationException(get_class()+": Action setCond not implemented ");
-    }
-
-    /**
-     * Sets the conditional statement of the loop. Works with loops of kind 'for'
-     * @param condCode 
-     */
-    public final void setCond(String condCode) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setCond", this, Optional.empty(), condCode);
-        	}
-        	this.setCondImpl(condCode);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setCond", this, Optional.empty(), condCode);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setCond", e);
-        }
-    }
-
-    /**
-     * Sets the step statement of the loop. Works with loops of kind 'for'
-     * @param stepCode 
-     */
-    public void setStepImpl(String stepCode) {
-        throw new UnsupportedOperationException(get_class()+": Action setStep not implemented ");
-    }
-
-    /**
-     * Sets the step statement of the loop. Works with loops of kind 'for'
-     * @param stepCode 
-     */
-    public final void setStep(String stepCode) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setStep", this, Optional.empty(), stepCode);
-        	}
-        	this.setStepImpl(stepCode);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setStep", this, Optional.empty(), stepCode);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setStep", e);
-        }
-    }
-
-    /**
      * Sets the attribute 'isParallel' of the loop
      * @param isParallel 
      */
@@ -781,28 +807,54 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Interchanges two for loops, if possible
-     * @param otherLoop 
+     * Sets the kind of the loop
+     * @param kind 
      */
-    public void interchangeImpl(ALoop otherLoop) {
-        throw new UnsupportedOperationException(get_class()+": Action interchange not implemented ");
+    public void setKindImpl(String kind) {
+        throw new UnsupportedOperationException(get_class()+": Action setKind not implemented ");
     }
 
     /**
-     * Interchanges two for loops, if possible
-     * @param otherLoop 
+     * Sets the kind of the loop
+     * @param kind 
      */
-    public final void interchange(ALoop otherLoop) {
+    public final void setKind(String kind) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "interchange", this, Optional.empty(), otherLoop);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setKind", this, Optional.empty(), kind);
         	}
-        	this.interchangeImpl(otherLoop);
+        	this.setKindImpl(kind);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "interchange", this, Optional.empty(), otherLoop);
+        		eventTrigger().triggerAction(Stage.END, "setKind", this, Optional.empty(), kind);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "interchange", e);
+        	throw new ActionException(get_class(), "setKind", e);
+        }
+    }
+
+    /**
+     * Sets the step statement of the loop. Works with loops of kind 'for'
+     * @param stepCode 
+     */
+    public void setStepImpl(String stepCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setStep not implemented ");
+    }
+
+    /**
+     * Sets the step statement of the loop. Works with loops of kind 'for'
+     * @param stepCode 
+     */
+    public final void setStep(String stepCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setStep", this, Optional.empty(), stepCode);
+        	}
+        	this.setStepImpl(stepCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setStep", this, Optional.empty(), stepCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setStep", e);
         }
     }
 
@@ -834,58 +886,6 @@ public abstract class ALoop extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "tile", e);
-        }
-    }
-
-    /**
-     * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
-     * @param operator 
-     */
-    public void setCondRelationImpl(String operator) {
-        throw new UnsupportedOperationException(get_class()+": Action setCondRelation not implemented ");
-    }
-
-    /**
-     * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
-     * @param operator 
-     */
-    public final void setCondRelation(String operator) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setCondRelation", this, Optional.empty(), operator);
-        	}
-        	this.setCondRelationImpl(operator);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setCondRelation", this, Optional.empty(), operator);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setCondRelation", e);
-        }
-    }
-
-    /**
-     * Sets the body of the loop
-     * @param body 
-     */
-    public void setBodyImpl(AScope body) {
-        throw new UnsupportedOperationException(get_class()+": Action setBody not implemented ");
-    }
-
-    /**
-     * Sets the body of the loop
-     * @param body 
-     */
-    public final void setBody(AScope body) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setBody", this, Optional.empty(), body);
-        	}
-        	this.setBodyImpl(body);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setBody", this, Optional.empty(), body);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setBody", e);
         }
     }
 

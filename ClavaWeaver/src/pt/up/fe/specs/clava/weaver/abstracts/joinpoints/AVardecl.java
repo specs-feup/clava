@@ -206,6 +206,32 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
+     * If vardecl already has an initialization, removes it.
+     * @param removeConst 
+     */
+    public void removeInitImpl(boolean removeConst) {
+        throw new UnsupportedOperationException(get_class()+": Action removeInit not implemented ");
+    }
+
+    /**
+     * If vardecl already has an initialization, removes it.
+     * @param removeConst 
+     */
+    public final void removeInit(boolean removeConst) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "removeInit", this, Optional.empty(), removeConst);
+        	}
+        	this.removeInitImpl(removeConst);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "removeInit", this, Optional.empty(), removeConst);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "removeInit", e);
+        }
+    }
+
+    /**
      * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
      * @param init 
      */
@@ -258,28 +284,28 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
-     * If vardecl already has an initialization, removes it.
-     * @param removeConst 
+     * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
+     * @param storageClass 
      */
-    public void removeInitImpl(boolean removeConst) {
-        throw new UnsupportedOperationException(get_class()+": Action removeInit not implemented ");
+    public void setStorageClassImpl(String storageClass) {
+        throw new UnsupportedOperationException(get_class()+": Action setStorageClass not implemented ");
     }
 
     /**
-     * If vardecl already has an initialization, removes it.
-     * @param removeConst 
+     * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
+     * @param storageClass 
      */
-    public final void removeInit(boolean removeConst) {
+    public final void setStorageClass(String storageClass) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "removeInit", this, Optional.empty(), removeConst);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setStorageClass", this, Optional.empty(), storageClass);
         	}
-        	this.removeInitImpl(removeConst);
+        	this.setStorageClassImpl(storageClass);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "removeInit", this, Optional.empty(), removeConst);
+        		eventTrigger().triggerAction(Stage.END, "setStorageClass", this, Optional.empty(), storageClass);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "removeInit", e);
+        	throw new ActionException(get_class(), "setStorageClass", e);
         }
     }
 
@@ -305,32 +331,6 @@ public abstract class AVardecl extends ADeclarator {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "varref", e);
-        }
-    }
-
-    /**
-     * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
-     * @param storageClass 
-     */
-    public void setStorageClassImpl(String storageClass) {
-        throw new UnsupportedOperationException(get_class()+": Action setStorageClass not implemented ");
-    }
-
-    /**
-     * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
-     * @param storageClass 
-     */
-    public final void setStorageClass(String storageClass) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setStorageClass", this, Optional.empty(), storageClass);
-        	}
-        	this.setStorageClassImpl(storageClass);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setStorageClass", this, Optional.empty(), storageClass);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setStorageClass", e);
         }
     }
 

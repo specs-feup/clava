@@ -95,32 +95,6 @@ public abstract class AFunctionType extends AType {
     }
 
     /**
-     * Sets the return type of the FunctionType
-     * @param newType 
-     */
-    public void setReturnTypeImpl(AType newType) {
-        throw new UnsupportedOperationException(get_class()+": Action setReturnType not implemented ");
-    }
-
-    /**
-     * Sets the return type of the FunctionType
-     * @param newType 
-     */
-    public final void setReturnType(AType newType) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setReturnType", this, Optional.empty(), newType);
-        	}
-        	this.setReturnTypeImpl(newType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setReturnType", this, Optional.empty(), newType);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setReturnType", e);
-        }
-    }
-
-    /**
      * Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType
      * @param index 
      * @param newType 
@@ -145,6 +119,32 @@ public abstract class AFunctionType extends AType {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setParamType", e);
+        }
+    }
+
+    /**
+     * Sets the return type of the FunctionType
+     * @param newType 
+     */
+    public void setReturnTypeImpl(AType newType) {
+        throw new UnsupportedOperationException(get_class()+": Action setReturnType not implemented ");
+    }
+
+    /**
+     * Sets the return type of the FunctionType
+     * @param newType 
+     */
+    public final void setReturnType(AType newType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setReturnType", this, Optional.empty(), newType);
+        	}
+        	this.setReturnTypeImpl(newType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setReturnType", this, Optional.empty(), newType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setReturnType", e);
         }
     }
 

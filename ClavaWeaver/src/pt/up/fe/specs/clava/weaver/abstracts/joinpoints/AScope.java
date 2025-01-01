@@ -329,6 +329,111 @@ public abstract class AScope extends AStatement {
     }
 
     /**
+     * Adds a new local variable to this scope
+     * @param name 
+     * @param type 
+     * @param initValue 
+     */
+    public AJoinPoint addLocalImpl(String name, AJoinPoint type, String initValue) {
+        throw new UnsupportedOperationException(get_class()+": Action addLocal not implemented ");
+    }
+
+    /**
+     * Adds a new local variable to this scope
+     * @param name 
+     * @param type 
+     * @param initValue 
+     */
+    public final Object addLocal(String name, AJoinPoint type, String initValue) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addLocal", this, Optional.empty(), name, type, initValue);
+        	}
+        	AJoinPoint result = this.addLocalImpl(name, type, initValue);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addLocal", this, Optional.ofNullable(result), name, type, initValue);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addLocal", e);
+        }
+    }
+
+    /**
+     * CFG tester
+     */
+    public String cfgImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action cfg not implemented ");
+    }
+
+    /**
+     * CFG tester
+     */
+    public final Object cfg() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "cfg", this, Optional.empty());
+        	}
+        	String result = this.cfgImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "cfg", this, Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "cfg", e);
+        }
+    }
+
+    /**
+     * Clears the contents of this scope (untested)
+     */
+    public void clearImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action clear not implemented ");
+    }
+
+    /**
+     * Clears the contents of this scope (untested)
+     */
+    public final void clear() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "clear", this, Optional.empty());
+        	}
+        	this.clearImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "clear", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "clear", e);
+        }
+    }
+
+    /**
+     * DFG tester
+     */
+    public String dfgImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action dfg not implemented ");
+    }
+
+    /**
+     * DFG tester
+     */
+    public final Object dfg() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "dfg", this, Optional.empty());
+        	}
+        	String result = this.dfgImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "dfg", this, Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "dfg", e);
+        }
+    }
+
+    /**
      * 
      * @param node 
      */
@@ -491,37 +596,6 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Adds a new local variable to this scope
-     * @param name 
-     * @param type 
-     * @param initValue 
-     */
-    public AJoinPoint addLocalImpl(String name, AJoinPoint type, String initValue) {
-        throw new UnsupportedOperationException(get_class()+": Action addLocal not implemented ");
-    }
-
-    /**
-     * Adds a new local variable to this scope
-     * @param name 
-     * @param type 
-     * @param initValue 
-     */
-    public final Object addLocal(String name, AJoinPoint type, String initValue) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addLocal", this, Optional.empty(), name, type, initValue);
-        	}
-        	AJoinPoint result = this.addLocalImpl(name, type, initValue);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addLocal", this, Optional.ofNullable(result), name, type, initValue);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addLocal", e);
-        }
-    }
-
-    /**
      * Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)
      * @param isNaked 
      */
@@ -544,80 +618,6 @@ public abstract class AScope extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setNaked", e);
-        }
-    }
-
-    /**
-     * Clears the contents of this scope (untested)
-     */
-    public void clearImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action clear not implemented ");
-    }
-
-    /**
-     * Clears the contents of this scope (untested)
-     */
-    public final void clear() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "clear", this, Optional.empty());
-        	}
-        	this.clearImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "clear", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "clear", e);
-        }
-    }
-
-    /**
-     * CFG tester
-     */
-    public String cfgImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action cfg not implemented ");
-    }
-
-    /**
-     * CFG tester
-     */
-    public final Object cfg() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "cfg", this, Optional.empty());
-        	}
-        	String result = this.cfgImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "cfg", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "cfg", e);
-        }
-    }
-
-    /**
-     * DFG tester
-     */
-    public String dfgImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action dfg not implemented ");
-    }
-
-    /**
-     * DFG tester
-     */
-    public final Object dfg() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "dfg", this, Optional.empty());
-        	}
-        	String result = this.dfgImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "dfg", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "dfg", e);
         }
     }
 

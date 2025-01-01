@@ -175,32 +175,6 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
-     * Sets the qualified prefix of this namedDecl
-     * @param qualifiedPrefix 
-     */
-    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
-        throw new UnsupportedOperationException(get_class()+": Action setQualifiedPrefix not implemented ");
-    }
-
-    /**
-     * Sets the qualified prefix of this namedDecl
-     * @param qualifiedPrefix 
-     */
-    public final void setQualifiedPrefix(String qualifiedPrefix) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setQualifiedPrefix", this, Optional.empty(), qualifiedPrefix);
-        	}
-        	this.setQualifiedPrefixImpl(qualifiedPrefix);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setQualifiedPrefix", this, Optional.empty(), qualifiedPrefix);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setQualifiedPrefix", e);
-        }
-    }
-
-    /**
      * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
      * @param name 
      */
@@ -223,6 +197,32 @@ public abstract class ANamedDecl extends ADecl {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setQualifiedName", e);
+        }
+    }
+
+    /**
+     * Sets the qualified prefix of this namedDecl
+     * @param qualifiedPrefix 
+     */
+    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
+        throw new UnsupportedOperationException(get_class()+": Action setQualifiedPrefix not implemented ");
+    }
+
+    /**
+     * Sets the qualified prefix of this namedDecl
+     * @param qualifiedPrefix 
+     */
+    public final void setQualifiedPrefix(String qualifiedPrefix) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setQualifiedPrefix", this, Optional.empty(), qualifiedPrefix);
+        	}
+        	this.setQualifiedPrefixImpl(qualifiedPrefix);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setQualifiedPrefix", this, Optional.empty(), qualifiedPrefix);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setQualifiedPrefix", e);
         }
     }
 

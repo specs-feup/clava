@@ -466,139 +466,6 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * Changes the name of the call
-     * @param name 
-     */
-    public void setNameImpl(String name) {
-        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
-    }
-
-    /**
-     * Changes the name of the call
-     * @param name 
-     */
-    public final void setName(String name) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
-        	}
-        	this.setNameImpl(name);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setName", e);
-        }
-    }
-
-    /**
-     * Wraps this call with a possibly new wrapping function
-     * @param name 
-     */
-    public void wrapImpl(String name) {
-        throw new UnsupportedOperationException(get_class()+": Action wrap not implemented ");
-    }
-
-    /**
-     * Wraps this call with a possibly new wrapping function
-     * @param name 
-     */
-    public final void wrap(String name) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "wrap", this, Optional.empty(), name);
-        	}
-        	this.wrapImpl(name);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "wrap", this, Optional.empty(), name);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "wrap", e);
-        }
-    }
-
-    /**
-     * Tries to inline this call
-     */
-    public boolean inlineImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action inline not implemented ");
-    }
-
-    /**
-     * Tries to inline this call
-     */
-    public final Object inline() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "inline", this, Optional.empty());
-        	}
-        	boolean result = this.inlineImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "inline", this, Optional.ofNullable(result));
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "inline", e);
-        }
-    }
-
-    /**
-     * 
-     * @param index 
-     * @param expr 
-     */
-    public void setArgFromStringImpl(int index, String expr) {
-        throw new UnsupportedOperationException(get_class()+": Action setArgFromString not implemented ");
-    }
-
-    /**
-     * 
-     * @param index 
-     * @param expr 
-     */
-    public final void setArgFromString(int index, String expr) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setArgFromString", this, Optional.empty(), index, expr);
-        	}
-        	this.setArgFromStringImpl(index, expr);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setArgFromString", this, Optional.empty(), index, expr);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setArgFromString", e);
-        }
-    }
-
-    /**
-     * 
-     * @param index 
-     * @param expr 
-     */
-    public void setArgImpl(int index, AExpression expr) {
-        throw new UnsupportedOperationException(get_class()+": Action setArg not implemented ");
-    }
-
-    /**
-     * 
-     * @param index 
-     * @param expr 
-     */
-    public final void setArg(int index, AExpression expr) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setArg", this, Optional.empty(), index, expr);
-        	}
-        	this.setArgImpl(index, expr);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setArg", this, Optional.empty(), index, expr);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setArg", e);
-        }
-    }
-
-    /**
      * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
      * @param argCode 
      * @param type 
@@ -651,6 +518,139 @@ public abstract class ACall extends AExpression {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addArg", e);
+        }
+    }
+
+    /**
+     * Tries to inline this call
+     */
+    public boolean inlineImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action inline not implemented ");
+    }
+
+    /**
+     * Tries to inline this call
+     */
+    public final Object inline() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "inline", this, Optional.empty());
+        	}
+        	boolean result = this.inlineImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "inline", this, Optional.ofNullable(result));
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "inline", e);
+        }
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    public void setArgImpl(int index, AExpression expr) {
+        throw new UnsupportedOperationException(get_class()+": Action setArg not implemented ");
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    public final void setArg(int index, AExpression expr) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setArg", this, Optional.empty(), index, expr);
+        	}
+        	this.setArgImpl(index, expr);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setArg", this, Optional.empty(), index, expr);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setArg", e);
+        }
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    public void setArgFromStringImpl(int index, String expr) {
+        throw new UnsupportedOperationException(get_class()+": Action setArgFromString not implemented ");
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    public final void setArgFromString(int index, String expr) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setArgFromString", this, Optional.empty(), index, expr);
+        	}
+        	this.setArgFromStringImpl(index, expr);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setArgFromString", this, Optional.empty(), index, expr);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setArgFromString", e);
+        }
+    }
+
+    /**
+     * Changes the name of the call
+     * @param name 
+     */
+    public void setNameImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
+    }
+
+    /**
+     * Changes the name of the call
+     * @param name 
+     */
+    public final void setName(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
+        	}
+        	this.setNameImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setName", e);
+        }
+    }
+
+    /**
+     * Wraps this call with a possibly new wrapping function
+     * @param name 
+     */
+    public void wrapImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action wrap not implemented ");
+    }
+
+    /**
+     * Wraps this call with a possibly new wrapping function
+     * @param name 
+     */
+    public final void wrap(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "wrap", this, Optional.empty(), name);
+        	}
+        	this.wrapImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "wrap", this, Optional.empty(), name);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "wrap", e);
         }
     }
 

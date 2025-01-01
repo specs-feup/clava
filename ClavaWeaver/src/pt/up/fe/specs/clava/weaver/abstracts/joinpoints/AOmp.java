@@ -582,32 +582,6 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
-     * @param directiveKind 
-     */
-    public void setKindImpl(String directiveKind) {
-        throw new UnsupportedOperationException(get_class()+": Action setKind not implemented ");
-    }
-
-    /**
-     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
-     * @param directiveKind 
-     */
-    public final void setKind(String directiveKind) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setKind", this, Optional.empty(), directiveKind);
-        	}
-        	this.setKindImpl(directiveKind);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setKind", this, Optional.empty(), directiveKind);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setKind", e);
-        }
-    }
-
-    /**
      * Removes any clause of the given kind from the OpenMP pragma
      * @param clauseKind 
      */
@@ -630,346 +604,6 @@ public abstract class AOmp extends APragma {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "removeClause", e);
-        }
-    }
-
-    /**
-     * Sets the value of the num_threads clause of an OpenMP pragma
-     * @param newExpr 
-     */
-    public void setNumThreadsImpl(String newExpr) {
-        throw new UnsupportedOperationException(get_class()+": Action setNumThreads not implemented ");
-    }
-
-    /**
-     * Sets the value of the num_threads clause of an OpenMP pragma
-     * @param newExpr 
-     */
-    public final void setNumThreads(String newExpr) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setNumThreads", this, Optional.empty(), newExpr);
-        	}
-        	this.setNumThreadsImpl(newExpr);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setNumThreads", this, Optional.empty(), newExpr);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setNumThreads", e);
-        }
-    }
-
-    /**
-     * Sets the value of the proc_bind clause of an OpenMP pragma
-     * @param newBind 
-     */
-    public void setProcBindImpl(String newBind) {
-        throw new UnsupportedOperationException(get_class()+": Action setProcBind not implemented ");
-    }
-
-    /**
-     * Sets the value of the proc_bind clause of an OpenMP pragma
-     * @param newBind 
-     */
-    public final void setProcBind(String newBind) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setProcBind", this, Optional.empty(), newBind);
-        	}
-        	this.setProcBindImpl(newBind);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setProcBind", this, Optional.empty(), newBind);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setProcBind", e);
-        }
-    }
-
-    /**
-     * Sets the variables of a private clause of an OpenMP pragma
-     * @param newVariables 
-     */
-    public void setPrivateImpl(String[] newVariables) {
-        throw new UnsupportedOperationException(get_class()+": Action setPrivate not implemented ");
-    }
-
-    /**
-     * Sets the variables of a private clause of an OpenMP pragma
-     * @param newVariables 
-     */
-    public final void setPrivate(Object[] newVariables) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setPrivate", this, Optional.empty(), new Object[] { newVariables});
-        	}
-        	this.setPrivateImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setPrivate", this, Optional.empty(), new Object[] { newVariables});
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setPrivate", e);
-        }
-    }
-
-    /**
-     * Sets the variables for a given kind of a reduction clause of an OpenMP pragma
-     * @param kind 
-     * @param newVariables 
-     */
-    public void setReductionImpl(String kind, String[] newVariables) {
-        throw new UnsupportedOperationException(get_class()+": Action setReduction not implemented ");
-    }
-
-    /**
-     * Sets the variables for a given kind of a reduction clause of an OpenMP pragma
-     * @param kind 
-     * @param newVariables 
-     */
-    public final void setReduction(String kind, Object[] newVariables) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setReduction", this, Optional.empty(), kind, newVariables);
-        	}
-        	this.setReductionImpl(kind, pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setReduction", this, Optional.empty(), kind, newVariables);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setReduction", e);
-        }
-    }
-
-    /**
-     * Sets the value of the default clause of an OpenMP pragma
-     * @param newDefault 
-     */
-    public void setDefaultImpl(String newDefault) {
-        throw new UnsupportedOperationException(get_class()+": Action setDefault not implemented ");
-    }
-
-    /**
-     * Sets the value of the default clause of an OpenMP pragma
-     * @param newDefault 
-     */
-    public final void setDefault(String newDefault) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setDefault", this, Optional.empty(), newDefault);
-        	}
-        	this.setDefaultImpl(newDefault);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setDefault", this, Optional.empty(), newDefault);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setDefault", e);
-        }
-    }
-
-    /**
-     * Sets the variables of a firstprivate clause of an OpenMP pragma
-     * @param newVariables 
-     */
-    public void setFirstprivateImpl(String[] newVariables) {
-        throw new UnsupportedOperationException(get_class()+": Action setFirstprivate not implemented ");
-    }
-
-    /**
-     * Sets the variables of a firstprivate clause of an OpenMP pragma
-     * @param newVariables 
-     */
-    public final void setFirstprivate(Object[] newVariables) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setFirstprivate", this, Optional.empty(), new Object[] { newVariables});
-        	}
-        	this.setFirstprivateImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setFirstprivate", this, Optional.empty(), new Object[] { newVariables});
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setFirstprivate", e);
-        }
-    }
-
-    /**
-     * Sets the variables of a lastprivate clause of an OpenMP pragma
-     * @param newVariables 
-     */
-    public void setLastprivateImpl(String[] newVariables) {
-        throw new UnsupportedOperationException(get_class()+": Action setLastprivate not implemented ");
-    }
-
-    /**
-     * Sets the variables of a lastprivate clause of an OpenMP pragma
-     * @param newVariables 
-     */
-    public final void setLastprivate(Object[] newVariables) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setLastprivate", this, Optional.empty(), new Object[] { newVariables});
-        	}
-        	this.setLastprivateImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setLastprivate", this, Optional.empty(), new Object[] { newVariables});
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setLastprivate", e);
-        }
-    }
-
-    /**
-     * Sets the variables of a shared clause of an OpenMP pragma
-     * @param newVariables 
-     */
-    public void setSharedImpl(String[] newVariables) {
-        throw new UnsupportedOperationException(get_class()+": Action setShared not implemented ");
-    }
-
-    /**
-     * Sets the variables of a shared clause of an OpenMP pragma
-     * @param newVariables 
-     */
-    public final void setShared(Object[] newVariables) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setShared", this, Optional.empty(), new Object[] { newVariables});
-        	}
-        	this.setSharedImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setShared", this, Optional.empty(), new Object[] { newVariables});
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setShared", e);
-        }
-    }
-
-    /**
-     * Sets the variables of a copyin clause of an OpenMP pragma
-     * @param newVariables 
-     */
-    public void setCopyinImpl(String[] newVariables) {
-        throw new UnsupportedOperationException(get_class()+": Action setCopyin not implemented ");
-    }
-
-    /**
-     * Sets the variables of a copyin clause of an OpenMP pragma
-     * @param newVariables 
-     */
-    public final void setCopyin(Object[] newVariables) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setCopyin", this, Optional.empty(), new Object[] { newVariables});
-        	}
-        	this.setCopyinImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setCopyin", this, Optional.empty(), new Object[] { newVariables});
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setCopyin", e);
-        }
-    }
-
-    /**
-     * Sets the value of the schedule clause of an OpenMP pragma
-     * @param scheduleKind 
-     */
-    public void setScheduleKindImpl(String scheduleKind) {
-        throw new UnsupportedOperationException(get_class()+": Action setScheduleKind not implemented ");
-    }
-
-    /**
-     * Sets the value of the schedule clause of an OpenMP pragma
-     * @param scheduleKind 
-     */
-    public final void setScheduleKind(String scheduleKind) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleKind", this, Optional.empty(), scheduleKind);
-        	}
-        	this.setScheduleKindImpl(scheduleKind);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setScheduleKind", this, Optional.empty(), scheduleKind);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setScheduleKind", e);
-        }
-    }
-
-    /**
-     * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
-     * @param chunkSize 
-     */
-    public void setScheduleChunkSizeImpl(String chunkSize) {
-        throw new UnsupportedOperationException(get_class()+": Action setScheduleChunkSize not implemented ");
-    }
-
-    /**
-     * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
-     * @param chunkSize 
-     */
-    public final void setScheduleChunkSize(String chunkSize) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
-        	}
-        	this.setScheduleChunkSizeImpl(chunkSize);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setScheduleChunkSize", e);
-        }
-    }
-
-    /**
-     * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
-     * @param chunkSize 
-     */
-    public void setScheduleChunkSizeImpl(int chunkSize) {
-        throw new UnsupportedOperationException(get_class()+": Action setScheduleChunkSize not implemented ");
-    }
-
-    /**
-     * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
-     * @param chunkSize 
-     */
-    public final void setScheduleChunkSize(int chunkSize) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
-        	}
-        	this.setScheduleChunkSizeImpl(chunkSize);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setScheduleChunkSize", e);
-        }
-    }
-
-    /**
-     * Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
-     * @param modifiers 
-     */
-    public void setScheduleModifiersImpl(String[] modifiers) {
-        throw new UnsupportedOperationException(get_class()+": Action setScheduleModifiers not implemented ");
-    }
-
-    /**
-     * Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
-     * @param modifiers 
-     */
-    public final void setScheduleModifiers(Object[] modifiers) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleModifiers", this, Optional.empty(), new Object[] { modifiers});
-        	}
-        	this.setScheduleModifiersImpl(pt.up.fe.specs.util.SpecsCollections.cast(modifiers, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setScheduleModifiers", this, Optional.empty(), new Object[] { modifiers});
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setScheduleModifiers", e);
         }
     }
 
@@ -1026,6 +660,162 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * Sets the variables of a copyin clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public void setCopyinImpl(String[] newVariables) {
+        throw new UnsupportedOperationException(get_class()+": Action setCopyin not implemented ");
+    }
+
+    /**
+     * Sets the variables of a copyin clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public final void setCopyin(Object[] newVariables) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setCopyin", this, Optional.empty(), new Object[] { newVariables});
+        	}
+        	this.setCopyinImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setCopyin", this, Optional.empty(), new Object[] { newVariables});
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setCopyin", e);
+        }
+    }
+
+    /**
+     * Sets the value of the default clause of an OpenMP pragma
+     * @param newDefault 
+     */
+    public void setDefaultImpl(String newDefault) {
+        throw new UnsupportedOperationException(get_class()+": Action setDefault not implemented ");
+    }
+
+    /**
+     * Sets the value of the default clause of an OpenMP pragma
+     * @param newDefault 
+     */
+    public final void setDefault(String newDefault) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setDefault", this, Optional.empty(), newDefault);
+        	}
+        	this.setDefaultImpl(newDefault);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setDefault", this, Optional.empty(), newDefault);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setDefault", e);
+        }
+    }
+
+    /**
+     * Sets the variables of a firstprivate clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public void setFirstprivateImpl(String[] newVariables) {
+        throw new UnsupportedOperationException(get_class()+": Action setFirstprivate not implemented ");
+    }
+
+    /**
+     * Sets the variables of a firstprivate clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public final void setFirstprivate(Object[] newVariables) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setFirstprivate", this, Optional.empty(), new Object[] { newVariables});
+        	}
+        	this.setFirstprivateImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setFirstprivate", this, Optional.empty(), new Object[] { newVariables});
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setFirstprivate", e);
+        }
+    }
+
+    /**
+     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
+     * @param directiveKind 
+     */
+    public void setKindImpl(String directiveKind) {
+        throw new UnsupportedOperationException(get_class()+": Action setKind not implemented ");
+    }
+
+    /**
+     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
+     * @param directiveKind 
+     */
+    public final void setKind(String directiveKind) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setKind", this, Optional.empty(), directiveKind);
+        	}
+        	this.setKindImpl(directiveKind);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setKind", this, Optional.empty(), directiveKind);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setKind", e);
+        }
+    }
+
+    /**
+     * Sets the variables of a lastprivate clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public void setLastprivateImpl(String[] newVariables) {
+        throw new UnsupportedOperationException(get_class()+": Action setLastprivate not implemented ");
+    }
+
+    /**
+     * Sets the variables of a lastprivate clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public final void setLastprivate(Object[] newVariables) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setLastprivate", this, Optional.empty(), new Object[] { newVariables});
+        	}
+        	this.setLastprivateImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setLastprivate", this, Optional.empty(), new Object[] { newVariables});
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setLastprivate", e);
+        }
+    }
+
+    /**
+     * Sets the value of the num_threads clause of an OpenMP pragma
+     * @param newExpr 
+     */
+    public void setNumThreadsImpl(String newExpr) {
+        throw new UnsupportedOperationException(get_class()+": Action setNumThreads not implemented ");
+    }
+
+    /**
+     * Sets the value of the num_threads clause of an OpenMP pragma
+     * @param newExpr 
+     */
+    public final void setNumThreads(String newExpr) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setNumThreads", this, Optional.empty(), newExpr);
+        	}
+        	this.setNumThreadsImpl(newExpr);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setNumThreads", this, Optional.empty(), newExpr);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setNumThreads", e);
+        }
+    }
+
+    /**
      * Sets the value of the ordered clause of an OpenMP pragma
      * @param parameters 
      */
@@ -1048,6 +838,216 @@ public abstract class AOmp extends APragma {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setOrdered", e);
+        }
+    }
+
+    /**
+     * Sets the variables of a private clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public void setPrivateImpl(String[] newVariables) {
+        throw new UnsupportedOperationException(get_class()+": Action setPrivate not implemented ");
+    }
+
+    /**
+     * Sets the variables of a private clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public final void setPrivate(Object[] newVariables) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setPrivate", this, Optional.empty(), new Object[] { newVariables});
+        	}
+        	this.setPrivateImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setPrivate", this, Optional.empty(), new Object[] { newVariables});
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setPrivate", e);
+        }
+    }
+
+    /**
+     * Sets the value of the proc_bind clause of an OpenMP pragma
+     * @param newBind 
+     */
+    public void setProcBindImpl(String newBind) {
+        throw new UnsupportedOperationException(get_class()+": Action setProcBind not implemented ");
+    }
+
+    /**
+     * Sets the value of the proc_bind clause of an OpenMP pragma
+     * @param newBind 
+     */
+    public final void setProcBind(String newBind) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setProcBind", this, Optional.empty(), newBind);
+        	}
+        	this.setProcBindImpl(newBind);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setProcBind", this, Optional.empty(), newBind);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setProcBind", e);
+        }
+    }
+
+    /**
+     * Sets the variables for a given kind of a reduction clause of an OpenMP pragma
+     * @param kind 
+     * @param newVariables 
+     */
+    public void setReductionImpl(String kind, String[] newVariables) {
+        throw new UnsupportedOperationException(get_class()+": Action setReduction not implemented ");
+    }
+
+    /**
+     * Sets the variables for a given kind of a reduction clause of an OpenMP pragma
+     * @param kind 
+     * @param newVariables 
+     */
+    public final void setReduction(String kind, Object[] newVariables) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setReduction", this, Optional.empty(), kind, newVariables);
+        	}
+        	this.setReductionImpl(kind, pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setReduction", this, Optional.empty(), kind, newVariables);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setReduction", e);
+        }
+    }
+
+    /**
+     * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+     * @param chunkSize 
+     */
+    public void setScheduleChunkSizeImpl(String chunkSize) {
+        throw new UnsupportedOperationException(get_class()+": Action setScheduleChunkSize not implemented ");
+    }
+
+    /**
+     * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+     * @param chunkSize 
+     */
+    public final void setScheduleChunkSize(String chunkSize) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
+        	}
+        	this.setScheduleChunkSizeImpl(chunkSize);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setScheduleChunkSize", e);
+        }
+    }
+
+    /**
+     * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+     * @param chunkSize 
+     */
+    public void setScheduleChunkSizeImpl(int chunkSize) {
+        throw new UnsupportedOperationException(get_class()+": Action setScheduleChunkSize not implemented ");
+    }
+
+    /**
+     * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+     * @param chunkSize 
+     */
+    public final void setScheduleChunkSize(int chunkSize) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
+        	}
+        	this.setScheduleChunkSizeImpl(chunkSize);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setScheduleChunkSize", e);
+        }
+    }
+
+    /**
+     * Sets the value of the schedule clause of an OpenMP pragma
+     * @param scheduleKind 
+     */
+    public void setScheduleKindImpl(String scheduleKind) {
+        throw new UnsupportedOperationException(get_class()+": Action setScheduleKind not implemented ");
+    }
+
+    /**
+     * Sets the value of the schedule clause of an OpenMP pragma
+     * @param scheduleKind 
+     */
+    public final void setScheduleKind(String scheduleKind) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleKind", this, Optional.empty(), scheduleKind);
+        	}
+        	this.setScheduleKindImpl(scheduleKind);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setScheduleKind", this, Optional.empty(), scheduleKind);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setScheduleKind", e);
+        }
+    }
+
+    /**
+     * Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+     * @param modifiers 
+     */
+    public void setScheduleModifiersImpl(String[] modifiers) {
+        throw new UnsupportedOperationException(get_class()+": Action setScheduleModifiers not implemented ");
+    }
+
+    /**
+     * Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+     * @param modifiers 
+     */
+    public final void setScheduleModifiers(Object[] modifiers) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleModifiers", this, Optional.empty(), new Object[] { modifiers});
+        	}
+        	this.setScheduleModifiersImpl(pt.up.fe.specs.util.SpecsCollections.cast(modifiers, String.class));
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setScheduleModifiers", this, Optional.empty(), new Object[] { modifiers});
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setScheduleModifiers", e);
+        }
+    }
+
+    /**
+     * Sets the variables of a shared clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public void setSharedImpl(String[] newVariables) {
+        throw new UnsupportedOperationException(get_class()+": Action setShared not implemented ");
+    }
+
+    /**
+     * Sets the variables of a shared clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public final void setShared(Object[] newVariables) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setShared", this, Optional.empty(), new Object[] { newVariables});
+        	}
+        	this.setSharedImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setShared", this, Optional.empty(), new Object[] { newVariables});
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setShared", e);
         }
     }
 

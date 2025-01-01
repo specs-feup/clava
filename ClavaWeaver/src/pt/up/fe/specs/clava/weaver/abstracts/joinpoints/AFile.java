@@ -507,6 +507,92 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Adds a C include to the current file. If the file already has the include, it does nothing
+     * @param name 
+     * @param isAngled 
+     */
+    public void addCIncludeImpl(String name, boolean isAngled) {
+        throw new UnsupportedOperationException(get_class()+": Action addCInclude not implemented ");
+    }
+
+    /**
+     * Adds a C include to the current file. If the file already has the include, it does nothing
+     * @param name 
+     * @param isAngled 
+     */
+    public final void addCInclude(String name, boolean isAngled) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addCInclude", this, Optional.empty(), name, isAngled);
+        	}
+        	this.addCIncludeImpl(name, isAngled);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addCInclude", this, Optional.empty(), name, isAngled);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addCInclude", e);
+        }
+    }
+
+    /**
+     * Adds a function to the file that returns void and has no parameters
+     * @param name 
+     */
+    public AJoinPoint addFunctionImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action addFunction not implemented ");
+    }
+
+    /**
+     * Adds a function to the file that returns void and has no parameters
+     * @param name 
+     */
+    public final Object addFunction(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addFunction", this, Optional.empty(), name);
+        	}
+        	AJoinPoint result = this.addFunctionImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addFunction", this, Optional.ofNullable(result), name);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addFunction", e);
+        }
+    }
+
+    /**
+     * Adds a global variable to this file
+     * @param name 
+     * @param type 
+     * @param initValue 
+     */
+    public AVardecl addGlobalImpl(String name, AJoinPoint type, String initValue) {
+        throw new UnsupportedOperationException(get_class()+": Action addGlobal not implemented ");
+    }
+
+    /**
+     * Adds a global variable to this file
+     * @param name 
+     * @param type 
+     * @param initValue 
+     */
+    public final Object addGlobal(String name, AJoinPoint type, String initValue) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addGlobal", this, Optional.empty(), name, type, initValue);
+        	}
+        	AVardecl result = this.addGlobalImpl(name, type, initValue);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addGlobal", this, Optional.ofNullable(result), name, type, initValue);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addGlobal", e);
+        }
+    }
+
+    /**
      * Adds an include to the current file. If the file already has the include, it does nothing
      * @param name 
      * @param isAngled 
@@ -557,168 +643,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addIncludeJp", e);
-        }
-    }
-
-    /**
-     * Adds a C include to the current file. If the file already has the include, it does nothing
-     * @param name 
-     * @param isAngled 
-     */
-    public void addCIncludeImpl(String name, boolean isAngled) {
-        throw new UnsupportedOperationException(get_class()+": Action addCInclude not implemented ");
-    }
-
-    /**
-     * Adds a C include to the current file. If the file already has the include, it does nothing
-     * @param name 
-     * @param isAngled 
-     */
-    public final void addCInclude(String name, boolean isAngled) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addCInclude", this, Optional.empty(), name, isAngled);
-        	}
-        	this.addCIncludeImpl(name, isAngled);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addCInclude", this, Optional.empty(), name, isAngled);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addCInclude", e);
-        }
-    }
-
-    /**
-     * Adds a global variable to this file
-     * @param name 
-     * @param type 
-     * @param initValue 
-     */
-    public AVardecl addGlobalImpl(String name, AJoinPoint type, String initValue) {
-        throw new UnsupportedOperationException(get_class()+": Action addGlobal not implemented ");
-    }
-
-    /**
-     * Adds a global variable to this file
-     * @param name 
-     * @param type 
-     * @param initValue 
-     */
-    public final Object addGlobal(String name, AJoinPoint type, String initValue) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addGlobal", this, Optional.empty(), name, type, initValue);
-        	}
-        	AVardecl result = this.addGlobalImpl(name, type, initValue);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addGlobal", this, Optional.ofNullable(result), name, type, initValue);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addGlobal", e);
-        }
-    }
-
-    /**
-     * Writes the code of this file to a given folder
-     * @param destinationFoldername 
-     */
-    public String writeImpl(String destinationFoldername) {
-        throw new UnsupportedOperationException(get_class()+": Action write not implemented ");
-    }
-
-    /**
-     * Writes the code of this file to a given folder
-     * @param destinationFoldername 
-     */
-    public final Object write(String destinationFoldername) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "write", this, Optional.empty(), destinationFoldername);
-        	}
-        	String result = this.writeImpl(destinationFoldername);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "write", this, Optional.ofNullable(result), destinationFoldername);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "write", e);
-        }
-    }
-
-    /**
-     * Changes the name of the file
-     * @param filename 
-     */
-    public void setNameImpl(String filename) {
-        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
-    }
-
-    /**
-     * Changes the name of the file
-     * @param filename 
-     */
-    public final void setName(String filename) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), filename);
-        	}
-        	this.setNameImpl(filename);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), filename);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setName", e);
-        }
-    }
-
-    /**
-     * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
-     */
-    public AFile rebuildImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
-    }
-
-    /**
-     * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
-     */
-    public final Object rebuild() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
-        	}
-        	AFile result = this.rebuildImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "rebuild", e);
-        }
-    }
-
-    /**
-     * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
-     */
-    public AJoinPoint rebuildTryImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action rebuildTry not implemented ");
-    }
-
-    /**
-     * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
-     */
-    public final Object rebuildTry() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "rebuildTry", this, Optional.empty());
-        	}
-        	AJoinPoint result = this.rebuildTryImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "rebuildTry", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "rebuildTry", e);
         }
     }
 
@@ -827,29 +751,78 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Adds a function to the file that returns void and has no parameters
-     * @param name 
+     * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
      */
-    public AJoinPoint addFunctionImpl(String name) {
-        throw new UnsupportedOperationException(get_class()+": Action addFunction not implemented ");
+    public AFile rebuildImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
     }
 
     /**
-     * Adds a function to the file that returns void and has no parameters
-     * @param name 
+     * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
      */
-    public final Object addFunction(String name) {
+    public final Object rebuild() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addFunction", this, Optional.empty(), name);
+        		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
         	}
-        	AJoinPoint result = this.addFunctionImpl(name);
+        	AFile result = this.rebuildImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addFunction", this, Optional.ofNullable(result), name);
+        		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "addFunction", e);
+        	throw new ActionException(get_class(), "rebuild", e);
+        }
+    }
+
+    /**
+     * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
+     */
+    public AJoinPoint rebuildTryImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action rebuildTry not implemented ");
+    }
+
+    /**
+     * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
+     */
+    public final Object rebuildTry() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "rebuildTry", this, Optional.empty());
+        	}
+        	AJoinPoint result = this.rebuildTryImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "rebuildTry", this, Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "rebuildTry", e);
+        }
+    }
+
+    /**
+     * Changes the name of the file
+     * @param filename 
+     */
+    public void setNameImpl(String filename) {
+        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
+    }
+
+    /**
+     * Changes the name of the file
+     * @param filename 
+     */
+    public final void setName(String filename) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), filename);
+        	}
+        	this.setNameImpl(filename);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), filename);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setName", e);
         }
     }
 
@@ -876,6 +849,33 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setRelativeFolderpath", e);
+        }
+    }
+
+    /**
+     * Writes the code of this file to a given folder
+     * @param destinationFoldername 
+     */
+    public String writeImpl(String destinationFoldername) {
+        throw new UnsupportedOperationException(get_class()+": Action write not implemented ");
+    }
+
+    /**
+     * Writes the code of this file to a given folder
+     * @param destinationFoldername 
+     */
+    public final Object write(String destinationFoldername) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "write", this, Optional.empty(), destinationFoldername);
+        	}
+        	String result = this.writeImpl(destinationFoldername);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "write", this, Optional.ofNullable(result), destinationFoldername);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "write", e);
         }
     }
 

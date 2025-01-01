@@ -216,32 +216,6 @@ public abstract class AIf extends AStatement {
     }
 
     /**
-     * sets the body of the if
-     * @param then 
-     */
-    public void setThenImpl(AStatement then) {
-        throw new UnsupportedOperationException(get_class()+": Action setThen not implemented ");
-    }
-
-    /**
-     * sets the body of the if
-     * @param then 
-     */
-    public final void setThen(AStatement then) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setThen", this, Optional.empty(), then);
-        	}
-        	this.setThenImpl(then);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setThen", this, Optional.empty(), then);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setThen", e);
-        }
-    }
-
-    /**
      * sets the body of the else
      * @param _else 
      */
@@ -264,6 +238,32 @@ public abstract class AIf extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setElse", e);
+        }
+    }
+
+    /**
+     * sets the body of the if
+     * @param then 
+     */
+    public void setThenImpl(AStatement then) {
+        throw new UnsupportedOperationException(get_class()+": Action setThen not implemented ");
+    }
+
+    /**
+     * sets the body of the if
+     * @param then 
+     */
+    public final void setThen(AStatement then) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setThen", this, Optional.empty(), then);
+        	}
+        	this.setThenImpl(then);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setThen", this, Optional.empty(), then);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setThen", e);
         }
     }
 

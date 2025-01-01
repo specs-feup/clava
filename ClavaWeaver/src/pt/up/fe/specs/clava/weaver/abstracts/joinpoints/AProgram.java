@@ -466,157 +466,6 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
-     */
-    public boolean rebuildImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
-    }
-
-    /**
-     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
-     */
-    public final Object rebuild() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
-        	}
-        	boolean result = this.rebuildImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.ofNullable(result));
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "rebuild", e);
-        }
-    }
-
-    /**
-     * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
-     */
-    public void rebuildFuzzyImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action rebuildFuzzy not implemented ");
-    }
-
-    /**
-     * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
-     */
-    public final void rebuildFuzzy() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "rebuildFuzzy", this, Optional.empty());
-        	}
-        	this.rebuildFuzzyImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "rebuildFuzzy", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "rebuildFuzzy", e);
-        }
-    }
-
-    /**
-     * Adds a file join point to the current program
-     * @param file 
-     */
-    public AJoinPoint addFileImpl(AFile file) {
-        throw new UnsupportedOperationException(get_class()+": Action addFile not implemented ");
-    }
-
-    /**
-     * Adds a file join point to the current program
-     * @param file 
-     */
-    public final Object addFile(AFile file) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addFile", this, Optional.empty(), file);
-        	}
-        	AJoinPoint result = this.addFileImpl(file);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addFile", this, Optional.ofNullable(result), file);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addFile", e);
-        }
-    }
-
-    /**
-     * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
-     * @param filepath 
-     */
-    public AJoinPoint addFileFromPathImpl(Object filepath) {
-        throw new UnsupportedOperationException(get_class()+": Action addFileFromPath not implemented ");
-    }
-
-    /**
-     * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
-     * @param filepath 
-     */
-    public final Object addFileFromPath(Object filepath) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addFileFromPath", this, Optional.empty(), filepath);
-        	}
-        	AJoinPoint result = this.addFileFromPathImpl(filepath);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addFileFromPath", this, Optional.ofNullable(result), filepath);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addFileFromPath", e);
-        }
-    }
-
-    /**
-     * Creates a copy of the current AST and pushes it to the top of the AST stack
-     */
-    public void pushImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action push not implemented ");
-    }
-
-    /**
-     * Creates a copy of the current AST and pushes it to the top of the AST stack
-     */
-    public final void push() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "push", this, Optional.empty());
-        	}
-        	this.pushImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "push", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "push", e);
-        }
-    }
-
-    /**
-     * Discards the AST at the top of the ASt stack
-     */
-    public void popImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action pop not implemented ");
-    }
-
-    /**
-     * Discards the AST at the top of the ASt stack
-     */
-    public final void pop() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "pop", this, Optional.empty());
-        	}
-        	this.popImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "pop", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "pop", e);
-        }
-    }
-
-    /**
      * Adds a path to an include that the current program depends on
      * @param path 
      */
@@ -667,6 +516,32 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addExtraIncludeFromGit", e);
+        }
+    }
+
+    /**
+     * Adds a library (e.g., -pthreads) that the current program depends on
+     * @param lib 
+     */
+    public void addExtraLibImpl(String lib) {
+        throw new UnsupportedOperationException(get_class()+": Action addExtraLib not implemented ");
+    }
+
+    /**
+     * Adds a library (e.g., -pthreads) that the current program depends on
+     * @param lib 
+     */
+    public final void addExtraLib(String lib) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraLib", this, Optional.empty(), lib);
+        	}
+        	this.addExtraLibImpl(lib);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addExtraLib", this, Optional.empty(), lib);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addExtraLib", e);
         }
     }
 
@@ -725,6 +600,60 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Adds a file join point to the current program
+     * @param file 
+     */
+    public AJoinPoint addFileImpl(AFile file) {
+        throw new UnsupportedOperationException(get_class()+": Action addFile not implemented ");
+    }
+
+    /**
+     * Adds a file join point to the current program
+     * @param file 
+     */
+    public final Object addFile(AFile file) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addFile", this, Optional.empty(), file);
+        	}
+        	AJoinPoint result = this.addFileImpl(file);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addFile", this, Optional.ofNullable(result), file);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addFile", e);
+        }
+    }
+
+    /**
+     * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
+     * @param filepath 
+     */
+    public AJoinPoint addFileFromPathImpl(Object filepath) {
+        throw new UnsupportedOperationException(get_class()+": Action addFileFromPath not implemented ");
+    }
+
+    /**
+     * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
+     * @param filepath 
+     */
+    public final Object addFileFromPath(Object filepath) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addFileFromPath", this, Optional.empty(), filepath);
+        	}
+        	AJoinPoint result = this.addFileFromPathImpl(filepath);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addFileFromPath", this, Optional.ofNullable(result), filepath);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addFileFromPath", e);
+        }
+    }
+
+    /**
      * Adds a path based on a git repository to a project that the current program depends on
      * @param gitRepo 
      * @param libs 
@@ -755,32 +684,6 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Adds a library (e.g., -pthreads) that the current program depends on
-     * @param lib 
-     */
-    public void addExtraLibImpl(String lib) {
-        throw new UnsupportedOperationException(get_class()+": Action addExtraLib not implemented ");
-    }
-
-    /**
-     * Adds a library (e.g., -pthreads) that the current program depends on
-     * @param lib 
-     */
-    public final void addExtraLib(String lib) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraLib", this, Optional.empty(), lib);
-        	}
-        	this.addExtraLibImpl(lib);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addExtraLib", this, Optional.empty(), lib);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addExtraLib", e);
-        }
-    }
-
-    /**
      * Registers a function to be executed when the program exits
      * @param function 
      */
@@ -803,6 +706,103 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "atexit", e);
+        }
+    }
+
+    /**
+     * Discards the AST at the top of the ASt stack
+     */
+    public void popImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action pop not implemented ");
+    }
+
+    /**
+     * Discards the AST at the top of the ASt stack
+     */
+    public final void pop() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "pop", this, Optional.empty());
+        	}
+        	this.popImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "pop", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "pop", e);
+        }
+    }
+
+    /**
+     * Creates a copy of the current AST and pushes it to the top of the AST stack
+     */
+    public void pushImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action push not implemented ");
+    }
+
+    /**
+     * Creates a copy of the current AST and pushes it to the top of the AST stack
+     */
+    public final void push() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "push", this, Optional.empty());
+        	}
+        	this.pushImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "push", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "push", e);
+        }
+    }
+
+    /**
+     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
+     */
+    public boolean rebuildImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
+    }
+
+    /**
+     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
+     */
+    public final Object rebuild() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
+        	}
+        	boolean result = this.rebuildImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.ofNullable(result));
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "rebuild", e);
+        }
+    }
+
+    /**
+     * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
+     */
+    public void rebuildFuzzyImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action rebuildFuzzy not implemented ");
+    }
+
+    /**
+     * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
+     */
+    public final void rebuildFuzzy() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "rebuildFuzzy", this, Optional.empty());
+        	}
+        	this.rebuildFuzzyImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "rebuildFuzzy", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "rebuildFuzzy", e);
         }
     }
 
