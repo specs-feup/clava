@@ -3256,7 +3256,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -6540,7 +6540,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -8927,7 +8927,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -12416,7 +12416,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -14691,7 +14691,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -15809,7 +15809,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[for| while| dowhile| foreach]",
+										"type": "{for,while,dowhile,foreach}",
 										"name": "kind"
 									}]
 					},
@@ -17260,7 +17260,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -23847,7 +23847,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -28093,7 +28093,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -36786,7 +36786,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -40242,7 +40242,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -46286,7 +46286,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -48309,7 +48309,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -49329,7 +49329,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -52474,7 +52474,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -53592,7 +53592,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[for| while| dowhile| foreach]",
+										"type": "{for,while,dowhile,foreach}",
 										"name": "kind"
 									}]
 					},
@@ -56002,7 +56002,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -57186,7 +57186,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -60920,7 +60920,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -63438,7 +63438,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -65640,7 +65640,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -83037,7 +83037,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -84064,7 +84064,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -89667,7 +89667,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -90733,7 +90733,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -95472,7 +95472,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[read| write| readwrite]",
+										"type": "{read,write,readwrite}",
 										"name": "use"
 									}]
 					},
@@ -96478,7 +96478,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "[comment| pragma]",
+										"type": "{comment,pragma}",
 										"name": "kind"
 									}]
 					},
