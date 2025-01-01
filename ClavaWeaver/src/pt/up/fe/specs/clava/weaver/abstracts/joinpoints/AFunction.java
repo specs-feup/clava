@@ -30,102 +30,93 @@ public abstract class AFunction extends ADeclarator {
         this.aDeclarator = aDeclarator;
     }
     /**
-     * [DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise
+     * Get value on attribute body
+     * @return the attribute's value
      */
-    public abstract Boolean getHasDefinitionImpl();
+    public abstract AScope getBodyImpl();
 
     /**
-     * [DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise
+     * Get value on attribute body
+     * @return the attribute's value
      */
-    public final Object getHasDefinition() {
+    public final Object getBody() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasDefinition", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "body", Optional.empty());
         	}
-        	Boolean result = this.getHasDefinitionImpl();
+        	AScope result = this.getBodyImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasDefinition", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "body", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasDefinition", e);
-        }
-    }
-
-    /**
-     * true if this particular function join point is an implementation (i.e. has a body), false otherwise
-     */
-    public abstract Boolean getIsImplementationImpl();
-
-    /**
-     * true if this particular function join point is an implementation (i.e. has a body), false otherwise
-     */
-    public final Object getIsImplementation() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isImplementation", Optional.empty());
-        	}
-        	Boolean result = this.getIsImplementationImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isImplementation", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isImplementation", e);
-        }
-    }
-
-    /**
-     * true if this particular function join point is a prototype (i.e. does not have a body), false otherwise
-     */
-    public abstract Boolean getIsPrototypeImpl();
-
-    /**
-     * true if this particular function join point is a prototype (i.e. does not have a body), false otherwise
-     */
-    public final Object getIsPrototype() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPrototype", Optional.empty());
-        	}
-        	Boolean result = this.getIsPrototypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isPrototype", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isPrototype", e);
-        }
-    }
-
-    /**
-     * the type of the call, which includes the return type and the types of the parameters
-     */
-    public abstract AFunctionType getFunctionTypeImpl();
-
-    /**
-     * the type of the call, which includes the return type and the types of the parameters
-     */
-    public final Object getFunctionType() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "functionType", Optional.empty());
-        	}
-        	AFunctionType result = this.getFunctionTypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "functionType", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "functionType", e);
+        	throw new AttributeException(get_class(), "body", e);
         }
     }
 
     /**
      * 
      */
-    public void defFunctionTypeImpl(AFunctionType value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def functionType with type AFunctionType not implemented ");
+    public void defBodyImpl(AScope value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def body with type AScope not implemented ");
+    }
+
+    /**
+     * Get value on attribute calls
+     * @return the attribute's value
+     */
+    public abstract ACall[] getCallsArrayImpl();
+
+    /**
+     * Get value on attribute calls
+     * @return the attribute's value
+     */
+    public Object getCallsImpl() {
+        ACall[] aCallArrayImpl0 = getCallsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCallArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute calls
+     * @return the attribute's value
+     */
+    public final Object getCalls() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "calls", Optional.empty());
+        	}
+        	Object result = this.getCallsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "calls", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "calls", e);
+        }
+    }
+
+    /**
+     * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
+     */
+    public abstract AFunction getCanonicalImpl();
+
+    /**
+     * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
+     */
+    public final Object getCanonical() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "canonical", Optional.empty());
+        	}
+        	AFunction result = this.getCanonicalImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "canonical", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "canonical", e);
+        }
     }
 
     /**
@@ -208,6 +199,36 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * the type of the call, which includes the return type and the types of the parameters
+     */
+    public abstract AFunctionType getFunctionTypeImpl();
+
+    /**
+     * the type of the call, which includes the return type and the types of the parameters
+     */
+    public final Object getFunctionType() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "functionType", Optional.empty());
+        	}
+        	AFunctionType result = this.getFunctionTypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "functionType", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "functionType", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defFunctionTypeImpl(AFunctionType value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def functionType with type AFunctionType not implemented ");
+    }
+
+    /**
      * 
      * @param withReturnType
      * @return 
@@ -235,35 +256,270 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute body
-     * @return the attribute's value
+     * [DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise
      */
-    public abstract AScope getBodyImpl();
+    public abstract Boolean getHasDefinitionImpl();
 
     /**
-     * Get value on attribute body
-     * @return the attribute's value
+     * [DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise
      */
-    public final Object getBody() {
+    public final Object getHasDefinition() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "body", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasDefinition", Optional.empty());
         	}
-        	AScope result = this.getBodyImpl();
+        	Boolean result = this.getHasDefinitionImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "body", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasDefinition", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "body", e);
+        	throw new AttributeException(get_class(), "hasDefinition", e);
         }
     }
 
     /**
-     * 
+     * Get value on attribute id
+     * @return the attribute's value
      */
-    public void defBodyImpl(AScope value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def body with type AScope not implemented ");
+    public abstract String getIdImpl();
+
+    /**
+     * Get value on attribute id
+     * @return the attribute's value
+     */
+    public final Object getId() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "id", Optional.empty());
+        	}
+        	String result = this.getIdImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "id", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "id", e);
+        }
+    }
+
+    /**
+     * true, if this is the function returned by the 'canonical' attribute
+     */
+    public abstract Boolean getIsCanonicalImpl();
+
+    /**
+     * true, if this is the function returned by the 'canonical' attribute
+     */
+    public final Object getIsCanonical() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCanonical", Optional.empty());
+        	}
+        	Boolean result = this.getIsCanonicalImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isCanonical", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isCanonical", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isCudaKernel
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsCudaKernelImpl();
+
+    /**
+     * Get value on attribute isCudaKernel
+     * @return the attribute's value
+     */
+    public final Object getIsCudaKernel() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCudaKernel", Optional.empty());
+        	}
+        	Boolean result = this.getIsCudaKernelImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isCudaKernel", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isCudaKernel", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isDelete
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsDeleteImpl();
+
+    /**
+     * Get value on attribute isDelete
+     * @return the attribute's value
+     */
+    public final Object getIsDelete() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isDelete", Optional.empty());
+        	}
+        	Boolean result = this.getIsDeleteImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isDelete", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isDelete", e);
+        }
+    }
+
+    /**
+     * true if this particular function join point is an implementation (i.e. has a body), false otherwise
+     */
+    public abstract Boolean getIsImplementationImpl();
+
+    /**
+     * true if this particular function join point is an implementation (i.e. has a body), false otherwise
+     */
+    public final Object getIsImplementation() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isImplementation", Optional.empty());
+        	}
+        	Boolean result = this.getIsImplementationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isImplementation", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isImplementation", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isInline
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsInlineImpl();
+
+    /**
+     * Get value on attribute isInline
+     * @return the attribute's value
+     */
+    public final Object getIsInline() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInline", Optional.empty());
+        	}
+        	Boolean result = this.getIsInlineImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isInline", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isInline", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isModulePrivate
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsModulePrivateImpl();
+
+    /**
+     * Get value on attribute isModulePrivate
+     * @return the attribute's value
+     */
+    public final Object getIsModulePrivate() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isModulePrivate", Optional.empty());
+        	}
+        	Boolean result = this.getIsModulePrivateImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isModulePrivate", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isModulePrivate", e);
+        }
+    }
+
+    /**
+     * true if this particular function join point is a prototype (i.e. does not have a body), false otherwise
+     */
+    public abstract Boolean getIsPrototypeImpl();
+
+    /**
+     * true if this particular function join point is a prototype (i.e. does not have a body), false otherwise
+     */
+    public final Object getIsPrototype() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPrototype", Optional.empty());
+        	}
+        	Boolean result = this.getIsPrototypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isPrototype", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isPrototype", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isPure
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsPureImpl();
+
+    /**
+     * Get value on attribute isPure
+     * @return the attribute's value
+     */
+    public final Object getIsPure() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPure", Optional.empty());
+        	}
+        	Boolean result = this.getIsPureImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isPure", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isPure", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isVirtual
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsVirtualImpl();
+
+    /**
+     * Get value on attribute isVirtual
+     * @return the attribute's value
+     */
+    public final Object getIsVirtual() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isVirtual", Optional.empty());
+        	}
+        	Boolean result = this.getIsVirtualImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isVirtual", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isVirtual", e);
+        }
     }
 
     /**
@@ -351,239 +607,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute id
-     * @return the attribute's value
-     */
-    public abstract String getIdImpl();
-
-    /**
-     * Get value on attribute id
-     * @return the attribute's value
-     */
-    public final Object getId() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "id", Optional.empty());
-        	}
-        	String result = this.getIdImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "id", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "id", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isInline
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsInlineImpl();
-
-    /**
-     * Get value on attribute isInline
-     * @return the attribute's value
-     */
-    public final Object getIsInline() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInline", Optional.empty());
-        	}
-        	Boolean result = this.getIsInlineImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isInline", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isInline", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isVirtual
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsVirtualImpl();
-
-    /**
-     * Get value on attribute isVirtual
-     * @return the attribute's value
-     */
-    public final Object getIsVirtual() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isVirtual", Optional.empty());
-        	}
-        	Boolean result = this.getIsVirtualImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isVirtual", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isVirtual", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isModulePrivate
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsModulePrivateImpl();
-
-    /**
-     * Get value on attribute isModulePrivate
-     * @return the attribute's value
-     */
-    public final Object getIsModulePrivate() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isModulePrivate", Optional.empty());
-        	}
-        	Boolean result = this.getIsModulePrivateImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isModulePrivate", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isModulePrivate", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isPure
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsPureImpl();
-
-    /**
-     * Get value on attribute isPure
-     * @return the attribute's value
-     */
-    public final Object getIsPure() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPure", Optional.empty());
-        	}
-        	Boolean result = this.getIsPureImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isPure", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isPure", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isDelete
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsDeleteImpl();
-
-    /**
-     * Get value on attribute isDelete
-     * @return the attribute's value
-     */
-    public final Object getIsDelete() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isDelete", Optional.empty());
-        	}
-        	Boolean result = this.getIsDeleteImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isDelete", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isDelete", e);
-        }
-    }
-
-    /**
-     * Get value on attribute storageClass
-     * @return the attribute's value
-     */
-    public abstract String getStorageClassImpl();
-
-    /**
-     * Get value on attribute storageClass
-     * @return the attribute's value
-     */
-    public final Object getStorageClass() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
-        	}
-        	String result = this.getStorageClassImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "storageClass", e);
-        }
-    }
-
-    /**
-     * Get value on attribute calls
-     * @return the attribute's value
-     */
-    public abstract ACall[] getCallsArrayImpl();
-
-    /**
-     * Get value on attribute calls
-     * @return the attribute's value
-     */
-    public Object getCallsImpl() {
-        ACall[] aCallArrayImpl0 = getCallsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCallArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Get value on attribute calls
-     * @return the attribute's value
-     */
-    public final Object getCalls() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "calls", Optional.empty());
-        	}
-        	Object result = this.getCallsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "calls", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "calls", e);
-        }
-    }
-
-    /**
-     * a string with the signature of this function (e.g., name of the function, plus the parameters types)
-     */
-    public abstract String getSignatureImpl();
-
-    /**
-     * a string with the signature of this function (e.g., name of the function, plus the parameters types)
-     */
-    public final Object getSignature() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "signature", Optional.empty());
-        	}
-        	String result = this.getSignatureImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "signature", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "signature", e);
-        }
-    }
-
-    /**
      * Get value on attribute returnType
      * @return the attribute's value
      */
@@ -616,73 +639,50 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute isCudaKernel
-     * @return the attribute's value
+     * a string with the signature of this function (e.g., name of the function, plus the parameters types)
      */
-    public abstract Boolean getIsCudaKernelImpl();
+    public abstract String getSignatureImpl();
 
     /**
-     * Get value on attribute isCudaKernel
-     * @return the attribute's value
+     * a string with the signature of this function (e.g., name of the function, plus the parameters types)
      */
-    public final Object getIsCudaKernel() {
+    public final Object getSignature() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCudaKernel", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "signature", Optional.empty());
         	}
-        	Boolean result = this.getIsCudaKernelImpl();
+        	String result = this.getSignatureImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isCudaKernel", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "signature", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isCudaKernel", e);
+        	throw new AttributeException(get_class(), "signature", e);
         }
     }
 
     /**
-     * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
+     * Get value on attribute storageClass
+     * @return the attribute's value
      */
-    public abstract AFunction getCanonicalImpl();
+    public abstract String getStorageClassImpl();
 
     /**
-     * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
+     * Get value on attribute storageClass
+     * @return the attribute's value
      */
-    public final Object getCanonical() {
+    public final Object getStorageClass() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "canonical", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
         	}
-        	AFunction result = this.getCanonicalImpl();
+        	String result = this.getStorageClassImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "canonical", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "canonical", e);
-        }
-    }
-
-    /**
-     * true, if this is the function returned by the 'canonical' attribute
-     */
-    public abstract Boolean getIsCanonicalImpl();
-
-    /**
-     * true, if this is the function returned by the 'canonical' attribute
-     */
-    public final Object getIsCanonical() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCanonical", Optional.empty());
-        	}
-        	Boolean result = this.getIsCanonicalImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isCanonical", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isCanonical", e);
+        	throw new AttributeException(get_class(), "storageClass", e);
         }
     }
 

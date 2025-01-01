@@ -30,6 +30,31 @@ public abstract class ABinaryOp extends AOp {
         this.aOp = aOp;
     }
     /**
+     * Get value on attribute isAssignment
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsAssignmentImpl();
+
+    /**
+     * Get value on attribute isAssignment
+     * @return the attribute's value
+     */
+    public final Object getIsAssignment() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isAssignment", Optional.empty());
+        	}
+        	Boolean result = this.getIsAssignmentImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isAssignment", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isAssignment", e);
+        }
+    }
+
+    /**
      * Get value on attribute left
      * @return the attribute's value
      */
@@ -91,31 +116,6 @@ public abstract class ABinaryOp extends AOp {
      */
     public void defRightImpl(AExpression value) {
         throw new UnsupportedOperationException("Join point "+get_class()+": Action def right with type AExpression not implemented ");
-    }
-
-    /**
-     * Get value on attribute isAssignment
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsAssignmentImpl();
-
-    /**
-     * Get value on attribute isAssignment
-     * @return the attribute's value
-     */
-    public final Object getIsAssignment() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isAssignment", Optional.empty());
-        	}
-        	Boolean result = this.getIsAssignmentImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isAssignment", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isAssignment", e);
-        }
     }
 
     /**

@@ -30,6 +30,29 @@ public abstract class AVardecl extends ADeclarator {
         this.aDeclarator = aDeclarator;
     }
     /**
+     * The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)
+     */
+    public abstract AVardecl getDefinitionImpl();
+
+    /**
+     * The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)
+     */
+    public final Object getDefinition() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definition", Optional.empty());
+        	}
+        	AVardecl result = this.getDefinitionImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "definition", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "definition", e);
+        }
+    }
+
+    /**
      * true, if vardecl has an initialization value
      */
     public abstract Boolean getHasInitImpl();
@@ -99,6 +122,29 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
+     * true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function.
+     */
+    public abstract Boolean getIsGlobalImpl();
+
+    /**
+     * true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function.
+     */
+    public final Object getIsGlobal() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isGlobal", Optional.empty());
+        	}
+        	Boolean result = this.getIsGlobalImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isGlobal", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isGlobal", e);
+        }
+    }
+
+    /**
      * true, if vardecl is a function parameter
      */
     public abstract Boolean getIsParamImpl();
@@ -149,52 +195,6 @@ public abstract class AVardecl extends ADeclarator {
      */
     public void defStorageClassImpl(String value) {
         throw new UnsupportedOperationException("Join point "+get_class()+": Action def storageClass with type String not implemented ");
-    }
-
-    /**
-     * true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function.
-     */
-    public abstract Boolean getIsGlobalImpl();
-
-    /**
-     * true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function.
-     */
-    public final Object getIsGlobal() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isGlobal", Optional.empty());
-        	}
-        	Boolean result = this.getIsGlobalImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isGlobal", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isGlobal", e);
-        }
-    }
-
-    /**
-     * The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)
-     */
-    public abstract AVardecl getDefinitionImpl();
-
-    /**
-     * The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)
-     */
-    public final Object getDefinition() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definition", Optional.empty());
-        	}
-        	AVardecl result = this.getDefinitionImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "definition", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "definition", e);
-        }
     }
 
     /**

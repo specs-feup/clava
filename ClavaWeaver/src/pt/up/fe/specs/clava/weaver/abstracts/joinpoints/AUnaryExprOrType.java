@@ -28,77 +28,27 @@ public abstract class AUnaryExprOrType extends AExpression {
         this.aExpression = aExpression;
     }
     /**
-     * Get value on attribute kind
+     * Get value on attribute argExpr
      * @return the attribute's value
      */
-    public abstract String getKindImpl();
+    public abstract AExpression getArgExprImpl();
 
     /**
-     * Get value on attribute kind
+     * Get value on attribute argExpr
      * @return the attribute's value
      */
-    public final Object getKind() {
+    public final Object getArgExpr() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "argExpr", Optional.empty());
         	}
-        	String result = this.getKindImpl();
+        	AExpression result = this.getArgExprImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "argExpr", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "kind", e);
-        }
-    }
-
-    /**
-     * Get value on attribute hasTypeExpr
-     * @return the attribute's value
-     */
-    public abstract Boolean getHasTypeExprImpl();
-
-    /**
-     * Get value on attribute hasTypeExpr
-     * @return the attribute's value
-     */
-    public final Object getHasTypeExpr() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasTypeExpr", Optional.empty());
-        	}
-        	Boolean result = this.getHasTypeExprImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasTypeExpr", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasTypeExpr", e);
-        }
-    }
-
-    /**
-     * Get value on attribute hasArgExpr
-     * @return the attribute's value
-     */
-    public abstract Boolean getHasArgExprImpl();
-
-    /**
-     * Get value on attribute hasArgExpr
-     * @return the attribute's value
-     */
-    public final Object getHasArgExpr() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasArgExpr", Optional.empty());
-        	}
-        	Boolean result = this.getHasArgExprImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasArgExpr", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasArgExpr", e);
+        	throw new AttributeException(get_class(), "argExpr", e);
         }
     }
 
@@ -135,27 +85,77 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * Get value on attribute argExpr
+     * Get value on attribute hasArgExpr
      * @return the attribute's value
      */
-    public abstract AExpression getArgExprImpl();
+    public abstract Boolean getHasArgExprImpl();
 
     /**
-     * Get value on attribute argExpr
+     * Get value on attribute hasArgExpr
      * @return the attribute's value
      */
-    public final Object getArgExpr() {
+    public final Object getHasArgExpr() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "argExpr", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasArgExpr", Optional.empty());
         	}
-        	AExpression result = this.getArgExprImpl();
+        	Boolean result = this.getHasArgExprImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "argExpr", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasArgExpr", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "argExpr", e);
+        	throw new AttributeException(get_class(), "hasArgExpr", e);
+        }
+    }
+
+    /**
+     * Get value on attribute hasTypeExpr
+     * @return the attribute's value
+     */
+    public abstract Boolean getHasTypeExprImpl();
+
+    /**
+     * Get value on attribute hasTypeExpr
+     * @return the attribute's value
+     */
+    public final Object getHasTypeExpr() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasTypeExpr", Optional.empty());
+        	}
+        	Boolean result = this.getHasTypeExprImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasTypeExpr", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasTypeExpr", e);
+        }
+    }
+
+    /**
+     * Get value on attribute kind
+     * @return the attribute's value
+     */
+    public abstract String getKindImpl();
+
+    /**
+     * Get value on attribute kind
+     * @return the attribute's value
+     */
+    public final Object getKind() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
+        	}
+        	String result = this.getKindImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "kind", e);
         }
     }
 

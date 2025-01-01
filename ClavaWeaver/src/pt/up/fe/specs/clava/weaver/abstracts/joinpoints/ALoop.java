@@ -29,126 +29,90 @@ public abstract class ALoop extends AStatement {
         this.aStatement = aStatement;
     }
     /**
-     * Get value on attribute kind
+     * Get value on attribute body
      * @return the attribute's value
      */
-    public abstract String getKindImpl();
+    public abstract AScope getBodyImpl();
 
     /**
-     * Get value on attribute kind
+     * Get value on attribute body
      * @return the attribute's value
      */
-    public final Object getKind() {
+    public final Object getBody() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "body", Optional.empty());
         	}
-        	String result = this.getKindImpl();
+        	AScope result = this.getBodyImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "body", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "kind", e);
+        	throw new AttributeException(get_class(), "body", e);
         }
     }
 
     /**
-     * Uniquely identifies the loop inside the program
+     * 
      */
-    public abstract String getIdImpl();
+    public void defBodyImpl(AScope value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def body with type AScope not implemented ");
+    }
 
     /**
-     * Uniquely identifies the loop inside the program
+     * The statement of the loop condition
      */
-    public final Object getId() {
+    public abstract AStatement getCondImpl();
+
+    /**
+     * The statement of the loop condition
+     */
+    public final Object getCond() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "id", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "cond", Optional.empty());
         	}
-        	String result = this.getIdImpl();
+        	AStatement result = this.getCondImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "id", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "cond", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "id", e);
+        	throw new AttributeException(get_class(), "cond", e);
         }
     }
 
     /**
-     * Get value on attribute isInnermost
+     * Get value on attribute condRelation
      * @return the attribute's value
      */
-    public abstract Boolean getIsInnermostImpl();
+    public abstract String getCondRelationImpl();
 
     /**
-     * Get value on attribute isInnermost
+     * Get value on attribute condRelation
      * @return the attribute's value
      */
-    public final Object getIsInnermost() {
+    public final Object getCondRelation() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInnermost", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "condRelation", Optional.empty());
         	}
-        	Boolean result = this.getIsInnermostImpl();
+        	String result = this.getCondRelationImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isInnermost", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "condRelation", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isInnermost", e);
+        	throw new AttributeException(get_class(), "condRelation", e);
         }
     }
 
     /**
-     * Get value on attribute isOutermost
-     * @return the attribute's value
+     * 
      */
-    public abstract Boolean getIsOutermostImpl();
-
-    /**
-     * Get value on attribute isOutermost
-     * @return the attribute's value
-     */
-    public final Object getIsOutermost() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isOutermost", Optional.empty());
-        	}
-        	Boolean result = this.getIsOutermostImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isOutermost", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isOutermost", e);
-        }
-    }
-
-    /**
-     * Get value on attribute nestedLevel
-     * @return the attribute's value
-     */
-    public abstract Integer getNestedLevelImpl();
-
-    /**
-     * Get value on attribute nestedLevel
-     * @return the attribute's value
-     */
-    public final Object getNestedLevel() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nestedLevel", Optional.empty());
-        	}
-        	Integer result = this.getNestedLevelImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "nestedLevel", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "nestedLevel", e);
-        }
+    public void defCondRelationImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def condRelation with type String not implemented ");
     }
 
     /**
@@ -177,37 +141,208 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Get value on attribute rank
-     * @return the attribute's value
+     * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
      */
-    public abstract int[] getRankArrayImpl();
+    public abstract String getEndValueImpl();
 
     /**
-     * Get value on attribute rank
-     * @return the attribute's value
+     * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
      */
-    public Object getRankImpl() {
-        int[] intArrayImpl0 = getRankArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(intArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Get value on attribute rank
-     * @return the attribute's value
-     */
-    public final Object getRank() {
+    public final Object getEndValue() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "rank", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "endValue", Optional.empty());
         	}
-        	Object result = this.getRankImpl();
+        	String result = this.getEndValueImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "rank", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "endValue", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "rank", e);
+        	throw new AttributeException(get_class(), "endValue", e);
+        }
+    }
+
+    /**
+     * True if the condition of the loop in the canonical format, and is one of: <, <=, >, >=
+     */
+    public abstract Boolean getHasCondRelationImpl();
+
+    /**
+     * True if the condition of the loop in the canonical format, and is one of: <, <=, >, >=
+     */
+    public final Object getHasCondRelation() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasCondRelation", Optional.empty());
+        	}
+        	Boolean result = this.getHasCondRelationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasCondRelation", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasCondRelation", e);
+        }
+    }
+
+    /**
+     * Uniquely identifies the loop inside the program
+     */
+    public abstract String getIdImpl();
+
+    /**
+     * Uniquely identifies the loop inside the program
+     */
+    public final Object getId() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "id", Optional.empty());
+        	}
+        	String result = this.getIdImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "id", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "id", e);
+        }
+    }
+
+    /**
+     * The statement of the loop initialization
+     */
+    public abstract AStatement getInitImpl();
+
+    /**
+     * The statement of the loop initialization
+     */
+    public final Object getInit() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "init", Optional.empty());
+        	}
+        	AStatement result = this.getInitImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "init", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "init", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defInitImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def init with type String not implemented ");
+    }
+
+    /**
+     * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
+     */
+    public abstract String getInitValueImpl();
+
+    /**
+     * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
+     */
+    public final Object getInitValue() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "initValue", Optional.empty());
+        	}
+        	String result = this.getInitValueImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "initValue", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "initValue", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defInitValueImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def initValue with type String not implemented ");
+    }
+
+    /**
+     * Get value on attribute isInnermost
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsInnermostImpl();
+
+    /**
+     * Get value on attribute isInnermost
+     * @return the attribute's value
+     */
+    public final Object getIsInnermost() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInnermost", Optional.empty());
+        	}
+        	Boolean result = this.getIsInnermostImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isInnermost", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isInnermost", e);
+        }
+    }
+
+    /**
+     * 
+     * @param otherLoop
+     * @return 
+     */
+    public abstract Boolean isInterchangeableImpl(ALoop otherLoop);
+
+    /**
+     * 
+     * @param otherLoop
+     * @return 
+     */
+    public final Object isInterchangeable(ALoop otherLoop) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInterchangeable", Optional.empty(), otherLoop);
+        	}
+        	Boolean result = this.isInterchangeableImpl(otherLoop);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isInterchangeable", Optional.ofNullable(result), otherLoop);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isInterchangeable", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isOutermost
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsOutermostImpl();
+
+    /**
+     * Get value on attribute isOutermost
+     * @return the attribute's value
+     */
+    public final Object getIsOutermost() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isOutermost", Optional.empty());
+        	}
+        	Boolean result = this.getIsOutermostImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isOutermost", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isOutermost", e);
         }
     }
 
@@ -301,112 +436,87 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
-     * @param otherLoop
-     * @return 
+     * Get value on attribute kind
+     * @return the attribute's value
      */
-    public abstract Boolean isInterchangeableImpl(ALoop otherLoop);
+    public abstract String getKindImpl();
 
     /**
-     * 
-     * @param otherLoop
-     * @return 
+     * Get value on attribute kind
+     * @return the attribute's value
      */
-    public final Object isInterchangeable(ALoop otherLoop) {
+    public final Object getKind() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInterchangeable", Optional.empty(), otherLoop);
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
         	}
-        	Boolean result = this.isInterchangeableImpl(otherLoop);
+        	String result = this.getKindImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isInterchangeable", Optional.ofNullable(result), otherLoop);
+        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isInterchangeable", e);
+        	throw new AttributeException(get_class(), "kind", e);
         }
     }
 
     /**
-     * The statement of the loop initialization
+     * Get value on attribute nestedLevel
+     * @return the attribute's value
      */
-    public abstract AStatement getInitImpl();
+    public abstract Integer getNestedLevelImpl();
 
     /**
-     * The statement of the loop initialization
+     * Get value on attribute nestedLevel
+     * @return the attribute's value
      */
-    public final Object getInit() {
+    public final Object getNestedLevel() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "init", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nestedLevel", Optional.empty());
         	}
-        	AStatement result = this.getInitImpl();
+        	Integer result = this.getNestedLevelImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "init", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "nestedLevel", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "init", e);
+        	throw new AttributeException(get_class(), "nestedLevel", e);
         }
     }
 
     /**
-     * 
+     * Get value on attribute rank
+     * @return the attribute's value
      */
-    public void defInitImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def init with type String not implemented ");
+    public abstract int[] getRankArrayImpl();
+
+    /**
+     * Get value on attribute rank
+     * @return the attribute's value
+     */
+    public Object getRankImpl() {
+        int[] intArrayImpl0 = getRankArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(intArrayImpl0);
+        return nativeArray0;
     }
 
     /**
-     * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
+     * Get value on attribute rank
+     * @return the attribute's value
      */
-    public abstract String getInitValueImpl();
-
-    /**
-     * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
-     */
-    public final Object getInitValue() {
+    public final Object getRank() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "initValue", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "rank", Optional.empty());
         	}
-        	String result = this.getInitValueImpl();
+        	Object result = this.getRankImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "initValue", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "rank", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "initValue", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defInitValueImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def initValue with type String not implemented ");
-    }
-
-    /**
-     * The statement of the loop condition
-     */
-    public abstract AStatement getCondImpl();
-
-    /**
-     * The statement of the loop condition
-     */
-    public final Object getCond() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "cond", Optional.empty());
-        	}
-        	AStatement result = this.getCondImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "cond", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "cond", e);
+        	throw new AttributeException(get_class(), "rank", e);
         }
     }
 
@@ -434,29 +544,6 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
-     */
-    public abstract String getEndValueImpl();
-
-    /**
-     * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
-     */
-    public final Object getEndValue() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "endValue", Optional.empty());
-        	}
-        	String result = this.getEndValueImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "endValue", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "endValue", e);
-        }
-    }
-
-    /**
      * The expression of the iteration step
      */
     public abstract String getStepValueImpl();
@@ -477,93 +564,6 @@ public abstract class ALoop extends AStatement {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "stepValue", e);
         }
-    }
-
-    /**
-     * True if the condition of the loop in the canonical format, and is one of: <, <=, >, >=
-     */
-    public abstract Boolean getHasCondRelationImpl();
-
-    /**
-     * True if the condition of the loop in the canonical format, and is one of: <, <=, >, >=
-     */
-    public final Object getHasCondRelation() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasCondRelation", Optional.empty());
-        	}
-        	Boolean result = this.getHasCondRelationImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasCondRelation", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasCondRelation", e);
-        }
-    }
-
-    /**
-     * Get value on attribute condRelation
-     * @return the attribute's value
-     */
-    public abstract String getCondRelationImpl();
-
-    /**
-     * Get value on attribute condRelation
-     * @return the attribute's value
-     */
-    public final Object getCondRelation() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "condRelation", Optional.empty());
-        	}
-        	String result = this.getCondRelationImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "condRelation", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "condRelation", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defCondRelationImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def condRelation with type String not implemented ");
-    }
-
-    /**
-     * Get value on attribute body
-     * @return the attribute's value
-     */
-    public abstract AScope getBodyImpl();
-
-    /**
-     * Get value on attribute body
-     * @return the attribute's value
-     */
-    public final Object getBody() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "body", Optional.empty());
-        	}
-        	AScope result = this.getBodyImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "body", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "body", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defBodyImpl(AScope value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def body with type AScope not implemented ");
     }
 
     /**

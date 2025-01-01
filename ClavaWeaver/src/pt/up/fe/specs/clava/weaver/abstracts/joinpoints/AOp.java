@@ -27,27 +27,27 @@ public abstract class AOp extends AExpression {
         this.aExpression = aExpression;
     }
     /**
-     * Get value on attribute operator
+     * Get value on attribute isBitwise
      * @return the attribute's value
      */
-    public abstract String getOperatorImpl();
+    public abstract Boolean getIsBitwiseImpl();
 
     /**
-     * Get value on attribute operator
+     * Get value on attribute isBitwise
      * @return the attribute's value
      */
-    public final Object getOperator() {
+    public final Object getIsBitwise() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "operator", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isBitwise", Optional.empty());
         	}
-        	String result = this.getOperatorImpl();
+        	Boolean result = this.getIsBitwiseImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "operator", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "isBitwise", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "operator", e);
+        	throw new AttributeException(get_class(), "isBitwise", e);
         }
     }
 
@@ -75,27 +75,27 @@ public abstract class AOp extends AExpression {
     }
 
     /**
-     * Get value on attribute isBitwise
+     * Get value on attribute operator
      * @return the attribute's value
      */
-    public abstract Boolean getIsBitwiseImpl();
+    public abstract String getOperatorImpl();
 
     /**
-     * Get value on attribute isBitwise
+     * Get value on attribute operator
      * @return the attribute's value
      */
-    public final Object getIsBitwise() {
+    public final Object getOperator() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isBitwise", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "operator", Optional.empty());
         	}
-        	Boolean result = this.getIsBitwiseImpl();
+        	String result = this.getOperatorImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isBitwise", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "operator", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isBitwise", e);
+        	throw new AttributeException(get_class(), "operator", e);
         }
     }
 

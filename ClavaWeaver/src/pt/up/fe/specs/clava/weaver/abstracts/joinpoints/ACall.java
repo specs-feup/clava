@@ -29,144 +29,6 @@ public abstract class ACall extends AExpression {
         this.aExpression = aExpression;
     }
     /**
-     * Get value on attribute name
-     * @return the attribute's value
-     */
-    public abstract String getNameImpl();
-
-    /**
-     * Get value on attribute name
-     * @return the attribute's value
-     */
-    public final Object getName() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
-        	}
-        	String result = this.getNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "name", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defNameImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def name with type String not implemented ");
-    }
-
-    /**
-     * Get value on attribute numArgs
-     * @return the attribute's value
-     */
-    public abstract Integer getNumArgsImpl();
-
-    /**
-     * Get value on attribute numArgs
-     * @return the attribute's value
-     */
-    public final Object getNumArgs() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numArgs", Optional.empty());
-        	}
-        	Integer result = this.getNumArgsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "numArgs", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "numArgs", e);
-        }
-    }
-
-    /**
-     * Get value on attribute memberNames
-     * @return the attribute's value
-     */
-    public abstract String[] getMemberNamesArrayImpl();
-
-    /**
-     * Get value on attribute memberNames
-     * @return the attribute's value
-     */
-    public Object getMemberNamesImpl() {
-        String[] stringArrayImpl0 = getMemberNamesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Get value on attribute memberNames
-     * @return the attribute's value
-     */
-    public final Object getMemberNames() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "memberNames", Optional.empty());
-        	}
-        	Object result = this.getMemberNamesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "memberNames", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "memberNames", e);
-        }
-    }
-
-    /**
-     * a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found
-     */
-    public abstract AFunction getDeclarationImpl();
-
-    /**
-     * a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found
-     */
-    public final Object getDeclaration() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declaration", Optional.empty());
-        	}
-        	AFunction result = this.getDeclarationImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "declaration", e);
-        }
-    }
-
-    /**
-     * a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found
-     */
-    public abstract AFunction getDefinitionImpl();
-
-    /**
-     * a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found
-     */
-    public final Object getDefinition() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definition", Optional.empty());
-        	}
-        	AFunction result = this.getDefinitionImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "definition", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "definition", e);
-        }
-    }
-
-    /**
      * Get value on attribute argList
      * @return the attribute's value
      */
@@ -233,52 +95,94 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
-     * @param index
-     * @return 
+     * a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found
      */
-    public abstract AExpression getArgImpl(int index);
+    public abstract AFunction getDeclarationImpl();
 
     /**
-     * 
-     * @param index
-     * @return 
+     * a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found
      */
-    public final Object getArg(int index) {
+    public final Object getDeclaration() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getArg", Optional.empty(), index);
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declaration", Optional.empty());
         	}
-        	AExpression result = this.getArgImpl(index);
+        	AFunction result = this.getDeclarationImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getArg", Optional.ofNullable(result), index);
+        		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "getArg", e);
+        	throw new AttributeException(get_class(), "declaration", e);
         }
     }
 
     /**
-     * the return type of the call
+     * a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found
      */
-    public abstract AType getReturnTypeImpl();
+    public abstract AFunction getDefinitionImpl();
 
     /**
-     * the return type of the call
+     * a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found
      */
-    public final Object getReturnType() {
+    public final Object getDefinition() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnType", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definition", Optional.empty());
         	}
-        	AType result = this.getReturnTypeImpl();
+        	AFunction result = this.getDefinitionImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "definition", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "returnType", e);
+        	throw new AttributeException(get_class(), "definition", e);
+        }
+    }
+
+    /**
+     * a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)
+     */
+    public abstract AFunction getDirectCalleeImpl();
+
+    /**
+     * a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)
+     */
+    public final Object getDirectCallee() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "directCallee", Optional.empty());
+        	}
+        	AFunction result = this.getDirectCalleeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "directCallee", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "directCallee", e);
+        }
+    }
+
+    /**
+     * a function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration
+     */
+    public abstract AFunction getFunctionImpl();
+
+    /**
+     * a function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration
+     */
+    public final Object getFunction() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "function", Optional.empty());
+        	}
+        	AFunction result = this.getFunctionImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "function", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "function", e);
         }
     }
 
@@ -302,6 +206,33 @@ public abstract class ACall extends AExpression {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "functionType", e);
+        }
+    }
+
+    /**
+     * 
+     * @param index
+     * @return 
+     */
+    public abstract AExpression getArgImpl(int index);
+
+    /**
+     * 
+     * @param index
+     * @return 
+     */
+    public final Object getArg(int index) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getArg", Optional.empty(), index);
+        	}
+        	AExpression result = this.getArgImpl(index);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "getArg", Optional.ofNullable(result), index);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "getArg", e);
         }
     }
 
@@ -331,31 +262,6 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * Get value on attribute memberAccess
-     * @return the attribute's value
-     */
-    public abstract AMemberAccess getMemberAccessImpl();
-
-    /**
-     * Get value on attribute memberAccess
-     * @return the attribute's value
-     */
-    public final Object getMemberAccess() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "memberAccess", Optional.empty());
-        	}
-        	AMemberAccess result = this.getMemberAccessImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "memberAccess", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "memberAccess", e);
-        }
-    }
-
-    /**
      * Get value on attribute isStmtCall
      * @return the attribute's value
      */
@@ -381,25 +287,142 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * a function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration
+     * Get value on attribute memberAccess
+     * @return the attribute's value
      */
-    public abstract AFunction getFunctionImpl();
+    public abstract AMemberAccess getMemberAccessImpl();
 
     /**
-     * a function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration
+     * Get value on attribute memberAccess
+     * @return the attribute's value
      */
-    public final Object getFunction() {
+    public final Object getMemberAccess() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "function", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "memberAccess", Optional.empty());
         	}
-        	AFunction result = this.getFunctionImpl();
+        	AMemberAccess result = this.getMemberAccessImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "function", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "memberAccess", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "function", e);
+        	throw new AttributeException(get_class(), "memberAccess", e);
+        }
+    }
+
+    /**
+     * Get value on attribute memberNames
+     * @return the attribute's value
+     */
+    public abstract String[] getMemberNamesArrayImpl();
+
+    /**
+     * Get value on attribute memberNames
+     * @return the attribute's value
+     */
+    public Object getMemberNamesImpl() {
+        String[] stringArrayImpl0 = getMemberNamesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute memberNames
+     * @return the attribute's value
+     */
+    public final Object getMemberNames() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "memberNames", Optional.empty());
+        	}
+        	Object result = this.getMemberNamesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "memberNames", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "memberNames", e);
+        }
+    }
+
+    /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    public abstract String getNameImpl();
+
+    /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    public final Object getName() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        	}
+        	String result = this.getNameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "name", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defNameImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def name with type String not implemented ");
+    }
+
+    /**
+     * Get value on attribute numArgs
+     * @return the attribute's value
+     */
+    public abstract Integer getNumArgsImpl();
+
+    /**
+     * Get value on attribute numArgs
+     * @return the attribute's value
+     */
+    public final Object getNumArgs() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numArgs", Optional.empty());
+        	}
+        	Integer result = this.getNumArgsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "numArgs", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "numArgs", e);
+        }
+    }
+
+    /**
+     * the return type of the call
+     */
+    public abstract AType getReturnTypeImpl();
+
+    /**
+     * the return type of the call
+     */
+    public final Object getReturnType() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnType", Optional.empty());
+        	}
+        	AType result = this.getReturnTypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "returnType", e);
         }
     }
 
@@ -423,29 +446,6 @@ public abstract class ACall extends AExpression {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "signature", e);
-        }
-    }
-
-    /**
-     * a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)
-     */
-    public abstract AFunction getDirectCalleeImpl();
-
-    /**
-     * a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)
-     */
-    public final Object getDirectCallee() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "directCallee", Optional.empty());
-        	}
-        	AFunction result = this.getDirectCalleeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "directCallee", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "directCallee", e);
         }
     }
 

@@ -86,38 +86,6 @@ public abstract class AIf extends AStatement {
     }
 
     /**
-     * Get value on attribute then
-     * @return the attribute's value
-     */
-    public abstract AScope getThenImpl();
-
-    /**
-     * Get value on attribute then
-     * @return the attribute's value
-     */
-    public final Object getThen() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "then", Optional.empty());
-        	}
-        	AScope result = this.getThenImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "then", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "then", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defThenImpl(AStatement value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def then with type AStatement not implemented ");
-    }
-
-    /**
      * Get value on attribute _else
      * @return the attribute's value
      */
@@ -147,6 +115,38 @@ public abstract class AIf extends AStatement {
      */
     public void defElseImpl(AStatement value) {
         throw new UnsupportedOperationException("Join point "+get_class()+": Action def else with type AStatement not implemented ");
+    }
+
+    /**
+     * Get value on attribute then
+     * @return the attribute's value
+     */
+    public abstract AScope getThenImpl();
+
+    /**
+     * Get value on attribute then
+     * @return the attribute's value
+     */
+    public final Object getThen() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "then", Optional.empty());
+        	}
+        	AScope result = this.getThenImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "then", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "then", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defThenImpl(AStatement value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def then with type AStatement not implemented ");
     }
 
     /**

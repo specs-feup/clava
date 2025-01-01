@@ -50,29 +50,6 @@ public abstract class AElaboratedType extends AType {
     }
 
     /**
-     * the qualifier of this elaborated type, if present (e.g., A::)
-     */
-    public abstract String getQualifierImpl();
-
-    /**
-     * the qualifier of this elaborated type, if present (e.g., A::)
-     */
-    public final Object getQualifier() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "qualifier", Optional.empty());
-        	}
-        	String result = this.getQualifierImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "qualifier", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "qualifier", e);
-        }
-    }
-
-    /**
      * the type that is being prefixed with the qualifier
      */
     public abstract AType getNamedTypeImpl();
@@ -92,6 +69,29 @@ public abstract class AElaboratedType extends AType {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "namedType", e);
+        }
+    }
+
+    /**
+     * the qualifier of this elaborated type, if present (e.g., A::)
+     */
+    public abstract String getQualifierImpl();
+
+    /**
+     * the qualifier of this elaborated type, if present (e.g., A::)
+     */
+    public final Object getQualifier() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "qualifier", Optional.empty());
+        	}
+        	String result = this.getQualifierImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "qualifier", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "qualifier", e);
         }
     }
 

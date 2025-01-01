@@ -27,29 +27,6 @@ public abstract class ACast extends AExpression {
         this.aExpression = aExpression;
     }
     /**
-     * [DEPRECATED: Use expr.implicitCast instead]
-     */
-    public abstract Boolean getIsImplicitCastImpl();
-
-    /**
-     * [DEPRECATED: Use expr.implicitCast instead]
-     */
-    public final Object getIsImplicitCast() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isImplicitCast", Optional.empty());
-        	}
-        	Boolean result = this.getIsImplicitCastImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isImplicitCast", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isImplicitCast", e);
-        }
-    }
-
-    /**
      * Get value on attribute fromType
      * @return the attribute's value
      */
@@ -75,27 +52,25 @@ public abstract class ACast extends AExpression {
     }
 
     /**
-     * Get value on attribute toType
-     * @return the attribute's value
+     * [DEPRECATED: Use expr.implicitCast instead]
      */
-    public abstract AType getToTypeImpl();
+    public abstract Boolean getIsImplicitCastImpl();
 
     /**
-     * Get value on attribute toType
-     * @return the attribute's value
+     * [DEPRECATED: Use expr.implicitCast instead]
      */
-    public final Object getToType() {
+    public final Object getIsImplicitCast() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "toType", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isImplicitCast", Optional.empty());
         	}
-        	AType result = this.getToTypeImpl();
+        	Boolean result = this.getIsImplicitCastImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "toType", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "isImplicitCast", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "toType", e);
+        	throw new AttributeException(get_class(), "isImplicitCast", e);
         }
     }
 
@@ -121,6 +96,31 @@ public abstract class ACast extends AExpression {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "subExpr", e);
+        }
+    }
+
+    /**
+     * Get value on attribute toType
+     * @return the attribute's value
+     */
+    public abstract AType getToTypeImpl();
+
+    /**
+     * Get value on attribute toType
+     * @return the attribute's value
+     */
+    public final Object getToType() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "toType", Optional.empty());
+        	}
+        	AType result = this.getToTypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "toType", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "toType", e);
         }
     }
 

@@ -28,38 +28,6 @@ public abstract class AFunctionType extends AType {
         this.aType = aType;
     }
     /**
-     * Get value on attribute returnType
-     * @return the attribute's value
-     */
-    public abstract AType getReturnTypeImpl();
-
-    /**
-     * Get value on attribute returnType
-     * @return the attribute's value
-     */
-    public final Object getReturnType() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnType", Optional.empty());
-        	}
-        	AType result = this.getReturnTypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "returnType", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defReturnTypeImpl(AType value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def returnType with type AType not implemented ");
-    }
-
-    /**
      * Get value on attribute paramTypes
      * @return the attribute's value
      */
@@ -92,6 +60,38 @@ public abstract class AFunctionType extends AType {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "paramTypes", e);
         }
+    }
+
+    /**
+     * Get value on attribute returnType
+     * @return the attribute's value
+     */
+    public abstract AType getReturnTypeImpl();
+
+    /**
+     * Get value on attribute returnType
+     * @return the attribute's value
+     */
+    public final Object getReturnType() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnType", Optional.empty());
+        	}
+        	AType result = this.getReturnTypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "returnType", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defReturnTypeImpl(AType value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def returnType with type AType not implemented ");
     }
 
     /**

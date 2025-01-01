@@ -27,29 +27,6 @@ public abstract class AInclude extends ADecl {
         this.aDecl = aDecl;
     }
     /**
-     * the name of the include
-     */
-    public abstract String getNameImpl();
-
-    /**
-     * the name of the include
-     */
-    public final Object getName() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
-        	}
-        	String result = this.getNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "name", e);
-        }
-    }
-
-    /**
      * true if this is an angled include (i.e., system include)
      */
     public abstract Boolean getIsAngledImpl();
@@ -69,6 +46,29 @@ public abstract class AInclude extends ADecl {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isAngled", e);
+        }
+    }
+
+    /**
+     * the name of the include
+     */
+    public abstract String getNameImpl();
+
+    /**
+     * the name of the include
+     */
+    public final Object getName() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        	}
+        	String result = this.getNameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "name", e);
         }
     }
 

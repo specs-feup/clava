@@ -51,6 +51,75 @@ public abstract class AArrayAccess extends AExpression {
     }
 
     /**
+     * If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name
+     */
+    public abstract String getNameImpl();
+
+    /**
+     * If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name
+     */
+    public final Object getName() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        	}
+        	String result = this.getNameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "name", e);
+        }
+    }
+
+    /**
+     * The number of subscripts of this array access
+     */
+    public abstract Integer getNumSubscriptsImpl();
+
+    /**
+     * The number of subscripts of this array access
+     */
+    public final Object getNumSubscripts() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numSubscripts", Optional.empty());
+        	}
+        	Integer result = this.getNumSubscriptsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "numSubscripts", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "numSubscripts", e);
+        }
+    }
+
+    /**
+     * A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript
+     */
+    public abstract AArrayAccess getParentAccessImpl();
+
+    /**
+     * A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript
+     */
+    public final Object getParentAccess() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "parentAccess", Optional.empty());
+        	}
+        	AArrayAccess result = this.getParentAccessImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "parentAccess", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "parentAccess", e);
+        }
+    }
+
+    /**
      * Get value on attribute subscript
      * @return the attribute's value
      */
@@ -80,75 +149,6 @@ public abstract class AArrayAccess extends AExpression {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "subscript", e);
-        }
-    }
-
-    /**
-     * A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript
-     */
-    public abstract AArrayAccess getParentAccessImpl();
-
-    /**
-     * A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript
-     */
-    public final Object getParentAccess() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "parentAccess", Optional.empty());
-        	}
-        	AArrayAccess result = this.getParentAccessImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "parentAccess", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "parentAccess", e);
-        }
-    }
-
-    /**
-     * The number of subscripts of this array access
-     */
-    public abstract Integer getNumSubscriptsImpl();
-
-    /**
-     * The number of subscripts of this array access
-     */
-    public final Object getNumSubscripts() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numSubscripts", Optional.empty());
-        	}
-        	Integer result = this.getNumSubscriptsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "numSubscripts", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "numSubscripts", e);
-        }
-    }
-
-    /**
-     * If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name
-     */
-    public abstract String getNameImpl();
-
-    /**
-     * If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name
-     */
-    public final Object getName() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
-        	}
-        	String result = this.getNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "name", e);
         }
     }
 

@@ -19,27 +19,27 @@ import java.util.Arrays;
 public abstract class AClavaException extends ACxxWeaverJoinPoint {
 
     /**
-     * Get value on attribute message
+     * Get value on attribute exception
      * @return the attribute's value
      */
-    public abstract String getMessageImpl();
+    public abstract Object getExceptionImpl();
 
     /**
-     * Get value on attribute message
+     * Get value on attribute exception
      * @return the attribute's value
      */
-    public final Object getMessage() {
+    public final Object getException() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "message", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "exception", Optional.empty());
         	}
-        	String result = this.getMessageImpl();
+        	Object result = this.getExceptionImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "message", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "exception", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "message", e);
+        	throw new AttributeException(get_class(), "exception", e);
         }
     }
 
@@ -69,27 +69,27 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute exception
+     * Get value on attribute message
      * @return the attribute's value
      */
-    public abstract Object getExceptionImpl();
+    public abstract String getMessageImpl();
 
     /**
-     * Get value on attribute exception
+     * Get value on attribute message
      * @return the attribute's value
      */
-    public final Object getException() {
+    public final Object getMessage() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "exception", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "message", Optional.empty());
         	}
-        	Object result = this.getExceptionImpl();
+        	String result = this.getMessageImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "exception", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "message", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "exception", e);
+        	throw new AttributeException(get_class(), "message", e);
         }
     }
 

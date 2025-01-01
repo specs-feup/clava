@@ -28,27 +28,55 @@ public abstract class AMemberAccess extends AExpression {
         this.aExpression = aExpression;
     }
     /**
-     * Get value on attribute name
-     * @return the attribute's value
+     * true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
      */
-    public abstract String getNameImpl();
+    public abstract Boolean getArrowImpl();
 
     /**
-     * Get value on attribute name
-     * @return the attribute's value
+     * true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
      */
-    public final Object getName() {
+    public final Object getArrow() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "arrow", Optional.empty());
         	}
-        	String result = this.getNameImpl();
+        	Boolean result = this.getArrowImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "arrow", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "name", e);
+        	throw new AttributeException(get_class(), "arrow", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defArrowImpl(Boolean value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def arrow with type Boolean not implemented ");
+    }
+
+    /**
+     * expression of the base of this member access
+     */
+    public abstract AExpression getBaseImpl();
+
+    /**
+     * expression of the base of this member access
+     */
+    public final Object getBase() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "base", Optional.empty());
+        	}
+        	AExpression result = this.getBaseImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "base", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "base", e);
         }
     }
 
@@ -123,56 +151,28 @@ public abstract class AMemberAccess extends AExpression {
     }
 
     /**
-     * expression of the base of this member access
+     * Get value on attribute name
+     * @return the attribute's value
      */
-    public abstract AExpression getBaseImpl();
+    public abstract String getNameImpl();
 
     /**
-     * expression of the base of this member access
+     * Get value on attribute name
+     * @return the attribute's value
      */
-    public final Object getBase() {
+    public final Object getName() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "base", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
         	}
-        	AExpression result = this.getBaseImpl();
+        	String result = this.getNameImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "base", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "base", e);
+        	throw new AttributeException(get_class(), "name", e);
         }
-    }
-
-    /**
-     * true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
-     */
-    public abstract Boolean getArrowImpl();
-
-    /**
-     * true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
-     */
-    public final Object getArrow() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "arrow", Optional.empty());
-        	}
-        	Boolean result = this.getArrowImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "arrow", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "arrow", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defArrowImpl(Boolean value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def arrow with type Boolean not implemented ");
     }
 
     /**

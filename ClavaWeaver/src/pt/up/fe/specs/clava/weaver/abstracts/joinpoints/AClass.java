@@ -30,68 +30,35 @@ public abstract class AClass extends ARecord {
         this.aRecord = aRecord;
     }
     /**
-     * Get value on attribute methods
+     * Get value on attribute allBases
      * @return the attribute's value
      */
-    public abstract AMethod[] getMethodsArrayImpl();
+    public abstract AClass[] getAllBasesArrayImpl();
 
     /**
-     * The methods declared by this class
+     * All the classes this class inherits from
      */
-    public Object getMethodsImpl() {
-        AMethod[] aMethodArrayImpl0 = getMethodsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aMethodArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * The methods declared by this class
-     */
-    public final Object getMethods() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "methods", Optional.empty());
-        	}
-        	Object result = this.getMethodsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "methods", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "methods", e);
-        }
-    }
-
-    /**
-     * Get value on attribute bases
-     * @return the attribute's value
-     */
-    public abstract AClass[] getBasesArrayImpl();
-
-    /**
-     * The classes this class directly inherits from
-     */
-    public Object getBasesImpl() {
-        AClass[] aClassArrayImpl0 = getBasesArrayImpl();
+    public Object getAllBasesImpl() {
+        AClass[] aClassArrayImpl0 = getAllBasesArrayImpl();
         Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aClassArrayImpl0);
         return nativeArray0;
     }
 
     /**
-     * The classes this class directly inherits from
+     * All the classes this class inherits from
      */
-    public final Object getBases() {
+    public final Object getAllBases() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "bases", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "allBases", Optional.empty());
         	}
-        	Object result = this.getBasesImpl();
+        	Object result = this.getAllBasesImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "bases", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "allBases", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "bases", e);
+        	throw new AttributeException(get_class(), "allBases", e);
         }
     }
 
@@ -129,35 +96,81 @@ public abstract class AClass extends ARecord {
     }
 
     /**
-     * Get value on attribute allBases
+     * Get value on attribute bases
      * @return the attribute's value
      */
-    public abstract AClass[] getAllBasesArrayImpl();
+    public abstract AClass[] getBasesArrayImpl();
 
     /**
-     * All the classes this class inherits from
+     * The classes this class directly inherits from
      */
-    public Object getAllBasesImpl() {
-        AClass[] aClassArrayImpl0 = getAllBasesArrayImpl();
+    public Object getBasesImpl() {
+        AClass[] aClassArrayImpl0 = getBasesArrayImpl();
         Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aClassArrayImpl0);
         return nativeArray0;
     }
 
     /**
-     * All the classes this class inherits from
+     * The classes this class directly inherits from
      */
-    public final Object getAllBases() {
+    public final Object getBases() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "allBases", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "bases", Optional.empty());
         	}
-        	Object result = this.getAllBasesImpl();
+        	Object result = this.getBasesImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "allBases", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "bases", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "allBases", e);
+        	throw new AttributeException(get_class(), "bases", e);
+        }
+    }
+
+    /**
+     * Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present
+     */
+    public abstract AClass getCanonicalImpl();
+
+    /**
+     * Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present
+     */
+    public final Object getCanonical() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "canonical", Optional.empty());
+        	}
+        	AClass result = this.getCanonicalImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "canonical", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "canonical", e);
+        }
+    }
+
+    /**
+     * The implementation (or definition) of this class present in the AST, or undefined if none is found
+     */
+    public abstract AClass getImplementationImpl();
+
+    /**
+     * The implementation (or definition) of this class present in the AST, or undefined if none is found
+     */
+    public final Object getImplementation() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "implementation", Optional.empty());
+        	}
+        	AClass result = this.getImplementationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "implementation", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "implementation", e);
         }
     }
 
@@ -185,6 +198,29 @@ public abstract class AClass extends ARecord {
     }
 
     /**
+     * true if this is the class returned by the 'canonical' attribute
+     */
+    public abstract Boolean getIsCanonicalImpl();
+
+    /**
+     * true if this is the class returned by the 'canonical' attribute
+     */
+    public final Object getIsCanonical() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCanonical", Optional.empty());
+        	}
+        	Boolean result = this.getIsCanonicalImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isCanonical", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isCanonical", e);
+        }
+    }
+
+    /**
      * True, if all functions are pure
      */
     public abstract Boolean getIsInterfaceImpl();
@@ -204,6 +240,39 @@ public abstract class AClass extends ARecord {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInterface", e);
+        }
+    }
+
+    /**
+     * Get value on attribute methods
+     * @return the attribute's value
+     */
+    public abstract AMethod[] getMethodsArrayImpl();
+
+    /**
+     * The methods declared by this class
+     */
+    public Object getMethodsImpl() {
+        AMethod[] aMethodArrayImpl0 = getMethodsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aMethodArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * The methods declared by this class
+     */
+    public final Object getMethods() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "methods", Optional.empty());
+        	}
+        	Object result = this.getMethodsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "methods", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "methods", e);
         }
     }
 
@@ -237,75 +306,6 @@ public abstract class AClass extends ARecord {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "prototypes", e);
-        }
-    }
-
-    /**
-     * The implementation (or definition) of this class present in the AST, or undefined if none is found
-     */
-    public abstract AClass getImplementationImpl();
-
-    /**
-     * The implementation (or definition) of this class present in the AST, or undefined if none is found
-     */
-    public final Object getImplementation() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "implementation", Optional.empty());
-        	}
-        	AClass result = this.getImplementationImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "implementation", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "implementation", e);
-        }
-    }
-
-    /**
-     * Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present
-     */
-    public abstract AClass getCanonicalImpl();
-
-    /**
-     * Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present
-     */
-    public final Object getCanonical() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "canonical", Optional.empty());
-        	}
-        	AClass result = this.getCanonicalImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "canonical", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "canonical", e);
-        }
-    }
-
-    /**
-     * true if this is the class returned by the 'canonical' attribute
-     */
-    public abstract Boolean getIsCanonicalImpl();
-
-    /**
-     * true if this is the class returned by the 'canonical' attribute
-     */
-    public final Object getIsCanonical() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCanonical", Optional.empty());
-        	}
-        	Boolean result = this.getIsCanonicalImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isCanonical", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isCanonical", e);
         }
     }
 

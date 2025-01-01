@@ -30,31 +30,6 @@ public abstract class ARecord extends ANamedDecl {
         this.aNamedDecl = aNamedDecl;
     }
     /**
-     * Get value on attribute kind
-     * @return the attribute's value
-     */
-    public abstract String getKindImpl();
-
-    /**
-     * Get value on attribute kind
-     * @return the attribute's value
-     */
-    public final Object getKind() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
-        	}
-        	String result = this.getKindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "kind", e);
-        }
-    }
-
-    /**
      * Get value on attribute fields
      * @return the attribute's value
      */
@@ -167,6 +142,31 @@ public abstract class ARecord extends ANamedDecl {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPrototype", e);
+        }
+    }
+
+    /**
+     * Get value on attribute kind
+     * @return the attribute's value
+     */
+    public abstract String getKindImpl();
+
+    /**
+     * Get value on attribute kind
+     * @return the attribute's value
+     */
+    public final Object getKind() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
+        	}
+        	String result = this.getKindImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "kind", e);
         }
     }
 

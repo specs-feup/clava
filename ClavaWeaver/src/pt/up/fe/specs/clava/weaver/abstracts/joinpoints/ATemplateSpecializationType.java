@@ -27,56 +27,6 @@ public abstract class ATemplateSpecializationType extends AType {
         this.aType = aType;
     }
     /**
-     * Get value on attribute templateName
-     * @return the attribute's value
-     */
-    public abstract String getTemplateNameImpl();
-
-    /**
-     * Get value on attribute templateName
-     * @return the attribute's value
-     */
-    public final Object getTemplateName() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "templateName", Optional.empty());
-        	}
-        	String result = this.getTemplateNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "templateName", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "templateName", e);
-        }
-    }
-
-    /**
-     * Get value on attribute numArgs
-     * @return the attribute's value
-     */
-    public abstract Integer getNumArgsImpl();
-
-    /**
-     * Get value on attribute numArgs
-     * @return the attribute's value
-     */
-    public final Object getNumArgs() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numArgs", Optional.empty());
-        	}
-        	Integer result = this.getNumArgsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "numArgs", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "numArgs", e);
-        }
-    }
-
-    /**
      * Get value on attribute args
      * @return the attribute's value
      */
@@ -133,6 +83,56 @@ public abstract class ATemplateSpecializationType extends AType {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "firstArgType", e);
+        }
+    }
+
+    /**
+     * Get value on attribute numArgs
+     * @return the attribute's value
+     */
+    public abstract Integer getNumArgsImpl();
+
+    /**
+     * Get value on attribute numArgs
+     * @return the attribute's value
+     */
+    public final Object getNumArgs() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numArgs", Optional.empty());
+        	}
+        	Integer result = this.getNumArgsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "numArgs", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "numArgs", e);
+        }
+    }
+
+    /**
+     * Get value on attribute templateName
+     * @return the attribute's value
+     */
+    public abstract String getTemplateNameImpl();
+
+    /**
+     * Get value on attribute templateName
+     * @return the attribute's value
+     */
+    public final Object getTemplateName() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "templateName", Optional.empty());
+        	}
+        	String result = this.getTemplateNameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "templateName", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "templateName", e);
         }
     }
 

@@ -27,52 +27,6 @@ public abstract class ASwitch extends AStatement {
         this.aStatement = aStatement;
     }
     /**
-     * true if there is a default case in this switch statement, false otherwise
-     */
-    public abstract Boolean getHasDefaultCaseImpl();
-
-    /**
-     * true if there is a default case in this switch statement, false otherwise
-     */
-    public final Object getHasDefaultCase() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasDefaultCase", Optional.empty());
-        	}
-        	Boolean result = this.getHasDefaultCaseImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasDefaultCase", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasDefaultCase", e);
-        }
-    }
-
-    /**
-     * the default case statement of this switch statement or undefined if it does not have a default case
-     */
-    public abstract ACase getGetDefaultCaseImpl();
-
-    /**
-     * the default case statement of this switch statement or undefined if it does not have a default case
-     */
-    public final Object getGetDefaultCase() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getDefaultCase", Optional.empty());
-        	}
-        	ACase result = this.getGetDefaultCaseImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getDefaultCase", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "getDefaultCase", e);
-        }
-    }
-
-    /**
      * Get value on attribute cases
      * @return the attribute's value
      */
@@ -125,6 +79,52 @@ public abstract class ASwitch extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "condition", e);
+        }
+    }
+
+    /**
+     * the default case statement of this switch statement or undefined if it does not have a default case
+     */
+    public abstract ACase getGetDefaultCaseImpl();
+
+    /**
+     * the default case statement of this switch statement or undefined if it does not have a default case
+     */
+    public final Object getGetDefaultCase() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getDefaultCase", Optional.empty());
+        	}
+        	ACase result = this.getGetDefaultCaseImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "getDefaultCase", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "getDefaultCase", e);
+        }
+    }
+
+    /**
+     * true if there is a default case in this switch statement, false otherwise
+     */
+    public abstract Boolean getHasDefaultCaseImpl();
+
+    /**
+     * true if there is a default case in this switch statement, false otherwise
+     */
+    public final Object getHasDefaultCase() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasDefaultCase", Optional.empty());
+        	}
+        	Boolean result = this.getHasDefaultCaseImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasDefaultCase", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasDefaultCase", e);
         }
     }
 

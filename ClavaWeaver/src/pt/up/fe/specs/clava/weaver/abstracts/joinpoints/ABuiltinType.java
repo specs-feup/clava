@@ -52,29 +52,6 @@ public abstract class ABuiltinType extends AType {
     }
 
     /**
-     * true, if it is an integer type
-     */
-    public abstract Boolean getIsIntegerImpl();
-
-    /**
-     * true, if it is an integer type
-     */
-    public final Object getIsInteger() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInteger", Optional.empty());
-        	}
-        	Boolean result = this.getIsIntegerImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isInteger", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isInteger", e);
-        }
-    }
-
-    /**
      * true, if ot is a floating type (e.g., float, double)
      */
     public abstract Boolean getIsFloatImpl();
@@ -94,6 +71,29 @@ public abstract class ABuiltinType extends AType {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isFloat", e);
+        }
+    }
+
+    /**
+     * true, if it is an integer type
+     */
+    public abstract Boolean getIsIntegerImpl();
+
+    /**
+     * true, if it is an integer type
+     */
+    public final Object getIsInteger() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInteger", Optional.empty());
+        	}
+        	Boolean result = this.getIsIntegerImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isInteger", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isInteger", e);
         }
     }
 

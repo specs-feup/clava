@@ -21,25 +21,48 @@ import java.util.Arrays;
 public abstract class AFile extends ACxxWeaverJoinPoint {
 
     /**
-     * the name of the file
+     * the path to the source folder that was given as the base folder of this file
      */
-    public abstract String getNameImpl();
+    public abstract String getBaseSourcePathImpl();
 
     /**
-     * the name of the file
+     * the path to the source folder that was given as the base folder of this file
      */
-    public final Object getName() {
+    public final Object getBaseSourcePath() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "baseSourcePath", Optional.empty());
         	}
-        	String result = this.getNameImpl();
+        	String result = this.getBaseSourcePathImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "baseSourcePath", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "name", e);
+        	throw new AttributeException(get_class(), "baseSourcePath", e);
+        }
+    }
+
+    /**
+     * the output of the parser if there were errors during parsing
+     */
+    public abstract String getErrorOutputImpl();
+
+    /**
+     * the output of the parser if there were errors during parsing
+     */
+    public final Object getErrorOutput() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "errorOutput", Optional.empty());
+        	}
+        	String result = this.getErrorOutputImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "errorOutput", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "errorOutput", e);
         }
     }
 
@@ -67,6 +90,33 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * 
+     * @param destinationFolderpath
+     * @return 
+     */
+    public abstract String getDestinationFilepathImpl(String destinationFolderpath);
+
+    /**
+     * 
+     * @param destinationFolderpath
+     * @return 
+     */
+    public final Object getDestinationFilepath(String destinationFolderpath) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getDestinationFilepath", Optional.empty(), destinationFolderpath);
+        	}
+        	String result = this.getDestinationFilepathImpl(destinationFolderpath);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "getDestinationFilepath", Optional.ofNullable(result), destinationFolderpath);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "getDestinationFilepath", e);
+        }
+    }
+
+    /**
      * true if this file contains a 'main' method
      */
     public abstract Boolean getHasMainImpl();
@@ -86,6 +136,154 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasMain", e);
+        }
+    }
+
+    /**
+     * true if there were errors during parsing
+     */
+    public abstract Boolean getHasParsingErrorsImpl();
+
+    /**
+     * true if there were errors during parsing
+     */
+    public final Object getHasParsingErrors() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasParsingErrors", Optional.empty());
+        	}
+        	Boolean result = this.getHasParsingErrorsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasParsingErrors", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasParsingErrors", e);
+        }
+    }
+
+    /**
+     * Get value on attribute includes
+     * @return the attribute's value
+     */
+    public abstract AInclude[] getIncludesArrayImpl();
+
+    /**
+     * the includes of this file
+     */
+    public Object getIncludesImpl() {
+        AInclude[] aIncludeArrayImpl0 = getIncludesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aIncludeArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the includes of this file
+     */
+    public final Object getIncludes() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "includes", Optional.empty());
+        	}
+        	Object result = this.getIncludesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "includes", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "includes", e);
+        }
+    }
+
+    /**
+     * true if this file is considered a C++ file
+     */
+    public abstract Boolean getIsCxxImpl();
+
+    /**
+     * true if this file is considered a C++ file
+     */
+    public final Object getIsCxx() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCxx", Optional.empty());
+        	}
+        	Boolean result = this.getIsCxxImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isCxx", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isCxx", e);
+        }
+    }
+
+    /**
+     * true if this file is considered a header file
+     */
+    public abstract Boolean getIsHeaderImpl();
+
+    /**
+     * true if this file is considered a header file
+     */
+    public final Object getIsHeader() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isHeader", Optional.empty());
+        	}
+        	Boolean result = this.getIsHeaderImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isHeader", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isHeader", e);
+        }
+    }
+
+    /**
+     * true if this file is an OpenCL filetype
+     */
+    public abstract Boolean getIsOpenCLImpl();
+
+    /**
+     * true if this file is an OpenCL filetype
+     */
+    public final Object getIsOpenCL() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isOpenCL", Optional.empty());
+        	}
+        	Boolean result = this.getIsOpenCLImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isOpenCL", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isOpenCL", e);
+        }
+    }
+
+    /**
+     * the name of the file
+     */
+    public abstract String getNameImpl();
+
+    /**
+     * the name of the file
+     */
+    public final Object getName() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        	}
+        	String result = this.getNameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "name", e);
         }
     }
 
@@ -166,125 +364,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * the path to the source folder that was given as the base folder of this file
-     */
-    public abstract String getBaseSourcePathImpl();
-
-    /**
-     * the path to the source folder that was given as the base folder of this file
-     */
-    public final Object getBaseSourcePath() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "baseSourcePath", Optional.empty());
-        	}
-        	String result = this.getBaseSourcePathImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "baseSourcePath", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "baseSourcePath", e);
-        }
-    }
-
-    /**
-     * true if this file is considered a C++ file
-     */
-    public abstract Boolean getIsCxxImpl();
-
-    /**
-     * true if this file is considered a C++ file
-     */
-    public final Object getIsCxx() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCxx", Optional.empty());
-        	}
-        	Boolean result = this.getIsCxxImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isCxx", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isCxx", e);
-        }
-    }
-
-    /**
-     * true if this file is considered a header file
-     */
-    public abstract Boolean getIsHeaderImpl();
-
-    /**
-     * true if this file is considered a header file
-     */
-    public final Object getIsHeader() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isHeader", Optional.empty());
-        	}
-        	Boolean result = this.getIsHeaderImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isHeader", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isHeader", e);
-        }
-    }
-
-    /**
-     * true if this file is an OpenCL filetype
-     */
-    public abstract Boolean getIsOpenCLImpl();
-
-    /**
-     * true if this file is an OpenCL filetype
-     */
-    public final Object getIsOpenCL() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isOpenCL", Optional.empty());
-        	}
-        	Boolean result = this.getIsOpenCLImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isOpenCL", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isOpenCL", e);
-        }
-    }
-
-    /**
-     * 
-     * @param destinationFolderpath
-     * @return 
-     */
-    public abstract String getDestinationFilepathImpl(String destinationFolderpath);
-
-    /**
-     * 
-     * @param destinationFolderpath
-     * @return 
-     */
-    public final Object getDestinationFilepath(String destinationFolderpath) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getDestinationFilepath", Optional.empty(), destinationFolderpath);
-        	}
-        	String result = this.getDestinationFilepathImpl(destinationFolderpath);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getDestinationFilepath", Optional.ofNullable(result), destinationFolderpath);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "getDestinationFilepath", e);
-        }
-    }
-
-    /**
      * the name of the source folder of this file, or undefined if it has none
      */
     public abstract String getSourceFoldernameImpl();
@@ -304,85 +383,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "sourceFoldername", e);
-        }
-    }
-
-    /**
-     * true if there were errors during parsing
-     */
-    public abstract Boolean getHasParsingErrorsImpl();
-
-    /**
-     * true if there were errors during parsing
-     */
-    public final Object getHasParsingErrors() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasParsingErrors", Optional.empty());
-        	}
-        	Boolean result = this.getHasParsingErrorsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasParsingErrors", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasParsingErrors", e);
-        }
-    }
-
-    /**
-     * the output of the parser if there were errors during parsing
-     */
-    public abstract String getErrorOutputImpl();
-
-    /**
-     * the output of the parser if there were errors during parsing
-     */
-    public final Object getErrorOutput() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "errorOutput", Optional.empty());
-        	}
-        	String result = this.getErrorOutputImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "errorOutput", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "errorOutput", e);
-        }
-    }
-
-    /**
-     * Get value on attribute includes
-     * @return the attribute's value
-     */
-    public abstract AInclude[] getIncludesArrayImpl();
-
-    /**
-     * the includes of this file
-     */
-    public Object getIncludesImpl() {
-        AInclude[] aIncludeArrayImpl0 = getIncludesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aIncludeArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * the includes of this file
-     */
-    public final Object getIncludes() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "includes", Optional.empty());
-        	}
-        	Object result = this.getIncludesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "includes", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "includes", e);
         }
     }
 

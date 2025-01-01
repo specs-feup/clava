@@ -61,38 +61,6 @@ public abstract class ATernaryOp extends AOp {
     }
 
     /**
-     * Get value on attribute trueExpr
-     * @return the attribute's value
-     */
-    public abstract AExpression getTrueExprImpl();
-
-    /**
-     * Get value on attribute trueExpr
-     * @return the attribute's value
-     */
-    public final Object getTrueExpr() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "trueExpr", Optional.empty());
-        	}
-        	AExpression result = this.getTrueExprImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "trueExpr", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "trueExpr", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defTrueExprImpl(AExpression value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def trueExpr with type AExpression not implemented ");
-    }
-
-    /**
      * Get value on attribute falseExpr
      * @return the attribute's value
      */
@@ -122,6 +90,38 @@ public abstract class ATernaryOp extends AOp {
      */
     public void defFalseExprImpl(AExpression value) {
         throw new UnsupportedOperationException("Join point "+get_class()+": Action def falseExpr with type AExpression not implemented ");
+    }
+
+    /**
+     * Get value on attribute trueExpr
+     * @return the attribute's value
+     */
+    public abstract AExpression getTrueExprImpl();
+
+    /**
+     * Get value on attribute trueExpr
+     * @return the attribute's value
+     */
+    public final Object getTrueExpr() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "trueExpr", Optional.empty());
+        	}
+        	AExpression result = this.getTrueExprImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "trueExpr", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "trueExpr", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defTrueExprImpl(AExpression value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def trueExpr with type AExpression not implemented ");
     }
 
     /**

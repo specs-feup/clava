@@ -28,176 +28,6 @@ public abstract class AOmp extends APragma {
         this.aPragma = aPragma;
     }
     /**
-     * The kind of the directive
-     */
-    public abstract String getKindImpl();
-
-    /**
-     * The kind of the directive
-     */
-    public final Object getKind() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
-        	}
-        	String result = this.getKindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "kind", e);
-        }
-    }
-
-    /**
-     * An integer expression, or undefined if no 'num_threads' clause is defined
-     */
-    public abstract String getNumThreadsImpl();
-
-    /**
-     * An integer expression, or undefined if no 'num_threads' clause is defined
-     */
-    public final Object getNumThreads() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numThreads", Optional.empty());
-        	}
-        	String result = this.getNumThreadsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "numThreads", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "numThreads", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defNumThreadsImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def numThreads with type String not implemented ");
-    }
-
-    /**
-     * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
-     */
-    public abstract String getProcBindImpl();
-
-    /**
-     * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
-     */
-    public final Object getProcBind() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "procBind", Optional.empty());
-        	}
-        	String result = this.getProcBindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "procBind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "procBind", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defProcBindImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def procBind with type String not implemented ");
-    }
-
-    /**
-     * Get value on attribute _private
-     * @return the attribute's value
-     */
-    public abstract String[] getPrivateArrayImpl();
-
-    /**
-     * The variable names of all private clauses, or empty array if no private clause is defined
-     */
-    public Object getPrivateImpl() {
-        String[] stringArrayImpl0 = getPrivateArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * The variable names of all private clauses, or empty array if no private clause is defined
-     */
-    public final Object getPrivate() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "private", Optional.empty());
-        	}
-        	Object result = this.getPrivateImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "private", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "private", e);
-        }
-    }
-
-    /**
-     * 
-     * @param clauseName
-     * @return 
-     */
-    public abstract Boolean hasClauseImpl(String clauseName);
-
-    /**
-     * 
-     * @param clauseName
-     * @return 
-     */
-    public final Object hasClause(String clauseName) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasClause", Optional.empty(), clauseName);
-        	}
-        	Boolean result = this.hasClauseImpl(clauseName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasClause", Optional.ofNullable(result), clauseName);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasClause", e);
-        }
-    }
-
-    /**
-     * 
-     * @param clauseName
-     * @return 
-     */
-    public abstract Boolean isClauseLegalImpl(String clauseName);
-
-    /**
-     * 
-     * @param clauseName
-     * @return 
-     */
-    public final Object isClauseLegal(String clauseName) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isClauseLegal", Optional.empty(), clauseName);
-        	}
-        	Boolean result = this.isClauseLegalImpl(clauseName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isClauseLegal", Optional.ofNullable(result), clauseName);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isClauseLegal", e);
-        }
-    }
-
-    /**
      * Get value on attribute clauseKinds
      * @return the attribute's value
      */
@@ -231,73 +61,58 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * 
-     * @param kind
-     * @return 
+     * An integer expression, or undefined if no 'collapse' clause is defined
      */
-    public abstract String[] getReductionArrayImpl(String kind);
+    public abstract String getCollapseImpl();
 
     /**
-     * 
-     * @param kind
-     * @return 
+     * An integer expression, or undefined if no 'collapse' clause is defined
      */
-    public Object getReductionImpl(String kind) {
-        String[] stringArrayImpl0 = getReductionArrayImpl(kind);
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * 
-     * @param kind
-     * @return 
-     */
-    public final Object getReduction(String kind) {
+    public final Object getCollapse() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getReduction", Optional.empty(), kind);
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "collapse", Optional.empty());
         	}
-        	Object result = this.getReductionImpl(kind);
+        	String result = this.getCollapseImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getReduction", Optional.ofNullable(result), kind);
+        		eventTrigger().triggerAttribute(Stage.END, this, "collapse", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "getReduction", e);
+        	throw new AttributeException(get_class(), "collapse", e);
         }
     }
 
     /**
-     * Get value on attribute reductionKinds
+     * Get value on attribute copyin
      * @return the attribute's value
      */
-    public abstract String[] getReductionKindsArrayImpl();
+    public abstract String[] getCopyinArrayImpl();
 
     /**
-     * The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined
+     * The variable names of all copyin clauses, or empty array if no copyin clause is defined
      */
-    public Object getReductionKindsImpl() {
-        String[] stringArrayImpl0 = getReductionKindsArrayImpl();
+    public Object getCopyinImpl() {
+        String[] stringArrayImpl0 = getCopyinArrayImpl();
         Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
     /**
-     * The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined
+     * The variable names of all copyin clauses, or empty array if no copyin clause is defined
      */
-    public final Object getReductionKinds() {
+    public final Object getCopyin() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "reductionKinds", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "copyin", Optional.empty());
         	}
-        	Object result = this.getReductionKindsImpl();
+        	Object result = this.getCopyinImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "reductionKinds", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "copyin", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "reductionKinds", e);
+        	throw new AttributeException(get_class(), "copyin", e);
         }
     }
 
@@ -358,6 +173,121 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * 
+     * @param kind
+     * @return 
+     */
+    public abstract String[] getReductionArrayImpl(String kind);
+
+    /**
+     * 
+     * @param kind
+     * @return 
+     */
+    public Object getReductionImpl(String kind) {
+        String[] stringArrayImpl0 = getReductionArrayImpl(kind);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * 
+     * @param kind
+     * @return 
+     */
+    public final Object getReduction(String kind) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getReduction", Optional.empty(), kind);
+        	}
+        	Object result = this.getReductionImpl(kind);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "getReduction", Optional.ofNullable(result), kind);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "getReduction", e);
+        }
+    }
+
+    /**
+     * 
+     * @param clauseName
+     * @return 
+     */
+    public abstract Boolean hasClauseImpl(String clauseName);
+
+    /**
+     * 
+     * @param clauseName
+     * @return 
+     */
+    public final Object hasClause(String clauseName) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasClause", Optional.empty(), clauseName);
+        	}
+        	Boolean result = this.hasClauseImpl(clauseName);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasClause", Optional.ofNullable(result), clauseName);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasClause", e);
+        }
+    }
+
+    /**
+     * 
+     * @param clauseName
+     * @return 
+     */
+    public abstract Boolean isClauseLegalImpl(String clauseName);
+
+    /**
+     * 
+     * @param clauseName
+     * @return 
+     */
+    public final Object isClauseLegal(String clauseName) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isClauseLegal", Optional.empty(), clauseName);
+        	}
+        	Boolean result = this.isClauseLegalImpl(clauseName);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isClauseLegal", Optional.ofNullable(result), clauseName);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isClauseLegal", e);
+        }
+    }
+
+    /**
+     * The kind of the directive
+     */
+    public abstract String getKindImpl();
+
+    /**
+     * The kind of the directive
+     */
+    public final Object getKind() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
+        	}
+        	String result = this.getKindImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "kind", e);
+        }
+    }
+
+    /**
      * Get value on attribute lastprivate
      * @return the attribute's value
      */
@@ -391,91 +321,151 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute shared
-     * @return the attribute's value
+     * An integer expression, or undefined if no 'num_threads' clause is defined
      */
-    public abstract String[] getSharedArrayImpl();
+    public abstract String getNumThreadsImpl();
 
     /**
-     * The variable names of all shared clauses, or empty array if no shared clause is defined
+     * An integer expression, or undefined if no 'num_threads' clause is defined
      */
-    public Object getSharedImpl() {
-        String[] stringArrayImpl0 = getSharedArrayImpl();
+    public final Object getNumThreads() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numThreads", Optional.empty());
+        	}
+        	String result = this.getNumThreadsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "numThreads", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "numThreads", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defNumThreadsImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def numThreads with type String not implemented ");
+    }
+
+    /**
+     * An integer expression, or undefined if no 'ordered' clause with a parameter is defined
+     */
+    public abstract String getOrderedImpl();
+
+    /**
+     * An integer expression, or undefined if no 'ordered' clause with a parameter is defined
+     */
+    public final Object getOrdered() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "ordered", Optional.empty());
+        	}
+        	String result = this.getOrderedImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "ordered", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "ordered", e);
+        }
+    }
+
+    /**
+     * Get value on attribute _private
+     * @return the attribute's value
+     */
+    public abstract String[] getPrivateArrayImpl();
+
+    /**
+     * The variable names of all private clauses, or empty array if no private clause is defined
+     */
+    public Object getPrivateImpl() {
+        String[] stringArrayImpl0 = getPrivateArrayImpl();
         Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
     /**
-     * The variable names of all shared clauses, or empty array if no shared clause is defined
+     * The variable names of all private clauses, or empty array if no private clause is defined
      */
-    public final Object getShared() {
+    public final Object getPrivate() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "shared", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "private", Optional.empty());
         	}
-        	Object result = this.getSharedImpl();
+        	Object result = this.getPrivateImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "shared", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "private", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "shared", e);
+        	throw new AttributeException(get_class(), "private", e);
         }
     }
 
     /**
-     * Get value on attribute copyin
-     * @return the attribute's value
+     * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
      */
-    public abstract String[] getCopyinArrayImpl();
+    public abstract String getProcBindImpl();
 
     /**
-     * The variable names of all copyin clauses, or empty array if no copyin clause is defined
+     * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
      */
-    public Object getCopyinImpl() {
-        String[] stringArrayImpl0 = getCopyinArrayImpl();
+    public final Object getProcBind() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "procBind", Optional.empty());
+        	}
+        	String result = this.getProcBindImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "procBind", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "procBind", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defProcBindImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def procBind with type String not implemented ");
+    }
+
+    /**
+     * Get value on attribute reductionKinds
+     * @return the attribute's value
+     */
+    public abstract String[] getReductionKindsArrayImpl();
+
+    /**
+     * The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined
+     */
+    public Object getReductionKindsImpl() {
+        String[] stringArrayImpl0 = getReductionKindsArrayImpl();
         Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
     /**
-     * The variable names of all copyin clauses, or empty array if no copyin clause is defined
+     * The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined
      */
-    public final Object getCopyin() {
+    public final Object getReductionKinds() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "copyin", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "reductionKinds", Optional.empty());
         	}
-        	Object result = this.getCopyinImpl();
+        	Object result = this.getReductionKindsImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "copyin", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "reductionKinds", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "copyin", e);
-        }
-    }
-
-    /**
-     * One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined
-     */
-    public abstract String getScheduleKindImpl();
-
-    /**
-     * One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined
-     */
-    public final Object getScheduleKind() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "scheduleKind", Optional.empty());
-        	}
-        	String result = this.getScheduleKindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "scheduleKind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "scheduleKind", e);
+        	throw new AttributeException(get_class(), "reductionKinds", e);
         }
     }
 
@@ -499,6 +489,29 @@ public abstract class AOmp extends APragma {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "scheduleChunkSize", e);
+        }
+    }
+
+    /**
+     * One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined
+     */
+    public abstract String getScheduleKindImpl();
+
+    /**
+     * One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined
+     */
+    public final Object getScheduleKind() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "scheduleKind", Optional.empty());
+        	}
+        	String result = this.getScheduleKindImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "scheduleKind", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "scheduleKind", e);
         }
     }
 
@@ -536,48 +549,35 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * An integer expression, or undefined if no 'collapse' clause is defined
+     * Get value on attribute shared
+     * @return the attribute's value
      */
-    public abstract String getCollapseImpl();
+    public abstract String[] getSharedArrayImpl();
 
     /**
-     * An integer expression, or undefined if no 'collapse' clause is defined
+     * The variable names of all shared clauses, or empty array if no shared clause is defined
      */
-    public final Object getCollapse() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "collapse", Optional.empty());
-        	}
-        	String result = this.getCollapseImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "collapse", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "collapse", e);
-        }
+    public Object getSharedImpl() {
+        String[] stringArrayImpl0 = getSharedArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
     }
 
     /**
-     * An integer expression, or undefined if no 'ordered' clause with a parameter is defined
+     * The variable names of all shared clauses, or empty array if no shared clause is defined
      */
-    public abstract String getOrderedImpl();
-
-    /**
-     * An integer expression, or undefined if no 'ordered' clause with a parameter is defined
-     */
-    public final Object getOrdered() {
+    public final Object getShared() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "ordered", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "shared", Optional.empty());
         	}
-        	String result = this.getOrderedImpl();
+        	Object result = this.getSharedImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "ordered", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "shared", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "ordered", e);
+        	throw new AttributeException(get_class(), "shared", e);
         }
     }
 

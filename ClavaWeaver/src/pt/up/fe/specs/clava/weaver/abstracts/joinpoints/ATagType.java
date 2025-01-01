@@ -27,6 +27,29 @@ public abstract class ATagType extends AType {
         this.aType = aType;
     }
     /**
+     * a 'decl' join point that represents the declaration of this tag type
+     */
+    public abstract ADecl getDeclImpl();
+
+    /**
+     * a 'decl' join point that represents the declaration of this tag type
+     */
+    public final Object getDecl() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "decl", Optional.empty());
+        	}
+        	ADecl result = this.getDeclImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "decl", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "decl", e);
+        }
+    }
+
+    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -48,29 +71,6 @@ public abstract class ATagType extends AType {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
-        }
-    }
-
-    /**
-     * a 'decl' join point that represents the declaration of this tag type
-     */
-    public abstract ADecl getDeclImpl();
-
-    /**
-     * a 'decl' join point that represents the declaration of this tag type
-     */
-    public final Object getDecl() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "decl", Optional.empty());
-        	}
-        	ADecl result = this.getDeclImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "decl", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "decl", e);
         }
     }
 

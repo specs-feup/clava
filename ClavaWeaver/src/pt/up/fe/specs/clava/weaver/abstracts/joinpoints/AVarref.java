@@ -28,6 +28,102 @@ public abstract class AVarref extends AExpression {
         this.aExpression = aExpression;
     }
     /**
+     * Get value on attribute declaration
+     * @return the attribute's value
+     */
+    public abstract ADeclarator getDeclarationImpl();
+
+    /**
+     * Get value on attribute declaration
+     * @return the attribute's value
+     */
+    public final Object getDeclaration() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declaration", Optional.empty());
+        	}
+        	ADeclarator result = this.getDeclarationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "declaration", e);
+        }
+    }
+
+    /**
+     * true if this variable reference has a MS-style property, false otherwise
+     */
+    public abstract Boolean getHasPropertyImpl();
+
+    /**
+     * true if this variable reference has a MS-style property, false otherwise
+     */
+    public final Object getHasProperty() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasProperty", Optional.empty());
+        	}
+        	Boolean result = this.getHasPropertyImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasProperty", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasProperty", e);
+        }
+    }
+
+    /**
+     * true if this varref represents a function call
+     */
+    public abstract Boolean getIsFunctionCallImpl();
+
+    /**
+     * true if this varref represents a function call
+     */
+    public final Object getIsFunctionCall() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isFunctionCall", Optional.empty());
+        	}
+        	Boolean result = this.getIsFunctionCallImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isFunctionCall", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isFunctionCall", e);
+        }
+    }
+
+    /**
+     * Get value on attribute kind
+     * @return the attribute's value
+     */
+    public abstract String getKindImpl();
+
+    /**
+     * Get value on attribute kind
+     * @return the attribute's value
+     */
+    public final Object getKind() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
+        	}
+        	String result = this.getKindImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "kind", e);
+        }
+    }
+
+    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -60,102 +156,6 @@ public abstract class AVarref extends AExpression {
     }
 
     /**
-     * Get value on attribute kind
-     * @return the attribute's value
-     */
-    public abstract String getKindImpl();
-
-    /**
-     * Get value on attribute kind
-     * @return the attribute's value
-     */
-    public final Object getKind() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
-        	}
-        	String result = this.getKindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "kind", e);
-        }
-    }
-
-    /**
-     * expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
-     */
-    public abstract AExpression getUseExprImpl();
-
-    /**
-     * expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
-     */
-    public final Object getUseExpr() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "useExpr", Optional.empty());
-        	}
-        	AExpression result = this.getUseExprImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "useExpr", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "useExpr", e);
-        }
-    }
-
-    /**
-     * true if this varref represents a function call
-     */
-    public abstract Boolean getIsFunctionCallImpl();
-
-    /**
-     * true if this varref represents a function call
-     */
-    public final Object getIsFunctionCall() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isFunctionCall", Optional.empty());
-        	}
-        	Boolean result = this.getIsFunctionCallImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isFunctionCall", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isFunctionCall", e);
-        }
-    }
-
-    /**
-     * Get value on attribute declaration
-     * @return the attribute's value
-     */
-    public abstract ADeclarator getDeclarationImpl();
-
-    /**
-     * Get value on attribute declaration
-     * @return the attribute's value
-     */
-    public final Object getDeclaration() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declaration", Optional.empty());
-        	}
-        	ADeclarator result = this.getDeclarationImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "declaration", e);
-        }
-    }
-
-    /**
      * if this variable reference has a MS-style property, returns the property name. Returns undefined otherwise
      */
     public abstract String getPropertyImpl();
@@ -179,25 +179,25 @@ public abstract class AVarref extends AExpression {
     }
 
     /**
-     * true if this variable reference has a MS-style property, false otherwise
+     * expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
      */
-    public abstract Boolean getHasPropertyImpl();
+    public abstract AExpression getUseExprImpl();
 
     /**
-     * true if this variable reference has a MS-style property, false otherwise
+     * expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
      */
-    public final Object getHasProperty() {
+    public final Object getUseExpr() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasProperty", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "useExpr", Optional.empty());
         	}
-        	Boolean result = this.getHasPropertyImpl();
+        	AExpression result = this.getUseExprImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasProperty", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "useExpr", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasProperty", e);
+        	throw new AttributeException(get_class(), "useExpr", e);
         }
     }
 

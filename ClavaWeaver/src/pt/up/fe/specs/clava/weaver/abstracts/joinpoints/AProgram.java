@@ -21,27 +21,262 @@ import java.util.Arrays;
 public abstract class AProgram extends ACxxWeaverJoinPoint {
 
     /**
-     * Get value on attribute name
+     * Get value on attribute baseFolder
      * @return the attribute's value
      */
-    public abstract String getNameImpl();
+    public abstract String getBaseFolderImpl();
 
     /**
-     * Get value on attribute name
+     * Get value on attribute baseFolder
      * @return the attribute's value
      */
-    public final Object getName() {
+    public final Object getBaseFolder() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "baseFolder", Optional.empty());
         	}
-        	String result = this.getNameImpl();
+        	String result = this.getBaseFolderImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "baseFolder", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "name", e);
+        	throw new AttributeException(get_class(), "baseFolder", e);
+        }
+    }
+
+    /**
+     * Get value on attribute defaultFlags
+     * @return the attribute's value
+     */
+    public abstract String[] getDefaultFlagsArrayImpl();
+
+    /**
+     * Get value on attribute defaultFlags
+     * @return the attribute's value
+     */
+    public Object getDefaultFlagsImpl() {
+        String[] stringArrayImpl0 = getDefaultFlagsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute defaultFlags
+     * @return the attribute's value
+     */
+    public final Object getDefaultFlags() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "defaultFlags", Optional.empty());
+        	}
+        	Object result = this.getDefaultFlagsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "defaultFlags", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "defaultFlags", e);
+        }
+    }
+
+    /**
+     * Get value on attribute extraIncludes
+     * @return the attribute's value
+     */
+    public abstract String[] getExtraIncludesArrayImpl();
+
+    /**
+     * paths to includes that the current program depends on
+     */
+    public Object getExtraIncludesImpl() {
+        String[] stringArrayImpl0 = getExtraIncludesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * paths to includes that the current program depends on
+     */
+    public final Object getExtraIncludes() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraIncludes", Optional.empty());
+        	}
+        	Object result = this.getExtraIncludesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "extraIncludes", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "extraIncludes", e);
+        }
+    }
+
+    /**
+     * Get value on attribute extraLibs
+     * @return the attribute's value
+     */
+    public abstract String[] getExtraLibsArrayImpl();
+
+    /**
+     * link libraries of external projects the current program depends on
+     */
+    public Object getExtraLibsImpl() {
+        String[] stringArrayImpl0 = getExtraLibsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * link libraries of external projects the current program depends on
+     */
+    public final Object getExtraLibs() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraLibs", Optional.empty());
+        	}
+        	Object result = this.getExtraLibsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "extraLibs", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "extraLibs", e);
+        }
+    }
+
+    /**
+     * Get value on attribute extraProjects
+     * @return the attribute's value
+     */
+    public abstract String[] getExtraProjectsArrayImpl();
+
+    /**
+     * paths to folders of projects that the current program depends on
+     */
+    public Object getExtraProjectsImpl() {
+        String[] stringArrayImpl0 = getExtraProjectsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * paths to folders of projects that the current program depends on
+     */
+    public final Object getExtraProjects() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraProjects", Optional.empty());
+        	}
+        	Object result = this.getExtraProjectsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "extraProjects", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "extraProjects", e);
+        }
+    }
+
+    /**
+     * Get value on attribute extraSources
+     * @return the attribute's value
+     */
+    public abstract String[] getExtraSourcesArrayImpl();
+
+    /**
+     * paths to sources that the current program depends on
+     */
+    public Object getExtraSourcesImpl() {
+        String[] stringArrayImpl0 = getExtraSourcesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * paths to sources that the current program depends on
+     */
+    public final Object getExtraSources() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraSources", Optional.empty());
+        	}
+        	Object result = this.getExtraSourcesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "extraSources", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "extraSources", e);
+        }
+    }
+
+    /**
+     * Get value on attribute files
+     * @return the attribute's value
+     */
+    public abstract AFile[] getFilesArrayImpl();
+
+    /**
+     * the source files in this program
+     */
+    public Object getFilesImpl() {
+        AFile[] aFileArrayImpl0 = getFilesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFileArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the source files in this program
+     */
+    public final Object getFiles() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "files", Optional.empty());
+        	}
+        	Object result = this.getFilesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "files", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "files", e);
+        }
+    }
+
+    /**
+     * Get value on attribute includeFolders
+     * @return the attribute's value
+     */
+    public abstract String[] getIncludeFoldersArrayImpl();
+
+    /**
+     * Get value on attribute includeFolders
+     * @return the attribute's value
+     */
+    public Object getIncludeFoldersImpl() {
+        String[] stringArrayImpl0 = getIncludeFoldersArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute includeFolders
+     * @return the attribute's value
+     */
+    public final Object getIncludeFolders() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "includeFolders", Optional.empty());
+        	}
+        	Object result = this.getIncludeFoldersImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "includeFolders", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "includeFolders", e);
         }
     }
 
@@ -65,6 +300,54 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCxx", e);
+        }
+    }
+
+    /**
+     * a function join point with the main function of the program, if one is available
+     */
+    public abstract AFunction getMainImpl();
+
+    /**
+     * a function join point with the main function of the program, if one is available
+     */
+    public final Object getMain() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "main", Optional.empty());
+        	}
+        	AFunction result = this.getMainImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "main", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "main", e);
+        }
+    }
+
+    /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    public abstract String getNameImpl();
+
+    /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    public final Object getName() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        	}
+        	String result = this.getNameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "name", e);
         }
     }
 
@@ -115,41 +398,6 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute defaultFlags
-     * @return the attribute's value
-     */
-    public abstract String[] getDefaultFlagsArrayImpl();
-
-    /**
-     * Get value on attribute defaultFlags
-     * @return the attribute's value
-     */
-    public Object getDefaultFlagsImpl() {
-        String[] stringArrayImpl0 = getDefaultFlagsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Get value on attribute defaultFlags
-     * @return the attribute's value
-     */
-    public final Object getDefaultFlags() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "defaultFlags", Optional.empty());
-        	}
-        	Object result = this.getDefaultFlagsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "defaultFlags", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "defaultFlags", e);
-        }
-    }
-
-    /**
      * Get value on attribute userFlags
      * @return the attribute's value
      */
@@ -185,66 +433,6 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute includeFolders
-     * @return the attribute's value
-     */
-    public abstract String[] getIncludeFoldersArrayImpl();
-
-    /**
-     * Get value on attribute includeFolders
-     * @return the attribute's value
-     */
-    public Object getIncludeFoldersImpl() {
-        String[] stringArrayImpl0 = getIncludeFoldersArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Get value on attribute includeFolders
-     * @return the attribute's value
-     */
-    public final Object getIncludeFolders() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "includeFolders", Optional.empty());
-        	}
-        	Object result = this.getIncludeFoldersImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "includeFolders", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "includeFolders", e);
-        }
-    }
-
-    /**
-     * Get value on attribute baseFolder
-     * @return the attribute's value
-     */
-    public abstract String getBaseFolderImpl();
-
-    /**
-     * Get value on attribute baseFolder
-     * @return the attribute's value
-     */
-    public final Object getBaseFolder() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "baseFolder", Optional.empty());
-        	}
-        	String result = this.getBaseFolderImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "baseFolder", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "baseFolder", e);
-        }
-    }
-
-    /**
      * Get value on attribute weavingFolder
      * @return the attribute's value
      */
@@ -266,194 +454,6 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "weavingFolder", e);
-        }
-    }
-
-    /**
-     * Get value on attribute extraSources
-     * @return the attribute's value
-     */
-    public abstract String[] getExtraSourcesArrayImpl();
-
-    /**
-     * paths to sources that the current program depends on
-     */
-    public Object getExtraSourcesImpl() {
-        String[] stringArrayImpl0 = getExtraSourcesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * paths to sources that the current program depends on
-     */
-    public final Object getExtraSources() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraSources", Optional.empty());
-        	}
-        	Object result = this.getExtraSourcesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "extraSources", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "extraSources", e);
-        }
-    }
-
-    /**
-     * Get value on attribute extraIncludes
-     * @return the attribute's value
-     */
-    public abstract String[] getExtraIncludesArrayImpl();
-
-    /**
-     * paths to includes that the current program depends on
-     */
-    public Object getExtraIncludesImpl() {
-        String[] stringArrayImpl0 = getExtraIncludesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * paths to includes that the current program depends on
-     */
-    public final Object getExtraIncludes() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraIncludes", Optional.empty());
-        	}
-        	Object result = this.getExtraIncludesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "extraIncludes", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "extraIncludes", e);
-        }
-    }
-
-    /**
-     * Get value on attribute extraProjects
-     * @return the attribute's value
-     */
-    public abstract String[] getExtraProjectsArrayImpl();
-
-    /**
-     * paths to folders of projects that the current program depends on
-     */
-    public Object getExtraProjectsImpl() {
-        String[] stringArrayImpl0 = getExtraProjectsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * paths to folders of projects that the current program depends on
-     */
-    public final Object getExtraProjects() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraProjects", Optional.empty());
-        	}
-        	Object result = this.getExtraProjectsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "extraProjects", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "extraProjects", e);
-        }
-    }
-
-    /**
-     * Get value on attribute extraLibs
-     * @return the attribute's value
-     */
-    public abstract String[] getExtraLibsArrayImpl();
-
-    /**
-     * link libraries of external projects the current program depends on
-     */
-    public Object getExtraLibsImpl() {
-        String[] stringArrayImpl0 = getExtraLibsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * link libraries of external projects the current program depends on
-     */
-    public final Object getExtraLibs() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraLibs", Optional.empty());
-        	}
-        	Object result = this.getExtraLibsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "extraLibs", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "extraLibs", e);
-        }
-    }
-
-    /**
-     * a function join point with the main function of the program, if one is available
-     */
-    public abstract AFunction getMainImpl();
-
-    /**
-     * a function join point with the main function of the program, if one is available
-     */
-    public final Object getMain() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "main", Optional.empty());
-        	}
-        	AFunction result = this.getMainImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "main", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "main", e);
-        }
-    }
-
-    /**
-     * Get value on attribute files
-     * @return the attribute's value
-     */
-    public abstract AFile[] getFilesArrayImpl();
-
-    /**
-     * the source files in this program
-     */
-    public Object getFilesImpl() {
-        AFile[] aFileArrayImpl0 = getFilesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFileArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * the source files in this program
-     */
-    public final Object getFiles() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "files", Optional.empty());
-        	}
-        	Object result = this.getFilesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "files", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "files", e);
         }
     }
 

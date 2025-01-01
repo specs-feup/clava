@@ -28,6 +28,29 @@ public abstract class AMarker extends APragma {
         this.aPragma = aPragma;
     }
     /**
+     * A scope, associated with this marker
+     */
+    public abstract AJoinPoint getContentsImpl();
+
+    /**
+     * A scope, associated with this marker
+     */
+    public final Object getContents() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "contents", Optional.empty());
+        	}
+        	AJoinPoint result = this.getContentsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "contents", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "contents", e);
+        }
+    }
+
+    /**
      * Get value on attribute id
      * @return the attribute's value
      */
@@ -49,29 +72,6 @@ public abstract class AMarker extends APragma {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "id", e);
-        }
-    }
-
-    /**
-     * A scope, associated with this marker
-     */
-    public abstract AJoinPoint getContentsImpl();
-
-    /**
-     * A scope, associated with this marker
-     */
-    public final Object getContents() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "contents", Optional.empty());
-        	}
-        	AJoinPoint result = this.getContentsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "contents", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "contents", e);
         }
     }
 

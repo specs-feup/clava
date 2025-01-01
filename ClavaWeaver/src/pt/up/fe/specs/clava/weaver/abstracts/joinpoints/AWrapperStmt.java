@@ -27,31 +27,6 @@ public abstract class AWrapperStmt extends AStatement {
         this.aStatement = aStatement;
     }
     /**
-     * Get value on attribute kind
-     * @return the attribute's value
-     */
-    public abstract String getKindImpl();
-
-    /**
-     * Get value on attribute kind
-     * @return the attribute's value
-     */
-    public final Object getKind() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
-        	}
-        	String result = this.getKindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "kind", e);
-        }
-    }
-
-    /**
      * Get value on attribute content
      * @return the attribute's value
      */
@@ -73,6 +48,31 @@ public abstract class AWrapperStmt extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "content", e);
+        }
+    }
+
+    /**
+     * Get value on attribute kind
+     * @return the attribute's value
+     */
+    public abstract String getKindImpl();
+
+    /**
+     * Get value on attribute kind
+     * @return the attribute's value
+     */
+    public final Object getKind() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
+        	}
+        	String result = this.getKindImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "kind", e);
         }
     }
 

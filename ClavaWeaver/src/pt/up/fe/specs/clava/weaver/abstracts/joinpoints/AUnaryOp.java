@@ -29,31 +29,6 @@ public abstract class AUnaryOp extends AOp {
         this.aOp = aOp;
     }
     /**
-     * Get value on attribute operand
-     * @return the attribute's value
-     */
-    public abstract AExpression getOperandImpl();
-
-    /**
-     * Get value on attribute operand
-     * @return the attribute's value
-     */
-    public final Object getOperand() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "operand", Optional.empty());
-        	}
-        	AExpression result = this.getOperandImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "operand", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "operand", e);
-        }
-    }
-
-    /**
      * Get value on attribute isPointerDeref
      * @return the attribute's value
      */
@@ -75,6 +50,31 @@ public abstract class AUnaryOp extends AOp {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPointerDeref", e);
+        }
+    }
+
+    /**
+     * Get value on attribute operand
+     * @return the attribute's value
+     */
+    public abstract AExpression getOperandImpl();
+
+    /**
+     * Get value on attribute operand
+     * @return the attribute's value
+     */
+    public final Object getOperand() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "operand", Optional.empty());
+        	}
+        	AExpression result = this.getOperandImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "operand", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "operand", e);
         }
     }
 
