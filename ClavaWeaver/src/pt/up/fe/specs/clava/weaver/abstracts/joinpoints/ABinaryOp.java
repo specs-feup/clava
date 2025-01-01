@@ -1096,6 +1096,20 @@ public abstract class ABinaryOp extends AOp {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "left": {
+        	if(value instanceof AExpression){
+        		this.defLeftImpl((AExpression)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "right": {
+        	if(value instanceof AExpression){
+        		this.defRightImpl((AExpression)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "data": {
         	if(value instanceof Object){
         		this.defDataImpl((Object)value);
@@ -1124,20 +1138,6 @@ public abstract class ABinaryOp extends AOp {
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "left": {
-        	if(value instanceof AExpression){
-        		this.defLeftImpl((AExpression)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "right": {
-        	if(value instanceof AExpression){
-        		this.defRightImpl((AExpression)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

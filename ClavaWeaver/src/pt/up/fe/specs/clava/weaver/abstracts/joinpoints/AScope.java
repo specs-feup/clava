@@ -1678,6 +1678,13 @@ public abstract class AScope extends AStatement {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "naked": {
+        	if(value instanceof Boolean){
+        		this.defNakedImpl((Boolean)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "data": {
         	if(value instanceof Object){
         		this.defDataImpl((Object)value);
@@ -1706,13 +1713,6 @@ public abstract class AScope extends AStatement {
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "naked": {
-        	if(value instanceof Boolean){
-        		this.defNakedImpl((Boolean)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

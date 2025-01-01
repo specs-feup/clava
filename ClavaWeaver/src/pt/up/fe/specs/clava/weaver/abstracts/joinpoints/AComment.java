@@ -97,6 +97,13 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "text": {
+        	if(value instanceof String){
+        		this.defTextImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "data": {
         	if(value instanceof Object){
         		this.defDataImpl((Object)value);
@@ -125,13 +132,6 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "text": {
-        	if(value instanceof String){
-        		this.defTextImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

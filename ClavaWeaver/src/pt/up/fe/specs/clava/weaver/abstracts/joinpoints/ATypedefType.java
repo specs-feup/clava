@@ -1133,16 +1133,23 @@ public abstract class ATypedefType extends AType {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
+        case "desugar": {
+        	if(value instanceof AType){
+        		this.defDesugarImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "desugar": {
-        	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
+        case "templateArgsTypes": {
+        	if(value instanceof AType[]){
+        		this.defTemplateArgsTypesImpl((AType[])value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1168,13 +1175,6 @@ public abstract class ATypedefType extends AType {
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

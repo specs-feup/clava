@@ -1367,6 +1367,13 @@ public abstract class ABody extends AScope {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "naked": {
+        	if(value instanceof Boolean){
+        		this.defNakedImpl((Boolean)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "data": {
         	if(value instanceof Object){
         		this.defDataImpl((Object)value);
@@ -1395,13 +1402,6 @@ public abstract class ABody extends AScope {
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "naked": {
-        	if(value instanceof Boolean){
-        		this.defNakedImpl((Boolean)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

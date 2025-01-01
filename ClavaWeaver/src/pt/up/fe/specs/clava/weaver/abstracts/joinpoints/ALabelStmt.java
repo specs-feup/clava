@@ -1103,16 +1103,16 @@ public abstract class ALabelStmt extends AStatement {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
+        case "decl": {
+        	if(value instanceof ALabelDecl){
+        		this.defDeclImpl((ALabelDecl)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "decl": {
-        	if(value instanceof ALabelDecl){
-        		this.defDeclImpl((ALabelDecl)value);
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

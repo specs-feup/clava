@@ -1116,9 +1116,16 @@ public abstract class AVariableArrayType extends AArrayType {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
+        case "sizeExpr": {
+        	if(value instanceof AExpression){
+        		this.defSizeExprImpl((AExpression)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "elementType": {
+        	if(value instanceof AType){
+        		this.defElementTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1130,9 +1137,16 @@ public abstract class AVariableArrayType extends AArrayType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "elementType": {
-        	if(value instanceof AType){
-        		this.defElementTypeImpl((AType)value);
+        case "templateArgsTypes": {
+        	if(value instanceof AType[]){
+        		this.defTemplateArgsTypesImpl((AType[])value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1158,20 +1172,6 @@ public abstract class AVariableArrayType extends AArrayType {
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "sizeExpr": {
-        	if(value instanceof AExpression){
-        		this.defSizeExprImpl((AExpression)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

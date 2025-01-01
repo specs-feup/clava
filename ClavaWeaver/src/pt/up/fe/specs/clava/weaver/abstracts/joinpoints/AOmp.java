@@ -1937,6 +1937,20 @@ public abstract class AOmp extends APragma {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "numThreads": {
+        	if(value instanceof String){
+        		this.defNumThreadsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "procBind": {
+        	if(value instanceof String){
+        		this.defProcBindImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "data": {
         	if(value instanceof Object){
         		this.defDataImpl((Object)value);
@@ -1965,20 +1979,6 @@ public abstract class AOmp extends APragma {
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "numThreads": {
-        	if(value instanceof String){
-        		this.defNumThreadsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "procBind": {
-        	if(value instanceof String){
-        		this.defProcBindImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

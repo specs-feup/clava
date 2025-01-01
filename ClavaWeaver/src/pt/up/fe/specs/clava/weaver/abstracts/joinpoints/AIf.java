@@ -1307,16 +1307,23 @@ public abstract class AIf extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
+        case "else": {
+        	if(value instanceof AStatement){
+        		this.defElseImpl((AStatement)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "else": {
+        case "then": {
         	if(value instanceof AStatement){
-        		this.defElseImpl((AStatement)value);
+        		this.defThenImpl((AStatement)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1342,13 +1349,6 @@ public abstract class AIf extends AStatement {
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "then": {
-        	if(value instanceof AStatement){
-        		this.defThenImpl((AStatement)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

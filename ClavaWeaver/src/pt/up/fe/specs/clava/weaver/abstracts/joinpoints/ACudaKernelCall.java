@@ -1247,6 +1247,13 @@ public abstract class ACudaKernelCall extends ACall {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "data": {
         	if(value instanceof Object){
         		this.defDataImpl((Object)value);
@@ -1275,13 +1282,6 @@ public abstract class ACudaKernelCall extends ACall {
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

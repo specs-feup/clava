@@ -1428,20 +1428,6 @@ public abstract class ACilkFor extends ALoop {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "init": {
         	if(value instanceof String){
         		this.defInitImpl((String)value);
@@ -1456,17 +1442,6 @@ public abstract class ACilkFor extends ALoop {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "isParallel": {
         	if(value instanceof Boolean){
         		this.defIsParallelImpl((Boolean)value);
@@ -1474,6 +1449,31 @@ public abstract class ACilkFor extends ALoop {
         	}
         	if(value instanceof String){
         		this.defIsParallelImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "firstChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defFirstChildImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "inlineComments": {
+        	if(value instanceof String[]){
+        		this.defInlineCommentsImpl((String[])value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defInlineCommentsImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

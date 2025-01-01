@@ -1103,6 +1103,13 @@ public abstract class AGotoStmt extends AStatement {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "label": {
+        	if(value instanceof ALabelDecl){
+        		this.defLabelImpl((ALabelDecl)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "data": {
         	if(value instanceof Object){
         		this.defDataImpl((Object)value);
@@ -1124,13 +1131,6 @@ public abstract class AGotoStmt extends AStatement {
         	}
         	if(value instanceof String){
         		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "label": {
-        	if(value instanceof ALabelDecl){
-        		this.defLabelImpl((ALabelDecl)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

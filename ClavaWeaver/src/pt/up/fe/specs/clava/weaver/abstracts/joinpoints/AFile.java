@@ -944,6 +944,13 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "relativeFolderpath": {
+        	if(value instanceof String){
+        		this.defRelativeFolderpathImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "data": {
         	if(value instanceof Object){
         		this.defDataImpl((Object)value);
@@ -972,13 +979,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "relativeFolderpath": {
-        	if(value instanceof String){
-        		this.defRelativeFolderpathImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

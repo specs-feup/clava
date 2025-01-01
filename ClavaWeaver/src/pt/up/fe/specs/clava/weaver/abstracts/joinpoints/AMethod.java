@@ -1409,48 +1409,9 @@ public abstract class AMethod extends AFunction {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "functionType": {
         	if(value instanceof AFunctionType){
         		this.defFunctionTypeImpl((AFunctionType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1462,6 +1423,20 @@ public abstract class AMethod extends AFunction {
         	}
         	if(value instanceof String[]){
         		this.defParamsImpl((String[])value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "returnType": {
+        	if(value instanceof AType){
+        		this.defReturnTypeImpl((AType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1480,9 +1455,34 @@ public abstract class AMethod extends AFunction {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "returnType": {
-        	if(value instanceof AType){
-        		this.defReturnTypeImpl((AType)value);
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "firstChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defFirstChildImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "inlineComments": {
+        	if(value instanceof String[]){
+        		this.defInlineCommentsImpl((String[])value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defInlineCommentsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "lastChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defLastChildImpl((AJoinPoint)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

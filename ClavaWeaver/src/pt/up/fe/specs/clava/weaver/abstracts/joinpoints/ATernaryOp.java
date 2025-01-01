@@ -1068,16 +1068,23 @@ public abstract class ATernaryOp extends AOp {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
+        case "falseExpr": {
+        	if(value instanceof AExpression){
+        		this.defFalseExprImpl((AExpression)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "falseExpr": {
+        case "trueExpr": {
         	if(value instanceof AExpression){
-        		this.defFalseExprImpl((AExpression)value);
+        		this.defTrueExprImpl((AExpression)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1103,13 +1110,6 @@ public abstract class ATernaryOp extends AOp {
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "trueExpr": {
-        	if(value instanceof AExpression){
-        		this.defTrueExprImpl((AExpression)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
