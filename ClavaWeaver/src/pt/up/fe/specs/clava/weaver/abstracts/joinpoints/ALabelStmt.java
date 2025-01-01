@@ -1110,9 +1110,9 @@ public abstract class ALabelStmt extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
+        case "decl": {
+        	if(value instanceof ALabelDecl){
+        		this.defDeclImpl((ALabelDecl)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1142,9 +1142,9 @@ public abstract class ALabelStmt extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "decl": {
-        	if(value instanceof ALabelDecl){
-        		this.defDeclImpl((ALabelDecl)value);
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

@@ -1078,16 +1078,16 @@ public abstract class AMemberAccess extends AExpression {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
+        case "arrow": {
+        	if(value instanceof Boolean){
+        		this.defArrowImpl((Boolean)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1117,9 +1117,9 @@ public abstract class AMemberAccess extends AExpression {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "arrow": {
-        	if(value instanceof Boolean){
-        		this.defArrowImpl((Boolean)value);
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

@@ -1061,6 +1061,13 @@ public abstract class ATernaryOp extends AOp {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "cond": {
+        	if(value instanceof AExpression){
+        		this.defCondImpl((AExpression)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "data": {
         	if(value instanceof Object){
         		this.defDataImpl((Object)value);
@@ -1068,9 +1075,9 @@ public abstract class ATernaryOp extends AOp {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
+        case "falseExpr": {
+        	if(value instanceof AExpression){
+        		this.defFalseExprImpl((AExpression)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1100,13 +1107,6 @@ public abstract class ATernaryOp extends AOp {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "cond": {
-        	if(value instanceof AExpression){
-        		this.defCondImpl((AExpression)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "trueExpr": {
         	if(value instanceof AExpression){
         		this.defTrueExprImpl((AExpression)value);
@@ -1114,9 +1114,9 @@ public abstract class ATernaryOp extends AOp {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "falseExpr": {
-        	if(value instanceof AExpression){
-        		this.defFalseExprImpl((AExpression)value);
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

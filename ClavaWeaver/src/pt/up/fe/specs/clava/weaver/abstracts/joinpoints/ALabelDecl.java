@@ -972,13 +972,6 @@ public abstract class ALabelDecl extends ANamedDecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "firstChild": {
         	if(value instanceof AJoinPoint){
         		this.defFirstChildImpl((AJoinPoint)value);
@@ -1011,6 +1004,13 @@ public abstract class ALabelDecl extends ANamedDecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "qualifiedName": {
+        	if(value instanceof String){
+        		this.defQualifiedNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "qualifiedPrefix": {
         	if(value instanceof String){
         		this.defQualifiedPrefixImpl((String)value);
@@ -1018,9 +1018,9 @@ public abstract class ALabelDecl extends ANamedDecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedName": {
-        	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

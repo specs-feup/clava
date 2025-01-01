@@ -1300,6 +1300,13 @@ public abstract class AIf extends AStatement {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "cond": {
+        	if(value instanceof AExpression){
+        		this.defCondImpl((AExpression)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "data": {
         	if(value instanceof Object){
         		this.defDataImpl((Object)value);
@@ -1307,9 +1314,9 @@ public abstract class AIf extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
+        case "else": {
+        	if(value instanceof AStatement){
+        		this.defElseImpl((AStatement)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1339,13 +1346,6 @@ public abstract class AIf extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "cond": {
-        	if(value instanceof AExpression){
-        		this.defCondImpl((AExpression)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "then": {
         	if(value instanceof AStatement){
         		this.defThenImpl((AStatement)value);
@@ -1353,9 +1353,9 @@ public abstract class AIf extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "else": {
-        	if(value instanceof AStatement){
-        		this.defElseImpl((AStatement)value);
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

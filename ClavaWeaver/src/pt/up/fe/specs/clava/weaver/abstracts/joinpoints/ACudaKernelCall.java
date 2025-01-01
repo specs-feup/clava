@@ -1240,16 +1240,16 @@ public abstract class ACudaKernelCall extends ACall {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
+        case "config": {
+        	if(value instanceof AExpression[]){
+        		this.defConfigImpl((AExpression[])value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1279,16 +1279,16 @@ public abstract class ACudaKernelCall extends ACall {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "config": {
-        	if(value instanceof AExpression[]){
-        		this.defConfigImpl((AExpression[])value);
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

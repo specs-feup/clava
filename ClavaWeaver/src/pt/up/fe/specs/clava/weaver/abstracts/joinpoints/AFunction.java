@@ -2043,6 +2043,13 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "body": {
+        	if(value instanceof AScope){
+        		this.defBodyImpl((AScope)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "data": {
         	if(value instanceof Object){
         		this.defDataImpl((Object)value);
@@ -2050,16 +2057,16 @@ public abstract class AFunction extends ADeclarator {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
+        case "firstChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defFirstChildImpl((AJoinPoint)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
+        case "functionType": {
+        	if(value instanceof AFunctionType){
+        		this.defFunctionTypeImpl((AFunctionType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -2082,16 +2089,9 @@ public abstract class AFunction extends ADeclarator {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "functionType": {
-        	if(value instanceof AFunctionType){
-        		this.defFunctionTypeImpl((AFunctionType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "body": {
-        	if(value instanceof AScope){
-        		this.defBodyImpl((AScope)value);
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -2107,16 +2107,9 @@ public abstract class AFunction extends ADeclarator {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "returnType": {
-        	if(value instanceof AType){
-        		this.defReturnTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "name": {
+        case "qualifiedName": {
         	if(value instanceof String){
-        		this.defNameImpl((String)value);
+        		this.defQualifiedNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -2128,9 +2121,16 @@ public abstract class AFunction extends ADeclarator {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedName": {
-        	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
+        case "returnType": {
+        	if(value instanceof AType){
+        		this.defReturnTypeImpl((AType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

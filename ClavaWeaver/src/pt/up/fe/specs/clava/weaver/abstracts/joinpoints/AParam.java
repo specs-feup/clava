@@ -1044,13 +1044,6 @@ public abstract class AParam extends AVardecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "firstChild": {
         	if(value instanceof AJoinPoint){
         		this.defFirstChildImpl((AJoinPoint)value);
@@ -1076,16 +1069,16 @@ public abstract class AParam extends AVardecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "storageClass": {
+        case "name": {
         	if(value instanceof String){
-        		this.defStorageClassImpl((String)value);
+        		this.defNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "name": {
+        case "qualifiedName": {
         	if(value instanceof String){
-        		this.defNameImpl((String)value);
+        		this.defQualifiedNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1097,9 +1090,16 @@ public abstract class AParam extends AVardecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedName": {
+        case "storageClass": {
         	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
+        		this.defStorageClassImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

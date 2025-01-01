@@ -1154,9 +1154,9 @@ public abstract class AQualType extends AType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
+        case "desugar": {
         	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
+        		this.defDesugarImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1193,9 +1193,9 @@ public abstract class AQualType extends AType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "desugar": {
+        case "type": {
         	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
