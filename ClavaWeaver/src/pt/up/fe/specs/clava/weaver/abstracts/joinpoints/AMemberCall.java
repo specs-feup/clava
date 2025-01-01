@@ -78,30 +78,21 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Get value on attribute name
+     * Get value on attribute argListArrayImpl
      * @return the attribute's value
      */
     @Override
-    public String getNameImpl() {
-        return this.aCall.getNameImpl();
+    public AExpression[] getArgListArrayImpl() {
+        return this.aCall.getArgListArrayImpl();
     }
 
     /**
-     * Get value on attribute numArgs
+     * Get value on attribute argsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public Integer getNumArgsImpl() {
-        return this.aCall.getNumArgsImpl();
-    }
-
-    /**
-     * Get value on attribute memberNamesArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getMemberNamesArrayImpl() {
-        return this.aCall.getMemberNamesArrayImpl();
+    public AExpression[] getArgsArrayImpl() {
+        return this.aCall.getArgsArrayImpl();
     }
 
     /**
@@ -123,75 +114,12 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Get value on attribute argListArrayImpl
+     * Get value on attribute directCallee
      * @return the attribute's value
      */
     @Override
-    public AExpression[] getArgListArrayImpl() {
-        return this.aCall.getArgListArrayImpl();
-    }
-
-    /**
-     * Get value on attribute argsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AExpression[] getArgsArrayImpl() {
-        return this.aCall.getArgsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute getArg
-     * @return the attribute's value
-     */
-    @Override
-    public AExpression getArgImpl(int index) {
-        return this.aCall.getArgImpl(index);
-    }
-
-    /**
-     * Get value on attribute returnType
-     * @return the attribute's value
-     */
-    @Override
-    public AType getReturnTypeImpl() {
-        return this.aCall.getReturnTypeImpl();
-    }
-
-    /**
-     * Get value on attribute functionType
-     * @return the attribute's value
-     */
-    @Override
-    public AFunctionType getFunctionTypeImpl() {
-        return this.aCall.getFunctionTypeImpl();
-    }
-
-    /**
-     * Get value on attribute isMemberAccess
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsMemberAccessImpl() {
-        return this.aCall.getIsMemberAccessImpl();
-    }
-
-    /**
-     * Get value on attribute memberAccess
-     * @return the attribute's value
-     */
-    @Override
-    public AMemberAccess getMemberAccessImpl() {
-        return this.aCall.getMemberAccessImpl();
-    }
-
-    /**
-     * Get value on attribute isStmtCall
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsStmtCallImpl() {
-        return this.aCall.getIsStmtCallImpl();
+    public AFunction getDirectCalleeImpl() {
+        return this.aCall.getDirectCalleeImpl();
     }
 
     /**
@@ -204,21 +132,93 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
+     * Get value on attribute functionType
+     * @return the attribute's value
+     */
+    @Override
+    public AFunctionType getFunctionTypeImpl() {
+        return this.aCall.getFunctionTypeImpl();
+    }
+
+    /**
+     * Get value on attribute getArg
+     * @return the attribute's value
+     */
+    @Override
+    public AExpression getArgImpl(int index) {
+        return this.aCall.getArgImpl(index);
+    }
+
+    /**
+     * Get value on attribute isMemberAccess
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsMemberAccessImpl() {
+        return this.aCall.getIsMemberAccessImpl();
+    }
+
+    /**
+     * Get value on attribute isStmtCall
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsStmtCallImpl() {
+        return this.aCall.getIsStmtCallImpl();
+    }
+
+    /**
+     * Get value on attribute memberAccess
+     * @return the attribute's value
+     */
+    @Override
+    public AMemberAccess getMemberAccessImpl() {
+        return this.aCall.getMemberAccessImpl();
+    }
+
+    /**
+     * Get value on attribute memberNamesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getMemberNamesArrayImpl() {
+        return this.aCall.getMemberNamesArrayImpl();
+    }
+
+    /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    @Override
+    public String getNameImpl() {
+        return this.aCall.getNameImpl();
+    }
+
+    /**
+     * Get value on attribute numArgs
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getNumArgsImpl() {
+        return this.aCall.getNumArgsImpl();
+    }
+
+    /**
+     * Get value on attribute returnType
+     * @return the attribute's value
+     */
+    @Override
+    public AType getReturnTypeImpl() {
+        return this.aCall.getReturnTypeImpl();
+    }
+
+    /**
      * Get value on attribute signature
      * @return the attribute's value
      */
     @Override
     public String getSignatureImpl() {
         return this.aCall.getSignatureImpl();
-    }
-
-    /**
-     * Get value on attribute directCallee
-     * @return the attribute's value
-     */
-    @Override
-    public AFunction getDirectCalleeImpl() {
-        return this.aCall.getDirectCalleeImpl();
     }
 
     /**
@@ -249,21 +249,12 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Get value on attribute vardecl
+     * Get value on attribute implicitCast
      * @return the attribute's value
      */
     @Override
-    public AVardecl getVardeclImpl() {
-        return this.aCall.getVardeclImpl();
-    }
-
-    /**
-     * Get value on attribute use
-     * @return the attribute's value
-     */
-    @Override
-    public String getUseImpl() {
-        return this.aCall.getUseImpl();
+    public ACast getImplicitCastImpl() {
+        return this.aCall.getImplicitCastImpl();
     }
 
     /**
@@ -276,12 +267,21 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Get value on attribute implicitCast
+     * Get value on attribute use
      * @return the attribute's value
      */
     @Override
-    public ACast getImplicitCastImpl() {
-        return this.aCall.getImplicitCastImpl();
+    public String getUseImpl() {
+        return this.aCall.getUseImpl();
+    }
+
+    /**
+     * Get value on attribute vardecl
+     * @return the attribute's value
+     */
+    @Override
+    public AVardecl getVardeclImpl() {
+        return this.aCall.getVardeclImpl();
     }
 
     /**
@@ -301,363 +301,12 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Get value on attribute parent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getParentImpl() {
-        return this.aCall.getParentImpl();
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
     @Override
     public String getAstImpl() {
         return this.aCall.getAstImpl();
-    }
-
-    /**
-     * Get value on attribute siblingsLeftArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getSiblingsLeftArrayImpl() {
-        return this.aCall.getSiblingsLeftArrayImpl();
-    }
-
-    /**
-     * Get value on attribute data
-     * @return the attribute's value
-     */
-    @Override
-    public Object getDataImpl() {
-        return this.aCall.getDataImpl();
-    }
-
-    /**
-     * Get value on attribute hasChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasChildrenImpl() {
-        return this.aCall.getHasChildrenImpl();
-    }
-
-    /**
-     * Get value on attribute getAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAncestorImpl(String type) {
-        return this.aCall.getAncestorImpl(type);
-    }
-
-    /**
-     * Get value on attribute type
-     * @return the attribute's value
-     */
-    @Override
-    public AType getTypeImpl() {
-        return this.aCall.getTypeImpl();
-    }
-
-    /**
-     * Get value on attribute siblingsRightArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getSiblingsRightArrayImpl() {
-        return this.aCall.getSiblingsRightArrayImpl();
-    }
-
-    /**
-     * Get value on attribute rightJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getRightJpImpl() {
-        return this.aCall.getRightJpImpl();
-    }
-
-    /**
-     * Get value on attribute isCilk
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsCilkImpl() {
-        return this.aCall.getIsCilkImpl();
-    }
-
-    /**
-     * Get value on attribute filepath
-     * @return the attribute's value
-     */
-    @Override
-    public String getFilepathImpl() {
-        return this.aCall.getFilepathImpl();
-    }
-
-    /**
-     * Get value on attribute scopeNodesArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getScopeNodesArrayImpl() {
-        return this.aCall.getScopeNodesArrayImpl();
-    }
-
-    /**
-     * Get value on attribute childrenArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getChildrenArrayImpl() {
-        return this.aCall.getChildrenArrayImpl();
-    }
-
-    /**
-     * Get value on attribute getJavaFieldType
-     * @return the attribute's value
-     */
-    @Override
-    public String getJavaFieldTypeImpl(String fieldName) {
-        return this.aCall.getJavaFieldTypeImpl(fieldName);
-    }
-
-    /**
-     * Get value on attribute firstChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getFirstChildImpl() {
-        return this.aCall.getFirstChildImpl();
-    }
-
-    /**
-     * Get value on attribute numChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getNumChildrenImpl() {
-        return this.aCall.getNumChildrenImpl();
-    }
-
-    /**
-     * Get value on attribute getChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getChildImpl(int index) {
-        return this.aCall.getChildImpl(index);
-    }
-
-    /**
-     * Get value on attribute leftJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getLeftJpImpl() {
-        return this.aCall.getLeftJpImpl();
-    }
-
-    /**
-     * Get value on attribute inlineCommentsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AComment[] getInlineCommentsArrayImpl() {
-        return this.aCall.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astName
-     * @return the attribute's value
-     */
-    @Override
-    public String getAstNameImpl() {
-        return this.aCall.getAstNameImpl();
-    }
-
-    /**
-     * Get value on attribute jpId
-     * @return the attribute's value
-     */
-    @Override
-    public String getJpIdImpl() {
-        return this.aCall.getJpIdImpl();
-    }
-
-    /**
-     * Get value on attribute astId
-     * @return the attribute's value
-     */
-    @Override
-    public String getAstIdImpl() {
-        return this.aCall.getAstIdImpl();
-    }
-
-    /**
-     * Get value on attribute getKeyType
-     * @return the attribute's value
-     */
-    @Override
-    public Object getKeyTypeImpl(String key) {
-        return this.aCall.getKeyTypeImpl(key);
-    }
-
-    /**
-     * Get value on attribute contains
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean containsImpl(AJoinPoint jp) {
-        return this.aCall.containsImpl(jp);
-    }
-
-    /**
-     * Get value on attribute astIsInstance
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean astIsInstanceImpl(String className) {
-        return this.aCall.astIsInstanceImpl(className);
-    }
-
-    /**
-     * Get value on attribute filename
-     * @return the attribute's value
-     */
-    @Override
-    public String getFilenameImpl() {
-        return this.aCall.getFilenameImpl();
-    }
-
-    /**
-     * Get value on attribute javaFieldsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getJavaFieldsArrayImpl() {
-        return this.aCall.getJavaFieldsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute isInSystemHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInSystemHeaderImpl() {
-        return this.aCall.getIsInSystemHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute bitWidth
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getBitWidthImpl() {
-        return this.aCall.getBitWidthImpl();
-    }
-
-    /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aCall.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute endLine
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndLineImpl() {
-        return this.aCall.getEndLineImpl();
-    }
-
-    /**
-     * Get value on attribute endColumn
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndColumnImpl() {
-        return this.aCall.getEndColumnImpl();
-    }
-
-    /**
-     * Get value on attribute code
-     * @return the attribute's value
-     */
-    @Override
-    public String getCodeImpl() {
-        return this.aCall.getCodeImpl();
-    }
-
-    /**
-     * Get value on attribute isInsideLoopHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInsideLoopHeaderImpl() {
-        return this.aCall.getIsInsideLoopHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute line
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getLineImpl() {
-        return this.aCall.getLineImpl();
-    }
-
-    /**
-     * Get value on attribute keysArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getKeysArrayImpl() {
-        return this.aCall.getKeysArrayImpl();
-    }
-
-    /**
-     * Get value on attribute isInsideHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInsideHeaderImpl() {
-        return this.aCall.getIsInsideHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute astNumChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getAstNumChildrenImpl() {
-        return this.aCall.getAstNumChildrenImpl();
-    }
-
-    /**
-     * Get value on attribute getChainAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getChainAncestorImpl(String type) {
-        return this.aCall.getChainAncestorImpl(type);
-    }
-
-    /**
-     * Get value on attribute descendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsArrayImpl() {
-        return this.aCall.getDescendantsArrayImpl();
     }
 
     /**
@@ -670,66 +319,48 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Get value on attribute getDescendantsArrayImpl
+     * Get value on attribute astId
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getDescendantsArrayImpl(String type) {
-        return this.aCall.getDescendantsArrayImpl(type);
+    public String getAstIdImpl() {
+        return this.aCall.getAstIdImpl();
     }
 
     /**
-     * Get value on attribute getFirstJp
+     * Get value on attribute astIsInstance
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getFirstJpImpl(String type) {
-        return this.aCall.getFirstJpImpl(type);
+    public Boolean astIsInstanceImpl(String className) {
+        return this.aCall.astIsInstanceImpl(className);
     }
 
     /**
-     * Get value on attribute isMacro
+     * Get value on attribute astName
      * @return the attribute's value
      */
     @Override
-    public Boolean getIsMacroImpl() {
-        return this.aCall.getIsMacroImpl();
+    public String getAstNameImpl() {
+        return this.aCall.getAstNameImpl();
     }
 
     /**
-     * Get value on attribute lastChild
+     * Get value on attribute astNumChildren
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getLastChildImpl() {
-        return this.aCall.getLastChildImpl();
+    public Integer getAstNumChildrenImpl() {
+        return this.aCall.getAstNumChildrenImpl();
     }
 
     /**
-     * Get value on attribute root
+     * Get value on attribute bitWidth
      * @return the attribute's value
      */
     @Override
-    public AProgram getRootImpl() {
-        return this.aCall.getRootImpl();
-    }
-
-    /**
-     * Get value on attribute getAstChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstChildImpl(int index) {
-        return this.aCall.getAstChildImpl(index);
-    }
-
-    /**
-     * Get value on attribute getDescendantsAndSelfArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
-        return this.aCall.getDescendantsAndSelfArrayImpl(type);
+    public Integer getBitWidthImpl() {
+        return this.aCall.getBitWidthImpl();
     }
 
     /**
@@ -742,21 +373,21 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Get value on attribute currentRegion
+     * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getCurrentRegionImpl() {
-        return this.aCall.getCurrentRegionImpl();
+    public AJoinPoint[] getChildrenArrayImpl() {
+        return this.aCall.getChildrenArrayImpl();
     }
 
     /**
-     * Get value on attribute originNode
+     * Get value on attribute code
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getOriginNodeImpl() {
-        return this.aCall.getOriginNodeImpl();
+    public String getCodeImpl() {
+        return this.aCall.getCodeImpl();
     }
 
     /**
@@ -769,30 +400,30 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Get value on attribute parentRegion
+     * Get value on attribute contains
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getParentRegionImpl() {
-        return this.aCall.getParentRegionImpl();
+    public Boolean containsImpl(AJoinPoint jp) {
+        return this.aCall.containsImpl(jp);
     }
 
     /**
-     * Get value on attribute getValue
+     * Get value on attribute currentRegion
      * @return the attribute's value
      */
     @Override
-    public Object getValueImpl(String key) {
-        return this.aCall.getValueImpl(key);
+    public AJoinPoint getCurrentRegionImpl() {
+        return this.aCall.getCurrentRegionImpl();
     }
 
     /**
-     * Get value on attribute getAstAncestor
+     * Get value on attribute data
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstAncestorImpl(String type) {
-        return this.aCall.getAstAncestorImpl(type);
+    public Object getDataImpl() {
+        return this.aCall.getDataImpl();
     }
 
     /**
@@ -805,12 +436,147 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Get value on attribute location
+     * Get value on attribute descendantsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public String getLocationImpl() {
-        return this.aCall.getLocationImpl();
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aCall.getDescendantsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute endColumn
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndColumnImpl() {
+        return this.aCall.getEndColumnImpl();
+    }
+
+    /**
+     * Get value on attribute endLine
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndLineImpl() {
+        return this.aCall.getEndLineImpl();
+    }
+
+    /**
+     * Get value on attribute filename
+     * @return the attribute's value
+     */
+    @Override
+    public String getFilenameImpl() {
+        return this.aCall.getFilenameImpl();
+    }
+
+    /**
+     * Get value on attribute filepath
+     * @return the attribute's value
+     */
+    @Override
+    public String getFilepathImpl() {
+        return this.aCall.getFilepathImpl();
+    }
+
+    /**
+     * Get value on attribute firstChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstChildImpl() {
+        return this.aCall.getFirstChildImpl();
+    }
+
+    /**
+     * Get value on attribute getAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aCall.getAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getAstAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aCall.getAstAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getAstChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstChildImpl(int index) {
+        return this.aCall.getAstChildImpl(index);
+    }
+
+    /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aCall.getChainAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChildImpl(int index) {
+        return this.aCall.getChildImpl(index);
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aCall.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getDescendantsAndSelfArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aCall.getDescendantsAndSelfArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aCall.getFirstJpImpl(type);
+    }
+
+    /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aCall.getJavaFieldTypeImpl(fieldName);
+    }
+
+    /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aCall.getKeyTypeImpl(key);
     }
 
     /**
@@ -823,12 +589,201 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
+     * Get value on attribute getValue
+     * @return the attribute's value
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aCall.getValueImpl(key);
+    }
+
+    /**
+     * Get value on attribute hasChildren
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasChildrenImpl() {
+        return this.aCall.getHasChildrenImpl();
+    }
+
+    /**
+     * Get value on attribute hasNode
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aCall.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
+     * Get value on attribute hasParent
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasParentImpl() {
+        return this.aCall.getHasParentImpl();
+    }
+
+    /**
      * Get value on attribute hasType
      * @return the attribute's value
      */
     @Override
     public Boolean getHasTypeImpl() {
         return this.aCall.getHasTypeImpl();
+    }
+
+    /**
+     * Get value on attribute inlineCommentsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AComment[] getInlineCommentsArrayImpl() {
+        return this.aCall.getInlineCommentsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute isCilk
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsCilkImpl() {
+        return this.aCall.getIsCilkImpl();
+    }
+
+    /**
+     * Get value on attribute isInSystemHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInSystemHeaderImpl() {
+        return this.aCall.getIsInSystemHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideHeaderImpl() {
+        return this.aCall.getIsInsideHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideLoopHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideLoopHeaderImpl() {
+        return this.aCall.getIsInsideLoopHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isMacro
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsMacroImpl() {
+        return this.aCall.getIsMacroImpl();
+    }
+
+    /**
+     * Get value on attribute javaFieldsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getJavaFieldsArrayImpl() {
+        return this.aCall.getJavaFieldsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute jpId
+     * @return the attribute's value
+     */
+    @Override
+    public String getJpIdImpl() {
+        return this.aCall.getJpIdImpl();
+    }
+
+    /**
+     * Get value on attribute keysArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getKeysArrayImpl() {
+        return this.aCall.getKeysArrayImpl();
+    }
+
+    /**
+     * Get value on attribute lastChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getLastChildImpl() {
+        return this.aCall.getLastChildImpl();
+    }
+
+    /**
+     * Get value on attribute leftJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getLeftJpImpl() {
+        return this.aCall.getLeftJpImpl();
+    }
+
+    /**
+     * Get value on attribute line
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getLineImpl() {
+        return this.aCall.getLineImpl();
+    }
+
+    /**
+     * Get value on attribute location
+     * @return the attribute's value
+     */
+    @Override
+    public String getLocationImpl() {
+        return this.aCall.getLocationImpl();
+    }
+
+    /**
+     * Get value on attribute numChildren
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getNumChildrenImpl() {
+        return this.aCall.getNumChildrenImpl();
+    }
+
+    /**
+     * Get value on attribute originNode
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aCall.getOriginNodeImpl();
+    }
+
+    /**
+     * Get value on attribute parent
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getParentImpl() {
+        return this.aCall.getParentImpl();
+    }
+
+    /**
+     * Get value on attribute parentRegion
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getParentRegionImpl() {
+        return this.aCall.getParentRegionImpl();
     }
 
     /**
@@ -841,6 +796,51 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
+     * Get value on attribute rightJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getRightJpImpl() {
+        return this.aCall.getRightJpImpl();
+    }
+
+    /**
+     * Get value on attribute root
+     * @return the attribute's value
+     */
+    @Override
+    public AProgram getRootImpl() {
+        return this.aCall.getRootImpl();
+    }
+
+    /**
+     * Get value on attribute scopeNodesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getScopeNodesArrayImpl() {
+        return this.aCall.getScopeNodesArrayImpl();
+    }
+
+    /**
+     * Get value on attribute siblingsLeftArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getSiblingsLeftArrayImpl() {
+        return this.aCall.getSiblingsLeftArrayImpl();
+    }
+
+    /**
+     * Get value on attribute siblingsRightArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getSiblingsRightArrayImpl() {
+        return this.aCall.getSiblingsRightArrayImpl();
+    }
+
+    /**
      * Get value on attribute stmt
      * @return the attribute's value
      */
@@ -850,12 +850,12 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Get value on attribute hasParent
+     * Get value on attribute type
      * @return the attribute's value
      */
     @Override
-    public Boolean getHasParentImpl() {
-        return this.aCall.getHasParentImpl();
+    public AType getTypeImpl() {
+        return this.aCall.getTypeImpl();
     }
 
     /**

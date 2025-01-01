@@ -26,48 +26,30 @@ public abstract class ACilkFor extends ALoop {
         this.aLoop = aLoop;
     }
     /**
-     * Get value on attribute kind
+     * Get value on attribute body
      * @return the attribute's value
      */
     @Override
-    public String getKindImpl() {
-        return this.aLoop.getKindImpl();
+    public AScope getBodyImpl() {
+        return this.aLoop.getBodyImpl();
     }
 
     /**
-     * Get value on attribute id
+     * Get value on attribute cond
      * @return the attribute's value
      */
     @Override
-    public String getIdImpl() {
-        return this.aLoop.getIdImpl();
+    public AStatement getCondImpl() {
+        return this.aLoop.getCondImpl();
     }
 
     /**
-     * Get value on attribute isInnermost
+     * Get value on attribute condRelation
      * @return the attribute's value
      */
     @Override
-    public Boolean getIsInnermostImpl() {
-        return this.aLoop.getIsInnermostImpl();
-    }
-
-    /**
-     * Get value on attribute isOutermost
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsOutermostImpl() {
-        return this.aLoop.getIsOutermostImpl();
-    }
-
-    /**
-     * Get value on attribute nestedLevel
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getNestedLevelImpl() {
-        return this.aLoop.getNestedLevelImpl();
+    public String getCondRelationImpl() {
+        return this.aLoop.getCondRelationImpl();
     }
 
     /**
@@ -80,12 +62,75 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute rankArrayImpl
+     * Get value on attribute endValue
      * @return the attribute's value
      */
     @Override
-    public int[] getRankArrayImpl() {
-        return this.aLoop.getRankArrayImpl();
+    public String getEndValueImpl() {
+        return this.aLoop.getEndValueImpl();
+    }
+
+    /**
+     * Get value on attribute hasCondRelation
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasCondRelationImpl() {
+        return this.aLoop.getHasCondRelationImpl();
+    }
+
+    /**
+     * Get value on attribute id
+     * @return the attribute's value
+     */
+    @Override
+    public String getIdImpl() {
+        return this.aLoop.getIdImpl();
+    }
+
+    /**
+     * Get value on attribute init
+     * @return the attribute's value
+     */
+    @Override
+    public AStatement getInitImpl() {
+        return this.aLoop.getInitImpl();
+    }
+
+    /**
+     * Get value on attribute initValue
+     * @return the attribute's value
+     */
+    @Override
+    public String getInitValueImpl() {
+        return this.aLoop.getInitValueImpl();
+    }
+
+    /**
+     * Get value on attribute isInnermost
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInnermostImpl() {
+        return this.aLoop.getIsInnermostImpl();
+    }
+
+    /**
+     * Get value on attribute isInterchangeable
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean isInterchangeableImpl(ALoop otherLoop) {
+        return this.aLoop.isInterchangeableImpl(otherLoop);
+    }
+
+    /**
+     * Get value on attribute isOutermost
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsOutermostImpl() {
+        return this.aLoop.getIsOutermostImpl();
     }
 
     /**
@@ -116,39 +161,30 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute isInterchangeable
+     * Get value on attribute kind
      * @return the attribute's value
      */
     @Override
-    public Boolean isInterchangeableImpl(ALoop otherLoop) {
-        return this.aLoop.isInterchangeableImpl(otherLoop);
+    public String getKindImpl() {
+        return this.aLoop.getKindImpl();
     }
 
     /**
-     * Get value on attribute init
+     * Get value on attribute nestedLevel
      * @return the attribute's value
      */
     @Override
-    public AStatement getInitImpl() {
-        return this.aLoop.getInitImpl();
+    public Integer getNestedLevelImpl() {
+        return this.aLoop.getNestedLevelImpl();
     }
 
     /**
-     * Get value on attribute initValue
+     * Get value on attribute rankArrayImpl
      * @return the attribute's value
      */
     @Override
-    public String getInitValueImpl() {
-        return this.aLoop.getInitValueImpl();
-    }
-
-    /**
-     * Get value on attribute cond
-     * @return the attribute's value
-     */
-    @Override
-    public AStatement getCondImpl() {
-        return this.aLoop.getCondImpl();
+    public int[] getRankArrayImpl() {
+        return this.aLoop.getRankArrayImpl();
     }
 
     /**
@@ -161,48 +197,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute endValue
-     * @return the attribute's value
-     */
-    @Override
-    public String getEndValueImpl() {
-        return this.aLoop.getEndValueImpl();
-    }
-
-    /**
      * Get value on attribute stepValue
      * @return the attribute's value
      */
     @Override
     public String getStepValueImpl() {
         return this.aLoop.getStepValueImpl();
-    }
-
-    /**
-     * Get value on attribute hasCondRelation
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasCondRelationImpl() {
-        return this.aLoop.getHasCondRelationImpl();
-    }
-
-    /**
-     * Get value on attribute condRelation
-     * @return the attribute's value
-     */
-    @Override
-    public String getCondRelationImpl() {
-        return this.aLoop.getCondRelationImpl();
-    }
-
-    /**
-     * Get value on attribute body
-     * @return the attribute's value
-     */
-    @Override
-    public AScope getBodyImpl() {
-        return this.aLoop.getBodyImpl();
     }
 
     /**
@@ -397,15 +397,15 @@ public abstract class ACilkFor extends ALoop {
     /**
      * 
      */
-    public void defIsParallelImpl(Boolean value) {
-        this.aLoop.defIsParallelImpl(value);
+    public void defBodyImpl(AScope value) {
+        this.aLoop.defBodyImpl(value);
     }
 
     /**
      * 
      */
-    public void defIsParallelImpl(String value) {
-        this.aLoop.defIsParallelImpl(value);
+    public void defCondRelationImpl(String value) {
+        this.aLoop.defCondRelationImpl(value);
     }
 
     /**
@@ -425,24 +425,15 @@ public abstract class ACilkFor extends ALoop {
     /**
      * 
      */
-    public void defCondRelationImpl(String value) {
-        this.aLoop.defCondRelationImpl(value);
+    public void defIsParallelImpl(Boolean value) {
+        this.aLoop.defIsParallelImpl(value);
     }
 
     /**
      * 
      */
-    public void defBodyImpl(AScope value) {
-        this.aLoop.defBodyImpl(value);
-    }
-
-    /**
-     * Get value on attribute parent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getParentImpl() {
-        return this.aLoop.getParentImpl();
+    public void defIsParallelImpl(String value) {
+        this.aLoop.defIsParallelImpl(value);
     }
 
     /**
@@ -455,174 +446,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute siblingsLeftArrayImpl
+     * Get value on attribute astChildrenArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getSiblingsLeftArrayImpl() {
-        return this.aLoop.getSiblingsLeftArrayImpl();
-    }
-
-    /**
-     * Get value on attribute data
-     * @return the attribute's value
-     */
-    @Override
-    public Object getDataImpl() {
-        return this.aLoop.getDataImpl();
-    }
-
-    /**
-     * Get value on attribute hasChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasChildrenImpl() {
-        return this.aLoop.getHasChildrenImpl();
-    }
-
-    /**
-     * Get value on attribute getAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAncestorImpl(String type) {
-        return this.aLoop.getAncestorImpl(type);
-    }
-
-    /**
-     * Get value on attribute type
-     * @return the attribute's value
-     */
-    @Override
-    public AType getTypeImpl() {
-        return this.aLoop.getTypeImpl();
-    }
-
-    /**
-     * Get value on attribute siblingsRightArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getSiblingsRightArrayImpl() {
-        return this.aLoop.getSiblingsRightArrayImpl();
-    }
-
-    /**
-     * Get value on attribute rightJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getRightJpImpl() {
-        return this.aLoop.getRightJpImpl();
-    }
-
-    /**
-     * Get value on attribute isCilk
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsCilkImpl() {
-        return this.aLoop.getIsCilkImpl();
-    }
-
-    /**
-     * Get value on attribute filepath
-     * @return the attribute's value
-     */
-    @Override
-    public String getFilepathImpl() {
-        return this.aLoop.getFilepathImpl();
-    }
-
-    /**
-     * Get value on attribute scopeNodesArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getScopeNodesArrayImpl() {
-        return this.aLoop.getScopeNodesArrayImpl();
-    }
-
-    /**
-     * Get value on attribute childrenArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getChildrenArrayImpl() {
-        return this.aLoop.getChildrenArrayImpl();
-    }
-
-    /**
-     * Get value on attribute getJavaFieldType
-     * @return the attribute's value
-     */
-    @Override
-    public String getJavaFieldTypeImpl(String fieldName) {
-        return this.aLoop.getJavaFieldTypeImpl(fieldName);
-    }
-
-    /**
-     * Get value on attribute firstChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getFirstChildImpl() {
-        return this.aLoop.getFirstChildImpl();
-    }
-
-    /**
-     * Get value on attribute numChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getNumChildrenImpl() {
-        return this.aLoop.getNumChildrenImpl();
-    }
-
-    /**
-     * Get value on attribute getChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getChildImpl(int index) {
-        return this.aLoop.getChildImpl(index);
-    }
-
-    /**
-     * Get value on attribute leftJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getLeftJpImpl() {
-        return this.aLoop.getLeftJpImpl();
-    }
-
-    /**
-     * Get value on attribute inlineCommentsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AComment[] getInlineCommentsArrayImpl() {
-        return this.aLoop.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astName
-     * @return the attribute's value
-     */
-    @Override
-    public String getAstNameImpl() {
-        return this.aLoop.getAstNameImpl();
-    }
-
-    /**
-     * Get value on attribute jpId
-     * @return the attribute's value
-     */
-    @Override
-    public String getJpIdImpl() {
-        return this.aLoop.getJpIdImpl();
+    public AJoinPoint[] getAstChildrenArrayImpl() {
+        return this.aLoop.getAstChildrenArrayImpl();
     }
 
     /**
@@ -635,24 +464,6 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute getKeyType
-     * @return the attribute's value
-     */
-    @Override
-    public Object getKeyTypeImpl(String key) {
-        return this.aLoop.getKeyTypeImpl(key);
-    }
-
-    /**
-     * Get value on attribute contains
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean containsImpl(AJoinPoint jp) {
-        return this.aLoop.containsImpl(jp);
-    }
-
-    /**
      * Get value on attribute astIsInstance
      * @return the attribute's value
      */
@@ -662,111 +473,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute filename
+     * Get value on attribute astName
      * @return the attribute's value
      */
     @Override
-    public String getFilenameImpl() {
-        return this.aLoop.getFilenameImpl();
-    }
-
-    /**
-     * Get value on attribute javaFieldsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getJavaFieldsArrayImpl() {
-        return this.aLoop.getJavaFieldsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute isInSystemHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInSystemHeaderImpl() {
-        return this.aLoop.getIsInSystemHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute bitWidth
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getBitWidthImpl() {
-        return this.aLoop.getBitWidthImpl();
-    }
-
-    /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aLoop.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute endLine
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndLineImpl() {
-        return this.aLoop.getEndLineImpl();
-    }
-
-    /**
-     * Get value on attribute endColumn
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndColumnImpl() {
-        return this.aLoop.getEndColumnImpl();
-    }
-
-    /**
-     * Get value on attribute code
-     * @return the attribute's value
-     */
-    @Override
-    public String getCodeImpl() {
-        return this.aLoop.getCodeImpl();
-    }
-
-    /**
-     * Get value on attribute isInsideLoopHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInsideLoopHeaderImpl() {
-        return this.aLoop.getIsInsideLoopHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute line
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getLineImpl() {
-        return this.aLoop.getLineImpl();
-    }
-
-    /**
-     * Get value on attribute keysArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getKeysArrayImpl() {
-        return this.aLoop.getKeysArrayImpl();
-    }
-
-    /**
-     * Get value on attribute isInsideHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInsideHeaderImpl() {
-        return this.aLoop.getIsInsideHeaderImpl();
+    public String getAstNameImpl() {
+        return this.aLoop.getAstNameImpl();
     }
 
     /**
@@ -779,93 +491,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute getChainAncestor
+     * Get value on attribute bitWidth
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChainAncestorImpl(String type) {
-        return this.aLoop.getChainAncestorImpl(type);
-    }
-
-    /**
-     * Get value on attribute descendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsArrayImpl() {
-        return this.aLoop.getDescendantsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astChildrenArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getAstChildrenArrayImpl() {
-        return this.aLoop.getAstChildrenArrayImpl();
-    }
-
-    /**
-     * Get value on attribute getDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsArrayImpl(String type) {
-        return this.aLoop.getDescendantsArrayImpl(type);
-    }
-
-    /**
-     * Get value on attribute getFirstJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getFirstJpImpl(String type) {
-        return this.aLoop.getFirstJpImpl(type);
-    }
-
-    /**
-     * Get value on attribute isMacro
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsMacroImpl() {
-        return this.aLoop.getIsMacroImpl();
-    }
-
-    /**
-     * Get value on attribute lastChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getLastChildImpl() {
-        return this.aLoop.getLastChildImpl();
-    }
-
-    /**
-     * Get value on attribute root
-     * @return the attribute's value
-     */
-    @Override
-    public AProgram getRootImpl() {
-        return this.aLoop.getRootImpl();
-    }
-
-    /**
-     * Get value on attribute getAstChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstChildImpl(int index) {
-        return this.aLoop.getAstChildImpl(index);
-    }
-
-    /**
-     * Get value on attribute getDescendantsAndSelfArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
-        return this.aLoop.getDescendantsAndSelfArrayImpl(type);
+    public Integer getBitWidthImpl() {
+        return this.aLoop.getBitWidthImpl();
     }
 
     /**
@@ -878,21 +509,21 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute currentRegion
+     * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getCurrentRegionImpl() {
-        return this.aLoop.getCurrentRegionImpl();
+    public AJoinPoint[] getChildrenArrayImpl() {
+        return this.aLoop.getChildrenArrayImpl();
     }
 
     /**
-     * Get value on attribute originNode
+     * Get value on attribute code
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getOriginNodeImpl() {
-        return this.aLoop.getOriginNodeImpl();
+    public String getCodeImpl() {
+        return this.aLoop.getCodeImpl();
     }
 
     /**
@@ -905,30 +536,30 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute parentRegion
+     * Get value on attribute contains
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getParentRegionImpl() {
-        return this.aLoop.getParentRegionImpl();
+    public Boolean containsImpl(AJoinPoint jp) {
+        return this.aLoop.containsImpl(jp);
     }
 
     /**
-     * Get value on attribute getValue
+     * Get value on attribute currentRegion
      * @return the attribute's value
      */
     @Override
-    public Object getValueImpl(String key) {
-        return this.aLoop.getValueImpl(key);
+    public AJoinPoint getCurrentRegionImpl() {
+        return this.aLoop.getCurrentRegionImpl();
     }
 
     /**
-     * Get value on attribute getAstAncestor
+     * Get value on attribute data
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstAncestorImpl(String type) {
-        return this.aLoop.getAstAncestorImpl(type);
+    public Object getDataImpl() {
+        return this.aLoop.getDataImpl();
     }
 
     /**
@@ -941,12 +572,147 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute location
+     * Get value on attribute descendantsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public String getLocationImpl() {
-        return this.aLoop.getLocationImpl();
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aLoop.getDescendantsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute endColumn
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndColumnImpl() {
+        return this.aLoop.getEndColumnImpl();
+    }
+
+    /**
+     * Get value on attribute endLine
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndLineImpl() {
+        return this.aLoop.getEndLineImpl();
+    }
+
+    /**
+     * Get value on attribute filename
+     * @return the attribute's value
+     */
+    @Override
+    public String getFilenameImpl() {
+        return this.aLoop.getFilenameImpl();
+    }
+
+    /**
+     * Get value on attribute filepath
+     * @return the attribute's value
+     */
+    @Override
+    public String getFilepathImpl() {
+        return this.aLoop.getFilepathImpl();
+    }
+
+    /**
+     * Get value on attribute firstChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstChildImpl() {
+        return this.aLoop.getFirstChildImpl();
+    }
+
+    /**
+     * Get value on attribute getAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aLoop.getAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getAstAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aLoop.getAstAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getAstChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstChildImpl(int index) {
+        return this.aLoop.getAstChildImpl(index);
+    }
+
+    /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aLoop.getChainAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChildImpl(int index) {
+        return this.aLoop.getChildImpl(index);
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aLoop.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getDescendantsAndSelfArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aLoop.getDescendantsAndSelfArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aLoop.getFirstJpImpl(type);
+    }
+
+    /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aLoop.getJavaFieldTypeImpl(fieldName);
+    }
+
+    /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aLoop.getKeyTypeImpl(key);
     }
 
     /**
@@ -959,12 +725,201 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
+     * Get value on attribute getValue
+     * @return the attribute's value
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aLoop.getValueImpl(key);
+    }
+
+    /**
+     * Get value on attribute hasChildren
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasChildrenImpl() {
+        return this.aLoop.getHasChildrenImpl();
+    }
+
+    /**
+     * Get value on attribute hasNode
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aLoop.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
+     * Get value on attribute hasParent
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasParentImpl() {
+        return this.aLoop.getHasParentImpl();
+    }
+
+    /**
      * Get value on attribute hasType
      * @return the attribute's value
      */
     @Override
     public Boolean getHasTypeImpl() {
         return this.aLoop.getHasTypeImpl();
+    }
+
+    /**
+     * Get value on attribute inlineCommentsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AComment[] getInlineCommentsArrayImpl() {
+        return this.aLoop.getInlineCommentsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute isCilk
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsCilkImpl() {
+        return this.aLoop.getIsCilkImpl();
+    }
+
+    /**
+     * Get value on attribute isInSystemHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInSystemHeaderImpl() {
+        return this.aLoop.getIsInSystemHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideHeaderImpl() {
+        return this.aLoop.getIsInsideHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideLoopHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideLoopHeaderImpl() {
+        return this.aLoop.getIsInsideLoopHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isMacro
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsMacroImpl() {
+        return this.aLoop.getIsMacroImpl();
+    }
+
+    /**
+     * Get value on attribute javaFieldsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getJavaFieldsArrayImpl() {
+        return this.aLoop.getJavaFieldsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute jpId
+     * @return the attribute's value
+     */
+    @Override
+    public String getJpIdImpl() {
+        return this.aLoop.getJpIdImpl();
+    }
+
+    /**
+     * Get value on attribute keysArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getKeysArrayImpl() {
+        return this.aLoop.getKeysArrayImpl();
+    }
+
+    /**
+     * Get value on attribute lastChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getLastChildImpl() {
+        return this.aLoop.getLastChildImpl();
+    }
+
+    /**
+     * Get value on attribute leftJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getLeftJpImpl() {
+        return this.aLoop.getLeftJpImpl();
+    }
+
+    /**
+     * Get value on attribute line
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getLineImpl() {
+        return this.aLoop.getLineImpl();
+    }
+
+    /**
+     * Get value on attribute location
+     * @return the attribute's value
+     */
+    @Override
+    public String getLocationImpl() {
+        return this.aLoop.getLocationImpl();
+    }
+
+    /**
+     * Get value on attribute numChildren
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getNumChildrenImpl() {
+        return this.aLoop.getNumChildrenImpl();
+    }
+
+    /**
+     * Get value on attribute originNode
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aLoop.getOriginNodeImpl();
+    }
+
+    /**
+     * Get value on attribute parent
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getParentImpl() {
+        return this.aLoop.getParentImpl();
+    }
+
+    /**
+     * Get value on attribute parentRegion
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getParentRegionImpl() {
+        return this.aLoop.getParentRegionImpl();
     }
 
     /**
@@ -977,6 +932,51 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
+     * Get value on attribute rightJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getRightJpImpl() {
+        return this.aLoop.getRightJpImpl();
+    }
+
+    /**
+     * Get value on attribute root
+     * @return the attribute's value
+     */
+    @Override
+    public AProgram getRootImpl() {
+        return this.aLoop.getRootImpl();
+    }
+
+    /**
+     * Get value on attribute scopeNodesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getScopeNodesArrayImpl() {
+        return this.aLoop.getScopeNodesArrayImpl();
+    }
+
+    /**
+     * Get value on attribute siblingsLeftArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getSiblingsLeftArrayImpl() {
+        return this.aLoop.getSiblingsLeftArrayImpl();
+    }
+
+    /**
+     * Get value on attribute siblingsRightArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getSiblingsRightArrayImpl() {
+        return this.aLoop.getSiblingsRightArrayImpl();
+    }
+
+    /**
      * Get value on attribute stmt
      * @return the attribute's value
      */
@@ -986,12 +986,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute hasParent
+     * Get value on attribute type
      * @return the attribute's value
      */
     @Override
-    public Boolean getHasParentImpl() {
-        return this.aLoop.getHasParentImpl();
+    public AType getTypeImpl() {
+        return this.aLoop.getTypeImpl();
     }
 
     /**
@@ -1453,13 +1453,16 @@ public abstract class ACilkFor extends ALoop {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "isParallel": {
-        	if(value instanceof Boolean){
-        		this.defIsParallelImpl((Boolean)value);
+        case "body": {
+        	if(value instanceof AScope){
+        		this.defBodyImpl((AScope)value);
         		return;
         	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "condRelation": {
         	if(value instanceof String){
-        		this.defIsParallelImpl((String)value);
+        		this.defCondRelationImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1478,16 +1481,13 @@ public abstract class ACilkFor extends ALoop {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "condRelation": {
-        	if(value instanceof String){
-        		this.defCondRelationImpl((String)value);
+        case "isParallel": {
+        	if(value instanceof Boolean){
+        		this.defIsParallelImpl((Boolean)value);
         		return;
         	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "body": {
-        	if(value instanceof AScope){
-        		this.defBodyImpl((AScope)value);
+        	if(value instanceof String){
+        		this.defIsParallelImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
