@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
 import java.util.List;
-import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -961,26 +961,6 @@ public abstract class ACudaKernelCall extends ACall {
     @Override
     public boolean inlineImpl() {
         return this.aCall.inlineImpl();
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aCall.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aCall.insertImpl(position, code);
     }
 
     /**

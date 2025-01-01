@@ -1,9 +1,9 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
 import java.util.Optional;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -682,26 +682,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
     }
 
     /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aTypedefNameDecl.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aTypedefNameDecl.insertImpl(position, code);
-    }
-
-    /**
      * Inserts the given join point after this join point
      * @param node 
      */
@@ -833,6 +813,33 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
     @Override
     public AJoinPoint setLastChildImpl(AJoinPoint node) {
         return this.aTypedefNameDecl.setLastChildImpl(node);
+    }
+
+    /**
+     * Sets the name of this namedDecl
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aTypedefNameDecl.setNameImpl(name);
+    }
+
+    /**
+     * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
+     * @param name 
+     */
+    @Override
+    public void setQualifiedNameImpl(String name) {
+        this.aTypedefNameDecl.setQualifiedNameImpl(name);
+    }
+
+    /**
+     * Sets the qualified prefix of this namedDecl
+     * @param qualifiedPrefix 
+     */
+    @Override
+    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
+        this.aTypedefNameDecl.setQualifiedPrefixImpl(qualifiedPrefix);
     }
 
     /**

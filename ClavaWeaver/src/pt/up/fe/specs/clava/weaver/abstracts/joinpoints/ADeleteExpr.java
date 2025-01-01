@@ -1,9 +1,9 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
 import java.util.List;
-import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
 import java.util.Optional;
+import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -666,26 +666,6 @@ public abstract class ADeleteExpr extends AExpression {
     @Override
     public AJoinPoint detachImpl() {
         return this.aExpression.detachImpl();
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aExpression.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aExpression.insertImpl(position, code);
     }
 
     /**
