@@ -80,15 +80,15 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
     /**
      * 
      */
-    public void defQualifiedNameImpl(String value) {
-        this.aTypedefNameDecl.defQualifiedNameImpl(value);
+    public void defQualifiedPrefixImpl(String value) {
+        this.aTypedefNameDecl.defQualifiedPrefixImpl(value);
     }
 
     /**
      * 
      */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aTypedefNameDecl.defQualifiedPrefixImpl(value);
+    public void defQualifiedNameImpl(String value) {
+        this.aTypedefNameDecl.defQualifiedNameImpl(value);
     }
 
     /**
@@ -957,16 +957,16 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedName": {
+        case "qualifiedPrefix": {
         	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
+        		this.defQualifiedPrefixImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedPrefix": {
+        case "qualifiedName": {
         	if(value instanceof String){
-        		this.defQualifiedPrefixImpl((String)value);
+        		this.defQualifiedNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

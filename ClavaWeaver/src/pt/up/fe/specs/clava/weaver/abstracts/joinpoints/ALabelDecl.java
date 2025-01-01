@@ -107,15 +107,15 @@ public abstract class ALabelDecl extends ANamedDecl {
     /**
      * 
      */
-    public void defQualifiedNameImpl(String value) {
-        this.aNamedDecl.defQualifiedNameImpl(value);
+    public void defQualifiedPrefixImpl(String value) {
+        this.aNamedDecl.defQualifiedPrefixImpl(value);
     }
 
     /**
      * 
      */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aNamedDecl.defQualifiedPrefixImpl(value);
+    public void defQualifiedNameImpl(String value) {
+        this.aNamedDecl.defQualifiedNameImpl(value);
     }
 
     /**
@@ -1011,16 +1011,16 @@ public abstract class ALabelDecl extends ANamedDecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedName": {
+        case "qualifiedPrefix": {
         	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
+        		this.defQualifiedPrefixImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedPrefix": {
+        case "qualifiedName": {
         	if(value instanceof String){
-        		this.defQualifiedPrefixImpl((String)value);
+        		this.defQualifiedNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

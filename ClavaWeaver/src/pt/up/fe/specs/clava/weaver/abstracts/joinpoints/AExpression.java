@@ -43,48 +43,27 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
+     * Get value on attribute vardecl
+     * @return the attribute's value
      */
-    public abstract ACast getImplicitCastImpl();
+    public abstract AVardecl getVardeclImpl();
 
     /**
-     * returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
+     * Get value on attribute vardecl
+     * @return the attribute's value
      */
-    public final Object getImplicitCast() {
+    public final Object getVardecl() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "implicitCast", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "vardecl", Optional.empty());
         	}
-        	ACast result = this.getImplicitCastImpl();
+        	AVardecl result = this.getVardeclImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "implicitCast", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "vardecl", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "implicitCast", e);
-        }
-    }
-
-    /**
-     * true if the expression is part of an argument of a function call
-     */
-    public abstract Boolean getIsFunctionArgumentImpl();
-
-    /**
-     * true if the expression is part of an argument of a function call
-     */
-    public final Object getIsFunctionArgument() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isFunctionArgument", Optional.empty());
-        	}
-        	Boolean result = this.getIsFunctionArgumentImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isFunctionArgument", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isFunctionArgument", e);
+        	throw new AttributeException(get_class(), "vardecl", e);
         }
     }
 
@@ -114,27 +93,48 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute vardecl
-     * @return the attribute's value
+     * true if the expression is part of an argument of a function call
      */
-    public abstract AVardecl getVardeclImpl();
+    public abstract Boolean getIsFunctionArgumentImpl();
 
     /**
-     * Get value on attribute vardecl
-     * @return the attribute's value
+     * true if the expression is part of an argument of a function call
      */
-    public final Object getVardecl() {
+    public final Object getIsFunctionArgument() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "vardecl", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isFunctionArgument", Optional.empty());
         	}
-        	AVardecl result = this.getVardeclImpl();
+        	Boolean result = this.getIsFunctionArgumentImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "vardecl", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "isFunctionArgument", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "vardecl", e);
+        	throw new AttributeException(get_class(), "isFunctionArgument", e);
+        }
+    }
+
+    /**
+     * returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
+     */
+    public abstract ACast getImplicitCastImpl();
+
+    /**
+     * returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
+     */
+    public final Object getImplicitCast() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "implicitCast", Optional.empty());
+        	}
+        	ACast result = this.getImplicitCastImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "implicitCast", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "implicitCast", e);
         }
     }
 

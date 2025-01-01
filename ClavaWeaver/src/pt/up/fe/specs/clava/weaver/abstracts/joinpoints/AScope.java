@@ -29,6 +29,96 @@ public abstract class AScope extends AStatement {
         this.aStatement = aStatement;
     }
     /**
+     * 
+     * @param flat
+     * @return 
+     */
+    public abstract Long getNumStatementsImpl(Boolean flat);
+
+    /**
+     * 
+     * @param flat
+     * @return 
+     */
+    public final Object getNumStatements(Boolean flat) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getNumStatements", Optional.empty(), flat);
+        	}
+        	Long result = this.getNumStatementsImpl(flat);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "getNumStatements", Optional.ofNullable(result), flat);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "getNumStatements", e);
+        }
+    }
+
+    /**
+     * true if the scope does not have curly braces
+     */
+    public abstract Boolean getNakedImpl();
+
+    /**
+     * true if the scope does not have curly braces
+     */
+    public final Object getNaked() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "naked", Optional.empty());
+        	}
+        	Boolean result = this.getNakedImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "naked", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "naked", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defNakedImpl(Boolean value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def naked with type Boolean not implemented ");
+    }
+
+    /**
+     * Get value on attribute stmts
+     * @return the attribute's value
+     */
+    public abstract AStatement[] getStmtsArrayImpl();
+
+    /**
+     * Returns the direct (children) statements of this scope
+     */
+    public Object getStmtsImpl() {
+        AStatement[] aStatementArrayImpl0 = getStmtsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Returns the direct (children) statements of this scope
+     */
+    public final Object getStmts() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "stmts", Optional.empty());
+        	}
+        	Object result = this.getStmtsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "stmts", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "stmts", e);
+        }
+    }
+
+    /**
      * Get value on attribute allStmts
      * @return the attribute's value
      */
@@ -87,33 +177,6 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * 
-     * @param flat
-     * @return 
-     */
-    public abstract Long getNumStatementsImpl(Boolean flat);
-
-    /**
-     * 
-     * @param flat
-     * @return 
-     */
-    public final Object getNumStatements(Boolean flat) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getNumStatements", Optional.empty(), flat);
-        	}
-        	Long result = this.getNumStatementsImpl(flat);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getNumStatements", Optional.ofNullable(result), flat);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "getNumStatements", e);
-        }
-    }
-
-    /**
      * Get value on attribute lastStmt
      * @return the attribute's value
      */
@@ -139,36 +202,6 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * true if the scope does not have curly braces
-     */
-    public abstract Boolean getNakedImpl();
-
-    /**
-     * true if the scope does not have curly braces
-     */
-    public final Object getNaked() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "naked", Optional.empty());
-        	}
-        	Boolean result = this.getNakedImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "naked", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "naked", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defNakedImpl(Boolean value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def naked with type Boolean not implemented ");
-    }
-
-    /**
      * The statement that owns the scope (e.g., function, loop...)
      */
     public abstract AJoinPoint getOwnerImpl();
@@ -188,39 +221,6 @@ public abstract class AScope extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "owner", e);
-        }
-    }
-
-    /**
-     * Get value on attribute stmts
-     * @return the attribute's value
-     */
-    public abstract AStatement[] getStmtsArrayImpl();
-
-    /**
-     * Returns the direct (children) statements of this scope
-     */
-    public Object getStmtsImpl() {
-        AStatement[] aStatementArrayImpl0 = getStmtsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Returns the direct (children) statements of this scope
-     */
-    public final Object getStmts() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "stmts", Optional.empty());
-        	}
-        	Object result = this.getStmtsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "stmts", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "stmts", e);
         }
     }
 

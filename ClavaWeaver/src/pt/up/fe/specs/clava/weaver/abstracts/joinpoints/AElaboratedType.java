@@ -269,15 +269,15 @@ public abstract class AElaboratedType extends AType {
     /**
      * 
      */
-    public void defDesugarImpl(AType value) {
-        this.aType.defDesugarImpl(value);
+    public void defTemplateArgsTypesImpl(AType[] value) {
+        this.aType.defTemplateArgsTypesImpl(value);
     }
 
     /**
      * 
      */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aType.defTemplateArgsTypesImpl(value);
+    public void defDesugarImpl(AType value) {
+        this.aType.defDesugarImpl(value);
     }
 
     /**
@@ -1195,16 +1195,16 @@ public abstract class AElaboratedType extends AType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "desugar": {
-        	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
+        case "templateArgsTypes": {
+        	if(value instanceof AType[]){
+        		this.defTemplateArgsTypesImpl((AType[])value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
+        case "desugar": {
+        	if(value instanceof AType){
+        		this.defDesugarImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

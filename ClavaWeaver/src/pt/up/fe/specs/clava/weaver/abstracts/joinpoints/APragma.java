@@ -21,6 +21,52 @@ import java.util.Arrays;
 public abstract class APragma extends ACxxWeaverJoinPoint {
 
     /**
+     * The name of the pragma. E.g. for #pragma foo bar, returns 'foo'
+     */
+    public abstract String getNameImpl();
+
+    /**
+     * The name of the pragma. E.g. for #pragma foo bar, returns 'foo'
+     */
+    public final Object getName() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        	}
+        	String result = this.getNameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "name", e);
+        }
+    }
+
+    /**
+     * The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations
+     */
+    public abstract AJoinPoint getTargetImpl();
+
+    /**
+     * The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations
+     */
+    public final Object getTarget() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "target", Optional.empty());
+        	}
+        	AJoinPoint result = this.getTargetImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "target", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "target", e);
+        }
+    }
+
+    /**
      * Everything that is after the name of the pragma
      */
     public abstract String getContentImpl();
@@ -78,52 +124,6 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getTargetNodes", e);
-        }
-    }
-
-    /**
-     * The name of the pragma. E.g. for #pragma foo bar, returns 'foo'
-     */
-    public abstract String getNameImpl();
-
-    /**
-     * The name of the pragma. E.g. for #pragma foo bar, returns 'foo'
-     */
-    public final Object getName() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
-        	}
-        	String result = this.getNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "name", e);
-        }
-    }
-
-    /**
-     * The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations
-     */
-    public abstract AJoinPoint getTargetImpl();
-
-    /**
-     * The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations
-     */
-    public final Object getTarget() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "target", Optional.empty());
-        	}
-        	AJoinPoint result = this.getTargetImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "target", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "target", e);
         }
     }
 

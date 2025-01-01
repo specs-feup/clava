@@ -269,15 +269,15 @@ public abstract class AVariableArrayType extends AArrayType {
     /**
      * 
      */
-    public void defDesugarImpl(AType value) {
-        this.aArrayType.defDesugarImpl(value);
+    public void defTemplateArgsTypesImpl(AType[] value) {
+        this.aArrayType.defTemplateArgsTypesImpl(value);
     }
 
     /**
      * 
      */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aArrayType.defTemplateArgsTypesImpl(value);
+    public void defDesugarImpl(AType value) {
+        this.aArrayType.defDesugarImpl(value);
     }
 
     /**
@@ -1169,16 +1169,16 @@ public abstract class AVariableArrayType extends AArrayType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "desugar": {
-        	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
+        case "templateArgsTypes": {
+        	if(value instanceof AType[]){
+        		this.defTemplateArgsTypesImpl((AType[])value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
+        case "desugar": {
+        	if(value instanceof AType){
+        		this.defDesugarImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

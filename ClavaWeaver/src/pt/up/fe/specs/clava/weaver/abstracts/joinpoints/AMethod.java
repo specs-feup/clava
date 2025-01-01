@@ -375,13 +375,6 @@ public abstract class AMethod extends AFunction {
     /**
      * 
      */
-    public void defQualifiedNameImpl(String value) {
-        this.aFunction.defQualifiedNameImpl(value);
-    }
-
-    /**
-     * 
-     */
     public void defQualifiedPrefixImpl(String value) {
         this.aFunction.defQualifiedPrefixImpl(value);
     }
@@ -389,8 +382,8 @@ public abstract class AMethod extends AFunction {
     /**
      * 
      */
-    public void defBodyImpl(AScope value) {
-        this.aFunction.defBodyImpl(value);
+    public void defQualifiedNameImpl(String value) {
+        this.aFunction.defQualifiedNameImpl(value);
     }
 
     /**
@@ -398,6 +391,13 @@ public abstract class AMethod extends AFunction {
      */
     public void defFunctionTypeImpl(AFunctionType value) {
         this.aFunction.defFunctionTypeImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defBodyImpl(AScope value) {
+        this.aFunction.defBodyImpl(value);
     }
 
     /**
@@ -1441,16 +1441,16 @@ public abstract class AMethod extends AFunction {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "body": {
-        	if(value instanceof AScope){
-        		this.defBodyImpl((AScope)value);
+        case "functionType": {
+        	if(value instanceof AFunctionType){
+        		this.defFunctionTypeImpl((AFunctionType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "functionType": {
-        	if(value instanceof AFunctionType){
-        		this.defFunctionTypeImpl((AFunctionType)value);
+        case "body": {
+        	if(value instanceof AScope){
+        		this.defBodyImpl((AScope)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1480,16 +1480,16 @@ public abstract class AMethod extends AFunction {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedName": {
+        case "qualifiedPrefix": {
         	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
+        		this.defQualifiedPrefixImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedPrefix": {
+        case "qualifiedName": {
         	if(value instanceof String){
-        		this.defQualifiedPrefixImpl((String)value);
+        		this.defQualifiedNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

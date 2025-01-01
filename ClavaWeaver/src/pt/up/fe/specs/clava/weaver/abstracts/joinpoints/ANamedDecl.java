@@ -28,31 +28,6 @@ public abstract class ANamedDecl extends ADecl {
         this.aDecl = aDecl;
     }
     /**
-     * Get value on attribute isPublic
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsPublicImpl();
-
-    /**
-     * Get value on attribute isPublic
-     * @return the attribute's value
-     */
-    public final Object getIsPublic() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPublic", Optional.empty());
-        	}
-        	Boolean result = this.getIsPublicImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isPublic", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isPublic", e);
-        }
-    }
-
-    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -85,35 +60,28 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
-     * Get value on attribute qualifiedName
+     * Get value on attribute isPublic
      * @return the attribute's value
      */
-    public abstract String getQualifiedNameImpl();
+    public abstract Boolean getIsPublicImpl();
 
     /**
-     * Get value on attribute qualifiedName
+     * Get value on attribute isPublic
      * @return the attribute's value
      */
-    public final Object getQualifiedName() {
+    public final Object getIsPublic() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "qualifiedName", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPublic", Optional.empty());
         	}
-        	String result = this.getQualifiedNameImpl();
+        	Boolean result = this.getIsPublicImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "qualifiedName", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "isPublic", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "qualifiedName", e);
+        	throw new AttributeException(get_class(), "isPublic", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedNameImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def qualifiedName with type String not implemented ");
     }
 
     /**
@@ -146,6 +114,38 @@ public abstract class ANamedDecl extends ADecl {
      */
     public void defQualifiedPrefixImpl(String value) {
         throw new UnsupportedOperationException("Join point "+get_class()+": Action def qualifiedPrefix with type String not implemented ");
+    }
+
+    /**
+     * Get value on attribute qualifiedName
+     * @return the attribute's value
+     */
+    public abstract String getQualifiedNameImpl();
+
+    /**
+     * Get value on attribute qualifiedName
+     * @return the attribute's value
+     */
+    public final Object getQualifiedName() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "qualifiedName", Optional.empty());
+        	}
+        	String result = this.getQualifiedNameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "qualifiedName", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "qualifiedName", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defQualifiedNameImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def qualifiedName with type String not implemented ");
     }
 
     /**
@@ -1101,16 +1101,16 @@ public abstract class ANamedDecl extends ADecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedName": {
+        case "qualifiedPrefix": {
         	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
+        		this.defQualifiedPrefixImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedPrefix": {
+        case "qualifiedName": {
         	if(value instanceof String){
-        		this.defQualifiedPrefixImpl((String)value);
+        		this.defQualifiedNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

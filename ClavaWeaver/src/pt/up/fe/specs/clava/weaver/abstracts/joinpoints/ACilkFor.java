@@ -397,15 +397,15 @@ public abstract class ACilkFor extends ALoop {
     /**
      * 
      */
-    public void defBodyImpl(AScope value) {
-        this.aLoop.defBodyImpl(value);
+    public void defIsParallelImpl(Boolean value) {
+        this.aLoop.defIsParallelImpl(value);
     }
 
     /**
      * 
      */
-    public void defCondRelationImpl(String value) {
-        this.aLoop.defCondRelationImpl(value);
+    public void defIsParallelImpl(String value) {
+        this.aLoop.defIsParallelImpl(value);
     }
 
     /**
@@ -425,15 +425,15 @@ public abstract class ACilkFor extends ALoop {
     /**
      * 
      */
-    public void defIsParallelImpl(Boolean value) {
-        this.aLoop.defIsParallelImpl(value);
+    public void defCondRelationImpl(String value) {
+        this.aLoop.defCondRelationImpl(value);
     }
 
     /**
      * 
      */
-    public void defIsParallelImpl(String value) {
-        this.aLoop.defIsParallelImpl(value);
+    public void defBodyImpl(AScope value) {
+        this.aLoop.defBodyImpl(value);
     }
 
     /**
@@ -1453,16 +1453,13 @@ public abstract class ACilkFor extends ALoop {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "body": {
-        	if(value instanceof AScope){
-        		this.defBodyImpl((AScope)value);
+        case "isParallel": {
+        	if(value instanceof Boolean){
+        		this.defIsParallelImpl((Boolean)value);
         		return;
         	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "condRelation": {
         	if(value instanceof String){
-        		this.defCondRelationImpl((String)value);
+        		this.defIsParallelImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1481,13 +1478,16 @@ public abstract class ACilkFor extends ALoop {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "isParallel": {
-        	if(value instanceof Boolean){
-        		this.defIsParallelImpl((Boolean)value);
+        case "condRelation": {
+        	if(value instanceof String){
+        		this.defCondRelationImpl((String)value);
         		return;
         	}
-        	if(value instanceof String){
-        		this.defIsParallelImpl((String)value);
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "body": {
+        	if(value instanceof AScope){
+        		this.defBodyImpl((AScope)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

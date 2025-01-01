@@ -27,29 +27,6 @@ public abstract class ATagType extends AType {
         this.aType = aType;
     }
     /**
-     * a 'decl' join point that represents the declaration of this tag type
-     */
-    public abstract ADecl getDeclImpl();
-
-    /**
-     * a 'decl' join point that represents the declaration of this tag type
-     */
-    public final Object getDecl() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "decl", Optional.empty());
-        	}
-        	ADecl result = this.getDeclImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "decl", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "decl", e);
-        }
-    }
-
-    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -71,6 +48,29 @@ public abstract class ATagType extends AType {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
+        }
+    }
+
+    /**
+     * a 'decl' join point that represents the declaration of this tag type
+     */
+    public abstract ADecl getDeclImpl();
+
+    /**
+     * a 'decl' join point that represents the declaration of this tag type
+     */
+    public final Object getDecl() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "decl", Optional.empty());
+        	}
+        	ADecl result = this.getDeclImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "decl", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "decl", e);
         }
     }
 
@@ -248,15 +248,15 @@ public abstract class ATagType extends AType {
     /**
      * 
      */
-    public void defDesugarImpl(AType value) {
-        this.aType.defDesugarImpl(value);
+    public void defTemplateArgsTypesImpl(AType[] value) {
+        this.aType.defTemplateArgsTypesImpl(value);
     }
 
     /**
      * 
      */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aType.defTemplateArgsTypesImpl(value);
+    public void defDesugarImpl(AType value) {
+        this.aType.defDesugarImpl(value);
     }
 
     /**
@@ -1174,16 +1174,16 @@ public abstract class ATagType extends AType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "desugar": {
-        	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
+        case "templateArgsTypes": {
+        	if(value instanceof AType[]){
+        		this.defTemplateArgsTypesImpl((AType[])value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
+        case "desugar": {
+        	if(value instanceof AType){
+        		this.defDesugarImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

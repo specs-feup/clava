@@ -244,15 +244,15 @@ public abstract class AEnumType extends ATagType {
     /**
      * 
      */
-    public void defDesugarImpl(AType value) {
-        this.aTagType.defDesugarImpl(value);
+    public void defTemplateArgsTypesImpl(AType[] value) {
+        this.aTagType.defTemplateArgsTypesImpl(value);
     }
 
     /**
      * 
      */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aTagType.defTemplateArgsTypesImpl(value);
+    public void defDesugarImpl(AType value) {
+        this.aTagType.defDesugarImpl(value);
     }
 
     /**
@@ -1114,16 +1114,16 @@ public abstract class AEnumType extends ATagType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "desugar": {
-        	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
+        case "templateArgsTypes": {
+        	if(value instanceof AType[]){
+        		this.defTemplateArgsTypesImpl((AType[])value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
+        case "desugar": {
+        	if(value instanceof AType){
+        		this.defDesugarImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

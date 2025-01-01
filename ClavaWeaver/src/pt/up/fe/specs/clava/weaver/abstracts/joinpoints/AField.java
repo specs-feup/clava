@@ -80,15 +80,15 @@ public abstract class AField extends ADeclarator {
     /**
      * 
      */
-    public void defQualifiedNameImpl(String value) {
-        this.aDeclarator.defQualifiedNameImpl(value);
+    public void defQualifiedPrefixImpl(String value) {
+        this.aDeclarator.defQualifiedPrefixImpl(value);
     }
 
     /**
      * 
      */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aDeclarator.defQualifiedPrefixImpl(value);
+    public void defQualifiedNameImpl(String value) {
+        this.aDeclarator.defQualifiedNameImpl(value);
     }
 
     /**
@@ -957,16 +957,16 @@ public abstract class AField extends ADeclarator {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedName": {
+        case "qualifiedPrefix": {
         	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
+        		this.defQualifiedPrefixImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedPrefix": {
+        case "qualifiedName": {
         	if(value instanceof String){
-        		this.defQualifiedPrefixImpl((String)value);
+        		this.defQualifiedNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
