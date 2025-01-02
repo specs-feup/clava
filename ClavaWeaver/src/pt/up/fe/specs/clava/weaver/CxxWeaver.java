@@ -8,7 +8,7 @@ import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.interpreter.weaver.utils.LaraResourceProvider;
-import org.lara.language.specification.dsl.LanguageSpecificationV2;
+import org.lara.language.specification.dsl.LanguageSpecification;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
@@ -73,8 +73,8 @@ public class CxxWeaver extends ACxxWeaver {
         // true, true);
     }
 
-    public static LanguageSpecificationV2 buildLanguageSpecification() {
-        return LanguageSpecificationV2.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
+    public static LanguageSpecification buildLanguageSpecification() {
+        return LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
                 ClavaWeaverResource.ACTIONS);
     }
 
@@ -2004,7 +2004,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     @Override
-    protected LanguageSpecificationV2 buildLangSpecs() {
+    protected LanguageSpecification buildLangSpecs() {
         return buildLanguageSpecification();
     }
 
