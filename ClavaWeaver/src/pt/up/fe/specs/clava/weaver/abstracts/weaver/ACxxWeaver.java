@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 /**
  * Abstract Weaver Implementation for CxxWeaver<br>
-Since the generated abstract classes are always overwritten, their implementation should be done by extending those abstract classes with user-defined classes.<br>
-The abstract class {@link pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint} contains attributes and actions common to all join points.
+ * Since the generated abstract classes are always overwritten, their implementation should be done by extending those abstract classes with user-defined classes.<br>
+ * The abstract class {@link pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint} contains attributes and actions common to all join points.
  * The implementation of the abstract methods is mandatory!
  * @author Lara C.
  */
