@@ -21,27 +21,262 @@ import java.util.Arrays;
 public abstract class AProgram extends ACxxWeaverJoinPoint {
 
     /**
-     * Get value on attribute name
+     * Get value on attribute baseFolder
      * @return the attribute's value
      */
-    public abstract String getNameImpl();
+    public abstract String getBaseFolderImpl();
 
     /**
-     * Get value on attribute name
+     * Get value on attribute baseFolder
      * @return the attribute's value
      */
-    public final Object getName() {
+    public final Object getBaseFolder() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "baseFolder", Optional.empty());
         	}
-        	String result = this.getNameImpl();
+        	String result = this.getBaseFolderImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "baseFolder", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "name", e);
+        	throw new AttributeException(get_class(), "baseFolder", e);
+        }
+    }
+
+    /**
+     * Get value on attribute defaultFlags
+     * @return the attribute's value
+     */
+    public abstract String[] getDefaultFlagsArrayImpl();
+
+    /**
+     * Get value on attribute defaultFlags
+     * @return the attribute's value
+     */
+    public Object getDefaultFlagsImpl() {
+        String[] stringArrayImpl0 = getDefaultFlagsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute defaultFlags
+     * @return the attribute's value
+     */
+    public final Object getDefaultFlags() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "defaultFlags", Optional.empty());
+        	}
+        	Object result = this.getDefaultFlagsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "defaultFlags", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "defaultFlags", e);
+        }
+    }
+
+    /**
+     * Get value on attribute extraIncludes
+     * @return the attribute's value
+     */
+    public abstract String[] getExtraIncludesArrayImpl();
+
+    /**
+     * paths to includes that the current program depends on
+     */
+    public Object getExtraIncludesImpl() {
+        String[] stringArrayImpl0 = getExtraIncludesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * paths to includes that the current program depends on
+     */
+    public final Object getExtraIncludes() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraIncludes", Optional.empty());
+        	}
+        	Object result = this.getExtraIncludesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "extraIncludes", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "extraIncludes", e);
+        }
+    }
+
+    /**
+     * Get value on attribute extraLibs
+     * @return the attribute's value
+     */
+    public abstract String[] getExtraLibsArrayImpl();
+
+    /**
+     * link libraries of external projects the current program depends on
+     */
+    public Object getExtraLibsImpl() {
+        String[] stringArrayImpl0 = getExtraLibsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * link libraries of external projects the current program depends on
+     */
+    public final Object getExtraLibs() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraLibs", Optional.empty());
+        	}
+        	Object result = this.getExtraLibsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "extraLibs", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "extraLibs", e);
+        }
+    }
+
+    /**
+     * Get value on attribute extraProjects
+     * @return the attribute's value
+     */
+    public abstract String[] getExtraProjectsArrayImpl();
+
+    /**
+     * paths to folders of projects that the current program depends on
+     */
+    public Object getExtraProjectsImpl() {
+        String[] stringArrayImpl0 = getExtraProjectsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * paths to folders of projects that the current program depends on
+     */
+    public final Object getExtraProjects() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraProjects", Optional.empty());
+        	}
+        	Object result = this.getExtraProjectsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "extraProjects", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "extraProjects", e);
+        }
+    }
+
+    /**
+     * Get value on attribute extraSources
+     * @return the attribute's value
+     */
+    public abstract String[] getExtraSourcesArrayImpl();
+
+    /**
+     * paths to sources that the current program depends on
+     */
+    public Object getExtraSourcesImpl() {
+        String[] stringArrayImpl0 = getExtraSourcesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * paths to sources that the current program depends on
+     */
+    public final Object getExtraSources() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraSources", Optional.empty());
+        	}
+        	Object result = this.getExtraSourcesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "extraSources", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "extraSources", e);
+        }
+    }
+
+    /**
+     * Get value on attribute files
+     * @return the attribute's value
+     */
+    public abstract AFile[] getFilesArrayImpl();
+
+    /**
+     * the source files in this program
+     */
+    public Object getFilesImpl() {
+        AFile[] aFileArrayImpl0 = getFilesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFileArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the source files in this program
+     */
+    public final Object getFiles() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "files", Optional.empty());
+        	}
+        	Object result = this.getFilesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "files", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "files", e);
+        }
+    }
+
+    /**
+     * Get value on attribute includeFolders
+     * @return the attribute's value
+     */
+    public abstract String[] getIncludeFoldersArrayImpl();
+
+    /**
+     * Get value on attribute includeFolders
+     * @return the attribute's value
+     */
+    public Object getIncludeFoldersImpl() {
+        String[] stringArrayImpl0 = getIncludeFoldersArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute includeFolders
+     * @return the attribute's value
+     */
+    public final Object getIncludeFolders() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "includeFolders", Optional.empty());
+        	}
+        	Object result = this.getIncludeFoldersImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "includeFolders", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "includeFolders", e);
         }
     }
 
@@ -65,6 +300,54 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCxx", e);
+        }
+    }
+
+    /**
+     * a function join point with the main function of the program, if one is available
+     */
+    public abstract AFunction getMainImpl();
+
+    /**
+     * a function join point with the main function of the program, if one is available
+     */
+    public final Object getMain() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "main", Optional.empty());
+        	}
+        	AFunction result = this.getMainImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "main", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "main", e);
+        }
+    }
+
+    /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    public abstract String getNameImpl();
+
+    /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    public final Object getName() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        	}
+        	String result = this.getNameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "name", e);
         }
     }
 
@@ -115,41 +398,6 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute defaultFlags
-     * @return the attribute's value
-     */
-    public abstract String[] getDefaultFlagsArrayImpl();
-
-    /**
-     * Get value on attribute defaultFlags
-     * @return the attribute's value
-     */
-    public Object getDefaultFlagsImpl() {
-        String[] stringArrayImpl0 = getDefaultFlagsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Get value on attribute defaultFlags
-     * @return the attribute's value
-     */
-    public final Object getDefaultFlags() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "defaultFlags", Optional.empty());
-        	}
-        	Object result = this.getDefaultFlagsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "defaultFlags", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "defaultFlags", e);
-        }
-    }
-
-    /**
      * Get value on attribute userFlags
      * @return the attribute's value
      */
@@ -185,66 +433,6 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute includeFolders
-     * @return the attribute's value
-     */
-    public abstract String[] getIncludeFoldersArrayImpl();
-
-    /**
-     * Get value on attribute includeFolders
-     * @return the attribute's value
-     */
-    public Object getIncludeFoldersImpl() {
-        String[] stringArrayImpl0 = getIncludeFoldersArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Get value on attribute includeFolders
-     * @return the attribute's value
-     */
-    public final Object getIncludeFolders() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "includeFolders", Optional.empty());
-        	}
-        	Object result = this.getIncludeFoldersImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "includeFolders", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "includeFolders", e);
-        }
-    }
-
-    /**
-     * Get value on attribute baseFolder
-     * @return the attribute's value
-     */
-    public abstract String getBaseFolderImpl();
-
-    /**
-     * Get value on attribute baseFolder
-     * @return the attribute's value
-     */
-    public final Object getBaseFolder() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "baseFolder", Optional.empty());
-        	}
-        	String result = this.getBaseFolderImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "baseFolder", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "baseFolder", e);
-        }
-    }
-
-    /**
      * Get value on attribute weavingFolder
      * @return the attribute's value
      */
@@ -270,350 +458,11 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute extraSources
-     * @return the attribute's value
-     */
-    public abstract String[] getExtraSourcesArrayImpl();
-
-    /**
-     * paths to sources that the current program depends on
-     */
-    public Object getExtraSourcesImpl() {
-        String[] stringArrayImpl0 = getExtraSourcesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * paths to sources that the current program depends on
-     */
-    public final Object getExtraSources() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraSources", Optional.empty());
-        	}
-        	Object result = this.getExtraSourcesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "extraSources", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "extraSources", e);
-        }
-    }
-
-    /**
-     * Get value on attribute extraIncludes
-     * @return the attribute's value
-     */
-    public abstract String[] getExtraIncludesArrayImpl();
-
-    /**
-     * paths to includes that the current program depends on
-     */
-    public Object getExtraIncludesImpl() {
-        String[] stringArrayImpl0 = getExtraIncludesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * paths to includes that the current program depends on
-     */
-    public final Object getExtraIncludes() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraIncludes", Optional.empty());
-        	}
-        	Object result = this.getExtraIncludesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "extraIncludes", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "extraIncludes", e);
-        }
-    }
-
-    /**
-     * Get value on attribute extraProjects
-     * @return the attribute's value
-     */
-    public abstract String[] getExtraProjectsArrayImpl();
-
-    /**
-     * paths to folders of projects that the current program depends on
-     */
-    public Object getExtraProjectsImpl() {
-        String[] stringArrayImpl0 = getExtraProjectsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * paths to folders of projects that the current program depends on
-     */
-    public final Object getExtraProjects() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraProjects", Optional.empty());
-        	}
-        	Object result = this.getExtraProjectsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "extraProjects", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "extraProjects", e);
-        }
-    }
-
-    /**
-     * Get value on attribute extraLibs
-     * @return the attribute's value
-     */
-    public abstract String[] getExtraLibsArrayImpl();
-
-    /**
-     * link libraries of external projects the current program depends on
-     */
-    public Object getExtraLibsImpl() {
-        String[] stringArrayImpl0 = getExtraLibsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * link libraries of external projects the current program depends on
-     */
-    public final Object getExtraLibs() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraLibs", Optional.empty());
-        	}
-        	Object result = this.getExtraLibsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "extraLibs", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "extraLibs", e);
-        }
-    }
-
-    /**
-     * a function join point with the main function of the program, if one is available
-     */
-    public abstract AFunction getMainImpl();
-
-    /**
-     * a function join point with the main function of the program, if one is available
-     */
-    public final Object getMain() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "main", Optional.empty());
-        	}
-        	AFunction result = this.getMainImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "main", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "main", e);
-        }
-    }
-
-    /**
-     * Get value on attribute files
-     * @return the attribute's value
-     */
-    public abstract AFile[] getFilesArrayImpl();
-
-    /**
-     * the source files in this program
-     */
-    public Object getFilesImpl() {
-        AFile[] aFileArrayImpl0 = getFilesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFileArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * the source files in this program
-     */
-    public final Object getFiles() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "files", Optional.empty());
-        	}
-        	Object result = this.getFilesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "files", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "files", e);
-        }
-    }
-
-    /**
      * Default implementation of the method used by the lara interpreter to select files
      * @return 
      */
     public List<? extends AFile> selectFile() {
         return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
-     */
-    public boolean rebuildImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
-    }
-
-    /**
-     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
-     */
-    public final Object rebuild() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
-        	}
-        	boolean result = this.rebuildImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.ofNullable(result));
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "rebuild", e);
-        }
-    }
-
-    /**
-     * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
-     */
-    public void rebuildFuzzyImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action rebuildFuzzy not implemented ");
-    }
-
-    /**
-     * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
-     */
-    public final void rebuildFuzzy() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "rebuildFuzzy", this, Optional.empty());
-        	}
-        	this.rebuildFuzzyImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "rebuildFuzzy", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "rebuildFuzzy", e);
-        }
-    }
-
-    /**
-     * Adds a file join point to the current program
-     * @param file 
-     */
-    public AJoinPoint addFileImpl(AFile file) {
-        throw new UnsupportedOperationException(get_class()+": Action addFile not implemented ");
-    }
-
-    /**
-     * Adds a file join point to the current program
-     * @param file 
-     */
-    public final Object addFile(AFile file) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addFile", this, Optional.empty(), file);
-        	}
-        	AJoinPoint result = this.addFileImpl(file);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addFile", this, Optional.ofNullable(result), file);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addFile", e);
-        }
-    }
-
-    /**
-     * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
-     * @param filepath 
-     */
-    public AJoinPoint addFileFromPathImpl(Object filepath) {
-        throw new UnsupportedOperationException(get_class()+": Action addFileFromPath not implemented ");
-    }
-
-    /**
-     * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
-     * @param filepath 
-     */
-    public final Object addFileFromPath(Object filepath) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addFileFromPath", this, Optional.empty(), filepath);
-        	}
-        	AJoinPoint result = this.addFileFromPathImpl(filepath);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addFileFromPath", this, Optional.ofNullable(result), filepath);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addFileFromPath", e);
-        }
-    }
-
-    /**
-     * Creates a copy of the current AST and pushes it to the top of the AST stack
-     */
-    public void pushImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action push not implemented ");
-    }
-
-    /**
-     * Creates a copy of the current AST and pushes it to the top of the AST stack
-     */
-    public final void push() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "push", this, Optional.empty());
-        	}
-        	this.pushImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "push", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "push", e);
-        }
-    }
-
-    /**
-     * Discards the AST at the top of the ASt stack
-     */
-    public void popImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action pop not implemented ");
-    }
-
-    /**
-     * Discards the AST at the top of the ASt stack
-     */
-    public final void pop() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "pop", this, Optional.empty());
-        	}
-        	this.popImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "pop", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "pop", e);
-        }
     }
 
     /**
@@ -667,6 +516,32 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addExtraIncludeFromGit", e);
+        }
+    }
+
+    /**
+     * Adds a library (e.g., -pthreads) that the current program depends on
+     * @param lib 
+     */
+    public void addExtraLibImpl(String lib) {
+        throw new UnsupportedOperationException(get_class()+": Action addExtraLib not implemented ");
+    }
+
+    /**
+     * Adds a library (e.g., -pthreads) that the current program depends on
+     * @param lib 
+     */
+    public final void addExtraLib(String lib) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraLib", this, Optional.empty(), lib);
+        	}
+        	this.addExtraLibImpl(lib);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addExtraLib", this, Optional.empty(), lib);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addExtraLib", e);
         }
     }
 
@@ -725,6 +600,60 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Adds a file join point to the current program
+     * @param file 
+     */
+    public AJoinPoint addFileImpl(AFile file) {
+        throw new UnsupportedOperationException(get_class()+": Action addFile not implemented ");
+    }
+
+    /**
+     * Adds a file join point to the current program
+     * @param file 
+     */
+    public final Object addFile(AFile file) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addFile", this, Optional.empty(), file);
+        	}
+        	AJoinPoint result = this.addFileImpl(file);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addFile", this, Optional.ofNullable(result), file);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addFile", e);
+        }
+    }
+
+    /**
+     * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
+     * @param filepath 
+     */
+    public AJoinPoint addFileFromPathImpl(Object filepath) {
+        throw new UnsupportedOperationException(get_class()+": Action addFileFromPath not implemented ");
+    }
+
+    /**
+     * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
+     * @param filepath 
+     */
+    public final Object addFileFromPath(Object filepath) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addFileFromPath", this, Optional.empty(), filepath);
+        	}
+        	AJoinPoint result = this.addFileFromPathImpl(filepath);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addFileFromPath", this, Optional.ofNullable(result), filepath);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addFileFromPath", e);
+        }
+    }
+
+    /**
      * Adds a path based on a git repository to a project that the current program depends on
      * @param gitRepo 
      * @param libs 
@@ -755,32 +684,6 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Adds a library (e.g., -pthreads) that the current program depends on
-     * @param lib 
-     */
-    public void addExtraLibImpl(String lib) {
-        throw new UnsupportedOperationException(get_class()+": Action addExtraLib not implemented ");
-    }
-
-    /**
-     * Adds a library (e.g., -pthreads) that the current program depends on
-     * @param lib 
-     */
-    public final void addExtraLib(String lib) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraLib", this, Optional.empty(), lib);
-        	}
-        	this.addExtraLibImpl(lib);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addExtraLib", this, Optional.empty(), lib);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addExtraLib", e);
-        }
-    }
-
-    /**
      * Registers a function to be executed when the program exits
      * @param function 
      */
@@ -803,6 +706,103 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "atexit", e);
+        }
+    }
+
+    /**
+     * Discards the AST at the top of the ASt stack
+     */
+    public void popImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action pop not implemented ");
+    }
+
+    /**
+     * Discards the AST at the top of the ASt stack
+     */
+    public final void pop() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "pop", this, Optional.empty());
+        	}
+        	this.popImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "pop", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "pop", e);
+        }
+    }
+
+    /**
+     * Creates a copy of the current AST and pushes it to the top of the AST stack
+     */
+    public void pushImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action push not implemented ");
+    }
+
+    /**
+     * Creates a copy of the current AST and pushes it to the top of the AST stack
+     */
+    public final void push() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "push", this, Optional.empty());
+        	}
+        	this.pushImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "push", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "push", e);
+        }
+    }
+
+    /**
+     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
+     */
+    public boolean rebuildImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
+    }
+
+    /**
+     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
+     */
+    public final Object rebuild() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
+        	}
+        	boolean result = this.rebuildImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.ofNullable(result));
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "rebuild", e);
+        }
+    }
+
+    /**
+     * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
+     */
+    public void rebuildFuzzyImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action rebuildFuzzy not implemented ");
+    }
+
+    /**
+     * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
+     */
+    public final void rebuildFuzzy() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "rebuildFuzzy", this, Optional.empty());
+        	}
+        	this.rebuildFuzzyImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "rebuildFuzzy", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "rebuildFuzzy", e);
         }
     }
 
@@ -836,13 +836,6 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "firstChild": {
         	if(value instanceof AJoinPoint){
         		this.defFirstChildImpl((AJoinPoint)value);
@@ -868,6 +861,13 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -878,21 +878,21 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
-        attributes.add("name");
+        attributes.add("baseFolder");
+        attributes.add("defaultFlags");
+        attributes.add("extraIncludes");
+        attributes.add("extraLibs");
+        attributes.add("extraProjects");
+        attributes.add("extraSources");
+        attributes.add("files");
+        attributes.add("includeFolders");
         attributes.add("isCxx");
+        attributes.add("main");
+        attributes.add("name");
         attributes.add("standard");
         attributes.add("stdFlag");
-        attributes.add("defaultFlags");
         attributes.add("userFlags");
-        attributes.add("includeFolders");
-        attributes.add("baseFolder");
         attributes.add("weavingFolder");
-        attributes.add("extraSources");
-        attributes.add("extraIncludes");
-        attributes.add("extraProjects");
-        attributes.add("extraLibs");
-        attributes.add("main");
-        attributes.add("files");
     }
 
     /**
@@ -910,19 +910,19 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     @Override
     protected final void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
-        actions.add("boolean rebuild()");
-        actions.add("void rebuildFuzzy()");
-        actions.add("joinpoint addFile(file)");
-        actions.add("joinpoint addFileFromPath(Object)");
-        actions.add("void push()");
-        actions.add("void pop()");
         actions.add("void addExtraInclude(String)");
         actions.add("void addExtraIncludeFromGit(String, String)");
+        actions.add("void addExtraLib(String)");
         actions.add("void addExtraSource(String)");
         actions.add("void addExtraSourceFromGit(String, String)");
+        actions.add("joinpoint addFile(file)");
+        actions.add("joinpoint addFileFromPath(Object)");
         actions.add("void addProjectFromGit(String, String[], String)");
-        actions.add("void addExtraLib(String)");
         actions.add("void atexit(function)");
+        actions.add("void pop()");
+        actions.add("void push()");
+        actions.add("boolean rebuild()");
+        actions.add("void rebuildFuzzy()");
     }
 
     /**
@@ -937,83 +937,83 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum ProgramAttributes {
-        NAME("name"),
+        BASEFOLDER("baseFolder"),
+        DEFAULTFLAGS("defaultFlags"),
+        EXTRAINCLUDES("extraIncludes"),
+        EXTRALIBS("extraLibs"),
+        EXTRAPROJECTS("extraProjects"),
+        EXTRASOURCES("extraSources"),
+        FILES("files"),
+        INCLUDEFOLDERS("includeFolders"),
         ISCXX("isCxx"),
+        MAIN("main"),
+        NAME("name"),
         STANDARD("standard"),
         STDFLAG("stdFlag"),
-        DEFAULTFLAGS("defaultFlags"),
         USERFLAGS("userFlags"),
-        INCLUDEFOLDERS("includeFolders"),
-        BASEFOLDER("baseFolder"),
         WEAVINGFOLDER("weavingFolder"),
-        EXTRASOURCES("extraSources"),
-        EXTRAINCLUDES("extraIncludes"),
-        EXTRAPROJECTS("extraProjects"),
-        EXTRALIBS("extraLibs"),
-        MAIN("main"),
-        FILES("files"),
-        PARENT("parent"),
         AST("ast"),
-        SIBLINGSLEFT("siblingsLeft"),
-        DATA("data"),
-        HASCHILDREN("hasChildren"),
-        GETANCESTOR("getAncestor"),
-        TYPE("type"),
-        SIBLINGSRIGHT("siblingsRight"),
-        RIGHTJP("rightJp"),
-        ISCILK("isCilk"),
-        FILEPATH("filepath"),
-        SCOPENODES("scopeNodes"),
-        CHILDREN("children"),
-        GETJAVAFIELDTYPE("getJavaFieldType"),
-        FIRSTCHILD("firstChild"),
-        NUMCHILDREN("numChildren"),
-        GETCHILD("getChild"),
-        LEFTJP("leftJp"),
-        INLINECOMMENTS("inlineComments"),
-        ASTNAME("astName"),
-        JPID("jpId"),
-        ASTID("astId"),
-        GETKEYTYPE("getKeyType"),
-        CONTAINS("contains"),
-        ASTISINSTANCE("astIsInstance"),
-        FILENAME("filename"),
-        JAVAFIELDS("javaFields"),
-        ISINSYSTEMHEADER("isInSystemHeader"),
-        BITWIDTH("bitWidth"),
-        HASNODE("hasNode"),
-        ENDLINE("endLine"),
-        ENDCOLUMN("endColumn"),
-        CODE("code"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
-        GETCHAINANCESTOR("getChainAncestor"),
-        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
-        GETDESCENDANTS("getDescendants"),
-        GETFIRSTJP("getFirstJp"),
-        ISMACRO("isMacro"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
-        GETASTCHILD("getAstChild"),
-        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        ASTID("astId"),
+        ASTISINSTANCE("astIsInstance"),
+        ASTNAME("astName"),
+        ASTNUMCHILDREN("astNumChildren"),
+        BITWIDTH("bitWidth"),
         CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
-        ORIGINNODE("originNode"),
+        CHILDREN("children"),
+        CODE("code"),
         COLUMN("column"),
-        PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
-        GETASTANCESTOR("getAstAncestor"),
+        CONTAINS("contains"),
+        CURRENTREGION("currentRegion"),
+        DATA("data"),
         DEPTH("depth"),
-        LOCATION("location"),
+        DESCENDANTS("descendants"),
+        ENDCOLUMN("endColumn"),
+        ENDLINE("endLine"),
+        FILENAME("filename"),
+        FILEPATH("filepath"),
+        FIRSTCHILD("firstChild"),
+        GETANCESTOR("getAncestor"),
+        GETASTANCESTOR("getAstAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        GETCHILD("getChild"),
+        GETDESCENDANTS("getDescendants"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        GETFIRSTJP("getFirstJp"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
+        GETKEYTYPE("getKeyType"),
         GETUSERFIELD("getUserField"),
+        GETVALUE("getValue"),
+        HASCHILDREN("hasChildren"),
+        HASNODE("hasNode"),
+        HASPARENT("hasParent"),
         HASTYPE("hasType"),
+        INLINECOMMENTS("inlineComments"),
+        ISCILK("isCilk"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        ISMACRO("isMacro"),
+        JAVAFIELDS("javaFields"),
+        JPID("jpId"),
+        KEYS("keys"),
+        LASTCHILD("lastChild"),
+        LEFTJP("leftJp"),
+        LINE("line"),
+        LOCATION("location"),
+        NUMCHILDREN("numChildren"),
+        ORIGINNODE("originNode"),
+        PARENT("parent"),
+        PARENTREGION("parentRegion"),
         PRAGMAS("pragmas"),
+        RIGHTJP("rightJp"),
+        ROOT("root"),
+        SCOPENODES("scopeNodes"),
+        SIBLINGSLEFT("siblingsLeft"),
+        SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        HASPARENT("hasParent");
+        TYPE("type");
         private String name;
 
         /**

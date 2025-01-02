@@ -21,25 +21,48 @@ import java.util.Arrays;
 public abstract class AFile extends ACxxWeaverJoinPoint {
 
     /**
-     * the name of the file
+     * the path to the source folder that was given as the base folder of this file
      */
-    public abstract String getNameImpl();
+    public abstract String getBaseSourcePathImpl();
 
     /**
-     * the name of the file
+     * the path to the source folder that was given as the base folder of this file
      */
-    public final Object getName() {
+    public final Object getBaseSourcePath() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "baseSourcePath", Optional.empty());
         	}
-        	String result = this.getNameImpl();
+        	String result = this.getBaseSourcePathImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "baseSourcePath", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "name", e);
+        	throw new AttributeException(get_class(), "baseSourcePath", e);
+        }
+    }
+
+    /**
+     * the output of the parser if there were errors during parsing
+     */
+    public abstract String getErrorOutputImpl();
+
+    /**
+     * the output of the parser if there were errors during parsing
+     */
+    public final Object getErrorOutput() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "errorOutput", Optional.empty());
+        	}
+        	String result = this.getErrorOutputImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "errorOutput", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "errorOutput", e);
         }
     }
 
@@ -67,6 +90,33 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * 
+     * @param destinationFolderpath
+     * @return 
+     */
+    public abstract String getDestinationFilepathImpl(String destinationFolderpath);
+
+    /**
+     * 
+     * @param destinationFolderpath
+     * @return 
+     */
+    public final Object getDestinationFilepath(String destinationFolderpath) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getDestinationFilepath", Optional.empty(), destinationFolderpath);
+        	}
+        	String result = this.getDestinationFilepathImpl(destinationFolderpath);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "getDestinationFilepath", Optional.ofNullable(result), destinationFolderpath);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "getDestinationFilepath", e);
+        }
+    }
+
+    /**
      * true if this file contains a 'main' method
      */
     public abstract Boolean getHasMainImpl();
@@ -86,6 +136,154 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasMain", e);
+        }
+    }
+
+    /**
+     * true if there were errors during parsing
+     */
+    public abstract Boolean getHasParsingErrorsImpl();
+
+    /**
+     * true if there were errors during parsing
+     */
+    public final Object getHasParsingErrors() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasParsingErrors", Optional.empty());
+        	}
+        	Boolean result = this.getHasParsingErrorsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasParsingErrors", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasParsingErrors", e);
+        }
+    }
+
+    /**
+     * Get value on attribute includes
+     * @return the attribute's value
+     */
+    public abstract AInclude[] getIncludesArrayImpl();
+
+    /**
+     * the includes of this file
+     */
+    public Object getIncludesImpl() {
+        AInclude[] aIncludeArrayImpl0 = getIncludesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aIncludeArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the includes of this file
+     */
+    public final Object getIncludes() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "includes", Optional.empty());
+        	}
+        	Object result = this.getIncludesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "includes", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "includes", e);
+        }
+    }
+
+    /**
+     * true if this file is considered a C++ file
+     */
+    public abstract Boolean getIsCxxImpl();
+
+    /**
+     * true if this file is considered a C++ file
+     */
+    public final Object getIsCxx() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCxx", Optional.empty());
+        	}
+        	Boolean result = this.getIsCxxImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isCxx", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isCxx", e);
+        }
+    }
+
+    /**
+     * true if this file is considered a header file
+     */
+    public abstract Boolean getIsHeaderImpl();
+
+    /**
+     * true if this file is considered a header file
+     */
+    public final Object getIsHeader() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isHeader", Optional.empty());
+        	}
+        	Boolean result = this.getIsHeaderImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isHeader", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isHeader", e);
+        }
+    }
+
+    /**
+     * true if this file is an OpenCL filetype
+     */
+    public abstract Boolean getIsOpenCLImpl();
+
+    /**
+     * true if this file is an OpenCL filetype
+     */
+    public final Object getIsOpenCL() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isOpenCL", Optional.empty());
+        	}
+        	Boolean result = this.getIsOpenCLImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isOpenCL", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isOpenCL", e);
+        }
+    }
+
+    /**
+     * the name of the file
+     */
+    public abstract String getNameImpl();
+
+    /**
+     * the name of the file
+     */
+    public final Object getName() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        	}
+        	String result = this.getNameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "name", e);
         }
     }
 
@@ -166,125 +364,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * the path to the source folder that was given as the base folder of this file
-     */
-    public abstract String getBaseSourcePathImpl();
-
-    /**
-     * the path to the source folder that was given as the base folder of this file
-     */
-    public final Object getBaseSourcePath() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "baseSourcePath", Optional.empty());
-        	}
-        	String result = this.getBaseSourcePathImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "baseSourcePath", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "baseSourcePath", e);
-        }
-    }
-
-    /**
-     * true if this file is considered a C++ file
-     */
-    public abstract Boolean getIsCxxImpl();
-
-    /**
-     * true if this file is considered a C++ file
-     */
-    public final Object getIsCxx() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCxx", Optional.empty());
-        	}
-        	Boolean result = this.getIsCxxImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isCxx", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isCxx", e);
-        }
-    }
-
-    /**
-     * true if this file is considered a header file
-     */
-    public abstract Boolean getIsHeaderImpl();
-
-    /**
-     * true if this file is considered a header file
-     */
-    public final Object getIsHeader() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isHeader", Optional.empty());
-        	}
-        	Boolean result = this.getIsHeaderImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isHeader", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isHeader", e);
-        }
-    }
-
-    /**
-     * true if this file is an OpenCL filetype
-     */
-    public abstract Boolean getIsOpenCLImpl();
-
-    /**
-     * true if this file is an OpenCL filetype
-     */
-    public final Object getIsOpenCL() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isOpenCL", Optional.empty());
-        	}
-        	Boolean result = this.getIsOpenCLImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isOpenCL", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isOpenCL", e);
-        }
-    }
-
-    /**
-     * 
-     * @param destinationFolderpath
-     * @return 
-     */
-    public abstract String getDestinationFilepathImpl(String destinationFolderpath);
-
-    /**
-     * 
-     * @param destinationFolderpath
-     * @return 
-     */
-    public final Object getDestinationFilepath(String destinationFolderpath) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getDestinationFilepath", Optional.empty(), destinationFolderpath);
-        	}
-        	String result = this.getDestinationFilepathImpl(destinationFolderpath);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getDestinationFilepath", Optional.ofNullable(result), destinationFolderpath);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "getDestinationFilepath", e);
-        }
-    }
-
-    /**
      * the name of the source folder of this file, or undefined if it has none
      */
     public abstract String getSourceFoldernameImpl();
@@ -304,85 +383,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "sourceFoldername", e);
-        }
-    }
-
-    /**
-     * true if there were errors during parsing
-     */
-    public abstract Boolean getHasParsingErrorsImpl();
-
-    /**
-     * true if there were errors during parsing
-     */
-    public final Object getHasParsingErrors() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasParsingErrors", Optional.empty());
-        	}
-        	Boolean result = this.getHasParsingErrorsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasParsingErrors", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasParsingErrors", e);
-        }
-    }
-
-    /**
-     * the output of the parser if there were errors during parsing
-     */
-    public abstract String getErrorOutputImpl();
-
-    /**
-     * the output of the parser if there were errors during parsing
-     */
-    public final Object getErrorOutput() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "errorOutput", Optional.empty());
-        	}
-        	String result = this.getErrorOutputImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "errorOutput", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "errorOutput", e);
-        }
-    }
-
-    /**
-     * Get value on attribute includes
-     * @return the attribute's value
-     */
-    public abstract AInclude[] getIncludesArrayImpl();
-
-    /**
-     * the includes of this file
-     */
-    public Object getIncludesImpl() {
-        AInclude[] aIncludeArrayImpl0 = getIncludesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aIncludeArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * the includes of this file
-     */
-    public final Object getIncludes() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "includes", Optional.empty());
-        	}
-        	Object result = this.getIncludesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "includes", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "includes", e);
         }
     }
 
@@ -507,6 +507,92 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Adds a C include to the current file. If the file already has the include, it does nothing
+     * @param name 
+     * @param isAngled 
+     */
+    public void addCIncludeImpl(String name, boolean isAngled) {
+        throw new UnsupportedOperationException(get_class()+": Action addCInclude not implemented ");
+    }
+
+    /**
+     * Adds a C include to the current file. If the file already has the include, it does nothing
+     * @param name 
+     * @param isAngled 
+     */
+    public final void addCInclude(String name, boolean isAngled) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addCInclude", this, Optional.empty(), name, isAngled);
+        	}
+        	this.addCIncludeImpl(name, isAngled);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addCInclude", this, Optional.empty(), name, isAngled);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addCInclude", e);
+        }
+    }
+
+    /**
+     * Adds a function to the file that returns void and has no parameters
+     * @param name 
+     */
+    public AJoinPoint addFunctionImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action addFunction not implemented ");
+    }
+
+    /**
+     * Adds a function to the file that returns void and has no parameters
+     * @param name 
+     */
+    public final Object addFunction(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addFunction", this, Optional.empty(), name);
+        	}
+        	AJoinPoint result = this.addFunctionImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addFunction", this, Optional.ofNullable(result), name);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addFunction", e);
+        }
+    }
+
+    /**
+     * Adds a global variable to this file
+     * @param name 
+     * @param type 
+     * @param initValue 
+     */
+    public AVardecl addGlobalImpl(String name, AJoinPoint type, String initValue) {
+        throw new UnsupportedOperationException(get_class()+": Action addGlobal not implemented ");
+    }
+
+    /**
+     * Adds a global variable to this file
+     * @param name 
+     * @param type 
+     * @param initValue 
+     */
+    public final Object addGlobal(String name, AJoinPoint type, String initValue) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addGlobal", this, Optional.empty(), name, type, initValue);
+        	}
+        	AVardecl result = this.addGlobalImpl(name, type, initValue);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addGlobal", this, Optional.ofNullable(result), name, type, initValue);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addGlobal", e);
+        }
+    }
+
+    /**
      * Adds an include to the current file. If the file already has the include, it does nothing
      * @param name 
      * @param isAngled 
@@ -557,168 +643,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addIncludeJp", e);
-        }
-    }
-
-    /**
-     * Adds a C include to the current file. If the file already has the include, it does nothing
-     * @param name 
-     * @param isAngled 
-     */
-    public void addCIncludeImpl(String name, boolean isAngled) {
-        throw new UnsupportedOperationException(get_class()+": Action addCInclude not implemented ");
-    }
-
-    /**
-     * Adds a C include to the current file. If the file already has the include, it does nothing
-     * @param name 
-     * @param isAngled 
-     */
-    public final void addCInclude(String name, boolean isAngled) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addCInclude", this, Optional.empty(), name, isAngled);
-        	}
-        	this.addCIncludeImpl(name, isAngled);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addCInclude", this, Optional.empty(), name, isAngled);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addCInclude", e);
-        }
-    }
-
-    /**
-     * Adds a global variable to this file
-     * @param name 
-     * @param type 
-     * @param initValue 
-     */
-    public AVardecl addGlobalImpl(String name, AJoinPoint type, String initValue) {
-        throw new UnsupportedOperationException(get_class()+": Action addGlobal not implemented ");
-    }
-
-    /**
-     * Adds a global variable to this file
-     * @param name 
-     * @param type 
-     * @param initValue 
-     */
-    public final Object addGlobal(String name, AJoinPoint type, String initValue) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addGlobal", this, Optional.empty(), name, type, initValue);
-        	}
-        	AVardecl result = this.addGlobalImpl(name, type, initValue);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addGlobal", this, Optional.ofNullable(result), name, type, initValue);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addGlobal", e);
-        }
-    }
-
-    /**
-     * Writes the code of this file to a given folder
-     * @param destinationFoldername 
-     */
-    public String writeImpl(String destinationFoldername) {
-        throw new UnsupportedOperationException(get_class()+": Action write not implemented ");
-    }
-
-    /**
-     * Writes the code of this file to a given folder
-     * @param destinationFoldername 
-     */
-    public final Object write(String destinationFoldername) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "write", this, Optional.empty(), destinationFoldername);
-        	}
-        	String result = this.writeImpl(destinationFoldername);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "write", this, Optional.ofNullable(result), destinationFoldername);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "write", e);
-        }
-    }
-
-    /**
-     * Changes the name of the file
-     * @param filename 
-     */
-    public void setNameImpl(String filename) {
-        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
-    }
-
-    /**
-     * Changes the name of the file
-     * @param filename 
-     */
-    public final void setName(String filename) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), filename);
-        	}
-        	this.setNameImpl(filename);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), filename);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setName", e);
-        }
-    }
-
-    /**
-     * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
-     */
-    public AFile rebuildImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
-    }
-
-    /**
-     * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
-     */
-    public final Object rebuild() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
-        	}
-        	AFile result = this.rebuildImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "rebuild", e);
-        }
-    }
-
-    /**
-     * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
-     */
-    public AJoinPoint rebuildTryImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action rebuildTry not implemented ");
-    }
-
-    /**
-     * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
-     */
-    public final Object rebuildTry() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "rebuildTry", this, Optional.empty());
-        	}
-        	AJoinPoint result = this.rebuildTryImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "rebuildTry", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "rebuildTry", e);
         }
     }
 
@@ -827,29 +751,78 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Adds a function to the file that returns void and has no parameters
-     * @param name 
+     * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
      */
-    public AJoinPoint addFunctionImpl(String name) {
-        throw new UnsupportedOperationException(get_class()+": Action addFunction not implemented ");
+    public AFile rebuildImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
     }
 
     /**
-     * Adds a function to the file that returns void and has no parameters
-     * @param name 
+     * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
      */
-    public final Object addFunction(String name) {
+    public final Object rebuild() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addFunction", this, Optional.empty(), name);
+        		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
         	}
-        	AJoinPoint result = this.addFunctionImpl(name);
+        	AFile result = this.rebuildImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addFunction", this, Optional.ofNullable(result), name);
+        		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "addFunction", e);
+        	throw new ActionException(get_class(), "rebuild", e);
+        }
+    }
+
+    /**
+     * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
+     */
+    public AJoinPoint rebuildTryImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action rebuildTry not implemented ");
+    }
+
+    /**
+     * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
+     */
+    public final Object rebuildTry() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "rebuildTry", this, Optional.empty());
+        	}
+        	AJoinPoint result = this.rebuildTryImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "rebuildTry", this, Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "rebuildTry", e);
+        }
+    }
+
+    /**
+     * Changes the name of the file
+     * @param filename 
+     */
+    public void setNameImpl(String filename) {
+        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
+    }
+
+    /**
+     * Changes the name of the file
+     * @param filename 
+     */
+    public final void setName(String filename) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), filename);
+        	}
+        	this.setNameImpl(filename);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), filename);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setName", e);
         }
     }
 
@@ -876,6 +849,33 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setRelativeFolderpath", e);
+        }
+    }
+
+    /**
+     * Writes the code of this file to a given folder
+     * @param destinationFoldername 
+     */
+    public String writeImpl(String destinationFoldername) {
+        throw new UnsupportedOperationException(get_class()+": Action write not implemented ");
+    }
+
+    /**
+     * Writes the code of this file to a given folder
+     * @param destinationFoldername 
+     */
+    public final Object write(String destinationFoldername) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "write", this, Optional.empty(), destinationFoldername);
+        	}
+        	String result = this.writeImpl(destinationFoldername);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "write", this, Optional.ofNullable(result), destinationFoldername);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "write", e);
         }
     }
 
@@ -944,16 +944,16 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
+        case "relativeFolderpath": {
+        	if(value instanceof String){
+        		this.defRelativeFolderpathImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -983,9 +983,9 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "relativeFolderpath": {
-        	if(value instanceof String){
-        		this.defRelativeFolderpathImpl((String)value);
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1000,21 +1000,21 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
-        attributes.add("name");
-        attributes.add("file");
-        attributes.add("hasMain");
-        attributes.add("path");
-        attributes.add("relativeFilepath");
-        attributes.add("relativeFolderpath");
         attributes.add("baseSourcePath");
+        attributes.add("errorOutput");
+        attributes.add("file");
+        attributes.add("getDestinationFilepath");
+        attributes.add("hasMain");
+        attributes.add("hasParsingErrors");
+        attributes.add("includes");
         attributes.add("isCxx");
         attributes.add("isHeader");
         attributes.add("isOpenCL");
-        attributes.add("getDestinationFilepath");
+        attributes.add("name");
+        attributes.add("path");
+        attributes.add("relativeFilepath");
+        attributes.add("relativeFolderpath");
         attributes.add("sourceFoldername");
-        attributes.add("hasParsingErrors");
-        attributes.add("errorOutput");
-        attributes.add("includes");
     }
 
     /**
@@ -1046,20 +1046,20 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     @Override
     protected final void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
-        actions.add("void addInclude(string, boolean)");
-        actions.add("void addIncludeJp(joinpoint)");
-        actions.add("void addCInclude(string, boolean)");
+        actions.add("void addCInclude(String, boolean)");
+        actions.add("joinpoint addFunction(String)");
         actions.add("vardecl addGlobal(String, joinpoint, String)");
-        actions.add("String write(String)");
-        actions.add("void setName(String)");
-        actions.add("file rebuild()");
-        actions.add("joinpoint rebuildTry()");
+        actions.add("void addInclude(String, boolean)");
+        actions.add("void addIncludeJp(joinpoint)");
         actions.add("void insertBegin(joinpoint)");
         actions.add("void insertBegin(String)");
         actions.add("void insertEnd(joinpoint)");
         actions.add("void insertEnd(String)");
-        actions.add("joinpoint addFunction(String)");
+        actions.add("file rebuild()");
+        actions.add("joinpoint rebuildTry()");
+        actions.add("void setName(String)");
         actions.add("void setRelativeFolderpath(String)");
+        actions.add("String write(String)");
     }
 
     /**
@@ -1074,83 +1074,83 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum FileAttributes {
-        NAME("name"),
-        FILE("file"),
-        HASMAIN("hasMain"),
-        PATH("path"),
-        RELATIVEFILEPATH("relativeFilepath"),
-        RELATIVEFOLDERPATH("relativeFolderpath"),
         BASESOURCEPATH("baseSourcePath"),
+        ERROROUTPUT("errorOutput"),
+        FILE("file"),
+        GETDESTINATIONFILEPATH("getDestinationFilepath"),
+        HASMAIN("hasMain"),
+        HASPARSINGERRORS("hasParsingErrors"),
+        INCLUDES("includes"),
         ISCXX("isCxx"),
         ISHEADER("isHeader"),
         ISOPENCL("isOpenCL"),
-        GETDESTINATIONFILEPATH("getDestinationFilepath"),
+        NAME("name"),
+        PATH("path"),
+        RELATIVEFILEPATH("relativeFilepath"),
+        RELATIVEFOLDERPATH("relativeFolderpath"),
         SOURCEFOLDERNAME("sourceFoldername"),
-        HASPARSINGERRORS("hasParsingErrors"),
-        ERROROUTPUT("errorOutput"),
-        INCLUDES("includes"),
-        PARENT("parent"),
         AST("ast"),
-        SIBLINGSLEFT("siblingsLeft"),
-        DATA("data"),
-        HASCHILDREN("hasChildren"),
-        GETANCESTOR("getAncestor"),
-        TYPE("type"),
-        SIBLINGSRIGHT("siblingsRight"),
-        RIGHTJP("rightJp"),
-        ISCILK("isCilk"),
-        FILEPATH("filepath"),
-        SCOPENODES("scopeNodes"),
-        CHILDREN("children"),
-        GETJAVAFIELDTYPE("getJavaFieldType"),
-        FIRSTCHILD("firstChild"),
-        NUMCHILDREN("numChildren"),
-        GETCHILD("getChild"),
-        LEFTJP("leftJp"),
-        INLINECOMMENTS("inlineComments"),
-        ASTNAME("astName"),
-        JPID("jpId"),
-        ASTID("astId"),
-        GETKEYTYPE("getKeyType"),
-        CONTAINS("contains"),
-        ASTISINSTANCE("astIsInstance"),
-        FILENAME("filename"),
-        JAVAFIELDS("javaFields"),
-        ISINSYSTEMHEADER("isInSystemHeader"),
-        BITWIDTH("bitWidth"),
-        HASNODE("hasNode"),
-        ENDLINE("endLine"),
-        ENDCOLUMN("endColumn"),
-        CODE("code"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
-        GETCHAINANCESTOR("getChainAncestor"),
-        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
-        GETDESCENDANTS("getDescendants"),
-        GETFIRSTJP("getFirstJp"),
-        ISMACRO("isMacro"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
-        GETASTCHILD("getAstChild"),
-        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        ASTID("astId"),
+        ASTISINSTANCE("astIsInstance"),
+        ASTNAME("astName"),
+        ASTNUMCHILDREN("astNumChildren"),
+        BITWIDTH("bitWidth"),
         CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
-        ORIGINNODE("originNode"),
+        CHILDREN("children"),
+        CODE("code"),
         COLUMN("column"),
-        PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
-        GETASTANCESTOR("getAstAncestor"),
+        CONTAINS("contains"),
+        CURRENTREGION("currentRegion"),
+        DATA("data"),
         DEPTH("depth"),
-        LOCATION("location"),
+        DESCENDANTS("descendants"),
+        ENDCOLUMN("endColumn"),
+        ENDLINE("endLine"),
+        FILENAME("filename"),
+        FILEPATH("filepath"),
+        FIRSTCHILD("firstChild"),
+        GETANCESTOR("getAncestor"),
+        GETASTANCESTOR("getAstAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        GETCHILD("getChild"),
+        GETDESCENDANTS("getDescendants"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        GETFIRSTJP("getFirstJp"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
+        GETKEYTYPE("getKeyType"),
         GETUSERFIELD("getUserField"),
+        GETVALUE("getValue"),
+        HASCHILDREN("hasChildren"),
+        HASNODE("hasNode"),
+        HASPARENT("hasParent"),
         HASTYPE("hasType"),
+        INLINECOMMENTS("inlineComments"),
+        ISCILK("isCilk"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        ISMACRO("isMacro"),
+        JAVAFIELDS("javaFields"),
+        JPID("jpId"),
+        KEYS("keys"),
+        LASTCHILD("lastChild"),
+        LEFTJP("leftJp"),
+        LINE("line"),
+        LOCATION("location"),
+        NUMCHILDREN("numChildren"),
+        ORIGINNODE("originNode"),
+        PARENT("parent"),
+        PARENTREGION("parentRegion"),
         PRAGMAS("pragmas"),
+        RIGHTJP("rightJp"),
+        ROOT("root"),
+        SCOPENODES("scopeNodes"),
+        SIBLINGSLEFT("siblingsLeft"),
+        SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        HASPARENT("hasParent");
+        TYPE("type");
         private String name;
 
         /**

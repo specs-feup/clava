@@ -89,7 +89,12 @@ jobs:
           cd clava/ClavaWeaver
           gradle installDist
 
-      - name: Test with Gradle
+      - name: Test ClangAstParser
+        run: |
+          cd clava/ClangAstParser
+          gradle test
+          
+      - name: Test ClavaWeaver
         run: |
           cd clava/ClavaWeaver
           gradle test

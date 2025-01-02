@@ -21,154 +21,6 @@ import java.util.Arrays;
 public abstract class AType extends ACxxWeaverJoinPoint {
 
     /**
-     * Get value on attribute kind
-     * @return the attribute's value
-     */
-    public abstract String getKindImpl();
-
-    /**
-     * Get value on attribute kind
-     * @return the attribute's value
-     */
-    public final Object getKind() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
-        	}
-        	String result = this.getKindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "kind", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isTopLevel
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsTopLevelImpl();
-
-    /**
-     * Get value on attribute isTopLevel
-     * @return the attribute's value
-     */
-    public final Object getIsTopLevel() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isTopLevel", Optional.empty());
-        	}
-        	Boolean result = this.getIsTopLevelImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isTopLevel", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isTopLevel", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isArray
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsArrayImpl();
-
-    /**
-     * Get value on attribute isArray
-     * @return the attribute's value
-     */
-    public final Object getIsArray() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isArray", Optional.empty());
-        	}
-        	Boolean result = this.getIsArrayImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isArray", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isArray", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isPointer
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsPointerImpl();
-
-    /**
-     * Get value on attribute isPointer
-     * @return the attribute's value
-     */
-    public final Object getIsPointer() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPointer", Optional.empty());
-        	}
-        	Boolean result = this.getIsPointerImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isPointer", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isPointer", e);
-        }
-    }
-
-    /**
-     * True if this is a type declared with the 'auto' keyword
-     */
-    public abstract Boolean getIsAutoImpl();
-
-    /**
-     * True if this is a type declared with the 'auto' keyword
-     */
-    public final Object getIsAuto() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isAuto", Optional.empty());
-        	}
-        	Boolean result = this.getIsAutoImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isAuto", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isAuto", e);
-        }
-    }
-
-    /**
-     * Get value on attribute arraySize
-     * @return the attribute's value
-     */
-    public abstract Integer getArraySizeImpl();
-
-    /**
-     * Get value on attribute arraySize
-     * @return the attribute's value
-     */
-    public final Object getArraySize() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "arraySize", Optional.empty());
-        	}
-        	Integer result = this.getArraySizeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "arraySize", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "arraySize", e);
-        }
-    }
-
-    /**
      * Get value on attribute arrayDims
      * @return the attribute's value
      */
@@ -204,6 +56,157 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Get value on attribute arraySize
+     * @return the attribute's value
+     */
+    public abstract Integer getArraySizeImpl();
+
+    /**
+     * Get value on attribute arraySize
+     * @return the attribute's value
+     */
+    public final Object getArraySize() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "arraySize", Optional.empty());
+        	}
+        	Integer result = this.getArraySizeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "arraySize", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "arraySize", e);
+        }
+    }
+
+    /**
+     * Get value on attribute constant
+     * @return the attribute's value
+     */
+    public abstract Boolean getConstantImpl();
+
+    /**
+     * Get value on attribute constant
+     * @return the attribute's value
+     */
+    public final Object getConstant() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "constant", Optional.empty());
+        	}
+        	Boolean result = this.getConstantImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "constant", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "constant", e);
+        }
+    }
+
+    /**
+     * Single-step desugar. Returns the type itself if it does not have sugar
+     */
+    public abstract AType getDesugarImpl();
+
+    /**
+     * Single-step desugar. Returns the type itself if it does not have sugar
+     */
+    public final Object getDesugar() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "desugar", Optional.empty());
+        	}
+        	AType result = this.getDesugarImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "desugar", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "desugar", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defDesugarImpl(AType value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def desugar with type AType not implemented ");
+    }
+
+    /**
+     * Completely desugars the type
+     */
+    public abstract AType getDesugarAllImpl();
+
+    /**
+     * Completely desugars the type
+     */
+    public final Object getDesugarAll() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "desugarAll", Optional.empty());
+        	}
+        	AType result = this.getDesugarAllImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "desugarAll", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "desugarAll", e);
+        }
+    }
+
+    /**
+     * A tree representation of the fields of this type
+     */
+    public abstract String getFieldTreeImpl();
+
+    /**
+     * A tree representation of the fields of this type
+     */
+    public final Object getFieldTree() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "fieldTree", Optional.empty());
+        	}
+        	String result = this.getFieldTreeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "fieldTree", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "fieldTree", e);
+        }
+    }
+
+    /**
+     * Get value on attribute hasSugar
+     * @return the attribute's value
+     */
+    public abstract Boolean getHasSugarImpl();
+
+    /**
+     * Get value on attribute hasSugar
+     * @return the attribute's value
+     */
+    public final Object getHasSugar() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasSugar", Optional.empty());
+        	}
+        	Boolean result = this.getHasSugarImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasSugar", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasSugar", e);
+        }
+    }
+
+    /**
      * Get value on attribute hasTemplateArgs
      * @return the attribute's value
      */
@@ -225,6 +228,177 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasTemplateArgs", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isArray
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsArrayImpl();
+
+    /**
+     * Get value on attribute isArray
+     * @return the attribute's value
+     */
+    public final Object getIsArray() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isArray", Optional.empty());
+        	}
+        	Boolean result = this.getIsArrayImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isArray", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isArray", e);
+        }
+    }
+
+    /**
+     * True if this is a type declared with the 'auto' keyword
+     */
+    public abstract Boolean getIsAutoImpl();
+
+    /**
+     * True if this is a type declared with the 'auto' keyword
+     */
+    public final Object getIsAuto() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isAuto", Optional.empty());
+        	}
+        	Boolean result = this.getIsAutoImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isAuto", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isAuto", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isBuiltin
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsBuiltinImpl();
+
+    /**
+     * Get value on attribute isBuiltin
+     * @return the attribute's value
+     */
+    public final Object getIsBuiltin() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isBuiltin", Optional.empty());
+        	}
+        	Boolean result = this.getIsBuiltinImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isBuiltin", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isBuiltin", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isPointer
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsPointerImpl();
+
+    /**
+     * Get value on attribute isPointer
+     * @return the attribute's value
+     */
+    public final Object getIsPointer() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPointer", Optional.empty());
+        	}
+        	Boolean result = this.getIsPointerImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isPointer", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isPointer", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isTopLevel
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsTopLevelImpl();
+
+    /**
+     * Get value on attribute isTopLevel
+     * @return the attribute's value
+     */
+    public final Object getIsTopLevel() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isTopLevel", Optional.empty());
+        	}
+        	Boolean result = this.getIsTopLevelImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isTopLevel", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isTopLevel", e);
+        }
+    }
+
+    /**
+     * Get value on attribute kind
+     * @return the attribute's value
+     */
+    public abstract String getKindImpl();
+
+    /**
+     * Get value on attribute kind
+     * @return the attribute's value
+     */
+    public final Object getKind() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
+        	}
+        	String result = this.getKindImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "kind", e);
+        }
+    }
+
+    /**
+     * Ignores certain types (e.g., DecayedType)
+     */
+    public abstract AType getNormalizeImpl();
+
+    /**
+     * Ignores certain types (e.g., DecayedType)
+     */
+    public final Object getNormalize() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "normalize", Optional.empty());
+        	}
+        	AType result = this.getNormalizeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "normalize", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "normalize", e);
         }
     }
 
@@ -306,130 +480,25 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute hasSugar
-     * @return the attribute's value
+     * Maps names of join point fields that represent type join points, to their respective values
      */
-    public abstract Boolean getHasSugarImpl();
+    public abstract Map<?, ?> getTypeFieldsImpl();
 
     /**
-     * Get value on attribute hasSugar
-     * @return the attribute's value
+     * Maps names of join point fields that represent type join points, to their respective values
      */
-    public final Object getHasSugar() {
+    public final Object getTypeFields() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasSugar", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "typeFields", Optional.empty());
         	}
-        	Boolean result = this.getHasSugarImpl();
+        	Map<?, ?> result = this.getTypeFieldsImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasSugar", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "typeFields", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasSugar", e);
-        }
-    }
-
-    /**
-     * Single-step desugar. Returns the type itself if it does not have sugar
-     */
-    public abstract AType getDesugarImpl();
-
-    /**
-     * Single-step desugar. Returns the type itself if it does not have sugar
-     */
-    public final Object getDesugar() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "desugar", Optional.empty());
-        	}
-        	AType result = this.getDesugarImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "desugar", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "desugar", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defDesugarImpl(AType value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def desugar with type AType not implemented ");
-    }
-
-    /**
-     * Completely desugars the type
-     */
-    public abstract AType getDesugarAllImpl();
-
-    /**
-     * Completely desugars the type
-     */
-    public final Object getDesugarAll() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "desugarAll", Optional.empty());
-        	}
-        	AType result = this.getDesugarAllImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "desugarAll", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "desugarAll", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isBuiltin
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsBuiltinImpl();
-
-    /**
-     * Get value on attribute isBuiltin
-     * @return the attribute's value
-     */
-    public final Object getIsBuiltin() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isBuiltin", Optional.empty());
-        	}
-        	Boolean result = this.getIsBuiltinImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isBuiltin", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isBuiltin", e);
-        }
-    }
-
-    /**
-     * Get value on attribute constant
-     * @return the attribute's value
-     */
-    public abstract Boolean getConstantImpl();
-
-    /**
-     * Get value on attribute constant
-     * @return the attribute's value
-     */
-    public final Object getConstant() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "constant", Optional.empty());
-        	}
-        	Boolean result = this.getConstantImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "constant", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "constant", e);
+        	throw new AttributeException(get_class(), "typeFields", e);
         }
     }
 
@@ -457,97 +526,53 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Ignores certain types (e.g., DecayedType)
+     * Returns a new node based on this type with the qualifier const
      */
-    public abstract AType getNormalizeImpl();
+    public AType asConstImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action asConst not implemented ");
+    }
 
     /**
-     * Ignores certain types (e.g., DecayedType)
+     * Returns a new node based on this type with the qualifier const
      */
-    public final Object getNormalize() {
+    public final Object asConst() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "normalize", Optional.empty());
+        		eventTrigger().triggerAction(Stage.BEGIN, "asConst", this, Optional.empty());
         	}
-        	AType result = this.getNormalizeImpl();
+        	AType result = this.asConstImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "normalize", Optional.ofNullable(result));
+        		eventTrigger().triggerAction(Stage.END, "asConst", this, Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "normalize", e);
+        	throw new ActionException(get_class(), "asConst", e);
         }
     }
 
     /**
-     * Maps names of join point fields that represent type join points, to their respective values
+     * Sets the desugared type of this type
+     * @param desugaredType 
      */
-    public abstract Map<?, ?> getTypeFieldsImpl();
-
-    /**
-     * Maps names of join point fields that represent type join points, to their respective values
-     */
-    public final Object getTypeFields() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "typeFields", Optional.empty());
-        	}
-        	Map<?, ?> result = this.getTypeFieldsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "typeFields", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "typeFields", e);
-        }
+    public void setDesugarImpl(AType desugaredType) {
+        throw new UnsupportedOperationException(get_class()+": Action setDesugar not implemented ");
     }
 
     /**
-     * A tree representation of the fields of this type
+     * Sets the desugared type of this type
+     * @param desugaredType 
      */
-    public abstract String getFieldTreeImpl();
-
-    /**
-     * A tree representation of the fields of this type
-     */
-    public final Object getFieldTree() {
+    public final void setDesugar(AType desugaredType) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "fieldTree", Optional.empty());
+        		eventTrigger().triggerAction(Stage.BEGIN, "setDesugar", this, Optional.empty(), desugaredType);
         	}
-        	String result = this.getFieldTreeImpl();
+        	this.setDesugarImpl(desugaredType);
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "fieldTree", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "fieldTree", e);
-        }
-    }
-
-    /**
-     * Sets the template argument types of a template type
-     * @param templateArgTypes 
-     */
-    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
-        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgsTypes not implemented ");
-    }
-
-    /**
-     * Sets the template argument types of a template type
-     * @param templateArgTypes 
-     */
-    public final void setTemplateArgsTypes(Object[] templateArgTypes) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
-        	}
-        	this.setTemplateArgsTypesImpl(pt.up.fe.specs.util.SpecsCollections.cast(templateArgTypes, AType.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
+        		eventTrigger().triggerAction(Stage.END, "setDesugar", this, Optional.empty(), desugaredType);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setTemplateArgsTypes", e);
+        	throw new ActionException(get_class(), "setDesugar", e);
         }
     }
 
@@ -580,28 +605,28 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Sets the desugared type of this type
-     * @param desugaredType 
+     * Sets the template argument types of a template type
+     * @param templateArgTypes 
      */
-    public void setDesugarImpl(AType desugaredType) {
-        throw new UnsupportedOperationException(get_class()+": Action setDesugar not implemented ");
+    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
+        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgsTypes not implemented ");
     }
 
     /**
-     * Sets the desugared type of this type
-     * @param desugaredType 
+     * Sets the template argument types of a template type
+     * @param templateArgTypes 
      */
-    public final void setDesugar(AType desugaredType) {
+    public final void setTemplateArgsTypes(Object[] templateArgTypes) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setDesugar", this, Optional.empty(), desugaredType);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
         	}
-        	this.setDesugarImpl(desugaredType);
+        	this.setTemplateArgsTypesImpl(pt.up.fe.specs.util.SpecsCollections.cast(templateArgTypes, AType.class));
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setDesugar", this, Optional.empty(), desugaredType);
+        		eventTrigger().triggerAction(Stage.END, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setDesugar", e);
+        	throw new ActionException(get_class(), "setTemplateArgsTypes", e);
         }
     }
 
@@ -664,31 +689,6 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Returns a new node based on this type with the qualifier const
-     */
-    public AType asConstImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action asConst not implemented ");
-    }
-
-    /**
-     * Returns a new node based on this type with the qualifier const
-     */
-    public final Object asConst() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "asConst", this, Optional.empty());
-        	}
-        	AType result = this.asConstImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "asConst", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "asConst", e);
-        }
-    }
-
-    /**
      * 
      */
     @Override
@@ -708,16 +708,23 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
+        case "desugar": {
+        	if(value instanceof AType){
+        		this.defDesugarImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
+        case "templateArgsTypes": {
+        	if(value instanceof AType[]){
+        		this.defTemplateArgsTypesImpl((AType[])value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -747,16 +754,9 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "desugar": {
+        case "type": {
         	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -771,25 +771,25 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
-        attributes.add("kind");
-        attributes.add("isTopLevel");
-        attributes.add("isArray");
-        attributes.add("isPointer");
-        attributes.add("isAuto");
-        attributes.add("arraySize");
         attributes.add("arrayDims");
-        attributes.add("hasTemplateArgs");
-        attributes.add("templateArgsStrings");
-        attributes.add("templateArgsTypes");
-        attributes.add("hasSugar");
+        attributes.add("arraySize");
+        attributes.add("constant");
         attributes.add("desugar");
         attributes.add("desugarAll");
-        attributes.add("isBuiltin");
-        attributes.add("constant");
-        attributes.add("unwrap");
-        attributes.add("normalize");
-        attributes.add("typeFields");
         attributes.add("fieldTree");
+        attributes.add("hasSugar");
+        attributes.add("hasTemplateArgs");
+        attributes.add("isArray");
+        attributes.add("isAuto");
+        attributes.add("isBuiltin");
+        attributes.add("isPointer");
+        attributes.add("isTopLevel");
+        attributes.add("kind");
+        attributes.add("normalize");
+        attributes.add("templateArgsStrings");
+        attributes.add("templateArgsTypes");
+        attributes.add("typeFields");
+        attributes.add("unwrap");
     }
 
     /**
@@ -806,12 +806,12 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     @Override
     protected void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
-        actions.add("void setTemplateArgsTypes(type[])");
-        actions.add("void setTemplateArgType(int, type)");
+        actions.add("type asConst()");
         actions.add("void setDesugar(type)");
+        actions.add("void setTemplateArgType(int, type)");
+        actions.add("void setTemplateArgsTypes(type[])");
         actions.add("boolean setTypeFieldByValueRecursive(Object, Object)");
         actions.add("type setUnderlyingType(type, type)");
-        actions.add("type asConst()");
     }
 
     /**
@@ -826,87 +826,87 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum TypeAttributes {
-        KIND("kind"),
-        ISTOPLEVEL("isTopLevel"),
-        ISARRAY("isArray"),
-        ISPOINTER("isPointer"),
-        ISAUTO("isAuto"),
-        ARRAYSIZE("arraySize"),
         ARRAYDIMS("arrayDims"),
-        HASTEMPLATEARGS("hasTemplateArgs"),
-        TEMPLATEARGSSTRINGS("templateArgsStrings"),
-        TEMPLATEARGSTYPES("templateArgsTypes"),
-        HASSUGAR("hasSugar"),
+        ARRAYSIZE("arraySize"),
+        CONSTANT("constant"),
         DESUGAR("desugar"),
         DESUGARALL("desugarAll"),
-        ISBUILTIN("isBuiltin"),
-        CONSTANT("constant"),
-        UNWRAP("unwrap"),
-        NORMALIZE("normalize"),
-        TYPEFIELDS("typeFields"),
         FIELDTREE("fieldTree"),
-        PARENT("parent"),
+        HASSUGAR("hasSugar"),
+        HASTEMPLATEARGS("hasTemplateArgs"),
+        ISARRAY("isArray"),
+        ISAUTO("isAuto"),
+        ISBUILTIN("isBuiltin"),
+        ISPOINTER("isPointer"),
+        ISTOPLEVEL("isTopLevel"),
+        KIND("kind"),
+        NORMALIZE("normalize"),
+        TEMPLATEARGSSTRINGS("templateArgsStrings"),
+        TEMPLATEARGSTYPES("templateArgsTypes"),
+        TYPEFIELDS("typeFields"),
+        UNWRAP("unwrap"),
         AST("ast"),
-        SIBLINGSLEFT("siblingsLeft"),
-        DATA("data"),
-        HASCHILDREN("hasChildren"),
-        GETANCESTOR("getAncestor"),
-        TYPE("type"),
-        SIBLINGSRIGHT("siblingsRight"),
-        RIGHTJP("rightJp"),
-        ISCILK("isCilk"),
-        FILEPATH("filepath"),
-        SCOPENODES("scopeNodes"),
-        CHILDREN("children"),
-        GETJAVAFIELDTYPE("getJavaFieldType"),
-        FIRSTCHILD("firstChild"),
-        NUMCHILDREN("numChildren"),
-        GETCHILD("getChild"),
-        LEFTJP("leftJp"),
-        INLINECOMMENTS("inlineComments"),
-        ASTNAME("astName"),
-        JPID("jpId"),
-        ASTID("astId"),
-        GETKEYTYPE("getKeyType"),
-        CONTAINS("contains"),
-        ASTISINSTANCE("astIsInstance"),
-        FILENAME("filename"),
-        JAVAFIELDS("javaFields"),
-        ISINSYSTEMHEADER("isInSystemHeader"),
-        BITWIDTH("bitWidth"),
-        HASNODE("hasNode"),
-        ENDLINE("endLine"),
-        ENDCOLUMN("endColumn"),
-        CODE("code"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
-        GETCHAINANCESTOR("getChainAncestor"),
-        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
-        GETDESCENDANTS("getDescendants"),
-        GETFIRSTJP("getFirstJp"),
-        ISMACRO("isMacro"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
-        GETASTCHILD("getAstChild"),
-        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        ASTID("astId"),
+        ASTISINSTANCE("astIsInstance"),
+        ASTNAME("astName"),
+        ASTNUMCHILDREN("astNumChildren"),
+        BITWIDTH("bitWidth"),
         CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
-        ORIGINNODE("originNode"),
+        CHILDREN("children"),
+        CODE("code"),
         COLUMN("column"),
-        PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
-        GETASTANCESTOR("getAstAncestor"),
+        CONTAINS("contains"),
+        CURRENTREGION("currentRegion"),
+        DATA("data"),
         DEPTH("depth"),
-        LOCATION("location"),
+        DESCENDANTS("descendants"),
+        ENDCOLUMN("endColumn"),
+        ENDLINE("endLine"),
+        FILENAME("filename"),
+        FILEPATH("filepath"),
+        FIRSTCHILD("firstChild"),
+        GETANCESTOR("getAncestor"),
+        GETASTANCESTOR("getAstAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        GETCHILD("getChild"),
+        GETDESCENDANTS("getDescendants"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        GETFIRSTJP("getFirstJp"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
+        GETKEYTYPE("getKeyType"),
         GETUSERFIELD("getUserField"),
+        GETVALUE("getValue"),
+        HASCHILDREN("hasChildren"),
+        HASNODE("hasNode"),
+        HASPARENT("hasParent"),
         HASTYPE("hasType"),
+        INLINECOMMENTS("inlineComments"),
+        ISCILK("isCilk"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        ISMACRO("isMacro"),
+        JAVAFIELDS("javaFields"),
+        JPID("jpId"),
+        KEYS("keys"),
+        LASTCHILD("lastChild"),
+        LEFTJP("leftJp"),
+        LINE("line"),
+        LOCATION("location"),
+        NUMCHILDREN("numChildren"),
+        ORIGINNODE("originNode"),
+        PARENT("parent"),
+        PARENTREGION("parentRegion"),
         PRAGMAS("pragmas"),
+        RIGHTJP("rightJp"),
+        ROOT("root"),
+        SCOPENODES("scopeNodes"),
+        SIBLINGSLEFT("siblingsLeft"),
+        SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        HASPARENT("hasParent");
+        TYPE("type");
         private String name;
 
         /**
