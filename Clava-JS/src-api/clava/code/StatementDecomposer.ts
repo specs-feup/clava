@@ -47,33 +47,30 @@ export default class StatementDecomposer {
    * @returns void
    */
   private ensureValidNode($jp: Joinpoint): void {
+    if (!($jp instanceof Statement) || $jp instanceof EmptyStmt) {
+      const parentStmt = $jp.getAncestor("statement") as Statement | undefined;
+
+      if (parentStmt === undefined) return;
+    
+      this.ensureValidNode(parentStmt);
+
+      return;
+    }
+    
     // If preceeding statement is a CaseStmt or a LabelStmt it might generate invalid code if a declaration is inserted
     // Add empty statement after the label to avoid this situation
-    if ($jp instanceof Statement && !($jp instanceof EmptyStmt)) {
-      const $leftStmt = $jp.leftJp;
-      
-      if (
-        $leftStmt === undefined ||
-        (!($leftStmt instanceof Case) && !($leftStmt instanceof LabelStmt))
-      ) return;
+    const $leftStmt = $jp.leftJp;
+    
+    if (
+      $leftStmt === undefined ||
+      (!($leftStmt instanceof Case) && !($leftStmt instanceof LabelStmt))
+    ) return;
 
-      debug(
-        `StatementDecomposer: statement just before label, inserting empty statement after as a precaution`
-      );
+    debug(
+      `StatementDecomposer: statement just before label, inserting empty statement after as a precaution`
+    );
 
-      $leftStmt.insertAfter(ClavaJoinPoints.emptyStmt());
-
-      return;
-    }
-
-    const parentStmt = $jp.getAncestor("statement") as Statement | undefined;
-
-    if (parentStmt !== undefined) {
-      this.ensureValidNode(parentStmt);
-      return;
-    }
-
-    return;
+    $leftStmt.insertAfter(ClavaJoinPoints.emptyStmt());
   }
 
   /**
