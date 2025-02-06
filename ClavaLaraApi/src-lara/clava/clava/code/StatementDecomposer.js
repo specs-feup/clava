@@ -17,24 +17,29 @@ export default class StatementDecomposer {
         this.startIndex++;
         return varName;
     }
-    isValidNode($jp) {
+    /**
+     * Some Joinpoints might generate invalid code under certain conditions. This method checks
+     * for those cases and adds an empty statement to the AST to fix them.
+     *
+     * @param $jp - Joinpoint to be scrutinized
+     * @returns void
+     */
+    ensureValidNode($jp) {
+        if (!($jp instanceof Statement) || $jp instanceof EmptyStmt) {
+            const parentStmt = $jp.getAncestor("statement");
+            if (parentStmt === undefined)
+                return;
+            this.ensureValidNode(parentStmt);
+            return;
+        }
         // If preceeding statement is a CaseStmt or a LabelStmt it might generate invalid code if a declaration is inserted
         // Add empty statement after the label to avoid this situation
-        if ($jp instanceof Statement && !($jp instanceof EmptyStmt)) {
-            const $leftStmt = $jp.leftJp;
-            if ($leftStmt !== undefined &&
-                ($leftStmt instanceof Case || $leftStmt instanceof LabelStmt)) {
-                debug(`StatementDecomposer: statement just before label, inserting empty statement after as a precaution`);
-                $leftStmt.insertAfter(ClavaJoinPoints.emptyStmt());
-                return true;
-            }
-            return true;
-        }
-        const parentStmt = $jp.getAncestor("statement");
-        if (parentStmt !== undefined) {
-            return this.isValidNode(parentStmt);
-        }
-        return true;
+        const $leftStmt = $jp.leftJp;
+        if ($leftStmt === undefined ||
+            (!($leftStmt instanceof Case) && !($leftStmt instanceof LabelStmt)))
+            return;
+        debug(`StatementDecomposer: statement just before label, inserting empty statement after as a precaution`);
+        $leftStmt.insertAfter(ClavaJoinPoints.emptyStmt());
     }
     /**
      * If the given statement can be decomposed in two or more statements, replaces the statement with the decomposition.
@@ -69,9 +74,7 @@ export default class StatementDecomposer {
             debug(`StatementDecomposer: skipping scope or generic statement join point`);
             return [];
         }
-        if (!this.isValidNode($stmt)) {
-            return [];
-        }
+        this.ensureValidNode($stmt);
         if ($stmt instanceof ExprStmt) {
             return this.decomposeExprStmt($stmt);
         }
@@ -124,9 +127,7 @@ export default class StatementDecomposer {
         return [ClavaJoinPoints.declStmt($decl)];
     }
     decomposeExpr($expr) {
-        if (!this.isValidNode($expr)) {
-            return new DecomposeResult([], $expr);
-        }
+        this.ensureValidNode($expr);
         if ($expr instanceof BinaryOp) {
             return this.decomposeBinaryOp($expr);
         }
