@@ -39,7 +39,7 @@ export default class StatementDecomposer {
     return varName;
   }
 
-  private isValidNode($jp: Joinpoint): boolean {
+  private isValidNode($jp: Joinpoint): void {
     // If preceeding statement is a CaseStmt or a LabelStmt it might generate invalid code if a declaration is inserted
     // Add empty statement after the label to avoid this situation
     if ($jp instanceof Statement && !($jp instanceof EmptyStmt)) {
@@ -55,19 +55,20 @@ export default class StatementDecomposer {
 
         $leftStmt.insertAfter(ClavaJoinPoints.emptyStmt());
 
-        return true;
+        return;
       }
 
-      return true;
+      return;
     }
 
     const parentStmt = $jp.getAncestor("statement") as Statement | undefined;
 
     if (parentStmt !== undefined) {
-      return this.isValidNode(parentStmt);
+      this.isValidNode(parentStmt);
+      return;
     }
 
-    return true;
+    return;
   }
 
   /**
@@ -109,9 +110,7 @@ export default class StatementDecomposer {
       return [];
     }
 
-    if (!this.isValidNode($stmt)) {
-      return [];
-    }
+    this.isValidNode($stmt);
 
     if ($stmt instanceof ExprStmt) {
       return this.decomposeExprStmt($stmt);
@@ -185,9 +184,7 @@ export default class StatementDecomposer {
   }
 
   decomposeExpr($expr: Expression): DecomposeResult {
-    if (!this.isValidNode($expr)) {
-      return new DecomposeResult([], $expr);
-    }
+    this.isValidNode($expr);
 
     if ($expr instanceof BinaryOp) {
       return this.decomposeBinaryOp($expr);
