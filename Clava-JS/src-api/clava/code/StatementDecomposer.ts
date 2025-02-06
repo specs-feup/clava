@@ -51,19 +51,17 @@ export default class StatementDecomposer {
     // Add empty statement after the label to avoid this situation
     if ($jp instanceof Statement && !($jp instanceof EmptyStmt)) {
       const $leftStmt = $jp.leftJp;
-
+      
       if (
-        $leftStmt !== undefined &&
-        ($leftStmt instanceof Case || $leftStmt instanceof LabelStmt)
-      ) {
-        debug(
-          `StatementDecomposer: statement just before label, inserting empty statement after as a precaution`
-        );
+        $leftStmt === undefined ||
+        (!($leftStmt instanceof Case) && !($leftStmt instanceof LabelStmt))
+      ) return;
 
-        $leftStmt.insertAfter(ClavaJoinPoints.emptyStmt());
+      debug(
+        `StatementDecomposer: statement just before label, inserting empty statement after as a precaution`
+      );
 
-        return;
-      }
+      $leftStmt.insertAfter(ClavaJoinPoints.emptyStmt());
 
       return;
     }
