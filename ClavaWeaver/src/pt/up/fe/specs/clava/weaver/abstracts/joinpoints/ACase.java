@@ -4,8 +4,8 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
-import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -26,6 +26,39 @@ public abstract class ACase extends AStatement {
     public ACase(AStatement aStatement){
         this.aStatement = aStatement;
     }
+    /**
+     * Get value on attribute instructions
+     * @return the attribute's value
+     */
+    public abstract AStatement[] getInstructionsArrayImpl();
+
+    /**
+     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
+     */
+    public Object getInstructionsImpl() {
+        AStatement[] aStatementArrayImpl0 = getInstructionsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
+     */
+    public final Object getInstructions() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "instructions", Optional.empty());
+        	}
+        	Object result = this.getInstructionsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "instructions", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "instructions", e);
+        }
+    }
+
     /**
      * true if this is a default case, false otherwise
      */
@@ -73,62 +106,6 @@ public abstract class ACase extends AStatement {
     }
 
     /**
-     * the first statement that is not a case that will be executed by this case statement
-     */
-    public abstract AStatement getNextInstructionImpl();
-
-    /**
-     * the first statement that is not a case that will be executed by this case statement
-     */
-    public final Object getNextInstruction() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextInstruction", Optional.empty());
-        	}
-        	AStatement result = this.getNextInstructionImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "nextInstruction", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "nextInstruction", e);
-        }
-    }
-
-    /**
-     * Get value on attribute instructions
-     * @return the attribute's value
-     */
-    public abstract AStatement[] getInstructionsArrayImpl();
-
-    /**
-     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
-     */
-    public Object getInstructionsImpl() {
-        AStatement[] aStatementArrayImpl0 = getInstructionsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
-     */
-    public final Object getInstructions() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "instructions", Optional.empty());
-        	}
-        	Object result = this.getInstructionsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "instructions", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "instructions", e);
-        }
-    }
-
-    /**
      * the case statement that comes after this case, or undefined if there are no more case statements
      */
     public abstract ACase getNextCaseImpl();
@@ -148,6 +125,29 @@ public abstract class ACase extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "nextCase", e);
+        }
+    }
+
+    /**
+     * the first statement that is not a case that will be executed by this case statement
+     */
+    public abstract AStatement getNextInstructionImpl();
+
+    /**
+     * the first statement that is not a case that will be executed by this case statement
+     */
+    public final Object getNextInstruction() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextInstruction", Optional.empty());
+        	}
+        	AStatement result = this.getNextInstructionImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "nextInstruction", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "nextInstruction", e);
         }
     }
 
@@ -338,363 +338,12 @@ public abstract class ACase extends AStatement {
     }
 
     /**
-     * Get value on attribute parent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getParentImpl() {
-        return this.aStatement.getParentImpl();
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
     @Override
     public String getAstImpl() {
         return this.aStatement.getAstImpl();
-    }
-
-    /**
-     * Get value on attribute siblingsLeftArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getSiblingsLeftArrayImpl() {
-        return this.aStatement.getSiblingsLeftArrayImpl();
-    }
-
-    /**
-     * Get value on attribute data
-     * @return the attribute's value
-     */
-    @Override
-    public Object getDataImpl() {
-        return this.aStatement.getDataImpl();
-    }
-
-    /**
-     * Get value on attribute hasChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasChildrenImpl() {
-        return this.aStatement.getHasChildrenImpl();
-    }
-
-    /**
-     * Get value on attribute getAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAncestorImpl(String type) {
-        return this.aStatement.getAncestorImpl(type);
-    }
-
-    /**
-     * Get value on attribute type
-     * @return the attribute's value
-     */
-    @Override
-    public AType getTypeImpl() {
-        return this.aStatement.getTypeImpl();
-    }
-
-    /**
-     * Get value on attribute siblingsRightArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getSiblingsRightArrayImpl() {
-        return this.aStatement.getSiblingsRightArrayImpl();
-    }
-
-    /**
-     * Get value on attribute rightJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getRightJpImpl() {
-        return this.aStatement.getRightJpImpl();
-    }
-
-    /**
-     * Get value on attribute isCilk
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsCilkImpl() {
-        return this.aStatement.getIsCilkImpl();
-    }
-
-    /**
-     * Get value on attribute filepath
-     * @return the attribute's value
-     */
-    @Override
-    public String getFilepathImpl() {
-        return this.aStatement.getFilepathImpl();
-    }
-
-    /**
-     * Get value on attribute scopeNodesArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getScopeNodesArrayImpl() {
-        return this.aStatement.getScopeNodesArrayImpl();
-    }
-
-    /**
-     * Get value on attribute childrenArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getChildrenArrayImpl() {
-        return this.aStatement.getChildrenArrayImpl();
-    }
-
-    /**
-     * Get value on attribute getJavaFieldType
-     * @return the attribute's value
-     */
-    @Override
-    public String getJavaFieldTypeImpl(String fieldName) {
-        return this.aStatement.getJavaFieldTypeImpl(fieldName);
-    }
-
-    /**
-     * Get value on attribute firstChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getFirstChildImpl() {
-        return this.aStatement.getFirstChildImpl();
-    }
-
-    /**
-     * Get value on attribute numChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getNumChildrenImpl() {
-        return this.aStatement.getNumChildrenImpl();
-    }
-
-    /**
-     * Get value on attribute getChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getChildImpl(int index) {
-        return this.aStatement.getChildImpl(index);
-    }
-
-    /**
-     * Get value on attribute leftJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getLeftJpImpl() {
-        return this.aStatement.getLeftJpImpl();
-    }
-
-    /**
-     * Get value on attribute inlineCommentsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AComment[] getInlineCommentsArrayImpl() {
-        return this.aStatement.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astName
-     * @return the attribute's value
-     */
-    @Override
-    public String getAstNameImpl() {
-        return this.aStatement.getAstNameImpl();
-    }
-
-    /**
-     * Get value on attribute jpId
-     * @return the attribute's value
-     */
-    @Override
-    public String getJpIdImpl() {
-        return this.aStatement.getJpIdImpl();
-    }
-
-    /**
-     * Get value on attribute astId
-     * @return the attribute's value
-     */
-    @Override
-    public String getAstIdImpl() {
-        return this.aStatement.getAstIdImpl();
-    }
-
-    /**
-     * Get value on attribute getKeyType
-     * @return the attribute's value
-     */
-    @Override
-    public Object getKeyTypeImpl(String key) {
-        return this.aStatement.getKeyTypeImpl(key);
-    }
-
-    /**
-     * Get value on attribute contains
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean containsImpl(AJoinPoint jp) {
-        return this.aStatement.containsImpl(jp);
-    }
-
-    /**
-     * Get value on attribute astIsInstance
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean astIsInstanceImpl(String className) {
-        return this.aStatement.astIsInstanceImpl(className);
-    }
-
-    /**
-     * Get value on attribute filename
-     * @return the attribute's value
-     */
-    @Override
-    public String getFilenameImpl() {
-        return this.aStatement.getFilenameImpl();
-    }
-
-    /**
-     * Get value on attribute javaFieldsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getJavaFieldsArrayImpl() {
-        return this.aStatement.getJavaFieldsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute isInSystemHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInSystemHeaderImpl() {
-        return this.aStatement.getIsInSystemHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute bitWidth
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getBitWidthImpl() {
-        return this.aStatement.getBitWidthImpl();
-    }
-
-    /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aStatement.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute endLine
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndLineImpl() {
-        return this.aStatement.getEndLineImpl();
-    }
-
-    /**
-     * Get value on attribute endColumn
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndColumnImpl() {
-        return this.aStatement.getEndColumnImpl();
-    }
-
-    /**
-     * Get value on attribute code
-     * @return the attribute's value
-     */
-    @Override
-    public String getCodeImpl() {
-        return this.aStatement.getCodeImpl();
-    }
-
-    /**
-     * Get value on attribute isInsideLoopHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInsideLoopHeaderImpl() {
-        return this.aStatement.getIsInsideLoopHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute line
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getLineImpl() {
-        return this.aStatement.getLineImpl();
-    }
-
-    /**
-     * Get value on attribute keysArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getKeysArrayImpl() {
-        return this.aStatement.getKeysArrayImpl();
-    }
-
-    /**
-     * Get value on attribute isInsideHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInsideHeaderImpl() {
-        return this.aStatement.getIsInsideHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute astNumChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getAstNumChildrenImpl() {
-        return this.aStatement.getAstNumChildrenImpl();
-    }
-
-    /**
-     * Get value on attribute getChainAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getChainAncestorImpl(String type) {
-        return this.aStatement.getChainAncestorImpl(type);
-    }
-
-    /**
-     * Get value on attribute descendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsArrayImpl() {
-        return this.aStatement.getDescendantsArrayImpl();
     }
 
     /**
@@ -707,66 +356,48 @@ public abstract class ACase extends AStatement {
     }
 
     /**
-     * Get value on attribute getDescendantsArrayImpl
+     * Get value on attribute astId
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getDescendantsArrayImpl(String type) {
-        return this.aStatement.getDescendantsArrayImpl(type);
+    public String getAstIdImpl() {
+        return this.aStatement.getAstIdImpl();
     }
 
     /**
-     * Get value on attribute getFirstJp
+     * Get value on attribute astIsInstance
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getFirstJpImpl(String type) {
-        return this.aStatement.getFirstJpImpl(type);
+    public Boolean astIsInstanceImpl(String className) {
+        return this.aStatement.astIsInstanceImpl(className);
     }
 
     /**
-     * Get value on attribute isMacro
+     * Get value on attribute astName
      * @return the attribute's value
      */
     @Override
-    public Boolean getIsMacroImpl() {
-        return this.aStatement.getIsMacroImpl();
+    public String getAstNameImpl() {
+        return this.aStatement.getAstNameImpl();
     }
 
     /**
-     * Get value on attribute lastChild
+     * Get value on attribute astNumChildren
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getLastChildImpl() {
-        return this.aStatement.getLastChildImpl();
+    public Integer getAstNumChildrenImpl() {
+        return this.aStatement.getAstNumChildrenImpl();
     }
 
     /**
-     * Get value on attribute root
+     * Get value on attribute bitWidth
      * @return the attribute's value
      */
     @Override
-    public AProgram getRootImpl() {
-        return this.aStatement.getRootImpl();
-    }
-
-    /**
-     * Get value on attribute getAstChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstChildImpl(int index) {
-        return this.aStatement.getAstChildImpl(index);
-    }
-
-    /**
-     * Get value on attribute getDescendantsAndSelfArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
-        return this.aStatement.getDescendantsAndSelfArrayImpl(type);
+    public Integer getBitWidthImpl() {
+        return this.aStatement.getBitWidthImpl();
     }
 
     /**
@@ -779,21 +410,21 @@ public abstract class ACase extends AStatement {
     }
 
     /**
-     * Get value on attribute currentRegion
+     * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getCurrentRegionImpl() {
-        return this.aStatement.getCurrentRegionImpl();
+    public AJoinPoint[] getChildrenArrayImpl() {
+        return this.aStatement.getChildrenArrayImpl();
     }
 
     /**
-     * Get value on attribute originNode
+     * Get value on attribute code
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getOriginNodeImpl() {
-        return this.aStatement.getOriginNodeImpl();
+    public String getCodeImpl() {
+        return this.aStatement.getCodeImpl();
     }
 
     /**
@@ -806,30 +437,30 @@ public abstract class ACase extends AStatement {
     }
 
     /**
-     * Get value on attribute parentRegion
+     * Get value on attribute contains
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getParentRegionImpl() {
-        return this.aStatement.getParentRegionImpl();
+    public Boolean containsImpl(AJoinPoint jp) {
+        return this.aStatement.containsImpl(jp);
     }
 
     /**
-     * Get value on attribute getValue
+     * Get value on attribute currentRegion
      * @return the attribute's value
      */
     @Override
-    public Object getValueImpl(String key) {
-        return this.aStatement.getValueImpl(key);
+    public AJoinPoint getCurrentRegionImpl() {
+        return this.aStatement.getCurrentRegionImpl();
     }
 
     /**
-     * Get value on attribute getAstAncestor
+     * Get value on attribute data
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstAncestorImpl(String type) {
-        return this.aStatement.getAstAncestorImpl(type);
+    public Object getDataImpl() {
+        return this.aStatement.getDataImpl();
     }
 
     /**
@@ -842,12 +473,147 @@ public abstract class ACase extends AStatement {
     }
 
     /**
-     * Get value on attribute location
+     * Get value on attribute descendantsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public String getLocationImpl() {
-        return this.aStatement.getLocationImpl();
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aStatement.getDescendantsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute endColumn
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndColumnImpl() {
+        return this.aStatement.getEndColumnImpl();
+    }
+
+    /**
+     * Get value on attribute endLine
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndLineImpl() {
+        return this.aStatement.getEndLineImpl();
+    }
+
+    /**
+     * Get value on attribute filename
+     * @return the attribute's value
+     */
+    @Override
+    public String getFilenameImpl() {
+        return this.aStatement.getFilenameImpl();
+    }
+
+    /**
+     * Get value on attribute filepath
+     * @return the attribute's value
+     */
+    @Override
+    public String getFilepathImpl() {
+        return this.aStatement.getFilepathImpl();
+    }
+
+    /**
+     * Get value on attribute firstChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstChildImpl() {
+        return this.aStatement.getFirstChildImpl();
+    }
+
+    /**
+     * Get value on attribute getAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aStatement.getAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getAstAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aStatement.getAstAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getAstChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstChildImpl(int index) {
+        return this.aStatement.getAstChildImpl(index);
+    }
+
+    /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aStatement.getChainAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChildImpl(int index) {
+        return this.aStatement.getChildImpl(index);
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aStatement.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getDescendantsAndSelfArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aStatement.getDescendantsAndSelfArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aStatement.getFirstJpImpl(type);
+    }
+
+    /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aStatement.getJavaFieldTypeImpl(fieldName);
+    }
+
+    /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aStatement.getKeyTypeImpl(key);
     }
 
     /**
@@ -860,12 +626,201 @@ public abstract class ACase extends AStatement {
     }
 
     /**
+     * Get value on attribute getValue
+     * @return the attribute's value
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aStatement.getValueImpl(key);
+    }
+
+    /**
+     * Get value on attribute hasChildren
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasChildrenImpl() {
+        return this.aStatement.getHasChildrenImpl();
+    }
+
+    /**
+     * Get value on attribute hasNode
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aStatement.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
+     * Get value on attribute hasParent
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasParentImpl() {
+        return this.aStatement.getHasParentImpl();
+    }
+
+    /**
      * Get value on attribute hasType
      * @return the attribute's value
      */
     @Override
     public Boolean getHasTypeImpl() {
         return this.aStatement.getHasTypeImpl();
+    }
+
+    /**
+     * Get value on attribute inlineCommentsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AComment[] getInlineCommentsArrayImpl() {
+        return this.aStatement.getInlineCommentsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute isCilk
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsCilkImpl() {
+        return this.aStatement.getIsCilkImpl();
+    }
+
+    /**
+     * Get value on attribute isInSystemHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInSystemHeaderImpl() {
+        return this.aStatement.getIsInSystemHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideHeaderImpl() {
+        return this.aStatement.getIsInsideHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideLoopHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideLoopHeaderImpl() {
+        return this.aStatement.getIsInsideLoopHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isMacro
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsMacroImpl() {
+        return this.aStatement.getIsMacroImpl();
+    }
+
+    /**
+     * Get value on attribute javaFieldsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getJavaFieldsArrayImpl() {
+        return this.aStatement.getJavaFieldsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute jpId
+     * @return the attribute's value
+     */
+    @Override
+    public String getJpIdImpl() {
+        return this.aStatement.getJpIdImpl();
+    }
+
+    /**
+     * Get value on attribute keysArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getKeysArrayImpl() {
+        return this.aStatement.getKeysArrayImpl();
+    }
+
+    /**
+     * Get value on attribute lastChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getLastChildImpl() {
+        return this.aStatement.getLastChildImpl();
+    }
+
+    /**
+     * Get value on attribute leftJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getLeftJpImpl() {
+        return this.aStatement.getLeftJpImpl();
+    }
+
+    /**
+     * Get value on attribute line
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getLineImpl() {
+        return this.aStatement.getLineImpl();
+    }
+
+    /**
+     * Get value on attribute location
+     * @return the attribute's value
+     */
+    @Override
+    public String getLocationImpl() {
+        return this.aStatement.getLocationImpl();
+    }
+
+    /**
+     * Get value on attribute numChildren
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getNumChildrenImpl() {
+        return this.aStatement.getNumChildrenImpl();
+    }
+
+    /**
+     * Get value on attribute originNode
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aStatement.getOriginNodeImpl();
+    }
+
+    /**
+     * Get value on attribute parent
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getParentImpl() {
+        return this.aStatement.getParentImpl();
+    }
+
+    /**
+     * Get value on attribute parentRegion
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getParentRegionImpl() {
+        return this.aStatement.getParentRegionImpl();
     }
 
     /**
@@ -878,6 +833,51 @@ public abstract class ACase extends AStatement {
     }
 
     /**
+     * Get value on attribute rightJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getRightJpImpl() {
+        return this.aStatement.getRightJpImpl();
+    }
+
+    /**
+     * Get value on attribute root
+     * @return the attribute's value
+     */
+    @Override
+    public AProgram getRootImpl() {
+        return this.aStatement.getRootImpl();
+    }
+
+    /**
+     * Get value on attribute scopeNodesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getScopeNodesArrayImpl() {
+        return this.aStatement.getScopeNodesArrayImpl();
+    }
+
+    /**
+     * Get value on attribute siblingsLeftArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getSiblingsLeftArrayImpl() {
+        return this.aStatement.getSiblingsLeftArrayImpl();
+    }
+
+    /**
+     * Get value on attribute siblingsRightArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getSiblingsRightArrayImpl() {
+        return this.aStatement.getSiblingsRightArrayImpl();
+    }
+
+    /**
      * Get value on attribute stmt
      * @return the attribute's value
      */
@@ -887,12 +887,117 @@ public abstract class ACase extends AStatement {
     }
 
     /**
-     * Get value on attribute hasParent
+     * Get value on attribute type
      * @return the attribute's value
      */
     @Override
-    public Boolean getHasParentImpl() {
-        return this.aStatement.getHasParentImpl();
+    public AType getTypeImpl() {
+        return this.aStatement.getTypeImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, but not of the nodes in its fields
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aStatement.copyImpl();
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    @Override
+    public void dataClearImpl() {
+        this.aStatement.dataClearImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    @Override
+    public AJoinPoint deepCopyImpl() {
+        return this.aStatement.deepCopyImpl();
+    }
+
+    /**
+     * Removes the node associated to this joinpoint from the AST
+     */
+    @Override
+    public AJoinPoint detachImpl() {
+        return this.aStatement.detachImpl();
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aStatement.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aStatement.insertImpl(position, code);
+    }
+
+    /**
+     * Inserts the given join point after this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        return this.aStatement.insertAfterImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(String code) {
+        return this.aStatement.insertAfterImpl(code);
+    }
+
+    /**
+     * Inserts the given join point before this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        return this.aStatement.insertBeforeImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(String node) {
+        return this.aStatement.insertBeforeImpl(node);
+    }
+
+    /**
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
+     * @param message 
+     */
+    @Override
+    public void messageToUserImpl(String message) {
+        this.aStatement.messageToUserImpl(message);
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aStatement.removeChildrenImpl();
     }
 
     /**
@@ -932,47 +1037,48 @@ public abstract class ACase extends AStatement {
     }
 
     /**
-     * Inserts the given join point before this join point
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    @Override
+    public void setDataImpl(Object source) {
+        this.aStatement.setDataImpl(source);
+    }
+
+    /**
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aStatement.insertBeforeImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aStatement.setFirstChildImpl(node);
     }
 
     /**
-     * Overload which accepts a string
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aStatement.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aStatement.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(String node) {
-        return this.aStatement.insertBeforeImpl(node);
-    }
-
-    /**
-     * Inserts the given join point after this join point
-     * @param node 
-     */
-    @Override
-    public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aStatement.insertAfterImpl(node);
-    }
-
-    /**
-     * Overload which accepts a string
-     * @param code 
-     */
-    @Override
-    public AJoinPoint insertAfterImpl(String code) {
-        return this.aStatement.insertAfterImpl(code);
-    }
-
-    /**
-     * Removes the node associated to this joinpoint from the AST
-     */
-    @Override
-    public AJoinPoint detachImpl() {
-        return this.aStatement.detachImpl();
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aStatement.setLastChildImpl(node);
     }
 
     /**
@@ -982,22 +1088,6 @@ public abstract class ACase extends AStatement {
     @Override
     public void setTypeImpl(AType type) {
         this.aStatement.setTypeImpl(type);
-    }
-
-    /**
-     * Performs a copy of the node and its children, but not of the nodes in its fields
-     */
-    @Override
-    public AJoinPoint copyImpl() {
-        return this.aStatement.copyImpl();
-    }
-
-    /**
-     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
-     */
-    @Override
-    public AJoinPoint deepCopyImpl() {
-        return this.aStatement.deepCopyImpl();
     }
 
     /**
@@ -1030,41 +1120,6 @@ public abstract class ACase extends AStatement {
     }
 
     /**
-     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
-     * @param message 
-     */
-    @Override
-    public void messageToUserImpl(String message) {
-        this.aStatement.messageToUserImpl(message);
-    }
-
-    /**
-     * Removes the children of this node
-     */
-    @Override
-    public void removeChildrenImpl() {
-        this.aStatement.removeChildrenImpl();
-    }
-
-    /**
-     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
-        return this.aStatement.setFirstChildImpl(node);
-    }
-
-    /**
-     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setLastChildImpl(AJoinPoint node) {
-        return this.aStatement.setLastChildImpl(node);
-    }
-
-    /**
      * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
@@ -1072,61 +1127,6 @@ public abstract class ACase extends AStatement {
     @Override
     public AJoinPoint toCommentImpl(String prefix, String suffix) {
         return this.aStatement.toCommentImpl(prefix, suffix);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String[] comments) {
-        this.aStatement.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String comments) {
-        this.aStatement.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Setting data directly is not supported, this action just emits a warning and does nothing
-     * @param source 
-     */
-    @Override
-    public void setDataImpl(Object source) {
-        this.aStatement.setDataImpl(source);
-    }
-
-    /**
-     * Clears all properties from the .data object
-     */
-    @Override
-    public void dataClearImpl() {
-        this.aStatement.dataClearImpl();
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aStatement.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aStatement.insertImpl(position, code);
     }
 
     /**
@@ -1209,13 +1209,6 @@ public abstract class ACase extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "firstChild": {
         	if(value instanceof AJoinPoint){
         		this.defFirstChildImpl((AJoinPoint)value);
@@ -1241,6 +1234,13 @@ public abstract class ACase extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -1251,11 +1251,11 @@ public abstract class ACase extends AStatement {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
+        attributes.add("instructions");
         attributes.add("isDefault");
         attributes.add("isEmpty");
-        attributes.add("nextInstruction");
-        attributes.add("instructions");
         attributes.add("nextCase");
+        attributes.add("nextInstruction");
         attributes.add("values");
     }
 
@@ -1300,76 +1300,76 @@ public abstract class ACase extends AStatement {
      * 
      */
     protected enum CaseAttributes {
+        INSTRUCTIONS("instructions"),
         ISDEFAULT("isDefault"),
         ISEMPTY("isEmpty"),
-        NEXTINSTRUCTION("nextInstruction"),
-        INSTRUCTIONS("instructions"),
         NEXTCASE("nextCase"),
+        NEXTINSTRUCTION("nextInstruction"),
         VALUES("values"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
-        PARENT("parent"),
         AST("ast"),
-        SIBLINGSLEFT("siblingsLeft"),
-        DATA("data"),
-        HASCHILDREN("hasChildren"),
-        GETANCESTOR("getAncestor"),
-        TYPE("type"),
-        SIBLINGSRIGHT("siblingsRight"),
-        RIGHTJP("rightJp"),
-        ISCILK("isCilk"),
-        FILEPATH("filepath"),
-        SCOPENODES("scopeNodes"),
-        CHILDREN("children"),
-        GETJAVAFIELDTYPE("getJavaFieldType"),
-        FIRSTCHILD("firstChild"),
-        NUMCHILDREN("numChildren"),
-        GETCHILD("getChild"),
-        LEFTJP("leftJp"),
-        INLINECOMMENTS("inlineComments"),
-        ASTNAME("astName"),
-        JPID("jpId"),
-        ASTID("astId"),
-        GETKEYTYPE("getKeyType"),
-        CONTAINS("contains"),
-        ASTISINSTANCE("astIsInstance"),
-        FILENAME("filename"),
-        JAVAFIELDS("javaFields"),
-        ISINSYSTEMHEADER("isInSystemHeader"),
-        BITWIDTH("bitWidth"),
-        HASNODE("hasNode"),
-        ENDLINE("endLine"),
-        ENDCOLUMN("endColumn"),
-        CODE("code"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
-        GETCHAINANCESTOR("getChainAncestor"),
-        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
-        GETDESCENDANTS("getDescendants"),
-        GETFIRSTJP("getFirstJp"),
-        ISMACRO("isMacro"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
-        GETASTCHILD("getAstChild"),
-        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        ASTID("astId"),
+        ASTISINSTANCE("astIsInstance"),
+        ASTNAME("astName"),
+        ASTNUMCHILDREN("astNumChildren"),
+        BITWIDTH("bitWidth"),
         CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
-        ORIGINNODE("originNode"),
+        CHILDREN("children"),
+        CODE("code"),
         COLUMN("column"),
-        PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
-        GETASTANCESTOR("getAstAncestor"),
+        CONTAINS("contains"),
+        CURRENTREGION("currentRegion"),
+        DATA("data"),
         DEPTH("depth"),
-        LOCATION("location"),
+        DESCENDANTS("descendants"),
+        ENDCOLUMN("endColumn"),
+        ENDLINE("endLine"),
+        FILENAME("filename"),
+        FILEPATH("filepath"),
+        FIRSTCHILD("firstChild"),
+        GETANCESTOR("getAncestor"),
+        GETASTANCESTOR("getAstAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        GETCHILD("getChild"),
+        GETDESCENDANTS("getDescendants"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        GETFIRSTJP("getFirstJp"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
+        GETKEYTYPE("getKeyType"),
         GETUSERFIELD("getUserField"),
+        GETVALUE("getValue"),
+        HASCHILDREN("hasChildren"),
+        HASNODE("hasNode"),
+        HASPARENT("hasParent"),
         HASTYPE("hasType"),
+        INLINECOMMENTS("inlineComments"),
+        ISCILK("isCilk"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        ISMACRO("isMacro"),
+        JAVAFIELDS("javaFields"),
+        JPID("jpId"),
+        KEYS("keys"),
+        LASTCHILD("lastChild"),
+        LEFTJP("leftJp"),
+        LINE("line"),
+        LOCATION("location"),
+        NUMCHILDREN("numChildren"),
+        ORIGINNODE("originNode"),
+        PARENT("parent"),
+        PARENTREGION("parentRegion"),
         PRAGMAS("pragmas"),
+        RIGHTJP("rightJp"),
+        ROOT("root"),
+        SCOPENODES("scopeNodes"),
+        SIBLINGSLEFT("siblingsLeft"),
+        SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        HASPARENT("hasParent");
+        TYPE("type");
         private String name;
 
         /**
