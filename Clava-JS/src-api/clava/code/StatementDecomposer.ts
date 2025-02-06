@@ -39,7 +39,14 @@ export default class StatementDecomposer {
     return varName;
   }
 
-  private isValidNode($jp: Joinpoint): void {
+  /**
+   * Some Joinpoints might generate invalid code under certain conditions. This method checks
+   * for those cases and adds an empty statement to the AST to fix them.
+   * 
+   * @param $jp - Joinpoint to be scrutinized
+   * @returns void
+   */
+  private ensureValidNode($jp: Joinpoint): void {
     // If preceeding statement is a CaseStmt or a LabelStmt it might generate invalid code if a declaration is inserted
     // Add empty statement after the label to avoid this situation
     if ($jp instanceof Statement && !($jp instanceof EmptyStmt)) {
@@ -64,7 +71,7 @@ export default class StatementDecomposer {
     const parentStmt = $jp.getAncestor("statement") as Statement | undefined;
 
     if (parentStmt !== undefined) {
-      this.isValidNode(parentStmt);
+      this.ensureValidNode(parentStmt);
       return;
     }
 
@@ -110,7 +117,7 @@ export default class StatementDecomposer {
       return [];
     }
 
-    this.isValidNode($stmt);
+    this.ensureValidNode($stmt);
 
     if ($stmt instanceof ExprStmt) {
       return this.decomposeExprStmt($stmt);
@@ -184,7 +191,7 @@ export default class StatementDecomposer {
   }
 
   decomposeExpr($expr: Expression): DecomposeResult {
-    this.isValidNode($expr);
+    this.ensureValidNode($expr);
 
     if ($expr instanceof BinaryOp) {
       return this.decomposeBinaryOp($expr);
