@@ -22,7 +22,6 @@ export default class StatementDecomposer {
      * for those cases and adds an empty statement to the AST to fix them.
      *
      * @param $jp - Joinpoint to be scrutinized
-     * @returns void
      */
     ensureValidNode($jp) {
         if (!($jp instanceof Statement) || $jp instanceof EmptyStmt) {
