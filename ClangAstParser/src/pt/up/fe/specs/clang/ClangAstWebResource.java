@@ -18,11 +18,11 @@ import pt.up.fe.specs.util.providers.WebResourceProvider;
 public interface ClangAstWebResource {
 
     static WebResourceProvider create(String resourceUrl, String version) {
-        return WebResourceProvider.newInstance("http://specs.fe.up.pt/resources/clangast/", resourceUrl, version);
+        return WebResourceProvider.newInstance("https://specs.fe.up.pt/resources/clangast/", resourceUrl, version);
     }
 
     static WebResourceProvider create(String resourceUrl) {
-        return WebResourceProvider.newInstance("http://specs.fe.up.pt/resources/clangast/", resourceUrl);
+        return WebResourceProvider.newInstance("https://specs.fe.up.pt/resources/clangast/", resourceUrl);
     }
 
     WebResourceProvider BUILTIN_INCLUDES = create("clang_builtin_includes_v12.0.1.zip", "v12.0.1");
