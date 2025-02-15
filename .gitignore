@@ -19,6 +19,10 @@ RemoteSystemsTempFiles/
 # Custom ignores #
 ##################
 
+.vscode
+deps/temp
+**/.settings/org.eclipse.buildship.core.prefs
+
 tomJava/
 .svn/
 sf.eclipse.javacc.prefs
