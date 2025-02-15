@@ -22,7 +22,7 @@ In the `workspace` directory, edit the `package.json` file and add the following
   "type": "module",
   "workspaces": [
     "clava/Clava-JS",
-    "lara-framework/Lara-JS",
+    "lara-framework/Lara-JS"
   ]
 }
 ```
@@ -39,11 +39,11 @@ gradle installDist
 cd ../..
 ```
 
-Finally, copy the folder `./clava/ClavaWeaver/build/install/ClavaWeaver` into a new folder called java-binaries in `./clava/Clava-JS`:
+Finally, copy the JARs in the folder `./clava/ClavaWeaver/build/install/ClavaWeaver/lib` into a new folder called java-binaries in `./clava/Clava-JS`:
 
 ```bash
 mkdir clava/Clava-JS/java-binaries
-cp -r ./clava/ClavaWeaver/build/install/ClavaWeaver ./clava/Clava-JS/java-binaries
+cp -r ./clava/ClavaWeaver/build/install/ClavaWeaver/lib ./clava/Clava-JS/java-binaries
 ```
 
 Install the package globally:
