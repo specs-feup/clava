@@ -6,8 +6,8 @@ import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
-import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -30,102 +30,93 @@ public abstract class AFunction extends ADeclarator {
         this.aDeclarator = aDeclarator;
     }
     /**
-     * [DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise
+     * Get value on attribute body
+     * @return the attribute's value
      */
-    public abstract Boolean getHasDefinitionImpl();
+    public abstract AScope getBodyImpl();
 
     /**
-     * [DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise
+     * Get value on attribute body
+     * @return the attribute's value
      */
-    public final Object getHasDefinition() {
+    public final Object getBody() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasDefinition", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "body", Optional.empty());
         	}
-        	Boolean result = this.getHasDefinitionImpl();
+        	AScope result = this.getBodyImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasDefinition", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "body", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasDefinition", e);
-        }
-    }
-
-    /**
-     * true if this particular function join point is an implementation (i.e. has a body), false otherwise
-     */
-    public abstract Boolean getIsImplementationImpl();
-
-    /**
-     * true if this particular function join point is an implementation (i.e. has a body), false otherwise
-     */
-    public final Object getIsImplementation() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isImplementation", Optional.empty());
-        	}
-        	Boolean result = this.getIsImplementationImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isImplementation", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isImplementation", e);
-        }
-    }
-
-    /**
-     * true if this particular function join point is a prototype (i.e. does not have a body), false otherwise
-     */
-    public abstract Boolean getIsPrototypeImpl();
-
-    /**
-     * true if this particular function join point is a prototype (i.e. does not have a body), false otherwise
-     */
-    public final Object getIsPrototype() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPrototype", Optional.empty());
-        	}
-        	Boolean result = this.getIsPrototypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isPrototype", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isPrototype", e);
-        }
-    }
-
-    /**
-     * the type of the call, which includes the return type and the types of the parameters
-     */
-    public abstract AFunctionType getFunctionTypeImpl();
-
-    /**
-     * the type of the call, which includes the return type and the types of the parameters
-     */
-    public final Object getFunctionType() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "functionType", Optional.empty());
-        	}
-        	AFunctionType result = this.getFunctionTypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "functionType", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "functionType", e);
+        	throw new AttributeException(get_class(), "body", e);
         }
     }
 
     /**
      * 
      */
-    public void defFunctionTypeImpl(AFunctionType value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def functionType with type AFunctionType not implemented ");
+    public void defBodyImpl(AScope value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def body with type AScope not implemented ");
+    }
+
+    /**
+     * Get value on attribute calls
+     * @return the attribute's value
+     */
+    public abstract ACall[] getCallsArrayImpl();
+
+    /**
+     * Get value on attribute calls
+     * @return the attribute's value
+     */
+    public Object getCallsImpl() {
+        ACall[] aCallArrayImpl0 = getCallsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCallArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute calls
+     * @return the attribute's value
+     */
+    public final Object getCalls() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "calls", Optional.empty());
+        	}
+        	Object result = this.getCallsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "calls", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "calls", e);
+        }
+    }
+
+    /**
+     * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
+     */
+    public abstract AFunction getCanonicalImpl();
+
+    /**
+     * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
+     */
+    public final Object getCanonical() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "canonical", Optional.empty());
+        	}
+        	AFunction result = this.getCanonicalImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "canonical", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "canonical", e);
+        }
     }
 
     /**
@@ -208,6 +199,36 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * the type of the call, which includes the return type and the types of the parameters
+     */
+    public abstract AFunctionType getFunctionTypeImpl();
+
+    /**
+     * the type of the call, which includes the return type and the types of the parameters
+     */
+    public final Object getFunctionType() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "functionType", Optional.empty());
+        	}
+        	AFunctionType result = this.getFunctionTypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "functionType", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "functionType", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defFunctionTypeImpl(AFunctionType value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def functionType with type AFunctionType not implemented ");
+    }
+
+    /**
      * 
      * @param withReturnType
      * @return 
@@ -235,35 +256,270 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute body
-     * @return the attribute's value
+     * [DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise
      */
-    public abstract AScope getBodyImpl();
+    public abstract Boolean getHasDefinitionImpl();
 
     /**
-     * Get value on attribute body
-     * @return the attribute's value
+     * [DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise
      */
-    public final Object getBody() {
+    public final Object getHasDefinition() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "body", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasDefinition", Optional.empty());
         	}
-        	AScope result = this.getBodyImpl();
+        	Boolean result = this.getHasDefinitionImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "body", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasDefinition", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "body", e);
+        	throw new AttributeException(get_class(), "hasDefinition", e);
         }
     }
 
     /**
-     * 
+     * Get value on attribute id
+     * @return the attribute's value
      */
-    public void defBodyImpl(AScope value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def body with type AScope not implemented ");
+    public abstract String getIdImpl();
+
+    /**
+     * Get value on attribute id
+     * @return the attribute's value
+     */
+    public final Object getId() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "id", Optional.empty());
+        	}
+        	String result = this.getIdImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "id", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "id", e);
+        }
+    }
+
+    /**
+     * true, if this is the function returned by the 'canonical' attribute
+     */
+    public abstract Boolean getIsCanonicalImpl();
+
+    /**
+     * true, if this is the function returned by the 'canonical' attribute
+     */
+    public final Object getIsCanonical() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCanonical", Optional.empty());
+        	}
+        	Boolean result = this.getIsCanonicalImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isCanonical", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isCanonical", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isCudaKernel
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsCudaKernelImpl();
+
+    /**
+     * Get value on attribute isCudaKernel
+     * @return the attribute's value
+     */
+    public final Object getIsCudaKernel() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCudaKernel", Optional.empty());
+        	}
+        	Boolean result = this.getIsCudaKernelImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isCudaKernel", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isCudaKernel", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isDelete
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsDeleteImpl();
+
+    /**
+     * Get value on attribute isDelete
+     * @return the attribute's value
+     */
+    public final Object getIsDelete() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isDelete", Optional.empty());
+        	}
+        	Boolean result = this.getIsDeleteImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isDelete", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isDelete", e);
+        }
+    }
+
+    /**
+     * true if this particular function join point is an implementation (i.e. has a body), false otherwise
+     */
+    public abstract Boolean getIsImplementationImpl();
+
+    /**
+     * true if this particular function join point is an implementation (i.e. has a body), false otherwise
+     */
+    public final Object getIsImplementation() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isImplementation", Optional.empty());
+        	}
+        	Boolean result = this.getIsImplementationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isImplementation", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isImplementation", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isInline
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsInlineImpl();
+
+    /**
+     * Get value on attribute isInline
+     * @return the attribute's value
+     */
+    public final Object getIsInline() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInline", Optional.empty());
+        	}
+        	Boolean result = this.getIsInlineImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isInline", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isInline", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isModulePrivate
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsModulePrivateImpl();
+
+    /**
+     * Get value on attribute isModulePrivate
+     * @return the attribute's value
+     */
+    public final Object getIsModulePrivate() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isModulePrivate", Optional.empty());
+        	}
+        	Boolean result = this.getIsModulePrivateImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isModulePrivate", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isModulePrivate", e);
+        }
+    }
+
+    /**
+     * true if this particular function join point is a prototype (i.e. does not have a body), false otherwise
+     */
+    public abstract Boolean getIsPrototypeImpl();
+
+    /**
+     * true if this particular function join point is a prototype (i.e. does not have a body), false otherwise
+     */
+    public final Object getIsPrototype() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPrototype", Optional.empty());
+        	}
+        	Boolean result = this.getIsPrototypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isPrototype", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isPrototype", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isPure
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsPureImpl();
+
+    /**
+     * Get value on attribute isPure
+     * @return the attribute's value
+     */
+    public final Object getIsPure() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPure", Optional.empty());
+        	}
+        	Boolean result = this.getIsPureImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isPure", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isPure", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isVirtual
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsVirtualImpl();
+
+    /**
+     * Get value on attribute isVirtual
+     * @return the attribute's value
+     */
+    public final Object getIsVirtual() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isVirtual", Optional.empty());
+        	}
+        	Boolean result = this.getIsVirtualImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isVirtual", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isVirtual", e);
+        }
     }
 
     /**
@@ -351,239 +607,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute id
-     * @return the attribute's value
-     */
-    public abstract String getIdImpl();
-
-    /**
-     * Get value on attribute id
-     * @return the attribute's value
-     */
-    public final Object getId() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "id", Optional.empty());
-        	}
-        	String result = this.getIdImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "id", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "id", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isInline
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsInlineImpl();
-
-    /**
-     * Get value on attribute isInline
-     * @return the attribute's value
-     */
-    public final Object getIsInline() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInline", Optional.empty());
-        	}
-        	Boolean result = this.getIsInlineImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isInline", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isInline", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isVirtual
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsVirtualImpl();
-
-    /**
-     * Get value on attribute isVirtual
-     * @return the attribute's value
-     */
-    public final Object getIsVirtual() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isVirtual", Optional.empty());
-        	}
-        	Boolean result = this.getIsVirtualImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isVirtual", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isVirtual", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isModulePrivate
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsModulePrivateImpl();
-
-    /**
-     * Get value on attribute isModulePrivate
-     * @return the attribute's value
-     */
-    public final Object getIsModulePrivate() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isModulePrivate", Optional.empty());
-        	}
-        	Boolean result = this.getIsModulePrivateImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isModulePrivate", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isModulePrivate", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isPure
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsPureImpl();
-
-    /**
-     * Get value on attribute isPure
-     * @return the attribute's value
-     */
-    public final Object getIsPure() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPure", Optional.empty());
-        	}
-        	Boolean result = this.getIsPureImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isPure", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isPure", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isDelete
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsDeleteImpl();
-
-    /**
-     * Get value on attribute isDelete
-     * @return the attribute's value
-     */
-    public final Object getIsDelete() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isDelete", Optional.empty());
-        	}
-        	Boolean result = this.getIsDeleteImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isDelete", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isDelete", e);
-        }
-    }
-
-    /**
-     * Get value on attribute storageClass
-     * @return the attribute's value
-     */
-    public abstract String getStorageClassImpl();
-
-    /**
-     * Get value on attribute storageClass
-     * @return the attribute's value
-     */
-    public final Object getStorageClass() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
-        	}
-        	String result = this.getStorageClassImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "storageClass", e);
-        }
-    }
-
-    /**
-     * Get value on attribute calls
-     * @return the attribute's value
-     */
-    public abstract ACall[] getCallsArrayImpl();
-
-    /**
-     * Get value on attribute calls
-     * @return the attribute's value
-     */
-    public Object getCallsImpl() {
-        ACall[] aCallArrayImpl0 = getCallsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCallArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Get value on attribute calls
-     * @return the attribute's value
-     */
-    public final Object getCalls() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "calls", Optional.empty());
-        	}
-        	Object result = this.getCallsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "calls", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "calls", e);
-        }
-    }
-
-    /**
-     * a string with the signature of this function (e.g., name of the function, plus the parameters types)
-     */
-    public abstract String getSignatureImpl();
-
-    /**
-     * a string with the signature of this function (e.g., name of the function, plus the parameters types)
-     */
-    public final Object getSignature() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "signature", Optional.empty());
-        	}
-        	String result = this.getSignatureImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "signature", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "signature", e);
-        }
-    }
-
-    /**
      * Get value on attribute returnType
      * @return the attribute's value
      */
@@ -616,73 +639,50 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute isCudaKernel
-     * @return the attribute's value
+     * a string with the signature of this function (e.g., name of the function, plus the parameters types)
      */
-    public abstract Boolean getIsCudaKernelImpl();
+    public abstract String getSignatureImpl();
 
     /**
-     * Get value on attribute isCudaKernel
-     * @return the attribute's value
+     * a string with the signature of this function (e.g., name of the function, plus the parameters types)
      */
-    public final Object getIsCudaKernel() {
+    public final Object getSignature() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCudaKernel", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "signature", Optional.empty());
         	}
-        	Boolean result = this.getIsCudaKernelImpl();
+        	String result = this.getSignatureImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isCudaKernel", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "signature", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isCudaKernel", e);
+        	throw new AttributeException(get_class(), "signature", e);
         }
     }
 
     /**
-     * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
+     * Get value on attribute storageClass
+     * @return the attribute's value
      */
-    public abstract AFunction getCanonicalImpl();
+    public abstract String getStorageClassImpl();
 
     /**
-     * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
+     * Get value on attribute storageClass
+     * @return the attribute's value
      */
-    public final Object getCanonical() {
+    public final Object getStorageClass() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "canonical", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
         	}
-        	AFunction result = this.getCanonicalImpl();
+        	String result = this.getStorageClassImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "canonical", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "canonical", e);
-        }
-    }
-
-    /**
-     * true, if this is the function returned by the 'canonical' attribute
-     */
-    public abstract Boolean getIsCanonicalImpl();
-
-    /**
-     * true, if this is the function returned by the 'canonical' attribute
-     */
-    public final Object getIsCanonical() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCanonical", Optional.empty());
-        	}
-        	Boolean result = this.getIsCanonicalImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isCanonical", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isCanonical", e);
+        	throw new AttributeException(get_class(), "storageClass", e);
         }
     }
 
@@ -708,6 +708,60 @@ public abstract class AFunction extends ADeclarator {
      */
     public List<? extends ADecl> selectDecl() {
         return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl.class, SelectOp.DESCENDANTS);
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param param 
+     */
+    public void addParamImpl(AParam param) {
+        throw new UnsupportedOperationException(get_class()+": Action addParam not implemented ");
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param param 
+     */
+    public final void addParam(AParam param) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), param);
+        	}
+        	this.addParamImpl(param);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), param);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addParam", e);
+        }
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param name 
+     * @param type 
+     */
+    public void addParamImpl(String name, AType type) {
+        throw new UnsupportedOperationException(get_class()+": Action addParam not implemented ");
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param name 
+     * @param type 
+     */
+    public final void addParam(String name, AType type) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), name, type);
+        	}
+        	this.addParamImpl(name, type);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), name, type);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addParam", e);
+        }
     }
 
     /**
@@ -852,54 +906,81 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Sets the parameters of the function
-     * @param params 
+     * Creates a new call to this function
+     * @param args 
      */
-    public void setParamsImpl(AParam[] params) {
-        throw new UnsupportedOperationException(get_class()+": Action setParams not implemented ");
+    public ACall newCallImpl(AJoinPoint[] args) {
+        throw new UnsupportedOperationException(get_class()+": Action newCall not implemented ");
     }
 
     /**
-     * Sets the parameters of the function
-     * @param params 
+     * Creates a new call to this function
+     * @param args 
      */
-    public final void setParams(Object[] params) {
+    public final Object newCall(Object[] args) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), new Object[] { params});
+        		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), new Object[] { args});
         	}
-        	this.setParamsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, AParam.class));
+        	ACall result = this.newCallImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AJoinPoint.class));
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), new Object[] { params});
+        		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), new Object[] { args});
         	}
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setParams", e);
+        	throw new ActionException(get_class(), "newCall", e);
         }
     }
 
     /**
-     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
-     * @param params 
+     * Sets the body of the function
+     * @param body 
      */
-    public void setParamsFromStringsImpl(String[] params) {
-        throw new UnsupportedOperationException(get_class()+": Action setParamsFromStrings not implemented ");
+    public void setBodyImpl(AScope body) {
+        throw new UnsupportedOperationException(get_class()+": Action setBody not implemented ");
     }
 
     /**
-     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
-     * @param params 
+     * Sets the body of the function
+     * @param body 
      */
-    public final void setParamsFromStrings(Object[] params) {
+    public final void setBody(AScope body) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
+        		eventTrigger().triggerAction(Stage.BEGIN, "setBody", this, Optional.empty(), body);
         	}
-        	this.setParamsFromStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, String.class));
+        	this.setBodyImpl(body);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
+        		eventTrigger().triggerAction(Stage.END, "setBody", this, Optional.empty(), body);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setParamsFromStrings", e);
+        	throw new ActionException(get_class(), "setBody", e);
+        }
+    }
+
+    /**
+     * Sets the type of the function
+     * @param functionType 
+     */
+    public void setFunctionTypeImpl(AFunctionType functionType) {
+        throw new UnsupportedOperationException(get_class()+": Action setFunctionType not implemented ");
+    }
+
+    /**
+     * Sets the type of the function
+     * @param functionType 
+     */
+    public final void setFunctionType(AFunctionType functionType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setFunctionType", this, Optional.empty(), functionType);
+        	}
+        	this.setFunctionTypeImpl(functionType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setFunctionType", this, Optional.empty(), functionType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setFunctionType", e);
         }
     }
 
@@ -962,81 +1043,82 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Sets the body of the function
-     * @param body 
+     * Sets the type of a parameter of the function
+     * @param index 
+     * @param newType 
      */
-    public void setBodyImpl(AScope body) {
-        throw new UnsupportedOperationException(get_class()+": Action setBody not implemented ");
+    public void setParamTypeImpl(int index, AType newType) {
+        throw new UnsupportedOperationException(get_class()+": Action setParamType not implemented ");
     }
 
     /**
-     * Sets the body of the function
-     * @param body 
+     * Sets the type of a parameter of the function
+     * @param index 
+     * @param newType 
      */
-    public final void setBody(AScope body) {
+    public final void setParamType(int index, AType newType) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setBody", this, Optional.empty(), body);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParamType", this, Optional.empty(), index, newType);
         	}
-        	this.setBodyImpl(body);
+        	this.setParamTypeImpl(index, newType);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setBody", this, Optional.empty(), body);
+        		eventTrigger().triggerAction(Stage.END, "setParamType", this, Optional.empty(), index, newType);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setBody", e);
+        	throw new ActionException(get_class(), "setParamType", e);
         }
     }
 
     /**
-     * Creates a new call to this function
-     * @param args 
+     * Sets the parameters of the function
+     * @param params 
      */
-    public ACall newCallImpl(AJoinPoint[] args) {
-        throw new UnsupportedOperationException(get_class()+": Action newCall not implemented ");
+    public void setParamsImpl(AParam[] params) {
+        throw new UnsupportedOperationException(get_class()+": Action setParams not implemented ");
     }
 
     /**
-     * Creates a new call to this function
-     * @param args 
+     * Sets the parameters of the function
+     * @param params 
      */
-    public final Object newCall(Object[] args) {
+    public final void setParams(Object[] params) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), new Object[] { args});
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), new Object[] { params});
         	}
-        	ACall result = this.newCallImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AJoinPoint.class));
+        	this.setParamsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, AParam.class));
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), new Object[] { args});
+        		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), new Object[] { params});
         	}
-        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "newCall", e);
+        	throw new ActionException(get_class(), "setParams", e);
         }
     }
 
     /**
-     * Sets the type of the function
-     * @param functionType 
+     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
+     * @param params 
      */
-    public void setFunctionTypeImpl(AFunctionType functionType) {
-        throw new UnsupportedOperationException(get_class()+": Action setFunctionType not implemented ");
+    public void setParamsFromStringsImpl(String[] params) {
+        throw new UnsupportedOperationException(get_class()+": Action setParamsFromStrings not implemented ");
     }
 
     /**
-     * Sets the type of the function
-     * @param functionType 
+     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
+     * @param params 
      */
-    public final void setFunctionType(AFunctionType functionType) {
+    public final void setParamsFromStrings(Object[] params) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setFunctionType", this, Optional.empty(), functionType);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
         	}
-        	this.setFunctionTypeImpl(functionType);
+        	this.setParamsFromStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, String.class));
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setFunctionType", this, Optional.empty(), functionType);
+        		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setFunctionType", e);
+        	throw new ActionException(get_class(), "setParamsFromStrings", e);
         }
     }
 
@@ -1067,85 +1149,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Sets the type of a parameter of the function
-     * @param index 
-     * @param newType 
+     * Get value on attribute isPublic
+     * @return the attribute's value
      */
-    public void setParamTypeImpl(int index, AType newType) {
-        throw new UnsupportedOperationException(get_class()+": Action setParamType not implemented ");
-    }
-
-    /**
-     * Sets the type of a parameter of the function
-     * @param index 
-     * @param newType 
-     */
-    public final void setParamType(int index, AType newType) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParamType", this, Optional.empty(), index, newType);
-        	}
-        	this.setParamTypeImpl(index, newType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParamType", this, Optional.empty(), index, newType);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setParamType", e);
-        }
-    }
-
-    /**
-     * Adds a new parameter to the function
-     * @param param 
-     */
-    public void addParamImpl(AParam param) {
-        throw new UnsupportedOperationException(get_class()+": Action addParam not implemented ");
-    }
-
-    /**
-     * Adds a new parameter to the function
-     * @param param 
-     */
-    public final void addParam(AParam param) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), param);
-        	}
-        	this.addParamImpl(param);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), param);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addParam", e);
-        }
-    }
-
-    /**
-     * Adds a new parameter to the function
-     * @param name 
-     * @param type 
-     */
-    public void addParamImpl(String name, AType type) {
-        throw new UnsupportedOperationException(get_class()+": Action addParam not implemented ");
-    }
-
-    /**
-     * Adds a new parameter to the function
-     * @param name 
-     * @param type 
-     */
-    public final void addParam(String name, AType type) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), name, type);
-        	}
-        	this.addParamImpl(name, type);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), name, type);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addParam", e);
-        }
+    @Override
+    public Boolean getIsPublicImpl() {
+        return this.aDeclarator.getIsPublicImpl();
     }
 
     /**
@@ -1158,12 +1167,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute isPublic
+     * Get value on attribute qualifiedName
      * @return the attribute's value
      */
     @Override
-    public Boolean getIsPublicImpl() {
-        return this.aDeclarator.getIsPublicImpl();
+    public String getQualifiedNameImpl() {
+        return this.aDeclarator.getQualifiedNameImpl();
     }
 
     /**
@@ -1173,15 +1182,6 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public String getQualifiedPrefixImpl() {
         return this.aDeclarator.getQualifiedPrefixImpl();
-    }
-
-    /**
-     * Get value on attribute qualifiedName
-     * @return the attribute's value
-     */
-    @Override
-    public String getQualifiedNameImpl() {
-        return this.aDeclarator.getQualifiedNameImpl();
     }
 
     /**
@@ -1203,24 +1203,15 @@ public abstract class AFunction extends ADeclarator {
     /**
      * 
      */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aDeclarator.defQualifiedPrefixImpl(value);
-    }
-
-    /**
-     * 
-     */
     public void defQualifiedNameImpl(String value) {
         this.aDeclarator.defQualifiedNameImpl(value);
     }
 
     /**
-     * Get value on attribute parent
-     * @return the attribute's value
+     * 
      */
-    @Override
-    public AJoinPoint getParentImpl() {
-        return this.aDeclarator.getParentImpl();
+    public void defQualifiedPrefixImpl(String value) {
+        this.aDeclarator.defQualifiedPrefixImpl(value);
     }
 
     /**
@@ -1233,174 +1224,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute siblingsLeftArrayImpl
+     * Get value on attribute astChildrenArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getSiblingsLeftArrayImpl() {
-        return this.aDeclarator.getSiblingsLeftArrayImpl();
-    }
-
-    /**
-     * Get value on attribute data
-     * @return the attribute's value
-     */
-    @Override
-    public Object getDataImpl() {
-        return this.aDeclarator.getDataImpl();
-    }
-
-    /**
-     * Get value on attribute hasChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasChildrenImpl() {
-        return this.aDeclarator.getHasChildrenImpl();
-    }
-
-    /**
-     * Get value on attribute getAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAncestorImpl(String type) {
-        return this.aDeclarator.getAncestorImpl(type);
-    }
-
-    /**
-     * Get value on attribute type
-     * @return the attribute's value
-     */
-    @Override
-    public AType getTypeImpl() {
-        return this.aDeclarator.getTypeImpl();
-    }
-
-    /**
-     * Get value on attribute siblingsRightArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getSiblingsRightArrayImpl() {
-        return this.aDeclarator.getSiblingsRightArrayImpl();
-    }
-
-    /**
-     * Get value on attribute rightJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getRightJpImpl() {
-        return this.aDeclarator.getRightJpImpl();
-    }
-
-    /**
-     * Get value on attribute isCilk
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsCilkImpl() {
-        return this.aDeclarator.getIsCilkImpl();
-    }
-
-    /**
-     * Get value on attribute filepath
-     * @return the attribute's value
-     */
-    @Override
-    public String getFilepathImpl() {
-        return this.aDeclarator.getFilepathImpl();
-    }
-
-    /**
-     * Get value on attribute scopeNodesArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getScopeNodesArrayImpl() {
-        return this.aDeclarator.getScopeNodesArrayImpl();
-    }
-
-    /**
-     * Get value on attribute childrenArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getChildrenArrayImpl() {
-        return this.aDeclarator.getChildrenArrayImpl();
-    }
-
-    /**
-     * Get value on attribute getJavaFieldType
-     * @return the attribute's value
-     */
-    @Override
-    public String getJavaFieldTypeImpl(String fieldName) {
-        return this.aDeclarator.getJavaFieldTypeImpl(fieldName);
-    }
-
-    /**
-     * Get value on attribute firstChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getFirstChildImpl() {
-        return this.aDeclarator.getFirstChildImpl();
-    }
-
-    /**
-     * Get value on attribute numChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getNumChildrenImpl() {
-        return this.aDeclarator.getNumChildrenImpl();
-    }
-
-    /**
-     * Get value on attribute getChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getChildImpl(int index) {
-        return this.aDeclarator.getChildImpl(index);
-    }
-
-    /**
-     * Get value on attribute leftJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getLeftJpImpl() {
-        return this.aDeclarator.getLeftJpImpl();
-    }
-
-    /**
-     * Get value on attribute inlineCommentsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AComment[] getInlineCommentsArrayImpl() {
-        return this.aDeclarator.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astName
-     * @return the attribute's value
-     */
-    @Override
-    public String getAstNameImpl() {
-        return this.aDeclarator.getAstNameImpl();
-    }
-
-    /**
-     * Get value on attribute jpId
-     * @return the attribute's value
-     */
-    @Override
-    public String getJpIdImpl() {
-        return this.aDeclarator.getJpIdImpl();
+    public AJoinPoint[] getAstChildrenArrayImpl() {
+        return this.aDeclarator.getAstChildrenArrayImpl();
     }
 
     /**
@@ -1413,24 +1242,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute getKeyType
-     * @return the attribute's value
-     */
-    @Override
-    public Object getKeyTypeImpl(String key) {
-        return this.aDeclarator.getKeyTypeImpl(key);
-    }
-
-    /**
-     * Get value on attribute contains
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean containsImpl(AJoinPoint jp) {
-        return this.aDeclarator.containsImpl(jp);
-    }
-
-    /**
      * Get value on attribute astIsInstance
      * @return the attribute's value
      */
@@ -1440,111 +1251,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute filename
+     * Get value on attribute astName
      * @return the attribute's value
      */
     @Override
-    public String getFilenameImpl() {
-        return this.aDeclarator.getFilenameImpl();
-    }
-
-    /**
-     * Get value on attribute javaFieldsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getJavaFieldsArrayImpl() {
-        return this.aDeclarator.getJavaFieldsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute isInSystemHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInSystemHeaderImpl() {
-        return this.aDeclarator.getIsInSystemHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute bitWidth
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getBitWidthImpl() {
-        return this.aDeclarator.getBitWidthImpl();
-    }
-
-    /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aDeclarator.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute endLine
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndLineImpl() {
-        return this.aDeclarator.getEndLineImpl();
-    }
-
-    /**
-     * Get value on attribute endColumn
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndColumnImpl() {
-        return this.aDeclarator.getEndColumnImpl();
-    }
-
-    /**
-     * Get value on attribute code
-     * @return the attribute's value
-     */
-    @Override
-    public String getCodeImpl() {
-        return this.aDeclarator.getCodeImpl();
-    }
-
-    /**
-     * Get value on attribute isInsideLoopHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInsideLoopHeaderImpl() {
-        return this.aDeclarator.getIsInsideLoopHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute line
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getLineImpl() {
-        return this.aDeclarator.getLineImpl();
-    }
-
-    /**
-     * Get value on attribute keysArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getKeysArrayImpl() {
-        return this.aDeclarator.getKeysArrayImpl();
-    }
-
-    /**
-     * Get value on attribute isInsideHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInsideHeaderImpl() {
-        return this.aDeclarator.getIsInsideHeaderImpl();
+    public String getAstNameImpl() {
+        return this.aDeclarator.getAstNameImpl();
     }
 
     /**
@@ -1557,93 +1269,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute getChainAncestor
+     * Get value on attribute bitWidth
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChainAncestorImpl(String type) {
-        return this.aDeclarator.getChainAncestorImpl(type);
-    }
-
-    /**
-     * Get value on attribute descendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsArrayImpl() {
-        return this.aDeclarator.getDescendantsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astChildrenArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getAstChildrenArrayImpl() {
-        return this.aDeclarator.getAstChildrenArrayImpl();
-    }
-
-    /**
-     * Get value on attribute getDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsArrayImpl(String type) {
-        return this.aDeclarator.getDescendantsArrayImpl(type);
-    }
-
-    /**
-     * Get value on attribute getFirstJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getFirstJpImpl(String type) {
-        return this.aDeclarator.getFirstJpImpl(type);
-    }
-
-    /**
-     * Get value on attribute isMacro
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsMacroImpl() {
-        return this.aDeclarator.getIsMacroImpl();
-    }
-
-    /**
-     * Get value on attribute lastChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getLastChildImpl() {
-        return this.aDeclarator.getLastChildImpl();
-    }
-
-    /**
-     * Get value on attribute root
-     * @return the attribute's value
-     */
-    @Override
-    public AProgram getRootImpl() {
-        return this.aDeclarator.getRootImpl();
-    }
-
-    /**
-     * Get value on attribute getAstChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstChildImpl(int index) {
-        return this.aDeclarator.getAstChildImpl(index);
-    }
-
-    /**
-     * Get value on attribute getDescendantsAndSelfArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
-        return this.aDeclarator.getDescendantsAndSelfArrayImpl(type);
+    public Integer getBitWidthImpl() {
+        return this.aDeclarator.getBitWidthImpl();
     }
 
     /**
@@ -1656,21 +1287,21 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute currentRegion
+     * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getCurrentRegionImpl() {
-        return this.aDeclarator.getCurrentRegionImpl();
+    public AJoinPoint[] getChildrenArrayImpl() {
+        return this.aDeclarator.getChildrenArrayImpl();
     }
 
     /**
-     * Get value on attribute originNode
+     * Get value on attribute code
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getOriginNodeImpl() {
-        return this.aDeclarator.getOriginNodeImpl();
+    public String getCodeImpl() {
+        return this.aDeclarator.getCodeImpl();
     }
 
     /**
@@ -1683,30 +1314,30 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute parentRegion
+     * Get value on attribute contains
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getParentRegionImpl() {
-        return this.aDeclarator.getParentRegionImpl();
+    public Boolean containsImpl(AJoinPoint jp) {
+        return this.aDeclarator.containsImpl(jp);
     }
 
     /**
-     * Get value on attribute getValue
+     * Get value on attribute currentRegion
      * @return the attribute's value
      */
     @Override
-    public Object getValueImpl(String key) {
-        return this.aDeclarator.getValueImpl(key);
+    public AJoinPoint getCurrentRegionImpl() {
+        return this.aDeclarator.getCurrentRegionImpl();
     }
 
     /**
-     * Get value on attribute getAstAncestor
+     * Get value on attribute data
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstAncestorImpl(String type) {
-        return this.aDeclarator.getAstAncestorImpl(type);
+    public Object getDataImpl() {
+        return this.aDeclarator.getDataImpl();
     }
 
     /**
@@ -1719,12 +1350,147 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute location
+     * Get value on attribute descendantsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public String getLocationImpl() {
-        return this.aDeclarator.getLocationImpl();
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aDeclarator.getDescendantsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute endColumn
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndColumnImpl() {
+        return this.aDeclarator.getEndColumnImpl();
+    }
+
+    /**
+     * Get value on attribute endLine
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndLineImpl() {
+        return this.aDeclarator.getEndLineImpl();
+    }
+
+    /**
+     * Get value on attribute filename
+     * @return the attribute's value
+     */
+    @Override
+    public String getFilenameImpl() {
+        return this.aDeclarator.getFilenameImpl();
+    }
+
+    /**
+     * Get value on attribute filepath
+     * @return the attribute's value
+     */
+    @Override
+    public String getFilepathImpl() {
+        return this.aDeclarator.getFilepathImpl();
+    }
+
+    /**
+     * Get value on attribute firstChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstChildImpl() {
+        return this.aDeclarator.getFirstChildImpl();
+    }
+
+    /**
+     * Get value on attribute getAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aDeclarator.getAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getAstAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aDeclarator.getAstAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getAstChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstChildImpl(int index) {
+        return this.aDeclarator.getAstChildImpl(index);
+    }
+
+    /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aDeclarator.getChainAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChildImpl(int index) {
+        return this.aDeclarator.getChildImpl(index);
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aDeclarator.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getDescendantsAndSelfArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aDeclarator.getDescendantsAndSelfArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aDeclarator.getFirstJpImpl(type);
+    }
+
+    /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aDeclarator.getJavaFieldTypeImpl(fieldName);
+    }
+
+    /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aDeclarator.getKeyTypeImpl(key);
     }
 
     /**
@@ -1737,12 +1503,201 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Get value on attribute getValue
+     * @return the attribute's value
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aDeclarator.getValueImpl(key);
+    }
+
+    /**
+     * Get value on attribute hasChildren
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasChildrenImpl() {
+        return this.aDeclarator.getHasChildrenImpl();
+    }
+
+    /**
+     * Get value on attribute hasNode
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aDeclarator.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
+     * Get value on attribute hasParent
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasParentImpl() {
+        return this.aDeclarator.getHasParentImpl();
+    }
+
+    /**
      * Get value on attribute hasType
      * @return the attribute's value
      */
     @Override
     public Boolean getHasTypeImpl() {
         return this.aDeclarator.getHasTypeImpl();
+    }
+
+    /**
+     * Get value on attribute inlineCommentsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AComment[] getInlineCommentsArrayImpl() {
+        return this.aDeclarator.getInlineCommentsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute isCilk
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsCilkImpl() {
+        return this.aDeclarator.getIsCilkImpl();
+    }
+
+    /**
+     * Get value on attribute isInSystemHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInSystemHeaderImpl() {
+        return this.aDeclarator.getIsInSystemHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideHeaderImpl() {
+        return this.aDeclarator.getIsInsideHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideLoopHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideLoopHeaderImpl() {
+        return this.aDeclarator.getIsInsideLoopHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isMacro
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsMacroImpl() {
+        return this.aDeclarator.getIsMacroImpl();
+    }
+
+    /**
+     * Get value on attribute javaFieldsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getJavaFieldsArrayImpl() {
+        return this.aDeclarator.getJavaFieldsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute jpId
+     * @return the attribute's value
+     */
+    @Override
+    public String getJpIdImpl() {
+        return this.aDeclarator.getJpIdImpl();
+    }
+
+    /**
+     * Get value on attribute keysArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getKeysArrayImpl() {
+        return this.aDeclarator.getKeysArrayImpl();
+    }
+
+    /**
+     * Get value on attribute lastChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getLastChildImpl() {
+        return this.aDeclarator.getLastChildImpl();
+    }
+
+    /**
+     * Get value on attribute leftJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getLeftJpImpl() {
+        return this.aDeclarator.getLeftJpImpl();
+    }
+
+    /**
+     * Get value on attribute line
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getLineImpl() {
+        return this.aDeclarator.getLineImpl();
+    }
+
+    /**
+     * Get value on attribute location
+     * @return the attribute's value
+     */
+    @Override
+    public String getLocationImpl() {
+        return this.aDeclarator.getLocationImpl();
+    }
+
+    /**
+     * Get value on attribute numChildren
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getNumChildrenImpl() {
+        return this.aDeclarator.getNumChildrenImpl();
+    }
+
+    /**
+     * Get value on attribute originNode
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aDeclarator.getOriginNodeImpl();
+    }
+
+    /**
+     * Get value on attribute parent
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getParentImpl() {
+        return this.aDeclarator.getParentImpl();
+    }
+
+    /**
+     * Get value on attribute parentRegion
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getParentRegionImpl() {
+        return this.aDeclarator.getParentRegionImpl();
     }
 
     /**
@@ -1755,6 +1710,51 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Get value on attribute rightJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getRightJpImpl() {
+        return this.aDeclarator.getRightJpImpl();
+    }
+
+    /**
+     * Get value on attribute root
+     * @return the attribute's value
+     */
+    @Override
+    public AProgram getRootImpl() {
+        return this.aDeclarator.getRootImpl();
+    }
+
+    /**
+     * Get value on attribute scopeNodesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getScopeNodesArrayImpl() {
+        return this.aDeclarator.getScopeNodesArrayImpl();
+    }
+
+    /**
+     * Get value on attribute siblingsLeftArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getSiblingsLeftArrayImpl() {
+        return this.aDeclarator.getSiblingsLeftArrayImpl();
+    }
+
+    /**
+     * Get value on attribute siblingsRightArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getSiblingsRightArrayImpl() {
+        return this.aDeclarator.getSiblingsRightArrayImpl();
+    }
+
+    /**
      * Get value on attribute stmt
      * @return the attribute's value
      */
@@ -1764,12 +1764,117 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute hasParent
+     * Get value on attribute type
      * @return the attribute's value
      */
     @Override
-    public Boolean getHasParentImpl() {
-        return this.aDeclarator.getHasParentImpl();
+    public AType getTypeImpl() {
+        return this.aDeclarator.getTypeImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, but not of the nodes in its fields
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aDeclarator.copyImpl();
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    @Override
+    public void dataClearImpl() {
+        this.aDeclarator.dataClearImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    @Override
+    public AJoinPoint deepCopyImpl() {
+        return this.aDeclarator.deepCopyImpl();
+    }
+
+    /**
+     * Removes the node associated to this joinpoint from the AST
+     */
+    @Override
+    public AJoinPoint detachImpl() {
+        return this.aDeclarator.detachImpl();
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aDeclarator.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aDeclarator.insertImpl(position, code);
+    }
+
+    /**
+     * Inserts the given join point after this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        return this.aDeclarator.insertAfterImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(String code) {
+        return this.aDeclarator.insertAfterImpl(code);
+    }
+
+    /**
+     * Inserts the given join point before this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        return this.aDeclarator.insertBeforeImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(String node) {
+        return this.aDeclarator.insertBeforeImpl(node);
+    }
+
+    /**
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
+     * @param message 
+     */
+    @Override
+    public void messageToUserImpl(String message) {
+        this.aDeclarator.messageToUserImpl(message);
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aDeclarator.removeChildrenImpl();
     }
 
     /**
@@ -1809,47 +1914,75 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Inserts the given join point before this join point
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    @Override
+    public void setDataImpl(Object source) {
+        this.aDeclarator.setDataImpl(source);
+    }
+
+    /**
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aDeclarator.insertBeforeImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aDeclarator.setFirstChildImpl(node);
     }
 
     /**
-     * Overload which accepts a string
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aDeclarator.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aDeclarator.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(String node) {
-        return this.aDeclarator.insertBeforeImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aDeclarator.setLastChildImpl(node);
     }
 
     /**
-     * Inserts the given join point after this join point
-     * @param node 
+     * Sets the name of this namedDecl
+     * @param name 
      */
     @Override
-    public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aDeclarator.insertAfterImpl(node);
+    public void setNameImpl(String name) {
+        this.aDeclarator.setNameImpl(name);
     }
 
     /**
-     * Overload which accepts a string
-     * @param code 
+     * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
+     * @param name 
      */
     @Override
-    public AJoinPoint insertAfterImpl(String code) {
-        return this.aDeclarator.insertAfterImpl(code);
+    public void setQualifiedNameImpl(String name) {
+        this.aDeclarator.setQualifiedNameImpl(name);
     }
 
     /**
-     * Removes the node associated to this joinpoint from the AST
+     * Sets the qualified prefix of this namedDecl
+     * @param qualifiedPrefix 
      */
     @Override
-    public AJoinPoint detachImpl() {
-        return this.aDeclarator.detachImpl();
+    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
+        this.aDeclarator.setQualifiedPrefixImpl(qualifiedPrefix);
     }
 
     /**
@@ -1859,22 +1992,6 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public void setTypeImpl(AType type) {
         this.aDeclarator.setTypeImpl(type);
-    }
-
-    /**
-     * Performs a copy of the node and its children, but not of the nodes in its fields
-     */
-    @Override
-    public AJoinPoint copyImpl() {
-        return this.aDeclarator.copyImpl();
-    }
-
-    /**
-     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
-     */
-    @Override
-    public AJoinPoint deepCopyImpl() {
-        return this.aDeclarator.deepCopyImpl();
     }
 
     /**
@@ -1907,41 +2024,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
-     * @param message 
-     */
-    @Override
-    public void messageToUserImpl(String message) {
-        this.aDeclarator.messageToUserImpl(message);
-    }
-
-    /**
-     * Removes the children of this node
-     */
-    @Override
-    public void removeChildrenImpl() {
-        this.aDeclarator.removeChildrenImpl();
-    }
-
-    /**
-     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
-        return this.aDeclarator.setFirstChildImpl(node);
-    }
-
-    /**
-     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setLastChildImpl(AJoinPoint node) {
-        return this.aDeclarator.setLastChildImpl(node);
-    }
-
-    /**
      * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
@@ -1949,61 +2031,6 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public AJoinPoint toCommentImpl(String prefix, String suffix) {
         return this.aDeclarator.toCommentImpl(prefix, suffix);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String[] comments) {
-        this.aDeclarator.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String comments) {
-        this.aDeclarator.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Setting data directly is not supported, this action just emits a warning and does nothing
-     * @param source 
-     */
-    @Override
-    public void setDataImpl(Object source) {
-        this.aDeclarator.setDataImpl(source);
-    }
-
-    /**
-     * Clears all properties from the .data object
-     */
-    @Override
-    public void dataClearImpl() {
-        this.aDeclarator.dataClearImpl();
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aDeclarator.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aDeclarator.insertImpl(position, code);
     }
 
     /**
@@ -2043,41 +2070,9 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
+        case "body": {
+        	if(value instanceof AScope){
+        		this.defBodyImpl((AScope)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -2085,13 +2080,6 @@ public abstract class AFunction extends ADeclarator {
         case "functionType": {
         	if(value instanceof AFunctionType){
         		this.defFunctionTypeImpl((AFunctionType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "body": {
-        	if(value instanceof AScope){
-        		this.defBodyImpl((AScope)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -2121,6 +2109,13 @@ public abstract class AFunction extends ADeclarator {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "qualifiedName": {
+        	if(value instanceof String){
+        		this.defQualifiedNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "qualifiedPrefix": {
         	if(value instanceof String){
         		this.defQualifiedPrefixImpl((String)value);
@@ -2128,9 +2123,41 @@ public abstract class AFunction extends ADeclarator {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "qualifiedName": {
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "firstChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defFirstChildImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "inlineComments": {
+        	if(value instanceof String[]){
+        		this.defInlineCommentsImpl((String[])value);
+        		return;
+        	}
         	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
+        		this.defInlineCommentsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "lastChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defLastChildImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -2145,30 +2172,30 @@ public abstract class AFunction extends ADeclarator {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aDeclarator.fillWithAttributes(attributes);
-        attributes.add("hasDefinition");
-        attributes.add("isImplementation");
-        attributes.add("isPrototype");
-        attributes.add("functionType");
+        attributes.add("body");
+        attributes.add("calls");
+        attributes.add("canonical");
         attributes.add("declarationJp");
         attributes.add("declarationJps");
         attributes.add("definitionJp");
+        attributes.add("functionType");
         attributes.add("getDeclaration");
-        attributes.add("body");
+        attributes.add("hasDefinition");
+        attributes.add("id");
+        attributes.add("isCanonical");
+        attributes.add("isCudaKernel");
+        attributes.add("isDelete");
+        attributes.add("isImplementation");
+        attributes.add("isInline");
+        attributes.add("isModulePrivate");
+        attributes.add("isPrototype");
+        attributes.add("isPure");
+        attributes.add("isVirtual");
         attributes.add("paramNames");
         attributes.add("params");
-        attributes.add("id");
-        attributes.add("isInline");
-        attributes.add("isVirtual");
-        attributes.add("isModulePrivate");
-        attributes.add("isPure");
-        attributes.add("isDelete");
-        attributes.add("storageClass");
-        attributes.add("calls");
-        attributes.add("signature");
         attributes.add("returnType");
-        attributes.add("isCudaKernel");
-        attributes.add("canonical");
-        attributes.add("isCanonical");
+        attributes.add("signature");
+        attributes.add("storageClass");
     }
 
     /**
@@ -2188,22 +2215,22 @@ public abstract class AFunction extends ADeclarator {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aDeclarator.fillWithActions(actions);
+        actions.add("void addParam(param)");
+        actions.add("void addParam(String, type)");
         actions.add("function clone(String, Boolean)");
         actions.add("function cloneOnFile(String, String)");
         actions.add("function cloneOnFile(String, file)");
         actions.add("joinpoint insertReturn(joinpoint)");
         actions.add("joinpoint insertReturn(String)");
-        actions.add("void setParams(param[])");
-        actions.add("void setParamsFromStrings(String[])");
+        actions.add("call newCall(joinpoint[])");
+        actions.add("void setBody(scope)");
+        actions.add("void setFunctionType(functionType)");
         actions.add("void setParam(int, param)");
         actions.add("void setParam(int, String, type)");
-        actions.add("void setBody(scope)");
-        actions.add("call newCall(joinpoint[])");
-        actions.add("void setFunctionType(functionType)");
-        actions.add("void setReturnType(type)");
         actions.add("void setParamType(int, type)");
-        actions.add("void addParam(param)");
-        actions.add("void addParam(String, type)");
+        actions.add("void setParams(param[])");
+        actions.add("void setParamsFromStrings(String[])");
+        actions.add("void setReturnType(type)");
     }
 
     /**
@@ -2231,97 +2258,97 @@ public abstract class AFunction extends ADeclarator {
      * 
      */
     protected enum FunctionAttributes {
-        HASDEFINITION("hasDefinition"),
-        ISIMPLEMENTATION("isImplementation"),
-        ISPROTOTYPE("isPrototype"),
-        FUNCTIONTYPE("functionType"),
+        BODY("body"),
+        CALLS("calls"),
+        CANONICAL("canonical"),
         DECLARATIONJP("declarationJp"),
         DECLARATIONJPS("declarationJps"),
         DEFINITIONJP("definitionJp"),
+        FUNCTIONTYPE("functionType"),
         GETDECLARATION("getDeclaration"),
-        BODY("body"),
+        HASDEFINITION("hasDefinition"),
+        ID("id"),
+        ISCANONICAL("isCanonical"),
+        ISCUDAKERNEL("isCudaKernel"),
+        ISDELETE("isDelete"),
+        ISIMPLEMENTATION("isImplementation"),
+        ISINLINE("isInline"),
+        ISMODULEPRIVATE("isModulePrivate"),
+        ISPROTOTYPE("isPrototype"),
+        ISPURE("isPure"),
+        ISVIRTUAL("isVirtual"),
         PARAMNAMES("paramNames"),
         PARAMS("params"),
-        ID("id"),
-        ISINLINE("isInline"),
-        ISVIRTUAL("isVirtual"),
-        ISMODULEPRIVATE("isModulePrivate"),
-        ISPURE("isPure"),
-        ISDELETE("isDelete"),
-        STORAGECLASS("storageClass"),
-        CALLS("calls"),
-        SIGNATURE("signature"),
         RETURNTYPE("returnType"),
-        ISCUDAKERNEL("isCudaKernel"),
-        CANONICAL("canonical"),
-        ISCANONICAL("isCanonical"),
-        NAME("name"),
+        SIGNATURE("signature"),
+        STORAGECLASS("storageClass"),
         ISPUBLIC("isPublic"),
-        QUALIFIEDPREFIX("qualifiedPrefix"),
+        NAME("name"),
         QUALIFIEDNAME("qualifiedName"),
+        QUALIFIEDPREFIX("qualifiedPrefix"),
         ATTRS("attrs"),
-        PARENT("parent"),
         AST("ast"),
-        SIBLINGSLEFT("siblingsLeft"),
-        DATA("data"),
-        HASCHILDREN("hasChildren"),
-        GETANCESTOR("getAncestor"),
-        TYPE("type"),
-        SIBLINGSRIGHT("siblingsRight"),
-        RIGHTJP("rightJp"),
-        ISCILK("isCilk"),
-        FILEPATH("filepath"),
-        SCOPENODES("scopeNodes"),
-        CHILDREN("children"),
-        GETJAVAFIELDTYPE("getJavaFieldType"),
-        FIRSTCHILD("firstChild"),
-        NUMCHILDREN("numChildren"),
-        GETCHILD("getChild"),
-        LEFTJP("leftJp"),
-        INLINECOMMENTS("inlineComments"),
-        ASTNAME("astName"),
-        JPID("jpId"),
-        ASTID("astId"),
-        GETKEYTYPE("getKeyType"),
-        CONTAINS("contains"),
-        ASTISINSTANCE("astIsInstance"),
-        FILENAME("filename"),
-        JAVAFIELDS("javaFields"),
-        ISINSYSTEMHEADER("isInSystemHeader"),
-        BITWIDTH("bitWidth"),
-        HASNODE("hasNode"),
-        ENDLINE("endLine"),
-        ENDCOLUMN("endColumn"),
-        CODE("code"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
-        GETCHAINANCESTOR("getChainAncestor"),
-        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
-        GETDESCENDANTS("getDescendants"),
-        GETFIRSTJP("getFirstJp"),
-        ISMACRO("isMacro"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
-        GETASTCHILD("getAstChild"),
-        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        ASTID("astId"),
+        ASTISINSTANCE("astIsInstance"),
+        ASTNAME("astName"),
+        ASTNUMCHILDREN("astNumChildren"),
+        BITWIDTH("bitWidth"),
         CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
-        ORIGINNODE("originNode"),
+        CHILDREN("children"),
+        CODE("code"),
         COLUMN("column"),
-        PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
-        GETASTANCESTOR("getAstAncestor"),
+        CONTAINS("contains"),
+        CURRENTREGION("currentRegion"),
+        DATA("data"),
         DEPTH("depth"),
-        LOCATION("location"),
+        DESCENDANTS("descendants"),
+        ENDCOLUMN("endColumn"),
+        ENDLINE("endLine"),
+        FILENAME("filename"),
+        FILEPATH("filepath"),
+        FIRSTCHILD("firstChild"),
+        GETANCESTOR("getAncestor"),
+        GETASTANCESTOR("getAstAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        GETCHILD("getChild"),
+        GETDESCENDANTS("getDescendants"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        GETFIRSTJP("getFirstJp"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
+        GETKEYTYPE("getKeyType"),
         GETUSERFIELD("getUserField"),
+        GETVALUE("getValue"),
+        HASCHILDREN("hasChildren"),
+        HASNODE("hasNode"),
+        HASPARENT("hasParent"),
         HASTYPE("hasType"),
+        INLINECOMMENTS("inlineComments"),
+        ISCILK("isCilk"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        ISMACRO("isMacro"),
+        JAVAFIELDS("javaFields"),
+        JPID("jpId"),
+        KEYS("keys"),
+        LASTCHILD("lastChild"),
+        LEFTJP("leftJp"),
+        LINE("line"),
+        LOCATION("location"),
+        NUMCHILDREN("numChildren"),
+        ORIGINNODE("originNode"),
+        PARENT("parent"),
+        PARENTREGION("parentRegion"),
         PRAGMAS("pragmas"),
+        RIGHTJP("rightJp"),
+        ROOT("root"),
+        SCOPENODES("scopeNodes"),
+        SIBLINGSLEFT("siblingsLeft"),
+        SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        HASPARENT("hasParent");
+        TYPE("type");
         private String name;
 
         /**

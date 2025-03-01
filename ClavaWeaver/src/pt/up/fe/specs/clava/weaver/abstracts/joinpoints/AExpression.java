@@ -43,27 +43,48 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute vardecl
-     * @return the attribute's value
+     * returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
      */
-    public abstract AVardecl getVardeclImpl();
+    public abstract ACast getImplicitCastImpl();
 
     /**
-     * Get value on attribute vardecl
-     * @return the attribute's value
+     * returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
      */
-    public final Object getVardecl() {
+    public final Object getImplicitCast() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "vardecl", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "implicitCast", Optional.empty());
         	}
-        	AVardecl result = this.getVardeclImpl();
+        	ACast result = this.getImplicitCastImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "vardecl", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "implicitCast", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "vardecl", e);
+        	throw new AttributeException(get_class(), "implicitCast", e);
+        }
+    }
+
+    /**
+     * true if the expression is part of an argument of a function call
+     */
+    public abstract Boolean getIsFunctionArgumentImpl();
+
+    /**
+     * true if the expression is part of an argument of a function call
+     */
+    public final Object getIsFunctionArgument() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isFunctionArgument", Optional.empty());
+        	}
+        	Boolean result = this.getIsFunctionArgumentImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isFunctionArgument", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isFunctionArgument", e);
         }
     }
 
@@ -93,48 +114,27 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * true if the expression is part of an argument of a function call
+     * Get value on attribute vardecl
+     * @return the attribute's value
      */
-    public abstract Boolean getIsFunctionArgumentImpl();
+    public abstract AVardecl getVardeclImpl();
 
     /**
-     * true if the expression is part of an argument of a function call
+     * Get value on attribute vardecl
+     * @return the attribute's value
      */
-    public final Object getIsFunctionArgument() {
+    public final Object getVardecl() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isFunctionArgument", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "vardecl", Optional.empty());
         	}
-        	Boolean result = this.getIsFunctionArgumentImpl();
+        	AVardecl result = this.getVardeclImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isFunctionArgument", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "vardecl", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isFunctionArgument", e);
-        }
-    }
-
-    /**
-     * returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
-     */
-    public abstract ACast getImplicitCastImpl();
-
-    /**
-     * returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
-     */
-    public final Object getImplicitCast() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "implicitCast", Optional.empty());
-        	}
-        	ACast result = this.getImplicitCastImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "implicitCast", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "implicitCast", e);
+        	throw new AttributeException(get_class(), "vardecl", e);
         }
     }
 
@@ -176,13 +176,6 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "firstChild": {
         	if(value instanceof AJoinPoint){
         		this.defFirstChildImpl((AJoinPoint)value);
@@ -208,6 +201,13 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -219,10 +219,10 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
     protected void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
         attributes.add("decl");
-        attributes.add("vardecl");
-        attributes.add("use");
-        attributes.add("isFunctionArgument");
         attributes.add("implicitCast");
+        attributes.add("isFunctionArgument");
+        attributes.add("use");
+        attributes.add("vardecl");
     }
 
     /**
@@ -255,72 +255,72 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
      */
     protected enum ExpressionAttributes {
         DECL("decl"),
-        VARDECL("vardecl"),
-        USE("use"),
-        ISFUNCTIONARGUMENT("isFunctionArgument"),
         IMPLICITCAST("implicitCast"),
-        PARENT("parent"),
+        ISFUNCTIONARGUMENT("isFunctionArgument"),
+        USE("use"),
+        VARDECL("vardecl"),
         AST("ast"),
-        SIBLINGSLEFT("siblingsLeft"),
-        DATA("data"),
-        HASCHILDREN("hasChildren"),
-        GETANCESTOR("getAncestor"),
-        TYPE("type"),
-        SIBLINGSRIGHT("siblingsRight"),
-        RIGHTJP("rightJp"),
-        ISCILK("isCilk"),
-        FILEPATH("filepath"),
-        SCOPENODES("scopeNodes"),
-        CHILDREN("children"),
-        GETJAVAFIELDTYPE("getJavaFieldType"),
-        FIRSTCHILD("firstChild"),
-        NUMCHILDREN("numChildren"),
-        GETCHILD("getChild"),
-        LEFTJP("leftJp"),
-        INLINECOMMENTS("inlineComments"),
-        ASTNAME("astName"),
-        JPID("jpId"),
-        ASTID("astId"),
-        GETKEYTYPE("getKeyType"),
-        CONTAINS("contains"),
-        ASTISINSTANCE("astIsInstance"),
-        FILENAME("filename"),
-        JAVAFIELDS("javaFields"),
-        ISINSYSTEMHEADER("isInSystemHeader"),
-        BITWIDTH("bitWidth"),
-        HASNODE("hasNode"),
-        ENDLINE("endLine"),
-        ENDCOLUMN("endColumn"),
-        CODE("code"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
-        GETCHAINANCESTOR("getChainAncestor"),
-        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
-        GETDESCENDANTS("getDescendants"),
-        GETFIRSTJP("getFirstJp"),
-        ISMACRO("isMacro"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
-        GETASTCHILD("getAstChild"),
-        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        ASTID("astId"),
+        ASTISINSTANCE("astIsInstance"),
+        ASTNAME("astName"),
+        ASTNUMCHILDREN("astNumChildren"),
+        BITWIDTH("bitWidth"),
         CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
-        ORIGINNODE("originNode"),
+        CHILDREN("children"),
+        CODE("code"),
         COLUMN("column"),
-        PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
-        GETASTANCESTOR("getAstAncestor"),
+        CONTAINS("contains"),
+        CURRENTREGION("currentRegion"),
+        DATA("data"),
         DEPTH("depth"),
-        LOCATION("location"),
+        DESCENDANTS("descendants"),
+        ENDCOLUMN("endColumn"),
+        ENDLINE("endLine"),
+        FILENAME("filename"),
+        FILEPATH("filepath"),
+        FIRSTCHILD("firstChild"),
+        GETANCESTOR("getAncestor"),
+        GETASTANCESTOR("getAstAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        GETCHILD("getChild"),
+        GETDESCENDANTS("getDescendants"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        GETFIRSTJP("getFirstJp"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
+        GETKEYTYPE("getKeyType"),
         GETUSERFIELD("getUserField"),
+        GETVALUE("getValue"),
+        HASCHILDREN("hasChildren"),
+        HASNODE("hasNode"),
+        HASPARENT("hasParent"),
         HASTYPE("hasType"),
+        INLINECOMMENTS("inlineComments"),
+        ISCILK("isCilk"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        ISMACRO("isMacro"),
+        JAVAFIELDS("javaFields"),
+        JPID("jpId"),
+        KEYS("keys"),
+        LASTCHILD("lastChild"),
+        LEFTJP("leftJp"),
+        LINE("line"),
+        LOCATION("location"),
+        NUMCHILDREN("numChildren"),
+        ORIGINNODE("originNode"),
+        PARENT("parent"),
+        PARENTREGION("parentRegion"),
         PRAGMAS("pragmas"),
+        RIGHTJP("rightJp"),
+        ROOT("root"),
+        SCOPENODES("scopeNodes"),
+        SIBLINGSLEFT("siblingsLeft"),
+        SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        HASPARENT("hasParent");
+        TYPE("type");
         private String name;
 
         /**

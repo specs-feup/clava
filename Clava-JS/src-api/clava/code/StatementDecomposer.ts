@@ -39,35 +39,37 @@ export default class StatementDecomposer {
     return varName;
   }
 
-  private isValidNode($jp: Joinpoint): boolean {
+  /**
+   * Some Joinpoints might generate invalid code under certain conditions. This method checks
+   * for those cases and adds an empty statement to the AST to fix them.
+   * 
+   * @param $jp - Joinpoint to be scrutinized
+   */
+  private ensureValidNode($jp: Joinpoint): void {
+    if (!($jp instanceof Statement) || $jp instanceof EmptyStmt) {
+      const parentStmt = $jp.getAncestor("statement") as Statement | undefined;
+
+      if (parentStmt === undefined) return;
+    
+      this.ensureValidNode(parentStmt);
+
+      return;
+    }
+    
     // If preceeding statement is a CaseStmt or a LabelStmt it might generate invalid code if a declaration is inserted
     // Add empty statement after the label to avoid this situation
-    if ($jp instanceof Statement && !($jp instanceof EmptyStmt)) {
-      const $leftStmt = $jp.leftJp;
+    const $leftStmt = $jp.leftJp;
+    
+    if (
+      $leftStmt === undefined ||
+      (!($leftStmt instanceof Case) && !($leftStmt instanceof LabelStmt))
+    ) return;
 
-      if (
-        $leftStmt !== undefined &&
-        ($leftStmt instanceof Case || $leftStmt instanceof LabelStmt)
-      ) {
-        debug(
-          `StatementDecomposer: statement just before label, inserting empty statement after as a precaution`
-        );
+    debug(
+      `StatementDecomposer: statement just before label, inserting empty statement after as a precaution`
+    );
 
-        $leftStmt.insertAfter(ClavaJoinPoints.emptyStmt());
-
-        return true;
-      }
-
-      return true;
-    }
-
-    const parentStmt = $jp.getAncestor("statement") as Statement | undefined;
-
-    if (parentStmt !== undefined) {
-      return this.isValidNode(parentStmt);
-    }
-
-    return true;
+    $leftStmt.insertAfter(ClavaJoinPoints.emptyStmt());
   }
 
   /**
@@ -109,9 +111,7 @@ export default class StatementDecomposer {
       return [];
     }
 
-    if (!this.isValidNode($stmt)) {
-      return [];
-    }
+    this.ensureValidNode($stmt);
 
     if ($stmt instanceof ExprStmt) {
       return this.decomposeExprStmt($stmt);
@@ -185,9 +185,7 @@ export default class StatementDecomposer {
   }
 
   decomposeExpr($expr: Expression): DecomposeResult {
-    if (!this.isValidNode($expr)) {
-      return new DecomposeResult([], $expr);
-    }
+    this.ensureValidNode($expr);
 
     if ($expr instanceof BinaryOp) {
       return this.decomposeBinaryOp($expr);

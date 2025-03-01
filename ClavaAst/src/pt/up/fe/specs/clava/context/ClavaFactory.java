@@ -661,7 +661,13 @@ public class ClavaFactory {
         DataStore data = newDataStore(LabelStmt.class)
                 .set(LabelStmt.LABEL, label);
 
-        return new LabelStmt(data, SpecsCollections.ofNullable(subStmt));
+
+        var labelStmt = new LabelStmt(data, SpecsCollections.ofNullable(subStmt));
+
+        // Update labelDecl to refer to this labelStmt
+        label.setOptional(LabelDecl.LABEL_STMT, labelStmt);
+
+        return labelStmt;
     }
 
     public GotoStmt gotoStmt(LabelDecl label) {

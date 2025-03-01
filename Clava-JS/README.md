@@ -2,6 +2,10 @@
 
 Clava source-to-source compiler running on top of Node.js.
 
+Current version only works on Node 18 and 20.
+
+To test Clava-JS you can try the [Clava project template](https://github.com/specs-feup/clava-project-template).
+
 ## Installing dev environment
 
 Execute the following commands to build Clava-JS in a folder called `workspace`:
@@ -22,7 +26,7 @@ In the `workspace` directory, edit the `package.json` file and add the following
   "type": "module",
   "workspaces": [
     "clava/Clava-JS",
-    "lara-framework/Lara-JS",
+    "lara-framework/Lara-JS"
   ]
 }
 ```
@@ -39,11 +43,11 @@ gradle installDist
 cd ../..
 ```
 
-Finally, copy the folder `./clava/ClavaWeaver/build/install/ClavaWeaver` into a new folder called java-binaries in `./clava/Clava-JS`:
+Finally, copy the JARs in the folder `./clava/ClavaWeaver/build/install/ClavaWeaver/lib` into a new folder called java-binaries in `./clava/Clava-JS`:
 
 ```bash
 mkdir clava/Clava-JS/java-binaries
-cp -r ./clava/ClavaWeaver/build/install/ClavaWeaver ./clava/Clava-JS/java-binaries
+cp -r ./clava/ClavaWeaver/build/install/ClavaWeaver/lib ./clava/Clava-JS/java-binaries
 ```
 
 Install the package globally:
