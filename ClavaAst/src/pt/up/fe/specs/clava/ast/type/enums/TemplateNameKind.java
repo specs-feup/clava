@@ -35,6 +35,8 @@ public enum TemplateNameKind {
 
     // A template template parameter pack that has been substituted for a template template argument pack, but has not
     // yet been expanded into individual arguments.
-    SubstTemplateTemplateParmPack;
+    SubstTemplateTemplateParmPack,
 
+    UsingTemplate;
+        
 }
