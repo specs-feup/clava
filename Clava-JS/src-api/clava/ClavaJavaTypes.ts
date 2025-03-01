@@ -24,6 +24,7 @@ export namespace ClavaJavaClasses {
   export interface ClavaPetit extends JavaClasses.JavaClass {}
   export interface ClavaPlatforms extends JavaClasses.JavaClass {}
   export interface CxxWeaverOption extends JavaClasses.JavaClass {}
+  export interface ClavaOptions extends JavaClasses.JavaClass {}
   /* eslint-enable @typescript-eslint/no-empty-interface */
 }
 
@@ -144,5 +145,11 @@ export default class ClavaJavaTypes {
     return JavaTypes.getType(
       "pt.up.fe.specs.clava.weaver.options.CxxWeaverOption"
     ) as ClavaJavaClasses.CxxWeaverOption;
+  }
+
+  static get ClavaOptions() {
+    return JavaTypes.getType(
+      "pt.up.fe.specs.clava.ClavaOptions"
+    ) as ClavaJavaClasses.ClavaOptions;
   }
 }

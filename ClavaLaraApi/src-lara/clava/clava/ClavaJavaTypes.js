@@ -58,5 +58,11 @@ export default class ClavaJavaTypes {
     static get ClavaPlatforms() {
         return JavaTypes.getType("pt.up.fe.specs.clava.weaver.importable.ClavaPlatforms");
     }
+    static get CxxWeaverOption() {
+        return JavaTypes.getType("pt.up.fe.specs.clava.weaver.options.CxxWeaverOption");
+    }
+    static get ClavaOptions() {
+        return JavaTypes.getType("pt.up.fe.specs.clava.ClavaOptions");
+    }
 }
 //# sourceMappingURL=ClavaJavaTypes.js.map

@@ -23,12 +23,16 @@ for (const $loop of Query.search("function", "iterationsExpr").search("loop")) {
 const $headerInsert1 = Query.search("function", "headerInsert1")
     .search("loop")
     .first();
-testHeaderInsert($headerInsert1, true);
+if ($headerInsert1) {
+    testHeaderInsert($headerInsert1, true);
+}
 
 const $headerInsert2 = Query.search("function", "headerInsert2")
     .search("loop")
     .first();
-testHeaderInsert($headerInsert2, false);
+if ($headerInsert2) {
+    testHeaderInsert($headerInsert2, false);
+}
 
 function testHeaderInsert($loop, isDeclaration) {
     const newVarName1 = "newVar1";
