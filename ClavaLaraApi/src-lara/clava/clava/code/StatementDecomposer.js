@@ -1,4 +1,4 @@
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
 import { BinaryOp, Call, Case, DeclStmt, EmptyStmt, ExprStmt, LabelStmt, MemberCall, ReturnStmt, Scope, Statement, TernaryOp, UnaryOp, Vardecl, } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 import DecomposeResult from "./DecomposeResult.js";

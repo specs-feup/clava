@@ -32,18 +32,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.cilk.CilkAstAdapter;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
-import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
-import pt.up.fe.specs.clang.transforms.CreateEmptyStmts;
-import pt.up.fe.specs.clang.transforms.CreatePointerToMemberExpr;
-import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
-import pt.up.fe.specs.clang.transforms.FlattenSubStmtNodes;
-import pt.up.fe.specs.clang.transforms.MoveDeclsToTagDecl;
-import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
-import pt.up.fe.specs.clang.transforms.ProcessCudaNodes;
-import pt.up.fe.specs.clang.transforms.RemoveClangOmpNodes;
-import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
-import pt.up.fe.specs.clang.transforms.RemovePoison;
-import pt.up.fe.specs.clang.transforms.TreeTransformer;
+import pt.up.fe.specs.clang.transforms.*;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
@@ -94,7 +83,8 @@ public class ClangAstParser {
             new FlattenSubStmtNodes(),
             new ProcessCudaNodes(),
             new CreateEmptyStmts(),
-            new CreatePointerToMemberExpr()
+            new CreatePointerToMemberExpr(),
+            new AnnotateLabelDecls()
     // new CilkAstAdapter()
 
     // new AdaptBoolTypes(),

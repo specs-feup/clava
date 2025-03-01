@@ -1,4 +1,4 @@
-import JavaTypes from "lara-js/api/lara/util/JavaTypes.js";
+import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 /**
  * Static variables with class names of Java classes used in the Clava API.
  *

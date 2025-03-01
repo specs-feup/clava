@@ -192,12 +192,12 @@ public abstract class AJoinPoint extends JoinPoint {
      * Overload which accepts a list of join points
      * @param node 
      */
-    public final Object replaceWith(AJoinPoint[] node) {
+    public final Object replaceWith(Object[] node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "replaceWith", this, Optional.empty(), new Object[] { node});
         	}
-        	AJoinPoint result = this.replaceWithImpl(node);
+        	AJoinPoint result = this.replaceWithImpl(pt.up.fe.specs.util.SpecsCollections.cast(node, AJoinPoint.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "replaceWith", this, Optional.ofNullable(result), new Object[] { node});
         	}
@@ -219,12 +219,12 @@ public abstract class AJoinPoint extends JoinPoint {
      * Overload which accepts a list of strings
      * @param node 
      */
-    public final Object replaceWithStrings(String[] node) {
+    public final Object replaceWithStrings(Object[] node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "replaceWithStrings", this, Optional.empty(), new Object[] { node});
         	}
-        	AJoinPoint result = this.replaceWithStringsImpl(node);
+        	AJoinPoint result = this.replaceWithStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(node, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "replaceWithStrings", this, Optional.ofNullable(result), new Object[] { node});
         	}
@@ -579,52 +579,54 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Replaces the first child, or inserts the join point if no child is present
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
-    public void setFirstChildImpl(AJoinPoint node) {
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
         throw new UnsupportedOperationException(get_class()+": Action setFirstChild not implemented ");
     }
 
     /**
-     * Replaces the first child, or inserts the join point if no child is present
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
-    public final void setFirstChild(AJoinPoint node) {
+    public final Object setFirstChild(AJoinPoint node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setFirstChild", this, Optional.empty(), node);
         	}
-        	this.setFirstChildImpl(node);
+        	AJoinPoint result = this.setFirstChildImpl(node);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setFirstChild", this, Optional.empty(), node);
+        		eventTrigger().triggerAction(Stage.END, "setFirstChild", this, Optional.ofNullable(result), node);
         	}
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setFirstChild", e);
         }
     }
 
     /**
-     * Replaces the last child, or inserts the join point if no child is present
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
-    public void setLastChildImpl(AJoinPoint node) {
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
         throw new UnsupportedOperationException(get_class()+": Action setLastChild not implemented ");
     }
 
     /**
-     * Replaces the last child, or inserts the join point if no child is present
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
-    public final void setLastChild(AJoinPoint node) {
+    public final Object setLastChild(AJoinPoint node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setLastChild", this, Optional.empty(), node);
         	}
-        	this.setLastChildImpl(node);
+        	AJoinPoint result = this.setLastChildImpl(node);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setLastChild", this, Optional.empty(), node);
+        		eventTrigger().triggerAction(Stage.END, "setLastChild", this, Optional.ofNullable(result), node);
         	}
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setLastChild", e);
         }
@@ -671,12 +673,12 @@ public abstract class AJoinPoint extends JoinPoint {
      * Sets the commented that are embedded in a node
      * @param comments 
      */
-    public final void setInlineComments(String[] comments) {
+    public final void setInlineComments(Object[] comments) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setInlineComments", this, Optional.empty(), new Object[] { comments});
         	}
-        	this.setInlineCommentsImpl(comments);
+        	this.setInlineCommentsImpl(pt.up.fe.specs.util.SpecsCollections.cast(comments, String.class));
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "setInlineComments", this, Optional.empty(), new Object[] { comments});
         	}

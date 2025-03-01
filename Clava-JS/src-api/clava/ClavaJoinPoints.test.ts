@@ -1,5 +1,5 @@
-import { registerSourceCode } from "lara-js/jest/jestHelpers.js";
-import Query from "lara-js/api/weaver/Query.js";
+import { registerSourceCode } from "@specs-feup/lara/jest/jestHelpers.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { ExprStmt } from "../Joinpoints.js";
 import ClavaJoinPoints from "./ClavaJoinPoints.js";
 

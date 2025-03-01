@@ -1,6 +1,6 @@
-import Io from "lara-js/api/lara/Io.js";
-import Strings from "lara-js/api/lara/Strings.js";
-import Query from "lara-js/api/weaver/Query.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import Strings from "@specs-feup/lara/api/lara/Strings.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { Call, FileJp, Pragma } from "../../Joinpoints.js";
 import KernelReplacer, {
   OpenClKernelReplacerConfiguration,

@@ -14,12 +14,18 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
+import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 
 public class LabelDecl extends NamedDecl {
+
+    public static final DataKey<Optional<LabelStmt>> LABEL_STMT = KeyFactory.optional("labelStmt");
 
     public LabelDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

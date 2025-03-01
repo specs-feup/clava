@@ -1,4 +1,6 @@
-import JavaTypes, { JavaClasses } from "lara-js/api/lara/util/JavaTypes.js";
+import JavaTypes, {
+  JavaClasses,
+} from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ClavaJavaClasses {

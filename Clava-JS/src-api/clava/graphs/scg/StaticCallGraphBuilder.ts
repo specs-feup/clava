@@ -1,7 +1,7 @@
-import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
-import Graphs from "lara-js/api/lara/graphs/Graphs.js";
-import cytoscape from "lara-js/api/libs/cytoscape-3.26.0.js";
-import Query from "lara-js/api/weaver/Query.js";
+import { LaraJoinPoint } from "@specs-feup/lara/api/LaraJoinPoint.js";
+import Graphs from "@specs-feup/lara/api/lara/graphs/Graphs.js";
+import cytoscape from "@specs-feup/lara/api/libs/cytoscape-3.26.0.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { Call, FunctionJp, Joinpoint, Program } from "../../../Joinpoints.js";
 import ScgEdgeData from "./ScgEdgeData.js";
 import ScgNodeData from "./ScgNodeData.js";

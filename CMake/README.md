@@ -15,6 +15,12 @@ If you do not want to install the Clava CMake plugin, you can manually define th
 set(Clava_DIR <PATH_TO_CMAKE_CLAVA_PLUGIN>)
 ```
 
+If you have Clava installed locally, you can specify what command should be used to run it by using the variable LOCAL_CLAVA:
+
+```
+set(LOCAL_CLAVA "npx clava classic")	
+```
+
 ## Example
 
 To apply a LARA file to the current code, write the following in the `CMakeLists.txt` file:

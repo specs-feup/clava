@@ -1,6 +1,6 @@
-import Pass from "lara-js/api/lara/pass/Pass.js";
-import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
-import Query from "lara-js/api/weaver/Query.js";
+import Pass from "@specs-feup/lara/api/lara/pass/Pass.js";
+import PassResult from "@specs-feup/lara/api/lara/pass/results/PassResult.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { If, Joinpoint } from "../../Joinpoints.js";
 import StatementDecomposer from "../code/StatementDecomposer.js";
 

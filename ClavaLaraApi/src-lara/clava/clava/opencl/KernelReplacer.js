@@ -1,5 +1,5 @@
-import Io from "lara-js/api/lara/Io.js";
-import Strings from "lara-js/api/lara/Strings.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import Strings from "@specs-feup/lara/api/lara/Strings.js";
 import { BuiltinType, } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 export default class KernelReplacer {

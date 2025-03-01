@@ -1,8 +1,8 @@
-import Io from "lara-js/api/lara/Io.js";
-import BenchmarkInstance from "lara-js/api/lara/benchmark/BenchmarkInstance.js";
-import { JavaClasses } from "lara-js/api/lara/util/JavaTypes.js";
-import Query from "lara-js/api/weaver/Query.js";
-import Weaver from "lara-js/api/weaver/Weaver.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import BenchmarkInstance from "@specs-feup/lara/api/lara/benchmark/BenchmarkInstance.js";
+import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import Weaver from "@specs-feup/lara/api/weaver/Weaver.js";
 import Clava from "../..//clava/Clava.js";
 import { Joinpoint, Pragma, Program } from "../../Joinpoints.js";
 import CMaker from "../../clava/cmake/CMaker.js";

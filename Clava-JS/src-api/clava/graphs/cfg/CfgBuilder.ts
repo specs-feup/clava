@@ -1,7 +1,7 @@
-import { debug } from "lara-js/api/lara/core/LaraCore.js";
-import Graphs from "lara-js/api/lara/graphs/Graphs.js";
-import cytoscape from "lara-js/api/libs/cytoscape-3.26.0.js";
-import Query from "lara-js/api/weaver/Query.js";
+import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import Graphs from "@specs-feup/lara/api/lara/graphs/Graphs.js";
+import cytoscape from "@specs-feup/lara/api/libs/cytoscape-3.26.0.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import {
   Break,
   Continue,
@@ -30,7 +30,7 @@ import ScopeNodeData from "./nodedata/ScopeNodeData.js";
 import SwitchData from "./nodedata/SwitchData.js";
 import GotoData from "./nodedata/GotoData.js";
 import LabelData from "./nodedata/LabelData.js";
-import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
+import { LaraJoinPoint } from "@specs-feup/lara/api/LaraJoinPoint.js";
 
 export default class CfgBuilder {
   /**

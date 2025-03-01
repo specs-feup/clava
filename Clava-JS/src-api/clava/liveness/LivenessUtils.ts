@@ -1,6 +1,6 @@
-import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
-import cytoscape from "lara-js/api/libs/cytoscape-3.26.0.js";
-import Query from "lara-js/api/weaver/Query.js";
+import { LaraJoinPoint } from "@specs-feup/lara/api/LaraJoinPoint.js";
+import cytoscape from "@specs-feup/lara/api/libs/cytoscape-3.26.0.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import {
   BinaryOp,
   Expression,

@@ -1,4 +1,4 @@
-import Io from "lara-js/api/lara/Io.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
 import Clava from "../Clava.js";
 // Class sorting resultLists and generating an analysis report
 export default class MessageGenerator {
