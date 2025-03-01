@@ -1,11 +1,21 @@
 import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.js";
-import { ClavaJavaClasses } from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
+import ClavaJavaTypes, {
+    ClavaJavaClasses,
+} from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import Weaver from "@specs-feup/lara/api/weaver/Weaver.js";
 import fs from "fs";
 import util from "util";
 import { jest } from "@jest/globals";
 import path from "path";
 
+describe("Dummy", () => {
+    it("Dummy", () => {
+        expect(true).toBe(true);
+    });
+});
+
+// eslint-disable-next-line jest/no-export
 export class ClavaWeaverTester {
     private static readonly WORK_FOLDER: string = "cxx_weaver_output";
 
@@ -13,6 +23,11 @@ export class ClavaWeaverTester {
     private readonly standard: ClavaJavaClasses.Standard;
     private readonly compilerFlags: string;
 
+    /**
+     * Stores the original values of the datastore settings that were modified by the test
+     */
+    private readonly modifiedDatastoreSettings: Map<string, unknown> =
+        new Map();
     private checkWovenCodeSyntax: boolean;
     private _checkExpectedOutput: boolean;
     private srcPackage: string | null;
@@ -26,11 +41,8 @@ export class ClavaWeaverTester {
         compilerFlags: string = ""
     ) {
         this.basePackage = basePackage;
-        // TODO: This is ignored
         this.standard = standard;
-        // TODO: This is ignored
         this.compilerFlags = compilerFlags;
-        // TODO: This is ignored
         this.checkWovenCodeSyntax = true;
 
         this.srcPackage = null;
@@ -46,10 +58,15 @@ export class ClavaWeaverTester {
         return this;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public set(key: string, value: string | boolean = true) {
-        // TODO: Implement this
-        //this.additionalSettings.set(key, true);
+    public set(key: string, value: unknown = true) {
+        const datastore = Weaver.getWeaverEngine().getData().get();
+        const currentValue = datastore.get(key);
+
+        if (value !== currentValue) {
+            this.modifiedDatastoreSettings.set(key, currentValue);
+            datastore.set(key, value);
+        }
+
         return this;
     }
 
@@ -115,8 +132,29 @@ export class ClavaWeaverTester {
         let out = "";
         const log = jest.spyOn(global.console, "log");
         log.mockImplementation((data, ...args: unknown[]) => {
-            out += util.format(data, ...args) + "\n";
+            if (data) {
+                out += util.format(data, ...args);
+            }
+            out += "\n";
         });
+
+        this.set(JavaTypes.LaraiKeys.VERBOSE, JavaTypes.VerboseLevel.errors);
+        this.set(JavaTypes.LaraiKeys.LOG_JS_OUTPUT);
+
+        if (this.standard != null) {
+            this.set(ClavaJavaTypes.ClavaOptions.STANDARD, this.standard);
+        }
+
+        this.set(ClavaJavaTypes.ClavaOptions.FLAGS, this.compilerFlags);
+        this.set(
+            ClavaJavaTypes.CxxWeaverOption.CHECK_SYNTAX,
+            this.checkWovenCodeSyntax
+        );
+        this.set(ClavaJavaTypes.CxxWeaverOption.DISABLE_CLAVA_INFO, true);
+        this.set(ClavaJavaTypes.CxxWeaverOption.DISABLE_CODE_GENERATION);
+
+        // Enable parallel parsing
+        //this.set(ClavaJavaTypes.ParallelCodeParser.PARALLEL_PARSING);
 
         try {
             Clava.getProgram().push();
@@ -131,7 +169,16 @@ export class ClavaWeaverTester {
             await import(path.join(this.basePackage, laraResource));
         } finally {
             log.mockRestore();
-            Clava.getProgram().pop();
+
+            for (let i = Weaver.getWeaverEngine().getApp().getContext().getStackSize() -1; i > 0; i--) {
+                Clava.getProgram().pop();
+            }
+
+            const datastore = Weaver.getWeaverEngine().getData().get();
+            this.modifiedDatastoreSettings.forEach((value, key) => {
+                datastore.set(key, value);
+            });
+            this.modifiedDatastoreSettings.clear();
         }
 
         // Do not check expected output

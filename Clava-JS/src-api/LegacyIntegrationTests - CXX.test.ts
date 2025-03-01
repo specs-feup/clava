@@ -443,7 +443,7 @@ describe("CxxApiTest", () => {
     });
 
     it("AddHeaderFile", async () => {
-        await newTester().test("AddHeaderFileTest.js", "add_header_file.h");
+        await newTester().test("AddHeaderFileTest.js", "add_header_file.cpp");
     });
 
     it("Clava", async () => {
@@ -504,6 +504,7 @@ describe("CxxApiTest", () => {
         await newTester()
             // Disable syntax check of woven code, mpi.h may not be available
             .setCheckWovenCodeSyntax(false)
+            .set(ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES, false)
             .test(
                 "MpiScatterGatherTest.js",
                 "mpi_scatter_gather.cpp",

@@ -51,12 +51,16 @@ describe("CTest", () => {
         await newTester().test("Expressions.js", "expressions.c");
     });
 
+    // FIXME: currentTime() is a method only available in the MasterWeaver class and not in any Weaver that is actually shipped.
+    // This test only runs in the java test runner and does not work in the real world.
+    /*
     it("Dijkstra", async () => {
         await newTester()
             .setCheckWovenCodeSyntax(false)
             .checkExpectedOutput(false)
             .test("Dijkstra.js", "dijkstra.c");
     });
+    */
 
     it("Wrap", async () => {
         await newTester()
