@@ -521,6 +521,11 @@ public class AstFactory {
         return CxxJoinpoints.create(functionDecl, AFunction.class);
     }
 
+    public static AFunction functionDecl(String functionName, AType returnTypeJp, Object... namedDeclJps) {
+        AJoinPoint[] aJoinPointArray = Arrays.copyOf(namedDeclJps, namedDeclJps.length, AJoinPoint[].class);
+        return functionDecl(functionName, returnTypeJp, aJoinPointArray);
+    }
+
     public static ABinaryOp assignment(AExpression leftHand, AExpression rightHand) {
         Expr lhs = (Expr) leftHand.getNode();
         Expr rhs = (Expr) rightHand.getNode();
@@ -631,7 +636,11 @@ public class AstFactory {
 
         var classDecl = CxxWeaver.getFactory().cxxRecordDecl(className, fieldsNodes);
         return CxxJoinpoints.create(classDecl, AClass.class);
+    }
 
+    public static AClass classDecl(String className, Object... fields) {
+        AField[] aFieldArray = Arrays.copyOf(fields, fields.length, AField[].class);
+        return classDecl(className, aFieldArray);
     }
 
     /**
@@ -642,10 +651,8 @@ public class AstFactory {
      * @return
      */
     public static AField field(String fieldName, AType fieldType) {
-
         var fieldDecl = CxxWeaver.getFactory().fieldDecl(fieldName, (Type) fieldType.getNode());
         return CxxJoinpoints.create(fieldDecl, AField.class);
-
     }
 
     /**
@@ -733,6 +740,12 @@ public class AstFactory {
         var declStmt = CxxWeaver.getFactory().declStmt(declNodes);
 
         return CxxJoinpoints.create(declStmt, ADeclStmt.class);
+    }
+
+    public static ADeclStmt declStmt(Object... decls) {
+        ADecl[] aDeclArray = Arrays.copyOf(decls, decls.length, ADecl[].class);
+
+        return declStmt(aDeclArray);
     }
 
     /**
