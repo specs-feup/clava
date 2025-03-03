@@ -57,6 +57,11 @@ export default class HeaderEnums {
         "Could not process header '" +
           path.resolve(headerFile) +
           "':\n\t" +
+          "Command failed: " +
+          compilerCmd +
+          " " +
+          args.join(" ") +
+          "\n" +
           String(result.stderr).split("\n").join("\n\t")
       );
     }
