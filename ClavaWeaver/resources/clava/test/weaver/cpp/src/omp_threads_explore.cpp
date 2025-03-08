@@ -4,7 +4,7 @@ int main()  {
     #pragma lara marker loop1
     {
         
-		#pragma omp parallel for reduction( min : a, i )
+		#pragma omp parallel for reduction( min : a )
 		for(int i=0; i<10; i++) {
 			a += i;    
 		}
