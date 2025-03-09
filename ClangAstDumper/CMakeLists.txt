@@ -1,15 +1,45 @@
 cmake_minimum_required(VERSION 3.14)
 project(ClangAstDumper)
 
-set(CLANG_VERSION 16)
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-SET(CMAKE_C_COMPILER "clang-${CLANG_VERSION}")
-SET(CMAKE_CXX_COMPILER "clang++-${CLANG_VERSION}")
+set(CLANG_VERSION 16)
 
-SET(Clang_DIR "/usr/lib/cmake/clang-${CLANG_VERSION}")
-SET(LLVM_DIR "/usr/lib/llvm-${CLANG_VERSION}/lib/cmake/llvm")
+# Set base folder in Windows
+#
+# Convention for MinGW packages that were downloaded from https://repo.msys2.org/mingw/mingw64/
+# Download matching versions of clang and llvm packages, extract them to a folder (e.g. mingw64-clang-<version>)
+# You have to download:
+# mingw-w64-x86_64-llvm-<version>
+# mingw-w64-x86_64-llvm-libs-<version>
+# mingw-w64-x86_64-clang-<version>
+# mingw-w64-x86_64-clang-tools-extra-<version>
+#
+#
+if(WIN32)
+	SET(MINGW_BASEDIR "c:/mingw64-clang-${CLANG_VERSION}")
+endif()
+
+# Set compiler
+if(WIN32)
+    # Often these do not work... replace with direct invocation in command line
+	# E.g., cmake -DCMAKE_C_COMPILER="c:/mingw64-clang-16/bin/clang.exe" -DCMAKE_CXX_COMPILER="C:/mingw64-clang-16/bin/clang++.exe" -DCMAKE_LINKER="C:/mingw64-clang-16/bin/lld-link.exe" ..
+	SET(CMAKE_C_COMPILER "${MINGW_BASEDIR}/bin/clang.exe")
+	SET(CMAKE_CXX_COMPILER "${MINGW_BASEDIR}/bin/clang++.exe")
+	SET(CMAKE_LINKER "${MINGW_BASEDIR}/bin/lld-link.exe")
+else()
+	SET(CMAKE_C_COMPILER "clang-${CLANG_VERSION}")
+	SET(CMAKE_CXX_COMPILER "clang++-${CLANG_VERSION}")
+endif()
+
+# Set libraries
+if(WIN32)
+	SET(Clang_DIR "${MINGW_BASEDIR}/lib/cmake/clang")
+	SET(LLVM_DIR "${MINGW_BASEDIR}/lib/cmake/llvm")
+else()
+	SET(Clang_DIR "/usr/lib/cmake/clang-${CLANG_VERSION}")
+	SET(LLVM_DIR "/usr/lib/llvm-${CLANG_VERSION}/lib/cmake/llvm")
+endif()
 
 add_compile_options(-Wsuggest-override)
 
@@ -20,10 +50,11 @@ message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 
 # Set the LLVM and Clang include directories
-include_directories(${LLVM_INCLUDE_DIRS})
+include_directories(${LLVM_INCLUDE_DIRS})	
+include_directories(${CLANG_INCLUDE_DIRS})
+
 #include_directories("/usr/lib/llvm-${CLANG_VERSION}/include/")
-#include_directories(${CLANG_INCLUDE_DIRS})
-include_directories("/usr/lib/clang/${CLANG_VERSION}/include/")
+#include_directories("/usr/lib/clang/${CLANG_VERSION}/include/")
 
 # Add definitions needed for LLVM and Clang
 add_definitions(${LLVM_DEFINITIONS})
@@ -62,7 +93,7 @@ set(SOURCE_FILES
 
 add_custom_target (
     clang_enums
-    COMMAND node clang_enums/Main.mjs ${CLANG_VERSION} src/	
+    COMMAND node clang_enums/Main.mjs ${LLVM_DIR} src/	
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # Only build plugin if not on Windows
