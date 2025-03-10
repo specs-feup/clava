@@ -340,12 +340,23 @@ public class AstFactory {
         return CxxJoinpoints.create(OmpParser.newOmpPragma(kind, CxxWeaver.getContex()));
     }
 
-    public static AStatement caseStmt(AExpression value, AStatement subStmt) {
+    public static AStatement caseStmt(AExpression value) {
 
-        CaseStmt caseStmt = CxxWeaver.getFactory().caseStmt((Expr) value.getNode(),
-                (Stmt) subStmt.getNode());
+        CaseStmt caseStmt = CxxWeaver.getFactory().caseStmt((Expr) value.getNode());
 
         return CxxJoinpoints.create(caseStmt, AStatement.class);
+    }
+
+    public static AStatement defaultStmt() {
+        var defaultStmt = CxxWeaver.getFactory().defaultStmt();
+
+        return CxxJoinpoints.create(defaultStmt, AStatement.class);
+    }
+
+    public static AStatement breakStmt() {
+        var breakStmt = CxxWeaver.getFactory().breakStmt();
+
+        return CxxJoinpoints.create(breakStmt, AStatement.class);
     }
 
     /**
@@ -358,14 +369,14 @@ public class AstFactory {
         // Create compound stmt
         ExprStmt exprStmt = CxxWeaver.getFactory().exprStmt((Expr) expr.getNode());
         BreakStmt breakStmt = CxxWeaver.getFactory().breakStmt();
+        var breakJp = CxxJoinpoints.create(breakStmt, AStatement.class);
 
         CompoundStmt compoundStmt = CxxWeaver.getFactory().compoundStmt(exprStmt);
         compoundStmt.setNaked(true);
 
-        AStatement caseStmt = caseStmt(value, CxxJoinpoints.create(compoundStmt, AStatement.class));
-
-        return Arrays.asList(caseStmt,
-                CxxJoinpoints.create(breakStmt, AStatement.class));
+        AStatement caseStmt = caseStmt(value);
+        var compoundJp = CxxJoinpoints.create(compoundStmt, AStatement.class);
+        return Arrays.asList(caseStmt, compoundJp, breakJp);
 
     }
 
