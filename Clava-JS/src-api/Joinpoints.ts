@@ -2077,6 +2077,7 @@ export class LabelDecl extends NamedDecl {
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
+  get labelStmt(): LabelStmt { return wrapJoinPoint(this._javaObject.getLabelStmt()) }
 }
 
 export class LabelStmt extends Statement {

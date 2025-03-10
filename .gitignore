@@ -60,7 +60,7 @@ deps/*/*/*
 
 # Build
 **/build/*
-**/build-*/*
+**/build*/*
 **/cmake-build*/*
 **/.gradle/*
 **/gradle/*
@@ -86,4 +86,7 @@ stderr.txt
 /*Experiment/
 
 #JavaScript
-java-binaries/
+java-binaries*/
+
+# Automatic node_modules inside CalvaWeaver when running tests
+**/ClavaWeaver/node_modules/*

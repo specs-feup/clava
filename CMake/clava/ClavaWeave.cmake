@@ -14,6 +14,46 @@ function(clava_weave ORIG_TARGET ASPECT)
     set(options)
     set(oneValueArgs ARGS)
     set(multiValueArgs FLAGS JAVA_FLAGS)
+	
+	# Setup Clava Node mode, if enabled
+	if(DEFINED CLAVA_NODE AND CLAVA_NODE)
+		get_filename_component(aspectAbsolutePath "${ASPECT}" ABSOLUTE)	
+		get_filename_component(aspectParentDir "${aspectAbsolutePath}" DIRECTORY)
+	
+		# If package.json does not exist, create a default one
+		if(NOT EXISTS "${aspectParentDir}/package.json")
+			message(STATUS "Clava Node: Creating default package.json")
+			set(jsonContents "{\n  \"type\": \"module\",\n  \"dependencies\": {\n    \"@specs-feup/clava\": \"^3.0.1\",\n    \"@specs-feup/lara\": \"^3.0.2\"\n  }\n}\n")			
+			
+			file(WRITE "${aspectParentDir}/package.json" "${jsonContents}")
+		endif()		
+	
+		# If node_modules does not exist, call npm install
+		if(NOT EXISTS "${aspectParentDir}/node_modules")
+			message(STATUS "Clava Node: installing node packages")
+			
+			if(WIN32)
+				set(NPM_CMD "npm.cmd")
+			else()
+				set(NPM_CMD "npm")			
+			endif()
+
+			execute_process(COMMAND ${NPM_CMD} install
+				WORKING_DIRECTORY "${aspectParentDir}"
+				OUTPUT_VARIABLE NPM_OUTPUT
+				ERROR_VARIABLE NPM_ERROR
+				RESULT_VARIABLE NPM_RESULT				
+			)	
+			
+			
+			if(${NPM_RESULT} STREQUAL "0")
+				message(STATUS "${NPM_OUTPUT}")
+			else()
+				message(SEND_ERROR "npm install error: ${NPM_ERROR}")				
+			endif()
+
+		endif()
+	endif()
 
     cmake_parse_arguments(PARSE_ARGV 2 CLAVA_WEAVE "${options}" "${oneValueArgs}" "${multiValueArgs}")
 

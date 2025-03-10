@@ -20,7 +20,11 @@ permissions:
 env:
   JAVA_VERSION: 17
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  DEFAULT_BRANCH: ${{ github.base_ref || 'master' }}
+  # Setting default branch to staging assuming PRs will be done against the staging versions of the repository
+  # main versions will just receive what comes from the staging
+  DEFAULT_BRANCH: ${{ github.base_ref || 'staging' }}
+  #SPECS_JAVA_LIBS_BRANCH: ${{ 'master' }}
+  #LARA_FRAMEWORK_BRANCH: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   build-java:
@@ -63,6 +67,7 @@ jobs:
           echo "Branch-specs-java-libs: ${{ steps.Branch-specs-java-libs.outputs.value }}"
           echo "Branch name: ${{ env.BRANCH_NAME }}"
           echo "Default branch: ${{ env.DEFAULT_BRANCH }}"
+          echo "Branch base_ref: ${{ github.base_ref }}"          
 
       - name: Checkout lara-framework
         uses: actions/checkout@v4
@@ -83,12 +88,24 @@ jobs:
           cd clava/ClavaWeaver
           gradle installDist
 
-      - name: Test with Gradle
+      - name: Test ClangAstParser
+        run: |
+          cd clava/ClangAstParser
+          gradle test
+          
+      - name: Test ClavaWeaver
         run: |
           cd clava/ClavaWeaver
           gradle test
         env:
           GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: always()
+        with:
+            report_paths: './**/build/test-results/test/TEST-*.xml'
+            summary: true
 
       - name: Upload ClavaWeaver artifacts
         uses: actions/upload-artifact@v4
@@ -120,6 +137,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org/'
 
       - name: Checkout Clava
         uses: actions/checkout@v4
@@ -158,3 +176,29 @@ jobs:
         run: |
           cd clava/Clava-JS
           npm run test
+
+      # Only on ubuntu-latest
+      - name: Publish JS
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == '20.x'
+        run: | 
+            cd clava/Clava-JS
+            npm whoami
+            echo "Attempt to publish while running on ${{ matrix.os }} and Node.js ${{matrix.node-version}}"
+            if [[ "${{ github.event_name }}" == "push" ]]; then
+                if [ "${{ github.ref }}" == "refs/heads/staging" ]; then
+                    echo "Publishing from staging, creating timestamped prerelease and updating tag 'staging'"
+                    TIMESTAMP=$(date +"%Y%m%d%H%M")
+                    npm version prerelease --preid="$TIMESTAMP"
+                    npm publish --tag staging --access public
+                # Not updating automatically the version since this would make the staging branch diverge from the main branch
+                elif [ "${{ github.ref }}" == "refs/heads/master" ]; then
+                    echo "Publishing from main, assumes version was changed before publishing"
+                    npm publish
+                else
+                    echo "Not master or staging branches, not publishing even if it is a push event"
+                fi
+            else
+                echo "Not a push event, skipping publish."
+            fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} 

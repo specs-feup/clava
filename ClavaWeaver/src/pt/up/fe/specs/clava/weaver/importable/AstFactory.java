@@ -150,8 +150,12 @@ public class AstFactory {
         return CxxJoinpoints.create(CxxWeaver.getFactory().literalExpr(code, astType), AExpression.class);
     }
 
-    public static AExpression cxxConstructExpr(AType type, AJoinPoint... constructorArguments) {
-        List<Expr> exprArgs = Arrays.stream(constructorArguments)
+    public static AExpression cxxConstructExpr(AType type, Object[] constructorArguments) {
+        return cxxConstructExpr(type, SpecsCollections.asListT(AJoinPoint.class, constructorArguments));
+    }
+
+    public static AExpression cxxConstructExpr(AType type, List<AJoinPoint> constructorArguments) {
+        List<Expr> exprArgs = constructorArguments.stream()
                 .map(arg -> (Expr) arg.getNode())
                 .collect(Collectors.toList());
 
@@ -174,19 +178,24 @@ public class AstFactory {
         return CxxJoinpoints.create(call, ACall.class);
     }
 
-    public static ACall call(String functionName, AType typeJp, AJoinPoint... args) {
+    public static ACall call(String functionName, AType typeJp, Object[] args) {
+        return call(functionName, typeJp, SpecsCollections.asListT(AJoinPoint.class, args));
+    }
+
+
+    public static ACall call(String functionName, AType typeJp, List<AJoinPoint> args) {
 
         Type returnType = (Type) typeJp.getNode();
 
         DeclRefExpr declRef = CxxWeaver.getFactory().declRefExpr(functionName, returnType);
 
-        List<Type> argTypes = Arrays.stream(args)
+        List<Type> argTypes = args.stream()
                 .map(arg -> ((Typable) arg.getNode()).getType())
                 .collect(Collectors.toList());
 
         FunctionProtoType type = CxxWeaver.getFactory().functionProtoType(returnType, argTypes);
 
-        List<Expr> exprArgs = Arrays.stream(args)
+        List<Expr> exprArgs = args.stream()
                 .map(arg -> (Expr) arg.getNode())
                 .collect(Collectors.toList());
 
@@ -284,6 +293,10 @@ public class AstFactory {
         return constArrayType(CxxWeaver.getFactory().literalType(typeCode), standard, dims);
     }
 
+    public static ACxxWeaverJoinPoint constArrayType(String typeCode, String standard, Object[] dims) {
+        return constArrayType(typeCode, standard, SpecsCollections.asListT(Integer.class, dims));
+    }
+
     /**
      * TODO: Standard string not required
      *
@@ -307,6 +320,11 @@ public class AstFactory {
 
         return CxxJoinpoints.create(outType);
     }
+
+    public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, Object[] dims) {
+        return constArrayType(outType, standardString, SpecsCollections.asListT(Integer.class, dims));
+    }
+
 
     public static AType variableArrayType(AType elementType, AExpression sizeExpr) {
         Type variableArrayType = CxxWeaver.getFactory().variableArrayType((Type) elementType.getNode(),
@@ -357,7 +375,9 @@ public class AstFactory {
         return CxxJoinpoints.create(switchStmt, AStatement.class);
     }
 
-    public static AStatement switchStmt(AExpression condition, AExpression[] cases) {
+    public static AStatement switchStmt(AExpression condition, Object[] casesArray) {
+        var cases = SpecsCollections.cast(casesArray, AExpression.class);
+
         if (cases.length % 2 != 0) {
             ClavaLog.info("The number of join points for the cases must be even (expression-stmt pairs)");
             return null;
@@ -469,11 +489,16 @@ public class AstFactory {
         return CxxJoinpoints.create(CxxWeaver.getFactory().returnStmt(), AStatement.class);
     }
 
-    public static AFunctionType functionType(AType returnTypeJp, AType... argTypesJps) {
+    public static AFunctionType functionType(AType returnTypeJp, Object[] argTypesJps) {
+        return functionType(returnTypeJp, SpecsCollections.asListT(AType.class, argTypesJps));
+    }
+
+
+    public static AFunctionType functionType(AType returnTypeJp, List<AType> argTypesJps) {
 
         Type returnType = (Type) returnTypeJp.getNode();
 
-        List<Type> argTypes = Arrays.stream(argTypesJps)
+        List<Type> argTypes = argTypesJps.stream()
                 .map(arg -> ((Type) arg.getNode()))
                 .collect(Collectors.toList());
 
@@ -488,12 +513,12 @@ public class AstFactory {
                 AFunction.class);
     }
 
-    public static AFunction functionDecl(String functionName, AType returnTypeJp, AJoinPoint... namedDeclJps) {
+    public static AFunction functionDecl(String functionName, AType returnTypeJp, List<AJoinPoint> namedDeclJps) {
 
         Type returnType = (Type) returnTypeJp.getNode();
 
         // Get the arg types and create the parameters
-        List<Type> argTypes = new ArrayList<>(namedDeclJps.length);
+        List<Type> argTypes = new ArrayList<>(namedDeclJps.size());
         List<ParmVarDecl> params = new ArrayList<>();
 
         for (AJoinPoint namedDeclJp : namedDeclJps) {
@@ -522,8 +547,7 @@ public class AstFactory {
     }
 
     public static AFunction functionDecl(String functionName, AType returnTypeJp, Object... namedDeclJps) {
-        AJoinPoint[] aJoinPointArray = Arrays.copyOf(namedDeclJps, namedDeclJps.length, AJoinPoint[].class);
-        return functionDecl(functionName, returnTypeJp, aJoinPointArray);
+        return functionDecl(functionName, returnTypeJp, SpecsCollections.asListT(AJoinPoint.class, namedDeclJps));
     }
 
     public static ABinaryOp assignment(AExpression leftHand, AExpression rightHand) {
@@ -593,6 +617,32 @@ public class AstFactory {
         return CxxJoinpoints.create(parenExpr, AExpression.class);
     }
 
+    public static AArrayAccess arrayAccess(AExpression base, List<AExpression> subscripts) {
+        var subscriptsExpr = subscripts.stream()
+                .map(arg -> ((Expr) arg.getNode()))
+                .collect(Collectors.toList());
+
+        var arraySubscriptExpr = CxxWeaver.getFactory().arraySubscriptExpr((Expr) base.getNode(), subscriptsExpr);
+        return CxxJoinpoints.create(arraySubscriptExpr, AArrayAccess.class);
+    }
+
+    public static AArrayAccess arrayAccess(AExpression base, Object[] subscripts) {
+        return arrayAccess(base, SpecsCollections.asListT(AExpression.class, subscripts));
+    }
+
+    public static AInitList initList(List<AExpression> values) {
+        var valuesExpr = values.stream()
+                .map(arg -> ((Expr) arg.getNode()))
+                .collect(Collectors.toList());
+
+        var initList = CxxWeaver.getFactory().initListExpr((valuesExpr));
+        return CxxJoinpoints.create(initList, AInitList.class);
+    }
+
+    public static AInitList initList(Object[] values) {
+        return initList(SpecsCollections.asListT(AExpression.class, values));
+    }
+
     /**
      * Creates a join point representing a type of a typedef.
      *
@@ -630,8 +680,8 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static AClass classDecl(String className, AField... fields) {
-        var fieldsNodes = Arrays.stream(fields).map(field -> (FieldDecl) field.getNode())
+    public static AClass classDecl(String className, List<AField> fields) {
+        var fieldsNodes = fields.stream().map(field -> (FieldDecl) field.getNode())
                 .collect(Collectors.toList());
 
         var classDecl = CxxWeaver.getFactory().cxxRecordDecl(className, fieldsNodes);
@@ -639,8 +689,7 @@ public class AstFactory {
     }
 
     public static AClass classDecl(String className, Object... fields) {
-        AField[] aFieldArray = Arrays.copyOf(fields, fields.length, AField[].class);
-        return classDecl(className, aFieldArray);
+        return classDecl(className, SpecsCollections.asListT(AField.class, fields));
     }
 
     /**
@@ -733,8 +782,8 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static ADeclStmt declStmt(ADecl... decls) {
-        var declNodes = Arrays.stream(decls).map(decl -> (Decl) decl.getNode())
+    public static ADeclStmt declStmt(List<ADecl> decls) {
+        var declNodes = decls.stream().map(decl -> (Decl) decl.getNode())
                 .collect(Collectors.toList());
 
         var declStmt = CxxWeaver.getFactory().declStmt(declNodes);
@@ -743,9 +792,7 @@ public class AstFactory {
     }
 
     public static ADeclStmt declStmt(Object... decls) {
-        ADecl[] aDeclArray = Arrays.copyOf(decls, decls.length, ADecl[].class);
-
-        return declStmt(aDeclArray);
+        return declStmt(SpecsCollections.asListT(ADecl.class, decls));
     }
 
     /**

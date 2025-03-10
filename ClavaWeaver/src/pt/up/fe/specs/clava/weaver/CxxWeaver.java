@@ -1,21 +1,5 @@
 package pt.up.fe.specs.clava.weaver;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
-
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.profile.WeavingReport;
 import org.lara.interpreter.weaver.ast.AstMethods;
@@ -24,12 +8,10 @@ import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.interpreter.weaver.utils.LaraResourceProvider;
-import org.lara.language.specification.LanguageSpecification;
-import org.lara.language.specification.dsl.LanguageSpecificationV2;
+import org.lara.language.specification.dsl.LanguageSpecification;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
-
 import pt.up.fe.specs.antarex.clava.AntarexClavaLaraApis;
 import pt.up.fe.specs.antarex.clava.JsAntarexApiResource;
 import pt.up.fe.specs.clang.ClangAstKeys;
@@ -57,18 +39,19 @@ import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.clava.weaver.utils.ClavaAstMethods;
-import pt.up.fe.specs.lara.langspec.LangSpecsXmlParser;
-import pt.up.fe.specs.util.SpecsCheck;
-import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.SpecsIo;
-import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.*;
 import pt.up.fe.specs.util.collections.AccumulatorMap;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.ResourceProvider;
 import pt.up.fe.specs.util.utilities.Buffer;
 import pt.up.fe.specs.util.utilities.LineStream;
 import pt.up.fe.specs.util.utilities.StringLines;
+
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * Weaver Implementation for CxxWeaver<br>
@@ -88,15 +71,9 @@ public class CxxWeaver extends ACxxWeaver {
         // true, true);
     }
 
-    public static LanguageSpecificationV2 buildLanguageSpecification() {
-        // var langSpecV1 = LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS,
-        // ClavaWeaverResource.ARTIFACTS,
-        // ClavaWeaverResource.ACTIONS, true);
-        //
-        // return JoinPointFactory.fromOld(langSpecV1);
-        // System.out.println("JPS: " + ClavaWeaverResource.JOINPOINTS.read());
-        return LangSpecsXmlParser.parse(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
-                ClavaWeaverResource.ACTIONS, true);
+    public static LanguageSpecification buildLanguageSpecification() {
+        return LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
+                ClavaWeaverResource.ACTIONS);
     }
 
     private static final List<String> CLAVA_PREDEFINED_EXTERNAL_DEPS = Arrays.asList("LAT - Lara Autotuning Tool",
@@ -117,15 +94,6 @@ public class CxxWeaver extends ACxxWeaver {
             "Benchmark - Rosetta (import lara.benchmark.RosettaBenchmarkSet)",
             "https://github.com/specs-feup/clava-benchmarks.git?folder=Rosetta");
 
-    /**
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-    public static LanguageSpecification buildLanguageSpecificationOld() {
-        return LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
-                ClavaWeaverResource.ACTIONS, true);
-    }
 
     private static final String TEMP_WEAVING_FOLDER = "__clava_woven";
     private static final String TEMP_SRC_FOLDER = "__clava_src";
@@ -172,6 +140,7 @@ public class CxxWeaver extends ACxxWeaver {
     private static final String CLAVA_API_NAME = "@specs-feup/clava";
 
     private static final List<ResourceProvider> CLAVA_LARA_API = new ArrayList<>();
+
     static {
         CLAVA_LARA_API.addAll(AntarexClavaLaraApis.getApis());
     }
@@ -318,12 +287,9 @@ public class CxxWeaver extends ACxxWeaver {
     /**
      * Set a file/folder in the weaver if it is valid file/folder type for the weaver.
      *
-     * @param source
-     *            the file with the source code
-     * @param outputDir
-     *            output directory for the generated file(s)
-     * @param args
-     *            arguments to start the weaver
+     * @param source    the file with the source code
+     * @param outputDir output directory for the generated file(s)
+     * @param args      arguments to start the weaver
      * @return true if the file type is valid
      */
     @Override
@@ -455,13 +421,12 @@ public class CxxWeaver extends ACxxWeaver {
 
     /**
      * Updates the information relative to the current sources.
-     * 
+     *
      * <p>
      * Creation of sources follow this rules:<br>
      * 1) Single files listed in 'sources' are considered to not have a base folder (relative path is null) <br>
      * 2) Source folders listed in 'sources' will have the parent folder as its base folder <br>
      * 3) Source files or folders listed in 'map' will have the base folder indicated in the map
-     * 
      */
     private void updateSources(Map<File, File> map) {
         // TODO: Convert all folders to files, folders become bases when in sources
@@ -663,7 +628,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     /**
      * Builds the -I argument
-     * 
+     *
      * @param include
      * @return
      */
@@ -677,13 +642,11 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     /**
-     *
      * @param sources
      * @param parserOptions
-     * @param extraOptions
-     *            options that should not be processed (e.g., header files found in folders specified by -I flags are
-     *            automatically added to the compilation, if we want to add header folders whose header files should not
-     *            be parsed, they can be specified here)
+     * @param extraOptions  options that should not be processed (e.g., header files found in folders specified by -I flags are
+     *                      automatically added to the compilation, if we want to add header folders whose header files should not
+     *                      be parsed, they can be specified here)
      * @return
      */
     public App createApp(List<File> sources, List<String> parserOptions, List<String> extraOptions) {
@@ -1157,11 +1120,6 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     @Override
-    public LanguageSpecification getLanguageSpecification() {
-        return buildLanguageSpecificationOld();
-    }
-
-    @Override
     public String getName() {
         // v1.2.2
         return "Clava";
@@ -1334,9 +1292,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     /**
-     *
-     * @param update
-     *            if true, the weaver will update its state to use the rebuilt tree instead of the original tree
+     * @param update if true, the weaver will update its state to use the rebuilt tree instead of the original tree
      */
     public boolean rebuildAst(boolean update) {
         // Check if inside apply
@@ -1492,10 +1448,10 @@ public class CxxWeaver extends ACxxWeaver {
 
     /**
      * Creates a new temporary folder for weaving.
-     * 
+     *
      * <p>
      * The folder will be deleted when the JVM exits.
-     * 
+     *
      * @return
      */
     private static File newTemporaryWeavingFolder() {
@@ -1656,11 +1612,11 @@ public class CxxWeaver extends ACxxWeaver {
 
     /**
      * Helper method which returns include folders of the source files.
-     * 
+     *
      * <p>
      * For the temporary folder, the source folders are the children folders of the temporary folder, and the temporary
      * folder itself.
-     * 
+     *
      * @param weavingFolder
      * @return
      */
@@ -1670,7 +1626,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     /**
      *
-    */
+     */
     private Set<File> getSourceIncludeFolders(File weavingFolder, boolean onlyHeaders) {
         Set<File> includeFolders = new LinkedHashSet<>();
         includeFolders.addAll(SpecsIo.getFolders(weavingFolder));
@@ -1807,7 +1763,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     @Override
-    protected LanguageSpecificationV2 buildLangSpecsV2() {
+    protected LanguageSpecification buildLangSpecs() {
         return buildLanguageSpecification();
     }
 
@@ -1836,4 +1792,7 @@ public class CxxWeaver extends ACxxWeaver {
         return Arrays.asList(ClavaApiJsResource.values());
     }
 
+    public void clearAppHistory() {
+        context.clearAppHistory();
+    }
 }

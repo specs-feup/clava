@@ -19,27 +19,27 @@ import java.util.Arrays;
 public abstract class AClavaException extends ACxxWeaverJoinPoint {
 
     /**
-     * Get value on attribute message
+     * Get value on attribute exception
      * @return the attribute's value
      */
-    public abstract String getMessageImpl();
+    public abstract Object getExceptionImpl();
 
     /**
-     * Get value on attribute message
+     * Get value on attribute exception
      * @return the attribute's value
      */
-    public final Object getMessage() {
+    public final Object getException() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "message", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "exception", Optional.empty());
         	}
-        	String result = this.getMessageImpl();
+        	Object result = this.getExceptionImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "message", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "exception", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "message", e);
+        	throw new AttributeException(get_class(), "exception", e);
         }
     }
 
@@ -69,27 +69,27 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute exception
+     * Get value on attribute message
      * @return the attribute's value
      */
-    public abstract Object getExceptionImpl();
+    public abstract String getMessageImpl();
 
     /**
-     * Get value on attribute exception
+     * Get value on attribute message
      * @return the attribute's value
      */
-    public final Object getException() {
+    public final Object getMessage() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "exception", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "message", Optional.empty());
         	}
-        	Object result = this.getExceptionImpl();
+        	String result = this.getMessageImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "exception", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "message", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "exception", e);
+        	throw new AttributeException(get_class(), "message", e);
         }
     }
 
@@ -120,13 +120,6 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "firstChild": {
         	if(value instanceof AJoinPoint){
         		this.defFirstChildImpl((AJoinPoint)value);
@@ -152,6 +145,13 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "type": {
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -162,9 +162,9 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
-        attributes.add("message");
-        attributes.add("exceptionType");
         attributes.add("exception");
+        attributes.add("exceptionType");
+        attributes.add("message");
     }
 
     /**
@@ -195,71 +195,71 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum ClavaExceptionAttributes {
-        MESSAGE("message"),
-        EXCEPTIONTYPE("exceptionType"),
         EXCEPTION("exception"),
-        PARENT("parent"),
+        EXCEPTIONTYPE("exceptionType"),
+        MESSAGE("message"),
         AST("ast"),
-        SIBLINGSLEFT("siblingsLeft"),
-        DATA("data"),
-        HASCHILDREN("hasChildren"),
-        GETANCESTOR("getAncestor"),
-        TYPE("type"),
-        SIBLINGSRIGHT("siblingsRight"),
-        RIGHTJP("rightJp"),
-        ISCILK("isCilk"),
-        FILEPATH("filepath"),
-        SCOPENODES("scopeNodes"),
-        CHILDREN("children"),
-        GETJAVAFIELDTYPE("getJavaFieldType"),
-        FIRSTCHILD("firstChild"),
-        NUMCHILDREN("numChildren"),
-        GETCHILD("getChild"),
-        LEFTJP("leftJp"),
-        INLINECOMMENTS("inlineComments"),
-        ASTNAME("astName"),
-        JPID("jpId"),
-        ASTID("astId"),
-        GETKEYTYPE("getKeyType"),
-        CONTAINS("contains"),
-        ASTISINSTANCE("astIsInstance"),
-        FILENAME("filename"),
-        JAVAFIELDS("javaFields"),
-        ISINSYSTEMHEADER("isInSystemHeader"),
-        BITWIDTH("bitWidth"),
-        HASNODE("hasNode"),
-        ENDLINE("endLine"),
-        ENDCOLUMN("endColumn"),
-        CODE("code"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
-        GETCHAINANCESTOR("getChainAncestor"),
-        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
-        GETDESCENDANTS("getDescendants"),
-        GETFIRSTJP("getFirstJp"),
-        ISMACRO("isMacro"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
-        GETASTCHILD("getAstChild"),
-        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        ASTID("astId"),
+        ASTISINSTANCE("astIsInstance"),
+        ASTNAME("astName"),
+        ASTNUMCHILDREN("astNumChildren"),
+        BITWIDTH("bitWidth"),
         CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
-        ORIGINNODE("originNode"),
+        CHILDREN("children"),
+        CODE("code"),
         COLUMN("column"),
-        PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
-        GETASTANCESTOR("getAstAncestor"),
+        CONTAINS("contains"),
+        CURRENTREGION("currentRegion"),
+        DATA("data"),
         DEPTH("depth"),
-        LOCATION("location"),
+        DESCENDANTS("descendants"),
+        ENDCOLUMN("endColumn"),
+        ENDLINE("endLine"),
+        FILENAME("filename"),
+        FILEPATH("filepath"),
+        FIRSTCHILD("firstChild"),
+        GETANCESTOR("getAncestor"),
+        GETASTANCESTOR("getAstAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        GETCHILD("getChild"),
+        GETDESCENDANTS("getDescendants"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        GETFIRSTJP("getFirstJp"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
+        GETKEYTYPE("getKeyType"),
         GETUSERFIELD("getUserField"),
+        GETVALUE("getValue"),
+        HASCHILDREN("hasChildren"),
+        HASNODE("hasNode"),
+        HASPARENT("hasParent"),
         HASTYPE("hasType"),
+        INLINECOMMENTS("inlineComments"),
+        ISCILK("isCilk"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        ISMACRO("isMacro"),
+        JAVAFIELDS("javaFields"),
+        JPID("jpId"),
+        KEYS("keys"),
+        LASTCHILD("lastChild"),
+        LEFTJP("leftJp"),
+        LINE("line"),
+        LOCATION("location"),
+        NUMCHILDREN("numChildren"),
+        ORIGINNODE("originNode"),
+        PARENT("parent"),
+        PARENTREGION("parentRegion"),
         PRAGMAS("pragmas"),
+        RIGHTJP("rightJp"),
+        ROOT("root"),
+        SCOPENODES("scopeNodes"),
+        SIBLINGSLEFT("siblingsLeft"),
+        SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        HASPARENT("hasParent");
+        TYPE("type");
         private String name;
 
         /**

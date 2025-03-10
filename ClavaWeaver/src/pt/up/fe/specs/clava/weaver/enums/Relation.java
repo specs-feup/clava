@@ -10,11 +10,11 @@ import pt.up.fe.specs.util.enums.EnumHelperWithValue;
  * @author Lara C.
  */
 public enum Relation  implements NamedEnum{
-    LE("le"),
-    LT("lt"),
+    EQ("eq"),
     GE("ge"),
     GT("gt"),
-    EQ("eq"),
+    LE("le"),
+    LT("lt"),
     NE("ne");
     private String name;
     private static final Lazy<EnumHelperWithValue<Relation>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(Relation.class);

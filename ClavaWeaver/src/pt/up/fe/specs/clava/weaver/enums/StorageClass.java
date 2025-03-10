@@ -10,9 +10,9 @@ import pt.up.fe.specs.util.enums.EnumHelperWithValue;
  * @author Lara C.
  */
 public enum StorageClass  implements NamedEnum{
-    NONE("none"),
     AUTO("auto"),
     EXTERN("extern"),
+    NONE("none"),
     PRIVATE_EXTERN("private_extern"),
     REGISTER("register"),
     STATIC("static");

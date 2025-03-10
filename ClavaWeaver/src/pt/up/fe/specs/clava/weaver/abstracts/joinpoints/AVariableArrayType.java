@@ -96,48 +96,12 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute kind
+     * Get value on attribute arrayDimsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public String getKindImpl() {
-        return this.aArrayType.getKindImpl();
-    }
-
-    /**
-     * Get value on attribute isTopLevel
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsTopLevelImpl() {
-        return this.aArrayType.getIsTopLevelImpl();
-    }
-
-    /**
-     * Get value on attribute isArray
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsArrayImpl() {
-        return this.aArrayType.getIsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute isPointer
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsPointerImpl() {
-        return this.aArrayType.getIsPointerImpl();
-    }
-
-    /**
-     * Get value on attribute isAuto
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsAutoImpl() {
-        return this.aArrayType.getIsAutoImpl();
+    public int[] getArrayDimsArrayImpl() {
+        return this.aArrayType.getArrayDimsArrayImpl();
     }
 
     /**
@@ -150,48 +114,12 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute arrayDimsArrayImpl
+     * Get value on attribute constant
      * @return the attribute's value
      */
     @Override
-    public int[] getArrayDimsArrayImpl() {
-        return this.aArrayType.getArrayDimsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute hasTemplateArgs
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasTemplateArgsImpl() {
-        return this.aArrayType.getHasTemplateArgsImpl();
-    }
-
-    /**
-     * Get value on attribute templateArgsStringsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getTemplateArgsStringsArrayImpl() {
-        return this.aArrayType.getTemplateArgsStringsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute templateArgsTypesArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AType[] getTemplateArgsTypesArrayImpl() {
-        return this.aArrayType.getTemplateArgsTypesArrayImpl();
-    }
-
-    /**
-     * Get value on attribute hasSugar
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasSugarImpl() {
-        return this.aArrayType.getHasSugarImpl();
+    public Boolean getConstantImpl() {
+        return this.aArrayType.getConstantImpl();
     }
 
     /**
@@ -213,6 +141,51 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
+     * Get value on attribute fieldTree
+     * @return the attribute's value
+     */
+    @Override
+    public String getFieldTreeImpl() {
+        return this.aArrayType.getFieldTreeImpl();
+    }
+
+    /**
+     * Get value on attribute hasSugar
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasSugarImpl() {
+        return this.aArrayType.getHasSugarImpl();
+    }
+
+    /**
+     * Get value on attribute hasTemplateArgs
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasTemplateArgsImpl() {
+        return this.aArrayType.getHasTemplateArgsImpl();
+    }
+
+    /**
+     * Get value on attribute isArray
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsArrayImpl() {
+        return this.aArrayType.getIsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute isAuto
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsAutoImpl() {
+        return this.aArrayType.getIsAutoImpl();
+    }
+
+    /**
      * Get value on attribute isBuiltin
      * @return the attribute's value
      */
@@ -222,21 +195,30 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute constant
+     * Get value on attribute isPointer
      * @return the attribute's value
      */
     @Override
-    public Boolean getConstantImpl() {
-        return this.aArrayType.getConstantImpl();
+    public Boolean getIsPointerImpl() {
+        return this.aArrayType.getIsPointerImpl();
     }
 
     /**
-     * Get value on attribute unwrap
+     * Get value on attribute isTopLevel
      * @return the attribute's value
      */
     @Override
-    public AType getUnwrapImpl() {
-        return this.aArrayType.getUnwrapImpl();
+    public Boolean getIsTopLevelImpl() {
+        return this.aArrayType.getIsTopLevelImpl();
+    }
+
+    /**
+     * Get value on attribute kind
+     * @return the attribute's value
+     */
+    @Override
+    public String getKindImpl() {
+        return this.aArrayType.getKindImpl();
     }
 
     /**
@@ -249,6 +231,24 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
+     * Get value on attribute templateArgsStringsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getTemplateArgsStringsArrayImpl() {
+        return this.aArrayType.getTemplateArgsStringsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute templateArgsTypesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AType[] getTemplateArgsTypesArrayImpl() {
+        return this.aArrayType.getTemplateArgsTypesArrayImpl();
+    }
+
+    /**
      * Get value on attribute typeFields
      * @return the attribute's value
      */
@@ -258,19 +258,12 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute fieldTree
+     * Get value on attribute unwrap
      * @return the attribute's value
      */
     @Override
-    public String getFieldTreeImpl() {
-        return this.aArrayType.getFieldTreeImpl();
-    }
-
-    /**
-     * 
-     */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aArrayType.defTemplateArgsTypesImpl(value);
+    public AType getUnwrapImpl() {
+        return this.aArrayType.getUnwrapImpl();
     }
 
     /**
@@ -283,17 +276,15 @@ public abstract class AVariableArrayType extends AArrayType {
     /**
      * 
      */
-    public void defElementTypeImpl(AType value) {
-        this.aArrayType.defElementTypeImpl(value);
+    public void defTemplateArgsTypesImpl(AType[] value) {
+        this.aArrayType.defTemplateArgsTypesImpl(value);
     }
 
     /**
-     * Get value on attribute parent
-     * @return the attribute's value
+     * 
      */
-    @Override
-    public AJoinPoint getParentImpl() {
-        return this.aArrayType.getParentImpl();
+    public void defElementTypeImpl(AType value) {
+        this.aArrayType.defElementTypeImpl(value);
     }
 
     /**
@@ -306,174 +297,12 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute siblingsLeftArrayImpl
+     * Get value on attribute astChildrenArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getSiblingsLeftArrayImpl() {
-        return this.aArrayType.getSiblingsLeftArrayImpl();
-    }
-
-    /**
-     * Get value on attribute data
-     * @return the attribute's value
-     */
-    @Override
-    public Object getDataImpl() {
-        return this.aArrayType.getDataImpl();
-    }
-
-    /**
-     * Get value on attribute hasChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasChildrenImpl() {
-        return this.aArrayType.getHasChildrenImpl();
-    }
-
-    /**
-     * Get value on attribute getAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAncestorImpl(String type) {
-        return this.aArrayType.getAncestorImpl(type);
-    }
-
-    /**
-     * Get value on attribute type
-     * @return the attribute's value
-     */
-    @Override
-    public AType getTypeImpl() {
-        return this.aArrayType.getTypeImpl();
-    }
-
-    /**
-     * Get value on attribute siblingsRightArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getSiblingsRightArrayImpl() {
-        return this.aArrayType.getSiblingsRightArrayImpl();
-    }
-
-    /**
-     * Get value on attribute rightJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getRightJpImpl() {
-        return this.aArrayType.getRightJpImpl();
-    }
-
-    /**
-     * Get value on attribute isCilk
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsCilkImpl() {
-        return this.aArrayType.getIsCilkImpl();
-    }
-
-    /**
-     * Get value on attribute filepath
-     * @return the attribute's value
-     */
-    @Override
-    public String getFilepathImpl() {
-        return this.aArrayType.getFilepathImpl();
-    }
-
-    /**
-     * Get value on attribute scopeNodesArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getScopeNodesArrayImpl() {
-        return this.aArrayType.getScopeNodesArrayImpl();
-    }
-
-    /**
-     * Get value on attribute childrenArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getChildrenArrayImpl() {
-        return this.aArrayType.getChildrenArrayImpl();
-    }
-
-    /**
-     * Get value on attribute getJavaFieldType
-     * @return the attribute's value
-     */
-    @Override
-    public String getJavaFieldTypeImpl(String fieldName) {
-        return this.aArrayType.getJavaFieldTypeImpl(fieldName);
-    }
-
-    /**
-     * Get value on attribute firstChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getFirstChildImpl() {
-        return this.aArrayType.getFirstChildImpl();
-    }
-
-    /**
-     * Get value on attribute numChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getNumChildrenImpl() {
-        return this.aArrayType.getNumChildrenImpl();
-    }
-
-    /**
-     * Get value on attribute getChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getChildImpl(int index) {
-        return this.aArrayType.getChildImpl(index);
-    }
-
-    /**
-     * Get value on attribute leftJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getLeftJpImpl() {
-        return this.aArrayType.getLeftJpImpl();
-    }
-
-    /**
-     * Get value on attribute inlineCommentsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AComment[] getInlineCommentsArrayImpl() {
-        return this.aArrayType.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astName
-     * @return the attribute's value
-     */
-    @Override
-    public String getAstNameImpl() {
-        return this.aArrayType.getAstNameImpl();
-    }
-
-    /**
-     * Get value on attribute jpId
-     * @return the attribute's value
-     */
-    @Override
-    public String getJpIdImpl() {
-        return this.aArrayType.getJpIdImpl();
+    public AJoinPoint[] getAstChildrenArrayImpl() {
+        return this.aArrayType.getAstChildrenArrayImpl();
     }
 
     /**
@@ -486,24 +315,6 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute getKeyType
-     * @return the attribute's value
-     */
-    @Override
-    public Object getKeyTypeImpl(String key) {
-        return this.aArrayType.getKeyTypeImpl(key);
-    }
-
-    /**
-     * Get value on attribute contains
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean containsImpl(AJoinPoint jp) {
-        return this.aArrayType.containsImpl(jp);
-    }
-
-    /**
      * Get value on attribute astIsInstance
      * @return the attribute's value
      */
@@ -513,111 +324,12 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute filename
+     * Get value on attribute astName
      * @return the attribute's value
      */
     @Override
-    public String getFilenameImpl() {
-        return this.aArrayType.getFilenameImpl();
-    }
-
-    /**
-     * Get value on attribute javaFieldsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getJavaFieldsArrayImpl() {
-        return this.aArrayType.getJavaFieldsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute isInSystemHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInSystemHeaderImpl() {
-        return this.aArrayType.getIsInSystemHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute bitWidth
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getBitWidthImpl() {
-        return this.aArrayType.getBitWidthImpl();
-    }
-
-    /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aArrayType.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute endLine
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndLineImpl() {
-        return this.aArrayType.getEndLineImpl();
-    }
-
-    /**
-     * Get value on attribute endColumn
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndColumnImpl() {
-        return this.aArrayType.getEndColumnImpl();
-    }
-
-    /**
-     * Get value on attribute code
-     * @return the attribute's value
-     */
-    @Override
-    public String getCodeImpl() {
-        return this.aArrayType.getCodeImpl();
-    }
-
-    /**
-     * Get value on attribute isInsideLoopHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInsideLoopHeaderImpl() {
-        return this.aArrayType.getIsInsideLoopHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute line
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getLineImpl() {
-        return this.aArrayType.getLineImpl();
-    }
-
-    /**
-     * Get value on attribute keysArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getKeysArrayImpl() {
-        return this.aArrayType.getKeysArrayImpl();
-    }
-
-    /**
-     * Get value on attribute isInsideHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInsideHeaderImpl() {
-        return this.aArrayType.getIsInsideHeaderImpl();
+    public String getAstNameImpl() {
+        return this.aArrayType.getAstNameImpl();
     }
 
     /**
@@ -630,93 +342,12 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute getChainAncestor
+     * Get value on attribute bitWidth
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChainAncestorImpl(String type) {
-        return this.aArrayType.getChainAncestorImpl(type);
-    }
-
-    /**
-     * Get value on attribute descendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsArrayImpl() {
-        return this.aArrayType.getDescendantsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astChildrenArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getAstChildrenArrayImpl() {
-        return this.aArrayType.getAstChildrenArrayImpl();
-    }
-
-    /**
-     * Get value on attribute getDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsArrayImpl(String type) {
-        return this.aArrayType.getDescendantsArrayImpl(type);
-    }
-
-    /**
-     * Get value on attribute getFirstJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getFirstJpImpl(String type) {
-        return this.aArrayType.getFirstJpImpl(type);
-    }
-
-    /**
-     * Get value on attribute isMacro
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsMacroImpl() {
-        return this.aArrayType.getIsMacroImpl();
-    }
-
-    /**
-     * Get value on attribute lastChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getLastChildImpl() {
-        return this.aArrayType.getLastChildImpl();
-    }
-
-    /**
-     * Get value on attribute root
-     * @return the attribute's value
-     */
-    @Override
-    public AProgram getRootImpl() {
-        return this.aArrayType.getRootImpl();
-    }
-
-    /**
-     * Get value on attribute getAstChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstChildImpl(int index) {
-        return this.aArrayType.getAstChildImpl(index);
-    }
-
-    /**
-     * Get value on attribute getDescendantsAndSelfArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
-        return this.aArrayType.getDescendantsAndSelfArrayImpl(type);
+    public Integer getBitWidthImpl() {
+        return this.aArrayType.getBitWidthImpl();
     }
 
     /**
@@ -729,21 +360,21 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute currentRegion
+     * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getCurrentRegionImpl() {
-        return this.aArrayType.getCurrentRegionImpl();
+    public AJoinPoint[] getChildrenArrayImpl() {
+        return this.aArrayType.getChildrenArrayImpl();
     }
 
     /**
-     * Get value on attribute originNode
+     * Get value on attribute code
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getOriginNodeImpl() {
-        return this.aArrayType.getOriginNodeImpl();
+    public String getCodeImpl() {
+        return this.aArrayType.getCodeImpl();
     }
 
     /**
@@ -756,30 +387,30 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute parentRegion
+     * Get value on attribute contains
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getParentRegionImpl() {
-        return this.aArrayType.getParentRegionImpl();
+    public Boolean containsImpl(AJoinPoint jp) {
+        return this.aArrayType.containsImpl(jp);
     }
 
     /**
-     * Get value on attribute getValue
+     * Get value on attribute currentRegion
      * @return the attribute's value
      */
     @Override
-    public Object getValueImpl(String key) {
-        return this.aArrayType.getValueImpl(key);
+    public AJoinPoint getCurrentRegionImpl() {
+        return this.aArrayType.getCurrentRegionImpl();
     }
 
     /**
-     * Get value on attribute getAstAncestor
+     * Get value on attribute data
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstAncestorImpl(String type) {
-        return this.aArrayType.getAstAncestorImpl(type);
+    public Object getDataImpl() {
+        return this.aArrayType.getDataImpl();
     }
 
     /**
@@ -792,12 +423,147 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute location
+     * Get value on attribute descendantsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public String getLocationImpl() {
-        return this.aArrayType.getLocationImpl();
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aArrayType.getDescendantsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute endColumn
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndColumnImpl() {
+        return this.aArrayType.getEndColumnImpl();
+    }
+
+    /**
+     * Get value on attribute endLine
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndLineImpl() {
+        return this.aArrayType.getEndLineImpl();
+    }
+
+    /**
+     * Get value on attribute filename
+     * @return the attribute's value
+     */
+    @Override
+    public String getFilenameImpl() {
+        return this.aArrayType.getFilenameImpl();
+    }
+
+    /**
+     * Get value on attribute filepath
+     * @return the attribute's value
+     */
+    @Override
+    public String getFilepathImpl() {
+        return this.aArrayType.getFilepathImpl();
+    }
+
+    /**
+     * Get value on attribute firstChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstChildImpl() {
+        return this.aArrayType.getFirstChildImpl();
+    }
+
+    /**
+     * Get value on attribute getAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aArrayType.getAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getAstAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aArrayType.getAstAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getAstChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstChildImpl(int index) {
+        return this.aArrayType.getAstChildImpl(index);
+    }
+
+    /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aArrayType.getChainAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute getChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChildImpl(int index) {
+        return this.aArrayType.getChildImpl(index);
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aArrayType.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getDescendantsAndSelfArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aArrayType.getDescendantsAndSelfArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aArrayType.getFirstJpImpl(type);
+    }
+
+    /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aArrayType.getJavaFieldTypeImpl(fieldName);
+    }
+
+    /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aArrayType.getKeyTypeImpl(key);
     }
 
     /**
@@ -810,12 +576,201 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
+     * Get value on attribute getValue
+     * @return the attribute's value
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aArrayType.getValueImpl(key);
+    }
+
+    /**
+     * Get value on attribute hasChildren
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasChildrenImpl() {
+        return this.aArrayType.getHasChildrenImpl();
+    }
+
+    /**
+     * Get value on attribute hasNode
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aArrayType.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
+     * Get value on attribute hasParent
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasParentImpl() {
+        return this.aArrayType.getHasParentImpl();
+    }
+
+    /**
      * Get value on attribute hasType
      * @return the attribute's value
      */
     @Override
     public Boolean getHasTypeImpl() {
         return this.aArrayType.getHasTypeImpl();
+    }
+
+    /**
+     * Get value on attribute inlineCommentsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AComment[] getInlineCommentsArrayImpl() {
+        return this.aArrayType.getInlineCommentsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute isCilk
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsCilkImpl() {
+        return this.aArrayType.getIsCilkImpl();
+    }
+
+    /**
+     * Get value on attribute isInSystemHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInSystemHeaderImpl() {
+        return this.aArrayType.getIsInSystemHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideHeaderImpl() {
+        return this.aArrayType.getIsInsideHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideLoopHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideLoopHeaderImpl() {
+        return this.aArrayType.getIsInsideLoopHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute isMacro
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsMacroImpl() {
+        return this.aArrayType.getIsMacroImpl();
+    }
+
+    /**
+     * Get value on attribute javaFieldsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getJavaFieldsArrayImpl() {
+        return this.aArrayType.getJavaFieldsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute jpId
+     * @return the attribute's value
+     */
+    @Override
+    public String getJpIdImpl() {
+        return this.aArrayType.getJpIdImpl();
+    }
+
+    /**
+     * Get value on attribute keysArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getKeysArrayImpl() {
+        return this.aArrayType.getKeysArrayImpl();
+    }
+
+    /**
+     * Get value on attribute lastChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getLastChildImpl() {
+        return this.aArrayType.getLastChildImpl();
+    }
+
+    /**
+     * Get value on attribute leftJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getLeftJpImpl() {
+        return this.aArrayType.getLeftJpImpl();
+    }
+
+    /**
+     * Get value on attribute line
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getLineImpl() {
+        return this.aArrayType.getLineImpl();
+    }
+
+    /**
+     * Get value on attribute location
+     * @return the attribute's value
+     */
+    @Override
+    public String getLocationImpl() {
+        return this.aArrayType.getLocationImpl();
+    }
+
+    /**
+     * Get value on attribute numChildren
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getNumChildrenImpl() {
+        return this.aArrayType.getNumChildrenImpl();
+    }
+
+    /**
+     * Get value on attribute originNode
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aArrayType.getOriginNodeImpl();
+    }
+
+    /**
+     * Get value on attribute parent
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getParentImpl() {
+        return this.aArrayType.getParentImpl();
+    }
+
+    /**
+     * Get value on attribute parentRegion
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getParentRegionImpl() {
+        return this.aArrayType.getParentRegionImpl();
     }
 
     /**
@@ -828,6 +783,51 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
+     * Get value on attribute rightJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getRightJpImpl() {
+        return this.aArrayType.getRightJpImpl();
+    }
+
+    /**
+     * Get value on attribute root
+     * @return the attribute's value
+     */
+    @Override
+    public AProgram getRootImpl() {
+        return this.aArrayType.getRootImpl();
+    }
+
+    /**
+     * Get value on attribute scopeNodesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getScopeNodesArrayImpl() {
+        return this.aArrayType.getScopeNodesArrayImpl();
+    }
+
+    /**
+     * Get value on attribute siblingsLeftArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getSiblingsLeftArrayImpl() {
+        return this.aArrayType.getSiblingsLeftArrayImpl();
+    }
+
+    /**
+     * Get value on attribute siblingsRightArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getSiblingsRightArrayImpl() {
+        return this.aArrayType.getSiblingsRightArrayImpl();
+    }
+
+    /**
      * Get value on attribute stmt
      * @return the attribute's value
      */
@@ -837,12 +837,125 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute hasParent
+     * Get value on attribute type
      * @return the attribute's value
      */
     @Override
-    public Boolean getHasParentImpl() {
-        return this.aArrayType.getHasParentImpl();
+    public AType getTypeImpl() {
+        return this.aArrayType.getTypeImpl();
+    }
+
+    /**
+     * Returns a new node based on this type with the qualifier const
+     */
+    @Override
+    public AType asConstImpl() {
+        return this.aArrayType.asConstImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, but not of the nodes in its fields
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aArrayType.copyImpl();
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    @Override
+    public void dataClearImpl() {
+        this.aArrayType.dataClearImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    @Override
+    public AJoinPoint deepCopyImpl() {
+        return this.aArrayType.deepCopyImpl();
+    }
+
+    /**
+     * Removes the node associated to this joinpoint from the AST
+     */
+    @Override
+    public AJoinPoint detachImpl() {
+        return this.aArrayType.detachImpl();
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aArrayType.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aArrayType.insertImpl(position, code);
+    }
+
+    /**
+     * Inserts the given join point after this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        return this.aArrayType.insertAfterImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(String code) {
+        return this.aArrayType.insertAfterImpl(code);
+    }
+
+    /**
+     * Inserts the given join point before this join point
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        return this.aArrayType.insertBeforeImpl(node);
+    }
+
+    /**
+     * Overload which accepts a string
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(String node) {
+        return this.aArrayType.insertBeforeImpl(node);
+    }
+
+    /**
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
+     * @param message 
+     */
+    @Override
+    public void messageToUserImpl(String message) {
+        this.aArrayType.messageToUserImpl(message);
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aArrayType.removeChildrenImpl();
     }
 
     /**
@@ -882,47 +995,85 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Inserts the given join point before this join point
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    @Override
+    public void setDataImpl(Object source) {
+        this.aArrayType.setDataImpl(source);
+    }
+
+    /**
+     * Sets the desugared type of this type
+     * @param desugaredType 
+     */
+    @Override
+    public void setDesugarImpl(AType desugaredType) {
+        this.aArrayType.setDesugarImpl(desugaredType);
+    }
+
+    /**
+     * Sets the element type of the array
+     * @param arrayElementType 
+     */
+    @Override
+    public void setElementTypeImpl(AType arrayElementType) {
+        this.aArrayType.setElementTypeImpl(arrayElementType);
+    }
+
+    /**
+     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aArrayType.insertBeforeImpl(node);
+    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
+        return this.aArrayType.setFirstChildImpl(node);
     }
 
     /**
-     * Overload which accepts a string
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aArrayType.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aArrayType.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
      * @param node 
      */
     @Override
-    public AJoinPoint insertBeforeImpl(String node) {
-        return this.aArrayType.insertBeforeImpl(node);
+    public AJoinPoint setLastChildImpl(AJoinPoint node) {
+        return this.aArrayType.setLastChildImpl(node);
     }
 
     /**
-     * Inserts the given join point after this join point
-     * @param node 
+     * Sets a single template argument type of a template type
+     * @param index 
+     * @param templateArgType 
      */
     @Override
-    public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aArrayType.insertAfterImpl(node);
+    public void setTemplateArgTypeImpl(int index, AType templateArgType) {
+        this.aArrayType.setTemplateArgTypeImpl(index, templateArgType);
     }
 
     /**
-     * Overload which accepts a string
-     * @param code 
+     * Sets the template argument types of a template type
+     * @param templateArgTypes 
      */
     @Override
-    public AJoinPoint insertAfterImpl(String code) {
-        return this.aArrayType.insertAfterImpl(code);
-    }
-
-    /**
-     * Removes the node associated to this joinpoint from the AST
-     */
-    @Override
-    public AJoinPoint detachImpl() {
-        return this.aArrayType.detachImpl();
+    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
+        this.aArrayType.setTemplateArgsTypesImpl(templateArgTypes);
     }
 
     /**
@@ -935,19 +1086,23 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Performs a copy of the node and its children, but not of the nodes in its fields
+     * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
+     * @param currentValue 
+     * @param newValue 
      */
     @Override
-    public AJoinPoint copyImpl() {
-        return this.aArrayType.copyImpl();
+    public boolean setTypeFieldByValueRecursiveImpl(Object currentValue, Object newValue) {
+        return this.aArrayType.setTypeFieldByValueRecursiveImpl(currentValue, newValue);
     }
 
     /**
-     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
+     * @param oldValue 
+     * @param newValue 
      */
     @Override
-    public AJoinPoint deepCopyImpl() {
-        return this.aArrayType.deepCopyImpl();
+    public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
+        return this.aArrayType.setUnderlyingTypeImpl(oldValue, newValue);
     }
 
     /**
@@ -980,41 +1135,6 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
-     * @param message 
-     */
-    @Override
-    public void messageToUserImpl(String message) {
-        this.aArrayType.messageToUserImpl(message);
-    }
-
-    /**
-     * Removes the children of this node
-     */
-    @Override
-    public void removeChildrenImpl() {
-        this.aArrayType.removeChildrenImpl();
-    }
-
-    /**
-     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setFirstChildImpl(AJoinPoint node) {
-        return this.aArrayType.setFirstChildImpl(node);
-    }
-
-    /**
-     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
-     */
-    @Override
-    public AJoinPoint setLastChildImpl(AJoinPoint node) {
-        return this.aArrayType.setLastChildImpl(node);
-    }
-
-    /**
      * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
@@ -1022,70 +1142,6 @@ public abstract class AVariableArrayType extends AArrayType {
     @Override
     public AJoinPoint toCommentImpl(String prefix, String suffix) {
         return this.aArrayType.toCommentImpl(prefix, suffix);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String[] comments) {
-        this.aArrayType.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Sets the commented that are embedded in a node
-     * @param comments 
-     */
-    @Override
-    public void setInlineCommentsImpl(String comments) {
-        this.aArrayType.setInlineCommentsImpl(comments);
-    }
-
-    /**
-     * Setting data directly is not supported, this action just emits a warning and does nothing
-     * @param source 
-     */
-    @Override
-    public void setDataImpl(Object source) {
-        this.aArrayType.setDataImpl(source);
-    }
-
-    /**
-     * Clears all properties from the .data object
-     */
-    @Override
-    public void dataClearImpl() {
-        this.aArrayType.dataClearImpl();
-    }
-
-    /**
-     * Sets the element type of the array
-     * @param arrayElementType 
-     */
-    @Override
-    public void setElementTypeImpl(AType arrayElementType) {
-        this.aArrayType.setElementTypeImpl(arrayElementType);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aArrayType.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param position 
-     * @param code 
-     */
-    @Override
-    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aArrayType.insertImpl(position, code);
     }
 
     /**
@@ -1116,16 +1172,37 @@ public abstract class AVariableArrayType extends AArrayType {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
+        case "sizeExpr": {
+        	if(value instanceof AExpression){
+        		this.defSizeExprImpl((AExpression)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "type": {
+        case "elementType": {
         	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
+        		this.defElementTypeImpl((AType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "desugar": {
+        	if(value instanceof AType){
+        		this.defDesugarImpl((AType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "templateArgsTypes": {
+        	if(value instanceof AType[]){
+        		this.defTemplateArgsTypesImpl((AType[])value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1155,30 +1232,9 @@ public abstract class AVariableArrayType extends AArrayType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "sizeExpr": {
-        	if(value instanceof AExpression){
-        		this.defSizeExprImpl((AExpression)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "elementType": {
+        case "type": {
         	if(value instanceof AType){
-        		this.defElementTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "desugar": {
-        	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1240,87 +1296,87 @@ public abstract class AVariableArrayType extends AArrayType {
     protected enum VariableArrayTypeAttributes {
         SIZEEXPR("sizeExpr"),
         ELEMENTTYPE("elementType"),
-        KIND("kind"),
-        ISTOPLEVEL("isTopLevel"),
-        ISARRAY("isArray"),
-        ISPOINTER("isPointer"),
-        ISAUTO("isAuto"),
-        ARRAYSIZE("arraySize"),
         ARRAYDIMS("arrayDims"),
-        HASTEMPLATEARGS("hasTemplateArgs"),
-        TEMPLATEARGSSTRINGS("templateArgsStrings"),
-        TEMPLATEARGSTYPES("templateArgsTypes"),
-        HASSUGAR("hasSugar"),
+        ARRAYSIZE("arraySize"),
+        CONSTANT("constant"),
         DESUGAR("desugar"),
         DESUGARALL("desugarAll"),
-        ISBUILTIN("isBuiltin"),
-        CONSTANT("constant"),
-        UNWRAP("unwrap"),
-        NORMALIZE("normalize"),
-        TYPEFIELDS("typeFields"),
         FIELDTREE("fieldTree"),
-        PARENT("parent"),
+        HASSUGAR("hasSugar"),
+        HASTEMPLATEARGS("hasTemplateArgs"),
+        ISARRAY("isArray"),
+        ISAUTO("isAuto"),
+        ISBUILTIN("isBuiltin"),
+        ISPOINTER("isPointer"),
+        ISTOPLEVEL("isTopLevel"),
+        KIND("kind"),
+        NORMALIZE("normalize"),
+        TEMPLATEARGSSTRINGS("templateArgsStrings"),
+        TEMPLATEARGSTYPES("templateArgsTypes"),
+        TYPEFIELDS("typeFields"),
+        UNWRAP("unwrap"),
         AST("ast"),
-        SIBLINGSLEFT("siblingsLeft"),
-        DATA("data"),
-        HASCHILDREN("hasChildren"),
-        GETANCESTOR("getAncestor"),
-        TYPE("type"),
-        SIBLINGSRIGHT("siblingsRight"),
-        RIGHTJP("rightJp"),
-        ISCILK("isCilk"),
-        FILEPATH("filepath"),
-        SCOPENODES("scopeNodes"),
-        CHILDREN("children"),
-        GETJAVAFIELDTYPE("getJavaFieldType"),
-        FIRSTCHILD("firstChild"),
-        NUMCHILDREN("numChildren"),
-        GETCHILD("getChild"),
-        LEFTJP("leftJp"),
-        INLINECOMMENTS("inlineComments"),
-        ASTNAME("astName"),
-        JPID("jpId"),
-        ASTID("astId"),
-        GETKEYTYPE("getKeyType"),
-        CONTAINS("contains"),
-        ASTISINSTANCE("astIsInstance"),
-        FILENAME("filename"),
-        JAVAFIELDS("javaFields"),
-        ISINSYSTEMHEADER("isInSystemHeader"),
-        BITWIDTH("bitWidth"),
-        HASNODE("hasNode"),
-        ENDLINE("endLine"),
-        ENDCOLUMN("endColumn"),
-        CODE("code"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
-        GETCHAINANCESTOR("getChainAncestor"),
-        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
-        GETDESCENDANTS("getDescendants"),
-        GETFIRSTJP("getFirstJp"),
-        ISMACRO("isMacro"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
-        GETASTCHILD("getAstChild"),
-        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        ASTID("astId"),
+        ASTISINSTANCE("astIsInstance"),
+        ASTNAME("astName"),
+        ASTNUMCHILDREN("astNumChildren"),
+        BITWIDTH("bitWidth"),
         CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
-        ORIGINNODE("originNode"),
+        CHILDREN("children"),
+        CODE("code"),
         COLUMN("column"),
-        PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
-        GETASTANCESTOR("getAstAncestor"),
+        CONTAINS("contains"),
+        CURRENTREGION("currentRegion"),
+        DATA("data"),
         DEPTH("depth"),
-        LOCATION("location"),
+        DESCENDANTS("descendants"),
+        ENDCOLUMN("endColumn"),
+        ENDLINE("endLine"),
+        FILENAME("filename"),
+        FILEPATH("filepath"),
+        FIRSTCHILD("firstChild"),
+        GETANCESTOR("getAncestor"),
+        GETASTANCESTOR("getAstAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        GETCHILD("getChild"),
+        GETDESCENDANTS("getDescendants"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        GETFIRSTJP("getFirstJp"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
+        GETKEYTYPE("getKeyType"),
         GETUSERFIELD("getUserField"),
+        GETVALUE("getValue"),
+        HASCHILDREN("hasChildren"),
+        HASNODE("hasNode"),
+        HASPARENT("hasParent"),
         HASTYPE("hasType"),
+        INLINECOMMENTS("inlineComments"),
+        ISCILK("isCilk"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        ISMACRO("isMacro"),
+        JAVAFIELDS("javaFields"),
+        JPID("jpId"),
+        KEYS("keys"),
+        LASTCHILD("lastChild"),
+        LEFTJP("leftJp"),
+        LINE("line"),
+        LOCATION("location"),
+        NUMCHILDREN("numChildren"),
+        ORIGINNODE("originNode"),
+        PARENT("parent"),
+        PARENTREGION("parentRegion"),
         PRAGMAS("pragmas"),
+        RIGHTJP("rightJp"),
+        ROOT("root"),
+        SCOPENODES("scopeNodes"),
+        SIBLINGSLEFT("siblingsLeft"),
+        SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
-        HASPARENT("hasParent");
+        TYPE("type");
         private String name;
 
         /**

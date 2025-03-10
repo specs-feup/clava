@@ -1,11 +1,11 @@
 /**
  * Copyright 2017 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,18 +13,7 @@
 
 package pt.up.fe.specs.clava.weaver;
 
-import java.io.File;
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-
+import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -33,6 +22,10 @@ import pt.up.fe.specs.clava.weaver.pragmas.ClavaPragmas;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
+
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class ClavaWeaverData {
 
@@ -120,7 +113,7 @@ public class ClavaWeaverData {
     }
 
     private Map<ClavaNode, Map<String, Object>> getUserValuesCopy(App app, App previousApp,
-            Map<ClavaNode, Map<String, Object>> userValues) {
+                                                                  Map<ClavaNode, Map<String, Object>> userValues) {
 
         // When there are no user values
         if (userValues == null || userValues.isEmpty()) {
@@ -183,6 +176,20 @@ public class ClavaWeaverData {
 
         return topApp;
     }
+
+    private void clearAppHistory() {
+        // Clear ASTs
+        context.clearAppHistory();
+
+        // Clear user values
+        if (userValuesStack.size() >= 2) {
+            var top = userValuesStack.pop();
+            userValuesStack.clear();
+            userValuesStack.push(top);
+        }
+
+    }
+
 
     public void setGeneratedFiles(Collection<File> generatedFiles) {
         this.generatedFiles = new HashSet<>(generatedFiles);

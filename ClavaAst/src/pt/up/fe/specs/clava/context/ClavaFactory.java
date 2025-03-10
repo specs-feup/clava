@@ -1,11 +1,11 @@
 /**
  * Copyright 2018 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,21 +13,8 @@
 
 package pt.up.fe.specs.clava.context;
 
-import java.io.File;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.SourceRange;
@@ -38,48 +25,9 @@ import pt.up.fe.specs.clava.ast.attr.DummyAttr;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
-import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
-import pt.up.fe.specs.clava.ast.decl.CIncludeDecl;
-import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
-import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.DummyDecl;
-import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
-import pt.up.fe.specs.clava.ast.decl.DummyValueDecl;
-import pt.up.fe.specs.clava.ast.decl.FieldDecl;
-import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
-import pt.up.fe.specs.clava.ast.decl.LabelDecl;
-import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
-import pt.up.fe.specs.clava.ast.decl.LiteralDecl;
-import pt.up.fe.specs.clava.ast.decl.NamedDecl;
-import pt.up.fe.specs.clava.ast.decl.NullDecl;
-import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
-import pt.up.fe.specs.clava.ast.decl.RecordDecl;
-import pt.up.fe.specs.clava.ast.decl.TagDecl;
-import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
-import pt.up.fe.specs.clava.ast.decl.ValueDecl;
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.*;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
-import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
-import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
-import pt.up.fe.specs.clava.ast.expr.CallExpr;
-import pt.up.fe.specs.clava.ast.expr.CastExpr;
-import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
-import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
-import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
-import pt.up.fe.specs.clava.ast.expr.DummyExpr;
-import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
-import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
-import pt.up.fe.specs.clava.ast.expr.Literal;
-import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
-import pt.up.fe.specs.clava.ast.expr.MemberExpr;
-import pt.up.fe.specs.clava.ast.expr.NullExpr;
-import pt.up.fe.specs.clava.ast.expr.ParenExpr;
-import pt.up.fe.specs.clava.ast.expr.PointerToMemberExpr;
-import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
+import pt.up.fe.specs.clava.ast.expr.*;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
@@ -89,47 +37,13 @@ import pt.up.fe.specs.clava.ast.extra.TagDeclVars;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
-import pt.up.fe.specs.clava.ast.omp.OmpClausePragma;
-import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
-import pt.up.fe.specs.clava.ast.omp.OmpLiteralPragma;
-import pt.up.fe.specs.clava.ast.omp.OmpPragma;
-import pt.up.fe.specs.clava.ast.omp.SimpleOmpPragma;
+import pt.up.fe.specs.clava.ast.omp.*;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
-import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
-import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
-import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
-import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
-import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
-import pt.up.fe.specs.clava.ast.stmt.EmptyStmt;
-import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
-import pt.up.fe.specs.clava.ast.stmt.ForStmt;
-import pt.up.fe.specs.clava.ast.stmt.GotoStmt;
-import pt.up.fe.specs.clava.ast.stmt.IfStmt;
-import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
-import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
-import pt.up.fe.specs.clava.ast.stmt.NullStmt;
-import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
-import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
-import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
-import pt.up.fe.specs.clava.ast.type.BuiltinType;
-import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
-import pt.up.fe.specs.clava.ast.type.DummyType;
-import pt.up.fe.specs.clava.ast.type.ElaboratedType;
-import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
-import pt.up.fe.specs.clava.ast.type.LiteralType;
-import pt.up.fe.specs.clava.ast.type.NullType;
-import pt.up.fe.specs.clava.ast.type.PointerType;
-import pt.up.fe.specs.clava.ast.type.QualType;
-import pt.up.fe.specs.clava.ast.type.RecordType;
-import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.TypeWithKeyword;
-import pt.up.fe.specs.clava.ast.type.TypedefType;
-import pt.up.fe.specs.clava.ast.type.VariableArrayType;
+import pt.up.fe.specs.clava.ast.stmt.*;
+import pt.up.fe.specs.clava.ast.type.*;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
@@ -141,6 +55,10 @@ import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.classmap.ClassMap;
 
+import java.io.File;
+import java.math.BigInteger;
+import java.util.*;
+
 /**
  * Factory methods for ClavaNodes that use the DataStore format.
  *
@@ -149,7 +67,6 @@ import pt.up.fe.specs.util.classmap.ClassMap;
  * method of the respective node.
  *
  * @author JoaoBispo
- *
  */
 public class ClavaFactory {
 
@@ -163,6 +80,7 @@ public class ClavaFactory {
     private static final String COMMENT_ID_PREFIX = "comment_";
 
     private static final ClassMap<ClavaNode, String> PREFIX_MAP;
+
     static {
         PREFIX_MAP = new ClassMap<>(EXTRA_ID_PREFIX);
         PREFIX_MAP.put(Type.class, TYPE_ID_PREFIX);
@@ -508,6 +426,64 @@ public class ClavaFactory {
         return new CXXConstructExpr(data, constructorArguments);
     }
 
+    public ArraySubscriptExpr arraySubscriptExpr(Expr base, List<Expr> subscripts) {
+        if (subscripts.isEmpty()) {
+            throw new RuntimeException("To create an array subscript we need at least one subscript");
+        }
+
+
+        if (!(base.getType() instanceof ArrayType)) {
+            throw new RuntimeException("Base expression must be an array type (e.g., constArrayType)");
+        }
+
+        var arrayType = (ArrayType) base.getType();
+
+
+        if (subscripts.size() > arrayType.getArrayDims().size()) {
+            throw new RuntimeException("Number of subscripts (" + subscripts.size() + ") greater than the number of dimensions of the array type (" + arrayType.getArrayDims().size() + ")");
+        }
+
+
+        // Lhs are either other ArraySubscriptExpr or DeclRefExpr
+        // Rhs always contains the index
+        // Indexes appear from inside to outside
+
+        // Always set the element type of the array type
+        var subscriptType = arrayType.getElementType();
+
+        DataStore data = newDataStore(ArraySubscriptExpr.class)
+                .set(Expr.TYPE, Optional.of(subscriptType));
+
+        // Create first level
+        var currentArraySubscript = new ArraySubscriptExpr(data, Arrays.asList(base, subscripts.get(0)));
+
+
+        // Add remaining levels
+        for (int i = 1; i < subscripts.size(); i++) {
+            subscriptType = ((ArrayType) subscriptType).getElementType();
+            var newData = newDataStore(ArraySubscriptExpr.class)
+                    .set(Expr.TYPE, Optional.of(subscriptType));
+
+            var newChildren = Arrays.asList(currentArraySubscript, subscripts.get(i));
+
+            currentArraySubscript = new ArraySubscriptExpr(newData, newChildren);
+        }
+
+        return currentArraySubscript;
+    }
+
+    public InitListExpr initListExpr(List<Expr> values) {
+        if (values.isEmpty()) {
+            throw new RuntimeException("To create an initList expression we need at least one value");
+        }
+
+        DataStore data = newDataStore(InitListExpr.class)
+                .put(Expr.TYPE, Optional.of(constantArrayType(values.get(0).getType(), values.size())))
+                .put(InitListExpr.IS_EXPLICIT, true);
+
+        return new InitListExpr(data, values);
+    }
+
     /// DECLS
 
     public NullDecl nullDecl() {
@@ -685,7 +661,13 @@ public class ClavaFactory {
         DataStore data = newDataStore(LabelStmt.class)
                 .set(LabelStmt.LABEL, label);
 
-        return new LabelStmt(data, SpecsCollections.ofNullable(subStmt));
+
+        var labelStmt = new LabelStmt(data, SpecsCollections.ofNullable(subStmt));
+
+        // Update labelDecl to refer to this labelStmt
+        label.setOptional(LabelDecl.LABEL_STMT, labelStmt);
+
+        return labelStmt;
     }
 
     public GotoStmt gotoStmt(LabelDecl label) {
@@ -771,12 +753,9 @@ public class ClavaFactory {
     }
 
     /**
-     * 
      * @param condition
-     * @param thenBody
-     *            can be null (i.e., empty body)
-     * @param elseBody
-     *            can be null (i.e., no else)
+     * @param thenBody  can be null (i.e., empty body)
+     * @param elseBody  can be null (i.e., no else)
      * @return
      */
     public IfStmt ifStmt(Expr condition, CompoundStmt thenBody, CompoundStmt elseBody) {

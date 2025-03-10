@@ -221,8 +221,6 @@ export default class ClavaJoinPoints {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.callFromFunction(
         unwrapJoinPoint($function),
-        // TODO: Made this change without testing. Similar case to scope()
-        //...unwrapJoinPoint(flattenArgsArray(callArgs))
         unwrapJoinPoint(flattenArgsArray(callArgs))
       )
     );
@@ -244,7 +242,7 @@ export default class ClavaJoinPoints {
       ClavaJavaTypes.AstFactory.call(
         functionName,
         unwrapJoinPoint($returnType),
-        ...flattenArgsArray(callArgs).map(unwrapJoinPoint)
+        flattenArgsArray(callArgs).map(unwrapJoinPoint)
       )
     );
   }
@@ -671,6 +669,40 @@ export default class ClavaJoinPoints {
         className,
         unwrapJoinPoint(flattenedFields)
       )
+    );
+  }
+
+  /**
+   * Creates an array access from the given base that represents an array, and several subscripts.
+   *
+   * Must provide at least one subscript, base expression must be of type array,
+   * and have a defined number of dimensions. The number of subscripts must be lower or equal
+   * than the number of dimensions of the array type.
+   *
+   */
+  static arrayAccess(
+    base: Joinpoints.Expression,
+    ...subscripts: Joinpoints.Expression[]
+  ): Joinpoints.ArrayAccess {
+    const flattenedSubscripts = flattenArgsArray(subscripts);
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.arrayAccess(
+        unwrapJoinPoint(base),
+        unwrapJoinPoint(flattenedSubscripts)
+      )
+    );
+  }
+
+  /**
+   * Creates a initialization list expression (initList) from the values.
+   *
+   * Must provide at least one value, the element type of the initList will be the same as the type of the first element.
+   *
+   */
+  static initList(...values: Joinpoints.Expression[]): Joinpoints.InitList {
+    const flattenedValues = flattenArgsArray(values);
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.initList(unwrapJoinPoint(flattenedValues))
     );
   }
 

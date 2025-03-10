@@ -15,8 +15,8 @@ console.log("Literal statement: " + ClavaJoinPoints.stmtLiteral("int a = 0;").co
 
 // TypedefDecl
 var typedefDecl = ClavaJoinPoints.typedefDecl(
-  ClavaJoinPoints.builtinType("int"),
-  "custom_int"
+    ClavaJoinPoints.builtinType("int"),
+    "custom_int"
 );
 console.log("Typedef decl: " + typedefDecl.code);
 
@@ -37,9 +37,9 @@ console.log(
 console.log(
   "If with else:\n" +
     ClavaJoinPoints.ifStmt(
-      "a == 0",
-      undefined,
-      ClavaJoinPoints.stmtLiteral("a = 2;")
+        "a == 0",
+        undefined,
+        ClavaJoinPoints.stmtLiteral("a = 2;")
     ).code
 );
 
@@ -48,7 +48,7 @@ console.log("Empty for:\n" + ClavaJoinPoints.forStmt().code);
 console.log(
   "Complete for:\n" +
     ClavaJoinPoints.forStmt("int i=0;", "i<10;", "i++;", "i = i+1;\ni = i - 1;")
-      .code
+        .code
 );
 
 // Unary Operator
@@ -61,8 +61,8 @@ console.log("Deref code: " + derefOp.code);
 console.log("Deref code type: " + derefOp.type.code);
 
 const xConstPointerDecl = Query.search("function", "constPointer")
-  .search("vardecl", "x")
-  .first();
+    .search("vardecl", "x")
+    .first();
 const xConstPointerRef = ClavaJoinPoints.varRef(xConstPointerDecl);
 
 // Deref of qualified pointer
@@ -99,7 +99,27 @@ var $varref = ClavaJoinPoints.varRef("varref_test", type);
 console.log("Varref code: " + $varref.code);
 console.log("Varref type: " + $varref.type.code);
 var $varref2 = ClavaJoinPoints.varRef(
-  ClavaJoinPoints.varDeclNoInit("varref_test_2", type)
+    ClavaJoinPoints.varDeclNoInit("varref_test_2", type)
 );
 console.log("Varref2 code: " + $varref2.code);
 console.log("Varref2 type: " + $varref2.type.code);
+
+// ArrayAccess
+var $constArrayType = ClavaJoinPoints.constArrayType(intType, 10, 10, 10);
+var $arrayVarRef = ClavaJoinPoints.varRef("a", $constArrayType);
+var $arrayAccess1 = ClavaJoinPoints.arrayAccess($arrayVarRef, ClavaJoinPoints.integerLiteral(0), ClavaJoinPoints.integerLiteral(1), ClavaJoinPoints.integerLiteral(2));
+var $arrayAccess2 = ClavaJoinPoints.arrayAccess($arrayVarRef, [ClavaJoinPoints.integerLiteral(3), ClavaJoinPoints.integerLiteral(4)]);
+var $arrayAccess3 = ClavaJoinPoints.arrayAccess($arrayVarRef, ClavaJoinPoints.integerLiteral(5));
+console.log("ArrayAccess1 code: " + $arrayAccess1.code);
+console.log("ArrayAccess1 type: " + $arrayAccess1.type.code);
+console.log("ArrayAccess2 code: " + $arrayAccess2.code);
+console.log("ArrayAccess2 type: " + $arrayAccess2.type.code);
+console.log("ArrayAccess3 code: " + $arrayAccess3.code);
+console.log("ArrayAccess3 type: " + $arrayAccess3.type.code);
+
+
+// InitList
+const $literalTwo = ClavaJoinPoints.integerLiteral(2)
+const $initList = ClavaJoinPoints.initList($literalTwo, $literalTwo, $literalTwo, $literalTwo, $literalTwo);
+console.log("InitList code: " + $initList.code);
+console.log("InitList type: " + $initList.type.code);
