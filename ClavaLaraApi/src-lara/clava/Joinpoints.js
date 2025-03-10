@@ -914,6 +914,14 @@ export class Switch extends Statement {
      */
     get hasDefaultCase() { return wrapJoinPoint(this._javaObject.getHasDefaultCase()); }
 }
+export class SwitchCase extends Statement {
+    /**
+     * @internal
+     */
+    static _defaultAttributeInfo = {
+        name: null,
+    };
+}
 /**
  * A pragma that references a point in the code and sticks to it
  */
@@ -1331,7 +1339,7 @@ export class Call extends Expression {
      */
     wrap(name) { return wrapJoinPoint(this._javaObject.wrap(unwrapJoinPoint(name))); }
 }
-export class Case extends Statement {
+export class Case extends SwitchCase {
     /**
      * @internal
      */
@@ -1490,6 +1498,14 @@ export class Declarator extends NamedDecl {
      */
     static _defaultAttributeInfo = {
         name: "name",
+    };
+}
+export class Default extends SwitchCase {
+    /**
+     * @internal
+     */
+    static _defaultAttributeInfo = {
+        name: null,
     };
 }
 export class DeleteExpr extends Expression {
@@ -2471,6 +2487,7 @@ const JoinpointMapper = {
     statement: Statement,
     struct: Struct,
     switch: Switch,
+    switchCase: SwitchCase,
     tag: Tag,
     ternaryOp: TernaryOp,
     this: This,
@@ -2500,6 +2517,7 @@ const JoinpointMapper = {
     cudaKernelCall: CudaKernelCall,
     declStmt: DeclStmt,
     declarator: Declarator,
+    default: Default,
     deleteExpr: DeleteExpr,
     elaboratedType: ElaboratedType,
     emptyStmt: EmptyStmt,

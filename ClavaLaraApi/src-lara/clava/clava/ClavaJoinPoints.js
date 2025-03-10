@@ -478,6 +478,12 @@ export default class ClavaJoinPoints {
     static gotoStmt(labelDecl) {
         return wrapJoinPoint(ClavaJavaTypes.AstFactory.gotoStmt(unwrapJoinPoint(labelDecl)));
     }
+    static breakStmt() {
+        return wrapJoinPoint(ClavaJavaTypes.AstFactory.breakStmt());
+    }
+    static defaultStmt() {
+        return wrapJoinPoint(ClavaJavaTypes.AstFactory.defaultStmt());
+    }
     /**
      * Creates a new literal join point 'decl'.
      *

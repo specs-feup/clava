@@ -42,6 +42,7 @@ type PrivateMapper = {
   "Statement": typeof Statement,
   "Struct": typeof Struct,
   "Switch": typeof Switch,
+  "SwitchCase": typeof SwitchCase,
   "Tag": typeof Tag,
   "TernaryOp": typeof TernaryOp,
   "This": typeof This,
@@ -71,6 +72,7 @@ type PrivateMapper = {
   "CudaKernelCall": typeof CudaKernelCall,
   "DeclStmt": typeof DeclStmt,
   "Declarator": typeof Declarator,
+  "Default": typeof Default,
   "DeleteExpr": typeof DeleteExpr,
   "ElaboratedType": typeof ElaboratedType,
   "EmptyStmt": typeof EmptyStmt,
@@ -1128,6 +1130,15 @@ export class Switch extends Statement {
   get hasDefaultCase(): boolean { return wrapJoinPoint(this._javaObject.getHasDefaultCase()) }
 }
 
+export class SwitchCase extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
   /**
    * A pragma that references a point in the code and sticks to it
    */
@@ -1573,7 +1584,7 @@ export class Call extends Expression {
   wrap(name: string): void { return wrapJoinPoint(this._javaObject.wrap(unwrapJoinPoint(name))); }
 }
 
-export class Case extends Statement {
+export class Case extends SwitchCase {
   /**
    * @internal
    */
@@ -1740,6 +1751,15 @@ export class Declarator extends NamedDecl {
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
+  };
+}
+
+export class Default extends SwitchCase {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
   };
 }
 
@@ -2824,6 +2844,7 @@ const JoinpointMapper = {
   statement: Statement,
   struct: Struct,
   switch: Switch,
+  switchCase: SwitchCase,
   tag: Tag,
   ternaryOp: TernaryOp,
   this: This,
@@ -2853,6 +2874,7 @@ const JoinpointMapper = {
   cudaKernelCall: CudaKernelCall,
   declStmt: DeclStmt,
   declarator: Declarator,
+  default: Default,
   deleteExpr: DeleteExpr,
   elaboratedType: ElaboratedType,
   emptyStmt: EmptyStmt,
