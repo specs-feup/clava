@@ -1787,11 +1787,6 @@ public class CxxWeaver extends ACxxWeaver {
                 node -> ClavaCommonLanguage.getJoinPointName(node), node -> node.getScopeChildren());
     }
 
-    @Override
-    protected List<LaraResourceProvider> getWeaverNpmResources() {
-        return Arrays.asList(ClavaApiJsResource.values());
-    }
-
     public void clearAppHistory() {
         context.clearAppHistory();
     }
