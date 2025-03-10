@@ -792,10 +792,16 @@ public class ClavaFactory {
         return new BreakStmt(breakStmtData, Collections.emptyList());
     }
 
-    public CaseStmt caseStmt(Expr caseExpr, Stmt subStmt) {
+    public CaseStmt caseStmt(Expr caseExpr) {
         DataStore caseStmtData = newDataStore(CaseStmt.class);
 
-        return new CaseStmt(caseStmtData, Arrays.asList(caseExpr, nullExpr(), subStmt));
+        return new CaseStmt(caseStmtData, Arrays.asList(caseExpr, nullExpr()));
+    }
+
+    public DefaultStmt defaultStmt() {
+        DataStore defaultStmtData = newDataStore(DefaultStmt.class);
+
+        return new DefaultStmt(defaultStmtData, Collections.emptyList());
     }
 
     public SwitchStmt switchStmt(Expr condition, Stmt body) {
