@@ -61,7 +61,6 @@ sourceSets {
     main {
         java {
             srcDir 'src'
-            srcDir 'test'
         }
 
         resources {
@@ -71,15 +70,10 @@ sourceSets {
 
 
     test {
-        java {
-            srcDir 'test'
-        }
-
         resources {
             srcDir 'resources'
         }
     }
-
 }
 
 // Clava
