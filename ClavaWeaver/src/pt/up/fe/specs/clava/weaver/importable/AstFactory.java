@@ -524,10 +524,6 @@ public class AstFactory {
                 AFunction.class);
     }
 
-    public static AFunction functionDecl(String functionName, AType returnTypeJp, Object[] namedDeclJps) {
-        return functionDecl(functionName, returnTypeJp, SpecsCollections.asListT(AJoinPoint.class, namedDeclJps));
-    }
-
     public static AFunction functionDecl(String functionName, AType returnTypeJp, List<AJoinPoint> namedDeclJps) {
 
         Type returnType = (Type) returnTypeJp.getNode();
@@ -559,6 +555,10 @@ public class AstFactory {
         functionDecl.addChildren(params);
 
         return CxxJoinpoints.create(functionDecl, AFunction.class);
+    }
+
+    public static AFunction functionDecl(String functionName, AType returnTypeJp, Object... namedDeclJps) {
+        return functionDecl(functionName, returnTypeJp, SpecsCollections.asListT(AJoinPoint.class, namedDeclJps));
     }
 
     public static ABinaryOp assignment(AExpression leftHand, AExpression rightHand) {
@@ -684,10 +684,6 @@ public class AstFactory {
         return CxxJoinpoints.create(cast, ACast.class);
     }
 
-    public static AClass classDecl(String className, Object[] fields) {
-        return classDecl(className, SpecsCollections.asListT(AField.class, fields));
-    }
-
     /**
      * Creates a join point representing a new class.
      *
@@ -701,7 +697,10 @@ public class AstFactory {
 
         var classDecl = CxxWeaver.getFactory().cxxRecordDecl(className, fieldsNodes);
         return CxxJoinpoints.create(classDecl, AClass.class);
+    }
 
+    public static AClass classDecl(String className, Object... fields) {
+        return classDecl(className, SpecsCollections.asListT(AField.class, fields));
     }
 
     /**
@@ -712,10 +711,8 @@ public class AstFactory {
      * @return
      */
     public static AField field(String fieldName, AType fieldType) {
-
         var fieldDecl = CxxWeaver.getFactory().fieldDecl(fieldName, (Type) fieldType.getNode());
         return CxxJoinpoints.create(fieldDecl, AField.class);
-
     }
 
     /**
@@ -796,10 +793,6 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static ADeclStmt declStmt(Object[] decls) {
-        return declStmt(SpecsCollections.asListT(ADecl.class, decls));
-    }
-
     public static ADeclStmt declStmt(List<ADecl> decls) {
         var declNodes = decls.stream().map(decl -> (Decl) decl.getNode())
                 .collect(Collectors.toList());
@@ -807,6 +800,10 @@ public class AstFactory {
         var declStmt = CxxWeaver.getFactory().declStmt(declNodes);
 
         return CxxJoinpoints.create(declStmt, ADeclStmt.class);
+    }
+
+    public static ADeclStmt declStmt(Object... decls) {
+        return declStmt(SpecsCollections.asListT(ADecl.class, decls));
     }
 
     /**

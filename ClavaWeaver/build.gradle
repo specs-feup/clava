@@ -1,20 +1,18 @@
 plugins {
     id 'distribution'
+    id 'application' // Executable
+    id 'java' // Java project
 }
-
-// Java project
-apply plugin: 'java'
-
-// Executable
-apply plugin: 'application'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+
+    withSourcesJar()
 }
 
-
 application {
+    mainClass.set("pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher")
 
     // For most input codes this is not necessary, but for the largest example we have tested (LSU-gcc, ~700.000 LoC)
     // it needs a large amount of memory
@@ -32,7 +30,6 @@ repositories {
 dependencies {
     implementation "junit:junit:4.13.1"
 
-
     implementation ":CommonsLangPlus"
     implementation ":GsonPlus"
     implementation ":jOptions"
@@ -42,12 +39,8 @@ dependencies {
     implementation ":tdrcLibrary"
 
     implementation ":LanguageSpecification"
-    implementation ":LaraCommonLanguageApi"
-    implementation ":LaraDoc"
     implementation ":LaraFramework"
     implementation ":LARAI"
-    implementation ":LaraLoc"
-    implementation ":LaraUnit"
     implementation ":LaraUtils"
     implementation ":WeaverGenerator"
     implementation ":WeaverInterface"
@@ -57,15 +50,10 @@ dependencies {
     implementation ":ClavaAst"
     implementation ":ClavaHls"
     implementation ":ClavaLaraApi"
-    implementation ":ClavaWeaverSpecs"
 
 
     implementation group: 'com.google.guava', name: 'guava', version: '19.0'
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.4'
-}
-
-java {
-    withSourcesJar()
 }
 
 // Project sources
@@ -73,7 +61,6 @@ sourceSets {
     main {
         java {
             srcDir 'src'
-            srcDir 'test'
         }
 
         resources {
@@ -83,19 +70,10 @@ sourceSets {
 
 
     test {
-        java {
-            srcDir 'test'
-        }
-
         resources {
             srcDir 'resources'
         }
     }
-
-}
-
-application {
-    mainClass.set("pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher")
 }
 
 // Clava
@@ -121,7 +99,6 @@ task clavadoc(type: JavaExec) {
             '--exclude',
             '_',
             '--packages',
-//            '{"Clava API": ["../ClavaLaraApi/src-lara-clava/clava"], "LARA API": ["../LaraApi/src-lara-base","../LaraApi}/src-lara","../LARAI/src-lara","../LaraExtraApi/src-lara","../ClavaLaraApi/src-lara/clava"], "LARA Common Language API": ["../LaraCommonLanguageApi/src-lara"], "ANTAREX API": ["../AntarexClavaApi/src-lara/clava"]}',
-            '{\'Clava API\': [\'../ClavaLaraApi/src-lara-clava/clava\'], \'LARA API\': [\'../LaraApi/src-lara-base\',\'../LaraApi}/src-lara\',\'../LARAI/src-lara\',\'../LaraExtraApi/src-lara\',\'../ClavaLaraApi/src-lara/clava\'], \'LARA Common Language API\': [\'../LaraCommonLanguageApi/src-lara\'], \'ANTAREX API\': [\'../AntarexClavaApi/src-lara/clava\']}',
+            '{\'Clava API\': [\'../ClavaLaraApi/src-lara-clava/clava\'], \'LARA API\': [\'../LaraApi/src-lara-base\',\'../LaraApi}/src-lara\',\'../LARAI/src-lara\',\'../LaraExtraApi/src-lara\',\'../ClavaLaraApi/src-lara/clava\'], \'ANTAREX API\': [\'../AntarexClavaApi/src-lara/clava\']}',
     ]
 }

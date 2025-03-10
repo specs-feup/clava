@@ -11,7 +11,6 @@ To call Clava from within CMake, please click [here](https://github.com/specs-fe
 
 To build the Java part of Clava, please check the [ClavaWeaver](https://github.com/specs-feup/clava/tree/master/ClavaWeaver) project folder. The JAR can be used to generate configuration files.
 
-
 # Compatibility
 
 Currently Clava requires Java 17 and Node 18 or 20.

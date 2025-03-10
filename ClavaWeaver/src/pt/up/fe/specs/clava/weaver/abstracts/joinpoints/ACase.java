@@ -23,18 +23,22 @@ public abstract class ACase extends ASwitchCase {
     /**
      * 
      */
-    public ACase(ASwitchCase aSwitchCase){
+    public ACase(ASwitchCase aSwitchCase) {
         super(aSwitchCase);
         this.aSwitchCase = aSwitchCase;
     }
+
     /**
      * Get value on attribute instructions
+     * 
      * @return the attribute's value
      */
     public abstract AStatement[] getInstructionsArrayImpl();
 
     /**
-     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
+     * the instructions that are associated with this case in the source code. This
+     * does not represent what instructions are actually executed (e.g., if a case
+     * does not have a break, does not show instructions of the next case)
      */
     public Object getInstructionsImpl() {
         AStatement[] aStatementArrayImpl0 = getInstructionsArrayImpl();
@@ -43,20 +47,22 @@ public abstract class ACase extends ASwitchCase {
     }
 
     /**
-     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
+     * the instructions that are associated with this case in the source code. This
+     * does not represent what instructions are actually executed (e.g., if a case
+     * does not have a break, does not show instructions of the next case)
      */
     public final Object getInstructions() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "instructions", Optional.empty());
-        	}
-        	Object result = this.getInstructionsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "instructions", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "instructions", e);
+            if (hasListeners()) {
+                eventTrigger().triggerAttribute(Stage.BEGIN, this, "instructions", Optional.empty());
+            }
+            Object result = this.getInstructionsImpl();
+            if (hasListeners()) {
+                eventTrigger().triggerAttribute(Stage.END, this, "instructions", Optional.ofNullable(result));
+            }
+            return result != null ? result : getUndefinedValue();
+        } catch (Exception e) {
+            throw new AttributeException(get_class(), "instructions", e);
         }
     }
 
@@ -70,96 +76,105 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getIsDefault() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isDefault", Optional.empty());
-        	}
-        	Boolean result = this.getIsDefaultImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isDefault", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isDefault", e);
+            if (hasListeners()) {
+                eventTrigger().triggerAttribute(Stage.BEGIN, this, "isDefault", Optional.empty());
+            }
+            Boolean result = this.getIsDefaultImpl();
+            if (hasListeners()) {
+                eventTrigger().triggerAttribute(Stage.END, this, "isDefault", Optional.ofNullable(result));
+            }
+            return result != null ? result : getUndefinedValue();
+        } catch (Exception e) {
+            throw new AttributeException(get_class(), "isDefault", e);
         }
     }
 
     /**
-     * true if this case does not contain instructions (i.e., it is directly above another case), false otherwise
+     * true if this case does not contain instructions (i.e., it is directly above
+     * another case), false otherwise
      */
     public abstract Boolean getIsEmptyImpl();
 
     /**
-     * true if this case does not contain instructions (i.e., it is directly above another case), false otherwise
+     * true if this case does not contain instructions (i.e., it is directly above
+     * another case), false otherwise
      */
     public final Object getIsEmpty() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isEmpty", Optional.empty());
-        	}
-        	Boolean result = this.getIsEmptyImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isEmpty", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isEmpty", e);
+            if (hasListeners()) {
+                eventTrigger().triggerAttribute(Stage.BEGIN, this, "isEmpty", Optional.empty());
+            }
+            Boolean result = this.getIsEmptyImpl();
+            if (hasListeners()) {
+                eventTrigger().triggerAttribute(Stage.END, this, "isEmpty", Optional.ofNullable(result));
+            }
+            return result != null ? result : getUndefinedValue();
+        } catch (Exception e) {
+            throw new AttributeException(get_class(), "isEmpty", e);
         }
     }
 
     /**
-     * the case statement that comes after this case, or undefined if there are no more case statements
+     * the case statement that comes after this case, or undefined if there are no
+     * more case statements
      */
     public abstract ACase getNextCaseImpl();
 
     /**
-     * the case statement that comes after this case, or undefined if there are no more case statements
+     * the case statement that comes after this case, or undefined if there are no
+     * more case statements
      */
     public final Object getNextCase() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextCase", Optional.empty());
-        	}
-        	ACase result = this.getNextCaseImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "nextCase", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "nextCase", e);
+            if (hasListeners()) {
+                eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextCase", Optional.empty());
+            }
+            ACase result = this.getNextCaseImpl();
+            if (hasListeners()) {
+                eventTrigger().triggerAttribute(Stage.END, this, "nextCase", Optional.ofNullable(result));
+            }
+            return result != null ? result : getUndefinedValue();
+        } catch (Exception e) {
+            throw new AttributeException(get_class(), "nextCase", e);
         }
     }
 
     /**
-     * the first statement that is not a case that will be executed by this case statement
+     * the first statement that is not a case that will be executed by this case
+     * statement
      */
     public abstract AStatement getNextInstructionImpl();
 
     /**
-     * the first statement that is not a case that will be executed by this case statement
+     * the first statement that is not a case that will be executed by this case
+     * statement
      */
     public final Object getNextInstruction() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextInstruction", Optional.empty());
-        	}
-        	AStatement result = this.getNextInstructionImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "nextInstruction", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "nextInstruction", e);
+            if (hasListeners()) {
+                eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextInstruction", Optional.empty());
+            }
+            AStatement result = this.getNextInstructionImpl();
+            if (hasListeners()) {
+                eventTrigger().triggerAttribute(Stage.END, this, "nextInstruction", Optional.ofNullable(result));
+            }
+            return result != null ? result : getUndefinedValue();
+        } catch (Exception e) {
+            throw new AttributeException(get_class(), "nextInstruction", e);
         }
     }
 
     /**
      * Get value on attribute values
+     * 
      * @return the attribute's value
      */
     public abstract AExpression[] getValuesArrayImpl();
 
     /**
-     * the values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
+     * the values that the case statement will match. It can return zero (e.g.,
+     * 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions,
+     * depending on the format of the case
      */
     public Object getValuesImpl() {
         AExpression[] aExpressionArrayImpl0 = getValuesArrayImpl();
@@ -168,25 +183,28 @@ public abstract class ACase extends ASwitchCase {
     }
 
     /**
-     * the values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
+     * the values that the case statement will match. It can return zero (e.g.,
+     * 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions,
+     * depending on the format of the case
      */
     public final Object getValues() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "values", Optional.empty());
-        	}
-        	Object result = this.getValuesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "values", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "values", e);
+            if (hasListeners()) {
+                eventTrigger().triggerAttribute(Stage.BEGIN, this, "values", Optional.empty());
+            }
+            Object result = this.getValuesImpl();
+            if (hasListeners()) {
+                eventTrigger().triggerAttribute(Stage.END, this, "values", Optional.ofNullable(result));
+            }
+            return result != null ? result : getUndefinedValue();
+        } catch (Exception e) {
+            throw new AttributeException(get_class(), "values", e);
         }
     }
 
     /**
      * Get value on attribute isFirst
+     * 
      * @return the attribute's value
      */
     @Override
@@ -196,6 +214,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute isLast
+     * 
      * @return the attribute's value
      */
     @Override
@@ -205,7 +224,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select exprs
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends AExpression> selectExpr() {
@@ -214,7 +234,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select childExprs
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends AExpression> selectChildExpr() {
@@ -223,7 +244,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select calls
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends ACall> selectCall() {
@@ -232,7 +254,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select stmtCalls
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends ACall> selectStmtCall() {
@@ -241,7 +264,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select memberCalls
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends AMemberCall> selectMemberCall() {
@@ -250,7 +274,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select memberAccesss
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends AMemberAccess> selectMemberAccess() {
@@ -259,7 +284,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select arrayAccesss
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends AArrayAccess> selectArrayAccess() {
@@ -268,7 +294,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select vardecls
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends AVardecl> selectVardecl() {
@@ -277,7 +304,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select varrefs
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends AVarref> selectVarref() {
@@ -286,7 +314,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select ops
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends AOp> selectOp() {
@@ -295,7 +324,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select binaryOps
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends ABinaryOp> selectBinaryOp() {
@@ -304,7 +334,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select unaryOps
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends AUnaryOp> selectUnaryOp() {
@@ -313,7 +344,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select newExprs
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends ANewExpr> selectNewExpr() {
@@ -322,7 +354,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select deleteExprs
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends ADeleteExpr> selectDeleteExpr() {
@@ -331,7 +364,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Method used by the lara interpreter to select cilkSpawns
-     * @return 
+     * 
+     * @return
      */
     @Override
     public List<? extends ACilkSpawn> selectCilkSpawn() {
@@ -340,6 +374,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute ast
+     * 
      * @return the attribute's value
      */
     @Override
@@ -349,6 +384,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute astChildrenArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -358,6 +394,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute astId
+     * 
      * @return the attribute's value
      */
     @Override
@@ -367,6 +404,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute astIsInstance
+     * 
      * @return the attribute's value
      */
     @Override
@@ -376,6 +414,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute astName
+     * 
      * @return the attribute's value
      */
     @Override
@@ -385,6 +424,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute astNumChildren
+     * 
      * @return the attribute's value
      */
     @Override
@@ -394,6 +434,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute bitWidth
+     * 
      * @return the attribute's value
      */
     @Override
@@ -403,6 +444,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute chainArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -412,6 +454,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute childrenArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -421,6 +464,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute code
+     * 
      * @return the attribute's value
      */
     @Override
@@ -430,6 +474,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute column
+     * 
      * @return the attribute's value
      */
     @Override
@@ -439,6 +484,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute contains
+     * 
      * @return the attribute's value
      */
     @Override
@@ -448,6 +494,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute currentRegion
+     * 
      * @return the attribute's value
      */
     @Override
@@ -457,6 +504,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute data
+     * 
      * @return the attribute's value
      */
     @Override
@@ -466,6 +514,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute depth
+     * 
      * @return the attribute's value
      */
     @Override
@@ -475,6 +524,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute descendantsArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -484,6 +534,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute endColumn
+     * 
      * @return the attribute's value
      */
     @Override
@@ -493,6 +544,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute endLine
+     * 
      * @return the attribute's value
      */
     @Override
@@ -502,6 +554,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute filename
+     * 
      * @return the attribute's value
      */
     @Override
@@ -511,6 +564,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute filepath
+     * 
      * @return the attribute's value
      */
     @Override
@@ -520,6 +574,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute firstChild
+     * 
      * @return the attribute's value
      */
     @Override
@@ -529,6 +584,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute getAncestor
+     * 
      * @return the attribute's value
      */
     @Override
@@ -538,6 +594,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute getAstAncestor
+     * 
      * @return the attribute's value
      */
     @Override
@@ -547,6 +604,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute getAstChild
+     * 
      * @return the attribute's value
      */
     @Override
@@ -556,6 +614,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute getChainAncestor
+     * 
      * @return the attribute's value
      */
     @Override
@@ -565,6 +624,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute getChild
+     * 
      * @return the attribute's value
      */
     @Override
@@ -574,6 +634,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute getDescendantsArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -583,6 +644,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute getDescendantsAndSelfArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -592,6 +654,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute getFirstJp
+     * 
      * @return the attribute's value
      */
     @Override
@@ -601,6 +664,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute getJavaFieldType
+     * 
      * @return the attribute's value
      */
     @Override
@@ -610,6 +674,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute getKeyType
+     * 
      * @return the attribute's value
      */
     @Override
@@ -619,6 +684,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute getUserField
+     * 
      * @return the attribute's value
      */
     @Override
@@ -628,6 +694,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute getValue
+     * 
      * @return the attribute's value
      */
     @Override
@@ -637,6 +704,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute hasChildren
+     * 
      * @return the attribute's value
      */
     @Override
@@ -646,6 +714,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute hasNode
+     * 
      * @return the attribute's value
      */
     @Override
@@ -655,6 +724,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute hasParent
+     * 
      * @return the attribute's value
      */
     @Override
@@ -664,6 +734,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute hasType
+     * 
      * @return the attribute's value
      */
     @Override
@@ -673,6 +744,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute inlineCommentsArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -682,6 +754,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute isCilk
+     * 
      * @return the attribute's value
      */
     @Override
@@ -691,6 +764,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute isInSystemHeader
+     * 
      * @return the attribute's value
      */
     @Override
@@ -700,6 +774,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute isInsideHeader
+     * 
      * @return the attribute's value
      */
     @Override
@@ -709,6 +784,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute isInsideLoopHeader
+     * 
      * @return the attribute's value
      */
     @Override
@@ -718,6 +794,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute isMacro
+     * 
      * @return the attribute's value
      */
     @Override
@@ -727,6 +804,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute javaFieldsArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -736,6 +814,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute jpId
+     * 
      * @return the attribute's value
      */
     @Override
@@ -745,6 +824,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute keysArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -754,6 +834,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute lastChild
+     * 
      * @return the attribute's value
      */
     @Override
@@ -763,6 +844,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute leftJp
+     * 
      * @return the attribute's value
      */
     @Override
@@ -772,6 +854,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute line
+     * 
      * @return the attribute's value
      */
     @Override
@@ -781,6 +864,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute location
+     * 
      * @return the attribute's value
      */
     @Override
@@ -790,6 +874,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute numChildren
+     * 
      * @return the attribute's value
      */
     @Override
@@ -799,6 +884,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute originNode
+     * 
      * @return the attribute's value
      */
     @Override
@@ -808,6 +894,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute parent
+     * 
      * @return the attribute's value
      */
     @Override
@@ -817,6 +904,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute parentRegion
+     * 
      * @return the attribute's value
      */
     @Override
@@ -826,6 +914,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute pragmasArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -835,6 +924,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute rightJp
+     * 
      * @return the attribute's value
      */
     @Override
@@ -844,6 +934,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute root
+     * 
      * @return the attribute's value
      */
     @Override
@@ -853,6 +944,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute scopeNodesArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -862,6 +954,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute siblingsLeftArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -871,6 +964,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute siblingsRightArrayImpl
+     * 
      * @return the attribute's value
      */
     @Override
@@ -880,6 +974,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute stmt
+     * 
      * @return the attribute's value
      */
     @Override
@@ -889,6 +984,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Get value on attribute type
+     * 
      * @return the attribute's value
      */
     @Override
@@ -897,7 +993,8 @@ public abstract class ACase extends ASwitchCase {
     }
 
     /**
-     * Performs a copy of the node and its children, but not of the nodes in its fields
+     * Performs a copy of the node and its children, but not of the nodes in its
+     * fields
      */
     @Override
     public AJoinPoint copyImpl() {
@@ -913,7 +1010,8 @@ public abstract class ACase extends ASwitchCase {
     }
 
     /**
-     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     * Performs a copy of the node and its children, including the nodes in their
+     * fields (only the first level of field nodes, this function is not recursive)
      */
     @Override
     public AJoinPoint deepCopyImpl() {
@@ -930,8 +1028,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * 
-     * @param position 
-     * @param code 
+     * @param position
+     * @param code
      */
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
@@ -940,8 +1038,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * 
-     * @param position 
-     * @param code 
+     * @param position
+     * @param code
      */
     @Override
     public AJoinPoint[] insertImpl(String position, JoinPoint code) {
@@ -950,7 +1048,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Inserts the given join point after this join point
-     * @param node 
+     * 
+     * @param node
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
@@ -959,7 +1058,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Overload which accepts a string
-     * @param code 
+     * 
+     * @param code
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
@@ -968,7 +1068,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Inserts the given join point before this join point
-     * @param node 
+     * 
+     * @param node
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
@@ -977,7 +1078,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Overload which accepts a string
-     * @param node 
+     * 
+     * @param node
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
@@ -985,8 +1087,10 @@ public abstract class ACase extends ASwitchCase {
     }
 
     /**
-     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
-     * @param message 
+     * Adds a message that will be printed to the user after weaving finishes.
+     * Identical messages are removed
+     * 
+     * @param message
      */
     @Override
     public void messageToUserImpl(String message) {
@@ -1003,7 +1107,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Replaces this node with the given node
-     * @param node 
+     * 
+     * @param node
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
@@ -1012,7 +1117,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Overload which accepts a string
-     * @param node 
+     * 
+     * @param node
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
@@ -1021,7 +1127,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Overload which accepts a list of join points
-     * @param node 
+     * 
+     * @param node
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint[] node) {
@@ -1030,7 +1137,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Overload which accepts a list of strings
-     * @param node 
+     * 
+     * @param node
      */
     @Override
     public AJoinPoint replaceWithStringsImpl(String[] node) {
@@ -1038,8 +1146,10 @@ public abstract class ACase extends ASwitchCase {
     }
 
     /**
-     * Setting data directly is not supported, this action just emits a warning and does nothing
-     * @param source 
+     * Setting data directly is not supported, this action just emits a warning and
+     * does nothing
+     * 
+     * @param source
      */
     @Override
     public void setDataImpl(Object source) {
@@ -1047,8 +1157,10 @@ public abstract class ACase extends ASwitchCase {
     }
 
     /**
-     * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
+     * Replaces the first child, or inserts the join point if no child is present.
+     * Returns the replaced child, or undefined if there was no child present.
+     * 
+     * @param node
      */
     @Override
     public AJoinPoint setFirstChildImpl(AJoinPoint node) {
@@ -1057,7 +1169,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Sets the commented that are embedded in a node
-     * @param comments 
+     * 
+     * @param comments
      */
     @Override
     public void setInlineCommentsImpl(String[] comments) {
@@ -1066,7 +1179,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Sets the commented that are embedded in a node
-     * @param comments 
+     * 
+     * @param comments
      */
     @Override
     public void setInlineCommentsImpl(String comments) {
@@ -1074,8 +1188,10 @@ public abstract class ACase extends ASwitchCase {
     }
 
     /**
-     * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
-     * @param node 
+     * Replaces the last child, or inserts the join point if no child is present.
+     * Returns the replaced child, or undefined if there was no child present.
+     * 
+     * @param node
      */
     @Override
     public AJoinPoint setLastChildImpl(AJoinPoint node) {
@@ -1084,7 +1200,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Sets the type of a node, if it has a type
-     * @param type 
+     * 
+     * @param type
      */
     @Override
     public void setTypeImpl(AType type) {
@@ -1093,8 +1210,9 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Associates arbitrary values to nodes of the AST
-     * @param fieldName 
-     * @param value 
+     * 
+     * @param fieldName
+     * @param value
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
@@ -1103,7 +1221,8 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Overload which accepts a map
-     * @param fieldNameAndValue 
+     * 
+     * @param fieldNameAndValue
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
@@ -1112,8 +1231,9 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Sets the value associated with the given property key
-     * @param key 
-     * @param value 
+     * 
+     * @param key
+     * @param value
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
@@ -1122,8 +1242,9 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     * @param suffix 
+     * 
+     * @param prefix
+     * @param suffix
      */
     @Override
     public AJoinPoint toCommentImpl(String prefix, String suffix) {
@@ -1144,55 +1265,55 @@ public abstract class ACase extends ASwitchCase {
     @Override
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "expr": 
-        		joinPointList = selectExpr();
-        		break;
-        	case "childExpr": 
-        		joinPointList = selectChildExpr();
-        		break;
-        	case "call": 
-        		joinPointList = selectCall();
-        		break;
-        	case "stmtCall": 
-        		joinPointList = selectStmtCall();
-        		break;
-        	case "memberCall": 
-        		joinPointList = selectMemberCall();
-        		break;
-        	case "memberAccess": 
-        		joinPointList = selectMemberAccess();
-        		break;
-        	case "arrayAccess": 
-        		joinPointList = selectArrayAccess();
-        		break;
-        	case "vardecl": 
-        		joinPointList = selectVardecl();
-        		break;
-        	case "varref": 
-        		joinPointList = selectVarref();
-        		break;
-        	case "op": 
-        		joinPointList = selectOp();
-        		break;
-        	case "binaryOp": 
-        		joinPointList = selectBinaryOp();
-        		break;
-        	case "unaryOp": 
-        		joinPointList = selectUnaryOp();
-        		break;
-        	case "newExpr": 
-        		joinPointList = selectNewExpr();
-        		break;
-        	case "deleteExpr": 
-        		joinPointList = selectDeleteExpr();
-        		break;
-        	case "cilkSpawn": 
-        		joinPointList = selectCilkSpawn();
-        		break;
-        	default:
-        		joinPointList = this.aSwitchCase.select(selectName);
-        		break;
+        switch (selectName) {
+            case "expr":
+                joinPointList = selectExpr();
+                break;
+            case "childExpr":
+                joinPointList = selectChildExpr();
+                break;
+            case "call":
+                joinPointList = selectCall();
+                break;
+            case "stmtCall":
+                joinPointList = selectStmtCall();
+                break;
+            case "memberCall":
+                joinPointList = selectMemberCall();
+                break;
+            case "memberAccess":
+                joinPointList = selectMemberAccess();
+                break;
+            case "arrayAccess":
+                joinPointList = selectArrayAccess();
+                break;
+            case "vardecl":
+                joinPointList = selectVardecl();
+                break;
+            case "varref":
+                joinPointList = selectVarref();
+                break;
+            case "op":
+                joinPointList = selectOp();
+                break;
+            case "binaryOp":
+                joinPointList = selectBinaryOp();
+                break;
+            case "unaryOp":
+                joinPointList = selectUnaryOp();
+                break;
+            case "newExpr":
+                joinPointList = selectNewExpr();
+                break;
+            case "deleteExpr":
+                joinPointList = selectDeleteExpr();
+                break;
+            case "cilkSpawn":
+                joinPointList = selectCilkSpawn();
+                break;
+            default:
+                joinPointList = this.aSwitchCase.select(selectName);
+                break;
         }
         return joinPointList;
     }
@@ -1202,47 +1323,49 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        switch (attribute) {
+            case "data": {
+                if (value instanceof Object) {
+                    this.defDataImpl((Object) value);
+                    return;
+                }
+                this.unsupportedTypeForDef(attribute, value);
+            }
+            case "firstChild": {
+                if (value instanceof AJoinPoint) {
+                    this.defFirstChildImpl((AJoinPoint) value);
+                    return;
+                }
+                this.unsupportedTypeForDef(attribute, value);
+            }
+            case "inlineComments": {
+                if (value instanceof String[]) {
+                    this.defInlineCommentsImpl((String[]) value);
+                    return;
+                }
+                if (value instanceof String) {
+                    this.defInlineCommentsImpl((String) value);
+                    return;
+                }
+                this.unsupportedTypeForDef(attribute, value);
+            }
+            case "lastChild": {
+                if (value instanceof AJoinPoint) {
+                    this.defLastChildImpl((AJoinPoint) value);
+                    return;
+                }
+                this.unsupportedTypeForDef(attribute, value);
+            }
+            case "type": {
+                if (value instanceof AType) {
+                    this.defTypeImpl((AType) value);
+                    return;
+                }
+                this.unsupportedTypeForDef(attribute, value);
+            }
+            default:
+                throw new UnsupportedOperationException(
+                        "Join point " + get_class() + ": attribute '" + attribute + "' cannot be defined");
         }
     }
 
@@ -1278,6 +1401,7 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Returns the join point type of this class
+     * 
      * @return The join point type
      */
     @Override
@@ -1287,16 +1411,18 @@ public abstract class ACase extends ASwitchCase {
 
     /**
      * Defines if this joinpoint is an instanceof a given joinpoint class
+     * 
      * @return True if this join point is an instanceof the given class
      */
     @Override
     public final boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
-        if(isInstance) {
-        	return true;
+        if (isInstance) {
+            return true;
         }
         return this.aSwitchCase.instanceOf(joinpointClass);
     }
+
     /**
      * 
      */
@@ -1371,14 +1497,16 @@ public abstract class ACase extends ASwitchCase {
         SIBLINGSRIGHT("siblingsRight"),
         STMT("stmt"),
         TYPE("type");
+
         private String name;
 
         /**
          * 
          */
-        private CaseAttributes(String name){
+        private CaseAttributes(String name) {
             this.name = name;
         }
+
         /**
          * Return an attribute enumeration item from a given attribute name
          */
