@@ -879,6 +879,14 @@ export default class ClavaJoinPoints {
     );
   }
 
+  static breakStmt(): Joinpoints.Break {
+    return wrapJoinPoint(ClavaJavaTypes.AstFactory.breakStmt());
+  }
+
+  static defaultStmt(): Joinpoints.Default {
+    return wrapJoinPoint(ClavaJavaTypes.AstFactory.defaultStmt());
+  }
+
   /**
    * Creates a new literal join point 'decl'.
    *
