@@ -1,4 +1,4 @@
-/**** File 'lib/dummy.c' ****/
+/**** File 'lib/dummy.cpp' ****/
 
 //hello 2
 /**** End File ****/
