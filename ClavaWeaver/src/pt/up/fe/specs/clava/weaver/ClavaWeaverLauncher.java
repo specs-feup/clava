@@ -25,14 +25,12 @@ import java.util.stream.Collectors;
 
 import org.junit.runner.Result;
 
+import eu.antarex.clang.parser.tests.CTest;
+import eu.antarex.clang.parser.tests.CxxTest;
 import eu.antarex.clang.parser.tests.CBenchTest;
 import eu.antarex.clang.parser.tests.CxxBenchTest;
 import larai.LaraI;
 import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.cxxweaver.tests.CApiTest;
-import pt.up.fe.specs.cxxweaver.tests.CTest;
-import pt.up.fe.specs.cxxweaver.tests.CxxApiTest;
-import pt.up.fe.specs.cxxweaver.tests.CxxTest;
 import pt.up.fe.specs.lara.WeaverLauncher;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -41,9 +39,6 @@ public class ClavaWeaverLauncher {
 
     public static void main(String[] args) {
         SpecsSystem.programStandardInit();
-
-        // System.out.println("Press any key to proceed");
-        // SpecsIo.read();
 
         boolean success = execute(args);
 
@@ -57,111 +52,22 @@ public class ClavaWeaverLauncher {
     }
 
     public static boolean execute(String[] args) {
-        // To profile using VisualVM
-        // try {
-        // System.out.println("PRESS ENTER");
-        // System.in.read();
-        // } catch (IOException e) {
-        // LoggingUtils.msgWarn("Error message:\n", e);
-        // }
 
         // If junit file present, run junit
-        if (new File("junit").isFile()) {
-            ClavaLog.info("Found file 'junit', running unit tets");
-            Result result = org.junit.runner.JUnitCore.runClasses(CApiTest.class, CTest.class, CxxApiTest.class,
-                    CxxTest.class);
-            System.out.println("RESULT:\n" + result);
-            return result.getFailures().isEmpty();
-        }
-
         if (new File("junit-parser").isFile()) {
             ClavaLog.info("Found file 'junit-parser', running parser unit tets");
             Result result = org.junit.runner.JUnitCore.runClasses(CBenchTest.class,
-                    eu.antarex.clang.parser.tests.CTest.class, CxxBenchTest.class,
-                    eu.antarex.clang.parser.tests.CxxTest.class);
+                    CTest.class, CxxBenchTest.class, CxxTest.class);
             System.out.println("RESULT:\n" + result);
             return result.getFailures().isEmpty();
         }
 
         return new WeaverLauncher(new CxxWeaver()).launch(args);
-
-        // // If unit testing flag is present, run unit tester
-        // Optional<Boolean> unitTesterResult = runUnitTester(args);
-        // if (unitTesterResult.isPresent()) {
-        // return unitTesterResult.get();
-        // }
-        //
-        // // If doc generator flag is present, run doc generator
-        // Optional<Boolean> docGeneratorResult = runDocGenerator(args);
-        // if (docGeneratorResult.isPresent()) {
-        // return docGeneratorResult.get();
-        // }
-        //
-        // return LaraLauncher.launch(args, new CxxWeaver());
-        // // return LaraI.exec(args, new CxxWeaver());
     }
 
     public static boolean execute(List<String> args) {
         return execute(args.toArray(new String[0]));
     }
-
-    // private static Optional<Boolean> runUnitTester(String[] args) {
-    // // Look for flag
-    // String unitTestingFlag = "-" + LaraiKeys.getUnitTestFlag();
-    //
-    // int flagIndex = IntStream.range(0, args.length)
-    // .filter(index -> unitTestingFlag.equals(args[index]))
-    // .findFirst()
-    // .orElse(-1);
-    //
-    // if (flagIndex == -1) {
-    // return Optional.empty();
-    // }
-    //
-    // List<String> laraUnitArgs = new ArrayList<>();
-    // // laraUnitArgs.add("lara-unit-weaver=" + CxxWeaver.class.getName());
-    // laraUnitArgs.add("--weaver");
-    // laraUnitArgs.add(CxxWeaver.class.getName());
-    //
-    // // laraUnitArgs.add("lara-unit-weaver=" + CxxWeaver.class.getName());
-    // for (int i = flagIndex + 1; i < args.length; i++) {
-    // laraUnitArgs.add(args[i]);
-    // }
-    //
-    // SpecsLogs.debug("Launching lara-unit with flags '" + laraUnitArgs + "'");
-    //
-    // int unitResults = LaraUnitLauncher.execute(laraUnitArgs.toArray(new String[0]));
-    //
-    // return Optional.of(unitResults == 0);
-    // }
-    //
-    // private static Optional<Boolean> runDocGenerator(String[] args) {
-    // // Look for flag
-    // String docGeneratorFlag = "-" + LaraiKeys.getDocGeneratorFlag();
-    //
-    // int flagIndex = IntStream.range(0, args.length)
-    // .filter(index -> docGeneratorFlag.equals(args[index]))
-    // .findFirst()
-    // .orElse(-1);
-    //
-    // if (flagIndex == -1) {
-    // return Optional.empty();
-    // }
-    //
-    // List<String> laraDocArgs = new ArrayList<>();
-    // laraDocArgs.add("--weaver");
-    // laraDocArgs.add(CxxWeaver.class.getName());
-    //
-    // for (int i = flagIndex + 1; i < args.length; i++) {
-    // laraDocArgs.add(args[i]);
-    // }
-    //
-    // SpecsLogs.debug("Launching lara-doc with flags '" + laraDocArgs + "'");
-    //
-    // int docResults = LaraDocLauncher.execute(laraDocArgs.toArray(new String[0]));
-    //
-    // return Optional.of(docResults != -1);
-    // }
 
     public static String[] executeParallel(String[][] args, int threads, List<String> clavaCommand) {
         return executeParallel(args, threads, clavaCommand, SpecsIo.getWorkingDir().getAbsolutePath());
@@ -216,18 +122,12 @@ public class ClavaWeaverLauncher {
                 adaptedArgs[i] = newArgs;
             }
 
-            // var results =
             customThreadPool.submit(() -> Arrays.asList(adaptedArgs).parallelStream()
                     .map(clavaExecutor)
                     .collect(Collectors.toList())).get();
 
             // Find the file for each execution
             return collectResults(resultFiles);
-
-            // return results.stream()
-            // .filter(result -> result == false)
-            // .findFirst()
-            // .orElse(true);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             return collectResults(resultFiles);
@@ -266,27 +166,13 @@ public class ClavaWeaverLauncher {
 
     private static boolean executeOtherJvm(String[] args, List<String> clavaCommand, File workingDir) {
         try {
-            // DEBUG
-            // if (true) {
-            // return ClavaWeaverLauncher.execute(args);
-            // }
-
             List<String> newArgs = new ArrayList<>();
-            // newArgs.add("java");
-            // newArgs.add("-jar");
-            // newArgs.add("Clava.jar");
-            // newArgs.add("/usr/local/bin/clava");
             newArgs.addAll(clavaCommand);
             newArgs.addAll(Arrays.asList(args));
 
-            // ClavaLog.info(() -> "Launching Clava on another JVM with command: " + newArgs);
-
-            // var result = SpecsSystem.run(newArgs, SpecsIo.getWorkingDir());
             var result = SpecsSystem.run(newArgs, workingDir);
 
             return result == 0;
-
-            // return execute(args);
         } catch (Exception e) {
             ClavaLog.info("Exception during Clava execution: " + e);
             return false;
