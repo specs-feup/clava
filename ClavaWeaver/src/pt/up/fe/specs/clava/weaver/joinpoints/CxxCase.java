@@ -25,7 +25,7 @@ public class CxxCase extends ACase {
     private final SwitchCase caseStmt;
 
     public CxxCase(SwitchCase caseStmt) {
-        super(new CxxStatement(caseStmt));
+        super(new CxxSwitchCase(caseStmt));
         this.caseStmt = caseStmt;
     }
 

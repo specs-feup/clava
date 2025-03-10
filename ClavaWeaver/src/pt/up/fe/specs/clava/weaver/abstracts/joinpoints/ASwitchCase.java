@@ -1,197 +1,36 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
-import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point ACase
+ * Auto-Generated class for join point ASwitchCase
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class ACase extends ASwitchCase {
+public abstract class ASwitchCase extends AStatement {
 
-    protected ASwitchCase aSwitchCase;
+    protected AStatement aStatement;
 
     /**
      * 
      */
-    public ACase(ASwitchCase aSwitchCase){
-        super(aSwitchCase);
-        this.aSwitchCase = aSwitchCase;
+    public ASwitchCase(AStatement aStatement){
+        this.aStatement = aStatement;
     }
-    /**
-     * Get value on attribute instructions
-     * @return the attribute's value
-     */
-    public abstract AStatement[] getInstructionsArrayImpl();
-
-    /**
-     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
-     */
-    public Object getInstructionsImpl() {
-        AStatement[] aStatementArrayImpl0 = getInstructionsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
-     */
-    public final Object getInstructions() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "instructions", Optional.empty());
-        	}
-        	Object result = this.getInstructionsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "instructions", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "instructions", e);
-        }
-    }
-
-    /**
-     * true if this is a default case, false otherwise
-     */
-    public abstract Boolean getIsDefaultImpl();
-
-    /**
-     * true if this is a default case, false otherwise
-     */
-    public final Object getIsDefault() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isDefault", Optional.empty());
-        	}
-        	Boolean result = this.getIsDefaultImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isDefault", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isDefault", e);
-        }
-    }
-
-    /**
-     * true if this case does not contain instructions (i.e., it is directly above another case), false otherwise
-     */
-    public abstract Boolean getIsEmptyImpl();
-
-    /**
-     * true if this case does not contain instructions (i.e., it is directly above another case), false otherwise
-     */
-    public final Object getIsEmpty() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isEmpty", Optional.empty());
-        	}
-        	Boolean result = this.getIsEmptyImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isEmpty", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isEmpty", e);
-        }
-    }
-
-    /**
-     * the case statement that comes after this case, or undefined if there are no more case statements
-     */
-    public abstract ACase getNextCaseImpl();
-
-    /**
-     * the case statement that comes after this case, or undefined if there are no more case statements
-     */
-    public final Object getNextCase() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextCase", Optional.empty());
-        	}
-        	ACase result = this.getNextCaseImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "nextCase", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "nextCase", e);
-        }
-    }
-
-    /**
-     * the first statement that is not a case that will be executed by this case statement
-     */
-    public abstract AStatement getNextInstructionImpl();
-
-    /**
-     * the first statement that is not a case that will be executed by this case statement
-     */
-    public final Object getNextInstruction() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextInstruction", Optional.empty());
-        	}
-        	AStatement result = this.getNextInstructionImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "nextInstruction", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "nextInstruction", e);
-        }
-    }
-
-    /**
-     * Get value on attribute values
-     * @return the attribute's value
-     */
-    public abstract AExpression[] getValuesArrayImpl();
-
-    /**
-     * the values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
-     */
-    public Object getValuesImpl() {
-        AExpression[] aExpressionArrayImpl0 = getValuesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * the values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
-     */
-    public final Object getValues() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "values", Optional.empty());
-        	}
-        	Object result = this.getValuesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "values", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "values", e);
-        }
-    }
-
     /**
      * Get value on attribute isFirst
      * @return the attribute's value
      */
     @Override
     public Boolean getIsFirstImpl() {
-        return this.aSwitchCase.getIsFirstImpl();
+        return this.aStatement.getIsFirstImpl();
     }
 
     /**
@@ -200,7 +39,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Boolean getIsLastImpl() {
-        return this.aSwitchCase.getIsLastImpl();
+        return this.aStatement.getIsLastImpl();
     }
 
     /**
@@ -209,7 +48,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends AExpression> selectExpr() {
-        return this.aSwitchCase.selectExpr();
+        return this.aStatement.selectExpr();
     }
 
     /**
@@ -218,7 +57,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends AExpression> selectChildExpr() {
-        return this.aSwitchCase.selectChildExpr();
+        return this.aStatement.selectChildExpr();
     }
 
     /**
@@ -227,7 +66,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends ACall> selectCall() {
-        return this.aSwitchCase.selectCall();
+        return this.aStatement.selectCall();
     }
 
     /**
@@ -236,7 +75,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends ACall> selectStmtCall() {
-        return this.aSwitchCase.selectStmtCall();
+        return this.aStatement.selectStmtCall();
     }
 
     /**
@@ -245,7 +84,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends AMemberCall> selectMemberCall() {
-        return this.aSwitchCase.selectMemberCall();
+        return this.aStatement.selectMemberCall();
     }
 
     /**
@@ -254,7 +93,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends AMemberAccess> selectMemberAccess() {
-        return this.aSwitchCase.selectMemberAccess();
+        return this.aStatement.selectMemberAccess();
     }
 
     /**
@@ -263,7 +102,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends AArrayAccess> selectArrayAccess() {
-        return this.aSwitchCase.selectArrayAccess();
+        return this.aStatement.selectArrayAccess();
     }
 
     /**
@@ -272,7 +111,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends AVardecl> selectVardecl() {
-        return this.aSwitchCase.selectVardecl();
+        return this.aStatement.selectVardecl();
     }
 
     /**
@@ -281,7 +120,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends AVarref> selectVarref() {
-        return this.aSwitchCase.selectVarref();
+        return this.aStatement.selectVarref();
     }
 
     /**
@@ -290,7 +129,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends AOp> selectOp() {
-        return this.aSwitchCase.selectOp();
+        return this.aStatement.selectOp();
     }
 
     /**
@@ -299,7 +138,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends ABinaryOp> selectBinaryOp() {
-        return this.aSwitchCase.selectBinaryOp();
+        return this.aStatement.selectBinaryOp();
     }
 
     /**
@@ -308,7 +147,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends AUnaryOp> selectUnaryOp() {
-        return this.aSwitchCase.selectUnaryOp();
+        return this.aStatement.selectUnaryOp();
     }
 
     /**
@@ -317,7 +156,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends ANewExpr> selectNewExpr() {
-        return this.aSwitchCase.selectNewExpr();
+        return this.aStatement.selectNewExpr();
     }
 
     /**
@@ -326,7 +165,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends ADeleteExpr> selectDeleteExpr() {
-        return this.aSwitchCase.selectDeleteExpr();
+        return this.aStatement.selectDeleteExpr();
     }
 
     /**
@@ -335,7 +174,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public List<? extends ACilkSpawn> selectCilkSpawn() {
-        return this.aSwitchCase.selectCilkSpawn();
+        return this.aStatement.selectCilkSpawn();
     }
 
     /**
@@ -344,7 +183,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public String getAstImpl() {
-        return this.aSwitchCase.getAstImpl();
+        return this.aStatement.getAstImpl();
     }
 
     /**
@@ -353,7 +192,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint[] getAstChildrenArrayImpl() {
-        return this.aSwitchCase.getAstChildrenArrayImpl();
+        return this.aStatement.getAstChildrenArrayImpl();
     }
 
     /**
@@ -362,7 +201,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public String getAstIdImpl() {
-        return this.aSwitchCase.getAstIdImpl();
+        return this.aStatement.getAstIdImpl();
     }
 
     /**
@@ -371,7 +210,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Boolean astIsInstanceImpl(String className) {
-        return this.aSwitchCase.astIsInstanceImpl(className);
+        return this.aStatement.astIsInstanceImpl(className);
     }
 
     /**
@@ -380,7 +219,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public String getAstNameImpl() {
-        return this.aSwitchCase.getAstNameImpl();
+        return this.aStatement.getAstNameImpl();
     }
 
     /**
@@ -389,7 +228,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Integer getAstNumChildrenImpl() {
-        return this.aSwitchCase.getAstNumChildrenImpl();
+        return this.aStatement.getAstNumChildrenImpl();
     }
 
     /**
@@ -398,7 +237,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Integer getBitWidthImpl() {
-        return this.aSwitchCase.getBitWidthImpl();
+        return this.aStatement.getBitWidthImpl();
     }
 
     /**
@@ -407,7 +246,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public String[] getChainArrayImpl() {
-        return this.aSwitchCase.getChainArrayImpl();
+        return this.aStatement.getChainArrayImpl();
     }
 
     /**
@@ -416,7 +255,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
-        return this.aSwitchCase.getChildrenArrayImpl();
+        return this.aStatement.getChildrenArrayImpl();
     }
 
     /**
@@ -425,7 +264,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public String getCodeImpl() {
-        return this.aSwitchCase.getCodeImpl();
+        return this.aStatement.getCodeImpl();
     }
 
     /**
@@ -434,7 +273,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Integer getColumnImpl() {
-        return this.aSwitchCase.getColumnImpl();
+        return this.aStatement.getColumnImpl();
     }
 
     /**
@@ -443,7 +282,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Boolean containsImpl(AJoinPoint jp) {
-        return this.aSwitchCase.containsImpl(jp);
+        return this.aStatement.containsImpl(jp);
     }
 
     /**
@@ -452,7 +291,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getCurrentRegionImpl() {
-        return this.aSwitchCase.getCurrentRegionImpl();
+        return this.aStatement.getCurrentRegionImpl();
     }
 
     /**
@@ -461,7 +300,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Object getDataImpl() {
-        return this.aSwitchCase.getDataImpl();
+        return this.aStatement.getDataImpl();
     }
 
     /**
@@ -470,7 +309,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Integer getDepthImpl() {
-        return this.aSwitchCase.getDepthImpl();
+        return this.aStatement.getDepthImpl();
     }
 
     /**
@@ -479,7 +318,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint[] getDescendantsArrayImpl() {
-        return this.aSwitchCase.getDescendantsArrayImpl();
+        return this.aStatement.getDescendantsArrayImpl();
     }
 
     /**
@@ -488,7 +327,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Integer getEndColumnImpl() {
-        return this.aSwitchCase.getEndColumnImpl();
+        return this.aStatement.getEndColumnImpl();
     }
 
     /**
@@ -497,7 +336,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Integer getEndLineImpl() {
-        return this.aSwitchCase.getEndLineImpl();
+        return this.aStatement.getEndLineImpl();
     }
 
     /**
@@ -506,7 +345,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public String getFilenameImpl() {
-        return this.aSwitchCase.getFilenameImpl();
+        return this.aStatement.getFilenameImpl();
     }
 
     /**
@@ -515,7 +354,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public String getFilepathImpl() {
-        return this.aSwitchCase.getFilepathImpl();
+        return this.aStatement.getFilepathImpl();
     }
 
     /**
@@ -524,7 +363,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getFirstChildImpl() {
-        return this.aSwitchCase.getFirstChildImpl();
+        return this.aStatement.getFirstChildImpl();
     }
 
     /**
@@ -533,7 +372,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getAncestorImpl(String type) {
-        return this.aSwitchCase.getAncestorImpl(type);
+        return this.aStatement.getAncestorImpl(type);
     }
 
     /**
@@ -542,7 +381,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getAstAncestorImpl(String type) {
-        return this.aSwitchCase.getAstAncestorImpl(type);
+        return this.aStatement.getAstAncestorImpl(type);
     }
 
     /**
@@ -551,7 +390,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getAstChildImpl(int index) {
-        return this.aSwitchCase.getAstChildImpl(index);
+        return this.aStatement.getAstChildImpl(index);
     }
 
     /**
@@ -560,7 +399,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getChainAncestorImpl(String type) {
-        return this.aSwitchCase.getChainAncestorImpl(type);
+        return this.aStatement.getChainAncestorImpl(type);
     }
 
     /**
@@ -569,7 +408,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getChildImpl(int index) {
-        return this.aSwitchCase.getChildImpl(index);
+        return this.aStatement.getChildImpl(index);
     }
 
     /**
@@ -578,7 +417,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint[] getDescendantsArrayImpl(String type) {
-        return this.aSwitchCase.getDescendantsArrayImpl(type);
+        return this.aStatement.getDescendantsArrayImpl(type);
     }
 
     /**
@@ -587,7 +426,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
-        return this.aSwitchCase.getDescendantsAndSelfArrayImpl(type);
+        return this.aStatement.getDescendantsAndSelfArrayImpl(type);
     }
 
     /**
@@ -596,7 +435,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getFirstJpImpl(String type) {
-        return this.aSwitchCase.getFirstJpImpl(type);
+        return this.aStatement.getFirstJpImpl(type);
     }
 
     /**
@@ -605,7 +444,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public String getJavaFieldTypeImpl(String fieldName) {
-        return this.aSwitchCase.getJavaFieldTypeImpl(fieldName);
+        return this.aStatement.getJavaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -614,7 +453,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Object getKeyTypeImpl(String key) {
-        return this.aSwitchCase.getKeyTypeImpl(key);
+        return this.aStatement.getKeyTypeImpl(key);
     }
 
     /**
@@ -623,7 +462,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Object getUserFieldImpl(String fieldName) {
-        return this.aSwitchCase.getUserFieldImpl(fieldName);
+        return this.aStatement.getUserFieldImpl(fieldName);
     }
 
     /**
@@ -632,7 +471,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Object getValueImpl(String key) {
-        return this.aSwitchCase.getValueImpl(key);
+        return this.aStatement.getValueImpl(key);
     }
 
     /**
@@ -641,7 +480,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Boolean getHasChildrenImpl() {
-        return this.aSwitchCase.getHasChildrenImpl();
+        return this.aStatement.getHasChildrenImpl();
     }
 
     /**
@@ -650,7 +489,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aSwitchCase.hasNodeImpl(nodeOrJp);
+        return this.aStatement.hasNodeImpl(nodeOrJp);
     }
 
     /**
@@ -659,7 +498,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Boolean getHasParentImpl() {
-        return this.aSwitchCase.getHasParentImpl();
+        return this.aStatement.getHasParentImpl();
     }
 
     /**
@@ -668,7 +507,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Boolean getHasTypeImpl() {
-        return this.aSwitchCase.getHasTypeImpl();
+        return this.aStatement.getHasTypeImpl();
     }
 
     /**
@@ -677,7 +516,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AComment[] getInlineCommentsArrayImpl() {
-        return this.aSwitchCase.getInlineCommentsArrayImpl();
+        return this.aStatement.getInlineCommentsArrayImpl();
     }
 
     /**
@@ -686,7 +525,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Boolean getIsCilkImpl() {
-        return this.aSwitchCase.getIsCilkImpl();
+        return this.aStatement.getIsCilkImpl();
     }
 
     /**
@@ -695,7 +534,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Boolean getIsInSystemHeaderImpl() {
-        return this.aSwitchCase.getIsInSystemHeaderImpl();
+        return this.aStatement.getIsInSystemHeaderImpl();
     }
 
     /**
@@ -704,7 +543,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Boolean getIsInsideHeaderImpl() {
-        return this.aSwitchCase.getIsInsideHeaderImpl();
+        return this.aStatement.getIsInsideHeaderImpl();
     }
 
     /**
@@ -713,7 +552,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Boolean getIsInsideLoopHeaderImpl() {
-        return this.aSwitchCase.getIsInsideLoopHeaderImpl();
+        return this.aStatement.getIsInsideLoopHeaderImpl();
     }
 
     /**
@@ -722,7 +561,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Boolean getIsMacroImpl() {
-        return this.aSwitchCase.getIsMacroImpl();
+        return this.aStatement.getIsMacroImpl();
     }
 
     /**
@@ -731,7 +570,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public String[] getJavaFieldsArrayImpl() {
-        return this.aSwitchCase.getJavaFieldsArrayImpl();
+        return this.aStatement.getJavaFieldsArrayImpl();
     }
 
     /**
@@ -740,7 +579,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public String getJpIdImpl() {
-        return this.aSwitchCase.getJpIdImpl();
+        return this.aStatement.getJpIdImpl();
     }
 
     /**
@@ -749,7 +588,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public String[] getKeysArrayImpl() {
-        return this.aSwitchCase.getKeysArrayImpl();
+        return this.aStatement.getKeysArrayImpl();
     }
 
     /**
@@ -758,7 +597,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getLastChildImpl() {
-        return this.aSwitchCase.getLastChildImpl();
+        return this.aStatement.getLastChildImpl();
     }
 
     /**
@@ -767,7 +606,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getLeftJpImpl() {
-        return this.aSwitchCase.getLeftJpImpl();
+        return this.aStatement.getLeftJpImpl();
     }
 
     /**
@@ -776,7 +615,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Integer getLineImpl() {
-        return this.aSwitchCase.getLineImpl();
+        return this.aStatement.getLineImpl();
     }
 
     /**
@@ -785,7 +624,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public String getLocationImpl() {
-        return this.aSwitchCase.getLocationImpl();
+        return this.aStatement.getLocationImpl();
     }
 
     /**
@@ -794,7 +633,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Integer getNumChildrenImpl() {
-        return this.aSwitchCase.getNumChildrenImpl();
+        return this.aStatement.getNumChildrenImpl();
     }
 
     /**
@@ -803,7 +642,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getOriginNodeImpl() {
-        return this.aSwitchCase.getOriginNodeImpl();
+        return this.aStatement.getOriginNodeImpl();
     }
 
     /**
@@ -812,7 +651,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getParentImpl() {
-        return this.aSwitchCase.getParentImpl();
+        return this.aStatement.getParentImpl();
     }
 
     /**
@@ -821,7 +660,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getParentRegionImpl() {
-        return this.aSwitchCase.getParentRegionImpl();
+        return this.aStatement.getParentRegionImpl();
     }
 
     /**
@@ -830,7 +669,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public APragma[] getPragmasArrayImpl() {
-        return this.aSwitchCase.getPragmasArrayImpl();
+        return this.aStatement.getPragmasArrayImpl();
     }
 
     /**
@@ -839,7 +678,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint getRightJpImpl() {
-        return this.aSwitchCase.getRightJpImpl();
+        return this.aStatement.getRightJpImpl();
     }
 
     /**
@@ -848,7 +687,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AProgram getRootImpl() {
-        return this.aSwitchCase.getRootImpl();
+        return this.aStatement.getRootImpl();
     }
 
     /**
@@ -857,7 +696,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint[] getScopeNodesArrayImpl() {
-        return this.aSwitchCase.getScopeNodesArrayImpl();
+        return this.aStatement.getScopeNodesArrayImpl();
     }
 
     /**
@@ -866,7 +705,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint[] getSiblingsLeftArrayImpl() {
-        return this.aSwitchCase.getSiblingsLeftArrayImpl();
+        return this.aStatement.getSiblingsLeftArrayImpl();
     }
 
     /**
@@ -875,7 +714,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint[] getSiblingsRightArrayImpl() {
-        return this.aSwitchCase.getSiblingsRightArrayImpl();
+        return this.aStatement.getSiblingsRightArrayImpl();
     }
 
     /**
@@ -884,7 +723,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AStatement getStmtImpl() {
-        return this.aSwitchCase.getStmtImpl();
+        return this.aStatement.getStmtImpl();
     }
 
     /**
@@ -893,7 +732,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AType getTypeImpl() {
-        return this.aSwitchCase.getTypeImpl();
+        return this.aStatement.getTypeImpl();
     }
 
     /**
@@ -901,7 +740,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aSwitchCase.copyImpl();
+        return this.aStatement.copyImpl();
     }
 
     /**
@@ -909,7 +748,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public void dataClearImpl() {
-        this.aSwitchCase.dataClearImpl();
+        this.aStatement.dataClearImpl();
     }
 
     /**
@@ -917,7 +756,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aSwitchCase.deepCopyImpl();
+        return this.aStatement.deepCopyImpl();
     }
 
     /**
@@ -925,7 +764,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint detachImpl() {
-        return this.aSwitchCase.detachImpl();
+        return this.aStatement.detachImpl();
     }
 
     /**
@@ -935,7 +774,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aSwitchCase.insertImpl(position, code);
+        return this.aStatement.insertImpl(position, code);
     }
 
     /**
@@ -945,7 +784,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aSwitchCase.insertImpl(position, code);
+        return this.aStatement.insertImpl(position, code);
     }
 
     /**
@@ -954,7 +793,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aSwitchCase.insertAfterImpl(node);
+        return this.aStatement.insertAfterImpl(node);
     }
 
     /**
@@ -963,7 +802,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aSwitchCase.insertAfterImpl(code);
+        return this.aStatement.insertAfterImpl(code);
     }
 
     /**
@@ -972,7 +811,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aSwitchCase.insertBeforeImpl(node);
+        return this.aStatement.insertBeforeImpl(node);
     }
 
     /**
@@ -981,7 +820,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aSwitchCase.insertBeforeImpl(node);
+        return this.aStatement.insertBeforeImpl(node);
     }
 
     /**
@@ -990,7 +829,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aSwitchCase.messageToUserImpl(message);
+        this.aStatement.messageToUserImpl(message);
     }
 
     /**
@@ -998,7 +837,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public void removeChildrenImpl() {
-        this.aSwitchCase.removeChildrenImpl();
+        this.aStatement.removeChildrenImpl();
     }
 
     /**
@@ -1007,7 +846,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aSwitchCase.replaceWithImpl(node);
+        return this.aStatement.replaceWithImpl(node);
     }
 
     /**
@@ -1016,7 +855,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aSwitchCase.replaceWithImpl(node);
+        return this.aStatement.replaceWithImpl(node);
     }
 
     /**
@@ -1025,7 +864,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint[] node) {
-        return this.aSwitchCase.replaceWithImpl(node);
+        return this.aStatement.replaceWithImpl(node);
     }
 
     /**
@@ -1034,7 +873,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint replaceWithStringsImpl(String[] node) {
-        return this.aSwitchCase.replaceWithStringsImpl(node);
+        return this.aStatement.replaceWithStringsImpl(node);
     }
 
     /**
@@ -1043,7 +882,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public void setDataImpl(Object source) {
-        this.aSwitchCase.setDataImpl(source);
+        this.aStatement.setDataImpl(source);
     }
 
     /**
@@ -1052,7 +891,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint setFirstChildImpl(AJoinPoint node) {
-        return this.aSwitchCase.setFirstChildImpl(node);
+        return this.aStatement.setFirstChildImpl(node);
     }
 
     /**
@@ -1061,7 +900,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public void setInlineCommentsImpl(String[] comments) {
-        this.aSwitchCase.setInlineCommentsImpl(comments);
+        this.aStatement.setInlineCommentsImpl(comments);
     }
 
     /**
@@ -1070,7 +909,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public void setInlineCommentsImpl(String comments) {
-        this.aSwitchCase.setInlineCommentsImpl(comments);
+        this.aStatement.setInlineCommentsImpl(comments);
     }
 
     /**
@@ -1079,7 +918,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint setLastChildImpl(AJoinPoint node) {
-        return this.aSwitchCase.setLastChildImpl(node);
+        return this.aStatement.setLastChildImpl(node);
     }
 
     /**
@@ -1088,7 +927,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public void setTypeImpl(AType type) {
-        this.aSwitchCase.setTypeImpl(type);
+        this.aStatement.setTypeImpl(type);
     }
 
     /**
@@ -1098,7 +937,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aSwitchCase.setUserFieldImpl(fieldName, value);
+        return this.aStatement.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -1107,7 +946,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aSwitchCase.setUserFieldImpl(fieldNameAndValue);
+        return this.aStatement.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -1117,7 +956,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aSwitchCase.setValueImpl(key, value);
+        return this.aStatement.setValueImpl(key, value);
     }
 
     /**
@@ -1127,22 +966,22 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public AJoinPoint toCommentImpl(String prefix, String suffix) {
-        return this.aSwitchCase.toCommentImpl(prefix, suffix);
+        return this.aStatement.toCommentImpl(prefix, suffix);
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends ASwitchCase> getSuper() {
-        return Optional.of(this.aSwitchCase);
+    public Optional<? extends AStatement> getSuper() {
+        return Optional.of(this.aStatement);
     }
 
     /**
      * 
      */
     @Override
-    public final List<? extends JoinPoint> select(String selectName) {
+    public List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	case "expr": 
@@ -1191,7 +1030,7 @@ public abstract class ACase extends ASwitchCase {
         		joinPointList = selectCilkSpawn();
         		break;
         	default:
-        		joinPointList = this.aSwitchCase.select(selectName);
+        		joinPointList = this.aStatement.select(selectName);
         		break;
         }
         return joinPointList;
@@ -1201,7 +1040,7 @@ public abstract class ACase extends ASwitchCase {
      * 
      */
     @Override
-    public final void defImpl(String attribute, Object value) {
+    public void defImpl(String attribute, Object value) {
         switch(attribute){
         case "data": {
         	if(value instanceof Object){
@@ -1250,30 +1089,24 @@ public abstract class ACase extends ASwitchCase {
      * 
      */
     @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aSwitchCase.fillWithAttributes(attributes);
-        attributes.add("instructions");
-        attributes.add("isDefault");
-        attributes.add("isEmpty");
-        attributes.add("nextCase");
-        attributes.add("nextInstruction");
-        attributes.add("values");
+    protected void fillWithAttributes(List<String> attributes) {
+        this.aStatement.fillWithAttributes(attributes);
     }
 
     /**
      * 
      */
     @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aSwitchCase.fillWithSelects(selects);
+    protected void fillWithSelects(List<String> selects) {
+        this.aStatement.fillWithSelects(selects);
     }
 
     /**
      * 
      */
     @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aSwitchCase.fillWithActions(actions);
+    protected void fillWithActions(List<String> actions) {
+        this.aStatement.fillWithActions(actions);
     }
 
     /**
@@ -1281,8 +1114,8 @@ public abstract class ACase extends ASwitchCase {
      * @return The join point type
      */
     @Override
-    public final String get_class() {
-        return "case";
+    public String get_class() {
+        return "switchCase";
     }
 
     /**
@@ -1290,23 +1123,17 @@ public abstract class ACase extends ASwitchCase {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public final boolean instanceOf(String joinpointClass) {
+    public boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;
         }
-        return this.aSwitchCase.instanceOf(joinpointClass);
+        return this.aStatement.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum CaseAttributes {
-        INSTRUCTIONS("instructions"),
-        ISDEFAULT("isDefault"),
-        ISEMPTY("isEmpty"),
-        NEXTCASE("nextCase"),
-        NEXTINSTRUCTION("nextInstruction"),
-        VALUES("values"),
+    protected enum SwitchCaseAttributes {
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         AST("ast"),
@@ -1376,13 +1203,13 @@ public abstract class ACase extends ASwitchCase {
         /**
          * 
          */
-        private CaseAttributes(String name){
+        private SwitchCaseAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<CaseAttributes> fromString(String name) {
+        public static Optional<SwitchCaseAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -1390,7 +1217,7 @@ public abstract class ACase extends ASwitchCase {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(CaseAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(SwitchCaseAttributes::name).collect(Collectors.toList());
         }
 
         /**
