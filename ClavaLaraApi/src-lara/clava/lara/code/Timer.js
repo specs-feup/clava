@@ -175,7 +175,7 @@ export default class Timer extends TimerBase {
 QueryPerformanceFrequency(&${timeFrequencyVar});`;
     }
     _timer_c_windows_get_time(timeVar) {
-        return `QueryPerformanceCounter(&${timeVar})`;
+        return `QueryPerformanceCounter(&${timeVar});`;
     }
     _timer_c_windows_calc_interval(timeStartVar, timeEndVar, timeDiffenceVar, timeFrequencyVar, factorConversion) {
         return `${timeDiffenceVar} = ((${timeEndVar}.QuadPart - ${timeStartVar}.QuadPart) / (double)${timeFrequencyVar}.QuadPart) * (${factorConversion})`;
