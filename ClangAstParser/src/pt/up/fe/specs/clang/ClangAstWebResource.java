@@ -25,7 +25,7 @@ public interface ClangAstWebResource {
         return WebResourceProvider.newInstance("https://specs.fe.up.pt/resources/clangast/", resourceUrl);
     }
 
-    WebResourceProvider BUILTIN_INCLUDES = create("clang_builtin_includes_v14.0.6.zip_", "v14.0.6_3");
+    WebResourceProvider BUILTIN_INCLUDES = create("clang_builtin_includes_v16.0.5.zip", "v16.0.5_0");
     // WebResourceProvider LIBC_CXX = create("libcxx_7.0.1.zip", "v1.0");
     WebResourceProvider LIBC_CXX = create("libc_cxx.zip", "v14.0.6");
 
@@ -35,9 +35,10 @@ public interface ClangAstWebResource {
     // For some reason, on Linux, this file no longer downloads
     WebResourceProvider CUDA_LIB = create("cudalib.zip_", "v11.3.0");
 
-    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v14.0.6_0");
+    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v16.0.5_0");
     WebResourceProvider WIN_DLL1 = create("windows/libwinpthread-1.dll");
     WebResourceProvider WIN_DLL2 = create("windows/zlib1.dll");
+    WebResourceProvider WIN_LLVM_DLL = create("windows/libLLVM-16.dll");
 
     WebResourceProvider LINUX_EXE = create("linux_ubuntu_18/clang-plugin.so", "16");
 
