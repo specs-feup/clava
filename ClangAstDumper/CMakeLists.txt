@@ -15,6 +15,13 @@ set(CLANG_VERSION 16)
 # mingw-w64-x86_64-clang-<version>
 # mingw-w64-x86_64-clang-tools-extra-<version>
 #
+# The executable will still need the dynamic LLVM library to run
+# It can be found in c:/mingw64-clang-${CLANG_VERSION}/bin/libLLVM-${CLANG_VERSION}.dll
+#
+# We also need the includes for the stdlib when running the tool, you can find it in:
+# ${MINGW_BASEDIR}/lib/clang/${CLANG_VERSION}/include // libc
+# mingw-w64-x86_64-openmp-<version> // OpenMP
+# https://repo.msys2.org/msys/x86_64/msys2-w32api-headers-<version> // Windows headers, use one with the date close to the clang version
 #
 if(WIN32)
 	SET(MINGW_BASEDIR "c:/mingw64-clang-${CLANG_VERSION}")
