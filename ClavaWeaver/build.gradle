@@ -22,7 +22,7 @@ application {
 // Repositories providers
 repositories {
     // Gearman
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url="https://oss.sonatype.org/content/repositories/snapshots" }
 
     mavenCentral()
 }
