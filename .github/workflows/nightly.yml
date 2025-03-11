@@ -7,7 +7,6 @@ name: nightly
 
 on:
   push:
-  pull_request:
 
   # Daily at midnight
   schedule:
