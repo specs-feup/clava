@@ -1,14 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AVariableArrayType
@@ -40,24 +39,10 @@ public abstract class AVariableArrayType extends AArrayType {
      */
     public final Object getSizeExpr() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "sizeExpr", Optional.empty());
-        	}
-        	AExpression result = this.getSizeExprImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "sizeExpr", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getSizeExprImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "sizeExpr", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defSizeExprImpl(AExpression value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def sizeExpr with type AExpression not implemented ");
     }
 
     /**
@@ -74,13 +59,7 @@ public abstract class AVariableArrayType extends AArrayType {
      */
     public final void setSizeExpr(AExpression sizeExpr) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setSizeExpr", this, Optional.empty(), sizeExpr);
-        	}
         	this.setSizeExprImpl(sizeExpr);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setSizeExpr", this, Optional.empty(), sizeExpr);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setSizeExpr", e);
         }
@@ -264,27 +243,6 @@ public abstract class AVariableArrayType extends AArrayType {
     @Override
     public AType getUnwrapImpl() {
         return this.aArrayType.getUnwrapImpl();
-    }
-
-    /**
-     * 
-     */
-    public void defDesugarImpl(AType value) {
-        this.aArrayType.defDesugarImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aArrayType.defTemplateArgsTypesImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defElementTypeImpl(AType value) {
-        this.aArrayType.defElementTypeImpl(value);
     }
 
     /**
@@ -1150,123 +1108,6 @@ public abstract class AVariableArrayType extends AArrayType {
     @Override
     public Optional<? extends AArrayType> getSuper() {
         return Optional.of(this.aArrayType);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	default:
-        		joinPointList = this.aArrayType.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "sizeExpr": {
-        	if(value instanceof AExpression){
-        		this.defSizeExprImpl((AExpression)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "elementType": {
-        	if(value instanceof AType){
-        		this.defElementTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "desugar": {
-        	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aArrayType.fillWithAttributes(attributes);
-        attributes.add("sizeExpr");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aArrayType.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aArrayType.fillWithActions(actions);
-        actions.add("void setSizeExpr(expression)");
     }
 
     /**

@@ -1,14 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
-import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point ANamedDecl
@@ -39,14 +38,7 @@ public abstract class ANamedDecl extends ADecl {
      */
     public final Object getIsPublic() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPublic", Optional.empty());
-        	}
-        	Boolean result = this.getIsPublicImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isPublic", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsPublicImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPublic", e);
         }
@@ -64,24 +56,10 @@ public abstract class ANamedDecl extends ADecl {
      */
     public final Object getName() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
-        	}
-        	String result = this.getNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getNameImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defNameImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def name with type String not implemented ");
     }
 
     /**
@@ -96,24 +74,10 @@ public abstract class ANamedDecl extends ADecl {
      */
     public final Object getQualifiedName() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "qualifiedName", Optional.empty());
-        	}
-        	String result = this.getQualifiedNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "qualifiedName", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getQualifiedNameImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "qualifiedName", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedNameImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def qualifiedName with type String not implemented ");
     }
 
     /**
@@ -128,24 +92,10 @@ public abstract class ANamedDecl extends ADecl {
      */
     public final Object getQualifiedPrefix() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "qualifiedPrefix", Optional.empty());
-        	}
-        	String result = this.getQualifiedPrefixImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "qualifiedPrefix", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getQualifiedPrefixImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "qualifiedPrefix", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedPrefixImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def qualifiedPrefix with type String not implemented ");
     }
 
     /**
@@ -162,13 +112,7 @@ public abstract class ANamedDecl extends ADecl {
      */
     public final void setName(String name) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
-        	}
         	this.setNameImpl(name);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setName", e);
         }
@@ -188,13 +132,7 @@ public abstract class ANamedDecl extends ADecl {
      */
     public final void setQualifiedName(String name) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setQualifiedName", this, Optional.empty(), name);
-        	}
         	this.setQualifiedNameImpl(name);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setQualifiedName", this, Optional.empty(), name);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setQualifiedName", e);
         }
@@ -214,13 +152,7 @@ public abstract class ANamedDecl extends ADecl {
      */
     public final void setQualifiedPrefix(String qualifiedPrefix) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setQualifiedPrefix", this, Optional.empty(), qualifiedPrefix);
-        	}
         	this.setQualifiedPrefixImpl(qualifiedPrefix);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setQualifiedPrefix", this, Optional.empty(), qualifiedPrefix);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setQualifiedPrefix", e);
         }
@@ -1033,121 +965,6 @@ public abstract class ANamedDecl extends ADecl {
     @Override
     public Optional<? extends ADecl> getSuper() {
         return Optional.of(this.aDecl);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	default:
-        		joinPointList = this.aDecl.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedName": {
-        	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedPrefix": {
-        	if(value instanceof String){
-        		this.defQualifiedPrefixImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithAttributes(List<String> attributes) {
-        this.aDecl.fillWithAttributes(attributes);
-        attributes.add("isPublic");
-        attributes.add("name");
-        attributes.add("qualifiedName");
-        attributes.add("qualifiedPrefix");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithSelects(List<String> selects) {
-        this.aDecl.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithActions(List<String> actions) {
-        this.aDecl.fillWithActions(actions);
-        actions.add("void setName(String)");
-        actions.add("void setQualifiedName(String)");
-        actions.add("void setQualifiedPrefix(String)");
     }
 
     /**

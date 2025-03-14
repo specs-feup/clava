@@ -40,15 +40,10 @@ public class CxxRecord extends ARecord {
     }
 
     @Override
-    public List<? extends AField> selectField() {
+    public AField[] getFieldsArrayImpl() {
         return recordDecl.getFields().stream()
                 .map(field -> CxxJoinpoints.create(field, AField.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public AField[] getFieldsArrayImpl() {
-        return selectField().toArray(new AField[0]);
+                .collect(Collectors.toList()).toArray(new AField[0]);
     }
 
     @Override

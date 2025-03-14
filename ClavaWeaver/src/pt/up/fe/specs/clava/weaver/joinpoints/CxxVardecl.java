@@ -13,8 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.List;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -24,7 +22,6 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
-import pt.up.fe.specs.util.SpecsCollections;
 
 public class CxxVardecl extends AVardecl {
 
@@ -39,14 +36,6 @@ public class CxxVardecl extends AVardecl {
     @Override
     public ClavaNode getNode() {
         return varDecl;
-    }
-
-    @Override
-    public List<? extends AExpression> selectInit() {
-        return SpecsCollections.toList(
-                varDecl.getInit()
-                        .map(init -> (AExpression) CxxJoinpoints.create(init)));
-
     }
 
     @Override
@@ -98,13 +87,8 @@ public class CxxVardecl extends AVardecl {
     }
 
     @Override
-    public void defStorageClassImpl(String value) {
-        varDecl.setStorageClass(value);
-    }
-
-    @Override
     public void setStorageClassImpl(String storageClass) {
-        defStorageClassImpl(storageClass);
+        varDecl.setStorageClass(storageClass);
     }
 
     @Override

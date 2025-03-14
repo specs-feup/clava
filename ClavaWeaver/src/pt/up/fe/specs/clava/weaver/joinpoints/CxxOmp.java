@@ -309,14 +309,4 @@ public class CxxOmp extends AOmp {
         // Update parent join point
         this.aPragma = new CxxPragma(ompPragma);
     }
-
-    @Override
-    public void defNumThreadsImpl(String value) {
-        setNumThreads(value);
-    }
-
-    @Override
-    public void defProcBindImpl(String value) {
-        setProcBind(value);
-    }
 }

@@ -1,9 +1,7 @@
 package pt.up.fe.specs.clava.weaver.abstracts;
 
 import com.google.common.base.Preconditions;
-import org.lara.interpreter.utils.DefMap;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import pt.up.fe.specs.clava.ClavaLog;
@@ -301,8 +299,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public void defTypeImpl(AType type) {
-
+    public void setTypeImpl(AType type) {
         // Check if node has a type
         ClavaNode node = getNode();
 
@@ -313,12 +310,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         }
 
         ((Typable) node).setType((Type) type.getNode());
-
-    }
-
-    @Override
-    public void setTypeImpl(AType type) {
-        defTypeImpl(type);
     }
 
     @Override
@@ -569,35 +560,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         return getNode().getDescendantsStream()
                 .filter(child -> child == clavaNode)
                 .findFirst().isPresent();
-    }
-
-    /*
-    @Override
-    public void defImpl(String attribute, Object value) {
-        // Get def map
-        DefMap<?> defMap = getDefMap();
-    
-        if (defMap == null) {
-            SpecsLogs
-                    .msgInfo("Joinpoint '" + getJoinpointType() + "' does not have 'def' defined for any attribute");
-            return;
-        }
-    
-        if (!defMap.hasAttribute(attribute)) {
-            List<String> keys = new ArrayList<>(defMap.keys());
-            Collections.sort(keys);
-            SpecsLogs
-                    .msgInfo("'def' of attribute '" + attribute + "' not defined for joinpoint " + getJoinpointType());
-            SpecsLogs.msgInfo("Available attributes: " + keys);
-            return;
-        }
-    
-        defMap.apply(attribute, this, value);
-    }
-    */
-
-    protected DefMap<?> getDefMap() {
-        return null;
     }
 
     /**
@@ -1078,11 +1040,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public void defDataImpl(Object source) {
-        setDataImpl(source);
-    }
-
-    @Override
     public void setDataImpl(Object source) {
         var dataPragma = ClavaData.getClavaData(getNode());
 
@@ -1201,15 +1158,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     /**
      * Generic select function, used by the default select implementations.
-     */
-    @Override
-    public <T extends AJoinPoint> List<? extends T> select(Class<T> joinPointClass, SelectOp op) {
-        throw new RuntimeException(
-                "Generic select function not implemented yet. Implement it in order to use the default implementations of select");
-    }
-
-    /**
-     * Generic select function, used by the default select implementations.
      *
      * @param joinPointClass
      * @param op
@@ -1247,11 +1195,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public void defFirstChildImpl(AJoinPoint value) {
-        setFirstChildImpl(value);
-    }
-
-    @Override
     public AJoinPoint setFirstChildImpl(AJoinPoint value) {
         // If no children, just insert the node
         if (!getHasChildrenImpl()) {
@@ -1276,11 +1219,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         }
 
         return children[children.length - 1];
-    }
-
-    @Override
-    public void defLastChildImpl(AJoinPoint value) {
-        setLastChildImpl(value);
     }
 
     @Override
@@ -1373,41 +1311,27 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     // }
 
     @Override
-    public void defInlineCommentsImpl(String[] value) {
-
-        if (value == null || value.length == 0) {
+    public void setInlineCommentsImpl(String[] comments) {
+        if (comments == null || comments.length == 0) {
             getNode().removeInlineComments();
             return;
         }
 
-        // sArrays.stream(value).map(comment -> (Com))
-
-        var comments = Arrays.stream(value)
+        var newComments = Arrays.stream(
+                comments)
                 .map(comment -> getFactory().inlineComment(comment, false))
                 .collect(Collectors.toList());
 
-        getNode().set(ClavaNode.INLINE_COMMENTS, comments);
+        getNode().set(ClavaNode.INLINE_COMMENTS, newComments);
     }
-
     @Override
-    public void setInlineCommentsImpl(String[] comments) {
-        defInlineCommentsImpl(comments);
-    }
-
-    @Override
-    public void defInlineCommentsImpl(String value) {
-
-        if (value == null || value.isBlank()) {
-            defInlineCommentsImpl(new String[0]);
+    public void setInlineCommentsImpl(String comment) {
+        if (comment == null || comment.isBlank()) {
+            setInlineCommentsImpl(new String[0]);
             return;
         }
 
-        defInlineCommentsImpl(new String[]{value});
-    }
-
-    @Override
-    public void setInlineCommentsImpl(String comment) {
-        defInlineCommentsImpl(comment);
+        setInlineCommentsImpl(new String[] { comment });
     }
 
     @Override

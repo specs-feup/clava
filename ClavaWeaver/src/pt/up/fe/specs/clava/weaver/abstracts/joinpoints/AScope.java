@@ -1,15 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AScope
@@ -48,14 +46,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object getAllStmts() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "allStmts", Optional.empty());
-        	}
-        	Object result = this.getAllStmtsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "allStmts", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getAllStmtsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "allStmts", e);
         }
@@ -73,14 +64,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object getFirstStmt() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "firstStmt", Optional.empty());
-        	}
-        	AStatement result = this.getFirstStmtImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "firstStmt", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getFirstStmtImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "firstStmt", e);
         }
@@ -100,14 +84,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object getNumStatements(Boolean flat) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getNumStatements", Optional.empty(), flat);
-        	}
-        	Long result = this.getNumStatementsImpl(flat);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getNumStatements", Optional.ofNullable(result), flat);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getNumStatementsImpl(flat);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getNumStatements", e);
         }
@@ -125,14 +102,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object getLastStmt() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "lastStmt", Optional.empty());
-        	}
-        	AStatement result = this.getLastStmtImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "lastStmt", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getLastStmtImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "lastStmt", e);
         }
@@ -148,24 +118,10 @@ public abstract class AScope extends AStatement {
      */
     public final Object getNaked() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "naked", Optional.empty());
-        	}
-        	Boolean result = this.getNakedImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "naked", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getNakedImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "naked", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defNakedImpl(Boolean value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def naked with type Boolean not implemented ");
     }
 
     /**
@@ -178,14 +134,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object getOwner() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "owner", Optional.empty());
-        	}
-        	AJoinPoint result = this.getOwnerImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "owner", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getOwnerImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "owner", e);
         }
@@ -211,121 +160,10 @@ public abstract class AScope extends AStatement {
      */
     public final Object getStmts() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "stmts", Optional.empty());
-        	}
-        	Object result = this.getStmtsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "stmts", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getStmtsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "stmts", e);
         }
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select stmts
-     * @return 
-     */
-    public List<? extends AStatement> selectStmt() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select childStmts
-     * @return 
-     */
-    public List<? extends AStatement> selectChildStmt() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select scopes
-     * @return 
-     */
-    public List<? extends AScope> selectScope() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select ifs
-     * @return 
-     */
-    public List<? extends AIf> selectIf() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select loops
-     * @return 
-     */
-    public List<? extends ALoop> selectLoop() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select pragmas
-     * @return 
-     */
-    public List<? extends APragma> selectPragma() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select markers
-     * @return 
-     */
-    public List<? extends AMarker> selectMarker() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMarker.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select tags
-     * @return 
-     */
-    public List<? extends ATag> selectTag() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select omps
-     * @return 
-     */
-    public List<? extends AOmp> selectOmp() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOmp.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select comments
-     * @return 
-     */
-    public List<? extends AComment> selectComment() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select returnStmts
-     * @return 
-     */
-    public List<? extends AReturnStmt> selectReturnStmt() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AReturnStmt.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select cilkFors
-     * @return 
-     */
-    public List<? extends ACilkFor> selectCilkFor() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkFor.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select cilkSyncs
-     * @return 
-     */
-    public List<? extends ACilkSync> selectCilkSync() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkSync.class, SelectOp.DESCENDANTS);
     }
 
     /**
@@ -346,14 +184,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object addLocal(String name, AJoinPoint type, String initValue) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addLocal", this, Optional.empty(), name, type, initValue);
-        	}
-        	AJoinPoint result = this.addLocalImpl(name, type, initValue);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addLocal", this, Optional.ofNullable(result), name, type, initValue);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.addLocalImpl(name, type, initValue);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addLocal", e);
         }
@@ -371,14 +202,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object cfg() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "cfg", this, Optional.empty());
-        	}
-        	String result = this.cfgImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "cfg", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.cfgImpl();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cfg", e);
         }
@@ -396,13 +220,7 @@ public abstract class AScope extends AStatement {
      */
     public final void clear() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "clear", this, Optional.empty());
-        	}
         	this.clearImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "clear", this, Optional.empty());
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "clear", e);
         }
@@ -420,14 +238,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object dfg() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "dfg", this, Optional.empty());
-        	}
-        	String result = this.dfgImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "dfg", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.dfgImpl();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "dfg", e);
         }
@@ -447,14 +258,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object insertBegin(AJoinPoint node) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "insertBegin", this, Optional.empty(), node);
-        	}
-        	AJoinPoint result = this.insertBeginImpl(node);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertBegin", this, Optional.ofNullable(result), node);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.insertBeginImpl(node);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertBegin", e);
         }
@@ -474,14 +278,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object insertBegin(String code) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "insertBegin", this, Optional.empty(), code);
-        	}
-        	AJoinPoint result = this.insertBeginImpl(code);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertBegin", this, Optional.ofNullable(result), code);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.insertBeginImpl(code);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertBegin", e);
         }
@@ -501,14 +298,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object insertEnd(AJoinPoint node) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "insertEnd", this, Optional.empty(), node);
-        	}
-        	AJoinPoint result = this.insertEndImpl(node);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertEnd", this, Optional.ofNullable(result), node);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.insertEndImpl(node);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertEnd", e);
         }
@@ -528,14 +318,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object insertEnd(String code) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "insertEnd", this, Optional.empty(), code);
-        	}
-        	AJoinPoint result = this.insertEndImpl(code);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertEnd", this, Optional.ofNullable(result), code);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.insertEndImpl(code);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertEnd", e);
         }
@@ -555,14 +338,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object insertReturn(AJoinPoint code) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
-        	}
-        	AJoinPoint result = this.insertReturnImpl(code);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.insertReturnImpl(code);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -582,14 +358,7 @@ public abstract class AScope extends AStatement {
      */
     public final Object insertReturn(String code) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
-        	}
-        	AJoinPoint result = this.insertReturnImpl(code);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.insertReturnImpl(code);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -609,13 +378,7 @@ public abstract class AScope extends AStatement {
      */
     public final void setNaked(Boolean isNaked) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setNaked", this, Optional.empty(), isNaked);
-        	}
         	this.setNakedImpl(isNaked);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setNaked", this, Optional.empty(), isNaked);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setNaked", e);
         }
@@ -637,141 +400,6 @@ public abstract class AScope extends AStatement {
     @Override
     public Boolean getIsLastImpl() {
         return this.aStatement.getIsLastImpl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select exprs
-     * @return 
-     */
-    @Override
-    public List<? extends AExpression> selectExpr() {
-        return this.aStatement.selectExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select childExprs
-     * @return 
-     */
-    @Override
-    public List<? extends AExpression> selectChildExpr() {
-        return this.aStatement.selectChildExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select calls
-     * @return 
-     */
-    @Override
-    public List<? extends ACall> selectCall() {
-        return this.aStatement.selectCall();
-    }
-
-    /**
-     * Method used by the lara interpreter to select stmtCalls
-     * @return 
-     */
-    @Override
-    public List<? extends ACall> selectStmtCall() {
-        return this.aStatement.selectStmtCall();
-    }
-
-    /**
-     * Method used by the lara interpreter to select memberCalls
-     * @return 
-     */
-    @Override
-    public List<? extends AMemberCall> selectMemberCall() {
-        return this.aStatement.selectMemberCall();
-    }
-
-    /**
-     * Method used by the lara interpreter to select memberAccesss
-     * @return 
-     */
-    @Override
-    public List<? extends AMemberAccess> selectMemberAccess() {
-        return this.aStatement.selectMemberAccess();
-    }
-
-    /**
-     * Method used by the lara interpreter to select arrayAccesss
-     * @return 
-     */
-    @Override
-    public List<? extends AArrayAccess> selectArrayAccess() {
-        return this.aStatement.selectArrayAccess();
-    }
-
-    /**
-     * Method used by the lara interpreter to select vardecls
-     * @return 
-     */
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return this.aStatement.selectVardecl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select varrefs
-     * @return 
-     */
-    @Override
-    public List<? extends AVarref> selectVarref() {
-        return this.aStatement.selectVarref();
-    }
-
-    /**
-     * Method used by the lara interpreter to select ops
-     * @return 
-     */
-    @Override
-    public List<? extends AOp> selectOp() {
-        return this.aStatement.selectOp();
-    }
-
-    /**
-     * Method used by the lara interpreter to select binaryOps
-     * @return 
-     */
-    @Override
-    public List<? extends ABinaryOp> selectBinaryOp() {
-        return this.aStatement.selectBinaryOp();
-    }
-
-    /**
-     * Method used by the lara interpreter to select unaryOps
-     * @return 
-     */
-    @Override
-    public List<? extends AUnaryOp> selectUnaryOp() {
-        return this.aStatement.selectUnaryOp();
-    }
-
-    /**
-     * Method used by the lara interpreter to select newExprs
-     * @return 
-     */
-    @Override
-    public List<? extends ANewExpr> selectNewExpr() {
-        return this.aStatement.selectNewExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select deleteExprs
-     * @return 
-     */
-    @Override
-    public List<? extends ADeleteExpr> selectDeleteExpr() {
-        return this.aStatement.selectDeleteExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select cilkSpawns
-     * @return 
-     */
-    @Override
-    public List<? extends ACilkSpawn> selectCilkSpawn() {
-        return this.aStatement.selectCilkSpawn();
     }
 
     /**
@@ -1572,215 +1200,6 @@ public abstract class AScope extends AStatement {
     @Override
     public Optional<? extends AStatement> getSuper() {
         return Optional.of(this.aStatement);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "stmt": 
-        		joinPointList = selectStmt();
-        		break;
-        	case "childStmt": 
-        		joinPointList = selectChildStmt();
-        		break;
-        	case "scope": 
-        		joinPointList = selectScope();
-        		break;
-        	case "if": 
-        		joinPointList = selectIf();
-        		break;
-        	case "loop": 
-        		joinPointList = selectLoop();
-        		break;
-        	case "pragma": 
-        		joinPointList = selectPragma();
-        		break;
-        	case "marker": 
-        		joinPointList = selectMarker();
-        		break;
-        	case "tag": 
-        		joinPointList = selectTag();
-        		break;
-        	case "omp": 
-        		joinPointList = selectOmp();
-        		break;
-        	case "comment": 
-        		joinPointList = selectComment();
-        		break;
-        	case "returnStmt": 
-        		joinPointList = selectReturnStmt();
-        		break;
-        	case "cilkFor": 
-        		joinPointList = selectCilkFor();
-        		break;
-        	case "cilkSync": 
-        		joinPointList = selectCilkSync();
-        		break;
-        	case "expr": 
-        		joinPointList = selectExpr();
-        		break;
-        	case "childExpr": 
-        		joinPointList = selectChildExpr();
-        		break;
-        	case "call": 
-        		joinPointList = selectCall();
-        		break;
-        	case "stmtCall": 
-        		joinPointList = selectStmtCall();
-        		break;
-        	case "memberCall": 
-        		joinPointList = selectMemberCall();
-        		break;
-        	case "memberAccess": 
-        		joinPointList = selectMemberAccess();
-        		break;
-        	case "arrayAccess": 
-        		joinPointList = selectArrayAccess();
-        		break;
-        	case "vardecl": 
-        		joinPointList = selectVardecl();
-        		break;
-        	case "varref": 
-        		joinPointList = selectVarref();
-        		break;
-        	case "op": 
-        		joinPointList = selectOp();
-        		break;
-        	case "binaryOp": 
-        		joinPointList = selectBinaryOp();
-        		break;
-        	case "unaryOp": 
-        		joinPointList = selectUnaryOp();
-        		break;
-        	case "newExpr": 
-        		joinPointList = selectNewExpr();
-        		break;
-        	case "deleteExpr": 
-        		joinPointList = selectDeleteExpr();
-        		break;
-        	case "cilkSpawn": 
-        		joinPointList = selectCilkSpawn();
-        		break;
-        	default:
-        		joinPointList = this.aStatement.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "naked": {
-        	if(value instanceof Boolean){
-        		this.defNakedImpl((Boolean)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithAttributes(List<String> attributes) {
-        this.aStatement.fillWithAttributes(attributes);
-        attributes.add("allStmts");
-        attributes.add("firstStmt");
-        attributes.add("getNumStatements");
-        attributes.add("lastStmt");
-        attributes.add("naked");
-        attributes.add("owner");
-        attributes.add("stmts");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithSelects(List<String> selects) {
-        this.aStatement.fillWithSelects(selects);
-        selects.add("stmt");
-        selects.add("childStmt");
-        selects.add("scope");
-        selects.add("if");
-        selects.add("loop");
-        selects.add("pragma");
-        selects.add("marker");
-        selects.add("tag");
-        selects.add("omp");
-        selects.add("comment");
-        selects.add("returnStmt");
-        selects.add("cilkFor");
-        selects.add("cilkSync");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithActions(List<String> actions) {
-        this.aStatement.fillWithActions(actions);
-        actions.add("joinpoint addLocal(String, joinpoint, String)");
-        actions.add("String cfg()");
-        actions.add("void clear()");
-        actions.add("String dfg()");
-        actions.add("joinpoint insertBegin(joinpoint)");
-        actions.add("joinpoint insertBegin(String)");
-        actions.add("joinpoint insertEnd(joinpoint)");
-        actions.add("joinpoint insertEnd(String)");
-        actions.add("joinpoint insertReturn(joinpoint)");
-        actions.add("joinpoint insertReturn(String)");
-        actions.add("void setNaked(Boolean)");
     }
 
     /**

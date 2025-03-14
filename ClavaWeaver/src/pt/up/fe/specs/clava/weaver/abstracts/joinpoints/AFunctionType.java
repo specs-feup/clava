@@ -1,14 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AFunctionType
@@ -49,14 +48,7 @@ public abstract class AFunctionType extends AType {
      */
     public final Object getParamTypes() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "paramTypes", Optional.empty());
-        	}
-        	Object result = this.getParamTypesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "paramTypes", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getParamTypesImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "paramTypes", e);
         }
@@ -74,24 +66,10 @@ public abstract class AFunctionType extends AType {
      */
     public final Object getReturnType() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnType", Optional.empty());
-        	}
-        	AType result = this.getReturnTypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getReturnTypeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "returnType", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defReturnTypeImpl(AType value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def returnType with type AType not implemented ");
     }
 
     /**
@@ -110,13 +88,7 @@ public abstract class AFunctionType extends AType {
      */
     public final void setParamType(int index, AType newType) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParamType", this, Optional.empty(), index, newType);
-        	}
         	this.setParamTypeImpl(index, newType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParamType", this, Optional.empty(), index, newType);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setParamType", e);
         }
@@ -136,13 +108,7 @@ public abstract class AFunctionType extends AType {
      */
     public final void setReturnType(AType newType) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setReturnType", this, Optional.empty(), newType);
-        	}
         	this.setReturnTypeImpl(newType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setReturnType", this, Optional.empty(), newType);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setReturnType", e);
         }
@@ -317,20 +283,6 @@ public abstract class AFunctionType extends AType {
     @Override
     public AType getUnwrapImpl() {
         return this.aType.getUnwrapImpl();
-    }
-
-    /**
-     * 
-     */
-    public void defDesugarImpl(AType value) {
-        this.aType.defDesugarImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aType.defTemplateArgsTypesImpl(value);
     }
 
     /**
@@ -1187,118 +1139,6 @@ public abstract class AFunctionType extends AType {
     @Override
     public Optional<? extends AType> getSuper() {
         return Optional.of(this.aType);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	default:
-        		joinPointList = this.aType.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "returnType": {
-        	if(value instanceof AType){
-        		this.defReturnTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "desugar": {
-        	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aType.fillWithAttributes(attributes);
-        attributes.add("paramTypes");
-        attributes.add("returnType");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aType.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aType.fillWithActions(actions);
-        actions.add("void setParamType(int, type)");
-        actions.add("void setReturnType(type)");
     }
 
     /**

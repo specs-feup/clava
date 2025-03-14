@@ -1,15 +1,12 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point APragma
@@ -30,14 +27,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      */
     public final Object getContent() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "content", Optional.empty());
-        	}
-        	String result = this.getContentImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "content", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getContentImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "content", e);
         }
@@ -68,14 +58,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      */
     public final Object getTargetNodes(String endPragma) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getTargetNodes", Optional.empty(), endPragma);
-        	}
-        	Object result = this.getTargetNodesImpl(endPragma);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getTargetNodes", Optional.ofNullable(result), endPragma);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getTargetNodesImpl(endPragma);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getTargetNodes", e);
         }
@@ -91,14 +74,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      */
     public final Object getName() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
-        	}
-        	String result = this.getNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getNameImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -114,25 +90,10 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      */
     public final Object getTarget() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "target", Optional.empty());
-        	}
-        	AJoinPoint result = this.getTargetImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "target", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getTargetImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "target", e);
         }
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select targets
-     * @return 
-     */
-    public List<? extends AJoinPoint> selectTarget() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint.class, SelectOp.DESCENDANTS);
     }
 
     /**
@@ -149,13 +110,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      */
     public final void setContent(String content) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setContent", this, Optional.empty(), content);
-        	}
         	this.setContentImpl(content);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setContent", this, Optional.empty(), content);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setContent", e);
         }
@@ -175,113 +130,10 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      */
     public final void setName(String name) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
-        	}
         	this.setNameImpl(name);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setName", e);
         }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "target": 
-        		joinPointList = selectTarget();
-        		break;
-        	default:
-        		joinPointList = super.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithAttributes(List<String> attributes) {
-        super.fillWithAttributes(attributes);
-        attributes.add("content");
-        attributes.add("getTargetNodes");
-        attributes.add("name");
-        attributes.add("target");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithSelects(List<String> selects) {
-        super.fillWithSelects(selects);
-        selects.add("target");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithActions(List<String> actions) {
-        super.fillWithActions(actions);
-        actions.add("void setContent(String)");
-        actions.add("void setName(String)");
     }
 
     /**

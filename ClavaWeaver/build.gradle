@@ -85,20 +85,20 @@ task clava(type: JavaExec) {
     args = []
 }
 
-// Clava Doc (old version)
-task clavadoc(type: JavaExec) {
+// Re-run the weaver generator
+task generateWeaver(type: Exec) {
     group = "Execution"
-    description = "Generates Documentation (Legacy)"
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher'
+    description = "Generates the Weaver Abstracts"
+
+    executable "./../../lara-framework/WeaverGenerator/build/install/WeaverGenerator/bin/WeaverGenerator"
+
     args = [
-            '-doc',
-            '--output',
-            '"../docs/api"',
-            '--clean',
-            '--exclude',
-            '_',
-            '--packages',
-            '{\'Clava API\': [\'../ClavaLaraApi/src-lara-clava/clava\'], \'LARA API\': [\'../LaraApi/src-lara-base\',\'../LaraApi}/src-lara\',\'../LARAI/src-lara\',\'../LaraExtraApi/src-lara\',\'../ClavaLaraApi/src-lara/clava\'], \'ANTAREX API\': [\'../AntarexClavaApi/src-lara/clava\']}',
+        "-w", "CxxWeaver",
+        "-x", "./resources/clava/weaverspecs",
+        "-o", "./src",
+        "-p", "pt.up.fe.specs.clava.weaver",
+        "-n", "pt.up.fe.specs.clava.ClavaNode",
+        "-j",
+        "-d",
     ]
 }

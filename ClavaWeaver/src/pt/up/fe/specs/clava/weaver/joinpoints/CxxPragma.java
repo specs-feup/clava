@@ -66,11 +66,6 @@ public class CxxPragma extends APragma {
     }
 
     @Override
-    public List<? extends AJoinPoint> selectTarget() {
-        return Arrays.asList(getTargetImpl());
-    }
-
-    @Override
     public AJoinPoint[] getTargetNodesArrayImpl(String endPragma) {
         var pragmaNodes = pragma.getPragmaNodes(endPragma);
         return CxxSelects.selectedNodesToJps(pragmaNodes.stream(), getWeaverEngine());

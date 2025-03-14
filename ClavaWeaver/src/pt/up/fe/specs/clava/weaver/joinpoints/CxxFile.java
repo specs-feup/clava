@@ -19,42 +19,23 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.comment.Comment;
-import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
-import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
-import pt.up.fe.specs.clava.ast.decl.RecordDecl;
-import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
-import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
-import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AInclude;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMarker;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ARecord;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.util.SpecsIo;
@@ -82,20 +63,6 @@ public class CxxFile extends AFile {
     }
 
     @Override
-    public List<? extends AFunction> selectFunction() {
-        return getFunctions().stream()
-                .map(function -> CxxJoinpoints.create(function, AFunction.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<? extends AMethod> selectMethod() {
-        return getMethods().stream()
-                .map(function -> CxxJoinpoints.create(function, AMethod.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public TranslationUnit getNode() {
         return tunit;
     }
@@ -116,14 +83,6 @@ public class CxxFile extends AFile {
                 // FunctionDecl represents C function, C++ methods, constructors and destructors
                 .filter(node -> node instanceof FunctionDecl)
                 .map(function -> (FunctionDecl) function)
-                .collect(Collectors.toList());
-    }
-
-    private List<CXXMethodDecl> getMethods() {
-        return tunit.getDescendantsStream()
-                // FunctionDecl represents C function, C++ methods, constructors and destructors
-                .filter(node -> node instanceof CXXMethodDecl)
-                .map(function -> (CXXMethodDecl) function)
                 .collect(Collectors.toList());
     }
 
@@ -177,42 +136,6 @@ public class CxxFile extends AFile {
     }
 
     @Override
-    public List<? extends APragma> selectPragma() {
-        return CxxSelects.select(APragma.class, tunit.getChildren(), true, Pragma.class);
-
-    }
-
-    @Override
-    public List<? extends AMarker> selectMarker() {
-        return CxxSelects.select(AMarker.class, tunit.getChildren(), true, LaraMarkerPragma.class);
-    }
-
-    @Override
-    public List<? extends ATag> selectTag() {
-        return CxxSelects.select(ATag.class, tunit.getChildren(), true, LaraTagPragma.class);
-    }
-
-    @Override
-    public List<? extends ARecord> selectRecord() {
-        return CxxSelects.select(ARecord.class, tunit.getChildren(), true, RecordDecl.class);
-    }
-
-    @Override
-    public List<? extends AStruct> selectStruct() {
-        return CxxSelects.select(AStruct.class, tunit.getChildren(), true,
-                // node -> node instanceof RecordDecl && ((RecordDecl) node).getTagKind() == TagKind.STRUCT);
-                // Structs: RecordDecls that are not CXXRecordDecls
-                node -> node instanceof RecordDecl && !(node instanceof CXXRecordDecl));
-    }
-
-    @Override
-    public List<? extends AClass> selectClass() {
-        return CxxSelects.select(AClass.class, tunit.getChildren(), true,
-                // node -> node instanceof CXXRecordDecl && ((CXXRecordDecl) node).getTagKind() == TagKind.CLASS);
-                CXXRecordDecl.class);
-    }
-
-    @Override
     public String getPathImpl() {
         return tunit.getFolderpath().orElse(null);
     }
@@ -259,13 +182,8 @@ public class CxxFile extends AFile {
     }
 
     @Override
-    public void defRelativeFolderpathImpl(String value) {
-        tunit.setRelativePath(value);
-    }
-
-    @Override
     public void setRelativeFolderpathImpl(String path) {
-        defRelativeFolderpathImpl(path);
+        tunit.setRelativePath(path);
     }
 
     @Override
@@ -276,14 +194,6 @@ public class CxxFile extends AFile {
     @Override
     public Boolean getIsCxxImpl() {
         return tunit.isCXXUnit();
-    }
-
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return tunit.getDescendantsStream()
-                .filter(node -> node instanceof VarDecl)
-                .map(varDecl -> CxxJoinpoints.create((VarDecl) varDecl, AVardecl.class))
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -301,19 +211,6 @@ public class CxxFile extends AFile {
         VarDecl global = tunit.getApp().getGlobalManager().addGlobal(tunit, name, typeNode, literalExpr);
 
         return CxxJoinpoints.create(global, AVardecl.class);
-    }
-
-    @Override
-    public List<? extends AStatement> selectStmt() {
-        return CxxSelects.select(AStatement.class, tunit.getChildren(), true, CxxSelects::stmtFilter);
-
-    }
-
-    @Override
-    public List<? extends AStatement> selectChildStmt() {
-        return tunit.getChildren().stream()
-                .map(stmt -> (AStatement) CxxJoinpoints.create(stmt))
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -344,11 +241,6 @@ public class CxxFile extends AFile {
     @Override
     public void insertEndImpl(String code) {
         insertEndImpl(AstFactory.declLiteral(code));
-    }
-
-    @Override
-    public List<? extends AComment> selectComment() {
-        return CxxSelects.select(AComment.class, tunit.getChildren(), true, Comment.class::isInstance);
     }
 
     @Override
@@ -386,13 +278,8 @@ public class CxxFile extends AFile {
     }
 
     @Override
-    public List<? extends AInclude> selectInclude() {
-        return CxxSelects.select(AInclude.class, tunit.getChildren(), false, IncludeDecl.class);
-    }
-
-    @Override
     public AInclude[] getIncludesArrayImpl() {
-        return selectInclude().toArray(size -> new AInclude[size]);
+        return CxxSelects.select(AInclude.class, tunit.getChildren(), false, IncludeDecl.class).toArray(size -> new AInclude[size]);
     }
 
     @Override
@@ -400,19 +287,6 @@ public class CxxFile extends AFile {
         SpecsLogs.warn(
                 "Attribute $file.baseSourcePath is deprecated, please use attribute $file.relativeFolderpath, which returns the same.");
         return tunit.getRelativeFolderpath().orElse(null);
-    }
-
-    @Override
-    public List<? extends ADecl> selectDecl() {
-        return CxxSelects.select(ADecl.class, tunit.getChildren(), true, Decl.class);
-    }
-
-    @Override
-    public List<? extends ATypedefDecl> selectTypedefDecl() {
-        return tunit.getDescendantsStream()
-                .filter(node -> node instanceof TypedefDecl)
-                .map(varDecl -> CxxJoinpoints.create((TypedefDecl) varDecl, ATypedefDecl.class))
-                .collect(Collectors.toList());
     }
 
     @Override

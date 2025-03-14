@@ -1,15 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AVardecl
@@ -39,14 +37,7 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getDefinition() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definition", Optional.empty());
-        	}
-        	AVardecl result = this.getDefinitionImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "definition", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getDefinitionImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "definition", e);
         }
@@ -62,14 +53,7 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getHasInit() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasInit", Optional.empty());
-        	}
-        	Boolean result = this.getHasInitImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasInit", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getHasInitImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasInit", e);
         }
@@ -85,14 +69,7 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getInit() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "init", Optional.empty());
-        	}
-        	AExpression result = this.getInitImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "init", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getInitImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "init", e);
         }
@@ -108,14 +85,7 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getInitStyle() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "initStyle", Optional.empty());
-        	}
-        	String result = this.getInitStyleImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "initStyle", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getInitStyleImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "initStyle", e);
         }
@@ -131,14 +101,7 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getIsGlobal() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isGlobal", Optional.empty());
-        	}
-        	Boolean result = this.getIsGlobalImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isGlobal", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsGlobalImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isGlobal", e);
         }
@@ -154,14 +117,7 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getIsParam() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isParam", Optional.empty());
-        	}
-        	Boolean result = this.getIsParamImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isParam", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsParamImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isParam", e);
         }
@@ -177,32 +133,10 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getStorageClass() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
-        	}
-        	String result = this.getStorageClassImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getStorageClassImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "storageClass", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defStorageClassImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def storageClass with type String not implemented ");
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select inits
-     * @return 
-     */
-    public List<? extends AExpression> selectInit() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
     }
 
     /**
@@ -219,13 +153,7 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final void removeInit(boolean removeConst) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "removeInit", this, Optional.empty(), removeConst);
-        	}
         	this.removeInitImpl(removeConst);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "removeInit", this, Optional.empty(), removeConst);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "removeInit", e);
         }
@@ -245,13 +173,7 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final void setInit(AExpression init) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setInit", this, Optional.empty(), init);
-        	}
         	this.setInitImpl(init);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setInit", this, Optional.empty(), init);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setInit", e);
         }
@@ -271,13 +193,7 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final void setInit(String init) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setInit", this, Optional.empty(), init);
-        	}
         	this.setInitImpl(init);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setInit", this, Optional.empty(), init);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setInit", e);
         }
@@ -297,13 +213,7 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final void setStorageClass(String storageClass) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setStorageClass", this, Optional.empty(), storageClass);
-        	}
         	this.setStorageClassImpl(storageClass);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setStorageClass", this, Optional.empty(), storageClass);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setStorageClass", e);
         }
@@ -321,14 +231,7 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object varref() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "varref", this, Optional.empty());
-        	}
-        	AVarref result = this.varrefImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "varref", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.varrefImpl();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "varref", e);
         }
@@ -377,27 +280,6 @@ public abstract class AVardecl extends ADeclarator {
     @Override
     public AAttribute[] getAttrsArrayImpl() {
         return this.aDeclarator.getAttrsArrayImpl();
-    }
-
-    /**
-     * 
-     */
-    public void defNameImpl(String value) {
-        this.aDeclarator.defNameImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedNameImpl(String value) {
-        this.aDeclarator.defQualifiedNameImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aDeclarator.defQualifiedPrefixImpl(value);
     }
 
     /**
@@ -1225,137 +1107,6 @@ public abstract class AVardecl extends ADeclarator {
     @Override
     public Optional<? extends ADeclarator> getSuper() {
         return Optional.of(this.aDeclarator);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "init": 
-        		joinPointList = selectInit();
-        		break;
-        	default:
-        		joinPointList = this.aDeclarator.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "storageClass": {
-        	if(value instanceof String){
-        		this.defStorageClassImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedName": {
-        	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedPrefix": {
-        	if(value instanceof String){
-        		this.defQualifiedPrefixImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithAttributes(List<String> attributes) {
-        this.aDeclarator.fillWithAttributes(attributes);
-        attributes.add("definition");
-        attributes.add("hasInit");
-        attributes.add("init");
-        attributes.add("initStyle");
-        attributes.add("isGlobal");
-        attributes.add("isParam");
-        attributes.add("storageClass");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithSelects(List<String> selects) {
-        this.aDeclarator.fillWithSelects(selects);
-        selects.add("init");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithActions(List<String> actions) {
-        this.aDeclarator.fillWithActions(actions);
-        actions.add("void removeInit(boolean)");
-        actions.add("void setInit(expression)");
-        actions.add("void setInit(String)");
-        actions.add("void setStorageClass(StorageClass)");
-        actions.add("varref varref()");
     }
 
     /**

@@ -1,14 +1,12 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AArrayAccess
@@ -37,14 +35,7 @@ public abstract class AArrayAccess extends AExpression {
      */
     public final Object getArrayVar() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "arrayVar", Optional.empty());
-        	}
-        	AExpression result = this.getArrayVarImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "arrayVar", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getArrayVarImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "arrayVar", e);
         }
@@ -60,14 +51,7 @@ public abstract class AArrayAccess extends AExpression {
      */
     public final Object getName() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
-        	}
-        	String result = this.getNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getNameImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -83,14 +67,7 @@ public abstract class AArrayAccess extends AExpression {
      */
     public final Object getNumSubscripts() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numSubscripts", Optional.empty());
-        	}
-        	Integer result = this.getNumSubscriptsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "numSubscripts", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getNumSubscriptsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numSubscripts", e);
         }
@@ -106,14 +83,7 @@ public abstract class AArrayAccess extends AExpression {
      */
     public final Object getParentAccess() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "parentAccess", Optional.empty());
-        	}
-        	AArrayAccess result = this.getParentAccessImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "parentAccess", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getParentAccessImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "parentAccess", e);
         }
@@ -139,33 +109,10 @@ public abstract class AArrayAccess extends AExpression {
      */
     public final Object getSubscript() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "subscript", Optional.empty());
-        	}
-        	Object result = this.getSubscriptImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "subscript", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getSubscriptImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "subscript", e);
         }
-    }
-
-    /**
-     * varref to the variable of the array access
-     * @return 
-     */
-    public List<? extends AExpression> selectArrayVar() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * expression of the array access subscript
-     * @return 
-     */
-    public List<? extends AExpression> selectSubscript() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
     }
 
     /**
@@ -211,15 +158,6 @@ public abstract class AArrayAccess extends AExpression {
     @Override
     public AVardecl getVardeclImpl() {
         return this.aExpression.getVardeclImpl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select vardecls
-     * @return 
-     */
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return this.aExpression.selectVardecl();
     }
 
     /**
@@ -1020,109 +958,6 @@ public abstract class AArrayAccess extends AExpression {
     @Override
     public Optional<? extends AExpression> getSuper() {
         return Optional.of(this.aExpression);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "arrayVar": 
-        		joinPointList = selectArrayVar();
-        		break;
-        	case "subscript": 
-        		joinPointList = selectSubscript();
-        		break;
-        	case "vardecl": 
-        		joinPointList = selectVardecl();
-        		break;
-        	default:
-        		joinPointList = this.aExpression.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aExpression.fillWithAttributes(attributes);
-        attributes.add("arrayVar");
-        attributes.add("name");
-        attributes.add("numSubscripts");
-        attributes.add("parentAccess");
-        attributes.add("subscript");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aExpression.fillWithSelects(selects);
-        selects.add("arrayVar");
-        selects.add("subscript");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aExpression.fillWithActions(actions);
     }
 
     /**

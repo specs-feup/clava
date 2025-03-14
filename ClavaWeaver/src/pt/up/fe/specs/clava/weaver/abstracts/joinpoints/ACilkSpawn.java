@@ -1,11 +1,11 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point ACilkSpawn
@@ -170,24 +170,6 @@ public abstract class ACilkSpawn extends ACall {
     }
 
     /**
-     * Method used by the lara interpreter to select callees
-     * @return 
-     */
-    @Override
-    public List<? extends AExpression> selectCallee() {
-        return this.aCall.selectCallee();
-    }
-
-    /**
-     * Method used by the lara interpreter to select args
-     * @return 
-     */
-    @Override
-    public List<? extends AExpression> selectArg() {
-        return this.aCall.selectArg();
-    }
-
-    /**
      * Get value on attribute decl
      * @return the attribute's value
      */
@@ -230,22 +212,6 @@ public abstract class ACilkSpawn extends ACall {
     @Override
     public AVardecl getVardeclImpl() {
         return this.aCall.getVardeclImpl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select vardecls
-     * @return 
-     */
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return this.aCall.selectVardecl();
-    }
-
-    /**
-     * 
-     */
-    public void defNameImpl(String value) {
-        this.aCall.defNameImpl(value);
     }
 
     /**
@@ -1112,109 +1078,6 @@ public abstract class ACilkSpawn extends ACall {
     @Override
     public Optional<? extends ACall> getSuper() {
         return Optional.of(this.aCall);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "callee": 
-        		joinPointList = selectCallee();
-        		break;
-        	case "arg": 
-        		joinPointList = selectArg();
-        		break;
-        	case "vardecl": 
-        		joinPointList = selectVardecl();
-        		break;
-        	default:
-        		joinPointList = this.aCall.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aCall.fillWithAttributes(attributes);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aCall.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aCall.fillWithActions(actions);
     }
 
     /**

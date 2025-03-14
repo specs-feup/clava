@@ -25,6 +25,9 @@ sf.eclipse.javacc.prefs
 MatisseOptions.lara
 Matisse.lara
 
+# Eclipse settings folder
+**/.settings/**
+
 #output/
 .idea/
 .gradle/

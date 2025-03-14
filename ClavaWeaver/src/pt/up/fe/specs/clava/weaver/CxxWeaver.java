@@ -63,13 +63,6 @@ import java.util.stream.Collectors;
  */
 public class CxxWeaver extends ACxxWeaver {
 
-    static {
-        // DevUtils.addDevProject(
-        // new File("C:\\Users\\JoaoBispo\\Desktop\\shared\\specs-lara\\2017 COMLAN\\RangeValueMonitor\\lara"),
-        // "COMLAN",
-        // true, true);
-    }
-
     public static LanguageSpecification buildLanguageSpecification() {
         return LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
                 ClavaWeaverResource.ACTIONS);
@@ -811,7 +804,7 @@ public class CxxWeaver extends ACxxWeaver {
      * @return an instance of the join point root/program
      */
     @Override
-    public JoinPoint select() {
+    public JoinPoint getRootJp() {
         return CxxJoinpoints.create(getApp());
     }
 

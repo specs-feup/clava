@@ -66,27 +66,13 @@ public class CxxUnaryExprOrType extends AUnaryExprOrType {
     }
 
     @Override
-    public void defArgTypeImpl(AType value) {
+    public void setArgTypeImpl(AType argType) {
         if (!expr.hasTypeExpression()) {
             SpecsLogs.msgInfo("UnaryExprOrType '" + expr.getUettKind() + "' does not have a type argument");
             return;
         }
 
-        expr.setArgType((Type) value.getNode());
-
-        // SpecsLogs.msgInfo("Setting the argument type of an UnaryExprOrType is currently disabled");
-        return;
-        // if (!expr.hasTypeExpression()) {
-        // SpecsLogs.msgInfo("UnaryExprOrType '" + expr.getUettKind() + "' does not have a type argument");
-        // return;
-        // }
-        //
-        // expr.setArgType((Type) value.getNode());
-    }
-
-    @Override
-    public void setArgTypeImpl(AType argType) {
-        defArgTypeImpl(argType);
+        expr.setArgType((Type) argType.getNode());
     }
 
     @Override

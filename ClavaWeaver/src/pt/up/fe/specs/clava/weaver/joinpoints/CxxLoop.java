@@ -13,16 +13,12 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import org.lara.interpreter.utils.DefMap;
 
 import com.google.common.base.Preconditions;
 
@@ -51,10 +47,8 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.ALoopKindEnum;
-import pt.up.fe.specs.clava.weaver.defs.CxxLoopDefs;
 import pt.up.fe.specs.clava.weaver.enums.Relation;
 import pt.up.fe.specs.util.SpecsEnums;
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.lazy.ThreadSafeLazy;
 
@@ -94,33 +88,6 @@ public class CxxLoop extends ALoop {
 
         return loopType.name().toLowerCase();
     }
-
-    @Override
-    protected DefMap<?> getDefMap() {
-        return CxxLoopDefs.getDefMap();
-    }
-
-    /*
-    @Override
-    public int getIncrementValue() {
-        // Only supported for loops of type 'for'
-        if (!(loop instanceof ForStmt)) {
-            return 0;
-        }
-    
-        ForStmt forLoop = (ForStmt) loop;
-    
-        Stmt inc = forLoop.getInc().orElse(null);
-        if (inc == null) {
-            return 0;
-        }
-    
-        // TODO: Regular expression for <VAR_NAME>++; / <VAR_NAME>--;
-        System.out.println("INC CODE:" + inc);
-    
-        return 0;
-    }
-    */
 
     @Override
     public Boolean getIsInnermostImpl() {
@@ -218,28 +185,6 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public List<? extends AStatement> selectInit() {
-        if (!(loop instanceof ForStmt)) {
-            return Collections.emptyList();
-        }
-
-        Stmt init = ((ForStmt) loop).getInit().orElse(null);
-        if (init == null) {
-            return Collections.emptyList();
-
-        }
-
-        return Arrays.asList(CxxJoinpoints.create(init, AStatement.class));
-    }
-
-    @Override
-    public List<? extends AStatement> selectCond() {
-        var condition = getCondImpl();
-
-        return condition != null ? Arrays.asList(condition) : Collections.emptyList();
-    }
-
-    @Override
     public AStatement getCondImpl() {
         ClavaNode condition = loop.getStmtCondition().orElse(null);
 
@@ -248,13 +193,6 @@ public class CxxLoop extends ALoop {
         }
 
         return CxxJoinpoints.create(ClavaNodes.toStmt(condition), AStatement.class);
-    }
-
-    @Override
-    public List<? extends AStatement> selectStep() {
-        var step = getStepImpl();
-
-        return step != null ? Arrays.asList(step) : Collections.emptyList();
     }
 
     @Override
@@ -273,14 +211,6 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public List<? extends AScope> selectBody() {
-        // return loop.getBody()
-        // .map(body -> Arrays.asList(CxxJoinpoints.create(body, this, AScope.class)))
-        // .orElse(Collections.emptyList());
-        return Arrays.asList(CxxJoinpoints.create(loop.getBody(), AScope.class));
-    }
-
-    @Override
     public LoopStmt getNode() {
         return loop;
     }
@@ -294,26 +224,7 @@ public class CxxLoop extends ALoop {
     @Override
     public Boolean getIsParallelImpl() {
         return loop.isParallel();
-        /*
-        // Map<String, Consumer<? extends Object>> defMap = new HashMap<>();
-        // defMap.put("qq", obj -> consumerString(obj));
-        
-        // Check if loop is annotated with pragma "parallel"
-        List<Pragma> pragmas = ClavaNodes.getPragmas(getNode());
-        
-        boolean result = pragmas.stream()
-                .filter(pragma -> pragma.getName().equals("clava"))
-                .filter(clavaPragma -> clavaPragma.getContent().equals("parallel"))
-                .findFirst()
-                .isPresent();
-        
-        return result;
-        */
     }
-
-    // private void consumerString(String s) {
-    //
-    // }
 
     @Override
     public Integer getIterationsImpl() {
@@ -364,73 +275,26 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public void defInitImpl(String value) {
-        if (!(loop instanceof ForStmt)) {
-            return; // TODO: warn user?
-        }
-
-        var suffix = value.strip().endsWith(";") ? "" : ";";
-        LiteralStmt literalStmt = getFactory().literalStmt(value + suffix);
-
-        ((ForStmt) loop).setInit(literalStmt);
-    }
-
-    @Override
     public void setInitImpl(String initCode) {
-        defInitImpl(initCode);
-        /*
-        // ClavaLog.deprecated("action $loop.exec setInit is deprecated, please use setInitValue instead");
-        // setInitValue(initCode);
-        
         if (!(loop instanceof ForStmt)) {
             return; // TODO: warn user?
         }
-        
-        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
-        
-        ((ForStmt) loop).setInit(literalStmt);
-        */
-    }
 
-    /*
-    @Override
-    public void setInitValueImpl(String initCode) {
-        // if (!(loop instanceof ForStmt)) {
-        // return; // TODO: warn user?
-        // }
-        //
-        // LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
-        //
-        // ((ForStmt) loop).setInit(literalStmt);
-        defInitValueImpl(initCode);
-    }
-    
-    @Override
-    public void defInitValueImpl(String value) {
-        if (!(loop instanceof ForStmt)) {
-            return; // TODO: warn user?
-        }
-    
-        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(value + ";");
-    
+        var suffix = initCode.strip().endsWith(";") ? "" : ";";
+        LiteralStmt literalStmt = getFactory().literalStmt(initCode + suffix);
+
         ((ForStmt) loop).setInit(literalStmt);
     }
-    */
 
     @Override
     public void setInitValueImpl(String initCode) {
-        defInitValueImpl(initCode);
-    }
-
-    @Override
-    public void defInitValueImpl(String value) {
         if (!(loop instanceof ForStmt)) {
             return; // TODO: warn user?
         }
 
         Type intType = CxxWeaver.getFactory().builtinType(BuiltinKind.Int);
 
-        ((ForStmt) loop).setInitValue(CxxWeaver.getFactory().literalExpr(value, intType));
+        ((ForStmt) loop).setInitValue(CxxWeaver.getFactory().literalExpr(initCode, intType));
     }
 
     @Override
@@ -604,12 +468,11 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public void defCondRelationImpl(String value) {
-        BinaryOperatorKind kind = BinaryOperatorKind.getHelper().fromValueTry(value).orElse(null);
-        // BinaryOperatorKind kind = SpecsEnums.valueOfTry(BinaryOperatorKind.class, value).orElse(null);
+    public void setCondRelationImpl(String operator) {
+        BinaryOperatorKind kind = BinaryOperatorKind.getHelper().fromValueTry(operator).orElse(null);
 
         if (kind == null) {
-            ClavaLog.info("def 'condRelation': Invalid binary operator " + value);
+            ClavaLog.info("def 'condRelation': Invalid binary operator " + operator);
             return;
         }
 
@@ -625,30 +488,6 @@ public class CxxLoop extends ALoop {
         }
 
         condOp.set(BinaryOperator.OP, kind);
-    }
-
-    @Override
-    public void setCondRelationImpl(String operator) {
-        defCondRelationImpl(operator);
-    }
-
-    private BinaryOperatorKind getOpKind(Relation relation) {
-        switch (relation) {
-        case EQ:
-            return BinaryOperatorKind.EQ;
-        case GE:
-            return BinaryOperatorKind.GE;
-        case GT:
-            return BinaryOperatorKind.GT;
-        case LE:
-            return BinaryOperatorKind.LE;
-        case LT:
-            return BinaryOperatorKind.LT;
-        case NE:
-            return BinaryOperatorKind.NE;
-        default:
-            throw new NotImplementedException(relation);
-        }
     }
 
     @Override
@@ -694,18 +533,8 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public void defIsParallelImpl(Boolean value) {
-        loop.setParallel(value);
-    }
-
-    @Override
-    public void defIsParallelImpl(String value) {
-        loop.setParallel(Boolean.parseBoolean(value));
-    }
-
-    @Override
     public void setIsParallelImpl(Boolean isParallel) {
-        defIsParallelImpl(isParallel);
+        loop.setParallel(isParallel);
     }
 
     @Override
@@ -767,13 +596,8 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public void defBodyImpl(AScope value) {
-        loop.setBody((CompoundStmt) value.getNode());
-    }
-
-    @Override
     public void setBodyImpl(AScope body) {
-        defBodyImpl(body);
+        loop.setBody((CompoundStmt) body.getNode());
     }
 
 }

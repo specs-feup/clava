@@ -1,14 +1,12 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AMarker
@@ -37,14 +35,7 @@ public abstract class AMarker extends APragma {
      */
     public final Object getContents() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "contents", Optional.empty());
-        	}
-        	AJoinPoint result = this.getContentsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "contents", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getContentsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "contents", e);
         }
@@ -62,25 +53,10 @@ public abstract class AMarker extends APragma {
      */
     public final Object getId() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "id", Optional.empty());
-        	}
-        	String result = this.getIdImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "id", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIdImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "id", e);
         }
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select contentss
-     * @return 
-     */
-    public List<? extends AScope> selectContents() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
     }
 
     /**
@@ -117,15 +93,6 @@ public abstract class AMarker extends APragma {
     @Override
     public AJoinPoint getTargetImpl() {
         return this.aPragma.getTargetImpl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select targets
-     * @return 
-     */
-    @Override
-    public List<? extends AJoinPoint> selectTarget() {
-        return this.aPragma.selectTarget();
     }
 
     /**
@@ -944,102 +911,6 @@ public abstract class AMarker extends APragma {
     @Override
     public Optional<? extends APragma> getSuper() {
         return Optional.of(this.aPragma);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "contents": 
-        		joinPointList = selectContents();
-        		break;
-        	case "target": 
-        		joinPointList = selectTarget();
-        		break;
-        	default:
-        		joinPointList = this.aPragma.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aPragma.fillWithAttributes(attributes);
-        attributes.add("contents");
-        attributes.add("id");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aPragma.fillWithSelects(selects);
-        selects.add("contents");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aPragma.fillWithActions(actions);
     }
 
     /**

@@ -1,14 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point APointerType
@@ -39,24 +38,10 @@ public abstract class APointerType extends AType {
      */
     public final Object getPointee() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "pointee", Optional.empty());
-        	}
-        	AType result = this.getPointeeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "pointee", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getPointeeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "pointee", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defPointeeImpl(AType value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def pointee with type AType not implemented ");
     }
 
     /**
@@ -69,14 +54,7 @@ public abstract class APointerType extends AType {
      */
     public final Object getPointerLevels() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "pointerLevels", Optional.empty());
-        	}
-        	Integer result = this.getPointerLevelsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "pointerLevels", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getPointerLevelsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "pointerLevels", e);
         }
@@ -96,13 +74,7 @@ public abstract class APointerType extends AType {
      */
     public final void setPointee(AType pointeeType) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setPointee", this, Optional.empty(), pointeeType);
-        	}
         	this.setPointeeImpl(pointeeType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setPointee", this, Optional.empty(), pointeeType);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setPointee", e);
         }
@@ -277,20 +249,6 @@ public abstract class APointerType extends AType {
     @Override
     public AType getUnwrapImpl() {
         return this.aType.getUnwrapImpl();
-    }
-
-    /**
-     * 
-     */
-    public void defDesugarImpl(AType value) {
-        this.aType.defDesugarImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aType.defTemplateArgsTypesImpl(value);
     }
 
     /**
@@ -1147,117 +1105,6 @@ public abstract class APointerType extends AType {
     @Override
     public Optional<? extends AType> getSuper() {
         return Optional.of(this.aType);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	default:
-        		joinPointList = this.aType.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "pointee": {
-        	if(value instanceof AType){
-        		this.defPointeeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "desugar": {
-        	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aType.fillWithAttributes(attributes);
-        attributes.add("pointee");
-        attributes.add("pointerLevels");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aType.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aType.fillWithActions(actions);
-        actions.add("void setPointee(type)");
     }
 
     /**

@@ -1,14 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
-import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point ACudaKernelCall
@@ -50,24 +49,10 @@ public abstract class ACudaKernelCall extends ACall {
      */
     public final Object getConfig() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "config", Optional.empty());
-        	}
-        	Object result = this.getConfigImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "config", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getConfigImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "config", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defConfigImpl(AExpression[] value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def config with type AExpression not implemented ");
     }
 
     /**
@@ -84,13 +69,7 @@ public abstract class ACudaKernelCall extends ACall {
      */
     public final void setConfig(Object[] args) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setConfig", this, Optional.empty(), new Object[] { args});
-        	}
         	this.setConfigImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AExpression.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setConfig", this, Optional.empty(), new Object[] { args});
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setConfig", e);
         }
@@ -110,13 +89,7 @@ public abstract class ACudaKernelCall extends ACall {
      */
     public final void setConfigFromStrings(Object[] args) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setConfigFromStrings", this, Optional.empty(), new Object[] { args});
-        	}
         	this.setConfigFromStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setConfigFromStrings", this, Optional.empty(), new Object[] { args});
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setConfigFromStrings", e);
         }
@@ -267,24 +240,6 @@ public abstract class ACudaKernelCall extends ACall {
     }
 
     /**
-     * Method used by the lara interpreter to select callees
-     * @return 
-     */
-    @Override
-    public List<? extends AExpression> selectCallee() {
-        return this.aCall.selectCallee();
-    }
-
-    /**
-     * Method used by the lara interpreter to select args
-     * @return 
-     */
-    @Override
-    public List<? extends AExpression> selectArg() {
-        return this.aCall.selectArg();
-    }
-
-    /**
      * Get value on attribute decl
      * @return the attribute's value
      */
@@ -327,22 +282,6 @@ public abstract class ACudaKernelCall extends ACall {
     @Override
     public AVardecl getVardeclImpl() {
         return this.aCall.getVardeclImpl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select vardecls
-     * @return 
-     */
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return this.aCall.selectVardecl();
-    }
-
-    /**
-     * 
-     */
-    public void defNameImpl(String value) {
-        this.aCall.defNameImpl(value);
     }
 
     /**
@@ -1209,119 +1148,6 @@ public abstract class ACudaKernelCall extends ACall {
     @Override
     public Optional<? extends ACall> getSuper() {
         return Optional.of(this.aCall);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "callee": 
-        		joinPointList = selectCallee();
-        		break;
-        	case "arg": 
-        		joinPointList = selectArg();
-        		break;
-        	case "vardecl": 
-        		joinPointList = selectVardecl();
-        		break;
-        	default:
-        		joinPointList = this.aCall.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "config": {
-        	if(value instanceof AExpression[]){
-        		this.defConfigImpl((AExpression[])value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aCall.fillWithAttributes(attributes);
-        attributes.add("config");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aCall.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aCall.fillWithActions(actions);
-        actions.add("void setConfig(expression[])");
-        actions.add("void setConfigFromStrings(String[])");
     }
 
     /**

@@ -60,13 +60,6 @@ public class CxxProgram extends AProgram {
     }
 
     @Override
-    public List<? extends AFile> selectFile() {
-        return app.getTranslationUnits().stream()
-                .map(tunit -> CxxJoinpoints.create(tunit, AFile.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public App getNode() {
         return app;
     }
@@ -345,6 +338,8 @@ public class CxxProgram extends AProgram {
 
     @Override
     public AFile[] getFilesArrayImpl() {
-        return selectFile().toArray(size -> new AFile[size]);
+        return app.getTranslationUnits().stream()
+                .map(tunit -> CxxJoinpoints.create(tunit, AFile.class))
+                .collect(Collectors.toList()).toArray(size -> new AFile[size]);
     }
 }

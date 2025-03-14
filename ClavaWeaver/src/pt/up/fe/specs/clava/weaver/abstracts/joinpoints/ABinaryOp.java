@@ -1,15 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point ABinaryOp
@@ -41,14 +39,7 @@ public abstract class ABinaryOp extends AOp {
      */
     public final Object getIsAssignment() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isAssignment", Optional.empty());
-        	}
-        	Boolean result = this.getIsAssignmentImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isAssignment", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsAssignmentImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isAssignment", e);
         }
@@ -66,24 +57,10 @@ public abstract class ABinaryOp extends AOp {
      */
     public final Object getLeft() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "left", Optional.empty());
-        	}
-        	AExpression result = this.getLeftImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "left", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getLeftImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "left", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defLeftImpl(AExpression value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def left with type AExpression not implemented ");
     }
 
     /**
@@ -98,40 +75,10 @@ public abstract class ABinaryOp extends AOp {
      */
     public final Object getRight() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "right", Optional.empty());
-        	}
-        	AExpression result = this.getRightImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "right", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getRightImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "right", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defRightImpl(AExpression value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def right with type AExpression not implemented ");
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select lefts
-     * @return 
-     */
-    public List<? extends AExpression> selectLeft() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select rights
-     * @return 
-     */
-    public List<? extends AExpression> selectRight() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
     }
 
     /**
@@ -148,13 +95,7 @@ public abstract class ABinaryOp extends AOp {
      */
     public final void setLeft(AExpression left) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setLeft", this, Optional.empty(), left);
-        	}
         	this.setLeftImpl(left);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setLeft", this, Optional.empty(), left);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setLeft", e);
         }
@@ -174,13 +115,7 @@ public abstract class ABinaryOp extends AOp {
      */
     public final void setRight(AExpression right) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setRight", this, Optional.empty(), right);
-        	}
         	this.setRightImpl(right);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setRight", this, Optional.empty(), right);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setRight", e);
         }
@@ -256,15 +191,6 @@ public abstract class ABinaryOp extends AOp {
     @Override
     public AVardecl getVardeclImpl() {
         return this.aOp.getVardeclImpl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select vardecls
-     * @return 
-     */
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return this.aOp.selectVardecl();
     }
 
     /**
@@ -1065,123 +991,6 @@ public abstract class ABinaryOp extends AOp {
     @Override
     public Optional<? extends AOp> getSuper() {
         return Optional.of(this.aOp);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "left": 
-        		joinPointList = selectLeft();
-        		break;
-        	case "right": 
-        		joinPointList = selectRight();
-        		break;
-        	case "vardecl": 
-        		joinPointList = selectVardecl();
-        		break;
-        	default:
-        		joinPointList = this.aOp.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "left": {
-        	if(value instanceof AExpression){
-        		this.defLeftImpl((AExpression)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "right": {
-        	if(value instanceof AExpression){
-        		this.defRightImpl((AExpression)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aOp.fillWithAttributes(attributes);
-        attributes.add("isAssignment");
-        attributes.add("left");
-        attributes.add("right");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aOp.fillWithSelects(selects);
-        selects.add("left");
-        selects.add("right");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aOp.fillWithActions(actions);
-        actions.add("void setLeft(expression)");
-        actions.add("void setRight(expression)");
     }
 
     /**

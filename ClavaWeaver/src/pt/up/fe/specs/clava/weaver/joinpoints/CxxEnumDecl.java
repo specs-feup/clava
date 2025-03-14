@@ -13,8 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.List;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
@@ -37,13 +35,8 @@ public class CxxEnumDecl extends AEnumDecl {
     }
 
     @Override
-    public List<? extends AEnumeratorDecl> selectEnumerator() {
-        return CxxSelects.select(AEnumeratorDecl.class, enumDecl.getChildren(), false, EnumConstantDecl.class);
-    }
-
-    @Override
     public AEnumeratorDecl[] getEnumeratorsArrayImpl() {
-        return selectEnumerator().toArray(new AEnumeratorDecl[0]);
+        return CxxSelects.select(AEnumeratorDecl.class, enumDecl.getChildren(), false, EnumConstantDecl.class).toArray(new AEnumeratorDecl[0]);
     }
 
 }

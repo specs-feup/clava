@@ -1,14 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
-import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AMethod
@@ -40,14 +39,7 @@ public abstract class AMethod extends AFunction {
      */
     public final Object getRecord() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "record", Optional.empty());
-        	}
-        	AClass result = this.getRecordImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "record", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getRecordImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "record", e);
         }
@@ -65,13 +57,7 @@ public abstract class AMethod extends AFunction {
      */
     public final void removeRecord() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "removeRecord", this, Optional.empty());
-        	}
         	this.removeRecordImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "removeRecord", this, Optional.empty());
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "removeRecord", e);
         }
@@ -294,33 +280,6 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Method used by the lara interpreter to select bodys
-     * @return 
-     */
-    @Override
-    public List<? extends ABody> selectBody() {
-        return this.aFunction.selectBody();
-    }
-
-    /**
-     * Method used by the lara interpreter to select params
-     * @return 
-     */
-    @Override
-    public List<? extends AParam> selectParam() {
-        return this.aFunction.selectParam();
-    }
-
-    /**
-     * Method used by the lara interpreter to select decls
-     * @return 
-     */
-    @Override
-    public List<? extends ADecl> selectDecl() {
-        return this.aFunction.selectDecl();
-    }
-
-    /**
      * Get value on attribute isPublic
      * @return the attribute's value
      */
@@ -363,62 +322,6 @@ public abstract class AMethod extends AFunction {
     @Override
     public AAttribute[] getAttrsArrayImpl() {
         return this.aFunction.getAttrsArrayImpl();
-    }
-
-    /**
-     * 
-     */
-    public void defNameImpl(String value) {
-        this.aFunction.defNameImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedNameImpl(String value) {
-        this.aFunction.defQualifiedNameImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aFunction.defQualifiedPrefixImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defBodyImpl(AScope value) {
-        this.aFunction.defBodyImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defFunctionTypeImpl(AFunctionType value) {
-        this.aFunction.defFunctionTypeImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defParamsImpl(AParam[] value) {
-        this.aFunction.defParamsImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defParamsImpl(String[] value) {
-        this.aFunction.defParamsImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defReturnTypeImpl(AType value) {
-        this.aFunction.defReturnTypeImpl(value);
     }
 
     /**
@@ -1398,157 +1301,6 @@ public abstract class AMethod extends AFunction {
     @Override
     public Optional<? extends AFunction> getSuper() {
         return Optional.of(this.aFunction);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "body": 
-        		joinPointList = selectBody();
-        		break;
-        	case "param": 
-        		joinPointList = selectParam();
-        		break;
-        	case "decl": 
-        		joinPointList = selectDecl();
-        		break;
-        	default:
-        		joinPointList = this.aFunction.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "body": {
-        	if(value instanceof AScope){
-        		this.defBodyImpl((AScope)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "functionType": {
-        	if(value instanceof AFunctionType){
-        		this.defFunctionTypeImpl((AFunctionType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "params": {
-        	if(value instanceof AParam[]){
-        		this.defParamsImpl((AParam[])value);
-        		return;
-        	}
-        	if(value instanceof String[]){
-        		this.defParamsImpl((String[])value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "returnType": {
-        	if(value instanceof AType){
-        		this.defReturnTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedName": {
-        	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedPrefix": {
-        	if(value instanceof String){
-        		this.defQualifiedPrefixImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aFunction.fillWithAttributes(attributes);
-        attributes.add("record");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aFunction.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aFunction.fillWithActions(actions);
-        actions.add("void removeRecord()");
     }
 
     /**

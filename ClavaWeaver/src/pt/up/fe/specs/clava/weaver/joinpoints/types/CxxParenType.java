@@ -41,13 +41,8 @@ public class CxxParenType extends AParenType {
     }
 
     @Override
-    public void defInnerTypeImpl(AType value) {
-        var newType = (Type) value.getNode();
-        parenType.setInnerType(newType);
-    }
-
-    @Override
     public void setInnerTypeImpl(AType innerType) {
-        defInnerTypeImpl(innerType);
+        var newType = (Type) innerType.getNode();
+        parenType.setInnerType(newType);
     }
 }

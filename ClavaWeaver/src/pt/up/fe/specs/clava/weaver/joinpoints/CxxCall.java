@@ -13,8 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -60,13 +58,6 @@ public class CxxCall extends ACall {
     @Override
     public Integer getNumArgsImpl() {
         return call.getArgs().size();
-    }
-
-    @Override
-    public List<? extends AExpression> selectArg() {
-        return call.getArgs().stream()
-                .map(expr -> CxxJoinpoints.create(expr, AExpression.class))
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -160,33 +151,14 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public List<? extends AExpression> selectCallee() {
-        return Arrays.asList(CxxJoinpoints.create(call.getCallee(), AExpression.class));
-    }
-
-    @Override
     public String[] getMemberNamesArrayImpl() {
         return call.getCallMemberNames().toArray(new String[0]);
     }
 
     @Override
     public void setNameImpl(String name) {
-        defNameImpl(name);
+        call.setCallName(name);
     }
-
-    @Override
-    public void defNameImpl(String value) {
-        call.setCallName(value);
-    }
-
-    /*
-    @Override
-    public AFunction[] getDeclarationsArrayImpl() {
-        return call.getPrototypes().stream()
-                .map(decl -> CxxJoinpoints.create(decl, AFunction.class))
-                .toArray(size -> new AFunction[size]);
-    }
-    */
 
     @Override
     public AFunction getDeclarationImpl() {

@@ -1,15 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AFunction
@@ -41,24 +39,10 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getBody() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "body", Optional.empty());
-        	}
-        	AScope result = this.getBodyImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "body", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getBodyImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "body", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defBodyImpl(AScope value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def body with type AScope not implemented ");
     }
 
     /**
@@ -83,14 +67,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getCalls() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "calls", Optional.empty());
-        	}
-        	Object result = this.getCallsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "calls", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getCallsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "calls", e);
         }
@@ -106,14 +83,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getCanonical() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "canonical", Optional.empty());
-        	}
-        	AFunction result = this.getCanonicalImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "canonical", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getCanonicalImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "canonical", e);
         }
@@ -129,14 +99,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getDeclarationJp() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declarationJp", Optional.empty());
-        	}
-        	AFunction result = this.getDeclarationJpImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "declarationJp", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getDeclarationJpImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "declarationJp", e);
         }
@@ -162,14 +125,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getDeclarationJps() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declarationJps", Optional.empty());
-        	}
-        	Object result = this.getDeclarationJpsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "declarationJps", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getDeclarationJpsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "declarationJps", e);
         }
@@ -185,14 +141,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getDefinitionJp() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definitionJp", Optional.empty());
-        	}
-        	AFunction result = this.getDefinitionJpImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "definitionJp", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getDefinitionJpImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "definitionJp", e);
         }
@@ -208,24 +157,10 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getFunctionType() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "functionType", Optional.empty());
-        	}
-        	AFunctionType result = this.getFunctionTypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "functionType", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getFunctionTypeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "functionType", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defFunctionTypeImpl(AFunctionType value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def functionType with type AFunctionType not implemented ");
     }
 
     /**
@@ -242,14 +177,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getDeclaration(Boolean withReturnType) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getDeclaration", Optional.empty(), withReturnType);
-        	}
-        	String result = this.getDeclarationImpl(withReturnType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getDeclaration", Optional.ofNullable(result), withReturnType);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getDeclarationImpl(withReturnType);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getDeclaration", e);
         }
@@ -265,14 +193,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getHasDefinition() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasDefinition", Optional.empty());
-        	}
-        	Boolean result = this.getHasDefinitionImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasDefinition", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getHasDefinitionImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasDefinition", e);
         }
@@ -290,14 +211,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getId() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "id", Optional.empty());
-        	}
-        	String result = this.getIdImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "id", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIdImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "id", e);
         }
@@ -313,14 +227,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsCanonical() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCanonical", Optional.empty());
-        	}
-        	Boolean result = this.getIsCanonicalImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isCanonical", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsCanonicalImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCanonical", e);
         }
@@ -338,14 +245,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsCudaKernel() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCudaKernel", Optional.empty());
-        	}
-        	Boolean result = this.getIsCudaKernelImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isCudaKernel", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsCudaKernelImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCudaKernel", e);
         }
@@ -363,14 +263,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsDelete() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isDelete", Optional.empty());
-        	}
-        	Boolean result = this.getIsDeleteImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isDelete", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsDeleteImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isDelete", e);
         }
@@ -386,14 +279,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsImplementation() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isImplementation", Optional.empty());
-        	}
-        	Boolean result = this.getIsImplementationImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isImplementation", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsImplementationImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isImplementation", e);
         }
@@ -411,14 +297,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsInline() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInline", Optional.empty());
-        	}
-        	Boolean result = this.getIsInlineImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isInline", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsInlineImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInline", e);
         }
@@ -436,14 +315,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsModulePrivate() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isModulePrivate", Optional.empty());
-        	}
-        	Boolean result = this.getIsModulePrivateImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isModulePrivate", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsModulePrivateImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isModulePrivate", e);
         }
@@ -459,14 +331,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsPrototype() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPrototype", Optional.empty());
-        	}
-        	Boolean result = this.getIsPrototypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isPrototype", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsPrototypeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPrototype", e);
         }
@@ -484,14 +349,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsPure() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPure", Optional.empty());
-        	}
-        	Boolean result = this.getIsPureImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isPure", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsPureImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPure", e);
         }
@@ -509,14 +367,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsVirtual() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isVirtual", Optional.empty());
-        	}
-        	Boolean result = this.getIsVirtualImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isVirtual", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsVirtualImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isVirtual", e);
         }
@@ -544,14 +395,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getParamNames() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "paramNames", Optional.empty());
-        	}
-        	Object result = this.getParamNamesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "paramNames", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getParamNamesImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "paramNames", e);
         }
@@ -579,31 +423,10 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getParams() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "params", Optional.empty());
-        	}
-        	Object result = this.getParamsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "params", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getParamsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "params", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defParamsImpl(AParam[] value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def params with type AParam not implemented ");
-    }
-
-    /**
-     * 
-     */
-    public void defParamsImpl(String[] value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def params with type String not implemented ");
     }
 
     /**
@@ -618,24 +441,10 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getReturnType() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnType", Optional.empty());
-        	}
-        	AType result = this.getReturnTypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getReturnTypeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "returnType", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defReturnTypeImpl(AType value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def returnType with type AType not implemented ");
     }
 
     /**
@@ -648,14 +457,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getSignature() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "signature", Optional.empty());
-        	}
-        	String result = this.getSignatureImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "signature", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getSignatureImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "signature", e);
         }
@@ -673,41 +475,10 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getStorageClass() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
-        	}
-        	String result = this.getStorageClassImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getStorageClassImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "storageClass", e);
         }
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select bodys
-     * @return 
-     */
-    public List<? extends ABody> selectBody() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABody.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select params
-     * @return 
-     */
-    public List<? extends AParam> selectParam() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select decls
-     * @return 
-     */
-    public List<? extends ADecl> selectDecl() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl.class, SelectOp.DESCENDANTS);
     }
 
     /**
@@ -724,13 +495,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final void addParam(AParam param) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), param);
-        	}
         	this.addParamImpl(param);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), param);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addParam", e);
         }
@@ -752,13 +517,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final void addParam(String name, AType type) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), name, type);
-        	}
         	this.addParamImpl(name, type);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), name, type);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addParam", e);
         }
@@ -780,14 +539,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object clone(String newName, Boolean insert) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "clone", this, Optional.empty(), newName, insert);
-        	}
-        	AFunction result = this.cloneImpl(newName, insert);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "clone", this, Optional.ofNullable(result), newName, insert);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.cloneImpl(newName, insert);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "clone", e);
         }
@@ -809,14 +561,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object cloneOnFile(String newName, String fileName) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "cloneOnFile", this, Optional.empty(), newName, fileName);
-        	}
-        	AFunction result = this.cloneOnFileImpl(newName, fileName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "cloneOnFile", this, Optional.ofNullable(result), newName, fileName);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.cloneOnFileImpl(newName, fileName);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cloneOnFile", e);
         }
@@ -838,14 +583,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object cloneOnFile(String newName, AFile fileName) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "cloneOnFile", this, Optional.empty(), newName, fileName);
-        	}
-        	AFunction result = this.cloneOnFileImpl(newName, fileName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "cloneOnFile", this, Optional.ofNullable(result), newName, fileName);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.cloneOnFileImpl(newName, fileName);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cloneOnFile", e);
         }
@@ -865,14 +603,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object insertReturn(AJoinPoint code) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
-        	}
-        	AJoinPoint result = this.insertReturnImpl(code);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.insertReturnImpl(code);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -892,14 +623,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object insertReturn(String code) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
-        	}
-        	AJoinPoint result = this.insertReturnImpl(code);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.insertReturnImpl(code);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -919,14 +643,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object newCall(Object[] args) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), new Object[] { args});
-        	}
-        	ACall result = this.newCallImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AJoinPoint.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), new Object[] { args});
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.newCallImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AJoinPoint.class));
         } catch(Exception e) {
         	throw new ActionException(get_class(), "newCall", e);
         }
@@ -946,13 +663,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final void setBody(AScope body) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setBody", this, Optional.empty(), body);
-        	}
         	this.setBodyImpl(body);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setBody", this, Optional.empty(), body);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setBody", e);
         }
@@ -972,13 +683,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final void setFunctionType(AFunctionType functionType) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setFunctionType", this, Optional.empty(), functionType);
-        	}
         	this.setFunctionTypeImpl(functionType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setFunctionType", this, Optional.empty(), functionType);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setFunctionType", e);
         }
@@ -1000,13 +705,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final void setParam(int index, AParam param) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParam", this, Optional.empty(), index, param);
-        	}
         	this.setParamImpl(index, param);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParam", this, Optional.empty(), index, param);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setParam", e);
         }
@@ -1030,13 +729,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final void setParam(int index, String name, AType type) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParam", this, Optional.empty(), index, name, type);
-        	}
         	this.setParamImpl(index, name, type);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParam", this, Optional.empty(), index, name, type);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setParam", e);
         }
@@ -1058,13 +751,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final void setParamType(int index, AType newType) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParamType", this, Optional.empty(), index, newType);
-        	}
         	this.setParamTypeImpl(index, newType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParamType", this, Optional.empty(), index, newType);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setParamType", e);
         }
@@ -1084,13 +771,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final void setParams(Object[] params) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), new Object[] { params});
-        	}
         	this.setParamsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, AParam.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), new Object[] { params});
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setParams", e);
         }
@@ -1110,13 +791,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final void setParamsFromStrings(Object[] params) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
-        	}
         	this.setParamsFromStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(params, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setParamsFromStrings", e);
         }
@@ -1136,13 +811,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public final void setReturnType(AType returnType) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setReturnType", this, Optional.empty(), returnType);
-        	}
         	this.setReturnTypeImpl(returnType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setReturnType", this, Optional.empty(), returnType);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setReturnType", e);
         }
@@ -1191,27 +860,6 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public AAttribute[] getAttrsArrayImpl() {
         return this.aDeclarator.getAttrsArrayImpl();
-    }
-
-    /**
-     * 
-     */
-    public void defNameImpl(String value) {
-        this.aDeclarator.defNameImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedNameImpl(String value) {
-        this.aDeclarator.defQualifiedNameImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aDeclarator.defQualifiedPrefixImpl(value);
     }
 
     /**
@@ -2039,198 +1687,6 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public Optional<? extends ADeclarator> getSuper() {
         return Optional.of(this.aDeclarator);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "body": 
-        		joinPointList = selectBody();
-        		break;
-        	case "param": 
-        		joinPointList = selectParam();
-        		break;
-        	case "decl": 
-        		joinPointList = selectDecl();
-        		break;
-        	default:
-        		joinPointList = this.aDeclarator.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "body": {
-        	if(value instanceof AScope){
-        		this.defBodyImpl((AScope)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "functionType": {
-        	if(value instanceof AFunctionType){
-        		this.defFunctionTypeImpl((AFunctionType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "params": {
-        	if(value instanceof AParam[]){
-        		this.defParamsImpl((AParam[])value);
-        		return;
-        	}
-        	if(value instanceof String[]){
-        		this.defParamsImpl((String[])value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "returnType": {
-        	if(value instanceof AType){
-        		this.defReturnTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedName": {
-        	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedPrefix": {
-        	if(value instanceof String){
-        		this.defQualifiedPrefixImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithAttributes(List<String> attributes) {
-        this.aDeclarator.fillWithAttributes(attributes);
-        attributes.add("body");
-        attributes.add("calls");
-        attributes.add("canonical");
-        attributes.add("declarationJp");
-        attributes.add("declarationJps");
-        attributes.add("definitionJp");
-        attributes.add("functionType");
-        attributes.add("getDeclaration");
-        attributes.add("hasDefinition");
-        attributes.add("id");
-        attributes.add("isCanonical");
-        attributes.add("isCudaKernel");
-        attributes.add("isDelete");
-        attributes.add("isImplementation");
-        attributes.add("isInline");
-        attributes.add("isModulePrivate");
-        attributes.add("isPrototype");
-        attributes.add("isPure");
-        attributes.add("isVirtual");
-        attributes.add("paramNames");
-        attributes.add("params");
-        attributes.add("returnType");
-        attributes.add("signature");
-        attributes.add("storageClass");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithSelects(List<String> selects) {
-        this.aDeclarator.fillWithSelects(selects);
-        selects.add("body");
-        selects.add("param");
-        selects.add("decl");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithActions(List<String> actions) {
-        this.aDeclarator.fillWithActions(actions);
-        actions.add("void addParam(param)");
-        actions.add("void addParam(String, type)");
-        actions.add("function clone(String, Boolean)");
-        actions.add("function cloneOnFile(String, String)");
-        actions.add("function cloneOnFile(String, file)");
-        actions.add("joinpoint insertReturn(joinpoint)");
-        actions.add("joinpoint insertReturn(String)");
-        actions.add("call newCall(joinpoint[])");
-        actions.add("void setBody(scope)");
-        actions.add("void setFunctionType(functionType)");
-        actions.add("void setParam(int, param)");
-        actions.add("void setParam(int, String, type)");
-        actions.add("void setParamType(int, type)");
-        actions.add("void setParams(param[])");
-        actions.add("void setParamsFromStrings(String[])");
-        actions.add("void setReturnType(type)");
     }
 
     /**

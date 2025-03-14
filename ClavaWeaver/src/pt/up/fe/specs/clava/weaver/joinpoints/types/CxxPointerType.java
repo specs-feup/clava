@@ -46,13 +46,8 @@ public class CxxPointerType extends APointerType {
     }
 
     @Override
-    public void defPointeeImpl(AType value) {
-        pointerType.set(PointerType.POINTEE_TYPE, (Type) value.getNode());
-    }
-
-    @Override
     public void setPointeeImpl(AType pointeeType) {
-        defPointeeImpl(pointeeType);
+        pointerType.set(PointerType.POINTEE_TYPE, (Type) pointeeType.getNode());
     }
 
 }

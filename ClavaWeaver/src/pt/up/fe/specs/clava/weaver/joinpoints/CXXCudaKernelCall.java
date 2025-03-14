@@ -32,13 +32,8 @@ public class CXXCudaKernelCall extends ACudaKernelCall {
     }
 
     @Override
-    public void defConfigImpl(AExpression[] args) {
-        kernelCall.setConfiguration(SpecsCollections.toList(args, jp -> (Expr) jp.getNode()));
-    }
-
-    @Override
     public void setConfigImpl(AExpression[] args) {
-        defConfigImpl(args);
+        kernelCall.setConfiguration(SpecsCollections.toList(args, jp -> (Expr) jp.getNode()));
     }
 
     @Override

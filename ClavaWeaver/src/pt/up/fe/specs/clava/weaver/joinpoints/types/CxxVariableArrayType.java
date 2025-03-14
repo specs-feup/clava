@@ -41,13 +41,8 @@ public class CxxVariableArrayType extends AVariableArrayType {
     }
 
     @Override
-    public void defSizeExprImpl(AExpression value) {
-        arrayType.set(VariableArrayType.SIZE_EXPR, (Expr) value.getNode());
-    }
-
-    @Override
     public void setSizeExprImpl(AExpression sizeExpr) {
-        defSizeExprImpl(sizeExpr);
+        arrayType.set(VariableArrayType.SIZE_EXPR, (Expr) sizeExpr.getNode());
     }
 
 }

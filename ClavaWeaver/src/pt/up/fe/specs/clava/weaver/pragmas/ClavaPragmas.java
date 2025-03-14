@@ -25,18 +25,12 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
-import tdrc.utils.StringUtils;
 
 public class ClavaPragmas {
-
-    private static final String JOINPOINTS_PACKAGE_PREFIX = "pt.up.fe.specs.cxxweaver.abstracts.joinpoints.";
 
     private static final Map<String, Function<String, ClavaDirective>> CLAVA_DIRECTIVES_MAP;
     static {
         CLAVA_DIRECTIVES_MAP = new HashMap<>();
-        CLAVA_DIRECTIVES_MAP.put("attribute", AttributeDirective::parse);
-        // CLAVA_DIRECTIVES_MAP.put("opencl", OpenCLDirective::parse);
-        // CLAVA_DIRECTIVES_MAP.put("attribute", content -> AttributeDirective::parse);
     }
 
     public static void processClavaPragmas(App app) {
@@ -60,83 +54,9 @@ public class ClavaPragmas {
             clavaDirective.ifPresent(directive -> directive.apply(jp));
             return;
         }
-        // Optional<>
-        // if (parser.apply(StringParsers::hasWord, "attribute")) {
-        // new ClavaAttributeClause(clavaPragma).parse(parser.toString());
-        // return;
-        // }
-
-        StringParser parser = new StringParser(clavaPragma.getContent());
-
-        if (!parser.apply(StringParsers::peekStartsWith, "def ")) {
-            return;
-        }
-
-        // Check if starts with name of joinpoint
-        boolean hasJoinpoint = parser.apply(StringParsers::checkStringStarts, "$").isPresent();
-        String joinpointName = null;
-        if (hasJoinpoint) {
-            joinpointName = parser.apply(StringParsers::parseWord);
-        }
-
-        var target = clavaPragma.getTarget();
-        if (!target.isPresent()) {
-            ClavaLog.warning(clavaPragma, "Clava pragma could not be associated with a joinpoint");
-            return;
-        }
-
-        // Create joinpoint
-        ACxxWeaverJoinPoint joinpoint = CxxJoinpoints.create(target.get(), null);
-
-        // Validate joinpoint, if present
-        if (joinpointName != null) {
-            // Make first letter uppercase
-            String className = StringUtils.firstCharToUpper(joinpointName);
-            // Prefix 'A'
-            className = "A" + className;
-
-            try {
-                Class<?> joinpointTestClass = Class.forName(JOINPOINTS_PACKAGE_PREFIX + className);
-                if (!joinpointTestClass.isInstance(joinpoint)) {
-                    ClavaLog.warning(clavaPragma,
-                            "Clava pragma associated to a joinpoint $" + joinpoint.getJoinPointType()
-                                    + ", which is not compatible with the joinpoint $" + joinpointName
-                                    + " defined in the pragma");
-                }
-            } catch (ClassNotFoundException e) {
-                ClavaLog.warning(clavaPragma,
-                        "The weaver does not recognize the joinpoit $" + joinpointName + " in Clava pragma");
-            }
-        }
-
-        // Simple approach for now, enhance it as needed
-        // Split remaining contents by the comma
-        String[] defs = parser.getCurrentString().toString().split(",");
-        for (String def : defs) {
-            def = def.trim();
-
-            // Find index of =
-            int equalIndex = def.indexOf('=');
-
-            // If index is not present, assume that we should set a bool value to true
-            if (equalIndex == -1) {
-                joinpoint.def(def, Boolean.TRUE);
-                continue;
-            }
-
-            String attribute = def.substring(0, equalIndex).trim();
-            String value = def.substring(equalIndex + 1).trim();
-
-            joinpoint.def(attribute, value);
-        }
     }
 
     private static Optional<ClavaDirective> getDirective(Pragma clavaPragma) {
-        // String pragmaName = clavaPragma.getName();
-
-        // Preconditions.checkArgument(pragmaName.toLowerCase().equals("clava"),
-        // "Expected pragma name to be 'clava', is " + pragmaName);
-
         // Check directive
         StringParser parser = new StringParser(clavaPragma.getContent());
 
@@ -153,14 +73,6 @@ public class ClavaPragmas {
         }
 
         return Optional.of(directiveBuilder.apply(parser.toString()));
-        // if (!parser.apply(StringParsers::parseWordhasWord, "attribute")) {
-        // return Optional.empty();
-        // }
-
-        // return parse(parser.toString());
-        //
-        // // TODO Auto-generated method stub
-        // return null;
     }
 
 }

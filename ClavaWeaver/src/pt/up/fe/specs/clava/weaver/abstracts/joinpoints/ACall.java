@@ -1,15 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point ACall
@@ -48,14 +46,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getArgList() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "argList", Optional.empty());
-        	}
-        	Object result = this.getArgListImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "argList", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getArgListImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "argList", e);
         }
@@ -81,14 +72,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getArgs() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "args", Optional.empty());
-        	}
-        	Object result = this.getArgsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "args", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getArgsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "args", e);
         }
@@ -104,14 +88,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getDeclaration() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declaration", Optional.empty());
-        	}
-        	AFunction result = this.getDeclarationImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getDeclarationImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "declaration", e);
         }
@@ -127,14 +104,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getDefinition() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definition", Optional.empty());
-        	}
-        	AFunction result = this.getDefinitionImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "definition", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getDefinitionImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "definition", e);
         }
@@ -150,14 +120,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getDirectCallee() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "directCallee", Optional.empty());
-        	}
-        	AFunction result = this.getDirectCalleeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "directCallee", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getDirectCalleeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "directCallee", e);
         }
@@ -173,14 +136,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getFunction() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "function", Optional.empty());
-        	}
-        	AFunction result = this.getFunctionImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "function", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getFunctionImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "function", e);
         }
@@ -196,14 +152,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getFunctionType() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "functionType", Optional.empty());
-        	}
-        	AFunctionType result = this.getFunctionTypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "functionType", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getFunctionTypeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "functionType", e);
         }
@@ -223,14 +172,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getArg(int index) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getArg", Optional.empty(), index);
-        	}
-        	AExpression result = this.getArgImpl(index);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getArg", Optional.ofNullable(result), index);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getArgImpl(index);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getArg", e);
         }
@@ -248,14 +190,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getIsMemberAccess() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isMemberAccess", Optional.empty());
-        	}
-        	Boolean result = this.getIsMemberAccessImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isMemberAccess", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsMemberAccessImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isMemberAccess", e);
         }
@@ -273,14 +208,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getIsStmtCall() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isStmtCall", Optional.empty());
-        	}
-        	Boolean result = this.getIsStmtCallImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isStmtCall", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsStmtCallImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isStmtCall", e);
         }
@@ -298,14 +226,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getMemberAccess() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "memberAccess", Optional.empty());
-        	}
-        	AMemberAccess result = this.getMemberAccessImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "memberAccess", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getMemberAccessImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "memberAccess", e);
         }
@@ -333,14 +254,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getMemberNames() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "memberNames", Optional.empty());
-        	}
-        	Object result = this.getMemberNamesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "memberNames", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getMemberNamesImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "memberNames", e);
         }
@@ -358,24 +272,10 @@ public abstract class ACall extends AExpression {
      */
     public final Object getName() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
-        	}
-        	String result = this.getNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getNameImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defNameImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def name with type String not implemented ");
     }
 
     /**
@@ -390,14 +290,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getNumArgs() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numArgs", Optional.empty());
-        	}
-        	Integer result = this.getNumArgsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "numArgs", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getNumArgsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numArgs", e);
         }
@@ -413,14 +306,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object getReturnType() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnType", Optional.empty());
-        	}
-        	AType result = this.getReturnTypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getReturnTypeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "returnType", e);
         }
@@ -436,33 +322,10 @@ public abstract class ACall extends AExpression {
      */
     public final Object getSignature() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "signature", Optional.empty());
-        	}
-        	String result = this.getSignatureImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "signature", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getSignatureImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "signature", e);
         }
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select callees
-     * @return 
-     */
-    public List<? extends AExpression> selectCallee() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select args
-     * @return 
-     */
-    public List<? extends AExpression> selectArg() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
     }
 
     /**
@@ -481,13 +344,7 @@ public abstract class ACall extends AExpression {
      */
     public final void addArg(String argCode, AType type) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addArg", this, Optional.empty(), argCode, type);
-        	}
         	this.addArgImpl(argCode, type);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addArg", this, Optional.empty(), argCode, type);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addArg", e);
         }
@@ -509,13 +366,7 @@ public abstract class ACall extends AExpression {
      */
     public final void addArg(String arg, String type) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addArg", this, Optional.empty(), arg, type);
-        	}
         	this.addArgImpl(arg, type);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addArg", this, Optional.empty(), arg, type);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addArg", e);
         }
@@ -533,14 +384,7 @@ public abstract class ACall extends AExpression {
      */
     public final Object inline() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "inline", this, Optional.empty());
-        	}
-        	boolean result = this.inlineImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "inline", this, Optional.ofNullable(result));
-        	}
-        	return result;
+        	return this.inlineImpl();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "inline", e);
         }
@@ -562,13 +406,7 @@ public abstract class ACall extends AExpression {
      */
     public final void setArg(int index, AExpression expr) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setArg", this, Optional.empty(), index, expr);
-        	}
         	this.setArgImpl(index, expr);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setArg", this, Optional.empty(), index, expr);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setArg", e);
         }
@@ -590,13 +428,7 @@ public abstract class ACall extends AExpression {
      */
     public final void setArgFromString(int index, String expr) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setArgFromString", this, Optional.empty(), index, expr);
-        	}
         	this.setArgFromStringImpl(index, expr);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setArgFromString", this, Optional.empty(), index, expr);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setArgFromString", e);
         }
@@ -616,13 +448,7 @@ public abstract class ACall extends AExpression {
      */
     public final void setName(String name) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
-        	}
         	this.setNameImpl(name);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setName", e);
         }
@@ -642,13 +468,7 @@ public abstract class ACall extends AExpression {
      */
     public final void wrap(String name) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "wrap", this, Optional.empty(), name);
-        	}
         	this.wrapImpl(name);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "wrap", this, Optional.empty(), name);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "wrap", e);
         }
@@ -697,15 +517,6 @@ public abstract class ACall extends AExpression {
     @Override
     public AVardecl getVardeclImpl() {
         return this.aExpression.getVardeclImpl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select vardecls
-     * @return 
-     */
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return this.aExpression.selectVardecl();
     }
 
     /**
@@ -1506,134 +1317,6 @@ public abstract class ACall extends AExpression {
     @Override
     public Optional<? extends AExpression> getSuper() {
         return Optional.of(this.aExpression);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "callee": 
-        		joinPointList = selectCallee();
-        		break;
-        	case "arg": 
-        		joinPointList = selectArg();
-        		break;
-        	case "vardecl": 
-        		joinPointList = selectVardecl();
-        		break;
-        	default:
-        		joinPointList = this.aExpression.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithAttributes(List<String> attributes) {
-        this.aExpression.fillWithAttributes(attributes);
-        attributes.add("argList");
-        attributes.add("args");
-        attributes.add("declaration");
-        attributes.add("definition");
-        attributes.add("directCallee");
-        attributes.add("function");
-        attributes.add("functionType");
-        attributes.add("getArg");
-        attributes.add("isMemberAccess");
-        attributes.add("isStmtCall");
-        attributes.add("memberAccess");
-        attributes.add("memberNames");
-        attributes.add("name");
-        attributes.add("numArgs");
-        attributes.add("returnType");
-        attributes.add("signature");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithSelects(List<String> selects) {
-        this.aExpression.fillWithSelects(selects);
-        selects.add("callee");
-        selects.add("arg");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithActions(List<String> actions) {
-        this.aExpression.fillWithActions(actions);
-        actions.add("void addArg(String, type)");
-        actions.add("void addArg(String, String)");
-        actions.add("boolean inline()");
-        actions.add("void setArg(int, expression)");
-        actions.add("void setArgFromString(int, String)");
-        actions.add("void setName(String)");
-        actions.add("void wrap(String)");
     }
 
     /**

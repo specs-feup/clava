@@ -1,14 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
-import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AOmp
@@ -47,14 +46,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getClauseKinds() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "clauseKinds", Optional.empty());
-        	}
-        	Object result = this.getClauseKindsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "clauseKinds", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getClauseKindsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "clauseKinds", e);
         }
@@ -70,14 +62,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getCollapse() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "collapse", Optional.empty());
-        	}
-        	String result = this.getCollapseImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "collapse", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getCollapseImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "collapse", e);
         }
@@ -103,14 +88,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getCopyin() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "copyin", Optional.empty());
-        	}
-        	Object result = this.getCopyinImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "copyin", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getCopyinImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "copyin", e);
         }
@@ -126,14 +104,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getDefault() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "default", Optional.empty());
-        	}
-        	String result = this.getDefaultImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "default", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getDefaultImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "default", e);
         }
@@ -159,14 +130,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getFirstprivate() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "firstprivate", Optional.empty());
-        	}
-        	Object result = this.getFirstprivateImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "firstprivate", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getFirstprivateImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "firstprivate", e);
         }
@@ -197,14 +161,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getReduction(String kind) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getReduction", Optional.empty(), kind);
-        	}
-        	Object result = this.getReductionImpl(kind);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getReduction", Optional.ofNullable(result), kind);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getReductionImpl(kind);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getReduction", e);
         }
@@ -224,14 +181,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object hasClause(String clauseName) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasClause", Optional.empty(), clauseName);
-        	}
-        	Boolean result = this.hasClauseImpl(clauseName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasClause", Optional.ofNullable(result), clauseName);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.hasClauseImpl(clauseName);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasClause", e);
         }
@@ -251,14 +201,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object isClauseLegal(String clauseName) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isClauseLegal", Optional.empty(), clauseName);
-        	}
-        	Boolean result = this.isClauseLegalImpl(clauseName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isClauseLegal", Optional.ofNullable(result), clauseName);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.isClauseLegalImpl(clauseName);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isClauseLegal", e);
         }
@@ -274,14 +217,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getKind() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
-        	}
-        	String result = this.getKindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getKindImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }
@@ -307,14 +243,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getLastprivate() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "lastprivate", Optional.empty());
-        	}
-        	Object result = this.getLastprivateImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "lastprivate", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getLastprivateImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "lastprivate", e);
         }
@@ -330,24 +259,10 @@ public abstract class AOmp extends APragma {
      */
     public final Object getNumThreads() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numThreads", Optional.empty());
-        	}
-        	String result = this.getNumThreadsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "numThreads", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getNumThreadsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numThreads", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defNumThreadsImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def numThreads with type String not implemented ");
     }
 
     /**
@@ -360,14 +275,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getOrdered() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "ordered", Optional.empty());
-        	}
-        	String result = this.getOrderedImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "ordered", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getOrderedImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "ordered", e);
         }
@@ -393,14 +301,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getPrivate() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "private", Optional.empty());
-        	}
-        	Object result = this.getPrivateImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "private", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getPrivateImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "private", e);
         }
@@ -416,24 +317,10 @@ public abstract class AOmp extends APragma {
      */
     public final Object getProcBind() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "procBind", Optional.empty());
-        	}
-        	String result = this.getProcBindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "procBind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getProcBindImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "procBind", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defProcBindImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def procBind with type String not implemented ");
     }
 
     /**
@@ -456,14 +343,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getReductionKinds() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "reductionKinds", Optional.empty());
-        	}
-        	Object result = this.getReductionKindsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "reductionKinds", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getReductionKindsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "reductionKinds", e);
         }
@@ -479,14 +359,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getScheduleChunkSize() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "scheduleChunkSize", Optional.empty());
-        	}
-        	String result = this.getScheduleChunkSizeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "scheduleChunkSize", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getScheduleChunkSizeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "scheduleChunkSize", e);
         }
@@ -502,14 +375,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getScheduleKind() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "scheduleKind", Optional.empty());
-        	}
-        	String result = this.getScheduleKindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "scheduleKind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getScheduleKindImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "scheduleKind", e);
         }
@@ -535,14 +401,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getScheduleModifiers() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "scheduleModifiers", Optional.empty());
-        	}
-        	Object result = this.getScheduleModifiersImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "scheduleModifiers", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getScheduleModifiersImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "scheduleModifiers", e);
         }
@@ -568,14 +427,7 @@ public abstract class AOmp extends APragma {
      */
     public final Object getShared() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "shared", Optional.empty());
-        	}
-        	Object result = this.getSharedImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "shared", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getSharedImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "shared", e);
         }
@@ -595,13 +447,7 @@ public abstract class AOmp extends APragma {
      */
     public final void removeClause(String clauseKind) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "removeClause", this, Optional.empty(), clauseKind);
-        	}
         	this.removeClauseImpl(clauseKind);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "removeClause", this, Optional.empty(), clauseKind);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "removeClause", e);
         }
@@ -621,13 +467,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setCollapse(String newExpr) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setCollapse", this, Optional.empty(), newExpr);
-        	}
         	this.setCollapseImpl(newExpr);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setCollapse", this, Optional.empty(), newExpr);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setCollapse", e);
         }
@@ -647,13 +487,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setCollapse(int newExpr) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setCollapse", this, Optional.empty(), newExpr);
-        	}
         	this.setCollapseImpl(newExpr);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setCollapse", this, Optional.empty(), newExpr);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setCollapse", e);
         }
@@ -673,13 +507,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setCopyin(Object[] newVariables) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setCopyin", this, Optional.empty(), new Object[] { newVariables});
-        	}
         	this.setCopyinImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setCopyin", this, Optional.empty(), new Object[] { newVariables});
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setCopyin", e);
         }
@@ -699,13 +527,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setDefault(String newDefault) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setDefault", this, Optional.empty(), newDefault);
-        	}
         	this.setDefaultImpl(newDefault);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setDefault", this, Optional.empty(), newDefault);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setDefault", e);
         }
@@ -725,13 +547,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setFirstprivate(Object[] newVariables) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setFirstprivate", this, Optional.empty(), new Object[] { newVariables});
-        	}
         	this.setFirstprivateImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setFirstprivate", this, Optional.empty(), new Object[] { newVariables});
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setFirstprivate", e);
         }
@@ -751,13 +567,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setKind(String directiveKind) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setKind", this, Optional.empty(), directiveKind);
-        	}
         	this.setKindImpl(directiveKind);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setKind", this, Optional.empty(), directiveKind);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setKind", e);
         }
@@ -777,13 +587,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setLastprivate(Object[] newVariables) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setLastprivate", this, Optional.empty(), new Object[] { newVariables});
-        	}
         	this.setLastprivateImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setLastprivate", this, Optional.empty(), new Object[] { newVariables});
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setLastprivate", e);
         }
@@ -803,13 +607,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setNumThreads(String newExpr) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setNumThreads", this, Optional.empty(), newExpr);
-        	}
         	this.setNumThreadsImpl(newExpr);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setNumThreads", this, Optional.empty(), newExpr);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setNumThreads", e);
         }
@@ -829,13 +627,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setOrdered(String parameters) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setOrdered", this, Optional.empty(), parameters);
-        	}
         	this.setOrderedImpl(parameters);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setOrdered", this, Optional.empty(), parameters);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setOrdered", e);
         }
@@ -855,13 +647,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setPrivate(Object[] newVariables) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setPrivate", this, Optional.empty(), new Object[] { newVariables});
-        	}
         	this.setPrivateImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setPrivate", this, Optional.empty(), new Object[] { newVariables});
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setPrivate", e);
         }
@@ -881,13 +667,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setProcBind(String newBind) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setProcBind", this, Optional.empty(), newBind);
-        	}
         	this.setProcBindImpl(newBind);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setProcBind", this, Optional.empty(), newBind);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setProcBind", e);
         }
@@ -909,13 +689,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setReduction(String kind, Object[] newVariables) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setReduction", this, Optional.empty(), kind, newVariables);
-        	}
         	this.setReductionImpl(kind, pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setReduction", this, Optional.empty(), kind, newVariables);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setReduction", e);
         }
@@ -935,13 +709,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setScheduleChunkSize(String chunkSize) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
-        	}
         	this.setScheduleChunkSizeImpl(chunkSize);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setScheduleChunkSize", e);
         }
@@ -961,13 +729,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setScheduleChunkSize(int chunkSize) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
-        	}
         	this.setScheduleChunkSizeImpl(chunkSize);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setScheduleChunkSize", e);
         }
@@ -987,13 +749,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setScheduleKind(String scheduleKind) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleKind", this, Optional.empty(), scheduleKind);
-        	}
         	this.setScheduleKindImpl(scheduleKind);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setScheduleKind", this, Optional.empty(), scheduleKind);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setScheduleKind", e);
         }
@@ -1013,13 +769,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setScheduleModifiers(Object[] modifiers) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleModifiers", this, Optional.empty(), new Object[] { modifiers});
-        	}
         	this.setScheduleModifiersImpl(pt.up.fe.specs.util.SpecsCollections.cast(modifiers, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setScheduleModifiers", this, Optional.empty(), new Object[] { modifiers});
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setScheduleModifiers", e);
         }
@@ -1039,13 +789,7 @@ public abstract class AOmp extends APragma {
      */
     public final void setShared(Object[] newVariables) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setShared", this, Optional.empty(), new Object[] { newVariables});
-        	}
         	this.setSharedImpl(pt.up.fe.specs.util.SpecsCollections.cast(newVariables, String.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setShared", this, Optional.empty(), new Object[] { newVariables});
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setShared", e);
         }
@@ -1085,15 +829,6 @@ public abstract class AOmp extends APragma {
     @Override
     public AJoinPoint getTargetImpl() {
         return this.aPragma.getTargetImpl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select targets
-     * @return 
-     */
-    @Override
-    public List<? extends AJoinPoint> selectTarget() {
-        return this.aPragma.selectTarget();
     }
 
     /**
@@ -1912,147 +1647,6 @@ public abstract class AOmp extends APragma {
     @Override
     public Optional<? extends APragma> getSuper() {
         return Optional.of(this.aPragma);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "target": 
-        		joinPointList = selectTarget();
-        		break;
-        	default:
-        		joinPointList = this.aPragma.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "numThreads": {
-        	if(value instanceof String){
-        		this.defNumThreadsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "procBind": {
-        	if(value instanceof String){
-        		this.defProcBindImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aPragma.fillWithAttributes(attributes);
-        attributes.add("clauseKinds");
-        attributes.add("collapse");
-        attributes.add("copyin");
-        attributes.add("default");
-        attributes.add("firstprivate");
-        attributes.add("getReduction");
-        attributes.add("hasClause");
-        attributes.add("isClauseLegal");
-        attributes.add("kind");
-        attributes.add("lastprivate");
-        attributes.add("numThreads");
-        attributes.add("ordered");
-        attributes.add("private");
-        attributes.add("procBind");
-        attributes.add("reductionKinds");
-        attributes.add("scheduleChunkSize");
-        attributes.add("scheduleKind");
-        attributes.add("scheduleModifiers");
-        attributes.add("shared");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aPragma.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aPragma.fillWithActions(actions);
-        actions.add("void removeClause(String)");
-        actions.add("void setCollapse(String)");
-        actions.add("void setCollapse(int)");
-        actions.add("void setCopyin(String[])");
-        actions.add("void setDefault(String)");
-        actions.add("void setFirstprivate(String[])");
-        actions.add("void setKind(String)");
-        actions.add("void setLastprivate(String[])");
-        actions.add("void setNumThreads(String)");
-        actions.add("void setOrdered(String)");
-        actions.add("void setPrivate(String[])");
-        actions.add("void setProcBind(String)");
-        actions.add("void setReduction(String, String[])");
-        actions.add("void setScheduleChunkSize(String)");
-        actions.add("void setScheduleChunkSize(int)");
-        actions.add("void setScheduleKind(String)");
-        actions.add("void setScheduleModifiers(String[])");
-        actions.add("void setShared(String[])");
     }
 
     /**

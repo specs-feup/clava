@@ -1,14 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AParenType
@@ -39,24 +38,10 @@ public abstract class AParenType extends AType {
      */
     public final Object getInnerType() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "innerType", Optional.empty());
-        	}
-        	AType result = this.getInnerTypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "innerType", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getInnerTypeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "innerType", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defInnerTypeImpl(AType value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def innerType with type AType not implemented ");
     }
 
     /**
@@ -73,13 +58,7 @@ public abstract class AParenType extends AType {
      */
     public final void setInnerType(AType innerType) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setInnerType", this, Optional.empty(), innerType);
-        	}
         	this.setInnerTypeImpl(innerType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setInnerType", this, Optional.empty(), innerType);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setInnerType", e);
         }
@@ -254,20 +233,6 @@ public abstract class AParenType extends AType {
     @Override
     public AType getUnwrapImpl() {
         return this.aType.getUnwrapImpl();
-    }
-
-    /**
-     * 
-     */
-    public void defDesugarImpl(AType value) {
-        this.aType.defDesugarImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aType.defTemplateArgsTypesImpl(value);
     }
 
     /**
@@ -1124,116 +1089,6 @@ public abstract class AParenType extends AType {
     @Override
     public Optional<? extends AType> getSuper() {
         return Optional.of(this.aType);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	default:
-        		joinPointList = this.aType.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "innerType": {
-        	if(value instanceof AType){
-        		this.defInnerTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "desugar": {
-        	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aType.fillWithAttributes(attributes);
-        attributes.add("innerType");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aType.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aType.fillWithActions(actions);
-        actions.add("void setInnerType(type)");
     }
 
     /**

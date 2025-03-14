@@ -49,14 +49,9 @@ public class CxxFunctionType extends AFunctionType {
     }
 
     @Override
-    public void defReturnTypeImpl(AType value) {
-        Type newClavaType = (Type) value.getNode();
-        type.set(FunctionType.RETURN_TYPE, newClavaType);
-    }
-
-    @Override
     public void setReturnTypeImpl(AType newType) {
-        defReturnTypeImpl(newType);
+        Type newClavaType = (Type) newType.getNode();
+        type.set(FunctionType.RETURN_TYPE, newClavaType);
     }
 
     @Override

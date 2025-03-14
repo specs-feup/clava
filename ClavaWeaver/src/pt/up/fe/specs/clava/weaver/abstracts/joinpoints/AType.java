@@ -1,15 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.Map;
 import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AType
@@ -42,14 +40,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getArrayDims() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "arrayDims", Optional.empty());
-        	}
-        	Object result = this.getArrayDimsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "arrayDims", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getArrayDimsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "arrayDims", e);
         }
@@ -67,14 +58,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getArraySize() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "arraySize", Optional.empty());
-        	}
-        	Integer result = this.getArraySizeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "arraySize", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getArraySizeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "arraySize", e);
         }
@@ -92,14 +76,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getConstant() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "constant", Optional.empty());
-        	}
-        	Boolean result = this.getConstantImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "constant", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getConstantImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "constant", e);
         }
@@ -115,24 +92,10 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getDesugar() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "desugar", Optional.empty());
-        	}
-        	AType result = this.getDesugarImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "desugar", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getDesugarImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "desugar", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defDesugarImpl(AType value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def desugar with type AType not implemented ");
     }
 
     /**
@@ -145,14 +108,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getDesugarAll() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "desugarAll", Optional.empty());
-        	}
-        	AType result = this.getDesugarAllImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "desugarAll", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getDesugarAllImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "desugarAll", e);
         }
@@ -168,14 +124,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getFieldTree() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "fieldTree", Optional.empty());
-        	}
-        	String result = this.getFieldTreeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "fieldTree", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getFieldTreeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "fieldTree", e);
         }
@@ -193,14 +142,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getHasSugar() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasSugar", Optional.empty());
-        	}
-        	Boolean result = this.getHasSugarImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasSugar", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getHasSugarImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasSugar", e);
         }
@@ -218,14 +160,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getHasTemplateArgs() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasTemplateArgs", Optional.empty());
-        	}
-        	Boolean result = this.getHasTemplateArgsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasTemplateArgs", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getHasTemplateArgsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasTemplateArgs", e);
         }
@@ -243,14 +178,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getIsArray() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isArray", Optional.empty());
-        	}
-        	Boolean result = this.getIsArrayImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isArray", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsArrayImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isArray", e);
         }
@@ -266,14 +194,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getIsAuto() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isAuto", Optional.empty());
-        	}
-        	Boolean result = this.getIsAutoImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isAuto", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsAutoImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isAuto", e);
         }
@@ -291,14 +212,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getIsBuiltin() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isBuiltin", Optional.empty());
-        	}
-        	Boolean result = this.getIsBuiltinImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isBuiltin", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsBuiltinImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isBuiltin", e);
         }
@@ -316,14 +230,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getIsPointer() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPointer", Optional.empty());
-        	}
-        	Boolean result = this.getIsPointerImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isPointer", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsPointerImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPointer", e);
         }
@@ -341,14 +248,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getIsTopLevel() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isTopLevel", Optional.empty());
-        	}
-        	Boolean result = this.getIsTopLevelImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isTopLevel", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsTopLevelImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isTopLevel", e);
         }
@@ -366,14 +266,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getKind() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
-        	}
-        	String result = this.getKindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getKindImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }
@@ -389,14 +282,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getNormalize() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "normalize", Optional.empty());
-        	}
-        	AType result = this.getNormalizeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "normalize", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getNormalizeImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "normalize", e);
         }
@@ -424,14 +310,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getTemplateArgsStrings() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "templateArgsStrings", Optional.empty());
-        	}
-        	Object result = this.getTemplateArgsStringsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "templateArgsStrings", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getTemplateArgsStringsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "templateArgsStrings", e);
         }
@@ -459,24 +338,10 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getTemplateArgsTypes() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "templateArgsTypes", Optional.empty());
-        	}
-        	Object result = this.getTemplateArgsTypesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "templateArgsTypes", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getTemplateArgsTypesImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "templateArgsTypes", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def templateArgsTypes with type AType not implemented ");
     }
 
     /**
@@ -489,14 +354,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getTypeFields() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "typeFields", Optional.empty());
-        	}
-        	Map<?, ?> result = this.getTypeFieldsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "typeFields", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getTypeFieldsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "typeFields", e);
         }
@@ -512,14 +370,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getUnwrap() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "unwrap", Optional.empty());
-        	}
-        	AType result = this.getUnwrapImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "unwrap", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getUnwrapImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "unwrap", e);
         }
@@ -537,14 +388,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object asConst() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "asConst", this, Optional.empty());
-        	}
-        	AType result = this.asConstImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "asConst", this, Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.asConstImpl();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "asConst", e);
         }
@@ -564,13 +408,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final void setDesugar(AType desugaredType) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setDesugar", this, Optional.empty(), desugaredType);
-        	}
         	this.setDesugarImpl(desugaredType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setDesugar", this, Optional.empty(), desugaredType);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setDesugar", e);
         }
@@ -592,13 +430,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final void setTemplateArgType(int index, AType templateArgType) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgType", this, Optional.empty(), index, templateArgType);
-        	}
         	this.setTemplateArgTypeImpl(index, templateArgType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setTemplateArgType", this, Optional.empty(), index, templateArgType);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setTemplateArgType", e);
         }
@@ -618,13 +450,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final void setTemplateArgsTypes(Object[] templateArgTypes) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
-        	}
         	this.setTemplateArgsTypesImpl(pt.up.fe.specs.util.SpecsCollections.cast(templateArgTypes, AType.class));
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setTemplateArgsTypes", e);
         }
@@ -646,14 +472,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object setTypeFieldByValueRecursive(Object currentValue, Object newValue) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setTypeFieldByValueRecursive", this, Optional.empty(), currentValue, newValue);
-        	}
-        	boolean result = this.setTypeFieldByValueRecursiveImpl(currentValue, newValue);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setTypeFieldByValueRecursive", this, Optional.ofNullable(result), currentValue, newValue);
-        	}
-        	return result;
+        	return this.setTypeFieldByValueRecursiveImpl(currentValue, newValue);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setTypeFieldByValueRecursive", e);
         }
@@ -675,143 +494,10 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object setUnderlyingType(AType oldValue, AType newValue) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setUnderlyingType", this, Optional.empty(), oldValue, newValue);
-        	}
-        	AType result = this.setUnderlyingTypeImpl(oldValue, newValue);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setUnderlyingType", this, Optional.ofNullable(result), oldValue, newValue);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.setUnderlyingTypeImpl(oldValue, newValue);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setUnderlyingType", e);
         }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	default:
-        		joinPointList = super.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "desugar": {
-        	if(value instanceof AType){
-        		this.defDesugarImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "templateArgsTypes": {
-        	if(value instanceof AType[]){
-        		this.defTemplateArgsTypesImpl((AType[])value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithAttributes(List<String> attributes) {
-        super.fillWithAttributes(attributes);
-        attributes.add("arrayDims");
-        attributes.add("arraySize");
-        attributes.add("constant");
-        attributes.add("desugar");
-        attributes.add("desugarAll");
-        attributes.add("fieldTree");
-        attributes.add("hasSugar");
-        attributes.add("hasTemplateArgs");
-        attributes.add("isArray");
-        attributes.add("isAuto");
-        attributes.add("isBuiltin");
-        attributes.add("isPointer");
-        attributes.add("isTopLevel");
-        attributes.add("kind");
-        attributes.add("normalize");
-        attributes.add("templateArgsStrings");
-        attributes.add("templateArgsTypes");
-        attributes.add("typeFields");
-        attributes.add("unwrap");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithSelects(List<String> selects) {
-        super.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithActions(List<String> actions) {
-        super.fillWithActions(actions);
-        actions.add("type asConst()");
-        actions.add("void setDesugar(type)");
-        actions.add("void setTemplateArgType(int, type)");
-        actions.add("void setTemplateArgsTypes(type[])");
-        actions.add("boolean setTypeFieldByValueRecursive(Object, Object)");
-        actions.add("type setUnderlyingType(type, type)");
     }
 
     /**

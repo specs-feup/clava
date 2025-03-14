@@ -1,15 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point ALoop
@@ -40,24 +38,10 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getBody() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "body", Optional.empty());
-        	}
-        	AScope result = this.getBodyImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "body", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getBodyImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "body", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defBodyImpl(AScope value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def body with type AScope not implemented ");
     }
 
     /**
@@ -70,14 +54,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getCond() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "cond", Optional.empty());
-        	}
-        	AStatement result = this.getCondImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "cond", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getCondImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "cond", e);
         }
@@ -95,24 +72,10 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getCondRelation() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "condRelation", Optional.empty());
-        	}
-        	String result = this.getCondRelationImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "condRelation", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getCondRelationImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "condRelation", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defCondRelationImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def condRelation with type String not implemented ");
     }
 
     /**
@@ -127,14 +90,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getControlVar() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "controlVar", Optional.empty());
-        	}
-        	String result = this.getControlVarImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "controlVar", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getControlVarImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "controlVar", e);
         }
@@ -150,14 +106,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getEndValue() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "endValue", Optional.empty());
-        	}
-        	String result = this.getEndValueImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "endValue", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getEndValueImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "endValue", e);
         }
@@ -173,14 +122,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getHasCondRelation() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasCondRelation", Optional.empty());
-        	}
-        	Boolean result = this.getHasCondRelationImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasCondRelation", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getHasCondRelationImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasCondRelation", e);
         }
@@ -196,14 +138,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getId() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "id", Optional.empty());
-        	}
-        	String result = this.getIdImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "id", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIdImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "id", e);
         }
@@ -219,24 +154,10 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getInit() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "init", Optional.empty());
-        	}
-        	AStatement result = this.getInitImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "init", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getInitImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "init", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defInitImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def init with type String not implemented ");
     }
 
     /**
@@ -249,24 +170,10 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getInitValue() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "initValue", Optional.empty());
-        	}
-        	String result = this.getInitValueImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "initValue", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getInitValueImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "initValue", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defInitValueImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def initValue with type String not implemented ");
     }
 
     /**
@@ -281,14 +188,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getIsInnermost() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInnermost", Optional.empty());
-        	}
-        	Boolean result = this.getIsInnermostImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isInnermost", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsInnermostImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInnermost", e);
         }
@@ -308,14 +208,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object isInterchangeable(ALoop otherLoop) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInterchangeable", Optional.empty(), otherLoop);
-        	}
-        	Boolean result = this.isInterchangeableImpl(otherLoop);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isInterchangeable", Optional.ofNullable(result), otherLoop);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.isInterchangeableImpl(otherLoop);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInterchangeable", e);
         }
@@ -333,14 +226,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getIsOutermost() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isOutermost", Optional.empty());
-        	}
-        	Boolean result = this.getIsOutermostImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isOutermost", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsOutermostImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isOutermost", e);
         }
@@ -358,31 +244,10 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getIsParallel() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isParallel", Optional.empty());
-        	}
-        	Boolean result = this.getIsParallelImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isParallel", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsParallelImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isParallel", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defIsParallelImpl(Boolean value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def isParallel with type Boolean not implemented ");
-    }
-
-    /**
-     * 
-     */
-    public void defIsParallelImpl(String value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def isParallel with type String not implemented ");
     }
 
     /**
@@ -397,14 +262,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getIterations() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "iterations", Optional.empty());
-        	}
-        	Integer result = this.getIterationsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "iterations", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIterationsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "iterations", e);
         }
@@ -422,14 +280,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getIterationsExpr() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "iterationsExpr", Optional.empty());
-        	}
-        	AExpression result = this.getIterationsExprImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "iterationsExpr", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIterationsExprImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "iterationsExpr", e);
         }
@@ -447,14 +298,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getKind() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
-        	}
-        	String result = this.getKindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getKindImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }
@@ -472,14 +316,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getNestedLevel() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nestedLevel", Optional.empty());
-        	}
-        	Integer result = this.getNestedLevelImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "nestedLevel", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getNestedLevelImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "nestedLevel", e);
         }
@@ -507,14 +344,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getRank() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "rank", Optional.empty());
-        	}
-        	Object result = this.getRankImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "rank", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getRankImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "rank", e);
         }
@@ -530,14 +360,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getStep() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "step", Optional.empty());
-        	}
-        	AStatement result = this.getStepImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "step", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getStepImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "step", e);
         }
@@ -553,49 +376,10 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getStepValue() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "stepValue", Optional.empty());
-        	}
-        	String result = this.getStepValueImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "stepValue", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getStepValueImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "stepValue", e);
         }
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select inits
-     * @return 
-     */
-    public List<? extends AStatement> selectInit() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select conds
-     * @return 
-     */
-    public List<? extends AStatement> selectCond() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select steps
-     * @return 
-     */
-    public List<? extends AStatement> selectStep() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select bodys
-     * @return 
-     */
-    public List<? extends AScope> selectBody() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
     }
 
     /**
@@ -612,13 +396,7 @@ public abstract class ALoop extends AStatement {
      */
     public final void interchange(ALoop otherLoop) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "interchange", this, Optional.empty(), otherLoop);
-        	}
         	this.interchangeImpl(otherLoop);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "interchange", this, Optional.empty(), otherLoop);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "interchange", e);
         }
@@ -638,13 +416,7 @@ public abstract class ALoop extends AStatement {
      */
     public final void setBody(AScope body) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setBody", this, Optional.empty(), body);
-        	}
         	this.setBodyImpl(body);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setBody", this, Optional.empty(), body);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setBody", e);
         }
@@ -664,13 +436,7 @@ public abstract class ALoop extends AStatement {
      */
     public final void setCond(String condCode) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setCond", this, Optional.empty(), condCode);
-        	}
         	this.setCondImpl(condCode);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setCond", this, Optional.empty(), condCode);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setCond", e);
         }
@@ -690,13 +456,7 @@ public abstract class ALoop extends AStatement {
      */
     public final void setCondRelation(String operator) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setCondRelation", this, Optional.empty(), operator);
-        	}
         	this.setCondRelationImpl(operator);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setCondRelation", this, Optional.empty(), operator);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setCondRelation", e);
         }
@@ -716,13 +476,7 @@ public abstract class ALoop extends AStatement {
      */
     public final void setEndValue(String initCode) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setEndValue", this, Optional.empty(), initCode);
-        	}
         	this.setEndValueImpl(initCode);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setEndValue", this, Optional.empty(), initCode);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setEndValue", e);
         }
@@ -742,13 +496,7 @@ public abstract class ALoop extends AStatement {
      */
     public final void setInit(String initCode) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setInit", this, Optional.empty(), initCode);
-        	}
         	this.setInitImpl(initCode);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setInit", this, Optional.empty(), initCode);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setInit", e);
         }
@@ -768,13 +516,7 @@ public abstract class ALoop extends AStatement {
      */
     public final void setInitValue(String initCode) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setInitValue", this, Optional.empty(), initCode);
-        	}
         	this.setInitValueImpl(initCode);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setInitValue", this, Optional.empty(), initCode);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setInitValue", e);
         }
@@ -794,13 +536,7 @@ public abstract class ALoop extends AStatement {
      */
     public final void setIsParallel(Boolean isParallel) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setIsParallel", this, Optional.empty(), isParallel);
-        	}
         	this.setIsParallelImpl(isParallel);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setIsParallel", this, Optional.empty(), isParallel);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setIsParallel", e);
         }
@@ -820,13 +556,7 @@ public abstract class ALoop extends AStatement {
      */
     public final void setKind(String kind) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setKind", this, Optional.empty(), kind);
-        	}
         	this.setKindImpl(kind);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setKind", this, Optional.empty(), kind);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setKind", e);
         }
@@ -846,13 +576,7 @@ public abstract class ALoop extends AStatement {
      */
     public final void setStep(String stepCode) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setStep", this, Optional.empty(), stepCode);
-        	}
         	this.setStepImpl(stepCode);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setStep", this, Optional.empty(), stepCode);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setStep", e);
         }
@@ -876,14 +600,7 @@ public abstract class ALoop extends AStatement {
      */
     public final Object tile(String blockSize, AStatement reference, Boolean useTernary) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "tile", this, Optional.empty(), blockSize, reference, useTernary);
-        	}
-        	AStatement result = this.tileImpl(blockSize, reference, useTernary);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "tile", this, Optional.ofNullable(result), blockSize, reference, useTernary);
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.tileImpl(blockSize, reference, useTernary);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "tile", e);
         }
@@ -905,141 +622,6 @@ public abstract class ALoop extends AStatement {
     @Override
     public Boolean getIsLastImpl() {
         return this.aStatement.getIsLastImpl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select exprs
-     * @return 
-     */
-    @Override
-    public List<? extends AExpression> selectExpr() {
-        return this.aStatement.selectExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select childExprs
-     * @return 
-     */
-    @Override
-    public List<? extends AExpression> selectChildExpr() {
-        return this.aStatement.selectChildExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select calls
-     * @return 
-     */
-    @Override
-    public List<? extends ACall> selectCall() {
-        return this.aStatement.selectCall();
-    }
-
-    /**
-     * Method used by the lara interpreter to select stmtCalls
-     * @return 
-     */
-    @Override
-    public List<? extends ACall> selectStmtCall() {
-        return this.aStatement.selectStmtCall();
-    }
-
-    /**
-     * Method used by the lara interpreter to select memberCalls
-     * @return 
-     */
-    @Override
-    public List<? extends AMemberCall> selectMemberCall() {
-        return this.aStatement.selectMemberCall();
-    }
-
-    /**
-     * Method used by the lara interpreter to select memberAccesss
-     * @return 
-     */
-    @Override
-    public List<? extends AMemberAccess> selectMemberAccess() {
-        return this.aStatement.selectMemberAccess();
-    }
-
-    /**
-     * Method used by the lara interpreter to select arrayAccesss
-     * @return 
-     */
-    @Override
-    public List<? extends AArrayAccess> selectArrayAccess() {
-        return this.aStatement.selectArrayAccess();
-    }
-
-    /**
-     * Method used by the lara interpreter to select vardecls
-     * @return 
-     */
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return this.aStatement.selectVardecl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select varrefs
-     * @return 
-     */
-    @Override
-    public List<? extends AVarref> selectVarref() {
-        return this.aStatement.selectVarref();
-    }
-
-    /**
-     * Method used by the lara interpreter to select ops
-     * @return 
-     */
-    @Override
-    public List<? extends AOp> selectOp() {
-        return this.aStatement.selectOp();
-    }
-
-    /**
-     * Method used by the lara interpreter to select binaryOps
-     * @return 
-     */
-    @Override
-    public List<? extends ABinaryOp> selectBinaryOp() {
-        return this.aStatement.selectBinaryOp();
-    }
-
-    /**
-     * Method used by the lara interpreter to select unaryOps
-     * @return 
-     */
-    @Override
-    public List<? extends AUnaryOp> selectUnaryOp() {
-        return this.aStatement.selectUnaryOp();
-    }
-
-    /**
-     * Method used by the lara interpreter to select newExprs
-     * @return 
-     */
-    @Override
-    public List<? extends ANewExpr> selectNewExpr() {
-        return this.aStatement.selectNewExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select deleteExprs
-     * @return 
-     */
-    @Override
-    public List<? extends ADeleteExpr> selectDeleteExpr() {
-        return this.aStatement.selectDeleteExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select cilkSpawns
-     * @return 
-     */
-    @Override
-    public List<? extends ACilkSpawn> selectCilkSpawn() {
-        return this.aStatement.selectCilkSpawn();
     }
 
     /**
@@ -1840,224 +1422,6 @@ public abstract class ALoop extends AStatement {
     @Override
     public Optional<? extends AStatement> getSuper() {
         return Optional.of(this.aStatement);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "init": 
-        		joinPointList = selectInit();
-        		break;
-        	case "cond": 
-        		joinPointList = selectCond();
-        		break;
-        	case "step": 
-        		joinPointList = selectStep();
-        		break;
-        	case "body": 
-        		joinPointList = selectBody();
-        		break;
-        	case "expr": 
-        		joinPointList = selectExpr();
-        		break;
-        	case "childExpr": 
-        		joinPointList = selectChildExpr();
-        		break;
-        	case "call": 
-        		joinPointList = selectCall();
-        		break;
-        	case "stmtCall": 
-        		joinPointList = selectStmtCall();
-        		break;
-        	case "memberCall": 
-        		joinPointList = selectMemberCall();
-        		break;
-        	case "memberAccess": 
-        		joinPointList = selectMemberAccess();
-        		break;
-        	case "arrayAccess": 
-        		joinPointList = selectArrayAccess();
-        		break;
-        	case "vardecl": 
-        		joinPointList = selectVardecl();
-        		break;
-        	case "varref": 
-        		joinPointList = selectVarref();
-        		break;
-        	case "op": 
-        		joinPointList = selectOp();
-        		break;
-        	case "binaryOp": 
-        		joinPointList = selectBinaryOp();
-        		break;
-        	case "unaryOp": 
-        		joinPointList = selectUnaryOp();
-        		break;
-        	case "newExpr": 
-        		joinPointList = selectNewExpr();
-        		break;
-        	case "deleteExpr": 
-        		joinPointList = selectDeleteExpr();
-        		break;
-        	case "cilkSpawn": 
-        		joinPointList = selectCilkSpawn();
-        		break;
-        	default:
-        		joinPointList = this.aStatement.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "body": {
-        	if(value instanceof AScope){
-        		this.defBodyImpl((AScope)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "condRelation": {
-        	if(value instanceof String){
-        		this.defCondRelationImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "init": {
-        	if(value instanceof String){
-        		this.defInitImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "initValue": {
-        	if(value instanceof String){
-        		this.defInitValueImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "isParallel": {
-        	if(value instanceof Boolean){
-        		this.defIsParallelImpl((Boolean)value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defIsParallelImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithAttributes(List<String> attributes) {
-        this.aStatement.fillWithAttributes(attributes);
-        attributes.add("body");
-        attributes.add("cond");
-        attributes.add("condRelation");
-        attributes.add("controlVar");
-        attributes.add("endValue");
-        attributes.add("hasCondRelation");
-        attributes.add("id");
-        attributes.add("init");
-        attributes.add("initValue");
-        attributes.add("isInnermost");
-        attributes.add("isInterchangeable");
-        attributes.add("isOutermost");
-        attributes.add("isParallel");
-        attributes.add("iterations");
-        attributes.add("iterationsExpr");
-        attributes.add("kind");
-        attributes.add("nestedLevel");
-        attributes.add("rank");
-        attributes.add("step");
-        attributes.add("stepValue");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithSelects(List<String> selects) {
-        this.aStatement.fillWithSelects(selects);
-        selects.add("init");
-        selects.add("cond");
-        selects.add("step");
-        selects.add("body");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithActions(List<String> actions) {
-        this.aStatement.fillWithActions(actions);
-        actions.add("void interchange(loop)");
-        actions.add("void setBody(scope)");
-        actions.add("void setCond(String)");
-        actions.add("void setCondRelation(Relation)");
-        actions.add("void setEndValue(String)");
-        actions.add("void setInit(String)");
-        actions.add("void setInitValue(String)");
-        actions.add("void setIsParallel(Boolean)");
-        actions.add("void setKind(String)");
-        actions.add("void setStep(String)");
-        actions.add("statement tile(String, statement, Boolean)");
     }
 
     /**

@@ -1,14 +1,12 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point ATernaryOp
@@ -40,24 +38,10 @@ public abstract class ATernaryOp extends AOp {
      */
     public final Object getCond() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "cond", Optional.empty());
-        	}
-        	AExpression result = this.getCondImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "cond", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getCondImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "cond", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defCondImpl(AExpression value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def cond with type AExpression not implemented ");
     }
 
     /**
@@ -72,24 +56,10 @@ public abstract class ATernaryOp extends AOp {
      */
     public final Object getFalseExpr() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "falseExpr", Optional.empty());
-        	}
-        	AExpression result = this.getFalseExprImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "falseExpr", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getFalseExprImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "falseExpr", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defFalseExprImpl(AExpression value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def falseExpr with type AExpression not implemented ");
     }
 
     /**
@@ -104,48 +74,10 @@ public abstract class ATernaryOp extends AOp {
      */
     public final Object getTrueExpr() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "trueExpr", Optional.empty());
-        	}
-        	AExpression result = this.getTrueExprImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "trueExpr", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getTrueExprImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "trueExpr", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defTrueExprImpl(AExpression value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def trueExpr with type AExpression not implemented ");
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select conds
-     * @return 
-     */
-    public List<? extends AExpression> selectCond() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select trueExprs
-     * @return 
-     */
-    public List<? extends AExpression> selectTrueExpr() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select falseExprs
-     * @return 
-     */
-    public List<? extends AExpression> selectFalseExpr() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
     }
 
     /**
@@ -218,15 +150,6 @@ public abstract class ATernaryOp extends AOp {
     @Override
     public AVardecl getVardeclImpl() {
         return this.aOp.getVardeclImpl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select vardecls
-     * @return 
-     */
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return this.aOp.selectVardecl();
     }
 
     /**
@@ -1027,132 +950,6 @@ public abstract class ATernaryOp extends AOp {
     @Override
     public Optional<? extends AOp> getSuper() {
         return Optional.of(this.aOp);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "cond": 
-        		joinPointList = selectCond();
-        		break;
-        	case "trueExpr": 
-        		joinPointList = selectTrueExpr();
-        		break;
-        	case "falseExpr": 
-        		joinPointList = selectFalseExpr();
-        		break;
-        	case "vardecl": 
-        		joinPointList = selectVardecl();
-        		break;
-        	default:
-        		joinPointList = this.aOp.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "cond": {
-        	if(value instanceof AExpression){
-        		this.defCondImpl((AExpression)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "falseExpr": {
-        	if(value instanceof AExpression){
-        		this.defFalseExprImpl((AExpression)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "trueExpr": {
-        	if(value instanceof AExpression){
-        		this.defTrueExprImpl((AExpression)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aOp.fillWithAttributes(attributes);
-        attributes.add("cond");
-        attributes.add("falseExpr");
-        attributes.add("trueExpr");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aOp.fillWithSelects(selects);
-        selects.add("cond");
-        selects.add("trueExpr");
-        selects.add("falseExpr");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aOp.fillWithActions(actions);
     }
 
     /**

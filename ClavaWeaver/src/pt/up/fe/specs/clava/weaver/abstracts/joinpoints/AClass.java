@@ -1,15 +1,13 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AClass
@@ -49,14 +47,7 @@ public abstract class AClass extends ARecord {
      */
     public final Object getAllBases() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "allBases", Optional.empty());
-        	}
-        	Object result = this.getAllBasesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "allBases", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getAllBasesImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "allBases", e);
         }
@@ -82,14 +73,7 @@ public abstract class AClass extends ARecord {
      */
     public final Object getAllMethods() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "allMethods", Optional.empty());
-        	}
-        	Object result = this.getAllMethodsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "allMethods", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getAllMethodsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "allMethods", e);
         }
@@ -115,14 +99,7 @@ public abstract class AClass extends ARecord {
      */
     public final Object getBases() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "bases", Optional.empty());
-        	}
-        	Object result = this.getBasesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "bases", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getBasesImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "bases", e);
         }
@@ -138,14 +115,7 @@ public abstract class AClass extends ARecord {
      */
     public final Object getCanonical() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "canonical", Optional.empty());
-        	}
-        	AClass result = this.getCanonicalImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "canonical", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getCanonicalImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "canonical", e);
         }
@@ -161,14 +131,7 @@ public abstract class AClass extends ARecord {
      */
     public final Object getImplementation() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "implementation", Optional.empty());
-        	}
-        	AClass result = this.getImplementationImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "implementation", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getImplementationImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "implementation", e);
         }
@@ -184,14 +147,7 @@ public abstract class AClass extends ARecord {
      */
     public final Object getIsAbstract() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isAbstract", Optional.empty());
-        	}
-        	Boolean result = this.getIsAbstractImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isAbstract", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsAbstractImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isAbstract", e);
         }
@@ -207,14 +163,7 @@ public abstract class AClass extends ARecord {
      */
     public final Object getIsCanonical() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCanonical", Optional.empty());
-        	}
-        	Boolean result = this.getIsCanonicalImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isCanonical", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsCanonicalImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCanonical", e);
         }
@@ -230,14 +179,7 @@ public abstract class AClass extends ARecord {
      */
     public final Object getIsInterface() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInterface", Optional.empty());
-        	}
-        	Boolean result = this.getIsInterfaceImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isInterface", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getIsInterfaceImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInterface", e);
         }
@@ -263,14 +205,7 @@ public abstract class AClass extends ARecord {
      */
     public final Object getMethods() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "methods", Optional.empty());
-        	}
-        	Object result = this.getMethodsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "methods", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getMethodsImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "methods", e);
         }
@@ -296,25 +231,10 @@ public abstract class AClass extends ARecord {
      */
     public final Object getPrototypes() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "prototypes", Optional.empty());
-        	}
-        	Object result = this.getPrototypesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "prototypes", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
+        	return this.getPrototypesImpl();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "prototypes", e);
         }
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select methods
-     * @return 
-     */
-    public List<? extends AMethod> selectMethod() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod.class, SelectOp.DESCENDANTS);
     }
 
     /**
@@ -331,13 +251,7 @@ public abstract class AClass extends ARecord {
      */
     public final void addMethod(AMethod method) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addMethod", this, Optional.empty(), method);
-        	}
         	this.addMethodImpl(method);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addMethod", this, Optional.empty(), method);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addMethod", e);
         }
@@ -389,15 +303,6 @@ public abstract class AClass extends ARecord {
     }
 
     /**
-     * Method used by the lara interpreter to select fields
-     * @return 
-     */
-    @Override
-    public List<? extends AField> selectField() {
-        return this.aRecord.selectField();
-    }
-
-    /**
      * Get value on attribute isPublic
      * @return the attribute's value
      */
@@ -440,27 +345,6 @@ public abstract class AClass extends ARecord {
     @Override
     public AAttribute[] getAttrsArrayImpl() {
         return this.aRecord.getAttrsArrayImpl();
-    }
-
-    /**
-     * 
-     */
-    public void defNameImpl(String value) {
-        this.aRecord.defNameImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedNameImpl(String value) {
-        this.aRecord.defQualifiedNameImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aRecord.defQualifiedPrefixImpl(value);
     }
 
     /**
@@ -1297,132 +1181,6 @@ public abstract class AClass extends ARecord {
     @Override
     public Optional<? extends ARecord> getSuper() {
         return Optional.of(this.aRecord);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "method": 
-        		joinPointList = selectMethod();
-        		break;
-        	case "field": 
-        		joinPointList = selectField();
-        		break;
-        	default:
-        		joinPointList = this.aRecord.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedName": {
-        	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedPrefix": {
-        	if(value instanceof String){
-        		this.defQualifiedPrefixImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aRecord.fillWithAttributes(attributes);
-        attributes.add("allBases");
-        attributes.add("allMethods");
-        attributes.add("bases");
-        attributes.add("canonical");
-        attributes.add("implementation");
-        attributes.add("isAbstract");
-        attributes.add("isCanonical");
-        attributes.add("isInterface");
-        attributes.add("methods");
-        attributes.add("prototypes");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aRecord.fillWithSelects(selects);
-        selects.add("method");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aRecord.fillWithActions(actions);
-        actions.add("void addMethod(method)");
     }
 
     /**
