@@ -22,8 +22,7 @@ dependencies {
 	implementation ':SpecsUtils'
 	implementation ':CommonsLangPlus'
 	implementation ':JacksonPlus'
-   implementation ':SymjaPlus'
-	implementation ':LaraApi'
+   	implementation ':SymjaPlus'
 	implementation ':LaraUtils'		
 	implementation ':ClavaAst'		
 
