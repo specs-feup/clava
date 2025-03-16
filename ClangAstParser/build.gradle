@@ -24,7 +24,7 @@ dependencies {
 	implementation ":jOptions"
 	implementation ":SpecsUtils"
 
-	implementation group: 'com.google.guava', name: 'guava', version: '19.0'	
+	implementation group: 'com.google.guava', name: 'guava', version: '33.4.0-jre'	
 }
 
 java {
