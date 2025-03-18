@@ -35,7 +35,8 @@ public abstract class AElaboratedType extends AType {
      */
     public final Object getKeyword() {
         try {
-        	return this.getKeywordImpl();
+        	String result = this.getKeywordImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "keyword", e);
         }
@@ -51,7 +52,8 @@ public abstract class AElaboratedType extends AType {
      */
     public final Object getNamedType() {
         try {
-        	return this.getNamedTypeImpl();
+        	AType result = this.getNamedTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "namedType", e);
         }
@@ -67,7 +69,8 @@ public abstract class AElaboratedType extends AType {
      */
     public final Object getQualifier() {
         try {
-        	return this.getQualifierImpl();
+        	String result = this.getQualifierImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "qualifier", e);
         }

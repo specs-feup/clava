@@ -39,7 +39,8 @@ public abstract class ABinaryOp extends AOp {
      */
     public final Object getIsAssignment() {
         try {
-        	return this.getIsAssignmentImpl();
+        	Boolean result = this.getIsAssignmentImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isAssignment", e);
         }
@@ -57,7 +58,8 @@ public abstract class ABinaryOp extends AOp {
      */
     public final Object getLeft() {
         try {
-        	return this.getLeftImpl();
+        	AExpression result = this.getLeftImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "left", e);
         }
@@ -75,7 +77,8 @@ public abstract class ABinaryOp extends AOp {
      */
     public final Object getRight() {
         try {
-        	return this.getRightImpl();
+        	AExpression result = this.getRightImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "right", e);
         }

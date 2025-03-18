@@ -35,7 +35,8 @@ public abstract class AInclude extends ADecl {
      */
     public final Object getIsAngled() {
         try {
-        	return this.getIsAngledImpl();
+        	Boolean result = this.getIsAngledImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isAngled", e);
         }
@@ -51,7 +52,8 @@ public abstract class AInclude extends ADecl {
      */
     public final Object getName() {
         try {
-        	return this.getNameImpl();
+        	String result = this.getNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -67,7 +69,8 @@ public abstract class AInclude extends ADecl {
      */
     public final Object getRelativeFolderpath() {
         try {
-        	return this.getRelativeFolderpathImpl();
+        	String result = this.getRelativeFolderpathImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "relativeFolderpath", e);
         }

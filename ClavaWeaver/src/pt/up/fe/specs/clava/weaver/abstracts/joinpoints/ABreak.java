@@ -35,7 +35,8 @@ public abstract class ABreak extends AStatement {
      */
     public final Object getEnclosingStmt() {
         try {
-        	return this.getEnclosingStmtImpl();
+        	AStatement result = this.getEnclosingStmtImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "enclosingStmt", e);
         }

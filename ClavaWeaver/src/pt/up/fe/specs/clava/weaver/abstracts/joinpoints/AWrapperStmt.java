@@ -37,7 +37,8 @@ public abstract class AWrapperStmt extends AStatement {
      */
     public final Object getContent() {
         try {
-        	return this.getContentImpl();
+        	AJoinPoint result = this.getContentImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "content", e);
         }
@@ -55,7 +56,8 @@ public abstract class AWrapperStmt extends AStatement {
      */
     public final Object getKind() {
         try {
-        	return this.getKindImpl();
+        	String result = this.getKindImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }

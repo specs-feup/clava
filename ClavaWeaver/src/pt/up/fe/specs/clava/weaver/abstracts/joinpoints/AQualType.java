@@ -47,7 +47,8 @@ public abstract class AQualType extends AType {
      */
     public final Object getQualifiers() {
         try {
-        	return this.getQualifiersImpl();
+        	Object result = this.getQualifiersImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "qualifiers", e);
         }
@@ -65,7 +66,8 @@ public abstract class AQualType extends AType {
      */
     public final Object getUnqualifiedType() {
         try {
-        	return this.getUnqualifiedTypeImpl();
+        	AType result = this.getUnqualifiedTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "unqualifiedType", e);
         }

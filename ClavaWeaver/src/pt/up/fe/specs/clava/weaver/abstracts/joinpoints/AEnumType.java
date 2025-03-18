@@ -38,7 +38,8 @@ public abstract class AEnumType extends ATagType {
      */
     public final Object getIntegerType() {
         try {
-        	return this.getIntegerTypeImpl();
+        	AType result = this.getIntegerTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "integerType", e);
         }

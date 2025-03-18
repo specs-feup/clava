@@ -38,7 +38,8 @@ public abstract class AGotoStmt extends AStatement {
      */
     public final Object getLabel() {
         try {
-        	return this.getLabelImpl();
+        	ALabelDecl result = this.getLabelImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "label", e);
         }

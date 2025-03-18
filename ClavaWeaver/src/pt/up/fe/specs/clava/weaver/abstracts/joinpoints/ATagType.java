@@ -35,7 +35,8 @@ public abstract class ATagType extends AType {
      */
     public final Object getDecl() {
         try {
-        	return this.getDeclImpl();
+        	ADecl result = this.getDeclImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "decl", e);
         }
@@ -53,7 +54,8 @@ public abstract class ATagType extends AType {
      */
     public final Object getName() {
         try {
-        	return this.getNameImpl();
+        	String result = this.getNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }

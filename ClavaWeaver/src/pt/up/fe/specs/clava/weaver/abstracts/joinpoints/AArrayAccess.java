@@ -35,7 +35,8 @@ public abstract class AArrayAccess extends AExpression {
      */
     public final Object getArrayVar() {
         try {
-        	return this.getArrayVarImpl();
+        	AExpression result = this.getArrayVarImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "arrayVar", e);
         }
@@ -51,7 +52,8 @@ public abstract class AArrayAccess extends AExpression {
      */
     public final Object getName() {
         try {
-        	return this.getNameImpl();
+        	String result = this.getNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -67,7 +69,8 @@ public abstract class AArrayAccess extends AExpression {
      */
     public final Object getNumSubscripts() {
         try {
-        	return this.getNumSubscriptsImpl();
+        	Integer result = this.getNumSubscriptsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numSubscripts", e);
         }
@@ -83,7 +86,8 @@ public abstract class AArrayAccess extends AExpression {
      */
     public final Object getParentAccess() {
         try {
-        	return this.getParentAccessImpl();
+        	AArrayAccess result = this.getParentAccessImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "parentAccess", e);
         }
@@ -109,7 +113,8 @@ public abstract class AArrayAccess extends AExpression {
      */
     public final Object getSubscript() {
         try {
-        	return this.getSubscriptImpl();
+        	Object result = this.getSubscriptImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "subscript", e);
         }

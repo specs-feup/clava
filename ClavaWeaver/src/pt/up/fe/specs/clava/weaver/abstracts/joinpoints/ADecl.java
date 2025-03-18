@@ -36,7 +36,8 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
      */
     public final Object getAttrs() {
         try {
-        	return this.getAttrsImpl();
+        	Object result = this.getAttrsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "attrs", e);
         }

@@ -39,7 +39,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getBody() {
         try {
-        	return this.getBodyImpl();
+        	AScope result = this.getBodyImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "body", e);
         }
@@ -67,7 +68,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getCalls() {
         try {
-        	return this.getCallsImpl();
+        	Object result = this.getCallsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "calls", e);
         }
@@ -83,7 +85,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getCanonical() {
         try {
-        	return this.getCanonicalImpl();
+        	AFunction result = this.getCanonicalImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "canonical", e);
         }
@@ -99,7 +102,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getDeclarationJp() {
         try {
-        	return this.getDeclarationJpImpl();
+        	AFunction result = this.getDeclarationJpImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "declarationJp", e);
         }
@@ -125,7 +129,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getDeclarationJps() {
         try {
-        	return this.getDeclarationJpsImpl();
+        	Object result = this.getDeclarationJpsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "declarationJps", e);
         }
@@ -141,7 +146,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getDefinitionJp() {
         try {
-        	return this.getDefinitionJpImpl();
+        	AFunction result = this.getDefinitionJpImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "definitionJp", e);
         }
@@ -157,7 +163,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getFunctionType() {
         try {
-        	return this.getFunctionTypeImpl();
+        	AFunctionType result = this.getFunctionTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "functionType", e);
         }
@@ -177,7 +184,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getDeclaration(Boolean withReturnType) {
         try {
-        	return this.getDeclarationImpl(withReturnType);
+        	String result = this.getDeclarationImpl(withReturnType);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getDeclaration", e);
         }
@@ -193,7 +201,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getHasDefinition() {
         try {
-        	return this.getHasDefinitionImpl();
+        	Boolean result = this.getHasDefinitionImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasDefinition", e);
         }
@@ -211,7 +220,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getId() {
         try {
-        	return this.getIdImpl();
+        	String result = this.getIdImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "id", e);
         }
@@ -227,7 +237,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsCanonical() {
         try {
-        	return this.getIsCanonicalImpl();
+        	Boolean result = this.getIsCanonicalImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCanonical", e);
         }
@@ -245,7 +256,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsCudaKernel() {
         try {
-        	return this.getIsCudaKernelImpl();
+        	Boolean result = this.getIsCudaKernelImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCudaKernel", e);
         }
@@ -263,7 +275,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsDelete() {
         try {
-        	return this.getIsDeleteImpl();
+        	Boolean result = this.getIsDeleteImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isDelete", e);
         }
@@ -279,7 +292,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsImplementation() {
         try {
-        	return this.getIsImplementationImpl();
+        	Boolean result = this.getIsImplementationImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isImplementation", e);
         }
@@ -297,7 +311,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsInline() {
         try {
-        	return this.getIsInlineImpl();
+        	Boolean result = this.getIsInlineImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInline", e);
         }
@@ -315,7 +330,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsModulePrivate() {
         try {
-        	return this.getIsModulePrivateImpl();
+        	Boolean result = this.getIsModulePrivateImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isModulePrivate", e);
         }
@@ -331,7 +347,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsPrototype() {
         try {
-        	return this.getIsPrototypeImpl();
+        	Boolean result = this.getIsPrototypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPrototype", e);
         }
@@ -349,7 +366,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsPure() {
         try {
-        	return this.getIsPureImpl();
+        	Boolean result = this.getIsPureImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPure", e);
         }
@@ -367,7 +385,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getIsVirtual() {
         try {
-        	return this.getIsVirtualImpl();
+        	Boolean result = this.getIsVirtualImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isVirtual", e);
         }
@@ -395,7 +414,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getParamNames() {
         try {
-        	return this.getParamNamesImpl();
+        	Object result = this.getParamNamesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "paramNames", e);
         }
@@ -423,7 +443,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getParams() {
         try {
-        	return this.getParamsImpl();
+        	Object result = this.getParamsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "params", e);
         }
@@ -441,7 +462,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getReturnType() {
         try {
-        	return this.getReturnTypeImpl();
+        	AType result = this.getReturnTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "returnType", e);
         }
@@ -457,7 +479,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getSignature() {
         try {
-        	return this.getSignatureImpl();
+        	String result = this.getSignatureImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "signature", e);
         }
@@ -475,7 +498,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object getStorageClass() {
         try {
-        	return this.getStorageClassImpl();
+        	String result = this.getStorageClassImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "storageClass", e);
         }
@@ -539,7 +563,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object clone(String newName, Boolean insert) {
         try {
-        	return this.cloneImpl(newName, insert);
+        	AFunction result = this.cloneImpl(newName, insert);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "clone", e);
         }
@@ -561,7 +586,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object cloneOnFile(String newName, String fileName) {
         try {
-        	return this.cloneOnFileImpl(newName, fileName);
+        	AFunction result = this.cloneOnFileImpl(newName, fileName);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cloneOnFile", e);
         }
@@ -583,7 +609,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object cloneOnFile(String newName, AFile fileName) {
         try {
-        	return this.cloneOnFileImpl(newName, fileName);
+        	AFunction result = this.cloneOnFileImpl(newName, fileName);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cloneOnFile", e);
         }
@@ -603,7 +630,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object insertReturn(AJoinPoint code) {
         try {
-        	return this.insertReturnImpl(code);
+        	AJoinPoint result = this.insertReturnImpl(code);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -623,7 +651,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object insertReturn(String code) {
         try {
-        	return this.insertReturnImpl(code);
+        	AJoinPoint result = this.insertReturnImpl(code);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -643,7 +672,8 @@ public abstract class AFunction extends ADeclarator {
      */
     public final Object newCall(Object[] args) {
         try {
-        	return this.newCallImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AJoinPoint.class));
+        	ACall result = this.newCallImpl(pt.up.fe.specs.util.SpecsCollections.cast(args, AJoinPoint.class));
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "newCall", e);
         }

@@ -28,7 +28,8 @@ public abstract class AAttribute extends ACxxWeaverJoinPoint {
      */
     public final Object getKind() {
         try {
-        	return this.getKindImpl();
+        	String result = this.getKindImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }

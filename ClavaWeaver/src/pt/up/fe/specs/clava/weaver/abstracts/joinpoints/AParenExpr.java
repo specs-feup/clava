@@ -35,7 +35,8 @@ public abstract class AParenExpr extends AExpression {
      */
     public final Object getSubExpr() {
         try {
-        	return this.getSubExprImpl();
+        	AExpression result = this.getSubExprImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "subExpr", e);
         }

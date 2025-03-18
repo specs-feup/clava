@@ -39,7 +39,8 @@ public abstract class AVariableArrayType extends AArrayType {
      */
     public final Object getSizeExpr() {
         try {
-        	return this.getSizeExprImpl();
+        	AExpression result = this.getSizeExprImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "sizeExpr", e);
         }

@@ -38,7 +38,8 @@ public abstract class ALabelStmt extends AStatement {
      */
     public final Object getDecl() {
         try {
-        	return this.getDeclImpl();
+        	ALabelDecl result = this.getDeclImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "decl", e);
         }

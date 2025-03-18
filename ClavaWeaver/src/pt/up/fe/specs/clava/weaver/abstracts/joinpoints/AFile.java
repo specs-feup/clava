@@ -27,7 +27,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getBaseSourcePath() {
         try {
-        	return this.getBaseSourcePathImpl();
+        	String result = this.getBaseSourcePathImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "baseSourcePath", e);
         }
@@ -43,7 +44,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getErrorOutput() {
         try {
-        	return this.getErrorOutputImpl();
+        	String result = this.getErrorOutputImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "errorOutput", e);
         }
@@ -59,7 +61,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getFile() {
         try {
-        	return this.getFileImpl();
+        	Object result = this.getFileImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "file", e);
         }
@@ -79,7 +82,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getDestinationFilepath(String destinationFolderpath) {
         try {
-        	return this.getDestinationFilepathImpl(destinationFolderpath);
+        	String result = this.getDestinationFilepathImpl(destinationFolderpath);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getDestinationFilepath", e);
         }
@@ -95,7 +99,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getHasMain() {
         try {
-        	return this.getHasMainImpl();
+        	Boolean result = this.getHasMainImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasMain", e);
         }
@@ -111,7 +116,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getHasParsingErrors() {
         try {
-        	return this.getHasParsingErrorsImpl();
+        	Boolean result = this.getHasParsingErrorsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasParsingErrors", e);
         }
@@ -137,7 +143,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getIncludes() {
         try {
-        	return this.getIncludesImpl();
+        	Object result = this.getIncludesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "includes", e);
         }
@@ -153,7 +160,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getIsCxx() {
         try {
-        	return this.getIsCxxImpl();
+        	Boolean result = this.getIsCxxImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCxx", e);
         }
@@ -169,7 +177,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getIsHeader() {
         try {
-        	return this.getIsHeaderImpl();
+        	Boolean result = this.getIsHeaderImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isHeader", e);
         }
@@ -185,7 +194,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getIsOpenCL() {
         try {
-        	return this.getIsOpenCLImpl();
+        	Boolean result = this.getIsOpenCLImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isOpenCL", e);
         }
@@ -201,7 +211,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getName() {
         try {
-        	return this.getNameImpl();
+        	String result = this.getNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -217,7 +228,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getPath() {
         try {
-        	return this.getPathImpl();
+        	String result = this.getPathImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "path", e);
         }
@@ -233,7 +245,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getRelativeFilepath() {
         try {
-        	return this.getRelativeFilepathImpl();
+        	String result = this.getRelativeFilepathImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "relativeFilepath", e);
         }
@@ -249,7 +262,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getRelativeFolderpath() {
         try {
-        	return this.getRelativeFolderpathImpl();
+        	String result = this.getRelativeFolderpathImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "relativeFolderpath", e);
         }
@@ -265,7 +279,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object getSourceFoldername() {
         try {
-        	return this.getSourceFoldernameImpl();
+        	String result = this.getSourceFoldernameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "sourceFoldername", e);
         }
@@ -307,7 +322,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object addFunction(String name) {
         try {
-        	return this.addFunctionImpl(name);
+        	AJoinPoint result = this.addFunctionImpl(name);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addFunction", e);
         }
@@ -331,7 +347,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object addGlobal(String name, AJoinPoint type, String initValue) {
         try {
-        	return this.addGlobalImpl(name, type, initValue);
+        	AVardecl result = this.addGlobalImpl(name, type, initValue);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addGlobal", e);
         }
@@ -471,7 +488,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object rebuild() {
         try {
-        	return this.rebuildImpl();
+        	AFile result = this.rebuildImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "rebuild", e);
         }
@@ -489,7 +507,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object rebuildTry() {
         try {
-        	return this.rebuildTryImpl();
+        	AJoinPoint result = this.rebuildTryImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "rebuildTry", e);
         }
@@ -549,7 +568,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public final Object write(String destinationFoldername) {
         try {
-        	return this.writeImpl(destinationFoldername);
+        	String result = this.writeImpl(destinationFoldername);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "write", e);
         }

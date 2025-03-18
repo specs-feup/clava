@@ -45,7 +45,8 @@ public abstract class ADeclStmt extends AStatement {
      */
     public final Object getDecls() {
         try {
-        	return this.getDeclsImpl();
+        	Object result = this.getDeclsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "decls", e);
         }

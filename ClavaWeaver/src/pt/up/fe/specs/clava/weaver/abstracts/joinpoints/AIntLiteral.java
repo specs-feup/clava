@@ -38,7 +38,8 @@ public abstract class AIntLiteral extends ALiteral {
      */
     public final Object getValue() {
         try {
-        	return this.getValueImpl();
+        	Long result = this.getValueImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "value", e);
         }

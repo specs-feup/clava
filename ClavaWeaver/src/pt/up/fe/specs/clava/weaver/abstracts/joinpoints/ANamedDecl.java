@@ -38,7 +38,8 @@ public abstract class ANamedDecl extends ADecl {
      */
     public final Object getIsPublic() {
         try {
-        	return this.getIsPublicImpl();
+        	Boolean result = this.getIsPublicImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPublic", e);
         }
@@ -56,7 +57,8 @@ public abstract class ANamedDecl extends ADecl {
      */
     public final Object getName() {
         try {
-        	return this.getNameImpl();
+        	String result = this.getNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -74,7 +76,8 @@ public abstract class ANamedDecl extends ADecl {
      */
     public final Object getQualifiedName() {
         try {
-        	return this.getQualifiedNameImpl();
+        	String result = this.getQualifiedNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "qualifiedName", e);
         }
@@ -92,7 +95,8 @@ public abstract class ANamedDecl extends ADecl {
      */
     public final Object getQualifiedPrefix() {
         try {
-        	return this.getQualifiedPrefixImpl();
+        	String result = this.getQualifiedPrefixImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "qualifiedPrefix", e);
         }

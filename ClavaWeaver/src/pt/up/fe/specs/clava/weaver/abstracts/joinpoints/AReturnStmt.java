@@ -37,7 +37,8 @@ public abstract class AReturnStmt extends AStatement {
      */
     public final Object getReturnExpr() {
         try {
-        	return this.getReturnExprImpl();
+        	AExpression result = this.getReturnExprImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "returnExpr", e);
         }

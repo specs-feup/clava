@@ -37,7 +37,8 @@ public abstract class AOp extends AExpression {
      */
     public final Object getIsBitwise() {
         try {
-        	return this.getIsBitwiseImpl();
+        	Boolean result = this.getIsBitwiseImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isBitwise", e);
         }
@@ -53,7 +54,8 @@ public abstract class AOp extends AExpression {
      */
     public final Object getKind() {
         try {
-        	return this.getKindImpl();
+        	String result = this.getKindImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }
@@ -71,7 +73,8 @@ public abstract class AOp extends AExpression {
      */
     public final Object getOperator() {
         try {
-        	return this.getOperatorImpl();
+        	String result = this.getOperatorImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "operator", e);
         }

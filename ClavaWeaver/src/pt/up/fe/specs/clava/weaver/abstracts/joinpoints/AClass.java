@@ -47,7 +47,8 @@ public abstract class AClass extends ARecord {
      */
     public final Object getAllBases() {
         try {
-        	return this.getAllBasesImpl();
+        	Object result = this.getAllBasesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "allBases", e);
         }
@@ -73,7 +74,8 @@ public abstract class AClass extends ARecord {
      */
     public final Object getAllMethods() {
         try {
-        	return this.getAllMethodsImpl();
+        	Object result = this.getAllMethodsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "allMethods", e);
         }
@@ -99,7 +101,8 @@ public abstract class AClass extends ARecord {
      */
     public final Object getBases() {
         try {
-        	return this.getBasesImpl();
+        	Object result = this.getBasesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "bases", e);
         }
@@ -115,7 +118,8 @@ public abstract class AClass extends ARecord {
      */
     public final Object getCanonical() {
         try {
-        	return this.getCanonicalImpl();
+        	AClass result = this.getCanonicalImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "canonical", e);
         }
@@ -131,7 +135,8 @@ public abstract class AClass extends ARecord {
      */
     public final Object getImplementation() {
         try {
-        	return this.getImplementationImpl();
+        	AClass result = this.getImplementationImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "implementation", e);
         }
@@ -147,7 +152,8 @@ public abstract class AClass extends ARecord {
      */
     public final Object getIsAbstract() {
         try {
-        	return this.getIsAbstractImpl();
+        	Boolean result = this.getIsAbstractImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isAbstract", e);
         }
@@ -163,7 +169,8 @@ public abstract class AClass extends ARecord {
      */
     public final Object getIsCanonical() {
         try {
-        	return this.getIsCanonicalImpl();
+        	Boolean result = this.getIsCanonicalImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCanonical", e);
         }
@@ -179,7 +186,8 @@ public abstract class AClass extends ARecord {
      */
     public final Object getIsInterface() {
         try {
-        	return this.getIsInterfaceImpl();
+        	Boolean result = this.getIsInterfaceImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInterface", e);
         }
@@ -205,7 +213,8 @@ public abstract class AClass extends ARecord {
      */
     public final Object getMethods() {
         try {
-        	return this.getMethodsImpl();
+        	Object result = this.getMethodsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "methods", e);
         }
@@ -231,7 +240,8 @@ public abstract class AClass extends ARecord {
      */
     public final Object getPrototypes() {
         try {
-        	return this.getPrototypesImpl();
+        	Object result = this.getPrototypesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "prototypes", e);
         }

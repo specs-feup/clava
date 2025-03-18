@@ -37,7 +37,8 @@ public abstract class ACast extends AExpression {
      */
     public final Object getFromType() {
         try {
-        	return this.getFromTypeImpl();
+        	AType result = this.getFromTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "fromType", e);
         }
@@ -53,7 +54,8 @@ public abstract class ACast extends AExpression {
      */
     public final Object getIsImplicitCast() {
         try {
-        	return this.getIsImplicitCastImpl();
+        	Boolean result = this.getIsImplicitCastImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isImplicitCast", e);
         }
@@ -71,7 +73,8 @@ public abstract class ACast extends AExpression {
      */
     public final Object getSubExpr() {
         try {
-        	return this.getSubExprImpl();
+        	AExpression result = this.getSubExprImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "subExpr", e);
         }
@@ -89,7 +92,8 @@ public abstract class ACast extends AExpression {
      */
     public final Object getToType() {
         try {
-        	return this.getToTypeImpl();
+        	AType result = this.getToTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "toType", e);
         }

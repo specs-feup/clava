@@ -35,7 +35,8 @@ public abstract class AInitList extends AExpression {
      */
     public final Object getArrayFiller() {
         try {
-        	return this.getArrayFillerImpl();
+        	AExpression result = this.getArrayFillerImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "arrayFiller", e);
         }

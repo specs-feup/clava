@@ -48,7 +48,8 @@ public abstract class AEnumDecl extends ANamedDecl {
      */
     public final Object getEnumerators() {
         try {
-        	return this.getEnumeratorsImpl();
+        	Object result = this.getEnumeratorsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "enumerators", e);
         }

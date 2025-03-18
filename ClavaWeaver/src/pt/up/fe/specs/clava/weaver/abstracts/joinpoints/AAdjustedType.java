@@ -35,7 +35,8 @@ public abstract class AAdjustedType extends AType {
      */
     public final Object getOriginalType() {
         try {
-        	return this.getOriginalTypeImpl();
+        	AType result = this.getOriginalTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "originalType", e);
         }

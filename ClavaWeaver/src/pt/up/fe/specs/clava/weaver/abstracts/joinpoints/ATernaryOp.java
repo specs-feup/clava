@@ -38,7 +38,8 @@ public abstract class ATernaryOp extends AOp {
      */
     public final Object getCond() {
         try {
-        	return this.getCondImpl();
+        	AExpression result = this.getCondImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "cond", e);
         }
@@ -56,7 +57,8 @@ public abstract class ATernaryOp extends AOp {
      */
     public final Object getFalseExpr() {
         try {
-        	return this.getFalseExprImpl();
+        	AExpression result = this.getFalseExprImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "falseExpr", e);
         }
@@ -74,7 +76,8 @@ public abstract class ATernaryOp extends AOp {
      */
     public final Object getTrueExpr() {
         try {
-        	return this.getTrueExprImpl();
+        	AExpression result = this.getTrueExprImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "trueExpr", e);
         }

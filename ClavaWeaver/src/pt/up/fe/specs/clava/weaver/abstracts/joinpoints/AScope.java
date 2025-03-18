@@ -46,7 +46,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object getAllStmts() {
         try {
-        	return this.getAllStmtsImpl();
+        	Object result = this.getAllStmtsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "allStmts", e);
         }
@@ -64,7 +65,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object getFirstStmt() {
         try {
-        	return this.getFirstStmtImpl();
+        	AStatement result = this.getFirstStmtImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "firstStmt", e);
         }
@@ -84,7 +86,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object getNumStatements(Boolean flat) {
         try {
-        	return this.getNumStatementsImpl(flat);
+        	Long result = this.getNumStatementsImpl(flat);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getNumStatements", e);
         }
@@ -102,7 +105,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object getLastStmt() {
         try {
-        	return this.getLastStmtImpl();
+        	AStatement result = this.getLastStmtImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "lastStmt", e);
         }
@@ -118,7 +122,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object getNaked() {
         try {
-        	return this.getNakedImpl();
+        	Boolean result = this.getNakedImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "naked", e);
         }
@@ -134,7 +139,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object getOwner() {
         try {
-        	return this.getOwnerImpl();
+        	AJoinPoint result = this.getOwnerImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "owner", e);
         }
@@ -160,7 +166,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object getStmts() {
         try {
-        	return this.getStmtsImpl();
+        	Object result = this.getStmtsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "stmts", e);
         }
@@ -184,7 +191,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object addLocal(String name, AJoinPoint type, String initValue) {
         try {
-        	return this.addLocalImpl(name, type, initValue);
+        	AJoinPoint result = this.addLocalImpl(name, type, initValue);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addLocal", e);
         }
@@ -202,7 +210,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object cfg() {
         try {
-        	return this.cfgImpl();
+        	String result = this.cfgImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cfg", e);
         }
@@ -238,7 +247,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object dfg() {
         try {
-        	return this.dfgImpl();
+        	String result = this.dfgImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "dfg", e);
         }
@@ -258,7 +268,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object insertBegin(AJoinPoint node) {
         try {
-        	return this.insertBeginImpl(node);
+        	AJoinPoint result = this.insertBeginImpl(node);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertBegin", e);
         }
@@ -278,7 +289,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object insertBegin(String code) {
         try {
-        	return this.insertBeginImpl(code);
+        	AJoinPoint result = this.insertBeginImpl(code);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertBegin", e);
         }
@@ -298,7 +310,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object insertEnd(AJoinPoint node) {
         try {
-        	return this.insertEndImpl(node);
+        	AJoinPoint result = this.insertEndImpl(node);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertEnd", e);
         }
@@ -318,7 +331,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object insertEnd(String code) {
         try {
-        	return this.insertEndImpl(code);
+        	AJoinPoint result = this.insertEndImpl(code);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertEnd", e);
         }
@@ -338,7 +352,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object insertReturn(AJoinPoint code) {
         try {
-        	return this.insertReturnImpl(code);
+        	AJoinPoint result = this.insertReturnImpl(code);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -358,7 +373,8 @@ public abstract class AScope extends AStatement {
      */
     public final Object insertReturn(String code) {
         try {
-        	return this.insertReturnImpl(code);
+        	AJoinPoint result = this.insertReturnImpl(code);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }

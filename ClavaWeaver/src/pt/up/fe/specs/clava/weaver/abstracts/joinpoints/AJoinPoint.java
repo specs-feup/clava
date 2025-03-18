@@ -54,7 +54,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object copy() {
         try {
-        	return this.copyImpl();
+        	AJoinPoint result = this.copyImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "copy", e);
         }
@@ -90,7 +91,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object deepCopy() {
         try {
-        	return this.deepCopyImpl();
+        	AJoinPoint result = this.deepCopyImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "deepCopy", e);
         }
@@ -108,7 +110,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object detach() {
         try {
-        	return this.detachImpl();
+        	AJoinPoint result = this.detachImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "detach", e);
         }
@@ -128,7 +131,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object insertAfter(AJoinPoint node) {
         try {
-        	return this.insertAfterImpl(node);
+        	AJoinPoint result = this.insertAfterImpl(node);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertAfter", e);
         }
@@ -148,7 +152,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object insertAfter(String code) {
         try {
-        	return this.insertAfterImpl(code);
+        	AJoinPoint result = this.insertAfterImpl(code);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertAfter", e);
         }
@@ -168,7 +173,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object insertBefore(AJoinPoint node) {
         try {
-        	return this.insertBeforeImpl(node);
+        	AJoinPoint result = this.insertBeforeImpl(node);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertBefore", e);
         }
@@ -188,7 +194,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object insertBefore(String node) {
         try {
-        	return this.insertBeforeImpl(node);
+        	AJoinPoint result = this.insertBeforeImpl(node);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertBefore", e);
         }
@@ -246,7 +253,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object replaceWith(AJoinPoint node) {
         try {
-        	return this.replaceWithImpl(node);
+        	AJoinPoint result = this.replaceWithImpl(node);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "replaceWith", e);
         }
@@ -266,7 +274,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object replaceWith(String node) {
         try {
-        	return this.replaceWithImpl(node);
+        	AJoinPoint result = this.replaceWithImpl(node);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "replaceWith", e);
         }
@@ -286,7 +295,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object replaceWith(Object[] node) {
         try {
-        	return this.replaceWithImpl(pt.up.fe.specs.util.SpecsCollections.cast(node, AJoinPoint.class));
+        	AJoinPoint result = this.replaceWithImpl(pt.up.fe.specs.util.SpecsCollections.cast(node, AJoinPoint.class));
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "replaceWith", e);
         }
@@ -306,7 +316,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object replaceWithStrings(Object[] node) {
         try {
-        	return this.replaceWithStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(node, String.class));
+        	AJoinPoint result = this.replaceWithStringsImpl(pt.up.fe.specs.util.SpecsCollections.cast(node, String.class));
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "replaceWithStrings", e);
         }
@@ -346,7 +357,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object setFirstChild(AJoinPoint node) {
         try {
-        	return this.setFirstChildImpl(node);
+        	AJoinPoint result = this.setFirstChildImpl(node);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setFirstChild", e);
         }
@@ -406,7 +418,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object setLastChild(AJoinPoint node) {
         try {
-        	return this.setLastChildImpl(node);
+        	AJoinPoint result = this.setLastChildImpl(node);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setLastChild", e);
         }
@@ -448,7 +461,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object setUserField(String fieldName, Object value) {
         try {
-        	return this.setUserFieldImpl(fieldName, value);
+        	Object result = this.setUserFieldImpl(fieldName, value);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setUserField", e);
         }
@@ -468,7 +482,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object setUserField(Map<?, ?> fieldNameAndValue) {
         try {
-        	return this.setUserFieldImpl(fieldNameAndValue);
+        	Object result = this.setUserFieldImpl(fieldNameAndValue);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setUserField", e);
         }
@@ -490,7 +505,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object setValue(String key, Object value) {
         try {
-        	return this.setValueImpl(key, value);
+        	AJoinPoint result = this.setValueImpl(key, value);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setValue", e);
         }
@@ -512,7 +528,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object toComment(String prefix, String suffix) {
         try {
-        	return this.toCommentImpl(prefix, suffix);
+        	AJoinPoint result = this.toCommentImpl(prefix, suffix);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "toComment", e);
         }
@@ -528,7 +545,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getAst() {
         try {
-        	return this.getAstImpl();
+        	String result = this.getAstImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "ast", e);
         }
@@ -554,7 +572,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getAstChildren() {
         try {
-        	return this.getAstChildrenImpl();
+        	Object result = this.getAstChildrenImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "astChildren", e);
         }
@@ -570,7 +589,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getAstId() {
         try {
-        	return this.getAstIdImpl();
+        	String result = this.getAstIdImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "astId", e);
         }
@@ -590,7 +610,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object astIsInstance(String className) {
         try {
-        	return this.astIsInstanceImpl(className);
+        	Boolean result = this.astIsInstanceImpl(className);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "astIsInstance", e);
         }
@@ -606,7 +627,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getAstName() {
         try {
-        	return this.getAstNameImpl();
+        	String result = this.getAstNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "astName", e);
         }
@@ -622,7 +644,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getAstNumChildren() {
         try {
-        	return this.getAstNumChildrenImpl();
+        	Integer result = this.getAstNumChildrenImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "astNumChildren", e);
         }
@@ -638,7 +661,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getBitWidth() {
         try {
-        	return this.getBitWidthImpl();
+        	Integer result = this.getBitWidthImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "bitWidth", e);
         }
@@ -664,7 +688,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getChain() {
         try {
-        	return this.getChainImpl();
+        	Object result = this.getChainImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "chain", e);
         }
@@ -690,7 +715,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getChildren() {
         try {
-        	return this.getChildrenImpl();
+        	Object result = this.getChildrenImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "children", e);
         }
@@ -706,7 +732,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getCode() {
         try {
-        	return this.getCodeImpl();
+        	String result = this.getCodeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "code", e);
         }
@@ -722,7 +749,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getColumn() {
         try {
-        	return this.getColumnImpl();
+        	Integer result = this.getColumnImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "column", e);
         }
@@ -742,7 +770,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object contains(AJoinPoint jp) {
         try {
-        	return this.containsImpl(jp);
+        	Boolean result = this.containsImpl(jp);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "contains", e);
         }
@@ -758,7 +787,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getCurrentRegion() {
         try {
-        	return this.getCurrentRegionImpl();
+        	AJoinPoint result = this.getCurrentRegionImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "currentRegion", e);
         }
@@ -774,7 +804,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getData() {
         try {
-        	return this.getDataImpl();
+        	Object result = this.getDataImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "data", e);
         }
@@ -790,7 +821,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getDepth() {
         try {
-        	return this.getDepthImpl();
+        	Integer result = this.getDepthImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "depth", e);
         }
@@ -816,7 +848,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getDescendants() {
         try {
-        	return this.getDescendantsImpl();
+        	Object result = this.getDescendantsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "descendants", e);
         }
@@ -832,7 +865,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getEndColumn() {
         try {
-        	return this.getEndColumnImpl();
+        	Integer result = this.getEndColumnImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "endColumn", e);
         }
@@ -848,7 +882,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getEndLine() {
         try {
-        	return this.getEndLineImpl();
+        	Integer result = this.getEndLineImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "endLine", e);
         }
@@ -864,7 +899,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getFilename() {
         try {
-        	return this.getFilenameImpl();
+        	String result = this.getFilenameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "filename", e);
         }
@@ -880,7 +916,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getFilepath() {
         try {
-        	return this.getFilepathImpl();
+        	String result = this.getFilepathImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "filepath", e);
         }
@@ -896,7 +933,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getFirstChild() {
         try {
-        	return this.getFirstChildImpl();
+        	AJoinPoint result = this.getFirstChildImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "firstChild", e);
         }
@@ -916,7 +954,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getAncestor(String type) {
         try {
-        	return this.getAncestorImpl(type);
+        	AJoinPoint result = this.getAncestorImpl(type);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getAncestor", e);
         }
@@ -936,7 +975,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getAstAncestor(String type) {
         try {
-        	return this.getAstAncestorImpl(type);
+        	AJoinPoint result = this.getAstAncestorImpl(type);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getAstAncestor", e);
         }
@@ -956,7 +996,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getAstChild(int index) {
         try {
-        	return this.getAstChildImpl(index);
+        	AJoinPoint result = this.getAstChildImpl(index);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getAstChild", e);
         }
@@ -976,7 +1017,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getChainAncestor(String type) {
         try {
-        	return this.getChainAncestorImpl(type);
+        	AJoinPoint result = this.getChainAncestorImpl(type);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getChainAncestor", e);
         }
@@ -996,7 +1038,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getChild(int index) {
         try {
-        	return this.getChildImpl(index);
+        	AJoinPoint result = this.getChildImpl(index);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getChild", e);
         }
@@ -1027,7 +1070,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getDescendants(String type) {
         try {
-        	return this.getDescendantsImpl(type);
+        	Object result = this.getDescendantsImpl(type);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getDescendants", e);
         }
@@ -1058,7 +1102,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getDescendantsAndSelf(String type) {
         try {
-        	return this.getDescendantsAndSelfImpl(type);
+        	Object result = this.getDescendantsAndSelfImpl(type);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getDescendantsAndSelf", e);
         }
@@ -1078,7 +1123,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getFirstJp(String type) {
         try {
-        	return this.getFirstJpImpl(type);
+        	AJoinPoint result = this.getFirstJpImpl(type);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getFirstJp", e);
         }
@@ -1098,7 +1144,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getJavaFieldType(String fieldName) {
         try {
-        	return this.getJavaFieldTypeImpl(fieldName);
+        	String result = this.getJavaFieldTypeImpl(fieldName);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getJavaFieldType", e);
         }
@@ -1118,7 +1165,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getKeyType(String key) {
         try {
-        	return this.getKeyTypeImpl(key);
+        	Object result = this.getKeyTypeImpl(key);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getKeyType", e);
         }
@@ -1138,7 +1186,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getUserField(String fieldName) {
         try {
-        	return this.getUserFieldImpl(fieldName);
+        	Object result = this.getUserFieldImpl(fieldName);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getUserField", e);
         }
@@ -1158,7 +1207,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getValue(String key) {
         try {
-        	return this.getValueImpl(key);
+        	Object result = this.getValueImpl(key);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getValue", e);
         }
@@ -1174,7 +1224,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getHasChildren() {
         try {
-        	return this.getHasChildrenImpl();
+        	Boolean result = this.getHasChildrenImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasChildren", e);
         }
@@ -1194,7 +1245,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object hasNode(Object nodeOrJp) {
         try {
-        	return this.hasNodeImpl(nodeOrJp);
+        	Boolean result = this.hasNodeImpl(nodeOrJp);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasNode", e);
         }
@@ -1210,7 +1262,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getHasParent() {
         try {
-        	return this.getHasParentImpl();
+        	Boolean result = this.getHasParentImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasParent", e);
         }
@@ -1226,7 +1279,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getHasType() {
         try {
-        	return this.getHasTypeImpl();
+        	Boolean result = this.getHasTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasType", e);
         }
@@ -1252,7 +1306,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getInlineComments() {
         try {
-        	return this.getInlineCommentsImpl();
+        	Object result = this.getInlineCommentsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "inlineComments", e);
         }
@@ -1268,7 +1323,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getIsCilk() {
         try {
-        	return this.getIsCilkImpl();
+        	Boolean result = this.getIsCilkImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCilk", e);
         }
@@ -1284,7 +1340,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getIsInSystemHeader() {
         try {
-        	return this.getIsInSystemHeaderImpl();
+        	Boolean result = this.getIsInSystemHeaderImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInSystemHeader", e);
         }
@@ -1300,7 +1357,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getIsInsideHeader() {
         try {
-        	return this.getIsInsideHeaderImpl();
+        	Boolean result = this.getIsInsideHeaderImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInsideHeader", e);
         }
@@ -1316,7 +1374,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getIsInsideLoopHeader() {
         try {
-        	return this.getIsInsideLoopHeaderImpl();
+        	Boolean result = this.getIsInsideLoopHeaderImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInsideLoopHeader", e);
         }
@@ -1332,7 +1391,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getIsMacro() {
         try {
-        	return this.getIsMacroImpl();
+        	Boolean result = this.getIsMacroImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isMacro", e);
         }
@@ -1358,7 +1418,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getJavaFields() {
         try {
-        	return this.getJavaFieldsImpl();
+        	Object result = this.getJavaFieldsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "javaFields", e);
         }
@@ -1374,7 +1435,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getJpId() {
         try {
-        	return this.getJpIdImpl();
+        	String result = this.getJpIdImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "jpId", e);
         }
@@ -1400,7 +1462,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getKeys() {
         try {
-        	return this.getKeysImpl();
+        	Object result = this.getKeysImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "keys", e);
         }
@@ -1416,7 +1479,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getLastChild() {
         try {
-        	return this.getLastChildImpl();
+        	AJoinPoint result = this.getLastChildImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "lastChild", e);
         }
@@ -1432,7 +1496,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getLeftJp() {
         try {
-        	return this.getLeftJpImpl();
+        	AJoinPoint result = this.getLeftJpImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "leftJp", e);
         }
@@ -1448,7 +1513,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getLine() {
         try {
-        	return this.getLineImpl();
+        	Integer result = this.getLineImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "line", e);
         }
@@ -1464,7 +1530,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getLocation() {
         try {
-        	return this.getLocationImpl();
+        	String result = this.getLocationImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "location", e);
         }
@@ -1480,7 +1547,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getNumChildren() {
         try {
-        	return this.getNumChildrenImpl();
+        	Integer result = this.getNumChildrenImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numChildren", e);
         }
@@ -1496,7 +1564,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getOriginNode() {
         try {
-        	return this.getOriginNodeImpl();
+        	AJoinPoint result = this.getOriginNodeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "originNode", e);
         }
@@ -1512,7 +1581,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getParent() {
         try {
-        	return this.getParentImpl();
+        	AJoinPoint result = this.getParentImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "parent", e);
         }
@@ -1528,7 +1598,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getParentRegion() {
         try {
-        	return this.getParentRegionImpl();
+        	AJoinPoint result = this.getParentRegionImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "parentRegion", e);
         }
@@ -1554,7 +1625,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getPragmas() {
         try {
-        	return this.getPragmasImpl();
+        	Object result = this.getPragmasImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "pragmas", e);
         }
@@ -1570,7 +1642,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getRightJp() {
         try {
-        	return this.getRightJpImpl();
+        	AJoinPoint result = this.getRightJpImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "rightJp", e);
         }
@@ -1586,7 +1659,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getRoot() {
         try {
-        	return this.getRootImpl();
+        	AProgram result = this.getRootImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "root", e);
         }
@@ -1612,7 +1686,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getScopeNodes() {
         try {
-        	return this.getScopeNodesImpl();
+        	Object result = this.getScopeNodesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "scopeNodes", e);
         }
@@ -1638,7 +1713,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getSiblingsLeft() {
         try {
-        	return this.getSiblingsLeftImpl();
+        	Object result = this.getSiblingsLeftImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "siblingsLeft", e);
         }
@@ -1664,7 +1740,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getSiblingsRight() {
         try {
-        	return this.getSiblingsRightImpl();
+        	Object result = this.getSiblingsRightImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "siblingsRight", e);
         }
@@ -1680,7 +1757,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getStmt() {
         try {
-        	return this.getStmtImpl();
+        	AStatement result = this.getStmtImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "stmt", e);
         }
@@ -1698,7 +1776,8 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public final Object getType() {
         try {
-        	return this.getTypeImpl();
+        	AType result = this.getTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "type", e);
         }

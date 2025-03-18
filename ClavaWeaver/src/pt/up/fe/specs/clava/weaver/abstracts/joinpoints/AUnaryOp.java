@@ -38,7 +38,8 @@ public abstract class AUnaryOp extends AOp {
      */
     public final Object getIsPointerDeref() {
         try {
-        	return this.getIsPointerDerefImpl();
+        	Boolean result = this.getIsPointerDerefImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPointerDeref", e);
         }
@@ -56,7 +57,8 @@ public abstract class AUnaryOp extends AOp {
      */
     public final Object getOperand() {
         try {
-        	return this.getOperandImpl();
+        	AExpression result = this.getOperandImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "operand", e);
         }

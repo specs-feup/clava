@@ -37,7 +37,8 @@ public abstract class ABuiltinType extends AType {
      */
     public final Object getBuiltinKind() {
         try {
-        	return this.getBuiltinKindImpl();
+        	String result = this.getBuiltinKindImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "builtinKind", e);
         }
@@ -53,7 +54,8 @@ public abstract class ABuiltinType extends AType {
      */
     public final Object getIsFloat() {
         try {
-        	return this.getIsFloatImpl();
+        	Boolean result = this.getIsFloatImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isFloat", e);
         }
@@ -69,7 +71,8 @@ public abstract class ABuiltinType extends AType {
      */
     public final Object getIsInteger() {
         try {
-        	return this.getIsIntegerImpl();
+        	Boolean result = this.getIsIntegerImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInteger", e);
         }
@@ -85,7 +88,8 @@ public abstract class ABuiltinType extends AType {
      */
     public final Object getIsSigned() {
         try {
-        	return this.getIsSignedImpl();
+        	Boolean result = this.getIsSignedImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isSigned", e);
         }
@@ -101,7 +105,8 @@ public abstract class ABuiltinType extends AType {
      */
     public final Object getIsUnsigned() {
         try {
-        	return this.getIsUnsignedImpl();
+        	Boolean result = this.getIsUnsignedImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isUnsigned", e);
         }
@@ -117,7 +122,8 @@ public abstract class ABuiltinType extends AType {
      */
     public final Object getIsVoid() {
         try {
-        	return this.getIsVoidImpl();
+        	Boolean result = this.getIsVoidImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isVoid", e);
         }

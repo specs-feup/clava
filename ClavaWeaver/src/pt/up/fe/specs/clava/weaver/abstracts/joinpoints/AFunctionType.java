@@ -48,7 +48,8 @@ public abstract class AFunctionType extends AType {
      */
     public final Object getParamTypes() {
         try {
-        	return this.getParamTypesImpl();
+        	Object result = this.getParamTypesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "paramTypes", e);
         }
@@ -66,7 +67,8 @@ public abstract class AFunctionType extends AType {
      */
     public final Object getReturnType() {
         try {
-        	return this.getReturnTypeImpl();
+        	AType result = this.getReturnTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "returnType", e);
         }

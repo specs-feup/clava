@@ -28,7 +28,8 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
      */
     public final Object getException() {
         try {
-        	return this.getExceptionImpl();
+        	Object result = this.getExceptionImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "exception", e);
         }
@@ -46,7 +47,8 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
      */
     public final Object getExceptionType() {
         try {
-        	return this.getExceptionTypeImpl();
+        	String result = this.getExceptionTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "exceptionType", e);
         }
@@ -64,7 +66,8 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
      */
     public final Object getMessage() {
         try {
-        	return this.getMessageImpl();
+        	String result = this.getMessageImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "message", e);
         }

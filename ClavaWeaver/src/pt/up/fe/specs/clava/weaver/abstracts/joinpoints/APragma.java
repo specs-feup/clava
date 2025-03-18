@@ -27,7 +27,8 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      */
     public final Object getContent() {
         try {
-        	return this.getContentImpl();
+        	String result = this.getContentImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "content", e);
         }
@@ -58,7 +59,8 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      */
     public final Object getTargetNodes(String endPragma) {
         try {
-        	return this.getTargetNodesImpl(endPragma);
+        	Object result = this.getTargetNodesImpl(endPragma);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getTargetNodes", e);
         }
@@ -74,7 +76,8 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      */
     public final Object getName() {
         try {
-        	return this.getNameImpl();
+        	String result = this.getNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -90,7 +93,8 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      */
     public final Object getTarget() {
         try {
-        	return this.getTargetImpl();
+        	AJoinPoint result = this.getTargetImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "target", e);
         }

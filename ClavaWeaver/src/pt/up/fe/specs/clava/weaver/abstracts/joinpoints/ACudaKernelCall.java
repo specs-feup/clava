@@ -49,7 +49,8 @@ public abstract class ACudaKernelCall extends ACall {
      */
     public final Object getConfig() {
         try {
-        	return this.getConfigImpl();
+        	Object result = this.getConfigImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "config", e);
         }

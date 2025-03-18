@@ -35,7 +35,8 @@ public abstract class AExprStmt extends AStatement {
      */
     public final Object getExpr() {
         try {
-        	return this.getExprImpl();
+        	AExpression result = this.getExprImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "expr", e);
         }

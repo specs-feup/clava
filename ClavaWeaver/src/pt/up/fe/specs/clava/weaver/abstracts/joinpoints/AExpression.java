@@ -26,7 +26,8 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
      */
     public final Object getDecl() {
         try {
-        	return this.getDeclImpl();
+        	ADecl result = this.getDeclImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "decl", e);
         }
@@ -42,7 +43,8 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
      */
     public final Object getImplicitCast() {
         try {
-        	return this.getImplicitCastImpl();
+        	ACast result = this.getImplicitCastImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "implicitCast", e);
         }
@@ -58,7 +60,8 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
      */
     public final Object getIsFunctionArgument() {
         try {
-        	return this.getIsFunctionArgumentImpl();
+        	Boolean result = this.getIsFunctionArgumentImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isFunctionArgument", e);
         }
@@ -76,7 +79,8 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
      */
     public final Object getUse() {
         try {
-        	return this.getUseImpl();
+        	String result = this.getUseImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "use", e);
         }
@@ -94,7 +98,8 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
      */
     public final Object getVardecl() {
         try {
-        	return this.getVardeclImpl();
+        	AVardecl result = this.getVardeclImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "vardecl", e);
         }

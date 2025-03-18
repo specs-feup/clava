@@ -37,7 +37,8 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getDefinition() {
         try {
-        	return this.getDefinitionImpl();
+        	AVardecl result = this.getDefinitionImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "definition", e);
         }
@@ -53,7 +54,8 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getHasInit() {
         try {
-        	return this.getHasInitImpl();
+        	Boolean result = this.getHasInitImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasInit", e);
         }
@@ -69,7 +71,8 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getInit() {
         try {
-        	return this.getInitImpl();
+        	AExpression result = this.getInitImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "init", e);
         }
@@ -85,7 +88,8 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getInitStyle() {
         try {
-        	return this.getInitStyleImpl();
+        	String result = this.getInitStyleImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "initStyle", e);
         }
@@ -101,7 +105,8 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getIsGlobal() {
         try {
-        	return this.getIsGlobalImpl();
+        	Boolean result = this.getIsGlobalImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isGlobal", e);
         }
@@ -117,7 +122,8 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getIsParam() {
         try {
-        	return this.getIsParamImpl();
+        	Boolean result = this.getIsParamImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isParam", e);
         }
@@ -133,7 +139,8 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object getStorageClass() {
         try {
-        	return this.getStorageClassImpl();
+        	String result = this.getStorageClassImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "storageClass", e);
         }
@@ -231,7 +238,8 @@ public abstract class AVardecl extends ADeclarator {
      */
     public final Object varref() {
         try {
-        	return this.varrefImpl();
+        	AVarref result = this.varrefImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "varref", e);
         }

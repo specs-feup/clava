@@ -35,7 +35,8 @@ public abstract class ATypedefType extends AType {
      */
     public final Object getDecl() {
         try {
-        	return this.getDeclImpl();
+        	ATypedefNameDecl result = this.getDeclImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "decl", e);
         }
@@ -51,7 +52,8 @@ public abstract class ATypedefType extends AType {
      */
     public final Object getUnderlyingType() {
         try {
-        	return this.getUnderlyingTypeImpl();
+        	AType result = this.getUnderlyingTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "underlyingType", e);
         }

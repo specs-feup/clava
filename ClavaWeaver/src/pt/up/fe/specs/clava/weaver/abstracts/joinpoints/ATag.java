@@ -35,7 +35,8 @@ public abstract class ATag extends APragma {
      */
     public final Object getId() {
         try {
-        	return this.getIdImpl();
+        	String result = this.getIdImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "id", e);
         }

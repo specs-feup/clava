@@ -49,7 +49,8 @@ public abstract class ARecord extends ANamedDecl {
      */
     public final Object getFields() {
         try {
-        	return this.getFieldsImpl();
+        	Object result = this.getFieldsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "fields", e);
         }
@@ -77,7 +78,8 @@ public abstract class ARecord extends ANamedDecl {
      */
     public final Object getFunctions() {
         try {
-        	return this.getFunctionsImpl();
+        	Object result = this.getFunctionsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "functions", e);
         }
@@ -93,7 +95,8 @@ public abstract class ARecord extends ANamedDecl {
      */
     public final Object getIsImplementation() {
         try {
-        	return this.getIsImplementationImpl();
+        	Boolean result = this.getIsImplementationImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isImplementation", e);
         }
@@ -109,7 +112,8 @@ public abstract class ARecord extends ANamedDecl {
      */
     public final Object getIsPrototype() {
         try {
-        	return this.getIsPrototypeImpl();
+        	Boolean result = this.getIsPrototypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPrototype", e);
         }
@@ -127,7 +131,8 @@ public abstract class ARecord extends ANamedDecl {
      */
     public final Object getKind() {
         try {
-        	return this.getKindImpl();
+        	String result = this.getKindImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }

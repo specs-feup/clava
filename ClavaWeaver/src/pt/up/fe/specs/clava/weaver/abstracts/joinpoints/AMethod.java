@@ -39,7 +39,8 @@ public abstract class AMethod extends AFunction {
      */
     public final Object getRecord() {
         try {
-        	return this.getRecordImpl();
+        	AClass result = this.getRecordImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "record", e);
         }

@@ -45,7 +45,8 @@ public abstract class ASwitch extends AStatement {
      */
     public final Object getCases() {
         try {
-        	return this.getCasesImpl();
+        	Object result = this.getCasesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "cases", e);
         }
@@ -61,7 +62,8 @@ public abstract class ASwitch extends AStatement {
      */
     public final Object getCondition() {
         try {
-        	return this.getConditionImpl();
+        	AExpression result = this.getConditionImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "condition", e);
         }
@@ -77,7 +79,8 @@ public abstract class ASwitch extends AStatement {
      */
     public final Object getGetDefaultCase() {
         try {
-        	return this.getGetDefaultCaseImpl();
+        	ACase result = this.getGetDefaultCaseImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getDefaultCase", e);
         }
@@ -93,7 +96,8 @@ public abstract class ASwitch extends AStatement {
      */
     public final Object getHasDefaultCase() {
         try {
-        	return this.getHasDefaultCaseImpl();
+        	Boolean result = this.getHasDefaultCaseImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasDefaultCase", e);
         }

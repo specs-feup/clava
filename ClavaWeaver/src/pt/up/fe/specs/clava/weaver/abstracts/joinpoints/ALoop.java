@@ -38,7 +38,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getBody() {
         try {
-        	return this.getBodyImpl();
+        	AScope result = this.getBodyImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "body", e);
         }
@@ -54,7 +55,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getCond() {
         try {
-        	return this.getCondImpl();
+        	AStatement result = this.getCondImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "cond", e);
         }
@@ -72,7 +74,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getCondRelation() {
         try {
-        	return this.getCondRelationImpl();
+        	String result = this.getCondRelationImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "condRelation", e);
         }
@@ -90,7 +93,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getControlVar() {
         try {
-        	return this.getControlVarImpl();
+        	String result = this.getControlVarImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "controlVar", e);
         }
@@ -106,7 +110,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getEndValue() {
         try {
-        	return this.getEndValueImpl();
+        	String result = this.getEndValueImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "endValue", e);
         }
@@ -122,7 +127,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getHasCondRelation() {
         try {
-        	return this.getHasCondRelationImpl();
+        	Boolean result = this.getHasCondRelationImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasCondRelation", e);
         }
@@ -138,7 +144,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getId() {
         try {
-        	return this.getIdImpl();
+        	String result = this.getIdImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "id", e);
         }
@@ -154,7 +161,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getInit() {
         try {
-        	return this.getInitImpl();
+        	AStatement result = this.getInitImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "init", e);
         }
@@ -170,7 +178,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getInitValue() {
         try {
-        	return this.getInitValueImpl();
+        	String result = this.getInitValueImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "initValue", e);
         }
@@ -188,7 +197,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getIsInnermost() {
         try {
-        	return this.getIsInnermostImpl();
+        	Boolean result = this.getIsInnermostImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInnermost", e);
         }
@@ -208,7 +218,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object isInterchangeable(ALoop otherLoop) {
         try {
-        	return this.isInterchangeableImpl(otherLoop);
+        	Boolean result = this.isInterchangeableImpl(otherLoop);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInterchangeable", e);
         }
@@ -226,7 +237,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getIsOutermost() {
         try {
-        	return this.getIsOutermostImpl();
+        	Boolean result = this.getIsOutermostImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isOutermost", e);
         }
@@ -244,7 +256,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getIsParallel() {
         try {
-        	return this.getIsParallelImpl();
+        	Boolean result = this.getIsParallelImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isParallel", e);
         }
@@ -262,7 +275,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getIterations() {
         try {
-        	return this.getIterationsImpl();
+        	Integer result = this.getIterationsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "iterations", e);
         }
@@ -280,7 +294,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getIterationsExpr() {
         try {
-        	return this.getIterationsExprImpl();
+        	AExpression result = this.getIterationsExprImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "iterationsExpr", e);
         }
@@ -298,7 +313,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getKind() {
         try {
-        	return this.getKindImpl();
+        	String result = this.getKindImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }
@@ -316,7 +332,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getNestedLevel() {
         try {
-        	return this.getNestedLevelImpl();
+        	Integer result = this.getNestedLevelImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "nestedLevel", e);
         }
@@ -344,7 +361,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getRank() {
         try {
-        	return this.getRankImpl();
+        	Object result = this.getRankImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "rank", e);
         }
@@ -360,7 +378,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getStep() {
         try {
-        	return this.getStepImpl();
+        	AStatement result = this.getStepImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "step", e);
         }
@@ -376,7 +395,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object getStepValue() {
         try {
-        	return this.getStepValueImpl();
+        	String result = this.getStepValueImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "stepValue", e);
         }
@@ -600,7 +620,8 @@ public abstract class ALoop extends AStatement {
      */
     public final Object tile(String blockSize, AStatement reference, Boolean useTernary) {
         try {
-        	return this.tileImpl(blockSize, reference, useTernary);
+        	AStatement result = this.tileImpl(blockSize, reference, useTernary);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "tile", e);
         }

@@ -38,7 +38,8 @@ public abstract class ALabelDecl extends ANamedDecl {
      */
     public final Object getLabelStmt() {
         try {
-        	return this.getLabelStmtImpl();
+        	ALabelStmt result = this.getLabelStmtImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "labelStmt", e);
         }

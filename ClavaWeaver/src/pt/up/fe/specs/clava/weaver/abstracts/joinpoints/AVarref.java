@@ -38,7 +38,8 @@ public abstract class AVarref extends AExpression {
      */
     public final Object getDeclaration() {
         try {
-        	return this.getDeclarationImpl();
+        	ADeclarator result = this.getDeclarationImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "declaration", e);
         }
@@ -54,7 +55,8 @@ public abstract class AVarref extends AExpression {
      */
     public final Object getHasProperty() {
         try {
-        	return this.getHasPropertyImpl();
+        	Boolean result = this.getHasPropertyImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasProperty", e);
         }
@@ -70,7 +72,8 @@ public abstract class AVarref extends AExpression {
      */
     public final Object getIsFunctionCall() {
         try {
-        	return this.getIsFunctionCallImpl();
+        	Boolean result = this.getIsFunctionCallImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isFunctionCall", e);
         }
@@ -88,7 +91,8 @@ public abstract class AVarref extends AExpression {
      */
     public final Object getKind() {
         try {
-        	return this.getKindImpl();
+        	String result = this.getKindImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }
@@ -106,7 +110,8 @@ public abstract class AVarref extends AExpression {
      */
     public final Object getName() {
         try {
-        	return this.getNameImpl();
+        	String result = this.getNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -122,7 +127,8 @@ public abstract class AVarref extends AExpression {
      */
     public final Object getProperty() {
         try {
-        	return this.getPropertyImpl();
+        	String result = this.getPropertyImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "property", e);
         }
@@ -138,7 +144,8 @@ public abstract class AVarref extends AExpression {
      */
     public final Object getUseExpr() {
         try {
-        	return this.getUseExprImpl();
+        	AExpression result = this.getUseExprImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "useExpr", e);
         }

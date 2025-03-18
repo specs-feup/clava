@@ -38,7 +38,8 @@ public abstract class AArrayType extends AType {
      */
     public final Object getElementType() {
         try {
-        	return this.getElementTypeImpl();
+        	AType result = this.getElementTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "elementType", e);
         }

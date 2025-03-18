@@ -47,7 +47,8 @@ public abstract class ATemplateSpecializationType extends AType {
      */
     public final Object getArgs() {
         try {
-        	return this.getArgsImpl();
+        	Object result = this.getArgsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "args", e);
         }
@@ -65,7 +66,8 @@ public abstract class ATemplateSpecializationType extends AType {
      */
     public final Object getFirstArgType() {
         try {
-        	return this.getFirstArgTypeImpl();
+        	AType result = this.getFirstArgTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "firstArgType", e);
         }
@@ -83,7 +85,8 @@ public abstract class ATemplateSpecializationType extends AType {
      */
     public final Object getNumArgs() {
         try {
-        	return this.getNumArgsImpl();
+        	Integer result = this.getNumArgsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numArgs", e);
         }
@@ -101,7 +104,8 @@ public abstract class ATemplateSpecializationType extends AType {
      */
     public final Object getTemplateName() {
         try {
-        	return this.getTemplateNameImpl();
+        	String result = this.getTemplateNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "templateName", e);
         }

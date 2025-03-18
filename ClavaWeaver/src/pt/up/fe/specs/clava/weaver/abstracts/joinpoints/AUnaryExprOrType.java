@@ -38,7 +38,8 @@ public abstract class AUnaryExprOrType extends AExpression {
      */
     public final Object getArgExpr() {
         try {
-        	return this.getArgExprImpl();
+        	AExpression result = this.getArgExprImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "argExpr", e);
         }
@@ -56,7 +57,8 @@ public abstract class AUnaryExprOrType extends AExpression {
      */
     public final Object getArgType() {
         try {
-        	return this.getArgTypeImpl();
+        	AType result = this.getArgTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "argType", e);
         }
@@ -74,7 +76,8 @@ public abstract class AUnaryExprOrType extends AExpression {
      */
     public final Object getHasArgExpr() {
         try {
-        	return this.getHasArgExprImpl();
+        	Boolean result = this.getHasArgExprImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasArgExpr", e);
         }
@@ -92,7 +95,8 @@ public abstract class AUnaryExprOrType extends AExpression {
      */
     public final Object getHasTypeExpr() {
         try {
-        	return this.getHasTypeExprImpl();
+        	Boolean result = this.getHasTypeExprImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasTypeExpr", e);
         }
@@ -110,7 +114,8 @@ public abstract class AUnaryExprOrType extends AExpression {
      */
     public final Object getKind() {
         try {
-        	return this.getKindImpl();
+        	String result = this.getKindImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }

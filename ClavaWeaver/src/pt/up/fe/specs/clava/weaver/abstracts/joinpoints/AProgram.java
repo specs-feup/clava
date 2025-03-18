@@ -29,7 +29,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getBaseFolder() {
         try {
-        	return this.getBaseFolderImpl();
+        	String result = this.getBaseFolderImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "baseFolder", e);
         }
@@ -57,7 +58,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getDefaultFlags() {
         try {
-        	return this.getDefaultFlagsImpl();
+        	Object result = this.getDefaultFlagsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "defaultFlags", e);
         }
@@ -83,7 +85,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getExtraIncludes() {
         try {
-        	return this.getExtraIncludesImpl();
+        	Object result = this.getExtraIncludesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "extraIncludes", e);
         }
@@ -109,7 +112,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getExtraLibs() {
         try {
-        	return this.getExtraLibsImpl();
+        	Object result = this.getExtraLibsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "extraLibs", e);
         }
@@ -135,7 +139,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getExtraProjects() {
         try {
-        	return this.getExtraProjectsImpl();
+        	Object result = this.getExtraProjectsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "extraProjects", e);
         }
@@ -161,7 +166,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getExtraSources() {
         try {
-        	return this.getExtraSourcesImpl();
+        	Object result = this.getExtraSourcesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "extraSources", e);
         }
@@ -187,7 +193,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getFiles() {
         try {
-        	return this.getFilesImpl();
+        	Object result = this.getFilesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "files", e);
         }
@@ -215,7 +222,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getIncludeFolders() {
         try {
-        	return this.getIncludeFoldersImpl();
+        	Object result = this.getIncludeFoldersImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "includeFolders", e);
         }
@@ -231,7 +239,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getIsCxx() {
         try {
-        	return this.getIsCxxImpl();
+        	Boolean result = this.getIsCxxImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCxx", e);
         }
@@ -247,7 +256,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getMain() {
         try {
-        	return this.getMainImpl();
+        	AFunction result = this.getMainImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "main", e);
         }
@@ -265,7 +275,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getName() {
         try {
-        	return this.getNameImpl();
+        	String result = this.getNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -281,7 +292,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getStandard() {
         try {
-        	return this.getStandardImpl();
+        	String result = this.getStandardImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "standard", e);
         }
@@ -297,7 +309,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getStdFlag() {
         try {
-        	return this.getStdFlagImpl();
+        	String result = this.getStdFlagImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "stdFlag", e);
         }
@@ -325,7 +338,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getUserFlags() {
         try {
-        	return this.getUserFlagsImpl();
+        	Object result = this.getUserFlagsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "userFlags", e);
         }
@@ -343,7 +357,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getWeavingFolder() {
         try {
-        	return this.getWeavingFolderImpl();
+        	String result = this.getWeavingFolderImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "weavingFolder", e);
         }
@@ -467,7 +482,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object addFile(AFile file) {
         try {
-        	return this.addFileImpl(file);
+        	AJoinPoint result = this.addFileImpl(file);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addFile", e);
         }
@@ -487,7 +503,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object addFileFromPath(Object filepath) {
         try {
-        	return this.addFileFromPathImpl(filepath);
+        	AJoinPoint result = this.addFileFromPathImpl(filepath);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addFileFromPath", e);
         }
@@ -585,7 +602,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object rebuild() {
         try {
-        	return this.rebuildImpl();
+        	boolean result = this.rebuildImpl();
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "rebuild", e);
         }

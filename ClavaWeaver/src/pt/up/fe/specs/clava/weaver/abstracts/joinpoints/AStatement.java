@@ -28,7 +28,8 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
      */
     public final Object getIsFirst() {
         try {
-        	return this.getIsFirstImpl();
+        	Boolean result = this.getIsFirstImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isFirst", e);
         }
@@ -46,7 +47,8 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
      */
     public final Object getIsLast() {
         try {
-        	return this.getIsLastImpl();
+        	Boolean result = this.getIsLastImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isLast", e);
         }

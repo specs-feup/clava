@@ -40,7 +40,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getArrayDims() {
         try {
-        	return this.getArrayDimsImpl();
+        	Object result = this.getArrayDimsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "arrayDims", e);
         }
@@ -58,7 +59,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getArraySize() {
         try {
-        	return this.getArraySizeImpl();
+        	Integer result = this.getArraySizeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "arraySize", e);
         }
@@ -76,7 +78,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getConstant() {
         try {
-        	return this.getConstantImpl();
+        	Boolean result = this.getConstantImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "constant", e);
         }
@@ -92,7 +95,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getDesugar() {
         try {
-        	return this.getDesugarImpl();
+        	AType result = this.getDesugarImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "desugar", e);
         }
@@ -108,7 +112,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getDesugarAll() {
         try {
-        	return this.getDesugarAllImpl();
+        	AType result = this.getDesugarAllImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "desugarAll", e);
         }
@@ -124,7 +129,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getFieldTree() {
         try {
-        	return this.getFieldTreeImpl();
+        	String result = this.getFieldTreeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "fieldTree", e);
         }
@@ -142,7 +148,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getHasSugar() {
         try {
-        	return this.getHasSugarImpl();
+        	Boolean result = this.getHasSugarImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasSugar", e);
         }
@@ -160,7 +167,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getHasTemplateArgs() {
         try {
-        	return this.getHasTemplateArgsImpl();
+        	Boolean result = this.getHasTemplateArgsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasTemplateArgs", e);
         }
@@ -178,7 +186,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getIsArray() {
         try {
-        	return this.getIsArrayImpl();
+        	Boolean result = this.getIsArrayImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isArray", e);
         }
@@ -194,7 +203,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getIsAuto() {
         try {
-        	return this.getIsAutoImpl();
+        	Boolean result = this.getIsAutoImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isAuto", e);
         }
@@ -212,7 +222,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getIsBuiltin() {
         try {
-        	return this.getIsBuiltinImpl();
+        	Boolean result = this.getIsBuiltinImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isBuiltin", e);
         }
@@ -230,7 +241,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getIsPointer() {
         try {
-        	return this.getIsPointerImpl();
+        	Boolean result = this.getIsPointerImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPointer", e);
         }
@@ -248,7 +260,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getIsTopLevel() {
         try {
-        	return this.getIsTopLevelImpl();
+        	Boolean result = this.getIsTopLevelImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isTopLevel", e);
         }
@@ -266,7 +279,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getKind() {
         try {
-        	return this.getKindImpl();
+        	String result = this.getKindImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }
@@ -282,7 +296,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getNormalize() {
         try {
-        	return this.getNormalizeImpl();
+        	AType result = this.getNormalizeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "normalize", e);
         }
@@ -310,7 +325,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getTemplateArgsStrings() {
         try {
-        	return this.getTemplateArgsStringsImpl();
+        	Object result = this.getTemplateArgsStringsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "templateArgsStrings", e);
         }
@@ -338,7 +354,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getTemplateArgsTypes() {
         try {
-        	return this.getTemplateArgsTypesImpl();
+        	Object result = this.getTemplateArgsTypesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "templateArgsTypes", e);
         }
@@ -354,7 +371,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getTypeFields() {
         try {
-        	return this.getTypeFieldsImpl();
+        	Map<?, ?> result = this.getTypeFieldsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "typeFields", e);
         }
@@ -370,7 +388,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object getUnwrap() {
         try {
-        	return this.getUnwrapImpl();
+        	AType result = this.getUnwrapImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "unwrap", e);
         }
@@ -388,7 +407,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object asConst() {
         try {
-        	return this.asConstImpl();
+        	AType result = this.asConstImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "asConst", e);
         }
@@ -472,7 +492,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object setTypeFieldByValueRecursive(Object currentValue, Object newValue) {
         try {
-        	return this.setTypeFieldByValueRecursiveImpl(currentValue, newValue);
+        	boolean result = this.setTypeFieldByValueRecursiveImpl(currentValue, newValue);
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setTypeFieldByValueRecursive", e);
         }
@@ -494,7 +515,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public final Object setUnderlyingType(AType oldValue, AType newValue) {
         try {
-        	return this.setUnderlyingTypeImpl(oldValue, newValue);
+        	AType result = this.setUnderlyingTypeImpl(oldValue, newValue);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setUnderlyingType", e);
         }

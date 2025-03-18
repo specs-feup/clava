@@ -38,7 +38,8 @@ public abstract class AMemberCall extends ACall {
      */
     public final Object getBase() {
         try {
-        	return this.getBaseImpl();
+        	AExpression result = this.getBaseImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "base", e);
         }
@@ -56,7 +57,8 @@ public abstract class AMemberCall extends ACall {
      */
     public final Object getRootBase() {
         try {
-        	return this.getRootBaseImpl();
+        	AExpression result = this.getRootBaseImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "rootBase", e);
         }

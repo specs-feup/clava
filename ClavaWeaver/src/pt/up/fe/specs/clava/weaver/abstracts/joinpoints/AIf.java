@@ -38,7 +38,8 @@ public abstract class AIf extends AStatement {
      */
     public final Object getCond() {
         try {
-        	return this.getCondImpl();
+        	AExpression result = this.getCondImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "cond", e);
         }
@@ -56,7 +57,8 @@ public abstract class AIf extends AStatement {
      */
     public final Object getCondDecl() {
         try {
-        	return this.getCondDeclImpl();
+        	AVardecl result = this.getCondDeclImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "condDecl", e);
         }
@@ -74,7 +76,8 @@ public abstract class AIf extends AStatement {
      */
     public final Object getElse() {
         try {
-        	return this.getElseImpl();
+        	AScope result = this.getElseImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "else", e);
         }
@@ -92,7 +95,8 @@ public abstract class AIf extends AStatement {
      */
     public final Object getThen() {
         try {
-        	return this.getThenImpl();
+        	AScope result = this.getThenImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "then", e);
         }

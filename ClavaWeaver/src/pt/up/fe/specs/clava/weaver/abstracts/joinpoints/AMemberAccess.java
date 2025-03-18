@@ -36,7 +36,8 @@ public abstract class AMemberAccess extends AExpression {
      */
     public final Object getArrow() {
         try {
-        	return this.getArrowImpl();
+        	Boolean result = this.getArrowImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "arrow", e);
         }
@@ -52,7 +53,8 @@ public abstract class AMemberAccess extends AExpression {
      */
     public final Object getBase() {
         try {
-        	return this.getBaseImpl();
+        	AExpression result = this.getBaseImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "base", e);
         }
@@ -80,7 +82,8 @@ public abstract class AMemberAccess extends AExpression {
      */
     public final Object getMemberChain() {
         try {
-        	return this.getMemberChainImpl();
+        	Object result = this.getMemberChainImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "memberChain", e);
         }
@@ -108,7 +111,8 @@ public abstract class AMemberAccess extends AExpression {
      */
     public final Object getMemberChainNames() {
         try {
-        	return this.getMemberChainNamesImpl();
+        	Object result = this.getMemberChainNamesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "memberChainNames", e);
         }
@@ -126,7 +130,8 @@ public abstract class AMemberAccess extends AExpression {
      */
     public final Object getName() {
         try {
-        	return this.getNameImpl();
+        	String result = this.getNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }

@@ -46,7 +46,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getArgList() {
         try {
-        	return this.getArgListImpl();
+        	Object result = this.getArgListImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "argList", e);
         }
@@ -72,7 +73,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getArgs() {
         try {
-        	return this.getArgsImpl();
+        	Object result = this.getArgsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "args", e);
         }
@@ -88,7 +90,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getDeclaration() {
         try {
-        	return this.getDeclarationImpl();
+        	AFunction result = this.getDeclarationImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "declaration", e);
         }
@@ -104,7 +107,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getDefinition() {
         try {
-        	return this.getDefinitionImpl();
+        	AFunction result = this.getDefinitionImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "definition", e);
         }
@@ -120,7 +124,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getDirectCallee() {
         try {
-        	return this.getDirectCalleeImpl();
+        	AFunction result = this.getDirectCalleeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "directCallee", e);
         }
@@ -136,7 +141,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getFunction() {
         try {
-        	return this.getFunctionImpl();
+        	AFunction result = this.getFunctionImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "function", e);
         }
@@ -152,7 +158,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getFunctionType() {
         try {
-        	return this.getFunctionTypeImpl();
+        	AFunctionType result = this.getFunctionTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "functionType", e);
         }
@@ -172,7 +179,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getArg(int index) {
         try {
-        	return this.getArgImpl(index);
+        	AExpression result = this.getArgImpl(index);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getArg", e);
         }
@@ -190,7 +198,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getIsMemberAccess() {
         try {
-        	return this.getIsMemberAccessImpl();
+        	Boolean result = this.getIsMemberAccessImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isMemberAccess", e);
         }
@@ -208,7 +217,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getIsStmtCall() {
         try {
-        	return this.getIsStmtCallImpl();
+        	Boolean result = this.getIsStmtCallImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isStmtCall", e);
         }
@@ -226,7 +236,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getMemberAccess() {
         try {
-        	return this.getMemberAccessImpl();
+        	AMemberAccess result = this.getMemberAccessImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "memberAccess", e);
         }
@@ -254,7 +265,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getMemberNames() {
         try {
-        	return this.getMemberNamesImpl();
+        	Object result = this.getMemberNamesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "memberNames", e);
         }
@@ -272,7 +284,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getName() {
         try {
-        	return this.getNameImpl();
+        	String result = this.getNameImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -290,7 +303,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getNumArgs() {
         try {
-        	return this.getNumArgsImpl();
+        	Integer result = this.getNumArgsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numArgs", e);
         }
@@ -306,7 +320,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getReturnType() {
         try {
-        	return this.getReturnTypeImpl();
+        	AType result = this.getReturnTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "returnType", e);
         }
@@ -322,7 +337,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object getSignature() {
         try {
-        	return this.getSignatureImpl();
+        	String result = this.getSignatureImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "signature", e);
         }
@@ -384,7 +400,8 @@ public abstract class ACall extends AExpression {
      */
     public final Object inline() {
         try {
-        	return this.inlineImpl();
+        	boolean result = this.inlineImpl();
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "inline", e);
         }

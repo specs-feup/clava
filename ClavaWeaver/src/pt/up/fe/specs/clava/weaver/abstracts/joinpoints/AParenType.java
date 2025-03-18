@@ -38,7 +38,8 @@ public abstract class AParenType extends AType {
      */
     public final Object getInnerType() {
         try {
-        	return this.getInnerTypeImpl();
+        	AType result = this.getInnerTypeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "innerType", e);
         }

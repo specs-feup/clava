@@ -46,7 +46,8 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getInstructions() {
         try {
-        	return this.getInstructionsImpl();
+        	Object result = this.getInstructionsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "instructions", e);
         }
@@ -62,7 +63,8 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getIsDefault() {
         try {
-        	return this.getIsDefaultImpl();
+        	Boolean result = this.getIsDefaultImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isDefault", e);
         }
@@ -78,7 +80,8 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getIsEmpty() {
         try {
-        	return this.getIsEmptyImpl();
+        	Boolean result = this.getIsEmptyImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isEmpty", e);
         }
@@ -94,7 +97,8 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getNextCase() {
         try {
-        	return this.getNextCaseImpl();
+        	ACase result = this.getNextCaseImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "nextCase", e);
         }
@@ -110,7 +114,8 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getNextInstruction() {
         try {
-        	return this.getNextInstructionImpl();
+        	AStatement result = this.getNextInstructionImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "nextInstruction", e);
         }
@@ -136,7 +141,8 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getValues() {
         try {
-        	return this.getValuesImpl();
+        	Object result = this.getValuesImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "values", e);
         }

@@ -29,7 +29,8 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
      */
     public final Object getText() {
         try {
-        	return this.getTextImpl();
+        	String result = this.getTextImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "text", e);
         }

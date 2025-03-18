@@ -38,7 +38,8 @@ public abstract class APointerType extends AType {
      */
     public final Object getPointee() {
         try {
-        	return this.getPointeeImpl();
+        	AType result = this.getPointeeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "pointee", e);
         }
@@ -54,7 +55,8 @@ public abstract class APointerType extends AType {
      */
     public final Object getPointerLevels() {
         try {
-        	return this.getPointerLevelsImpl();
+        	Integer result = this.getPointerLevelsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "pointerLevels", e);
         }

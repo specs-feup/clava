@@ -46,7 +46,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getClauseKinds() {
         try {
-        	return this.getClauseKindsImpl();
+        	Object result = this.getClauseKindsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "clauseKinds", e);
         }
@@ -62,7 +63,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getCollapse() {
         try {
-        	return this.getCollapseImpl();
+        	String result = this.getCollapseImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "collapse", e);
         }
@@ -88,7 +90,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getCopyin() {
         try {
-        	return this.getCopyinImpl();
+        	Object result = this.getCopyinImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "copyin", e);
         }
@@ -104,7 +107,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getDefault() {
         try {
-        	return this.getDefaultImpl();
+        	String result = this.getDefaultImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "default", e);
         }
@@ -130,7 +134,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getFirstprivate() {
         try {
-        	return this.getFirstprivateImpl();
+        	Object result = this.getFirstprivateImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "firstprivate", e);
         }
@@ -161,7 +166,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getReduction(String kind) {
         try {
-        	return this.getReductionImpl(kind);
+        	Object result = this.getReductionImpl(kind);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getReduction", e);
         }
@@ -181,7 +187,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object hasClause(String clauseName) {
         try {
-        	return this.hasClauseImpl(clauseName);
+        	Boolean result = this.hasClauseImpl(clauseName);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasClause", e);
         }
@@ -201,7 +208,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object isClauseLegal(String clauseName) {
         try {
-        	return this.isClauseLegalImpl(clauseName);
+        	Boolean result = this.isClauseLegalImpl(clauseName);
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isClauseLegal", e);
         }
@@ -217,7 +225,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getKind() {
         try {
-        	return this.getKindImpl();
+        	String result = this.getKindImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }
@@ -243,7 +252,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getLastprivate() {
         try {
-        	return this.getLastprivateImpl();
+        	Object result = this.getLastprivateImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "lastprivate", e);
         }
@@ -259,7 +269,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getNumThreads() {
         try {
-        	return this.getNumThreadsImpl();
+        	String result = this.getNumThreadsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numThreads", e);
         }
@@ -275,7 +286,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getOrdered() {
         try {
-        	return this.getOrderedImpl();
+        	String result = this.getOrderedImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "ordered", e);
         }
@@ -301,7 +313,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getPrivate() {
         try {
-        	return this.getPrivateImpl();
+        	Object result = this.getPrivateImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "private", e);
         }
@@ -317,7 +330,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getProcBind() {
         try {
-        	return this.getProcBindImpl();
+        	String result = this.getProcBindImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "procBind", e);
         }
@@ -343,7 +357,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getReductionKinds() {
         try {
-        	return this.getReductionKindsImpl();
+        	Object result = this.getReductionKindsImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "reductionKinds", e);
         }
@@ -359,7 +374,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getScheduleChunkSize() {
         try {
-        	return this.getScheduleChunkSizeImpl();
+        	String result = this.getScheduleChunkSizeImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "scheduleChunkSize", e);
         }
@@ -375,7 +391,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getScheduleKind() {
         try {
-        	return this.getScheduleKindImpl();
+        	String result = this.getScheduleKindImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "scheduleKind", e);
         }
@@ -401,7 +418,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getScheduleModifiers() {
         try {
-        	return this.getScheduleModifiersImpl();
+        	Object result = this.getScheduleModifiersImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "scheduleModifiers", e);
         }
@@ -427,7 +445,8 @@ public abstract class AOmp extends APragma {
      */
     public final Object getShared() {
         try {
-        	return this.getSharedImpl();
+        	Object result = this.getSharedImpl();
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "shared", e);
         }
