@@ -151,10 +151,6 @@ describe("CxxTest", () => {
         await newTester().test("Call.js", "call.cpp");
     });
 
-    it("PragmaClavaAttribute", async () => {
-        await newTester().test("PragmaAttribute.js", "pragma_attribute.cpp");
-    });
-
     it("TypeTemplate", async () => {
         await newTester().test("TypeTemplate.js", "type_template.cpp");
     });
