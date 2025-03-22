@@ -48,14 +48,4 @@ public abstract class AClavaWeaver extends WeaverEngine {
         allClasses.addAll(otherClasses);
         return allClasses;
     }
-
-    /**
-     * Does the generated code implements events?
-     * 
-     * @return true if implements events, false otherwise
-     */
-    @Override
-    public final boolean implementsEvents() {
-        return true;
-    }
 }

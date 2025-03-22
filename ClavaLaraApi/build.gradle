@@ -22,12 +22,11 @@ dependencies {
 	implementation ':SpecsUtils'
 	implementation ':CommonsLangPlus'
 	implementation ':JacksonPlus'
-    implementation ':SymjaPlus'
-	implementation ':LaraApi'
+   	implementation ':SymjaPlus'
 	implementation ':LaraUtils'		
 	implementation ':ClavaAst'		
 
-	implementation group: 'com.google.code.gson', name: 'gson', version: '2.4'
+	implementation group: 'com.google.code.gson', name: 'gson', version: '2.12.1'
 }
 
 java {
@@ -41,12 +40,5 @@ sourceSets {
       java {
          srcDir 'src-java'
       }
-
-      resources {
-         srcDir 'src-lara'
-         srcDir 'src-lara-clava'
-         srcDir 'src-js'		 
-      }
-	  
    }   
 }

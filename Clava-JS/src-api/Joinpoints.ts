@@ -196,7 +196,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.
    */
-  get data(): object { const data = (this._javaObject.getData() as string | undefined); return data ? JSON.parse(data) : data; }
+  get data(): any { const data = (this._javaObject.getData() as string | undefined); return data ? JSON.parse(data) : data; }
   /**
    * JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.
    */

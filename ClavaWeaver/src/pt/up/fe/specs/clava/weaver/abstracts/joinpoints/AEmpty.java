@@ -1,11 +1,10 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AEmpty
@@ -15,93 +14,6 @@ import java.util.Arrays;
  * @author Lara Weaver Generator
  */
 public abstract class AEmpty extends ACxxWeaverJoinPoint {
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	default:
-        		joinPointList = super.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        super.fillWithAttributes(attributes);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        super.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        super.fillWithActions(actions);
-    }
 
     /**
      * Returns the join point type of this class
