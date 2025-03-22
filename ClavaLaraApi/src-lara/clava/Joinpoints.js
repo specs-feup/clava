@@ -1781,6 +1781,14 @@ export class If extends Statement {
      */
     setThen(then) { return wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then))); }
 }
+export class IncompleteArrayType extends ArrayType {
+    /**
+     * @internal
+     */
+    static _defaultAttributeInfo = {
+        name: null,
+    };
+}
 export class IntLiteral extends Literal {
     /**
      * @internal
@@ -2530,6 +2538,7 @@ const JoinpointMapper = {
     functionType: FunctionType,
     gotoStmt: GotoStmt,
     if: If,
+    incompleteArrayType: IncompleteArrayType,
     intLiteral: IntLiteral,
     labelDecl: LabelDecl,
     labelStmt: LabelStmt,

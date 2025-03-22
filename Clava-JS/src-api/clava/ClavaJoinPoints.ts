@@ -92,6 +92,16 @@ export default class ClavaJoinPoints {
     );
   }
 
+  static incompleteArrayType(
+    $type: Joinpoints.Type
+  ): Joinpoints.IncompleteArrayType {
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.incompleteArrayType(
+        unwrapJoinPoint($type)
+      )
+    );
+  }
+
   static exprLiteral(code: string): Joinpoints.Expression;
   static exprLiteral(
     code: string,
