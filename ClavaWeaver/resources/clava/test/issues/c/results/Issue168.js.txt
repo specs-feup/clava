@@ -10,8 +10,8 @@ float buzz(int *A, double *B, char C[]) {
       decomp_0 = C[i] + 1;
       C[i] = decomp_0;
       for(int j = 0; j < 100; j++) {
-         int decomp_0;
-         int decomp_1;
+         bool decomp_0;
+         bool decomp_1;
          decomp_1 = C[i] > 0;
          decomp_0 = decomp_1;
          if(decomp_0) return 0.3;
@@ -22,8 +22,8 @@ float buzz(int *A, double *B, char C[]) {
             int decomp_3;
             decomp_3 = C[k] + 3;
             C[k] = decomp_3;
-            int decomp_1;
-            int decomp_4;
+            bool decomp_1;
+            bool decomp_4;
             decomp_4 = C[k] > 0;
             decomp_1 = decomp_4;
             if(decomp_1) {
