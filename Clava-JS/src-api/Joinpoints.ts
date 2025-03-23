@@ -85,6 +85,7 @@ type PrivateMapper = {
   "FunctionType": typeof FunctionType,
   "GotoStmt": typeof GotoStmt,
   "If": typeof If,
+  "IncompleteArrayType": typeof IncompleteArrayType,
   "IntLiteral": typeof IntLiteral,
   "LabelDecl": typeof LabelDecl,
   "LabelStmt": typeof LabelStmt,
@@ -2080,6 +2081,15 @@ export class If extends Statement {
   setThen(then: Statement): void { return wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then))); }
 }
 
+export class IncompleteArrayType extends ArrayType {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
 export class IntLiteral extends Literal {
   /**
    * @internal
@@ -2887,6 +2897,7 @@ const JoinpointMapper = {
   functionType: FunctionType,
   gotoStmt: GotoStmt,
   if: If,
+  incompleteArrayType: IncompleteArrayType,
   intLiteral: IntLiteral,
   labelDecl: LabelDecl,
   labelStmt: LabelStmt,

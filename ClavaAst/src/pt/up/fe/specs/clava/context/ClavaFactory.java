@@ -225,6 +225,13 @@ public class ClavaFactory {
         return new VariableArrayType(data, Collections.emptyList());
     }
 
+    public IncompleteArrayType incompleteArrayType(Type elementType) {
+        DataStore data = newDataStore(IncompleteArrayType.class)
+                .put(ArrayType.ELEMENT_TYPE, elementType);
+
+        return new IncompleteArrayType(data, Collections.emptyList());
+    }
+
     public PointerType pointerType(Type pointeeType) {
         DataStore data = newDataStore(PointerType.class)
                 .put(PointerType.POINTEE_TYPE, pointeeType);
