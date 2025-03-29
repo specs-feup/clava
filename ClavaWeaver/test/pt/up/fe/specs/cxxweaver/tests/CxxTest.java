@@ -17,11 +17,13 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.utilities.StringList;
 
 public class CxxTest {
 
@@ -103,7 +105,9 @@ public class CxxTest {
 
     @Test
     public void testOmpThreadsExplore() {
-        newTester().test("OmpThreadsExplore.lara", "omp_threads_explore.cpp");
+        newTester()
+                .set(ClavaOptions.FLAGS_LIST, StringList.newInstance("-fopenmp=libomp"))
+                .test("OmpThreadsExplore.lara", "omp_threads_explore.cpp");
     }
 
     @Test

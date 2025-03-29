@@ -161,7 +161,7 @@ public class DeclDataParser {
         // data.set(NamedDecl.DECL_NAME, anonName);
         // }
 
-        data.add(TagDecl.TAG_KIND, LineStreamParsers.enumFromName(TagKind.class, lines));
+        data.add(TagDecl.TAG_KIND, LineStreamParsers.enumFromName(TagKind.getHelper(), lines));
         data.add(TagDecl.IS_COMPLETE_DEFINITION, LineStreamParsers.oneOrZero(lines));
 
         return data;
