@@ -700,8 +700,14 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <artifact class="op">
         <attribute name="operator" type="String"/>
-        <attribute name="kind" type="String"
-                   tooltip="The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div, rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign, rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not, real, imag, extension, cowait."/>
+        <!--<attribute name="operator" type="{*,+,,,-}"/>-->
+        <attribute name="kind"
+                   type="{ptr_mem_d, ptr_mem_i, mul, div,rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign,rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma, post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not,real, imag, extension, cowait,ternary}"
+                   tooltip="The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div,
+                rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign,
+                rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a
+                unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not,
+                real, imag, extension, cowait. If it is a ternary operator, the value will be 'ternary'"/>
         <attribute name="isBitwise" type="Boolean"/>
     </artifact>
 
@@ -714,7 +720,13 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             <def/>
         </attribute>
         <attribute name="isAssignment" type="Boolean"/>
-
+        <!--
+                <attribute name="kind"
+                           type="{ptr_mem_d, ptr_mem_i, mul, div, rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign,rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma}"
+                           tooltip="The kind of the operator. It can be one of: ptr_mem_d, ptr_mem_i, mul, div,
+                rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign,
+                rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma."/>
+        -->
     </artifact>
 
 
@@ -722,6 +734,12 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     <artifact class="unaryOp">
         <attribute name="operand" type="expression"/>
         <attribute name="isPointerDeref" type="Boolean"/>
+        <!--
+                <attribute name="kind"
+                           type="{post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not,real, imag, extension, cowait}"
+                           tooltip="The kind of the operator. It can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not,
+                real, imag, extension, cowait."/>
+        -->
     </artifact>
 
 
