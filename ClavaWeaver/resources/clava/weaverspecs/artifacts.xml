@@ -720,13 +720,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             <def/>
         </attribute>
         <attribute name="isAssignment" type="Boolean"/>
-        <!--
-                <attribute name="kind"
-                           type="{ptr_mem_d, ptr_mem_i, mul, div, rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign,rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma}"
-                           tooltip="The kind of the operator. It can be one of: ptr_mem_d, ptr_mem_i, mul, div,
-                rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign,
-                rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma."/>
-        -->
     </artifact>
 
 
