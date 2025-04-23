@@ -1,7 +1,6 @@
-laraImport("clava.util.CodeInserter");
-laraImport("clava.Clava");
-laraImport("weaver.Query");
-laraImport("lara.Io");
+import CodeInserter from "@specs-feup/clava/api/clava/util/CodeInserter.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
 
 var codeInserter = new CodeInserter();
 
@@ -30,16 +29,16 @@ codeInserter.add($file, 1, "#include <omp.h>");
 codeInserter.write(outputFolder);
 
 // Check file (first element is the folder)
-//println("PATHS:");
+//console.log("PATHS:");
 //printObject(Io.getFilesRecursive(outputFolder));
-//println("PATHS *.c:");
+//console.log("PATHS *.c:");
 //printObject(Io.getFilesRecursive(outputFolder, "*.c"));
 
 //var outputFile = Io.getFilesRecursive(outputFolder)[0];
 var outputFile = Io.getFiles(outputFolder, undefined, true)[0];
 
 // Print file
-println(Io.readFile(outputFile));
+console.log(Io.readFile(outputFile));
 
 // Clean
 //Io.deleteFolder(outputFolder);

@@ -47,14 +47,14 @@ export default class ClavaDataStore extends WeaverDataStore {
    * @returns A list with the current extra system includes.
    */
   getSystemIncludes(): string[] {
-    return this.get("library includes").getFiles();
+    return this.get("library includes").getFiles().toArray();
   }
 
   /**
    * @returns A list with the current user includes.
    */
   getUserIncludes(): string[] {
-    return this.get("header includes").getFiles();
+    return this.get("header includes").getFiles().toArray();
   }
 
   /**
@@ -65,7 +65,11 @@ export default class ClavaDataStore extends WeaverDataStore {
     const filenames = arrayFromArgs(args);
     const files = filenames.map((filename: string) => Io.getPath(filename));
 
-    this.put("library includes", JavaTypes.FileList.newInstance(files));
+    if (files.length === 0) {
+      this.put("library includes", JavaTypes.FileList.newInstance());
+    } else {
+      this.put("library includes", JavaTypes.FileList.newInstance(...files));
+    }
   }
 
   /**
@@ -75,8 +79,12 @@ export default class ClavaDataStore extends WeaverDataStore {
   setUserIncludes(...args: string[]) {
     const filenames = arrayFromArgs(args);
     const files = filenames.map((filename: string) => Io.getPath(filename));
+    if(files.length === 0) {
+      this.put("header includes", JavaTypes.FileList.newInstance());
+    } else {
+      this.put("header includes", JavaTypes.FileList.newInstance(...files));
+    }
 
-    this.put("header includes", JavaTypes.FileList.newInstance(files));
   }
 
   /**

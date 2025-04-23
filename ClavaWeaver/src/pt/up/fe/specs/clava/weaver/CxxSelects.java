@@ -192,9 +192,6 @@ public class CxxSelects {
                 })
                 .map(jp -> reportJp(jp, report, ReportField.FILTERED_JOIN_POINTS));
 
-        // Count as a select
-        report.inc(ReportField.SELECTS);
-
         return selectedJps;
     }
 

@@ -36,13 +36,8 @@ public class CxxGotoStmt extends AGotoStmt {
     }
 
     @Override
-    public void defLabelImpl(ALabelDecl value) {
-        gotoStmt.setLabel((LabelDecl) value.getNode());
-    }
-
-    @Override
     public void setLabelImpl(ALabelDecl label) {
-        defLabelImpl(label);
+        gotoStmt.setLabel((LabelDecl) label.getNode());
     }
 
     @Override

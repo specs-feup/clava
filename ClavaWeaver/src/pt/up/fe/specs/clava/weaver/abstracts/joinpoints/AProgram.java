@@ -1,15 +1,12 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AProgram
@@ -32,13 +29,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getBaseFolder() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "baseFolder", Optional.empty());
-        	}
         	String result = this.getBaseFolderImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "baseFolder", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "baseFolder", e);
@@ -67,13 +58,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getDefaultFlags() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "defaultFlags", Optional.empty());
-        	}
         	Object result = this.getDefaultFlagsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "defaultFlags", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "defaultFlags", e);
@@ -100,13 +85,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getExtraIncludes() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraIncludes", Optional.empty());
-        	}
         	Object result = this.getExtraIncludesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "extraIncludes", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "extraIncludes", e);
@@ -133,13 +112,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getExtraLibs() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraLibs", Optional.empty());
-        	}
         	Object result = this.getExtraLibsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "extraLibs", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "extraLibs", e);
@@ -166,13 +139,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getExtraProjects() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraProjects", Optional.empty());
-        	}
         	Object result = this.getExtraProjectsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "extraProjects", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "extraProjects", e);
@@ -199,13 +166,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getExtraSources() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraSources", Optional.empty());
-        	}
         	Object result = this.getExtraSourcesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "extraSources", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "extraSources", e);
@@ -232,13 +193,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getFiles() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "files", Optional.empty());
-        	}
         	Object result = this.getFilesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "files", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "files", e);
@@ -267,13 +222,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getIncludeFolders() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "includeFolders", Optional.empty());
-        	}
         	Object result = this.getIncludeFoldersImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "includeFolders", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "includeFolders", e);
@@ -290,13 +239,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getIsCxx() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCxx", Optional.empty());
-        	}
         	Boolean result = this.getIsCxxImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isCxx", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCxx", e);
@@ -313,13 +256,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getMain() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "main", Optional.empty());
-        	}
         	AFunction result = this.getMainImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "main", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "main", e);
@@ -338,13 +275,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getName() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
-        	}
         	String result = this.getNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
@@ -361,13 +292,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getStandard() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "standard", Optional.empty());
-        	}
         	String result = this.getStandardImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "standard", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "standard", e);
@@ -384,13 +309,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getStdFlag() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "stdFlag", Optional.empty());
-        	}
         	String result = this.getStdFlagImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "stdFlag", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "stdFlag", e);
@@ -419,13 +338,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getUserFlags() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "userFlags", Optional.empty());
-        	}
         	Object result = this.getUserFlagsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "userFlags", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "userFlags", e);
@@ -444,25 +357,11 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object getWeavingFolder() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "weavingFolder", Optional.empty());
-        	}
         	String result = this.getWeavingFolderImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "weavingFolder", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "weavingFolder", e);
         }
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select files
-     * @return 
-     */
-    public List<? extends AFile> selectFile() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile.class, SelectOp.DESCENDANTS);
     }
 
     /**
@@ -479,13 +378,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final void addExtraInclude(String path) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraInclude", this, Optional.empty(), path);
-        	}
         	this.addExtraIncludeImpl(path);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addExtraInclude", this, Optional.empty(), path);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addExtraInclude", e);
         }
@@ -507,13 +400,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final void addExtraIncludeFromGit(String gitRepo, String path) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraIncludeFromGit", this, Optional.empty(), gitRepo, path);
-        	}
         	this.addExtraIncludeFromGitImpl(gitRepo, path);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addExtraIncludeFromGit", this, Optional.empty(), gitRepo, path);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addExtraIncludeFromGit", e);
         }
@@ -533,13 +420,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final void addExtraLib(String lib) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraLib", this, Optional.empty(), lib);
-        	}
         	this.addExtraLibImpl(lib);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addExtraLib", this, Optional.empty(), lib);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addExtraLib", e);
         }
@@ -559,13 +440,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final void addExtraSource(String path) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraSource", this, Optional.empty(), path);
-        	}
         	this.addExtraSourceImpl(path);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addExtraSource", this, Optional.empty(), path);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addExtraSource", e);
         }
@@ -587,13 +462,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final void addExtraSourceFromGit(String gitRepo, String path) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraSourceFromGit", this, Optional.empty(), gitRepo, path);
-        	}
         	this.addExtraSourceFromGitImpl(gitRepo, path);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addExtraSourceFromGit", this, Optional.empty(), gitRepo, path);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addExtraSourceFromGit", e);
         }
@@ -613,13 +482,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object addFile(AFile file) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addFile", this, Optional.empty(), file);
-        	}
         	AJoinPoint result = this.addFileImpl(file);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addFile", this, Optional.ofNullable(result), file);
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addFile", e);
@@ -640,13 +503,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object addFileFromPath(Object filepath) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addFileFromPath", this, Optional.empty(), filepath);
-        	}
         	AJoinPoint result = this.addFileFromPathImpl(filepath);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addFileFromPath", this, Optional.ofNullable(result), filepath);
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addFileFromPath", e);
@@ -671,13 +528,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final void addProjectFromGit(String gitRepo, Object[] libs, String path) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addProjectFromGit", this, Optional.empty(), gitRepo, libs, path);
-        	}
         	this.addProjectFromGitImpl(gitRepo, pt.up.fe.specs.util.SpecsCollections.cast(libs, String.class), path);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addProjectFromGit", this, Optional.empty(), gitRepo, libs, path);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addProjectFromGit", e);
         }
@@ -697,13 +548,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final void atexit(AFunction function) {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "atexit", this, Optional.empty(), function);
-        	}
         	this.atexitImpl(function);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "atexit", this, Optional.empty(), function);
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "atexit", e);
         }
@@ -721,13 +566,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final void pop() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "pop", this, Optional.empty());
-        	}
         	this.popImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "pop", this, Optional.empty());
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "pop", e);
         }
@@ -745,13 +584,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final void push() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "push", this, Optional.empty());
-        	}
         	this.pushImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "push", this, Optional.empty());
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "push", e);
         }
@@ -769,13 +602,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final Object rebuild() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
-        	}
         	boolean result = this.rebuildImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.ofNullable(result));
-        	}
         	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "rebuild", e);
@@ -794,135 +621,10 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public final void rebuildFuzzy() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "rebuildFuzzy", this, Optional.empty());
-        	}
         	this.rebuildFuzzyImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "rebuildFuzzy", this, Optional.empty());
-        	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "rebuildFuzzy", e);
         }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "file": 
-        		joinPointList = selectFile();
-        		break;
-        	default:
-        		joinPointList = super.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        super.fillWithAttributes(attributes);
-        attributes.add("baseFolder");
-        attributes.add("defaultFlags");
-        attributes.add("extraIncludes");
-        attributes.add("extraLibs");
-        attributes.add("extraProjects");
-        attributes.add("extraSources");
-        attributes.add("files");
-        attributes.add("includeFolders");
-        attributes.add("isCxx");
-        attributes.add("main");
-        attributes.add("name");
-        attributes.add("standard");
-        attributes.add("stdFlag");
-        attributes.add("userFlags");
-        attributes.add("weavingFolder");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        super.fillWithSelects(selects);
-        selects.add("file");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        super.fillWithActions(actions);
-        actions.add("void addExtraInclude(String)");
-        actions.add("void addExtraIncludeFromGit(String, String)");
-        actions.add("void addExtraLib(String)");
-        actions.add("void addExtraSource(String)");
-        actions.add("void addExtraSourceFromGit(String, String)");
-        actions.add("joinpoint addFile(file)");
-        actions.add("joinpoint addFileFromPath(Object)");
-        actions.add("void addProjectFromGit(String, String[], String)");
-        actions.add("void atexit(function)");
-        actions.add("void pop()");
-        actions.add("void push()");
-        actions.add("boolean rebuild()");
-        actions.add("void rebuildFuzzy()");
     }
 
     /**

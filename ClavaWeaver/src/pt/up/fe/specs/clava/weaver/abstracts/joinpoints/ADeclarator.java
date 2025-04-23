@@ -3,9 +3,9 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
 import java.util.Optional;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point ADeclarator
@@ -68,27 +68,6 @@ public abstract class ADeclarator extends ANamedDecl {
     @Override
     public AAttribute[] getAttrsArrayImpl() {
         return this.aNamedDecl.getAttrsArrayImpl();
-    }
-
-    /**
-     * 
-     */
-    public void defNameImpl(String value) {
-        this.aNamedDecl.defNameImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedNameImpl(String value) {
-        this.aNamedDecl.defQualifiedNameImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aNamedDecl.defQualifiedPrefixImpl(value);
     }
 
     /**
@@ -916,114 +895,6 @@ public abstract class ADeclarator extends ANamedDecl {
     @Override
     public Optional<? extends ANamedDecl> getSuper() {
         return Optional.of(this.aNamedDecl);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	default:
-        		joinPointList = this.aNamedDecl.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedName": {
-        	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedPrefix": {
-        	if(value instanceof String){
-        		this.defQualifiedPrefixImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithAttributes(List<String> attributes) {
-        this.aNamedDecl.fillWithAttributes(attributes);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithSelects(List<String> selects) {
-        this.aNamedDecl.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected void fillWithActions(List<String> actions) {
-        this.aNamedDecl.fillWithActions(actions);
     }
 
     /**
