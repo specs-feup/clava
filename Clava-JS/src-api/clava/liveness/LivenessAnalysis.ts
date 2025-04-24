@@ -1,4 +1,4 @@
-import cytoscape from "@specs-feup/lara/api/libs/cytoscape-3.26.0.js";
+import cytoscape from "cytoscape";
 import ControlFlowGraph from "../graphs/ControlFlowGraph.js";
 import LivenessAnalyser from "./LivenessAnalyser.js";
 
