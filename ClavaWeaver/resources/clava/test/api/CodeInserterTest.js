@@ -2,13 +2,12 @@ import CodeInserter from "@specs-feup/clava/api/clava/util/CodeInserter.js";
 import Clava from "@specs-feup/clava/api/clava/Clava.js";
 import Io from "@specs-feup/lara/api/lara/Io.js";
 
-var codeInserter = new CodeInserter();
+const codeInserter = new CodeInserter();
 
-var outputFolder = Clava.getWeavingFolder();
-//var outputFolder = Io.getAbsolutePath(Io.mkdir("./codeInserter"));
+const outputFolder = Clava.getWeavingFolder();
 
 // Select the only file of the test
-var $file = Clava.getProgram().getDescendants("file")[0];
+const $file = Clava.getProgram().getDescendants("file")[0];
 
 codeInserter.add(
   $file,
@@ -28,14 +27,12 @@ codeInserter.add($file, 1, "#include <omp.h>");
 // Write
 codeInserter.write(outputFolder);
 
-// Check file (first element is the folder)
-//console.log("PATHS:");
-//printObject(Io.getFilesRecursive(outputFolder));
-//console.log("PATHS *.c:");
-//printObject(Io.getFilesRecursive(outputFolder, "*.c"));
+const outputFiles = Io.getFiles(outputFolder, undefined, true);
+const outputFile = outputFiles.map((file) => file.getPath()).find((file) => file.endsWith("code_inserter.c"));
 
-//var outputFile = Io.getFilesRecursive(outputFolder)[0];
-var outputFile = Io.getFiles(outputFolder, undefined, true)[0];
+if (!outputFile) {
+  throw new Error("Output file not found");
+}
 
 // Print file
 console.log(Io.readFile(outputFile));
