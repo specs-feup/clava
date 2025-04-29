@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package eu.antarex.clang.parser.scripts;
+package pt.up.fe.specs.clang.parser.scripts;
 
 import java.io.File;
 import java.lang.reflect.Modifier;

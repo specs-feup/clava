@@ -11,19 +11,29 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package eu.antarex.clang.parser;
+package pt.up.fe.specs.clang.parser;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class ClangTester extends AClangAstTester {
+import pt.up.fe.specs.lang.SpecsPlatforms;
 
-    public ClangTester(String... files) {
+public class CxxCudaTester extends AClangAstTester {
+
+    public CxxCudaTester(String... files) {
         this(Arrays.asList(files));
     }
 
-    public ClangTester(List<String> files) {
-        super("clang", files);
+    public CxxCudaTester(List<String> files) {
+        // super("cxx/cuda", files, Arrays.asList("-std=cuda"));
+        super("cxx/cuda", files);
+
+        // Windows currently not supported
+        if (SpecsPlatforms.isWindows()) {
+            doNotRun();
+        }
+
+        enableBuiltinCuda();
     }
 
 }

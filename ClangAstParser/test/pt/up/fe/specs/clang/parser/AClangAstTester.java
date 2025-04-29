@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package eu.antarex.clang.parser;
+package pt.up.fe.specs.clang.parser;
 
 import org.junit.Assert;
 import org.junit.Before;

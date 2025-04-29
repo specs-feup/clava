@@ -25,11 +25,11 @@ import java.util.stream.Collectors;
 
 import org.junit.runner.Result;
 
-import eu.antarex.clang.parser.tests.CTest;
-import eu.antarex.clang.parser.tests.CxxTest;
-import eu.antarex.clang.parser.tests.CBenchTest;
-import eu.antarex.clang.parser.tests.CxxBenchTest;
 import larai.LaraI;
+import pt.up.fe.specs.clang.parser.tests.CBenchTest;
+import pt.up.fe.specs.clang.parser.tests.CTest;
+import pt.up.fe.specs.clang.parser.tests.CxxBenchTest;
+import pt.up.fe.specs.clang.parser.tests.CxxTest;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.lara.WeaverLauncher;
 import pt.up.fe.specs.util.SpecsIo;

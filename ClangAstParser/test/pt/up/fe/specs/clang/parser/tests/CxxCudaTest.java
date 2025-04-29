@@ -11,14 +11,14 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package eu.antarex.clang.parser.tests;
+package pt.up.fe.specs.clang.parser.tests;
 
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import eu.antarex.clang.parser.AClangAstTester;
-import eu.antarex.clang.parser.CxxCudaTester;
+import pt.up.fe.specs.clang.parser.AClangAstTester;
+import pt.up.fe.specs.clang.parser.CxxCudaTester;
 
 /**
  * Disabled tests, they are failing in the CI server. Even when passing the --cuda-path built-in library, the parser
