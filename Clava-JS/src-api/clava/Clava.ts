@@ -11,13 +11,6 @@ import ClavaDataStore from "./util/ClavaDataStore.js";
 
 export default class Clava {
   /**
-   * Enables/disables library SpecsLogger for printing.
-   * <p>
-   * By default, is disabled.
-   */
-  static useSpecsLogger = false;
-
-  /**
    * Returns the standard being used for compilation.
    */
   static getStandard() {
