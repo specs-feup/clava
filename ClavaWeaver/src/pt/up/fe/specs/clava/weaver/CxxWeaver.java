@@ -11,8 +11,6 @@ import org.lara.language.specification.dsl.LanguageSpecification;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
-import pt.up.fe.specs.antarex.clava.AntarexClavaLaraApis;
-import pt.up.fe.specs.antarex.clava.JsAntarexApiResource;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
@@ -129,14 +127,6 @@ public class CxxWeaver extends ACxxWeaver {
         return DEFAULT_DUMPER_FLAGS;
     }
 
-    private static final String CLAVA_API_NAME = "@specs-feup/clava";
-
-    private static final List<ResourceProvider> CLAVA_LARA_API = new ArrayList<>();
-
-    static {
-        CLAVA_LARA_API.addAll(AntarexClavaLaraApis.getApis());
-    }
-
     /**
      * All definitions, including default LaraI keys and Clava-specific keys.
      */
@@ -198,11 +188,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     public CxxWeaver() {
         reset();
-    }
-
-    @Override
-    public String getWeaverApiName() {
-        return CLAVA_API_NAME;
     }
 
     private void reset() {
@@ -1456,16 +1441,6 @@ public class CxxWeaver extends ACxxWeaver {
         SpecsIo.deleteOnExit(tempFolder);
 
         return tempFolder.getAbsoluteFile();
-    }
-
-    @Override
-    public List<ResourceProvider> getAspectsAPI() {
-        return CLAVA_LARA_API;
-    }
-
-    @Override
-    public List<ResourceProvider> getImportableScripts() {
-        return ResourceProvider.getResourcesFromEnum(Arrays.asList(JsAntarexApiResource.class));
     }
 
     @Override
