@@ -205,11 +205,13 @@ describe("CxxTest", () => {
     });
 
     it("SkipParsingHeaders", async () => {
-        await newTester().test(
-            "SkipParsingHeaders.js",
-            "skip_parsing_headers.cpp",
-            "skip_parsing_headers.h"
-        );
+        await newTester()
+            .set(ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES, false)
+            .test(
+                "SkipParsingHeaders.js",
+                "skip_parsing_headers.cpp",
+                "skip_parsing_headers.h"
+            );
     });
 
     it("NoParsing", async () => {

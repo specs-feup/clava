@@ -50,6 +50,8 @@ export class ClavaWeaverTester {
         this.resultsFile = null;
         this.run = true;
         this._checkExpectedOutput = true;
+
+        this.set(ClavaJavaTypes.ClavaOptions.FLAGS, this.compilerFlags);
     }
 
     public checkExpectedOutput(checkExpectedOutput: boolean) {
@@ -145,7 +147,6 @@ export class ClavaWeaverTester {
             this.set(ClavaJavaTypes.ClavaOptions.STANDARD, this.standard);
         }
 
-        this.set(ClavaJavaTypes.ClavaOptions.FLAGS, this.compilerFlags);
         this.set(
             ClavaJavaTypes.CxxWeaverOption.CHECK_SYNTAX,
             this.checkWovenCodeSyntax
