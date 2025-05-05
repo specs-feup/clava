@@ -1285,16 +1285,6 @@ public class CxxWeaver extends ACxxWeaver {
 
         Set<File> includeFolders = getSourceIncludeFoldersFromTempFolder(tempFolder);
 
-        /*
-        // If we are skipping the parsing of include folders, we should include the original include folders as includes
-        if (args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
-            List<File> originalHeaderIncludes = args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
-            includeFolders.addAll(originalHeaderIncludes);
-            ClavaLog.debug(
-                    () -> "Skip headers is enabled, adding original headers to rebuild: " + originalHeaderIncludes);
-        }
-        */
-
         ClavaLog.debug(() -> "Include folders for rebuild, from folder '" + tempFolder + "': " + includeFolders);
 
         List<String> extraOptions = new ArrayList<>();
@@ -1304,42 +1294,29 @@ public class CxxWeaver extends ACxxWeaver {
         List<File> originalHeaderIncludes = args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
         originalHeaderIncludes.stream().map(folder -> CxxWeaver.buildIncludeArg(folder.getAbsolutePath()))
                 .forEach(extraOptions::add);
-        // includeFolders.addAll(originalHeaderIncludes);
-
-        // ClavaLog.debug(() -> "All include folders for rebuild" + includeFolders);
 
         List<String> rebuildOptions = new ArrayList<>();
 
         // Copy current options, removing previous normal includes
         var parserOptions = buildParserOptions(args);
         parserOptions.stream()
-                .filter(option -> !option.startsWith("-I"))
+                .filter(option -> !(option.startsWith("-I") || option.startsWith("-i")))
                 .forEach(rebuildOptions::add);
-        // rebuildOptions.addAll(parserOptions);
 
         // Add include folders
         for (File includeFolder : includeFolders) {
-            // rebuildOptions.add(0, "\"-I" + includeFolder.getAbsolutePath() + "\"");
             rebuildOptions.add(0, CxxWeaver.buildIncludeArg(includeFolder.getAbsolutePath()));
         }
 
         // Add extra includes
-        // for (File extraInclude : getApp().getExternalDependencies().getExtraIncludes()) {
         for (File extraInclude : getExternalIncludeFolders()) {
-            // rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
             rebuildOptions.add(0, CxxWeaver.buildIncludeArg(extraInclude.getAbsolutePath()));
         }
 
-        // App rebuiltApp = createApp(srcFolders, rebuildOptions);
-        // List<File> srcFolders = new ArrayList<>(includeFolders);
-
-        // App rebuiltApp = createApp(srcFolders, rebuildOptions);
-
         var previousBases = currentBases;
         var rebuildBases = new HashMap<File, File>();
-        for (var writtenFile : writtenFiles) {
-            rebuildBases.put(SpecsIo.getCanonicalFile(writtenFile), tempFolder);
-        }
+        writtenFiles.stream()
+                .forEach(writtenFile -> rebuildBases.put(SpecsIo.getCanonicalFile(writtenFile), tempFolder));
 
         currentBases = rebuildBases;
         App rebuiltApp = createApp(writtenFiles, rebuildOptions, extraOptions);
@@ -1347,28 +1324,11 @@ public class CxxWeaver extends ACxxWeaver {
         // Restore current bases
         currentBases = previousBases;
 
-        // rebuiltApp.getTranslationUnits().forEach(tu -> System.out.println("Relative: " + tu.getRelativeFilepath()));
-
         // Creating an app automatically pushes the App in the Context
         context.popApp();
 
         // Clear data
         ClavaData.clearAllCaches();
-
-        // if (update) {
-        // // Top app is the one we want, pop the app before that one
-        // weaverData.popAst();
-        // weaverData.pushAst(rebuiltApp);
-        // currentSources = srcFolders;
-        //
-        // }
-        // System.out.println("TUs:"
-        // + getApp().getTranslationUnits().stream().map(tu -> tu.getFilename())
-        // .collect(Collectors.toList()));
-        //
-        // System.out.println("TUs Rebuilt:"
-        // + rebuiltApp.getTranslationUnits().stream().map(tu -> tu.getFilename())
-        // .collect(Collectors.toList()));
 
         // Base folder is now the temporary folder
         if (update) {
