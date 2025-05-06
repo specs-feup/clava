@@ -66,7 +66,7 @@ We provide the following resources and documentation to get you started:
 
 * [Usage Examples](https://github.com/specs-feup/clava/tree/master/ClavaWeaver/resources/clava/test)
 * [Clava Online Demo Tutorial (2022)](https://specs.fe.up.pt/tools/clava/Clava%20Web-based%20Tutorial%20(2022).pdf)
-* [Clava Libraries Showcase (FCCM 2025 Demo Night)]()
+* [Clava Libraries Showcase (FCCM 2025 Demo Night)](https://github.com/specs-feup/clava-fccm-2025-demo)
 * Documentation:
   * [API Documentation](https://specs-feup.github.io/modules/_specs_feup_clava.html) - List of all join points, attributes and actions available in Clava
   * [API Slides](https://drive.google.com/drive/u/1/folders/1IAqv7SpP8S-t5g3fpNO06cJ7J2j2aD7K) - Introduction to Clava and the LARA Framework APIs.
