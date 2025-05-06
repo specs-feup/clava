@@ -38,7 +38,7 @@ This is the option you need if you want to use any of the several Clava extensio
 ```bash
 npm install
 npm run build
-npx clava # check if it was installed and built correctly
+npx run run # run the hello world example that comes with the template
 ```
 
 3. (optional) Add Clava packages to your project, e.g., `npm install @specs-feup/clava-code-transforms@latest`
@@ -124,9 +124,17 @@ Clava has also been used in these recent papers:
 
 Year | Paper | Cite
 ---|---|---
+2024 | T. Silva, P. G. Correia, L. Sousa, J. Bispo and T. Carvalho. 2024. Towards a Rust-Like Borrow Checker for C. ACM Trans. Embed. Comput. Syst. Just Accepted (October 2024). <https://doi.org/10.1145/3702229> | [[BibTex]](docs/citations/ecs2024silva.bib)
 2024 | T. Santos, J. Bispo and J. M. P. Cardoso. 2024. A Flexible-Granularity Task Graph Representation and Its Generation from C Applications (WIP). In Proceedings of the 25th ACM SIGPLAN/SIGBED International Conference on Languages, Compilers, and Tools for Embedded Systems (LCTES 2024). Association for Computing Machinery, New York, NY, USA, 178–182. <https://doi.org/10.1145/3652032.3657580> | [[BibTex]](docs/citations/lctes2024santos.bib)
+2024 | T. Silva, J. Bispo and T. Carvalho. 2024. Foundations for a Rust-Like Borrow Checker for C. In Proceedings of the 25th ACM SIGPLAN/SIGBED International Conference on Languages, Compilers, and Tools for Embedded Systems (LCTES 2024). Association for Computing Machinery, New York, NY, USA, 155–165. <https://doi.org/10.1145/3652032.3657579> | [[BibTex]](docs/citations/lctes2024silva.bib)
+2024 | J. N. Matos, J. Bispo and L. M. Sousa. 2024. A C Subset for Ergonomic Source-to-Source Analyses and Transformations. In Proceedings of the 16th Workshop on Rapid Simulation and Performance Evaluation for Design (RAPIDO '24). Association for Computing Machinery, New York, NY, USA, 1–8. <https://doi.org/10.1145/3642921.3642922> | [[BibTex]](docs/citations/rapido2024matos.bib)
 2023 | T. Santos, J. Bispo and J. M. P. Cardoso, "A CPU-FPGA Holistic Source-To-Source Compilation Approach for Partitioning and Optimizing C/C++ Applications," 2023 32nd International Conference on Parallel Architectures and Compilation Techniques (PACT), Vienna, Austria, 2023, pp. 320-322. <https://doi.org/10.1109/PACT58117.2023.00034> | [[BibTex]](docs/citations/pact2023santos.bib)
+2023 | L. M. Sousa, J. Bispo and N. Paulino, "Retargeting Applications for Heterogeneous Systems with the Tribble Source-to-Source Framework," 2023 32nd International Conference on Parallel Architectures and Compilation Techniques (PACT), Vienna, Austria, 2023, pp. 329-331. <https://doi.org/10.1109/PACT58117.2023.00038> | [[BibTex]](docs/citations/pact2023sousa.bib)
+2023 | J. Bispo, N. Paulino and L. M. Sousa. Challenges and Opportunities in C/C++ Source-To-Source Compilation (Invited Paper). In 14th Workshop on Parallel Programming and Run-Time Management Techniques for Many-Core Architectures and 12th Workshop on Design Tools and Architectures for Multicore Embedded Computing Platforms (PARMA-DITAM 2023). Open Access Series in Informatics (OASIcs), Volume 107, pp. 2:1-2:15, Schloss Dagstuhl – Leibniz-Zentrum für Informatik (2023) <https://doi.org/10.4230/OASIcs.PARMA-DITAM.2023.2> | [[BibTex]](docs/citations/parmaditam2023bispo.bib)
+2022 | L. M. Sousa, N. Paulino, J. C. Ferreira and J. Bispo, "A Flexible HLS Hoeffding Tree Implementation for Runtime Learning on FPGA," 2022 IEEE 21st Mediterranean Electrotechnical Conference (MELECON), Palermo, Italy, 2022, pp. 972-977, <https://doi.org/10.1109/MELECON53508.2022.9843092> | [[BibTex]](docs/citations/melecon2022sousa.bib)
+2021 | P. Pinto and J. M. P. Cardoso. 2021. A methodology and framework for software memoization of functions. In Proceedings of the 18th ACM International Conference on Computing Frontiers (CF '21). Association for Computing Machinery, New York, NY, USA, 93–101. <https://doi.org/10.1145/3457388.3458668> | [[BibTex]](docs/citations/cf2021pinto.bib)
 2020 | T. Santos and J. M. P. Cardoso, "Automatic Selection and Insertion of HLS Directives Via a Source-to-Source Compiler," 2020 International Conference on Field-Programmable Technology (ICFPT), Maui, HI, USA, 2020, pp. 227-232. <https://doi.org/10.1109/ICFPT51103.2020.00039> | [[BibTex]](docs/citations/fpt2020santos.bib)
+2020 | H. Arabnejad, J. Bispo, J. M. P. Cardoso and J. G. Barbosa, Source-to-source compilation targeting OpenMP-based automatic parallelization of C applications. J Supercomput 76, 6753–6785 (2020). <https://doi.org/10.1007/s11227-019-03109-9> | [[BibTex]](docs/citations/super2020arabnejad.bib)
 
 ## Acknowledgments
 
