@@ -1,5 +1,5 @@
 <div style="text-align: center;">
-<img src="clava.png" alt="clava logo" style="width:30%;">
+<img src="docs/assets/clava.png" alt="clava logo" style="width:30%;">
 </div>
 
 Clava is a C/C++/CUDA/OpenCL source-to-source compiler, applying analysis and transformations written in TypeScript/JavaScript with a focus on composability and reusability. It is currently supported on Ubuntu 20.04+, CentOS 7, Windows 10 and 11, and MacOS 11 (Big Sur).
@@ -95,32 +95,15 @@ Library | Description | Installation
 [hoopa](github.com/specs-feup/hoopa) | Hoopa (Holistic optimization and partitioning algorithms) is a collection of HW/SW partitioning policies and algorithms that can partition and optimize an application on a CPU-FPGA system | `npm i @specs-feup/hoopa@latest`
 [onnx-flow](github.com/specs-feup/onnx-flow)  | Converts an ONNX graph into a data-flow graph (DFG), decomposing its high-level operations into low-level operations and performing a set of optimizations | `npm i @specs-feup/onnx-flow@latest`
 
-<!--
-# Sample of supported transformations
-
-Clava already supports the following transformations:
-
-* [Automatic insertion of OpenMP pragmas](https://github.com/specs-feup/clava/blob/master/ClavaLaraApi/src-lara-clava/clava/clava/autopar/Parallelize.lara)
-* [Function inlining](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/opt/Inlining.ts)
-* [Normalizing code](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/opt/NormalizeToSubset.ts) to a subset of the language, including:
-* [Decomposition of complex statements into several, simpler statements](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/StatementDecomposer.ts)
-* [Converting static local variables to static global variables](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/pass/LocalStaticToGlobal.ts)
-* [Conversion of switch statements to ifs](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/pass/TransformSwitchToIf.ts)
-* Loop conversion ([for to while](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/ForToWhileStmt.ts), [do to while](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/DoToWhileStmt.ts))
-* [Ensure there is a single return in a function](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/pass/SingleReturnFunction.ts)
-* [Remove variable shadowing](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/RemoveShadowing.ts)
-* [Simplify ternary operator](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/SimplifyTernaryOp.ts)
-* [Simplify compound assignments](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/SimplifyAssignment.ts)--->
-
 ## Troubleshooting
 
-* First, check if your problem is part of the [common issues list](common_issues.md)
+* First, check if your problem is part of the [common issues list](docs/common_issues.md)
 * If not, check if it has been reported on the [issue tracker](https://github.com/specs-feup/clava/issues)
 * If not, then please [create an issue](https://github.com/specs-feup/clava/issues/new/choose) or otherwise [let us know directly](mailto:jbispo@fe.up.pt)
 
 ## Research Papers
 
-If you found Clava useful, please consider it citing it as such:
+If you found Clava useful, please consider it citing it as follows:
 
 ```latex
 @article{BISPO2020100565,
@@ -143,7 +126,7 @@ Year | Paper | Cite
 ---|---|---
 2024 | T. Santos, J. Bispo and J. M. P. Cardoso. 2024. A Flexible-Granularity Task Graph Representation and Its Generation from C Applications (WIP). In Proceedings of the 25th ACM SIGPLAN/SIGBED International Conference on Languages, Compilers, and Tools for Embedded Systems (LCTES 2024). Association for Computing Machinery, New York, NY, USA, 178–182. <https://doi.org/10.1145/3652032.3657580> | [[BibTex]]()
 2023 | T. Santos, J. Bispo and J. M. P. Cardoso, "A CPU-FPGA Holistic Source-To-Source Compilation Approach for Partitioning and Optimizing C/C++ Applications," 2023 32nd International Conference on Parallel Architectures and Compilation Techniques (PACT), Vienna, Austria, 2023, pp. 320-322. <https://doi.org/10.1109/PACT58117.2023.00034> | [[BibTex]]()
-2020 | T. Santos and J. M. P. Cardoso, "Automatic Selection and Insertion of HLS Directives Via a Source-to-Source Compiler," 2020 International Conference on Field-Programmable Technology (ICFPT), Maui, HI, USA, 2020, pp. 227-232. <https://doi.org/10.1109/ICFPT51103.2020.00039> | [[BibTex]]()
+2020 | T. Santos and J. M. P. Cardoso, "Automatic Selection and Insertion of HLS Directives Via a Source-to-Source Compiler," 2020 International Conference on Field-Programmable Technology (ICFPT), Maui, HI, USA, 2020, pp. 227-232. <https://doi.org/10.1109/ICFPT51103.2020.00039> | [[BibTex]](docs/citations/fpt2020.bib)
 
 ## Acknowledgments
 
