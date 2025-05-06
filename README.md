@@ -6,7 +6,7 @@ Clava is a C/C++/CUDA/OpenCL source-to-source compiler, applying analysis and tr
 
 ## Installation
 
-There are three distinct distributions of using Clava: an [NPM package](https://www.npmjs.com/package/@specs-feup/clava) distribution (recommended), a [JAR file](http://specs.fe.up.pt/tools/clava.zip) distribution (legacy), and an [online demo](https://specs.fe.up.pt/tools/clava/) (for demonstration purposes only)
+There are three distributions of Clava: an [NPM package](https://www.npmjs.com/package/@specs-feup/clava) distribution (recommended), a [JAR file](http://specs.fe.up.pt/tools/clava.zip) distribution (legacy), and an [online demo](https://specs.fe.up.pt/tools/clava/) (for demonstration purposes only)
 
 ### NPM distribution (recommended)
 
@@ -47,10 +47,10 @@ See the [README](https://github.com/specs-feup/clava-project-template/blob/main/
 
 ### JAR file distribution (legacy)
 
-Clava is available as a JAR file for legacy purposes. You can [download it directly](http://specs.fe.up.pt/tools/clava.zip), or you can run these install scripts to install it at the system level:
+Clava is available as a JAR file for legacy purposes, requiring Java 17 or higher. You can [download it directly](http://specs.fe.up.pt/tools/clava.zip), or you can run a script to install it at the system level:
 
-* [Linux](https://github.com/specs-feup/clava/blob/master/install/linux/clava-update)
-* [Windows](https://github.com/specs-feup/clava/blob/master/install/windows/clava-install.cmd)
+* [Linux](https://raw.githubusercontent.com/specs-feup/clava/refs/heads/master/install/linux/clava-update)
+* [Windows](https://raw.githubusercontent.com/specs-feup/clava/refs/heads/master/install/windows/clava-install.cmd)
 
 ### Online demo (demonstration only)
 
@@ -60,11 +60,11 @@ You can [use this online demo](https://specs.fe.up.pt/tools/clava/) to try out C
 
 This is a non-exhaustive list of Clava documentation, usage examples and features:
 
+* [API Documentation](https://specs-feup.github.io/modules/_specs_feup_clava.html) - up-to-date documentation of all Clava joinpoints, attributes and methods
 * Getting started:
   * [Usage Examples](https://github.com/specs-feup/clava/tree/master/ClavaWeaver/resources/clava/test)
   * [Clava Online Demo Tutorial (2022)](https://specs.fe.up.pt/tools/clava/Clava%20Web-based%20Tutorial%20(2022).pdf)
   * [Clava Libraries Showcase (FCCM 2025 Demo Night)](https://github.com/specs-feup/clava-fccm-2025-demo)
-  * [Clava API Documentation](https://specs-feup.github.io/modules/_specs_feup_clava.html) - List of all join points, attributes and actions available in Clava
   * [Clava API Slides](https://drive.google.com/drive/u/1/folders/1IAqv7SpP8S-t5g3fpNO06cJ7J2j2aD7K) - Introduction to Clava and the LARA Framework APIs.
 * Clava built-in features:
   * [CMake integration](https://github.com/specs-feup/clava/tree/master/CMake) - Allows Clava to be used in CMake-centered compilation flows
