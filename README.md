@@ -1,6 +1,6 @@
-<div style="text-align: center;">
-<img src="docs/assets/clava.png" alt="clava logo" style="width:30%;">
-</div>
+<p align="center">
+  <img src="docs/assets/clava.png" alt="clava logo" style="width:30%;">
+</p>
 
 Clava is a C/C++/CUDA/OpenCL source-to-source compiler, applying analysis and transformations written in TypeScript/JavaScript with a focus on composability and reusability. It is currently supported on Ubuntu 20.04+, CentOS 7, Windows 10 and 11, and MacOS 11 (Big Sur).
 
@@ -124,9 +124,9 @@ Clava has also been used in these recent papers:
 
 Year | Paper | Cite
 ---|---|---
-2024 | T. Santos, J. Bispo and J. M. P. Cardoso. 2024. A Flexible-Granularity Task Graph Representation and Its Generation from C Applications (WIP). In Proceedings of the 25th ACM SIGPLAN/SIGBED International Conference on Languages, Compilers, and Tools for Embedded Systems (LCTES 2024). Association for Computing Machinery, New York, NY, USA, 178–182. <https://doi.org/10.1145/3652032.3657580> | [[BibTex]]()
-2023 | T. Santos, J. Bispo and J. M. P. Cardoso, "A CPU-FPGA Holistic Source-To-Source Compilation Approach for Partitioning and Optimizing C/C++ Applications," 2023 32nd International Conference on Parallel Architectures and Compilation Techniques (PACT), Vienna, Austria, 2023, pp. 320-322. <https://doi.org/10.1109/PACT58117.2023.00034> | [[BibTex]]()
-2020 | T. Santos and J. M. P. Cardoso, "Automatic Selection and Insertion of HLS Directives Via a Source-to-Source Compiler," 2020 International Conference on Field-Programmable Technology (ICFPT), Maui, HI, USA, 2020, pp. 227-232. <https://doi.org/10.1109/ICFPT51103.2020.00039> | [[BibTex]](docs/citations/fpt2020.bib)
+2024 | T. Santos, J. Bispo and J. M. P. Cardoso. 2024. A Flexible-Granularity Task Graph Representation and Its Generation from C Applications (WIP). In Proceedings of the 25th ACM SIGPLAN/SIGBED International Conference on Languages, Compilers, and Tools for Embedded Systems (LCTES 2024). Association for Computing Machinery, New York, NY, USA, 178–182. <https://doi.org/10.1145/3652032.3657580> | [[BibTex]](docs/citations/lctes2024santos.bib)
+2023 | T. Santos, J. Bispo and J. M. P. Cardoso, "A CPU-FPGA Holistic Source-To-Source Compilation Approach for Partitioning and Optimizing C/C++ Applications," 2023 32nd International Conference on Parallel Architectures and Compilation Techniques (PACT), Vienna, Austria, 2023, pp. 320-322. <https://doi.org/10.1109/PACT58117.2023.00034> | [[BibTex]](docs/citations/pact2023santos.bib)
+2020 | T. Santos and J. M. P. Cardoso, "Automatic Selection and Insertion of HLS Directives Via a Source-to-Source Compiler," 2020 International Conference on Field-Programmable Technology (ICFPT), Maui, HI, USA, 2020, pp. 227-232. <https://doi.org/10.1109/ICFPT51103.2020.00039> | [[BibTex]](docs/citations/fpt2020santos.bib)
 
 ## Acknowledgments
 
