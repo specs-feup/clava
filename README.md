@@ -2,7 +2,7 @@
   <img src="docs/assets/clava.png" alt="clava logo" style="width:30%;">
 </p>
 
-Clava is a C/C++/CUDA/OpenCL source-to-source compiler, applying analysis and transformations written in TypeScript/JavaScript with a focus on composability and reusability. It is currently supported on Ubuntu 20.04+, CentOS 7, Windows 10 and 11, and MacOS 11 (Big Sur).
+Clava is a C/C++/CUDA/OpenCL source-to-source compiler, applying analysis and transformations written in TypeScript/JavaScript with a focus on composability and reusability. It is currently supported on Ubuntu, Windows and MacOS.
 
 ## Installation
 
@@ -10,7 +10,7 @@ There are three distributions of Clava: an [NPM package](https://www.npmjs.com/p
 
 ### NPM distribution (recommended)
 
-Clava is currently distributed as an [NPM package](https://www.npmjs.com/package/@specs-feup/clava). It requires Node.js 16 or 18, and Java 17 or higher. Different OSses have different ways of installing these dependencies, but on Ubuntu you can run this:
+Clava is currently distributed as an [NPM package](https://www.npmjs.com/package/@specs-feup/clava). It requires Node.js 18 or 20, and Java 17 or higher. Different OSses have different ways of installing these dependencies, but on Ubuntu you can run this:
 
 ```bash
 apt-get update && apt-get install -y curl openjdk-17-jdk
@@ -28,6 +28,12 @@ npm install -g @specs-feup/clava@latest
 clava help # check if it was installed correctly 
 ```
 
+To use Clava with the currently supported CLI you must use the command `clava classic`. You can check if this works by running: 
+
+```bash
+clava classic --help # check if CLI is supported 
+```
+
 #### b. Clava as a dependency of an NPM project
 
 Choose this option if you want to use any of the several Clava extensions available, or write your own analysis and transformation scripts:
@@ -43,6 +49,8 @@ npx run run # run the hello world example that comes with the template
 
 3. (optional) Add Clava packages to your project, e.g., `npm install @specs-feup/clava-code-transforms@latest`
 
+Check [specs-feup NPM page](https://www.npmjs.com/org/specs-feup) to see what packages are available for Clava (they should have a `clava-` prefix).
+
 See the [README](https://github.com/specs-feup/clava-project-template/blob/main/README.md) included in the template for further instructions on running, testing, automatic building, etc.
 
 ### JAR file distribution (legacy)
@@ -55,6 +63,8 @@ Clava is available as a JAR file for legacy purposes, requiring Java 17 or highe
 ### Online demo (demonstration only)
 
 You can [use this online demo](https://specs.fe.up.pt/tools/clava/) to try out Clava without needing to install it.
+
+Warning: currently the demo only supports legacy mode, we are currently working to support the recommended NPM mode.
 
 ## Using Clava
 
@@ -80,7 +90,7 @@ This is a non-exhaustive list of Clava documentation, usage examples and feature
       * [Remove variable shadowing](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/RemoveShadowing.ts)
       * [Simplify ternary operator](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/SimplifyTernaryOp.ts)
       * [Simplify compound assignments](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/SimplifyAssignment.ts)
-* Clava [NPM libraries](https://www.npmjs.com/settings/specs-feup/packages) (not supported by the JAR file legacy distribution):
+* Clava [NPM libraries](https://www.npmjs.com/org/specs-feup) (not supported by the JAR file legacy distribution):
 
 Library | Description | Installation
 ---|---|---
