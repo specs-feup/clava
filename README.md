@@ -6,7 +6,10 @@ Clava is a C/C++/CUDA/OpenCL source-to-source compiler, applying analysis and tr
 
 ## Installation
 
-There are three distributions of Clava: an [NPM package](https://www.npmjs.com/package/@specs-feup/clava) distribution (recommended), a [JAR file](http://specs.fe.up.pt/tools/clava.zip) distribution (legacy), and an [online demo](https://specs.fe.up.pt/tools/clava/) (for demonstration purposes only)
+There are three distributions of Clava:
+- an [NPM package](https://www.npmjs.com/package/@specs-feup/clava) distribution (recommended),
+- a [JAR file](http://specs.fe.up.pt/tools/clava.zip) distribution (legacy),
+- and an [online demo](https://specs.fe.up.pt/tools/clava/) (for demonstration purposes only)
 
 ### NPM distribution (recommended)
 
@@ -55,7 +58,7 @@ See the [README](https://github.com/specs-feup/clava-project-template/blob/main/
 
 ### JAR file distribution (legacy)
 
-Clava is available as a JAR file for legacy purposes, requiring Java 17 or higher. You can [download it directly](http://specs.fe.up.pt/tools/clava.zip), or you can run a script to install it at the system level:
+A Clava version based on LARA 2.x is available as a JAR file for legacy purposes, requiring Java 17 or higher. You can [download it directly](http://specs.fe.up.pt/tools/clava.zip), or you can run a script to install it at the system level:
 
 * [Linux](https://raw.githubusercontent.com/specs-feup/clava/refs/heads/master/install/linux/clava-update)
 * [Windows](https://raw.githubusercontent.com/specs-feup/clava/refs/heads/master/install/windows/clava-install.cmd)
@@ -146,7 +149,9 @@ Year | Paper | Cite
 
 ## Acknowledgments
 
-This work has been partially funded by the [ANTAREX](https://antarex.fe.up.pt) project through the EU H2020 FET-HPC program under grant no. 671623. João Bispo acknowledges the support provided by Fundação para a Ciência e a Tecnologia, Portugal, under Post-Doctoral grant SFRH/BPD/118211/2016.
+- This work has been partially funded by the [ANTAREX](https://antarex.fe.up.pt) project through the EU H2020 FET-HPC program under grant no. 671623.
+- João Bispo acknowledges the support provided by Fundação para a Ciência e a Tecnologia, Portugal, under Post-Doctoral grant SFRH/BPD/118211/2016.
+- Luís Sousa acknowledges the support provided by Fundação para a Ciência e a Tecnologia, Portugal, under Doctoral grant 2022.10002.BD.
 
 ## Contacts
 
