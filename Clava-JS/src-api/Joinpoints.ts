@@ -85,6 +85,7 @@ type PrivateMapper = {
   "FunctionType": typeof FunctionType,
   "GotoStmt": typeof GotoStmt,
   "If": typeof If,
+  "IncompleteArrayType": typeof IncompleteArrayType,
   "IntLiteral": typeof IntLiteral,
   "LabelDecl": typeof LabelDecl,
   "LabelStmt": typeof LabelStmt,
@@ -196,7 +197,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.
    */
-  get data(): object { const data = (this._javaObject.getData() as string | undefined); return data ? JSON.parse(data) : data; }
+  get data(): any { const data = (this._javaObject.getData() as string | undefined); return data ? JSON.parse(data) : data; }
   /**
    * JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.
    */
@@ -892,9 +893,9 @@ export class Op extends Expression {
   };
   get isBitwise(): boolean { return wrapJoinPoint(this._javaObject.getIsBitwise()) }
   /**
-   * The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div, rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign, rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not, real, imag, extension, cowait.
+   * The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div,                 rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign,                 rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a                 unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not,                 real, imag, extension, cowait. If it is a ternary operator, the value will be 'ternary'
    */
-  get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
+  get kind(): "ptr_mem_d" | "ptr_mem_i" | "mul" | "div" | "rem" | "add" | "sub" | "shl" | "shr" | "cmp" | "lt" | "gt" | "le" | "ge" | "eq" | "ne" | "and" | "xor" | "or" | "l_and" | "l_or" | "assign" | "mul_assign" | "div_assign" | "rem_assign" | "add_assign" | "sub_assign" | "shl_assign" | "shr_assign" | "and_assign" | "xor_assign" | "or_assign" | "comma" | "post_inc" | "post_dec" | "pre_inc" | "pre_dec" | "addr_of" | "deref" | "plus" | "minus" | "not" | "l_not" | "real" | "imag" | "extension" | "cowait" | "ternary" { return wrapJoinPoint(this._javaObject.getKind()) }
   get operator(): string { return wrapJoinPoint(this._javaObject.getOperator()) }
 }
 
@@ -2080,6 +2081,15 @@ export class If extends Statement {
   setThen(then: Statement): void { return wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then))); }
 }
 
+export class IncompleteArrayType extends ArrayType {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
 export class IntLiteral extends Literal {
   /**
    * @internal
@@ -2887,6 +2897,7 @@ const JoinpointMapper = {
   functionType: FunctionType,
   gotoStmt: GotoStmt,
   if: If,
+  incompleteArrayType: IncompleteArrayType,
   intLiteral: IntLiteral,
   labelDecl: LabelDecl,
   labelStmt: LabelStmt,

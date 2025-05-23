@@ -684,7 +684,7 @@ export class Op extends Expression {
     };
     get isBitwise() { return wrapJoinPoint(this._javaObject.getIsBitwise()); }
     /**
-     * The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div, rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign, rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not, real, imag, extension, cowait.
+     * The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div,                 rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign,                 rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a                 unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not,                 real, imag, extension, cowait. If it is a ternary operator, the value will be 'ternary'
      */
     get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
     get operator() { return wrapJoinPoint(this._javaObject.getOperator()); }
@@ -1781,6 +1781,14 @@ export class If extends Statement {
      */
     setThen(then) { return wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then))); }
 }
+export class IncompleteArrayType extends ArrayType {
+    /**
+     * @internal
+     */
+    static _defaultAttributeInfo = {
+        name: null,
+    };
+}
 export class IntLiteral extends Literal {
     /**
      * @internal
@@ -2530,6 +2538,7 @@ const JoinpointMapper = {
     functionType: FunctionType,
     gotoStmt: GotoStmt,
     if: If,
+    incompleteArrayType: IncompleteArrayType,
     intLiteral: IntLiteral,
     labelDecl: LabelDecl,
     labelStmt: LabelStmt,
