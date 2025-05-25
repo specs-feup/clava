@@ -8,9 +8,11 @@ aspectdef LaraGetterTest
 	// descendants() does not work in newer versions of GraalVM
 	// For some reason, laraGetter is not being used in that case
 	//var descendants2 = Clava.getProgram().getDescendants('vardecl');
+
+	var filename = Clava.isCxx() ? "dummy.cpp" : "dummy.c";
 	
 	var $app = Clava.getProgram();
-	var $file = ClavaJoinPoints.file("dummy.c", "lib");
+	var $file = ClavaJoinPoints.file(filename, "lib");
 	//$file.insertBefore("// Hello");
 	$file.insert before "// Hello";
 
