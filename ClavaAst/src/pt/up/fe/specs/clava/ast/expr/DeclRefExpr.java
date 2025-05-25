@@ -50,7 +50,8 @@ public class DeclRefExpr extends Expr implements Nameable {
     // DATAKEY BEGIN
 
     /**
-     * The nested-name qualifier that precedes the name, or empty string if it has none.
+     * The nested-name qualifier that precedes the name, or empty string if it has
+     * none.
      */
     public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
 
@@ -240,18 +241,18 @@ public class DeclRefExpr extends Expr implements Nameable {
         DeclRefKind kind = getKind();
 
         switch (kind) {
-        case VAR_ACCESS:
-            return this;
-        case ARRAY_ACCESS:
-            return getArrayAccessExpr(this);
-        case FUNCTION_CALL:
-        case POINTER_ACCESS:
-        case ADDRESS_OF:
-            return (Expr) ClavaNodes.getParentNormalized(this);
-        case UNKNOWN:
-            return this;
-        default:
-            throw new CaseNotDefinedException(kind);
+            case VAR_ACCESS:
+                return this;
+            case ARRAY_ACCESS:
+                return getArrayAccessExpr(this);
+            case FUNCTION_CALL:
+            case POINTER_ACCESS:
+            case ADDRESS_OF:
+                return (Expr) ClavaNodes.getParentNormalized(this);
+            case UNKNOWN:
+                return this;
+            default:
+                throw new CaseNotDefinedException(kind);
         }
 
     }
