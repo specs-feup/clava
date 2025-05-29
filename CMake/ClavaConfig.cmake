@@ -59,7 +59,7 @@ if(DEFINED CLAVA_NODE AND CLAVA_NODE)
 		endif()
 
 	else()
-		message(SEND_ERROR "npm find error: ${NPM_ERROR}")				
+		message(SEND_ERROR "npm find error: ${NPM_ERROR}\noutout: ${NPM_OUTPUT}\nreturn value: ${NPM_RESULT}")				
 	endif()	
 	
 	set(LOCAL_CLAVA "npx clava classic")
