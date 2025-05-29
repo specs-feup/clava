@@ -51,6 +51,9 @@ export default class ClavaJoinPoints {
     static variableArrayType($type, $sizeExpr) {
         return wrapJoinPoint(ClavaJavaTypes.AstFactory.variableArrayType(unwrapJoinPoint($type), unwrapJoinPoint($sizeExpr)));
     }
+    static incompleteArrayType($type) {
+        return wrapJoinPoint(ClavaJavaTypes.AstFactory.incompleteArrayType(unwrapJoinPoint($type)));
+    }
     static exprLiteral(code, type) {
         if (type === undefined) {
             return wrapJoinPoint(ClavaJavaTypes.AstFactory.exprLiteral(code));
@@ -477,6 +480,12 @@ export default class ClavaJoinPoints {
     }
     static gotoStmt(labelDecl) {
         return wrapJoinPoint(ClavaJavaTypes.AstFactory.gotoStmt(unwrapJoinPoint(labelDecl)));
+    }
+    static breakStmt() {
+        return wrapJoinPoint(ClavaJavaTypes.AstFactory.breakStmt());
+    }
+    static defaultStmt() {
+        return wrapJoinPoint(ClavaJavaTypes.AstFactory.defaultStmt());
     }
     /**
      * Creates a new literal join point 'decl'.

@@ -1,190 +1,30 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
-import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point ACase
+ * Auto-Generated class for join point ADefault
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class ACase extends ASwitchCase {
+public abstract class ADefault extends ASwitchCase {
 
     protected ASwitchCase aSwitchCase;
 
     /**
      * 
      */
-    public ACase(ASwitchCase aSwitchCase){
+    public ADefault(ASwitchCase aSwitchCase){
         super(aSwitchCase);
         this.aSwitchCase = aSwitchCase;
     }
-    /**
-     * Get value on attribute instructions
-     * @return the attribute's value
-     */
-    public abstract AStatement[] getInstructionsArrayImpl();
-
-    /**
-     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
-     */
-    public Object getInstructionsImpl() {
-        AStatement[] aStatementArrayImpl0 = getInstructionsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
-     */
-    public final Object getInstructions() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "instructions", Optional.empty());
-        	}
-        	Object result = this.getInstructionsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "instructions", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "instructions", e);
-        }
-    }
-
-    /**
-     * true if this is a default case, false otherwise
-     */
-    public abstract Boolean getIsDefaultImpl();
-
-    /**
-     * true if this is a default case, false otherwise
-     */
-    public final Object getIsDefault() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isDefault", Optional.empty());
-        	}
-        	Boolean result = this.getIsDefaultImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isDefault", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isDefault", e);
-        }
-    }
-
-    /**
-     * true if this case does not contain instructions (i.e., it is directly above another case), false otherwise
-     */
-    public abstract Boolean getIsEmptyImpl();
-
-    /**
-     * true if this case does not contain instructions (i.e., it is directly above another case), false otherwise
-     */
-    public final Object getIsEmpty() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isEmpty", Optional.empty());
-        	}
-        	Boolean result = this.getIsEmptyImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isEmpty", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isEmpty", e);
-        }
-    }
-
-    /**
-     * the case statement that comes after this case, or undefined if there are no more case statements
-     */
-    public abstract ACase getNextCaseImpl();
-
-    /**
-     * the case statement that comes after this case, or undefined if there are no more case statements
-     */
-    public final Object getNextCase() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextCase", Optional.empty());
-        	}
-        	ACase result = this.getNextCaseImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "nextCase", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "nextCase", e);
-        }
-    }
-
-    /**
-     * the first statement that is not a case that will be executed by this case statement
-     */
-    public abstract AStatement getNextInstructionImpl();
-
-    /**
-     * the first statement that is not a case that will be executed by this case statement
-     */
-    public final Object getNextInstruction() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextInstruction", Optional.empty());
-        	}
-        	AStatement result = this.getNextInstructionImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "nextInstruction", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "nextInstruction", e);
-        }
-    }
-
-    /**
-     * Get value on attribute values
-     * @return the attribute's value
-     */
-    public abstract AExpression[] getValuesArrayImpl();
-
-    /**
-     * the values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
-     */
-    public Object getValuesImpl() {
-        AExpression[] aExpressionArrayImpl0 = getValuesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * the values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
-     */
-    public final Object getValues() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "values", Optional.empty());
-        	}
-        	Object result = this.getValuesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "values", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "values", e);
-        }
-    }
-
     /**
      * Get value on attribute isFirst
      * @return the attribute's value
@@ -1252,12 +1092,6 @@ public abstract class ACase extends ASwitchCase {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aSwitchCase.fillWithAttributes(attributes);
-        attributes.add("instructions");
-        attributes.add("isDefault");
-        attributes.add("isEmpty");
-        attributes.add("nextCase");
-        attributes.add("nextInstruction");
-        attributes.add("values");
     }
 
     /**
@@ -1282,7 +1116,7 @@ public abstract class ACase extends ASwitchCase {
      */
     @Override
     public final String get_class() {
-        return "case";
+        return "default";
     }
 
     /**
@@ -1300,13 +1134,7 @@ public abstract class ACase extends ASwitchCase {
     /**
      * 
      */
-    protected enum CaseAttributes {
-        INSTRUCTIONS("instructions"),
-        ISDEFAULT("isDefault"),
-        ISEMPTY("isEmpty"),
-        NEXTCASE("nextCase"),
-        NEXTINSTRUCTION("nextInstruction"),
-        VALUES("values"),
+    protected enum DefaultAttributes {
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         AST("ast"),
@@ -1376,13 +1204,13 @@ public abstract class ACase extends ASwitchCase {
         /**
          * 
          */
-        private CaseAttributes(String name){
+        private DefaultAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<CaseAttributes> fromString(String name) {
+        public static Optional<DefaultAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -1390,7 +1218,7 @@ public abstract class ACase extends ASwitchCase {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(CaseAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(DefaultAttributes::name).collect(Collectors.toList());
         }
 
         /**

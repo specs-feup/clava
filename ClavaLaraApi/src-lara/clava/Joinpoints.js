@@ -684,7 +684,7 @@ export class Op extends Expression {
     };
     get isBitwise() { return wrapJoinPoint(this._javaObject.getIsBitwise()); }
     /**
-     * The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div, rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign, rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not, real, imag, extension, cowait.
+     * The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div,                 rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign,                 rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a                 unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not,                 real, imag, extension, cowait. If it is a ternary operator, the value will be 'ternary'
      */
     get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
     get operator() { return wrapJoinPoint(this._javaObject.getOperator()); }
@@ -913,6 +913,14 @@ export class Switch extends Statement {
      * True if there is a default case in this switch statement, false otherwise
      */
     get hasDefaultCase() { return wrapJoinPoint(this._javaObject.getHasDefaultCase()); }
+}
+export class SwitchCase extends Statement {
+    /**
+     * @internal
+     */
+    static _defaultAttributeInfo = {
+        name: null,
+    };
 }
 /**
  * A pragma that references a point in the code and sticks to it
@@ -1331,7 +1339,7 @@ export class Call extends Expression {
      */
     wrap(name) { return wrapJoinPoint(this._javaObject.wrap(unwrapJoinPoint(name))); }
 }
-export class Case extends Statement {
+export class Case extends SwitchCase {
     /**
      * @internal
      */
@@ -1490,6 +1498,14 @@ export class Declarator extends NamedDecl {
      */
     static _defaultAttributeInfo = {
         name: "name",
+    };
+}
+export class Default extends SwitchCase {
+    /**
+     * @internal
+     */
+    static _defaultAttributeInfo = {
+        name: null,
     };
 }
 export class DeleteExpr extends Expression {
@@ -1764,6 +1780,14 @@ export class If extends Statement {
      * Sets the body of the if
      */
     setThen(then) { return wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then))); }
+}
+export class IncompleteArrayType extends ArrayType {
+    /**
+     * @internal
+     */
+    static _defaultAttributeInfo = {
+        name: null,
+    };
 }
 export class IntLiteral extends Literal {
     /**
@@ -2471,6 +2495,7 @@ const JoinpointMapper = {
     statement: Statement,
     struct: Struct,
     switch: Switch,
+    switchCase: SwitchCase,
     tag: Tag,
     ternaryOp: TernaryOp,
     this: This,
@@ -2500,6 +2525,7 @@ const JoinpointMapper = {
     cudaKernelCall: CudaKernelCall,
     declStmt: DeclStmt,
     declarator: Declarator,
+    default: Default,
     deleteExpr: DeleteExpr,
     elaboratedType: ElaboratedType,
     emptyStmt: EmptyStmt,
@@ -2512,6 +2538,7 @@ const JoinpointMapper = {
     functionType: FunctionType,
     gotoStmt: GotoStmt,
     if: If,
+    incompleteArrayType: IncompleteArrayType,
     intLiteral: IntLiteral,
     labelDecl: LabelDecl,
     labelStmt: LabelStmt,

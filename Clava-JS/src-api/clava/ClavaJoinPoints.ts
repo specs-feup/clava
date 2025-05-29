@@ -92,6 +92,16 @@ export default class ClavaJoinPoints {
     );
   }
 
+  static incompleteArrayType(
+    $type: Joinpoints.Type
+  ): Joinpoints.IncompleteArrayType {
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.incompleteArrayType(
+        unwrapJoinPoint($type)
+      )
+    );
+  }
+
   static exprLiteral(code: string): Joinpoints.Expression;
   static exprLiteral(
     code: string,
@@ -877,6 +887,14 @@ export default class ClavaJoinPoints {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.gotoStmt(unwrapJoinPoint(labelDecl))
     );
+  }
+
+  static breakStmt(): Joinpoints.Break {
+    return wrapJoinPoint(ClavaJavaTypes.AstFactory.breakStmt());
+  }
+
+  static defaultStmt(): Joinpoints.Default {
+    return wrapJoinPoint(ClavaJavaTypes.AstFactory.defaultStmt());
   }
 
   /**

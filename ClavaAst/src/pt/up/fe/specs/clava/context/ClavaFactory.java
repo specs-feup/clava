@@ -225,6 +225,13 @@ public class ClavaFactory {
         return new VariableArrayType(data, Collections.emptyList());
     }
 
+    public IncompleteArrayType incompleteArrayType(Type elementType) {
+        DataStore data = newDataStore(IncompleteArrayType.class)
+                .put(ArrayType.ELEMENT_TYPE, elementType);
+
+        return new IncompleteArrayType(data, Collections.emptyList());
+    }
+
     public PointerType pointerType(Type pointeeType) {
         DataStore data = newDataStore(PointerType.class)
                 .put(PointerType.POINTEE_TYPE, pointeeType);
@@ -792,10 +799,16 @@ public class ClavaFactory {
         return new BreakStmt(breakStmtData, Collections.emptyList());
     }
 
-    public CaseStmt caseStmt(Expr caseExpr, Stmt subStmt) {
+    public CaseStmt caseStmt(Expr caseExpr) {
         DataStore caseStmtData = newDataStore(CaseStmt.class);
 
-        return new CaseStmt(caseStmtData, Arrays.asList(caseExpr, nullExpr(), subStmt));
+        return new CaseStmt(caseStmtData, Arrays.asList(caseExpr, nullExpr()));
+    }
+
+    public DefaultStmt defaultStmt() {
+        DataStore defaultStmtData = newDataStore(DefaultStmt.class);
+
+        return new DefaultStmt(defaultStmtData, Collections.emptyList());
     }
 
     public SwitchStmt switchStmt(Expr condition, Stmt body) {

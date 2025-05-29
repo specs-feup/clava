@@ -117,6 +117,9 @@ println("ArrayAccess2 type: " + $arrayAccess2.type.code);
 println("ArrayAccess3 code: " + $arrayAccess3.code);
 println("ArrayAccess3 type: " + $arrayAccess3.type.code);
 
+// IncompleteArrayType
+var $incompleteArrayType = ClavaJoinPoints.incompleteArrayType(intType);
+println("IncompleteArrayType code: " + $incompleteArrayType.code);
 
 // InitList
 const $literalTwo = ClavaJoinPoints.integerLiteral(2)
