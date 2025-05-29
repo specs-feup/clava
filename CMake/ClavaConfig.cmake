@@ -24,8 +24,11 @@ find_package(Java COMPONENTS Runtime REQUIRED)
 set(CLAVA_CMAKE_HOME ${CMAKE_CURRENT_LIST_DIR})
 message(STATUS "Clava home: ${CLAVA_CMAKE_HOME}")
 
-# Check if Node mode. If so, LOCAL_CLAVA becomes 'clava classic'
-if(DEFINED CLAVA_NODE AND CLAVA_NODE)
+
+# Check if Node mode. If so, LOCAL_CLAVA becomes 'npx clava classic'
+if(DEFINED CLAVA_GRAAL AND CLAVA_GRAAL)
+	# Do nothing
+else()
 	message(STATUS "Enabling Clava Node mode")
 	
 	# Check if clava is globally installed
