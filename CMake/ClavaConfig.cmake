@@ -42,7 +42,7 @@ if(DEFINED CLAVA_NODE AND CLAVA_NODE)
 		RESULT_VARIABLE NPM_RESULT				
 	)	
 
-	if(${NPM_RESULT} STREQUAL "0")
+	#if(${NPM_RESULT} STREQUAL "0")
 		string(FIND "${NPM_OUTPUT}" "(empty)" INDEX)
 
 		# Could not find package, install globally
@@ -58,9 +58,9 @@ if(DEFINED CLAVA_NODE AND CLAVA_NODE)
 			
 		endif()
 
-	else()
-		message(SEND_ERROR "npm find error: ${NPM_ERROR}\noutout: ${NPM_OUTPUT}\nreturn value: ${NPM_RESULT}")				
-	endif()	
+	#else()
+	#	message(SEND_ERROR "npm find error: ${NPM_ERROR}\noutout: ${NPM_OUTPUT}\nreturn value: ${NPM_RESULT}")				
+	#endif()	
 	
 	set(LOCAL_CLAVA "npx clava classic")
 endif()
