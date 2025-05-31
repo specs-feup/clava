@@ -84,21 +84,27 @@ public abstract class Decl extends ClavaNode {
     }
 
     public String getAttributesCode() {
+        // return getAttributesCode(get(ATTRIBUTES), true, true);
+        // }
+        //
+        // public String getAttributesCode(List<Attribute> attrs, boolean addNewline, boolean ignoreGenericAttrs) {
+        List<Attribute> attrs = get(ATTRIBUTES);
         var code = new StringBuilder();
 
-        for (Attribute attr : get(ATTRIBUTES)) {
+        for (Attribute attr : attrs) {
 
             // If generic class, do not generated code for it
+            // if (ignoreGenericAttrs && attr.getClass().equals(Attribute.class)) {
             if (attr.getClass().equals(Attribute.class)) {
                 ClavaLog.info(
                         "Attribute '" + attr.getKind() + "' not implemented, not generating code for it");
                 continue;
             }
-
             code.append(attr.getCode());
 
             if (attr.getKind().isInline()) {
                 code.append(" ");
+                // } else if (addNewline) {
             } else {
                 code.append("\n");
             }
