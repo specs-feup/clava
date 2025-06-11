@@ -1345,7 +1345,7 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Sets the storage class of this function (changes all declarations of the function)
+     * Sets the storage class of this specific function decl
      * @param storageClass 
      */
     @Override

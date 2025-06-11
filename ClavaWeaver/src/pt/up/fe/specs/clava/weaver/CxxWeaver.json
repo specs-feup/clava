@@ -43450,7 +43450,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Sets the storage class of this function (changes all declarations of the function)",
+						"tooltip": "Sets the storage class of this specific function decl",
 						"children": [
 									{
 										"type": "void",
@@ -61794,7 +61794,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Sets the storage class of this function (changes all declarations of the function)",
+						"tooltip": "Sets the storage class of this specific function decl",
 						"children": [
 									{
 										"type": "void",

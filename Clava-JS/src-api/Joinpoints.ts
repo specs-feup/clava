@@ -1925,7 +1925,14 @@ export class FunctionJp extends Declarator {
    * A string with the signature of this function (e.g., name of the function, plus the parameters types)
    */
   get signature(): string { return wrapJoinPoint(this._javaObject.getSignature()) }
+  /**
+   * The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)
+   */
   get storageClass(): StorageClass { return wrapJoinPoint(this._javaObject.getStorageClass()) }
+  /**
+   * The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)
+   */
+  set storageClass(value: StorageClass) { this._javaObject.setStorageClass(unwrapJoinPoint(value)); }
   getDeclaration(withReturnType: boolean): string { return wrapJoinPoint(this._javaObject.getDeclaration(unwrapJoinPoint(withReturnType))); }
   /**
    * Adds a new parameter to the function
@@ -2007,6 +2014,10 @@ export class FunctionJp extends Declarator {
    * Sets the return type of the function
    */
   setReturnType(returnType: Type): void { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(returnType))); }
+  /**
+   * Sets the storage class of this specific function decl
+   */
+  setStorageClass(storageClass: StorageClass): void { return wrapJoinPoint(this._javaObject.setStorageClass(unwrapJoinPoint(storageClass))); }
 }
 
 export class FunctionType extends Type {
