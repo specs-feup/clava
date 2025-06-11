@@ -15708,6 +15708,14 @@
 					},
 					{
 						"type": "attribute",
+						"children": [
+									{
+										"type": "varref",
+										"name": "controlVarref"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The expression of the last value of the control variable (e.g. 'length' in 'i < length;')",
 						"children": [
 									{
@@ -55781,6 +55789,14 @@
 									{
 										"type": "String",
 										"name": "controlVar"
+									}]
+					},
+					{
+						"type": "attribute",
+						"children": [
+									{
+										"type": "varref",
+										"name": "controlVarref"
 									}]
 					},
 					{

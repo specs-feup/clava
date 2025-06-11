@@ -62,6 +62,15 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
+     * Get value on attribute controlVarref
+     * @return the attribute's value
+     */
+    @Override
+    public AVarref getControlVarrefImpl() {
+        return this.aLoop.getControlVarrefImpl();
+    }
+
+    /**
      * Get value on attribute endValue
      * @return the attribute's value
      */
@@ -1549,6 +1558,7 @@ public abstract class ACilkFor extends ALoop {
         COND("cond"),
         CONDRELATION("condRelation"),
         CONTROLVAR("controlVar"),
+        CONTROLVARREF("controlVarref"),
         ENDVALUE("endValue"),
         HASCONDRELATION("hasCondRelation"),
         ID("id"),
