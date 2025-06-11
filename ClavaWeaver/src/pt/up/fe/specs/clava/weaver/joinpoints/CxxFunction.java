@@ -476,11 +476,11 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void setStorageClassImpl(String storageClass) {
+    public boolean setStorageClassImpl(String storageClass) {
         // Get corresponding enum
         var storageClassEnum = StorageClass.getHelper().fromValue(storageClass);
 
-        function.setStorageClass(storageClassEnum);
+        return function.setStorageClass(storageClassEnum);
     }
 
     @Override
