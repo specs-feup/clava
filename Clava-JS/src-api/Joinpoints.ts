@@ -2015,9 +2015,9 @@ export class FunctionJp extends Declarator {
    */
   setReturnType(returnType: Type): void { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(returnType))); }
   /**
-   * Sets the storage class of this specific function decl
+   * Sets the storage class of this specific function decl. AUTO and REGISTER are not allowed for functions, and EXTERN is not allowed in function implementations, or function declarations that are in the same file as the implementation. Returns true if the storage class changed, false otherwise.
    */
-  setStorageClass(storageClass: StorageClass): void { return wrapJoinPoint(this._javaObject.setStorageClass(unwrapJoinPoint(storageClass))); }
+  setStorageClass(storageClass: StorageClass): boolean { return wrapJoinPoint(this._javaObject.setStorageClass(unwrapJoinPoint(storageClass))); }
 }
 
 export class FunctionType extends Type {

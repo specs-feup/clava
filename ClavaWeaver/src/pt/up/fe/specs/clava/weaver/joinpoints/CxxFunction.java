@@ -480,7 +480,7 @@ public class CxxFunction extends AFunction {
         // Get corresponding enum
         var storageClassEnum = StorageClass.getHelper().fromValue(storageClass);
 
-        function.set(FunctionDecl.STORAGE_CLASS, storageClassEnum);
+        function.setStorageClass(storageClassEnum);
     }
 
     @Override
