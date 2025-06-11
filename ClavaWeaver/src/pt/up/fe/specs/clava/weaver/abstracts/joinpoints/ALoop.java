@@ -141,6 +141,31 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * Get value on attribute controlVarref
+     * @return the attribute's value
+     */
+    public abstract AVarref getControlVarrefImpl();
+
+    /**
+     * Get value on attribute controlVarref
+     * @return the attribute's value
+     */
+    public final Object getControlVarref() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "controlVarref", Optional.empty());
+        	}
+        	AVarref result = this.getControlVarrefImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "controlVarref", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "controlVarref", e);
+        }
+    }
+
+    /**
      * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
      */
     public abstract String getEndValueImpl();
@@ -2011,6 +2036,7 @@ public abstract class ALoop extends AStatement {
         attributes.add("cond");
         attributes.add("condRelation");
         attributes.add("controlVar");
+        attributes.add("controlVarref");
         attributes.add("endValue");
         attributes.add("hasCondRelation");
         attributes.add("id");
@@ -2089,6 +2115,7 @@ public abstract class ALoop extends AStatement {
         COND("cond"),
         CONDRELATION("condRelation"),
         CONTROLVAR("controlVar"),
+        CONTROLVARREF("controlVarref"),
         ENDVALUE("endValue"),
         HASCONDRELATION("hasCondRelation"),
         ID("id"),

@@ -28,10 +28,7 @@ import pt.up.fe.specs.clava.transform.loop.LoopInterchange;
 import pt.up.fe.specs.clava.transform.loop.LoopTiling;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.ALoopKindEnum;
 import pt.up.fe.specs.clava.weaver.defs.CxxLoopDefs;
 import pt.up.fe.specs.clava.weaver.enums.Relation;
@@ -137,16 +134,14 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public String getControlVarImpl() {
+    public AVarref getControlVarrefImpl() {
 
         // Only supported for loops of type 'for'
-        if (!(loop instanceof ForStmt)) {
+        if (!(loop instanceof ForStmt forStmt)) {
             return null;
         }
 
-        ForStmt forStmt = (ForStmt) loop;
-
-        List<String> controlVars = LoopAnalysisUtils.getControlVarNames(forStmt);
+        var controlVars = LoopAnalysisUtils.getControlVars(forStmt);
 
         if (controlVars.isEmpty()) {
 
@@ -161,44 +156,20 @@ public class CxxLoop extends ALoop {
                     + loop.getLocation());
         }
 
-        return controlVars.get(0);
+        return CxxJoinpoints.create(controlVars.get(0), AVarref.class);
 
-        // // 1. Find control var in the initialization
-        // Stmt init = forStmt.getInit().orElse(null);
-        // if (init != null) {
-        //
-        // // 1.1 When there is only initialization
-        // DeclRefExpr expr = init.getFirstDescendantsAndSelf(DeclRefExpr.class).orElse(null);
-        // if (expr != null) {
-        // return expr.getRefName();
-        // }
-        //
-        // // 1.2 When there is declaration and initialization
-        // VarDecl decl = init.getFirstDescendantsAndSelf(VarDecl.class).orElse(null);
-        // if (decl != null) {
-        // return decl.getDeclName();
-        // }
-        //
-        // }
-        //
-        // // 2. Find control var in the condition
-        // Stmt cond = forStmt.getCond().orElse(null);
-        // if (cond != null) {
-        // DeclRefExpr expr = cond.getFirstDescendantsAndSelf(DeclRefExpr.class).orElse(null);
-        // if (expr != null) {
-        // return expr.getRefName();
-        // }
-        // }
-        //
-        // // 3. Find control var in the increment
-        // Stmt inc = forStmt.getInc().orElse(null);
-        // if (inc != null) {
-        // DeclRefExpr expr = inc.getFirstDescendantsAndSelf(DeclRefExpr.class).orElse(null);
-        // if (expr != null) {
-        // return expr.getRefName();
-        // }
-        // }
-        // return null;
+    }
+
+    @Override
+    public String getControlVarImpl() {
+
+        var controlVarref = getControlVarrefImpl();
+
+        if (controlVarref == null) {
+            return null;
+        }
+
+        return controlVarref.getNameImpl();
     }
 
     @Override

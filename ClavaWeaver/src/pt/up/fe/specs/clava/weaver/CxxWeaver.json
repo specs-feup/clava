@@ -15708,6 +15708,14 @@
 					},
 					{
 						"type": "attribute",
+						"children": [
+									{
+										"type": "varref",
+										"name": "controlVarref"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The expression of the last value of the control variable (e.g. 'length' in 'i < length;')",
 						"children": [
 									{
@@ -42481,6 +42489,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)",
 						"children": [
 									{
 										"type": "StorageClass",
@@ -43436,6 +43445,20 @@
 									{
 										"type": "type",
 										"name": "returnType",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Sets the storage class of this specific function decl. AUTO and REGISTER are not allowed for functions, and EXTERN is not allowed in function implementations, or function declarations that are in the same file as the implementation. Returns true if the storage class changed, false otherwise.",
+						"children": [
+									{
+										"type": "boolean",
+										"name": "setStorageClass"
+									},
+									{
+										"type": "StorageClass",
+										"name": "storageClass",
 										"defaultValue": ""
 									}]
 					},
@@ -55785,6 +55808,14 @@
 					},
 					{
 						"type": "attribute",
+						"children": [
+									{
+										"type": "varref",
+										"name": "controlVarref"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The expression of the last value of the control variable (e.g. 'length' in 'i < length;')",
 						"children": [
 									{
@@ -60793,6 +60824,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)",
 						"children": [
 									{
 										"type": "StorageClass",
@@ -61757,6 +61789,20 @@
 									{
 										"type": "type",
 										"name": "returnType",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Sets the storage class of this specific function decl. AUTO and REGISTER are not allowed for functions, and EXTERN is not allowed in function implementations, or function declarations that are in the same file as the implementation. Returns true if the storage class changed, false otherwise.",
+						"children": [
+									{
+										"type": "boolean",
+										"name": "setStorageClass"
+									},
+									{
+										"type": "StorageClass",
+										"name": "storageClass",
 										"defaultValue": ""
 									}]
 					},
