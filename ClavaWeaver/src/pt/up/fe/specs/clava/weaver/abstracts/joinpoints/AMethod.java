@@ -1345,6 +1345,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Sets the storage class of this function (changes all declarations of the function)
+     * @param storageClass 
+     */
+    @Override
+    public void setStorageClassImpl(String storageClass) {
+        this.aFunction.setStorageClassImpl(storageClass);
+    }
+
+    /**
      * Sets the type of a node, if it has a type
      * @param type 
      */

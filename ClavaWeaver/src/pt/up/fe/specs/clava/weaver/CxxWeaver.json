@@ -42489,6 +42489,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)",
 						"children": [
 									{
 										"type": "StorageClass",
@@ -43444,6 +43445,20 @@
 									{
 										"type": "type",
 										"name": "returnType",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Sets the storage class of this function (changes all declarations of the function)",
+						"children": [
+									{
+										"type": "void",
+										"name": "setStorageClass"
+									},
+									{
+										"type": "StorageClass",
+										"name": "storageClass",
 										"defaultValue": ""
 									}]
 					},
@@ -60809,6 +60824,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)",
 						"children": [
 									{
 										"type": "StorageClass",
@@ -61773,6 +61789,20 @@
 									{
 										"type": "type",
 										"name": "returnType",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Sets the storage class of this function (changes all declarations of the function)",
+						"children": [
+									{
+										"type": "void",
+										"name": "setStorageClass"
+									},
+									{
+										"type": "StorageClass",
+										"name": "storageClass",
 										"defaultValue": ""
 									}]
 					},

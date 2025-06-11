@@ -489,6 +489,10 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <parameter name="type" type="type" default="null"/>
     </action>
 
+    <action name="setStorageClass" class="function"
+            tooltip="Sets the storage class of this specific function decl">
+        <parameter name="storageClass" type="StorageClass"/>
+    </action>
 
     <!-- METHOD -->
     <!-- 
