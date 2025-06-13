@@ -138,10 +138,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org/'
 
-      # Install g++ on macOS
-      - name: Install g++ on macOS
+      # Install Xcode Command-Line Tools and GCC on macOS
+      - name: Install C SDK and GCC
         if: matrix.os == 'macos-latest'
-        run: brew install gcc
+        run: |
+          sudo xcode-select --install || true
+          sudo xcode-select -s /Library/Developer/CommandLineTools
+          brew install gcc
+          echo 'export PATH="$(brew --prefix gcc)/bin:$PATH"' >> $GITHUB_ENV
 
       - name: Checkout Clava
         uses: actions/checkout@v4
