@@ -138,6 +138,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org/'
 
+      # Install g++ on macOS
+      - name: Install g++ on macOS
+        if: matrix.os == 'macos-latest'
+        run: brew install gcc
+
       - name: Checkout Clava
         uses: actions/checkout@v4
         with:
@@ -200,4 +205,4 @@ jobs:
                 echo "Not a push event, skipping publish."
             fi
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} 
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
