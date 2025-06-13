@@ -643,41 +643,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .stream();
 
         return CxxSelects.selectedNodesToJps(stream, getWeaverEngine());
-        /*
-        AJoinPoint[] scopeChildren = ((NodeWithScope) node).getNodeScope()
-                .map(scope -> scope.getChildren()).orElse(Collections.emptyList())
-                .stream()
-                .filter(child -> !(child instanceof NullNode))
-                .map(child -> CxxJoinpoints.create(child))
-                .collect(Collectors.toList())
-                .toArray(new AJoinPoint[0]);
-        
-        // Count as selected nodes
-        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, scopeChildren.length);
-        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, scopeChildren.length);
-        
-        // Count as a select
-        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
-        
-        return scopeChildren;
-        */
     }
-
-    /*
-    public List<ClavaNode> getDirectNodes() {
-        var node = getNode();
-    
-        if (node instanceof LoopStmt) {
-            return ((LoopStmt) node).getBody().getChildren();
-        }
-    
-        if (node instanceof FunctionDecl) {
-            return ((FunctionDecl) node).getBody().map(body -> body.getChildren()).orElse(Collections.emptyList());
-        }
-    
-        return node.getChildren();
-    }
-    */
 
     @Override
     public Stream<JoinPoint> getJpChildrenStream() {
@@ -688,23 +654,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
         return CxxSelects.selectedNodesToJps(getNode().getChildren().stream(), getWeaverEngine());
-        /*
-        AJoinPoint[] children = getNode().getChildren().stream()
-                // AJoinPoint[] children = getChildrenPrivate().stream()
-                .filter(node -> !(node instanceof NullNode))
-                .map(node -> CxxJoinpoints.create(node))
-                .collect(Collectors.toList())
-                .toArray(new AJoinPoint[0]);
-        
-        // Count as selected nodes
-        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, children.length);
-        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, children.length);
-        
-        // Count as a select
-        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
-        
-        return children;
-        */
     }
 
     @Override

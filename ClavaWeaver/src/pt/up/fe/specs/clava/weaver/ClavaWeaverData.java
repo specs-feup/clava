@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver;
 
-import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.extra.App;

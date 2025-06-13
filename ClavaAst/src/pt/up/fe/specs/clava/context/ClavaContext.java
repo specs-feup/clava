@@ -47,12 +47,6 @@ public class ClavaContext extends ADataClass<ClavaContext> {
     public final static DataKey<ClavaFactory> FACTORY = KeyFactory
             .object("factory", ClavaFactory.class);
 
-    // public final static DataKey<App> APP = KeyFactory
-    // .object("app", App.class);
-
-    public final static DataKey<ClavaMetrics> METRICS = KeyFactory
-            .object("metrics", ClavaMetrics.class);
-
     public final static DataKey<CachedItems<String, String>> CACHED_FILEPATHS = KeyFactory
             .generic("cachedFilepaths", () -> new CachedItems<String, String>(string -> string, true));
 
@@ -86,8 +80,6 @@ public class ClavaContext extends ADataClass<ClavaContext> {
 
         // Initialize factory
         set(FACTORY, new ClavaFactory(this));
-
-        set(METRICS, new ClavaMetrics());
 
         set(CACHED_FILEPATHS, new CachedItems<>(string -> string, true));
 

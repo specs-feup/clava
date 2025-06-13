@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -22,7 +21,6 @@ import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ARecord;
 
 public class CxxRecord extends ARecord {

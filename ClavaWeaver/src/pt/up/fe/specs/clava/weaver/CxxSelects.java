@@ -210,32 +210,4 @@ public class CxxSelects {
 
         return true;
     }
-
-    /*
-    Incrementer nullJoinpoints = new Incrementer();
-    Incrementer excludedJoinpoints = new Incrementer();
-    AJoinPoint[] descendants = getNode().getDescendantsStream()
-            .map(descendant -> CxxJoinpoints.create(descendant))
-            .filter(jp -> {
-                // Count null join points separately
-                if (jp == null) {
-                    nullJoinpoints.increment();
-                    return false;
-                }
-    
-                boolean accepted = jp.instanceOf(type);
-                if (!accepted) {
-                    excludedJoinpoints.increment();
-                }
-                return accepted;
-            })
-            // .filter(jp -> jp.getJoinpointType().equals(type))
-            .toArray(AJoinPoint[]::new);
-    
-    // Count as selected nodes
-    getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS,
-            descendants.length + excludedJoinpoints.getCurrent());
-    getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, descendants.length);
-    */
-
 }

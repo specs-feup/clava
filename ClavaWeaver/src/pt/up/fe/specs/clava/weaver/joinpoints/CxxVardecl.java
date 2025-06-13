@@ -52,14 +52,9 @@ public class CxxVardecl extends AVardecl {
     public void setInitImpl(AExpression init) {
         if (init == null) {
             removeInitImpl(true);
+        } else {
+            varDecl.setInit((Expr) init.getNode());
         }
-
-        // if (init instanceof AExpression) {
-        // SpecsLogs.msgInfo("vardecl.setInit: join point must an instance of 'expression'");
-        // return;
-        // }
-
-        varDecl.setInit((Expr) init.getNode());
     }
 
     @Override

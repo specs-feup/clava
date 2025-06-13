@@ -13,11 +13,6 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.2'
-
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
     // This dependency is used by the application.
     implementation ':ClavaWeaver'
 
@@ -42,21 +37,5 @@ sourceSets {
         java {
             srcDir 'src'
         }
-    }
-
-    test {
-        java {
-            srcDir 'test'
-        }
-    }
-}
-
-tasks.named('test', Test) {
-    useJUnitPlatform()
-
-    maxHeapSize = '1G'
-
-    testLogging {
-        events "passed"
     }
 }

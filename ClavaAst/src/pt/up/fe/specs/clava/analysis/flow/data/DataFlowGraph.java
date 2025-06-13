@@ -375,6 +375,9 @@ public class DataFlowGraph extends FlowGraph {
                 }
             }
             // Set multiplexer as top level
+            if (condition == null) {
+                throw new IllegalStateException("Condition node is null in IF block");
+            }
             condition.setTopLevel(false);
             DataFlowNode mux = new DataFlowNode(DataFlowNodeType.OP_COND, "mux", condition.getClavaNode());
             this.addNode(mux);
@@ -489,6 +492,9 @@ public class DataFlowGraph extends FlowGraph {
             BasicBlockEdge edge = (BasicBlockEdge) e;
             if (edge.getType() == BasicBlockEdgeType.LOOP)
                 topBlock = (BasicBlockNode) edge.getDest();
+        }
+        if (topBlock == null) {
+            throw new IllegalStateException("Loop block has no top block");
         }
 
         // Get top basic blocks

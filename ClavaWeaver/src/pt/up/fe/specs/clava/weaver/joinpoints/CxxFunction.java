@@ -29,13 +29,10 @@ import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
-import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.enums.EnumHelperWithValue;
-import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.treenode.TreeNodeUtils;
 
@@ -45,11 +42,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CxxFunction extends AFunction {
-
-    // TODO: Move this to generated enums
-    private static final Lazy<EnumHelperWithValue<StorageClass>> STORAGE_CLASS = EnumHelperWithValue
-            .newLazyHelperWithValue(StorageClass.class);
-
     private final FunctionDecl function;
 
     public CxxFunction(FunctionDecl function) {

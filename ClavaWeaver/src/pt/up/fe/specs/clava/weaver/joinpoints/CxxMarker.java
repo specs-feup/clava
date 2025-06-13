@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.base.Preconditions;

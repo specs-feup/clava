@@ -23,13 +23,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.junit.runner.Result;
-
 import larai.LaraI;
-import pt.up.fe.specs.clang.parser.tests.CBenchTest;
-import pt.up.fe.specs.clang.parser.tests.CTest;
-import pt.up.fe.specs.clang.parser.tests.CxxBenchTest;
-import pt.up.fe.specs.clang.parser.tests.CxxTest;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.lara.WeaverLauncher;
 import pt.up.fe.specs.util.SpecsIo;
@@ -52,16 +46,6 @@ public class ClavaWeaverLauncher {
     }
 
     public static boolean execute(String[] args) {
-
-        // If junit file present, run junit
-        if (new File("junit-parser").isFile()) {
-            ClavaLog.info("Found file 'junit-parser', running parser unit tets");
-            Result result = org.junit.runner.JUnitCore.runClasses(CBenchTest.class,
-                    CTest.class, CxxBenchTest.class, CxxTest.class);
-            System.out.println("RESULT:\n" + result);
-            return result.getFailures().isEmpty();
-        }
-
         return new WeaverLauncher(new CxxWeaver()).launch(args);
     }
 
