@@ -37,7 +37,6 @@ dependencies {
     implementation ":tdrcLibrary"
 
     implementation ":LanguageSpecification"
-    implementation ":LaraFramework"
     implementation ":LARAI"
     implementation ":LaraUtils"
     implementation ":WeaverGenerator"

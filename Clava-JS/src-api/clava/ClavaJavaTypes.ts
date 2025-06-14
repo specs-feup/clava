@@ -15,7 +15,6 @@ export namespace ClavaJavaClasses {
   export interface Standard extends JavaClasses.JavaClass {}
   export interface AstFactory extends JavaClasses.JavaClass {}
   export interface ArgumentsParser extends JavaClasses.JavaClass {}
-  export interface ClavaWeaverLauncher extends JavaClasses.JavaClass {}
   export interface MathExtraApiTools extends JavaClasses.JavaClass {}
   export interface HighLevelSynthesisAPI extends JavaClasses.JavaClass {}
   export interface MemoiReport extends JavaClasses.JavaClass {}
@@ -91,12 +90,6 @@ export default class ClavaJavaTypes {
     return JavaTypes.getType(
       "pt.up.fe.specs.util.parsing.arguments.ArgumentsParser"
     ) as ClavaJavaClasses.ArgumentsParser;
-  }
-
-  static get ClavaWeaverLauncher() {
-    return JavaTypes.getType(
-      "pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher"
-    ) as ClavaJavaClasses.ClavaWeaverLauncher;
   }
 
   static get MathExtraApiTools() {

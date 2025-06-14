@@ -84,12 +84,17 @@ extern "C" {
    * @returns True if the weaver execution without problems, false otherwise
    */
   static runClava(args: string | any[]): boolean {
+    //FIXME: This is broken. To be fixed when we have a proper way to run Clava from JS.
+    throw new Error("Clava.runClava() is not implemented yet.");
+
+    /*
     // If string, separate arguments
     if (typeof args === "string") {
       args = ClavaJavaTypes.ArgumentsParser.newCommandLine().parse(args);
     }
 
     return ClavaJavaTypes.ClavaWeaverLauncher.execute(args);
+    */
   }
 
   /**
@@ -106,22 +111,27 @@ extern "C" {
     threads = -1,
     clavaCommand: string | string[] = ["clava"]
   ) {
-    if (typeof clavaCommand === "string") {
-      clavaCommand = [clavaCommand];
-    }
+      //FIXME: This is broken. To be fixed when we have a proper way to run Clava from JS.
+      throw new Error("Clava.runClavaParallel() is not implemented yet.");
 
-    const jsonStrings: string[] =
-      ClavaJavaTypes.ClavaWeaverLauncher.executeParallel(
-        argsLists,
-        threads,
-        JavaInterop.arrayToStringList(clavaCommand),
-        Clava.getData().getContextFolder().getAbsolutePath()
-      );
+      /*
+      if (typeof clavaCommand === "string") {
+          clavaCommand = [clavaCommand];
+      }
 
-    // Read each json file into its own object
-    const results = jsonStrings.map((jsonString) => JSON.parse(jsonString));
+      const jsonStrings: string[] =
+          ClavaJavaTypes.ClavaWeaverLauncher.executeParallel(
+              argsLists,
+              threads,
+              JavaInterop.arrayToStringList(clavaCommand),
+              Clava.getData().getContextFolder().getAbsolutePath()
+          );
 
-    return results;
+      // Read each json file into its own object
+      const results = jsonStrings.map((jsonString) => JSON.parse(jsonString));
+
+      return results;
+      */
   }
 
   /**
