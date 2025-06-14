@@ -13,10 +13,7 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.List;
-
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.CXXDestructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -58,12 +55,7 @@ public class CxxClass extends AClass {
 
     @Override
     public AMethod[] getMethodsArrayImpl() {
-        return selectMethod().toArray(new AMethod[0]);
-    }
-
-    @Override
-    public List<? extends AMethod> selectMethod() {
-        return CxxSelects.select(AMethod.class, cxxRecordDecl.getMethods(), false, node -> true);
+        return CxxSelects.select(AMethod.class, cxxRecordDecl.getMethods(), false, node -> true).toArray(new AMethod[0]);
     }
 
     @Override

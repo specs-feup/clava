@@ -1,11 +1,11 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point AParam
@@ -89,15 +89,6 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
-     * Method used by the lara interpreter to select inits
-     * @return 
-     */
-    @Override
-    public List<? extends AExpression> selectInit() {
-        return this.aVardecl.selectInit();
-    }
-
-    /**
      * Get value on attribute isPublic
      * @return the attribute's value
      */
@@ -140,34 +131,6 @@ public abstract class AParam extends AVardecl {
     @Override
     public AAttribute[] getAttrsArrayImpl() {
         return this.aVardecl.getAttrsArrayImpl();
-    }
-
-    /**
-     * 
-     */
-    public void defNameImpl(String value) {
-        this.aVardecl.defNameImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedNameImpl(String value) {
-        this.aVardecl.defQualifiedNameImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defQualifiedPrefixImpl(String value) {
-        this.aVardecl.defQualifiedPrefixImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defStorageClassImpl(String value) {
-        this.aVardecl.defStorageClassImpl(value);
     }
 
     /**
@@ -1039,124 +1002,6 @@ public abstract class AParam extends AVardecl {
     @Override
     public Optional<? extends AVardecl> getSuper() {
         return Optional.of(this.aVardecl);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "init": 
-        		joinPointList = selectInit();
-        		break;
-        	default:
-        		joinPointList = this.aVardecl.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "storageClass": {
-        	if(value instanceof String){
-        		this.defStorageClassImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "name": {
-        	if(value instanceof String){
-        		this.defNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedName": {
-        	if(value instanceof String){
-        		this.defQualifiedNameImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "qualifiedPrefix": {
-        	if(value instanceof String){
-        		this.defQualifiedPrefixImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aVardecl.fillWithAttributes(attributes);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aVardecl.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aVardecl.fillWithActions(actions);
     }
 
     /**
