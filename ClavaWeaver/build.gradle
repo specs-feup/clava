@@ -28,13 +28,9 @@ repositories {
 }
 
 dependencies {
-    implementation ":CommonsLangPlus"
-    implementation ":GsonPlus"
     implementation ":jOptions"
     implementation ":JsEngine"
     implementation ":SpecsUtils"
-    implementation ":XStreamPlus"
-    implementation ":tdrcLibrary"
 
     implementation ":LanguageSpecification"
     implementation ":LARAI"
@@ -48,9 +44,7 @@ dependencies {
     implementation ":ClavaHls"
     implementation ":ClavaLaraApi"
 
-
     implementation group: 'com.google.guava', name: 'guava', version: '33.4.0-jre'
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.12.1'
 }
 
 // Project sources

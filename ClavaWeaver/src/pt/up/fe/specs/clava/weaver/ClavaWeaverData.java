@@ -134,16 +134,11 @@ public class ClavaWeaverData {
                 continue;
             }
 
-            // Serialize value
-            // Map<String, Object> valueCopy = XStreamUtils.copy(entry.getValue());
-
             // Add to map
-            // userValuesCopy.put(newNode, valueCopy);
             userValuesCopy.put(newNode, entry.getValue());
         }
 
         return userValuesCopy;
-        // return userValuesStack.isEmpty() ? new HashMap<>() : XStreamUtils.copy(userValuesStack.peek());
     }
 
     private ClavaNode getNewNode(App app, ClavaNode previousNode) {

@@ -1,15 +1,14 @@
 plugins {
- 	id 'distribution'
+    id 'distribution'
+    id 'java'
 }
 
-// Java project
-apply plugin: 'java'
-
 java {
+    withSourcesJar()
+
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
-
 
 // Repositories providers
 repositories {
@@ -17,42 +16,36 @@ repositories {
 }
 
 dependencies {
-	implementation "junit:junit:4.13.1"     
+   implementation "junit:junit:4.13.1"
 
-	implementation ":ClavaAst"
-	implementation ":CommonsLangPlus"
-	implementation ":jOptions"
-	implementation ":SpecsUtils"
+   implementation ":ClavaAst"
+   implementation ":CommonsLangPlus"
+   implementation ":jOptions"
+   implementation ":SpecsUtils"
 
-	implementation group: 'com.google.guava', name: 'guava', version: '33.4.0-jre'	
-}
-
-java {
-	withSourcesJar()
+   implementation group: 'com.google.guava', name: 'guava', version: '33.4.0-jre'
 }
 
 // Project sources
 sourceSets {
-   main {
-      java {
-         srcDir 'src'
-         srcDir 'test'		 
-      }
+    main {
+        java {
+            srcDir 'src'
+            srcDir 'test'
+        }
 
-	  resources {
-		srcDir 'resources'
-	  }      
-   }
-	
-   
-   test {
-      java {
-         srcDir 'test'
-      }
-	  
-	  resources {
-		srcDir 'resources'
-	  }
-   }
-   
+        resources {
+            srcDir 'resources'
+        }
+    }
+
+    test {
+        java {
+            srcDir 'test'
+        }
+
+        resources {
+            srcDir 'resources'
+        }
+    }
 }
