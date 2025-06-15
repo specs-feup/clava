@@ -260,7 +260,7 @@ QueryPerformanceFrequency(&${timeFrequencyVar});`;
   }
 
   private _timer_c_windows_get_time(timeVar: string) {
-    return `QueryPerformanceCounter(&${timeVar})`;
+    return `QueryPerformanceCounter(&${timeVar});`;
   }
 
   private _timer_c_windows_calc_interval(
