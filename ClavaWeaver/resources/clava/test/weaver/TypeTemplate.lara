@@ -81,10 +81,15 @@ aspectdef Test
 	select vardecl{"changed_typedef_type"} end
 	apply
 		$vardecl.type.templateArgsTypes = [intType];
-		if($vardecl.type.kind === "TypedefType") {
+
+		if($vardecl.type.kind === "ElaboratedType") {
 			$vardecl.type = $vardecl.type.desugar;
 		}
 		
+		if($vardecl.type.kind === "TypedefType") {
+			$vardecl.type = $vardecl.type.desugar;
+		}
+
 		println("After setting changed_typedef_type: " + $vardecl.type.code);		
 	end
 	
