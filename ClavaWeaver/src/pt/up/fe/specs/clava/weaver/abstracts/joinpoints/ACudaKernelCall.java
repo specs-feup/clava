@@ -39,7 +39,7 @@ public abstract class ACudaKernelCall extends ACall {
      */
     public Object getConfigImpl() {
         AExpression[] aExpressionArrayImpl0 = getConfigArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
+        Object nativeArray0 = aExpressionArrayImpl0;
         return nativeArray0;
     }
 

@@ -48,7 +48,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      */
     public Object getTargetNodesImpl(String endPragma) {
         AJoinPoint[] aJoinPointArrayImpl0 = getTargetNodesArrayImpl(endPragma);
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = aJoinPointArrayImpl0;
         return nativeArray0;
     }
 

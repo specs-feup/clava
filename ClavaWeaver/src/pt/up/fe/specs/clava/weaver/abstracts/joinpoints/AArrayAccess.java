@@ -104,7 +104,7 @@ public abstract class AArrayAccess extends AExpression {
      */
     public Object getSubscriptImpl() {
         AExpression[] aExpressionArrayImpl0 = getSubscriptArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
+        Object nativeArray0 = aExpressionArrayImpl0;
         return nativeArray0;
     }
 

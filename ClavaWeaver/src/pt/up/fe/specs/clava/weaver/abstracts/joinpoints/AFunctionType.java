@@ -38,7 +38,7 @@ public abstract class AFunctionType extends AType {
      */
     public Object getParamTypesImpl() {
         AType[] aTypeArrayImpl0 = getParamTypesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aTypeArrayImpl0);
+        Object nativeArray0 = aTypeArrayImpl0;
         return nativeArray0;
     }
 

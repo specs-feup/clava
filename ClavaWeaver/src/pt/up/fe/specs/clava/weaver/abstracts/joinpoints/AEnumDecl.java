@@ -38,7 +38,7 @@ public abstract class AEnumDecl extends ANamedDecl {
      */
     public Object getEnumeratorsImpl() {
         AEnumeratorDecl[] aEnumeratorDeclArrayImpl0 = getEnumeratorsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aEnumeratorDeclArrayImpl0);
+        Object nativeArray0 = aEnumeratorDeclArrayImpl0;
         return nativeArray0;
     }
 

@@ -38,7 +38,7 @@ public abstract class AClass extends ARecord {
      */
     public Object getAllBasesImpl() {
         AClass[] aClassArrayImpl0 = getAllBasesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aClassArrayImpl0);
+        Object nativeArray0 = aClassArrayImpl0;
         return nativeArray0;
     }
 
@@ -65,7 +65,7 @@ public abstract class AClass extends ARecord {
      */
     public Object getAllMethodsImpl() {
         AMethod[] aMethodArrayImpl0 = getAllMethodsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aMethodArrayImpl0);
+        Object nativeArray0 = aMethodArrayImpl0;
         return nativeArray0;
     }
 
@@ -92,7 +92,7 @@ public abstract class AClass extends ARecord {
      */
     public Object getBasesImpl() {
         AClass[] aClassArrayImpl0 = getBasesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aClassArrayImpl0);
+        Object nativeArray0 = aClassArrayImpl0;
         return nativeArray0;
     }
 
@@ -204,7 +204,7 @@ public abstract class AClass extends ARecord {
      */
     public Object getMethodsImpl() {
         AMethod[] aMethodArrayImpl0 = getMethodsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aMethodArrayImpl0);
+        Object nativeArray0 = aMethodArrayImpl0;
         return nativeArray0;
     }
 
@@ -231,7 +231,7 @@ public abstract class AClass extends ARecord {
      */
     public Object getPrototypesImpl() {
         AClass[] aClassArrayImpl0 = getPrototypesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aClassArrayImpl0);
+        Object nativeArray0 = aClassArrayImpl0;
         return nativeArray0;
     }
 

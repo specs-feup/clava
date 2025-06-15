@@ -58,7 +58,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public Object getCallsImpl() {
         ACall[] aCallArrayImpl0 = getCallsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCallArrayImpl0);
+        Object nativeArray0 = aCallArrayImpl0;
         return nativeArray0;
     }
 
@@ -120,7 +120,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public Object getDeclarationJpsImpl() {
         AFunction[] aFunctionArrayImpl0 = getDeclarationJpsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFunctionArrayImpl0);
+        Object nativeArray0 = aFunctionArrayImpl0;
         return nativeArray0;
     }
 
@@ -404,7 +404,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public Object getParamNamesImpl() {
         String[] stringArrayImpl0 = getParamNamesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -433,7 +433,7 @@ public abstract class AFunction extends ADeclarator {
      */
     public Object getParamsImpl() {
         AParam[] aParamArrayImpl0 = getParamsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aParamArrayImpl0);
+        Object nativeArray0 = aParamArrayImpl0;
         return nativeArray0;
     }
 

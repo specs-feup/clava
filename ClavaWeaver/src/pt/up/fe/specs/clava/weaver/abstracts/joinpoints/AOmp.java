@@ -37,7 +37,7 @@ public abstract class AOmp extends APragma {
      */
     public Object getClauseKindsImpl() {
         String[] stringArrayImpl0 = getClauseKindsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -81,7 +81,7 @@ public abstract class AOmp extends APragma {
      */
     public Object getCopyinImpl() {
         String[] stringArrayImpl0 = getCopyinArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -125,7 +125,7 @@ public abstract class AOmp extends APragma {
      */
     public Object getFirstprivateImpl() {
         String[] stringArrayImpl0 = getFirstprivateArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -155,7 +155,7 @@ public abstract class AOmp extends APragma {
      */
     public Object getReductionImpl(String kind) {
         String[] stringArrayImpl0 = getReductionArrayImpl(kind);
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -243,7 +243,7 @@ public abstract class AOmp extends APragma {
      */
     public Object getLastprivateImpl() {
         String[] stringArrayImpl0 = getLastprivateArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -304,7 +304,7 @@ public abstract class AOmp extends APragma {
      */
     public Object getPrivateImpl() {
         String[] stringArrayImpl0 = getPrivateArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -348,7 +348,7 @@ public abstract class AOmp extends APragma {
      */
     public Object getReductionKindsImpl() {
         String[] stringArrayImpl0 = getReductionKindsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -409,7 +409,7 @@ public abstract class AOmp extends APragma {
      */
     public Object getScheduleModifiersImpl() {
         String[] stringArrayImpl0 = getScheduleModifiersArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -436,7 +436,7 @@ public abstract class AOmp extends APragma {
      */
     public Object getSharedImpl() {
         String[] stringArrayImpl0 = getSharedArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 

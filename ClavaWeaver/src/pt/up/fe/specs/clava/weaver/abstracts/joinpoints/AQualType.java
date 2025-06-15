@@ -37,7 +37,7 @@ public abstract class AQualType extends AType {
      */
     public Object getQualifiersImpl() {
         String[] stringArrayImpl0 = getQualifiersArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 

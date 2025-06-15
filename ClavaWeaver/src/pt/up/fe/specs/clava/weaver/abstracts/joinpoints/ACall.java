@@ -37,7 +37,7 @@ public abstract class ACall extends AExpression {
      */
     public Object getArgListImpl() {
         AExpression[] aExpressionArrayImpl0 = getArgListArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
+        Object nativeArray0 = aExpressionArrayImpl0;
         return nativeArray0;
     }
 
@@ -64,7 +64,7 @@ public abstract class ACall extends AExpression {
      */
     public Object getArgsImpl() {
         AExpression[] aExpressionArrayImpl0 = getArgsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
+        Object nativeArray0 = aExpressionArrayImpl0;
         return nativeArray0;
     }
 
@@ -255,7 +255,7 @@ public abstract class ACall extends AExpression {
      */
     public Object getMemberNamesImpl() {
         String[] stringArrayImpl0 = getMemberNamesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 

@@ -37,7 +37,7 @@ public abstract class ATemplateSpecializationType extends AType {
      */
     public Object getArgsImpl() {
         String[] stringArrayImpl0 = getArgsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 

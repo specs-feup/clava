@@ -30,7 +30,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public Object getArrayDimsImpl() {
         int[] intArrayImpl0 = getArrayDimsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(intArrayImpl0);
+        Object nativeArray0 = intArrayImpl0;
         return nativeArray0;
     }
 
@@ -315,7 +315,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public Object getTemplateArgsStringsImpl() {
         String[] stringArrayImpl0 = getTemplateArgsStringsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -344,7 +344,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public Object getTemplateArgsTypesImpl() {
         AType[] aTypeArrayImpl0 = getTemplateArgsTypesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aTypeArrayImpl0);
+        Object nativeArray0 = aTypeArrayImpl0;
         return nativeArray0;
     }
 

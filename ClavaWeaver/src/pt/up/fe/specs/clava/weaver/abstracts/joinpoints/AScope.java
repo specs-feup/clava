@@ -37,7 +37,7 @@ public abstract class AScope extends AStatement {
      */
     public Object getAllStmtsImpl() {
         AStatement[] aStatementArrayImpl0 = getAllStmtsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
+        Object nativeArray0 = aStatementArrayImpl0;
         return nativeArray0;
     }
 
@@ -157,7 +157,7 @@ public abstract class AScope extends AStatement {
      */
     public Object getStmtsImpl() {
         AStatement[] aStatementArrayImpl0 = getStmtsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
+        Object nativeArray0 = aStatementArrayImpl0;
         return nativeArray0;
     }
 

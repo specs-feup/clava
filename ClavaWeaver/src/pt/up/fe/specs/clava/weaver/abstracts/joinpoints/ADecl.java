@@ -27,7 +27,7 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
      */
     public Object getAttrsImpl() {
         AAttribute[] aAttributeArrayImpl0 = getAttrsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aAttributeArrayImpl0);
+        Object nativeArray0 = aAttributeArrayImpl0;
         return nativeArray0;
     }
 

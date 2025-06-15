@@ -72,7 +72,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     public Object getMemberChainImpl() {
         AExpression[] aExpressionArrayImpl0 = getMemberChainArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
+        Object nativeArray0 = aExpressionArrayImpl0;
         return nativeArray0;
     }
 
@@ -101,7 +101,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     public Object getMemberChainNamesImpl() {
         String[] stringArrayImpl0 = getMemberChainNamesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 

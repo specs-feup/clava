@@ -134,7 +134,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     public Object getIncludesImpl() {
         AInclude[] aIncludeArrayImpl0 = getIncludesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aIncludeArrayImpl0);
+        Object nativeArray0 = aIncludeArrayImpl0;
         return nativeArray0;
     }
 

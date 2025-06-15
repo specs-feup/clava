@@ -563,7 +563,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getAstChildrenImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getAstChildrenArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = aJoinPointArrayImpl0;
         return nativeArray0;
     }
 
@@ -679,7 +679,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getChainImpl() {
         String[] stringArrayImpl0 = getChainArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -706,7 +706,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getChildrenImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getChildrenArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = aJoinPointArrayImpl0;
         return nativeArray0;
     }
 
@@ -839,7 +839,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getDescendantsImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getDescendantsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = aJoinPointArrayImpl0;
         return nativeArray0;
     }
 
@@ -1059,7 +1059,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getDescendantsImpl(String type) {
         AJoinPoint[] aJoinPointArrayImpl0 = getDescendantsArrayImpl(type);
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = aJoinPointArrayImpl0;
         return nativeArray0;
     }
 
@@ -1091,7 +1091,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getDescendantsAndSelfImpl(String type) {
         AJoinPoint[] aJoinPointArrayImpl0 = getDescendantsAndSelfArrayImpl(type);
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = aJoinPointArrayImpl0;
         return nativeArray0;
     }
 
@@ -1297,7 +1297,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getInlineCommentsImpl() {
         AComment[] aCommentArrayImpl0 = getInlineCommentsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCommentArrayImpl0);
+        Object nativeArray0 = aCommentArrayImpl0;
         return nativeArray0;
     }
 
@@ -1409,7 +1409,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getJavaFieldsImpl() {
         String[] stringArrayImpl0 = getJavaFieldsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -1453,7 +1453,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getKeysImpl() {
         String[] stringArrayImpl0 = getKeysArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -1616,7 +1616,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getPragmasImpl() {
         APragma[] aPragmaArrayImpl0 = getPragmasArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aPragmaArrayImpl0);
+        Object nativeArray0 = aPragmaArrayImpl0;
         return nativeArray0;
     }
 
@@ -1677,7 +1677,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getScopeNodesImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getScopeNodesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = aJoinPointArrayImpl0;
         return nativeArray0;
     }
 
@@ -1704,7 +1704,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getSiblingsLeftImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getSiblingsLeftArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = aJoinPointArrayImpl0;
         return nativeArray0;
     }
 
@@ -1731,7 +1731,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Object getSiblingsRightImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getSiblingsRightArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = aJoinPointArrayImpl0;
         return nativeArray0;
     }
 

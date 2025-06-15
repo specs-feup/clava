@@ -37,7 +37,7 @@ public abstract class ACase extends ASwitchCase {
      */
     public Object getInstructionsImpl() {
         AStatement[] aStatementArrayImpl0 = getInstructionsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
+        Object nativeArray0 = aStatementArrayImpl0;
         return nativeArray0;
     }
 
@@ -132,7 +132,7 @@ public abstract class ACase extends ASwitchCase {
      */
     public Object getValuesImpl() {
         AExpression[] aExpressionArrayImpl0 = getValuesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
+        Object nativeArray0 = aExpressionArrayImpl0;
         return nativeArray0;
     }
 

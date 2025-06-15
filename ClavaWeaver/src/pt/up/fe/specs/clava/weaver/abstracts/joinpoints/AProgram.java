@@ -48,7 +48,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public Object getDefaultFlagsImpl() {
         String[] stringArrayImpl0 = getDefaultFlagsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -76,7 +76,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public Object getExtraIncludesImpl() {
         String[] stringArrayImpl0 = getExtraIncludesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -103,7 +103,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public Object getExtraLibsImpl() {
         String[] stringArrayImpl0 = getExtraLibsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -130,7 +130,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public Object getExtraProjectsImpl() {
         String[] stringArrayImpl0 = getExtraProjectsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -157,7 +157,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public Object getExtraSourcesImpl() {
         String[] stringArrayImpl0 = getExtraSourcesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -184,7 +184,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public Object getFilesImpl() {
         AFile[] aFileArrayImpl0 = getFilesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFileArrayImpl0);
+        Object nativeArray0 = aFileArrayImpl0;
         return nativeArray0;
     }
 
@@ -212,7 +212,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public Object getIncludeFoldersImpl() {
         String[] stringArrayImpl0 = getIncludeFoldersArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 
@@ -328,7 +328,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public Object getUserFlagsImpl() {
         String[] stringArrayImpl0 = getUserFlagsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = stringArrayImpl0;
         return nativeArray0;
     }
 

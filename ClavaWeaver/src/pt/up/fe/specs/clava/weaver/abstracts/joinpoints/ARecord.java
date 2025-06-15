@@ -39,7 +39,7 @@ public abstract class ARecord extends ANamedDecl {
      */
     public Object getFieldsImpl() {
         AField[] aFieldArrayImpl0 = getFieldsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFieldArrayImpl0);
+        Object nativeArray0 = aFieldArrayImpl0;
         return nativeArray0;
     }
 
@@ -68,7 +68,7 @@ public abstract class ARecord extends ANamedDecl {
      */
     public Object getFunctionsImpl() {
         AFunction[] aFunctionArrayImpl0 = getFunctionsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFunctionArrayImpl0);
+        Object nativeArray0 = aFunctionArrayImpl0;
         return nativeArray0;
     }
 

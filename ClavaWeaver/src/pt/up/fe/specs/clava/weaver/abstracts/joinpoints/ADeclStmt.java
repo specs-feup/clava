@@ -36,7 +36,7 @@ public abstract class ADeclStmt extends AStatement {
      */
     public Object getDeclsImpl() {
         ADecl[] aDeclArrayImpl0 = getDeclsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aDeclArrayImpl0);
+        Object nativeArray0 = aDeclArrayImpl0;
         return nativeArray0;
     }
 

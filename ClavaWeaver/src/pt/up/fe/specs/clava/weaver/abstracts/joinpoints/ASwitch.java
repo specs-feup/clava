@@ -36,7 +36,7 @@ public abstract class ASwitch extends AStatement {
      */
     public Object getCasesImpl() {
         ACase[] aCaseArrayImpl0 = getCasesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCaseArrayImpl0);
+        Object nativeArray0 = aCaseArrayImpl0;
         return nativeArray0;
     }
 

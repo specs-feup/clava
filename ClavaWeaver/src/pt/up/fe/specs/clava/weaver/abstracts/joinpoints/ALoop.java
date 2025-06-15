@@ -370,7 +370,7 @@ public abstract class ALoop extends AStatement {
      */
     public Object getRankImpl() {
         int[] intArrayImpl0 = getRankArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(intArrayImpl0);
+        Object nativeArray0 = intArrayImpl0;
         return nativeArray0;
     }
 
