@@ -6,9 +6,6 @@ CMake Package to call Clava from CMake files.
 
 Copy the contents of this folder to a folder called `Clava` in a place where CMake can find it (e.g., `/usr/local/lib/Clava`)
 
-Alternatively, if you are on Linux, you can download the installation script [clava-update](https://raw.githubusercontent.com/specs-feup/clava/master/install/linux/clava-update), which installs Clava on the folder where you run the script. If you run the script with `sudo`, it will install the CMake plugin in `/usr/local/lib/Clava`. 
-
-
 If you do not want to install the Clava CMake plugin, you can manually define the path in the CMakeLists.txt file with the variable Clava_DIR:
 
 ```

@@ -1,0 +1,20 @@
+User field: test string
+User field after push: test string
+Array after push:
+[
+   Hello,
+   World
+]
+Map after push:
+{
+   field1:
+      field1_value,
+   field2:
+      2
+}
+Array after pop:
+[
+   Hello,
+   World,
+   pushed
+]

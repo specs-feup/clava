@@ -1,13 +1,12 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Auto-Generated class for join point ACase
@@ -38,7 +37,7 @@ public abstract class ACase extends ASwitchCase {
      */
     public Object getInstructionsImpl() {
         AStatement[] aStatementArrayImpl0 = getInstructionsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
+        Object nativeArray0 = aStatementArrayImpl0;
         return nativeArray0;
     }
 
@@ -47,13 +46,7 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getInstructions() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "instructions", Optional.empty());
-        	}
         	Object result = this.getInstructionsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "instructions", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "instructions", e);
@@ -70,13 +63,7 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getIsDefault() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isDefault", Optional.empty());
-        	}
         	Boolean result = this.getIsDefaultImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isDefault", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isDefault", e);
@@ -93,13 +80,7 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getIsEmpty() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isEmpty", Optional.empty());
-        	}
         	Boolean result = this.getIsEmptyImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isEmpty", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isEmpty", e);
@@ -116,13 +97,7 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getNextCase() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextCase", Optional.empty());
-        	}
         	ACase result = this.getNextCaseImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "nextCase", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "nextCase", e);
@@ -139,13 +114,7 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getNextInstruction() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextInstruction", Optional.empty());
-        	}
         	AStatement result = this.getNextInstructionImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "nextInstruction", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "nextInstruction", e);
@@ -163,7 +132,7 @@ public abstract class ACase extends ASwitchCase {
      */
     public Object getValuesImpl() {
         AExpression[] aExpressionArrayImpl0 = getValuesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
+        Object nativeArray0 = aExpressionArrayImpl0;
         return nativeArray0;
     }
 
@@ -172,13 +141,7 @@ public abstract class ACase extends ASwitchCase {
      */
     public final Object getValues() {
         try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "values", Optional.empty());
-        	}
         	Object result = this.getValuesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "values", Optional.ofNullable(result));
-        	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "values", e);
@@ -201,141 +164,6 @@ public abstract class ACase extends ASwitchCase {
     @Override
     public Boolean getIsLastImpl() {
         return this.aSwitchCase.getIsLastImpl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select exprs
-     * @return 
-     */
-    @Override
-    public List<? extends AExpression> selectExpr() {
-        return this.aSwitchCase.selectExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select childExprs
-     * @return 
-     */
-    @Override
-    public List<? extends AExpression> selectChildExpr() {
-        return this.aSwitchCase.selectChildExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select calls
-     * @return 
-     */
-    @Override
-    public List<? extends ACall> selectCall() {
-        return this.aSwitchCase.selectCall();
-    }
-
-    /**
-     * Method used by the lara interpreter to select stmtCalls
-     * @return 
-     */
-    @Override
-    public List<? extends ACall> selectStmtCall() {
-        return this.aSwitchCase.selectStmtCall();
-    }
-
-    /**
-     * Method used by the lara interpreter to select memberCalls
-     * @return 
-     */
-    @Override
-    public List<? extends AMemberCall> selectMemberCall() {
-        return this.aSwitchCase.selectMemberCall();
-    }
-
-    /**
-     * Method used by the lara interpreter to select memberAccesss
-     * @return 
-     */
-    @Override
-    public List<? extends AMemberAccess> selectMemberAccess() {
-        return this.aSwitchCase.selectMemberAccess();
-    }
-
-    /**
-     * Method used by the lara interpreter to select arrayAccesss
-     * @return 
-     */
-    @Override
-    public List<? extends AArrayAccess> selectArrayAccess() {
-        return this.aSwitchCase.selectArrayAccess();
-    }
-
-    /**
-     * Method used by the lara interpreter to select vardecls
-     * @return 
-     */
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return this.aSwitchCase.selectVardecl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select varrefs
-     * @return 
-     */
-    @Override
-    public List<? extends AVarref> selectVarref() {
-        return this.aSwitchCase.selectVarref();
-    }
-
-    /**
-     * Method used by the lara interpreter to select ops
-     * @return 
-     */
-    @Override
-    public List<? extends AOp> selectOp() {
-        return this.aSwitchCase.selectOp();
-    }
-
-    /**
-     * Method used by the lara interpreter to select binaryOps
-     * @return 
-     */
-    @Override
-    public List<? extends ABinaryOp> selectBinaryOp() {
-        return this.aSwitchCase.selectBinaryOp();
-    }
-
-    /**
-     * Method used by the lara interpreter to select unaryOps
-     * @return 
-     */
-    @Override
-    public List<? extends AUnaryOp> selectUnaryOp() {
-        return this.aSwitchCase.selectUnaryOp();
-    }
-
-    /**
-     * Method used by the lara interpreter to select newExprs
-     * @return 
-     */
-    @Override
-    public List<? extends ANewExpr> selectNewExpr() {
-        return this.aSwitchCase.selectNewExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select deleteExprs
-     * @return 
-     */
-    @Override
-    public List<? extends ADeleteExpr> selectDeleteExpr() {
-        return this.aSwitchCase.selectDeleteExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select cilkSpawns
-     * @return 
-     */
-    @Override
-    public List<? extends ACilkSpawn> selectCilkSpawn() {
-        return this.aSwitchCase.selectCilkSpawn();
     }
 
     /**
@@ -1136,144 +964,6 @@ public abstract class ACase extends ASwitchCase {
     @Override
     public Optional<? extends ASwitchCase> getSuper() {
         return Optional.of(this.aSwitchCase);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final List<? extends JoinPoint> select(String selectName) {
-        List<? extends JoinPoint> joinPointList;
-        switch(selectName) {
-        	case "expr": 
-        		joinPointList = selectExpr();
-        		break;
-        	case "childExpr": 
-        		joinPointList = selectChildExpr();
-        		break;
-        	case "call": 
-        		joinPointList = selectCall();
-        		break;
-        	case "stmtCall": 
-        		joinPointList = selectStmtCall();
-        		break;
-        	case "memberCall": 
-        		joinPointList = selectMemberCall();
-        		break;
-        	case "memberAccess": 
-        		joinPointList = selectMemberAccess();
-        		break;
-        	case "arrayAccess": 
-        		joinPointList = selectArrayAccess();
-        		break;
-        	case "vardecl": 
-        		joinPointList = selectVardecl();
-        		break;
-        	case "varref": 
-        		joinPointList = selectVarref();
-        		break;
-        	case "op": 
-        		joinPointList = selectOp();
-        		break;
-        	case "binaryOp": 
-        		joinPointList = selectBinaryOp();
-        		break;
-        	case "unaryOp": 
-        		joinPointList = selectUnaryOp();
-        		break;
-        	case "newExpr": 
-        		joinPointList = selectNewExpr();
-        		break;
-        	case "deleteExpr": 
-        		joinPointList = selectDeleteExpr();
-        		break;
-        	case "cilkSpawn": 
-        		joinPointList = selectCilkSpawn();
-        		break;
-        	default:
-        		joinPointList = this.aSwitchCase.select(selectName);
-        		break;
-        }
-        return joinPointList;
-    }
-
-    /**
-     * 
-     */
-    @Override
-    public final void defImpl(String attribute, Object value) {
-        switch(attribute){
-        case "data": {
-        	if(value instanceof Object){
-        		this.defDataImpl((Object)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "firstChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defFirstChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "inlineComments": {
-        	if(value instanceof String[]){
-        		this.defInlineCommentsImpl((String[])value);
-        		return;
-        	}
-        	if(value instanceof String){
-        		this.defInlineCommentsImpl((String)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "type": {
-        	if(value instanceof AType){
-        		this.defTypeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
-        }
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aSwitchCase.fillWithAttributes(attributes);
-        attributes.add("instructions");
-        attributes.add("isDefault");
-        attributes.add("isEmpty");
-        attributes.add("nextCase");
-        attributes.add("nextInstruction");
-        attributes.add("values");
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aSwitchCase.fillWithSelects(selects);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aSwitchCase.fillWithActions(actions);
     }
 
     /**

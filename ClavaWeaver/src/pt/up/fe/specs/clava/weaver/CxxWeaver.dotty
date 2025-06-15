@@ -46,6 +46,7 @@ edge [fontsize=10]
 "if"->"statement"
 "implicitValue"->"expression"
 "include"->"decl"
+"incompleteArrayType"->"arrayType"
 "initList"->"expression"
 "intLiteral"->"literal"
 "labelDecl"->"namedDecl"

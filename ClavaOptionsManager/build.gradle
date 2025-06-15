@@ -1,0 +1,35 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // This dependency is used by the application.
+    implementation ':ClavaWeaver'
+
+    implementation ':LARAI'
+    implementation ':WeaverInterface'
+    implementation ':WeaverOptionsManager'
+}
+
+// Apply a specific Java toolchain to ease working on different environments.
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'pt.up.fe.specs.clava.ClavaOptionsManagerLauncher'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}

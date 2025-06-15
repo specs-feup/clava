@@ -1,0 +1,10 @@
+AClass fields
+Field: anInt
+Is public: false
+Field: aFloat
+Is public: false
+AStruct fields
+Field: anInt
+Is public: true
+Field: aFloat
+Is public: true
