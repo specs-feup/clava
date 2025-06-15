@@ -131,7 +131,6 @@ public class HighLevelSynthesisAPI {
         ClavaLog.info("HLS API: applying trace verification to a function");
         ClavaHLS hls = createHLS(cxxFun);
         boolean can = hls.canBeInstrumented();
-        CxxWeaver.getCxxWeaver().getScriptEngine().toJs(can);
         return can;
     }
 
