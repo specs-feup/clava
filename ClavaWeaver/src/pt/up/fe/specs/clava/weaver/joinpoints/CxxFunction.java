@@ -18,6 +18,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.attr.CUDAGlobalAttr;
 import pt.up.fe.specs.clava.ast.decl.*;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -441,6 +442,14 @@ public class CxxFunction extends AFunction {
     @Override
     public String getStorageClassImpl() {
         return function.get(FunctionDecl.STORAGE_CLASS).getString();
+    }
+
+    @Override
+    public boolean setStorageClassImpl(String storageClass) {
+        // Get corresponding enum
+        var storageClassEnum = StorageClass.getHelper().fromValue(storageClass);
+
+        return function.setStorageClass(storageClassEnum);
     }
 
     @Override

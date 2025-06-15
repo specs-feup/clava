@@ -1,0 +1,17 @@
+@inproceedings{10.1145/3652032.3657580,
+author = {Santos, Tiago and Bispo, Jo\~{a}o and Cardoso, Jo\~{a}o M. P.},
+title = {A Flexible-Granularity Task Graph Representation and Its Generation from C Applications (WIP)},
+year = {2024},
+isbn = {9798400706165},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3652032.3657580},
+doi = {10.1145/3652032.3657580},
+abstract = {Modern hardware accelerators, such as FPGAs, allow offloading large regions of C/C++ code in order to improve the execution time and/or the energy consumption of software applications. An outstanding challenge with this approach, however, is solving the Hardware/Software (Hw/Sw) partitioning problem. Given the increasing complexity of both the accelerators and the potential code regions, one needs to adopt a holistic approach when selecting an offloading region by exploring the interplay between communication costs, data usage patterns, and target-specific optimizations. To this end, we propose representing a C application as an extended task graph (ETG) with flexible granularity, which can be manipulated through the merging and splitting of tasks. This approach involves generating a task graph overlay on the program's Abstract Syntax Tree (AST) that maps tasks to functions and the flexible granularity operations onto inlining/outlining operations. This maintains the integrity and readability of the original source code, which is paramount for targeting different accelerators and enabling code optimizations, while allowing the offloading of code regions of arbitrary complexity based on the data patterns of their tasks. To evaluate the ETG representation and its compiler, we use the latter to generate ETGs for the programs in Rosetta and MachSuite benchmark suites, and extract several metrics regarding data communication, task-level parallelism, and dataflow patterns between pairs of tasks. These metrics provide important information that can be used by Hw/Sw partitioning methods.},
+booktitle = {Proceedings of the 25th ACM SIGPLAN/SIGBED International Conference on Languages, Compilers, and Tools for Embedded Systems},
+pages = {178–182},
+numpages = {5},
+keywords = {FPGA, Hardware Accelerators, Hardware/Software Partitioning, Source-to-Source Compiler, Task Graph},
+location = {Copenhagen, Denmark},
+series = {LCTES 2024}
+}

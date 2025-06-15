@@ -16,5 +16,9 @@ describe("CxxTest", () => {
 
     it("Issue168", async () => {
         await newTester().test("Issue168.js", "issue_168.c");
-    });    
+    });
+
+    it("Issue-AIQ-1", async () => {
+        await newTester().test("Issue_aiq_1.js", "issue_aiq_1.c");
+    });
 });

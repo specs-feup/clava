@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,55 +13,14 @@
 
 package pt.up.fe.specs.clava.weaver;
 
-import java.util.List;
-import java.util.Optional;
-
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.cilk.CilkFor;
 import pt.up.fe.specs.clava.ast.cilk.CilkSpawn;
 import pt.up.fe.specs.clava.ast.cilk.CilkSync;
 import pt.up.fe.specs.clava.ast.comment.Comment;
-import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
-import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
-import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
-import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
-import pt.up.fe.specs.clava.ast.decl.EnumDecl;
-import pt.up.fe.specs.clava.ast.decl.FieldDecl;
-import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
-import pt.up.fe.specs.clava.ast.decl.LabelDecl;
-import pt.up.fe.specs.clava.ast.decl.NamedDecl;
-import pt.up.fe.specs.clava.ast.decl.NullDecl;
-import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
-import pt.up.fe.specs.clava.ast.decl.RecordDecl;
-import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
-import pt.up.fe.specs.clava.ast.decl.TypedefNameDecl;
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
-import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
-import pt.up.fe.specs.clava.ast.expr.CUDAKernelCallExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXThisExpr;
-import pt.up.fe.specs.clava.ast.expr.CallExpr;
-import pt.up.fe.specs.clava.ast.expr.CastExpr;
-import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
-import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
-import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
-import pt.up.fe.specs.clava.ast.expr.ImplicitValueInitExpr;
-import pt.up.fe.specs.clava.ast.expr.InitListExpr;
-import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
-import pt.up.fe.specs.clava.ast.expr.Literal;
-import pt.up.fe.specs.clava.ast.expr.MemberExpr;
-import pt.up.fe.specs.clava.ast.expr.NullExpr;
-import pt.up.fe.specs.clava.ast.expr.ParenExpr;
-import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
-import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
+import pt.up.fe.specs.clava.ast.decl.*;
+import pt.up.fe.specs.clava.ast.expr.*;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TagDeclVars;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -69,128 +28,28 @@ import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
-import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
-import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
-import pt.up.fe.specs.clava.ast.stmt.ContinueStmt;
-import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
-import pt.up.fe.specs.clava.ast.stmt.EmptyStmt;
-import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
-import pt.up.fe.specs.clava.ast.stmt.GotoStmt;
-import pt.up.fe.specs.clava.ast.stmt.IfStmt;
-import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
-import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
-import pt.up.fe.specs.clava.ast.stmt.NullStmt;
-import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.stmt.SwitchCase;
-import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
-import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
-import pt.up.fe.specs.clava.ast.type.AdjustedType;
-import pt.up.fe.specs.clava.ast.type.ArrayType;
-import pt.up.fe.specs.clava.ast.type.BuiltinType;
-import pt.up.fe.specs.clava.ast.type.ElaboratedType;
-import pt.up.fe.specs.clava.ast.type.EnumType;
-import pt.up.fe.specs.clava.ast.type.FunctionType;
-import pt.up.fe.specs.clava.ast.type.NullType;
-import pt.up.fe.specs.clava.ast.type.ParenType;
-import pt.up.fe.specs.clava.ast.type.PointerType;
-import pt.up.fe.specs.clava.ast.type.QualType;
-import pt.up.fe.specs.clava.ast.type.TagType;
-import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
-import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.TypedefType;
-import pt.up.fe.specs.clava.ast.type.VariableArrayType;
+import pt.up.fe.specs.clava.ast.stmt.*;
+import pt.up.fe.specs.clava.ast.type.*;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
-import pt.up.fe.specs.clava.weaver.joinpoints.CXXCudaKernelCall;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxAccessSpecifier;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxArrayAccess;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxBinaryOp;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxBody;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxBoolLiteral;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxBreak;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxCall;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxCase;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxCast;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxClass;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxComment;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxContinue;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxDecl;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxDeclStmt;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxDeleteExpr;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxEmptyStmt;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxEnumDecl;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxEnumeratorDecl;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxExprStmt;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxExpression;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxField;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxFile;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxFloatLiteral;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxGotoStmt;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxIf;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxImplicitValue;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxInclude;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxInitList;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxIntLiteral;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxLabelDecl;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxLabelStmt;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxLiteral;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxLoop;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxMarker;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxMemberAccess;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxMemberCall;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxMethod;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxNamedDecl;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxNewExpr;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxOmp;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxParam;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxParenExpr;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxPragma;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxReturnStmt;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxScope;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxStatement;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxStruct;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxSwitch;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxTag;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxTernaryOp;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxThis;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxTypedefDecl;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxTypedefNameDecl;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxUnaryExprOrType;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxUnaryOp;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxVardecl;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxVarref;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxWrapperStmt;
-import pt.up.fe.specs.clava.weaver.joinpoints.GenericJoinpoint;
+import pt.up.fe.specs.clava.weaver.joinpoints.*;
 import pt.up.fe.specs.clava.weaver.joinpoints.cilk.CxxCilkFor;
 import pt.up.fe.specs.clava.weaver.joinpoints.cilk.CxxCilkSpawn;
 import pt.up.fe.specs.clava.weaver.joinpoints.cilk.CxxCilkSync;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxAdjustedType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxArrayType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxBuiltinType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxElaboratedType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxEnumType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxParenType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxPointerType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxQualType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxTagType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxTemplateSpecializationType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxTypedefType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxUndefinedType;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxVariableArrayType;
+import pt.up.fe.specs.clava.weaver.joinpoints.types.*;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.classmap.FunctionClassMap;
 
+import java.util.List;
+import java.util.Optional;
+
 public class CxxJoinpoints {
 
     private static final FunctionClassMap<ClavaNode, ACxxWeaverJoinPoint> JOINPOINT_FACTORY;
+
     static {
         JOINPOINT_FACTORY = new FunctionClassMap<>();
         JOINPOINT_FACTORY.put(ElaboratedType.class, CxxElaboratedType::new);
@@ -256,6 +115,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(BuiltinType.class, CxxBuiltinType::new);
         JOINPOINT_FACTORY.put(PointerType.class, CxxPointerType::new);
         JOINPOINT_FACTORY.put(VariableArrayType.class, CxxVariableArrayType::new);
+        JOINPOINT_FACTORY.put(IncompleteArrayType.class, CxxIncompleteArrayType::new);
         JOINPOINT_FACTORY.put(ArrayType.class, CxxArrayType::new);
         JOINPOINT_FACTORY.put(FunctionType.class, CxxFunctionType::new);
         JOINPOINT_FACTORY.put(EnumType.class, CxxEnumType::new);
@@ -303,22 +163,22 @@ public class CxxJoinpoints {
      * private static void setWeaverEngine(ACxxWeaverJoinPoint newJoinPoint) {
      * ACxxWeaverJoinPoint currentJoinpoint = newJoinPoint;
      * CxxWeaver weaver = getWeaver();
-     * 
+     *
      * while (currentJoinpoint != null) {
-     * 
+     *
      * // Set engine
      * currentJoinpoint.setWeaverEngine(weaver);
      * currentJoinpoint = currentJoinpoint.getSuper()
      * .map(ACxxWeaverJoinPoint.class::cast)
      * .orElse(null);
-     * 
+     *
      * }
      * }
      */
 
     /*
      * private final CxxWeaver weaverEngine;
-     * 
+     *
      * public CxxJoinpoints(CxxWeaver weaverEngine) {
      * this.weaverEngine = weaverEngine;
      * }
@@ -333,7 +193,6 @@ public class CxxJoinpoints {
     // return new CxxFile(tu, parent);
     // // return new CxxFile(tu, parent == null ? null : parent.getRoot());
     // }
-
     public static CxxProgram programFactory(App app) {
         CxxWeaver weaver = CxxWeaver.getCxxWeaver();
         return new CxxProgram(weaver.getProgramName(), app, weaver);

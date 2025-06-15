@@ -487,14 +487,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute storageClass
-     * @return the attribute's value
+     * The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)
      */
     public abstract String getStorageClassImpl();
 
     /**
-     * Get value on attribute storageClass
-     * @return the attribute's value
+     * The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)
      */
     public final Object getStorageClass() {
         try {
@@ -844,6 +842,27 @@ public abstract class AFunction extends ADeclarator {
         	this.setReturnTypeImpl(returnType);
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setReturnType", e);
+        }
+    }
+
+    /**
+     * Sets the storage class of this specific function decl. AUTO and REGISTER are not allowed for functions, and EXTERN is not allowed in function implementations, or function declarations that are in the same file as the implementation. Returns true if the storage class changed, false otherwise.
+     * @param storageClass 
+     */
+    public boolean setStorageClassImpl(String storageClass) {
+        throw new UnsupportedOperationException(get_class()+": Action setStorageClass not implemented ");
+    }
+
+    /**
+     * Sets the storage class of this specific function decl. AUTO and REGISTER are not allowed for functions, and EXTERN is not allowed in function implementations, or function declarations that are in the same file as the implementation. Returns true if the storage class changed, false otherwise.
+     * @param storageClass 
+     */
+    public final Object setStorageClass(String storageClass) {
+        try {
+        	boolean result = this.setStorageClassImpl(storageClass);
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setStorageClass", e);
         }
     }
 

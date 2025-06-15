@@ -1,0 +1,15 @@
+@article{10.1145/3702229,
+author = {Silva, Tiago and Correia, Pedro Gon\c{c}alo and Sousa, Lu\'{\i}s and Bispo, Jo\~{a}o and Carvalho, Tiago},
+title = {Towards a Rust-Like Borrow Checker for C},
+year = {2024},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+issn = {1539-9087},
+url = {https://doi.org/10.1145/3702229},
+doi = {10.1145/3702229},
+abstract = {Memory safety issues in C are the origin of various vulnerabilities that can compromise a program’s correctness or safety from attacks. We propose an approach to tackle memory safety by replicating Rust’s Mid-level Intermediate Representation (MIR) Borrow Checker. Our solution uses static analysis and successive source-to-source code transformations to be composed upstream of the compiler, ensuring maximal compatibility with existing build systems. This allows us to apply the memory safety guarantees of the rustc compiler to C code with fewer changes than a rewrite in Rust. In this work, we present a comprehensive study of Rust’s efforts towards ensuring memory safety, and describe the theoretical basis for a C borrow checker, alongside a proof-of-concept that was developed to demonstrate its potential. We have evaluated the prototype on the CHStone and bzip2 benchmarks. This prototype correctly identified violations of the ownership and aliasing rules, and exposed incompatibilities between such rules and common C patterns, which can be addressed in future work.},
+note = {Just Accepted},
+journal = {ACM Trans. Embed. Comput. Syst.},
+month = oct,
+keywords = {C, Rust, Source-to-Source, Memory Safety, Static analysis, Borrow checker, Lifetimes, Ownership, Transpiler, Code transformations}
+}

@@ -326,11 +326,17 @@ public class AstFactory {
     }
 
 
-    public static AType variableArrayType(AType elementType, AExpression sizeExpr) {
+    public static AVariableArrayType variableArrayType(AType elementType, AExpression sizeExpr) {
         Type variableArrayType = CxxWeaver.getFactory().variableArrayType((Type) elementType.getNode(),
                 (Expr) sizeExpr.getNode());
 
-        return CxxJoinpoints.create(variableArrayType, AType.class);
+        return CxxJoinpoints.create(variableArrayType, AVariableArrayType.class);
+    }
+
+    public static AIncompleteArrayType incompleteArrayType(AType elementType) {
+        Type incompleteArrayType = CxxWeaver.getFactory().incompleteArrayType(((Type) elementType.getNode()));
+
+        return CxxJoinpoints.create(incompleteArrayType, AIncompleteArrayType.class);
     }
 
     public static AJoinPoint omp(String directiveName) {
