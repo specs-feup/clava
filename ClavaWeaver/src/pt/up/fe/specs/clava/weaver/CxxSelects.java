@@ -19,8 +19,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.lara.interpreter.profile.ReportField;
-import org.lara.interpreter.profile.WeavingReport;
 import org.lara.interpreter.weaver.interf.WeaverEngine;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -127,44 +125,6 @@ public class CxxSelects {
                 .collect(Collectors.toList())
                 // .toArray(new AJoinPoint[0]);
                 .toArray(AJoinPoint[]::new);
-        /*
-        Incrementer excludedJoinpoints = new Incrementer();
-        
-        AJoinPoint[] selectedJps = selectedNodes
-                // Ignore null nodes
-                .filter(sibling -> !(sibling instanceof NullNode))
-                .map(CxxJoinpoints::create)
-                // Filter null nodes
-                .filter(jp -> jp != null)
-                // Default filter
-                .filter(CxxSelects::defaultSelectFilter)
-                .filter(jp -> {
-        
-                    boolean accepted = filter.test(jp);
-        
-                    if (!accepted) {
-                        excludedJoinpoints.increment();
-                    }
-                    return accepted;
-                })
-                // Null nodes should have been filtered by previous filter
-                // .filter(jp -> jp != null)
-                // Filter null nodes
-                // .filter(jp -> jp != null)
-                .collect(Collectors.toList())
-                // .toArray(new AJoinPoint[0]);
-                .toArray(AJoinPoint[]::new);
-        
-        // Count as selected nodes
-        var report = weaverEngine.getWeaverProfiler().getReport();
-        report.inc(ReportField.JOIN_POINTS, selectedJps.length + excludedJoinpoints.getCurrent());
-        report.inc(ReportField.FILTERED_JOIN_POINTS, selectedJps.length);
-        
-        // Count as a select
-        report.inc(ReportField.SELECTS);
-        
-        return selectedJps;
-        */
     }
 
     public static Stream<AJoinPoint> selectedNodesToJpsStream(Stream<? extends ClavaNode> selectedNodes,
@@ -176,8 +136,6 @@ public class CxxSelects {
     public static Stream<AJoinPoint> selectedNodesToJpsStream(Stream<? extends ClavaNode> selectedNodes,
             Predicate<AJoinPoint> filter, WeaverEngine weaverEngine) {
 
-        var report = weaverEngine.getWeaverProfiler().getReport();
-
         var selectedJps = selectedNodes
                 // Ignore null nodes
                 .filter(sibling -> !(sibling instanceof NullNode))
@@ -186,18 +144,11 @@ public class CxxSelects {
                 .filter(jp -> jp != null)
                 // Default filter
                 .filter(CxxSelects::defaultSelectFilter)
-                .filter(jp -> {
-                    reportJp(jp, report, ReportField.JOIN_POINTS);
-                    return filter.test(jp);
-                })
-                .map(jp -> reportJp(jp, report, ReportField.FILTERED_JOIN_POINTS));
+                .filter(jp -> filter.test(jp))
+                // Cast back to AJoinPoint
+                .map(jp -> (AJoinPoint) jp);
 
         return selectedJps;
-    }
-
-    private static AJoinPoint reportJp(AJoinPoint jp, WeavingReport report, ReportField type) {
-        report.inc(type, 1);
-        return jp;
     }
 
     private static boolean defaultSelectFilter(AJoinPoint jp) {
