@@ -27,6 +27,10 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    weaverGeneratorRuntime
+}
+
 dependencies {
     implementation ":jOptions"
     implementation ":SpecsUtils"
@@ -34,7 +38,6 @@ dependencies {
     implementation ":LanguageSpecification"
     implementation ":LARAI"
     implementation ":LaraUtils"
-    implementation ":WeaverGenerator"
     implementation ":WeaverInterface"
 
     implementation ":AntarexClavaApi"
@@ -44,6 +47,8 @@ dependencies {
     implementation ":ClavaLaraApi"
 
     implementation group: 'com.google.guava', name: 'guava', version: '33.4.0-jre'
+    
+    weaverGeneratorRuntime ":WeaverGenerator"
 }
 
 // Project sources
@@ -65,12 +70,11 @@ task clava(type: JavaExec) {
 }
 
 // Re-run the weaver generator
-task generateWeaver(type: Exec) {
+task generateWeaver(type: JavaExec) {
     group = "Execution"
     description = "Generates the Weaver Abstracts"
-
-    executable "./../../lara-framework/WeaverGenerator/build/install/WeaverGenerator/bin/WeaverGenerator"
-
+    classpath = configurations.weaverGeneratorRuntime
+    mainClass = 'org.lara.interpreter.weaver.generator.commandline.WeaverGenerator'
     args = [
         "-w", "CxxWeaver",
         "-x", "./resources/clava/weaverspecs",
@@ -81,3 +85,5 @@ task generateWeaver(type: Exec) {
         "-d",
     ]
 }
+
+compileJava.dependsOn generateWeaver
