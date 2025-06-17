@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.10)
 
 # Generate files based on the source code of the current target, 
 # add generated files as a new target that depends on the original target.

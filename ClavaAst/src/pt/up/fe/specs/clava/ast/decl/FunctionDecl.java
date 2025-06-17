@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,18 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
@@ -43,8 +34,12 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.NodeWithScope;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Represents a function declaration or definition.
@@ -55,7 +50,6 @@ import pt.up.fe.specs.util.treenode.NodeInsertUtils;
  * - Definition (Stmt)
  *
  * @author JoaoBispo
- *
  */
 public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
@@ -194,7 +188,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     /**
-     *
      * @param body
      * @return
      */
@@ -229,9 +222,8 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     /**
-     *
      * @return the nodes representing the declarations of this function. Only takes into consideration nodes that are
-     *         already in the AST
+     * already in the AST
      */
     public List<FunctionDecl> getPrototypes() {
 
@@ -255,7 +247,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     /**
      * Legacy method, please use getPrototypes() instead.
-     * 
+     *
      * @return
      */
     public Optional<FunctionDecl> getDeclaration() {
@@ -263,9 +255,8 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     /**
-     * 
      * @return the node representing the implementation of this function. Only takes into consideration nodes that are
-     *         already in the AST
+     * already in the AST
      */
     public Optional<FunctionDecl> getImplementation() {
 
@@ -289,7 +280,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     /**
      * Legacy method, please use getImplementation() instead.
-     * 
+     *
      * @return
      */
     public Optional<FunctionDecl> getDefinition() {
@@ -317,7 +308,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     /**
-     * 
      * @return all the FunctionDecl related to this function (e.g., prototypes, implementation)
      */
     public List<FunctionDecl> getDecls() {
@@ -334,7 +324,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     /**
-     * 
      * @param useReturnType
      * @return
      */
@@ -502,7 +491,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     /**
-     *
      * @return all the calls to this function declaration.
      */
     public List<CallExpr> getCalls() {
@@ -584,9 +572,8 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
      * corresponding original functions.
      *
      * @param newName
-     *
      * @return the definition or the declaration of the cloned function, according to this node being a definition or a
-     *         declaration.
+     * declaration.
      */
     public FunctionDecl cloneAndInsert(String newName, boolean insert) {
         return cloneAndInsert(newName, null, insert);
@@ -664,4 +651,37 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         return fileId + getNodeIdSeparator() + functionId;
     }
 
+    /**
+     * @param storageClass
+     * @return true if the storage class changed, false otherwise
+     */
+    public boolean setStorageClass(StorageClass storageClass) {
+
+        if (storageClass == StorageClass.Auto || storageClass == StorageClass.Register) {
+            SpecsLogs.info("Cannot set function with storage class '" + storageClass + "'");
+            return false;
+        }
+
+        // When marking a function as extern, cannot mark the implementation,
+        // nor declarations that are in the same file as the implementation
+        if (storageClass == StorageClass.Extern) {
+
+            // Definition cannot have extern
+            if (isDefinition()) {
+                return false;
+            }
+
+            // This is a declaration. If a definition is present, check if in the same file as the definition
+            var defTu = getDefinition().flatMap(d -> d.getAncestorTry(TranslationUnit.class)).orElse(null);
+            var declTu = getAncestorTry(TranslationUnit.class).orElse(null);
+
+            if (defTu != null && declTu != null && defTu.equals(declTu)) {
+                return false;
+            }
+
+        }
+
+        set(FunctionDecl.STORAGE_CLASS, storageClass);
+        return true;
+    }
 }

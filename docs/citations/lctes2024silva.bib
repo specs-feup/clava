@@ -1,0 +1,17 @@
+@inproceedings{10.1145/3652032.3657579,
+author = {Silva, Tiago and Bispo, Jo\~{a}o and Carvalho, Tiago},
+title = {Foundations for a Rust-Like Borrow Checker for C},
+year = {2024},
+isbn = {9798400706165},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3652032.3657579},
+doi = {10.1145/3652032.3657579},
+abstract = {Memory safety issues in C are the origin of various vulnerabilities that can compromise a program's correctness or safety from attacks. We propose a different approach to tackle memory safety, the replication of Rust's Mid-level Intermediate Representation (MIR) Borrow Checker, through the usage of static analysis and successive source-to-source code transformations, to be composed upstream of the compiler, thus ensuring maximal compatibility with most build systems. This allows us to approximate a subset of C to Rust's core concepts, applying the memory safety guarantees of the rustc compiler to C. In this work, we present a survey of Rust's efforts towards ensuring memory safety, and describe the theoretical basis for a C borrow checker, alongside a proof-of-concept that was developed to demonstrate its potential. This prototype correctly identified violations of the ownership and aliasing rules, and accurately reported each error with a level of detail comparable to that of the rustc compiler.},
+booktitle = {Proceedings of the 25th ACM SIGPLAN/SIGBED International Conference on Languages, Compilers, and Tools for Embedded Systems},
+pages = {155–165},
+numpages = {11},
+keywords = {Borrow checker, C, Code transformations, Lifetimes, Memory Safety, Ownership, Rust, Source-to-Source, Static analysis, Transpiler},
+location = {Copenhagen, Denmark},
+series = {LCTES 2024}
+}

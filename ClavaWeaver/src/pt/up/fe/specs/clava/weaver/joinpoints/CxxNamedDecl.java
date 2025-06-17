@@ -65,12 +65,7 @@ public class CxxNamedDecl extends ANamedDecl {
 
     @Override
     public void setNameImpl(String name) {
-        defNameImpl(name);
-    }
-
-    @Override
-    public void defNameImpl(String value) {
-        namedDecl.set(NamedDecl.DECL_NAME, value);
+        namedDecl.set(NamedDecl.DECL_NAME, name);
     }
 
     @Override
@@ -84,23 +79,13 @@ public class CxxNamedDecl extends ANamedDecl {
     }
 
     @Override
-    public void defQualifiedPrefixImpl(String value) {
-        namedDecl.set(NamedDecl.QUALIFIED_PREFIX, value);
-    }
-
-    @Override
-    public void defQualifiedNameImpl(String value) {
-        namedDecl.setQualifiedName(value);
-    }
-
-    @Override
     public void setQualifiedPrefixImpl(String qualifiedPrefix) {
-        defQualifiedPrefixImpl(qualifiedPrefix);
+        namedDecl.set(NamedDecl.QUALIFIED_PREFIX, qualifiedPrefix);
     }
 
     @Override
     public void setQualifiedNameImpl(String name) {
-        defQualifiedNameImpl(name);
+        namedDecl.setQualifiedName(name);
     }
 
 }

@@ -2,7 +2,7 @@
 
 Clava source-to-source compiler running on top of Node.js.
 
-Current version only works on Node 18 and 20.
+Current version only works on Node 20 and 22.
 
 To test Clava-JS you can try the [Clava project template](https://github.com/specs-feup/clava-project-template).
 

@@ -93,81 +93,82 @@ public class ControlFlowGraph extends FlowGraph {
             BasicBlockNode bb = (BasicBlockNode) node;
 
             switch (bb.getType()) {
-            case EXIT:
-                // no out edges if this is an exit bb
-                break;
-            case IF:
-                IfStmt lastIf = (IfStmt) bb.last();
-                // from IfStmt to its Then
-                Stmt firstOfThen = (Stmt) lastIf.getThen().get().getChild(0);
-                BasicBlockNode thenBB = bbs.get(firstOfThen);
-                this.addEdge(BasicBlockEdge.newTrueEdge(bb, thenBB));
+                case EXIT:
+                    // no out edges if this is an exit bb
+                    break;
+                case IF:
+                    IfStmt lastIf = (IfStmt) bb.last();
+                    // from IfStmt to its Then
+                    Stmt firstOfThen = (Stmt) lastIf.getThen().get().getChild(0);
+                    BasicBlockNode thenBB = bbs.get(firstOfThen);
+                    this.addEdge(BasicBlockEdge.newTrueEdge(bb, thenBB));
 
-                // from IfStmt to its Else, or SE
-                Optional<CompoundStmt> possibleElse = lastIf.getElse();
-                if (possibleElse.isPresent()) {
-                    Stmt firstOfElse = (Stmt) possibleElse.get().getChild(0);
-                    BasicBlockNode elseBB = bbs.get(firstOfElse);
-                    this.addEdge(BasicBlockEdge.newFalseEdge(bb, elseBB));
-                } else {
-                    Optional<Stmt> ifSe = getSE(lastIf);
-                    if (ifSe.isPresent()) {
-                        BasicBlockNode elseBB = bbs.get(ifSe.get());
+                    // from IfStmt to its Else, or SE
+                    Optional<CompoundStmt> possibleElse = lastIf.getElse();
+                    if (possibleElse.isPresent()) {
+                        Stmt firstOfElse = (Stmt) possibleElse.get().getChild(0);
+                        BasicBlockNode elseBB = bbs.get(firstOfElse);
                         this.addEdge(BasicBlockEdge.newFalseEdge(bb, elseBB));
-                        // this.addEdge(BasicBlockEdge.newEdge(bb, elseBB));
-                    } // else: there is no SE so it must mean this is the last stmt of the function
-                }
-
-                break;
-            case LOOP:
-                LoopStmt lastLoop = (LoopStmt) bb.last();
-                // from LoopStmt to its Body
-                Stmt firstOfBody = (Stmt) lastLoop.getBody().getChild(0);
-                BasicBlockNode bodyBB = bbs.get(firstOfBody);
-                this.addEdge(BasicBlockEdge.newLoopEdge(bb, bodyBB));
-                // from LoopStmt to its SE
-                Optional<Stmt> loopSe = getSE(lastLoop);
-                if (loopSe.isPresent()) {
-                    BasicBlockNode loopSeBB = bbs.get(loopSe.get());
-                    this.addEdge(BasicBlockEdge.newNoLoopEdge(bb, loopSeBB));
-                }
-                break;
-            case NORMAL:
-                Stmt lastStmt = bb.last();
-
-                // DoWhile follows this BB
-                List<ClavaNode> rightSiblings = lastStmt.getRightSiblings();
-                if (!rightSiblings.isEmpty()) {
-                    ClavaNode clavaNode = rightSiblings.get(0);
-                    if (clavaNode instanceof DoStmt) {
-
-                        Stmt firstDo = (Stmt) ((DoStmt) clavaNode).getBody().getChild(0);
-                        BasicBlockNode firstDoBB = bbs.get(firstDo);
-                        this.addEdge(BasicBlockEdge.newEdge(bb, firstDoBB));
-                        continue;
+                    } else {
+                        Optional<Stmt> ifSe = getSE(lastIf);
+                        if (ifSe.isPresent()) {
+                            BasicBlockNode elseBB = bbs.get(ifSe.get());
+                            this.addEdge(BasicBlockEdge.newFalseEdge(bb, elseBB));
+                            // this.addEdge(BasicBlockEdge.newEdge(bb, elseBB));
+                        } // else: there is no SE so it must mean this is the last stmt of the function
                     }
-                }
 
-                // everything else
-                Optional<Stmt> possibleSe = getSE(lastStmt);
-                if (possibleSe.isPresent()) {
+                    break;
+                case LOOP:
+                    LoopStmt lastLoop = (LoopStmt) bb.last();
+                    // from LoopStmt to its Body
+                    Stmt firstOfBody = (Stmt) lastLoop.getBody().getChild(0);
+                    BasicBlockNode bodyBB = bbs.get(firstOfBody);
+                    this.addEdge(BasicBlockEdge.newLoopEdge(bb, bodyBB));
+                    // from LoopStmt to its SE
+                    Optional<Stmt> loopSe = getSE(lastLoop);
+                    if (loopSe.isPresent()) {
+                        BasicBlockNode loopSeBB = bbs.get(loopSe.get());
+                        this.addEdge(BasicBlockEdge.newNoLoopEdge(bb, loopSeBB));
+                    }
+                    break;
+                case NORMAL:
+                    Stmt lastStmt = bb.last();
 
-                    Stmt se = possibleSe.get();
+                    // DoWhile follows this BB
+                    List<ClavaNode> rightSiblings = lastStmt.getRightSiblings();
+                    if (!rightSiblings.isEmpty()) {
+                        ClavaNode clavaNode = rightSiblings.get(0);
+                        if (clavaNode instanceof DoStmt) {
 
-                    BasicBlockNode seBB = bbs.get(se);
-                    this.addEdge(BasicBlockEdge.newEdge(bb, seBB));
-                }
+                            Stmt firstDo = (Stmt) ((DoStmt) clavaNode).getBody().getChild(0);
+                            BasicBlockNode firstDoBB = bbs.get(firstDo);
+                            this.addEdge(BasicBlockEdge.newEdge(bb, firstDoBB));
+                            continue;
+                        }
+                    }
 
-                break;
-            default:
-                throw new RuntimeException("This BB has type '" + BasicBlockNodeType.UNDEFINED
-                        + "' and that shouldn't happen. BB info: \n" + bb.toString());
+                    // everything else
+                    Optional<Stmt> possibleSe = getSE(lastStmt);
+                    if (possibleSe.isPresent()) {
+
+                        Stmt se = possibleSe.get();
+
+                        BasicBlockNode seBB = bbs.get(se);
+                        this.addEdge(BasicBlockEdge.newEdge(bb, seBB));
+                    }
+
+                    break;
+                default:
+                    throw new RuntimeException("This BB has type '" + BasicBlockNodeType.UNDEFINED
+                            + "' and that shouldn't happen. BB info: \n" + bb.toString());
             }
         }
     }
 
     /**
-     * Gets the SE, or Sibling Equivalent. This is either the first right sibling, or the equivalent for CFG purposes,
+     * Gets the SE, or Sibling Equivalent. This is either the first right sibling,
+     * or the equivalent for CFG purposes,
      * e.g., a scoped statement that is the parent of the stmt.
      * 
      * @param stmt
@@ -219,9 +220,11 @@ public class ControlFlowGraph extends FlowGraph {
             }
 
             if (leaderSet.contains(stmt)) {
-
                 current = bbs.get(stmt);
             } else {
+                if (current == null) {
+                    throw new RuntimeException("BasicBlockNode for leader statement not found: " + stmt);
+                }
 
                 current.addStmt(stmt);
             }

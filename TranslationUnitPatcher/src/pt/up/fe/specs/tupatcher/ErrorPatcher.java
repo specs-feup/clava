@@ -301,6 +301,10 @@ public class ErrorPatcher {
             }
         }
         else {
+            if (fromType == null) {
+                throw new RuntimeException("Type "+fromTypeName+" not found in patch data. Cannot solve incompatible type error");
+            }
+
             if (fromTypeName.contains("*") && toTypeName.contains("*")) {
                 toTypeName = toTypeName.replace("*", "");
             }
@@ -519,6 +523,9 @@ public class ErrorPatcher {
                     break;
                 }
             }
+        }
+        if (function == null) {
+            throw new RuntimeException("Function " + functionName + " not found in patch data. Cannot set return type as const");
         }
         TypeInfo returnType = function.getReturnType();
         returnType.setAs("const " + returnType.getKind().replace("const ", ""));

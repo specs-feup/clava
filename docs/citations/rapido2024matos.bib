@@ -1,0 +1,17 @@
+@inproceedings{10.1145/3642921.3642922,
+author = {Matos, Jo\~{a}o N. and Bispo, Jo\~{a}o and Sousa, Lu\'{\i}s Miguel},
+title = {A C Subset for Ergonomic Source-to-Source Analyses and Transformations},
+year = {2024},
+isbn = {9798400717918},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3642921.3642922},
+doi = {10.1145/3642921.3642922},
+abstract = {Modern compiled software, written in languages such as C, relies on complex compiler infrastructure. However, developing new transformations and improving existing ones can be challenging for researchers and engineers. Often, transformations must be implemented bymodifying the compiler itself, which may not be feasible, for technical or legal reasons. Source-to-source compilers make it possible to directly analyse and transform the original source, making transformations portable across different compilers, and allowing rapid research and prototyping of code transformations. However, this approach has the drawback of exposing the researcher to the full breadth of the source language, which is often more extensive and complex than the IRs used in traditional compilers. In this work, we propose a solution to tame the complexity of the source language and make source-to-source compilers an ergonomic platform for program analysis and transformation. We define a simpler subset of the C language that can implement the same programs with fewer constructs and implement a set of source-to-source transformations that automatically normalise the input source code into equivalent programs expressed in the proposed subset. Finally, we implement a function inlining transformation that targets the subset as a case study. We show that for this case study, the assumptions afforded by using a simpler language subset greatly improves the number of cases the transformation can be applied, increasing the average success rate from 37\%, before normalisation, to 97\%, after normalisation. We also evaluate the performance of several benchmarks after applying a naive inlining algorithm, and obtained a 12\% performance improvement in certain applications, after compiling with the flag O2, both in Clang and GCC, suggesting there is room for exploring source-level transformations as a complement to traditional compilers.},
+booktitle = {Proceedings of the 16th Workshop on Rapid Simulation and Performance Evaluation for Design},
+pages = {1–8},
+numpages = {8},
+keywords = {C, Compilers, Meta-programming, Source-to-source},
+location = {Munich, Germany},
+series = {RAPIDO '24}
+}

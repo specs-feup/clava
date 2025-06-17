@@ -13,9 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.Arrays;
-import java.util.List;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
@@ -46,11 +43,6 @@ public class CxxUnaryOp extends AUnaryOp {
     @Override
     public Boolean getIsPointerDerefImpl() {
         return unaryOp.getOp() == UnaryOperatorKind.Deref;
-    }
-
-    @Override
-    public List<? extends AExpression> selectOperand() {
-        return Arrays.asList((AExpression) getOperandImpl());
     }
 
     @Override
