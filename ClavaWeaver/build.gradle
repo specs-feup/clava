@@ -47,7 +47,7 @@ dependencies {
     implementation ":ClavaLaraApi"
 
     implementation group: 'com.google.guava', name: 'guava', version: '33.4.0-jre'
-    
+
     weaverGeneratorRuntime ":WeaverGenerator"
 }
 
@@ -65,7 +65,7 @@ task clava(type: JavaExec) {
     group = "Execution"
     description = "Launches Clava"
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher'
+    mainClass = application.mainClass
     args = []
 }
 

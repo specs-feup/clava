@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-   implementation "junit:junit:4.13.1"
+   testImplementation "junit:junit:4.13.1"
 
    implementation ":ClavaAst"
    implementation ":CommonsLangPlus"
@@ -31,11 +31,6 @@ sourceSets {
     main {
         java {
             srcDir 'src'
-            srcDir 'test'
-        }
-
-        resources {
-            srcDir 'resources'
         }
     }
 
@@ -43,7 +38,6 @@ sourceSets {
         java {
             srcDir 'test'
         }
-
         resources {
             srcDir 'resources'
         }
