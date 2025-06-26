@@ -32,7 +32,6 @@ import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
 public class CxxType extends AType {
@@ -110,13 +109,8 @@ public class CxxType extends AType {
     }
 
     @Override
-    public void defDesugarImpl(AType value) {
-        type.setDesugar((Type) value.getNode());
-    }
-
-    @Override
     public void setDesugarImpl(AType desugaredType) {
-        defDesugarImpl(desugaredType);
+        type.setDesugar((Type) desugaredType.getNode());
     }
 
     @Override
@@ -166,18 +160,13 @@ public class CxxType extends AType {
     }
 
     @Override
-    public void defTemplateArgsTypesImpl(AType[] value) {
-        List<Type> argTypes = Arrays.stream(value)
+    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
+        List<Type> argTypes = Arrays.stream(
+                templateArgTypes)
                 .map(aType -> (Type) aType.getNode())
                 .collect(Collectors.toList());
 
         type.setTemplateArgumentTypes(argTypes);
-
-    }
-
-    @Override
-    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
-        defTemplateArgsTypesImpl(templateArgTypes);
     }
 
     @Override

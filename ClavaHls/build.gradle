@@ -1,15 +1,14 @@
 plugins {
- 	id 'distribution'
+    id 'distribution'
+    id 'java'
 }
 
-// Java project
-apply plugin: 'java'
-
 java {
+    withSourcesJar()
+
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
-
 
 // Repositories providers
 repositories {
@@ -17,28 +16,16 @@ repositories {
 }
 
 dependencies {
-	testImplementation "junit:junit:4.13.1"     
-	implementation ':SpecsUtils'
-	implementation ':GitPlus'
-	implementation ':GsonPlus'
-	implementation ':jOptions'
-	implementation ':tdrcLibrary'
-	implementation ':ClavaAst'	
-	
+   implementation ':SpecsUtils'
+   implementation ':jOptions'
+   implementation ':ClavaAst'
 }
-
-java {
-	withSourcesJar()
-}
-
 
 // Project sources
 sourceSets {
-   main {
-      java {
-         srcDir 'src'
-      }
-	  
-   }   
-   
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
 }

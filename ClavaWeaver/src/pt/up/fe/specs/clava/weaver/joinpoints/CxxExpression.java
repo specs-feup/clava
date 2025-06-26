@@ -104,11 +104,6 @@ public class CxxExpression extends AExpression {
     }
 
     @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return selectVarDecl(this);
-    }
-
-    @Override
     public Boolean getIsFunctionArgumentImpl() {
         return expr.isFunctionArgument();
     }

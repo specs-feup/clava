@@ -1,8 +1,8 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 for (const $break of Query.search("function", "foo").search("break")) {
   const enclosingStmt = $break.enclosingStmt;
-  println(
+  console.log(
     "Break enclosing statement: " +
       enclosingStmt.joinPointType +
       "@" +
