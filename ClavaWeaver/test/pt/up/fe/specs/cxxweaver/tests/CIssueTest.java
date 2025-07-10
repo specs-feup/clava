@@ -51,4 +51,8 @@ public class CIssueTest {
         newTester().test("Issue_aiq_1.mjs", "issue_aiq_1.c");
     }
 
+    @Test
+    public void testIssue187() {
+        newTester().test("Issue187.mjs", "issue_187.c");
+    }
 }

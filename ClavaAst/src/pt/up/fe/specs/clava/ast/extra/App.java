@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,22 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.extra;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
@@ -46,11 +33,15 @@ import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
 /**
  * Represents an application composed by a set of TranslationUnits.
  *
  * @author JoaoBispo
- *
  */
 public class App extends ClavaNode {
 
@@ -66,7 +57,6 @@ public class App extends ClavaNode {
 
     /**
      * Can be used to store arbitrary information that should be accessible through the application
-     *
      */
     public final static DataKey<DataStore> APP_DATA = KeyFactory.object("appData", DataStore.class)
             .setDefault(() -> DataStore.newInstance("Clava App Arbitrary Data"))
@@ -89,7 +79,6 @@ public class App extends ClavaNode {
     private final CallInliner callInliner;
 
     /**
-     *
      * @param dataStore
      * @param children
      */
@@ -162,7 +151,7 @@ public class App extends ClavaNode {
 
     /**
      * Writes the source-code of the current application to the given destination folder.
-     * 
+     *
      * @param destinationFolder
      * @return
      */
@@ -202,12 +191,10 @@ public class App extends ClavaNode {
     }
 
     /**
-     *
      * @param baseInputFolder
      * @param destinationFolder
-     * @param modifiedFiles
-     *            a set of filenames which is a white-list for files that should be generated from the AST. If null,
-     *            generates all files from the AST
+     * @param modifiedFiles     a set of filenames which is a white-list for files that should be generated from the AST. If null,
+     *                          generates all files from the AST
      * @return
      */
     public Map<File, String> getCode(File destinationFolder, Set<String> modifiedFiles) {
@@ -253,7 +240,6 @@ public class App extends ClavaNode {
     }
 
     /**
-     *
      * @return list of current files in the program
      */
     public List<File> getFiles() {
@@ -359,7 +345,7 @@ public class App extends ClavaNode {
 
     /**
      * Sets the sources of each Translation Unit that will be used to calculate the relative paths.
-     * 
+     *
      * <p>
      * Receives a map of App files to the corresponding base source folder
      *
@@ -389,7 +375,7 @@ public class App extends ClavaNode {
     /**
      * Sets the source folder names of each Translation Unit, which will be used to determine the folder to which the
      * source will be written.
-     * 
+     *
      * <p>
      * Receives a map of App files to the corresponding source folder name, if any
      *
@@ -441,7 +427,6 @@ public class App extends ClavaNode {
     }
 
     /**
-     * 
      * @return true, if any of the TranslationUnits has parsing errors
      */
     public boolean hasParsingErrors() {
