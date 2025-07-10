@@ -1,4 +1,7 @@
-import { registerSourceCode } from "@specs-feup/lara/jest/jestHelpers.js";
+import {
+  registerSourceCode,
+  registerSourceCodes,
+} from "@specs-feup/lara/jest/jestHelpers.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { FunctionJp, Loop } from "@specs-feup/clava/api/Joinpoints.js";
 import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
@@ -30,8 +33,51 @@ describe("issue187", () => {
 
     functionJp.setParams([newParam1, newParam2]);
 
-    const functionDecl = Query.search(FunctionJp, {name: "foo", isImplementation: false}).get()[0];
-    expect(functionDecl).toBeInstanceOf(FunctionJp)
-    expect(functionDecl.definitionJp).toBeInstanceOf(FunctionJp)
+    const functionDecl = Query.search(FunctionJp, {
+      name: "foo",
+      isImplementation: false,
+    }).get()[0];
+    expect(functionDecl).toBeInstanceOf(FunctionJp);
+    expect(functionDecl.definitionJp).toBeInstanceOf(FunctionJp);
+  });
+});
+
+const code190_1 = `
+static int foo() {
+    return 0;
+}`;
+
+const code190_2 = `
+static double foo() {
+    return 0.0;
+}`;
+
+describe("issue190", () => {
+  registerSourceCodes({ "file1.c": code190_1, "file2.c": code190_2 });
+
+  it("the right function should be renamed", () => {
+    const functionJp2 = Query.search(FunctionJp, (jp) =>
+      jp.filepath.endsWith("file2.c")
+    ).first();
+
+    if (functionJp2 === undefined) {
+      fail();
+    }
+
+    functionJp2.setName("bar");
+    expect(functionJp2.name).toBe("bar");
+    //console.log(functionJp2.name); //expected "bar" but still shows "foo"
+
+    const functionJp1 = Query.search(FunctionJp, (jp) =>
+      jp.filepath.endsWith("file1.c")
+    ).first();
+
+    if (functionJp1 === undefined) {
+      fail();
+    }
+
+    expect(functionJp1.name).toBe("foo");
+
+    //    console.log(functionJp1.name); // unexpected name "bar"
   });
 });
