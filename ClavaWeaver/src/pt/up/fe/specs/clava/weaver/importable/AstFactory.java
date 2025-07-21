@@ -36,7 +36,11 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
-import pt.up.fe.specs.util.*;
+import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.SpecsEnums;
+import pt.up.fe.specs.util.Preconditions;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 import java.io.File;
