@@ -172,7 +172,11 @@ public enum SupportedPlatform implements StringProvider {
     private static Double getMacOSVersion() {
         var macosVersion = System.getProperty("os.version");
 
-        var versionNumber = SpecsStrings.parseDouble(macosVersion);
+        // Extract major.minor (e.g., "14.7" from "14.7.6")
+        var versionParts = macosVersion.split("\\.");
+        String majorMinor = versionParts.length >= 2 ? versionParts[0] + "." + versionParts[1] : macosVersion;
+
+        var versionNumber = SpecsStrings.parseDouble(majorMinor);
 
         if (versionNumber == null) {
             ClavaLog.info("Could not convert MacOS version to a double: '" + macosVersion + "'");
