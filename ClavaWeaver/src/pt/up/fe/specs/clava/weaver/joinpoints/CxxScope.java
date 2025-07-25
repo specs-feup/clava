@@ -14,26 +14,14 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.analysis.flow.control.ControlFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
-import pt.up.fe.specs.clava.ast.cilk.CilkFor;
-import pt.up.fe.specs.clava.ast.cilk.CilkSync;
-import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
-import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
-import pt.up.fe.specs.clava.ast.omp.OmpPragma;
-import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
-import pt.up.fe.specs.clava.ast.stmt.IfStmt;
-import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
-import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -42,19 +30,9 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.Insert;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkFor;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkSync;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMarker;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOmp;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AReturnStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -183,62 +161,8 @@ public class CxxScope extends AScope {
     }
 
     @Override
-    public List<? extends AStatement> selectStmt() {
-        return CxxSelects.select(AStatement.class, getStatements(), true, CxxSelects::stmtFilter);
-    }
-
-    @Override
-    public List<? extends AStatement> selectChildStmt() {
-        return getStatements().stream().map(stmt -> (AStatement) CxxJoinpoints.create(stmt))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<? extends AScope> selectScope() {
-        // It is a scope if the parent is a compound statement
-        return CxxSelects.select(AScope.class, getStatements(), true,
-                node -> node instanceof CompoundStmt && ((CompoundStmt) node).isNestedScope());
-
-    }
-
-    @Override
-    public List<? extends AIf> selectIf() {
-        return CxxSelects.select(AIf.class, getStatements(), true, IfStmt.class);
-    }
-
-    @Override
-    public List<? extends ALoop> selectLoop() {
-        return CxxSelects.select(ALoop.class, getStatements(), true, LoopStmt.class);
-    }
-
-    @Override
-    public List<? extends APragma> selectPragma() {
-        return CxxSelects.select(APragma.class, getStatements(), true, Pragma.class);
-    }
-
-    @Override
-    public List<? extends AMarker> selectMarker() {
-        return CxxSelects.select(AMarker.class, getStatements(), true, LaraMarkerPragma.class);
-    }
-
-    @Override
-    public List<? extends ATag> selectTag() {
-        return CxxSelects.select(ATag.class, getStatements(), true, LaraTagPragma.class);
-    }
-
-    @Override
     public void clearImpl() {
         CxxActions.removeChildren(scope, getWeaverEngine());
-    }
-
-    @Override
-    public List<? extends AOmp> selectOmp() {
-        return CxxSelects.select(AOmp.class, getStatements(), true, OmpPragma.class);
-    }
-
-    @Override
-    public List<? extends AComment> selectComment() {
-        return CxxSelects.select(AComment.class, getStatements(), true, Comment.class::isInstance);
     }
 
     @Override
@@ -247,13 +171,8 @@ public class CxxScope extends AScope {
     }
 
     @Override
-    public void defNakedImpl(Boolean value) {
-        scope.setNaked(value);
-    }
-
-    @Override
     public void setNakedImpl(Boolean isNaked) {
-        defNakedImpl(isNaked);
+        scope.setNaked(isNaked);
     }
 
     @Override
@@ -294,7 +213,7 @@ public class CxxScope extends AScope {
 
     @Override
     public AStatement[] getAllStmtsArrayImpl() {
-        return selectStmt().toArray(new AStatement[0]);
+        return CxxSelects.select(AStatement.class, getStatements(), true, CxxSelects::stmtFilter).toArray(new AStatement[0]);
     }
 
     @Override
@@ -324,23 +243,6 @@ public class CxxScope extends AScope {
     public AJoinPoint getOwnerImpl() {
         // TODO: This should generically work, but corner cases have not been checked
         return getParentImpl();
-    }
-
-    @Override
-    public List<? extends AReturnStmt> selectReturnStmt() {
-        return CxxSelects.select(AReturnStmt.class, getStatements(), true, ReturnStmt.class);
-    }
-
-    @Override
-    public List<? extends ACilkFor> selectCilkFor() {
-        return CxxSelects.select(ACilkFor.class, getStatements(), true, CilkFor.class);
-
-    }
-
-    @Override
-    public List<? extends ACilkSync> selectCilkSync() {
-        return CxxSelects.select(ACilkSync.class, getStatements(), true, CilkSync.class);
-
     }
 
     @Override
