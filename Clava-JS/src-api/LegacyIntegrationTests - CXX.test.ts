@@ -515,12 +515,10 @@ describe("CxxApiTest", () => {
     });
 });
 
-// TODO: Implement a way to get CodeParser.
-/*
 describe("CudaTest", () => {
     function newTester() {
         const cudaTester = new ClavaWeaverTester(
-            path.resolve("../ClavaWeaver/resources/clava/test/weaver/),
+            path.resolve("../ClavaWeaver/resources/clava/test/weaver/"),
             ClavaJavaTypes.Standard.CUDA
         )
             .setResultPackage("cuda/results")
@@ -529,6 +527,7 @@ describe("CudaTest", () => {
 
         // Windows currently not supported
         if (JavaTypes.SpecsPlatforms.isWindows()) {
+            // TODO: Add a proper way to skip tests
             cudaTester.doNotRun();
         }
 
@@ -547,4 +546,3 @@ describe("CudaTest", () => {
         await newTester().test("CudaQuery.js", "sample.cu");
     });
 });
-*/

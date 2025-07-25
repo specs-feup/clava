@@ -24,6 +24,7 @@ export namespace ClavaJavaClasses {
   export interface ClavaPlatforms extends JavaClasses.JavaClass {}
   export interface CxxWeaverOption extends JavaClasses.JavaClass {}
   export interface ClavaOptions extends JavaClasses.JavaClass {}
+  export interface CodeParser extends JavaClasses.JavaClass {}
   /* eslint-enable @typescript-eslint/no-empty-interface */
 }
 
@@ -144,5 +145,11 @@ export default class ClavaJavaTypes {
     return JavaTypes.getType(
       "pt.up.fe.specs.clava.ClavaOptions"
     ) as ClavaJavaClasses.ClavaOptions;
+  }
+
+  static get CodeParser() {
+    return JavaTypes.getType(
+      "pt.up.fe.specs.clang.codeparser.CodeParser"
+    ) as ClavaJavaClasses.CodeParser;
   }
 }
