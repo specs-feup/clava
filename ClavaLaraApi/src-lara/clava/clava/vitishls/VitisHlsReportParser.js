@@ -6,7 +6,7 @@ export default class VitisHlsReportParser {
     }
     xmlToJson(xml) {
         //parses only the "leaves" of the XML string, which is enough for us. For now.
-        const regex = /(?:<([a-zA-Z'-\d_]*)(?:\s[^>]*)*>)((?:(?!<\1).)*)(?:<\/\1>)|<([a-zA-Z'-]*)(?:\s*)*\/>/gm;
+        const regex = /(?:<([a-zA-Z'-\d_]*)(?:\s[^<>]*)*>)((?:(?!<\/\1>).)*)(?:<\/\1>)|<([a-zA-Z'-]*)(?:\s*)*\/>/gm;
         const json = {};
         for (const match of xml.matchAll(regex)) {
             const key = match[1] || match[3];
