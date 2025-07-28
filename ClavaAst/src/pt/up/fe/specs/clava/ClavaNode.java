@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,20 +13,7 @@
 
 package pt.up.fe.specs.clava;
 
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-
+import com.google.common.base.Preconditions;
 import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.DataStore.GenericDataClass;
 import org.suikasoft.jOptions.DataStore.ListDataStore;
@@ -34,9 +21,6 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
-
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -60,6 +44,11 @@ import pt.up.fe.specs.util.system.Copyable;
 import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
+import java.lang.reflect.Constructor;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
 public abstract class ClavaNode extends ATreeNode<ClavaNode>
         implements DataClass<ClavaNode>, Copyable<ClavaNode>, StringProvider {
 
@@ -75,7 +64,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * Global object with information about the program.
-     * 
+     * <p>
      * TODO: Should this key be moved to another class?
      */
     public final static DataKey<ClavaContext> CONTEXT = KeyFactory.object("context", ClavaContext.class);
@@ -157,6 +146,22 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return "   ";
     }
 
+    /**
+     * Default implementation that tests IDs. If node is part of an AST, ID should uniquely identify it.
+     *
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ClavaNode clavaNode)) {
+            return false;
+        }
+
+        return get(ID).equals(clavaNode.get(ID));
+    }
+
+
     @Override
     public String getDataClassName() {
         return dataI.getName();
@@ -210,7 +215,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * An id that is stable across compilations and is based on the position of the node in the code.
-     * 
+     *
      * @return
      */
     public String getStableId() {
@@ -232,7 +237,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     * 
      * @return
      */
     public Optional<App> getAppTry() {
@@ -252,7 +256,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     *
      * @return true if the node is a 'wrapper' node. Examples of wrapper nodes: WrapperStmt
      */
     public boolean isWrapper() {
@@ -319,15 +322,12 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     * 
-     * @param keepId
-     *            if true, the id of the copy will be the same as the id of the original node
+     * @param keepId if true, the id of the copy will be the same as the id of the original node
      * @return
      */
     // public ClavaNode copy(boolean keepId) {
     // return copy(keepId, false);
     // }
-
     public ClavaNode copy(boolean keepId) {
         return copy(keepId, true);
     }
@@ -401,7 +401,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     *
      * @return a new list with the removed comments
      */
     public List<InlineComment> removeInlineComments() {
@@ -449,9 +448,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     * 
      * @return the CompoundStmt this node belongs to, or TranslationUnit if the scope is global. A node might not have
-     *         scope (e.g., if it is detached from the AST)
+     * scope (e.g., if it is detached from the AST)
      */
     public Optional<ClavaNode> getScope() {
         ClavaNode currentNode = this;
@@ -470,13 +468,12 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * Returns the DataStore associated with this node.
-     * 
+     *
      * <p>
      * Generically, it is not recommended that this method is used outside of ClavaNode classes. <br>
      * Instead, the method .get() / specific setters should be used. <br>
      * However, there might be situations where access to this object is needed (e.g., library operations).
-     * 
-     * 
+     *
      * @return the underlying DataStore of this node
      */
     protected DataStore getData() {
@@ -525,7 +522,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     * 
      * @return a ClavaFactory where the builders will use the data of this node as the base for new nodes.
      */
     public ClavaFactory getFactoryWithNode() {
@@ -538,7 +534,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * General getter for ClavaNode fields.
-     * 
+     *
      * @param key
      * @return
      */
@@ -562,11 +558,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * Tries to return a value from the DataStore.
-     * 
+     *
      * <p>
      * Does not use default values. If the key is not in the map, or there is no value mapped to the given key, returns
      * an empty Optional.
-     * 
+     *
      * @param key
      * @return
      */
@@ -576,10 +572,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * Generic method for setting values.
-     * 
+     *
      * <p>
      * If null is passed as value, removes current value associated with given key.
-     * 
+     *
      * @param key
      * @param value
      */
@@ -610,7 +606,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     * 
      * @param key
      * @return true, if it contains a non-null value for the given key, not considering default values
      */
@@ -630,7 +625,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * Helper method which disables sharing the same data object.
-     * 
+     *
      * @param keepId
      * @param nodeClass
      * @param children
@@ -642,13 +637,13 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * Creates a new node using the same data as this node.
-     * 
+     *
      * @param nodeClass
      * @param children
      * @return
      */
     public <T extends ClavaNode> T newInstance(boolean keepId, boolean shareData, Class<T> nodeClass,
-            List<ClavaNode> children) {
+                                               List<ClavaNode> children) {
 
         // System.out.println("NODE CLASS: " + nodeClass);
         // if (nodeClass.getSimpleName().equals("NullDecl")) {
@@ -743,7 +738,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * All keys that can potentially have ClavaNodes.
-     * 
+     *
      * @return
      */
     public List<DataKey<?>> getAllKeysWithNodes() {
@@ -926,11 +921,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * Copy the node, including nodes in fields.
-     * 
+     *
      * <p>
      * This function is not recursive, it only copies the first level of nodes it has in the fields (nodes in the fields
      * of the fields are not copied).
-     * 
+     *
      * @return
      */
 
@@ -1161,7 +1156,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * Deep copy node if it is a Type node, simple copy otherwise.
-     * 
+     *
      * @param value
      * @param keepId
      * @param copiedNodes
@@ -1222,10 +1217,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     * @deprecated
      * @param key
      * @param value
      * @return
+     * @deprecated
      */
     @Deprecated
     public <T, E extends T> ClavaNode setInPlace(DataKey<T> key, E value) {
@@ -1234,7 +1229,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * Keys that currently have nodes assigned.
-     * 
+     *
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -1327,7 +1322,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * A String that uniquely identifies the contents of this node.
-     * 
+     *
      * @return
      */
     public String getNodeSignature() {
@@ -1368,7 +1363,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * By default, returns empty.
-     * 
+     *
      * @return
      */
     public SpecsList<String> getSignatureCustomStrings() {
@@ -1382,7 +1377,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * If node is inside a StmtWithConditin (but not in a CompoundStmt), returns the statement.
-     * 
+     *
      * @return
      */
     public Optional<Stmt> getStmtWithConditionAncestor() {
@@ -1405,9 +1400,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     // }
 
     /**
-     * 
      * @return the children inside the scope declared by this node (e.g., body of a loop), or empty list if node does
-     *         not have a scope
+     * not have a scope
      */
     public List<ClavaNode> getScopeChildren() {
 
@@ -1421,11 +1415,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     * 
-     * 
      * @param classes
      * @return a list with the ancestors of the current node of the given classes. The top-most ancestor appears first
-     *         in the list
+     * in the list
      */
     public List<ClavaNode> getAncestors(Collection<Class<? extends ClavaNode>> classes) {
         var currentNode = this;
@@ -1520,6 +1512,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * Sets the key ORIGIN on this node and its descendents.
+     *
      * @param target
      */
     public void setOrigin(ClavaNode target) {
@@ -1534,7 +1527,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     *
      * @return the node set on the key ORIGIN, or itself if no origin is set
      */
     public ClavaNode getOrigin() {
