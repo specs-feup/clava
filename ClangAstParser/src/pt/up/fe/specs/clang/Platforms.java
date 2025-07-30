@@ -98,6 +98,9 @@ public class Platforms {
             }
         }
 
+        if (lastModified == null) {
+            throw new RuntimeException("Could not determine the most recent executable file in the build folder");
+        }
         SpecsLogs.msgInfo("Found more than 1 executable file in the build folder, choosing the most recent one: "
                 + lastModified.getAbsolutePath());
 

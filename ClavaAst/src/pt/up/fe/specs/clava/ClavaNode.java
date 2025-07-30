@@ -334,8 +334,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     public ClavaNode copy(boolean keepId, boolean copyChildren) {
 
-        get(CONTEXT).get(ClavaContext.METRICS).incrementNumCopies();
-
         // Re-implements ATreeNode copy, in order to specify if IDs should change or not
         // return super.copy();
 

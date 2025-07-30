@@ -66,6 +66,9 @@ public class MemoiReport implements java.io.Serializable {
                 report.mergeReport(tempReport, check);
             }
         }
+        if (report == null) {
+            throw new IllegalStateException("No reports found in the given file names: " + fileNames);
+        }
 
         report.makeStats();
         report.printStats();

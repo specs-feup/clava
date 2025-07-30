@@ -41,13 +41,8 @@ public class CxxArrayType extends AArrayType {
     }
 
     @Override
-    public void defElementTypeImpl(AType value) {
-        arrayType.setElementType((Type) value.getNode());
-    }
-
-    @Override
     public void setElementTypeImpl(AType arrayElementType) {
-        defElementTypeImpl(arrayElementType);
+        arrayType.setElementType((Type) arrayElementType.getNode());
     }
 
 }
