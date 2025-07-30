@@ -996,6 +996,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
+        JPFIELDSRECURSIVE("jpFieldsRecursive"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

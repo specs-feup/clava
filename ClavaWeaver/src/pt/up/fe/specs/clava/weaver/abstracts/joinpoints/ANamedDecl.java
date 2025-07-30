@@ -632,6 +632,15 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
+     * Get value on attribute jpFieldsRecursiveArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getJpFieldsRecursiveArrayImpl() {
+        return this.aDecl.getJpFieldsRecursiveArrayImpl();
+    }
+
+    /**
      * Get value on attribute jpId
      * @return the attribute's value
      */
@@ -1224,6 +1233,7 @@ public abstract class ANamedDecl extends ADecl {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
+        JPFIELDSRECURSIVE("jpFieldsRecursive"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

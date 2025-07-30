@@ -1171,6 +1171,15 @@ public abstract class AScope extends AStatement {
     }
 
     /**
+     * Get value on attribute jpFieldsRecursiveArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getJpFieldsRecursiveArrayImpl() {
+        return this.aStatement.getJpFieldsRecursiveArrayImpl();
+    }
+
+    /**
      * Get value on attribute jpId
      * @return the attribute's value
      */
@@ -1861,6 +1870,7 @@ public abstract class AScope extends AStatement {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
+        JPFIELDSRECURSIVE("jpFieldsRecursive"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

@@ -176,6 +176,9 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="originNode" type="joinpoint"
                    tooltip="If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin">
         </attribute>
+        <attribute name="jpFieldsRecursive" type="joinpoint[]"
+                   tooltip="List with the values of fields that are join points, recursively">
+        </attribute>
     </global>
 
 

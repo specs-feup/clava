@@ -718,6 +718,15 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
+     * Get value on attribute jpFieldsRecursiveArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getJpFieldsRecursiveArrayImpl() {
+        return this.aType.getJpFieldsRecursiveArrayImpl();
+    }
+
+    /**
      * Get value on attribute jpId
      * @return the attribute's value
      */
@@ -1374,6 +1383,7 @@ public abstract class ATemplateSpecializationType extends AType {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
+        JPFIELDSRECURSIVE("jpFieldsRecursive"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

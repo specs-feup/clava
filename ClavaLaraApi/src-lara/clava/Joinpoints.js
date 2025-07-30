@@ -140,6 +140,10 @@ export class Joinpoint extends LaraJoinPoint {
      */
     get javaFields() { return wrapJoinPoint(this._javaObject.getJavaFields()); }
     /**
+     * List with the values of fields that are join points, recursively
+     */
+    get jpFieldsRecursive() { return wrapJoinPoint(this._javaObject.getJpFieldsRecursive()); }
+    /**
      * Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)
      */
     get jpId() { return wrapJoinPoint(this._javaObject.getJpId()); }
