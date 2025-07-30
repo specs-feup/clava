@@ -81,6 +81,7 @@ task generateWeaver(type: JavaExec) {
         "-o", "./src",
         "-p", "pt.up.fe.specs.clava.weaver",
         "-n", "pt.up.fe.specs.clava.ClavaNode",
+        "-e",
         "-j",
         "-d",
     ]
