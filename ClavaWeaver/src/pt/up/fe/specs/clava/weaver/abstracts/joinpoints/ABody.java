@@ -762,12 +762,12 @@ public abstract class ABody extends AScope {
     }
 
     /**
-     * Get value on attribute jpFieldsRecursiveArrayImpl
+     * Get value on attribute jpFieldsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getJpFieldsRecursiveArrayImpl() {
-        return this.aScope.getJpFieldsRecursiveArrayImpl();
+    public AJoinPoint[] jpFieldsArrayImpl(Boolean recursive) {
+        return this.aScope.jpFieldsArrayImpl(recursive);
     }
 
     /**
@@ -1528,7 +1528,7 @@ public abstract class ABody extends AScope {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
-        JPFIELDSRECURSIVE("jpFieldsRecursive"),
+        JPFIELDS("jpFields"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

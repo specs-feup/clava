@@ -1493,12 +1493,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute jpFieldsRecursiveArrayImpl
+     * Get value on attribute jpFieldsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getJpFieldsRecursiveArrayImpl() {
-        return this.aPragma.getJpFieldsRecursiveArrayImpl();
+    public AJoinPoint[] jpFieldsArrayImpl(Boolean recursive) {
+        return this.aPragma.jpFieldsArrayImpl(recursive);
     }
 
     /**
@@ -2156,7 +2156,7 @@ public abstract class AOmp extends APragma {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
-        JPFIELDSRECURSIVE("jpFieldsRecursive"),
+        JPFIELDS("jpFields"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

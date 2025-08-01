@@ -636,12 +636,12 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * Get value on attribute jpFieldsRecursiveArrayImpl
+     * Get value on attribute jpFieldsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getJpFieldsRecursiveArrayImpl() {
-        return this.aExpression.getJpFieldsRecursiveArrayImpl();
+    public AJoinPoint[] jpFieldsArrayImpl(Boolean recursive) {
+        return this.aExpression.jpFieldsArrayImpl(recursive);
     }
 
     /**
@@ -1230,7 +1230,7 @@ public abstract class AUnaryExprOrType extends AExpression {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
-        JPFIELDSRECURSIVE("jpFieldsRecursive"),
+        JPFIELDS("jpFields"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

@@ -697,12 +697,12 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Get value on attribute jpFieldsRecursiveArrayImpl
+     * Get value on attribute jpFieldsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getJpFieldsRecursiveArrayImpl() {
-        return this.aCall.getJpFieldsRecursiveArrayImpl();
+    public AJoinPoint[] jpFieldsArrayImpl(Boolean recursive) {
+        return this.aCall.jpFieldsArrayImpl(recursive);
     }
 
     /**
@@ -1372,7 +1372,7 @@ public abstract class AMemberCall extends ACall {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
-        JPFIELDSRECURSIVE("jpFieldsRecursive"),
+        JPFIELDS("jpFields"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

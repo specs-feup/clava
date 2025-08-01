@@ -842,12 +842,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute jpFieldsRecursiveArrayImpl
+     * Get value on attribute jpFieldsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getJpFieldsRecursiveArrayImpl() {
-        return this.aLoop.getJpFieldsRecursiveArrayImpl();
+    public AJoinPoint[] jpFieldsArrayImpl(Boolean recursive) {
+        return this.aLoop.jpFieldsArrayImpl(recursive);
     }
 
     /**
@@ -1630,7 +1630,7 @@ public abstract class ACilkFor extends ALoop {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
-        JPFIELDSRECURSIVE("jpFieldsRecursive"),
+        JPFIELDS("jpFields"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

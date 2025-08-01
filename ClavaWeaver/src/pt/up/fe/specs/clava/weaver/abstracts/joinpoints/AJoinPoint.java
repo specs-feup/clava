@@ -816,7 +816,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("isInsideLoopHeader");
         attributes.add("isMacro");
         attributes.add("javaFields");
-        attributes.add("jpFieldsRecursive");
+        attributes.add("jpFields(Boolean recursive)");
         attributes.add("jpId");
         attributes.add("keys");
         attributes.add("lastChild");
@@ -2020,35 +2020,40 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute jpFieldsRecursive
-     * @return the attribute's value
+     * 
+     * @param recursive
+     * @return 
      */
-    public abstract AJoinPoint[] getJpFieldsRecursiveArrayImpl();
+    public abstract AJoinPoint[] jpFieldsArrayImpl(Boolean recursive);
 
     /**
-     * List with the values of fields that are join points, recursively
+     * 
+     * @param recursive
+     * @return 
      */
-    public Object getJpFieldsRecursiveImpl() {
-        AJoinPoint[] aJoinPointArrayImpl0 = getJpFieldsRecursiveArrayImpl();
+    public Object jpFieldsImpl(Boolean recursive) {
+        AJoinPoint[] aJoinPointArrayImpl0 = jpFieldsArrayImpl(recursive);
         Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
 
     /**
-     * List with the values of fields that are join points, recursively
+     * 
+     * @param recursive
+     * @return 
      */
-    public final Object getJpFieldsRecursive() {
+    public final Object jpFields(Boolean recursive) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "jpFieldsRecursive", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "jpFields", Optional.empty(), recursive);
         	}
-        	Object result = this.getJpFieldsRecursiveImpl();
+        	Object result = this.jpFieldsImpl(recursive);
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "jpFieldsRecursive", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "jpFields", Optional.ofNullable(result), recursive);
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "jpFieldsRecursive", e);
+        	throw new AttributeException(get_class(), "jpFields", e);
         }
     }
 

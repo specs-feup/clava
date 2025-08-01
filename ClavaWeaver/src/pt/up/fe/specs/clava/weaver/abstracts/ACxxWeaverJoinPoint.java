@@ -1421,7 +1421,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint[] getJpFieldsRecursiveArrayImpl() {
-        return CxxJoinpoints.create(getNode().getNodeFieldsRecursive(), AJoinPoint.class);
+    public AJoinPoint[] jpFieldsArrayImpl(Boolean recursive) {
+        if (recursive) {
+            return CxxJoinpoints.create(getNode().getNodeFieldsRecursive(), AJoinPoint.class);
+        }
+
+        return CxxJoinpoints.create(getNode().getNodeFields(), AJoinPoint.class);
     }
 }
