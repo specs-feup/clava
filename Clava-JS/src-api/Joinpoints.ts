@@ -272,10 +272,6 @@ export class Joinpoint extends LaraJoinPoint {
    */
   get javaFields(): string[] { return wrapJoinPoint(this._javaObject.getJavaFields()) }
   /**
-   * List with the values of fields that are join points, recursively
-   */
-  get jpFieldsRecursive(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getJpFieldsRecursive()) }
-  /**
    * Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)
    */
   get jpId(): string { return wrapJoinPoint(this._javaObject.getJpId()) }
@@ -409,6 +405,10 @@ export class Joinpoint extends LaraJoinPoint {
    * True, if the given join point or AST node is the same (== test) as the current join point AST node
    */
   hasNode(nodeOrJp: object): boolean { return wrapJoinPoint(this._javaObject.hasNode(unwrapJoinPoint(nodeOrJp))); }
+  /**
+   * List with the values of fields that are join points, recursively
+   */
+  jpFields(recursive: boolean = false): Joinpoint[] { return wrapJoinPoint(this._javaObject.jpFields(unwrapJoinPoint(recursive))); }
   /**
    * Performs a copy of the node and its children, but not of the nodes in its fields
    */
