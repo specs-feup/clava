@@ -43,7 +43,8 @@ public interface ClangAstWebResource {
     WebResourceProvider WIN_DLL1 = create("windows/libwinpthread-1.dll");
     WebResourceProvider WIN_DLL2 = create("windows/zlib1.dll");
 
-    WebResourceProvider LINUX_EXE = create("linux_ubuntu_18/clang_ast", "v12.0.7");
+    //WebResourceProvider LINUX_EXE = create("linux_ubuntu_18/clang_ast", "v12.0.7");
+    WebResourceProvider LINUX_EXE = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "clang_ast_ubuntu", "v12.0.7.1");
 
     // Disabled while we do not have an updated Odroid
     WebResourceProvider LINUX_ARMV7_EXE = create("linux_ubuntu_14_armv7/clang_ast", "v4.2.19");
