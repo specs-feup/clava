@@ -1,7 +1,7 @@
 plugins {
     id 'distribution'
-    id 'application' // Executable
-    id 'java' // Java project
+    id 'application'
+    id 'java'
 }
 
 java {
@@ -11,13 +11,6 @@ java {
     withSourcesJar()
 }
 
-application {
-    mainClass.set("pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher")
-
-    // For most input codes this is not necessary, but for the largest example we have tested (LSU-gcc, ~700.000 LoC)
-    // it needs a large amount of memory
-    //applicationDefaultJvmArgs = ["-Xmx6g"]
-}
 
 // Repositories providers
 repositories {
@@ -58,15 +51,6 @@ sourceSets {
             srcDir 'src'
         }
     }
-}
-
-// Clava
-task clava(type: JavaExec) {
-    group = "Execution"
-    description = "Launches Clava"
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = application.mainClass
-    args = []
 }
 
 // Re-run the weaver generator

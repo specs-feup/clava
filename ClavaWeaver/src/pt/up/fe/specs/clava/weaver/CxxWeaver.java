@@ -41,7 +41,6 @@ import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.collections.AccumulatorMap;
 import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.providers.ResourceProvider;
 import pt.up.fe.specs.util.utilities.Buffer;
 import pt.up.fe.specs.util.utilities.LineStream;
 import pt.up.fe.specs.util.utilities.StringLines;
@@ -1414,12 +1413,6 @@ public class CxxWeaver extends ACxxWeaver {
         SpecsIo.deleteOnExit(tempFolder);
 
         return tempFolder.getAbsoluteFile();
-    }
-
-    @Override
-    public ResourceProvider getIcon() {
-        // return () -> "cxxweaver/clava_icon_48x48.ico";
-        return () -> "clava/clava_icon_300dpi.png";
     }
 
     public Object getUserField(ClavaNode node, String fieldName) {
