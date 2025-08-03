@@ -20,7 +20,6 @@ export namespace ClavaJavaClasses {
   export interface MemoiReportsMap extends JavaClasses.JavaClass {}
   export interface MemoiCodeGen extends JavaClasses.JavaClass {}
   export interface ClavaPetit extends JavaClasses.JavaClass {}
-  export interface ClavaPlatforms extends JavaClasses.JavaClass {}
   export interface CxxWeaverOption extends JavaClasses.JavaClass {}
   export interface ClavaOptions extends JavaClasses.JavaClass {}
   export interface CodeParser extends JavaClasses.JavaClass {}
@@ -120,12 +119,6 @@ export default class ClavaJavaTypes {
     return JavaTypes.getType(
       "pt.up.fe.specs.clava.weaver.util.ClavaPetit"
     ) as ClavaJavaClasses.ClavaPetit;
-  }
-
-  static get ClavaPlatforms() {
-    return JavaTypes.getType(
-      "pt.up.fe.specs.clava.weaver.importable.ClavaPlatforms"
-    ) as ClavaJavaClasses.ClavaPlatforms;
   }
 
   static get CxxWeaverOption() {
