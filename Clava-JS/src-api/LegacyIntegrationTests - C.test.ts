@@ -278,10 +278,6 @@ describe("CApiTest", () => {
         await newTester().test("SelectorTest.js", "selector_test.c");
     });
 
-    it("Hls", async () => {
-        await newTester().test("HlsTest.js", "hls.c");
-    });
-
     it("StrcpyChecker", async () => {
         await newTester().test("StrcpyChecker.js", "strcpy.c");
     });

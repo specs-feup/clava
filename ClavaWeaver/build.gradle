@@ -36,7 +36,6 @@ dependencies {
     implementation ":AntarexClavaApi"
     implementation ":ClangAstParser"
     implementation ":ClavaAst"
-    implementation ":ClavaHls"
     implementation ":ClavaLaraApi"
 
     implementation group: 'com.google.guava', name: 'guava', version: '33.4.0-jre'
@@ -66,8 +65,7 @@ task generateWeaver(type: JavaExec) {
         "-p", "pt.up.fe.specs.clava.weaver",
         "-n", "pt.up.fe.specs.clava.ClavaNode",
         "-e",
-        "-j",
-        "-d",
+        "-j"
     ]
 }
 

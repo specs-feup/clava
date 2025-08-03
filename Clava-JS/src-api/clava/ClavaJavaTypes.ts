@@ -4,7 +4,7 @@ import JavaTypes, {
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ClavaJavaClasses {
-  /* eslint-disable @typescript-eslint/no-empty-interface */
+  /* eslint-disable @typescript-eslint/no-empty-object-type */
   export interface ClavaNodes extends JavaClasses.JavaClass {}
   export interface ClavaNode extends JavaClasses.JavaClass {}
   export interface CxxJoinpoints extends JavaClasses.JavaClass {}
@@ -16,7 +16,6 @@ export namespace ClavaJavaClasses {
   export interface AstFactory extends JavaClasses.JavaClass {}
   export interface ArgumentsParser extends JavaClasses.JavaClass {}
   export interface MathExtraApiTools extends JavaClasses.JavaClass {}
-  export interface HighLevelSynthesisAPI extends JavaClasses.JavaClass {}
   export interface MemoiReport extends JavaClasses.JavaClass {}
   export interface MemoiReportsMap extends JavaClasses.JavaClass {}
   export interface MemoiCodeGen extends JavaClasses.JavaClass {}
@@ -25,7 +24,7 @@ export namespace ClavaJavaClasses {
   export interface CxxWeaverOption extends JavaClasses.JavaClass {}
   export interface ClavaOptions extends JavaClasses.JavaClass {}
   export interface CodeParser extends JavaClasses.JavaClass {}
-  /* eslint-enable @typescript-eslint/no-empty-interface */
+  /* eslint-enable @typescript-eslint/no-empty-object-type */
 }
 
 /**
@@ -97,12 +96,6 @@ export default class ClavaJavaTypes {
     return JavaTypes.getType(
       "pt.up.fe.specs.clava.weaver.MathExtraApiTools"
     ) as ClavaJavaClasses.MathExtraApiTools;
-  }
-
-  static get HighLevelSynthesisAPI() {
-    return JavaTypes.getType(
-      "pt.up.fe.specs.clava.weaver.hls.HighLevelSynthesisAPI"
-    ) as ClavaJavaClasses.HighLevelSynthesisAPI;
   }
 
   static get MemoiReport() {
