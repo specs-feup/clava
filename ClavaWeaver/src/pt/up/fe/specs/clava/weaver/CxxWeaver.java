@@ -161,11 +161,6 @@ public class CxxWeaver extends ACxxWeaver {
     private CacheHandlerGear cacheHandlerGear = null;
 
     // Parsed program state
-    // private Deque<App> apps;
-    // private Deque<Map<ClavaNode, Map<String, Object>>> userValuesStack;
-
-    // private File outputDir = null;
-    // private List<File> originalSources = null;
     private List<File> currentSources = null;
     private Map<File, File> currentBases = null;
     private Map<File, String> sourceFoldernames = null;
@@ -173,13 +168,6 @@ public class CxxWeaver extends ACxxWeaver {
     private List<String> originalSourceFolders = null;
 
     private List<String> userFlags = null;
-    // private CxxJoinpoints jpFactory = null;
-
-    // private File baseFolder = null;
-    // private List<String> parserOptions = new ArrayList<>();
-
-    // private Logger infoLogger = null;
-    // private Level previousLevel = null;
 
     private Set<String> messagesToUser;
 
@@ -205,12 +193,6 @@ public class CxxWeaver extends ACxxWeaver {
         currentSources = new ArrayList<>();
         userFlags = null;
 
-        // baseFolder = null;
-        // parserOptions = new ArrayList<>();
-
-        // infoLogger = null;
-        // previousLevel = null;
-
         // Set, in order to filter repeated messages
         // Linked, to preserve order
         messagesToUser = null;
@@ -218,8 +200,6 @@ public class CxxWeaver extends ACxxWeaver {
         accMap = null;
 
         weaverData = null;
-
-        currentSources = new ArrayList<>();
     }
 
     public ClavaWeaverData getWeaverData() {
@@ -247,7 +227,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     private Map<ClavaNode, Map<String, Object>> getUserValues() {
         return weaverData.getUserValues();
-        // return userValuesStack.peek();
     }
 
     public boolean addMessageToUser(String message) {
@@ -340,9 +319,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     private List<String> buildParserOptions(DataStore args) {
         List<String> parserOptions = new ArrayList<>();
-
-        // Initialize list of options for parser
-        parserOptions = new ArrayList<>();
 
         // Add all source folders as include folders
         // Set<String> sourceIncludeFolders = getIncludeFlags(sources);
@@ -453,20 +429,14 @@ public class CxxWeaver extends ACxxWeaver {
                 .collect(Collectors.toList());
 
         // Add JSON argument flags
-        // flags.addAll(args.get(ClavaOptions.FLAGS_LIST));
         flags.addAll(args.get(ClavaOptions.FLAGS_LIST).getStringList());
 
         return flags;
     }
 
     public String getStdFlag() {
-        // String std = getStandard().getString();
-        //
-        // return "-std=" + std;
-
         Standard standard = args.get(ClavaOptions.STANDARD);
         return "-std=" + standard.getString();
-
     }
 
     public Standard getStandard() {
@@ -754,8 +724,6 @@ public class CxxWeaver extends ACxxWeaver {
         }
 
         return new ArrayList<>(adaptedSources);
-        // return sourceFiles.keySet().stream()
-        // .collect(Collectors.toList());
     }
 
     private static Optional<File> headerFlagToFile(String headerFlag) {
@@ -788,11 +756,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     public String getProgramName() {
         return getFirstSourceFolder(getSources()).getName();
-        // return getSources().stream()
-        // .findFirst()
-        // .map(File::getName)
-        // .orElse("C/C++ Program");
-        // return baseFolder.getName();
     }
 
     public File getWeavingFolder() {
@@ -802,13 +765,8 @@ public class CxxWeaver extends ACxxWeaver {
             ClavaLog.info("No name defined for the output folder, using default value 'output'");
             outputFoldername = "output";
         }
-        // System.out.println("OUTPUT FOLDER:" + args.get(LaraiKeys.OUTPUT_FOLDER));
-        // System.out.println("WOVEN CODE FOLDERNAME:" +
-        // args.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME));
-        // return SpecsIo.mkdir(outputDir,
-        // args.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME));
-        File outputFolder = SpecsIo.mkdir(args.get(LaraiKeys.OUTPUT_FOLDER), outputFoldername);
 
+        File outputFolder = SpecsIo.mkdir(args.get(LaraiKeys.OUTPUT_FOLDER), outputFoldername);
         return outputFolder;
     }
 
@@ -827,7 +785,6 @@ public class CxxWeaver extends ACxxWeaver {
             if (args.get(CxxWeaverOption.CHECK_SYNTAX)) {
                 SpecsLogs.msgInfo("Checking woven code syntax...");
                 rebuildAst(false);
-                // rebuildAst(true);
             }
 
             // Terminate weaver execution with final steps required and writing output files
@@ -864,14 +821,6 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Re-enable output
         if (args.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
-            // System.out.println("REENABLING CLAVA INFO FOR LOGGER " +
-            // SpecsLogs.getSpecsLogger());
-            /*
-             * Preconditions.checkNotNull(infoLogger);
-             * infoLogger.setLevel(previousLevel);
-             * infoLogger = null;
-             * previousLevel = null;
-             */
             SpecsLogs.getSpecsLogger().setLevelAll(null);
             ClavaLog.getLogger().setLevelAll(null);
         }
@@ -972,23 +921,6 @@ public class CxxWeaver extends ACxxWeaver {
     public void writeCode(File outputFolder) {
         // If copy files is enabled, first copy source files to output folder
         if (getConfig().get(CxxWeaverOption.COPY_FILES_IN_SOURCES)) {
-            // for (File source : getSources()) {
-            // // If file, just copy the file
-            // if (source.isFile()) {
-            // SpecsIo.copy(source, new File(outputFolder, source.getName()));
-            // continue;
-            // }
-            //
-            // if (source.isDirectory()) {
-            // File destFolder = SpecsIo.mkdir(outputFolder, source.getName());
-            // SpecsIo.copyFolderContents(source, destFolder);
-            // continue;
-            // }
-            //
-            // SpecsLogs.warn("Case not defined for source '" + source + "', is neither a
-            // file or a folder");
-            // }
-
             for (File source : currentSourceFolders) {
                 // If file, just copy the file
                 // if (source.isFile()) {
@@ -1178,11 +1110,6 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Delete current code folder
         SpecsIo.deleteFolder(currentCodeFolder);
-
-        // SpecsCheck.checkArgument(rebuiltApp.getTranslationUnits().size() == 1,
-        // () -> "Expected number of translation units to be 1, got " +
-        // rebuiltApp.getTranslationUnits().size()
-        // + ":\n" + rebuiltApp.getTranslationUnits());
 
         // After rebuilding, clear current app cache
         getApp().clearCache();
@@ -1458,12 +1385,7 @@ public class CxxWeaver extends ACxxWeaver {
     public void pushAst() {
         // Create a copy of app and push it
         App clonedApp = (App) getApp().copy(true);
-
-        // App newApp = getApp().pushAst();
-        // weaverData.pushAst(newApp);
         weaverData.pushAst(clonedApp);
-
-        // weaverData.pushAst(clonedApp);
     }
 
     public void pushAst(App app) {
@@ -1482,7 +1404,6 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public Integer nextId(String prefix) {
-
         return accMap.add(prefix);
     }
 
@@ -1523,16 +1444,6 @@ public class CxxWeaver extends ACxxWeaver {
         return includes;
     }
 
-    // public static String getRelativeFilepath(TranslationUnit tunit) {
-    // return
-    // tunit.getRelativeFilepath(CxxWeaver.getCxxWeaver().getBaseSourceFolder());
-    // }
-
-    // public static String getRelativeFolderpath(TranslationUnit tunit) {
-    // return
-    // tunit.getRelativeFolderpath(CxxWeaver.getCxxWeaver().getBaseSourceFolder());
-    // }
-
     public static ClavaFactory getFactory() {
         return getContex().get(ClavaContext.FACTORY);
     }
@@ -1569,21 +1480,6 @@ public class CxxWeaver extends ACxxWeaver {
         includeFolders.add(weavingFolder);
 
         return includeFolders;
-        /*
-         * boolean flattenFolders =
-         * getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
-         * 
-         * // For all Translation Units, collect new destination folders
-         * return getApp().getTranslationUnits().stream()
-         * // .map(tu -> new File(tu.getDestinationFolder(weavingFolder,
-         * flattenFolders),
-         * // tu.getRelativeFolderpath()))
-         * // Consider only header files
-         * .filter(tu -> onlyHeaders ? tu.isHeaderFile() : true)
-         * .map(tu -> tu.getDestinationFolder(weavingFolder, flattenFolders))
-         * .map(file -> SpecsIo.getCanonicalFile(file))
-         * .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
-         */
     }
 
     private Set<File> getExternalIncludeFolders() {
@@ -1594,79 +1490,17 @@ public class CxxWeaver extends ACxxWeaver {
 
     private Set<File> getAllIncludeFolders(File weavingFolder, Set<File> generatedFiles) {
         Set<File> includePaths = new LinkedHashSet<>();
-        // System.out.println("SOURCE INCLUDE FOLDERS: " +
-        // getSourceIncludeFolders(weavingFolder, true));
-        // System.out.println("EXTERNAL INCLUDE FOLDERS: " +
-        // getExternalIncludeFolders());
-        // System.out.println("GENERATED FILES: " + generatedFiles);
         includePaths.addAll(getSourceIncludeFolders(weavingFolder, true));
         includePaths.addAll(getExternalIncludeFolders());
 
-        /*
-         * if(!generatedFiles.isEmpty()) {
-         * // Get translation units that correspond to generated files
-         * getApp().getTranslationUnits();
-         * }
-         */
-
-        // System.out.println("INCLUDES BEFORE:" + includePaths);
         // Add includes to manually generated files
         generatedFiles.stream()
                 .filter(SourceType::isHeader)
                 .map(File::getParentFile)
                 .forEach(includePaths::add);
-        // .collect(Collectors.toList());
-        // System.out.println("INCLUDES AFTER:" + includePaths);
+
         return includePaths;
     }
-
-    /*
-     * 
-     * private Set<String> getIncludePaths(File weavingFolder) {
-     * Set<String> includePaths = new HashSet<>();
-     * 
-     * boolean flattenFolders =
-     * getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
-     * // System.out.println("FLATTEN FOLDERS:" + flattenFolders);
-     * // for (TranslationUnit tunit : getApp().getTranslationUnits()) {
-     * // System.out.println("TUNIT: " + tunit.getLocation());
-     * // System.out.println("DESTINATION FOLDER:" +
-     * tunit.getDestinationFolder(weavingFolder, flattenFolders));
-     * // System.out.println("Relative filepath:" + tunit.getRelativeFilepath());
-     * // System.out.println("Relative folderpath:" +
-     * tunit.getRelativeFolderpath());
-     * //
-     * // }
-     * 
-     * // For all Translation Units, collect new destination folders
-     * getApp().getTranslationUnits().stream()
-     * // .map(tu -> tu.getDestinationFolder(weavingFolder, flattenFolders))
-     * .map(tu -> new File(tu.getDestinationFolder(weavingFolder, flattenFolders),
-     * tu.getRelativeFolderpath()))
-     * .map(file -> SpecsIo.getCanonicalPath(file))
-     * .forEach(includePaths::add);
-     * 
-     * // getApp().getTranslationUnits().stream()
-     * // .map(tu -> SpecsIo.getCanonicalPath(new File(tu.getFolderpath())))
-     * // .forEach(includePaths::add);
-     * 
-     * getApp().getExternalDependencies().getExtraIncludes().stream()
-     * .map(SpecsIo::getCanonicalPath)
-     * .forEach(includePaths::add);
-     * 
-     * return includePaths;
-     * }
-     * 
-     */
-
-    /**
-     * Creates an empty App.
-     *
-     * @return
-     */
-    // private static App createEmptyApp(ClavaContext context) {
-    // return context.get(ClavaContext.FACTORY).app(Collections.emptyList());
-    // }
 
     /**
      * Normalizes key paths to be only files
@@ -1721,11 +1555,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public AstMethods getAstMethods() {
-        // var temp = getFactory().builtinType("int");
-        // temp.getChildren().stream()
-        // .filter(CxxWeaver::lclFilter)
-        // .collect(Collectors.toList());
-
         return new ClavaAstMethods(this, ClavaNode.class, node -> CxxJoinpoints.create(node),
                 node -> ClavaCommonLanguage.getJoinPointName(node), node -> node.getScopeChildren());
     }
