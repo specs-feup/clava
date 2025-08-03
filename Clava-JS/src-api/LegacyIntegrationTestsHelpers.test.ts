@@ -190,7 +190,7 @@ export class ClavaWeaverTester {
 
             javaWeaver.run(javaDatastore);
             await import(path.join(this.basePackage, laraResource));
-            javaWeaver.close();
+            javaWeaver.end();
         } finally {
             log.mockRestore();
 

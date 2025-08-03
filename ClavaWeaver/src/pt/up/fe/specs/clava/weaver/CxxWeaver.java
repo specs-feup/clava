@@ -244,7 +244,7 @@ public class CxxWeaver extends ACxxWeaver {
      * @return true if the file type is valid
      */
     @Override
-    public boolean begin(List<File> sources, File outputDir, DataStore args) {
+    protected boolean begin(List<File> sources, File outputDir, DataStore args) {
         this.args = args;
         this.weaverData = new ClavaWeaverData();
         this.accMap = new AccumulatorMap<>();
@@ -778,7 +778,7 @@ public class CxxWeaver extends ACxxWeaver {
      * @return if close was successful
      */
     @Override
-    public boolean close() {
+    protected boolean close() {
 
         // if (!args.get(CxxWeaverOption.DISABLE_WEAVING)) {
         // Process App files
