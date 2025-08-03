@@ -140,8 +140,6 @@ export class ClavaWeaverTester {
             out += "\n";
         });
 
-        this.set(JavaTypes.LaraiKeys.LOG_JS_OUTPUT);
-
         if (this.standard != null) {
             this.set(ClavaJavaTypes.ClavaOptions.STANDARD, this.standard);
         }

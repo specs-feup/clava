@@ -4,7 +4,7 @@ import path from "path";
 import "@specs-feup/clava/api/Joinpoints.js";
 
 /* eslint-disable jest/expect-expect */
-describe("CxxTest", () => {
+describe("IssuesTest", () => {
     function newTester() {
         return new ClavaWeaverTester(
             path.resolve("../ClavaWeaver/resources/clava/test/issues"),
