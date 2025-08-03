@@ -184,13 +184,14 @@ public class CxxWeaver extends ACxxWeaver {
         this.modifiedFilesGear = new ModifiedFilesGear();
         this.cacheHandlerGear = new CacheHandlerGear();
 
-        context = new ClavaContext();
-
         // Weaver configuration
         args = null;
-
-        // outputDir = null;
+        context = new ClavaContext();
         currentSources = new ArrayList<>();
+        currentBases = null;
+        sourceFoldernames = null;
+        currentSourceFolders = null;
+        originalSourceFolders = null;
         userFlags = null;
 
         // Set, in order to filter repeated messages
@@ -781,57 +782,58 @@ public class CxxWeaver extends ACxxWeaver {
 
         // if (!args.get(CxxWeaverOption.DISABLE_WEAVING)) {
         // Process App files
-        if (!getApp().getTranslationUnits().isEmpty()) {
-            if (args.get(CxxWeaverOption.CHECK_SYNTAX)) {
-                SpecsLogs.msgInfo("Checking woven code syntax...");
-                rebuildAst(false);
+        getAppTry().ifPresent(app -> {
+            if (!app.getTranslationUnits().isEmpty()) {
+                if (args.get(CxxWeaverOption.CHECK_SYNTAX)) {
+                    SpecsLogs.msgInfo("Checking woven code syntax...");
+                    rebuildAst(false);
+                }
+
+                // Terminate weaver execution with final steps required and writing output files
+
+                // Write output files if code generation is not disabled
+                if (!args.get(CxxWeaverOption.DISABLE_CODE_GENERATION)) {
+                    writeCode(getWeavingFolder());
+                }
+
+                // Write CMake helper files
+                if (args.get(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES)) {
+                    generateCmakerHelperFiles();
+                }
+
             }
-
-            // Terminate weaver execution with final steps required and writing output files
-
-            // Write output files if code generation is not disabled
-            if (!args.get(CxxWeaverOption.DISABLE_CODE_GENERATION)) {
-                writeCode(getWeavingFolder());
-            }
-
-            // Write CMake helper files
-            if (args.get(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES)) {
-                generateCmakerHelperFiles();
-            }
-
-        }
+        });
 
         /// Clean-up phase
 
-        // if (!SpecsSystem.isDebug()) {
         // Delete temporary weaving folder, if exists
         SpecsIo.deleteFolder(new File(TEMP_WEAVING_FOLDER));
 
         // Delete temporary source folder, if exists
         SpecsIo.deleteFolder(new File(TEMP_SRC_FOLDER));
 
-        // }
+        if (args != null) {
+            // Delete intermediary files
+            if (args.get(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES)) {
+                for (String tempFile : ClangAstDumper.getTempFiles()) {
+                    new File(tempFile).delete();
+                }
+            }
 
-        // Delete intermediary files
-        if (args.get(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES)) {
-            for (String tempFile : ClangAstDumper.getTempFiles()) {
-                new File(tempFile).delete();
+            // Re-enable output
+            if (args.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
+                SpecsLogs.getSpecsLogger().setLevelAll(null);
+                ClavaLog.getLogger().setLevelAll(null);
             }
         }
 
-        // Re-enable output
-        if (args.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
-            SpecsLogs.getSpecsLogger().setLevelAll(null);
-            ClavaLog.getLogger().setLevelAll(null);
-        }
-
-        if (!messagesToUser.isEmpty()) {
+        if ((messagesToUser != null) && !messagesToUser.isEmpty()) {
             ClavaLog.info(" - Messages -");
             messagesToUser.forEach(ClavaLog::info);
         }
 
         // Clear weaver data
-        weaverData = null;
+        reset();
 
         return true;
     }

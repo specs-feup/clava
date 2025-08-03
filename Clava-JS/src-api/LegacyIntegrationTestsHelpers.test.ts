@@ -1,8 +1,7 @@
-import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import JavaTypes, { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import ClavaJavaTypes, {
     ClavaJavaClasses,
 } from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
-import Clava from "@specs-feup/clava/api/clava/Clava.js";
 import Weaver from "@specs-feup/lara/api/weaver/Weaver.js";
 import fs from "fs";
 import util from "util";
@@ -13,6 +12,18 @@ describe("Dummy", () => {
     it("Dummy", () => {
         expect(true).toBe(true);
     });
+});
+
+afterAll(() => {
+    const javaWeaver = Weaver.getWeaverEngine();
+    const javaDatastore = javaWeaver.getData().get();
+
+    javaDatastore.set(
+      JavaTypes.LaraiKeys.WORKSPACE_FOLDER,
+      JavaTypes.FileList.newInstance()
+    );
+
+    javaWeaver.run(javaDatastore);
 });
 
 // eslint-disable-next-line jest/no-export
@@ -155,22 +166,33 @@ export class ClavaWeaverTester {
         //this.set(ClavaJavaTypes.ParallelCodeParser.PARALLEL_PARSING);
 
         try {
-            Clava.getProgram().push();
-            const program = Clava.getProgram();
-            for (const codeResource of codeResources) {
-                program.addFileFromPath(
-                    new JavaTypes.File(this.buildCodeResource(codeResource))
-                );
-            }
-            program.rebuild();
+            const javaFiles: JavaClasses.List<JavaClasses.File> = new JavaTypes.ArrayList();
 
+            for (const codeResource of codeResources) {
+                const javaFile = new JavaTypes.File(
+                    this.buildCodeResource(codeResource)
+                );
+                if (!fs.existsSync(javaFile.getAbsolutePath())) {
+                    throw new Error(
+                        `Code resource '${codeResource}' does not exist at '${javaFile.getAbsolutePath()}'.`
+                    );
+                }
+                javaFiles.add(javaFile);
+            }
+
+            const javaWeaver = Weaver.getWeaverEngine();
+            const javaDatastore = javaWeaver.getData().get();
+
+            javaDatastore.set(
+                JavaTypes.LaraiKeys.WORKSPACE_FOLDER,
+                JavaTypes.FileList.newInstance(javaFiles)
+            );
+
+            javaWeaver.run(javaDatastore);
             await import(path.join(this.basePackage, laraResource));
+            javaWeaver.close();
         } finally {
             log.mockRestore();
-
-            for (let i = Weaver.getWeaverEngine().getApp().getContext().getStackSize() -1; i > 0; i--) {
-                Clava.getProgram().pop();
-            }
 
             const datastore = Weaver.getWeaverEngine().getData().get();
             this.modifiedDatastoreSettings.forEach((value, key) => {

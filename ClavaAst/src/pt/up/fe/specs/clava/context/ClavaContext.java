@@ -56,6 +56,9 @@ public class ClavaContext extends ADataClass<ClavaContext> {
         // Set arguments
         set(ARGUMENTS, new HashMap<>());
 
+        // Set IDs generator
+        set(ID_GENERATOR, new IdGenerator());
+
         // Initialize factory
         set(FACTORY, new ClavaFactory(this));
 
