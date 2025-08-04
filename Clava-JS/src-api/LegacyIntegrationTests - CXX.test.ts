@@ -1,4 +1,4 @@
-import { ClavaWeaverTester } from "./LegacyIntegrationTestsHelpers.test.js";
+import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.js";
 import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import ClavaJavaTypes from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 import path from "path";
@@ -7,7 +7,7 @@ import "@specs-feup/clava/api/Joinpoints.js";
 /* eslint-disable jest/expect-expect */
 describe("CxxTest", () => {
     function newTester() {
-        return new ClavaWeaverTester(
+        return new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/weaver"),
             ClavaJavaTypes.Standard.CXX11
         )
@@ -308,7 +308,7 @@ describe("CxxTest", () => {
 
 describe("CxxBenchTest", () => {
     function newTester() {
-        return new ClavaWeaverTester(
+        return new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/bench/"),
             ClavaJavaTypes.Standard.CXX11
         )
@@ -342,7 +342,7 @@ describe("CxxBenchTest", () => {
 
 describe("CxxApiTest", () => {
     function newTester() {
-        return new ClavaWeaverTester(
+        return new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/api/"),
             ClavaJavaTypes.Standard.CXX11
         )
@@ -517,7 +517,7 @@ describe("CxxApiTest", () => {
 
 describe("CudaTest", () => {
     function newTester() {
-        const cudaTester = new ClavaWeaverTester(
+        const cudaTester = new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/weaver/"),
             ClavaJavaTypes.Standard.CUDA
         )

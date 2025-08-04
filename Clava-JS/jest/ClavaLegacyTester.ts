@@ -4,8 +4,7 @@ import ClavaJavaTypes, {
 
 import { WeaverLegacyTester } from "@specs-feup/lara/jest/WeaverLegacyTester.js";
 
-// eslint-disable-next-line jest/no-export
-export class ClavaWeaverTester extends WeaverLegacyTester {
+export class ClavaLegacyTester extends WeaverLegacyTester {
     protected readonly WORK_FOLDER: string = "cxx_weaver_output";
     private readonly standard: ClavaJavaClasses.Standard;
     private readonly compilerFlags: string;

@@ -1,4 +1,4 @@
-import { ClavaWeaverTester } from "./LegacyIntegrationTestsHelpers.test.js";
+import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.js";
 import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import ClavaJavaTypes from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 import path from "path";
@@ -7,7 +7,7 @@ import "@specs-feup/clava/api/Joinpoints.js";
 /* eslint-disable jest/expect-expect */
 describe("CTest", () => {
     function newTester() {
-        return new ClavaWeaverTester(
+        return new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/weaver/"),
             ClavaJavaTypes.Standard.C99
         )
@@ -197,7 +197,7 @@ describe("CTest", () => {
 
 describe("CBenchTest", () => {
     function newTester() {
-        return new ClavaWeaverTester(
+        return new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/bench/"),
             ClavaJavaTypes.Standard.C99
         )
@@ -222,7 +222,7 @@ describe("CBenchTest", () => {
 
 describe("CApiTest", () => {
     function newTester() {
-        return new ClavaWeaverTester(
+        return new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/api/"),
             ClavaJavaTypes.Standard.C99
         )

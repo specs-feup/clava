@@ -1,4 +1,4 @@
-import { ClavaWeaverTester } from "./LegacyIntegrationTestsHelpers.test.js";
+import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.js";
 import ClavaJavaTypes from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 import path from "path";
 import "@specs-feup/clava/api/Joinpoints.js";
@@ -6,7 +6,7 @@ import "@specs-feup/clava/api/Joinpoints.js";
 /* eslint-disable jest/expect-expect */
 describe("IssuesTest", () => {
     function newTester() {
-        return new ClavaWeaverTester(
+        return new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/issues"),
             ClavaJavaTypes.Standard.CXX11
         )
