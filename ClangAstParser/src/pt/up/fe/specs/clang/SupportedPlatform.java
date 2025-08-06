@@ -27,24 +27,19 @@ import pt.up.fe.specs.util.providers.StringProvider;
  * TODO: Rename to ClavaPlatform
  *
  * @author JoaoBispo
- *
  */
 public enum SupportedPlatform implements StringProvider {
 
     WINDOWS,
-    LINUX_4,
     LINUX_5,
-    LINUX_ARMV7,
     MAC_OS;
 
     private static final Lazy<EnumHelperWithValue<SupportedPlatform>> HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(SupportedPlatform.class);
 
-    // private static final int OLDER_LINUX_VERSION = 4;
 
     private static final double SUPPORTED_MAC_VERSION = 11.5;
-    private static final double SUPPORTED_LINUX_VERSION_HIGHER = 6;
-    private static final double SUPPORTED_LINUX_VERSION_LOWER = 4;
+    private static final double SUPPORTED_LINUX_VERSION = 5;
 
     public static EnumHelperWithValue<SupportedPlatform> getHelper() {
         return HELPER.get();
@@ -81,7 +76,6 @@ public enum SupportedPlatform implements StringProvider {
         // Linux
         if (SpecsPlatforms.isLinux()) {
             if (SpecsPlatforms.isLinuxArm()) {
-                // return LINUX_ARMV7;
                 throw new RuntimeException("ARM-based platforms are not currently supported");
             }
 
@@ -92,56 +86,17 @@ public enum SupportedPlatform implements StringProvider {
                 return LINUX_5;
             }
 
-            if (linuxMajorVersion == 4) {
-                return LINUX_4;
-            }
-
-            if (linuxMajorVersion == 5) {
+            if (linuxMajorVersion >= SUPPORTED_LINUX_VERSION) {
                 return LINUX_5;
             }
 
-            if (linuxMajorVersion > SUPPORTED_LINUX_VERSION_HIGHER) {
-                ClavaLog.info("Current major Linux version is " + linuxMajorVersion
-                        + ", only up to version " + SUPPORTED_LINUX_VERSION_HIGHER
-                        + " has been tested, running at your own risk");
-                return LINUX_5;
-            }
-
-            if (linuxMajorVersion < SUPPORTED_LINUX_VERSION_LOWER) {
-                ClavaLog.info("Current major Linux version is " + linuxMajorVersion
-                        + ", only down to version " + SUPPORTED_LINUX_VERSION_LOWER
-                        + " has been tested, running at your own risk");
-                return LINUX_4;
+            if (linuxMajorVersion < SUPPORTED_LINUX_VERSION) {
+                throw new RuntimeException("Current major Linux version is " + linuxMajorVersion + ", minimum version supported is " + SUPPORTED_LINUX_VERSION);
             }
 
         }
 
-        // CentOS 6
-        // if (System.getProperty("os.version").contains(".el6.")) {
-        // if (System.getProperty("os.version").contains(".el") || System.getProperty("os.version").contains(".fc")) {
-        // return LINUX_4;
-        // }
 
-        // Generic Linux (Debian-based)
-        // if (SpecsPlatforms.isLinux()) {
-        // if (SpecsPlatforms.isLinuxArm()) {
-        // return LINUX_ARMV7;
-        // }
-        //
-        // // If version 4 or below, use "older" compiled version, the same as CentOS
-        // var linuxVersion = System.getProperty("os.version");
-        // var dotIndex = linuxVersion.indexOf('.');
-        // if (dotIndex != -1) {
-        // var majorVersionString = linuxVersion.substring(0, dotIndex);
-        // var majorVersion = SpecsStrings.parseInteger(majorVersionString);
-        //
-        // if (majorVersion != null && majorVersion <= OLDER_LINUX_VERSION) {
-        // return LINUX_4;
-        // }
-        // }
-        //
-        // return LINUX_5;
-        // }
 
         throw new RuntimeException("Platform currently not supported: " + System.getProperty("os.name"));
     }
@@ -196,7 +151,7 @@ public enum SupportedPlatform implements StringProvider {
     }
 
     public boolean isLinux() {
-        return this == SupportedPlatform.LINUX_4 || this == MAC_OS || this == LINUX_5 || this == LINUX_ARMV7;
+        return this == MAC_OS || this == LINUX_5;
     }
 
     public String getName() {
