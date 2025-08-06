@@ -17,41 +17,38 @@ import pt.up.fe.specs.util.providers.WebResourceProvider;
 
 public interface ClangAstWebResource {
 
-    static WebResourceProvider create(String resourceUrl, String version) {
+    static WebResourceProvider create_old(String resourceUrl, String version) {
         return WebResourceProvider.newInstance("https://specs.fe.up.pt/resources/clangast/", resourceUrl, version);
     }
 
-    static WebResourceProvider create(String resourceUrl) {
+    static WebResourceProvider create_old(String resourceUrl) {
         return WebResourceProvider.newInstance("https://specs.fe.up.pt/resources/clangast/", resourceUrl);
     }
 
-    WebResourceProvider BUILTIN_INCLUDES = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "clang_builtin_includes_v12.0.1.zip", "v12.0.1");
 
-    // WebResourceProvider LIBC_CXX = create("libcxx_7.0.1.zip", "v1.0");
-    WebResourceProvider LIBC_CXX = create("libc_cxx.zip", "v12.0.1");
+    static WebResourceProvider create(String resourceUrl, String version) {
+        return WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/", resourceUrl, version);
+    }
 
-    // WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip", "v1.0");
-    WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip_", "v12.0.1");
+    static WebResourceProvider create(String resourceUrl) {
+        return create(resourceUrl, "1.0");
+    }
+
+    WebResourceProvider BUILTIN_INCLUDES = create("clang_ast_dumper_v12.0.7.1/clang_builtin_includes_v12.0.1.zip", "v12.0.1");
+
+    WebResourceProvider LIBC_CXX = create("clang_ast_dumper_v12.0.7.1/libc_cxx.zip", "v12.0.1");
+
+    WebResourceProvider LIBC_CXX_WINDOWS = create("clang_ast_dumper_v12.0.7.1/libc_cxx_windows.zip", "v12.0.1");
 
     // For some reason, on Linux, this file no longer downloads
-    WebResourceProvider CUDA_LIB = create("cudalib.zip_", "v11.3.0");
+    WebResourceProvider CUDA_LIB = create("clang_ast_dumper_v12.0.7.1/cudalib.zip", "v11.3.0");
 
-    // WebResourceProvider LIBC_CXX_MAC_OS = create("libc_cxx_mac_os.zip", "v1.0");
-    // WebResourceProvider LIBC_CXX_LINUX = create("libc_cxx_linux.zip", "v1.0");
-    // WebResourceProvider LIBC_CXX_CENTOS6 = create("libc_cxx_centos6.zip", "v1.0");
+    WebResourceProvider WIN_EXE = create("clang_ast_dumper_v12.0.7.1/clang_ast_windows.exe", "v12.0.7");
+    WebResourceProvider WIN_DLL1 = create("clang_ast_dumper_v12.0.7.1/libwinpthread-1.dll");
+    WebResourceProvider WIN_DLL2 = create("clang_ast_dumper_v12.0.7.1/zlib1.dll");
 
-    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v12.0.7");
-    WebResourceProvider WIN_DLL1 = create("windows/libwinpthread-1.dll");
-    WebResourceProvider WIN_DLL2 = create("windows/zlib1.dll");
+    WebResourceProvider LINUX_EXE = create("clang_ast_dumper_v12.0.7.1/clang_ast_ubuntu", "v12.0.7.1");
 
-    //WebResourceProvider LINUX_EXE = create("linux_ubuntu_18/clang_ast", "v12.0.7");
-    WebResourceProvider LINUX_EXE = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "clang_ast_ubuntu", "v12.0.7.1");
-
-    // Disabled while we do not have an updated Odroid
-    WebResourceProvider LINUX_ARMV7_EXE = create("linux_ubuntu_14_armv7/clang_ast", "v4.2.19");
-
-    WebResourceProvider CENTOS_EXE = create("centos8/clang_ast", "v12.0.7");
-
-    WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v12.0.7");
+    WebResourceProvider MAC_OS_EXE = create("clang_ast_dumper_v12.0.7.1/clang_ast_macos", "v12.0.7");
 
 }

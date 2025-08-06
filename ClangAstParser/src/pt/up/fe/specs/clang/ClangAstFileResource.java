@@ -23,15 +23,10 @@ public enum ClangAstFileResource implements Supplier<FileResourceProvider> {
     LIBC_CXX(ClangAstWebResource.LIBC_CXX),
     LIBC_CXX_WINDOWS(ClangAstWebResource.LIBC_CXX_WINDOWS),
     CUDA_LIB(ClangAstWebResource.CUDA_LIB),
-    // LIBC_CXX_MAC_OS(ClangAstWebResource.LIBC_CXX_MAC_OS),
-    // LIBC_CXX_LINUX(ClangAstWebResource.LIBC_CXX_LINUX),
-    // LIBC_CXX_CENTOS6(ClangAstWebResource.LIBC_CXX_CENTOS6),
     WIN_EXE(ClangAstWebResource.WIN_EXE),
     WIN_DLL1(ClangAstWebResource.WIN_DLL1),
     WIN_DLL2(ClangAstWebResource.WIN_DLL2),
     LINUX_EXE(ClangAstWebResource.LINUX_EXE),
-    LINUX_ARMV7_EXE(ClangAstWebResource.LINUX_ARMV7_EXE),
-    CENTOS_EXE(ClangAstWebResource.CENTOS_EXE),
     MAC_OS_EXE(ClangAstWebResource.MAC_OS_EXE);
 
     private final FileResourceProvider provider;

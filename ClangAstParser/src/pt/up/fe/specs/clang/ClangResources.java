@@ -1,26 +1,17 @@
 /**
  * Copyright 2018 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
  */
 
 package pt.up.fe.specs.clang;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
@@ -33,6 +24,11 @@ import pt.up.fe.specs.util.providers.FileResourceManager;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
 import pt.up.fe.specs.util.system.ProcessOutputAsString;
+
+import java.io.File;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class ClangResources {
 
@@ -217,19 +213,14 @@ public class ClangResources {
         }
 
         switch (platform) {
-        case WINDOWS:
-            return CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_EXE);
-        case LINUX_4:
-            return CLANG_AST_RESOURCES.get(ClangAstFileResource.CENTOS_EXE);
-        case LINUX_5:
-            return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_EXE);
-        case LINUX_ARMV7:
-            throw new RuntimeException("Platform Linux-ARMV7 not currently supported");
-        // return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_ARMV7_EXE);
-        case MAC_OS:
-            return CLANG_AST_RESOURCES.get(ClangAstFileResource.MAC_OS_EXE);
-        default:
-            throw new RuntimeException("Case not defined: '" + platform + "'");
+            case WINDOWS:
+                return CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_EXE);
+            case LINUX_5:
+                return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_EXE);
+            case MAC_OS:
+                return CLANG_AST_RESOURCES.get(ClangAstFileResource.MAC_OS_EXE);
+            default:
+                throw new RuntimeException("Case not defined: '" + platform + "'");
         }
     }
 
@@ -309,32 +300,15 @@ public class ClangResources {
     private boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode) {
 
         switch (libcMode) {
-        case AUTO:
-            return !hasLibC(clangExecutable);
-        case BUILTIN_AND_LIBC:
-            return true;
-        case BASE_BUILTIN_ONLY:
-            return false;
-        default:
-            throw new CaseNotDefinedException(libcMode);
+            case AUTO:
+                return !hasLibC(clangExecutable);
+            case BUILTIN_AND_LIBC:
+                return true;
+            case BASE_BUILTIN_ONLY:
+                return false;
+            default:
+                throw new CaseNotDefinedException(libcMode);
         }
-
-        // // If usePlatformIncludes is enabled, never use built-in includes
-        // if (usePlatformIncludes) {
-        // return false;
-        // }
-        //
-        // return !hasLibC(clangExecutable);
-        // return !usePlatformIncludes;
-        /*
-        // If platform includes is disabled, always use built-in headers
-        if (!usePlatformIncludes) {
-            return true;
-        }
-        
-        // If headers of both libc and libc++ are available, do not use built-in libc
-        return !hasLibC(clangExecutable);
-        */
     }
 
     private boolean hasLibC(File clangExecutable) {
@@ -356,17 +330,6 @@ public class ClangResources {
         }
 
         throw new RuntimeException("Unexpected value: '" + value + "'");
-
-        // Boolean.parseBoolean(CLANG_INCLUDES_FOLDERNAME)
-        // var hasLibC = HAS_LIBC.get();
-        //
-        // if (hasLibC != null) {
-        // return hasLibC;
-        // }
-        //
-        // hasLibC = detectLibC(clangExecutable);
-        // HAS_LIBC.set(hasLibC);
-        // return hasLibC;
     }
 
     /**
@@ -451,64 +414,12 @@ public class ClangResources {
         return SpecsSystem.runProcess(arguments, true, false);
     }
 
-    // private ProcessOutput<List<ClangNode>, DataStore> testFile(File clangExecutable, File testFolder,
-    // File testFile) {
-    //
-    // List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
-    // ClavaContext context = new ClavaContext();
-    // // System.out.println("ARGUMENTS: " + arguments);
-    // // System.out.println("CODE:\n" + SpecsIo.read(testFile.getAbsolutePath()));
-    // try (LineStreamParser<ClangParserData> clangStreamParser = ClangStreamParserV2.newInstance(context)) {
-    //
-    // var output2 = SpecsSystem.runProcess(arguments, true, false);
-    // // System.out.println("OUTPUT: " + output2);
-    //
-    // ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments,
-    // this::processOutput,
-    // inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
-    // clangStreamParser));
-    // // System.out.println("OUTPUT:\n" + output);
-    // return output;
-    //
-    // } catch (Exception e) {
-    // throw new RuntimeException("Error while testing include", e);
-    // }
-    // }
-
-    // public List<ClangNode> processOutput(InputStream inputStream) {
-    // return processOutput(inputStream, new File(CLANG_DUMP_FILENAME));
-    // }
-
-    // public List<ClangNode> processOutput(InputStream inputStream, File clangDumpFilename) {
-    // File dumpfile = dumpStdout | SpecsSystem.isDebug() ? clangDumpFilename : null;
-    //
-    // // Parse Clang output
-    // List<ClangNode> clangDump = new AstParser(dumpfile).parse(inputStream);
-    //
-    // return clangDump;
-    // }
-
-    // public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
-    // LineStreamParser<ClangParserData> lineStreamParser) {
-    //
-    // return processStdErr(clavaData, inputStream, lineStreamParser, new File(STDERR_DUMP_FILENAME));
-    // }
-
-    // public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
-    // LineStreamParser<ClangParserData> lineStreamParser, File stderrDumpFilename) {
-    //
-    // File dumpfile = SpecsSystem.isDebug() ? stderrDumpFilename : null;
-    //
-    // // Parse StdErr from ClangAst
-    // return new StreamParser(clavaData, dumpfile, lineStreamParser).parse(inputStream);
-    // }
-
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
         switch (platform) {
-        case WINDOWS:
-            return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
-        default:
-            return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
+            case WINDOWS:
+                return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
+            default:
+                return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
         }
         // return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
     }
