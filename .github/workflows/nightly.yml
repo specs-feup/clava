@@ -50,7 +50,7 @@ jobs:
 
       - name: Setup dependencies
         run: |
-          apt-get install libomp-dev
+          sudo apt-get install libomp-dev
 
       - name: Checkout Clava
         uses: actions/checkout@v4
