@@ -48,12 +48,6 @@ jobs:
           gradle-version: current
           dependency-graph: generate-and-submit
 
-      - name: Setup dependencies
-        run: |
-#          sudo apt-get install libomp-dev
-            # Create file to enable debug
-            touch debug
-
       - name: Checkout Clava
         uses: actions/checkout@v4
         with:
@@ -98,11 +92,13 @@ jobs:
       - name: Test ClangAstParser
         run: |
           cd clava/ClangAstParser
+          touch debug
           gradle test
           
       - name: Test ClavaWeaver
         run: |
           cd clava/ClavaWeaver
+          touch debug
           gradle test
         env:
           GITHUB_DEPENDENCY_GRAPH_ENABLED: false
