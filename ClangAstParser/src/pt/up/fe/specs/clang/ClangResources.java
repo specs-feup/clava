@@ -255,8 +255,13 @@ public class ClangResources {
         // Create list of include zips
         List<FileResourceProvider> includesZips = new ArrayList<>();
 
-        var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.BUILTIN_INCLUDES);
-        includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
+        // Only use built-in libc_cxx on Windows
+        // TODO: Redo useBuiltinLibc to reflect that only one file exists now
+        if (SupportedPlatform.getCurrentPlatform().isWindows()) {
+            var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.BUILTIN_INCLUDES);
+            includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
+
+        }
 
 /*
         // Check if built-in libc/c++ needs to be included
