@@ -252,29 +252,29 @@ public class ClangAstDumper {
             arguments.add(standard.isCxx() ? "c++" : "c");
         }
 
-        if (SpecsPlatforms.isLinux()) {
-            arguments.add(sourceFile.getAbsolutePath());
-        } else {
+//        if (SpecsPlatforms.isLinux()) {
+//            arguments.add(sourceFile.getAbsolutePath());
+//        } else {
 
-            List<String> systemIncludes = new ArrayList<>();
+        List<String> systemIncludes = new ArrayList<>();
 
-            // Add includes bundled with program
-            // (only on Windows, it is expected that a Linux system has its own headers for libc/libc++)
-            // if (Platforms.isWindows()) {
-            // systemIncludes.addAll(clangAstParser.prepareIncludes(clangExecutable, usePlatformLibc));
-            systemIncludes.addAll(builtinIncludes);
-            // }
+        // Add includes bundled with program
+        // (only on Windows, it is expected that a Linux system has its own headers for libc/libc++)
+        // if (Platforms.isWindows()) {
+        // systemIncludes.addAll(clangAstParser.prepareIncludes(clangExecutable, usePlatformLibc));
+        systemIncludes.addAll(builtinIncludes);
+        // }
 
-            // Add custom includes
-            systemIncludes.addAll(localData.get(LocalOptionsKeys.SYSTEM_INCLUDES).getStringList());
+        // Add custom includes
+        systemIncludes.addAll(localData.get(LocalOptionsKeys.SYSTEM_INCLUDES).getStringList());
 
-            // Add local system includes
-            // for (String systemInclude : localData.get(LocalOptionsKeys.SYSTEM_INCLUDES)) {
-            for (String systemInclude : systemIncludes) {
-                arguments.add("-isystem");
-                arguments.add(systemInclude);
-            }
+        // Add local system includes
+        // for (String systemInclude : localData.get(LocalOptionsKeys.SYSTEM_INCLUDES)) {
+        for (String systemInclude : systemIncludes) {
+            arguments.add("-isystem");
+            arguments.add(systemInclude);
         }
+        //      }
 
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
         // arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
