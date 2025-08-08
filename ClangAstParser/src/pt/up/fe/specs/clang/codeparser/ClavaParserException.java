@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clang.codeparser;
 
 import pt.up.fe.specs.clang.ClangFiles;
+import pt.up.fe.specs.util.SpecsSystem;
 
 import java.util.List;
 
@@ -49,8 +50,14 @@ public class ClavaParserException extends RuntimeException {
         if (errorsString.strip().isBlank()) {
             var clangExe = clangFiles.clangExecutable();
 
+            var clangExeExec = "";
+            if (clangExe.length() > 0) {
+                var output = SpecsSystem.runProcess(List.of(clangExe.getAbsolutePath(), "--version"), true, false);
+                clangExeExec = "\nDumper binary seems to have been correctly downloaded, message when executing it:'" + output.getOutput() + "'";
+            }
+
             errorsString = "\nNo error messages, check if dumper binary was correctly downloaded. Dumper file: "
-                    + clangExe.getAbsolutePath() + ", size (bytes): " + clangExe.length();
+                    + clangExe.getAbsolutePath() + ", size (bytes): " + clangExe.length() + clangExeExec;
         }
 
         errorMessage.append(errorsString);
