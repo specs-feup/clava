@@ -41,11 +41,14 @@ public class ClangResources {
     private final FileResourceManager clangAstResources;
     private final CodeParser options;
 
+    private final Map<LibcMode, List<String>> includesCache;
+
     private static final AtomicInteger HAS_LIBC = new AtomicInteger(-1);
 
     public ClangResources(CodeParser options) {
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
         this.options = options;
+        this.includesCache = new HashMap<>();
     }
 
     public ClangFiles getClangFiles(String version, LibcMode libcMode) {
@@ -216,6 +219,11 @@ public class ClangResources {
 
     private List<String> prepareIncludes(File clangExecutable, LibcMode libcMode) {
 
+        var cachedIncludes = includesCache.get(libcMode);
+        if (cachedIncludes != null) {
+            return cachedIncludes;
+        }
+
         // Use no built-ins
         /*
         if (libcMode == LibcMode.SYSTEM) {
@@ -264,14 +272,19 @@ public class ClangResources {
         List<String> includes = SpecsIo.getFolders(includesBaseFolder).stream()
                 .map(file -> file.getAbsolutePath())
                 .collect(Collectors.toList());
-        System.out.println("INCLUDES: " + includes);
+
+
         // Sort them alphabetically, include order can be important
         Collections.sort(includes);
+        SpecsLogs.debug(() -> "Includes folders: " + includes);
 
         // If on linux, make folders and files accessible to all users
         if (SupportedPlatform.getCurrentPlatform().isLinux()) {
             SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", resourceFolder.getAbsolutePath()), false, true);
         }
+
+        // Cache includes
+        includesCache.put(libcMode, includes);
 
         return includes;
     }

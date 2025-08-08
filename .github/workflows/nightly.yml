@@ -48,6 +48,10 @@ jobs:
           gradle-version: current
           dependency-graph: generate-and-submit
 
+      - name: Setup dependencies
+        run: |
+          apt-get install libomp-dev
+
       - name: Checkout Clava
         uses: actions/checkout@v4
         with:
