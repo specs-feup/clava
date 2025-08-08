@@ -92,13 +92,13 @@ jobs:
       - name: Test ClangAstParser
         run: |
           cd clava/ClangAstParser
-          touch debug
+#         touch debug
           gradle test
           
       - name: Test ClavaWeaver
         run: |
           cd clava/ClavaWeaver
-          touch debug
+#         touch debug
           gradle test
         env:
           GITHUB_DEPENDENCY_GRAPH_ENABLED: false
