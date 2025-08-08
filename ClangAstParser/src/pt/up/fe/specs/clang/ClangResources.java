@@ -217,9 +217,11 @@ public class ClangResources {
     private List<String> prepareIncludes(File clangExecutable, LibcMode libcMode) {
 
         // Use no built-ins
+        /*
         if (libcMode == LibcMode.SYSTEM) {
             return Collections.emptyList();
         }
+         */
         // Should not use basic includes if mode is System?
         // if (usePlatformIncludes) {
         // return Collections.emptyList();
@@ -283,6 +285,8 @@ public class ClangResources {
             case BUILTIN_AND_LIBC:
             case BASE_BUILTIN_ONLY:
                 return true;
+            case SYSTEM:
+                return false;
             default:
                 throw new CaseNotDefinedException(libcMode);
         }
