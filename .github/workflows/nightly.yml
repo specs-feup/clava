@@ -50,7 +50,9 @@ jobs:
 
       - name: Setup dependencies
         run: |
-          sudo apt-get install libomp-dev
+#          sudo apt-get install libomp-dev
+            # Create file to enable debug
+            touch debug
 
       - name: Checkout Clava
         uses: actions/checkout@v4
