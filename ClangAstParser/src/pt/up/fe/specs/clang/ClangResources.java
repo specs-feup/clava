@@ -72,12 +72,12 @@ public class ClangResources {
 
         if (localClangFiles != null) {
             ClavaLog.info("Using local version of ClangAstDumper ("
-                    + localClangFiles.getClangExecutable().getAbsolutePath()
+                    + localClangFiles.clangExecutable().getAbsolutePath()
                     + "). Option 'use platform includes' will be ignored");
 
             // Store in cache
             clangFilesCache.put(key, localClangFiles);
-
+            SpecsLogs.info("Using local version of Clang files: " + localClangFiles);
             return localClangFiles;
         }
 
@@ -85,6 +85,7 @@ public class ClangResources {
         List<String> builtinIncludes = prepareIncludes(clangExecutable, libcMode);
 
         var newFiles = new ClangFiles(clangExecutable, builtinIncludes);
+        SpecsLogs.info("Using downloaded version of Clang files: " + newFiles);
 
         // Store in cache
         clangFilesCache.put(key, newFiles);

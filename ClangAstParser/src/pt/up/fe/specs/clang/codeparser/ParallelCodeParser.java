@@ -1,11 +1,11 @@
 /**
  * Copyright 2018 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,25 +13,9 @@
 
 package pt.up.fe.specs.clang.codeparser;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
-
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.LibcMode;
@@ -53,12 +37,20 @@ import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.SpecsSystem;
 
+import java.io.File;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
+
 /**
  * Calls the dumper once per file.
  * <p>
  * This allows parallelization of the parsing (e.g., one process per compilation file) and compilation of header files
  * and mixed compilation (e.g., C + OpenCL).
- * 
+ *
  * @author JoaoBispo
  *
  */
@@ -153,7 +145,7 @@ public class ParallelCodeParser extends CodeParser {
 
             Future<ClangAstData> tUnit = executor
                     .submit(() -> parseSource(source, id, standard, options, clangDump,
-                            counter, parsingFolder, clangFiles.getClangExecutable(), clangFiles.getBuiltinIncludes()));
+                            counter, parsingFolder, clangFiles.clangExecutable(), clangFiles.builtinIncludes()));
 
             futureTUnits.add(tUnit);
 
@@ -369,8 +361,8 @@ public class ParallelCodeParser extends CodeParser {
     }
 
     private ClangAstData parseSource(File sourceFile, String id, Standard standard, DataStore options,
-            ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
-            File clangExecutable, List<String> builtinIncludes) {
+                                     ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
+                                     File clangExecutable, List<String> builtinIncludes) {
 
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
 
@@ -383,8 +375,8 @@ public class ParallelCodeParser extends CodeParser {
 
         ClangAstDumper clangParser = new ClangAstDumper(streamConsoleOutput, clangExecutable, builtinIncludes,
                 this)
-                        .setBaseFolder(parsingFolder)
-                        .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
+                .setBaseFolder(parsingFolder)
+                .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
 
         // .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
@@ -444,7 +436,7 @@ public class ParallelCodeParser extends CodeParser {
 
     /**
      * Collects all source folders, taking into account given sources to compile, and include folders in flags.
-     * 
+     *
      * @param sources
      * @param parserOptions
      * @return
