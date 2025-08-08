@@ -158,6 +158,26 @@ public class ClangResources {
             }
         }
 
+        // If on Windows, preemptively unblock file, due to possible Mark-of-the-Web restrictions
+        if (platform.isWindows()) {
+            var command = List.of(SpecsSystem.getWindowsPowershell(), "-NoLogo", "-NoProfile", "-NonInteractive",
+                    "-ExecutionPolicy", "Bypass",
+                    "-Command",
+                    "Unblock-File",
+                    "-Path",
+                    "\"" + executable.getFile().getAbsolutePath() + "\"",
+                    "-ErrorAction",
+                    "Stop"
+            );
+
+            var output = SpecsSystem.runProcess(command, true, true);
+            if (output.getReturnValue() == 0) {
+                SpecsLogs.info("Successfully unblocked dumper executable");
+            } else {
+                SpecsLogs.info("Could not unblock dumper executable");
+            }
+        }
+
         // If file is new and we are in a flavor of Linux, make file executable
         if (executable.isNewFile() && platform.isLinux()) {
             SpecsSystem.runProcess(Arrays.asList("chmod", "+x", executable.getFile().getAbsolutePath()), false, true);
