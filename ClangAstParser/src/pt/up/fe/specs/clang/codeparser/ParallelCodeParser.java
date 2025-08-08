@@ -218,7 +218,7 @@ public class ParallelCodeParser extends CodeParser {
                     .map(data -> data.get(ClangAstData.LINES_NOT_PARSED))
                     .collect(Collectors.toList());
 
-            throw new ClavaParserException(errors);
+            throw new ClavaParserException(errors, clangFiles);
         }
 
         tic = System.nanoTime();
