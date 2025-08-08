@@ -173,7 +173,7 @@ public class ClangAstDumper {
 
             arguments.add("--");
         }
-        
+
         var extension = SpecsIo.getExtension(sourceFile);
         boolean isOpenCL = extension.equals("cl");
         boolean isCuda = extension.equals("cu");
@@ -234,6 +234,9 @@ public class ClangAstDumper {
                 ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
                 arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
             }
+
+            // Since we only need parsing, enable host-only
+            arguments.add("--cuda-host-only");
 
         }
         // If header file, add the language flag (-x) that corresponds to the standard
