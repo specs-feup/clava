@@ -22,9 +22,7 @@ public interface ClangAstWebResource {
 
     WebResourceProvider BUILTIN_INCLUDES = WebResourceProvider.newInstance(ROOT_16_0_5, "libc_cxx.zip", "v16.0.5");
 
-    //WebResourceProvider LIBC_CXX = WebResourceProvider.newInstance(ROOT_16_0_5, "libc_cxx.zip", "v14.0.6");
-
-    //WebResourceProvider LIBC_CXX_WINDOWS = WebResourceProvider.newInstance(ROOT_16_0_5, "libc_cxx.zip", "v14.0.6");
+    WebResourceProvider OPENMP_INCLUDES = WebResourceProvider.newInstance(ROOT_16_0_5, "openmp_includes.zip");
 
     WebResourceProvider CUDA_LIB = WebResourceProvider.newInstance(ROOT_12_0_7, "cudalib.zip", "v11.3.0");
 

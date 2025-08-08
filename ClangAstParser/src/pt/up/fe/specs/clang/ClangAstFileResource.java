@@ -20,8 +20,7 @@ import java.util.function.Supplier;
 public enum ClangAstFileResource implements Supplier<FileResourceProvider> {
 
     BUILTIN_INCLUDES(ClangAstWebResource.BUILTIN_INCLUDES),
-    //LIBC_CXX(ClangAstWebResource.LIBC_CXX),
-    //LIBC_CXX_WINDOWS(ClangAstWebResource.LIBC_CXX_WINDOWS),
+    OPENMP_INCLUDES(ClangAstWebResource.OPENMP_INCLUDES),
     CUDA_LIB(ClangAstWebResource.CUDA_LIB),
     WIN_EXE(ClangAstWebResource.WIN_EXE),
     WIN_DLL1(ClangAstWebResource.WIN_DLL1),

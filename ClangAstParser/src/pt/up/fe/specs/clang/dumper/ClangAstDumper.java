@@ -236,6 +236,7 @@ public class ClangAstDumper {
             }
 
             // Since we only need parsing, enable host-only
+            // Can help with errors such as "__float128 is not supported on this target"
             arguments.add("--cuda-host-only");
 
         }

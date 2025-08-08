@@ -35,19 +35,15 @@ public class ClangResources {
     private static final FileResourceManager CLANG_AST_RESOURCES = FileResourceManager
             .fromEnum(ClangAstFileResource.class);
 
-    // private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
-    // private final static String STDERR_DUMP_FILENAME = "stderr.txt";
     private final static String CLANG_FOLDERNAME = "clang_ast_exe";
     private final static String CLANG_INCLUDES_FOLDERNAME = "clang_includes";
 
-    // private final boolean dumpStdout;
     private final FileResourceManager clangAstResources;
     private final CodeParser options;
 
     private static final AtomicInteger HAS_LIBC = new AtomicInteger(-1);
 
     public ClangResources(CodeParser options) {
-        // this.dumpStdout = dumpStdout;
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
         this.options = options;
     }
@@ -148,21 +144,6 @@ public class ClangResources {
         return executable.getFile();
     }
 
-    /*
-    private FileResourceProvider getVersionedExecutableResource(String version, SupportedPlatform platform) {
-        FileResourceProvider executableResource = getExecutableResource(platform);
-    
-        // If version not defined, use the latest version of the resource
-        if (version.isEmpty()) {
-            version = executableResource.getVersion();
-        }
-    
-        // ClangAst executable versions are separated by an underscore
-        executableResource = executableResource.createResourceVersion("_" + version);
-        return executableResource;
-    }
-    */
-
     private FileResourceProvider getVersionedResource(FileResourceProvider resource) {
         return getVersionedResource(resource, "");
     }
@@ -231,9 +212,6 @@ public class ClangResources {
         windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_LLVM_DLL));
 
         return windowsResources;
-        // clangAstResources.get(resourceEnum)
-        //
-        // return Arrays.asList(WIN_DLL1, WIN_DLL2, WIN_DLL3);
     }
 
     private List<String> prepareIncludes(File clangExecutable, LibcMode libcMode) {
@@ -255,30 +233,20 @@ public class ClangResources {
         // Create list of include zips
         List<FileResourceProvider> includesZips = new ArrayList<>();
 
-        // Only use built-in libc_cxx on Windows
-        // TODO: Redo useBuiltinLibc to reflect that only one file exists now
-        if (SupportedPlatform.getCurrentPlatform().isWindows()) {
+        // Get libc_libcxx, if required
+        if (useBuiltinLibc(clangExecutable, libcMode)) {
             var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.BUILTIN_INCLUDES);
             includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
 
         }
 
-/*
-        // Check if built-in libc/c++ needs to be included
-        if (useBuiltinLibc(clangExecutable, libcMode)) {
-            var libcResource = getVersionedResource(getLibCResource(SupportedPlatform.getCurrentPlatform()));
-            includesZips.add(libcResource);
-            // includesZips.add(getLibCResource(SupportedPlatform.getCurrentPlatform()));
-        }
-*/
+        // Always add OpenMP includes
+        includesZips.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.OPENMP_INCLUDES));
 
         // Download includes zips, check if any of them is new
         List<ResourceWriteData> zipFiles = includesZips.stream()
                 .map(resource -> resource.writeVersioned(resourceFolder, ClangResources.class))
                 .collect(Collectors.toList());
-        // .filter(resourceOutput -> resourceOutput.isNewFile())
-        // .findAny()
-        // .isPresent();
 
         // If a new file has been written, delete includes folder, and extract all zips again
         // Extracting all because zips might have several folders and we are not determining which should be updated
@@ -311,10 +279,10 @@ public class ClangResources {
         switch (libcMode) {
             case AUTO:
                 return !hasLibC(clangExecutable);
+            // Builtin and libc/libcxx are now merged in the same zip
             case BUILTIN_AND_LIBC:
-                return true;
             case BASE_BUILTIN_ONLY:
-                return false;
+                return true;
             default:
                 throw new CaseNotDefinedException(libcMode);
         }
@@ -389,18 +357,7 @@ public class ClangResources {
             var topLevelNodesHeader = TopLevelNodesParser.getTopLevelNodesHeader();
 
             var foundInclude = output.getOutput().contains(topLevelNodesHeader);
-            /*
-            ProcessOutput<List<ClangNode>, DataStore> output = testFile(clangExecutable, clangTest, testFile);
-            
-            boolean foundInclude = output.getReturnValue() == 0;
-            
-            if (foundInclude) {
-                SpecsCheck.checkArgument(output.getStdOut().isEmpty(),
-                        () -> "Expected std output to be empty: " + output.getStdOut());
-                SpecsCheck.checkArgument(output.getStdErr().get(StreamKeys.WARNINGS).isEmpty(),
-                        () -> "Expected err output to be empty: " + output.getStdErr().get(StreamKeys.WARNINGS));
-            }
-            */
+
             if (!foundInclude) {
                 needsLib = true;
                 break;
@@ -422,18 +379,6 @@ public class ClangResources {
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
         return SpecsSystem.runProcess(arguments, true, false);
     }
-
-    /*
-    private FileResourceProvider getLibCResource(SupportedPlatform platform) {
-        switch (platform) {
-            case WINDOWS:
-                return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
-            default:
-                return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
-        }
-        // return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
-    }
-     */
 
     public static File getBuiltinCudaLib() {
         var fileResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.CUDA_LIB);
