@@ -21,6 +21,7 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
+import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.FileResourceManager;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
@@ -28,6 +29,7 @@ import pt.up.fe.specs.util.system.ProcessOutputAsString;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -36,20 +38,22 @@ public class ClangResources {
     private static final FileResourceManager CLANG_AST_RESOURCES = FileResourceManager
             .fromEnum(ClangAstFileResource.class);
 
+    private static final Map<String, ClangFiles> CLANG_FILES_CACHE = new ConcurrentHashMap<>();
+
     private final static String CLANG_FOLDERNAME = "clang_ast_exe";
     private final static String CLANG_INCLUDES_FOLDERNAME = "clang_includes";
+
+    private final static Lazy<File> CUDALIB_FOLDER = Lazy.newInstance(ClangResources::prepareBuiltinCudaLib);
 
     private final FileResourceManager clangAstResources;
     private final CodeParser options;
 
-    private final Map<String, ClangFiles> clangFilesCache;
 
     private static final AtomicInteger HAS_LIBC = new AtomicInteger(-1);
 
     public ClangResources(CodeParser options) {
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
         this.options = options;
-        this.clangFilesCache = new HashMap<>();
     }
 
     public ClangFiles getClangFiles(String version, LibcMode libcMode) {
@@ -58,7 +62,7 @@ public class ClangResources {
         var key = libcMode.name() + "_" + version;
 
         // Check if cached
-        var files = clangFilesCache.get(key);
+        var files = CLANG_FILES_CACHE.get(key);
         if (files != null) {
             return files;
         }
@@ -76,7 +80,7 @@ public class ClangResources {
                     + "). Option 'use platform includes' will be ignored");
 
             // Store in cache
-            clangFilesCache.put(key, localClangFiles);
+            CLANG_FILES_CACHE.put(key, localClangFiles);
             SpecsLogs.info("Using local version of Clang files: " + localClangFiles);
             return localClangFiles;
         }
@@ -88,7 +92,7 @@ public class ClangResources {
         SpecsLogs.info("Using downloaded version of Clang files: " + newFiles);
 
         // Store in cache
-        clangFilesCache.put(key, newFiles);
+        CLANG_FILES_CACHE.put(key, newFiles);
 
         return newFiles;
     }
@@ -415,6 +419,10 @@ public class ClangResources {
     }
 
     public static File getBuiltinCudaLib() {
+        return CUDALIB_FOLDER.get();
+    }
+
+    private static File prepareBuiltinCudaLib() {
         var fileResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.CUDA_LIB);
         var resourceFolder = getClangResourceFolder();
         var cudalibFolder = SpecsIo.mkdir(new File(resourceFolder, "cudalib"));
