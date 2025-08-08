@@ -176,26 +176,26 @@ target_link_libraries( tool
     LLVMWindowsManifest
     LLVMXRay
     LLVMLibDriver
-    LLVMDlltoolDriver
+    #LLVMDlltoolDriver
     LLVMCoverage
     #LLVMLineEditor
-    LLVMXCoreDisassembler
-    LLVMXCoreCodeGen
-    LLVMXCoreDesc
-    LLVMXCoreInfo
+    #LLVMXCoreDisassembler
+    #LLVMXCoreCodeGen
+    #LLVMXCoreDesc
+    #LLVMXCoreInfo
     LLVM${PROCESSOR_PREFIX}Disassembler
     LLVM${PROCESSOR_PREFIX}AsmParser
     LLVM${PROCESSOR_PREFIX}CodeGen
     LLVM${PROCESSOR_PREFIX}Desc
     LLVM${PROCESSOR_PREFIX}Info
-    LLVMARMUtils
-    LLVMAArch64Utils
+    #LLVMARMUtils
+    #LLVMAArch64Utils
     LLVMOrcJIT
     LLVMMCJIT
     LLVMJITLink
-    LLVMOrcTargetProcess
-    LLVMOrcShared
-    LLVMInterpreter
+    #LLVMOrcTargetProcess
+    #LLVMOrcShared
+    #LLVMInterpreter
     LLVMExecutionEngine
     LLVMRuntimeDyld
     LLVMSymbolize
@@ -203,10 +203,10 @@ target_link_libraries( tool
     LLVMDebugInfoGSYM
     LLVMOption
     LLVMObjectYAML
-    LLVMMCA
-    LLVMMCDisassembler
+    #LLVMMCA
+    #LLVMMCDisassembler
     LLVMLTO
-    LLVMPasses
+    #LLVMPasses
     LLVMCFGuard
     LLVMCoroutines
     LLVMObjCARCOpts
@@ -220,35 +220,35 @@ target_link_libraries( tool
     LLVMDWARFLinker
     LLVMGlobalISel
     LLVMMIRParser
-    LLVMAsmPrinter
+    #LLVMAsmPrinter
     LLVMDebugInfoDWARF
     LLVMSelectionDAG
     LLVMCodeGen
     LLVMIRReader
-    LLVMAsmParser
+    #LLVMAsmParser
     LLVMInterfaceStub
     LLVMFileCheck
     LLVMFuzzMutate
     LLVMTarget
-    LLVMScalarOpts
-    LLVMInstCombine
-    LLVMAggressiveInstCombine
+    #LLVMScalarOpts
+    #LLVMInstCombine
+    #LLVMAggressiveInstCombine
     LLVMTransformUtils
     LLVMBitWriter
     LLVMAnalysis
-    LLVMProfileData
+    #LLVMProfileData
     LLVMObject
-    LLVMTextAPI
-    LLVMMCParser
-    LLVMMC
-    LLVMDebugInfoCodeView
-    LLVMDebugInfoMSF
-    LLVMBitReader
-    LLVMCore
-    LLVMRemarks
-    LLVMBitstreamReader
-    LLVMBinaryFormat
-    LLVMTableGen
-    LLVMSupport
-    LLVMDemangle
+    #LLVMTextAPI
+    #LLVMMCParser
+    #LLVMMC
+    #LLVMDebugInfoCodeView
+    #LLVMDebugInfoMSF
+    #LLVMBitReader
+    #LLVMCore
+    #LLVMRemarks
+    #LLVMBitstreamReader
+    #LLVMBinaryFormat
+    #LLVMTableGen
+    #LLVMSupport
+    #LLVMDemangle
 )
