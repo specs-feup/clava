@@ -1,11 +1,11 @@
 /**
  * Copyright 2018 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,16 +13,9 @@
 
 package pt.up.fe.specs.clang.dumper;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
-
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.cilk.CilkParser;
@@ -45,12 +38,16 @@ import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
 import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
 
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
- * 
- * 
- * @author JoaoBispo
  *
+ * @author JoaoBispo
  */
 public class ClangAstDumper {
 
@@ -88,7 +85,7 @@ public class ClangAstDumper {
 
     /**
      * TODO: Replace some of the arguments with reads to CodeParser?
-     * 
+     *
      * @param dumpStdOut
      * @param useCustomResources
      * @param streamConsoleOutput
@@ -97,7 +94,7 @@ public class ClangAstDumper {
      * @param parserConfig
      */
     public ClangAstDumper(boolean streamConsoleOutput,
-            File clangExecutable, List<String> builtinIncludes, CodeParser parserConfig) {
+                          File clangExecutable, List<String> builtinIncludes, CodeParser parserConfig) {
 
         this.streamConsoleOutput = streamConsoleOutput;
 
@@ -176,7 +173,7 @@ public class ClangAstDumper {
 
             arguments.add("--");
         }
-
+        
         var extension = SpecsIo.getExtension(sourceFile);
         boolean isOpenCL = extension.equals("cl");
         boolean isCuda = extension.equals("cu");
@@ -249,7 +246,7 @@ public class ClangAstDumper {
             arguments.add(sourceFile.getAbsolutePath());
         } else {
 
-        List<String> systemIncludes = new ArrayList<>();
+            List<String> systemIncludes = new ArrayList<>();
 
             // Add includes bundled with program
             // (only on Windows, it is expected that a Linux system has its own headers for libc/libc++)
