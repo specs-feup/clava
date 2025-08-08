@@ -18,6 +18,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.attr.CUDAGlobalAttr;
 import pt.up.fe.specs.clava.ast.decl.*;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -30,13 +31,10 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
-import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.enums.EnumHelperWithValue;
-import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.treenode.TreeNodeUtils;
 
@@ -49,8 +47,8 @@ import java.util.stream.Collectors;
 public class CxxFunction extends AFunction {
 
     // TODO: Move this to generated enums
-    private static final Lazy<EnumHelperWithValue<StorageClass>> STORAGE_CLASS = EnumHelperWithValue
-            .newLazyHelperWithValue(StorageClass.class);
+//    private static final Lazy<EnumHelperWithValue<StorageClass>> STORAGE_CLASS = EnumHelperWithValue
+    //          .newLazyHelperWithValue(StorageClass.class);
 
     private final FunctionDecl function;
 
@@ -475,6 +473,14 @@ public class CxxFunction extends AFunction {
     @Override
     public String getStorageClassImpl() {
         return function.get(FunctionDecl.STORAGE_CLASS).getString();
+    }
+
+    @Override
+    public boolean setStorageClassImpl(String storageClass) {
+        // Get corresponding enum
+        var storageClassEnum = StorageClass.getHelper().fromValue(storageClass);
+
+        return function.setStorageClass(storageClassEnum);
     }
 
     @Override

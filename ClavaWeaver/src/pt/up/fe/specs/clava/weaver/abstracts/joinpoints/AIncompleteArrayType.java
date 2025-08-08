@@ -623,6 +623,15 @@ public abstract class AIncompleteArrayType extends AArrayType {
     }
 
     /**
+     * Get value on attribute jpFieldsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] jpFieldsArrayImpl(Boolean recursive) {
+        return this.aArrayType.jpFieldsArrayImpl(recursive);
+    }
+
+    /**
      * Get value on attribute jpId
      * @return the attribute's value
      */
@@ -1288,6 +1297,7 @@ public abstract class AIncompleteArrayType extends AArrayType {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
+        JPFIELDS("jpFields"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

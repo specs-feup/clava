@@ -817,6 +817,15 @@ public abstract class AIf extends AStatement {
     }
 
     /**
+     * Get value on attribute jpFieldsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] jpFieldsArrayImpl(Boolean recursive) {
+        return this.aStatement.jpFieldsArrayImpl(recursive);
+    }
+
+    /**
      * Get value on attribute jpId
      * @return the attribute's value
      */
@@ -1475,6 +1484,7 @@ public abstract class AIf extends AStatement {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
+        JPFIELDS("jpFields"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

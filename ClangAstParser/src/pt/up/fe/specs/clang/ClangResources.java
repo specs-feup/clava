@@ -115,7 +115,6 @@ public class ClangResources {
     }
 
     /**
-     *
      * @return path to the executable that was copied
      */
     private File prepareResources(String version) {
@@ -215,13 +214,8 @@ public class ClangResources {
         switch (platform) {
             case WINDOWS:
                 return CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_EXE);
-            case LINUX_4:
-                return CLANG_AST_RESOURCES.get(ClangAstFileResource.CENTOS_EXE);
             case LINUX_5:
                 return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_EXE);
-            case LINUX_ARMV7:
-                throw new RuntimeException("Platform Linux-ARMV7 not currently supported");
-                // return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_ARMV7_EXE);
             case MAC_OS:
                 return CLANG_AST_RESOURCES.get(ClangAstFileResource.MAC_OS_EXE);
             default:
@@ -260,14 +254,18 @@ public class ClangResources {
 
         // Create list of include zips
         List<FileResourceProvider> includesZips = new ArrayList<>();
-        includesZips.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.BUILTIN_INCLUDES));
 
+        var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.BUILTIN_INCLUDES);
+        includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
+
+/*
         // Check if built-in libc/c++ needs to be included
         if (useBuiltinLibc(clangExecutable, libcMode)) {
             var libcResource = getVersionedResource(getLibCResource(SupportedPlatform.getCurrentPlatform()));
             includesZips.add(libcResource);
             // includesZips.add(getLibCResource(SupportedPlatform.getCurrentPlatform()));
         }
+*/
 
         // Download includes zips, check if any of them is new
         List<ResourceWriteData> zipFiles = includesZips.stream()
@@ -291,7 +289,7 @@ public class ClangResources {
         List<String> includes = SpecsIo.getFolders(includesBaseFolder).stream()
                 .map(file -> file.getAbsolutePath())
                 .collect(Collectors.toList());
-
+        System.out.println("INCLUDES: " + includes);
         // Sort them alphabetically, include order can be important
         Collections.sort(includes);
 
@@ -315,23 +313,6 @@ public class ClangResources {
             default:
                 throw new CaseNotDefinedException(libcMode);
         }
-
-        // // If usePlatformIncludes is enabled, never use built-in includes
-        // if (usePlatformIncludes) {
-        // return false;
-        // }
-        //
-        // return !hasLibC(clangExecutable);
-        // return !usePlatformIncludes;
-        /*
-        // If platform includes is disabled, always use built-in headers
-        if (!usePlatformIncludes) {
-            return true;
-        }
-        
-        // If headers of both libc and libc++ are available, do not use built-in libc
-        return !hasLibC(clangExecutable);
-        */
     }
 
     private boolean hasLibC(File clangExecutable) {
@@ -353,17 +334,6 @@ public class ClangResources {
         }
 
         throw new RuntimeException("Unexpected value: '" + value + "'");
-
-        // Boolean.parseBoolean(CLANG_INCLUDES_FOLDERNAME)
-        // var hasLibC = HAS_LIBC.get();
-        //
-        // if (hasLibC != null) {
-        // return hasLibC;
-        // }
-        //
-        // hasLibC = detectLibC(clangExecutable);
-        // HAS_LIBC.set(hasLibC);
-        // return hasLibC;
     }
 
     /**
@@ -448,58 +418,7 @@ public class ClangResources {
         return SpecsSystem.runProcess(arguments, true, false);
     }
 
-    // private ProcessOutput<List<ClangNode>, DataStore> testFile(File clangExecutable, File testFolder,
-    // File testFile) {
-    //
-    // List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
-    // ClavaContext context = new ClavaContext();
-    // // System.out.println("ARGUMENTS: " + arguments);
-    // // System.out.println("CODE:\n" + SpecsIo.read(testFile.getAbsolutePath()));
-    // try (LineStreamParser<ClangParserData> clangStreamParser = ClangStreamParserV2.newInstance(context)) {
-    //
-    // var output2 = SpecsSystem.runProcess(arguments, true, false);
-    // // System.out.println("OUTPUT: " + output2);
-    //
-    // ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments,
-    // this::processOutput,
-    // inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
-    // clangStreamParser));
-    // // System.out.println("OUTPUT:\n" + output);
-    // return output;
-    //
-    // } catch (Exception e) {
-    // throw new RuntimeException("Error while testing include", e);
-    // }
-    // }
-
-    // public List<ClangNode> processOutput(InputStream inputStream) {
-    // return processOutput(inputStream, new File(CLANG_DUMP_FILENAME));
-    // }
-
-    // public List<ClangNode> processOutput(InputStream inputStream, File clangDumpFilename) {
-    // File dumpfile = dumpStdout | SpecsSystem.isDebug() ? clangDumpFilename : null;
-    //
-    // // Parse Clang output
-    // List<ClangNode> clangDump = new AstParser(dumpfile).parse(inputStream);
-    //
-    // return clangDump;
-    // }
-
-    // public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
-    // LineStreamParser<ClangParserData> lineStreamParser) {
-    //
-    // return processStdErr(clavaData, inputStream, lineStreamParser, new File(STDERR_DUMP_FILENAME));
-    // }
-
-    // public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
-    // LineStreamParser<ClangParserData> lineStreamParser, File stderrDumpFilename) {
-    //
-    // File dumpfile = SpecsSystem.isDebug() ? stderrDumpFilename : null;
-    //
-    // // Parse StdErr from ClangAst
-    // return new StreamParser(clavaData, dumpfile, lineStreamParser).parse(inputStream);
-    // }
-
+    /*
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
         switch (platform) {
             case WINDOWS:
@@ -509,6 +428,7 @@ public class ClangResources {
         }
         // return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
     }
+     */
 
     public static File getBuiltinCudaLib() {
         var fileResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.CUDA_LIB);

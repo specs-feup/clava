@@ -818,6 +818,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute jpFieldsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] jpFieldsArrayImpl(Boolean recursive) {
+        return this.aFunction.jpFieldsArrayImpl(recursive);
+    }
+
+    /**
      * Get value on attribute jpId
      * @return the attribute's value
      */
@@ -1345,6 +1354,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Sets the storage class of this specific function decl. AUTO and REGISTER are not allowed for functions, and EXTERN is not allowed in function implementations, or function declarations that are in the same file as the implementation. Returns true if the storage class changed, false otherwise.
+     * @param storageClass 
+     */
+    @Override
+    public boolean setStorageClassImpl(String storageClass) {
+        return this.aFunction.setStorageClassImpl(storageClass);
+    }
+
+    /**
      * Sets the type of a node, if it has a type
      * @param type 
      */
@@ -1650,6 +1668,7 @@ public abstract class AMethod extends AFunction {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
+        JPFIELDS("jpFields"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

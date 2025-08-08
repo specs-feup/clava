@@ -480,6 +480,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -1459,6 +1473,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -2591,6 +2619,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -3737,6 +3779,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -4889,6 +4945,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -5969,6 +6039,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -7021,6 +7105,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -8108,6 +8206,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -9412,6 +9524,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -10402,6 +10528,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -11657,6 +11797,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -12901,6 +13055,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -14061,6 +14229,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -15176,6 +15358,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -15704,6 +15900,14 @@
 									{
 										"type": "String",
 										"name": "controlVar"
+									}]
+					},
+					{
+						"type": "attribute",
+						"children": [
+									{
+										"type": "varref",
+										"name": "controlVarref"
 									}]
 					},
 					{
@@ -16332,6 +16536,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -17745,6 +17963,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -18847,6 +19079,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -20065,6 +20311,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -21134,6 +21394,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -22102,6 +22376,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -23095,6 +23383,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -24332,6 +24634,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -25458,6 +25774,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -26443,6 +26773,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -27529,6 +27873,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -28547,6 +28905,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -29629,6 +30001,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -30789,6 +31175,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -31848,6 +32248,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -32824,6 +33238,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -33914,6 +34342,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -35113,6 +35555,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -36213,6 +36669,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -37240,6 +37710,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -38326,6 +38810,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -39334,6 +39832,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -40482,6 +40994,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -41782,6 +42308,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -42481,6 +43021,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)",
 						"children": [
 									{
 										"type": "StorageClass",
@@ -43001,6 +43542,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -43436,6 +43991,20 @@
 									{
 										"type": "type",
 										"name": "returnType",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Sets the storage class of this specific function decl. AUTO and REGISTER are not allowed for functions, and EXTERN is not allowed in function implementations, or function declarations that are in the same file as the implementation. Returns true if the storage class changed, false otherwise.",
+						"children": [
+									{
+										"type": "boolean",
+										"name": "setStorageClass"
+									},
+									{
+										"type": "StorageClass",
+										"name": "storageClass",
 										"defaultValue": ""
 									}]
 					},
@@ -44457,6 +45026,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -45576,6 +46159,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -46673,6 +47270,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -47826,6 +48437,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -48829,6 +49454,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -49964,6 +50603,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -51088,6 +51741,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -52108,6 +52775,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -53123,6 +53804,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -54153,6 +54848,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -55253,6 +55962,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -55781,6 +56504,14 @@
 									{
 										"type": "String",
 										"name": "controlVar"
+									}]
+					},
+					{
+						"type": "attribute",
+						"children": [
+									{
+										"type": "varref",
+										"name": "controlVarref"
 									}]
 					},
 					{
@@ -56409,6 +57140,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -57696,6 +58441,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -58777,6 +59536,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -59965,6 +60738,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -60793,6 +61580,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)",
 						"children": [
 									{
 										"type": "StorageClass",
@@ -61313,6 +62101,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -61757,6 +62559,20 @@
 									{
 										"type": "type",
 										"name": "returnType",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Sets the storage class of this specific function decl. AUTO and REGISTER are not allowed for functions, and EXTERN is not allowed in function implementations, or function declarations that are in the same file as the implementation. Returns true if the storage class changed, false otherwise.",
+						"children": [
+									{
+										"type": "boolean",
+										"name": "setStorageClass"
+									},
+									{
+										"type": "StorageClass",
+										"name": "storageClass",
 										"defaultValue": ""
 									}]
 					},
@@ -62646,6 +63462,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -63695,6 +64525,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -64893,6 +65737,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -66217,6 +67075,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -67287,6 +68159,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -68415,6 +69301,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -69551,6 +70451,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -70803,6 +71717,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -71914,6 +72842,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -73040,6 +73982,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -74370,6 +75326,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -75513,6 +76483,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -76558,6 +77542,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -77685,6 +78683,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -78954,6 +79966,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -80078,6 +81104,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -81155,6 +82195,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -82206,6 +83260,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -83297,6 +84365,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -84468,6 +85550,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -85721,6 +86817,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -86871,6 +87981,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -87894,6 +89018,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -89026,6 +90164,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -90127,6 +91279,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -91172,6 +92338,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -92360,6 +93540,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -93501,6 +94695,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -94563,6 +95771,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -95696,6 +96918,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -96860,6 +98096,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -98115,6 +99365,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -99306,6 +100570,20 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)",
 						"children": [
 									{
@@ -100316,6 +101594,20 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "List with the values of fields that are join points, recursively",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "jpFields"
+									},
+									{
+										"type": "Boolean",
+										"name": "recursive",
+										"defaultValue": "false"
 									}]
 					},
 					{

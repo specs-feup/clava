@@ -662,14 +662,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute storageClass
-     * @return the attribute's value
+     * The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)
      */
     public abstract String getStorageClassImpl();
 
     /**
-     * Get value on attribute storageClass
-     * @return the attribute's value
+     * The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)
      */
     public final Object getStorageClass() {
         try {
@@ -1149,6 +1147,33 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Sets the storage class of this specific function decl. AUTO and REGISTER are not allowed for functions, and EXTERN is not allowed in function implementations, or function declarations that are in the same file as the implementation. Returns true if the storage class changed, false otherwise.
+     * @param storageClass 
+     */
+    public boolean setStorageClassImpl(String storageClass) {
+        throw new UnsupportedOperationException(get_class()+": Action setStorageClass not implemented ");
+    }
+
+    /**
+     * Sets the storage class of this specific function decl. AUTO and REGISTER are not allowed for functions, and EXTERN is not allowed in function implementations, or function declarations that are in the same file as the implementation. Returns true if the storage class changed, false otherwise.
+     * @param storageClass 
+     */
+    public final Object setStorageClass(String storageClass) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setStorageClass", this, Optional.empty(), storageClass);
+        	}
+        	boolean result = this.setStorageClassImpl(storageClass);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setStorageClass", this, Optional.ofNullable(result), storageClass);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setStorageClass", e);
+        }
+    }
+
+    /**
      * Get value on attribute isPublic
      * @return the attribute's value
      */
@@ -1608,6 +1633,15 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public String[] getJavaFieldsArrayImpl() {
         return this.aDeclarator.getJavaFieldsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute jpFieldsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] jpFieldsArrayImpl(Boolean recursive) {
+        return this.aDeclarator.jpFieldsArrayImpl(recursive);
     }
 
     /**
@@ -2231,6 +2265,7 @@ public abstract class AFunction extends ADeclarator {
         actions.add("void setParams(param[])");
         actions.add("void setParamsFromStrings(String[])");
         actions.add("void setReturnType(type)");
+        actions.add("boolean setStorageClass(StorageClass)");
     }
 
     /**
@@ -2331,6 +2366,7 @@ public abstract class AFunction extends ADeclarator {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
+        JPFIELDS("jpFields"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

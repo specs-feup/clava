@@ -13,11 +13,11 @@ There are three distributions of Clava:
 
 ### NPM distribution (recommended)
 
-Clava is currently distributed as an [NPM package](https://www.npmjs.com/package/@specs-feup/clava). It requires Node.js 18 or 20, and Java 17 or higher. Different OSses have different ways of installing these dependencies, but on Ubuntu you can run this:
+Clava is currently distributed as an [NPM package](https://www.npmjs.com/package/@specs-feup/clava). It requires Node.js 20 or 22, and Java 17 or higher. Different OSses have different ways of installing these dependencies, but on Ubuntu you can run this:
 
 ```bash
 apt-get update && apt-get install -y curl openjdk-17-jdk
-curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs
+curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && apt-get install -y nodejs
 ```
 
 Now, you have two options:

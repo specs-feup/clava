@@ -816,6 +816,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("isInsideLoopHeader");
         attributes.add("isMacro");
         attributes.add("javaFields");
+        attributes.add("jpFields(Boolean recursive)");
         attributes.add("jpId");
         attributes.add("keys");
         attributes.add("lastChild");
@@ -2015,6 +2016,44 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "javaFields", e);
+        }
+    }
+
+    /**
+     * 
+     * @param recursive
+     * @return 
+     */
+    public abstract AJoinPoint[] jpFieldsArrayImpl(Boolean recursive);
+
+    /**
+     * 
+     * @param recursive
+     * @return 
+     */
+    public Object jpFieldsImpl(Boolean recursive) {
+        AJoinPoint[] aJoinPointArrayImpl0 = jpFieldsArrayImpl(recursive);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * 
+     * @param recursive
+     * @return 
+     */
+    public final Object jpFields(Boolean recursive) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "jpFields", Optional.empty(), recursive);
+        	}
+        	Object result = this.jpFieldsImpl(recursive);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "jpFields", Optional.ofNullable(result), recursive);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "jpFields", e);
         }
     }
 

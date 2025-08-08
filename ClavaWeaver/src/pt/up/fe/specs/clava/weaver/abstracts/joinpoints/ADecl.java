@@ -196,6 +196,7 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         ISMACRO("isMacro"),
         JAVAFIELDS("javaFields"),
+        JPFIELDS("jpFields"),
         JPID("jpId"),
         KEYS("keys"),
         LASTCHILD("lastChild"),

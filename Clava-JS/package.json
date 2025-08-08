@@ -1,6 +1,6 @@
 {
   "name": "@specs-feup/clava",
-  "version": "3.0.14",
+  "version": "3.0.26",
   "description": "A C/C++ source-to-source compiler written in Typescript",
   "type": "module",
   "files": [
@@ -56,7 +56,7 @@
   },
   "homepage": "https://github.com/specs-feup/clava#readme",
   "dependencies": {
-    "@specs-feup/lara": "^3.0.7"
+    "@specs-feup/lara": "^3.0.9"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
