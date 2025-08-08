@@ -42,7 +42,6 @@ public class ClangResources {
     private final FileResourceManager clangAstResources;
     private final CodeParser options;
 
-    private final Map<LibcMode, List<String>> includesCache;
     private final Map<String, ClangFiles> clangFilesCache;
 
     private static final AtomicInteger HAS_LIBC = new AtomicInteger(-1);
@@ -50,11 +49,19 @@ public class ClangResources {
     public ClangResources(CodeParser options) {
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
         this.options = options;
-        this.includesCache = new HashMap<>();
         this.clangFilesCache = new HashMap<>();
     }
 
     public ClangFiles getClangFiles(String version, LibcMode libcMode) {
+
+        // Create key
+        var key = libcMode.name() + "_" + version;
+
+        // Check if cached
+        var files = clangFilesCache.get(key);
+        if (files != null) {
+            return files;
+        }
 
         // Check if there is a local version of the Clang files
         ClangFiles localClangFiles = SpecsIo.getJarPath(ClangResources.class)
@@ -67,13 +74,22 @@ public class ClangResources {
             ClavaLog.info("Using local version of ClangAstDumper ("
                     + localClangFiles.getClangExecutable().getAbsolutePath()
                     + "). Option 'use platform includes' will be ignored");
+
+            // Store in cache
+            clangFilesCache.put(key, localClangFiles);
+
             return localClangFiles;
         }
 
         File clangExecutable = prepareResources(version);
         List<String> builtinIncludes = prepareIncludes(clangExecutable, libcMode);
 
-        return new ClangFiles(clangExecutable, builtinIncludes);
+        var newFiles = new ClangFiles(clangExecutable, builtinIncludes);
+
+        // Store in cache
+        clangFilesCache.put(key, newFiles);
+
+        return newFiles;
     }
 
     private Optional<ClangFiles> loadLocalClangFiles(File clangFolder, String version) {
@@ -227,11 +243,6 @@ public class ClangResources {
 
     private List<String> prepareIncludes(File clangExecutable, LibcMode libcMode) {
 
-        var cachedIncludes = includesCache.get(libcMode);
-        if (cachedIncludes != null) {
-            return cachedIncludes;
-        }
-
         // Use no built-ins
         /*
         if (libcMode == LibcMode.SYSTEM) {
@@ -290,9 +301,6 @@ public class ClangResources {
         if (SupportedPlatform.getCurrentPlatform().isLinux()) {
             SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", resourceFolder.getAbsolutePath()), false, true);
         }
-
-        // Cache includes
-        includesCache.put(libcMode, includes);
 
         return includes;
     }
