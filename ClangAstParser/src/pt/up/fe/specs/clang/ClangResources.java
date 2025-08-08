@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clang;
 
 import pt.up.fe.specs.clang.codeparser.CodeParser;
+import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsIo;
@@ -42,6 +43,7 @@ public class ClangResources {
     private final CodeParser options;
 
     private final Map<LibcMode, List<String>> includesCache;
+    private final Map<String, ClangFiles> clangFilesCache;
 
     private static final AtomicInteger HAS_LIBC = new AtomicInteger(-1);
 
@@ -49,6 +51,7 @@ public class ClangResources {
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
         this.options = options;
         this.includesCache = new HashMap<>();
+        this.clangFilesCache = new HashMap<>();
     }
 
     public ClangFiles getClangFiles(String version, LibcMode libcMode) {
@@ -199,7 +202,12 @@ public class ClangResources {
             case WINDOWS:
                 return CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_EXE);
             case LINUX_5:
-                return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_EXE);
+                if (ClangAstDumper.usePlugin()) {
+                    return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_PLUGIN);
+                } else {
+                    return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_EXE);
+                }
+
             case MAC_OS:
                 return CLANG_AST_RESOURCES.get(ClangAstFileResource.MAC_OS_EXE);
             default:

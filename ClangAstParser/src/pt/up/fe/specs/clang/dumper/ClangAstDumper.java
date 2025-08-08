@@ -51,6 +51,12 @@ import java.util.List;
  */
 public class ClangAstDumper {
 
+    private final static boolean USE_PLUGIN = false;
+
+    public static boolean usePlugin() {
+        return USE_PLUGIN;
+    }
+
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
 
@@ -142,7 +148,7 @@ public class ClangAstDumper {
                 LocalOptionsKeys.getProvider().getStoreDefinition());
 
         List<String> arguments = new ArrayList<>();
-        if (SpecsPlatforms.isLinux()) {
+        if (USE_PLUGIN && SpecsPlatforms.isLinux()) {
             arguments.add("clang-16");
             arguments.add("-c");
 
