@@ -109,8 +109,8 @@ add_custom_target (
     COMMAND node clang_enums/Main.mjs ${LLVM_DIR} src/	
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-# Only build plugin if not on Windows
-if(NOT WIN32)
+# Only build plugin if not on Windows or MacOS
+if(NOT WIN32 AND NOT APPLE)
 	add_library(plugin MODULE ${SOURCE_FILES} src/plugin.cpp)
 	target_compile_features(plugin PRIVATE cxx_std_20)
 	add_dependencies(plugin clang_enums)
