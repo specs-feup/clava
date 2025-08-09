@@ -264,6 +264,10 @@ public class ClangResources {
         windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_DLL3));
         windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_DLL4));
         windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_DLL5));
+        windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_DLL6));
+        windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_DLL7));
+        windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_DLL8));
+        windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_DLL9));
         windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_LLVM_DLL));
 
         return windowsResources;
