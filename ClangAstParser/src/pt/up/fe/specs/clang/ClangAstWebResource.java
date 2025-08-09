@@ -41,6 +41,6 @@ public interface ClangAstWebResource {
     WebResourceProvider LINUX_PLUGIN = WebResourceProvider.newInstance(ROOT_16_0_5, "clang-plugin.so", "v16.0.5");
     WebResourceProvider WIN_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM-16.dll");
 
-    WebResourceProvider MAC_OS_EXE = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "clang_ast_macos", "v12.0.7");
+    WebResourceProvider MAC_OS_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_macos", "v16.0.5");
 
 }
