@@ -19,6 +19,7 @@ import pt.up.fe.specs.util.SpecsSystem;
 
 import java.io.File;
 import java.util.List;
+import java.util.Locale;
 
 public class ClavaParserException extends RuntimeException {
 
@@ -55,7 +56,9 @@ public class ClavaParserException extends RuntimeException {
             var clangExeExec = "";
             if (clangExe.length() > 0) {
                 var output = SpecsSystem.runProcess(List.of(clangExe.getAbsolutePath(), "--version"), true, false);
-                clangExeExec = "\nDumper binary seems to have been correctly downloaded, message when executing it:'" + output.getOutput() + "'";
+                clangExeExec = "\nDumper binary seems to have been correctly downloaded, message when executing it:'" + output.getOutput() + "'\nExit code: 0x" +
+                        Integer.toHexString(output.getReturnValue()).toUpperCase(Locale.ROOT)
+                        + "\n";
             }
 
             var dependencies = "";
