@@ -1,111 +1,254 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.14)
 project(ClangAstDumper)
 
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
-#message(STATUS HELLO)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(CLANG_VERSION 16)
 
-#SET(CMAKE_C_COMPILER "clang")
-#SET(CMAKE_CXX_COMPILER "clang++")
+# Set base folder in Windows
+#
+# Convention for MinGW packages that were downloaded from https://repo.msys2.org/mingw/mingw64/
+# Download matching versions of clang and llvm packages, extract them to a folder (e.g. mingw64-clang-<version>)
+# You have to download:
+# mingw-w64-x86_64-llvm-<version>
+# mingw-w64-x86_64-llvm-libs-<version>
+# mingw-w64-x86_64-clang-<version>
+# mingw-w64-x86_64-clang-tools-extra-<version>
+#
+# The executable will still need the dynamic LLVM library to run
+# It can be found in c:/mingw64-clang-${CLANG_VERSION}/bin/libLLVM-${CLANG_VERSION}.dll
+#
+#
+# For creating a zip with libcxx, you can use Winlibs (https://winlibs.com/#download-release), find a release close the Clang version, and use the following folders, in the same order (it is important:
+#  mingw64/lib/clang/${CLANG_VERSION}/include
+#  mingw64/include/c++/%GCCVER%
+#  mingw64/include/c++/%GCCVER%/x86_64-w64-mingw32
+#  mingw64/x86_64-w64-mingw32/include
+#  mingw64/include
+#
+# Also download from https://repo.msys2.org/mingw/mingw64/ and include:
+# mingw-w64-x86_64-openmp-<version> // OpenMP
+#
+if(WIN32)
+	SET(MINGW_BASEDIR "c:/mingw64-clang-${CLANG_VERSION}")
+endif()
 
-# Initialize Deps
-include("../deps.cmake")
-
-# Add Modules
-#deps_find_package(llvm3.8 REQUIRED) # LLVM
-#deps_find_package(llvm7 REQUIRED) # LLVM
-deps_find_package(llvm12 REQUIRED) # LLVM
-
-set(COMMON_CXX_FLAGS "-std=c++14 -O3 -Wall -Wno-unused-function")
-#set(COMMON_CXX_FLAGS "-std=c++14 -O3 -Wall -Wno-unused-function -fuse-ld=\"C:/Program Files/LLVM/bin/ld.lld.exe\"")
-#-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DVISIT_CHECK
-
-#add_definitions(-DOLD_OUTPUT)
-
-if(SYSTEM_PLATFORM STREQUAL "MacOS")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_CXX_FLAGS} -stdlib=libc++")
+# Set compiler
+if(WIN32)
+    # Often these do not work... replace with direct invocation in command line
+	# E.g., cmake -DCMAKE_C_COMPILER="c:/mingw64-clang-16/bin/clang.exe" -DCMAKE_CXX_COMPILER="C:/mingw64-clang-16/bin/clang++.exe" -DCMAKE_LINKER="C:/mingw64-clang-16/bin/lld-link.exe" ..
+	SET(CMAKE_C_COMPILER "${MINGW_BASEDIR}/bin/clang.exe")
+	SET(CMAKE_CXX_COMPILER "${MINGW_BASEDIR}/bin/clang++.exe")
+	SET(CMAKE_LINKER "${MINGW_BASEDIR}/bin/lld-link.exe")
 else()
-  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_CXX_FLAGS} -static-libgcc -static-libstdc++")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_CXX_FLAGS}")  
+	SET(CMAKE_C_COMPILER "clang-${CLANG_VERSION}")
+	SET(CMAKE_CXX_COMPILER "clang++-${CLANG_VERSION}")
 endif()
 
-
-#Enable debug
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG")
-
-# For CentOS and macOS
-# Set SYSTEM_PLATFORM in deps_config.cmake
-if(SYSTEM_PLATFORM STREQUAL "Centos" OR SYSTEM_PLATFORM STREQUAL "MacOS")
-  	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS")
+# Set libraries
+if(WIN32)
+	SET(Clang_DIR "${MINGW_BASEDIR}/lib/cmake/clang")
+	SET(LLVM_DIR "${MINGW_BASEDIR}/lib/cmake/llvm")
+else()
+	SET(Clang_DIR "/usr/lib/cmake/clang-${CLANG_VERSION}")
+	SET(LLVM_DIR "/usr/lib/llvm-${CLANG_VERSION}/lib/cmake/llvm")
 endif()
 
+add_compile_options(-Wsuggest-override)
 
-OPTION(USE_CLAVA "Uses Clava during compilation")
+find_package(LLVM REQUIRED CONFIG)
+find_package(Clang REQUIRED CONFIG)
 
-# Enable Clava
-if(USE_CLAVA)
-#	message(STATUS "Using Clava in this project")
-	find_package(Clava REQUIRED)
-#else()
-#    message(STATUS "Not using Clava")
-endif(USE_CLAVA)
-unset(USE_CLAVA CACHE) # So that the value is refreshed
+message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 
+# Set the LLVM and Clang include directories
+include_directories(${LLVM_INCLUDE_DIRS})	
+include_directories(${CLANG_INCLUDE_DIRS})
+
+#include_directories("/usr/lib/llvm-${CLANG_VERSION}/include/")
+#include_directories("/usr/lib/clang/${CLANG_VERSION}/include/")
+
+# Add definitions needed for LLVM and Clang
+add_definitions(${LLVM_DEFINITIONS})
+add_definitions(${CLANG_DEFINITIONS})
+
+file (GLOB ENUM_FILES CONFIGURE_DEPENDS
+    "src/ClangEnums/enums_*.h"
+    "src/ClangEnums/enums_*.cpp")
 
 set(SOURCE_FILES
-		main.cpp
-		ClangAst.cpp
-		ClangAstDumper.cpp
-		ClangAstDumperTypes.cpp
-		ClangAstDumperStmts.cpp
-		ClangAstDumperDecls.cpp
-        ClangAstDumperExtra.cpp
-		TypeMarker.cpp
-        ClavaDataDumper.cpp
-        ClavaDataDumperDecls.cpp
-    	ChildrenVisitorDecls.cpp
-    	ClangNodes.cpp
-		ClavaDataDumperStmts.cpp
-		ClavaDataDumperTypes.cpp
-		ClangAstDumperExprs.cpp
-		ChildrenVisitorStmts.cpp
-		ClavaConstants.cpp
-		ChildrenVisitorTypes.cpp
-		ClangEnums.cpp
-		ClangastDumperAttr.cpp
-		ChildrenVisitorAttrs.cpp
-		ClavaDataDumperAttrs.cpp
-		ChildrenVisitorExtras.cpp
-		ClavaDecl.cpp
-		enums_Type_h.cpp
-		enums_OperationKinds_h.cpp
-		enums_AttrKinds_h.cpp
-		enums_Specifiers_h.cpp
-		enums_ExceptionSpecificationType_h.cpp
-		enums_Linkage_h.cpp
-		enums_Visibility_h.cpp
-		enums_TemplateBase_h.cpp
-		enums_Decl_h.cpp
-		enums_ExprCXX_h.cpp
-		enums_TypeTraits_h.cpp
-		enums_NestedNameSpecifier_h.cpp
-		enums_DeclCxx_h.cpp
-		enums_Lambda_h.cpp
-		enums_TemplateName_h.cpp
-		enums_Attr_h.cpp
-		enums_Expr_h.cpp
-		)
+    src/Clang/ClangAst.cpp
+    src/Clang/ClangNodes.cpp
+    src/ClangEnums/ClangEnums.cpp
+    src/TypeMarker/TypeMarker.cpp
+    src/Clava/ClavaConstants.cpp
+    src/Clava/ClavaDecl.cpp
+    src/ClavaDataDumper/ClavaDataDumper.cpp
+    src/ClavaDataDumper/ClavaDataDumperAttrs.cpp
+    src/ClavaDataDumper/ClavaDataDumperDecls.cpp
+    src/ClavaDataDumper/ClavaDataDumperStmts.cpp
+    src/ClavaDataDumper/ClavaDataDumperTypes.cpp
+    src/ChildrenVisitor/ChildrenVisitorAttrs.cpp
+    src/ChildrenVisitor/ChildrenVisitorDecls.cpp
+    src/ChildrenVisitor/ChildrenVisitorExtras.cpp
+    src/ChildrenVisitor/ChildrenVisitorStmts.cpp
+    src/ChildrenVisitor/ChildrenVisitorTypes.cpp
+    src/ClangAstDumper/ClangAstDumper.cpp
+    src/ClangAstDumper/ClangAstDumperAttr.cpp
+    src/ClangAstDumper/ClangAstDumperDecls.cpp
+    src/ClangAstDumper/ClangAstDumperExprs.cpp
+    src/ClangAstDumper/ClangAstDumperExtra.cpp
+    src/ClangAstDumper/ClangAstDumperStmts.cpp
+    src/ClangAstDumper/ClangAstDumperTypes.cpp
+    ${ENUM_FILES}
+    )
 
-add_executable(ClangAstDumper ${SOURCE_FILES})
+add_custom_target (
+    clang_enums
+    COMMAND node clang_enums/Main.mjs ${LLVM_DIR} src/	
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-# Add includes
-target_include_directories(ClangAstDumper
-       SYSTEM PUBLIC ${DEPS_INCLUDES}
-)
+# Only build plugin if not on Windows
+if(NOT WIN32)
+	add_library(plugin MODULE ${SOURCE_FILES} src/plugin.cpp)
+	target_compile_features(plugin PRIVATE cxx_std_20)
+	add_dependencies(plugin clang_enums)
+endif()
 
-# Add enums helper
 
-# Add Libraries
-target_link_libraries(ClangAstDumper
-        ${DEPS_LIBRARIES}
+
+add_executable(tool ${SOURCE_FILES} src/tool.cpp)
+target_compile_features(tool PRIVATE cxx_std_20)
+add_dependencies(tool clang_enums)
+
+message(STATUS "SYSTEM PROCESSOR: '${CMAKE_SYSTEM_PROCESSOR}'")
+if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm") 
+	set(PROCESSOR_PREFIX "ARM")
+else()
+	set(PROCESSOR_PREFIX "X86")
+endif()
+
+target_link_libraries( tool
+    clangAnalysis
+    clangAPINotes
+    clangARCMigrate
+    clangAST
+    clangASTMatchers
+    clangBasic
+    #clangChangeNamespace
+    clangCodeGen
+    clangCrossTU
+    clangDependencyScanning
+    clangDirectoryWatcher		
+    #clangDoc
+    clangDriver
+    clangDynamicASTMatchers
+    clangEdit
+    clangFormat
+    clangFrontend
+    clangFrontendTool
+    clangHandleCXX
+    clangHandleLLVM
+    clangIndex
+    clangIndexSerialization		
+    clangLex
+    #clangMove
+    clangParse
+    #clangReorderFields
+    clangRewrite
+    clangRewriteFrontend
+    clangSema
+    clangSerialization
+    clangStaticAnalyzerCheckers
+    clangStaticAnalyzerCore
+    clangStaticAnalyzerFrontend
+    clangTooling
+    clangToolingASTDiff
+    clangToolingCore
+    clangToolingInclusions
+    clangToolingRefactoring
+    clangToolingSyntax		
+    clangTransformer
+    #DynamicLibraryLib
+        
+    # LLVM libraries, as given by 'llvm-config --libs'
+    LLVMWindowsManifest
+    LLVMXRay
+    LLVMLibDriver
+    #LLVMDlltoolDriver
+    LLVMCoverage
+    #LLVMLineEditor
+    #LLVMXCoreDisassembler
+    #LLVMXCoreCodeGen
+    #LLVMXCoreDesc
+    #LLVMXCoreInfo
+    LLVM${PROCESSOR_PREFIX}Disassembler
+    LLVM${PROCESSOR_PREFIX}AsmParser
+    LLVM${PROCESSOR_PREFIX}CodeGen
+    LLVM${PROCESSOR_PREFIX}Desc
+    LLVM${PROCESSOR_PREFIX}Info
+    #LLVMARMUtils
+    #LLVMAArch64Utils
+    LLVMOrcJIT
+    LLVMMCJIT
+    LLVMJITLink
+    #LLVMOrcTargetProcess
+    #LLVMOrcShared
+    #LLVMInterpreter
+    LLVMExecutionEngine
+    LLVMRuntimeDyld
+    LLVMSymbolize
+    LLVMDebugInfoPDB
+    LLVMDebugInfoGSYM
+    LLVMOption
+    LLVMObjectYAML
+    #LLVMMCA
+    #LLVMMCDisassembler
+    LLVMLTO
+    #LLVMPasses
+    LLVMCFGuard
+    LLVMCoroutines
+    LLVMObjCARCOpts
+    LLVMipo
+    LLVMVectorize
+    LLVMLinker
+    LLVMInstrumentation
+    LLVMFrontendOpenMP
+    LLVMFrontendOpenACC
+    LLVMExtensions
+    LLVMDWARFLinker
+    LLVMGlobalISel
+    LLVMMIRParser
+    #LLVMAsmPrinter
+    LLVMDebugInfoDWARF
+    LLVMSelectionDAG
+    LLVMCodeGen
+    LLVMIRReader
+    #LLVMAsmParser
+    LLVMInterfaceStub
+    LLVMFileCheck
+    LLVMFuzzMutate
+    LLVMTarget
+    #LLVMScalarOpts
+    #LLVMInstCombine
+    #LLVMAggressiveInstCombine
+    LLVMTransformUtils
+    LLVMBitWriter
+    LLVMAnalysis
+    #LLVMProfileData
+    LLVMObject
+    #LLVMTextAPI
+    #LLVMMCParser
+    #LLVMMC
+    #LLVMDebugInfoCodeView
+    #LLVMDebugInfoMSF
+    #LLVMBitReader
+    #LLVMCore
+    #LLVMRemarks
+    #LLVMBitstreamReader
+    #LLVMBinaryFormat
+    #LLVMTableGen
+    #LLVMSupport
+    #LLVMDemangle
 )

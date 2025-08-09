@@ -17,20 +17,29 @@ import pt.up.fe.specs.util.providers.WebResourceProvider;
 
 public interface ClangAstWebResource {
 
+    String ROOT_16_0_5 = "https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_16.0.5/";
+    String ROOT_12_0_7 = "https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/";
 
-    WebResourceProvider BUILTIN_INCLUDES = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "clang_builtin_includes.zip", "v12.0.1");
+    WebResourceProvider BUILTIN_INCLUDES = WebResourceProvider.newInstance(ROOT_16_0_5, "libc_cxx.zip", "v16.0.5");
 
-    WebResourceProvider LIBC_CXX = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "libc_cxx.zip", "v12.0.1");
+    WebResourceProvider OPENMP_INCLUDES = WebResourceProvider.newInstance(ROOT_16_0_5, "openmp_includes.zip");
 
-    WebResourceProvider LIBC_CXX_WINDOWS = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "libc_cxx_windows.zip", "v12.0.1");
+    WebResourceProvider CUDA_LIB = WebResourceProvider.newInstance(ROOT_12_0_7, "cudalib.zip", "v11.3.0");
 
-    WebResourceProvider CUDA_LIB = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "cudalib.zip", "v11.3.0");
+    WebResourceProvider WIN_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_windows.exe", "v16.0.5");
+    WebResourceProvider WIN_DLL1 = WebResourceProvider.newInstance(ROOT_12_0_7, "libwinpthread-1.dll");
+    WebResourceProvider WIN_DLL2 = WebResourceProvider.newInstance(ROOT_12_0_7, "zlib1.dll");
+    WebResourceProvider WIN_DLL3 = WebResourceProvider.newInstance(ROOT_12_0_7, "libzstd.dll");
+    WebResourceProvider WIN_DLL4 = WebResourceProvider.newInstance(ROOT_12_0_7, "libstdc++-6.dll");
+    WebResourceProvider WIN_DLL5 = WebResourceProvider.newInstance(ROOT_12_0_7, "libgcc_s_seh-1.dll");
+    WebResourceProvider WIN_DLL6 = WebResourceProvider.newInstance(ROOT_12_0_7, "libffi-8.dll");
+    WebResourceProvider WIN_DLL7 = WebResourceProvider.newInstance(ROOT_12_0_7, "libxml2-2.dll");
+    WebResourceProvider WIN_DLL8 = WebResourceProvider.newInstance(ROOT_12_0_7, "liblzma-5.dll");
+    WebResourceProvider WIN_DLL9 = WebResourceProvider.newInstance(ROOT_12_0_7, "libiconv-2.dll");
 
-    WebResourceProvider WIN_EXE = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "clang_ast_windows.exe", "v12.0.7");
-    WebResourceProvider WIN_DLL1 = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "libwinpthread-1.dll");
-    WebResourceProvider WIN_DLL2 = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "zlib1.dll");
-
-    WebResourceProvider LINUX_EXE = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "clang_ast_ubuntu", "v12.0.7.1");
+    WebResourceProvider LINUX_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_linux", "v16.0.5");
+    WebResourceProvider LINUX_PLUGIN = WebResourceProvider.newInstance(ROOT_16_0_5, "clang-plugin.so", "v16.0.5");
+    WebResourceProvider WIN_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM-16.dll");
 
     WebResourceProvider MAC_OS_EXE = WebResourceProvider.newInstance("https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/", "clang_ast_macos", "v12.0.7");
 

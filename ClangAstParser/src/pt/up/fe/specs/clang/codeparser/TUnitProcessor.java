@@ -1,11 +1,11 @@
 /**
  * Copyright 2018 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,22 +13,15 @@
 
 package pt.up.fe.specs.clang.codeparser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.suikasoft.jOptions.Datakey.DataKey;
-
 import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TUnitProcessor {
 
@@ -95,6 +88,8 @@ public class TUnitProcessor {
                     // Only consider nodes with valid locations, nodes with invalid locations in the AST at this point
                     // where most likely introduced by Clava (e.g., Includes, Null nodes, etc)
                     .filter(node -> node.getLocation().isValid())
+                    // Ignore expressions
+                    //.filter(node -> !(node instanceof Expr))
                     // Ignore certain nodes that might have the same location, such as ImplicitCastExpr
                     // .filter(node -> !IGNORE_CLASSES.contains(node.getClass()))
                     .forEach(node -> addNode(node));
@@ -228,6 +223,11 @@ public class TUnitProcessor {
         if (node instanceof InitListExpr) {
             return Optional.empty();
         }
+
+        // Expressions cannot be normalized
+        //if (node instanceof Expr) {
+        //    return Optional.empty();
+        //}
 
         String signature = node.getNodeSignature();
 

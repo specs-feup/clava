@@ -1,11 +1,11 @@
 /**
  * Copyright 2018 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,16 +13,9 @@
 
 package pt.up.fe.specs.clang.dumper;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
-
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.cilk.CilkParser;
@@ -45,14 +38,24 @@ import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
 import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
 
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
- * 
- * 
- * @author JoaoBispo
  *
+ * @author JoaoBispo
  */
 public class ClangAstDumper {
+
+    private final static boolean USE_PLUGIN = false;
+
+    public static boolean usePlugin() {
+        return USE_PLUGIN;
+    }
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
@@ -88,7 +91,7 @@ public class ClangAstDumper {
 
     /**
      * TODO: Replace some of the arguments with reads to CodeParser?
-     * 
+     *
      * @param dumpStdOut
      * @param useCustomResources
      * @param streamConsoleOutput
@@ -97,7 +100,7 @@ public class ClangAstDumper {
      * @param parserConfig
      */
     public ClangAstDumper(boolean streamConsoleOutput,
-            File clangExecutable, List<String> builtinIncludes, CodeParser parserConfig) {
+                          File clangExecutable, List<String> builtinIncludes, CodeParser parserConfig) {
 
         this.streamConsoleOutput = streamConsoleOutput;
 
@@ -145,15 +148,37 @@ public class ClangAstDumper {
                 LocalOptionsKeys.getProvider().getStoreDefinition());
 
         List<String> arguments = new ArrayList<>();
-        arguments.add(clangExecutable.getAbsolutePath());
+        if (USE_PLUGIN && SpecsPlatforms.isLinux()) {
+            arguments.add("clang-16");
+            arguments.add("-c");
 
-        arguments.add(sourceFile.getAbsolutePath());
+            arguments.add("-Xclang");
+            arguments.add("-load");
+            arguments.add("-Xclang");
+            arguments.add(clangExecutable.getAbsolutePath());
+            arguments.add("-Xclang");
+            arguments.add("-plugin");
+            arguments.add("-Xclang");
+            arguments.add("DumpAst");
+            arguments.add("-Xclang");
+            arguments.add("-plugin-arg-DumpAst");
+            arguments.add("-Xclang");
+            arguments.add("-file-id=" + id);
+            arguments.add("-Xclang");
+            arguments.add("-plugin-arg-DumpAst");
+            arguments.add("-Xclang");
+            arguments.add("-system-threshold=" + systemIncludesThreshold);
+        } else {
+            arguments.add(clangExecutable.getAbsolutePath());
 
-        arguments.add("-id=" + id);
+            arguments.add(sourceFile.getAbsolutePath());
 
-        arguments.add("-system-header-threshold=" + systemIncludesThreshold);
+            arguments.add("-id=" + id);
 
-        arguments.add("--");
+            arguments.add("-system-header-threshold=" + systemIncludesThreshold);
+
+            arguments.add("--");
+        }
 
         var extension = SpecsIo.getExtension(sourceFile);
         boolean isOpenCL = extension.equals("cl");
@@ -216,12 +241,20 @@ public class ClangAstDumper {
                 arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
             }
 
+            // Since we only need parsing, enable host-only
+            // Can help with errors such as "__float128 is not supported on this target"
+            arguments.add("--cuda-host-only");
+
         }
         // If header file, add the language flag (-x) that corresponds to the standard
         else if (SourceType.isHeader(sourceFile)) {
             arguments.add("-x");
             arguments.add(standard.isCxx() ? "c++" : "c");
         }
+
+//        if (SpecsPlatforms.isLinux()) {
+//            arguments.add(sourceFile.getAbsolutePath());
+//        } else {
 
         List<String> systemIncludes = new ArrayList<>();
 
@@ -241,6 +274,7 @@ public class ClangAstDumper {
             arguments.add("-isystem");
             arguments.add(systemInclude);
         }
+        //      }
 
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
         // arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));

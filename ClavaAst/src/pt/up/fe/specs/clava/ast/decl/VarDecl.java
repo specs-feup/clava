@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,13 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Collection;
-import java.util.Optional;
-
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
@@ -29,10 +25,14 @@ import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.collections.SpecsList;
+
+import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Represents a variable declaration or definition.
- * 
+ *
  * @author JoaoBispo
  *
  */
@@ -58,7 +58,7 @@ public class VarDecl extends DeclaratorDecl {
 
     /**
      * The style of initialization for this declaration.
-     * 
+     *
      * <p>
      * C-style initialization is "int x = 1;". Call-style initialization is a C++98 direct-initializer, e.g. "int
      * x(1);". The Init expression will be the expression inside the parens or a "ClassType(a,b,c)" class constructor
@@ -77,13 +77,13 @@ public class VarDecl extends DeclaratorDecl {
 
     /**
      * True if this is a static data member.
-     * 
+     *
      * <p>
      * This will only be true in C++, and applies to, e.g., the variable 'x' in:<br>
-     * 
+     *
      * <pre>
      struct S {
-         static int x;
+     static int x;
      };
      * </pre>
      */
@@ -96,7 +96,7 @@ public class VarDecl extends DeclaratorDecl {
 
     /**
      * True if this variable does not have local storage.
-     * 
+     *
      * <p>
      * This includes all global variables as well as static variables declared within a function.
      */
@@ -133,7 +133,7 @@ public class VarDecl extends DeclaratorDecl {
     }
 
     /**
-     * 
+     *
      * @return the code of the variable declaration, possibly with initialization, but without the type nor a comma (;)
      *         at the end
      */
@@ -153,7 +153,7 @@ public class VarDecl extends DeclaratorDecl {
     }
 
     /**
-     * 
+     *
      * @return the code related to the named decl, or null if no name
      */
     private String getDeclNameCode() {
@@ -230,7 +230,7 @@ public class VarDecl extends DeclaratorDecl {
     /**
      * In most cases, returns this VarDecl. In case of declaration of global variables, returns the VarDecl
      * corresponding to its definition.
-     * 
+     *
      * @return the VarDecl that corresponds to its definition, or null if it could not be found
      */
     public VarDecl getDefinition() {
@@ -240,14 +240,14 @@ public class VarDecl extends DeclaratorDecl {
         }
 
         switch (get(VarDecl.STORAGE_CLASS)) {
-        // Is global and storageClass is 'none', this is the global definition
-        case None:
-            return this;
-        case Extern:
-            return getApp().getGlobalVarDefinition(this).orElse(null);
-        default:
-            SpecsLogs.warn("Case not contemplated yet: " + get(VarDecl.STORAGE_CLASS));
-            return this;
+            // Is global and storageClass is 'none', this is the global definition
+            case None:
+                return this;
+            case Extern:
+                return getApp().getGlobalVarDefinition(this).orElse(null);
+            default:
+                SpecsLogs.warn("Case not contemplated yet: " + get(VarDecl.STORAGE_CLASS));
+                return this;
         }
 
     }
@@ -257,6 +257,11 @@ public class VarDecl extends DeclaratorDecl {
         var storageClass = StorageClass.getHelper().fromValue(value);
         // Store it
         set(STORAGE_CLASS, storageClass);
+    }
+
+    @Override
+    public SpecsList<DataKey<?>> getSignatureKeys() {
+        return super.getSignatureKeys().andAdd(STORAGE_CLASS);
     }
 
 }

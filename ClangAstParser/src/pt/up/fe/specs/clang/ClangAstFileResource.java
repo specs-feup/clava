@@ -20,13 +20,21 @@ import java.util.function.Supplier;
 public enum ClangAstFileResource implements Supplier<FileResourceProvider> {
 
     BUILTIN_INCLUDES(ClangAstWebResource.BUILTIN_INCLUDES),
-    LIBC_CXX(ClangAstWebResource.LIBC_CXX),
-    LIBC_CXX_WINDOWS(ClangAstWebResource.LIBC_CXX_WINDOWS),
+    OPENMP_INCLUDES(ClangAstWebResource.OPENMP_INCLUDES),
     CUDA_LIB(ClangAstWebResource.CUDA_LIB),
     WIN_EXE(ClangAstWebResource.WIN_EXE),
     WIN_DLL1(ClangAstWebResource.WIN_DLL1),
     WIN_DLL2(ClangAstWebResource.WIN_DLL2),
+    WIN_DLL3(ClangAstWebResource.WIN_DLL3),
+    WIN_DLL4(ClangAstWebResource.WIN_DLL4),
+    WIN_DLL5(ClangAstWebResource.WIN_DLL5),
+    WIN_DLL6(ClangAstWebResource.WIN_DLL6),
+    WIN_DLL7(ClangAstWebResource.WIN_DLL7),
+    WIN_DLL8(ClangAstWebResource.WIN_DLL8),
+    WIN_DLL9(ClangAstWebResource.WIN_DLL9),
+    WIN_LLVM_DLL(ClangAstWebResource.WIN_LLVM_DLL),
     LINUX_EXE(ClangAstWebResource.LINUX_EXE),
+    LINUX_PLUGIN(ClangAstWebResource.LINUX_PLUGIN),
     MAC_OS_EXE(ClangAstWebResource.MAC_OS_EXE);
 
     private final FileResourceProvider provider;
