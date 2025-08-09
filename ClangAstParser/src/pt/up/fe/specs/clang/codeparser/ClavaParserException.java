@@ -14,8 +14,10 @@
 package pt.up.fe.specs.clang.codeparser;
 
 import pt.up.fe.specs.clang.ClangFiles;
+import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
 
+import java.io.File;
 import java.util.List;
 
 public class ClavaParserException extends RuntimeException {
@@ -56,8 +58,27 @@ public class ClavaParserException extends RuntimeException {
                 clangExeExec = "\nDumper binary seems to have been correctly downloaded, message when executing it:'" + output.getOutput() + "'";
             }
 
+            var dependencies = "";
+
+            if (SpecsSystem.isWindows()) {
+
+                // Download dependencies
+                var dependenciesFolder = SpecsIo.getTempFolder("dependencies");
+                var dependenciesZip = SpecsIo.download("https://github.com/lucasg/Dependencies/releases/download/v1.11.1/Dependencies_x64_Release.zip", dependenciesFolder);
+                SpecsIo.extractZip(dependenciesZip, dependenciesFolder);
+                // Get application
+                var dependenciesExe = new File(dependenciesFolder, "Dependencies.exe");
+                if (!dependenciesExe.isFile()) {
+                    dependencies = "\nCould not find Dependencies.exe inside " + dependenciesFolder.getAbsolutePath() + ": " + SpecsIo.getFilesRecursive(dependenciesFolder);
+                } else {
+                    var output = SpecsSystem.runProcess(List.of(dependenciesExe.getAbsolutePath(), "-depth", "1", "-modules", clangExe.getAbsolutePath()), true, true);
+                    dependencies = "\n" + output.getOutput();
+                }
+
+            }
+
             errorsString = "\nNo error messages, check if dumper binary was correctly downloaded. Dumper file: "
-                    + clangExe.getAbsolutePath() + ", size (bytes): " + clangExe.length() + clangExeExec;
+                    + clangExe.getAbsolutePath() + ", size (bytes): " + clangExe.length() + clangExeExec + dependencies;
         }
 
         errorMessage.append(errorsString);
