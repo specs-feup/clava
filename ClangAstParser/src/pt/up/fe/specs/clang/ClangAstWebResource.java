@@ -29,6 +29,9 @@ public interface ClangAstWebResource {
     WebResourceProvider WIN_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_windows.exe", "v16.0.5");
     WebResourceProvider WIN_DLL1 = WebResourceProvider.newInstance(ROOT_12_0_7, "libwinpthread-1.dll");
     WebResourceProvider WIN_DLL2 = WebResourceProvider.newInstance(ROOT_12_0_7, "zlib1.dll");
+    WebResourceProvider WIN_DLL3 = WebResourceProvider.newInstance(ROOT_12_0_7, "libzstd.dll");
+    WebResourceProvider WIN_DLL4 = WebResourceProvider.newInstance(ROOT_12_0_7, "libstdc++-6.dll");
+    WebResourceProvider WIN_DLL5 = WebResourceProvider.newInstance(ROOT_12_0_7, "libgcc_s_seh-1.dll");
 
     WebResourceProvider LINUX_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_linux", "v16.0.5");
     WebResourceProvider LINUX_PLUGIN = WebResourceProvider.newInstance(ROOT_16_0_5, "clang-plugin.so", "v16.0.5");
