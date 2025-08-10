@@ -45,18 +45,24 @@ else()
 	SET(CMAKE_CXX_COMPILER "clang++-${CLANG_VERSION}")
 endif()
 
+message(STATUS "Set C compiler to: ${CMAKE_C_COMPILER}")
+message(STATUS "Set C++ compiler to: ${CMAKE_CXX_COMPILER}")
+
 # Set libraries
 if(WIN32)
 	SET(Clang_DIR "${MINGW_BASEDIR}/lib/cmake/clang")
 	SET(LLVM_DIR "${MINGW_BASEDIR}/lib/cmake/llvm")
 elseif(APPLE)
 	# Point CMake to Homebrew's LLVM and Clang config packages
-	set(LLVM_DIR   "/usr/local/opt/llvm@${CLANG_VERSION}/lib/cmake/llvm"   CACHE PATH "Path to LLVMConfig.cmake")
 	set(Clang_DIR  "/usr/local/opt/llvm@${CLANG_VERSION}/lib/cmake/clang"  CACHE PATH "Path to ClangConfig.cmake")
+	set(LLVM_DIR   "/usr/local/opt/llvm@${CLANG_VERSION}/lib/cmake/llvm"   CACHE PATH "Path to LLVMConfig.cmake")
 else()
 	SET(Clang_DIR "/usr/lib/cmake/clang-${CLANG_VERSION}")
 	SET(LLVM_DIR "/usr/lib/llvm-${CLANG_VERSION}/lib/cmake/llvm")
 endif()
+
+message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+message(STATUS "Using ClangConfig.cmake in: ${Clang_DIR}")
 
 add_compile_options(-Wsuggest-override)
 
@@ -66,8 +72,6 @@ find_package(Clang REQUIRED CONFIG)
 
 # Helpful metadata
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
-message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
-message(STATUS "Clang folder: ${Clang_DIR}")
 
 
 
