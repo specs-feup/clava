@@ -142,6 +142,12 @@ public class CTest {
     }
 
     @Test
+    public void testIncludeLocation() {
+        newTester().test("IncludeLoc.js", "remove_include.c", "remove_include_0.h", "remove_include_1.h",
+                "remove_include_2.h");
+    }
+
+    @Test
     public void testDynamicCallGraph() {
         newTester().test("DynamicCallGraph.lara", "dynamic_call_graph.c");
     }
