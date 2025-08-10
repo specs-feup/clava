@@ -34,8 +34,8 @@ if(WIN32)
 endif()
 
 # Set compiler
+# Often these do not work... replace with direct invocation in command line
 if(WIN32)
-    # Often these do not work... replace with direct invocation in command line
 	# E.g., cmake -DCMAKE_C_COMPILER="c:/mingw64-clang-16/bin/clang.exe" -DCMAKE_CXX_COMPILER="C:/mingw64-clang-16/bin/clang++.exe" -DCMAKE_LINKER="C:/mingw64-clang-16/bin/lld-link.exe" ..
 	SET(CMAKE_C_COMPILER "${MINGW_BASEDIR}/bin/clang.exe")
 	SET(CMAKE_CXX_COMPILER "${MINGW_BASEDIR}/bin/clang++.exe")
@@ -45,8 +45,8 @@ else()
 	SET(CMAKE_CXX_COMPILER "clang++-${CLANG_VERSION}")
 endif()
 
-message(STATUS "Set C compiler to: ${CMAKE_C_COMPILER}")
-message(STATUS "Set C++ compiler to: ${CMAKE_CXX_COMPILER}")
+message(STATUS "Tried to set C compiler to: ${CMAKE_C_COMPILER}")
+message(STATUS "Tried to set C++ compiler to: ${CMAKE_CXX_COMPILER}")
 
 # Set libraries
 if(WIN32)
