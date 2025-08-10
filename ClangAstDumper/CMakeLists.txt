@@ -59,24 +59,11 @@ add_compile_options(-Wsuggest-override)
 find_package(LLVM REQUIRED CONFIG)
 find_package(Clang REQUIRED CONFIG)
 
-# Dump all targets CMake knows about right now and filter for LLVM/Clang
-# List all targets currently known to CMake and filter for LLVM/Clang ones
-#get_property(_allTargets GLOBAL PROPERTY TARGETS)
-#message(STATUS ${_allTargets})
-#list(SORT _allTargets)
-#foreach(t IN LISTS _allTargets)
-#	if(TARGET ${t} AND (t MATCHES "^LLVM::" OR t MATCHES "^Clang::" OR t MATCHES "^clang"))
-#		message(STATUS "FOUND TARGET: ${t}")
-#	endif()
-#endforeach()
 
 # Helpful metadata
-message(STATUS "LLVM version: ${LLVM_VERSION}")
-message(STATUS "LLVM_DIR:     ${LLVM_DIR}")
-message(STATUS "Clang_DIR=${Clang_DIR}")
-
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+message(STATUS "Clang folder: ${Clang_DIR}")
 
 
 
@@ -149,30 +136,15 @@ else()
 endif()
 
 
-set_property(TARGET tool PROPERTY INTERPROCEDURAL_OPTIMIZATION OFF)
+#set_property(TARGET tool PROPERTY INTERPROCEDURAL_OPTIMIZATION OFF)
 
 
 if(WIN32)
-#if(FALSE)
 	target_link_directories(tool PRIVATE "${MINGW_BASEDIR}/lib")
-
-	llvm_map_components_to_libnames(LLVM_LIBS
-		support core irreader mc mcparser option
-        # or your target(s): aarch64, riscv, …
-	)
-	message(STATUS "LIBS: ${LLVM_LIBS}")
-
-	#set(LLVM_LINK_LLVM_DYLIB ON)
 	target_link_libraries(tool
-			#clang
 			clang-cpp
 			LLVM
-			#${LLVM_LIBS}
-	)  # or specific components e.g. LLVM::MC LLVM::Support
-	target_link_options(tool PRIVATE "-Wl,--start-group" "-Wl,--end-group")
-message(STATUS "CMAKE_EXE_LINKER_FLAGS = ${CMAKE_EXE_LINKER_FLAGS}")
-message(STATUS "CMAKE_CXX_FLAGS = ${CMAKE_CXX_FLAGS}")
-
+	)  
 else()
 #	set(LLVM_LINK_LLVM_DYLIB OFF)
 	target_link_libraries( tool
