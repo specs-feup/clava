@@ -43,5 +43,6 @@ public interface ClangAstWebResource {
     WebResourceProvider WIN_CLANG_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libclang-cpp.dll");
 
     WebResourceProvider MAC_OS_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_macos", "v16.0.5");
+    WebResourceProvider MAC_OS_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM.dylib", "v16.0.5");
 
 }

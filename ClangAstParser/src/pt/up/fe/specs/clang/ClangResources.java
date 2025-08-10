@@ -156,6 +156,11 @@ public class ClangResources {
             for (FileResourceProvider resource : getWindowsResources()) {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
+        } else if (platform == SupportedPlatform.MAC_OS) {
+            var dynLibsFolder = new File("/usr/local/lib/");
+            for (FileResourceProvider resource : getMacOSResources()) {
+                resource.writeVersioned(dynLibsFolder, ClangResources.class);
+            }
         }
 
         // If on Windows, preemptively unblock file, due to possible Mark-of-the-Web restrictions
@@ -270,6 +275,14 @@ public class ClangResources {
         windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_DLL9));
         windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_CLANG_DLL));
         windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_LLVM_DLL));
+
+        return windowsResources;
+    }
+
+    private List<FileResourceProvider> getMacOSResources() {
+        List<FileResourceProvider> windowsResources = new ArrayList<>();
+
+        windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.MAC_OS_LLVM_DLL));
 
         return windowsResources;
     }
