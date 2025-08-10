@@ -271,3 +271,13 @@ else()
     #LLVMDemangle
 )
 endif()
+
+# If on MacOS, change the expected location of libLLVM.dylib and libzstd.1.dylib
+# To check changes, use 'otool -L tool'
+if(APPLE)
+	add_custom_command (
+		TARGET tool POST_BUILD
+		COMMAND install_name_tool -change /usr/local/opt/llvm@${CLANG_VERSION}/lib/libLLVM.dylib @executable_path/libLLVM.dylib "$<TARGET_FILE:tool>"
+		COMMAND install_name_tool -change /usr/local/opt/zstd/lib/libzstd.1.dylib @executable_path/libzstd.1.dylib  "$<TARGET_FILE:tool>"
+	)
+endif()
