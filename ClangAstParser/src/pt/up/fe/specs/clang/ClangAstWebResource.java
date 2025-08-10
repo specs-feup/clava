@@ -26,7 +26,7 @@ public interface ClangAstWebResource {
 
     WebResourceProvider CUDA_LIB = WebResourceProvider.newInstance(ROOT_12_0_7, "cudalib.zip", "v11.3.0");
 
-    WebResourceProvider WIN_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_windows.exe", "v16.0.5");
+    WebResourceProvider WIN_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_windows.exe", "v16.0.5_1");
     WebResourceProvider WIN_DLL1 = WebResourceProvider.newInstance(ROOT_12_0_7, "libwinpthread-1.dll");
     WebResourceProvider WIN_DLL2 = WebResourceProvider.newInstance(ROOT_12_0_7, "zlib1.dll");
     WebResourceProvider WIN_DLL3 = WebResourceProvider.newInstance(ROOT_12_0_7, "libzstd.dll");
@@ -40,7 +40,10 @@ public interface ClangAstWebResource {
     WebResourceProvider LINUX_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_linux", "v16.0.5");
     WebResourceProvider LINUX_PLUGIN = WebResourceProvider.newInstance(ROOT_16_0_5, "clang-plugin.so", "v16.0.5");
     WebResourceProvider WIN_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM-16.dll");
+    WebResourceProvider WIN_CLANG_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libclang-cpp.dll");
 
     WebResourceProvider MAC_OS_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_macos", "v16.0.5");
+    WebResourceProvider MAC_OS_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM.dylib", "v16.0.5");
+    WebResourceProvider MAC_OS_DLL1 = WebResourceProvider.newInstance(ROOT_16_0_5, "libzstd.1.dylib", "v16.0.5");
 
 }

@@ -34,8 +34,8 @@ if(WIN32)
 endif()
 
 # Set compiler
+# Often these do not work... replace with direct invocation in command line
 if(WIN32)
-    # Often these do not work... replace with direct invocation in command line
 	# E.g., cmake -DCMAKE_C_COMPILER="c:/mingw64-clang-16/bin/clang.exe" -DCMAKE_CXX_COMPILER="C:/mingw64-clang-16/bin/clang++.exe" -DCMAKE_LINKER="C:/mingw64-clang-16/bin/lld-link.exe" ..
 	SET(CMAKE_C_COMPILER "${MINGW_BASEDIR}/bin/clang.exe")
 	SET(CMAKE_CXX_COMPILER "${MINGW_BASEDIR}/bin/clang++.exe")
@@ -45,22 +45,35 @@ else()
 	SET(CMAKE_CXX_COMPILER "clang++-${CLANG_VERSION}")
 endif()
 
+message(STATUS "Tried to set C compiler to: ${CMAKE_C_COMPILER}")
+message(STATUS "Tried to set C++ compiler to: ${CMAKE_CXX_COMPILER}")
+
 # Set libraries
 if(WIN32)
 	SET(Clang_DIR "${MINGW_BASEDIR}/lib/cmake/clang")
 	SET(LLVM_DIR "${MINGW_BASEDIR}/lib/cmake/llvm")
+elseif(APPLE)
+	# Point CMake to Homebrew's LLVM and Clang config packages
+	set(Clang_DIR  "/usr/local/opt/llvm@${CLANG_VERSION}/lib/cmake/clang"  CACHE PATH "Path to ClangConfig.cmake")
+	set(LLVM_DIR   "/usr/local/opt/llvm@${CLANG_VERSION}/lib/cmake/llvm"   CACHE PATH "Path to LLVMConfig.cmake")
 else()
 	SET(Clang_DIR "/usr/lib/cmake/clang-${CLANG_VERSION}")
 	SET(LLVM_DIR "/usr/lib/llvm-${CLANG_VERSION}/lib/cmake/llvm")
 endif()
+
+message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+message(STATUS "Using ClangConfig.cmake in: ${Clang_DIR}")
 
 add_compile_options(-Wsuggest-override)
 
 find_package(LLVM REQUIRED CONFIG)
 find_package(Clang REQUIRED CONFIG)
 
+
+# Helpful metadata
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
-message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+
+
 
 # Set the LLVM and Clang include directories
 include_directories(${LLVM_INCLUDE_DIRS})	
@@ -106,7 +119,7 @@ set(SOURCE_FILES
 
 add_custom_target (
     clang_enums
-    COMMAND node clang_enums/Main.mjs ${LLVM_DIR} src/	
+    COMMAND node clang_enums/Main.mjs ${LLVM_DIR} src/
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # Only build plugin if not on Windows or MacOS
@@ -122,6 +135,7 @@ add_executable(tool ${SOURCE_FILES} src/tool.cpp)
 target_compile_features(tool PRIVATE cxx_std_20)
 add_dependencies(tool clang_enums)
 
+
 message(STATUS "SYSTEM PROCESSOR: '${CMAKE_SYSTEM_PROCESSOR}'")
 if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm") 
 	set(PROCESSOR_PREFIX "ARM")
@@ -129,7 +143,19 @@ else()
 	set(PROCESSOR_PREFIX "X86")
 endif()
 
-target_link_libraries( tool
+
+#set_property(TARGET tool PROPERTY INTERPROCEDURAL_OPTIMIZATION OFF)
+
+
+if(WIN32)
+	target_link_directories(tool PRIVATE "${MINGW_BASEDIR}/lib")
+	target_link_libraries(tool
+			clang-cpp
+			LLVM
+	)  
+else()
+#	set(LLVM_LINK_LLVM_DYLIB OFF)
+	target_link_libraries( tool
     clangAnalysis
     clangAPINotes
     clangARCMigrate
@@ -140,7 +166,7 @@ target_link_libraries( tool
     clangCodeGen
     clangCrossTU
     clangDependencyScanning
-    clangDirectoryWatcher		
+    clangDirectoryWatcher
     #clangDoc
     clangDriver
     clangDynamicASTMatchers
@@ -151,7 +177,7 @@ target_link_libraries( tool
     clangHandleCXX
     clangHandleLLVM
     clangIndex
-    clangIndexSerialization		
+    clangIndexSerialization
     clangLex
     #clangMove
     clangParse
@@ -168,10 +194,10 @@ target_link_libraries( tool
     clangToolingCore
     clangToolingInclusions
     clangToolingRefactoring
-    clangToolingSyntax		
+    clangToolingSyntax
     clangTransformer
     #DynamicLibraryLib
-        
+
     # LLVM libraries, as given by 'llvm-config --libs'
     LLVMWindowsManifest
     LLVMXRay
@@ -252,3 +278,14 @@ target_link_libraries( tool
     #LLVMSupport
     #LLVMDemangle
 )
+endif()
+
+# If on MacOS, change the expected location of libLLVM.dylib and libzstd.1.dylib
+# To check changes, use 'otool -L tool'
+if(APPLE)
+	add_custom_command (
+		TARGET tool POST_BUILD
+		COMMAND install_name_tool -change /usr/local/opt/llvm@${CLANG_VERSION}/lib/libLLVM.dylib @executable_path/libLLVM.dylib "$<TARGET_FILE:tool>"
+		COMMAND install_name_tool -change /usr/local/opt/zstd/lib/libzstd.1.dylib @executable_path/libzstd.1.dylib  "$<TARGET_FILE:tool>"
+	)
+endif()
