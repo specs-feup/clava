@@ -256,7 +256,7 @@ public class ClangAstParser {
         includes.stream()
                 .forEach(include -> includesMap.put(SpecsIo.getCanonicalPath(include.getSourceFile()), include));
 
-        // For each enty in MultiMap, create a Translation Unit
+        // For each entry in MultiMap, create a Translation Unit
         List<TranslationUnit> tUnits = new ArrayList<>();
         for (String path : declarations.keySet()) {
 
