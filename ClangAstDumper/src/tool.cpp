@@ -2,17 +2,26 @@
 #include <clang/Tooling/Tooling.h>
 
 #include "Clang/ClangAst.h"
+#include "llvm/Support/InitLLVM.h"
+
+
+// Globally defined, or parser might not catch it
+static llvm::cl::OptionCategory MyToolCategory("my-tool options");
+static llvm::cl::opt<int> UserIdOption("id", llvm::cl::cat(MyToolCategory));
+static llvm::cl::opt<int> UserSystemHeaderThresholdOption(
+        "system-header-threshold", llvm::cl::cat(MyToolCategory));
+
 
 int main(int argc, const char *argv[]) {
 
+    llvm::InitLLVM X(argc, argv);
+
+
+    //llvm::outs() << "HELLO!\n";
   // Errs is the main way we dump information, we tested if making it buffered
   // improved performance but could not detect a significant difference
   // llvm::errs().SetBuffered();
 
-  static llvm::cl::OptionCategory MyToolCategory("my-tool options");
-  static llvm::cl::opt<int> UserIdOption("id", llvm::cl::cat(MyToolCategory));
-  static llvm::cl::opt<int> UserSystemHeaderThresholdOption(
-      "system-header-threshold", llvm::cl::cat(MyToolCategory));
 
   auto OptionsParser =
       clang::tooling::CommonOptionsParser::create(argc, argv, MyToolCategory);
