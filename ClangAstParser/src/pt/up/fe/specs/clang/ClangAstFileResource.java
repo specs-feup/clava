@@ -37,7 +37,8 @@ public enum ClangAstFileResource implements Supplier<FileResourceProvider> {
     LINUX_EXE(ClangAstWebResource.LINUX_EXE),
     LINUX_PLUGIN(ClangAstWebResource.LINUX_PLUGIN),
     MAC_OS_EXE(ClangAstWebResource.MAC_OS_EXE),
-    MAC_OS_LLVM_DLL(ClangAstWebResource.MAC_OS_LLVM_DLL);
+    MAC_OS_LLVM_DLL(ClangAstWebResource.MAC_OS_LLVM_DLL),
+    MAC_OS_DLL1(ClangAstWebResource.MAC_OS_DLL1);
 
     private final FileResourceProvider provider;
 

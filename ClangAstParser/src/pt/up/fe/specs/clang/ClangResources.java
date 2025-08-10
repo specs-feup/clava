@@ -280,11 +280,12 @@ public class ClangResources {
     }
 
     private List<FileResourceProvider> getMacOSResources() {
-        List<FileResourceProvider> windowsResources = new ArrayList<>();
+        List<FileResourceProvider> macosResources = new ArrayList<>();
 
-        windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.MAC_OS_LLVM_DLL));
+        macosResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.MAC_OS_LLVM_DLL));
+        macosResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.MAC_OS_DLL1));
 
-        return windowsResources;
+        return macosResources;
     }
 
     private List<String> prepareIncludes(File clangExecutable, LibcMode libcMode) {

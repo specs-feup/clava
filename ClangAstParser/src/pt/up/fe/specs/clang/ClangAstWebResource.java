@@ -44,5 +44,6 @@ public interface ClangAstWebResource {
 
     WebResourceProvider MAC_OS_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_macos", "v16.0.5");
     WebResourceProvider MAC_OS_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM.dylib", "v16.0.5");
+    WebResourceProvider MAC_OS_DLL1 = WebResourceProvider.newInstance(ROOT_16_0_5, "libzstd.1.dylib", "v16.0.5");
 
 }
