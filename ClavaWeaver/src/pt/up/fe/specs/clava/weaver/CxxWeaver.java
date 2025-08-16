@@ -636,7 +636,6 @@ public class CxxWeaver extends ACxxWeaver {
                 .setDisableRemoteDependencies(getConfig().get(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES));
 
         return app;
-
     }
 
     private Set<String> getSourceIncludes(List<File> sources) {

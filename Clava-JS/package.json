@@ -1,6 +1,6 @@
 {
   "name": "@specs-feup/clava",
-  "version": "3.0.17",
+  "version": "3.0.27",
   "description": "A C/C++ source-to-source compiler written in Typescript",
   "type": "module",
   "files": [

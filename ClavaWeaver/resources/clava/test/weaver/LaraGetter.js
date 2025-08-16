@@ -6,8 +6,10 @@ const descendants = Clava.getProgram().descendants;
 // For some reason, laraGetter is not being used in that case
 //var descendants2 = Clava.getProgram().getDescendants('vardecl');
 
+const filename = Clava.isCxx() ? "dummy.cpp" : "dummy.c";
+
 const $app = Clava.getProgram();
-const $file = ClavaJoinPoints.file("dummy.c", "lib");
+const $file = ClavaJoinPoints.file(filename, "lib");
 $file.insertBefore("// Hello");
 
 $app.addFile($file);

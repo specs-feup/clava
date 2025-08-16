@@ -1,8 +1,9 @@
 import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.js";
-import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import ClavaJavaTypes from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 import path from "path";
 import "@specs-feup/clava/api/Joinpoints.js";
+
+const isWindows = process.platform === "win32";
 
 /* eslint-disable jest/expect-expect */
 describe("CxxTest", () => {
@@ -71,10 +72,9 @@ describe("CxxTest", () => {
     });
 
     it("OmpThreadsExplore", async () => {
-        await newTester().test(
-            "OmpThreadsExplore.js",
-            "omp_threads_explore.cpp"
-        );
+        await newTester()
+            .set(ClavaJavaTypes.ClavaOptions.FLAGS_LIST, "-fopenmp=libomp")
+            .test("OmpThreadsExplore.js", "omp_threads_explore.cpp");
     });
 
     it("HamidCfg", async () => {
@@ -125,12 +125,7 @@ describe("CxxTest", () => {
             .test("ParamType.js", "param_type.cpp");
     });
 
-    it("Wrap", async () => {
-        if (JavaTypes.SpecsSystem.isWindows()) {
-            console.info("Skipping test, results are different on Windows");
-            return;
-        }
-
+    (isWindows ? it.skip : it)("Wrap", async () => {
         // newTester().test("Wrap.js", "wrap.cpp", "wrap.h", "lib/lib.h", "lib/lib.cpp");
         await newTester()
             .set(ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES)
@@ -511,11 +506,17 @@ describe("CxxApiTest", () => {
     });
 
     it("Subset", async () => {
-        await newTester().test("SubsetTest.js", "subset.cpp");
+        const tester = newTester();
+
+        if (isWindows) {
+            tester.setResultsFile("SubsetTest.js.windows.txt");
+        }
+
+        await tester.test("SubsetTest.js", "subset.cpp");
     });
 });
 
-describe("CudaTest", () => {
+(isWindows ? describe.skip : describe)("CudaTest", () => {
     function newTester() {
         const cudaTester = new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/weaver/"),
@@ -523,13 +524,10 @@ describe("CudaTest", () => {
         )
             .setResultPackage("cuda/results")
             .setSrcPackage("cuda/src")
-            .set(ClavaJavaTypes.CodeParser.CUDA_PATH, ClavaJavaTypes.CodeParser.getBuiltinOption());
-
-        // Windows currently not supported
-        if (JavaTypes.SpecsPlatforms.isWindows()) {
-            // TODO: Add a proper way to skip tests
-            cudaTester.doNotRun();
-        }
+            .set(
+                ClavaJavaTypes.CodeParser.CUDA_PATH,
+                ClavaJavaTypes.CodeParser.getBuiltinOption()
+            );
 
         return cudaTester;
     }

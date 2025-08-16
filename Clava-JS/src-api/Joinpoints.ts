@@ -406,6 +406,10 @@ export class Joinpoint extends LaraJoinPoint {
    */
   hasNode(nodeOrJp: object): boolean { return wrapJoinPoint(this._javaObject.hasNode(unwrapJoinPoint(nodeOrJp))); }
   /**
+   * List with the values of fields that are join points, recursively
+   */
+  jpFields(recursive: boolean = false): Joinpoint[] { return wrapJoinPoint(this._javaObject.jpFields(unwrapJoinPoint(recursive))); }
+  /**
    * Performs a copy of the node and its children, but not of the nodes in its fields
    */
   copy(): Joinpoint { return wrapJoinPoint(this._javaObject.copy()); }

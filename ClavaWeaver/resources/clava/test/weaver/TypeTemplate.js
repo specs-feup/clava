@@ -65,6 +65,11 @@ for (const $typedefDecl of Query.search("typedefDecl", "typedef_to_change")) {
 // Change type of vardecl which is a typedef
 for (const $vardecl of Query.search("vardecl", "changed_typedef_type")) {
     $vardecl.type.templateArgsTypes = [intType];
+
+    if($vardecl.type.kind === "ElaboratedType") {
+        $vardecl.type = $vardecl.type.desugar;
+    }
+
     if ($vardecl.type.kind === "TypedefType") {
         $vardecl.type = $vardecl.type.desugar;
     }

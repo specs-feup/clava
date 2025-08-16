@@ -17,39 +17,33 @@ import pt.up.fe.specs.util.providers.WebResourceProvider;
 
 public interface ClangAstWebResource {
 
-    static WebResourceProvider create(String resourceUrl, String version) {
-        return WebResourceProvider.newInstance("https://specs.fe.up.pt/resources/clangast/", resourceUrl, version);
-    }
+    String ROOT_16_0_5 = "https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_16.0.5/";
+    String ROOT_12_0_7 = "https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/";
 
-    static WebResourceProvider create(String resourceUrl) {
-        return WebResourceProvider.newInstance("https://specs.fe.up.pt/resources/clangast/", resourceUrl);
-    }
+    WebResourceProvider BUILTIN_INCLUDES = WebResourceProvider.newInstance(ROOT_16_0_5, "libc_cxx.zip", "v16.0.5");
 
-    WebResourceProvider BUILTIN_INCLUDES = create("clang_builtin_includes_v12.0.1.zip", "v12.0.1");
-    // WebResourceProvider LIBC_CXX = create("libcxx_7.0.1.zip", "v1.0");
-    WebResourceProvider LIBC_CXX = create("libc_cxx.zip", "v12.0.1");
+    WebResourceProvider OPENMP_INCLUDES = WebResourceProvider.newInstance(ROOT_16_0_5, "openmp_includes.zip");
 
-    // WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip", "v1.0");
-    WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip_", "v12.0.1");
+    WebResourceProvider CUDA_LIB = WebResourceProvider.newInstance(ROOT_12_0_7, "cudalib.zip", "v11.3.0");
 
-    // For some reason, on Linux, this file no longer downloads
-    WebResourceProvider CUDA_LIB = create("cudalib.zip_", "v11.3.0");
+    WebResourceProvider WIN_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_windows.exe", "v16.0.5_1");
+    WebResourceProvider WIN_DLL1 = WebResourceProvider.newInstance(ROOT_12_0_7, "libwinpthread-1.dll");
+    WebResourceProvider WIN_DLL2 = WebResourceProvider.newInstance(ROOT_12_0_7, "zlib1.dll");
+    WebResourceProvider WIN_DLL3 = WebResourceProvider.newInstance(ROOT_12_0_7, "libzstd.dll");
+    WebResourceProvider WIN_DLL4 = WebResourceProvider.newInstance(ROOT_12_0_7, "libstdc++-6.dll");
+    WebResourceProvider WIN_DLL5 = WebResourceProvider.newInstance(ROOT_12_0_7, "libgcc_s_seh-1.dll");
+    WebResourceProvider WIN_DLL6 = WebResourceProvider.newInstance(ROOT_12_0_7, "libffi-8.dll");
+    WebResourceProvider WIN_DLL7 = WebResourceProvider.newInstance(ROOT_12_0_7, "libxml2-2.dll");
+    WebResourceProvider WIN_DLL8 = WebResourceProvider.newInstance(ROOT_12_0_7, "liblzma-5.dll");
+    WebResourceProvider WIN_DLL9 = WebResourceProvider.newInstance(ROOT_12_0_7, "libiconv-2.dll");
 
-    // WebResourceProvider LIBC_CXX_MAC_OS = create("libc_cxx_mac_os.zip", "v1.0");
-    // WebResourceProvider LIBC_CXX_LINUX = create("libc_cxx_linux.zip", "v1.0");
-    // WebResourceProvider LIBC_CXX_CENTOS6 = create("libc_cxx_centos6.zip", "v1.0");
+    WebResourceProvider LINUX_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_linux", "v16.0.5");
+    WebResourceProvider LINUX_PLUGIN = WebResourceProvider.newInstance(ROOT_16_0_5, "clang-plugin.so", "v16.0.5");
+    WebResourceProvider WIN_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM-16.dll");
+    WebResourceProvider WIN_CLANG_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libclang-cpp.dll");
 
-    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v12.0.7");
-    WebResourceProvider WIN_DLL1 = create("windows/libwinpthread-1.dll");
-    WebResourceProvider WIN_DLL2 = create("windows/zlib1.dll");
-
-    WebResourceProvider LINUX_EXE = create("linux_ubuntu_18/clang_ast", "v12.0.7");
-
-    // Disabled while we do not have an updated Odroid
-    WebResourceProvider LINUX_ARMV7_EXE = create("linux_ubuntu_14_armv7/clang_ast", "v4.2.19");
-
-    WebResourceProvider CENTOS_EXE = create("centos8/clang_ast", "v12.0.7");
-
-    WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v12.0.7");
+    WebResourceProvider MAC_OS_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_macos", "v16.0.5");
+    WebResourceProvider MAC_OS_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM.dylib", "v16.0.5");
+    WebResourceProvider MAC_OS_DLL1 = WebResourceProvider.newInstance(ROOT_16_0_5, "libzstd.1.dylib", "v16.0.5");
 
 }

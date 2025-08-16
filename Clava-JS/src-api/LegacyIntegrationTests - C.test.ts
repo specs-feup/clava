@@ -4,6 +4,8 @@ import ClavaJavaTypes from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 import path from "path";
 import "@specs-feup/clava/api/Joinpoints.js";
 
+const isWindows = process.platform === "win32";
+
 /* eslint-disable jest/expect-expect */
 describe("CTest", () => {
     function newTester() {
@@ -89,12 +91,7 @@ describe("CTest", () => {
         await newTester().test("Detach.js", "detach.c");
     });
 
-    it("InlineNasLu", async () => {
-        if (JavaTypes.SpecsSystem.isWindows()) {
-            console.info("Skipping test, does not work on Windows");
-            return;
-        }
-
+    (isWindows ? it.skip : it)("InlineNasLu", async () => {
         await newTester()
             .checkExpectedOutput(false)
             .test("InlineNasLu.js", "inline_nas_lu.c");
@@ -121,6 +118,16 @@ describe("CTest", () => {
     it("RemoveInclude", async () => {
         await newTester().test(
             "RemoveInclude.js",
+            "remove_include.c",
+            "remove_include_0.h",
+            "remove_include_1.h",
+            "remove_include_2.h"
+        );
+    });
+
+    it("IncludeLocation", async () => {
+        await newTester().test(
+            "IncludeLoc.js",
             "remove_include.c",
             "remove_include_0.h",
             "remove_include_1.h",
