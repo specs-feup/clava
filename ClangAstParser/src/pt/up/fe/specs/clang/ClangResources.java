@@ -157,7 +157,6 @@ public class ClangResources {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
         } else if (platform == SupportedPlatform.MAC_OS) {
-            //var dynLibsFolder = new File("/usr/local/lib/");
             for (FileResourceProvider resource : getMacOSResources()) {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
