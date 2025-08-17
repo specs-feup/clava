@@ -6,3 +6,5 @@ src/**/exceptions/CxxWeaverException.java
 src/**/enums/
 *.dotty
 CxxWeaver.json
+CxxWeaver.png
+CxxWeaver.svg
