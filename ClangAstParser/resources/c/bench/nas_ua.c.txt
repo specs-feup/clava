@@ -1,8 +1,3 @@
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <math.h>
 //-------------------------------------------------------------------------//
 //                                                                         //
 //  This benchmark is a serial C version of the NPB UA code. This C        //
@@ -30,12 +25,20 @@
 //          E-mail:  cmp@aces.snu.ac.kr                                    //
 //                                                                         //
 //-------------------------------------------------------------------------//
+
 //-------------------------------------------------------------------------//
 // Authors: Sangmin Seo, Jungwon Kim, Jun Lee, Jeongho Nah, Gangwon Jo,    //
 //          and Jaejin Lee                                                 //
 //-------------------------------------------------------------------------//
+
 // program ua
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 //#include <time.h>
+#include <sys/time.h>
+#include <math.h>
+
 /*
 //----------
 //  Class S:

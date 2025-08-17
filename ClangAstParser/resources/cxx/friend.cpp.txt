@@ -1,6 +1,6 @@
-#include <iostream>
 // friend functions
 // taken from: http://www.cplusplus.com/doc/tutorial/inheritance/
+#include <iostream>
 using namespace std;
 
 class Rectangle {
