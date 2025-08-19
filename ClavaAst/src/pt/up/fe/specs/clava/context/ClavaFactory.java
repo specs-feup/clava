@@ -594,9 +594,13 @@ public class ClavaFactory {
         DataStore data = newDataStore(IncludeDecl.class);
 
         data.set(IncludeDecl.INCLUDE, include);
-        if (filepath != null) {
-            data.set(IncludeDecl.LOCATION, new SourceRange(filepath, -1, -1, -1, -1));
-        }
+
+        var locFilepath = filepath != null ? filepath : "<no filepath>";
+        var line = include.getLine();
+
+        // Build location for include
+        var location = new SourceRange(locFilepath, line, 0, line, include.getInclude().length());
+        data.set(IncludeDecl.LOCATION, location);
 
         return new IncludeDecl(data, Collections.emptyList());
     }

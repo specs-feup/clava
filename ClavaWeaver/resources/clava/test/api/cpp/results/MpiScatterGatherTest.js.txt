@@ -52,3 +52,9 @@ return 0;
 foo();
 }
 /**** End File ****/
+/**** File 'mpi_scatter_gather.h' ****/
+#ifndef _MPI_SCATTER_GATHER_H_
+#define _MPI_SCATTER_GATHER_H_
+void bar();
+#endif
+/**** End File ****/

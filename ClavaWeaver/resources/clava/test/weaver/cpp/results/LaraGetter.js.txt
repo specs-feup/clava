@@ -1,0 +1,4 @@
+/**** File 'lib/dummy.cpp' ****/
+
+//hello 2
+/**** End File ****/

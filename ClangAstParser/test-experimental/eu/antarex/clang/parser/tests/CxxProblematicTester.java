@@ -84,7 +84,7 @@ public class CxxProblematicTester {
 
     @Test
     public void testMsAsm() {
-        new CxxTester("problematic/ms_asm.c").addFlags("-fasm-blocks").onePass().showCode().test();
+        new CxxTester("problematic/ms_asm.cpp").addFlags("-fasm-blocks").onePass().showCode().test();
     }
 
 }

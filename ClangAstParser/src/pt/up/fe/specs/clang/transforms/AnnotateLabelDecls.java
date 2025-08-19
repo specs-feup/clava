@@ -15,8 +15,6 @@ package pt.up.fe.specs.clang.transforms;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.*;
-import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
@@ -40,6 +38,4 @@ public class AnnotateLabelDecls implements SimplePostClavaRule {
         }
 
     }
-
-
 }
