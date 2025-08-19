@@ -270,7 +270,6 @@ public class CxxWeaver extends ACxxWeaver {
             }
         }
 
-        allSources.putAll(this.args.get(LaraiKeys.WORKSPACE_EXTRA));
         updateSources(allSources);
 
         // Store original source folders
