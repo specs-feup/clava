@@ -1,9 +1,3 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
-#include "polybench.h"
-#include "2mm.h"
 /**
 * This version is stamped on May 10, 2016
 *
@@ -14,11 +8,23 @@
 * Web address: http://polybench.sourceforge.net
 */
 /*2mm.c: this file is part of PolyBench/C*/
+
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <math.h>
+
 /*Include polybench common header.*/
+#include "polybench.h"
+
 /*Include benchmark-specific header.*/
+#include "2mm.h"
+
+
 /*Array initialization.*/
 static void init_array(int ni, int nj, int nk, int nl, double *alpha, double *beta, double A[800][1100], double B[1100][900], double C[900][1200], double D[800][1200]) {
    int i, j;
+
    *alpha = 1.5;
    *beta = 1.2;
    for(i = 0; i < ni; i++) 

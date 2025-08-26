@@ -1,17 +1,13 @@
-#include <iostream>
 // Example taken from http://en.cppreference.com/w/cpp/language/namespace_alias
 
-namespace foo {
-   
+#include <iostream>
+
+namespace foo {   
    namespace bar {
-      
       namespace baz {
          int qux = 42;
-      
       }
-   
    }
-
 }
 
 namespace fbz = foo::bar::baz;
