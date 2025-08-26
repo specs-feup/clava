@@ -564,6 +564,12 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
                 .collect(Collectors.joining(", ")));
         builder.append(")");
 
+        // If has static linkage, add the filename to the signature
+        if (get(STORAGE_CLASS) == StorageClass.Static) {
+            getAncestorTry(TranslationUnit.class)
+                    .ifPresent(tu -> builder.append("[" + tu.getFilename() + "]"));
+        }
+
         return builder.toString();
     }
 

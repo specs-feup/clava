@@ -19,11 +19,16 @@ RemoteSystemsTempFiles/
 # Custom ignores #
 ##################
 
+.vscode
+
 tomJava/
 .svn/
 sf.eclipse.javacc.prefs
 MatisseOptions.lara
 Matisse.lara
+
+# Eclipse settings folder
+**/.settings/**
 
 #output/
 .idea/

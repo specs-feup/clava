@@ -1,5 +1,0 @@
-rootProject.name = 'TranslationUnitPatcher'
-
-includeBuild("../../clava/ClangAstParser")
-includeBuild("../../specs-java-libs/jOptions")
-includeBuild("../../specs-java-libs/SpecsUtils")

@@ -7,6 +7,7 @@
     //"allowJs": true,
     //"checkJs": true,
     "moduleResolution": "NodeNext",
+    "isolatedModules": true,
     "sourceMap": true,
     "declarationMap": true,
     "allowSyntheticDefaultImports": true

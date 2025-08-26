@@ -1,11 +1,11 @@
 /**
  * Copyright 2020 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -16,22 +16,6 @@ package pt.up.fe.specs.clang;
 import java.io.File;
 import java.util.List;
 
-public class ClangFiles {
-
-    private final File clangExecutable;
-    private final List<String> builtinIncludes;
-
-    public ClangFiles(File clangExecutable, List<String> builtinIncludes) {
-        this.clangExecutable = clangExecutable;
-        this.builtinIncludes = builtinIncludes;
-    }
-
-    public File getClangExecutable() {
-        return clangExecutable;
-    }
-
-    public List<String> getBuiltinIncludes() {
-        return builtinIncludes;
-    }
+public record ClangFiles(File clangExecutable, List<String> builtinIncludes) {
 
 }

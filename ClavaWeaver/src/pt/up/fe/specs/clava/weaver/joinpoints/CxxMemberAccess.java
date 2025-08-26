@@ -68,13 +68,8 @@ public class CxxMemberAccess extends AMemberAccess {
     }
 
     @Override
-    public void defArrowImpl(Boolean value) {
-        memberExpr.set(MemberExpr.IS_ARROW, value);
-    }
-
-    @Override
     public void setArrowImpl(Boolean isArrow) {
-        defArrowImpl(isArrow);
+        memberExpr.set(MemberExpr.IS_ARROW, isArrow);
     }
 
 }
