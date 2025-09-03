@@ -49,6 +49,7 @@ type PrivateMapper = {
   "AdjustedType": typeof AdjustedType,
   "ArrayAccess": typeof ArrayAccess,
   "ArrayType": typeof ArrayType,
+  "AsmStmt": typeof AsmStmt,
   "BinaryOp": typeof BinaryOp,
   "BoolLiteral": typeof BoolLiteral,
   "Break": typeof Break,
@@ -1430,6 +1431,18 @@ export class ArrayType extends Type {
    * Sets the element type of the array
    */
   setElementType(arrayElementType: Type): void { return wrapJoinPoint(this._javaObject.setElementType(unwrapJoinPoint(arrayElementType))); }
+}
+
+export class AsmStmt extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get clobbers(): string[] { return wrapJoinPoint(this._javaObject.getClobbers()) }
+  get isSimple(): boolean { return wrapJoinPoint(this._javaObject.getIsSimple()) }
+  get isVolatile(): boolean { return wrapJoinPoint(this._javaObject.getIsVolatile()) }
 }
 
 export class BinaryOp extends Op {
@@ -2877,6 +2890,7 @@ const JoinpointMapper = {
   adjustedType: AdjustedType,
   arrayAccess: ArrayAccess,
   arrayType: ArrayType,
+  asmStmt: AsmStmt,
   binaryOp: BinaryOp,
   boolLiteral: BoolLiteral,
   break: Break,
