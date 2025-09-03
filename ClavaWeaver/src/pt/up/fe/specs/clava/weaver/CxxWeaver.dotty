@@ -7,6 +7,7 @@ edge [fontsize=10]
 "adjustedType"->"type"
 "arrayAccess"->"expression"
 "arrayType"->"type"
+"asmStmt"->"statement"
 "attribute"->"joinpoint"
 "binaryOp"->"op"
 "body"->"scope"
