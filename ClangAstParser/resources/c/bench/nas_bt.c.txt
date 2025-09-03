@@ -1,12 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <sys/mman.h>
-#include <errno.h>
-#include <time.h>
-#include <sys/time.h>
 //-------------------------------------------------------------------------//
 //                                                                         //
 //  This benchmark is a serial C version of the NPB BT code. This C        //
@@ -34,13 +25,24 @@
 //          E-mail:  cmp@aces.snu.ac.kr                                    //
 //                                                                         //
 //-------------------------------------------------------------------------//
+
 //-------------------------------------------------------------------------//
 // Authors: Sangmin Seo, Jungwon Kim, Jun Lee, Jeongho Nah, Gangwon Jo,    //
 //          and Jaejin Lee                                                 //
 //-------------------------------------------------------------------------//
+
 //---------------------------------------------------------------------
 // program BT
 //---------------------------------------------------------------------
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <errno.h>
+
 /*CLASS = W*/
 /*
 This file is generated automatically by the setparams utility.
@@ -159,6 +161,7 @@ double c3c4tz3;
 double c2iv;
 double con43;
 double con16;
+
 // to improve cache performance, grid dimensions padded by 1
 // for even number sizes only.
 /*common /fields/*/
@@ -171,22 +174,30 @@ double square[24][25][25];
 double forcing[24][25][25][5];
 double u[24][25][25][5];
 double rhs[24][25][25][5];
+
 /*common /work_1d/*/
 double cuf[25];
 double q[25];
 double ue[25][5];
 double buf[25][5];
+
+
+
 //-----------------------------------------------------------------------
 // Timer constants
 //-----------------------------------------------------------------------
+
 /*The following works on SGI Power Challenge systems*/
 typedef unsigned long iotimer_t;
+
 unsigned int cycleval;
 iotimer_t volatile *iotimer_addr;
 iotimer_t volatile base_counter;
 double resolution;
+
 /*address_t is an integer type big enough to hold an address*/
 typedef unsigned long address_t;
+
 void initialize();
 void lhsinit(double lhs[][3][5][5], int size);
 void exact_solution(double xi, double eta, double zeta, double dtemp[5]);
@@ -205,7 +216,9 @@ void add();
 void error_norm(double rms[5]);
 void rhs_norm(double rms[5]);
 void verify(int no_time_steps, char *class, logical *verified);
+
 void print_results(char *name, char class, int n1, int n2, int n3, int niter, double t, double mops, char *optype, logical verified, char *npbversion, char *compiletime, char *cs1, char *cs2, char *cs3, char *cs4, char *cs5, char *cs6, char *cs7);
+
 void timer_clear(int n);
 void timer_start(int n);
 void timer_stop(int n);
@@ -218,6 +231,9 @@ typedef struct {
 
 double randlc(double *x, double a);
 void vranlc(int n, double *x, double a, double y[]);
+
+#include <time.h>
+
 void wtime(double *t) {
 static int sec = -1;
 struct timeval tv;
@@ -225,6 +241,7 @@ gettimeofday(&tv, (void *) 0);
 if(sec < 0) sec = tv.tv_sec;
 *t = (tv.tv_sec - sec) + 1.0e-6 * tv.tv_usec;
 }
+
 /*****************************************************************/
 /******         E  L  A  P  S  E  D  _  T  I  M  E          ******/
 /*****************************************************************/
@@ -233,20 +250,24 @@ double t;
 wtime(&t);
 return (t);
 }
+
 static double start[64];
 static double elapsed[64];
+
 /*****************************************************************/
 /******            T  I  M  E  R  _  C  L  E  A  R          ******/
 /*****************************************************************/
 void timer_clear(int n) {
 elapsed[n] = 0.0;
 }
+
 /*****************************************************************/
 /******            T  I  M  E  R  _  S  T  A  R  T          ******/
 /*****************************************************************/
 void timer_start(int n) {
 start[n] = elapsed_time();
 }
+
 /*****************************************************************/
 /******            T  I  M  E  R  _  S  T  O  P             ******/
 /*****************************************************************/
@@ -256,12 +277,15 @@ now = elapsed_time();
 t = now - start[n];
 elapsed[n] += t;
 }
+
 /*****************************************************************/
 /******            T  I  M  E  R  _  R  E  A  D             ******/
 /*****************************************************************/
 double timer_read(int n) {
 return (elapsed[n]);
 }
+
+
 int main(int argc, char *argv[]) {
 int i, niter, step;
 double navg, mflops, n3;
@@ -319,6 +343,7 @@ printf("\n");
 if((grid_points[0] > 24) || (grid_points[1] > 24) || (grid_points[2] > 24)) {
 printf(" %d, %d, %d\n", grid_points[0], grid_points[1], grid_points[2]);
 printf(" Problem size too big for compiled array sizes\n");
+
 return 0;
 }
 set_constants();
@@ -381,8 +406,10 @@ printf("    --> %8s:%9.3f  (%6.2f%%)\n", "redist", t, t * 100. / tmax);
 }
 }
 }
+
 return 0;
 }
+
 //---------------------------------------------------------------------
 // addition of update to the vector u
 //---------------------------------------------------------------------
@@ -400,6 +427,7 @@ u[k][j][i][m] = u[k][j][i][m] + rhs[k][j][i][m];
 }
 if(timeron) timer_stop(11);
 }
+
 void adi() {
 compute_rhs();
 x_solve();
@@ -407,6 +435,7 @@ y_solve();
 z_solve();
 add();
 }
+
 //---------------------------------------------------------------------
 // this function computes the norm of the difference between the
 // computed solution and the exact solution
@@ -442,6 +471,7 @@ rms[m] = rms[m] / (double) (grid_points[d] - 2);
 rms[m] = sqrt(rms[m]);
 }
 }
+
 void rhs_norm(double rms[5]) {
 int i, j, k, d, m;
 double add;
@@ -465,6 +495,7 @@ rms[m] = rms[m] / (double) (grid_points[d] - 2);
 rms[m] = sqrt(rms[m]);
 }
 }
+
 //---------------------------------------------------------------------
 // compute the right hand side based on exact solution
 //---------------------------------------------------------------------
@@ -656,6 +687,7 @@ forcing[k][j][i][m] = -1.0 * forcing[k][j][i][m];
 }
 }
 }
+
 //---------------------------------------------------------------------
 // this function returns the exact solution at point xi, eta, zeta
 //---------------------------------------------------------------------
@@ -665,6 +697,7 @@ for(m = 0; m < 5; m++) {
 dtemp[m] = ce[m][0] + xi * (ce[m][1] + xi * (ce[m][4] + xi * (ce[m][7] + xi * ce[m][10]))) + eta * (ce[m][2] + eta * (ce[m][5] + eta * (ce[m][8] + eta * ce[m][11]))) + zeta * (ce[m][3] + zeta * (ce[m][6] + zeta * (ce[m][9] + zeta * ce[m][12])));
 }
 }
+
 //---------------------------------------------------------------------
 // This subroutine initializes the field variable u using
 // tri-linear transfinite interpolation of the boundary values
@@ -815,6 +848,7 @@ u[k][j][i][m] = temp[m];
 }
 }
 }
+
 void lhsinit(double lhs[][3][5][5], int size) {
 int i, m, n;
 i = size;
@@ -839,6 +873,7 @@ lhs[0][1][m][m] = 1.0;
 lhs[i][1][m][m] = 1.0;
 }
 }
+
 void compute_rhs() {
 int i, j, k, m;
 double rho_inv, uijk, up1, um1, vijk, vp1, vm1, wijk, wp1, wm1;
@@ -1050,6 +1085,7 @@ rhs[k][j][i][m] = rhs[k][j][i][m] * dt;
 }
 if(timeron) timer_stop(5);
 }
+
 void set_constants() {
 ce[0][0] = 2.0;
 ce[0][1] = 0.0;
@@ -1210,6 +1246,7 @@ zzcon3 = c3c4tz3 * conz1 * tz3;
 zzcon4 = c3c4tz3 * con16 * tz3;
 zzcon5 = c3c4tz3 * c1c5 * tz3;
 }
+
 //---------------------------------------------------------------------
 // subtracts bvec=bvec - ablock*avec
 //---------------------------------------------------------------------
@@ -1224,6 +1261,7 @@ bvec[2] = bvec[2] - ablock[0][2] * avec[0] - ablock[1][2] * avec[1] - ablock[2][
 bvec[3] = bvec[3] - ablock[0][3] * avec[0] - ablock[1][3] * avec[1] - ablock[2][3] * avec[2] - ablock[3][3] * avec[3] - ablock[4][3] * avec[4];
 bvec[4] = bvec[4] - ablock[0][4] * avec[0] - ablock[1][4] * avec[1] - ablock[2][4] * avec[2] - ablock[3][4] * avec[3] - ablock[4][4] * avec[4];
 }
+
 //---------------------------------------------------------------------
 // subtracts a(i,j,k) X b(i,j,k) from c(i,j,k)
 //---------------------------------------------------------------------
@@ -1254,6 +1292,7 @@ cblock[4][2] = cblock[4][2] - ablock[0][2] * bblock[4][0] - ablock[1][2] * bbloc
 cblock[4][3] = cblock[4][3] - ablock[0][3] * bblock[4][0] - ablock[1][3] * bblock[4][1] - ablock[2][3] * bblock[4][2] - ablock[3][3] * bblock[4][3] - ablock[4][3] * bblock[4][4];
 cblock[4][4] = cblock[4][4] - ablock[0][4] * bblock[4][0] - ablock[1][4] * bblock[4][1] - ablock[2][4] * bblock[4][2] - ablock[3][4] * bblock[4][3] - ablock[4][4] * bblock[4][4];
 }
+
 void binvcrhs(double lhs[5][5], double c[5][5], double r[5]) {
 double pivot, coeff;
 pivot = 1.00 / lhs[0][0];
@@ -1482,6 +1521,7 @@ c[3][3] = c[3][3] - coeff * c[3][4];
 c[4][3] = c[4][3] - coeff * c[4][4];
 r[3] = r[3] - coeff * r[4];
 }
+
 void binvrhs(double lhs[5][5], double r[5]) {
 double pivot, coeff;
 pivot = 1.00 / lhs[0][0];
@@ -1585,6 +1625,7 @@ r[2] = r[2] - coeff * r[4];
 coeff = lhs[4][3];
 r[3] = r[3] - coeff * r[4];
 }
+
 //---------------------------------------------------------------------
 // verification routine
 //---------------------------------------------------------------------
@@ -1860,6 +1901,7 @@ else {
 printf(" Verification failed\n");
 }
 }
+
 //---------------------------------------------------------------------
 //
 // Performs line solves in X direction by first factoring
@@ -2095,6 +2137,7 @@ rhs[k][j][i][m] = rhs[k][j][i][m] - lhs[i][2][n][m] * rhs[k][j][i + 1][n];
 }
 if(timeron) timer_stop(6);
 }
+
 //---------------------------------------------------------------------
 // Performs line solves in Y direction by first factoring
 // the block-tridiagonal matrix into an upper triangular matrix,
@@ -2327,6 +2370,7 @@ rhs[k][j][i][m] = rhs[k][j][i][m] - lhs[j][2][n][m] * rhs[k][j + 1][i][n];
 }
 if(timeron) timer_stop(7);
 }
+
 //---------------------------------------------------------------------
 // Performs line solves in Z direction by first factoring
 // the block-tridiagonal matrix into an upper triangular matrix,
@@ -2568,6 +2612,7 @@ rhs[k][j][i][m] = rhs[k][j][i][m] - lhs[k][2][n][m] * rhs[k + 1][j][i][n];
 }
 if(timeron) timer_stop(8);
 }
+
 void c_print_results(char *name, char class, int n1, int n2, int n3, int niter, double t, double mops, char *optype, int passed_verification, char *npbversion, char *compiletime, char *cc, char *clink, char *c_lib, char *c_inc, char *cflags, char *clinkflags) {
 printf("\n\n %s Benchmark Completed\n", name);
 printf(" Class           =                        %c\n", class);
@@ -2600,6 +2645,7 @@ printf(" cmp@aces.snu.ac.kr\n");
 printf(" http://aces.snu.ac.kr\n"); //aces.snu.ac.kr\n"); //aces.snu.ac.kr\n");
 printf("--------------------------------------\n");
 }
+
 void print_results(char *name, char class, int n1, int n2, int n3, int niter, double t, double mops, char *optype, logical verified, char *npbversion, char *compiletime, char *cs1, char *cs2, char *cs3, char *cs4, char *cs5, char *cs6, char *cs7) {
 char size[16];
 int j;
@@ -2644,6 +2690,7 @@ printf("    CLINKFLAGS   = %s\n", cs6);
 printf("    RAND         = %s\n", cs7);
 printf("\n--------------------------------------\n Please send all errors/feedbacks to:\n Center for Manycore Programming\n cmp@aces.snu.ac.kr\n http://aces.snu.ac.kr\n--------------------------------------\n\n"); //aces.snu.ac.kr\n--------------------------------------\n\n"); //aces.snu.ac.kr\n"
 }
+
 double randlc(double *x, double a) {
 //--------------------------------------------------------------------
 //
@@ -2700,8 +2747,10 @@ t3 = t23 * z + a2 * x2;
 t4 = (int) (r46 * t3);
 *x = t3 - t46 * t4;
 r = r46 * (*x);
+
 return r;
 }
+
 void vranlc(int n, double *x, double a, double y[]) {
 //--------------------------------------------------------------------
 //
@@ -2763,14 +2812,18 @@ t4 = (int) (r46 * t3);
 *x = t3 - t46 * t4;
 y[i] = r46 * (*x);
 }
+
 return;
 }
+
 /*
 void timer_init()
 {
+
 int fd;
 char *virt_addr;
 address_t phys_addr, page_offset, pagemask, pagebase_addr;
+
 pagemask = getpagesize() - 1;
 errno = 0;
 phys_addr = syssgi(SGI_QUERY_CYCLECNTR, &cycleval);
@@ -2782,6 +2835,7 @@ exit(1);
 page_offset = phys_addr & pagemask;
 pagebase_addr = phys_addr - page_offset;
 fd = open("/dev/mmem", O_RDONLY);
+
 virt_addr = mmap(0, pagemask, PROT_READ, MAP_PRIVATE, fd, pagebase_addr);
 virt_addr = virt_addr + page_offset;
 iotimer_addr = (iotimer_t *)virt_addr;
@@ -2789,6 +2843,7 @@ iotimer_addr = (iotimer_t *)virt_addr;
 resolution = 1.0e-12*cycleval;
 base_counter = *iotimer_addr;
 }
+
 void wtime_(double *time)
 {
 static int initialized = 0;
@@ -2800,6 +2855,8 @@ initialized = 1;
 counter_value = *iotimer_addr - base_counter;
 *time = (double)counter_value * resolution;
 }
+
+
 void wtime(double *time)
 {
 static int initialized = 0;
@@ -2811,4 +2868,5 @@ initialized = 1;
 counter_value = *iotimer_addr - base_counter;
 *time = (double)counter_value * resolution;
 }
+
 */

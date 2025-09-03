@@ -1,15 +1,11 @@
-#include <iostream>
 // Taken from here: https://docs.microsoft.com/en-us/cpp/cpp/pointer-to-member-operators-dot-star-and-star?view=msvc-170
-
 // expre_Expressions_with_Pointer_Member_Operators.cpp
-
 // compile with: /EHsc
+#include <iostream>
 
 using namespace std;
 
 class Testpm {
-   
-   
    public:
    void m_func1() {
       cout << "m_func1\n";
