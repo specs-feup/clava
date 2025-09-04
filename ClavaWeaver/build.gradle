@@ -53,7 +53,7 @@ sourceSets {
 }
 
 // Re-run the weaver generator
-task generateWeaver(type: JavaExec) {
+tasks.register('generateWeaver', JavaExec) {
     group = "Execution"
     description = "Generates the Weaver Abstracts"
     classpath = configurations.weaverGeneratorRuntime
