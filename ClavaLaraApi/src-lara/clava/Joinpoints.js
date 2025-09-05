@@ -1201,6 +1201,17 @@ export class ArrayType extends Type {
      */
     setElementType(arrayElementType) { return wrapJoinPoint(this._javaObject.setElementType(unwrapJoinPoint(arrayElementType))); }
 }
+export class AsmStmt extends Statement {
+    /**
+     * @internal
+     */
+    static _defaultAttributeInfo = {
+        name: null,
+    };
+    get clobbers() { return wrapJoinPoint(this._javaObject.getClobbers()); }
+    get isSimple() { return wrapJoinPoint(this._javaObject.getIsSimple()); }
+    get isVolatile() { return wrapJoinPoint(this._javaObject.getIsVolatile()); }
+}
 export class BinaryOp extends Op {
     /**
      * @internal
@@ -2520,6 +2531,7 @@ const JoinpointMapper = {
     adjustedType: AdjustedType,
     arrayAccess: ArrayAccess,
     arrayType: ArrayType,
+    asmStmt: AsmStmt,
     binaryOp: BinaryOp,
     boolLiteral: BoolLiteral,
     break: Break,
