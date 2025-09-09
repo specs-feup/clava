@@ -156,7 +156,7 @@ public class ClavaWeaverData {
 
     // Not implemented yet
     private App popAst(int astIndex) {
-        SpecsCheck.checkNotNull(context, () -> "No App to pop");
+        Objects.requireNonNull(context, () -> "No App to pop");
 
         userValuesStack.pop();
 

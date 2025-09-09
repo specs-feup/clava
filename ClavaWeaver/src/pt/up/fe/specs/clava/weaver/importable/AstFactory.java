@@ -311,7 +311,7 @@ public class AstFactory {
      */
     public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, List<Integer> dims) {
 
-        Preconditions.checkNotNull(dims);
+        Objects.requireNonNull(dims);
         Preconditions.checkArgument(dims.size() > 0);
 
         Type inType = null;

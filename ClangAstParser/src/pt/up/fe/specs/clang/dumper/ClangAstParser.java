@@ -21,13 +21,12 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
-
-import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.cilk.CilkAstAdapter;
@@ -144,7 +143,7 @@ public class ClangAstParser {
         // for (String topLevelDeclId : topLevelDecls.flatValues()) {
         for (String topLevelDeclId : topLevelDecls) {
             ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelDeclId);
-            Preconditions.checkNotNull(parsedNode, "No node for decl '" + topLevelDeclId + "'");
+            Objects.requireNonNull(parsedNode, () -> "No node for decl '" + topLevelDeclId + "'");
             // Check
             topLevelDeclNodes.add(parsedNode);
         }
@@ -155,14 +154,14 @@ public class ClangAstParser {
                 continue;
             }
             ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelTypeId);
-            Preconditions.checkNotNull(parsedNode, "No node for type '" + topLevelTypeId + "'");
+            Objects.requireNonNull(parsedNode, () -> "No node for type '" + topLevelTypeId + "'");
 
         }
 
         // Parse top-level attributes
         for (String topLevelAttributeId : topLevelAttributes) {
             ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelAttributeId);
-            Preconditions.checkNotNull(parsedNode, "No node for attribute '" + topLevelAttributeId + "'");
+            Objects.requireNonNull(parsedNode, () -> "No node for attribute '" + topLevelAttributeId + "'");
         }
 
         // topLevelTypes.stream().forEach(this::parse);
@@ -183,7 +182,7 @@ public class ClangAstParser {
         /*
         for (String topLevelTypeId : topLevelTypes) {
             ClavaNode topLevelType = parsedNodes.get(topLevelTypeId);
-            Preconditions.checkNotNull(topLevelType);
+            Objects.requireNonNull(topLevelType);
         
             topLevelType.getDescendantsAndSelfStream()
                     .filter(Type.class::isInstance)
@@ -334,7 +333,7 @@ public class ClangAstParser {
         // for (String topLevelDeclId : topLevelDecls.flatValues()) {
         for (String topLevelDeclId : topLevelDecls) {
             ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelDeclId);
-            Preconditions.checkNotNull(parsedNode, "No node for decl '" + topLevelDeclId + "'");
+            Objects.requireNonNull(parsedNode, () -> "No node for decl '" + topLevelDeclId + "'");
             // Check
             topLevelDeclNodes.add(parsedNode);
         }
@@ -345,14 +344,14 @@ public class ClangAstParser {
                 continue;
             }
             ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelTypeId);
-            Preconditions.checkNotNull(parsedNode, "No node for type '" + topLevelTypeId + "'");
+            Objects.requireNonNull(parsedNode, () -> "No node for type '" + topLevelTypeId + "'");
 
         }
 
         // Parse top-level attributes
         for (String topLevelAttributeId : topLevelAttributes) {
             ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelAttributeId);
-            Preconditions.checkNotNull(parsedNode, "No node for attribute '" + topLevelAttributeId + "'");
+            Objects.requireNonNull(parsedNode, () -> "No node for attribute '" + topLevelAttributeId + "'");
         }
 
         // Create TU node

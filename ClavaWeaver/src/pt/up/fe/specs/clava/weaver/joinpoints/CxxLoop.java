@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -67,8 +66,8 @@ public class CxxLoop extends ALoop {
     public String getKindImpl() {
         ALoopKindEnum loopType = LOOP_TYPE.get().get(loop.getClass());
 
-        Preconditions.checkNotNull(loopType,
-                "Could not determine type of node '" + loop.getClass().getSimpleName() + "'");
+        Objects.requireNonNull(loopType,
+                () -> "Could not determine type of node '" + loop.getClass().getSimpleName() + "'");
 
         return loopType.name().toLowerCase();
     }

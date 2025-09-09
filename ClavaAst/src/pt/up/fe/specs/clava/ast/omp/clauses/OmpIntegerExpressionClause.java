@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.omp.clauses;
 
-import com.google.common.base.Preconditions;
+import java.util.Objects;
 
 public class OmpIntegerExpressionClause implements OmpClause {
 
@@ -31,7 +31,7 @@ public class OmpIntegerExpressionClause implements OmpClause {
         this.isConstantPositive = isConstantPositive;
 
         if (!isOptional) {
-            Preconditions.checkNotNull(expression, "Expected expression to be present, since it is not optional");
+            Objects.requireNonNull(expression, () -> "Expected expression to be present, since it is not optional");
         }
 
         // TODO: Verify if positive constant integer expression with Symja?

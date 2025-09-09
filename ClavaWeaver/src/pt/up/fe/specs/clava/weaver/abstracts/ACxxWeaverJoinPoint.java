@@ -135,7 +135,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint getAncestorImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'ancestor'");
+        Objects.requireNonNull(type, () -> "Missing type of ancestor in attribute 'ancestor'");
 
         if (type.equals("program")) {
             ClavaLog.warning("Consider using attribute .root, instead of .ancestor('program')");
@@ -158,7 +158,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint[] getDescendantsArrayImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
+        Objects.requireNonNull(type, () -> "Missing type of descendants in attribute 'descendants'");
 
         return CxxSelects.selectedNodesToJps(getNode().getDescendantsStream(), jp -> jp.instanceOf(type),
                 getWeaverEngine());
@@ -171,7 +171,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
+        Objects.requireNonNull(type, () -> "Missing type of descendants in attribute 'descendants'");
 
         return CxxSelects.selectedNodesToJps(getNode().getDescendantsAndSelfStream(), jp -> jp.instanceOf(type),
                 getWeaverEngine());
@@ -179,7 +179,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint getChainAncestorImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'chainAncestor'");
+        Objects.requireNonNull(type, () -> "Missing type of ancestor in attribute 'chainAncestor'");
 
         if (type.equals("program")) {
             ClavaLog.warning("Consider using attribute .root, instead of .chainAncestor('program')");
@@ -201,7 +201,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint getAstAncestorImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'astAncestor'");
+        Objects.requireNonNull(type, () -> "Missing type of ancestor in attribute 'astAncestor'");
 
         // Obtain ClavaNode class from type
         Class<? extends ClavaNode> nodeClass = ClassesService.getClavaClass(type);
@@ -239,7 +239,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public Integer getLineImpl() {
         // ClavaNode node = getNode();
-        // Preconditions.checkNotNull(node);
+        // Objects.requireNonNull(node);
         // int line = getNode().getLocation().getStartLine();
         // return line != SourceLocation.getInvalidLoc() ? line : null;
         SourceRange location = getNode().getLocation();

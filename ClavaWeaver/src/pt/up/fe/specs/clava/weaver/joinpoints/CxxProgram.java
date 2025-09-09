@@ -28,13 +28,13 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AProgram;
-import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -325,7 +325,7 @@ public class CxxProgram extends AProgram {
         // Add include for atexit
         // ClavaLog.debug("Getting file ancestor");
         AFile file = (AFile) mainFunction.getAncestorImpl("file");
-        SpecsCheck.checkNotNull(file, () -> "Expected main function to be inside a file: " + mainFunction.getNode());
+        Objects.requireNonNull(file, () -> "Expected main function to be inside a file: " + mainFunction.getNode());
         // ClavaLog.debug("Adding stdlib.h include");
         file.addInclude("stdlib.h", true);
 

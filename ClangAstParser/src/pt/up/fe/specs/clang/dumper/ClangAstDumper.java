@@ -30,7 +30,6 @@ import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.lang.SpecsPlatforms;
-import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -43,6 +42,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
@@ -312,7 +312,7 @@ public class ClangAstDumper {
             });
 
             parsedData = output.getStdErr();
-            SpecsCheck.checkNotNull(parsedData, () -> "Did not expect error output to be null");
+            Objects.requireNonNull(parsedData, () -> "Did not expect error output to be null");
             parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
 
             // If console output streaming is disabled, show output only at the end
