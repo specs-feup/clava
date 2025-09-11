@@ -161,6 +161,10 @@ public class ClangResources {
             for (FileResourceProvider resource : getMacOSResources()) {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
+        } else if (platform == SupportedPlatform.LINUX_5) {
+            for (FileResourceProvider resource : getLinuxResources()) {
+                resource.writeVersioned(resourceFolder, ClangResources.class);
+            }
         }
 
         // If on Windows, preemptively unblock file, due to possible Mark-of-the-Web restrictions
@@ -286,6 +290,14 @@ public class ClangResources {
         macosResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.MAC_OS_DLL1));
 
         return macosResources;
+    }
+
+    private List<FileResourceProvider> getLinuxResources() {
+        List<FileResourceProvider> linuxResources = new ArrayList<>();
+
+        linuxResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_LLVM_DLL));
+
+        return linuxResources;
     }
 
     private List<String> prepareIncludes(File clangExecutable, LibcMode libcMode) {

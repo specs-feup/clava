@@ -36,11 +36,12 @@ public interface ClangAstWebResource {
     WebResourceProvider WIN_DLL7 = WebResourceProvider.newInstance(ROOT_12_0_7, "libxml2-2.dll");
     WebResourceProvider WIN_DLL8 = WebResourceProvider.newInstance(ROOT_12_0_7, "liblzma-5.dll");
     WebResourceProvider WIN_DLL9 = WebResourceProvider.newInstance(ROOT_12_0_7, "libiconv-2.dll");
+    WebResourceProvider WIN_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM-16.dll");
+    WebResourceProvider WIN_CLANG_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libclang-cpp.dll");
 
     WebResourceProvider LINUX_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_linux", "v16.0.5");
     WebResourceProvider LINUX_PLUGIN = WebResourceProvider.newInstance(ROOT_16_0_5, "clang-plugin.so", "v16.0.5");
-    WebResourceProvider WIN_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM-16.dll");
-    WebResourceProvider WIN_CLANG_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libclang-cpp.dll");
+    WebResourceProvider LINUX_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM-16.so.1", "v16.0.5");
 
     WebResourceProvider MAC_OS_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_macos", "v16.0.5");
     WebResourceProvider MAC_OS_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM.dylib", "v16.0.5");
