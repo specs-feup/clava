@@ -323,9 +323,13 @@ public class ClangResources {
 
         // Get libc_libcxx, if required
         if (useBuiltinLibc(clangExecutable, libcMode)) {
-            var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.BUILTIN_INCLUDES);
+            var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
             includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
 
+            if (SupportedPlatform.getCurrentPlatform().isWindows()) {
+                var windowsBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_WIN32);
+                includesZips.add(getVersionedResource(windowsBuiltinResource, builtinResource.getVersion()));
+            }
         }
 
         // Always add OpenMP includes
