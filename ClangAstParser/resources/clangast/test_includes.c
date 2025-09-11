@@ -1,3 +1,3 @@
-#if __has_include(<stdio.h>)
-	int has_stdio = 1;
+#if __has_include(<stddef.h>)
+	int has_stddef = 1;
 #endif
