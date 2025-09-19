@@ -1,7 +1,9 @@
 rootProject.name = 'ClavaOptionsManager'
 
-includeBuild("../../clava/ClavaWeaver")
+def laraFrameworkRoot = System.getenv('LARA_FRAMEWORK_HOME') ?: '../../lara-framework'
 
-includeBuild("../../lara-framework/LARAI")
-includeBuild("../../lara-framework/WeaverInterface")
-includeBuild("../../lara-framework/WeaverOptionsManager")
+includeBuild("${laraFrameworkRoot}/LARAI")
+includeBuild("${laraFrameworkRoot}/WeaverInterface")
+includeBuild("${laraFrameworkRoot}/WeaverOptionsManager")
+
+includeBuild("../ClavaWeaver")

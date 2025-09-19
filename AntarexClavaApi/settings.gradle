@@ -1,5 +1,8 @@
 rootProject.name = 'AntarexClavaApi'
 
-includeBuild("../../specs-java-libs/SpecsUtils")
+def specsJavaLibsRoot = System.getenv('SPECS_JAVA_LIBS_HOME') ?: '../../specs-java-libs'
+def laraFrameworkRoot = System.getenv('LARA_FRAMEWORK_HOME') ?: '../../lara-framework'
 
-includeBuild("../../lara-framework/LaraUtils")
+includeBuild("${specsJavaLibsRoot}/SpecsUtils")
+
+includeBuild("${laraFrameworkRoot}/LaraUtils")
