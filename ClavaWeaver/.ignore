@@ -1,0 +1,3 @@
+!src/**/abstracts/
+!src/**/exceptions/CxxWeaverException.java
+!src/**/enums/
