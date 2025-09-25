@@ -15,6 +15,7 @@ package eu.antarex.clang.parser;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.suikasoft.jOptions.Datakey.DataKey;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
@@ -45,6 +46,8 @@ public abstract class AClangAstTester {
     private boolean run = true;
     private boolean builtinCuda = false;
     private boolean idempotenceTest = false;
+
+    private CodeParser codeParser;
 
     public <T extends Enum<T> & ResourceProvider> AClangAstTester(Class<T> resource) {
         this(resource, Collections.emptyList());
@@ -82,8 +85,14 @@ public abstract class AClangAstTester {
         this.resources = resources;
         this.compilerOptions = new ArrayList<>(compilerOptions);
 
+        codeParser = CodeParser.newInstance();
         // Set strict mode
         // ClangAstParser.strictMode(true);
+    }
+
+    public <K, E extends K> AClangAstTester set(DataKey<K> key, E value) {
+        codeParser.set(key, value);
+        return this;
     }
 
     public AClangAstTester showClavaAst() {
@@ -179,8 +188,8 @@ public abstract class AClangAstTester {
     public void testProper() {
         // Parse files
 
-        CodeParser codeParser = CodeParser.newInstance()
-                .set(CodeParser.SHOW_CLANG_DUMP, showClangDump)
+        //CodeParser codeParser = CodeParser.newInstance()
+        codeParser.set(CodeParser.SHOW_CLANG_DUMP, showClangDump)
                 .set(CodeParser.SHOW_CLAVA_AST, showClavaAst)
                 .set(CodeParser.SHOW_CODE, showCode);
 
