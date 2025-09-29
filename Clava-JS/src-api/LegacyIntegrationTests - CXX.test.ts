@@ -1,7 +1,6 @@
 import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.js";
 import ClavaJavaTypes from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 import path from "path";
-import "@specs-feup/clava/api/Joinpoints.js";
 
 const isWindows = process.platform === "win32";
 

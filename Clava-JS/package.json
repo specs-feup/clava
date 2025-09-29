@@ -55,7 +55,7 @@
   },
   "homepage": "https://github.com/specs-feup/clava#readme",
   "dependencies": {
-    "@specs-feup/lara": "^3.0.9",
+    "@specs-feup/lara": "^3.5.0",
     "cytoscape": "^3.0.0"
   },
   "devDependencies": {
