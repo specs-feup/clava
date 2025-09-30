@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,29 +13,12 @@
 
 package pt.up.fe.specs.clava.parsing.snippet;
 
-import static pt.up.fe.specs.clava.context.ClavaContext.FACTORY;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.Optional;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
-
 import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
+import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -53,11 +36,16 @@ import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 import pt.up.fe.specs.util.utilities.LineStream;
 
+import java.io.File;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static pt.up.fe.specs.clava.context.ClavaContext.FACTORY;
+
 /**
  * Parses text elements from C/C++ files, such as comments and pragmas.
- * 
- * @author JoaoBispo
  *
+ * @author JoaoBispo
  */
 public class TextParser {
 
@@ -77,12 +65,13 @@ public class TextParser {
 
     /**
      * Adds text elements to the App tree.
-     * 
+     *
      * @param app
      */
     public void addElements(App app) {
         for (TranslationUnit tu : app.getTranslationUnits()) {
             if (!tu.hasChildren()) {
+                //System.out.println("DEBUG: TU HAS NO CHILDREN");
                 continue;
             }
 
@@ -94,7 +83,7 @@ public class TextParser {
 
         // Collect elements from the tree
         TextElements textElements = parseElements(tu.getFile());
-
+        //System.out.println("DEBUG: text elements\n" + textElements);
         addElements(tu, textElements);
     }
 
@@ -104,7 +93,7 @@ public class TextParser {
         String tuFilepath = tu.getFile().getPath();
 
         // Add associated inline comments before adding guards
-        addAssociatedInlineComments(tu, textElements.associatedInlineComments);
+        addAssociatedInlineComments(tu, textElements.getAssociatedInlineComments());
 
         TransformQueue<ClavaNode> queue = new TransformQueue<>("TextParser Queue");
 
@@ -123,7 +112,16 @@ public class TextParser {
 
         // Insert all text elements
         for (ClavaNode textElement : textElements.getStandaloneElements()) {
+            boolean isProbe = textElement instanceof MultiLineComment && textElement.get(MultiLineComment.LINES).size() == 1 && textElement.get(MultiLineComment.LINES).get(0).equals("common /global/");
+
+
             int textStartLine = textElement.getLocation().getStartLine();
+
+            if (isProbe) {
+                System.out.println("TEXT START LINE: " + textStartLine);
+                System.out.println("INITIAL CURRENT NOODE: " + currentNode);
+            }
+
 
             // Get node that has a line number greater than the text element
             while (hasNodes && textStartLine >= currentNode.getLocation().getStartLine(tuFilepath)) {
@@ -137,6 +135,14 @@ public class TextParser {
                 }
 
                 currentNode = nextNodeTry.get();
+                if (isProbe) {
+                    System.out.println("NEW CURRENT NOODE: " + currentNode);
+                }
+
+            }
+
+            if (isProbe) {
+                System.out.println("NODE THAT HAS LINE GREATER: " + currentNode);
             }
 
             // Check if should insert text element as Stmt
@@ -146,6 +152,10 @@ public class TextParser {
             }
 
             ClavaNode insertionPoint = statement.isPresent() ? statement.get() : currentNode;
+
+            if (isProbe) {
+                System.out.println("INSERTION POINT: " + insertionPoint);
+            }
 
             // If node is inside a StmtWithCondition, insert TextElement before StmtWithCondition
             Stmt parentConditionStmt = insertionPoint.getStmtWithConditionAncestor().orElse(null);
@@ -384,7 +394,7 @@ public class TextParser {
     }
 
     public static Optional<ClavaNode> applyRules(String filepath, Iterator<String> iterator, String currentLine,
-            int currentLineNumber, ClavaContext context) {
+                                                 int currentLineNumber, ClavaContext context) {
 
         // Apply all rules to the current line
         for (TextParserRule rule : RULES) {

@@ -1,11 +1,11 @@
 /**
  * Copyright 2018 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,34 +13,15 @@
 
 package pt.up.fe.specs.clang.dumper;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import org.suikasoft.jOptions.Interfaces.DataStore;
-
 import com.google.common.base.Preconditions;
-
+import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.cilk.CilkAstAdapter;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.transforms.*;
-import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaRule;
-import pt.up.fe.specs.clava.Include;
-import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.*;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
-import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
@@ -51,20 +32,21 @@ import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
 import pt.up.fe.specs.clava.parsing.snippet.TextElements;
 import pt.up.fe.specs.clava.parsing.snippet.TextParser;
-import pt.up.fe.specs.util.SpecsCheck;
-import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.SpecsIo;
-import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.*;
 import pt.up.fe.specs.util.collections.MultiMap;
+import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.utilities.LineStream;
 import pt.up.fe.specs.util.utilities.StringList;
 
+import java.io.File;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 /**
  * Creates a Clava tree from information dumped by ClangAstDumper.
- * 
- * @author JoaoBispo
  *
+ * @author JoaoBispo
  */
 public class ClangAstParser {
     private final static Collection<ClavaRule> POST_PARSING_RULES = Arrays.asList(
@@ -85,15 +67,15 @@ public class ClangAstParser {
             new CreateEmptyStmts(),
             new CreatePointerToMemberExpr(),
             new AnnotateLabelDecls()
-    // new CilkAstAdapter()
+            // new CilkAstAdapter()
 
-    // new AdaptBoolTypes(),
-    // new AdaptBoolCasts(),
-    // new RemoveBoolOperatorCalls(),
-    // new ReplaceClangLabelStmt(),
-    // new RemoveDefaultInitializers(),
-    // new RemoveImplicitConstructors(),
-    // new RecoverStdMacros(),
+            // new AdaptBoolTypes(),
+            // new AdaptBoolCasts(),
+            // new RemoveBoolOperatorCalls(),
+            // new ReplaceClangLabelStmt(),
+            // new RemoveDefaultInitializers(),
+            // new RemoveImplicitConstructors(),
+            // new RecoverStdMacros(),
     );
 
     private final static Collection<ClavaRule> TEXT_PARSING_RULES = Arrays.asList(
@@ -125,85 +107,75 @@ public class ClangAstParser {
         return TEXT_PARSING_RULES;
     }
 
-    public App parse() {
-        // Get top-level nodes
-        Set<String> topLevelDecls = data.get(ClangAstData.TOP_LEVEL_DECL_IDS);
-        // MultiMap<String, String> topLevelDecls = data.get(TopLevelNodesParser.getDataKey());
-        Set<String> topLevelTypes = data.get(ClangAstData.TOP_LEVEL_TYPE_IDS);
-        Set<String> topLevelAttributes = data.get(ClangAstData.TOP_LEVEL_ATTR_IDS);
+    /*
+        public App parse() {
+            // Get top-level nodes
+            Set<String> topLevelDecls = data.get(ClangAstData.TOP_LEVEL_DECL_IDS);
+            // MultiMap<String, String> topLevelDecls = data.get(TopLevelNodesParser.getDataKey());
+            Set<String> topLevelTypes = data.get(ClangAstData.TOP_LEVEL_TYPE_IDS);
+            Set<String> topLevelAttributes = data.get(ClangAstData.TOP_LEVEL_ATTR_IDS);
 
-        // Set<String> allDecls = data.get(ClangParserKeys.ALL_DECLS_IDS);
-        // System.out.println("ALL DECLS:" + allDecls);
-        // Separate into translation units?
+            // Set<String> allDecls = data.get(ClangParserKeys.ALL_DECLS_IDS);
+            // System.out.println("ALL DECLS:" + allDecls);
+            // Separate into translation units?
 
-        // Parse top-level decls
-        // List<ClavaNode> topLevelDeclNodes = topLevelDecls.flatValues().stream()
-        // .map(this::parse)
-        // .collect(Collectors.toList());
-        List<ClavaNode> topLevelDeclNodes = new ArrayList<>();
-        // for (String topLevelDeclId : topLevelDecls.flatValues()) {
-        for (String topLevelDeclId : topLevelDecls) {
-            ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelDeclId);
-            Preconditions.checkNotNull(parsedNode, "No node for decl '" + topLevelDeclId + "'");
-            // Check
-            topLevelDeclNodes.add(parsedNode);
-        }
-
-        // Parse top-level types
-        for (String topLevelTypeId : topLevelTypes) {
-            if (ClavaNodes.isNullId(topLevelTypeId)) {
-                continue;
+            // Parse top-level decls
+            // List<ClavaNode> topLevelDeclNodes = topLevelDecls.flatValues().stream()
+            // .map(this::parse)
+            // .collect(Collectors.toList());
+            List<ClavaNode> topLevelDeclNodes = new ArrayList<>();
+            // for (String topLevelDeclId : topLevelDecls.flatValues()) {
+            for (String topLevelDeclId : topLevelDecls) {
+                ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelDeclId);
+                Preconditions.checkNotNull(parsedNode, "No node for decl '" + topLevelDeclId + "'");
+                // Check
+                topLevelDeclNodes.add(parsedNode);
             }
-            ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelTypeId);
-            Preconditions.checkNotNull(parsedNode, "No node for type '" + topLevelTypeId + "'");
+
+            // Parse top-level types
+            for (String topLevelTypeId : topLevelTypes) {
+                if (ClavaNodes.isNullId(topLevelTypeId)) {
+                    continue;
+                }
+                ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelTypeId);
+                Preconditions.checkNotNull(parsedNode, "No node for type '" + topLevelTypeId + "'");
+
+            }
+
+            // Parse top-level attributes
+            for (String topLevelAttributeId : topLevelAttributes) {
+                ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelAttributeId);
+                Preconditions.checkNotNull(parsedNode, "No node for attribute '" + topLevelAttributeId + "'");
+            }
+
+            // topLevelTypes.stream().forEach(this::parse);
+
+            // Parse top-level attributes
+            // topLevelAttributes.stream().forEach(this::parse);
+
+            // After all ClavaNodes are created, apply post-processing
+            // Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES);
+            // ClavaDataPostProcessing postData = new ClavaDataPostProcessing(parsedNodes);
+            // parsedNodes.values().stream()
+            // .forEach(node -> ClavaDataUtils.applyPostProcessing(node.getData(), postData));
+
+            // Create App node
+            App app = createApp(topLevelDeclNodes, data.get(ClangAstData.INCLUDES));
+
+
+            // TODO: Currently disabled, to avoid conflicts with legacy parser
+            // Add text elements (comments, pragmas) to the tree
+            // new TextParser(app.getContext()).addElements(app);
+
+            // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
+            // original clang tree
+            new TreeTransformer(POST_PARSING_RULES).transform(app);
+
+            return app;
 
         }
-
-        // Parse top-level attributes
-        for (String topLevelAttributeId : topLevelAttributes) {
-            ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelAttributeId);
-            Preconditions.checkNotNull(parsedNode, "No node for attribute '" + topLevelAttributeId + "'");
-        }
-
-        // topLevelTypes.stream().forEach(this::parse);
-
-        // Parse top-level attributes
-        // topLevelAttributes.stream().forEach(this::parse);
-
-        // After all ClavaNodes are created, apply post-processing
-        // Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES);
-        // ClavaDataPostProcessing postData = new ClavaDataPostProcessing(parsedNodes);
-        // parsedNodes.values().stream()
-        // .forEach(node -> ClavaDataUtils.applyPostProcessing(node.getData(), postData));
-
-        // Create App node
-        App app = createApp(topLevelDeclNodes, data.get(ClangAstData.INCLUDES));
-
-        // Set app in Type nodes
-        /*
-        for (String topLevelTypeId : topLevelTypes) {
-            ClavaNode topLevelType = parsedNodes.get(topLevelTypeId);
-            Preconditions.checkNotNull(topLevelType);
-        
-            topLevelType.getDescendantsAndSelfStream()
-                    .filter(Type.class::isInstance)
-                    .map(Type.class::cast)
-                    .forEach(type -> type.setApp(app));
-        }
-        */
-
-        // TODO: Currently disabled, to avoid conflicts with legacy parser
-        // Add text elements (comments, pragmas) to the tree
-        // new TextParser(app.getContext()).addElements(app);
-
-        // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
-        // original clang tree
-        new TreeTransformer(POST_PARSING_RULES).transform(app);
-
-        return app;
-
-    }
-
+    */
+    /*
     private App createApp(Collection<? extends ClavaNode> topLevelDecls, List<Include> includes) {
         // Each node belongs to a file, maintain a map of what nodes belong to each file,
         // in the end create the file nodes and add them to the App node
@@ -320,7 +292,7 @@ public class ClangAstParser {
 
         return app;
     }
-
+*/
     public TranslationUnit parseTu(File sourceFile) {
         // Get top-level nodes
         Set<String> topLevelDecls = data.get(ClangAstData.TOP_LEVEL_DECL_IDS);
@@ -436,7 +408,7 @@ public class ClangAstParser {
     }
 
     private TranslationUnit createTu(File sourceFile, Collection<? extends ClavaNode> topLevelDecls,
-            List<Include> includes) {
+                                     List<Include> includes) {
         // Each node belongs to a file, maintain a map of what nodes belong to each file,
         // in the end create the file nodes and add them to the App node
 
@@ -536,14 +508,6 @@ public class ClangAstParser {
             throw new RuntimeException("Could not find includes for source file '" + declFile + "'");
         }
 
-        List<Include> uniqueIncludes = SpecsCollections.filter(sourceIncludes, include -> include.toString());
-
-        // Add includes
-        uniqueIncludes.stream()
-                // .map(include -> ClavaNodeFactory.include(include, path))
-                .map(include -> getFactory().includeDecl(include, path))
-                .forEach(decls::add);
-
         // Add declarations
         decls.addAll(declNodes);
 
@@ -563,12 +527,93 @@ public class ClangAstParser {
         if (language != null) {
             tUnit.setLanguage(language);
         }
+
+        // Add unique includes after all declarations are in place
+        List<Include> uniqueIncludes = SpecsCollections.filter(sourceIncludes, include -> include.toString());
+
+        addIncludes(uniqueIncludes, tUnit, path);
+
+
         // Clean translation unit
         // ClavaPostProcessing.applyPostPasses(tUnit);
 
         // tUnits.add(tUnit);
 
         return tUnit;
+    }
+
+    private void addIncludes(List<Include> uniqueIncludes, TranslationUnit tUnit, String path) {
+
+        System.out.println("BEF: " + uniqueIncludes);
+
+        // Guarantee that includes are ordered per line
+        Collections.sort(uniqueIncludes, (Comparator.comparingInt(Include::getLine)));
+
+        System.out.println("AFTER: " + uniqueIncludes);
+
+        // Create include decls
+        var includeDecls = uniqueIncludes.stream()
+                .map(include -> getFactory().includeDecl(include, path))
+                .toList();
+
+
+        // Use iterator to find the next insertion point
+        // Create a new list to allow modifications to the tree while iterating
+        var unitIterator = new ArrayList<>(tUnit.getChildren()).iterator();
+
+        var currentInsertionPoint = nextValidNode(unitIterator).orElse(null);
+
+        // If no nodes, just add all includes
+        if (currentInsertionPoint == null) {
+            tUnit.addChildren(includeDecls);
+            return;
+        }
+
+
+        boolean insertBefore = true;
+
+        for (var includeDecl : includeDecls) {
+
+            var includeLine = includeDecl.get(ClavaNode.LOCATION).getStartLine();
+
+            // Ensure insertion point is right
+            while (insertBefore == true && includeLine > currentInsertionPoint.get(ClavaNode.LOCATION).getStartLine()) {
+                // Iterate until a valid insertion point is found, or we arrive at a point we start inserting after
+                var newPoint = nextValidNode(unitIterator).orElse(null);
+
+                if (newPoint == null) {
+                    insertBefore = false;
+                } else {
+                    currentInsertionPoint = newPoint;
+                }
+            }
+
+            // Insert include
+            if (insertBefore) {
+                NodeInsertUtils.insertBefore(currentInsertionPoint, includeDecl);
+            } else {
+                NodeInsertUtils.insertAfter(currentInsertionPoint, includeDecl);
+            }
+        }
+    }
+
+    private Optional<ClavaNode> nextValidNode(Iterator<ClavaNode> unitIterator) {
+        if (!unitIterator.hasNext()) {
+            return Optional.empty();
+        }
+
+        ClavaNode currentNode = null;
+        while (unitIterator.hasNext()) {
+            currentNode = unitIterator.next();
+
+            var location = currentNode.get(ClavaNode.LOCATION);
+
+            if (location.isValid() && location.getStartLine() != -1) {
+                break;
+            }
+        }
+
+        return Optional.ofNullable(currentNode);
     }
 
     private void removeDescendantsFromOtherTus(ClavaNode node, String tuFilename) {

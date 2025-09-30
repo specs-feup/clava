@@ -96,17 +96,17 @@ public abstract class AClangAstTester {
     }
 
     public AClangAstTester showClavaAst() {
-        showClavaAst = true;
+        codeParser.set(CodeParser.SHOW_CLAVA_AST, true);
         return this;
     }
 
     public AClangAstTester showClangDump() {
-        showClangDump = true;
+        codeParser.set(CodeParser.SHOW_CLANG_DUMP, true);
         return this;
     }
 
     public AClangAstTester showCode() {
-        showCode = true;
+        codeParser.set(CodeParser.SHOW_CODE, true);
         return this;
     }
 
@@ -121,7 +121,7 @@ public abstract class AClangAstTester {
     }
 
     public AClangAstTester enableBuiltinCuda() {
-        this.builtinCuda = true;
+        codeParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
         return this;
     }
     /*
@@ -187,20 +187,11 @@ public abstract class AClangAstTester {
 
     public void testProper() {
 
-        // Apply settings (TODO: now we have an instance of codeparser, can immediately change its state
-        codeParser.set(CodeParser.SHOW_CLANG_DUMP, showClangDump)
-                .set(CodeParser.SHOW_CLAVA_AST, showClavaAst)
-                .set(CodeParser.SHOW_CODE, showCode);
-
-        if (builtinCuda) {
-            codeParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
-        }
-
+        // Enable parallel parsing
+        codeParser.set(ParallelCodeParser.PARALLEL_PARSING);
 
         File workFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME);
 
-        // Enable parallel parsing
-        codeParser.set(ParallelCodeParser.PARALLEL_PARSING);
 
         // Parse files
         App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
@@ -217,10 +208,12 @@ public abstract class AClangAstTester {
         // Set same options as original code parser
         testCodeParser.set(codeParser);
 
+        /*
         testCodeParser.set(ParallelCodeParser.PARALLEL_PARSING);
         if (builtinCuda) {
             testCodeParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
         }
+         */
 
         // Parse output again, check if files are the same
         File firstOutputFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst");
