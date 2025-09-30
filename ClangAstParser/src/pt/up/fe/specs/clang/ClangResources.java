@@ -249,7 +249,7 @@ public class ClangResources {
         // Create list of include zips
         List<FileResourceProvider> includesZips = new ArrayList<>();
 
-        // Get /, if required
+        // Get libc/libcxx resources, if required
         if (useBuiltinLibc(clangExecutable, libcMode)) {
             var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
             includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
