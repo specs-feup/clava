@@ -246,47 +246,37 @@ public class ClangAstDumper {
             arguments.add("--cuda-host-only");
 
         }
+
         // If header file, add the language flag (-x) that corresponds to the standard
         else if (SourceType.isHeader(sourceFile)) {
             arguments.add("-x");
             arguments.add(standard.isCxx() ? "c++" : "c");
         }
 
-//        if (SpecsPlatforms.isLinux()) {
-//            arguments.add(sourceFile.getAbsolutePath());
-//        } else {
 
         List<String> systemIncludes = new ArrayList<>();
 
-        // Add includes bundled with program
-        // (only on Windows, it is expected that a Linux system has its own headers for libc/libc++)
-        // if (Platforms.isWindows()) {
-        // systemIncludes.addAll(clangAstParser.prepareIncludes(clangExecutable, usePlatformLibc));
+        // Add bundled includes according to libc/cxx settings
         systemIncludes.addAll(builtinIncludes);
-        // }
 
         // Add custom includes
         systemIncludes.addAll(localData.get(LocalOptionsKeys.SYSTEM_INCLUDES).getStringList());
 
         // Add local system includes
-        // for (String systemInclude : localData.get(LocalOptionsKeys.SYSTEM_INCLUDES)) {
         for (String systemInclude : systemIncludes) {
             arguments.add("-isystem");
             arguments.add(systemInclude);
         }
-        //      }
 
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
-        // arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
+
         arguments.addAll(config.get(ClavaOptions.FLAGS_LIST).getStringList());
 
-        // ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
         ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments);
 
         ClangAstData parsedData = null;
         ProcessOutput<String, ClangAstData> output = null;
 
-        // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
         try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2
                 .newInstance(config.get(ClavaNode.CONTEXT))) {
 
@@ -295,7 +285,6 @@ public class ClangAstDumper {
             }
 
             // Create temporary working folder, in order to support running several dumps in parallel
-            // File workingFolder = SpecsIo.mkdir(UUID.randomUUID().toString());
             lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
 
             // Ensure folder is empty

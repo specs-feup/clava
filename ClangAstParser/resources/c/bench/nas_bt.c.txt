@@ -233,6 +233,7 @@ double randlc(double *x, double a);
 void vranlc(int n, double *x, double a, double y[]);
 
 #include <time.h>
+#include <sys/time.h>
 
 void wtime(double *t) {
 static int sec = -1;
