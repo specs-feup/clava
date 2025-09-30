@@ -116,8 +116,6 @@ public class TranslationUnit extends ClavaNode {
 
         // If IncludeDecl, treat it differently
         if (child instanceof IncludeDecl) {
-//            ClavaLog.warning(
-//                    "Using .addChild(int index, ClavaNode chilld) with an IncludeDecl node, the index value will be ignored");
             return addIncludePrivate((IncludeDecl) child, index);
         }
 

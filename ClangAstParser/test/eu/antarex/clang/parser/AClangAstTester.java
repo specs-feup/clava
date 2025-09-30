@@ -39,12 +39,8 @@ public abstract class AClangAstTester {
     private final Collection<ResourceProvider> resources;
     private List<String> compilerOptions;
 
-    private boolean showClavaAst = false;
-    private boolean showClangDump = false;
-    private boolean showCode = false;
     private boolean onePass = false;
     private boolean run = true;
-    private boolean builtinCuda = false;
     private boolean idempotenceTest = false;
 
     private CodeParser codeParser;
@@ -195,8 +191,6 @@ public abstract class AClangAstTester {
 
         // Parse files
         App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
-        // System.out.println("STOREDEF CACHE:\n" + StoreDefinitions.getStoreDefinitionsCache().getAnalytics());
-        // App clavaAst = codeParser.parseParallel(Arrays.asList(workFolder), compilerOptions);
 
         clavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"));
         if (onePass) {
@@ -208,12 +202,6 @@ public abstract class AClangAstTester {
         // Set same options as original code parser
         testCodeParser.set(codeParser);
 
-        /*
-        testCodeParser.set(ParallelCodeParser.PARALLEL_PARSING);
-        if (builtinCuda) {
-            testCodeParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
-        }
-         */
 
         // Parse output again, check if files are the same
         File firstOutputFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst");

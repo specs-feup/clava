@@ -18,7 +18,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
-import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -71,7 +70,6 @@ public class TextParser {
     public void addElements(App app) {
         for (TranslationUnit tu : app.getTranslationUnits()) {
             if (!tu.hasChildren()) {
-                //System.out.println("DEBUG: TU HAS NO CHILDREN");
                 continue;
             }
 
@@ -83,7 +81,6 @@ public class TextParser {
 
         // Collect elements from the tree
         TextElements textElements = parseElements(tu.getFile());
-        //System.out.println("DEBUG: text elements\n" + textElements);
         addElements(tu, textElements);
     }
 
@@ -112,16 +109,7 @@ public class TextParser {
 
         // Insert all text elements
         for (ClavaNode textElement : textElements.getStandaloneElements()) {
-            boolean isProbe = textElement instanceof MultiLineComment && textElement.get(MultiLineComment.LINES).size() == 1 && textElement.get(MultiLineComment.LINES).get(0).equals("common /global/");
-
-
             int textStartLine = textElement.getLocation().getStartLine();
-
-            if (isProbe) {
-                System.out.println("TEXT START LINE: " + textStartLine);
-                System.out.println("INITIAL CURRENT NOODE: " + currentNode);
-            }
-
 
             // Get node that has a line number greater than the text element
             while (hasNodes && textStartLine >= currentNode.getLocation().getStartLine(tuFilepath)) {
@@ -135,14 +123,6 @@ public class TextParser {
                 }
 
                 currentNode = nextNodeTry.get();
-                if (isProbe) {
-                    System.out.println("NEW CURRENT NOODE: " + currentNode);
-                }
-
-            }
-
-            if (isProbe) {
-                System.out.println("NODE THAT HAS LINE GREATER: " + currentNode);
             }
 
             // Check if should insert text element as Stmt
@@ -152,10 +132,6 @@ public class TextParser {
             }
 
             ClavaNode insertionPoint = statement.isPresent() ? statement.get() : currentNode;
-
-            if (isProbe) {
-                System.out.println("INSERTION POINT: " + insertionPoint);
-            }
 
             // If node is inside a StmtWithCondition, insert TextElement before StmtWithCondition
             Stmt parentConditionStmt = insertionPoint.getStmtWithConditionAncestor().orElse(null);

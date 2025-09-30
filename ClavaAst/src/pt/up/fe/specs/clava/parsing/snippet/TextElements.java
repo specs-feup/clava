@@ -20,7 +20,6 @@ import java.util.List;
 
 public class TextElements {
 
-    // TODO: Make these fields private
     private List<ClavaNode> standaloneElements;
     private List<InlineComment> associatedInlineComments;
 
