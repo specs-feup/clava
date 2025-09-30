@@ -161,6 +161,10 @@ public class ClangResources {
             for (FileResourceProvider resource : getMacOSResources()) {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
+        } else if (platform == SupportedPlatform.LINUX_5) {
+            for (FileResourceProvider resource : getLinuxResources()) {
+                resource.writeVersioned(resourceFolder, ClangResources.class);
+            }
         }
 
         // If on Windows, preemptively unblock file, due to possible Mark-of-the-Web restrictions
@@ -288,6 +292,14 @@ public class ClangResources {
         return macosResources;
     }
 
+    private List<FileResourceProvider> getLinuxResources() {
+        List<FileResourceProvider> linuxResources = new ArrayList<>();
+
+        linuxResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_LLVM_DLL));
+
+        return linuxResources;
+    }
+
     private List<String> prepareIncludes(File clangExecutable, LibcMode libcMode) {
 
         // Use no built-ins
@@ -311,9 +323,13 @@ public class ClangResources {
 
         // Get libc_libcxx, if required
         if (useBuiltinLibc(clangExecutable, libcMode)) {
-            var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.BUILTIN_INCLUDES);
+            var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
             includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
 
+            if (SupportedPlatform.getCurrentPlatform().isWindows()) {
+                var windowsBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_WIN32);
+                includesZips.add(getVersionedResource(windowsBuiltinResource, builtinResource.getVersion()));
+            }
         }
 
         // Always add OpenMP includes
