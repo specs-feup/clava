@@ -544,13 +544,9 @@ public class ClangAstParser {
 
     private void addIncludes(List<Include> uniqueIncludes, TranslationUnit tUnit, String path) {
 
-        System.out.println("BEF: " + uniqueIncludes);
-
         // Guarantee that includes are ordered per line
         Collections.sort(uniqueIncludes, (Comparator.comparingInt(Include::getLine)));
-
-        System.out.println("AFTER: " + uniqueIncludes);
-
+        
         // Create include decls
         var includeDecls = uniqueIncludes.stream()
                 .map(include -> getFactory().includeDecl(include, path))

@@ -34,8 +34,7 @@ public interface ClangAstKeys {
      */
     DataKey<LibcMode> LIBC_CXX_MODE = KeyFactory.enumeration("libcCxxMode", LibcMode.class)
             .setLabel("Libc/Libcxx mode")
-            // Since libc/libcxx is highly dependent on compiler versions, it is safer to use bundled includes by default
-            .setDefault(() -> LibcMode.BUILTIN_AND_LIBC);
+            .setDefault(() -> LibcMode.AUTO);
 
     DataKey<Boolean> USES_CILK = KeyFactory.bool("usesCilk");
 
