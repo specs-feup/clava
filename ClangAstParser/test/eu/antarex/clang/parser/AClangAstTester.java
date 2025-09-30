@@ -186,9 +186,8 @@ public abstract class AClangAstTester {
     }
 
     public void testProper() {
-        // Parse files
 
-        //CodeParser codeParser = CodeParser.newInstance()
+        // Apply settings (TODO: now we have an instance of codeparser, can immediately change its state
         codeParser.set(CodeParser.SHOW_CLANG_DUMP, showClangDump)
                 .set(CodeParser.SHOW_CLAVA_AST, showClavaAst)
                 .set(CodeParser.SHOW_CODE, showCode);
@@ -196,16 +195,14 @@ public abstract class AClangAstTester {
         if (builtinCuda) {
             codeParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
         }
-        // .setShowClangAst(showClangAst)
-        // .setShowClangDump(showClangDump)
-        // .setShowClavaAst(showClavaAst)
-        // .setShowCode(showCode);
+
 
         File workFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME);
 
         // Enable parallel parsing
         codeParser.set(ParallelCodeParser.PARALLEL_PARSING);
 
+        // Parse files
         App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
         // System.out.println("STOREDEF CACHE:\n" + StoreDefinitions.getStoreDefinitionsCache().getAnalytics());
         // App clavaAst = codeParser.parseParallel(Arrays.asList(workFolder), compilerOptions);
@@ -216,22 +213,24 @@ public abstract class AClangAstTester {
         }
 
         CodeParser testCodeParser = CodeParser.newInstance();
+
+        // Set same options as original code parser
+        testCodeParser.set(codeParser);
+
         testCodeParser.set(ParallelCodeParser.PARALLEL_PARSING);
         if (builtinCuda) {
             testCodeParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
         }
 
         // Parse output again, check if files are the same
-
         File firstOutputFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst");
 
         App testClavaAst = testCodeParser.parse(Arrays.asList(firstOutputFolder), compilerOptions);
-        // App testClavaAst = testCodeParser.parseParallel(Arrays.asList(firstOutputFolder), compilerOptions);
+
         testClavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputSecond"));
         // System.out.println("STOREDEF CACHE:\n" + StoreDefinitions.getStoreDefinitionsCache().getAnalytics());
 
         // Test if files from first and second are the same
-
         Map<String, File> outputFiles1 = SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"))
                 .stream()
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
@@ -241,14 +240,11 @@ public abstract class AClangAstTester {
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
 
         for (String name : outputFiles1.keySet()) {
+
             // Get corresponding file in output 2
             File outputFile2 = outputFiles2.get(name);
 
-            // if (outputFile2 == null) {
-            // ClavaLog.info("Could not find second version of file '" + name + "', ignoring");
-            // }
             Assert.assertNotNull("Could not find second version of file '" + name + "'", outputFile2);
-
         }
 
         // Compare with .txt, if available
