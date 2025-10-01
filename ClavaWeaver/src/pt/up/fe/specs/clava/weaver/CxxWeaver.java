@@ -150,9 +150,6 @@ public class CxxWeaver extends ACxxWeaver {
         return WEAVER_DEFINITION.get();
     }
 
-    // Weaver configuration
-    private DataStore args = null;
-
     // Parsing Context
     private ClavaContext context = null;
 
@@ -185,7 +182,7 @@ public class CxxWeaver extends ACxxWeaver {
         this.cacheHandlerGear = new CacheHandlerGear();
 
         // Weaver configuration
-        args = null;
+        this.dataStore = null;
         context = new ClavaContext();
         currentSources = new ArrayList<>();
         currentBases = null;
@@ -245,12 +242,12 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     protected boolean begin(List<File> sources, File outputDir, DataStore args) {
-        this.args = args;
+        setData(args);
         this.weaverData = new ClavaWeaverData();
         this.accMap = new AccumulatorMap<>();
         this.messagesToUser = new LinkedHashSet<>();
 
-        if (this.args.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
+        if (this.dataStore.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
             SpecsLogs.getSpecsLogger().setLevelAll(Level.WARNING);
             ClavaLog.getLogger().setLevelAll(Level.WARNING);
         }
@@ -264,7 +261,7 @@ public class CxxWeaver extends ACxxWeaver {
                 allSources.put(source, null);
             } else if (source.isDirectory()) {
                 allSources.put(source,
-                        this.args.get(CxxWeaverOption.FLAT_OUTPUT_FOLDER) ? null : source);
+                        this.dataStore.get(CxxWeaverOption.FLAT_OUTPUT_FOLDER) ? null : source);
             } else {
                 throw new RuntimeException("Case not implemented: " + source);
             }
@@ -288,16 +285,16 @@ public class CxxWeaver extends ACxxWeaver {
         this.originalSourceFolders = new ArrayList<>(originalSourceFoldersSet);
 
         // If args does not have a standard, add a standard one based on the input files
-        if (!this.args.hasValue(ClavaOptions.STANDARD)) {
-            this.args.add(ClavaOptions.STANDARD, getStandard());
+        if (!this.dataStore.hasValue(ClavaOptions.STANDARD)) {
+            this.dataStore.add(ClavaOptions.STANDARD, getStandard());
         }
 
-        var parserOptions = buildParserOptions(args);
+        var parserOptions = buildParserOptions(dataStore);
 
         App app = null;
 
         // If weaving disabled, create empty App
-        if (this.args.get(CxxWeaverOption.DISABLE_WEAVING)) {
+        if (this.dataStore.get(CxxWeaverOption.DISABLE_WEAVING)) {
             SpecsLogs.msgInfo("Initial parsing disabled, creating empty 'program'");
 
             app = context.get(ClavaContext.FACTORY).app(Collections.emptyList());
@@ -435,14 +432,14 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public String getStdFlag() {
-        Standard standard = args.get(ClavaOptions.STANDARD);
+        Standard standard = this.dataStore.get(ClavaOptions.STANDARD);
         return "-std=" + standard.getString();
     }
 
     public Standard getStandard() {
 
-        if (args.hasValue(ClavaOptions.STANDARD)) {
-            return args.get(ClavaOptions.STANDARD);
+        if (this.dataStore.hasValue(ClavaOptions.STANDARD)) {
+            return this.dataStore.get(ClavaOptions.STANDARD);
         }
 
         // Determine standard based on implementation files
@@ -604,22 +601,22 @@ public class CxxWeaver extends ACxxWeaver {
         // Sort filenames so that select order of files is consistent between OSes
         Collections.sort(allFiles);
 
-        boolean useCustomResources = getConfig().get(ClavaOptions.CUSTOM_RESOURCES);
+        boolean useCustomResources = this.dataStore.get(ClavaOptions.CUSTOM_RESOURCES);
 
         CodeParser codeParser = CodeParser.newInstance();
 
         // Setup code parser
         codeParser.set(CodeParser.USE_CUSTOM_RESOURCES, useCustomResources);
-        codeParser.set(CodeParser.CUDA_GPU_ARCH, getConfig().get(CodeParser.CUDA_GPU_ARCH));
-        codeParser.set(CodeParser.CUDA_PATH, getConfig().get(CodeParser.CUDA_PATH));
-        codeParser.set(ParallelCodeParser.PARALLEL_PARSING, getConfig().get(ParallelCodeParser.PARALLEL_PARSING));
-        codeParser.set(ParallelCodeParser.PARSING_NUM_THREADS, getConfig().get(ParallelCodeParser.PARSING_NUM_THREADS));
+        codeParser.set(CodeParser.CUDA_GPU_ARCH, this.dataStore.get(CodeParser.CUDA_GPU_ARCH));
+        codeParser.set(CodeParser.CUDA_PATH, this.dataStore.get(CodeParser.CUDA_PATH));
+        codeParser.set(ParallelCodeParser.PARALLEL_PARSING, this.dataStore.get(ParallelCodeParser.PARALLEL_PARSING));
+        codeParser.set(ParallelCodeParser.PARSING_NUM_THREADS, this.dataStore.get(ParallelCodeParser.PARSING_NUM_THREADS));
         codeParser.set(ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD,
-                getConfig().get(ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD));
+                this.dataStore.get(ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD));
         codeParser.set(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS,
-                getConfig().get(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS));
-        codeParser.set(ClangAstKeys.LIBC_CXX_MODE, getConfig().get(ClangAstKeys.LIBC_CXX_MODE));
-        codeParser.set(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE, getConfig().get(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE));
+                this.dataStore.get(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS));
+        codeParser.set(ClangAstKeys.LIBC_CXX_MODE, this.dataStore.get(ClangAstKeys.LIBC_CXX_MODE));
+        codeParser.set(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE, this.dataStore.get(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE));
 
         List<String> allParserOptions = new ArrayList<>(parserOptions.size() + adaptedExtraOptions.size());
         allParserOptions.addAll(parserOptions);
@@ -632,7 +629,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Set external dependencies
         app.getExternalDependencies()
-                .setDisableRemoteDependencies(getConfig().get(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES));
+                .setDisableRemoteDependencies(this.dataStore.get(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES));
 
         return app;
     }
@@ -674,7 +671,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // boolean skipHeaderFiles =
         // args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING);
-        boolean skipHeaderFiles = !args.get(CxxWeaverOption.PARSE_INCLUDES);
+        boolean skipHeaderFiles = !this.dataStore.get(CxxWeaverOption.PARSE_INCLUDES);
 
         if (skipHeaderFiles) {
             // Add only implementation files if skipping header includes
@@ -759,13 +756,13 @@ public class CxxWeaver extends ACxxWeaver {
 
     public File getWeavingFolder() {
 
-        String outputFoldername = args.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME);
+        String outputFoldername = this.dataStore.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME);
         if (outputFoldername.isEmpty()) {
             ClavaLog.info("No name defined for the output folder, using default value 'output'");
             outputFoldername = "output";
         }
 
-        File outputFolder = SpecsIo.mkdir(args.get(LaraiKeys.OUTPUT_FOLDER), outputFoldername);
+        File outputFolder = SpecsIo.mkdir(this.dataStore.get(LaraiKeys.OUTPUT_FOLDER), outputFoldername);
         return outputFolder;
     }
 
@@ -782,7 +779,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Process App files
         getAppTry().ifPresent(app -> {
             if (!app.getTranslationUnits().isEmpty()) {
-                if (args.get(CxxWeaverOption.CHECK_SYNTAX)) {
+                if (this.dataStore.get(CxxWeaverOption.CHECK_SYNTAX)) {
                     SpecsLogs.msgInfo("Checking woven code syntax...");
                     rebuildAst(false);
                 }
@@ -790,12 +787,12 @@ public class CxxWeaver extends ACxxWeaver {
                 // Terminate weaver execution with final steps required and writing output files
 
                 // Write output files if code generation is not disabled
-                if (!args.get(CxxWeaverOption.DISABLE_CODE_GENERATION)) {
+                if (!this.dataStore.get(CxxWeaverOption.DISABLE_CODE_GENERATION)) {
                     writeCode(getWeavingFolder());
                 }
 
                 // Write CMake helper files
-                if (args.get(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES)) {
+                if (this.dataStore.get(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES)) {
                     generateCmakerHelperFiles();
                 }
 
@@ -810,16 +807,16 @@ public class CxxWeaver extends ACxxWeaver {
         // Delete temporary source folder, if exists
         SpecsIo.deleteFolder(new File(TEMP_SRC_FOLDER));
 
-        if (args != null) {
+        if (this.dataStore != null) {
             // Delete intermediary files
-            if (args.get(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES)) {
+            if (this.dataStore.get(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES)) {
                 for (String tempFile : ClangAstDumper.getTempFiles()) {
                     new File(tempFile).delete();
                 }
             }
 
             // Re-enable output
-            if (args.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
+            if (this.dataStore.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
                 SpecsLogs.getSpecsLogger().setLevelAll(null);
                 ClavaLog.getLogger().setLevelAll(null);
             }
@@ -877,7 +874,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Add original includes at the end, in case there are "out-of-source" files
         // (e.g., .inc files) that are needed
-        newIncludeDirs.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
+        newIncludeDirs.addAll(this.dataStore.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
 
         // Add includes from original sources
         originalSourceFolders.stream().map(sourceFolder -> new File(sourceFolder))
@@ -920,7 +917,7 @@ public class CxxWeaver extends ACxxWeaver {
     @Override
     public void writeCode(File outputFolder) {
         // If copy files is enabled, first copy source files to output folder
-        if (getConfig().get(CxxWeaverOption.COPY_FILES_IN_SOURCES)) {
+        if (this.dataStore.get(CxxWeaverOption.COPY_FILES_IN_SOURCES)) {
             for (File source : currentSourceFolders) {
                 // If file, just copy the file
                 // if (source.isFile()) {
@@ -965,7 +962,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     private Set<String> getModifiedFilenames() {
         // If option is disabled, return null
-        if (!args.get(CxxWeaverOption.GENERATE_MODIFIED_CODE_ONLY)) {
+        if (!this.dataStore.get(CxxWeaverOption.GENERATE_MODIFIED_CODE_ONLY)) {
             return null;
         }
 
@@ -1040,7 +1037,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public DataStore getConfig() {
-        return args;
+        return this.dataStore;
     }
 
     public TranslationUnit rebuildFile(TranslationUnit tUnit) {
@@ -1064,7 +1061,7 @@ public class CxxWeaver extends ACxxWeaver {
         List<String> rebuildOptions = new ArrayList<>();
 
         // Copy current options, removing previous normal includes
-        var parserOptions = buildParserOptions(args);
+        var parserOptions = buildParserOptions(this.dataStore);
         parserOptions.stream()
                 .filter(option -> !option.startsWith("-I"))
                 .forEach(rebuildOptions::add);
@@ -1227,14 +1224,14 @@ public class CxxWeaver extends ACxxWeaver {
         // Add original includes as extra options, in case it needs any header file that
         // is excluded from parsing (e.g.,
         // .incl)
-        List<File> originalHeaderIncludes = args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
+        List<File> originalHeaderIncludes = this.dataStore.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
         originalHeaderIncludes.stream().map(folder -> CxxWeaver.buildIncludeArg(folder.getAbsolutePath()))
                 .forEach(extraOptions::add);
 
         List<String> rebuildOptions = new ArrayList<>();
 
         // Copy current options, removing previous normal includes
-        var parserOptions = buildParserOptions(args);
+        var parserOptions = buildParserOptions(this.dataStore);
         parserOptions.stream()
                 .filter(option -> !(option.startsWith("-I") || option.startsWith("-i")))
                 .forEach(rebuildOptions::add);
@@ -1412,7 +1409,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         List<File> searchPaths = new ArrayList<>();
         searchPaths.addAll(getSources());
-        searchPaths.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
+        searchPaths.addAll(this.dataStore.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
         // System.out.println("SEARCH PATHS:" + searchPaths);
         Set<String> includeFolders = searchPaths.stream()
                 // .map(CxxWeaver::parseIncludePath)
@@ -1506,7 +1503,7 @@ public class CxxWeaver extends ACxxWeaver {
      * Normalizes key paths to be only files
      */
     private Map<File, File> obtainFiles(Map<File, File> filesToBases) {
-        var parserOptions = buildParserOptions(args);
+        var parserOptions = buildParserOptions(this.dataStore);
 
         Map<File, File> processedFiles = new HashMap<>();
 
