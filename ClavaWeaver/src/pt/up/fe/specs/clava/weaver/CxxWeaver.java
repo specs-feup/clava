@@ -182,7 +182,6 @@ public class CxxWeaver extends ACxxWeaver {
         this.cacheHandlerGear = new CacheHandlerGear();
 
         // Weaver configuration
-        this.dataStore = null;
         context = new ClavaContext();
         currentSources = new ArrayList<>();
         currentBases = null;
