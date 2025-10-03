@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -139,7 +140,7 @@ public class OmpClauseParsers {
             ClavaLog.info("Clause not implemented yet: " + clauseKind.getString());
             return null;
         }
-        // Preconditions.checkNotNull(clauseParser, "Clause not implemented yet: " + clauseKind);
+        // Objects.requireNonNull(clauseParser, () -> "Clause not implemented yet: " + clauseKind);
 
         // Remove unused spaces
         // without this, the next call will fail to match any OmpClauseKind when parseClauseName is called
@@ -392,8 +393,8 @@ public class OmpClauseParsers {
 
         // If has colon, directive name must not be null, and this is an if clause with directive name
         if (hasColon) {
-            Preconditions.checkNotNull(directiveName,
-                    "Since it has a colon, expected the directive name preceeding the colon:" + clauses.toString());
+            Objects.requireNonNull(directiveName,
+                    () -> "Since it has a colon, expected the directive name preceeding the colon:" + clauses.toString());
 
             String expression = clause.clear();
             return new OmpIfClause(directiveName, expression);

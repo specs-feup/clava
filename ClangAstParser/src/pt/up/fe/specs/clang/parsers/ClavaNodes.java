@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -26,8 +27,6 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
-
-import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -70,7 +69,7 @@ public class ClavaNodes {
     public ClavaNode get(String nodeId) {
         ClavaNode clavaNode = clavaNodes.get(nodeId);
 
-        Preconditions.checkNotNull(clavaNode, "Could not find ClavaNode with id '" + nodeId
+        Objects.requireNonNull(clavaNode, () -> "Could not find ClavaNode with id '" + nodeId
                 + "'. Check if node is being visited. If parsing of includes is enabled, check that the parsing level is sufficient.");
 
         return clavaNode;

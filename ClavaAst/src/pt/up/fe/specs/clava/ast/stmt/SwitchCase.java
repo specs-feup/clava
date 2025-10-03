@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.ast.stmt;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -23,7 +24,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.util.SpecsCheck;
 
 /**
  * Represents a switch case.
@@ -43,7 +43,7 @@ public abstract class SwitchCase extends Stmt {
 
     public boolean isEmptyCase() {
         var nextStmt = getSubStmt().orElse(null);
-        SpecsCheck.checkNotNull(nextStmt, () -> "Case has no sub statement, is this correct?");
+        Objects.requireNonNull(nextStmt, () -> "Case has no sub statement, is this correct?");
 
         return nextStmt instanceof SwitchCase;
     }

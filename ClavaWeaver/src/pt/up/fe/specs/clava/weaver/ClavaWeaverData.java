@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver;
 
-import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -29,9 +28,6 @@ import java.util.Map.Entry;
 
 public class ClavaWeaverData {
 
-    // Options
-    private final DataStore data;
-
     // Parsed program state
     // private final Deque<App> apps;
     private final Deque<Map<ClavaNode, Map<String, Object>>> userValuesStack;
@@ -39,8 +35,7 @@ public class ClavaWeaverData {
     private Collection<File> generatedFiles;
     private ClavaContext context;
 
-    public ClavaWeaverData(DataStore data) {
-        this.data = data;
+    public ClavaWeaverData() {
 
         // this.apps = new ArrayDeque<>();
         this.userValuesStack = new ArrayDeque<>();
@@ -64,12 +59,6 @@ public class ClavaWeaverData {
 
         // if (app == null) {
         if (context == null) {
-            // Verify if weaving is disabled
-            // if (data.get(CxxWeaverOption.DISABLE_WEAVING)) {
-            // SpecsLogs.msgInfo("'Disable weaving' option is set, cannot use AST-related code (e.g., 'select')");
-            // return Optional.empty();
-            // }
-
             SpecsLogs.warn("No parsed tree available");
             return Optional.empty();
         }
@@ -145,16 +134,11 @@ public class ClavaWeaverData {
                 continue;
             }
 
-            // Serialize value
-            // Map<String, Object> valueCopy = XStreamUtils.copy(entry.getValue());
-
             // Add to map
-            // userValuesCopy.put(newNode, valueCopy);
             userValuesCopy.put(newNode, entry.getValue());
         }
 
         return userValuesCopy;
-        // return userValuesStack.isEmpty() ? new HashMap<>() : XStreamUtils.copy(userValuesStack.peek());
     }
 
     private ClavaNode getNewNode(App app, ClavaNode previousNode) {
@@ -172,9 +156,8 @@ public class ClavaWeaverData {
 
     // Not implemented yet
     private App popAst(int astIndex) {
-        SpecsCheck.checkNotNull(context, () -> "No App to pop");
+        Objects.requireNonNull(context, () -> "No App to pop");
 
-        // System.out.println("DATA:" + data);
         userValuesStack.pop();
 
         App topApp = context.popApp();

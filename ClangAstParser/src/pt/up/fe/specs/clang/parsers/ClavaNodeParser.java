@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 
@@ -33,7 +34,6 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.utils.ClassesService;
-import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -202,7 +202,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
             }
         
             int index = i;
-            SpecsCheck.checkNotNull(child,
+            Objects.requireNonNull(child,
                     () -> "Did not find ClavaNode for child with index '" + index + "' and id '" + childId
                             + "' when parsing "
                             + clavaNodeClass.getSimpleName() + " -> " + nodeData);
@@ -238,7 +238,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
                 // }
 
                 int index = i;
-                SpecsCheck.checkNotNull(child,
+                Objects.requireNonNull(child,
                         () -> "Did not find ClavaNode for child with index '" + index + "' and id '" + childId
                                 + "' when parsing "
                                 + clavaNodeClass.getSimpleName() + " -> " + nodeData);

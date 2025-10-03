@@ -13,9 +13,8 @@
 
 package pt.up.fe.specs.clava;
 
+import java.util.Objects;
 import java.util.Optional;
-
-import com.google.common.base.Preconditions;
 
 public class ClavaId {
 
@@ -103,15 +102,7 @@ public class ClavaId {
         // System.out.println("START GET PARENT:");
         ClavaId currentId = this;
         while (currentId.next != null) {
-            Preconditions.checkNotNull(currentId.nextType);
-            // System.out.println("CURRENT ID:" + currentId.id);
-            // System.out.println("NEXT ID:" + currentId.next);
-            // System.out.println("NEXT TYPE:" + currentId.nextType);
-            // if (currentId.nextType == null) {
-            // System.out.println("NODE WHERE NEXT IS NOT NULL BUT TYPE IS:" + currentId);
-            // currentId = currentId.next;
-            // continue;
-            // }
+            Objects.requireNonNull(currentId.nextType);
 
             if (currentId.nextType == RelationType.PARENT) {
                 return Optional.of(currentId.next);

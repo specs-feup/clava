@@ -45,91 +45,49 @@ public class CxxIf extends AIf {
     }
 
     @Override
-    public List<? extends AExpression> selectCond() {
-        if (!(ifStmt.getCondition() instanceof Expr)) {
-            return Collections.emptyList();
+    public AExpression getCondImpl() {
+        List<? extends AExpression> list = Collections.emptyList();
+
+        if ((ifStmt.getCondition() instanceof Expr)) {
+            list = Arrays.asList(CxxJoinpoints.create(ifStmt.getCondition(), AExpression.class));
         }
 
-        return Arrays.asList(CxxJoinpoints.create(ifStmt.getCondition(), AExpression.class));
-    }
-
-    @Override
-    public List<? extends AScope> selectThen() {
-        return ifStmt.getThen().map(then -> Arrays.asList(CxxJoinpoints.create(then, AScope.class)))
-                .orElse(Collections.emptyList());
-    }
-
-    @Override
-    public List<? extends AScope> selectElse() {
-        return SpecsCollections.toStream(ifStmt.getElse())
-                .map(stmt -> CxxJoinpoints.create(stmt, AScope.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<? extends AScope> selectBody() {
-        return selectThen();
-    }
-
-    @Override
-    public List<? extends AVardecl> selectCondDecl() {
-        return SpecsCollections.toList(ifStmt.getDeclCondition()
-                .map(varDecl -> CxxJoinpoints.create(varDecl, AVardecl.class)));
-        // if (!(ifStmt.getCondition() instanceof VarDecl)) {
-        // return Collections.emptyList();
-        // }
-        //
-        // return Arrays.asList(CxxJoinpoints.create((VarDecl) ifStmt.getCondition(), this, AVardecl.class));
-    }
-
-    @Override
-    public AExpression getCondImpl() {
-        return SpecsCollections.orElseNull(selectCond());
+        return SpecsCollections.orElseNull(list);
     }
 
     @Override
     public AVardecl getCondDeclImpl() {
-        return SpecsCollections.orElseNull(selectCondDecl());
+        return SpecsCollections.orElseNull(SpecsCollections.toList(ifStmt.getDeclCondition()
+                .map(varDecl -> CxxJoinpoints.create(varDecl, AVardecl.class))));
     }
 
     @Override
     public AScope getThenImpl() {
-        return SpecsCollections.orElseNull(selectThen());
+        return SpecsCollections.orElseNull(
+                ifStmt.getThen().map(then -> Arrays.asList(CxxJoinpoints.create(then, AScope.class)))
+                        .orElse(Collections.emptyList()));
     }
 
     @Override
     public AScope getElseImpl() {
-        return SpecsCollections.orElseNull(selectElse());
-    }
-
-    @Override
-    public void defCondImpl(AExpression value) {
-        ifStmt.setCondition((Expr) value.getNode());
+        return SpecsCollections.orElseNull(SpecsCollections.toStream(ifStmt.getElse())
+                .map(stmt -> CxxJoinpoints.create(stmt, AScope.class))
+                .collect(Collectors.toList()));
     }
 
     @Override
     public void setCondImpl(AExpression cond) {
-        defCondImpl(cond);
-    }
-
-    @Override
-    public void defThenImpl(AStatement value) {
-        ifStmt.setThen((Stmt) value.getNode());
+        ifStmt.setCondition((Expr) cond.getNode());
     }
 
     @Override
     public void setThenImpl(AStatement then) {
-        defThenImpl(then);
-    }
-
-    @Override
-    public void defElseImpl(AStatement value) {
-        ifStmt.setElse((Stmt) value.getNode());
+        ifStmt.setThen((Stmt) then.getNode());
     }
 
     @Override
     public void setElseImpl(AStatement _else) {
-        defElseImpl(_else);
+        ifStmt.setElse((Stmt) _else.getNode());
     }
 
 }

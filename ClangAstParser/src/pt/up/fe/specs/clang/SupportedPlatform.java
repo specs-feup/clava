@@ -88,15 +88,10 @@ public enum SupportedPlatform implements StringProvider {
 
             if (linuxMajorVersion >= SUPPORTED_LINUX_VERSION) {
                 return LINUX_5;
-            }
-
-            if (linuxMajorVersion < SUPPORTED_LINUX_VERSION) {
+            } else {
                 throw new RuntimeException("Current major Linux version is " + linuxMajorVersion + ", minimum version supported is " + SUPPORTED_LINUX_VERSION);
             }
-
         }
-
-
 
         throw new RuntimeException("Platform currently not supported: " + System.getProperty("os.name"));
     }

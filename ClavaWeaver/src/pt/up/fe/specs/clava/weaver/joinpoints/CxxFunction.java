@@ -28,7 +28,6 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
-import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
@@ -40,28 +39,15 @@ import pt.up.fe.specs.util.treenode.TreeNodeUtils;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CxxFunction extends AFunction {
-
-    // TODO: Move this to generated enums
-//    private static final Lazy<EnumHelperWithValue<StorageClass>> STORAGE_CLASS = EnumHelperWithValue
-    //          .newLazyHelperWithValue(StorageClass.class);
-
     private final FunctionDecl function;
 
     public CxxFunction(FunctionDecl function) {
         super(new CxxDeclarator(function));
         this.function = function;
-    }
-
-    @Override
-    public List<? extends ABody> selectBody() {
-        var body = getBodyImpl();
-
-        return body == null ? Collections.emptyList() : Arrays.asList(body);
     }
 
     @Override
@@ -164,13 +150,6 @@ public class CxxFunction extends AFunction {
             default:
                 throw new RuntimeException("Case not defined:" + position);
         }
-    }
-
-    @Override
-    public List<? extends AParam> selectParam() {
-        return function.getParameters().stream()
-                .map(param -> CxxJoinpoints.create(param, AParam.class))
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -328,15 +307,6 @@ public class CxxFunction extends AFunction {
         return cloneFunction;
     }
 
-    // /**
-    // * XXX: copied from CallWrap
-    // */
-    // private List<IncludeDecl> getIncludesCopyFromFile(TranslationUnit tu) {
-    //
-    // return TreeNodeUtils.copy(tu.getIncludes().getIncludes());
-    //
-    // }
-
     @Override
     public String[] getParamNamesArrayImpl() {
 
@@ -349,7 +319,11 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AParam[] getParamsArrayImpl() {
-        return selectParam().toArray(new AParam[0]);
+        return function.getParameters()
+                .stream()
+                .map(param -> CxxJoinpoints.create(param, AParam.class))
+                .collect(Collectors.toList())
+                .toArray(new AParam[0]);
     }
 
     @Override
@@ -453,7 +427,7 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void defNameImpl(String value) {
+    public void setNameImpl(String name) {
         // Set both the names of corresponding definition and declaration
         // Needs to first fetch both definition and declaration.
         // If one is renamed before fetching the other, the other will not be found
@@ -461,13 +435,8 @@ public class CxxFunction extends AFunction {
         var impl = function.getImplementation();
         var proto = function.getPrototypes();
 
-        impl.ifPresent(node -> node.setName(value));
-        proto.stream().forEach(node -> node.setName(value));
-    }
-
-    @Override
-    public void setNameImpl(String name) {
-        defNameImpl(name);
+        impl.ifPresent(node -> node.setName(name));
+        proto.stream().forEach(node -> node.setName(name));
     }
 
     @Override
@@ -509,12 +478,6 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public List<? extends ADecl> selectDecl() {
-        SpecsLogs.info("[DEPRECATED] Selecting 'decl' from 'function' is deprecated");
-        return CxxSelects.select(ADecl.class, function.getChildren(), true, Decl.class);
-    }
-
-    @Override
     public ACall[] getCallsArrayImpl() {
         return function.getCalls().stream()
                 .map(call -> CxxJoinpoints.create(call, ACall.class))
@@ -522,8 +485,9 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void defParamsImpl(AParam[] value) {
-        List<ParmVarDecl> newParams = Arrays.stream(value)
+    public void setParamsImpl(AParam[] params) {
+        List<ParmVarDecl> newParams = Arrays.stream(
+                params)
                 .map(param -> (ParmVarDecl) param.getNode())
                 .collect(Collectors.toList());
 
@@ -531,29 +495,19 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void defParamsImpl(String[] value) {
-        AParam[] params = new AParam[value.length];
+    public void setParamsFromStringsImpl(String[] params) {
+        AParam[] newParams = new AParam[params.length];
 
         // Each value is a type - varName pair, separate them by last space
-        for (int i = 0; i < value.length; i++) {
-            String typeVarname = value[i];
+        for (int i = 0; i < params.length; i++) {
+            String typeVarname = params[i];
 
             var parmVarDecl = ClavaNodes.toParam(typeVarname, function);
 
-            params[i] = CxxJoinpoints.create(parmVarDecl, AParam.class);
+            newParams[i] = CxxJoinpoints.create(parmVarDecl, AParam.class);
         }
 
-        defParamsImpl(params);
-    }
-
-    @Override
-    public void setParamsImpl(AParam[] params) {
-        defParamsImpl(params);
-    }
-
-    @Override
-    public void setParamsFromStringsImpl(String[] params) {
-        defParamsImpl(params);
+        setParamsImpl(newParams);
     }
 
     @Override
@@ -562,23 +516,13 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void defBodyImpl(AScope value) {
-        function.setBody((CompoundStmt) value.getNode());
-    }
-
-    @Override
     public void setBodyImpl(AScope body) {
-        defBodyImpl(body);
-    }
-
-    @Override
-    public void defFunctionTypeImpl(AFunctionType value) {
-        function.setFunctionType((FunctionType) value.getNode());
+        function.setBody((CompoundStmt) body.getNode());
     }
 
     @Override
     public void setFunctionTypeImpl(AFunctionType functionType) {
-        defFunctionTypeImpl(functionType);
+        function.setFunctionType((FunctionType) functionType.getNode());
     }
 
     @Override
@@ -587,13 +531,8 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void defReturnTypeImpl(AType value) {
-        function.setReturnType((Type) value.getNode());
-    }
-
-    @Override
     public void setReturnTypeImpl(AType returnType) {
-        defReturnTypeImpl(returnType);
+        function.setReturnType((Type) returnType.getNode());
     }
 
     @Override
@@ -608,7 +547,7 @@ public class CxxFunction extends AFunction {
 
         newParams[newParams.length - 1] = param;
 
-        defParamsImpl(newParams);
+        setParamsImpl(newParams);
     }
 
     @Override

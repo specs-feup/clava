@@ -148,7 +148,6 @@ public class SourceRange {
         if (start.getFilepath() == null) {
             return Optional.empty();
         }
-        // Preconditions.checkNotNull(start.getFilepath());
 
         return Optional.of(new File(start.getFilepath()).getName());
     }

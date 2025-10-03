@@ -13,10 +13,10 @@
 
 package pt.up.fe.specs.clava.parsing.snippet;
 
+import java.util.List;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
-
-import java.util.List;
 
 public class TextElements {
 

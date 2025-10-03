@@ -85,12 +85,6 @@ public class RecordDecl extends TagDecl {
         code.append(getTagKind().getCode());
 
         // Add attributes
-        // var preAttributes = get(ATTRIBUTES).stream()
-        // .filter(attr -> !attr.isPostAttr())
-        // .collect(Collectors.toList());
-        //
-        // String preAttributesCode = getAttributesCode(preAttributes, false, false);
-
         String preAttributesCode = get(ATTRIBUTES).stream()
                 .filter(attr -> !attr.isPostAttr())
                 .map(Attribute::getCode)

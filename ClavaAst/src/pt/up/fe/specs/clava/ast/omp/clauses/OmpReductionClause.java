@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.omp.clauses;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
@@ -67,7 +68,7 @@ public class OmpReductionClause implements OmpClause {
         this.reductionKind = reductionKind;
         this.variables = variables;
 
-        Preconditions.checkNotNull(variables);
+        Objects.requireNonNull(variables);
         Preconditions.checkArgument(variables.size() > 0);
     }
 

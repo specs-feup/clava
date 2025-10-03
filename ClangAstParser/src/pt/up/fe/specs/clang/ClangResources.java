@@ -98,7 +98,6 @@ public class ClangResources {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
         } else if (platform == SupportedPlatform.MAC_OS) {
-            //var dynLibsFolder = new File("/usr/local/lib/");
             for (FileResourceProvider resource : getMacOSResources()) {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
@@ -149,7 +148,7 @@ public class ClangResources {
 
         // If version not defined, use the latest version of the resource
         if (version.isEmpty()) {
-            version = resource.getVersion();
+            version = resource.version();
         }
 
         // ClangAst executable versions are separated by an underscore
@@ -252,11 +251,11 @@ public class ClangResources {
         // Get libc/libcxx resources, if required
         if (useBuiltinLibc(clangExecutable, libcMode)) {
             var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
-            includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
+            includesZips.add(getVersionedResource(builtinResource, builtinResource.version()));
 
             if (SupportedPlatform.getCurrentPlatform().isWindows()) {
                 var windowsBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_WIN32);
-                includesZips.add(getVersionedResource(windowsBuiltinResource, builtinResource.getVersion()));
+                includesZips.add(getVersionedResource(windowsBuiltinResource, windowsBuiltinResource.version()));
             }
         }
 

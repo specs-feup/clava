@@ -88,8 +88,6 @@ public class TUnitProcessor {
                     // Only consider nodes with valid locations, nodes with invalid locations in the AST at this point
                     // where most likely introduced by Clava (e.g., Includes, Null nodes, etc)
                     .filter(node -> node.getLocation().isValid())
-                    // Ignore expressions
-                    //.filter(node -> !(node instanceof Expr))
                     // Ignore certain nodes that might have the same location, such as ImplicitCastExpr
                     // .filter(node -> !IGNORE_CLASSES.contains(node.getClass()))
                     .forEach(node -> addNode(node));
@@ -223,11 +221,6 @@ public class TUnitProcessor {
         if (node instanceof InitListExpr) {
             return Optional.empty();
         }
-
-        // Expressions cannot be normalized
-        //if (node instanceof Expr) {
-        //    return Optional.empty();
-        //}
 
         String signature = node.getNodeSignature();
 

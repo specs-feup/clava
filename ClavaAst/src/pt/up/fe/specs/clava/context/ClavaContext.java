@@ -47,61 +47,25 @@ public class ClavaContext extends ADataClass<ClavaContext> {
     public final static DataKey<ClavaFactory> FACTORY = KeyFactory
             .object("factory", ClavaFactory.class);
 
-    // public final static DataKey<App> APP = KeyFactory
-    // .object("app", App.class);
-
-    public final static DataKey<ClavaMetrics> METRICS = KeyFactory
-            .object("metrics", ClavaMetrics.class);
-
     public final static DataKey<CachedItems<String, String>> CACHED_FILEPATHS = KeyFactory
             .generic("cachedFilepaths", () -> new CachedItems<String, String>(string -> string, true));
-
-    /**
-     * If set, represents the root folder where we are working on.
-     */
-    // public final static DataKey<Optional<File>> ROOT_FOLDER = KeyFactory.optional("rootFolder");
-
-    /**
-     * Temporary measure due to TextParser being called more than once over the same nodes.
-     */
-    // public final static DataKey<Set<ClavaNode>> ASSOCIATED_COMMENTS = KeyFactory.generic(
-    // "associatedComments", (Set<ClavaNode>) new HashSet<ClavaNode>());
-
-    /// DATAKEYS END
-
-    // private final DataStore data;
-    // private final Standard standard;
-    // private final List<String> arguments;
-    // private final ClavaIdGenerator idGenerator;
-    // private final ClavaFactory factory;
 
     private final List<App> appStack;
 
     public ClavaContext() {
-
-        // this.data = DataStore.newInstance(getClass());
-
         // Set arguments
         set(ARGUMENTS, new HashMap<>());
 
+        // Set IDs generator
+        set(ID_GENERATOR, new IdGenerator());
+
         // Initialize factory
         set(FACTORY, new ClavaFactory(this));
-
-        set(METRICS, new ClavaMetrics());
 
         set(CACHED_FILEPATHS, new CachedItems<>(string -> string, true));
 
         appStack = new ArrayList<>();
     }
-
-    // public ClavaContext(ClavaContext context) {
-    // set(ARGUMENTS, ARGUMENTS.copy(context.get(ARGUMENTS)));
-    // set(ID_GENERATOR, ID_GENERATOR.copy(context.get(ID_GENERATOR)));
-    // set(METRICS, METRICS.copy(context.get(METRICS)));
-    //
-    // // Initialize factory
-    // set(FACTORY, new ClavaFactory(this));
-    // }
 
     public ClavaContext addArguments(File sourceFile, List<String> arguments) {
         get(ARGUMENTS).put(sourceFile, arguments);
@@ -117,8 +81,6 @@ public class ClavaContext extends ADataClass<ClavaContext> {
         SpecsCheck.checkArgument(newApp.getContext() == this, () -> "Expected new App to have the same context");
         Optional<App> previousApp = SpecsCollections.lastTry(appStack);
         appStack.add(newApp);
-
-        // ClavaLog.info("APP PUSH: " + appStack.size() + " pushed app: " + newApp.hashCode());
 
         return previousApp;
     }
@@ -138,8 +100,6 @@ public class ClavaContext extends ADataClass<ClavaContext> {
 
     public App popApp() {
         App app = appStack.remove(appStack.size() - 1);
-
-        // ClavaLog.info("APP POP: " + appStack.size() + " popped app: " + app.hashCode());
 
         return app;
     }
@@ -175,31 +135,4 @@ public class ClavaContext extends ADataClass<ClavaContext> {
 
         return Optional.of(appStack.get(appStack.size() - index - 1));
     }
-
-    // public <T> T get(DataKey<T> key) {
-    // return this.data.get(key);
-    // }
-
-    // public Standard getStandard() {
-    // return standard;
-    // }
-
-    /*
-    public ClavaIdGenerator getIds() {
-        return idGenerator;
-        // return data.get(ID_GENERATOR);
-    }
-    
-    
-    
-    public List<String> getParsingArguments() {
-        return arguments;
-        // return data.get(ARGUMENTS);
-    }
-    */
-
-    // @Override
-    // public String toString() {
-    // return "ClavaContext:" + Integer.toString(hashCode());
-    // }
 }

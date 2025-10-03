@@ -1,7 +1,6 @@
-laraImport("lara.Io");
-laraImport("lara.Platforms");
-laraImport("clava.cmake.CMaker");
-laraImport("clava.Clava");
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import Platforms from "@specs-feup/lara/api/lara/Platforms.js";
+import CMaker from "@specs-feup/clava/api/clava/cmake/CMaker.js";
 
 const cmaker = new CMaker("testapp")
   .setMinimumVersion("3.0.2")
@@ -17,7 +16,7 @@ if (Platforms.isWindows()) {
 const executable = cmaker.build();
 
 if (executable !== undefined) {
-  println("Created executable: " + Io.removeExtension(executable.getName()));
+  console.log("Created executable: " + Io.removeExtension(executable.getName()));
 } else {
-  println("Could not create executable");
+  console.log("Could not create executable");
 }

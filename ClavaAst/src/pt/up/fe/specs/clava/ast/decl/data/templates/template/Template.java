@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.decl.data.templates.template;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -26,7 +27,6 @@ import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentTemplate;
 import pt.up.fe.specs.clava.ast.type.enums.TemplateNameKind;
-import pt.up.fe.specs.util.SpecsCheck;
 
 public class Template extends TemplateArgumentTemplate {
 
@@ -51,7 +51,7 @@ public class Template extends TemplateArgumentTemplate {
             return "";
         }
 
-        SpecsCheck.checkNotNull(decl instanceof NamedDecl, () -> "Check if this should always be a NamedDecl");
+        Objects.requireNonNull(decl instanceof NamedDecl, () -> "Check if this should always be a NamedDecl");
         return ((NamedDecl) decl).getDeclName();
     }
 }

@@ -36,13 +36,8 @@ public class CxxComment extends AComment {
     }
 
     @Override
-    public void defTextImpl(String value) {
-        comment.setText(value);
-    }
-
-    @Override
     public void setTextImpl(String text) {
-        defTextImpl(text);
+        comment.setText(text);
     }
 
 }
