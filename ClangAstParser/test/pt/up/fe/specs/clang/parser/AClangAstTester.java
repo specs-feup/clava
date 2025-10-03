@@ -13,8 +13,19 @@
 
 package pt.up.fe.specs.clang.parser;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.junit.Assert;
 import org.junit.Before;
+import org.suikasoft.jOptions.Datakey.DataKey;
+
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
@@ -26,10 +37,6 @@ import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.providers.ResourceProvider;
 
-import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
-
 public abstract class AClangAstTester {
 
     private static final boolean CLEAN_CLANG_FILES = !SpecsSystem.isDebug();
@@ -38,13 +45,11 @@ public abstract class AClangAstTester {
     private final Collection<ResourceProvider> resources;
     private List<String> compilerOptions;
 
-    private boolean showClavaAst = false;
-    private boolean showClangDump = false;
-    private boolean showCode = false;
     private boolean onePass = false;
     private boolean run = true;
-    private boolean builtinCuda = false;
     private boolean idempotenceTest = false;
+
+    private CodeParser codeParser;
 
     public <T extends Enum<T> & ResourceProvider> AClangAstTester(Class<T> resource) {
         this(resource, Collections.emptyList());
@@ -82,22 +87,28 @@ public abstract class AClangAstTester {
         this.resources = resources;
         this.compilerOptions = new ArrayList<>(compilerOptions);
 
+        codeParser = CodeParser.newInstance();
         // Set strict mode
         // ClangAstParser.strictMode(true);
     }
 
+    public <K, E extends K> AClangAstTester set(DataKey<K> key, E value) {
+        codeParser.set(key, value);
+        return this;
+    }
+
     public AClangAstTester showClavaAst() {
-        showClavaAst = true;
+        codeParser.set(CodeParser.SHOW_CLAVA_AST, true);
         return this;
     }
 
     public AClangAstTester showClangDump() {
-        showClangDump = true;
+        codeParser.set(CodeParser.SHOW_CLANG_DUMP, true);
         return this;
     }
 
     public AClangAstTester showCode() {
-        showCode = true;
+        codeParser.set(CodeParser.SHOW_CODE, true);
         return this;
     }
 
@@ -112,7 +123,7 @@ public abstract class AClangAstTester {
     }
 
     public AClangAstTester enableBuiltinCuda() {
-        this.builtinCuda = true;
+        codeParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
         return this;
     }
     /*
@@ -177,29 +188,15 @@ public abstract class AClangAstTester {
     }
 
     public void testProper() {
-        // Parse files
-
-        CodeParser codeParser = CodeParser.newInstance()
-                .set(CodeParser.SHOW_CLANG_DUMP, showClangDump)
-                .set(CodeParser.SHOW_CLAVA_AST, showClavaAst)
-                .set(CodeParser.SHOW_CODE, showCode);
-
-        if (builtinCuda) {
-            codeParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
-        }
-        // .setShowClangAst(showClangAst)
-        // .setShowClangDump(showClangDump)
-        // .setShowClavaAst(showClavaAst)
-        // .setShowCode(showCode);
-
-        File workFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME);
 
         // Enable parallel parsing
         codeParser.set(ParallelCodeParser.PARALLEL_PARSING);
 
+        File workFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME);
+
+
+        // Parse files
         App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
-        // System.out.println("STOREDEF CACHE:\n" + StoreDefinitions.getStoreDefinitionsCache().getAnalytics());
-        // App clavaAst = codeParser.parseParallel(Arrays.asList(workFolder), compilerOptions);
 
         clavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"));
         if (onePass) {
@@ -207,22 +204,20 @@ public abstract class AClangAstTester {
         }
 
         CodeParser testCodeParser = CodeParser.newInstance();
-        testCodeParser.set(ParallelCodeParser.PARALLEL_PARSING);
-        if (builtinCuda) {
-            testCodeParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
-        }
+
+        // Set same options as original code parser
+        testCodeParser.set(codeParser);
+
 
         // Parse output again, check if files are the same
-
         File firstOutputFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst");
 
         App testClavaAst = testCodeParser.parse(Arrays.asList(firstOutputFolder), compilerOptions);
-        // App testClavaAst = testCodeParser.parseParallel(Arrays.asList(firstOutputFolder), compilerOptions);
+
         testClavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputSecond"));
         // System.out.println("STOREDEF CACHE:\n" + StoreDefinitions.getStoreDefinitionsCache().getAnalytics());
 
         // Test if files from first and second are the same
-
         Map<String, File> outputFiles1 = SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"))
                 .stream()
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
@@ -232,14 +227,11 @@ public abstract class AClangAstTester {
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
 
         for (String name : outputFiles1.keySet()) {
+
             // Get corresponding file in output 2
             File outputFile2 = outputFiles2.get(name);
 
-            // if (outputFile2 == null) {
-            // ClavaLog.info("Could not find second version of file '" + name + "', ignoring");
-            // }
             Assert.assertNotNull("Could not find second version of file '" + name + "'", outputFile2);
-
         }
 
         // Compare with .txt, if available

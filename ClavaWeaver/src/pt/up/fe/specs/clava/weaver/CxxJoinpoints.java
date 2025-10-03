@@ -92,6 +92,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(ContinueStmt.class, CxxContinue::new);
         JOINPOINT_FACTORY.put(BreakStmt.class, CxxBreak::new);
         JOINPOINT_FACTORY.put(LabelStmt.class, CxxLabelStmt::new);
+        JOINPOINT_FACTORY.put(AsmStmt.class, CxxAsmStmt::new);
         JOINPOINT_FACTORY.put(EmptyStmt.class, CxxEmptyStmt::new);
         JOINPOINT_FACTORY.put(Stmt.class, CxxStatement::new);
         JOINPOINT_FACTORY.put(CXXMethodDecl.class, CxxMethod::new);

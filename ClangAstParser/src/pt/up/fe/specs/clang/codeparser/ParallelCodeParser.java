@@ -52,7 +52,6 @@ import java.util.stream.Collectors;
  * and mixed compilation (e.g., C + OpenCL).
  *
  * @author JoaoBispo
- *
  */
 // public class ParallelCodeParser extends ACodeParser<ParallelCodeParser> {
 public class ParallelCodeParser extends CodeParser {
@@ -111,10 +110,13 @@ public class ParallelCodeParser extends CodeParser {
         // Prepare resources before execution
         // ClangResources clangResources = new ClangResources(get(SHOW_CLANG_DUMP));
         ClangResources clangResources = new ClangResources(this);
-        if (SpecsSystem.isLinux()) {
+
+
+        if (ClangAstDumper.usePlugin()) {
             set(ClangAstKeys.LIBC_CXX_MODE, LibcMode.SYSTEM);
             ClavaLog.debug(() -> "In Linux, ClangAstDumper is a plugin. LIBC_CXX_MODE is reset to SYSTEM.");
         }
+
         var clangFiles = clangResources.getClangFiles(version, get(ClangAstKeys.LIBC_CXX_MODE));
         // File clangExecutable = clangResources.prepareResources(version);
         // List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,

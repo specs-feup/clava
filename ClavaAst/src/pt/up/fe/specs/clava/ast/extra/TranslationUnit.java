@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -24,7 +24,6 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
@@ -44,7 +43,6 @@ import pt.up.fe.specs.util.utilities.StringLines;
  * Represents a source file.
  *
  * @author JoaoBispo
- *
  */
 public class TranslationUnit extends ClavaNode {
 
@@ -119,9 +117,7 @@ public class TranslationUnit extends ClavaNode {
 
         // If IncludeDecl, treat it differently
         if (child instanceof IncludeDecl) {
-            ClavaLog.warning(
-                    "Using .addChild(int index, ClavaNode chilld) with an IncludeDecl node, the index value will be ignored");
-            return addIncludePrivate((IncludeDecl) child);
+            return addIncludePrivate((IncludeDecl) child, index);
         }
 
         // Add child normally
@@ -148,6 +144,18 @@ public class TranslationUnit extends ClavaNode {
         int insertIndex = getIncludes().addInclude(include);
 
         if (insertIndex == -1) {
+            return null;
+        }
+
+        return (IncludeDecl) super.addChild(insertIndex, include);
+    }
+
+    private IncludeDecl addIncludePrivate(IncludeDecl include, int insertIndex) {
+        // Ignores insert index
+        int index = getIncludes().addInclude(include);
+
+        if (index == -1) {
+            SpecsLogs.info("Adding already existing include '" + include.getCode() + "', ignoring");
             return null;
         }
 
@@ -237,7 +245,6 @@ public class TranslationUnit extends ClavaNode {
     }
 
     /**
-     *
      * @param relativePath
      */
     public void setRelativePath(String relativePath) {
@@ -330,7 +337,6 @@ public class TranslationUnit extends ClavaNode {
     }
 
     /**
-     *
      * @return the path to the folder of this file
      */
     public Optional<String> getFolderpath() {
@@ -478,9 +484,8 @@ public class TranslationUnit extends ClavaNode {
      * <p>
      * For instance, if the path of the file is /folder1/folder2/file.h, but the source folder should be considered to
      * be /folder1, this method returns folder2.
-     *
+     * <p>
      * *
-     *
      *
      * @return
      */

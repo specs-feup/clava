@@ -1,11 +1,11 @@
 /**
  * Copyright 2017 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -29,17 +29,9 @@ import pt.up.fe.specs.util.utilities.StringList;
 public interface ClangAstKeys {
 
     DataKey<String> CLANGAST_VERSION = KeyFactory.string("clangast_version", "");
-    // DataKey<String> LIBC_VERSION = KeyFactory.string("libc_version", "");
 
     /**
-     * If true, tries to use the platform system includes (if available), instead of the built-in system includes.
-     */
-    // DataKey<Boolean> USE_PLATFORM_INCLUDES = KeyFactory.bool("platformIncludes")
-    // // .setLabel("Uses the platform system includes headers (if available)");
-    // .setLabel("Disable built-in lib C/C++ includes");
-
-    /**
-     * What libc/libcxx should be used.
+     * What libc/libcxx mode should be used.
      */
     DataKey<LibcMode> LIBC_CXX_MODE = KeyFactory.enumeration("libcCxxMode", LibcMode.class)
             .setLabel("Libc/Libcxx mode")
@@ -56,7 +48,7 @@ public interface ClangAstKeys {
 
     /**
      * Transform flags to the ClangAstDumper into a DataStore.
-     * 
+     *
      * @param flags
      * @return
      */

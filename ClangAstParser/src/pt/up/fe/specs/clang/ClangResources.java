@@ -41,7 +41,6 @@ public class ClangResources {
     private static final Map<String, ClangFiles> CLANG_FILES_CACHE = new ConcurrentHashMap<>();
 
     private final static String CLANG_FOLDERNAME = "clang_ast_exe";
-    private final static String CLANG_INCLUDES_FOLDERNAME = "clang_includes";
 
     private final static Lazy<File> CUDALIB_FOLDER = Lazy.newInstance(ClangResources::prepareBuiltinCudaLib);
 
@@ -64,77 +63,20 @@ public class ClangResources {
         // Check if cached
         var files = CLANG_FILES_CACHE.get(key);
         if (files != null) {
+            SpecsLogs.debug(() -> "Using cached version of Clang files: " + files);
             return files;
-        }
-
-        // Check if there is a local version of the Clang files
-        ClangFiles localClangFiles = SpecsIo.getJarPath(ClangResources.class)
-                .map(jarFolder -> new File(jarFolder, CLANG_FOLDERNAME))
-                .filter(File::isDirectory)
-                .flatMap(clangFolder -> loadLocalClangFiles(clangFolder, version))
-                .orElse(null);
-
-        if (localClangFiles != null) {
-            ClavaLog.info("Using local version of ClangAstDumper ("
-                    + localClangFiles.clangExecutable().getAbsolutePath()
-                    + "). Option 'use platform includes' will be ignored");
-
-            // Store in cache
-            CLANG_FILES_CACHE.put(key, localClangFiles);
-            SpecsLogs.info("Using local version of Clang files: " + localClangFiles);
-            return localClangFiles;
         }
 
         File clangExecutable = prepareResources(version);
         List<String> builtinIncludes = prepareIncludes(clangExecutable, libcMode);
 
         var newFiles = new ClangFiles(clangExecutable, builtinIncludes);
-        SpecsLogs.info("Using downloaded version of Clang files: " + newFiles);
+        SpecsLogs.debug(() -> "Using downloaded version of Clang files: " + newFiles);
 
         // Store in cache
         CLANG_FILES_CACHE.put(key, newFiles);
 
         return newFiles;
-    }
-
-    private Optional<ClangFiles> loadLocalClangFiles(File clangFolder, String version) {
-
-        // Get versioned filename of dumper
-        SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
-        FileResourceProvider executableResource = getVersionedResource(getExecutableResource(platform), version);
-
-        // FileResourceProvider executableResource = getVersionedExecutableResource(version, platform);
-
-        var clangDumperExe = new File(clangFolder, executableResource.getFilename());
-        if (!clangDumperExe.isFile()) {
-            ClavaLog.info("!Found local ClangDumper folder '" + clangFolder.getAbsolutePath()
-                    + "', but does not contain required file '"
-                    + executableResource.getFilename() + "'. Please update the contents of the folder.");
-            return Optional.empty();
-        }
-
-        // Get clang includes folder
-        var clangIncludesFolder = new File(clangFolder, CLANG_INCLUDES_FOLDERNAME);
-        if (!clangIncludesFolder.isDirectory()) {
-            ClavaLog.info("!Found local ClangDumper folder '" + clangFolder.getAbsolutePath()
-                    + "', but does not contain folder '" + CLANG_INCLUDES_FOLDERNAME
-                    + "'. Please update the contents of the folder.");
-            return Optional.empty();
-        }
-
-        // Get include folders
-        var clangIncludes = SpecsIo.getFolders(clangIncludesFolder).stream()
-                .map(File::getAbsolutePath)
-                .collect(Collectors.toList());
-
-        if (clangIncludes.isEmpty()) {
-            ClavaLog.info("!Found local ClangDumper folder '" + clangFolder.getAbsolutePath()
-                    + "', but folder '" + CLANG_INCLUDES_FOLDERNAME
-                    + "' is empty. Please update the contents of the folder.");
-            return Optional.empty();
-        }
-
-        return Optional.of(new ClangFiles(clangDumperExe, clangIncludes));
     }
 
     /**
@@ -146,7 +88,6 @@ public class ClangResources {
 
         SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
         FileResourceProvider executableResource = getVersionedResource(getExecutableResource(platform), version);
-        // FileResourceProvider executableResource = getVersionedExecutableResource(version, platform);
 
         // Copy executable
         ResourceWriteData executable = executableResource.writeVersioned(resourceFolder, ClangResources.class);
@@ -158,6 +99,10 @@ public class ClangResources {
             }
         } else if (platform == SupportedPlatform.MAC_OS) {
             for (FileResourceProvider resource : getMacOSResources()) {
+                resource.writeVersioned(resourceFolder, ClangResources.class);
+            }
+        } else if (platform == SupportedPlatform.LINUX_5) {
+            for (FileResourceProvider resource : getLinuxResources()) {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
         }
@@ -287,59 +232,78 @@ public class ClangResources {
         return macosResources;
     }
 
+    private List<FileResourceProvider> getLinuxResources() {
+        List<FileResourceProvider> linuxResources = new ArrayList<>();
+
+        linuxResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_LLVM_DLL));
+
+        return linuxResources;
+    }
+
     private List<String> prepareIncludes(File clangExecutable, LibcMode libcMode) {
 
-        // Use no built-ins
-        /*
-        if (libcMode == LibcMode.SYSTEM) {
-            return Collections.emptyList();
-        }
-         */
-        // Should not use basic includes if mode is System?
-        // if (usePlatformIncludes) {
-        // return Collections.emptyList();
-        // }
-
+        // Get base resource folder
         File resourceFolder = getClangResourceFolder();
-
-        File includesBaseFolder = SpecsIo.mkdir(resourceFolder, CLANG_INCLUDES_FOLDERNAME);
-        // ZipResourceManager zipManager = new ZipResourceManager(includesBaseFolder);
 
         // Create list of include zips
         List<FileResourceProvider> includesZips = new ArrayList<>();
 
-        // Get libc_libcxx, if required
+        // Get libc/libcxx resources, if required
         if (useBuiltinLibc(clangExecutable, libcMode)) {
-            var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.BUILTIN_INCLUDES);
+            var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
             includesZips.add(getVersionedResource(builtinResource, builtinResource.version()));
 
+            if (SupportedPlatform.getCurrentPlatform().isWindows()) {
+                var windowsBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_WIN32);
+                includesZips.add(getVersionedResource(windowsBuiltinResource, windowsBuiltinResource.version()));
+            }
         }
 
         // Always add OpenMP includes
         includesZips.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.OPENMP_INCLUDES));
 
-        // Download includes zips, check if any of them is new
+        // Download includes zips, later we check if any of them is new
         List<ResourceWriteData> zipFiles = includesZips.stream()
                 .map(resource -> resource.writeVersioned(resourceFolder, ClangResources.class))
                 .collect(Collectors.toList());
 
-        // If a new file has been written, delete includes folder, and extract all zips again
-        // Extracting all because zips might have several folders and we are not determining which should be updated
-        if (zipFiles.stream().filter(ResourceWriteData::isNewFile).findAny().isPresent()) {
-            // Clean folder
-            SpecsIo.deleteFolderContents(includesBaseFolder);
 
-            // Extract zips
-            zipFiles.stream().forEach(zipFile -> SpecsIo.extractZip(zipFile.getFile(), includesBaseFolder));
+        var extractedFolders = new ArrayList<File>();
+
+        // If a new file has been written or if folder exists but is empty, delete corresponding includes folder, and extract zip again
+        for (var zipFile : zipFiles) {
+
+            // Obtain folder for zip
+            var zipFoldername = "include_" + SpecsIo.removeExtension(zipFile.getFile());
+            var extractedFolder = SpecsIo.mkdir(resourceFolder, zipFoldername);
+
+            // Add to extracted folders list
+            extractedFolders.add(extractedFolder);
+
+            // Skip extraction if zip is not new and folder is not empty
+            if (!zipFile.isNewFile() && !SpecsIo.isEmptyFolder(extractedFolder)) {
+                continue;
+            }
+
+            // Clean folder
+            SpecsIo.deleteFolderContents(extractedFolder);
+
+            // Extract zip contents to folder
+            SpecsIo.extractZip(zipFile.getFile(), extractedFolder);
         }
 
-        // Add all folders inside base folder as system include
-        List<String> includes = SpecsIo.getFolders(includesBaseFolder).stream()
-                .map(file -> file.getAbsolutePath())
-                .collect(Collectors.toList());
+        // Add all folders inside extracted folders as system include
+        var includes = new ArrayList<String>();
+        for (var extractedFolder : extractedFolders) {
+            var includeFolders = SpecsIo.getFolders(extractedFolder).stream()
+                    .map(file -> file.getAbsolutePath())
+                    .toList();
+
+            includes.addAll(includeFolders);
+        }
 
 
-        // Sort them alphabetically, include order can be important
+        // Sort them alphabetically, include order is important
         Collections.sort(includes);
         SpecsLogs.debug(() -> "Includes folders: " + includes);
 

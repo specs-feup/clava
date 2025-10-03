@@ -48,6 +48,11 @@ public class CxxTest {
     }
 
     @Test
+    public void testCommentInclude() {
+        new CxxTester("comment_include.cpp").test();
+    }
+
+    @Test
     public void testConstructor() {
         new CxxTester("constructor.cpp", "constructor.h").test();
     }
