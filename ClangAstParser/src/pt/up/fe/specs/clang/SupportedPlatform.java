@@ -66,7 +66,7 @@ public enum SupportedPlatform implements StringProvider {
             var macosVersion = getMacOSVersion();
 
             if (macosVersion != null && macosVersion < SUPPORTED_MAC_VERSION) {
-                ClavaLog.info("Current MacOS version is " + macosVersion + " but only " + SUPPORTED_MAC_VERSION
+                ClavaLog.debug("Current MacOS version is " + macosVersion + " but only " + SUPPORTED_MAC_VERSION
                         + " and above are supported, execution might fail");
             }
 
@@ -82,7 +82,7 @@ public enum SupportedPlatform implements StringProvider {
             var linuxMajorVersion = getLinuxMajorVersion();
 
             if (linuxMajorVersion == null) {
-                ClavaLog.info("Could not determine Linux version, running at your own risk");
+                ClavaLog.debug("Could not determine Linux version, running at your own risk");
                 return LINUX_5;
             }
 
@@ -106,7 +106,7 @@ public enum SupportedPlatform implements StringProvider {
         var dotIndex = linuxVersion.indexOf('.');
 
         if (dotIndex == -1) {
-            ClavaLog.info("Could not extract major version from Linux OS version string, expected at least a . : '"
+            ClavaLog.debug("Could not extract major version from Linux OS version string, expected at least a . : '"
                     + linuxVersion + "'");
             return null;
         }
@@ -116,7 +116,7 @@ public enum SupportedPlatform implements StringProvider {
         var majorVersion = SpecsStrings.parseInteger(majorVersionString);
 
         if (majorVersion == null) {
-            ClavaLog.info("Could not extract major version from Linux OS version string, '" + majorVersionString
+            ClavaLog.debug("Could not extract major version from Linux OS version string, '" + majorVersionString
                     + "' is not an integer: '" + linuxVersion + "'");
             return null;
         }
@@ -134,7 +134,7 @@ public enum SupportedPlatform implements StringProvider {
         var versionNumber = SpecsStrings.parseDouble(majorMinor);
 
         if (versionNumber == null) {
-            ClavaLog.info("Could not convert MacOS version to a double: '" + macosVersion + "'");
+            ClavaLog.debug("Could not convert MacOS version to a double: '" + macosVersion + "'");
             return null;
         }
 
