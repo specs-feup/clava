@@ -50,6 +50,7 @@ import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.TagKind;
+import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
 import pt.up.fe.specs.clava.utils.ClassesService;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -489,6 +490,24 @@ public class ClavaFactory {
                 .put(InitListExpr.IS_EXPLICIT, true);
 
         return new InitListExpr(data, values);
+    }
+
+
+    public UnaryExprOrTypeTraitExpr sizeof(Type typeArg) {
+        DataStore data = newDataStore(UnaryExprOrTypeTraitExpr.class)
+                .put(UnaryExprOrTypeTraitExpr.KIND, UnaryExprOrTypeTrait.SizeOf)
+                .put(UnaryExprOrTypeTraitExpr.IS_ARGUMENT_TYPE, true)
+                .put(UnaryExprOrTypeTraitExpr.ARG_TYPE, Optional.of(typeArg));
+
+        return new UnaryExprOrTypeTraitExpr(data, Collections.emptyList());
+    }
+
+    public UnaryExprOrTypeTraitExpr sizeof(Expr typeExpr) {
+        DataStore data = newDataStore(UnaryExprOrTypeTraitExpr.class)
+                .put(UnaryExprOrTypeTraitExpr.KIND, UnaryExprOrTypeTrait.SizeOf)
+                .put(UnaryExprOrTypeTraitExpr.IS_ARGUMENT_TYPE, false);
+
+        return new UnaryExprOrTypeTraitExpr(data, List.of(typeExpr));
     }
 
     /// DECLS
