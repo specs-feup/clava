@@ -74,6 +74,6 @@
     "jest": "^29.7.0",
     "node-notifier": "^10.0.1",
     "ts-jest": "^29.2.6",
-    "typescript": "^5.8.2"
+    "typescript": "^5.9.0"
   }
 }

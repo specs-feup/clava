@@ -1,8 +1,5 @@
 {
   "extends": "./tsconfig.json",
   "include": ["**/*.spec.ts", "**/*.test.ts"],
-  "exclude": ["node_modules"],
-   "compilerOptions": {
-    "isolatedModules": true
-  }
+  "exclude": ["node_modules"]
 }
