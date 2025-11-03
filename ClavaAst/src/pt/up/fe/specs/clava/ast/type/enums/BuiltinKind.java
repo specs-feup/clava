@@ -1,11 +1,11 @@
 /**
  * Copyright 2018 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,16 +13,16 @@
 
 package pt.up.fe.specs.clava.ast.type.enums;
 
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.extra.data.Language;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-
-import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.ast.extra.data.Language;
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public enum BuiltinKind {
     OCLImage1dRO,
@@ -265,6 +265,7 @@ public enum BuiltinKind {
     OMPIterator;
 
     private static final Map<String, BuiltinKind> LITERAL_KINDS;
+
     static {
         LITERAL_KINDS = new LinkedHashMap<>();
         LITERAL_KINDS.put("void", Void);
@@ -315,6 +316,7 @@ public enum BuiltinKind {
      * For built-in kinds that always have the same code.
      */
     private static final Map<BuiltinKind, String> BUILTIN_CODE;
+
     static {
         // Some of the built-in types:
         // https://android.googlesource.com/platform/prebuilts/clang/darwin-x86/sdk/3.5/+/refs/heads/master/include/clang/AST/BuiltinTypes.def
@@ -349,6 +351,7 @@ public enum BuiltinKind {
      * Calculates the bit width of built-in kinds.
      */
     private static final Map<BuiltinKind, Function<Language, Integer>> BIT_WIDTHS;
+
     static {
         BIT_WIDTHS = new HashMap<>();
         BIT_WIDTHS.put(BuiltinKind.Double, lang -> lang.get(Language.DOUBLE_WIDTH));
@@ -397,13 +400,13 @@ public enum BuiltinKind {
 
         // Special cases
         switch (this) {
-        case Bool:
-            return getCodeBool(sourceNode);
-        case Half:
-            return getCodeHalf(sourceNode);
-        default:
-            // return null;
-            throw new NotImplementedException(this);
+            case Bool:
+                return getCodeBool(sourceNode);
+            case Half:
+                return getCodeHalf(sourceNode);
+            default:
+                // return null;
+                throw new NotImplementedException(this);
         }
     }
 
@@ -457,6 +460,13 @@ public enum BuiltinKind {
     }
 
     public static BuiltinKind newInstance(String literalKind) {
+        // Special case: char is assumed to be unsigned char
+        // There are four char types: explicitly unsigned and signed char, and
+        // implicitly unsigned and signed char, that depends on the target
+        if ("char".equals(literalKind)) {
+            return BuiltinKind.Char_U;
+        }
+
         BuiltinKind builtinKind = LITERAL_KINDS.get(literalKind);
         if (builtinKind == null) {
             throw new RuntimeException("Literal '" + literalKind
