@@ -965,7 +965,7 @@ export default class ClavaJoinPoints {
    */
   static sizeof(argument: Joinpoints.Expression): Joinpoints.UnaryExprOrType;
   /**
-   *  Creates a new join point for the operator 'sizeof' which receives an type argument.
+   *  Creates a new join point for the operator 'sizeof' which receives a type argument.
    *
    * @param argument
    */
