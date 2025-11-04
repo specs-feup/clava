@@ -7,7 +7,14 @@
     //"checkJs": true,
     "sourceMap": true,
     "declarationMap": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
     //"esModuleInterop": true
+
+    // Experiment
+    "target": "ES2022",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
   }
 }
