@@ -15,6 +15,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "moduleResolution": "Node16",    
   }
 }
