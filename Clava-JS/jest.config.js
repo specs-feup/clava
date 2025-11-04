@@ -14,11 +14,6 @@ const config = {
   },
   projects: ["src-api", "src-code"],
 
-  // Experiment
-  extensionsToTreatAsEsm: ['.ts'],
-  transform: {
-    '^.+\\.tsx?$': ['ts-jest', { useESM: true }]
-  },
 };
 
 export default config;
