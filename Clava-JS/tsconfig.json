@@ -9,5 +9,12 @@
     "declarationMap": true,
     "allowSyntheticDefaultImports": true,
     //"esModuleInterop": true
+
+    // Experiment
+    "target": "ES2022",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "types": ["jest", "node"]
   }
 }
