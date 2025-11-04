@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    //"module": "node20",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "isolatedModules": true,
     "declaration": true,
     "strict": true,
     //"allowJs": true,
@@ -9,17 +11,5 @@
     "declarationMap": true,
     "allowSyntheticDefaultImports": true,
     //"esModuleInterop": true
-
-    // Experiment
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "isolatedModules": true,
-    /*
-    "target": "ES2022",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-
-*/
     }
 }

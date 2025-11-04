@@ -2,16 +2,4 @@
   "extends": "./tsconfig.json",
   "include": ["**/*.spec.ts", "**/*.test.ts"],
   "exclude": ["node_modules"],
-/*
-  // Experiment
- "compilerOptions": {
-    "module": "node20",
-    "moduleResolution": "Node16",
-    "target": "ES2022",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "types": ["jest", "node"]
-  }  
-*/    
 }
