@@ -176,6 +176,7 @@ jobs:
           path: clava/Clava-JS/java-binaries
 
       - name: Diagnostic info
+        working-directory: Clava-JS
         run: |
           echo "=== Node and npm ==="
           node -v
@@ -193,6 +194,7 @@ jobs:
         run: npx jest --showConfig
 
       - name: Test JS
+        working-directory: Clava-JS
         run: |
           cd clava/Clava-JS
           npm run test
