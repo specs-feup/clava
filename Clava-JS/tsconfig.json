@@ -13,10 +13,13 @@
     // Experiment
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "isolatedModules": true,
+    /*
     "target": "ES2022",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "isolatedModules": true,
+
+*/
     }
 }
