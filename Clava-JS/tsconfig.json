@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "Node20",
+    "module": "node20",
     "declaration": true,
     "strict": true,
     //"allowJs": true,
