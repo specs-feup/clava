@@ -191,10 +191,10 @@ jobs:
           npm ls --depth=0
 
       - name: Debug Jest
+        working-directory: clava/Clava-JS
         run: npx jest --showConfig
 
       - name: Test JS
-        working-directory: clava/Clava-JS
         run: |
           cd clava/Clava-JS
           npm run test
