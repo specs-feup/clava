@@ -13,6 +13,12 @@ const config = {
     "(.+)\\.js": "$1",
   },
   projects: ["src-api", "src-code"],
+
+  // Experiment
+  extensionsToTreatAsEsm: ['.ts'],
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', { useESM: true }]
+  },
 };
 
 export default config;
