@@ -14,6 +14,9 @@ const config = {
   },
   projects: ["src-api", "src-code"],
 
+  // Experiment
+  extensionsToTreatAsEsm: ['.ts'],
+
 };
 
 export default config;
