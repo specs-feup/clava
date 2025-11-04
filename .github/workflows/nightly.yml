@@ -175,6 +175,25 @@ jobs:
           name: java-binaries
           path: clava/Clava-JS/java-binaries
 
+      - name: Diagnostic info
+        working-directory: clava/Clava-JS
+        run: |
+          echo "=== Node and npm ==="
+          node -v
+          npm -v
+          echo "=== System Info ==="
+          uname -a
+          echo "=== Environment ==="
+          printenv | sort
+          echo "=== TypeScript Config ==="
+          npx tsc --showConfig
+          echo "=== Installed Packages ==="
+          npm ls --depth=0
+
+      - name: Debug Jest
+        working-directory: clava/Clava-JS
+        run: npx jest --showConfig
+
       - name: Test JS
         run: |
           cd clava/Clava-JS

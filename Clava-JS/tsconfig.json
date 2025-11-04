@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
     "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "isolatedModules": true,
     "declaration": true,
     "strict": true,
     //"allowJs": true,
     //"checkJs": true,
-    "moduleResolution": "NodeNext",
     "sourceMap": true,
     "declarationMap": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
     //"esModuleInterop": true
-  }
+    }
 }

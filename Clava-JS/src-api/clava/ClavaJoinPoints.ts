@@ -96,9 +96,7 @@ export default class ClavaJoinPoints {
     $type: Joinpoints.Type
   ): Joinpoints.IncompleteArrayType {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.incompleteArrayType(
-        unwrapJoinPoint($type)
-      )
+      ClavaJavaTypes.AstFactory.incompleteArrayType(unwrapJoinPoint($type))
     );
   }
 
@@ -913,5 +911,70 @@ export default class ClavaJoinPoints {
    */
   static program(): Joinpoints.Program {
     return wrapJoinPoint(ClavaJavaTypes.AstFactory.program());
+  }
+
+  /**
+   * Creates a new join point 'memberAccess' from a base expression and a field declaration.
+   *
+   * @param baseExpr
+   * @param field
+   */
+  static memberAccess(
+    baseExpr: Joinpoints.Expression,
+    field: Joinpoints.Field
+  ): Joinpoints.MemberAccess;
+  /**
+   * Creates a new join point 'memberAccess' from a base expression and the field name and its type.
+   *
+   * @param baseExpr
+   * @param fieldName
+   * @param fieldType
+   */
+  static memberAccess(
+    baseExpr: Joinpoints.Expression,
+    fieldName: String,
+    fieldType: Joinpoints.Type
+  ): Joinpoints.MemberAccess;
+  static memberAccess(
+    baseExpr: Joinpoints.Expression,
+    field: Joinpoints.Field | String,
+    fieldType?: Joinpoints.Type
+  ): Joinpoints.MemberAccess {
+    if (typeof field === "string") {
+      return wrapJoinPoint(
+        ClavaJavaTypes.AstFactory.memberAccess(
+          unwrapJoinPoint(baseExpr),
+          field,
+          unwrapJoinPoint(fieldType)
+        )
+      );
+    }
+
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.memberAccess(
+        unwrapJoinPoint(baseExpr),
+        unwrapJoinPoint(field)
+      )
+    );
+  }
+
+  /**
+   *  Creates a new join point for the operator 'sizeof' which receives an expression argument.
+   *
+   * @param argument
+   */
+  static sizeof(argument: Joinpoints.Expression): Joinpoints.UnaryExprOrType;
+  /**
+   *  Creates a new join point for the operator 'sizeof' which receives a type argument.
+   *
+   * @param argument
+   */
+  static sizeof(argument: Joinpoints.Type): Joinpoints.UnaryExprOrType;
+  static sizeof(
+    argument: Joinpoints.Expression | Joinpoints.Type
+  ): Joinpoints.UnaryExprOrType {
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.sizeof(unwrapJoinPoint(argument))
+    );
   }
 }
