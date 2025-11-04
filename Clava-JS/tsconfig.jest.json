@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "include": ["**/*.spec.ts", "**/*.test.ts"],
   "exclude": ["node_modules"],
-
+/*
   // Experiment
  "compilerOptions": {
     "module": "node20",
@@ -13,4 +13,5 @@
     "isolatedModules": true,
     "types": ["jest", "node"]
   }  
+*/    
 }

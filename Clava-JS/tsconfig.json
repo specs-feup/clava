@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "node20",
+    //"module": "node20",
     "declaration": true,
     "strict": true,
     //"allowJs": true,
@@ -11,11 +11,12 @@
     //"esModuleInterop": true
 
     // Experiment
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "target": "ES2022",
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "isolatedModules": true,
-    "types": ["jest", "node"],
-    "moduleResolution": "Node16",    
-  }
+    }
 }
