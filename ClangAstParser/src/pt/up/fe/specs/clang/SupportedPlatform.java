@@ -38,7 +38,6 @@ public enum SupportedPlatform implements StringProvider {
             .newLazyHelperWithValue(SupportedPlatform.class);
 
 
-    private static final double SUPPORTED_MAC_VERSION = 11.5;
     private static final double SUPPORTED_LINUX_VERSION = 5;
 
     public static EnumHelperWithValue<SupportedPlatform> getHelper() {
@@ -63,13 +62,6 @@ public enum SupportedPlatform implements StringProvider {
 
         // Generic Mac
         if (SpecsPlatforms.isMac()) {
-            var macosVersion = getMacOSVersion();
-
-            if (macosVersion != null && macosVersion < SUPPORTED_MAC_VERSION) {
-                ClavaLog.debug("Current MacOS version is " + macosVersion + " but only " + SUPPORTED_MAC_VERSION
-                        + " and above are supported, execution might fail");
-            }
-
             return MAC_OS;
         }
 
@@ -82,7 +74,6 @@ public enum SupportedPlatform implements StringProvider {
             var linuxMajorVersion = getLinuxMajorVersion();
 
             if (linuxMajorVersion == null) {
-                ClavaLog.debug("Could not determine Linux version, running at your own risk");
                 return LINUX_5;
             }
 
@@ -106,8 +97,6 @@ public enum SupportedPlatform implements StringProvider {
         var dotIndex = linuxVersion.indexOf('.');
 
         if (dotIndex == -1) {
-            ClavaLog.debug("Could not extract major version from Linux OS version string, expected at least a . : '"
-                    + linuxVersion + "'");
             return null;
         }
 
@@ -116,29 +105,10 @@ public enum SupportedPlatform implements StringProvider {
         var majorVersion = SpecsStrings.parseInteger(majorVersionString);
 
         if (majorVersion == null) {
-            ClavaLog.debug("Could not extract major version from Linux OS version string, '" + majorVersionString
-                    + "' is not an integer: '" + linuxVersion + "'");
             return null;
         }
 
         return majorVersion;
-    }
-
-    private static Double getMacOSVersion() {
-        var macosVersion = System.getProperty("os.version");
-
-        // Extract major.minor (e.g., "14.7" from "14.7.6")
-        var versionParts = macosVersion.split("\\.");
-        String majorMinor = versionParts.length >= 2 ? versionParts[0] + "." + versionParts[1] : macosVersion;
-
-        var versionNumber = SpecsStrings.parseDouble(majorMinor);
-
-        if (versionNumber == null) {
-            ClavaLog.debug("Could not convert MacOS version to a double: '" + macosVersion + "'");
-            return null;
-        }
-
-        return versionNumber;
     }
 
     @Override
