@@ -33,6 +33,7 @@ export default class StatementDecomposer {
   public startIndex;
   public useGlobalIds;
   private symbolTable: Set<string> | undefined;
+  private currentFunction: FunctionJp | undefined;
 
   /**
    * Creates a new StatementDecomposer.
@@ -54,12 +55,19 @@ export default class StatementDecomposer {
    * @param $scope - The scope to build the symbol table from (typically a function)
    */
   private buildSymbolTable($scope: Joinpoint): void {
-    this.symbolTable = new Set<string>();
-    
     // Get the enclosing function if we're not already at a function
     const $function = $scope instanceof FunctionJp 
       ? $scope 
       : $scope.getAncestor("function") as FunctionJp | undefined;
+    
+    // If we're in the same function as before, reuse the symbol table
+    if ($function === this.currentFunction && this.symbolTable !== undefined) {
+      return;
+    }
+    
+    // Reset for new function
+    this.currentFunction = $function;
+    this.symbolTable = new Set<string>();
     
     if ($function === undefined) {
       return;
@@ -154,10 +162,8 @@ export default class StatementDecomposer {
    * @returns An array with the new statements, or an empty array if no decomposition could be made
    */
   decompose($stmt: Statement): Statement[] {
-    // Build symbol table once per decomposition operation to avoid duplicate variable names
-    if (this.symbolTable === undefined) {
-      this.buildSymbolTable($stmt);
-    }
+    // Build/refresh symbol table for the current function to avoid duplicate variable names
+    this.buildSymbolTable($stmt);
     
     try {
       return this.decomposeStmt($stmt);
