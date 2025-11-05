@@ -1,16 +1,20 @@
 import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
+import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 import {
   BinaryOp,
   Call,
   Case,
-  Decl,
+  type Decl,
   DeclStmt,
   EmptyStmt,
   ExprStmt,
-  Expression,
-  Joinpoint,
+  type Expression,
+  FunctionJp,
+  type Joinpoint,
   LabelStmt,
   MemberCall,
+  type Param,
   ReturnStmt,
   Scope,
   Statement,
@@ -25,17 +29,73 @@ import DecomposeResult from "./DecomposeResult.js";
  * Decomposes complex statements into several simpler ones.
  */
 export default class StatementDecomposer {
-  tempPrefix;
-  startIndex;
+  public tempPrefix;
+  public startIndex;
+  public useGlobalIds;
+  private symbolTable: Set<string> | undefined;
 
-  constructor(tempPrefix: string = "decomp_", startIndex: number = 0) {
+  /**
+   * Creates a new StatementDecomposer.
+   * 
+   * @param tempPrefix - Prefix for temporary variable names
+   * @param startIndex - Starting index for temporary variable names (ignored if useGlobalIds is true)
+   * @param useGlobalIds - If true, uses global IdGenerator to avoid duplicate symbols across multiple normalizations
+   */
+  public constructor(tempPrefix = "decomp_", startIndex = 0, useGlobalIds = false) {
     this.tempPrefix = tempPrefix;
     this.startIndex = startIndex;
+    this.useGlobalIds = useGlobalIds;
+  }
+
+  /**
+   * Builds a symbol table of existing variable declarations and parameters in the given scope.
+   * This is used to avoid creating duplicate variable names.
+   * 
+   * @param $scope - The scope to build the symbol table from (typically a function)
+   */
+  private buildSymbolTable($scope: Joinpoint): void {
+    this.symbolTable = new Set<string>();
+    
+    // Get the enclosing function if we're not already at a function
+    const $function = $scope instanceof FunctionJp 
+      ? $scope 
+      : $scope.getAncestor("function") as FunctionJp | undefined;
+    
+    if ($function === undefined) {
+      return;
+    }
+    
+    // Add parameter names to symbol table
+    for (const $param of $function.params as Param[]) {
+      this.symbolTable.add($param.name);
+    }
+    
+    // Add all variable declarations in the function to symbol table
+    for (const $vardecl of Query.searchFrom($function, Vardecl)) {
+      this.symbolTable.add($vardecl.name);
+    }
   }
 
   private newTempVarname() {
-    const varName = `${this.tempPrefix}${this.startIndex}`;
+    if (this.useGlobalIds) {
+      // Use global IdGenerator to ensure unique names across multiple normalizations
+      return IdGenerator.next(this.tempPrefix);
+    }
+    
+    // Use local counter with symbol table checking to avoid duplicates
+    let varName = `${this.tempPrefix}${this.startIndex}`;
     this.startIndex++;
+    
+    // If we have a symbol table, ensure the name is unique
+    if (this.symbolTable !== undefined) {
+      while (this.symbolTable.has(varName)) {
+        varName = `${this.tempPrefix}${this.startIndex}`;
+        this.startIndex++;
+      }
+      // Add the new name to the symbol table
+      this.symbolTable.add(varName);
+    }
+    
     return varName;
   }
 
@@ -94,6 +154,11 @@ export default class StatementDecomposer {
    * @returns An array with the new statements, or an empty array if no decomposition could be made
    */
   decompose($stmt: Statement): Statement[] {
+    // Build symbol table once per decomposition operation to avoid duplicate variable names
+    if (this.symbolTable === undefined) {
+      this.buildSymbolTable($stmt);
+    }
+    
     try {
       return this.decomposeStmt($stmt);
     } catch (e) {
