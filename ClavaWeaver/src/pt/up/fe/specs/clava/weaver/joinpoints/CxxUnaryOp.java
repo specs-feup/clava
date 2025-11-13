@@ -25,11 +25,8 @@ import java.util.List;
 
 public class CxxUnaryOp extends AUnaryOp {
 
-//    private final UnaryOperator unaryOp;
-
     public CxxUnaryOp(UnaryOperator unaryOp) {
         super(unaryOp);
-//        this.unaryOp = unaryOp;
     }
 
     @Override

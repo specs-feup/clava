@@ -30,16 +30,6 @@ public abstract class AUnaryOp extends CxxOp {
 
 
     /**
-     * Alternative version that knows which node class corresponds to a given join point
-     * @param op
-     */
-    /*
-    public AUnaryOp(UnaryOperator op) {
-        super(op);
-    }
-     */
-
-    /**
      * Get value on attribute isPointerDeref
      *
      * @return the attribute's value
