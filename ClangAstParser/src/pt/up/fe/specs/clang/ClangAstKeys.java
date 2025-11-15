@@ -35,7 +35,7 @@ public interface ClangAstKeys {
      */
     DataKey<LibcMode> LIBC_CXX_MODE = KeyFactory.enumeration("libcCxxMode", LibcMode.class)
             .setLabel("Libc/Libcxx mode")
-            .setDefault(() -> SpecsPlatforms.isWindows() ? LibcMode.BUILTIN_AND_LIBC : LibcMode.AUTO);
+            .setDefault(() -> (SpecsPlatforms.isWindows() || SpecsPlatforms.isLinux()) ? LibcMode.BUILTIN_AND_LIBC : LibcMode.AUTO);
 
     DataKey<Boolean> USES_CILK = KeyFactory.bool("usesCilk");
 

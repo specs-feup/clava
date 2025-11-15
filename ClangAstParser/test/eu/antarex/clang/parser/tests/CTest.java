@@ -80,6 +80,15 @@ public class CTest {
     }
 
     @Test
+    public void testTimerLinux() {
+        if (!SpecsPlatforms.isLinux()) {
+            return;
+        }
+
+        new CTester("timer_linux.c").test();
+    }
+
+    @Test
     public void testArrayFiller() {
         new CTester("array_filler.c").test();
     }
