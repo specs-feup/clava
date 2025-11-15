@@ -251,13 +251,25 @@ public class ClangResources {
 
         // Get libc/libcxx resources, if required
         if (useBuiltinLibc(clangExecutable, libcMode)) {
-            var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
-            includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
+            // Common Clang files (except Linux, it is a self-contained package)
+            if (!SupportedPlatform.getCurrentPlatform().isLinux()) {
+                var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
+                includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
+            }
+            // Self-contained Linux includes
+            else {
+                var linuxBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LINUX);
+                includesZips.add(getVersionedResource(linuxBuiltinResource, linuxBuiltinResource.getVersion()));
+            }
 
+
+            // Windows-exclusive files
             if (SupportedPlatform.getCurrentPlatform().isWindows()) {
                 var windowsBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_WIN32);
-                includesZips.add(getVersionedResource(windowsBuiltinResource, builtinResource.getVersion()));
+                includesZips.add(getVersionedResource(windowsBuiltinResource, windowsBuiltinResource.getVersion()));
             }
+
+
         }
 
         // Always add OpenMP includes
