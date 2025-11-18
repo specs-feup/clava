@@ -23,7 +23,7 @@ public class CTester extends AClangAstTester {
     }
 
     public CTester(List<String> files) {
-        super("c", files, Arrays.asList("-std=gnu99"));
+        super("c", files, Arrays.asList("-std=c99"));
     }
 
 }
