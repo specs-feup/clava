@@ -22,6 +22,7 @@ public enum ClangAstFileResource implements Supplier<FileResourceProvider> {
     LIBC_CXX_LLVM(ClangAstWebResource.LIBC_CXX_LLVM),
     LIBC_CXX_WIN32(ClangAstWebResource.LIBC_CXX_WIN32),
     LIBC_CXX_LINUX(ClangAstWebResource.LIBC_CXX_LINUX),
+    LIBC_CXX_LINUX_COMPLETE(ClangAstWebResource.LIBC_CXX_LINUX_COMPLETE),
     OPENMP_INCLUDES(ClangAstWebResource.OPENMP_INCLUDES),
     CUDA_LIB(ClangAstWebResource.CUDA_LIB),
     WIN_EXE(ClangAstWebResource.WIN_EXE),

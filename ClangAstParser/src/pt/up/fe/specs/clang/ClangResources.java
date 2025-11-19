@@ -252,10 +252,13 @@ public class ClangResources {
         // Get libc/libcxx resources, if required
         if (useBuiltinLibc(clangExecutable, libcMode)) {
             // Common Clang files
-
-            var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
-            includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
-
+            if (!SupportedPlatform.getCurrentPlatform().isLinux()) {
+                var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
+                includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
+            } else {
+                var linuxBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LINUX_COMPLETE);
+                includesZips.add(getVersionedResource(linuxBuiltinResource, linuxBuiltinResource.getVersion()));
+            }
 
             // Windows-exclusive files
             if (SupportedPlatform.getCurrentPlatform().isWindows()) {
@@ -263,11 +266,13 @@ public class ClangResources {
                 includesZips.add(getVersionedResource(windowsBuiltinResource, windowsBuiltinResource.getVersion()));
             }
 
-            // Linux-exclusive files
+            // Linux-exclusive files (disabled because common includes not working
+            /*
             if (SupportedPlatform.getCurrentPlatform().isLinux()) {
                 var linuxBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LINUX);
                 includesZips.add(getVersionedResource(linuxBuiltinResource, linuxBuiltinResource.getVersion()));
             }
+             */
 
         }
 
