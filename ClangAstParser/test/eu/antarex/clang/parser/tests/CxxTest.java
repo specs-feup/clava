@@ -18,6 +18,7 @@ import eu.antarex.clang.parser.CxxTester;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import pt.up.fe.specs.lang.SpecsPlatforms;
 
 public class CxxTest {
 
@@ -63,7 +64,11 @@ public class CxxTest {
 
     @Test
     public void testDecl() {
-        new CxxTester("decl.cpp").test();
+        if (SpecsPlatforms.isUnix()) {
+            new CxxTester("decl_unix.cpp").test();
+        } else if (SpecsPlatforms.isWindows()) {
+            new CxxTester("decl_windows.cpp").test();
+        }
     }
 
     @Test
