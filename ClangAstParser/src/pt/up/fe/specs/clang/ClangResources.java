@@ -251,13 +251,29 @@ public class ClangResources {
 
         // Get libc/libcxx resources, if required
         if (useBuiltinLibc(clangExecutable, libcMode)) {
-            var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
-            includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
+            // Common Clang files
+            if (!SupportedPlatform.getCurrentPlatform().isLinux()) {
+                var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
+                includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
+            } else {
+                var linuxBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LINUX_COMPLETE);
+                includesZips.add(getVersionedResource(linuxBuiltinResource, linuxBuiltinResource.getVersion()));
+            }
 
+            // Windows-exclusive files
             if (SupportedPlatform.getCurrentPlatform().isWindows()) {
                 var windowsBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_WIN32);
-                includesZips.add(getVersionedResource(windowsBuiltinResource, builtinResource.getVersion()));
+                includesZips.add(getVersionedResource(windowsBuiltinResource, windowsBuiltinResource.getVersion()));
             }
+
+            // Linux-exclusive files (disabled because common includes not working
+            /*
+            if (SupportedPlatform.getCurrentPlatform().isLinux()) {
+                var linuxBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LINUX);
+                includesZips.add(getVersionedResource(linuxBuiltinResource, linuxBuiltinResource.getVersion()));
+            }
+             */
+
         }
 
         // Always add OpenMP includes
@@ -294,26 +310,27 @@ public class ClangResources {
         }
 
         // Add all folders inside extracted folders as system include
-        var includes = new ArrayList<String>();
+        var includesFiles = new ArrayList<File>();
         for (var extractedFolder : extractedFolders) {
-            var includeFolders = SpecsIo.getFolders(extractedFolder).stream()
-                    .map(file -> file.getAbsolutePath())
-                    .toList();
+            var includeFolders = SpecsIo.getFolders(extractedFolder);
+            //.stream()
+            //.map(file -> file.getAbsolutePath())
+            //.toList();
 
-            includes.addAll(includeFolders);
+            includesFiles.addAll(includeFolders);
         }
 
 
-        // Sort them alphabetically, include order is important
-        Collections.sort(includes);
-        SpecsLogs.debug(() -> "Includes folders: " + includes);
+        // Sort them alphabetically, by last foldername, include order is important
+        Collections.sort(includesFiles, Comparator.comparing(File::getName));
+        SpecsLogs.debug(() -> "Includes folders: " + includesFiles);
 
         // If on linux, make folders and files accessible to all users
         if (SupportedPlatform.getCurrentPlatform().isLinux()) {
             SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", resourceFolder.getAbsolutePath()), false, true);
         }
 
-        return includes;
+        return includesFiles.stream().map(File::getAbsolutePath).toList();
     }
 
     private boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode) {
