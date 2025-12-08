@@ -11,6 +11,7 @@ import {
 } from "../Joinpoints.js";
 import ClavaJoinPoints from "./ClavaJoinPoints.js";
 import ClavaJavaTypes from "./ClavaJavaTypes.js";
+import JavaTypes, { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 
 /**
  * Utility methods related with the type join points.
@@ -132,9 +133,9 @@ export default class ClavaType {
   static asScope(code: Joinpoint | undefined): Scope {
     const $newStmt = ClavaType.asStatement(code);
 
-    const newScopeNode = ClavaJavaTypes.ClavaNodes.toCompoundStmt(
-      $newStmt?.node
-    );
+    // Use toRuntimeType to ensure java-bridge recognizes the node as Stmt
+    const stmtNode = $newStmt?.node ? JavaTypes.toRuntimeType($newStmt.node as JavaClasses.JavaClass) : undefined;
+    const newScopeNode = ClavaJavaTypes.ClavaNodes.toCompoundStmt(stmtNode);
 
     return ClavaJoinPoints.toJoinPoint(newScopeNode) as Scope;
   }

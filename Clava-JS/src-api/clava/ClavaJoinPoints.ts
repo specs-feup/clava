@@ -6,7 +6,8 @@ import {
   arrayFromArgs,
   flattenArgsArray,
 } from "@specs-feup/lara/api/lara/core/LaraCore.js";
-import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import JavaInterop from "@specs-feup/lara/api/lara/JavaInterop.js";
+import JavaTypes, { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import * as Joinpoints from "../Joinpoints.js";
 import Clava from "./Clava.js";
 import ClavaJavaTypes from "./ClavaJavaTypes.js";
@@ -59,20 +60,25 @@ export default class ClavaJoinPoints {
       dims = arrayFromArgs(dims);
     }
 
+    // Convert dims to Java List to ensure proper type matching with java-bridge
+    const dimsList = JavaInterop.arrayToList(dims);
+
     if (typeof type === "string") {
       return wrapJoinPoint(
         ClavaJavaTypes.AstFactory.constArrayType(
           type,
           Clava.getStandard(),
-          dims
+          dimsList
         )
       );
     } else if (type instanceof Joinpoints.Type) {
+      // Use toRuntimeType to ensure java-bridge recognizes the node as Type
+      const typeNode = JavaTypes.toRuntimeType(type.node as JavaClasses.JavaClass);
       return wrapJoinPoint(
         ClavaJavaTypes.AstFactory.constArrayType(
-          type.node,
+          typeNode,
           Clava.getStandard(),
-          dims
+          dimsList
         )
       );
     } else {

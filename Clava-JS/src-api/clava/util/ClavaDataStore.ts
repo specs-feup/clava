@@ -68,7 +68,7 @@ export default class ClavaDataStore extends WeaverDataStore {
     if (files.length === 0) {
       this.put("library includes", JavaTypes.FileList.newInstance());
     } else {
-      this.put("library includes", JavaTypes.FileList.newInstance(...files));
+      this.put("library includes", JavaTypes.FileList.newInstance(files));
     }
   }
 
@@ -82,7 +82,7 @@ export default class ClavaDataStore extends WeaverDataStore {
     if(files.length === 0) {
       this.put("header includes", JavaTypes.FileList.newInstance());
     } else {
-      this.put("header includes", JavaTypes.FileList.newInstance(...files));
+      this.put("header includes", JavaTypes.FileList.newInstance(files));
     }
 
   }
