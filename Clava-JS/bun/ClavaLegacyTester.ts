@@ -2,7 +2,7 @@ import ClavaJavaTypes, {
     ClavaJavaClasses,
 } from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 
-import { WeaverLegacyTester } from "@specs-feup/lara/jest/WeaverLegacyTester.js";
+import { WeaverLegacyTester } from "@specs-feup/lara/bun/WeaverLegacyTester.js";
 
 export class ClavaLegacyTester extends WeaverLegacyTester {
     protected readonly WORK_FOLDER: string = "cxx_weaver_output";

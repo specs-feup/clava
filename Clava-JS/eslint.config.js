@@ -1,6 +1,5 @@
 import typescriptEslint from "typescript-eslint";
 import tsdoc from "eslint-plugin-tsdoc";
-import jest from "eslint-plugin-jest";
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 
@@ -34,19 +33,5 @@ export default [
   {
     ...typescriptEslint.configs.disableTypeChecked,
     files: ["scripts/**/*.js"],
-  },
-  {
-    ...jest.configs["flat/recommended"],
-    files: ["**/*.spec.ts", "**/*.test.ts"],
-
-    plugins: {
-      jest,
-    },
-
-    languageOptions: {
-      globals: {
-        ...jest.environments.globals.globals,
-      },
-    },
   },
 ];

@@ -119,8 +119,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        #node-version: ['latest', '22.x', '20.x']
-        node-version: ['22.x', '20.x']
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     runs-on: ${{ matrix.os }}
@@ -132,11 +130,8 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          registry-url: 'https://registry.npmjs.org/'
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
 
       # Install Xcode Command-Line Tools and GCC on macOS
       - name: Install C SDK and GCC
@@ -162,17 +157,17 @@ jobs:
       - name: Setup js workspace
         run: |
           echo '{ "name": "SPeCS Workspace", "type": "module", "workspaces": [ "clava/Clava-JS", "lara-framework/Lara-JS" ] }' > package.json
-          npm install
+          bun install
 
       - name: Build Lara-JS
         run: |
           cd lara-framework/Lara-JS
-          npm run build
+          bun run build
 
       - name: Build Clava-JS
         run: |
           cd clava/Clava-JS
-          npm run build
+          bun run build
 
       - name: Pull java-binaries
         uses: actions/download-artifact@v4
@@ -183,25 +178,25 @@ jobs:
       - name: Test JS
         run: |
           cd clava/Clava-JS
-          npm run test
+          bun test
 
       # Only on ubuntu-latest
       - name: Publish JS
-        if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+        if: matrix.os == 'ubuntu-latest'
         run: | 
             cd clava/Clava-JS
-            npm whoami
-            echo "Attempt to publish while running on ${{ matrix.os }} and Node.js ${{matrix.node-version}}"
+            bun whoami
+            echo "Attempt to publish while running on ${{ matrix.os }}"
             if [[ "${{ github.event_name }}" == "push" ]]; then
                 if [ "${{ github.ref }}" == "refs/heads/staging" ]; then
                     echo "Publishing from staging, creating timestamped prerelease and updating tag 'staging'"
                     TIMESTAMP=$(date +"%Y%m%d%H%M")
-                    npm version prerelease --preid="$TIMESTAMP"
-                    npm publish --tag staging --access public
+                    bun version prerelease --preid="$TIMESTAMP"
+                    bun publish --tag staging --access public
                 # Not updating automatically the version since this would make the staging branch diverge from the main branch
                 #elif [ "${{ github.ref }}" == "refs/heads/master" ]; then
                 #    echo "Publishing from main, assumes version was changed before publishing"
-                #    npm publish
+                #    bun publish
                 else
                     echo "Not master or staging branches, not publishing even if it is a push event"
                 fi

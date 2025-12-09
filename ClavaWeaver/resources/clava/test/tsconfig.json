@@ -1,0 +1,14 @@
+//FIXME: This hack is needed due to the Bun resolver. Remove when possible.
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@specs-feup/clava/*": ["../../../../Clava-JS/*"],
+      "@specs-feup/lara/*": ["../../../../../lara-framework/Lara-JS/*"]
+    }
+  }
+}

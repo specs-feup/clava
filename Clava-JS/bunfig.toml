@@ -1,0 +1,3 @@
+[test]
+# Run tests with Bun's test runner
+preload = ["./bun/preload.ts"]

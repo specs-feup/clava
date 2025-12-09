@@ -2,15 +2,19 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "NodeNext",
-    "declaration": true,
     "strict": true,
     //"allowJs": true,
     //"checkJs": true,
     "moduleResolution": "NodeNext",
     "isolatedModules": true,
-    "sourceMap": true,
-    "declarationMap": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
     //"esModuleInterop": true
-  }
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@specs-feup/clava": ["."],
+      "@specs-feup/clava/*": ["./*"]
+    }
+  },
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"]
 }

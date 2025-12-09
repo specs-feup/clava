@@ -1,11 +1,11 @@
-import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.js";
+import { describe, it } from "bun:test";
+import { ClavaLegacyTester } from "../bun/ClavaLegacyTester.js";
 import ClavaJavaTypes from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 import JavaInterop from "@specs-feup/lara/api/lara/JavaInterop.js";
 import path from "path";
 
 const isWindows = process.platform === "win32";
 
-/* eslint-disable jest/expect-expect */
 describe("CxxTest", () => {
     function newTester() {
         return new ClavaLegacyTester(

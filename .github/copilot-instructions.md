@@ -2,13 +2,13 @@
 
 ## Project Overview
 
-Clava is a modular source-to-source compiler for C, C++, CUDA, and OpenCL, supporting advanced code analysis and transformation. It is implemented using a combination of TypeScript/JavaScript (Node.js), Java, and C++. Clava is designed for composability and reusability, and integrates with the LARA DSL for custom code transformations.
+Clava is a modular source-to-source compiler for C, C++, CUDA, and OpenCL, supporting advanced code analysis and transformation. It is implemented using a combination of TypeScript/JavaScript (Bun.sh), Java, and C++. Clava is designed for composability and reusability, and integrates with the LARA DSL for custom code transformations.
 
 ## Development Environment & Setup
 
-- **Node.js Version:** 20 or 22 (required for Clava-JS)
+- **Bun.sh Version:** Any version
 - **Java Version:** 17+ (required for Java components)
-- **Build System:** Gradle for Java modules, npm for TypeScript/JavaScript
+- **Build System:** Gradle for Java modules, Bun for TypeScript/JavaScript
 - **IDE:** VSCode is recommended for development
 
 ## Architecture
@@ -18,7 +18,7 @@ Clava is a modular source-to-source compiler for C, C++, CUDA, and OpenCL, suppo
 - **Middle-end (Java):**  
   Components like `ClangAstParser` and `ClavaWeaver` process ASTs and apply transformations.
 - **API Layer (TypeScript/JavaScript):**  
-  The `Clava-JS` module provides the main user-facing API and runtime, exposing Clava's features to Node.js environments.
+  The `Clava-JS` module provides the main user-facing API and runtime, exposing Clava's features to Bun's environments.
 - **Build Integration:**  
   The `CMake` package enables integration with CMake-based build systems.
 
@@ -39,7 +39,7 @@ Clava is a modular source-to-source compiler for C, C++, CUDA, and OpenCL, suppo
 ## Build and Development
 
 - **Java Components:** Use Gradle (`gradle installDist`) to build Java modules (e.g., ClavaWeaver).
-- **TypeScript/JavaScript:** Use npm scripts (`npm install`, `npm run build`) in `Clava-JS`.
+- **TypeScript/JavaScript:** Use bun scripts (`bun install`, `bun run build`) in `Clava-JS`.
 - **C++ Components:** Use CMake for building and integrating the Clang AST dumper.
 - **Integration:** Copy built Java binaries into `Clava-JS/java-binaries` for full functionality.
 
@@ -47,9 +47,9 @@ Clava is a modular source-to-source compiler for C, C++, CUDA, and OpenCL, suppo
 
 - **NPM Package:**  
   Install globally or as a project dependency:  
-  `npm install -g @specs-feup/clava`
+  `bun install -g @specs-feup/clava`
 - **CLI:**  
-  Run transformations via `npx clava classic <scriptfile.js> -p "<source files>"`
+  Run transformations via `bunx clava classic <scriptfile.js> -p "<source files>"`
 - **CMake Integration:**  
   Use the `clava_weave` CMake command to apply LARA scripts to targets.
 
@@ -58,7 +58,7 @@ Clava is a modular source-to-source compiler for C, C++, CUDA, and OpenCL, suppo
 - **Visitor Patterns:**  
   Used extensively in AST processing (see `ClangAstDumper.h`).
 - **TypeScript API:**  
-  Modular, with clear separation between API (`src-api/`) and code (`src-code/`).
+  Modular, with clear separation between API (`api/`) and code (`code/`).
 - **Java:**  
   Follows standard Gradle project structure.
 - **C++:**  
@@ -67,15 +67,15 @@ Clava is a modular source-to-source compiler for C, C++, CUDA, and OpenCL, suppo
 ## Common Development Tasks
 
 - Add new AST node support in `ClangAstDumper` and propagate through Java and JS layers.
-- Extend the TypeScript API in `Clava-JS/src-api/`.
+- Extend the TypeScript API in `Clava-JS/api/`.
 - Create new code transformations as LARA scripts or TypeScript modules.
-- Use provided test scripts and npm/Gradle test commands.
+- Use provided test scripts and Bun/Gradle test commands.
 
 ## Dependencies
 
-- **Node.js 20 or 22** and **Java 17+** required.
+- **Bun.sh** and **Java 17+** required.
 - **Clang/LLVM** for AST extraction.
-- **NPM** for JS/TS dependencies.
+- **Bun** for JS/TS dependencies.
 - **Gradle** for Java builds.
 - **CMake** for build system integration.
 

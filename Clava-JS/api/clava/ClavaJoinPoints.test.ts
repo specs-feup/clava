@@ -1,4 +1,5 @@
-import { registerSourceCode } from "@specs-feup/lara/jest/jestHelpers.js";
+import { describe, it, expect } from "bun:test";
+import { registerSourceCode } from "@specs-feup/lara/bun/testHelpers.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { ExprStmt } from "../Joinpoints.js";
 import ClavaJoinPoints from "./ClavaJoinPoints.js";

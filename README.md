@@ -13,11 +13,11 @@ There are three distributions of Clava:
 
 ### NPM distribution (recommended)
 
-Clava is currently distributed as an [NPM package](https://www.npmjs.com/package/@specs-feup/clava). It requires Node.js 20 or 22, and Java 17 or higher. Different OSses have different ways of installing these dependencies, but on Ubuntu you can run this:
+Clava is currently distributed as an [NPM package](https://www.npmjs.com/package/@specs-feup/clava). It requires Bun.sh, and Java 17 or higher. Different OSses have different ways of installing these dependencies, but on Ubuntu you can run this:
 
 ```bash
 apt-get update && apt-get install -y curl openjdk-17-jdk
-curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && apt-get install -y nodejs
+curl -fsSL https://bun.com/install | bash
 ```
 
 Now, you have two options:
@@ -27,7 +27,7 @@ Now, you have two options:
 Choose this option if you just want to use Clava as-is. You can install it globally by running:
 
 ```bash
-npm install -g @specs-feup/clava@latest
+bun install -g @specs-feup/clava@latest
 clava help # check if it was installed correctly 
 ```
 
@@ -45,12 +45,12 @@ Choose this option if you want to use any of the several Clava extensions availa
 2. Open a terminal on that directory, and run the following:
 
 ```bash
-npm install
-npm run build
-npx run run # run the hello world example that comes with the template
+bun install
+bun run build
+bunx run run # run the hello world example that comes with the template
 ```
 
-3. (optional) Add Clava packages to your project, e.g., `npm install @specs-feup/clava-code-transforms@latest`
+3. (optional) Add Clava packages to your project, e.g., `bun install @specs-feup/clava-code-transforms@latest`
 
 Check [specs-feup NPM page](https://www.npmjs.com/org/specs-feup) to see what packages are available for Clava (they should have a `clava-` prefix).
 
@@ -82,29 +82,29 @@ This is a non-exhaustive list of Clava documentation, usage examples and feature
 * Clava built-in features:
   * [CMake integration](https://github.com/specs-feup/clava/tree/master/CMake) - Allows Clava to be used in CMake-centered compilation flows
   * Code transformations:
-    * [Automatic insertion of OpenMP pragmas](https://github.com/specs-feup/clava/blob/master/ClavaLaraApi/src-lara-clava/clava/clava/autopar/Parallelize.lara)
-    * [Function inlining](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/opt/Inlining.ts)
-    * [Normalizing code](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/opt/NormalizeToSubset.ts) to a subset of the language, including:
-      * [Decomposition of complex statements into several, simpler statements](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/StatementDecomposer.ts)
-      * [Converting static local variables to static global variables](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/pass/LocalStaticToGlobal.ts)
-      * [Conversion of switch statements to ifs](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/pass/TransformSwitchToIf.ts)
-      * Loop conversion ([for to while](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/ForToWhileStmt.ts), [do to while](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/DoToWhileStmt.ts))
-      * [Ensure there is a single return in a function](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/pass/SingleReturnFunction.ts)
-      * [Remove variable shadowing](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/RemoveShadowing.ts)
-      * [Simplify ternary operator](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/SimplifyTernaryOp.ts)
-      * [Simplify compound assignments](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/SimplifyAssignment.ts)
+    * [Automatic insertion of OpenMP pragmas](https://github.com/specs-feup/clava/blob/master/ClavaLaraApi/lara-clava/clava/clava/autopar/Parallelize.lara)
+    * [Function inlining](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/opt/Inlining.ts)
+    * [Normalizing code](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/opt/NormalizeToSubset.ts) to a subset of the language, including:
+      * [Decomposition of complex statements into several, simpler statements](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/code/StatementDecomposer.ts)
+      * [Converting static local variables to static global variables](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/pass/LocalStaticToGlobal.ts)
+      * [Conversion of switch statements to ifs](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/pass/TransformSwitchToIf.ts)
+      * Loop conversion ([for to while](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/code/ForToWhileStmt.ts), [do to while](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/code/DoToWhileStmt.ts))
+      * [Ensure there is a single return in a function](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/pass/SingleReturnFunction.ts)
+      * [Remove variable shadowing](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/code/RemoveShadowing.ts)
+      * [Simplify ternary operator](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/code/SimplifyTernaryOp.ts)
+      * [Simplify compound assignments](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/code/SimplifyAssignment.ts)
 * Clava [NPM libraries](https://www.npmjs.com/org/specs-feup) (not supported by the JAR file legacy distribution):
 
 Library | Description | Installation
 ---|---|---
-[clava-code-transforms](github.com/specs-feup/clava-code-transforms) | A set of advanced code transformations for Clava (function outlining and voidification, array and struct flattening, constant folding and propagation, loop static iteration annotation) | `npm i @specs-feup/clava-code-transforms@latest`
-[clava-misra](github.com/specs-feup/clava-misra) | Automatic detection and correction of C code patterns that violate the MISRA-C:2012 coding standard | `npm i @specs-feup/clava-misra@latest`
-[clava-visualization](github.com/specs-feup/clava-visualization)  | Renders an interactive web view of the program's AST, in a breakpoint-like fashion | `npm i @specs-feup/clava-visualization@latest`
-[clava-vitis-integration](github.com/specs-feup/clava-vitis-integration) | Integration with Vitis HLS, allowing for the automated synthesis and place-and-route of selected functions, and the programatic insertion and configurations of HLS directives | `npm i @specs-feup/clava-vitis-integration@latest`
-[extended-task-graph](github.com/specs-feup/extended-task-graph) | Generates an Extended Task Graph (ETG) representation of an application, with flexible granularity changes through task merging and splitting |`npm i @specs-feup/extended-task-graph@latest`
-[flow](github.com/specs-feup/flow) | Control-flow, Data-flow, static-call, and other graphs | `npm i @specs-feup/flow@latest`
-[hoopa](github.com/specs-feup/hoopa) | Hoopa (<u>Ho</u>listic <u>o</u>ptimization and <u>p</u>artitioning <u>a</u>lgorithms) is a collection of HW/SW partitioning policies and algorithms that can partition and optimize an application for a CPU-FPGA system | `npm i @specs-feup/hoopa@latest`
-[onnx-flow](github.com/specs-feup/onnx-flow)  | Converts an ONNX graph into a data-flow graph (DFG), decomposing its high-level operations into low-level operations and performing a set of optimizations | `npm i @specs-feup/onnx-flow@latest`
+[clava-code-transforms](github.com/specs-feup/clava-code-transforms) | A set of advanced code transformations for Clava (function outlining and voidification, array and struct flattening, constant folding and propagation, loop static iteration annotation) | `bun i @specs-feup/clava-code-transforms@latest`
+[clava-misra](github.com/specs-feup/clava-misra) | Automatic detection and correction of C code patterns that violate the MISRA-C:2012 coding standard | `bun i @specs-feup/clava-misra@latest`
+[clava-visualization](github.com/specs-feup/clava-visualization)  | Renders an interactive web view of the program's AST, in a breakpoint-like fashion | `bun i @specs-feup/clava-visualization@latest`
+[clava-vitis-integration](github.com/specs-feup/clava-vitis-integration) | Integration with Vitis HLS, allowing for the automated synthesis and place-and-route of selected functions, and the programatic insertion and configurations of HLS directives | `bun i @specs-feup/clava-vitis-integration@latest`
+[extended-task-graph](github.com/specs-feup/extended-task-graph) | Generates an Extended Task Graph (ETG) representation of an application, with flexible granularity changes through task merging and splitting |`bun i @specs-feup/extended-task-graph@latest`
+[flow](github.com/specs-feup/flow) | Control-flow, Data-flow, static-call, and other graphs | `bun i @specs-feup/flow@latest`
+[hoopa](github.com/specs-feup/hoopa) | Hoopa (<u>Ho</u>listic <u>o</u>ptimization and <u>p</u>artitioning <u>a</u>lgorithms) is a collection of HW/SW partitioning policies and algorithms that can partition and optimize an application for a CPU-FPGA system | `bun i @specs-feup/hoopa@latest`
+[onnx-flow](github.com/specs-feup/onnx-flow)  | Converts an ONNX graph into a data-flow graph (DFG), decomposing its high-level operations into low-level operations and performing a set of optimizations | `bun i @specs-feup/onnx-flow@latest`
 
 ## Troubleshooting
 

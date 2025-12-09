@@ -15,7 +15,7 @@ set(Clava_DIR <PATH_TO_CMAKE_CLAVA_PLUGIN>)
 If you have Clava installed locally, you can specify what command should be used to run it by using the variable LOCAL_CLAVA:
 
 ```
-set(LOCAL_CLAVA "npx clava classic")	
+set(LOCAL_CLAVA "bunx clava classic")	
 ```
 
 ## Example

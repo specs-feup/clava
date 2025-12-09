@@ -1,3 +1,4 @@
+import { describe, it, expect } from "bun:test";
 import AnalyserResult from "./AnalyserResult.js";
 import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
 

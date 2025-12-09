@@ -1,8 +1,8 @@
-import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.js";
+import { describe, it } from "bun:test";
+import { ClavaLegacyTester } from "../bun/ClavaLegacyTester.js";
 import ClavaJavaTypes from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 import path from "path";
 
-/* eslint-disable jest/expect-expect */
 describe("IssuesTest", () => {
     function newTester() {
         return new ClavaLegacyTester(
