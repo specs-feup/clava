@@ -43,6 +43,9 @@ jobs:
           gradle-version: current
           dependency-graph: generate-and-submit
 
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+
       - name: Checkout clava
         uses: actions/checkout@v4
         with:
@@ -104,3 +107,14 @@ jobs:
           repository: specs-feup/specs-java-libs
           path: specs-java-libs
           ref: ${{ steps.repo-refs.outputs.specs_ref }}
+
+      - name: Build with Gradle
+        run: |
+          cd clava/ClavaWeaver
+          gradle installDist
+
+      - name: Setup js workspace
+        run: |
+          echo '{ "name": "SPeCS Workspace", "type": "module", "workspaces": [ "clava/Clava-JS", "lara-framework/Lara-JS" ] }' > package.json
+          bun install
+          ln -s clava/ClavaWeaver/build/install/ClavaWeaver clava/Clava-JS/java-binaries
