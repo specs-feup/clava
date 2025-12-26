@@ -18,7 +18,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.util.SpecsIo;

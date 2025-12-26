@@ -13,9 +13,9 @@
 
 package pt.up.fe.specs.clang.parser.tests;
 
-import org.junit.After;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import pt.up.fe.specs.clang.parser.AClangAstTester;
 import pt.up.fe.specs.clang.parser.CTester;
@@ -23,12 +23,12 @@ import pt.up.fe.specs.lang.SpecsPlatforms;
 
 public class CTest {
 
-    @BeforeClass
+    @BeforeAll
     public static void setup() throws Exception {
         AClangAstTester.clear();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         AClangAstTester.clear();
     }

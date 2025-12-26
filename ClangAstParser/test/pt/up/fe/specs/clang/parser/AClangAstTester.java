@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
-import org.junit.Before;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.suikasoft.jOptions.Datakey.DataKey;
 
 import pt.up.fe.specs.clang.codeparser.CodeParser;
@@ -157,7 +157,7 @@ public abstract class AClangAstTester {
 
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         SpecsSystem.programStandardInit();
 
@@ -165,7 +165,7 @@ public abstract class AClangAstTester {
         File outputFolder = SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME);
         for (ResourceProvider resource : resources) {
             File copiedFile = SpecsIo.resourceCopy(resource.getResource(), outputFolder, false, true);
-            Assert.assertTrue("Could not copy resource '" + resource + "'", copiedFile.isFile());
+            assertTrue(copiedFile.isFile(), "Could not copy resource '" + resource + "'");
         }
 
     }
@@ -231,7 +231,7 @@ public abstract class AClangAstTester {
             // Get corresponding file in output 2
             File outputFile2 = outputFiles2.get(name);
 
-            Assert.assertNotNull("Could not find second version of file '" + name + "'", outputFile2);
+            assertNotNull(outputFile2, "Could not find second version of file '" + name + "'");
         }
 
         // Compare with .txt, if available
@@ -250,7 +250,7 @@ public abstract class AClangAstTester {
             File generatedFile = outputFiles2.get(resource.getFilename());
             String generatedFileContents = SpecsStrings.normalizeFileContents(SpecsIo.read(generatedFile), true);
 
-            Assert.assertEquals(txtContents, generatedFileContents);
+            assertEquals(txtContents, generatedFileContents);
         }
 
         // Idempotence test
@@ -270,7 +270,7 @@ public abstract class AClangAstTester {
             var normalizedFile1 = SpecsStrings.normalizeFileContents(SpecsIo.read(outputFile1), true);
             var normalizedFile2 = SpecsStrings.normalizeFileContents(SpecsIo.read(outputFile2), true);
 
-            Assert.assertEquals(normalizedFile1, normalizedFile2);
+            assertEquals(normalizedFile1, normalizedFile2);
         }
     }
 

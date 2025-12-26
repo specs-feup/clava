@@ -16,14 +16,15 @@ repositories {
 }
 
 dependencies {
-   testImplementation "junit:junit:4.13.1"
+    implementation ":ClavaAst"
+    implementation ":CommonsLangPlus"
+    implementation ":jOptions"
+    implementation ":SpecsUtils"
 
-   implementation ":ClavaAst"
-   implementation ":CommonsLangPlus"
-   implementation ":jOptions"
-   implementation ":SpecsUtils"
+    implementation group: 'com.google.guava', name: 'guava', version: '33.4.0-jre'
 
-   implementation group: 'com.google.guava', name: 'guava', version: '33.4.0-jre'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.0'
+    testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.10.0'
 }
 
 // Project sources
