@@ -3,9 +3,4 @@ rootProject.name = 'ClavaLaraApi'
 def specsJavaLibsRoot = System.getenv('SPECS_JAVA_LIBS_HOME') ?: '../../specs-java-libs'
 def laraFrameworkRoot = System.getenv('LARA_FRAMEWORK_HOME') ?: '../../lara-framework'
 
-includeBuild("${specsJavaLibsRoot}/CommonsLangPlus")
-includeBuild("${specsJavaLibsRoot}/JacksonPlus")
-includeBuild("${specsJavaLibsRoot}/SpecsUtils")
 includeBuild("${specsJavaLibsRoot}/SymjaPlus")
-
-includeBuild("${laraFrameworkRoot}/LaraUtils")

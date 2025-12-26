@@ -16,13 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation ':SpecsUtils'
-    implementation ':CommonsLangPlus'
-    implementation ':JacksonPlus'
     implementation ':SymjaPlus'
-    implementation ':LaraUtils'
-
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.12.1'
 }
 
 // Project sources

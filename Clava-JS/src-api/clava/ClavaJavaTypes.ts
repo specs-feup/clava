@@ -16,10 +16,6 @@ export namespace ClavaJavaClasses {
   export interface AstFactory extends JavaClasses.JavaClass {}
   export interface ArgumentsParser extends JavaClasses.JavaClass {}
   export interface MathExtraApiTools extends JavaClasses.JavaClass {}
-  export interface MemoiReport extends JavaClasses.JavaClass {}
-  export interface MemoiReportsMap extends JavaClasses.JavaClass {}
-  export interface MemoiCodeGen extends JavaClasses.JavaClass {}
-  export interface ClavaPetit extends JavaClasses.JavaClass {}
   export interface CxxWeaverOption extends JavaClasses.JavaClass {}
   export interface ClavaOptions extends JavaClasses.JavaClass {}
   export interface CodeParser extends JavaClasses.JavaClass {}
@@ -95,30 +91,6 @@ export default class ClavaJavaTypes {
     return JavaTypes.getType(
       "pt.up.fe.specs.clava.weaver.MathExtraApiTools"
     ) as ClavaJavaClasses.MathExtraApiTools;
-  }
-
-  static get MemoiReport() {
-    return JavaTypes.getType(
-      "pt.up.fe.specs.clava.weaver.memoi.MemoiReport"
-    ) as ClavaJavaClasses.MemoiReport;
-  }
-
-  static get MemoiReportsMap() {
-    return JavaTypes.getType(
-      "pt.up.fe.specs.clava.weaver.memoi.MemoiReportsMap"
-    ) as ClavaJavaClasses.MemoiReportsMap;
-  }
-
-  static get MemoiCodeGen() {
-    return JavaTypes.getType(
-      "pt.up.fe.specs.clava.weaver.memoi.MemoiCodeGen"
-    ) as ClavaJavaClasses.MemoiCodeGen;
-  }
-
-  static get ClavaPetit() {
-    return JavaTypes.getType(
-      "pt.up.fe.specs.clava.weaver.util.ClavaPetit"
-    ) as ClavaJavaClasses.ClavaPetit;
   }
 
   static get CxxWeaverOption() {
