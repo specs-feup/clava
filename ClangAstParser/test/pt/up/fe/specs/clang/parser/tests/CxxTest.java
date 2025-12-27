@@ -13,25 +13,11 @@
 
 package pt.up.fe.specs.clang.parser.tests;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import pt.up.fe.specs.clang.parser.AClangAstTester;
 import pt.up.fe.specs.clang.parser.CxxTester;
 
 public class CxxTest {
-
-    @BeforeAll
-    public static void setup() throws Exception {
-        AClangAstTester.clear();
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        AClangAstTester.clear();
-    }
-
     @Test
     public void testBoolean() {
         new CxxTester("boolean.cpp").test();

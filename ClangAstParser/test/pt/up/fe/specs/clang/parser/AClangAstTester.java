@@ -23,12 +23,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.suikasoft.jOptions.Datakey.DataKey;
 
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
-import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsIo;
@@ -40,7 +38,10 @@ import pt.up.fe.specs.util.providers.ResourceProvider;
 public abstract class AClangAstTester {
 
     private static final boolean CLEAN_CLANG_FILES = !SpecsSystem.isDebug();
-    private static final String OUTPUT_FOLDERNAME = "temp-clang-ast";
+    private static final String OUTPUT_FOLDERNAME_PREFIX = "temp-clang-ast-";
+    
+    // Each test instance gets a unique output folder to avoid race conditions in parallel execution
+    private final String outputFoldername;
 
     private final Collection<ResourceProvider> resources;
     private List<String> compilerOptions;
@@ -86,6 +87,9 @@ public abstract class AClangAstTester {
     public AClangAstTester(Collection<ResourceProvider> resources, List<String> compilerOptions) {
         this.resources = resources;
         this.compilerOptions = new ArrayList<>(compilerOptions);
+        
+        // Create unique output folder for this test instance to avoid parallel test conflicts
+        this.outputFoldername = OUTPUT_FOLDERNAME_PREFIX + System.nanoTime() + "-" + Thread.currentThread().threadId();
 
         codeParser = CodeParser.newInstance();
         // Set strict mode
@@ -153,16 +157,24 @@ public abstract class AClangAstTester {
             testProper();
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            // Clean up this test instance's folder after test completes
+            // Safe even in parallel execution since each instance has a unique folder
+            try {
+                cleanupInstance();
+            } catch (Exception e) {
+                // Log but don't fail the test if cleanup fails
+                SpecsLogs.info("Failed to cleanup test folder: " + e.getMessage());
+            }
         }
 
     }
 
-    @BeforeEach
     public void setUp() throws Exception {
         SpecsSystem.programStandardInit();
 
-        // Copy resources under test
-        File outputFolder = SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME);
+        // Copy resources under test to this test's unique output folder
+        File outputFolder = SpecsIo.mkdir(outputFoldername);
         for (ResourceProvider resource : resources) {
             File copiedFile = SpecsIo.resourceCopy(resource.getResource(), outputFolder, false, true);
             assertTrue(copiedFile.isFile(), "Could not copy resource '" + resource + "'");
@@ -170,21 +182,15 @@ public abstract class AClangAstTester {
 
     }
 
-    // @After
-    public static void clear() throws Exception {
-
-        // Delete ClangAst files
+    /**
+     * Cleans up this test instance's unique output folder.
+     * Safe to call from @AfterEach even when tests run in parallel.
+     */
+    public void cleanupInstance() throws Exception {
         if (CLEAN_CLANG_FILES) {
-
-            // Delete resources under test
-            File outputFolder = SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME);
-            SpecsIo.deleteFolderContents(outputFolder);
-            outputFolder.delete();
-
-            ClangAstDumper.getTempFiles().stream()
-                    .forEach(filename -> new File(filename).delete());
+            File outputFolder = new File(outputFoldername);
+            SpecsIo.deleteFolder(outputFolder);
         }
-
     }
 
     public void testProper() {
@@ -192,13 +198,12 @@ public abstract class AClangAstTester {
         // Enable parallel parsing
         codeParser.set(ParallelCodeParser.PARALLEL_PARSING);
 
-        File workFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME);
-
+        File workFolder = new File(outputFoldername);
 
         // Parse files
         App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
 
-        clavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"));
+        clavaAst.write(SpecsIo.mkdir(outputFoldername + "/outputFirst"));
         if (onePass) {
             return;
         }
@@ -210,19 +215,19 @@ public abstract class AClangAstTester {
 
 
         // Parse output again, check if files are the same
-        File firstOutputFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst");
+        File firstOutputFolder = new File(outputFoldername + "/outputFirst");
 
         App testClavaAst = testCodeParser.parse(Arrays.asList(firstOutputFolder), compilerOptions);
 
-        testClavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputSecond"));
+        testClavaAst.write(SpecsIo.mkdir(outputFoldername + "/outputSecond"));
         // System.out.println("STOREDEF CACHE:\n" + StoreDefinitions.getStoreDefinitionsCache().getAnalytics());
 
         // Test if files from first and second are the same
-        Map<String, File> outputFiles1 = SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"))
+        Map<String, File> outputFiles1 = SpecsIo.getFiles(new File(outputFoldername + "/outputFirst"))
                 .stream()
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
 
-        Map<String, File> outputFiles2 = SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputSecond"))
+        Map<String, File> outputFiles2 = SpecsIo.getFiles(new File(outputFoldername + "/outputSecond"))
                 .stream()
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
 

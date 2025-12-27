@@ -1,6 +1,7 @@
 plugins {
     id 'distribution'
     id 'java'
+    id 'jacoco'
 }
 
 java {
@@ -46,4 +47,33 @@ sourceSets {
             srcDir 'test-resources'
         }
     }
+}
+
+// Test coverage configuration
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.70 // 70% minimum coverage
+            }
+        }
+    }
+}
+
+// Make sure jacoco report is generated after tests
+test {
+    useJUnitPlatform()
+
+    maxParallelForks = Runtime.runtime.availableProcessors()
+
+    finalizedBy jacocoTestReport
 }

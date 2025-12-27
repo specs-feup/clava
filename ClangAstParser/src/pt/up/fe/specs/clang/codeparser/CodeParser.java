@@ -28,8 +28,6 @@ import java.util.List;
  * @author JoaoBispo
  *
  */
-// public interface CodeParser<T extends CodeParser<T>> extends DataClass<T> {
-// public interface CodeParser extends DataClass<CodeParser> {
 public abstract class CodeParser extends ADataClass<CodeParser> {
 
     // BEGIN DATAKEY
@@ -53,14 +51,7 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
      */
     public static final DataKey<Boolean> SHOW_EXEC_INFO = KeyFactory.bool("showExecInfo").setDefault(() -> true);
 
-    /**
-     * Applies several transformations to the Clava AST when parsing (e.g., normalization passes). By default is
-     * enabled.
-     */
-    // public static final DataKey<Boolean> PROCESS_CLAVA_AST = KeyFactory.bool("processClavaAst").setDefault(() ->
-    // true);
-
-    // BEGIN DATAKEY
+    // END DATAKEY
 
     private final static String BUILT_IN_CUDALIB = "<BUILTIN>";
 
@@ -87,7 +78,6 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
      * @return currently returns an instance of ParallelCodeParser
      */
     public static CodeParser newInstance() {
-        // return new MonolithicCodeParser();
         return new ParallelCodeParser();
     }
 }
