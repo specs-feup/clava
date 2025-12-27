@@ -89,7 +89,7 @@ public abstract class AClangAstTester {
         this.compilerOptions = new ArrayList<>(compilerOptions);
         
         // Create unique output folder for this test instance to avoid parallel test conflicts
-        this.outputFoldername = OUTPUT_FOLDERNAME_PREFIX + System.nanoTime() + "-" + Thread.currentThread().threadId();
+        this.outputFoldername = OUTPUT_FOLDERNAME_PREFIX + System.nanoTime() + "-" + Thread.currentThread().getId();
 
         codeParser = CodeParser.newInstance();
         // Set strict mode
