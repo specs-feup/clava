@@ -275,7 +275,7 @@ public class ClangAstDumper {
 
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
 
-        arguments.addAll(config.get(ClavaOptions.FLAGS_LIST).getStringList());
+        arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
 
         ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments);
 

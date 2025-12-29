@@ -425,7 +425,7 @@ public class CxxWeaver extends ACxxWeaver {
                 .collect(Collectors.toList());
 
         // Add JSON argument flags
-        flags.addAll(args.get(ClavaOptions.FLAGS_LIST).getStringList());
+        flags.addAll(args.get(ClavaOptions.FLAGS_LIST));
 
         return flags;
     }

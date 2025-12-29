@@ -1,5 +1,6 @@
 import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.js";
 import ClavaJavaTypes from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
+import JavaInterop from "@specs-feup/lara/api/lara/JavaInterop.js";
 import path from "path";
 
 const isWindows = process.platform === "win32";
@@ -72,7 +73,10 @@ describe("CxxTest", () => {
 
     it("OmpThreadsExplore", async () => {
         await newTester()
-            .set(ClavaJavaTypes.ClavaOptions.FLAGS_LIST, "-fopenmp=libomp")
+            .set(
+                ClavaJavaTypes.ClavaOptions.FLAGS_LIST,
+                JavaInterop.arrayToList(["-fopenmp=libomp"])
+            )
             .test("OmpThreadsExplore.js", "omp_threads_explore.cpp");
     });
 

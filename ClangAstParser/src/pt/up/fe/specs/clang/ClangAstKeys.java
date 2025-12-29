@@ -54,8 +54,6 @@ public interface ClangAstKeys {
      * @return
      */
     static DataStore toDataStore(List<String> flags) {
-        // ClavaLog.debug(() -> "ClangAstKeys flags: " + flags);
-
         DataStore config = DataStore.newInstance(ClavaOptions.STORE_DEFINITION, false);
         final String stdPrefix = "-std=";
         final String clangAstDumperPrefix = "-clang-dumper=";
@@ -109,9 +107,7 @@ public interface ClangAstKeys {
             parsedFlags.add(flag);
         }
 
-        // config.add(ClavaOptions.FLAGS, parsedFlags.stream().collect(Collectors.joining(" ")));
-        // config.add(ClavaOptions.FLAGS_LIST, new JsonStringList(parsedFlags));
-        config.add(ClavaOptions.FLAGS_LIST, new StringList(parsedFlags));
+        config.add(ClavaOptions.FLAGS_LIST, parsedFlags);
 
         return config;
     }
