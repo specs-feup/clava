@@ -1507,9 +1507,14 @@ public class CxxWeaver extends ACxxWeaver {
         Map<File, File> processedFiles = new HashMap<>();
 
         for (var sourceAndBase : filesToBases.entrySet()) {
-            // If a file, just add it
-            if (sourceAndBase.getKey().isFile()) {
-                processedFiles.put(sourceAndBase.getKey(), sourceAndBase.getValue());
+            File source = sourceAndBase.getKey();
+            // If a file, just add it (unless we are skipping header parsing)
+            if (source.isFile()) {
+                if (shouldSkipFile(source)) {
+                    continue;
+                }
+
+                processedFiles.put(source, sourceAndBase.getValue());
             }
 
             // Process folder
@@ -1518,6 +1523,10 @@ public class CxxWeaver extends ACxxWeaver {
 
         return processedFiles;
 
+    }
+
+    private boolean shouldSkipFile(File file) {
+        return !this.dataStore.get(CxxWeaverOption.PARSE_INCLUDES) && SourceType.isHeader(file);
     }
 
     private void obtainFiles(File folder, File baseFolder, Map<File, File> processedFiles, List<String> parserOptions) {
