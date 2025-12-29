@@ -1,6 +1,6 @@
 {
   "name": "@specs-feup/clava",
-  "version": "3.0.32",
+  "version": "3.0.33",
   "description": "A C/C++ source-to-source compiler written in Typescript",
   "type": "module",
   "files": [
@@ -74,6 +74,6 @@
     "jest": "^29.7.0",
     "node-notifier": "^10.0.1",
     "ts-jest": "^29.2.6",
-    "typescript": "^5.8.2"
+    "typescript": "^5.9.0"
   }
 }

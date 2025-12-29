@@ -871,4 +871,26 @@ public class AstFactory {
         return CxxJoinpoints.create(app, AProgram.class);
     }
 
+    public static AMemberAccess memberAccess(AExpression baseExpr, AField field) {
+        var fieldNode = (FieldDecl) field.getNode();
+
+        var memberAccess = CxxWeaver.getFactory().memberExpr(fieldNode.get(FieldDecl.DECL_NAME), fieldNode.get(FieldDecl.TYPE), (Expr) baseExpr.getNode());
+        return CxxJoinpoints.create(memberAccess, AMemberAccess.class);
+    }
+
+    public static AMemberAccess memberAccess(AExpression baseExpr, String fieldName, AType fieldType) {
+        var memberAccess = CxxWeaver.getFactory().memberExpr(fieldName, (Type) fieldType.getNode(), (Expr) baseExpr.getNode());
+        return CxxJoinpoints.create(memberAccess, AMemberAccess.class);
+    }
+
+    public static AUnaryExprOrType sizeof(AExpression exprArg) {
+        var sizeof = CxxWeaver.getFactory().sizeof((Expr) exprArg.getNode());
+        return CxxJoinpoints.create(sizeof, AUnaryExprOrType.class);
+    }
+
+    public static AUnaryExprOrType sizeof(AType typeArg) {
+        var sizeof = CxxWeaver.getFactory().sizeof((Type) typeArg.getNode());
+        return CxxJoinpoints.create(sizeof, AUnaryExprOrType.class);
+    }
+
 }

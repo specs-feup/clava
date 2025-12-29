@@ -18,6 +18,7 @@ import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
+import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.cilk.CilkParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
@@ -141,7 +142,6 @@ public class ClangAstDumper {
     }
 
     private ClangAstData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
-
         ClavaLog.debug(() -> "Data store config for single file parser: " + config);
 
         DataStore localData = JOptionsUtils.loadDataStore(LocalOptionsKeys.getLocalOptionsFilename(), getClass(),
@@ -251,6 +251,12 @@ public class ClangAstDumper {
         else if (SourceType.isHeader(sourceFile)) {
             arguments.add("-x");
             arguments.add(standard.isCxx() ? "c++" : "c");
+        }
+
+        // If option to ony use built-in includes, disable system includes
+        if (config.get(ClangAstKeys.LIBC_CXX_MODE) == LibcMode.BASE_BUILTIN_ONLY) {
+            arguments.add("-nostdinc");
+            arguments.add("-nostdinc++");
         }
 
         List<String> systemIncludes = new ArrayList<>();

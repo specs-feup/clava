@@ -23,6 +23,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.utilities.StringList;
 
@@ -35,7 +36,7 @@ public interface ClangAstKeys {
      */
     DataKey<LibcMode> LIBC_CXX_MODE = KeyFactory.enumeration("libcCxxMode", LibcMode.class)
             .setLabel("Libc/Libcxx mode")
-            .setDefault(() -> LibcMode.AUTO);
+            .setDefault(() -> (SpecsPlatforms.isWindows() || SpecsPlatforms.isLinux()) ? LibcMode.BASE_BUILTIN_ONLY : LibcMode.AUTO);
 
     DataKey<Boolean> USES_CILK = KeyFactory.bool("usesCilk");
 

@@ -16,6 +16,7 @@ package pt.up.fe.specs.clang.parser.tests;
 import org.junit.jupiter.api.Test;
 
 import pt.up.fe.specs.clang.parser.CxxTester;
+import pt.up.fe.specs.lang.SpecsPlatforms;
 
 public class CxxTest {
     @Test
@@ -50,7 +51,11 @@ public class CxxTest {
 
     @Test
     public void testDecl() {
-        new CxxTester("decl.cpp").test();
+        if (SpecsPlatforms.isUnix()) {
+            new CxxTester("decl_unix.cpp").test();
+        } else if (SpecsPlatforms.isWindows()) {
+            new CxxTester("decl_windows.cpp").test();
+        }
     }
 
     @Test

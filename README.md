@@ -75,10 +75,7 @@ This is a non-exhaustive list of Clava documentation, usage examples and feature
 
 * [API Documentation](https://specs-feup.github.io/modules/_specs_feup_clava.html) - up-to-date documentation of all Clava joinpoints, attributes and methods
 * Getting started:
-  * [Usage Examples](https://github.com/specs-feup/clava/tree/master/ClavaWeaver/resources/clava/test)
-  * [Clava Online Demo Tutorial (2022)](https://specs.fe.up.pt/tools/clava/Clava%20Web-based%20Tutorial%20(2022).pdf)
   * [Clava Libraries Showcase (FCCM 2025 Demo Night)](https://github.com/specs-feup/clava-fccm-2025-demo)
-  * [Clava API Slides](https://drive.google.com/drive/u/1/folders/1IAqv7SpP8S-t5g3fpNO06cJ7J2j2aD7K) - Introduction to Clava and the LARA Framework APIs.
 * Clava built-in features:
   * [CMake integration](https://github.com/specs-feup/clava/tree/master/CMake) - Allows Clava to be used in CMake-centered compilation flows
   * Code transformations:
