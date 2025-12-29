@@ -7,5 +7,4 @@ const CxxWeaverOptions = JavaTypes.getType(
 
 const datastore = Weaver.getWeaverEngine().getData().get();
 
-datastore.set(CxxWeaverOptions.PARSE_INCLUDES, true);
 datastore.set(CxxWeaverOptions.DISABLE_CLAVA_INFO, true);

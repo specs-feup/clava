@@ -50,8 +50,8 @@ public interface CxxWeaverOption {
     // .setDefault(() -> true);
 
     DataKey<Boolean> PARSE_INCLUDES = KeyFactory.bool("parseIncludes")
-            .setLabel("Parses header files");
-    // .setDefault(() -> true);
+            .setLabel("Parses header files")
+            .setDefault(() -> true);
 
     DataKey<FileList> SYSTEM_INCLUDES = LaraIKeyFactory.folderList("library includes")
             .setLabel("System Includes")
