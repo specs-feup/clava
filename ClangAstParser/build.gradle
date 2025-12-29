@@ -73,7 +73,8 @@ jacocoTestCoverageVerification {
 test {
     useJUnitPlatform()
 
-    maxParallelForks = Runtime.runtime.availableProcessors()
+    // Can't parellelize because it will trigger multiple simultaneous downloads of the dumper and stdlib zip files.
+    maxParallelForks = 1
 
     finalizedBy jacocoTestReport
 }
