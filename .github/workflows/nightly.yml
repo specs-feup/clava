@@ -81,6 +81,7 @@ jobs:
         with:
           repository: specs-feup/specs-java-libs
           path: specs-java-libs
+          ref: lara-3.0
           # This is causing problems in PRs, for now it will always be the default branch
           #ref: ${{ steps.Branch-specs-java-libs.outputs.value == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
 
