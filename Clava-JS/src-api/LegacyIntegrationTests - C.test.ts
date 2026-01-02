@@ -253,16 +253,14 @@ describe("CApiTest", () => {
     it("TimerWithCxxFlag", async () => {
         const tester = newTester();
         if (JavaTypes.SpecsPlatforms.isUnix()) {
-            // Test not working on Unix
-            return;
-            // tester.set(ClavaOptions.STANDARD, Standard.C11).setResultsFile("TimerTest.js.unix.txt");
+            tester.setResultsFile("TimerTest.js.unix.txt");
         }
         await tester
             .set(
                 ClavaJavaTypes.ClavaOptions.STANDARD,
                 ClavaJavaTypes.Standard.CXX11
             )
-            .test("TimerTest.js", "timer_test.c");
+            .test("TimerTestWithCxxFlag.js", "timer_test.c");
     });
 
     it("Energy", async () => {
