@@ -35,7 +35,7 @@ dependencies {
     implementation ":ClavaAst"
     implementation ":ClavaLaraApi"
 
-    implementation group: 'com.google.guava', name: 'guava', version: '33.4.0-jre'
+    implementation 'com.google.guava:guava:33.4.0-jre'
 
     weaverGeneratorRuntime ":WeaverGenerator"
 }
