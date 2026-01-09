@@ -52,9 +52,9 @@ public class CxxProgram extends AProgram {
     // this.parserOptions = parserOptions;
     // }
 
-    public CxxProgram(String name, App app, CxxWeaver weaver) {
+    public CxxProgram(App app, CxxWeaver weaver) {
         super(weaver);
-        this.name = name;
+        this.name = weaver.getProgramName();
         this.app = app;
     }
 

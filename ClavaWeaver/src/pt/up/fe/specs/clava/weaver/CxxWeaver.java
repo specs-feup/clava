@@ -215,7 +215,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public CxxProgram getAppJp() {
-        return CxxJoinpoints.programFactory(getApp(), this);
+        return new CxxProgram(getApp(), this);
     }
 
     private Map<ClavaNode, Map<String, Object>> getUserValues() {

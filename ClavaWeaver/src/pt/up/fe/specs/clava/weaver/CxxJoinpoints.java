@@ -62,15 +62,13 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(CUDAKernelCallExpr.class, CXXCudaKernelCall::new);
         JOINPOINT_FACTORY.put(CallExpr.class, CxxCall::new);
         JOINPOINT_FACTORY.put(DeclRefExpr.class, CxxVarref::new);
-        JOINPOINT_FACTORY.put(ArraySubscriptExpr.class, CxxJoinpoints::arrayAccessFactory);
+        JOINPOINT_FACTORY.put(ArraySubscriptExpr.class, CxxArrayAccess::new);
         JOINPOINT_FACTORY.put(MemberExpr.class, CxxMemberAccess::new);
         JOINPOINT_FACTORY.put(CXXNewExpr.class, CxxNewExpr::new);
         JOINPOINT_FACTORY.put(CXXDeleteExpr.class, CxxDeleteExpr::new);
         JOINPOINT_FACTORY.put(UnaryExprOrTypeTraitExpr.class, CxxUnaryExprOrType::new);
         JOINPOINT_FACTORY.put(CXXThisExpr.class, CxxThis::new);
         // JOINPOINT_FACTORY.put(LiteralExpr.class, CxxExpression::new);
-        // JOINPOINT_FACTORY.put(IntegerLiteral.class, CxxExpression::new);
-        // JOINPOINT_FACTORY.put(FloatingLiteral.class, CxxExpression::new);
         JOINPOINT_FACTORY.put(IntegerLiteral.class, CxxIntLiteral::new);
         JOINPOINT_FACTORY.put(FloatingLiteral.class, CxxFloatLiteral::new);
         JOINPOINT_FACTORY.put(CXXBoolLiteralExpr.class, CxxBoolLiteral::new);
@@ -81,7 +79,6 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(Expr.class, CxxExpression::new);
         JOINPOINT_FACTORY.put(IfStmt.class, CxxIf::new);
         JOINPOINT_FACTORY.put(LoopStmt.class, CxxLoop::new);
-        // JOINPOINT_FACTORY.put(CompoundStmt.class, CxxScope::new);
         JOINPOINT_FACTORY.put(CompoundStmt.class, CxxJoinpoints::compoundStmtFactory);
         JOINPOINT_FACTORY.put(ReturnStmt.class, CxxReturnStmt::new);
         JOINPOINT_FACTORY.put(SwitchStmt.class, CxxSwitch::new);
@@ -99,7 +96,6 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(FunctionDecl.class, CxxFunction::new);
         JOINPOINT_FACTORY.put(CXXRecordDecl.class, CxxClass::new);
         JOINPOINT_FACTORY.put(RecordDecl.class, CxxStruct::new);
-        // JOINPOINT_FACTORY.put(RecordDecl.class, CxxJoinpoints::recordDeclFactory);
         JOINPOINT_FACTORY.put(FieldDecl.class, CxxField::new);
         JOINPOINT_FACTORY.put(ParmVarDecl.class, CxxParam::new);
         JOINPOINT_FACTORY.put(VarDecl.class, CxxVardecl::new);
@@ -133,14 +129,12 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(OmpPragma.class, CxxOmp::new);
         JOINPOINT_FACTORY.put(Pragma.class, CxxPragma::new);
         JOINPOINT_FACTORY.put(TranslationUnit.class, CxxFile::new);
-        JOINPOINT_FACTORY.put(App.class, CxxJoinpoints::programFactory);
+        JOINPOINT_FACTORY.put(App.class, CxxProgram::new);
         JOINPOINT_FACTORY.put(NullExpr.class, CxxJoinpoints::nullNode);
         JOINPOINT_FACTORY.put(NullDecl.class, CxxJoinpoints::nullNode);
         JOINPOINT_FACTORY.put(NullStmt.class, CxxJoinpoints::nullNode);
         JOINPOINT_FACTORY.put(NullType.class, CxxUndefinedType::new);
-        // JOINPOINT_FACTORY.put(NullNodeOld.class, CxxEmpty::new);
         JOINPOINT_FACTORY.put(Comment.class, CxxComment::new);
-        // JOINPOINT_FACTORY.put(WrapperStmt.class, CxxJoinpoints::wrapperStmtFactory);
         JOINPOINT_FACTORY.put(WrapperStmt.class, CxxWrapperStmt::new);
         JOINPOINT_FACTORY.put(CilkFor.class, CxxCilkFor::new);
         JOINPOINT_FACTORY.put(CilkSync.class, CxxCilkSync::new);
@@ -153,49 +147,6 @@ public class CxxJoinpoints {
         SpecsCheck.checkArgument(node instanceof NullNode, () -> "Expected an instance of NullNode, received: " + node);
 
         return null;
-    }
-
-    /**
-     * Makes sure the node and its super have a weaver set.
-     *
-     * @param newJoinPoint
-     */
-    /*
-     * private static void setWeaverEngine(ACxxWeaverJoinPoint newJoinPoint) {
-     * ACxxWeaverJoinPoint currentJoinpoint = newJoinPoint;
-     * CxxWeaver weaver = getWeaver();
-     *
-     * while (currentJoinpoint != null) {
-     *
-     * // Set engine
-     * currentJoinpoint.setWeaverEngine(weaver);
-     * currentJoinpoint = currentJoinpoint.getSuper()
-     * .map(ACxxWeaverJoinPoint.class::cast)
-     * .orElse(null);
-     *
-     * }
-     * }
-     */
-
-    /*
-     * private final CxxWeaver weaverEngine;
-     *
-     * public CxxJoinpoints(CxxWeaver weaverEngine) {
-     * this.weaverEngine = weaverEngine;
-     * }
-     */
-    // private static ACxxWeaverJoinPoint typeFactory(Type type, ACxxWeaverJoinPoint
-    // parent) {
-    //
-    // }
-
-    // private static ACxxWeaverJoinPoint tuFactory(TranslationUnit tu,
-    // ACxxWeaverJoinPoint parent) {
-    // return new CxxFile(tu, parent);
-    // // return new CxxFile(tu, parent == null ? null : parent.getRoot());
-    // }
-    public static CxxProgram programFactory(App app, CxxWeaver weaver) {
-        return new CxxProgram(weaver.getProgramName(), app, weaver);
     }
 
     private static ACxxWeaverJoinPoint compoundStmtFactory(CompoundStmt stmt, CxxWeaver weaver) {
@@ -211,28 +162,6 @@ public class CxxJoinpoints {
 
         // Otherwise, is a Body
         return new CxxBody(stmt, weaver);
-    }
-
-    // private static ACxxWeaverJoinPoint recordDeclFactory(RecordDecl record) {
-    //
-    // if (record.getTagKind() == TagKind.STRUCT) {
-    // return new CxxStruct(record);
-    // }
-    //
-    // if (record.getTagKind() == TagKind.CLASS) {
-    // return new CxxClass((CXXRecordDecl) record);
-    // }
-    //
-    // return new CxxRecord(record);
-    // }
-
-    private static ACxxWeaverJoinPoint arrayAccessFactory(ArraySubscriptExpr expr, CxxWeaver weaver) {
-        /*
-         * if (!expr.isTopLevel()) {
-         * return CxxJoinpoints.nullNode(expr.getFactory().nullExpr());
-         * }
-         */
-        return new CxxArrayAccess(expr, weaver);
     }
 
     private static ACxxWeaverJoinPoint defaultFactory(ClavaNode node, CxxWeaver weaver) {
@@ -314,8 +243,4 @@ public class CxxJoinpoints {
         // Get root joinpoint (program)
         return getProgram(joinpoint).getWeaverEngine();
     }
-
-    // public static AJoinPoint create(Stmt newNode) {
-    // return create(newNode, null);
-    // }
 }
