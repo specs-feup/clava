@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABody;
 
 public class CxxBody extends ABody {
 
     private final CompoundStmt scope;
 
-    public CxxBody(CompoundStmt scope) {
-        super(new CxxScope(scope));
+    public CxxBody(CompoundStmt scope, CxxWeaver weaver) {
+        super(new CxxScope(scope, weaver), weaver);
         this.scope = scope;
     }
 

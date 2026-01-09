@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APointerType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
@@ -24,8 +25,8 @@ public class CxxPointerType extends APointerType {
 
     private final PointerType pointerType;
 
-    public CxxPointerType(PointerType pointerType) {
-        super(new CxxType(pointerType));
+    public CxxPointerType(PointerType pointerType, CxxWeaver weaver) {
+        super(new CxxType(pointerType, weaver), weaver);
 
         this.pointerType = pointerType;
     }
@@ -37,7 +38,7 @@ public class CxxPointerType extends APointerType {
 
     @Override
     public AType getPointeeImpl() {
-        return CxxJoinpoints.create(pointerType.getPointeeType(), AType.class);
+        return CxxJoinpoints.create(pointerType.getPointeeType(), getWeaverEngine(), AType.class);
     }
 
     @Override

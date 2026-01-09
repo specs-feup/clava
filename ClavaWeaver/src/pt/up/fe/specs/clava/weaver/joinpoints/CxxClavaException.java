@@ -14,13 +14,15 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClavaException;
 
 public class CxxClavaException extends AClavaException {
 
     private final Throwable exception;
 
-    public CxxClavaException(Throwable exception) {
+    public CxxClavaException(Throwable exception, CxxWeaver weaver) {
+        super(weaver);
         this.exception = exception;
     }
 

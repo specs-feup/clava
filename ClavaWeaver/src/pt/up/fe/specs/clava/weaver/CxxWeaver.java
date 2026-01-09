@@ -175,7 +175,7 @@ public class CxxWeaver extends ACxxWeaver {
     private void reset() {
         // Gears
         this.modifiedFilesGear = new ModifiedFilesGear();
-        this.cacheHandlerGear = new CacheHandlerGear();
+        this.cacheHandlerGear = new CacheHandlerGear(this);
 
         // Weaver configuration
         context = new ClavaContext();
@@ -215,7 +215,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public CxxProgram getAppJp() {
-        return CxxJoinpoints.programFactory(getApp());
+        return CxxJoinpoints.programFactory(getApp(), this);
     }
 
     private Map<ClavaNode, Map<String, Object>> getUserValues() {
@@ -238,7 +238,7 @@ public class CxxWeaver extends ACxxWeaver {
     @Override
     protected boolean begin(List<File> sources, File outputDir, DataStore args) {
         setData(args);
-        this.weaverData = new ClavaWeaverData();
+        this.weaverData = new ClavaWeaverData(this);
         this.accMap = new AccumulatorMap<>();
         this.messagesToUser = new LinkedHashSet<>();
 
@@ -742,7 +742,7 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     public JoinPoint getRootJp() {
-        return CxxJoinpoints.create(getApp());
+        return CxxJoinpoints.create(getApp(), this);
     }
 
     public String getProgramName() {
@@ -1107,7 +1107,7 @@ public class CxxWeaver extends ACxxWeaver {
         getApp().clearCache();
         getEventTrigger().triggerAction(Stage.DURING,
                 "CxxWeaver.rebuildFile",
-                CxxJoinpoints.create(tUnit), Collections.emptyList(), Optional.empty());
+                CxxJoinpoints.create(tUnit, this), Collections.emptyList(), Optional.empty());
 
         // Return correct TranslationUnit
         for (TranslationUnit tu : rebuiltApp.getTranslationUnits()) {
@@ -1365,10 +1365,6 @@ public class CxxWeaver extends ACxxWeaver {
         return getUserValues().remove(node) != null;
     }
 
-    public static CxxWeaver getCxxWeaver() {
-        return (CxxWeaver) getThreadLocalWeaver();
-    }
-
     @Override
     public Set<String> getLanguages() {
         return LANGUAGES;
@@ -1436,15 +1432,15 @@ public class CxxWeaver extends ACxxWeaver {
         return includes;
     }
 
-    public static ClavaFactory getFactory() {
+    public ClavaFactory getFactory() {
         return getContex().get(ClavaContext.FACTORY);
     }
 
-    public static ClavaContext getContex() {
-        return getCxxWeaver().getApp().getContext();
+    public ClavaContext getContex() {
+        return getApp().getContext();
     }
 
-    public static SnippetParser getSnippetParser() {
+    public SnippetParser getSnippetParser() {
         return new SnippetParser(getContex());
     }
 
@@ -1556,7 +1552,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public AstMethods getAstMethods() {
-        return new ClavaAstMethods(this, ClavaNode.class, node -> CxxJoinpoints.create(node),
+        return new ClavaAstMethods(this, ClavaNode.class, node -> CxxJoinpoints.create(node, this),
                 node -> ClavaCommonLanguage.getJoinPointName(node), node -> node.getScopeChildren());
     }
 

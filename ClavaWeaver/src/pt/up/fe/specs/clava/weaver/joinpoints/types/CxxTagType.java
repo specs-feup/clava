@@ -17,14 +17,15 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATagType;
 
 public class CxxTagType extends ATagType {
     private final TagType tagType;
 
-    public CxxTagType(TagType tagType) {
-        super(new CxxType(tagType));
+    public CxxTagType(TagType tagType, CxxWeaver weaver) {
+        super(new CxxType(tagType, weaver), weaver);
 
         this.tagType = tagType;
     }
@@ -41,7 +42,7 @@ public class CxxTagType extends ATagType {
 
     @Override
     public ADecl getDeclImpl() {
-        return CxxJoinpoints.create(tagType.getDecl(), ADecl.class);
+        return CxxJoinpoints.create(tagType.getDecl(), getWeaverEngine(), ADecl.class);
     }
 
 }

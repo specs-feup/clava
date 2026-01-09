@@ -15,13 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AAttribute;
 
 public class CxxAttribute extends AAttribute {
 
     private final Attribute attr;
 
-    public CxxAttribute(Attribute attr) {
+    public CxxAttribute(Attribute attr, CxxWeaver weaver) {
+        super(weaver);
         this.attr = attr;
     }
 

@@ -18,6 +18,7 @@ import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AWrapperStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.AWrapperStmtKindEnum;
@@ -26,8 +27,8 @@ public class CxxWrapperStmt extends AWrapperStmt {
 
     private final WrapperStmt wrapperStmt;
 
-    public CxxWrapperStmt(WrapperStmt wrapperStmt) {
-        super(new CxxStatement(wrapperStmt));
+    public CxxWrapperStmt(WrapperStmt wrapperStmt, CxxWeaver weaver) {
+        super(new CxxStatement(wrapperStmt, weaver), weaver);
         this.wrapperStmt = wrapperStmt;
     }
 
@@ -54,7 +55,7 @@ public class CxxWrapperStmt extends AWrapperStmt {
 
     @Override
     public AJoinPoint getContentImpl() {
-        return CxxJoinpoints.create(wrapperStmt.getWrappedNode());
+        return CxxJoinpoints.create(wrapperStmt.getWrappedNode(), getWeaverEngine());
     }
 
 }

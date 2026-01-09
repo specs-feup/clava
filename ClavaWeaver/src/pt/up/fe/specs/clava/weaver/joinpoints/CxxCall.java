@@ -44,8 +44,8 @@ public class CxxCall extends ACall {
 
     private final CallExpr call;
 
-    public CxxCall(CallExpr call) {
-        super(new CxxExpression(call));
+    public CxxCall(CallExpr call, CxxWeaver weaver) {
+        super(new CxxExpression(call, weaver), weaver);
 
         this.call = call;
     }
@@ -102,13 +102,13 @@ public class CxxCall extends ACall {
         // If assignment to already existing variable, use the following tree:
         // ExprStmt -> BinaryOperator -> DeclRefExpr, Call
         else {
-            Expr varExpr = CxxWeaver.getFactory().literalExpr(variableName, returnType);
-            BinaryOperator assign = CxxWeaver.getFactory().binaryOperator(BinaryOperatorKind.Assign, returnType,
+            Expr varExpr = getWeaverEngine().getFactory().literalExpr(variableName, returnType);
+            BinaryOperator assign = getWeaverEngine().getFactory().binaryOperator(BinaryOperatorKind.Assign, returnType,
                     varExpr, call);
             // BinaryOperator assign = ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new
             // ExprData(returnType),
             // call.getInfo(), varExpr, call);
-            ExprStmt newStmt = CxxWeaver.getFactory().exprStmt(assign);
+            ExprStmt newStmt = getWeaverEngine().getFactory().exprStmt(assign);
 
             // Replace stmt
             NodeInsertUtils.replace(exprStmt, newStmt, true);
@@ -124,7 +124,7 @@ public class CxxCall extends ACall {
     @Override
     public AType getTypeImpl() {
         if (call instanceof CXXMemberCallExpr) {
-            return CxxJoinpoints.create(((CXXMemberCallExpr) call).getType(), AType.class);
+            return CxxJoinpoints.create(((CXXMemberCallExpr) call).getType(), getWeaverEngine(), AType.class);
         }
 
         // Return the type of the function (return type), after desugaring
@@ -137,7 +137,7 @@ public class CxxCall extends ACall {
         // }
         // System.out.println("CALLEE TYPE:" + calleeType);
         if (calleeType instanceof FunctionType) {
-            return CxxJoinpoints.create(((FunctionType) calleeType).getReturnType(), AType.class);
+            return CxxJoinpoints.create(((FunctionType) calleeType).getReturnType(), getWeaverEngine(), AType.class);
         }
 
         /*
@@ -147,7 +147,7 @@ public class CxxCall extends ACall {
         }
         */
 
-        return CxxJoinpoints.create(calleeType, AType.class);
+        return CxxJoinpoints.create(calleeType, getWeaverEngine(), AType.class);
     }
 
     @Override
@@ -163,7 +163,8 @@ public class CxxCall extends ACall {
     @Override
     public AFunction getDeclarationImpl() {
         return call.getPrototypes().stream()
-                .map(decl -> CxxJoinpoints.create(decl, AFunction.class))
+                .map(decl -> CxxJoinpoints.create(decl,
+                        getWeaverEngine(), AFunction.class))
                 .findFirst()
                 .orElse(null);
         // return call.getFunctionDecl().map(FunctionDecl::getPrototypes)
@@ -175,7 +176,7 @@ public class CxxCall extends ACall {
 
     @Override
     public AFunction getDefinitionImpl() {
-        return call.getDefinition().map(decl -> (AFunction) CxxJoinpoints.create(decl)).orElse(null);
+        return call.getDefinition().map(decl -> CxxJoinpoints.create(decl, getWeaverEngine(), AFunction.class)).orElse(null);
     }
 
     @Override
@@ -183,7 +184,7 @@ public class CxxCall extends ACall {
         return call.getArgs()
                 .stream()
                 // .map(Expr::getCode)
-                .map(arg -> (AExpression) CxxJoinpoints.create(arg))
+                .map(arg -> CxxJoinpoints.create(arg, getWeaverEngine(), AExpression.class))
                 .collect(Collectors.toList())
                 .toArray(new AExpression[0]);
     }
@@ -196,12 +197,12 @@ public class CxxCall extends ACall {
     @Override
     public AType getReturnTypeImpl() {
 
-        return (AType) CxxJoinpoints.create(call.getType());
+        return CxxJoinpoints.create(call.getType(), getWeaverEngine(), AType.class);
     }
 
     @Override
     public void wrapImpl(String name) {
-        new CallWrap(this).addWrapper(name);
+        new CallWrap(getWeaverEngine(), this).addWrapper(name);
     }
 
     @Override
@@ -221,8 +222,8 @@ public class CxxCall extends ACall {
     public void setArgFromStringImpl(int index, String expr) {
         // Get arg of equivalent index, to extract type
         Expr arg = call.getArgs().get(index);
-        Expr literalExpr = CxxWeaver.getFactory().literalExpr(expr, arg.getExprType());
-        setArgImpl(index, (AExpression) CxxJoinpoints.create(literalExpr));
+        Expr literalExpr = getWeaverEngine().getFactory().literalExpr(expr, arg.getExprType());
+        setArgImpl(index, CxxJoinpoints.create(literalExpr, getWeaverEngine(), AExpression.class));
     }
 
     @Override
@@ -230,7 +231,7 @@ public class CxxCall extends ACall {
         Type processedType;
         
         if (type == null) {
-            processedType = CxxWeaver.getFactory().dummyType("from $call.addArg()");
+            processedType = getWeaverEngine().getFactory().dummyType("from $call.addArg()");
         } else {
             processedType = (Type) type.getNode();
         }
@@ -240,7 +241,7 @@ public class CxxCall extends ACall {
 
     @Override
     public void addArgImpl(String arg, String type) {
-        call.addArgument(arg, CxxWeaver.getFactory().literalType(type));
+        call.addArgument(arg, getWeaverEngine().getFactory().literalType(type));
     }
 
     @Override
@@ -260,7 +261,7 @@ public class CxxCall extends ACall {
     public AExpression getArgImpl(int index) {
         call.checkIndex(index);
         Expr arg = call.getArgs().get(index);
-        return (AExpression) CxxJoinpoints.create(arg);
+        return CxxJoinpoints.create(arg, getWeaverEngine(), AExpression.class);
 
     }
 
@@ -285,14 +286,14 @@ public class CxxCall extends ACall {
 
         // MemberExpr memberExpr = ((CXXMemberCallExpr) call).getCallee();
 
-        return CxxJoinpoints.create(memberExpr, AMemberAccess.class);
+        return CxxJoinpoints.create(memberExpr, getWeaverEngine(), AMemberAccess.class);
 
     }
 
     @Override
     public AFunctionType getFunctionTypeImpl() {
         return call.getFunctionType()
-                .map(type -> (AFunctionType) CxxJoinpoints.create(type))
+                .map(type -> CxxJoinpoints.create(type, getWeaverEngine(), AFunctionType.class))
                 .orElse(null);
 
         // return (AType) CxxJoinpoints.create(call.getFunctionType(), this);
@@ -340,14 +341,16 @@ public class CxxCall extends ACall {
     @Override
     public AFunction getDeclImpl() {
         return call.getFunctionDecl()
-                .map(fDecl -> CxxJoinpoints.create(fDecl, AFunction.class))
+                .map(fDecl -> CxxJoinpoints.create(fDecl,
+                        getWeaverEngine(), AFunction.class))
                 .orElse(null);
     }
 
     @Override
     public AFunction getDirectCalleeImpl() {
         return call.get(CallExpr.DIRECT_CALLEE)
-                .map(callee -> CxxJoinpoints.create(callee, AFunction.class))
+                .map(callee -> CxxJoinpoints.create(callee,
+                        getWeaverEngine(), AFunction.class))
                 .orElse(null);
     }
 

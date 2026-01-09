@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.ImplicitValueInitExpr;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AImplicitValue;
 
 public class CxxImplicitValue extends AImplicitValue {
 
     private final ImplicitValueInitExpr implicitValue;
 
-    public CxxImplicitValue(ImplicitValueInitExpr implicitValue) {
-        super(new CxxExpression(implicitValue));
+    public CxxImplicitValue(ImplicitValueInitExpr implicitValue, CxxWeaver weaver) {
+        super(new CxxExpression(implicitValue, weaver), weaver);
         this.implicitValue = implicitValue;
     }
 

@@ -14,13 +14,15 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 
 public class GenericJoinpoint extends ACxxWeaverJoinPoint {
 
     private final ClavaNode node;
 
-    public GenericJoinpoint(ClavaNode node) {
+    public GenericJoinpoint(ClavaNode node, CxxWeaver weaver) {
+        super(weaver);
         this.node = node;
     }
 

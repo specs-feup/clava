@@ -20,15 +20,16 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATemplateSpecializationType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
 public class CxxTemplateSpecializationType extends ATemplateSpecializationType {
     private final TemplateSpecializationType templateSpecializationType;
 
-    public CxxTemplateSpecializationType(TemplateSpecializationType templateSpecializationType) {
+    public CxxTemplateSpecializationType(TemplateSpecializationType templateSpecializationType, CxxWeaver weaver) {
 
-        super(new CxxType(templateSpecializationType));
+        super(new CxxType(templateSpecializationType, weaver), weaver);
 
         this.templateSpecializationType = templateSpecializationType;
     }
@@ -63,7 +64,7 @@ public class CxxTemplateSpecializationType extends ATemplateSpecializationType {
             return null;
         }
 
-        return (AType) CxxJoinpoints.create(templateArgTypes.get(0));
+        return CxxJoinpoints.create(templateArgTypes.get(0), getWeaverEngine(), AType.class);
     }
 
 }

@@ -42,7 +42,6 @@ public class CxxProgram extends AProgram {
 
     private final String name;
     private final App app;
-    private final CxxWeaver weaver;
     // private final File baseFolder;
 
     // private final List<String> parserOptions;
@@ -54,9 +53,9 @@ public class CxxProgram extends AProgram {
     // }
 
     public CxxProgram(String name, App app, CxxWeaver weaver) {
+        super(weaver);
         this.name = name;
         this.app = app;
-        this.weaver = weaver;
     }
 
     @Override
@@ -69,20 +68,16 @@ public class CxxProgram extends AProgram {
         return name;
     }
 
-    public CxxWeaver getWeaver() {
-        return weaver;
-    }
-
     @Override
     public boolean rebuildImpl() {
         SpecsLogs.msgInfo("Rebuilding tree...");
-        return weaver.rebuildAst(true);
+        return getWeaverEngine().rebuildAst(true);
     }
 
     @Override
     public void rebuildFuzzyImpl() {
         SpecsLogs.msgInfo("Fuzzy rebuilding tree...");
-        weaver.rebuildAstFuzzy();
+        getWeaverEngine().rebuildAstFuzzy();
     }
 
     @Override
@@ -94,24 +89,24 @@ public class CxxProgram extends AProgram {
             return file;
         }
 
-        return new CxxFile(trueTu);
+        return new CxxFile(trueTu, getWeaverEngine());
     }
 
     @Override
     public String[] getIncludeFoldersArrayImpl() {
-        Set<String> includeFolders = weaver.getIncludeFolders();
+        Set<String> includeFolders = getWeaverEngine().getIncludeFolders();
 
         return includeFolders.toArray(new String[0]);
     }
 
     @Override
     public String getStandardImpl() {
-        return weaver.getConfig().get(ClavaOptions.STANDARD).getString();
+        return getWeaverEngine().getConfig().get(ClavaOptions.STANDARD).getString();
     }
 
     @Override
     public String getStdFlagImpl() {
-        return weaver.getStdFlag();
+        return getWeaverEngine().getStdFlag();
     }
 
     @Override
@@ -121,7 +116,7 @@ public class CxxProgram extends AProgram {
 
     @Override
     public String[] getUserFlagsArrayImpl() {
-        return weaver.getUserFlags().toArray(new String[0]);
+        return getWeaverEngine().getUserFlags().toArray(new String[0]);
     }
 
     // @Override
@@ -132,7 +127,7 @@ public class CxxProgram extends AProgram {
     @Override
     public String getBaseFolderImpl() {
         // ClavaLog.deprecated("attribute baseFolder should not be used, instead use file.sourcePath");
-        List<File> sources = getWeaver().getSources();
+        List<File> sources = getWeaverEngine().getSources();
         if (sources.isEmpty()) {
             SpecsLogs.warn("Expected at least program to have one source folder, found none");
             return null;
@@ -154,22 +149,22 @@ public class CxxProgram extends AProgram {
 
     @Override
     public void pushImpl() {
-        weaver.pushAst();
+        getWeaverEngine().pushAst();
     }
 
     @Override
     public void popImpl() {
-        weaver.popAst();
+        getWeaverEngine().popAst();
     }
 
     @Override
     public String getWeavingFolderImpl() {
-        return weaver.getWeavingFolder().getAbsolutePath();
+        return getWeaverEngine().getWeavingFolder().getAbsolutePath();
     }
 
     @Override
     public Boolean getIsCxxImpl() {
-        return weaver.getConfig().get(ClavaOptions.STANDARD).isCxx();
+        return getWeaverEngine().getConfig().get(ClavaOptions.STANDARD).isCxx();
     }
 
     @Override
@@ -249,7 +244,7 @@ public class CxxProgram extends AProgram {
         // Create file join point
         TranslationUnit newTu = getFactory().translationUnit(file, Arrays.asList(code));
 
-        return addFileImpl(new CxxFile(newTu));
+        return addFileImpl(new CxxFile(newTu, getWeaverEngine()));
     }
 
     private File getFile(Object filepath) {
@@ -283,7 +278,7 @@ public class CxxProgram extends AProgram {
                     continue;
                 }
 
-                return (AFunction) CxxJoinpoints.create(function);
+                return CxxJoinpoints.create(function, getWeaverEngine(), AFunction.class);
             }
         }
 
@@ -320,7 +315,7 @@ public class CxxProgram extends AProgram {
 
         // Insert call at the beginning of the main function
         // ClavaLog.debug("Inserting atexit call at beginning of main");
-        mainFunction.getBodyImpl().insertBegin(CxxJoinpoints.create(atexitCall));
+        mainFunction.getBodyImpl().insertBegin(CxxJoinpoints.create(atexitCall, getWeaverEngine()));
 
         // Add include for atexit
         // ClavaLog.debug("Getting file ancestor");
@@ -339,7 +334,8 @@ public class CxxProgram extends AProgram {
     @Override
     public AFile[] getFilesArrayImpl() {
         return app.getTranslationUnits().stream()
-                .map(tunit -> CxxJoinpoints.create(tunit, AFile.class))
+                .map(tunit -> CxxJoinpoints.create(tunit,
+                        getWeaverEngine(), AFile.class))
                 .collect(Collectors.toList()).toArray(size -> new AFile[size]);
     }
 }

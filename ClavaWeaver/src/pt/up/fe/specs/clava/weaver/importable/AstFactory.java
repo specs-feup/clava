@@ -56,7 +56,7 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static AJoinPoint varDecl(String varName, AJoinPoint init) {
+    public static AJoinPoint varDecl(CxxWeaver weaver, String varName, AJoinPoint init) {
 
         // Check that init is an expression
         ClavaNode expr = init.getNode();
@@ -70,17 +70,17 @@ public class AstFactory {
 
         Type initType = (Type) init.getTypeImpl().getNode();
 
-        DataStore config = CxxWeaver.getCxxWeaver().getConfig();
+        DataStore config = weaver.getConfig();
 
         // Check if C or C++
         Standard standard = config.get(ClavaOptions.STANDARD);
 
-        Type type = getVarDeclType(standard, initType);
+        Type type = getVarDeclType(weaver, standard, initType);
 
-        VarDecl varDecl = CxxWeaver.getFactory().varDecl(varName, type);
+        VarDecl varDecl = weaver.getFactory().varDecl(varName, type);
         varDecl.setInit(initExpr);
 
-        return CxxJoinpoints.create(varDecl, AVardecl.class);
+        return CxxJoinpoints.create(varDecl, weaver, AVardecl.class);
     }
 
     /**
@@ -90,12 +90,12 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static AJoinPoint varDeclNoInit(String varName, AType type) {
-        VarDecl varDecl = CxxWeaver.getFactory().varDecl(varName, (Type) type.getNode());
-        return CxxJoinpoints.create(varDecl, AVardecl.class);
+    public static AJoinPoint varDeclNoInit(CxxWeaver weaver, String varName, AType type) {
+        VarDecl varDecl = weaver.getFactory().varDecl(varName, (Type) type.getNode());
+        return CxxJoinpoints.create(varDecl, weaver, AVardecl.class);
     }
 
-    private static Type getVarDeclType(Standard standard, Type returnType) {
+    private static Type getVarDeclType(CxxWeaver weaver, Standard standard, Type returnType) {
 
         // Special case, NullType
         if (returnType instanceof NullType) {
@@ -113,99 +113,97 @@ public class AstFactory {
             // autoCode = autoCode + "&";
             // }
 
-            return CxxWeaver.getFactory().literalType(autoCode);
+            return weaver.getFactory().literalType(autoCode);
         }
 
         return returnType;
     }
 
-    public static CxxFunction functionVoid(String name) {
+    public static CxxFunction functionVoid(CxxWeaver weaver, String name) {
 
-        BuiltinType voidType = CxxWeaver.getFactory().builtinType(BuiltinKind.Void);
-        FunctionProtoType functionType = CxxWeaver.getFactory().functionProtoType(voidType);
+        BuiltinType voidType = weaver.getFactory().builtinType(BuiltinKind.Void);
+        FunctionProtoType functionType = weaver.getFactory().functionProtoType(voidType);
 
-        FunctionDecl functionDecl = CxxWeaver.getFactory().functionDecl(name, functionType);
-        functionDecl.setBody(CxxWeaver.getFactory().compoundStmt());
+        FunctionDecl functionDecl = weaver.getFactory().functionDecl(name, functionType);
+        functionDecl.setBody(weaver.getFactory().compoundStmt());
 
-        return (CxxFunction) CxxJoinpoints.create(functionDecl);
+        return CxxJoinpoints.create(functionDecl, weaver, CxxFunction.class);
     }
 
-    public static AStatement stmtLiteral(String code) {
-        return CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code), AStatement.class);
+    public static AStatement stmtLiteral(CxxWeaver weaver, String code) {
+        return CxxJoinpoints.create(weaver.getSnippetParser().parseStmt(code), weaver, AStatement.class);
     }
 
-    public static AType typeLiteral(String code) {
-        return CxxJoinpoints.create(CxxWeaver.getFactory().literalType(code), AType.class);
+    public static AType typeLiteral(CxxWeaver weaver, String code) {
+        return CxxJoinpoints.create(weaver.getFactory().literalType(code), weaver, AType.class);
     }
 
-    public static ADecl declLiteral(String code) {
-        return CxxJoinpoints.create(CxxWeaver.getFactory().literalDecl(code), ADecl.class);
+    public static ADecl declLiteral(CxxWeaver weaver, String code) {
+        return CxxJoinpoints.create(weaver.getFactory().literalDecl(code), weaver, ADecl.class);
     }
 
-    public static AExpression exprLiteral(String code) {
-        return exprLiteral(code,
-                CxxJoinpoints.create(CxxWeaver.getFactory().nullType()));
+    public static AExpression exprLiteral(CxxWeaver weaver, String code) {
+        return exprLiteral(weaver, code,
+                CxxJoinpoints.create(weaver.getFactory().nullType(), weaver));
     }
 
-    public static AExpression exprLiteral(String code, AJoinPoint type) {
+    public static AExpression exprLiteral(CxxWeaver weaver, String code, AJoinPoint type) {
         Type astType = type instanceof AType ? (Type) type.getNode()
-                : CxxWeaver.getFactory().nullType();
+                : weaver.getFactory().nullType();
 
-        return CxxJoinpoints.create(CxxWeaver.getFactory().literalExpr(code, astType), AExpression.class);
+        return CxxJoinpoints.create(weaver.getFactory().literalExpr(code, astType), weaver, AExpression.class);
     }
 
-    public static AExpression cxxConstructExpr(AType type, Object[] constructorArguments) {
-        return cxxConstructExpr(type, SpecsCollections.asListT(AJoinPoint.class, constructorArguments));
+    public static AExpression cxxConstructExpr(CxxWeaver weaver, AType type, Object[] constructorArguments) {
+        return cxxConstructExpr(weaver, type, SpecsCollections.asListT(AJoinPoint.class, constructorArguments));
     }
 
-    public static AExpression cxxConstructExpr(AType type, List<AJoinPoint> constructorArguments) {
+    public static AExpression cxxConstructExpr(CxxWeaver weaver, AType type, List<AJoinPoint> constructorArguments) {
         List<Expr> exprArgs = constructorArguments.stream()
                 .map(arg -> (Expr) arg.getNode())
                 .collect(Collectors.toList());
 
-        return CxxJoinpoints.create(CxxWeaver.getFactory().cxxConstructExpr((Type) type.getNode(), exprArgs),
-                AExpression.class);
+        return CxxJoinpoints.create(weaver.getFactory().cxxConstructExpr((Type) type.getNode(), exprArgs), weaver, AExpression.class);
     }
 
-    public static ACall callFromFunction(AFunction function, Object[] args) {
-        return callFromFunction(function, SpecsCollections.asListT(AJoinPoint.class, args));
+    public static ACall callFromFunction(CxxWeaver weaver, AFunction function, Object[] args) {
+        return callFromFunction(weaver, function, SpecsCollections.asListT(AJoinPoint.class, args));
     }
 
-    public static ACall callFromFunction(AFunction function, List<? extends AJoinPoint> args) {
+    public static ACall callFromFunction(CxxWeaver weaver, AFunction function, List<? extends AJoinPoint> args) {
         var functionDecl = (FunctionDecl) function.getNode();
         List<Expr> exprArgs = args.stream()
                 .map(arg -> (Expr) arg.getNode())
                 .collect(Collectors.toList());
 
-        var call = CxxWeaver.getFactory().callExpr(functionDecl, exprArgs);
+        var call = weaver.getFactory().callExpr(functionDecl, exprArgs);
 
-        return CxxJoinpoints.create(call, ACall.class);
+        return CxxJoinpoints.create(call, weaver, ACall.class);
     }
 
-    public static ACall call(String functionName, AType typeJp, Object[] args) {
-        return call(functionName, typeJp, SpecsCollections.asListT(AJoinPoint.class, args));
+    public static ACall call(CxxWeaver weaver, String functionName, AType typeJp, Object[] args) {
+        return call(weaver, functionName, typeJp, SpecsCollections.asListT(AJoinPoint.class, args));
     }
 
 
-    public static ACall call(String functionName, AType typeJp, List<AJoinPoint> args) {
+    public static ACall call(CxxWeaver weaver, String functionName, AType typeJp, List<AJoinPoint> args) {
 
         Type returnType = (Type) typeJp.getNode();
 
-        DeclRefExpr declRef = CxxWeaver.getFactory().declRefExpr(functionName, returnType);
-
+        DeclRefExpr declRef = weaver.getFactory().declRefExpr(functionName, returnType);
         List<Type> argTypes = args.stream()
                 .map(arg -> ((Typable) arg.getNode()).getType())
                 .collect(Collectors.toList());
 
-        FunctionProtoType type = CxxWeaver.getFactory().functionProtoType(returnType, argTypes);
+        FunctionProtoType type = weaver.getFactory().functionProtoType(returnType, argTypes);
 
         List<Expr> exprArgs = args.stream()
                 .map(arg -> (Expr) arg.getNode())
                 .collect(Collectors.toList());
 
-        CallExpr call = CxxWeaver.getFactory().callExpr(declRef, type, exprArgs);
+        CallExpr call = weaver.getFactory().callExpr(declRef, type, exprArgs);
 
-        return CxxJoinpoints.create(call, ACall.class);
+        return CxxJoinpoints.create(call, weaver, ACall.class);
     }
 
     /**
@@ -215,7 +213,7 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static AFile file(File file, String relativePath) {
+    public static AFile file(CxxWeaver weaver, File file, String relativePath) {
 
         // Test if path is absolute
         if (relativePath != null && new File(relativePath).isAbsolute()) {
@@ -225,13 +223,13 @@ public class AstFactory {
         }
 
         // New files do not have a path
-        TranslationUnit tUnit = CxxWeaver.getFactory().translationUnit(file, Collections.emptyList());
+        TranslationUnit tUnit = weaver.getFactory().translationUnit(file, Collections.emptyList());
 
         if (relativePath != null) {
             tUnit.setRelativePath(relativePath);
         }
 
-        var fileJp = CxxJoinpoints.create(tUnit, AFile.class);
+        var fileJp = CxxJoinpoints.create(tUnit, weaver, AFile.class);
 
         // If file already exists, insert the code of the file literaly
         if (file.isFile()) {
@@ -249,8 +247,8 @@ public class AstFactory {
      * @param relativePath
      * @return
      */
-    public static AFile file(String filename, String contents, String relativePath) {
-        var fileJp = file(new File(filename), relativePath);
+    public static AFile file(CxxWeaver weaver, String filename, String contents, String relativePath) {
+        var fileJp = file(weaver, new File(filename), relativePath);
 
         // Add contents
         fileJp.getNode().setOptional(TranslationUnit.LITERAL_SOURCE, contents);
@@ -265,11 +263,11 @@ public class AstFactory {
      * @param relativePath
      * @return
      */
-    public static AFile file(String filename, String relativePath) {
-        return file(new File(filename), relativePath);
+    public static AFile file(CxxWeaver weaver, String filename, String relativePath) {
+        return file(weaver, new File(filename), relativePath);
     }
 
-    public static AJoinPoint externC(AJoinPoint jpDecl) {
+    public static AJoinPoint externC(CxxWeaver weaver, AJoinPoint jpDecl) {
 
         // Allowed classes for now: CxxFunction
         // TODO: This might be expanded in the future
@@ -288,17 +286,19 @@ public class AstFactory {
             // return CxxJoinpoints.newJoinpoint(decl.getParent(), null);
         }
 
-        LinkageSpecDecl linkage = CxxWeaver.getFactory().linkageSpecDecl(LanguageId.C, (Decl) decl);
+        LinkageSpecDecl linkage = weaver.getFactory().linkageSpecDecl(LanguageId.C, (Decl) decl);
 
-        return CxxJoinpoints.create(linkage);
+        return CxxJoinpoints.create(linkage, weaver);
     }
 
-    public static ACxxWeaverJoinPoint constArrayType(String typeCode, String standard, List<Integer> dims) {
-        return constArrayType(CxxWeaver.getFactory().literalType(typeCode), standard, dims);
+    public static ACxxWeaverJoinPoint constArrayType(CxxWeaver weaver,
+            String typeCode, String standard, List<Integer> dims) {
+        return constArrayType(weaver, weaver.getFactory().literalType(typeCode), standard, dims);
     }
 
-    public static ACxxWeaverJoinPoint constArrayType(String typeCode, String standard, Object[] dims) {
-        return constArrayType(typeCode, standard, SpecsCollections.asListT(Integer.class, dims));
+    public static ACxxWeaverJoinPoint constArrayType(CxxWeaver weaver,
+            String typeCode, String standard, Object[] dims) {
+        return constArrayType(weaver, typeCode, standard, SpecsCollections.asListT(Integer.class, dims));
     }
 
     /**
@@ -309,7 +309,8 @@ public class AstFactory {
      * @param dims
      * @return
      */
-    public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, List<Integer> dims) {
+    public static ACxxWeaverJoinPoint constArrayType(CxxWeaver weaver,
+            Type outType, String standardString, List<Integer> dims) {
 
         Objects.requireNonNull(dims);
         Preconditions.checkArgument(dims.size() > 0);
@@ -319,54 +320,53 @@ public class AstFactory {
         ListIterator<Integer> li = dims.listIterator(dims.size());
         while (li.hasPrevious()) {
             inType = outType;
-            outType = CxxWeaver.getFactory().constantArrayType(inType, li.previous());
+            outType = weaver.getFactory().constantArrayType(inType, li.previous());
         }
 
-        return CxxJoinpoints.create(outType);
+        return CxxJoinpoints.create(outType, weaver);
     }
 
-    public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, Object[] dims) {
-        return constArrayType(outType, standardString, SpecsCollections.asListT(Integer.class, dims));
+    public static ACxxWeaverJoinPoint constArrayType(CxxWeaver weaver,
+            Type outType, String standardString, Object[] dims) {
+        return constArrayType(weaver, outType, standardString, SpecsCollections.asListT(Integer.class, dims));
     }
 
 
-    public static AVariableArrayType variableArrayType(AType elementType, AExpression sizeExpr) {
-        Type variableArrayType = CxxWeaver.getFactory().variableArrayType((Type) elementType.getNode(),
+    public static AVariableArrayType variableArrayType(CxxWeaver weaver, AType elementType, AExpression sizeExpr) {
+        Type variableArrayType = weaver.getFactory().variableArrayType((Type) elementType.getNode(),
                 (Expr) sizeExpr.getNode());
 
-        return CxxJoinpoints.create(variableArrayType, AVariableArrayType.class);
+        return CxxJoinpoints.create(variableArrayType, weaver, AVariableArrayType.class);
     }
 
-    public static AIncompleteArrayType incompleteArrayType(AType elementType) {
-        Type incompleteArrayType = CxxWeaver.getFactory().incompleteArrayType(((Type) elementType.getNode()));
-
-        return CxxJoinpoints.create(incompleteArrayType, AIncompleteArrayType.class);
+    public static AIncompleteArrayType incompleteArrayType(CxxWeaver weaver, AType elementType) {
+        Type incompleteArrayType = weaver.getFactory().incompleteArrayType(((Type) elementType.getNode()));
+        return CxxJoinpoints.create(incompleteArrayType, weaver, AIncompleteArrayType.class);
     }
 
-    public static AJoinPoint omp(String directiveName) {
+    public static AJoinPoint omp(CxxWeaver weaver, String directiveName) {
 
         // Get directive
         OmpDirectiveKind kind = OmpDirectiveKind.getHelper().fromValue(directiveName);
-        return CxxJoinpoints.create(OmpParser.newOmpPragma(kind, CxxWeaver.getContex()));
+        return CxxJoinpoints.create(OmpParser.newOmpPragma(kind, weaver.getContex()), weaver);
     }
 
-    public static AStatement caseStmt(AExpression value) {
+    public static AStatement caseStmt(CxxWeaver weaver, AExpression value) {
 
-        CaseStmt caseStmt = CxxWeaver.getFactory().caseStmt((Expr) value.getNode());
+        CaseStmt caseStmt = weaver.getFactory().caseStmt((Expr) value.getNode());
 
-        return CxxJoinpoints.create(caseStmt, AStatement.class);
+        return CxxJoinpoints.create(caseStmt, weaver, AStatement.class);
     }
 
-    public static AStatement defaultStmt() {
-        var defaultStmt = CxxWeaver.getFactory().defaultStmt();
+    public static AStatement defaultStmt(CxxWeaver weaver) {
+        var defaultStmt = weaver.getFactory().defaultStmt();
 
-        return CxxJoinpoints.create(defaultStmt, AStatement.class);
+        return CxxJoinpoints.create(defaultStmt, weaver, AStatement.class);
     }
 
-    public static AStatement breakStmt() {
-        var breakStmt = CxxWeaver.getFactory().breakStmt();
-
-        return CxxJoinpoints.create(breakStmt, AStatement.class);
+    public static AStatement breakStmt(CxxWeaver weaver) {
+        var breakStmt = weaver.getFactory().breakStmt();
+        return CxxJoinpoints.create(breakStmt, weaver, AStatement.class);
     }
 
     /**
@@ -374,29 +374,29 @@ public class AstFactory {
      * @param expr
      * @return a list with a case statement and a break statement
      */
-    public static List<AStatement> caseFromExpr(AExpression value, AExpression expr) {
+    public static List<AStatement> caseFromExpr(CxxWeaver weaver, AExpression value, AExpression expr) {
 
         // Create compound stmt
-        ExprStmt exprStmt = CxxWeaver.getFactory().exprStmt((Expr) expr.getNode());
-        BreakStmt breakStmt = CxxWeaver.getFactory().breakStmt();
-        var breakJp = CxxJoinpoints.create(breakStmt, AStatement.class);
+        ExprStmt exprStmt = weaver.getFactory().exprStmt((Expr) expr.getNode());
+        BreakStmt breakStmt = weaver.getFactory().breakStmt();
+        var breakJp = CxxJoinpoints.create(breakStmt, weaver, AStatement.class);
 
-        CompoundStmt compoundStmt = CxxWeaver.getFactory().compoundStmt(exprStmt);
+        CompoundStmt compoundStmt = weaver.getFactory().compoundStmt(exprStmt);
         compoundStmt.setNaked(true);
 
-        AStatement caseStmt = caseStmt(value);
-        var compoundJp = CxxJoinpoints.create(compoundStmt, AStatement.class);
+        AStatement caseStmt = caseStmt(weaver, value);
+        var compoundJp = CxxJoinpoints.create(compoundStmt, weaver, AStatement.class);
         return Arrays.asList(caseStmt, compoundJp, breakJp);
 
     }
 
-    public static AStatement switchStmt(AExpression condition, AStatement body) {
-        Stmt switchStmt = CxxWeaver.getFactory().switchStmt((Expr) condition.getNode(), (Stmt) body.getNode());
+    public static AStatement switchStmt(CxxWeaver weaver, AExpression condition, AStatement body) {
+        Stmt switchStmt = weaver.getFactory().switchStmt((Expr) condition.getNode(), (Stmt) body.getNode());
 
-        return CxxJoinpoints.create(switchStmt, AStatement.class);
+        return CxxJoinpoints.create(switchStmt, weaver, AStatement.class);
     }
 
-    public static AStatement switchStmt(AExpression condition, Object[] casesArray) {
+    public static AStatement switchStmt(CxxWeaver weaver, AExpression condition, Object[] casesArray) {
         var cases = SpecsCollections.cast(casesArray, AExpression.class);
 
         if (cases.length % 2 != 0) {
@@ -408,89 +408,88 @@ public class AstFactory {
 
         for (int i = 0; i < cases.length; i += 2) {
 
-            statements.addAll(caseFromExpr(cases[i], cases[i + 1]).stream()
+            statements.addAll(caseFromExpr(weaver, cases[i], cases[i + 1]).stream()
                     .map(aStmt -> (Stmt) aStmt.getNode())
                     .collect(Collectors.toList()));
         }
 
-        CompoundStmt body = CxxWeaver.getFactory().compoundStmt(statements);
-        Stmt switchStmt = CxxWeaver.getFactory().switchStmt((Expr) condition.getNode(), body);
+        CompoundStmt body = weaver.getFactory().compoundStmt(statements);
+        Stmt switchStmt = weaver.getFactory().switchStmt((Expr) condition.getNode(), body);
 
-        return CxxJoinpoints.create(switchStmt, AStatement.class);
+        return CxxJoinpoints.create(switchStmt, weaver, AStatement.class);
     }
 
     ////// Methods that only use ClavaFactory
 
-    public static ACxxWeaverJoinPoint builtinType(String typeCode) {
-        BuiltinType type = CxxWeaver.getFactory().builtinType(typeCode);
+    public static ACxxWeaverJoinPoint builtinType(CxxWeaver weaver, String typeCode) {
+        BuiltinType type = weaver.getFactory().builtinType(typeCode);
 
-        return CxxJoinpoints.create(type);
+        return CxxJoinpoints.create(type, weaver);
     }
 
-    public static ACxxWeaverJoinPoint pointerTypeFromBuiltin(String typeCode) {
+    public static ACxxWeaverJoinPoint pointerTypeFromBuiltin(CxxWeaver weaver, String typeCode) {
 
-        BuiltinType pointeeType = CxxWeaver.getFactory().builtinType(typeCode);
-        PointerType pointerType = CxxWeaver.getFactory().pointerType(pointeeType);
+        BuiltinType pointeeType = weaver.getFactory().builtinType(typeCode);
+        PointerType pointerType = weaver.getFactory().pointerType(pointeeType);
 
-        ACxxWeaverJoinPoint jp = CxxJoinpoints.create(pointerType);
+        ACxxWeaverJoinPoint jp = CxxJoinpoints.create(pointerType, weaver);
 
         return jp;
     }
 
-    public static ACxxWeaverJoinPoint pointerType(AType pointeeType) {
-        PointerType pointerType = CxxWeaver.getFactory().pointerType((Type) pointeeType.getNode());
+    public static ACxxWeaverJoinPoint pointerType(CxxWeaver weaver, AType pointeeType) {
+        PointerType pointerType = weaver.getFactory().pointerType((Type) pointeeType.getNode());
 
-        ACxxWeaverJoinPoint jp = CxxJoinpoints.create(pointerType);
+        ACxxWeaverJoinPoint jp = CxxJoinpoints.create(pointerType, weaver);
 
         return jp;
     }
 
-    public static AExpression doubleLiteral(String floating) {
-        return doubleLiteral(Double.parseDouble(floating));
+    public static AExpression doubleLiteral(CxxWeaver weaver, String floating) {
+        return doubleLiteral(weaver, Double.parseDouble(floating));
     }
 
-    public static AExpression doubleLiteral(double floating) {
-        FloatingLiteral floatingLiteral = CxxWeaver.getFactory()
+    public static AExpression doubleLiteral(CxxWeaver weaver, double floating) {
+        FloatingLiteral floatingLiteral = weaver.getFactory()
                 .floatingLiteral(FloatKind.DOUBLE, floating);
 
-        return CxxJoinpoints.create(floatingLiteral, AExpression.class);
+        return CxxJoinpoints.create(floatingLiteral, weaver, AExpression.class);
     }
 
-    public static ACxxWeaverJoinPoint longType() {
-        BuiltinType type = CxxWeaver.getFactory().builtinType(BuiltinKind.Long);
-        return CxxJoinpoints.create(type);
+    public static ACxxWeaverJoinPoint longType(CxxWeaver weaver) {
+        BuiltinType type = weaver.getFactory().builtinType(BuiltinKind.Long);
+        return CxxJoinpoints.create(type, weaver);
     }
 
-    public static AExpression integerLiteral(String integer) {
-        return integerLiteral(Integer.parseInt(integer));
+    public static AExpression integerLiteral(CxxWeaver weaver, String integer) {
+        return integerLiteral(weaver, Integer.parseInt(integer));
     }
 
-    public static AExpression integerLiteral(int integer) {
-        IntegerLiteral intLiteral = CxxWeaver.getFactory().integerLiteral(integer);
+    public static AExpression integerLiteral(CxxWeaver weaver, int integer) {
+        IntegerLiteral intLiteral = weaver.getFactory().integerLiteral(integer);
 
-        return CxxJoinpoints.create(intLiteral, AExpression.class);
+        return CxxJoinpoints.create(intLiteral, weaver, AExpression.class);
     }
 
-    public static AScope scope() {
-        return scope(Collections.emptyList());
+    public static AScope scope(CxxWeaver weaver) {
+        return scope(weaver, Collections.emptyList());
     }
 
-    public static AScope scope(Object[] statements) {
-        return scope(SpecsCollections.asListT(AStatement.class, statements));
+    public static AScope scope(CxxWeaver weaver, Object[] statements) {
+        return scope(weaver, SpecsCollections.asListT(AStatement.class, statements));
     }
 
-    public static AScope scope(List<? extends AStatement> statements) {
+    public static AScope scope(CxxWeaver weaver, List<? extends AStatement> statements) {
         List<Stmt> stmtNodes = SpecsCollections.map(statements, stmt -> (Stmt) stmt.getNode());
-        return CxxJoinpoints.create(CxxWeaver.getFactory().compoundStmt(stmtNodes), AScope.class);
-
+        return CxxJoinpoints.create(weaver.getFactory().compoundStmt(stmtNodes), weaver, AScope.class);
     }
 
-    public static AVarref varref(String declName, AType type) {
+    public static AVarref varref(CxxWeaver weaver, String declName, AType type) {
         Type typeNode = (Type) type.getNode();
-        return CxxJoinpoints.create(CxxWeaver.getFactory().declRefExpr(declName, typeNode), AVarref.class);
+        return CxxJoinpoints.create(weaver.getFactory().declRefExpr(declName, typeNode), weaver, AVarref.class);
     }
 
-    public static AVarref varref(ANamedDecl namedDecl) {
+    public static AVarref varref(CxxWeaver weaver, ANamedDecl namedDecl) {
         NamedDecl decl = (NamedDecl) namedDecl.getNode();
 
         if (!(decl instanceof ValueDecl)) {
@@ -499,23 +498,23 @@ public class AstFactory {
             return null;
         }
 
-        return CxxJoinpoints.create(CxxWeaver.getFactory().declRefExpr((ValueDecl) decl), AVarref.class);
+        return CxxJoinpoints.create(weaver.getFactory().declRefExpr((ValueDecl) decl), weaver, AVarref.class);
     }
 
-    public static AStatement returnStmt(AExpression expr) {
-        return CxxJoinpoints.create(CxxWeaver.getFactory().returnStmt((Expr) expr.getNode()), AStatement.class);
+    public static AStatement returnStmt(CxxWeaver weaver, AExpression expr) {
+        return CxxJoinpoints.create(weaver.getFactory().returnStmt((Expr) expr.getNode()), weaver, AStatement.class);
     }
 
-    public static AStatement returnStmt() {
-        return CxxJoinpoints.create(CxxWeaver.getFactory().returnStmt(), AStatement.class);
+    public static AStatement returnStmt(CxxWeaver weaver) {
+        return CxxJoinpoints.create(weaver.getFactory().returnStmt(), weaver, AStatement.class);
     }
 
-    public static AFunctionType functionType(AType returnTypeJp, Object[] argTypesJps) {
-        return functionType(returnTypeJp, SpecsCollections.asListT(AType.class, argTypesJps));
+    public static AFunctionType functionType(CxxWeaver weaver, AType returnTypeJp, Object[] argTypesJps) {
+        return functionType(weaver, returnTypeJp, SpecsCollections.asListT(AType.class, argTypesJps));
     }
 
 
-    public static AFunctionType functionType(AType returnTypeJp, List<AType> argTypesJps) {
+    public static AFunctionType functionType(CxxWeaver weaver, AType returnTypeJp, List<AType> argTypesJps) {
 
         Type returnType = (Type) returnTypeJp.getNode();
 
@@ -523,18 +522,18 @@ public class AstFactory {
                 .map(arg -> ((Type) arg.getNode()))
                 .collect(Collectors.toList());
 
-        FunctionProtoType type = CxxWeaver.getFactory().functionProtoType(returnType, argTypes);
+        FunctionProtoType type = weaver.getFactory().functionProtoType(returnType, argTypes);
 
-        return CxxJoinpoints.create(type, AFunctionType.class);
+        return CxxJoinpoints.create(type, weaver, AFunctionType.class);
     }
 
-    public static AFunction functionDeclFromType(String functionName, AFunctionType functionTypeJp) {
+    public static AFunction functionDeclFromType(CxxWeaver weaver, String functionName, AFunctionType functionTypeJp) {
         FunctionType functionType = (FunctionType) functionTypeJp.getNode();
-        return CxxJoinpoints.create(CxxWeaver.getFactory().functionDecl(functionName, functionType),
-                AFunction.class);
+        return CxxJoinpoints.create(weaver.getFactory().functionDecl(functionName, functionType),
+                weaver, AFunction.class);
     }
 
-    public static AFunction functionDecl(String functionName, AType returnTypeJp, List<AJoinPoint> namedDeclJps) {
+    public static AFunction functionDecl(CxxWeaver weaver, String functionName, AType returnTypeJp, List<AJoinPoint> namedDeclJps) {
 
         Type returnType = (Type) returnTypeJp.getNode();
 
@@ -552,116 +551,115 @@ public class AstFactory {
 
             ValueDecl valueDecl = (ValueDecl) node;
             argTypes.add(valueDecl.getType());
-            params.add(CxxWeaver.getFactory().parmVarDecl(valueDecl.getDeclName(), valueDecl.getType()));
+            params.add(weaver.getFactory().parmVarDecl(valueDecl.getDeclName(), valueDecl.getType()));
         }
 
         // Create the function type
-        FunctionProtoType functionType = CxxWeaver.getFactory().functionProtoType(returnType, argTypes);
-
+        FunctionProtoType functionType = weaver.getFactory().functionProtoType(returnType, argTypes);
         // Create function decl
-        FunctionDecl functionDecl = CxxWeaver.getFactory().functionDecl(functionName, functionType);
+        FunctionDecl functionDecl = weaver.getFactory().functionDecl(functionName, functionType);
 
         // Add parameters
         functionDecl.addChildren(params);
 
-        return CxxJoinpoints.create(functionDecl, AFunction.class);
+        return CxxJoinpoints.create(functionDecl, weaver, AFunction.class);
     }
 
-    public static AFunction functionDecl(String functionName, AType returnTypeJp, Object... namedDeclJps) {
-        return functionDecl(functionName, returnTypeJp, SpecsCollections.asListT(AJoinPoint.class, namedDeclJps));
+    public static AFunction functionDecl(CxxWeaver weaver, String functionName, AType returnTypeJp, Object... namedDeclJps) {
+        return functionDecl(weaver, functionName, returnTypeJp, SpecsCollections.asListT(AJoinPoint.class, namedDeclJps));
     }
 
-    public static ABinaryOp assignment(AExpression leftHand, AExpression rightHand) {
+    public static ABinaryOp assignment(CxxWeaver weaver, AExpression leftHand, AExpression rightHand) {
         Expr lhs = (Expr) leftHand.getNode();
         Expr rhs = (Expr) rightHand.getNode();
 
-        BinaryOperator assign = CxxWeaver.getFactory().binaryOperator(BinaryOperatorKind.Assign, lhs.getType(), lhs,
+        BinaryOperator assign = weaver.getFactory().binaryOperator(BinaryOperatorKind.Assign, lhs.getType(), lhs,
                 rhs);
 
-        return CxxJoinpoints.create(assign, ABinaryOp.class);
+        return CxxJoinpoints.create(assign, weaver, ABinaryOp.class);
     }
 
-    public static AIf ifStmt(AExpression condition, AStatement thenBody, AStatement elseBody) {
+    public static AIf ifStmt(CxxWeaver weaver, AExpression condition, AStatement thenBody, AStatement elseBody) {
         var thenNode = thenBody != null ? ClavaNodes.toCompoundStmt((Stmt) thenBody.getNode()) : null;
         var elseNode = elseBody != null ? ClavaNodes.toCompoundStmt((Stmt) elseBody.getNode()) : null;
 
-        IfStmt ifStmt = CxxWeaver.getFactory().ifStmt((Expr) condition.getNode(), thenNode, elseNode);
-        return CxxJoinpoints.create(ifStmt, AIf.class);
+        IfStmt ifStmt = weaver.getFactory().ifStmt((Expr) condition.getNode(), thenNode, elseNode);
+        return CxxJoinpoints.create(ifStmt, weaver, AIf.class);
     }
 
-    public static ABinaryOp binaryOp(String op, AExpression left, AExpression right, AType type) {
+    public static ABinaryOp binaryOp(CxxWeaver weaver, String op, AExpression left, AExpression right, AType type) {
 
         BinaryOperatorKind opKind = BinaryOperator.getOpByNameOrSymbol(op);
 
-        BinaryOperator opNode = CxxWeaver.getFactory().binaryOperator(opKind, (Type) type.getNode(),
+        BinaryOperator opNode = weaver.getFactory().binaryOperator(opKind, (Type) type.getNode(),
                 (Expr) left.getNode(), (Expr) right.getNode());
 
-        return CxxJoinpoints.create(opNode, ABinaryOp.class);
+        return CxxJoinpoints.create(opNode, weaver, ABinaryOp.class);
     }
 
-    public static ABinaryOp compoundAssignment(String op, AExpression lhs, AExpression rhs) {
+    public static ABinaryOp compoundAssignment(CxxWeaver weaver, String op, AExpression lhs, AExpression rhs) {
         var opKind = BinaryOperator.getOpByNameOrSymbol(op);
         var type = ((Expr) lhs.getNode()).getType();
 
-        var opNode = CxxWeaver.getFactory().compoundAssignOperator(opKind, type, (Expr) lhs.getNode(),
+        var opNode = weaver.getFactory().compoundAssignOperator(opKind, type, (Expr) lhs.getNode(),
                 (Expr) rhs.getNode());
 
-        return CxxJoinpoints.create(opNode, ABinaryOp.class);
+        return CxxJoinpoints.create(opNode, weaver, ABinaryOp.class);
 
     }
 
-    public static AUnaryOp unaryOp(String op, AExpression expr, AType type) {
+    public static AUnaryOp unaryOp(CxxWeaver weaver, String op, AExpression expr, AType type) {
         UnaryOperatorKind opKind = UnaryOperator.getOpByNameOrSymbol(op);
 
         // If type is null, try to infer type from operator
         var typeNode = type != null ? (Type) type.getNode()
-                : Types.inferUnaryType(opKind, (Type) expr.getTypeImpl().getNode(), CxxWeaver.getFactory());
+                : Types.inferUnaryType(opKind, (Type) expr.getTypeImpl().getNode(), weaver.getFactory());
 
-        UnaryOperator opNode = CxxWeaver.getFactory().unaryOperator(opKind, typeNode,
+        UnaryOperator opNode = weaver.getFactory().unaryOperator(opKind, typeNode,
                 (Expr) expr.getNode());
 
-        return CxxJoinpoints.create(opNode, AUnaryOp.class);
+        return CxxJoinpoints.create(opNode, weaver, AUnaryOp.class);
     }
 
-    public static ATernaryOp ternaryOp(AExpression cond, AExpression trueExpr, AExpression falseExpr, AType type) {
-        ConditionalOperator opNode = CxxWeaver.getFactory().conditionalOperator(
+    public static ATernaryOp ternaryOp(CxxWeaver weaver, AExpression cond, AExpression trueExpr, AExpression falseExpr, AType type) {
+        ConditionalOperator opNode = weaver.getFactory().conditionalOperator(
                 (Type) type.getNode(),
                 (Expr) cond.getNode(),
                 (Expr) trueExpr.getNode(),
                 (Expr) falseExpr.getNode());
 
-        return CxxJoinpoints.create(opNode, ATernaryOp.class);
+        return CxxJoinpoints.create(opNode, weaver, ATernaryOp.class);
     }
 
-    public static AExpression parenthesis(AExpression expression) {
-        ParenExpr parenExpr = CxxWeaver.getFactory().parenExpr((Expr) expression.getNode());
-        return CxxJoinpoints.create(parenExpr, AExpression.class);
+    public static AExpression parenthesis(CxxWeaver weaver, AExpression expression) {
+        ParenExpr parenExpr = weaver.getFactory().parenExpr((Expr) expression.getNode());
+        return CxxJoinpoints.create(parenExpr, weaver, AExpression.class);
     }
 
-    public static AArrayAccess arrayAccess(AExpression base, List<AExpression> subscripts) {
+    public static AArrayAccess arrayAccess(CxxWeaver weaver, AExpression base, List<AExpression> subscripts) {
         var subscriptsExpr = subscripts.stream()
                 .map(arg -> ((Expr) arg.getNode()))
                 .collect(Collectors.toList());
 
-        var arraySubscriptExpr = CxxWeaver.getFactory().arraySubscriptExpr((Expr) base.getNode(), subscriptsExpr);
-        return CxxJoinpoints.create(arraySubscriptExpr, AArrayAccess.class);
+        var arraySubscriptExpr = weaver.getFactory().arraySubscriptExpr((Expr) base.getNode(), subscriptsExpr);
+        return CxxJoinpoints.create(arraySubscriptExpr, weaver, AArrayAccess.class);
     }
 
-    public static AArrayAccess arrayAccess(AExpression base, Object[] subscripts) {
-        return arrayAccess(base, SpecsCollections.asListT(AExpression.class, subscripts));
+    public static AArrayAccess arrayAccess(CxxWeaver weaver, AExpression base, Object[] subscripts) {
+        return arrayAccess(weaver, base, SpecsCollections.asListT(AExpression.class, subscripts));
     }
 
-    public static AInitList initList(List<AExpression> values) {
+    public static AInitList initList(CxxWeaver weaver, List<AExpression> values) {
         var valuesExpr = values.stream()
                 .map(arg -> ((Expr) arg.getNode()))
                 .collect(Collectors.toList());
 
-        var initList = CxxWeaver.getFactory().initListExpr((valuesExpr));
-        return CxxJoinpoints.create(initList, AInitList.class);
+        var initList = weaver.getFactory().initListExpr((valuesExpr));
+        return CxxJoinpoints.create(initList, weaver, AInitList.class);
     }
 
-    public static AInitList initList(Object[] values) {
-        return initList(SpecsCollections.asListT(AExpression.class, values));
+    public static AInitList initList(CxxWeaver weaver, Object[] values) {
+        return initList(weaver, SpecsCollections.asListT(AExpression.class, values));
     }
 
     /**
@@ -671,27 +669,27 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static AType typedefType(ATypedefDecl typedefDecl) {
-        var typedefType = CxxWeaver.getFactory().typedefType((TypedefDecl) typedefDecl.getNode());
-        return CxxJoinpoints.create(typedefType, AType.class);
+    public static AType typedefType(CxxWeaver weaver, ATypedefDecl typedefDecl) {
+        var typedefType = weaver.getFactory().typedefType((TypedefDecl) typedefDecl.getNode());
+        return CxxJoinpoints.create(typedefType, weaver, AType.class);
     }
 
-    public static ATypedefDecl typedefDecl(AType underlyingType, String identifier) {
-        var typedefDecl = CxxWeaver.getFactory().typedefDecl((Type) underlyingType.getNode(), identifier);
-        return CxxJoinpoints.create(typedefDecl, ATypedefDecl.class);
+    public static ATypedefDecl typedefDecl(CxxWeaver weaver, AType underlyingType, String identifier) {
+        var typedefDecl = weaver.getFactory().typedefDecl((Type) underlyingType.getNode(), identifier);
+        return CxxJoinpoints.create(typedefDecl, weaver, ATypedefDecl.class);
     }
 
-    public static AElaboratedType structType(AStruct struct) {
+    public static AElaboratedType structType(CxxWeaver weaver, AStruct struct) {
         var namedType = (Type) struct.getTypeImpl().getNode();
-        var elaboratedType = CxxWeaver.getFactory().elaboratedType(ElaboratedTypeKeyword.STRUCT, namedType);
+        var elaboratedType = weaver.getFactory().elaboratedType(ElaboratedTypeKeyword.STRUCT, namedType);
 
-        return CxxJoinpoints.create(elaboratedType, AElaboratedType.class);
+        return CxxJoinpoints.create(elaboratedType, weaver, AElaboratedType.class);
     }
 
-    public static ACast cStyleCast(AType type, AExpression expr) {
-        var cast = CxxWeaver.getFactory().cStyleCastExpr((Type) type.getNode(), (Expr) expr.getNode());
+    public static ACast cStyleCast(CxxWeaver weaver, AType type, AExpression expr) {
+        var cast = weaver.getFactory().cStyleCastExpr((Type) type.getNode(), (Expr) expr.getNode());
 
-        return CxxJoinpoints.create(cast, ACast.class);
+        return CxxJoinpoints.create(cast, weaver, ACast.class);
     }
 
     /**
@@ -701,16 +699,16 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static AClass classDecl(String className, List<AField> fields) {
+    public static AClass classDecl(CxxWeaver weaver, String className, List<AField> fields) {
         var fieldsNodes = fields.stream().map(field -> (FieldDecl) field.getNode())
                 .collect(Collectors.toList());
 
-        var classDecl = CxxWeaver.getFactory().cxxRecordDecl(className, fieldsNodes);
-        return CxxJoinpoints.create(classDecl, AClass.class);
+        var classDecl = weaver.getFactory().cxxRecordDecl(className, fieldsNodes);
+        return CxxJoinpoints.create(classDecl, weaver, AClass.class);
     }
 
-    public static AClass classDecl(String className, Object... fields) {
-        return classDecl(className, SpecsCollections.asListT(AField.class, fields));
+    public static AClass classDecl(CxxWeaver weaver, String className, Object... fields) {
+        return classDecl(weaver, className, SpecsCollections.asListT(AField.class, fields));
     }
 
     /**
@@ -720,9 +718,9 @@ public class AstFactory {
      * @param fieldType
      * @return
      */
-    public static AField field(String fieldName, AType fieldType) {
-        var fieldDecl = CxxWeaver.getFactory().fieldDecl(fieldName, (Type) fieldType.getNode());
-        return CxxJoinpoints.create(fieldDecl, AField.class);
+    public static AField field(CxxWeaver weaver, String fieldName, AType fieldType) {
+        var fieldDecl = weaver.getFactory().fieldDecl(fieldName, (Type) fieldType.getNode());
+        return CxxJoinpoints.create(fieldDecl, weaver, AField.class);
     }
 
     /**
@@ -732,39 +730,39 @@ public class AstFactory {
      * @param fieldType
      * @return
      */
-    public static AAccessSpecifier accessSpecifier(String accessSpecifierString) {
+    public static AAccessSpecifier accessSpecifier(CxxWeaver weaver, String accessSpecifierString) {
         var accessSpecifier = SpecsEnums.fromName(AccessSpecifier.class, accessSpecifierString.toUpperCase());
 
-        var accessSpecifierDecl = CxxWeaver.getFactory().accessSpecDecl(accessSpecifier);
-        return CxxJoinpoints.create(accessSpecifierDecl, AAccessSpecifier.class);
+        var accessSpecifierDecl = weaver.getFactory().accessSpecDecl(accessSpecifier);
+        return CxxJoinpoints.create(accessSpecifierDecl, weaver, AAccessSpecifier.class);
     }
 
-    public static ALoop forStmt(AStatement init, AStatement condition, AStatement inc, AStatement body) {
+    public static ALoop forStmt(CxxWeaver weaver,
+            AStatement init, AStatement condition, AStatement inc, AStatement body) {
 
         // If null, create NullStmt
-        var initStmt = init != null ? (Stmt) init.getNode() : CxxWeaver.getFactory().nullStmt();
-        var condStmt = condition != null ? (Stmt) condition.getNode() : CxxWeaver.getFactory().nullStmt();
-        var incStmt = inc != null ? (Stmt) inc.getNode() : CxxWeaver.getFactory().nullStmt();
-        var bodyStmt = body != null ? (Stmt) body.getNode() : CxxWeaver.getFactory().nullStmt();
+        var initStmt = init != null ? (Stmt) init.getNode() : weaver.getFactory().nullStmt();
+        var condStmt = condition != null ? (Stmt) condition.getNode() : weaver.getFactory().nullStmt();
+        var incStmt = inc != null ? (Stmt) inc.getNode() : weaver.getFactory().nullStmt();
+        var bodyStmt = body != null ? (Stmt) body.getNode() : weaver.getFactory().nullStmt();
 
         // If body is not a CompoundStmt, make it
 
         var compoundStmt = ClavaNodes.toCompoundStmt(bodyStmt);
 
-        var forStmt = CxxWeaver.getFactory().forStmt(initStmt, condStmt, incStmt, compoundStmt);
+        var forStmt = weaver.getFactory().forStmt(initStmt, condStmt, incStmt, compoundStmt);
 
-        return CxxJoinpoints.create(forStmt, ALoop.class);
+        return CxxJoinpoints.create(forStmt, weaver, ALoop.class);
     }
 
-    public static ALoop whileStmt(AStatement condition, AStatement body) {
-        var condStmt = condition != null ? (Stmt) condition.getNode() : CxxWeaver.getFactory().nullStmt();
-        var bodyStmt = body != null ? (Stmt) body.getNode() : CxxWeaver.getFactory().nullStmt();
+    public static ALoop whileStmt(CxxWeaver weaver, AStatement condition, AStatement body) {
+        var condStmt = condition != null ? (Stmt) condition.getNode() : weaver.getFactory().nullStmt();
+        var bodyStmt = body != null ? (Stmt) body.getNode() : weaver.getFactory().nullStmt();
 
         var compoundStmt = ClavaNodes.toCompoundStmt(bodyStmt);
 
-        var whileStmt = CxxWeaver.getFactory().whileStmt(condStmt, compoundStmt);
-
-        return CxxJoinpoints.create(whileStmt, ALoop.class);
+        var whileStmt = weaver.getFactory().whileStmt(condStmt, compoundStmt);
+        return CxxJoinpoints.create(whileStmt, weaver, ALoop.class);
     }
 
     /**
@@ -774,26 +772,26 @@ public class AstFactory {
      * @param type
      * @return
      */
-    public static AParam param(String name, AType type) {
-        var param = CxxWeaver.getFactory().parmVarDecl(name, (Type) type.getNode());
-        return CxxJoinpoints.create(param, AParam.class);
+    public static AParam param(CxxWeaver weaver, String name, AType type) {
+        var param = weaver.getFactory().parmVarDecl(name, (Type) type.getNode());
+        return CxxJoinpoints.create(param, weaver, AParam.class);
     }
 
-    public static AComment comment(String text) {
+    public static AComment comment(CxxWeaver weaver, String text) {
 
         // TODO: Detect C standard, to detect if inline comments are supported?
 
         var lines = StringLines.getLines(text);
 
-        var comment = lines.size() < 2 ? CxxWeaver.getFactory().inlineComment(text, false)
-                : CxxWeaver.getFactory().multiLineComment(lines);
+        var comment = lines.size() < 2 ? weaver.getFactory().inlineComment(text, false)
+                : weaver.getFactory().multiLineComment(lines);
 
-        return CxxJoinpoints.create(comment, AComment.class);
+        return CxxJoinpoints.create(comment, weaver, AComment.class);
     }
 
-    public static AExprStmt exprStmt(AExpression expr) {
-        var exprStmt = CxxWeaver.getFactory().exprStmt((Expr) expr.getNode());
-        return CxxJoinpoints.create(exprStmt, AExprStmt.class);
+    public static AExprStmt exprStmt(CxxWeaver weaver, AExpression expr) {
+        var exprStmt = weaver.getFactory().exprStmt((Expr) expr.getNode());
+        return CxxJoinpoints.create(exprStmt, weaver, AExprStmt.class);
     }
 
     /**
@@ -803,17 +801,16 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static ADeclStmt declStmt(List<ADecl> decls) {
+    public static ADeclStmt declStmt(CxxWeaver weaver, List<ADecl> decls) {
         var declNodes = decls.stream().map(decl -> (Decl) decl.getNode())
                 .collect(Collectors.toList());
 
-        var declStmt = CxxWeaver.getFactory().declStmt(declNodes);
-
-        return CxxJoinpoints.create(declStmt, ADeclStmt.class);
+        var declStmt = weaver.getFactory().declStmt(declNodes);
+        return CxxJoinpoints.create(declStmt, weaver, ADeclStmt.class);
     }
 
-    public static ADeclStmt declStmt(Object... decls) {
-        return declStmt(SpecsCollections.asListT(ADecl.class, decls));
+    public static ADeclStmt declStmt(CxxWeaver weaver, Object... decls) {
+        return declStmt(weaver, SpecsCollections.asListT(ADecl.class, decls));
     }
 
     /**
@@ -823,9 +820,9 @@ public class AstFactory {
      * @param name Name of the label
      * @return The created label declaration
      */
-    public static ALabelDecl labelDecl(String name) {
-        var decl = CxxWeaver.getFactory().labelDecl(name);
-        return CxxJoinpoints.create(decl, ALabelDecl.class);
+    public static ALabelDecl labelDecl(CxxWeaver weaver, String name) {
+        var decl = weaver.getFactory().labelDecl(name);
+        return CxxJoinpoints.create(decl, weaver, ALabelDecl.class);
     }
 
     /**
@@ -834,9 +831,9 @@ public class AstFactory {
      * @param decl The declaration for this statement
      * @return The label statement to be used in the code.
      */
-    public static ALabelStmt labelStmt(ALabelDecl decl) {
+    public static ALabelStmt labelStmt(CxxWeaver weaver, ALabelDecl decl) {
         var stmt = decl.getFactory().labelStmt((LabelDecl) decl.getNode());
-        return CxxJoinpoints.create(stmt, ALabelStmt.class);
+        return CxxJoinpoints.create(stmt, weaver, ALabelStmt.class);
     }
 
     /**
@@ -845,8 +842,8 @@ public class AstFactory {
      * @param name Name of the label
      * @return The created
      */
-    public static ALabelStmt labelStmt(String name) {
-        return labelStmt(labelDecl(name));
+    public static ALabelStmt labelStmt(CxxWeaver weaver, String name) {
+        return labelStmt(weaver, labelDecl(weaver, name));
     }
 
     /**
@@ -855,42 +852,42 @@ public class AstFactory {
      * @param label The declaration of the label to jump to
      * @return The created goto statement
      */
-    public static AGotoStmt gotoStmt(ALabelDecl label) {
+    public static AGotoStmt gotoStmt(CxxWeaver weaver, ALabelDecl label) {
         var stmt = label.getFactory().gotoStmt((LabelDecl) label.getNode());
-        return CxxJoinpoints.create(stmt, AGotoStmt.class);
+        return CxxJoinpoints.create(stmt, weaver, AGotoStmt.class);
     }
 
 
-    public static AEmptyStmt emptyStmt() {
-        var stmt = CxxWeaver.getFactory().emptyStmt();
-        return CxxJoinpoints.create(stmt, AEmptyStmt.class);
+    public static AEmptyStmt emptyStmt(CxxWeaver weaver) {
+        var stmt = weaver.getFactory().emptyStmt();
+        return CxxJoinpoints.create(stmt, weaver, AEmptyStmt.class);
     }
 
-    public static AProgram program() {
-        var app = CxxWeaver.getFactory().app(Collections.emptyList());
-        return CxxJoinpoints.create(app, AProgram.class);
+    public static AProgram program(CxxWeaver weaver) {
+        var app = weaver.getFactory().app(Collections.emptyList());
+        return CxxJoinpoints.create(app, weaver, AProgram.class);
     }
 
-    public static AMemberAccess memberAccess(AExpression baseExpr, AField field) {
+    public static AMemberAccess memberAccess(CxxWeaver weaver, AExpression baseExpr, AField field) {
         var fieldNode = (FieldDecl) field.getNode();
 
-        var memberAccess = CxxWeaver.getFactory().memberExpr(fieldNode.get(FieldDecl.DECL_NAME), fieldNode.get(FieldDecl.TYPE), (Expr) baseExpr.getNode());
-        return CxxJoinpoints.create(memberAccess, AMemberAccess.class);
+        var memberAccess = weaver.getFactory().memberExpr(fieldNode.get(FieldDecl.DECL_NAME), fieldNode.get(FieldDecl.TYPE), (Expr) baseExpr.getNode());
+        return CxxJoinpoints.create(memberAccess, weaver, AMemberAccess.class);
     }
 
-    public static AMemberAccess memberAccess(AExpression baseExpr, String fieldName, AType fieldType) {
-        var memberAccess = CxxWeaver.getFactory().memberExpr(fieldName, (Type) fieldType.getNode(), (Expr) baseExpr.getNode());
-        return CxxJoinpoints.create(memberAccess, AMemberAccess.class);
+    public static AMemberAccess memberAccess(CxxWeaver weaver, AExpression baseExpr, String fieldName, AType fieldType) {
+        var memberAccess = weaver.getFactory().memberExpr(fieldName, (Type) fieldType.getNode(), (Expr) baseExpr.getNode());
+        return CxxJoinpoints.create(memberAccess, weaver, AMemberAccess.class);
     }
 
-    public static AUnaryExprOrType sizeof(AExpression exprArg) {
-        var sizeof = CxxWeaver.getFactory().sizeof((Expr) exprArg.getNode());
-        return CxxJoinpoints.create(sizeof, AUnaryExprOrType.class);
+    public static AUnaryExprOrType sizeof(CxxWeaver weaver, AExpression exprArg) {
+        var sizeof = weaver.getFactory().sizeof((Expr) exprArg.getNode());
+        return CxxJoinpoints.create(sizeof, weaver, AUnaryExprOrType.class);
     }
 
-    public static AUnaryExprOrType sizeof(AType typeArg) {
-        var sizeof = CxxWeaver.getFactory().sizeof((Type) typeArg.getNode());
-        return CxxJoinpoints.create(sizeof, AUnaryExprOrType.class);
+    public static AUnaryExprOrType sizeof(CxxWeaver weaver, AType typeArg) {
+        var sizeof = weaver.getFactory().sizeof((Type) typeArg.getNode());
+        return CxxJoinpoints.create(sizeof, weaver, AUnaryExprOrType.class);
     }
 
 }

@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberCall;
 
@@ -22,8 +23,8 @@ public class CxxMemberCall extends AMemberCall {
 
     private final CXXMemberCallExpr memberCall;
 
-    public CxxMemberCall(CXXMemberCallExpr memberCall) {
-        super(new CxxCall(memberCall));
+    public CxxMemberCall(CXXMemberCallExpr memberCall, CxxWeaver weaver) {
+        super(new CxxCall(memberCall, weaver), weaver);
 
         this.memberCall = memberCall;
     }
@@ -35,11 +36,11 @@ public class CxxMemberCall extends AMemberCall {
 
     @Override
     public AExpression getBaseImpl() {
-        return CxxJoinpoints.create(memberCall.getBase(), AExpression.class);
+        return CxxJoinpoints.create(memberCall.getBase(), getWeaverEngine(), AExpression.class);
     }
 
     @Override
     public AExpression getRootBaseImpl() {
-        return CxxJoinpoints.create(memberCall.getRootBase(), AExpression.class);
+        return CxxJoinpoints.create(memberCall.getRootBase(), getWeaverEngine(), AExpression.class);
     }
 }

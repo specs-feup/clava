@@ -18,6 +18,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.weaver.CxxAttributes;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
 
 import java.util.Arrays;
@@ -28,7 +29,8 @@ public class CxxExpression extends AExpression {
 
     private final Expr expr;
 
-    public CxxExpression(Expr expr) {
+    public CxxExpression(Expr expr, CxxWeaver weaver) {
+        super(weaver);
         this.expr = expr;
     }
 
@@ -114,14 +116,16 @@ public class CxxExpression extends AExpression {
         // expr.hasValue(key)
 
         return expr.getImplicitCast()
-                .map(castExpr -> CxxJoinpoints.create(castExpr, ACast.class))
+                .map(castExpr -> CxxJoinpoints.create(castExpr,
+                        getWeaverEngine(), ACast.class))
                 .orElse(null);
     }
 
     @Override
     public ADecl getDeclImpl() {
         return expr.getDecl()
-                .map(decl -> CxxJoinpoints.create(decl, ADecl.class))
+                .map(decl -> CxxJoinpoints.create(decl,
+                        getWeaverEngine(), ADecl.class))
                 .orElse(null);
     }
 

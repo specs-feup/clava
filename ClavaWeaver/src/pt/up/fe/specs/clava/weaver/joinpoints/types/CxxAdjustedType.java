@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints.types;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AAdjustedType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
@@ -23,8 +24,8 @@ public class CxxAdjustedType extends AAdjustedType {
 
     private final AdjustedType adjustedType;
 
-    public CxxAdjustedType(AdjustedType adjustedType) {
-        super(new CxxType(adjustedType));
+    public CxxAdjustedType(AdjustedType adjustedType, CxxWeaver weaver) {
+        super(new CxxType(adjustedType, weaver), weaver);
 
         this.adjustedType = adjustedType;
     }
@@ -36,7 +37,7 @@ public class CxxAdjustedType extends AAdjustedType {
 
     @Override
     public AType getOriginalTypeImpl() {
-        return CxxJoinpoints.create(adjustedType.get(AdjustedType.ORIGINAL_TYPE), AType.class);
+        return CxxJoinpoints.create(adjustedType.get(AdjustedType.ORIGINAL_TYPE), getWeaverEngine(), AType.class);
     }
 
     @Override
