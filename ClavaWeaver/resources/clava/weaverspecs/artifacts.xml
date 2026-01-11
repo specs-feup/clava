@@ -1,7 +1,4 @@
 <?xml version="1.0"?>
-<!-- When changing the joinpoint model, do not forget to update the Clava 
-    document.
-https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/edit#heading=h.hii8b3kunout -->
 <artifacts>
 
 
@@ -61,9 +58,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="ast" type="String"
                    tooltip="String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'"/>
         <attribute name="code" type="String" tooltip="String with the code represented by this node"/>
-        <attribute name="type" type="type">
-            <def/>
-        </attribute>
+        <attribute name="type" type="type"/>
         <attribute name="hasType" type="Boolean" tooltip="true, if the join point has a type"/>
         <attribute name="bitWidth" type="int"
                    tooltip="The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit"/>
@@ -126,9 +121,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
                    tooltip="Returns the node that declares the scope of this node"/>
         <attribute name="pragmas" type="pragma[]" tooltip="The pragmas associated with this node"/>
         <attribute name="data" type="Object"
-                   tooltip="JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.">
-            <def/>
-        </attribute>
+                   tooltip="JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds."/>
         <attribute name="keys" type="String[]"
                    tooltip="A list of the properties currently supported by this node. Can be used as parameter of the attribute 'getValue'"/>
         <attribute name="getValue" type="Object"
@@ -143,13 +136,9 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
                    tooltip="true if any descendant or the node itself was defined as a macro">
         </attribute>
         <attribute name="firstChild" type="joinpoint"
-                   tooltip="Returns the first child of this node, or undefined if it has no child">
-            <def/>
-        </attribute>
+                   tooltip="Returns the first child of this node, or undefined if it has no child"/>
         <attribute name="lastChild" type="joinpoint"
-                   tooltip="Returns the last child of this node, or undefined if it has no child">
-            <def/>
-        </attribute>
+                   tooltip="Returns the last child of this node, or undefined if it has no child"/>
         <attribute name="hasChildren" type="Boolean"
                    tooltip="true if the node has children, false otherwise">
         </attribute>
@@ -168,11 +157,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="stmt" type="statement"
                    tooltip="Converts this join point to a statement, or returns undefined if it was not possible"/>
         <attribute name="inlineComments" type="comment[]"
-                   tooltip="Returns comments that are not explicitly in the AST, but embedded in other nodes">
-            <!-- <def type="comment[]"/>  -->
-            <def type="string[]"/>
-            <def type="string"/>
-        </attribute>
+                   tooltip="Returns comments that are not explicitly in the AST, but embedded in other nodes"/>
         <attribute name="originNode" type="joinpoint"
                    tooltip="If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin">
         </attribute>
@@ -225,15 +210,11 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
                    tooltip="a Java file to the file that originated this translation unit"/>
         <attribute name="hasMain" type="Boolean"
                    tooltip="true if this file contains a 'main' method"/>
-        <!-- <attribute name="filename" type="String"/> -->
         <attribute name="path" type="String" tooltip="the folder of the source file"/>
-        <!--  <attribute name="filepath" type="String" tooltip="the complete path to the file"/> -->
         <attribute name="relativeFilepath" type="String"
                    tooltip="the path to the file relative to the base source path"/>
         <attribute name="relativeFolderpath" type="String"
-                   tooltip="the path to the folder of the source file relative to the base source path">
-            <def/>
-        </attribute>
+                   tooltip="the path to the folder of the source file relative to the base source path"/>
         <attribute name="baseSourcePath" type="String"
                    tooltip="the path to the source folder that was given as the base folder of this file"/>
         <attribute name="isCxx" type="Boolean" tooltip="true if this file is considered a C++ file"/>
@@ -258,20 +239,13 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="name" type="String" tooltip="the name of the include"/>
         <attribute name="isAngled" type="Boolean"
                    tooltip="true if this is an angled include (i.e., system include)"/>
-        <!-- <attribute name="filepath" type="String" tooltip="the complete path to the file"/>  -->
         <attribute name="relativeFolderpath" type="String"
                    tooltip="the path to the folder of the source file of the include, relative to the name of the include"/>
     </artifact>
 
     <!-- RECORD -->
     <artifact class="record" default="name">
-        <!--  
-        <attribute name="name" type="String">
-            <def/>
-        </attribute>
-         -->
         <attribute name="kind" type="String"/>
-        <!-- <attribute name="name" type="{struct,interface,union,class,enum}"/> -->
         <attribute name="fields" type="field[]"/>
         <attribute name="functions" type="function[]"/>
         <attribute name="isImplementation" type="Boolean"
@@ -299,18 +273,11 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
                    tooltip="Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present"/>
         <attribute name="isCanonical" type="Boolean"
                    tooltip="true if this is the class returned by the 'canonical' attribute"/>
-        <!-- <attribute name="isImplementation" type="Boolean" tooltip="true if this class is
-        completely defined, false otherwise"/> -->
     </artifact>
 
     <!-- METHOD -->
     <artifact class="method" default="name">
         <attribute name="record" type="class"/>
-        <!-- 
-        <attribute name="record" type="class">
-            <def/>
-        </attribute>	
- -->
     </artifact>
 
 
@@ -322,16 +289,10 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- NAMED DECLARATION -->
     <artifact class="namedDecl" default="name">
-        <attribute name="name" type="String">
-            <def/>
-        </attribute>
+        <attribute name="name" type="String"/>
         <attribute name="isPublic" type="Boolean"/>
-        <attribute name="qualifiedPrefix" type="String">
-            <def/>
-        </attribute>
-        <attribute name="qualifiedName" type="String">
-            <def/>
-        </attribute>
+        <attribute name="qualifiedPrefix" type="String"/>
+        <attribute name="qualifiedName" type="String"/>
     </artifact>
 
     <!-- DECLARATOR DECLARATION -->
@@ -359,23 +320,16 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="controlVar" type="String"/>
         <attribute name="controlVarref" type="varref"/>
         <attribute name="rank" type="int[]"/>
-        <attribute name="isParallel" type="Boolean">
-            <def/>
-            <def type="string"/>
-        </attribute>
+        <attribute name="isParallel" type="Boolean"/>
         <attribute name="iterations" type="int"/>
         <attribute name="iterationsExpr" type="expression"/>
         <attribute name="isInterchangeable" type="Boolean"
                    tooltip="Tests whether the loops are interchangeable. This is a conservative test.">
             <parameter name="otherLoop" type="loop"/>
         </attribute>
-        <attribute name="init" type="statement" tooltip="The statement of the loop initialization">
-            <def type="string"/>
-        </attribute>
+        <attribute name="init" type="statement" tooltip="The statement of the loop initialization"/>
         <attribute name="initValue" type="String"
-                   tooltip="The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')">
-            <def/>
-        </attribute>
+                   tooltip="The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')"/>
         <attribute name="cond" type="statement" tooltip="The statement of the loop condition"/>
         <attribute name="step" type="statement" tooltip="The statement of the loop step"/>
         <attribute name="endValue" type="String"
@@ -383,12 +337,8 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="stepValue" type="String" tooltip="The expression of the iteration step"/>
         <attribute name="hasCondRelation" type="Boolean"
                    tooltip="True if the condition of the loop in the canonical format, and is one of: &lt;, &lt;=, >, >="/>
-        <attribute name="condRelation" type="Relation">
-            <def/>
-        </attribute>
-        <attribute name="body" type="scope">
-            <def/>
-        </attribute>
+        <attribute name="condRelation" type="Relation"/>
+        <attribute name="body" type="scope"/>
     </artifact>
 
 
@@ -399,9 +349,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             <parameter name="flat" type="Boolean" default="false"/>
         </attribute>
         <attribute name="naked" type="Boolean"
-                   tooltip="true if the scope does not have curly braces">
-            <def/>
-        </attribute>
+                   tooltip="true if the scope does not have curly braces"/>
         <attribute name="stmts" type="statement[]"
                    tooltip="Returns the direct (children) statements of this scope"/>
         <attribute name="allStmts" type="statement[]"
@@ -426,9 +374,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- EXPRESSION -->
     <artifact class="expression">
-        <!-- If this expression represents a declared variable, returns the name 
-            of the variable -->
-        <!-- <attribute name="refname" type="String"/> -->
         <!-- If this expression represents a declared variable, returns a joinpoint 
             representing the declaration of the variable -->
         <attribute name="decl" type="decl"
@@ -443,16 +388,9 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- CALL -->
     <artifact class="call" default="name">
-        <attribute name="name" type="String">
-            <def/>
-        </attribute>
+        <attribute name="name" type="String"/>
         <attribute name="numArgs" type="int"/>
         <attribute name="memberNames" type="String[]"/>
-        <!-- 		<attribute name="decl" type="function"
-            tooltip="a 'function' join point that represents the function declaration or definition of the
-        call, whatever appears first; 'undefined' if nothing was found"/>  -->
-        <!-- <attribute name="declarations" type="function[]" tooltip="an array of 'function' join
-        point that represents the prototypes of the call; empty array if no prototype was found"/>  -->
         <attribute name="declaration" type="function"
                    tooltip="a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found"/>
         <attribute name="definition" type="function"
@@ -483,9 +421,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     </artifact>
 
     <artifact class="cudaKernelCall" default="name">
-        <attribute name="config" type="expression[]">
-            <def type="expression[]"/>
-        </attribute>
+        <attribute name="config" type="expression[]"/>
     </artifact>
 
 
@@ -499,9 +435,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
                    tooltip="The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit"/>
         <attribute name="isParam" type="Boolean" tooltip="true, if vardecl is a function parameter"/>
         <attribute name="storageClass" type="StorageClass"
-                   tooltip="Storage class specifier, which can be none, extern, static, __private_extern__, auto, register">
-            <def/>
-        </attribute>
+                   tooltip="Storage class specifier, which can be none, extern, static, __private_extern__, auto, register"/>
         <attribute name="isGlobal" type="Boolean"
                    tooltip="true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function."/>
         <attribute name="definition" type="vardecl"
@@ -516,9 +450,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- VARREF -->
     <artifact class="varref" default="name">
-        <attribute name="name" type="String">
-            <def/>
-        </attribute>
+        <attribute name="name" type="String"/>
         <attribute name="kind" type="String"/>
         <attribute name="useExpr" type="expression"
                    tooltip="expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node"/>
@@ -534,19 +466,11 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     <artifact class="initList">
         <attribute name="arrayFiller" type="expression"
                    tooltip="[May be undefined] If this initializer list initializes an array with more elements than there are initializers in the list, specifies an expression to be used for value initialization of the rest of the elements"/>
-        <!--
-                <attribute name="initializedFieldInUnion" type="field" />
-                <attribute name="isExplicit" type="Boolean"/>
-                <attribute name="isStringLiteral" type="Boolean"/>
-                <attribute name="syntacticForm" type="initList" default="null" tooltip="Represents the initializer list as written by the user, which may contain C99 designated initializers (represented as DesignatedInitExprs), initializations of sub-object members without explicit braces, and so on. If the syntactic and semantic forms are the same for this initializer, it returns empty" />
-                <attribute name="semanticForm" type="initList" default="null" tooltip="Represents the initializer list as written by the user, which may contain C99 designated initializers (represented as DesignatedInitExprs), initializations of sub-object members without explicit braces, and so on. If the syntactic and semantic forms are the same for this initializer, it returns empty" />
-        -->
     </artifact>
 
 
     <!-- FUNCTION -->
     <artifact class="function" default="name">
-        <!--  <attribute name="name" type="String" />  -->
         <attribute name="hasDefinition" type="Boolean"
                    tooltip="[DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise"/>
         <attribute name="isImplementation" type="Boolean"
@@ -554,9 +478,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="isPrototype" type="Boolean"
                    tooltip="true if this particular function join point is a prototype (i.e. does not have a body), false otherwise"/>
         <attribute name="functionType" type="functionType"
-                   tooltip="the type of the call, which includes the return type and the types of the parameters">
-            <def/>
-        </attribute>
+                   tooltip="the type of the call, which includes the return type and the types of the parameters"/>
         <attribute name="declarationJp" type="function"
                    tooltip="Returns the first prototype of this function that could be found, or undefined if there is none"/>
         <attribute name="declarationJps" type="function[]"
@@ -566,14 +488,9 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="getDeclaration" type="String">
             <parameter name="withReturnType" type="Boolean"/>
         </attribute>
-        <attribute name="body" type="scope">
-            <def/>
-        </attribute>
+        <attribute name="body" type="scope"/>
         <attribute name="paramNames" type="String[]"/>
-        <attribute name="params" type="param[]">
-            <def type="param[]"/>
-            <def type="String[]"/>
-        </attribute>
+        <attribute name="params" type="param[]"/>
         <attribute name="id" type="String"/>
         <attribute name="isInline" type="Boolean"/>
         <attribute name="isVirtual" type="Boolean"/>
@@ -585,9 +502,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="calls" type="call[]"/>
         <attribute name="signature" type="String"
                    tooltip="a string with the signature of this function (e.g., name of the function, plus the parameters types)"/>
-        <attribute name="returnType" type="type">
-            <def/>
-        </attribute>
+        <attribute name="returnType" type="type"/>
         <attribute name="isCudaKernel" type="Boolean"/>
         <attribute name="canonical" type="function"
                    tooltip="Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present"/>
@@ -598,30 +513,20 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- IF -->
     <artifact class="if">
-        <attribute name="cond" type="expression">
-            <def/>
-        </attribute>
+        <attribute name="cond" type="expression"/>
         <attribute name="condDecl" type="vardecl"/>
-        <attribute name="then" type="scope">
-            <def type="statement"/>
-        </attribute>
-        <attribute name="else" type="scope">
-            <def type="statement"/>
-        </attribute>
+        <attribute name="then" type="scope"/>
+        <attribute name="else" type="scope"/>
     </artifact>
 
     <!-- GOTO -->
     <artifact class="gotoStmt">
-        <attribute name="label" type="labelDecl">
-            <def/>
-        </attribute>
+        <attribute name="label" type="labelDecl"/>
     </artifact>
 
     <!-- LABEL -->
     <artifact class="labelStmt">
-        <attribute name="decl" type="labelDecl">
-            <def/>
-        </attribute>
+        <attribute name="decl" type="labelDecl"/>
     </artifact>
 
     <!-- BREAK -->
@@ -670,7 +575,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     <artifact class="statement">
         <attribute name="isFirst" type="Boolean"/>
         <attribute name="isLast" type="Boolean"/>
-        <!-- <attribute name="stmts" type="joinpoint[]"/> -->
     </artifact>
 
     <artifact class="wrapperStmt">
@@ -694,9 +598,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     </artifact>
 
     <artifact class="returnStmt">
-        <attribute name="returnExpr" type="expression">
-            <!-- 			<def/>  -->
-        </attribute>
+        <attribute name="returnExpr" type="expression"/>
     </artifact>
 
 
@@ -714,7 +616,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <artifact class="op">
         <attribute name="operator" type="String"/>
-        <!--<attribute name="operator" type="{*,+,,,-}"/>-->
         <attribute name="kind"
                    type="{ptr_mem_d, ptr_mem_i, mul, div,rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign,rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma, post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not,real, imag, extension, cowait,ternary}"
                    tooltip="The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div,
@@ -727,12 +628,8 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- BINARY OPERATOR -->
     <artifact class="binaryOp">
-        <attribute name="left" type="expression">
-            <def/>
-        </attribute>
-        <attribute name="right" type="expression">
-            <def/>
-        </attribute>
+        <attribute name="left" type="expression"/>
+        <attribute name="right" type="expression"/>
         <attribute name="isAssignment" type="Boolean"/>
     </artifact>
 
@@ -746,15 +643,9 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- TERNARY OPERATOR -->
     <artifact class="ternaryOp">
-        <attribute name="cond" type="expression">
-            <def/>
-        </attribute>
-        <attribute name="trueExpr" type="expression">
-            <def/>
-        </attribute>
-        <attribute name="falseExpr" type="expression">
-            <def/>
-        </attribute>
+        <attribute name="cond" type="expression"/>
+        <attribute name="trueExpr" type="expression"/>
+        <attribute name="falseExpr" type="expression"/>
     </artifact>
 
 
@@ -796,9 +687,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="base" type="expression"
                    tooltip="expression of the base of this member access"/>
         <attribute name="arrow" type="Boolean"
-                   tooltip="true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)">
-            <def/>
-        </attribute>
+                   tooltip="true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)"/>
     </artifact>
 
 
@@ -807,9 +696,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="kind" type="String"/>
         <attribute name="hasTypeExpr" type="Boolean"/>
         <attribute name="hasArgExpr" type="Boolean"/>
-        <attribute name="argType" type="type">
-            <def/>
-        </attribute>
+        <attribute name="argType" type="type"/>
         <attribute name="argExpr" type="expression"/>
     </artifact>
 
@@ -835,9 +722,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- COMMENT -->
     <artifact class="comment">
-        <attribute name="text" type="String">
-            <def/>
-        </attribute>
+        <attribute name="text" type="String"/>
     </artifact>
 
     <!-- ATTRIBUTE -->
@@ -858,18 +743,12 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
                    tooltip="True if this is a type declared with the 'auto' keyword"/>
         <attribute name="arraySize" type="int"/>
         <attribute name="arrayDims" type="int[]"/>
-        <!-- <attribute name="elementType" type="joinpoint" />  -->
         <attribute name="hasTemplateArgs" type="Boolean"/>
         <attribute name="templateArgsStrings" type="String[]"/>
-        <attribute name="templateArgsTypes" type="type[]">
-            <!-- <def/> -->
-            <def type="type[]"/>
-        </attribute>
+        <attribute name="templateArgsTypes" type="type[]"/>
         <attribute name="hasSugar" type="Boolean"/>
         <attribute name="desugar" type="type"
-                   tooltip="Single-step desugar. Returns the type itself if it does not have sugar">
-            <def/>
-        </attribute>
+                   tooltip="Single-step desugar. Returns the type itself if it does not have sugar"/>
         <attribute name="desugarAll" type="type" tooltip="Completely desugars the type"/>
         <attribute name="isBuiltin" type="Boolean"/>
         <attribute name="constant" type="Boolean"/>
@@ -885,9 +764,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- POINTER TYPE -->
     <artifact class="pointerType">
-        <attribute name="pointee" type="type">
-            <def/>
-        </attribute>
+        <attribute name="pointee" type="type"/>
         <attribute name="pointerLevels" type="int"
                    tooltip="Number of pointer levels from this pointer"/>
     </artifact>
@@ -895,16 +772,12 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- ARRAY TYPE -->
     <artifact class="arrayType">
-        <attribute name="elementType" type="type">
-            <def/>
-        </attribute>
+        <attribute name="elementType" type="type"/>
     </artifact>
 
     <!-- VARIABLE ARRAY TYPE -->
     <artifact class="variableArrayType">
-        <attribute name="sizeExpr" type="expression">
-            <def/>
-        </attribute>
+        <attribute name="sizeExpr" type="expression"/>
     </artifact>
 
     <!-- TAG TYPE -->
@@ -930,9 +803,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- FUNCTION TYPE -->
     <artifact class="functionType">
-        <attribute name="returnType" type="type">
-            <def/>
-        </attribute>
+        <attribute name="returnType" type="type"/>
         <attribute name="paramTypes" type="type[]"/>
     </artifact>
 
@@ -957,9 +828,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- PAREN TYPE -->
     <artifact class="parenType">
-        <attribute name="innerType" type="type">
-            <def/>
-        </attribute>
+        <attribute name="innerType" type="type"/>
     </artifact>
 
 
@@ -991,13 +860,9 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     <artifact class="omp" default="kind">
         <attribute name="kind" type="String" tooltip="The kind of the directive"/>
         <attribute name="numThreads" type="String"
-                   tooltip="An integer expression, or undefined if no 'num_threads' clause is defined">
-            <def/>
-        </attribute>
+                   tooltip="An integer expression, or undefined if no 'num_threads' clause is defined"/>
         <attribute name="procBind" type="String"
-                   tooltip="One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined">
-            <def/>
-        </attribute>
+                   tooltip="One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined"/>
         <attribute name="private" type="String[]"
                    tooltip="The variable names of all private clauses, or empty array if no private clause is defined"/>
         <attribute name="hasClause" type="Boolean"
@@ -1040,7 +905,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
 
     <!-- ENUMS -->
-    <!--  <enum name="StorageClass" class="pt.up.fe.specs.clava.ast.decl.data.StorageClass">  -->
     <enum name="StorageClass">
         <value name="NONE"/>
         <value name="AUTO"/>
@@ -1058,13 +922,5 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <value name="EQ"/>
         <value name="NE"/>
     </enum>
-    <!--
-    <enum name="InitializationStyle">	
-        <value name="NO_INIT"/>
-        <value name="CINIT"/>
-        <value name="CALL_INIT"/>
-        <value name="LIST_INIT"/>
-    </enum>
-   -->
 
 </artifacts>
