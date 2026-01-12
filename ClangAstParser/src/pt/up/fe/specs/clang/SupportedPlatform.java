@@ -149,6 +149,10 @@ public enum SupportedPlatform implements StringProvider {
         return this == MAC_OS || this == LINUX_5;
     }
 
+    public boolean isMacOs() {
+        return this == MAC_OS;
+    }
+
     public String getName() {
         return name().toLowerCase();
     }

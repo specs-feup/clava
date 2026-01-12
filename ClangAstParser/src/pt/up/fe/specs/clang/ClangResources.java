@@ -250,13 +250,16 @@ public class ClangResources {
 
         // Get libc/libcxx resources, if required
         if (useBuiltinLibc(clangExecutable, libcMode)) {
-            // Common Clang files
-            if (!SupportedPlatform.getCurrentPlatform().isLinux()) {
-                var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
-                includesZips.add(getVersionedResource(builtinResource, builtinResource.version()));
-            } else {
+
+            // Linux complete stdlibc/c++
+            if (SupportedPlatform.getCurrentPlatform().isLinux() && !SupportedPlatform.getCurrentPlatform().isMacOs()) {
                 var linuxBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LINUX_COMPLETE);
                 includesZips.add(getVersionedResource(linuxBuiltinResource, linuxBuiltinResource.version()));
+            }
+            // Common Clang files
+            else {
+                var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
+                includesZips.add(getVersionedResource(builtinResource, builtinResource.version()));
             }
 
             // Windows-exclusive files
