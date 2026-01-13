@@ -61,7 +61,7 @@ public class Platforms {
             return file.getName().endsWith(".exe");
         }
 
-        if (platform.isLinux()) {
+        if (platform.isLinux() || platform.isMacOs()) {
             return file.canExecute();
         }
 
