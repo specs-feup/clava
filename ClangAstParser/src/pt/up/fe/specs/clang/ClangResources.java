@@ -44,14 +44,12 @@ public class ClangResources {
 
     private final static Lazy<File> CUDALIB_FOLDER = Lazy.newInstance(ClangResources::prepareBuiltinCudaLib);
 
-    private final FileResourceManager clangAstResources;
     private final CodeParser options;
 
 
     private static final AtomicInteger HAS_LIBC = new AtomicInteger(-1);
 
     public ClangResources(CodeParser options) {
-        clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
         this.options = options;
     }
 
@@ -101,7 +99,7 @@ public class ClangResources {
             for (FileResourceProvider resource : getMacOSResources()) {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
-        } else if (platform == SupportedPlatform.LINUX_5) {
+        } else if (platform == SupportedPlatform.LINUX) {
             for (FileResourceProvider resource : getLinuxResources()) {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
@@ -138,10 +136,6 @@ public class ClangResources {
         }
 
         return executable.getFile();
-    }
-
-    private FileResourceProvider getVersionedResource(FileResourceProvider resource) {
-        return getVersionedResource(resource, "");
     }
 
     private FileResourceProvider getVersionedResource(FileResourceProvider resource, String version) {
@@ -191,7 +185,7 @@ public class ClangResources {
         switch (platform) {
             case WINDOWS:
                 return CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_EXE);
-            case LINUX_5:
+            case LINUX:
                 if (ClangAstDumper.usePlugin()) {
                     return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_PLUGIN);
                 } else {
@@ -252,7 +246,7 @@ public class ClangResources {
         if (useBuiltinLibc(clangExecutable, libcMode)) {
 
             // Linux complete stdlibc/c++
-            if (SupportedPlatform.getCurrentPlatform().isLinux() && !SupportedPlatform.getCurrentPlatform().isMacOs()) {
+            if (SupportedPlatform.getCurrentPlatform().isLinux()) {
                 var linuxBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LINUX_COMPLETE);
                 includesZips.add(getVersionedResource(linuxBuiltinResource, linuxBuiltinResource.version()));
             }

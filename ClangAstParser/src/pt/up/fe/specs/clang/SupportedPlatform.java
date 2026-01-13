@@ -31,7 +31,7 @@ import pt.up.fe.specs.util.providers.StringProvider;
 public enum SupportedPlatform implements StringProvider {
 
     WINDOWS,
-    LINUX_5,
+    LINUX,
     MAC_OS;
 
     private static final Lazy<EnumHelperWithValue<SupportedPlatform>> HELPER = EnumHelperWithValue
@@ -39,7 +39,6 @@ public enum SupportedPlatform implements StringProvider {
 
 
     private static final double SUPPORTED_MAC_VERSION = 11.5;
-    private static final double SUPPORTED_LINUX_VERSION = 5;
 
     public static EnumHelperWithValue<SupportedPlatform> getHelper() {
         return HELPER.get();
@@ -78,45 +77,9 @@ public enum SupportedPlatform implements StringProvider {
             if (SpecsPlatforms.isLinuxArm()) {
                 throw new RuntimeException("ARM-based platforms are not currently supported");
             }
-
-            var linuxMajorVersion = getLinuxMajorVersion();
-
-            if (linuxMajorVersion == null) {
-                ClavaLog.info("Could not determine Linux version, running at your own risk");
-                return LINUX_5;
-            }
-
-            if (linuxMajorVersion >= SUPPORTED_LINUX_VERSION) {
-                return LINUX_5;
-            } else {
-                throw new RuntimeException("Current major Linux version is " + linuxMajorVersion + ", minimum version supported is " + SUPPORTED_LINUX_VERSION);
-            }
         }
 
         throw new RuntimeException("Platform currently not supported: " + System.getProperty("os.name"));
-    }
-
-    private static Integer getLinuxMajorVersion() {
-        var linuxVersion = System.getProperty("os.version");
-        var dotIndex = linuxVersion.indexOf('.');
-
-        if (dotIndex == -1) {
-            ClavaLog.info("Could not extract major version from Linux OS version string, expected at least a . : '"
-                    + linuxVersion + "'");
-            return null;
-        }
-
-        var majorVersionString = linuxVersion.substring(0, dotIndex);
-
-        var majorVersion = SpecsStrings.parseInteger(majorVersionString);
-
-        if (majorVersion == null) {
-            ClavaLog.info("Could not extract major version from Linux OS version string, '" + majorVersionString
-                    + "' is not an integer: '" + linuxVersion + "'");
-            return null;
-        }
-
-        return majorVersion;
     }
 
     private static Double getMacOSVersion() {
@@ -146,7 +109,7 @@ public enum SupportedPlatform implements StringProvider {
     }
 
     public boolean isLinux() {
-        return this == MAC_OS || this == LINUX_5;
+        return this == LINUX;
     }
 
     public boolean isMacOs() {
