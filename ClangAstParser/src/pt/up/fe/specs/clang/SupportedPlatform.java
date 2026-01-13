@@ -77,6 +77,8 @@ public enum SupportedPlatform implements StringProvider {
             if (SpecsPlatforms.isLinuxArm()) {
                 throw new RuntimeException("ARM-based platforms are not currently supported");
             }
+
+            return LINUX;
         }
 
         throw new RuntimeException("Platform currently not supported: " + System.getProperty("os.name"));
