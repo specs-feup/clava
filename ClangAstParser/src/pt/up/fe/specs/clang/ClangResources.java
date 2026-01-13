@@ -251,22 +251,28 @@ public class ClangResources {
         // Get libc/libcxx resources, if required
         if (useBuiltinLibc(clangExecutable, libcMode)) {
 
-            // Linux complete stdlibc/c++
-            if (SupportedPlatform.getCurrentPlatform().isLinux() && !SupportedPlatform.getCurrentPlatform().isMacOs()) {
+            // MacOS
+            if (SupportedPlatform.getCurrentPlatform().isMacOs()) {
+                var macosBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_MACOS_COMPLETE);
+                includesZips.add(getVersionedResource(macosBuiltinResource, macosBuiltinResource.version()));
+            }
+            // Linux
+            else if (SupportedPlatform.getCurrentPlatform().isLinux()) {
                 var linuxBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LINUX_COMPLETE);
                 includesZips.add(getVersionedResource(linuxBuiltinResource, linuxBuiltinResource.version()));
             }
-            // Common Clang files
-            else {
+            // Windows
+            else if (SupportedPlatform.getCurrentPlatform().isWindows()) {
                 var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
                 includesZips.add(getVersionedResource(builtinResource, builtinResource.version()));
-            }
 
-            // Windows-exclusive files
-            if (SupportedPlatform.getCurrentPlatform().isWindows()) {
                 var windowsBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_WIN32);
                 includesZips.add(getVersionedResource(windowsBuiltinResource, windowsBuiltinResource.version()));
+            } else {
+                throw new RuntimeException("Unsupported platform: " + SupportedPlatform.getCurrentPlatform());
             }
+
+
         }
 
         // Always add OpenMP includes

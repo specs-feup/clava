@@ -24,6 +24,7 @@ public interface ClangAstWebResource {
     WebResourceProvider LIBC_CXX_WIN32 = WebResourceProvider.newInstance(ROOT_16_0_5, "libc_cxx_win32.zip", "v16.0.5");
     WebResourceProvider LIBC_CXX_LINUX = WebResourceProvider.newInstance(ROOT_16_0_5, "libc_cxx_linux.zip", "v16.0.5");
     WebResourceProvider LIBC_CXX_LINUX_COMPLETE = WebResourceProvider.newInstance(ROOT_16_0_5, "libc_cxx_linux_complete.zip", "v16.0.5");
+    WebResourceProvider LIBC_CXX_MACOS_COMPLETE = WebResourceProvider.newInstance(ROOT_16_0_5, "libc_cxx_macos_complete.zip", "v12.0.5");
 
     WebResourceProvider OPENMP_INCLUDES = WebResourceProvider.newInstance(ROOT_16_0_5, "openmp_includes.zip");
 
