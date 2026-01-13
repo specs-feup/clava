@@ -125,14 +125,9 @@ public class ClangResources {
             }
         }
 
-        // If file is new and we are in a flavor of Linux, make file executable
-        if (executable.isNewFile() && platform.isLinux()) {
+        // If file is new and we are in a flavor of Linux or MacOS, make file executable
+        if (executable.isNewFile() && (platform.isLinux() || platform.isMacOs())) {
             SpecsSystem.runProcess(Arrays.asList("chmod", "+x", executable.getFile().getAbsolutePath()), false, true);
-        }
-
-        // If on linux, make folders and files accessible to all users
-        if (platform.isLinux()) {
-            SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", resourceFolder.getAbsolutePath()), false, true);
         }
 
         return executable.getFile();
@@ -309,11 +304,6 @@ public class ClangResources {
         Collections.sort(includesFiles, Comparator.comparing(File::getName));
         SpecsLogs.debug(() -> "Includes folders: " + includesFiles);
 
-        // If on linux, make folders and files accessible to all users
-        if (SupportedPlatform.getCurrentPlatform().isLinux()) {
-            SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", resourceFolder.getAbsolutePath()), false, true);
-        }
-
         return includesFiles.stream().map(File::getAbsolutePath).toList();
     }
 
@@ -362,13 +352,6 @@ public class ClangResources {
      */
     private boolean detectLibC(File clangExecutable) {
 
-        // return false;
-
-        // If Windows, return false and always use bundled LIBC++
-        // if (SupportedPlatform.getCurrentPlatform().isWindows()) {
-        // return false;
-        // }
-
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
 
         // Write test files
@@ -376,13 +359,6 @@ public class ClangResources {
                 .stream()
                 .map(resource -> resource.write(clangTest))
                 .collect(Collectors.toList());
-
-        // If on linux, make folders and files accessible to all users
-        if (SupportedPlatform.getCurrentPlatform().isLinux()) {
-            SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", clangTest.getAbsolutePath()), false, true);
-        }
-
-        // boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
 
         boolean needsLib = false;
         for (File testFile : testFiles) {
