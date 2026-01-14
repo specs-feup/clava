@@ -251,10 +251,7 @@ public class ClangResources {
             }
             // Windows
             else if (SupportedPlatform.getCurrentPlatform().isWindows()) {
-                var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
-                includesZips.add(getVersionedResource(builtinResource, builtinResource.version()));
-
-                var windowsBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_WIN32);
+                var windowsBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_WIN32_COMPLETE);
                 includesZips.add(getVersionedResource(windowsBuiltinResource, windowsBuiltinResource.version()));
             } else {
                 throw new RuntimeException("Unsupported platform: " + SupportedPlatform.getCurrentPlatform());
