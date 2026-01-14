@@ -20,7 +20,6 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
-import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.FileResourceManager;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
@@ -313,23 +312,16 @@ public class ClangResources {
         return includesFiles.stream().map(File::getAbsolutePath).toList();
     }
 
-    private boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode) {
+    public static boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode) {
 
-        switch (libcMode) {
-            case AUTO:
-                return !hasLibC(clangExecutable);
-            // Builtin and libc/libcxx are now merged in the same zip
-            case BUILTIN_AND_LIBC:
-            case BASE_BUILTIN_ONLY:
-                return true;
-            case SYSTEM:
-                return false;
-            default:
-                throw new CaseNotDefinedException(libcMode);
-        }
+        return switch (libcMode) {
+            case AUTO -> !hasLibC(clangExecutable);
+            case BUILTIN_AND_LIBC -> true;
+            case SYSTEM -> false;
+        };
     }
 
-    private boolean hasLibC(File clangExecutable) {
+    private static boolean hasLibC(File clangExecutable) {
         var value = HAS_LIBC.get();
 
         // Check if initiallized
@@ -356,7 +348,7 @@ public class ClangResources {
      * @param clangExecutable
      * @return
      */
-    private boolean detectLibC(File clangExecutable) {
+    private static boolean detectLibC(File clangExecutable) {
 
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
 
@@ -402,7 +394,7 @@ public class ClangResources {
 
     }
 
-    private ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile) {
+    private static ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile) {
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
         return SpecsSystem.runProcess(arguments, true, false);
     }

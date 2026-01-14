@@ -13,19 +13,17 @@
 
 package pt.up.fe.specs.clang;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
-import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.utilities.StringList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public interface ClangAstKeys {
 
@@ -35,8 +33,8 @@ public interface ClangAstKeys {
      * What libc/libcxx mode should be used.
      */
     DataKey<LibcMode> LIBC_CXX_MODE = KeyFactory.enumeration("libcCxxMode", LibcMode.class)
-            .setLabel("Libc/Libcxx mode")
-            .setDefault(() -> (SpecsPlatforms.isWindows() || SpecsPlatforms.isLinux()) ? LibcMode.BASE_BUILTIN_ONLY : LibcMode.AUTO);
+            .setLabel("Libc/Libc++ mode. builtin (default): uses built-in libc/libc++; system: uses includes available in the system; auto: detects if the built-in includes are needed")
+            .setDefault(() -> LibcMode.BUILTIN_AND_LIBC);
 
     DataKey<Boolean> USES_CILK = KeyFactory.bool("usesCilk");
 
