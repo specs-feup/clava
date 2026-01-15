@@ -1,6 +1,7 @@
 import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.js";
 import ClavaJavaTypes from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 import JavaInterop from "@specs-feup/lara/api/lara/JavaInterop.js";
+import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import path from "path";
 
 const isWindows = process.platform === "win32";
@@ -129,10 +130,14 @@ describe("CxxTest", () => {
     });
 
     (isWindows ? it.skip : it)("Wrap", async () => {
-        // newTester().test("Wrap.js", "wrap.cpp", "wrap.h", "lib/lib.h", "lib/lib.cpp");
-        await newTester()
-            .set(ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES)
-            .test("Wrap.js", "wrap.cpp", "wrap.h");
+        const tester = newTester()
+            .set(ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES);
+
+        if (JavaTypes.SpecsPlatforms.isMac()) {
+            tester.setResultsFile("Wrap.js.macos.txt");
+        }
+
+        await tester.test("Wrap.js", "wrap.cpp", "wrap.h");
     });
 
     it("SelectVarDecl", async () => {
@@ -199,7 +204,13 @@ describe("CxxTest", () => {
     });
 
     it("Setters", async () => {
-        await newTester().test("Setters.js", "setters.cpp");
+        const tester = newTester();
+        
+        if (JavaTypes.SpecsPlatforms.isMac()) {
+            tester.setResultsFile("Setters.js.macos.txt");
+        }
+
+        await tester.test("Setters.js", "setters.cpp");
     });
 
     it("SkipParsingHeaders", async () => {
