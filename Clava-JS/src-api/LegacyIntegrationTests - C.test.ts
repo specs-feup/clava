@@ -328,7 +328,7 @@ describe("CApiTest", () => {
         const tester = newTester();
 
         if (JavaTypes.SpecsPlatforms.isMac()) {
-            tester.setResultsFile("Inliner.js.macos.txt");
+            tester.setResultsFile("InlinerTest.js.macos.txt");
         }
 
         await tester.test("InlinerTest.js", "inliner.c");
