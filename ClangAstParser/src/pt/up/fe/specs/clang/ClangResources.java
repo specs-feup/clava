@@ -41,7 +41,7 @@ public class ClangResources {
 
     private final static String CLANG_FOLDERNAME = "clang_ast_exe";
 
-    private final static Lazy<File> CUDALIB_FOLDER = Lazy.newInstance(ClangResources::prepareBuiltinCudaLib);
+    private final Lazy<File> cudalibFolder = Lazy.newInstance(this::prepareBuiltinCudaLib);
 
     private final CodeParser options;
 
@@ -55,7 +55,7 @@ public class ClangResources {
     public ClangFiles getClangFiles(String version, LibcMode libcMode) {
 
         // Create key
-        var key = libcMode.name() + "_" + version;
+        var key = libcMode.name() + "_" + version + "_" + getClangResourceFolder().getAbsolutePath();
 
         // Check if cached
         var files = CLANG_FILES_CACHE.get(key);
@@ -144,7 +144,11 @@ public class ClangResources {
         return resource;
     }
 
-    public static File getClangResourceFolder() {
+    public File getClangResourceFolder() {
+        return options.get(ClangAstKeys.DUMPER_FOLDER);
+    }
+
+    public static File getDefaultTempFolder() {
         return SpecsIo.getTempFolder(CLANG_FOLDERNAME);
     }
 
@@ -396,11 +400,11 @@ public class ClangResources {
         return SpecsSystem.runProcess(arguments, true, false);
     }
 
-    public static File getBuiltinCudaLib() {
-        return CUDALIB_FOLDER.get();
+    public File getBuiltinCudaLib() {
+        return cudalibFolder.get();
     }
 
-    private static File prepareBuiltinCudaLib() {
+    private File prepareBuiltinCudaLib() {
         var fileResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.CUDA_LIB);
         var resourceFolder = getClangResourceFolder();
         var cudalibFolder = SpecsIo.mkdir(new File(resourceFolder, "cudalib"));

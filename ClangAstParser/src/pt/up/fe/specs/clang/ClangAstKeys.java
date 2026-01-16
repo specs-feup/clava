@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.utilities.StringList;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,10 @@ public interface ClangAstKeys {
 
     DataKey<StringList> IGNORE_HEADER_INCLUDES = KeyFactory.stringList("ignoreHeaderIncludes")
             .setLabel("Headers to ignore when recreating #include directives (Java regexes)");
+
+    DataKey<File> DUMPER_FOLDER = KeyFactory.folder("dumperFolder")
+            .setLabel("The work folder for the clang-dumper. Clava will look for it in this folder, and if not found, will download it. If not set, a temporary folder will be used.")
+            .setDefault(ClangResources::getDefaultTempFolder);
 
     public static String getFlagIgnoreIncludes() {
         return "ihi";

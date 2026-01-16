@@ -86,6 +86,7 @@ public class ClangAstDumper {
     private File clangExecutable;
     private List<String> builtinIncludes;
     private int systemIncludesThreshold;
+    private ClangResources clangResources;
 
     private final CodeParser parserConfig;
 
@@ -112,6 +113,7 @@ public class ClangAstDumper {
         this.baseFolder = null;
         this.systemIncludesThreshold = ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD.getDefault().get();
         this.parserConfig = parserConfig;
+        this.clangResources = new ClangResources(parserConfig);
     }
 
     public File getLastWorkingFolder() {
@@ -233,7 +235,7 @@ public class ClangAstDumper {
 
                 // Check if should use built-in CUDA lib
                 File cudaFolder = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption())
-                        ? ClangResources.getBuiltinCudaLib()
+                        ? clangResources.getBuiltinCudaLib()
                         : SpecsIo.existingFolder(cudaPath);
 
                 ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
