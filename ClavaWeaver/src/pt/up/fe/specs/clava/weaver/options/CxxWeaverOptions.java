@@ -141,9 +141,6 @@ public class CxxWeaverOptions {
                 "ignore-header-includes", "<Java regex list>",
                 "Headers to ignore when recreating #include directives (Java regexes)");
 
-        addOneArgOption(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE, "cde", "custom_dumper_exe", "dumper_exe",
-                "Path to a ClangAstDumper executable file");
-        
         addOneArgOption(CodeParser.DUMPER_FOLDER, "df", "dumper-folder",
                 "dir",
                 CodeParser.DUMPER_FOLDER.getLabel());

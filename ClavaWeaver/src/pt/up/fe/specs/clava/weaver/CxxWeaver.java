@@ -611,7 +611,6 @@ public class CxxWeaver extends ACxxWeaver {
         codeParser.set(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS,
                 this.dataStore.get(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS));
         codeParser.set(ClangAstKeys.LIBC_CXX_MODE, this.dataStore.get(ClangAstKeys.LIBC_CXX_MODE));
-        codeParser.set(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE, this.dataStore.get(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE));
         codeParser.set(CodeParser.DUMPER_FOLDER, this.dataStore.get(CodeParser.DUMPER_FOLDER));
 
         List<String> allParserOptions = new ArrayList<>(parserOptions.size() + adaptedExtraOptions.size());

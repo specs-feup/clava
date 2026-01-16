@@ -152,34 +152,7 @@ public class ClangResources {
         return SpecsIo.getTempFolder(CLANG_FOLDERNAME);
     }
 
-    private Optional<FileResourceProvider> getCustomExecutable() {
-        // Check if theres is a custom executable
-        var customExe = options.get(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE);
-
-        if (customExe.getName().isBlank()) {
-            return Optional.empty();
-        }
-
-        if (!customExe.isFile()) {
-            SpecsLogs.info("Specified a custom executable but could not find file '" + customExe
-                    + "', using built-in executable");
-
-            return Optional.empty();
-        }
-
-        SpecsLogs.info("Using custom executable for ClangAstDumper: '" + customExe.getAbsolutePath() + "'");
-
-        return Optional.of(FileResourceProvider.newInstance(customExe));
-    }
-
     private FileResourceProvider getExecutableResource(SupportedPlatform platform) {
-
-        var customExecutable = getCustomExecutable();
-
-        if (customExecutable.isPresent()) {
-            return customExecutable.get();
-        }
-
         switch (platform) {
             case WINDOWS:
                 return CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_EXE);
