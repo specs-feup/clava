@@ -16,6 +16,7 @@ package pt.up.fe.specs.clang.codeparser;
 import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.context.ClavaContext;
 
@@ -46,6 +47,10 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     public static final DataKey<File> CUSTOM_CLANG_AST_DUMPER_EXE = KeyFactory.file("customClangAstDumperExe")
             .setLabel("Custom ClangAstDumper executable file");
 
+    public static final DataKey<File> DUMPER_FOLDER = KeyFactory.folder("dumperFolder")
+            .setLabel("The work folder for the clang-dumper. Clava will look for it in this folder, and if not found, will download it. If not set, a temporary folder will be used.")
+            .setDefault(ClangResources::getDefaultTempFolder);
+
     /**
      * Execution information, such as execution time and memory used.
      */
@@ -64,8 +69,7 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     /**
      *
      * @param sources
-     * @param compilerOptions
-     *            flags compatible with C/C++ compilers such as Clang or GCC
+     * @param compilerOptions flags compatible with C/C++ compilers such as Clang or GCC
      * @return
      */
     public App parse(List<File> sources, List<String> compilerOptions) {

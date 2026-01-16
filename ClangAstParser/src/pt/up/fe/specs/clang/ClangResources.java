@@ -145,7 +145,7 @@ public class ClangResources {
     }
 
     public File getClangResourceFolder() {
-        return options.get(ClangAstKeys.DUMPER_FOLDER);
+        return options.get(CodeParser.DUMPER_FOLDER);
     }
 
     public static File getDefaultTempFolder() {

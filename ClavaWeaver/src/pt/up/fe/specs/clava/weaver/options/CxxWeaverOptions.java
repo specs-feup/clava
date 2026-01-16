@@ -128,10 +128,6 @@ public class CxxWeaverOptions {
                 // "Uses the platform system includes headers (if available)");
                 "Libc/Libcxx mode (one of: " + Arrays.toString(LibcMode.values()) + ")");
 
-        addOneArgOption(ClangAstKeys.DUMPER_FOLDER, "df", "dumper-folder",
-                "dir",
-                ClangAstKeys.DUMPER_FOLDER.getLabel());
-
         addBooleanOption(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS, "ipe", "ignore-parsing-errors",
                 "Ignores parsing errors in C/C++ source code");
 
@@ -147,6 +143,12 @@ public class CxxWeaverOptions {
 
         addOneArgOption(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE, "cde", "custom_dumper_exe", "dumper_exe",
                 "Path to a ClangAstDumper executable file");
+        
+        addOneArgOption(CodeParser.DUMPER_FOLDER, "df", "dumper-folder",
+                "dir",
+                CodeParser.DUMPER_FOLDER.getLabel());
+
+
     }
 
     private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,

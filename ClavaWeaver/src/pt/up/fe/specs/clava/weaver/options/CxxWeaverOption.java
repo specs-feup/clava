@@ -100,7 +100,6 @@ public interface CxxWeaverOption {
             // .addKey(ClangAstKeys.USE_PLATFORM_INCLUDES)
             .addKey(ClangAstKeys.LIBC_CXX_MODE)
             .addKey(ClangAstKeys.IGNORE_HEADER_INCLUDES)
-            .addKey(ClangAstKeys.DUMPER_FOLDER)
             .startSection("Parsing Options")
             .addKey(CodeParser.CUDA_GPU_ARCH)
             .addKey(CodeParser.CUDA_PATH)
@@ -108,6 +107,7 @@ public interface CxxWeaverOption {
             .addKey(ParallelCodeParser.PARSING_NUM_THREADS)
             .addKey(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS)
             .addKey(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE)
+            .addKey(CodeParser.DUMPER_FOLDER)
             .build();
 
 }

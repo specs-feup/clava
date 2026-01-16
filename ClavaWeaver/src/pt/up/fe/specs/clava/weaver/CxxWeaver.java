@@ -34,11 +34,7 @@ import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.clava.weaver.utils.ClavaAstMethods;
-import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.SpecsSystem;
-import pt.up.fe.specs.util.SpecsIo;
-import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.SpecsCheck;
+import pt.up.fe.specs.util.*;
 import pt.up.fe.specs.util.collections.AccumulatorMap;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.utilities.Buffer;
@@ -544,14 +540,14 @@ public class CxxWeaver extends ACxxWeaver {
          * if (!folderAbsPath.contains(" ")) {
          * return folderAbsPath;
          * }
-         * 
+         *
          * // If on Windows, do not escape, or it will not work:
          * // https://coderanch.com/t/627514/java/ProcessBuilder-incorrectly-processes-
          * embedded-spaces
          * if (SpecsPlatforms.isWindows()) {
          * return folderAbsPath;
          * }
-         * 
+         *
          * return "\"" + folderAbsPath + "\"";
          */
     }
@@ -616,6 +612,7 @@ public class CxxWeaver extends ACxxWeaver {
                 this.dataStore.get(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS));
         codeParser.set(ClangAstKeys.LIBC_CXX_MODE, this.dataStore.get(ClangAstKeys.LIBC_CXX_MODE));
         codeParser.set(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE, this.dataStore.get(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE));
+        codeParser.set(CodeParser.DUMPER_FOLDER, this.dataStore.get(CodeParser.DUMPER_FOLDER));
 
         List<String> allParserOptions = new ArrayList<>(parserOptions.size() + adaptedExtraOptions.size());
         allParserOptions.addAll(parserOptions);
@@ -1014,7 +1011,7 @@ public class CxxWeaver extends ACxxWeaver {
      * Returns a list of Gears associated to this weaver engine
      *
      * @return a list of implementations of {@link AGear} or null if no gears are
-     *         available
+     * available
      */
     @Override
     public List<AGear> getGears() {
