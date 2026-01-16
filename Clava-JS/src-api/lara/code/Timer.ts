@@ -201,7 +201,7 @@ export default class Timer extends TimerBase<Joinpoint> {
         $timingResultDecl.type
       );
     } else {
-      throw "Timer Exception: Platform not supported (Windows and Linux only)";
+      throw new Error("Timer Exception: Platform not supported (Windows and Linux only)");
     }
 
     // Build message

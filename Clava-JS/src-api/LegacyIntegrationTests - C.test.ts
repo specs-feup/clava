@@ -64,9 +64,14 @@ describe("CTest", () => {
     */
 
     it("Wrap", async () => {
-        await newTester()
-            .set(ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES)
-            .test("Wrap.js", "wrap.c", "wrap.h");
+        const tester = newTester()
+            .set(ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES);
+
+        if (JavaTypes.SpecsPlatforms.isMac()) {
+            tester.setResultsFile("Wrap.js.macos.txt");
+        }
+
+        await tester.test("Wrap.js", "wrap.c", "wrap.h")
     });
 
     it("VarrefInWhile", async () => {
@@ -246,7 +251,16 @@ describe("CApiTest", () => {
             tester.setResultsFile("TimerTest.js.unix.txt");
         }
 
-        await tester.test("TimerTest.js", "timer_test.c");
+        const t = async () => tester.test("TimerTest.js", "timer_test.c");
+
+        if( JavaTypes.SpecsPlatforms.isMac()) {
+            expect(t()).rejects.toThrow(
+                "Timer Exception: Platform not supported (Windows and Linux only)"
+            );
+        }
+        else {
+            await t();
+        }
     });
 
     // Compiles C code, but with C++ flag.
@@ -258,12 +272,21 @@ describe("CApiTest", () => {
         if (JavaTypes.SpecsPlatforms.isUnix()) {
             tester.setResultsFile("TimerTestWithCxxFlag.js.unix.txt");
         }
-        await tester
+        
+        const t = async () => tester
             .set(
                 ClavaJavaTypes.ClavaOptions.STANDARD,
                 ClavaJavaTypes.Standard.CXX11
             )
             .test("TimerTestWithCxxFlag.js", "timer_test.c");
+        
+        if (JavaTypes.SpecsPlatforms.isMac()) {
+            expect(t()).rejects.toThrow(
+                "Timer Exception: Platform not supported (Windows and Linux only)"
+            );
+        } else {
+            await t();
+        }
     });
 
     it("Energy", async () => {
@@ -302,7 +325,13 @@ describe("CApiTest", () => {
     });
 
     it("Inliner", async () => {
-        await newTester().test("InlinerTest.js", "inliner.c");
+        const tester = newTester();
+
+        if (JavaTypes.SpecsPlatforms.isMac()) {
+            tester.setResultsFile("InlinerTest.js.macos.txt");
+        }
+
+        await tester.test("InlinerTest.js", "inliner.c");
     });
 
     it("StatementDecomposer", async () => {
