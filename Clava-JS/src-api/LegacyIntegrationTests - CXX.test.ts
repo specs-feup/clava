@@ -1,10 +1,10 @@
 import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.js";
 import ClavaJavaTypes from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 import JavaInterop from "@specs-feup/lara/api/lara/JavaInterop.js";
-import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import path from "path";
 
 const isWindows = process.platform === "win32";
+const isMacOS = process.platform === "darwin";
 
 /* eslint-disable jest/expect-expect */
 describe("CxxTest", () => {
@@ -130,10 +130,11 @@ describe("CxxTest", () => {
     });
 
     (isWindows ? it.skip : it)("Wrap", async () => {
-        const tester = newTester()
-            .set(ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES);
+        const tester = newTester().set(
+            ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES
+        );
 
-        if (JavaTypes.SpecsPlatforms.isMac()) {
+        if (isMacOS) {
             tester.setResultsFile("Wrap.js.macos.txt");
         }
 
@@ -205,8 +206,8 @@ describe("CxxTest", () => {
 
     it("Setters", async () => {
         const tester = newTester();
-        
-        if (JavaTypes.SpecsPlatforms.isMac()) {
+
+        if (isMacOS) {
             tester.setResultsFile("Setters.js.macos.txt");
         }
 
@@ -394,8 +395,8 @@ describe("CxxApiTest", () => {
         }
 
         await newTester()
-                .set(ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES)
-                .test("CMakerTest.js", "cmaker_test.cpp", "cmaker_test.h");
+            .set(ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES)
+            .test("CMakerTest.js", "cmaker_test.cpp", "cmaker_test.h");
     });
 
     it("MathExtra", async () => {

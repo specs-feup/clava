@@ -4,6 +4,7 @@ import ClavaJavaTypes from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 import path from "path";
 
 const isWindows = process.platform === "win32";
+const isMacOS = process.platform === "darwin";
 
 /* eslint-disable jest/expect-expect */
 describe("CTest", () => {
@@ -64,14 +65,15 @@ describe("CTest", () => {
     */
 
     it("Wrap", async () => {
-        const tester = newTester()
-            .set(ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES);
+        const tester = newTester().set(
+            ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES
+        );
 
         if (JavaTypes.SpecsPlatforms.isMac()) {
             tester.setResultsFile("Wrap.js.macos.txt");
         }
 
-        await tester.test("Wrap.js", "wrap.c", "wrap.h")
+        await tester.test("Wrap.js", "wrap.c", "wrap.h");
     });
 
     it("VarrefInWhile", async () => {
@@ -253,12 +255,11 @@ describe("CApiTest", () => {
 
         const t = async () => tester.test("TimerTest.js", "timer_test.c");
 
-        if( JavaTypes.SpecsPlatforms.isMac()) {
-            expect(t()).rejects.toThrow(
+        if (JavaTypes.SpecsPlatforms.isMac()) {
+            await expect(t()).rejects.toThrow(
                 "Timer Exception: Platform not supported (Windows and Linux only)"
             );
-        }
-        else {
+        } else {
             await t();
         }
     });
@@ -272,16 +273,17 @@ describe("CApiTest", () => {
         if (JavaTypes.SpecsPlatforms.isUnix()) {
             tester.setResultsFile("TimerTestWithCxxFlag.js.unix.txt");
         }
-        
-        const t = async () => tester
-            .set(
-                ClavaJavaTypes.ClavaOptions.STANDARD,
-                ClavaJavaTypes.Standard.CXX11
-            )
-            .test("TimerTestWithCxxFlag.js", "timer_test.c");
-        
+
+        const t = async () =>
+            tester
+                .set(
+                    ClavaJavaTypes.ClavaOptions.STANDARD,
+                    ClavaJavaTypes.Standard.CXX11
+                )
+                .test("TimerTestWithCxxFlag.js", "timer_test.c");
+
         if (JavaTypes.SpecsPlatforms.isMac()) {
-            expect(t()).rejects.toThrow(
+            await expect(t()).rejects.toThrow(
                 "Timer Exception: Platform not supported (Windows and Linux only)"
             );
         } else {
@@ -309,7 +311,13 @@ describe("CApiTest", () => {
     });
 
     it("StrcpyChecker", async () => {
-        await newTester().test("StrcpyChecker.js", "strcpy.c");
+        const tester = newTester();
+
+        if (isMacOS) {
+            tester.setResultsFile("StrcpyChecker.js.macos.txt");
+        }
+
+        await tester.test("StrcpyChecker.js", "strcpy.c");
     });
 
     it("StaticCallGraph", async () => {
