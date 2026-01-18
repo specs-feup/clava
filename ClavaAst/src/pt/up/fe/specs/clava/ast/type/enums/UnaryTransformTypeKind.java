@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.ast.type.enums;
 
 public enum UnaryTransformTypeKind {
 
+    Decay,
     EnumUnderlyingType;
 
 }

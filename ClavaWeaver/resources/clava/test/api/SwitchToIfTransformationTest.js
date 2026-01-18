@@ -1,7 +1,7 @@
-laraImport("clava.Clava");
-laraImport("clava.pass.TransformSwitchToIf");
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import TransformSwitchToIf from "@specs-feup/clava/api/clava/pass/TransformSwitchToIf.js";
 
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 const switchTransformer = new TransformSwitchToIf(true);
 
@@ -10,4 +10,4 @@ for (const $switch of Query.search("switch")) {
 }
 
 Clava.rebuild();
-println(Query.search("function", "foo").first().code);
+console.log(Query.search("function", "foo").first().code);

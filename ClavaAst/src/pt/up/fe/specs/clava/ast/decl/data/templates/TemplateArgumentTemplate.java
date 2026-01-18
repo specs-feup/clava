@@ -64,7 +64,7 @@ public abstract class TemplateArgumentTemplate extends TemplateArgument {
     // case Template:
     // TemplateDecl templateDecl = get(TEMPLATE_DECL).get();
     // Decl decl = templateDecl.getTemplateDecl();
-    // SpecsCheck.checkNotNull(decl instanceof NamedDecl, () -> "Check if this should always be a NamedDecl");
+    // Objects.requireNonNull(decl instanceof NamedDecl, () -> "Check if this should always be a NamedDecl");
     // return ((NamedDecl) decl).getDeclName();
     // default:
     // throw new RuntimeException("Case not implemented: " + get(TEMPLATE_NAME_KIND));

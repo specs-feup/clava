@@ -13,7 +13,25 @@
 
 package pt.up.fe.specs.clava.parsing.snippet;
 
+import static pt.up.fe.specs.clava.context.ClavaContext.FACTORY;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.Optional;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+
 import com.google.common.base.Preconditions;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.SourceRange;
@@ -34,12 +52,6 @@ import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 import pt.up.fe.specs.util.utilities.LineStream;
-
-import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static pt.up.fe.specs.clava.context.ClavaContext.FACTORY;
 
 /**
  * Parses text elements from C/C++ files, such as comments and pragmas.

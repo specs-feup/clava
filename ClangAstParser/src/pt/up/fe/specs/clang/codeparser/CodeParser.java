@@ -16,6 +16,7 @@ package pt.up.fe.specs.clang.codeparser;
 import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.context.ClavaContext;
 
@@ -28,8 +29,6 @@ import java.util.List;
  * @author JoaoBispo
  *
  */
-// public interface CodeParser<T extends CodeParser<T>> extends DataClass<T> {
-// public interface CodeParser extends DataClass<CodeParser> {
 public abstract class CodeParser extends ADataClass<CodeParser> {
 
     // BEGIN DATAKEY
@@ -45,22 +44,16 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     public static final DataKey<String> CUDA_PATH = KeyFactory.string("cudaPath")
             .setLabel("CUDA Path (empty: uses system installed; <builtin>: uses builtin version)")
             .setDefaultString("");
-    public static final DataKey<File> CUSTOM_CLANG_AST_DUMPER_EXE = KeyFactory.file("customClangAstDumperExe")
-            .setLabel("Custom ClangAstDumper executable file");
+    public static final DataKey<File> DUMPER_FOLDER = KeyFactory.folder("dumperFolder")
+            .setLabel("The work folder for the clang-dumper. Clava will look for it in this folder, and if not found, will download it. If not set, a temporary folder will be used.")
+            .setDefault(ClangResources::getDefaultTempFolder);
 
     /**
      * Execution information, such as execution time and memory used.
      */
     public static final DataKey<Boolean> SHOW_EXEC_INFO = KeyFactory.bool("showExecInfo").setDefault(() -> true);
 
-    /**
-     * Applies several transformations to the Clava AST when parsing (e.g., normalization passes). By default is
-     * enabled.
-     */
-    // public static final DataKey<Boolean> PROCESS_CLAVA_AST = KeyFactory.bool("processClavaAst").setDefault(() ->
-    // true);
-
-    // BEGIN DATAKEY
+    // END DATAKEY
 
     private final static String BUILT_IN_CUDALIB = "<BUILTIN>";
 
@@ -73,8 +66,7 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     /**
      *
      * @param sources
-     * @param compilerOptions
-     *            flags compatible with C/C++ compilers such as Clang or GCC
+     * @param compilerOptions flags compatible with C/C++ compilers such as Clang or GCC
      * @return
      */
     public App parse(List<File> sources, List<String> compilerOptions) {
@@ -87,7 +79,6 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
      * @return currently returns an instance of ParallelCodeParser
      */
     public static CodeParser newInstance() {
-        // return new MonolithicCodeParser();
         return new ParallelCodeParser();
     }
 }

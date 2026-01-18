@@ -1,5 +1,5 @@
-laraImport("clava.mpi.MpiScatterGatherLoop");
-laraImport("weaver.Query");
+import MpiScatterGatherLoop from "@specs-feup/clava/api/clava/mpi/MpiScatterGatherLoop.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 const $function = Query.search("function", "foo").first();
 
@@ -12,4 +12,4 @@ const mpiGsl = new MpiScatterGatherLoop(
 
 mpiGsl.execute();
 
-println(Query.root().code);
+console.log(Query.root().code);

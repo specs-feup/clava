@@ -15,9 +15,8 @@ package pt.up.fe.specs.clang.transforms.legacy;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
-
-import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
@@ -60,7 +59,7 @@ public class RecoverStdMacros implements SimplePreClavaRule {
 
         // Get corresponding macro
         String macroStd = STD_MACROS.get(stdMacroNumber);
-        Preconditions.checkNotNull(macroStd, "Case not defined, " + stdMacroNumber);
+        Objects.requireNonNull(macroStd, () -> "Case not defined, " + stdMacroNumber);
 
         // Replace expression
         queue.replace(parenExpr, node.getFactory().literalExpr(macroStd, parenExpr.getExprType()));

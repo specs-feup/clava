@@ -1,6 +1,6 @@
 {
   "name": "@specs-feup/clava",
-  "version": "3.0.33",
+  "version": "3.5.0",
   "description": "A C/C++ source-to-source compiler written in Typescript",
   "type": "module",
   "files": [
@@ -34,7 +34,6 @@
     "test:code": "npm run test -- src-code",
     "test:cov": "npm run test -- --coverage",
     "test:watch": "npm run test -- --watch",
-    "java-dist": "npx lara-java-dist --jsSourceFolder api --jsDestinationFolder ../ClavaLaraApi/src-lara/clava/ --javaClassname ClavaApiJsResource --javaPackageName pt.up.fe.specs.clava.weaver --javaDestinationFolder ../ClavaLaraApi/src-java/pt/up/fe/specs/clava/weaver/ --javaResourceNamespace clava",
     "build-interfaces": "npx lara-build-interfaces --input ../ClavaWeaver/src/pt/up/fe/specs/clava/weaver/CxxWeaver.json --lara @specs-feup/lara/LaraJoinPointSpecification.json --output src-api/Joinpoints.ts"
   },
   "repository": {
@@ -56,7 +55,8 @@
   },
   "homepage": "https://github.com/specs-feup/clava#readme",
   "dependencies": {
-    "@specs-feup/lara": "~3.0.13"
+    "@specs-feup/lara": "~3.5.0",
+    "cytoscape": "^3.0.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

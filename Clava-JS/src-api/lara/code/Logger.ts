@@ -1,7 +1,6 @@
 import LoggerBase from "@specs-feup/lara/api/lara/code/LoggerBase.js";
 import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
 import PrintOnce from "@specs-feup/lara/api/lara/util/PrintOnce.js";
-import Clava from "../../clava/Clava.js";
 import {
   Expression,
   FileJp,
@@ -11,10 +10,12 @@ import {
 } from "../../Joinpoints.js";
 
 export default class Logger extends LoggerBase<Joinpoint> {
-  private _isCxx: boolean = false;
+  private _useSpecsLogger: boolean;
 
-  constructor(isGlobal = false, filename?: string) {
+  constructor(isGlobal = false, filename?: string, useSpecsLogger = false) {
     super(isGlobal, filename);
+
+    this._useSpecsLogger = useSpecsLogger;
 
     // Adds C/C++ specific types
     this.Type.set("LONGLONG", 100);
@@ -39,8 +40,6 @@ export default class Logger extends LoggerBase<Joinpoint> {
     }
 
     const $file = $function.getAncestor("file") as FileJp;
-
-    this._isCxx = $file.isCxx;
 
     let code = undefined;
     if ($file.isCxx) {
@@ -101,7 +100,7 @@ export default class Logger extends LoggerBase<Joinpoint> {
   }
 
   _log_cxx($file: FileJp, $function: FunctionJp) {
-    if (Clava.useSpecsLogger) {
+    if (this._useSpecsLogger) {
       return this._log_cxx_specslogger($file, $function);
     } else {
       return this._log_cxx_stdcpp($file, $function);

@@ -20,7 +20,6 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
-import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.FileResourceManager;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
@@ -42,23 +41,21 @@ public class ClangResources {
 
     private final static String CLANG_FOLDERNAME = "clang_ast_exe";
 
-    private final static Lazy<File> CUDALIB_FOLDER = Lazy.newInstance(ClangResources::prepareBuiltinCudaLib);
+    private final Lazy<File> cudalibFolder = Lazy.newInstance(this::prepareBuiltinCudaLib);
 
-    private final FileResourceManager clangAstResources;
     private final CodeParser options;
 
 
     private static final AtomicInteger HAS_LIBC = new AtomicInteger(-1);
 
     public ClangResources(CodeParser options) {
-        clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
         this.options = options;
     }
 
     public ClangFiles getClangFiles(String version, LibcMode libcMode) {
 
         // Create key
-        var key = libcMode.name() + "_" + version;
+        var key = libcMode.name() + "_" + version + "_" + getClangResourceFolder().getAbsolutePath();
 
         // Check if cached
         var files = CLANG_FILES_CACHE.get(key);
@@ -98,11 +95,10 @@ public class ClangResources {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
         } else if (platform == SupportedPlatform.MAC_OS) {
-            //var dynLibsFolder = new File("/usr/local/lib/");
             for (FileResourceProvider resource : getMacOSResources()) {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
-        } else if (platform == SupportedPlatform.LINUX_5) {
+        } else if (platform == SupportedPlatform.LINUX) {
             for (FileResourceProvider resource : getLinuxResources()) {
                 resource.writeVersioned(resourceFolder, ClangResources.class);
             }
@@ -128,28 +124,19 @@ public class ClangResources {
             }
         }
 
-        // If file is new and we are in a flavor of Linux, make file executable
-        if (executable.isNewFile() && platform.isLinux()) {
+        // If file is new and we are in a flavor of Linux or MacOS, make file executable
+        if (executable.isNewFile() && (platform.isLinux() || platform.isMacOs())) {
             SpecsSystem.runProcess(Arrays.asList("chmod", "+x", executable.getFile().getAbsolutePath()), false, true);
         }
 
-        // If on linux, make folders and files accessible to all users
-        if (platform.isLinux()) {
-            SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", resourceFolder.getAbsolutePath()), false, true);
-        }
-
         return executable.getFile();
-    }
-
-    private FileResourceProvider getVersionedResource(FileResourceProvider resource) {
-        return getVersionedResource(resource, "");
     }
 
     private FileResourceProvider getVersionedResource(FileResourceProvider resource, String version) {
 
         // If version not defined, use the latest version of the resource
         if (version.isEmpty()) {
-            version = resource.getVersion();
+            version = resource.version();
         }
 
         // ClangAst executable versions are separated by an underscore
@@ -157,42 +144,19 @@ public class ClangResources {
         return resource;
     }
 
-    public static File getClangResourceFolder() {
+    public File getClangResourceFolder() {
+        return options.get(CodeParser.DUMPER_FOLDER);
+    }
+
+    public static File getDefaultTempFolder() {
         return SpecsIo.getTempFolder(CLANG_FOLDERNAME);
     }
 
-    private Optional<FileResourceProvider> getCustomExecutable() {
-        // Check if theres is a custom executable
-        var customExe = options.get(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE);
-
-        if (customExe.getName().isBlank()) {
-            return Optional.empty();
-        }
-
-        if (!customExe.isFile()) {
-            SpecsLogs.info("Specified a custom executable but could not find file '" + customExe
-                    + "', using built-in executable");
-
-            return Optional.empty();
-        }
-
-        SpecsLogs.info("Using custom executable for ClangAstDumper: '" + customExe.getAbsolutePath() + "'");
-
-        return Optional.of(FileResourceProvider.newInstance(customExe));
-    }
-
     private FileResourceProvider getExecutableResource(SupportedPlatform platform) {
-
-        var customExecutable = getCustomExecutable();
-
-        if (customExecutable.isPresent()) {
-            return customExecutable.get();
-        }
-
         switch (platform) {
             case WINDOWS:
                 return CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_EXE);
-            case LINUX_5:
+            case LINUX:
                 if (ClangAstDumper.usePlugin()) {
                     return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_PLUGIN);
                 } else {
@@ -251,28 +215,25 @@ public class ClangResources {
 
         // Get libc/libcxx resources, if required
         if (useBuiltinLibc(clangExecutable, libcMode)) {
-            // Common Clang files
-            if (!SupportedPlatform.getCurrentPlatform().isLinux()) {
-                var builtinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LLVM);
-                includesZips.add(getVersionedResource(builtinResource, builtinResource.getVersion()));
-            } else {
+
+            // MacOS
+            if (SupportedPlatform.getCurrentPlatform().isMacOs()) {
+                var macosBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_MACOS_COMPLETE);
+                includesZips.add(getVersionedResource(macosBuiltinResource, macosBuiltinResource.version()));
+            }
+            // Linux
+            else if (SupportedPlatform.getCurrentPlatform().isLinux()) {
                 var linuxBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LINUX_COMPLETE);
-                includesZips.add(getVersionedResource(linuxBuiltinResource, linuxBuiltinResource.getVersion()));
+                includesZips.add(getVersionedResource(linuxBuiltinResource, linuxBuiltinResource.version()));
+            }
+            // Windows
+            else if (SupportedPlatform.getCurrentPlatform().isWindows()) {
+                var windowsBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_WIN32_COMPLETE);
+                includesZips.add(getVersionedResource(windowsBuiltinResource, windowsBuiltinResource.version()));
+            } else {
+                throw new RuntimeException("Unsupported platform: " + SupportedPlatform.getCurrentPlatform());
             }
 
-            // Windows-exclusive files
-            if (SupportedPlatform.getCurrentPlatform().isWindows()) {
-                var windowsBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_WIN32);
-                includesZips.add(getVersionedResource(windowsBuiltinResource, windowsBuiltinResource.getVersion()));
-            }
-
-            // Linux-exclusive files (disabled because common includes not working
-            /*
-            if (SupportedPlatform.getCurrentPlatform().isLinux()) {
-                var linuxBuiltinResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.LIBC_CXX_LINUX);
-                includesZips.add(getVersionedResource(linuxBuiltinResource, linuxBuiltinResource.getVersion()));
-            }
-             */
 
         }
 
@@ -313,9 +274,6 @@ public class ClangResources {
         var includesFiles = new ArrayList<File>();
         for (var extractedFolder : extractedFolders) {
             var includeFolders = SpecsIo.getFolders(extractedFolder);
-            //.stream()
-            //.map(file -> file.getAbsolutePath())
-            //.toList();
 
             includesFiles.addAll(includeFolders);
         }
@@ -325,31 +283,19 @@ public class ClangResources {
         Collections.sort(includesFiles, Comparator.comparing(File::getName));
         SpecsLogs.debug(() -> "Includes folders: " + includesFiles);
 
-        // If on linux, make folders and files accessible to all users
-        if (SupportedPlatform.getCurrentPlatform().isLinux()) {
-            SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", resourceFolder.getAbsolutePath()), false, true);
-        }
-
         return includesFiles.stream().map(File::getAbsolutePath).toList();
     }
 
-    private boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode) {
+    public static boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode) {
 
-        switch (libcMode) {
-            case AUTO:
-                return !hasLibC(clangExecutable);
-            // Builtin and libc/libcxx are now merged in the same zip
-            case BUILTIN_AND_LIBC:
-            case BASE_BUILTIN_ONLY:
-                return true;
-            case SYSTEM:
-                return false;
-            default:
-                throw new CaseNotDefinedException(libcMode);
-        }
+        return switch (libcMode) {
+            case AUTO -> !hasLibC(clangExecutable);
+            case BUILTIN_AND_LIBC -> true;
+            case SYSTEM -> false;
+        };
     }
 
-    private boolean hasLibC(File clangExecutable) {
+    private static boolean hasLibC(File clangExecutable) {
         var value = HAS_LIBC.get();
 
         // Check if initiallized
@@ -376,14 +322,7 @@ public class ClangResources {
      * @param clangExecutable
      * @return
      */
-    private boolean detectLibC(File clangExecutable) {
-
-        // return false;
-
-        // If Windows, return false and always use bundled LIBC++
-        // if (SupportedPlatform.getCurrentPlatform().isWindows()) {
-        // return false;
-        // }
+    private static boolean detectLibC(File clangExecutable) {
 
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
 
@@ -392,13 +331,6 @@ public class ClangResources {
                 .stream()
                 .map(resource -> resource.write(clangTest))
                 .collect(Collectors.toList());
-
-        // If on linux, make folders and files accessible to all users
-        if (SupportedPlatform.getCurrentPlatform().isLinux()) {
-            SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", clangTest.getAbsolutePath()), false, true);
-        }
-
-        // boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
 
         boolean needsLib = false;
         for (File testFile : testFiles) {
@@ -436,16 +368,16 @@ public class ClangResources {
 
     }
 
-    private ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile) {
+    private static ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile) {
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
         return SpecsSystem.runProcess(arguments, true, false);
     }
 
-    public static File getBuiltinCudaLib() {
-        return CUDALIB_FOLDER.get();
+    public File getBuiltinCudaLib() {
+        return cudalibFolder.get();
     }
 
-    private static File prepareBuiltinCudaLib() {
+    private File prepareBuiltinCudaLib() {
         var fileResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.CUDA_LIB);
         var resourceFolder = getClangResourceFolder();
         var cudalibFolder = SpecsIo.mkdir(new File(resourceFolder, "cudalib"));

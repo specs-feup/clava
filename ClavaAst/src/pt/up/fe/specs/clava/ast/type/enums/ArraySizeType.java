@@ -18,6 +18,7 @@ package pt.up.fe.specs.clava.ast.type.enums;
  * @author JoaoBispo
  *
  */
+@Deprecated
 public enum ArraySizeType {
     NORMAL(""),
     STATIC("static"),

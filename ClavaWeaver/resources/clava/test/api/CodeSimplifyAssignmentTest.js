@@ -1,10 +1,10 @@
-laraImport("clava.Clava");
-laraImport("clava.code.SimplifyAssignment");
-laraImport("weaver.Query");
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
+import SimplifyAssignment from "@specs-feup/clava/api/clava/code/SimplifyAssignment.js";
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 for (const $op of Query.search("binaryOp")) {
   SimplifyAssignment($op);
 }
 
 Clava.rebuild();
-println(Query.root().code);
+console.log(Query.root().code);

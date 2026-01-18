@@ -20,14 +20,15 @@ RemoteSystemsTempFiles/
 ##################
 
 .vscode
-deps/temp
-**/.settings/org.eclipse.buildship.core.prefs
 
 tomJava/
 .svn/
 sf.eclipse.javacc.prefs
 MatisseOptions.lara
 Matisse.lara
+
+# Eclipse settings folder
+**/.settings/**
 
 #output/
 .idea/

@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.List;
 import java.util.Optional;
 
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
@@ -47,13 +46,8 @@ public class CxxVarref extends AVarref {
     }
 
     @Override
-    public void defNameImpl(String value) {
-        refExpr.setRefName(value);
-    }
-
-    @Override
     public void setNameImpl(String name) {
-        defNameImpl(name);
+        refExpr.setRefName(name);
     }
 
     @Override
@@ -66,25 +60,11 @@ public class CxxVarref extends AVarref {
         return CxxJoinpoints.create(refExpr.getUseExpr(), AExpression.class);
     }
 
-    /*
-    @Override
-    public String getUseImpl() {
-        ExprUse use = ((Expr) getUseExprImpl().getNode()).use();
-    
-        return CxxAttributes.convertUse(use);
-    }
-    */
-
     @Override
     public AVardecl getVardeclImpl() {
         ADeclarator declarator = getDeclarationImpl();
 
         return declarator instanceof AVardecl ? (AVardecl) declarator : null;
-    }
-
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return CxxExpression.selectVarDecl(this);
     }
 
     @Override

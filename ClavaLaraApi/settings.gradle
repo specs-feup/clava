@@ -1,11 +1,6 @@
 rootProject.name = 'ClavaLaraApi'
 
-includeBuild("../../specs-java-libs/CommonsLangPlus")
-includeBuild("../../specs-java-libs/JacksonPlus")
-includeBuild("../../specs-java-libs/SpecsUtils")
-includeBuild("../../specs-java-libs/SymjaPlus")
+def specsJavaLibsRoot = System.getenv('SPECS_JAVA_LIBS_HOME') ?: '../../specs-java-libs'
+def laraFrameworkRoot = System.getenv('LARA_FRAMEWORK_HOME') ?: '../../lara-framework'
 
-includeBuild("../../lara-framework/LaraApi")
-includeBuild("../../lara-framework/LaraUtils")
-
-includeBuild("../../clava/ClavaAst")
+includeBuild("${specsJavaLibsRoot}/SymjaPlus")

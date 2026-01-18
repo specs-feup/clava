@@ -13,13 +13,44 @@
 
 package pt.up.fe.specs.clang.dumper;
 
-import com.google.common.base.Preconditions;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.cilk.CilkAstAdapter;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
-import pt.up.fe.specs.clang.transforms.*;
-import pt.up.fe.specs.clava.*;
+import pt.up.fe.specs.clang.transforms.AnnotateLabelDecls;
+import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
+import pt.up.fe.specs.clang.transforms.CreateEmptyStmts;
+import pt.up.fe.specs.clang.transforms.CreatePointerToMemberExpr;
+import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
+import pt.up.fe.specs.clang.transforms.FlattenSubStmtNodes;
+import pt.up.fe.specs.clang.transforms.MoveDeclsToTagDecl;
+import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
+import pt.up.fe.specs.clang.transforms.ProcessCudaNodes;
+import pt.up.fe.specs.clang.transforms.RemoveClangOmpNodes;
+import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
+import pt.up.fe.specs.clang.transforms.RemovePoison;
+import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaRule;
+import pt.up.fe.specs.clava.Include;
+import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -32,16 +63,15 @@ import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
 import pt.up.fe.specs.clava.parsing.snippet.TextElements;
 import pt.up.fe.specs.clava.parsing.snippet.TextParser;
-import pt.up.fe.specs.util.*;
+import pt.up.fe.specs.util.SpecsCheck;
+import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.utilities.LineStream;
 import pt.up.fe.specs.util.utilities.StringList;
-
-import java.io.File;
-import java.util.*;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Creates a Clava tree from information dumped by ClangAstDumper.
@@ -92,7 +122,6 @@ public class ClangAstParser {
         return TEXT_PARSING_RULES;
     }
 
-
     public TranslationUnit parseTu(File sourceFile) {
         // Get top-level nodes
         Set<String> topLevelDecls = data.get(ClangAstData.TOP_LEVEL_DECL_IDS);
@@ -106,7 +135,7 @@ public class ClangAstParser {
         // for (String topLevelDeclId : topLevelDecls.flatValues()) {
         for (String topLevelDeclId : topLevelDecls) {
             ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelDeclId);
-            Preconditions.checkNotNull(parsedNode, "No node for decl '" + topLevelDeclId + "'");
+            Objects.requireNonNull(parsedNode, () -> "No node for decl '" + topLevelDeclId + "'");
             // Check
             topLevelDeclNodes.add(parsedNode);
         }
@@ -117,14 +146,14 @@ public class ClangAstParser {
                 continue;
             }
             ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelTypeId);
-            Preconditions.checkNotNull(parsedNode, "No node for type '" + topLevelTypeId + "'");
+            Objects.requireNonNull(parsedNode, () -> "No node for type '" + topLevelTypeId + "'");
 
         }
 
         // Parse top-level attributes
         for (String topLevelAttributeId : topLevelAttributes) {
             ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelAttributeId);
-            Preconditions.checkNotNull(parsedNode, "No node for attribute '" + topLevelAttributeId + "'");
+            Objects.requireNonNull(parsedNode, () -> "No node for attribute '" + topLevelAttributeId + "'");
         }
 
         // Create TU node

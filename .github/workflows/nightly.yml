@@ -7,7 +7,6 @@ name: nightly
 
 on:
   push:
-  pull_request:
 
   # Daily at midnight
   schedule:
@@ -81,8 +80,7 @@ jobs:
         with:
           repository: specs-feup/specs-java-libs
           path: specs-java-libs
-          # This is causing problems in PRs, for now it will always be the default branch
-          #ref: ${{ steps.Branch-specs-java-libs.outputs.value == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ steps.Branch-specs-java-libs.outputs.value == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
 
       - name: Build with Gradle
         run: |
@@ -92,13 +90,11 @@ jobs:
       - name: Test ClangAstParser
         run: |
           cd clava/ClangAstParser
-          #touch debug
           gradle test
           
       - name: Test ClavaWeaver
         run: |
           cd clava/ClavaWeaver
-          #touch debug
           gradle test
         env:
           GITHUB_DEPENDENCY_GRAPH_ENABLED: false
@@ -123,10 +119,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        #node-version: ['latest', '20.x', '18.x']
-        node-version: ['22.x', '20.x']        
+        #node-version: ['latest', '22.x', '20.x']
+        node-version: ['22.x', '20.x']
         os: [ubuntu-latest, windows-latest, macos-latest]
-        
+
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -141,6 +137,15 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org/'
+
+      # Install Xcode Command-Line Tools and GCC on macOS
+      - name: Install C SDK and GCC
+        if: matrix.os == 'macos-latest'
+        run: |
+          sudo xcode-select --install || true
+          sudo xcode-select -s /Library/Developer/CommandLineTools
+          brew install gcc
+          echo 'export PATH="$(brew --prefix gcc)/bin:$PATH"' >> $GITHUB_ENV
 
       - name: Checkout Clava
         uses: actions/checkout@v4
@@ -175,25 +180,6 @@ jobs:
           name: java-binaries
           path: clava/Clava-JS/java-binaries
 
-      - name: Diagnostic info
-        working-directory: clava/Clava-JS
-        run: |
-          echo "=== Node and npm ==="
-          node -v
-          npm -v
-          echo "=== System Info ==="
-          uname -a
-          echo "=== Environment ==="
-          printenv | sort
-          echo "=== TypeScript Config ==="
-          npx tsc --showConfig
-          echo "=== Installed Packages ==="
-          npm ls --depth=0
-
-      - name: Debug Jest
-        working-directory: clava/Clava-JS
-        run: npx jest --showConfig
-
       - name: Test JS
         run: |
           cd clava/Clava-JS
@@ -223,4 +209,4 @@ jobs:
                 echo "Not a push event, skipping publish."
             fi
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} 
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

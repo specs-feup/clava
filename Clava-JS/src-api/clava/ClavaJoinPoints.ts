@@ -96,7 +96,9 @@ export default class ClavaJoinPoints {
     $type: Joinpoints.Type
   ): Joinpoints.IncompleteArrayType {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.incompleteArrayType(unwrapJoinPoint($type))
+      ClavaJavaTypes.AstFactory.incompleteArrayType(
+        unwrapJoinPoint($type)
+      )
     );
   }
 
@@ -944,7 +946,7 @@ export default class ClavaJoinPoints {
       return wrapJoinPoint(
         ClavaJavaTypes.AstFactory.memberAccess(
           unwrapJoinPoint(baseExpr),
-          field,
+          unwrapJoinPoint(field),
           unwrapJoinPoint(fieldType)
         )
       );

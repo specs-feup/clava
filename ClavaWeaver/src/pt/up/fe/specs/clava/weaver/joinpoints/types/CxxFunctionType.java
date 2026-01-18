@@ -17,7 +17,6 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
 public class CxxFunctionType extends AFunctionType {
@@ -49,14 +48,9 @@ public class CxxFunctionType extends AFunctionType {
     }
 
     @Override
-    public void defReturnTypeImpl(AType value) {
-        Type newClavaType = (Type) value.getNode();
-        type.set(FunctionType.RETURN_TYPE, newClavaType);
-    }
-
-    @Override
     public void setReturnTypeImpl(AType newType) {
-        defReturnTypeImpl(newType);
+        Type newClavaType = (Type) newType.getNode();
+        type.set(FunctionType.RETURN_TYPE, newClavaType);
     }
 
     @Override

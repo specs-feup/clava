@@ -1,71 +1,43 @@
 plugins {
     id 'distribution'
+    id 'application'
+    id 'java'
 }
-
-// Java project
-apply plugin: 'java'
-
-// Executable
-apply plugin: 'application'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+
+    withSourcesJar()
 }
 
-
-application {
-
-    // For most input codes this is not necessary, but for the largest example we have tested (LSU-gcc, ~700.000 LoC)
-    // it needs a large amount of memory
-    //applicationDefaultJvmArgs = ["-Xmx6g"]
-}
 
 // Repositories providers
 repositories {
-    // Gearman
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-
     mavenCentral()
 }
 
+configurations {
+    weaverGeneratorRuntime
+}
+
 dependencies {
-    implementation "junit:junit:4.13.1"
-
-
-    implementation ":CommonsLangPlus"
-    implementation ":GsonPlus"
     implementation ":jOptions"
-    implementation ":JsEngine"
     implementation ":SpecsUtils"
-    implementation ":XStreamPlus"
-    implementation ":tdrcLibrary"
 
     implementation ":LanguageSpecification"
-    implementation ":LaraCommonLanguageApi"
-    implementation ":LaraDoc"
-    implementation ":LaraFramework"
     implementation ":LARAI"
-    implementation ":LaraLoc"
-    implementation ":LaraUnit"
     implementation ":LaraUtils"
-    implementation ":WeaverGenerator"
     implementation ":WeaverInterface"
 
     implementation ":AntarexClavaApi"
     implementation ":ClangAstParser"
     implementation ":ClavaAst"
-    implementation ":ClavaHls"
     implementation ":ClavaLaraApi"
-    implementation ":ClavaWeaverSpecs"
 
+    implementation 'com.google.guava:guava:33.4.0-jre'
 
-    implementation group: 'com.google.guava', name: 'guava', version: '19.0'
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.4'
-}
-
-java {
-    withSourcesJar()
+    weaverGeneratorRuntime ":WeaverGenerator"
 }
 
 // Project sources
@@ -73,55 +45,25 @@ sourceSets {
     main {
         java {
             srcDir 'src'
-            srcDir 'test'
-        }
-
-        resources {
-            srcDir 'resources'
         }
     }
-
-
-    test {
-        java {
-            srcDir 'test'
-        }
-
-        resources {
-            srcDir 'resources'
-        }
-    }
-
 }
 
-application {
-    mainClass.set("pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher")
-}
-
-// Clava
-task clava(type: JavaExec) {
+// Re-run the weaver generator
+tasks.register('generateWeaver', JavaExec) {
     group = "Execution"
-    description = "Launches Clava"
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher'
-    args = []
-}
-
-// Clava Doc (old version)
-task clavadoc(type: JavaExec) {
-    group = "Execution"
-    description = "Generates Documentation (Legacy)"
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher'
+    description = "Generates the Weaver Abstracts"
+    classpath = configurations.weaverGeneratorRuntime
+    mainClass = 'org.lara.interpreter.weaver.generator.commandline.WeaverGenerator'
     args = [
-            '-doc',
-            '--output',
-            '"../docs/api"',
-            '--clean',
-            '--exclude',
-            '_',
-            '--packages',
-//            '{"Clava API": ["../ClavaLaraApi/src-lara-clava/clava"], "LARA API": ["../LaraApi/src-lara-base","../LaraApi}/src-lara","../LARAI/src-lara","../LaraExtraApi/src-lara","../ClavaLaraApi/src-lara/clava"], "LARA Common Language API": ["../LaraCommonLanguageApi/src-lara"], "ANTAREX API": ["../AntarexClavaApi/src-lara/clava"]}',
-            '{\'Clava API\': [\'../ClavaLaraApi/src-lara-clava/clava\'], \'LARA API\': [\'../LaraApi/src-lara-base\',\'../LaraApi}/src-lara\',\'../LARAI/src-lara\',\'../LaraExtraApi/src-lara\',\'../ClavaLaraApi/src-lara/clava\'], \'LARA Common Language API\': [\'../LaraCommonLanguageApi/src-lara\'], \'ANTAREX API\': [\'../AntarexClavaApi/src-lara/clava\']}',
+        "-w", "CxxWeaver",
+        "-x", "./resources/clava/weaverspecs",
+        "-o", "./src",
+        "-p", "pt.up.fe.specs.clava.weaver",
+        "-n", "pt.up.fe.specs.clava.ClavaNode",
+        "-e",
+        "-j"
     ]
 }
+
+compileJava.dependsOn generateWeaver

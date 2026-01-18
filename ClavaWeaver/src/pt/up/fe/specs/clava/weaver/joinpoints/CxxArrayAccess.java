@@ -13,9 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.Arrays;
-import java.util.List;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.utils.Nameable;
@@ -67,21 +64,6 @@ public class CxxArrayAccess extends AArrayAccess {
     @Override
     public ADecl getDeclImpl() {
         return getVardeclImpl();
-    }
-
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        return CxxExpression.selectVarDecl(this);
-    }
-
-    @Override
-    public List<? extends AExpression> selectArrayVar() {
-        return Arrays.asList(getArrayVarImpl());
-    }
-
-    @Override
-    public List<? extends AExpression> selectSubscript() {
-        return Arrays.asList(getSubscriptArrayImpl());
     }
 
     @Override

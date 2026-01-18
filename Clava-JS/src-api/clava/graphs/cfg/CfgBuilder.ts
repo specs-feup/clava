@@ -1,6 +1,6 @@
 import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
 import Graphs from "@specs-feup/lara/api/lara/graphs/Graphs.js";
-import cytoscape from "@specs-feup/lara/api/libs/cytoscape-3.26.0.js";
+import cytoscape from "cytoscape";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import {
   Break,

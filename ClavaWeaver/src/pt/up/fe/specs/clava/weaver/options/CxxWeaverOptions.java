@@ -1,11 +1,11 @@
 /**
  * Copyright 2017 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -13,15 +13,10 @@
 
 package pt.up.fe.specs.clava.weaver.options;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.lara.interpreter.weaver.options.OptionArguments;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.interpreter.weaver.options.WeaverOptionBuilder;
 import org.suikasoft.jOptions.Datakey.DataKey;
-
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
@@ -31,9 +26,14 @@ import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 public class CxxWeaverOptions {
 
     private static final Map<String, WeaverOption> WEAVER_OPTIONS;
+
     static {
         WEAVER_OPTIONS = new HashMap<>();
         WEAVER_OPTIONS.put(ClavaOptions.STANDARD.getName(),
@@ -141,17 +141,20 @@ public class CxxWeaverOptions {
                 "ignore-header-includes", "<Java regex list>",
                 "Headers to ignore when recreating #include directives (Java regexes)");
 
-        addOneArgOption(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE, "cde", "custom_dumper_exe", "dumper_exe",
-                "Path to a ClangAstDumper executable file");
+        addOneArgOption(CodeParser.DUMPER_FOLDER, "df", "dumper-folder",
+                "dir",
+                CodeParser.DUMPER_FOLDER.getLabel());
+
+
     }
 
     private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,
-            String description) {
+                                               String description) {
         WEAVER_OPTIONS.put(key.getName(), WeaverOptionBuilder.build(shortOption, longOption, description, key));
     }
 
     private static final void addOneArgOption(DataKey<?> key, String shortOption, String longOption, String argName,
-            String description) {
+                                              String description) {
 
         WEAVER_OPTIONS.put(key.getName(),
                 WeaverOptionBuilder.build(shortOption, longOption, OptionArguments.ONE_ARG, argName, description, key));

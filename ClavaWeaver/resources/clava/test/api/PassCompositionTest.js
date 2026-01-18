@@ -1,11 +1,10 @@
-laraImport("clava.pass.DecomposeDeclStmt");
-laraImport("clava.pass.SimplifySelectionStmts");
-laraImport("clava.code.SimplifyAssignment");
-laraImport("clava.code.StatementDecomposer");
+import DecomposeDeclStmt from "@specs-feup/clava/api/clava/pass/DecomposeDeclStmt.js";
+import SimplifySelectionStmts from "@specs-feup/clava/api/clava/pass/SimplifySelectionStmts.js";
+import StatementDecomposer from "@specs-feup/clava/api/clava/code/StatementDecomposer.js";
 
-laraImport("lara.pass.composition.Passes");
+import Passes from "@specs-feup/lara/api/lara/pass/composition/Passes.js";
 
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 // This type of pass is no longer supported. It is now mandatory to create a class for the pass
 /*
@@ -16,7 +15,7 @@ function SimplifyAssignments($startJp) {
 }
 
 function DummyPass($startJp, options) {
-  println(
+  console.log(
     "Dummy pass that has received an option object with the value '" +
       options["foo"] +
       "' for the key 'foo'"
@@ -33,4 +32,4 @@ const passes = [
 
 const results = Passes.apply(Query.root(), passes);
 
-println(Query.root().code);
+console.log(Query.root().code);

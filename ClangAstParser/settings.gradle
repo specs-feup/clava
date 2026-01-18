@@ -1,6 +1,9 @@
 rootProject.name = 'ClangAstParser'
 
-includeBuild("../../clava/ClavaAst")
-includeBuild("../../specs-java-libs/CommonsLangPlus")
-includeBuild("../../specs-java-libs/jOptions")
-includeBuild("../../specs-java-libs/SpecsUtils")
+def specsJavaLibsRoot = System.getenv('SPECS_JAVA_LIBS_HOME') ?: '../../specs-java-libs'
+
+includeBuild("${specsJavaLibsRoot}/CommonsLangPlus")
+includeBuild("${specsJavaLibsRoot}/jOptions")
+includeBuild("${specsJavaLibsRoot}/SpecsUtils")
+
+includeBuild("../ClavaAst")

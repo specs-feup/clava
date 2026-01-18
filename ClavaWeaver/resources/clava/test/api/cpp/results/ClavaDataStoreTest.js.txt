@@ -1,0 +1,8 @@
+GET:false
+TYPE:class java.lang.Boolean
+GET AFTER PUT:true
+Disable info:true
+System includes:
+System includes after:extra_system_include
+Flags:
+Flags after: -O3

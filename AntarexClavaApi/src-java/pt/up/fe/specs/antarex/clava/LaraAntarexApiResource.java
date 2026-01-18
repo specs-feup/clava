@@ -60,18 +60,6 @@ public enum LaraAntarexApiResource implements LaraResourceProvider {
     // mARGOt Helpers
     ENUM("margot/Enum.js"),
 
-    // Memoi
-    MEMOIZATION("memoi/Memoization.lara"),
-    MEMOIZATION_AUTO_ASPECTS("memoi/MemoizationAutoAspects.lara"),
-    MEMOIZATION_AUTO_FUNCS("memoi/MemoizationAutoFuncs.lara"),
-    MEMOIZATION_C("memoi/MemoizationC.lara"),
-    MEMOIZATION_CXX("memoi/MemoizationCXX.lara"),
-    MEMOIZATION_LIB_FUNCS("memoi/MemoizationLibFuncs.lara"),
-    MEMOIZATION_MATH("memoi/MemoizationMath.lara"),
-
-    // Memoi Helpers
-    LARA_OBJECT("memoi/LaraObject.js"),
-
     // MultiVersioning
     MULTI_POINTERS("multi/MultiVersionPointers.lara"),
     MULTI_POINTERS_ASPECTS("multi/MultiVersionPointersAspects.lara"),

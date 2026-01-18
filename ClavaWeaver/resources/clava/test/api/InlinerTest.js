@@ -1,10 +1,10 @@
 "use strict";
 
-laraImport("clava.opt.NormalizeToSubset");
-laraImport("clava.code.Inliner");
-laraImport("clava.opt.PrepareForInlining");
+import NormalizeToSubset from "@specs-feup/clava/api/clava/opt/NormalizeToSubset.js";
+import Inliner from "@specs-feup/clava/api/clava/code/Inliner.js";
+import PrepareForInlining from "@specs-feup/clava/api/clava/opt/PrepareForInlining.js";
 
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 //setDebug(true);
 
@@ -18,7 +18,7 @@ for (const $call of Query.search("function", "main").search("call")) {
   // inline() accepts an exprStmt. All calls must be inside exprStmt now
   const $callParent = $call.getAncestor("exprStmt");
   if (!$callParent.instanceOf("exprStmt")) {
-    println(
+    console.log(
       `Could not inline call ${$call.name}@${$call.location}, ancestor is ${$callParent.joinPointType}`
     );
     continue;
@@ -30,10 +30,10 @@ for (const $call of Query.search("function", "main").search("call")) {
 const inliner = new Inliner();
 inliner.inlineFunctionTree(Query.search("function", "main").first());
 
-println(Query.search("function", "main").first().code);
+console.log(Query.search("function", "main").first().code);
 
 // Multile successive inlines of the same function
-println("# Test inline of successive calls");
+console.log("# Test inline of successive calls");
 for (const $call of Query.search("function", "inlineTest2").search("call")) {
   PrepareForInlining($call.function);
 }
@@ -41,18 +41,18 @@ for (const $call of Query.search("function", "inlineTest2").search("call")) {
 new Inliner().inlineFunctionTree(
   Query.search("function", "inlineTest2").first()
 );
-println(Query.search("function", "inlineTest2").first().code);
+console.log(Query.search("function", "inlineTest2").first().code);
 
 new Inliner().inlineFunctionTree(
   Query.search("function", "arrayParam").first()
 );
-println(Query.search("function", "arrayParam").first().code);
+console.log(Query.search("function", "arrayParam").first().code);
 
 new Inliner().inlineFunctionTree(
   Query.search("function", "functionThatCallsFunctionThatUsesGlobal").first()
 );
 
-println(
+console.log(
   Query.search("function", "functionThatCallsFunctionThatUsesGlobal").first()
     .code
 );
@@ -71,7 +71,7 @@ new Inliner().inlineFunctionTree(
   ).first()
 );
 
-println(
+console.log(
   Query.search(
     "function",
     "functionThatCallsFunctionWithReturnButsDoesNotUseResult"
@@ -82,7 +82,7 @@ new Inliner().inlineFunctionTree(
   Query.search("function", "functionWithNakedIf").first()
 );
 
-println(Query.search("function", "functionWithNakedIf").first().code);
+console.log(Query.search("function", "functionWithNakedIf").first().code);
 
 new Inliner().inline(
   Query.search("function", "functionWhichCallIsNotDeclared")
@@ -91,7 +91,7 @@ new Inliner().inline(
     .getAncestor("exprStmt")
 );
 
-println(
+console.log(
   Query.search("function", "functionWhichCallIsNotDeclared").first().code
 );
 
@@ -99,7 +99,7 @@ new Inliner().inlineFunctionTree(
   Query.search("function", "functionThatCallsOtherWithVarInStruct").first()
 );
 
-println(
+console.log(
   Query.search("function", "functionThatCallsOtherWithVarInStruct").first().code
 );
 
@@ -107,7 +107,7 @@ new Inliner().inlineFunctionTree(
   Query.search("function", "functionThatCallsFunctionWithStruct").first()
 );
 
-println(
+console.log(
   Query.search("function", "functionThatCallsFunctionWithStruct").first().code
 );
 
@@ -115,7 +115,7 @@ new Inliner().inlineFunctionTree(
   Query.search("function", "functionThatCallFunctionWith2DimPointer").first()
 );
 
-println(
+console.log(
   Query.search("function", "functionThatCallFunctionWith2DimPointer").first()
     .code
 );
@@ -124,54 +124,54 @@ new Inliner().inlineFunctionTree(
   Query.search("function", "functionWithCallWithStatic").first()
 );
 
-println(Query.search("function", "functionWithCallWithStatic").first().code);
+console.log(Query.search("function", "functionWithCallWithStatic").first().code);
 
 new Inliner().inlineFunctionTree(
   Query.search("function", "callsFunctionWithLabels").first()
 );
 
-println(Query.search("function", "callsFunctionWithLabels").first().code);
+console.log(Query.search("function", "callsFunctionWithLabels").first().code);
 
-//println(Query.search("function", "functionWithStatic").first().ast);
+//console.log(Query.search("function", "functionWithStatic").first().ast);
 
 /*
-println(
+console.log(
   Query.search("function", "functionWith2DimPointer").search("exprStmt").first()
     .expr.type.pointee.innerType.elementType.elementType
 );
 */
 
 /*
-println(
+console.log(
   Query.search("function", "functionThatCallsFunctionWithStruct")
     .search("vardecl", "__inline_0_x")
     .first().type.ast
 );
 */
 
-//println(Query.search("function", "functioWithStruct").search("vardecl", "x").first().type.ast)
-//println(Query.search("function", "functioWithStruct").search("vardecl", "x").first().type.code)
+//console.log(Query.search("function", "functioWithStruct").search("vardecl", "x").first().type.ast)
+//console.log(Query.search("function", "functioWithStruct").search("vardecl", "x").first().type.code)
 
-//println(
+//console.log(
 //  Query.search("function", "functionThatCallsOtherWithVarInStruct").first().ast
 //);
 
-//println(Query.root().code);
+//console.log(Query.root().code);
 
 /*
 const callFiltezL1 = Query.search("function", "callFiltezL1")
   .search("call")
   .first();
 
-println("Bef:\n" + callFiltezL1.function.code);
+console.log("Bef:\n" + callFiltezL1.function.code);
 PrepareForInlining(callFiltezL1.function);
-println("Aft:\n" + callFiltezL1.function.code);
+console.log("Aft:\n" + callFiltezL1.function.code);
 
 const stmtFiltezL1 = callFiltezL1.getAncestor("exprStmt");
 
 inliner.inline(stmtFiltezL1);
 
-println(Query.search("function", "callFiltezL1").first().code);
+console.log(Query.search("function", "callFiltezL1").first().code);
 */
 //PrepareForInlining(Query.search("function", "filtez").first());
 //PrepareForInlining(Query.search("function", "callFiltezL1").first());
@@ -181,5 +181,5 @@ println(Query.search("function", "callFiltezL1").first().code);
 new Inliner().inlineFunctionTree(
   Query.search("function", "callFiltezL2").first()
 );
-println(Query.search("function", "callFiltezL2").first().code);
+console.log(Query.search("function", "callFiltezL2").first().code);
 */

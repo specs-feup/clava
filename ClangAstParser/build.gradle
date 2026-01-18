@@ -1,15 +1,15 @@
 plugins {
- 	id 'distribution'
+    id 'distribution'
+    id 'java'
+    id 'jacoco'
 }
 
-// Java project
-apply plugin: 'java'
-
 java {
+    withSourcesJar()
+
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
-
 
 // Repositories providers
 repositories {
@@ -17,42 +17,64 @@ repositories {
 }
 
 dependencies {
-	implementation "junit:junit:4.13.1"     
+    implementation ":ClavaAst"
+    implementation ":CommonsLangPlus"
+    implementation ":jOptions"
+    implementation ":SpecsUtils"
 
-	implementation ":ClavaAst"
-	implementation ":CommonsLangPlus"
-	implementation ":jOptions"
-	implementation ":SpecsUtils"
+    implementation 'com.google.guava:guava:33.4.0-jre'
 
-	implementation group: 'com.google.guava', name: 'guava', version: '19.0'	
-}
-
-java {
-	withSourcesJar()
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.0'
 }
 
 // Project sources
 sourceSets {
-   main {
-      java {
-         srcDir 'src'
-         srcDir 'test'		 
-      }
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'resources'
+        }
+    }
 
-	  resources {
-		srcDir 'resources'
-	  }      
-   }
-	
-   
-   test {
-      java {
-         srcDir 'test'
-      }
-	  
-	  resources {
-		srcDir 'resources'
-	  }
-   }
-   
+    test {
+        java {
+            srcDir 'test'
+        }
+        resources {
+            srcDir 'test-resources'
+        }
+    }
+}
+
+// Test coverage configuration
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.70 // 70% minimum coverage
+            }
+        }
+    }
+}
+
+// Make sure jacoco report is generated after tests
+test {
+    useJUnitPlatform()
+
+    // Can't parellelize because it will trigger multiple simultaneous downloads of the dumper and stdlib zip files.
+    maxParallelForks = 1
+
+    finalizedBy jacocoTestReport
 }

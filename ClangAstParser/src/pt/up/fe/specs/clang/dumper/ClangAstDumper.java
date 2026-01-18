@@ -18,7 +18,6 @@ import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
-import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.cilk.CilkParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
@@ -31,7 +30,6 @@ import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.lang.SpecsPlatforms;
-import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -44,6 +42,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
@@ -87,6 +86,7 @@ public class ClangAstDumper {
     private File clangExecutable;
     private List<String> builtinIncludes;
     private int systemIncludesThreshold;
+    private ClangResources clangResources;
 
     private final CodeParser parserConfig;
 
@@ -113,6 +113,7 @@ public class ClangAstDumper {
         this.baseFolder = null;
         this.systemIncludesThreshold = ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD.getDefault().get();
         this.parserConfig = parserConfig;
+        this.clangResources = new ClangResources(parserConfig);
     }
 
     public File getLastWorkingFolder() {
@@ -234,7 +235,7 @@ public class ClangAstDumper {
 
                 // Check if should use built-in CUDA lib
                 File cudaFolder = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption())
-                        ? ClangResources.getBuiltinCudaLib()
+                        ? clangResources.getBuiltinCudaLib()
                         : SpecsIo.existingFolder(cudaPath);
 
                 ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
@@ -253,8 +254,8 @@ public class ClangAstDumper {
             arguments.add(standard.isCxx() ? "c++" : "c");
         }
 
-        // If option to ony use built-in includes, disable system includes
-        if (config.get(ClangAstKeys.LIBC_CXX_MODE) == LibcMode.BASE_BUILTIN_ONLY) {
+        // If it was determined that built-in includes will be used, disable system includes
+        if (ClangResources.useBuiltinLibc(clangExecutable, config.get(ClangAstKeys.LIBC_CXX_MODE))) {
             arguments.add("-nostdinc");
             arguments.add("-nostdinc++");
         }
@@ -275,7 +276,7 @@ public class ClangAstDumper {
 
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
 
-        arguments.addAll(config.get(ClavaOptions.FLAGS_LIST).getStringList());
+        arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
 
         ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments);
 
@@ -311,7 +312,7 @@ public class ClangAstDumper {
             });
 
             parsedData = output.getStdErr();
-            SpecsCheck.checkNotNull(parsedData, () -> "Did not expect error output to be null");
+            Objects.requireNonNull(parsedData, () -> "Did not expect error output to be null");
             parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
 
             // If console output streaming is disabled, show output only at the end

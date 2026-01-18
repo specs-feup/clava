@@ -13,12 +13,8 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.Arrays;
-import java.util.List;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
-import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATernaryOp;
@@ -52,35 +48,4 @@ public class CxxTernaryOp extends ATernaryOp {
     public AExpression getFalseExprImpl() {
         return CxxJoinpoints.create(op.getFalseExpr(), AExpression.class);
     }
-
-    @Override
-    public List<? extends AExpression> selectCond() {
-        return Arrays.asList(getCondImpl());
-    }
-
-    @Override
-    public List<? extends AExpression> selectTrueExpr() {
-        return Arrays.asList(getTrueExprImpl());
-    }
-
-    @Override
-    public List<? extends AExpression> selectFalseExpr() {
-        return Arrays.asList(getFalseExprImpl());
-    }
-
-    @Override
-    public void defCondImpl(AExpression value) {
-        op.setCondition((Expr) value.getNode());
-    }
-
-    @Override
-    public void defTrueExprImpl(AExpression value) {
-        op.setTrueExpr((Expr) value.getNode());
-    }
-
-    @Override
-    public void defFalseExprImpl(AExpression value) {
-        op.setFalseExpr((Expr) value.getNode());
-    }
-
 }

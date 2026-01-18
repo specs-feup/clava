@@ -7,7 +7,7 @@ import eslintConfigPrettier from "eslint-config-prettier";
 export default [
   js.configs.recommended,
   eslintConfigPrettier,
-  ...typescriptEslint.configs.all,
+  ...typescriptEslint.configs.recommended,
   {
     ignores: ["**/*.d.ts", "**/*.config.js"],
   },
@@ -18,6 +18,8 @@ export default [
     },
 
     languageOptions: {
+      tsconfigRootDir: __dirname,
+
       parser: typescriptEslint.parser,
       ecmaVersion: 5,
       sourceType: "script",

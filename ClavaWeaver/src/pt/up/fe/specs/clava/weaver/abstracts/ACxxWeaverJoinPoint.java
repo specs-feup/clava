@@ -1,9 +1,7 @@
 package pt.up.fe.specs.clava.weaver.abstracts;
 
 import com.google.common.base.Preconditions;
-import org.lara.interpreter.utils.DefMap;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import pt.up.fe.specs.clava.ClavaLog;
@@ -137,7 +135,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint getAncestorImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'ancestor'");
+        Objects.requireNonNull(type, () -> "Missing type of ancestor in attribute 'ancestor'");
 
         if (type.equals("program")) {
             ClavaLog.warning("Consider using attribute .root, instead of .ancestor('program')");
@@ -160,7 +158,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint[] getDescendantsArrayImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
+        Objects.requireNonNull(type, () -> "Missing type of descendants in attribute 'descendants'");
 
         return CxxSelects.selectedNodesToJps(getNode().getDescendantsStream(), jp -> jp.instanceOf(type),
                 getWeaverEngine());
@@ -173,7 +171,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
+        Objects.requireNonNull(type, () -> "Missing type of descendants in attribute 'descendants'");
 
         return CxxSelects.selectedNodesToJps(getNode().getDescendantsAndSelfStream(), jp -> jp.instanceOf(type),
                 getWeaverEngine());
@@ -181,7 +179,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint getChainAncestorImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'chainAncestor'");
+        Objects.requireNonNull(type, () -> "Missing type of ancestor in attribute 'chainAncestor'");
 
         if (type.equals("program")) {
             ClavaLog.warning("Consider using attribute .root, instead of .chainAncestor('program')");
@@ -203,7 +201,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint getAstAncestorImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'astAncestor'");
+        Objects.requireNonNull(type, () -> "Missing type of ancestor in attribute 'astAncestor'");
 
         // Obtain ClavaNode class from type
         Class<? extends ClavaNode> nodeClass = ClassesService.getClavaClass(type);
@@ -241,7 +239,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public Integer getLineImpl() {
         // ClavaNode node = getNode();
-        // Preconditions.checkNotNull(node);
+        // Objects.requireNonNull(node);
         // int line = getNode().getLocation().getStartLine();
         // return line != SourceLocation.getInvalidLoc() ? line : null;
         SourceRange location = getNode().getLocation();
@@ -301,8 +299,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public void defTypeImpl(AType type) {
-
+    public void setTypeImpl(AType type) {
         // Check if node has a type
         ClavaNode node = getNode();
 
@@ -313,12 +310,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         }
 
         ((Typable) node).setType((Type) type.getNode());
-
-    }
-
-    @Override
-    public void setTypeImpl(AType type) {
-        defTypeImpl(type);
     }
 
     @Override
@@ -571,35 +562,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .findFirst().isPresent();
     }
 
-    /*
-    @Override
-    public void defImpl(String attribute, Object value) {
-        // Get def map
-        DefMap<?> defMap = getDefMap();
-    
-        if (defMap == null) {
-            SpecsLogs
-                    .msgInfo("Joinpoint '" + getJoinpointType() + "' does not have 'def' defined for any attribute");
-            return;
-        }
-    
-        if (!defMap.hasAttribute(attribute)) {
-            List<String> keys = new ArrayList<>(defMap.keys());
-            Collections.sort(keys);
-            SpecsLogs
-                    .msgInfo("'def' of attribute '" + attribute + "' not defined for joinpoint " + getJoinpointType());
-            SpecsLogs.msgInfo("Available attributes: " + keys);
-            return;
-        }
-    
-        defMap.apply(attribute, this, value);
-    }
-    */
-
-    protected DefMap<?> getDefMap() {
-        return null;
-    }
-
     /**
      * Ignores certain nodes, such as ImplicitCastExpr.
      *
@@ -681,41 +643,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .stream();
 
         return CxxSelects.selectedNodesToJps(stream, getWeaverEngine());
-        /*
-        AJoinPoint[] scopeChildren = ((NodeWithScope) node).getNodeScope()
-                .map(scope -> scope.getChildren()).orElse(Collections.emptyList())
-                .stream()
-                .filter(child -> !(child instanceof NullNode))
-                .map(child -> CxxJoinpoints.create(child))
-                .collect(Collectors.toList())
-                .toArray(new AJoinPoint[0]);
-        
-        // Count as selected nodes
-        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, scopeChildren.length);
-        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, scopeChildren.length);
-        
-        // Count as a select
-        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
-        
-        return scopeChildren;
-        */
     }
-
-    /*
-    public List<ClavaNode> getDirectNodes() {
-        var node = getNode();
-    
-        if (node instanceof LoopStmt) {
-            return ((LoopStmt) node).getBody().getChildren();
-        }
-    
-        if (node instanceof FunctionDecl) {
-            return ((FunctionDecl) node).getBody().map(body -> body.getChildren()).orElse(Collections.emptyList());
-        }
-    
-        return node.getChildren();
-    }
-    */
 
     @Override
     public Stream<JoinPoint> getJpChildrenStream() {
@@ -726,23 +654,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
         return CxxSelects.selectedNodesToJps(getNode().getChildren().stream(), getWeaverEngine());
-        /*
-        AJoinPoint[] children = getNode().getChildren().stream()
-                // AJoinPoint[] children = getChildrenPrivate().stream()
-                .filter(node -> !(node instanceof NullNode))
-                .map(node -> CxxJoinpoints.create(node))
-                .collect(Collectors.toList())
-                .toArray(new AJoinPoint[0]);
-        
-        // Count as selected nodes
-        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, children.length);
-        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, children.length);
-        
-        // Count as a select
-        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
-        
-        return children;
-        */
     }
 
     @Override
@@ -1078,11 +989,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public void defDataImpl(Object source) {
-        setDataImpl(source);
-    }
-
-    @Override
     public void setDataImpl(Object source) {
         var dataPragma = ClavaData.getClavaData(getNode());
 
@@ -1201,15 +1107,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     /**
      * Generic select function, used by the default select implementations.
-     */
-    @Override
-    public <T extends AJoinPoint> List<? extends T> select(Class<T> joinPointClass, SelectOp op) {
-        throw new RuntimeException(
-                "Generic select function not implemented yet. Implement it in order to use the default implementations of select");
-    }
-
-    /**
-     * Generic select function, used by the default select implementations.
      *
      * @param joinPointClass
      * @param op
@@ -1247,11 +1144,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public void defFirstChildImpl(AJoinPoint value) {
-        setFirstChildImpl(value);
-    }
-
-    @Override
     public AJoinPoint setFirstChildImpl(AJoinPoint value) {
         // If no children, just insert the node
         if (!getHasChildrenImpl()) {
@@ -1276,11 +1168,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         }
 
         return children[children.length - 1];
-    }
-
-    @Override
-    public void defLastChildImpl(AJoinPoint value) {
-        setLastChildImpl(value);
     }
 
     @Override
@@ -1373,41 +1260,27 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     // }
 
     @Override
-    public void defInlineCommentsImpl(String[] value) {
-
-        if (value == null || value.length == 0) {
+    public void setInlineCommentsImpl(String[] comments) {
+        if (comments == null || comments.length == 0) {
             getNode().removeInlineComments();
             return;
         }
 
-        // sArrays.stream(value).map(comment -> (Com))
-
-        var comments = Arrays.stream(value)
+        var newComments = Arrays.stream(
+                comments)
                 .map(comment -> getFactory().inlineComment(comment, false))
                 .collect(Collectors.toList());
 
-        getNode().set(ClavaNode.INLINE_COMMENTS, comments);
+        getNode().set(ClavaNode.INLINE_COMMENTS, newComments);
     }
-
     @Override
-    public void setInlineCommentsImpl(String[] comments) {
-        defInlineCommentsImpl(comments);
-    }
-
-    @Override
-    public void defInlineCommentsImpl(String value) {
-
-        if (value == null || value.isBlank()) {
-            defInlineCommentsImpl(new String[0]);
+    public void setInlineCommentsImpl(String comment) {
+        if (comment == null || comment.isBlank()) {
+            setInlineCommentsImpl(new String[0]);
             return;
         }
 
-        defInlineCommentsImpl(new String[]{value});
-    }
-
-    @Override
-    public void setInlineCommentsImpl(String comment) {
-        defInlineCommentsImpl(comment);
+        setInlineCommentsImpl(new String[] { comment });
     }
 
     @Override

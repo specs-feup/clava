@@ -41,24 +41,14 @@ public class CxxBinaryOp extends ABinaryOp {
     }
 
     @Override
-    public List<? extends AExpression> selectLeft() {
-        return Arrays.asList((AExpression) CxxJoinpoints.create(op.getLhs()));
-    }
-
-    @Override
-    public List<? extends AExpression> selectRight() {
-        return Arrays.asList((AExpression) CxxJoinpoints.create(op.getRhs()));
-    }
-
-    @Override
     public AExpression getLeftImpl() {
-        List<? extends AExpression> left = selectLeft();
+        List<? extends AExpression> left = Arrays.asList((AExpression) CxxJoinpoints.create(op.getLhs()));
         return left.isEmpty() ? null : left.get(0);
     }
 
     @Override
     public AExpression getRightImpl() {
-        List<? extends AExpression> right = selectRight();
+        List<? extends AExpression> right = Arrays.asList((AExpression) CxxJoinpoints.create(op.getRhs()));
         return right.isEmpty() ? null : right.get(0);
     }
 
@@ -73,22 +63,12 @@ public class CxxBinaryOp extends ABinaryOp {
     }
 
     @Override
-    public void defLeftImpl(AExpression value) {
-        op.setLhs((Expr) value.getNode());
-    }
-
-    @Override
-    public void defRightImpl(AExpression value) {
-        op.setRhs((Expr) value.getNode());
-    }
-
-    @Override
     public void setLeftImpl(AExpression left) {
-        defLeftImpl(left);
+        op.setLhs((Expr) left.getNode());
     }
 
     @Override
     public void setRightImpl(AExpression right) {
-        defRightImpl(right);
+        op.setRhs((Expr) right.getNode());
     }
 }

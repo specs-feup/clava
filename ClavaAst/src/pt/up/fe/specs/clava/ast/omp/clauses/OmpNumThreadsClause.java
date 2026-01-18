@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.omp.clauses;
 
-import com.google.common.base.Preconditions;
+import java.util.Objects;
 
 public class OmpNumThreadsClause implements OmpClause {
 
@@ -22,7 +22,7 @@ public class OmpNumThreadsClause implements OmpClause {
     public OmpNumThreadsClause(String expression) {
         this.expression = expression;
 
-        Preconditions.checkNotNull(expression);
+        Objects.requireNonNull(expression);
     }
 
     public String getExpression() {

@@ -19,7 +19,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
-import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.utilities.StringList;
 
@@ -34,13 +33,14 @@ public interface ClangAstKeys {
      * What libc/libcxx mode should be used.
      */
     DataKey<LibcMode> LIBC_CXX_MODE = KeyFactory.enumeration("libcCxxMode", LibcMode.class)
-            .setLabel("Libc/Libcxx mode")
-            .setDefault(() -> (SpecsPlatforms.isWindows() || SpecsPlatforms.isLinux()) ? LibcMode.BASE_BUILTIN_ONLY : LibcMode.AUTO);
+            .setLabel("Libc/Libc++ mode. builtin (default): uses built-in libc/libc++; system: uses includes available in the system; auto: detects if the built-in includes are needed")
+            .setDefault(() -> LibcMode.BUILTIN_AND_LIBC);
 
     DataKey<Boolean> USES_CILK = KeyFactory.bool("usesCilk");
 
     DataKey<StringList> IGNORE_HEADER_INCLUDES = KeyFactory.stringList("ignoreHeaderIncludes")
             .setLabel("Headers to ignore when recreating #include directives (Java regexes)");
+
 
     public static String getFlagIgnoreIncludes() {
         return "ihi";
@@ -53,8 +53,6 @@ public interface ClangAstKeys {
      * @return
      */
     static DataStore toDataStore(List<String> flags) {
-        // ClavaLog.debug(() -> "ClangAstKeys flags: " + flags);
-
         DataStore config = DataStore.newInstance(ClavaOptions.STORE_DEFINITION, false);
         final String stdPrefix = "-std=";
         final String clangAstDumperPrefix = "-clang-dumper=";
@@ -108,9 +106,7 @@ public interface ClangAstKeys {
             parsedFlags.add(flag);
         }
 
-        // config.add(ClavaOptions.FLAGS, parsedFlags.stream().collect(Collectors.joining(" ")));
-        // config.add(ClavaOptions.FLAGS_LIST, new JsonStringList(parsedFlags));
-        config.add(ClavaOptions.FLAGS_LIST, new StringList(parsedFlags));
+        config.add(ClavaOptions.FLAGS_LIST, parsedFlags);
 
         return config;
     }

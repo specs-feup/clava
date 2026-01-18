@@ -13,14 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.decl.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelperProvider;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum LanguageId implements StringProvider {
     C("C"),
     CXX("C++");
-
-    public static final EnumHelperProvider<LanguageId> HELPER = new EnumHelperProvider<>(LanguageId.class);
 
     private final String code;
 

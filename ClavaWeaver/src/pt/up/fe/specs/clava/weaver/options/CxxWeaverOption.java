@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -19,7 +19,6 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
-
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
@@ -30,7 +29,7 @@ public interface CxxWeaverOption {
 
     DataKey<String> WOVEN_CODE_FOLDERNAME = KeyFactory.string("Weaved code foldername")
             .setLabel("Name of woven code folder")
-            .setDefault(() -> CxxWeaver.getWovenCodeFoldername());
+            .setDefault(CxxWeaver::getWovenCodeFoldername);
 
     DataKey<Boolean> DISABLE_CLAVA_INFO = KeyFactory.bool("Disable Clava Info")
             .setLabel("Disable Clava execution information");
@@ -43,15 +42,15 @@ public interface CxxWeaverOption {
 
     DataKey<FileList> HEADER_INCLUDES = LaraIKeyFactory.folderList("header includes")
             .setLabel("Normal Includes")
-            .setDefault(() -> FileList.newInstance());
+            .setDefault(FileList::newInstance);
 
     // DataKey<Boolean> SKIP_HEADER_INCLUDES_PARSING = KeyFactory.bool("skipHeaderIncludesParsing")
     // .setLabel("Skip parsing of header files");
     // .setDefault(() -> true);
 
     DataKey<Boolean> PARSE_INCLUDES = KeyFactory.bool("parseIncludes")
-            .setLabel("Parses header files");
-    // .setDefault(() -> true);
+            .setLabel("Parses header files")
+            .setDefault(() -> true);
 
     DataKey<FileList> SYSTEM_INCLUDES = LaraIKeyFactory.folderList("library includes")
             .setLabel("System Includes")
@@ -107,7 +106,7 @@ public interface CxxWeaverOption {
             .addKey(ParallelCodeParser.PARALLEL_PARSING)
             .addKey(ParallelCodeParser.PARSING_NUM_THREADS)
             .addKey(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS)
-            .addKey(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE)
+            .addKey(CodeParser.DUMPER_FOLDER)
             .build();
 
 }

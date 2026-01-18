@@ -9,7 +9,7 @@
     //"checkJs": true,
     "sourceMap": true,
     "declarationMap": true,
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": true
     //"esModuleInterop": true
-    }
+  }
 }

@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
@@ -57,21 +56,4 @@ public class CxxMarker extends AMarker {
 
         return result.get(0);
     }
-
-    @Override
-    public List<? extends AScope> selectContents() {
-        return Arrays.asList(getContentsImpl());
-        /*
-        List<? extends AScope> result = CxxSelects.select(AScope.class, SpecsCollections.toList(marker.getTarget()),
-                false,
-                node -> node instanceof CompoundStmt && ((CompoundStmt) node).isNestedScope(),
-                node -> new CxxScope((CompoundStmt) node, this));
-        // if (!result.isEmpty()) {
-        // System.out.println("RESULT:" + result.get(0).getNode().getCode());
-        // }
-        
-        return result;
-        */
-    }
-
 }

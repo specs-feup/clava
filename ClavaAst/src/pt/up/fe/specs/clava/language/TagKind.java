@@ -51,6 +51,5 @@ public enum TagKind implements StringProvider {
     @Override
     public String getString() {
         return SpecsStrings.toCamelCase(name());
-        // return getCode();
     }
 }

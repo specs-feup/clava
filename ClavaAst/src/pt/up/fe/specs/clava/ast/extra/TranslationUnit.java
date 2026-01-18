@@ -13,9 +13,17 @@
 
 package pt.up.fe.specs.clava.ast.extra;
 
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
@@ -30,13 +38,6 @@ import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.utilities.LineStream;
 import pt.up.fe.specs.util.utilities.StringLines;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Represents a source file.

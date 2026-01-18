@@ -1,15 +1,14 @@
 plugins {
- 	id 'distribution'
+    id 'distribution'
+    id 'java'
 }
 
-// Java project
-apply plugin: 'java'
-
 java {
+    withSourcesJar()
+
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
-
 
 // Repositories providers
 repositories {
@@ -17,27 +16,20 @@ repositories {
 }
 
 dependencies {
-	testImplementation "junit:junit:4.13.1"     
-	implementation ':SpecsUtils'
-	implementation ':LaraUtils'		
+    implementation ':SpecsUtils'
+    implementation ':LaraUtils'
 }
-
-java {
-	withSourcesJar()
-}
-
 
 // Project sources
 sourceSets {
-   main {
-      java {
-         srcDir 'src-java'
-      }
-	  
-	  resources {
-		srcDir 'src-lara'
-		srcDir 'src-js'
-	  }
-   }   
-   
+    main {
+        java {
+            srcDir 'src-java'
+        }
+
+        resources {
+            srcDir 'src-lara'
+            srcDir 'src-js'
+        }
+    }
 }

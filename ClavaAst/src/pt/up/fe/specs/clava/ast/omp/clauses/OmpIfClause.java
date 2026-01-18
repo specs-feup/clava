@@ -13,9 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.omp.clauses;
 
+import java.util.Objects;
 import java.util.Optional;
-
-import com.google.common.base.Preconditions;
 
 public class OmpIfClause implements OmpClause {
 
@@ -30,7 +29,7 @@ public class OmpIfClause implements OmpClause {
         this.directiveName = directiveName;
         this.expression = expression;
 
-        Preconditions.checkNotNull(expression);
+        Objects.requireNonNull(expression);
     }
 
     public String getExpression() {

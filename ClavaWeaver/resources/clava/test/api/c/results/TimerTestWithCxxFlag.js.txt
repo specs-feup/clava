@@ -1,0 +1,57 @@
+#include <time.h>
+#include <windows.h>
+#include <stdio.h>
+double bar() {
+
+   return 1.0;
+}
+double bar2() {
+
+   return 1.0;
+}
+double bar3() {
+
+   return 1.0;
+}
+double foo() {
+   double a = 0;
+   for(int i = 0; i < 1000; i++) {
+      LARGE_INTEGER clava_timing_start_4, clava_timing_end_4, clava_timing_frequency_4;
+      QueryPerformanceFrequency(&clava_timing_frequency_4);
+      double clava_timing_duration_4;
+      QueryPerformanceCounter(&clava_timing_start_4);
+      a += bar();
+      QueryPerformanceCounter(&clava_timing_end_4);
+      clava_timing_duration_4 = ((clava_timing_end_4.QuadPart - clava_timing_start_4.QuadPart) / (double)clava_timing_frequency_4.QuadPart) * (1000);
+      printf("Time:%fms\n", clava_timing_duration_4);
+   }
+
+   return a;
+}
+int main() {
+   LARGE_INTEGER clava_timing_start_5, clava_timing_end_5, clava_timing_frequency_5;
+   QueryPerformanceFrequency(&clava_timing_frequency_5);
+   double clava_timing_duration_5;
+   QueryPerformanceCounter(&clava_timing_start_5);
+   foo();
+   QueryPerformanceCounter(&clava_timing_end_5);
+   clava_timing_duration_5 = ((clava_timing_end_5.QuadPart - clava_timing_start_5.QuadPart) / (double)clava_timing_frequency_5.QuadPart) * (1000);
+   printf("Time:%fms\n", clava_timing_duration_5);
+   LARGE_INTEGER clava_timing_start_6, clava_timing_end_6, clava_timing_frequency_6;
+   QueryPerformanceFrequency(&clava_timing_frequency_6);
+   double clava_timing_duration_6;
+   QueryPerformanceCounter(&clava_timing_start_6);
+   bar2();
+   QueryPerformanceCounter(&clava_timing_end_6);
+   clava_timing_duration_6 = ((clava_timing_end_6.QuadPart - clava_timing_start_6.QuadPart) / (double)clava_timing_frequency_6.QuadPart) * (1000);
+   printf("I want to print the value of the elapsed time (%f), which is in the unit 'ms' and put other stuff after it\n", clava_timing_duration_6);
+   LARGE_INTEGER clava_timing_start_7, clava_timing_end_7, clava_timing_frequency_7;
+   QueryPerformanceFrequency(&clava_timing_frequency_7);
+   double clava_timing_duration_7;
+   QueryPerformanceCounter(&clava_timing_start_7);
+   bar3();
+   QueryPerformanceCounter(&clava_timing_end_7);
+   clava_timing_duration_7 = ((clava_timing_end_7.QuadPart - clava_timing_start_7.QuadPart) / (double)clava_timing_frequency_7.QuadPart) * (1000);
+   printf("%fms\n", clava_timing_duration_7);
+   printf("This should appear after the timer print\n");
+}

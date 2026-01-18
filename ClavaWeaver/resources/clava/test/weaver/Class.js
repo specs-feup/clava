@@ -1,18 +1,18 @@
-laraImport("weaver.Query");
+import Query from "@specs-feup/lara/api/weaver/Query.js";
 
 for(let $class of Query.search("class")) {
-	println("Class: " + $class.name);
-	println("Is abstract: " + $class.isAbstract);	
-	println("Is interface: " + $class.isInterface);		
+	console.log("Class: " + $class.name);
+	console.log("Is abstract: " + $class.isAbstract);	
+	console.log("Is interface: " + $class.isInterface);		
 	
-	println("All Bases:");
+	console.log("All Bases:");
 	for(let $base of $class.allBases) {
-		println($base.name);	
+		console.log($base.name);	
 	}
 	
-	println("All methods:")
+	console.log("All methods:")
 	for(let $function of $class.allMethods) {
-		println($function.signature);
-		//println("Is pure? " + $function.isPure);
+		console.log($function.signature);
+		//console.log("Is pure? " + $function.isPure);
 	}
 }

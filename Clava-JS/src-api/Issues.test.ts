@@ -3,7 +3,7 @@ import {
   registerSourceCodes,
 } from "@specs-feup/lara/jest/jestHelpers.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
-import { FunctionJp, Loop } from "@specs-feup/clava/api/Joinpoints.js";
+import { FunctionJp } from "@specs-feup/clava/api/Joinpoints.js";
 import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.js";
 
 const code187 = `
@@ -28,7 +28,7 @@ describe("issue187", () => {
     );
 
     if (functionJp === undefined) {
-      fail();
+      throw new Error("functionJp is undefined");
     }
 
     functionJp.setParams([newParam1, newParam2]);
@@ -61,23 +61,20 @@ describe("issue190", () => {
     ).first();
 
     if (functionJp2 === undefined) {
-      fail();
+      throw new Error("functionJp2 is undefined");
     }
 
     functionJp2.setName("bar");
     expect(functionJp2.name).toBe("bar");
-    //console.log(functionJp2.name); //expected "bar" but still shows "foo"
 
     const functionJp1 = Query.search(FunctionJp, (jp) =>
       jp.filepath.endsWith("file1.c")
     ).first();
 
     if (functionJp1 === undefined) {
-      fail();
+      throw new Error("functionJp1 is undefined");
     }
 
     expect(functionJp1.name).toBe("foo");
-
-    //    console.log(functionJp1.name); // unexpected name "bar"
   });
 });

@@ -336,15 +336,6 @@ public enum BuiltinKind {
         // Manually add certain cases
         BUILTIN_CODE.put(Char_S, "char");
         BUILTIN_CODE.put(WChar_U, "wchar_t");
-
-        /*
-        BUILTIN_CODE.put(Void, "void");
-        BUILTIN_CODE.put(Int, "int");
-        BUILTIN_CODE.put(Long, "long");
-        BUILTIN_CODE.put(LongLong, "long long");
-        BUILTIN_CODE.put(Float, "float");
-        BUILTIN_CODE.put(Double, "double");
-        */
     }
 
     /**
@@ -405,7 +396,6 @@ public enum BuiltinKind {
             case Half:
                 return getCodeHalf(sourceNode);
             default:
-                // return null;
                 throw new NotImplementedException(this);
         }
     }

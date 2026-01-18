@@ -13,6 +13,9 @@
 
 package pt.up.fe.specs.clava;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
@@ -20,7 +23,6 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionProvider;
 
 import pt.up.fe.specs.clava.language.Standard;
-import pt.up.fe.specs.util.utilities.StringList;
 
 public interface ClavaOptions extends StoreDefinitionProvider {
 
@@ -29,7 +31,8 @@ public interface ClavaOptions extends StoreDefinitionProvider {
 
     DataKey<String> FLAGS = KeyFactory.string("Compiler Flags", "");
 
-    DataKey<StringList> FLAGS_LIST = KeyFactory.stringList("Compiler Flags in list format")
+    DataKey<List<String>> FLAGS_LIST = KeyFactory.list("Compiler Flags in list format", String.class)
+            .setDefault(() -> new ArrayList<String>())
             .setLabel("Compiler Flags in list format");
 
     DataKey<Boolean> CUSTOM_RESOURCES = KeyFactory.bool("Clava Custom Resources")
@@ -38,14 +41,8 @@ public interface ClavaOptions extends StoreDefinitionProvider {
     DataKey<Boolean> DISABLE_REMOTE_DEPENDENCIES = KeyFactory.bool("Disable Remote Dependencies")
             .setLabel("Disable remote dependencies (e.g., git repositories)");
 
-    // DataKey<Boolean> DISABLE_CLAVA_DATA_NODES = KeyFactory.bool("Disable Clava Data nodes")
-    // .setLabel("Disables new method for parsing nodes (only uses 'legacy' nodes)");
-
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("Clava")
-            // .addKeys(STANDARD, FLAGS, CUSTOM_RESOURCES, DISABLE_REMOTE_DEPENDENCIES, DISABLE_CLAVA_DATA_NODES)
-            .addKeys(STANDARD, FLAGS, FLAGS_LIST, CUSTOM_RESOURCES,
-                    // CUDA_GPU_ARCH, CUDA_PATH,
-                    DISABLE_REMOTE_DEPENDENCIES)
+            .addKeys(STANDARD, FLAGS, FLAGS_LIST, CUSTOM_RESOURCES, DISABLE_REMOTE_DEPENDENCIES)
             .build();
 
     @Override

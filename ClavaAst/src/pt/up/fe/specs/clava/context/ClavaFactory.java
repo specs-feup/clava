@@ -492,7 +492,6 @@ public class ClavaFactory {
         return new InitListExpr(data, values);
     }
 
-
     public UnaryExprOrTypeTraitExpr sizeof(Type typeArg) {
         DataStore data = newDataStore(UnaryExprOrTypeTraitExpr.class)
                 .put(UnaryExprOrTypeTraitExpr.KIND, UnaryExprOrTypeTrait.SizeOf)
@@ -790,7 +789,7 @@ public class ClavaFactory {
      */
     public IfStmt ifStmt(Expr condition, CompoundStmt thenBody, CompoundStmt elseBody) {
 
-        SpecsCheck.checkNotNull(condition, () -> "Condition of IfStmt must exist");
+        Objects.requireNonNull(condition, () -> "Condition of IfStmt must exist");
 
         // If null, create empty CompoundStmt
         ClavaNode thenStmt = thenBody != null ? thenBody : compoundStmt();

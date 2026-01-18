@@ -35,13 +35,8 @@ public class CxxLabelStmt extends ALabelStmt {
     }
 
     @Override
-    public void defDeclImpl(ALabelDecl value) {
-        labelStmt.setLabelDecl((LabelDecl) value.getNode());
-    }
-
-    @Override
     public void setDeclImpl(ALabelDecl label) {
-        defDeclImpl(label);
+        labelStmt.setLabelDecl((LabelDecl) label.getNode());
     }
 
     @Override

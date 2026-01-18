@@ -1,15 +1,14 @@
 plugins {
- 	id 'distribution'
+    id 'distribution'
+    id 'java'
 }
 
-// Java project
-apply plugin: 'java'
-
 java {
+    withSourcesJar()
+
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
-
 
 // Repositories providers
 repositories {
@@ -17,30 +16,20 @@ repositories {
 }
 
 dependencies {
-	testImplementation "junit:junit:4.13.1"     
-
-
     implementation ':GitPlus'
-    implementation ':GsonPlus'
     implementation ':jOptions'
     implementation ':SpecsUtils'
     implementation ':SymjaPlus'
-    implementation ':tdrcLibrary'
 
-	implementation group: 'com.google.guava', name: 'guava', version: '19.0'	
-	implementation group: 'com.google.code.gson', name: 'gson', version: '2.4'	
-
-}
-
-java {
-	withSourcesJar()
+    implementation 'com.google.guava:guava:33.4.0-jre'
+    implementation 'com.google.code.gson:gson:2.12.1'
 }
 
 // Project sources
 sourceSets {
-   main {
-      java {
-         srcDir 'src'
-      }  
-   }
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
 }
