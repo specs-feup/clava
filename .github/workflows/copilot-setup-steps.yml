@@ -44,7 +44,7 @@ jobs:
           dependency-graph: generate-and-submit
 
       - name: Checkout clava
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: clava
 
@@ -92,15 +92,41 @@ jobs:
           echo "Pull request base_ref (if any): ${{ github.base_ref }}"
 
       - name: Checkout lara-framework
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
           ref: ${{ steps.repo-refs.outputs.lara_ref }}
 
       - name: Checkout specs-java-libs
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: specs-feup/specs-java-libs
           path: specs-java-libs
           ref: ${{ steps.repo-refs.outputs.specs_ref }}
+
+      - name: Build Weaver
+        run: |
+          cd clava/ClavaWeaver
+          gradle installDist
+
+      - name: Setup java-binaries symlink
+        run: |
+          cd clava/Clava-JS
+          ln -s ../ClavaWeaver/build/install/ClavaWeaver/ java-binaries
+
+
+      - name: Setup JS workspace
+        run: |
+          echo '{ "name": "SPeCS Workspace", "type": "module", "workspaces": [ "clava/Clava-JS", "lara-framework/Lara-JS" ] }' > package.json
+          npm install
+
+      - name: Build Lara-JS
+        run: |
+          cd lara-framework/Lara-JS
+          npm run build
+
+      - name: Build Clava-JS
+        run: |
+          cd clava/Clava-JS
+          npm run build
