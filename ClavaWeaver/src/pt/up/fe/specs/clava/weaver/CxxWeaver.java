@@ -1077,7 +1077,7 @@ public class CxxWeaver extends ACxxWeaver {
         // are needed
         String currentCodeFoldername = TEMP_WEAVING_FOLDER + "_for_file_rebuild";
         File currentCodeFolder = SpecsIo.mkdir(currentCodeFoldername).getAbsoluteFile();
-        SpecsIo.deleteFolderContents(currentCodeFolder, true);
+        SpecsIo.deleteFolderContents(currentCodeFolder);
 
         // Add include
         // rebuildOptions.add(0, "\"-I" + currentCodeFolder.getAbsolutePath() + "\"");
@@ -1326,7 +1326,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         File tempFolder = SpecsIo.getTempFolder(TEMP_WEAVING_FOLDER + "_" + UUID.randomUUID().toString());
 
-        SpecsIo.deleteFolderContents(tempFolder, true);
+        SpecsIo.deleteFolderContents(tempFolder);
 
         // Register temporary folder and its contents for deletion
         SpecsIo.deleteOnExit(tempFolder);
