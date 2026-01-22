@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AArrayType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
@@ -24,8 +25,8 @@ public class CxxArrayType extends AArrayType {
 
     private final ArrayType arrayType;
 
-    public CxxArrayType(ArrayType arrayType) {
-        super(new CxxType(arrayType));
+    public CxxArrayType(ArrayType arrayType, CxxWeaver weaver) {
+        super(new CxxType(arrayType, weaver), weaver);
 
         this.arrayType = arrayType;
     }
@@ -37,7 +38,7 @@ public class CxxArrayType extends AArrayType {
 
     @Override
     public AType getElementTypeImpl() {
-        return CxxJoinpoints.create(arrayType.getElementType(), AType.class);
+        return CxxJoinpoints.create(arrayType.getElementType(), getWeaverEngine(), AType.class);
     }
 
     @Override

@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEnumDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEnumeratorDecl;
 
@@ -24,8 +25,8 @@ public class CxxEnumDecl extends AEnumDecl {
 
     private final EnumDecl enumDecl;
 
-    public CxxEnumDecl(EnumDecl enumDecl) {
-        super(new CxxNamedDecl(enumDecl));
+    public CxxEnumDecl(EnumDecl enumDecl, CxxWeaver weaver) {
+        super(new CxxNamedDecl(enumDecl, weaver), weaver);
         this.enumDecl = enumDecl;
     }
 
@@ -36,7 +37,7 @@ public class CxxEnumDecl extends AEnumDecl {
 
     @Override
     public AEnumeratorDecl[] getEnumeratorsArrayImpl() {
-        return CxxSelects.select(AEnumeratorDecl.class, enumDecl.getChildren(), false, EnumConstantDecl.class).toArray(new AEnumeratorDecl[0]);
+        return CxxSelects.select(getWeaverEngine(), AEnumeratorDecl.class, enumDecl.getChildren(), false, EnumConstantDecl.class).toArray(new AEnumeratorDecl[0]);
     }
 
 }

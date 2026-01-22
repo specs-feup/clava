@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AAccessSpecifier;
 
 public class CxxAccessSpecifier extends AAccessSpecifier {
 
     private final AccessSpecDecl accessSpecifier;
 
-    public CxxAccessSpecifier(AccessSpecDecl accessSpecifier) {
-        super(new CxxDecl(accessSpecifier));
+    public CxxAccessSpecifier(AccessSpecDecl accessSpecifier, CxxWeaver weaver) {
+        super(new CxxDecl(accessSpecifier, weaver), weaver);
         this.accessSpecifier = accessSpecifier;
     }
 

@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.weaver;
 
 import com.google.common.base.Preconditions;
-import org.lara.interpreter.weaver.interf.WeaverEngine;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -24,7 +23,6 @@ import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.stmt.*;
 import pt.up.fe.specs.clava.utils.NodePosition;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
@@ -71,7 +69,7 @@ public class CxxActions {
             app.clearCache();
             weaver.getEventTrigger().triggerAction(Stage.DURING,
                     "CxxActions.insertAsStmt",
-                    CxxJoinpoints.create(target), Arrays.asList(insert, code), Optional.empty());
+                    CxxJoinpoints.create(target, weaver), Arrays.asList(insert, code), Optional.empty());
         });
 
         // Convert Insert to NodePosition
@@ -88,7 +86,7 @@ public class CxxActions {
             weaver.clearUserField(target);
         }
 
-        return CxxJoinpoints.create(node);
+        return CxxJoinpoints.create(node, weaver);
     }
 
     private static void checkInsertAfterReturn(ClavaNode base, ClavaNode newNode) {
@@ -107,7 +105,7 @@ public class CxxActions {
             app.clearCache();
             weaver.getEventTrigger().triggerAction(Stage.DURING,
                     "CxxActions.insertAsChild",
-                    CxxJoinpoints.create(base), Arrays.asList(position, CxxJoinpoints.create(node)), Optional.empty());
+                    CxxJoinpoints.create(base, weaver), Arrays.asList(position, CxxJoinpoints.create(node, weaver)), Optional.empty());
         });
 
         switch (position) {
@@ -134,7 +132,7 @@ public class CxxActions {
                 // // Remove all children
                 // base.removeChildren(0, base.getNumChildren());
                 base.addChild(node);
-                return new AJoinPoint[]{CxxJoinpoints.create(node)};
+                return new AJoinPoint[]{CxxJoinpoints.create(node, weaver)};
             default:
                 throw new RuntimeException("Case not defined:" + position);
         }
@@ -158,8 +156,8 @@ public class CxxActions {
         return NodeInsertUtils.replace(target, newNode);
     }
 
-    public static AJoinPoint insertBefore(AJoinPoint baseJp, AJoinPoint newJp) {
-        return insert(baseJp, newJp, Insert.BEFORE, (base, node) -> NodeInsertUtils.insertBefore(base, node));
+    public static AJoinPoint insertBefore(AJoinPoint baseJp, AJoinPoint newJp, CxxWeaver weaver) {
+        return insert(baseJp, newJp, Insert.BEFORE, (base, node) -> NodeInsertUtils.insertBefore(base, node), weaver);
         // Stmt newStmt = ClavaNodes.toStmt(newJp.getNode());
         // Stmt baseStmt = getValidStatement(baseJp.getNode(), Insert.BEFORE);
         // if (baseStmt == null) {
@@ -170,10 +168,10 @@ public class CxxActions {
         // return CxxJoinpoints.create(newStmt);
     }
 
-    public static AJoinPoint insertAfter(AJoinPoint baseJp, AJoinPoint newJp) {
+    public static AJoinPoint insertAfter(AJoinPoint baseJp, AJoinPoint newJp, CxxWeaver weaver) {
         checkInsertAfterReturn(baseJp.getNode(), newJp.getNode());
 
-        return insert(baseJp, newJp, Insert.AFTER, (base, node) -> NodeInsertUtils.insertAfter(base, node));
+        return insert(baseJp, newJp, Insert.AFTER, (base, node) -> NodeInsertUtils.insertAfter(base, node), weaver);
         // // If inside a scope, treat nodes at the statement level
         // // if
         // Stmt newStmt = ClavaNodes.toStmt(newJp.getNode());
@@ -186,8 +184,9 @@ public class CxxActions {
         // return CxxJoinpoints.create(newStmt);
     }
 
-    public static AJoinPoint insert(AJoinPoint baseJp, AJoinPoint newJp, Insert position,
-                                    BiConsumer<ClavaNode, ClavaNode> insertFunction) {
+    public static AJoinPoint insert(AJoinPoint baseJp, 
+            AJoinPoint newJp, Insert position,
+            BiConsumer<ClavaNode, ClavaNode> insertFunction, CxxWeaver weaver) {
 
         // Set origin point from target to newNode if locations are invalid and no origin point is set
         var newNode = newJp.getNode();
@@ -225,12 +224,12 @@ public class CxxActions {
 
         insertFunction.accept(adaptedBase, adaptedNew);
 
-        var returnedJp = CxxJoinpoints.create(adaptedNew);
+        var returnedJp = CxxJoinpoints.create(adaptedNew, weaver);
 
         // If base is part of App, clear caches
         adaptedBase.getAncestorTry(App.class).ifPresent(app -> {
             app.clearCache();
-            WeaverEngine.getThreadLocalWeaver().getEventTrigger().triggerAction(Stage.DURING, "CxxActions.insert",
+            weaver.getEventTrigger().triggerAction(Stage.DURING, "CxxActions.insert",
                     baseJp,
                     Arrays.asList(position, newJp), Optional.ofNullable((Object) returnedJp));
         });
@@ -327,7 +326,7 @@ public class CxxActions {
     public static AJoinPoint insertJpAsStatement(AJoinPoint baseJp, AJoinPoint newJp, String position,
                                                  CxxWeaver weaver) {
 
-        AStatement stmtJp = CxxJoinpoints.create(ClavaNodes.toStmt(newJp.getNode()), AStatement.class);
+        AStatement stmtJp = CxxJoinpoints.create(ClavaNodes.toStmt(newJp.getNode()), weaver, AStatement.class);
 
         return insertJp(baseJp, stmtJp, position, weaver);
     }
@@ -379,7 +378,7 @@ public class CxxActions {
             app.clearCache();
             weaver.getEventTrigger().triggerAction(Stage.DURING,
                     "CxxActions.insertStmt",
-                    CxxJoinpoints.create(body), Arrays.asList(position, CxxJoinpoints.create(stmt)), Optional.empty());
+                    CxxJoinpoints.create(body, weaver), Arrays.asList(position, CxxJoinpoints.create(stmt, weaver)), Optional.empty());
         });
 
         switch (position) {
@@ -415,7 +414,7 @@ public class CxxActions {
             app.clearCache();
             weaver.getEventTrigger().triggerAction(Stage.DURING,
                     "CxxActions.removeChildren",
-                    CxxJoinpoints.create(node), Collections.emptyList(), Optional.empty());
+                    CxxJoinpoints.create(node, weaver), Collections.emptyList(), Optional.empty());
         });
 
         // Clear use fields
@@ -427,7 +426,7 @@ public class CxxActions {
         node.removeChildren(0, node.getNumChildren());
     }
 
-    public static AJoinPoint insertReturn(AScope scope, AJoinPoint code) {
+    public static AJoinPoint insertReturn(AScope scope, AJoinPoint code, CxxWeaver weaver) {
         // Does not take into account situations where functions returns in all paths of an if/else.
         // This means it can lead to dead-code, although for C/C++ that does not seem to be problematic.
 
@@ -454,7 +453,7 @@ public class CxxActions {
         }
 
         for (ReturnStmt returnStmt : returnStatements) {
-            ACxxWeaverJoinPoint returnJp = CxxJoinpoints.create(returnStmt);
+            AJoinPoint returnJp = CxxJoinpoints.create(returnStmt, weaver);
             lastInsertPoint = returnJp.insertBeforeImpl(code);
         }
 

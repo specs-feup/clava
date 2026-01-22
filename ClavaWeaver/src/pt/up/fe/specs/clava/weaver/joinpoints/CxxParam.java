@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
 
 public class CxxParam extends AParam {
 
     private final ParmVarDecl param;
 
-    public CxxParam(ParmVarDecl param) {
-        super(new CxxVardecl(param));
+    public CxxParam(ParmVarDecl param, CxxWeaver weaver) {
+        super(new CxxVardecl(param, weaver), weaver);
         this.param = param;
     }
 

@@ -18,6 +18,7 @@ import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod;
 
@@ -25,8 +26,8 @@ public class CxxClass extends AClass {
 
     private final CXXRecordDecl cxxRecordDecl;
 
-    public CxxClass(CXXRecordDecl cxxRecordDecl) {
-        super(new CxxStruct(cxxRecordDecl));
+    public CxxClass(CXXRecordDecl cxxRecordDecl, CxxWeaver weaver) {
+        super(new CxxStruct(cxxRecordDecl, weaver), weaver);
 
         this.cxxRecordDecl = cxxRecordDecl;
     }
@@ -55,7 +56,7 @@ public class CxxClass extends AClass {
 
     @Override
     public AMethod[] getMethodsArrayImpl() {
-        return CxxSelects.select(AMethod.class, cxxRecordDecl.getMethods(), false, node -> true).toArray(new AMethod[0]);
+        return CxxSelects.select(getWeaverEngine(), AMethod.class, cxxRecordDecl.getMethods(), false, node -> true).toArray(new AMethod[0]);
     }
 
     @Override
@@ -67,7 +68,8 @@ public class CxxClass extends AClass {
     public AClass[] getBasesArrayImpl() {
 
         return cxxRecordDecl.getBases().stream()
-                .map(decl -> CxxJoinpoints.create(decl, AClass.class))
+                .map(decl -> CxxJoinpoints.create(decl,
+                        getWeaverEngine(), AClass.class))
                 // Collect to array
                 .toArray(size -> new AClass[size]);
 
@@ -80,12 +82,12 @@ public class CxxClass extends AClass {
 
     @Override
     public AMethod[] getAllMethodsArrayImpl() {
-        return CxxJoinpoints.create(cxxRecordDecl.getAllMethods(false), AMethod.class);
+        return CxxJoinpoints.create(cxxRecordDecl.getAllMethods(false), getWeaverEngine(), AMethod.class);
     }
 
     @Override
     public AClass[] getAllBasesArrayImpl() {
-        return CxxJoinpoints.create(cxxRecordDecl.getAllBases(), AClass.class);
+        return CxxJoinpoints.create(cxxRecordDecl.getAllBases(), getWeaverEngine(), AClass.class);
     }
 
     @Override
@@ -101,14 +103,16 @@ public class CxxClass extends AClass {
     @Override
     public AClass[] getPrototypesArrayImpl() {
         return cxxRecordDecl.getDeclarations().stream()
-                .map(node -> CxxJoinpoints.create(node, AClass.class))
+                .map(node -> CxxJoinpoints.create(node,
+                        getWeaverEngine(), AClass.class))
                 .toArray(size -> new AClass[size]);
     }
 
     @Override
     public AClass getImplementationImpl() {
         return cxxRecordDecl.getDefinition()
-                .map(node -> CxxJoinpoints.create(node, AClass.class))
+                .map(node -> CxxJoinpoints.create(node,
+                        getWeaverEngine(), AClass.class))
                 .orElse(null);
     }
 

@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints.types;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AElaboratedType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -24,8 +25,8 @@ public class CxxElaboratedType extends AElaboratedType {
 
     private final ElaboratedType elaboratedType;
 
-    public CxxElaboratedType(ElaboratedType elaboratedType) {
-        super(new CxxType(elaboratedType));
+    public CxxElaboratedType(ElaboratedType elaboratedType, CxxWeaver weaver) {
+        super(new CxxType(elaboratedType, weaver), weaver);
 
         this.elaboratedType = elaboratedType;
     }
@@ -50,7 +51,7 @@ public class CxxElaboratedType extends AElaboratedType {
 
     @Override
     public AType getNamedTypeImpl() {
-        return CxxJoinpoints.create(elaboratedType.get(ElaboratedType.NAMED_TYPE), AType.class);
+        return CxxJoinpoints.create(elaboratedType.get(ElaboratedType.NAMED_TYPE), getWeaverEngine(), AType.class);
     }
 
 }

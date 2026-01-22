@@ -11,7 +11,7 @@ on:
     
   # Daily at midnight
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 1 * *'
     
 permissions:
   checks: write
@@ -26,7 +26,7 @@ jobs:
     #    working-directory: ./..
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       # Because of scheduled runs, by default run on default branch
       with:
         ref: lara-2.0-legacy

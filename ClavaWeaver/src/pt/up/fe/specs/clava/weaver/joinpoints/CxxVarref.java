@@ -19,6 +19,7 @@ import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.MSPropertyRefExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeclarator;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
@@ -29,8 +30,8 @@ public class CxxVarref extends AVarref {
 
     private final DeclRefExpr refExpr;
 
-    public CxxVarref(DeclRefExpr refExpr) {
-        super(new CxxExpression(refExpr));
+    public CxxVarref(DeclRefExpr refExpr, CxxWeaver weaver) {
+        super(new CxxExpression(refExpr, weaver), weaver);
 
         this.refExpr = refExpr;
     }
@@ -57,7 +58,7 @@ public class CxxVarref extends AVarref {
 
     @Override
     public AExpression getUseExprImpl() {
-        return CxxJoinpoints.create(refExpr.getUseExpr(), AExpression.class);
+        return CxxJoinpoints.create(refExpr.getUseExpr(), getWeaverEngine(), AExpression.class);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class CxxVarref extends AVarref {
             return null;
         }
 
-        return CxxJoinpoints.create(declarator.get(), ADeclarator.class);
+        return CxxJoinpoints.create(declarator.get(), getWeaverEngine(), ADeclarator.class);
     }
 
     @Override

@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIntLiteral;
 
 public class CxxIntLiteral extends AIntLiteral {
 
     private final IntegerLiteral literal;
 
-    public CxxIntLiteral(IntegerLiteral literal) {
-        super(new CxxLiteral(literal));
+    public CxxIntLiteral(IntegerLiteral literal, CxxWeaver weaver) {
+        super(new CxxLiteral(literal, weaver), weaver);
 
         this.literal = literal;
     }

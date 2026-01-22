@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABuiltinType;
 
 public class CxxBuiltinType extends ABuiltinType {
 
     private final BuiltinType builtinType;
 
-    public CxxBuiltinType(BuiltinType builtinType) {
-        super(new CxxType(builtinType));
+    public CxxBuiltinType(BuiltinType builtinType, CxxWeaver weaver) {
+        super(new CxxType(builtinType, weaver), weaver);
 
         this.builtinType = builtinType;
     }

@@ -19,11 +19,6 @@ permissions:
 env:
   JAVA_VERSION: 17
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  # Setting default branch to staging assuming PRs will be done against the staging versions of the repository
-  # main versions will just receive what comes from the staging
-  DEFAULT_BRANCH: ${{ github.base_ref || 'staging' }}
-  #SPECS_JAVA_LIBS_BRANCH: ${{ 'master' }}
-  #LARA_FRAMEWORK_BRANCH: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   build-java:
@@ -31,8 +26,8 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      branch-exists-lara-framework: ${{ steps.Branch-lara-framework.outputs.value }}
-      branch-exists-specs-java-libs: ${{ steps.Branch-specs-java-libs.outputs.value }}
+      lara_ref: ${{ steps.repo-refs.outputs.lara_ref }}
+      specs_ref: ${{ steps.repo-refs.outputs.specs_ref }}
 
     steps:
       - name: Setup Java
@@ -48,39 +43,80 @@ jobs:
           dependency-graph: generate-and-submit
 
       - name: Checkout Clava
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: clava
 
-      - name: Check if branch exists on lara-framework
-        id: Branch-lara-framework
-        run: echo "value=$(git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l)" >> $GITHUB_OUTPUT
+      - name: Determine repository refs
+        id: repo-refs
+        shell: bash
+        env:
+          BRANCH_NAME: ${{ env.BRANCH_NAME }}
+          BASE_BRANCH: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
 
-      - name: Check if branch exists on specs-java-libs
-        id: Branch-specs-java-libs
-        run: echo "value=$(git ls-remote --heads https://github.com/specs-feup/specs-java-libs.git refs/heads/${{ env.BRANCH_NAME }} | wc -l)" >> $GITHUB_OUTPUT
+          # For each dependency repository, determine which branch to checkout.
+          # Priority order:
+          # 1. A branch with the same name as the current branch
+          # 2. If this is a PR, the target branch (base_ref)
+          # 3. The default branch of the repository
+
+          determine_ref() {
+            local prefix=$1
+            local repo=$2
+            local url="https://github.com/${repo}.git"
+
+            # Get the default branch
+            local default_branch
+            default_branch=$(git ls-remote --symref "$url" HEAD | awk '/^ref:/ {print $2}' | sed 's@refs/heads/@@')
+            echo "${prefix}_default=${default_branch}" >> "$GITHUB_OUTPUT"
+            echo "Default branch for ${repo} is '${default_branch}'"
+
+            local ref_to_use=""
+            
+            # Priority 1: Same branch name
+            if [ -n "$(git ls-remote --heads "$url" "refs/heads/${BRANCH_NAME}")" ]; then
+              ref_to_use="${BRANCH_NAME}"
+              echo "Using matching branch '${BRANCH_NAME}' in ${repo}"
+            # Priority 2: PR target branch (if this is a PR)
+            elif [ -n "${BASE_BRANCH}" ] && [ -n "$(git ls-remote --heads "$url" "refs/heads/${BASE_BRANCH}")" ]; then
+              ref_to_use="${BASE_BRANCH}"
+              echo "Using PR target branch '${BASE_BRANCH}' in ${repo}"
+            # Priority 3: Default branch
+            else
+              ref_to_use="${default_branch}"
+              echo "Using default branch '${default_branch}' for ${repo}"
+            fi
+            
+            echo "${prefix}_ref=${ref_to_use}" >> "$GITHUB_OUTPUT"
+          }
+
+          determine_ref "lara" "specs-feup/lara-framework"
+          determine_ref "specs" "specs-feup/specs-java-libs"
 
       - name: Echo checks
         run: |
-          echo "Branch-lara-framework: ${{ steps.Branch-lara-framework.outputs.value }}"
-          echo "Branch-specs-java-libs: ${{ steps.Branch-specs-java-libs.outputs.value }}"
-          echo "Branch name: ${{ env.BRANCH_NAME }}"
-          echo "Default branch: ${{ env.DEFAULT_BRANCH }}"
-          echo "Branch base_ref: ${{ github.base_ref }}"          
+          echo "Weaver branch: ${{ env.BRANCH_NAME }}"
+          echo "PR target branch (if any): ${{ github.base_ref }}"
+          echo "Lara framework ref: ${{ steps.repo-refs.outputs.lara_ref }}"
+          echo "Lara framework default: ${{ steps.repo-refs.outputs.lara_default }}"
+          echo "Specs-java-libs ref: ${{ steps.repo-refs.outputs.specs_ref }}"
+          echo "Specs-java-libs default: ${{ steps.repo-refs.outputs.specs_default }}"
 
       - name: Checkout lara-framework
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          ref: ${{ steps.Branch-lara-framework.outputs.value == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ steps.repo-refs.outputs.lara_ref }}
 
       - name: Checkout specs-java-libs
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: specs-feup/specs-java-libs
           path: specs-java-libs
-          ref: ${{ steps.Branch-specs-java-libs.outputs.value == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ steps.repo-refs.outputs.specs_ref }}
 
       - name: Build with Gradle
         run: |
@@ -148,16 +184,16 @@ jobs:
           echo 'export PATH="$(brew --prefix gcc)/bin:$PATH"' >> $GITHUB_ENV
 
       - name: Checkout Clava
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: clava
 
       - name: Checkout lara-framework
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          ref: ${{ needs.build-java.outputs.branch-exists-lara-framework == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ needs.build-java.outputs.lara_ref }}
 
       - name: Setup js workspace
         run: |

@@ -65,7 +65,7 @@ export default class Clava {
     }
 
     const $file = wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.file(file.getAbsolutePath(), "")
+      ClavaJavaTypes.AstFactory.file(Weaver.getWeaverEngine(), file.getAbsolutePath(), "")
     ) as FileJp;
     Clava.addFile($file);
   }
@@ -187,6 +187,7 @@ extern "C" {
     }
 
     const $newJp = ClavaJavaTypes.CxxWeaverApi.findJp(
+      Weaver.getWeaverEngine(),
       $file.filepath,
       $jp.astId
     );
@@ -209,7 +210,7 @@ extern "C" {
   static writeCode(outputFoldername: string) {
     const outputFolder = Io.mkdir(outputFoldername);
 
-    ClavaJavaTypes.CxxWeaverApi.writeCode(outputFolder);
+    ClavaJavaTypes.CxxWeaverApi.writeCode(Weaver.getWeaverEngine(), outputFolder);
 
     return outputFolder;
   }
@@ -233,7 +234,7 @@ extern "C" {
    * @returns A list of join points representing available user includes
    */
   static getAvailableIncludes(): JavaClasses.List<Include> {
-    return ClavaJavaTypes.CxxWeaverApi.getAvailableUserIncludes();
+    return ClavaJavaTypes.CxxWeaverApi.getAvailableUserIncludes(Weaver.getWeaverEngine());
   }
 
   /**
@@ -241,6 +242,6 @@ extern "C" {
    * @returns {J#Set<String>} A set with paths to the include folders of the current configuration.
    */
   static getIncludeFolders() {
-    return ClavaJavaTypes.CxxWeaverApi.getIncludeFolders();
+    return ClavaJavaTypes.CxxWeaverApi.getIncludeFolders(Weaver.getWeaverEngine());
   }
 }
