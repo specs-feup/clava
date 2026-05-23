@@ -1,42 +1,33 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.AsmStmt;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AAsmStmt;
 
-public class CxxAsmStmt extends AAsmStmt {
+public class CxxAsmStmt<Self extends CxxAsmStmt<Self>> extends AAsmStmt<Self> {
 
-    private final AsmStmt asmStmt;
-
-    /**
-     * @param asmStmt
-     */
     public CxxAsmStmt(AsmStmt asmStmt, CxxWeaver weaver) {
-        super(new CxxStatement(asmStmt, weaver), weaver);
-
-        this.asmStmt = asmStmt;
+        super(asmStmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return asmStmt;
+    public AsmStmt getNodeImpl() {
+        return (AsmStmt) super.getNodeImpl();
     }
 
     @Override
-    public String[] getClobbersArrayImpl() {
-        return asmStmt.get(AsmStmt.CLOBBERS).toArray(new String[0]);
+    public String[] getClobbersImpl() {
+        return this.getNodeImpl().get(AsmStmt.CLOBBERS).toArray(new String[0]);
     }
 
     @Override
-    public Boolean getIsSimpleImpl() {
-        return asmStmt.get(AsmStmt.IS_SIMPLE);
+    public boolean getIsSimpleImpl() {
+        return this.getNodeImpl().get(AsmStmt.IS_SIMPLE);
     }
 
     @Override
-    public Boolean getIsVolatileImpl() {
-        return asmStmt.get(AsmStmt.IS_VOLATILE);
+    public boolean getIsVolatileImpl() {
+        return this.getNodeImpl().get(AsmStmt.IS_VOLATILE);
     }
-
 
 }

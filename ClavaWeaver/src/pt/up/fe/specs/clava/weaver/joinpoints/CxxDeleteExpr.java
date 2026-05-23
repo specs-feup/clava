@@ -13,23 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeleteExpr;
 
-public class CxxDeleteExpr extends ADeleteExpr {
-
-    private final CXXDeleteExpr deleteExpr;
+public class CxxDeleteExpr<Self extends CxxDeleteExpr<Self>> extends ADeleteExpr<Self> {
 
     public CxxDeleteExpr(CXXDeleteExpr deleteExpr, CxxWeaver weaver) {
-        super(new CxxExpression(deleteExpr, weaver), weaver);
-        this.deleteExpr = deleteExpr;
+        super(deleteExpr, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return deleteExpr;
+    public CXXDeleteExpr getNodeImpl() {
+        return (CXXDeleteExpr) super.getNodeImpl();
     }
 
 }

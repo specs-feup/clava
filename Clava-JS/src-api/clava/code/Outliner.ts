@@ -11,6 +11,7 @@ import {
   FileJp,
   FunctionJp,
   Joinpoint,
+  OpKind,
   Param,
   PointerType,
   ReturnStmt,
@@ -228,13 +229,13 @@ export default class Outliner {
     for (const ret of returnStmts) {
       const resVarParam = fun.params[fun.params.length - 2];
       const derefResVarParam = ClavaJoinPoints.unaryOp(
-        "*",
+        OpKind.deref,
         resVarParam.varref()
       );
       const retVal = ret.children[0];
       retVal.detach();
       const op1 = ClavaJoinPoints.binaryOp(
-        "=",
+        OpKind.eq,
         derefResVarParam,
         retVal as any,
         resVarParam.type
@@ -243,10 +244,10 @@ export default class Outliner {
 
       const boolVarParam = fun.params[fun.params.length - 1];
       const newVarref = ClavaJoinPoints.varRef(boolVarParam);
-      const derefBoolVarParam = ClavaJoinPoints.unaryOp("*", newVarref);
+      const derefBoolVarParam = ClavaJoinPoints.unaryOp(OpKind.deref, newVarref);
       const trueVal = ClavaJoinPoints.integerLiteral(1);
       const op2 = ClavaJoinPoints.binaryOp(
-        "=",
+        OpKind.eq,
         derefBoolVarParam,
         trueVal,
         boolVarParam.type
@@ -256,8 +257,8 @@ export default class Outliner {
     fun.setType(ClavaJoinPoints.type("void"));
 
     // actions on the function call
-    const resVarAddr = ClavaJoinPoints.unaryOp("&", resVarRef);
-    const boolVarAddr = ClavaJoinPoints.unaryOp("&", boolVarRef);
+    const resVarAddr = ClavaJoinPoints.unaryOp(OpKind.addr_of, resVarRef);
+    const boolVarAddr = ClavaJoinPoints.unaryOp(OpKind.addr_of, boolVarRef);
     const allArgs = call.argList.concat([resVarAddr, boolVarAddr]);
     call = this.createCall(call, fun, allArgs);
 
@@ -341,7 +342,7 @@ export default class Outliner {
             param.type instanceof PointerType &&
             ref.type instanceof BuiltinType
           ) {
-            const addressOfScalar = ClavaJoinPoints.unaryOp("&", ref);
+            const addressOfScalar = ClavaJoinPoints.unaryOp(OpKind.addr_of, ref);
             args.push(addressOfScalar);
           } else {
             args.push(ref);
@@ -409,7 +410,7 @@ export default class Outliner {
             varref.type instanceof BuiltinType
           ) {
             const newVarref = ClavaJoinPoints.varRef(param);
-            const op = ClavaJoinPoints.unaryOp("*", newVarref);
+            const op = ClavaJoinPoints.unaryOp(OpKind.deref, newVarref);
             varref.replaceWith(op);
           }
         }

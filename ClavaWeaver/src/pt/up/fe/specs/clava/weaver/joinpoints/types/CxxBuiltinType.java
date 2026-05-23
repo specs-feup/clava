@@ -13,54 +13,49 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABuiltinType;
 
-public class CxxBuiltinType extends ABuiltinType {
-
-    private final BuiltinType builtinType;
+public class CxxBuiltinType<Self extends CxxBuiltinType<Self>> extends ABuiltinType<Self> {
 
     public CxxBuiltinType(BuiltinType builtinType, CxxWeaver weaver) {
-        super(new CxxType(builtinType, weaver), weaver);
-
-        this.builtinType = builtinType;
+        super(builtinType, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return builtinType;
+    public BuiltinType getNodeImpl() {
+        return (BuiltinType) super.getNodeImpl();
     }
 
     @Override
     public String getBuiltinKindImpl() {
-        return builtinType.get(BuiltinType.KIND).name();
+        return this.getNodeImpl().get(BuiltinType.KIND).name();
     }
 
     @Override
-    public Boolean getIsIntegerImpl() {
-        return builtinType.get(BuiltinType.KIND).isInteger();
+    public boolean getIsIntegerImpl() {
+        return this.getNodeImpl().get(BuiltinType.KIND).isInteger();
     }
 
     @Override
-    public Boolean getIsFloatImpl() {
-        return builtinType.get(BuiltinType.KIND).isFloatingPoint();
+    public boolean getIsFloatImpl() {
+        return this.getNodeImpl().get(BuiltinType.KIND).isFloatingPoint();
     }
 
     @Override
-    public Boolean getIsSignedImpl() {
-        return builtinType.get(BuiltinType.KIND).isSignedInteger();
+    public boolean getIsSignedImpl() {
+        return this.getNodeImpl().get(BuiltinType.KIND).isSignedInteger();
     }
 
     @Override
-    public Boolean getIsUnsignedImpl() {
-        return builtinType.get(BuiltinType.KIND).isUnsignedInteger();
+    public boolean getIsUnsignedImpl() {
+        return this.getNodeImpl().get(BuiltinType.KIND).isUnsignedInteger();
     }
 
     @Override
-    public Boolean getIsVoidImpl() {
-        return builtinType.get(BuiltinType.KIND).isVoid();
+    public boolean getIsVoidImpl() {
+        return this.getNodeImpl().get(BuiltinType.KIND).isVoid();
     }
 
 }

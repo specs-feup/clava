@@ -13,31 +13,26 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AInitList;
 
-public class CxxInitList extends AInitList {
-
-    private final InitListExpr initList;
+public class CxxInitList<Self extends CxxInitList<Self>> extends AInitList<Self> {
 
     public CxxInitList(InitListExpr initList, CxxWeaver weaver) {
-        super(new CxxExpression(initList, weaver), weaver);
-
-        this.initList = initList;
+        super(initList, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return initList;
+    public InitListExpr getNodeImpl() {
+        return (InitListExpr) super.getNodeImpl();
     }
 
     @Override
-    public AExpression getArrayFillerImpl() {
-        return initList.get(InitListExpr.ARRAY_FILLER)
+    public AExpression<?> getArrayFillerImpl() {
+        return this.getNodeImpl().get(InitListExpr.ARRAY_FILLER)
                 .map(n -> CxxJoinpoints.create(n,
                         getWeaverEngine(), AExpression.class))
                 .orElse(null);

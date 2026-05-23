@@ -23,7 +23,6 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 
@@ -51,7 +50,7 @@ public class ClavaPragmas {
                 return;
             }
 
-            ACxxWeaverJoinPoint jp = CxxJoinpoints.create(targetNode.get(), weaver);
+            var jp = CxxJoinpoints.create(targetNode.get(), weaver);
             clavaDirective.ifPresent(directive -> directive.apply(jp));
             return;
         }

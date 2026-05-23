@@ -14,6 +14,9 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.util.List;
+
+import org.lara.interpreter.weaver.interf.enums.InsertPosition;
+
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -30,35 +33,32 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.Insert;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.util.SpecsLogs;
 
-public class CxxScope extends AScope {
-
-    private final CompoundStmt scope;
+public class CxxScope<Self extends CxxScope<Self>> extends AScope<Self> {
 
     public CxxScope(CompoundStmt scope, CxxWeaver weaver) {
-        super(new CxxStatement(scope, weaver), weaver);
-        this.scope = scope;
+        super(scope, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return scope;
+    public CompoundStmt getNodeImpl() {
+        return (CompoundStmt) super.getNodeImpl();
     }
 
     @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
+    public AJoinpoint<?>[] insertImpl(InsertPosition position, String code) {
 
         // 'body' behaviour
-        if (!scope.isNestedScope()) {
+        if (!this.getNodeImpl().isNestedScope()) {
             Stmt literalStmt = getWeaverEngine().getSnippetParser().parseStmt(code);
-            CxxActions.insertStmt(position, scope, literalStmt, getWeaverEngine());
-            return new AJoinPoint[] { CxxJoinpoints.create(literalStmt, getWeaverEngine()) };
+            CxxActions.insertStmt(position, this.getNodeImpl(), literalStmt, getWeaverEngine());
+            return new AJoinpoint[] { CxxJoinpoints.create(literalStmt, getWeaverEngine()) };
         }
 
         // Default behaviour
@@ -66,88 +66,88 @@ public class CxxScope extends AScope {
     }
 
     @Override
-    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+    public AJoinpoint<?> insertBeforeImpl(AJoinpoint<?> node) {
 
         // 'body' behaviour
-        if (!scope.isNestedScope()) {
+        if (!this.getNodeImpl().isNestedScope()) {
             ClavaLog.warning("Avoid using action 'insert before' over 'body' joinpoint, use 'insertBegin' instead.");
-            return insertBodyImplJp("before", node.getNode());
+            return insertBodyImplJp(InsertPosition.BEFORE, node.getNodeImpl());
         }
 
         return super.insertBeforeImpl(node);
     }
 
     @Override
-    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+    public AJoinpoint<?> insertAfterImpl(AJoinpoint<?> node) {
 
         // 'body' behaviour
-        if (!scope.isNestedScope()) {
+        if (!this.getNodeImpl().isNestedScope()) {
             ClavaLog.warning("Avoid using action 'insert after' over 'body' joinpoint, use 'insertEnd' instead.");
-            return insertBodyImplJp("after", node.getNode());
+            return insertBodyImplJp(InsertPosition.AFTER, node.getNodeImpl());
         }
 
         return super.insertAfterImpl(node);
     }
 
     @Override
-    public AJoinPoint replaceWithImpl(AJoinPoint node) {
+    public AJoinpoint<?> replaceWithImpl(AJoinpoint<?> node) {
 
         // 'body' behaviour
-        if (!scope.isNestedScope() && !(node instanceof AScope)) {
+        if (!this.getNodeImpl().isNestedScope() && !(node instanceof AScope)) {
 
             // Transform, if needed, the given node into a stmt
-            Stmt stmt = ClavaNodes.toStmt(node.getNode());
-            return insertBodyImplJp("replace", stmt);
+            Stmt stmt = ClavaNodes.toStmt(node.getNodeImpl());
+            return insertBodyImplJp(InsertPosition.REPLACE, stmt);
         }
 
         // Default behaviour
         return super.replaceWithImpl(node);
     }
 
-    private AJoinPoint insertBodyImplJp(String position, ClavaNode newNode) {
+    private AJoinpoint<?> insertBodyImplJp(InsertPosition position, ClavaNode newNode) {
 
-        Stmt newStmt = ClavaNodes.getValidStatement(newNode, Insert.valueOf(position.toUpperCase()).toPosition());
+        Stmt newStmt = ClavaNodes.getValidStatement(newNode, Insert.valueOf(position.getDisplay().toUpperCase()).toPosition());
         if (newStmt == null) {
             return null;
         }
 
-        CxxActions.insertStmt(position, scope, newStmt, getWeaverEngine());
+        CxxActions.insertStmt(position, this.getNodeImpl(), newStmt, getWeaverEngine());
 
         // Body becomes the parent of this statement
         return CxxJoinpoints.create(newStmt, getWeaverEngine());
     }
 
     @Override
-    public AJoinPoint insertBeginImpl(String code) {
+    public AJoinpoint<?> insertBeginImpl(String code) {
         return insertBeginImpl(AstFactory.stmtLiteral(getWeaverEngine(), code));
     }
 
     @Override
-    public AJoinPoint insertBeginImpl(AJoinPoint node) {
-        Stmt newStmt = ClavaNodes.toStmt(node.getNode());
+    public AJoinpoint<?> insertBeginImpl(AJoinpoint<?> node) {
+        Stmt newStmt = ClavaNodes.toStmt(node.getNodeImpl());
 
-        CxxActions.insertStmt("before", scope, newStmt, getWeaverEngine());
+        CxxActions.insertStmt(InsertPosition.BEFORE, this.getNodeImpl(), newStmt, getWeaverEngine());
 
         return CxxJoinpoints.create(newStmt, getWeaverEngine());
     }
 
     @Override
-    public AJoinPoint insertEndImpl(String code) {
+    public AJoinpoint<?> insertEndImpl(String code) {
         return insertEndImpl(AstFactory.stmtLiteral(getWeaverEngine(), code));
     }
 
     @Override
-    public AJoinPoint insertEndImpl(AJoinPoint node) {
-        Stmt newStmt = ClavaNodes.toStmt(node.getNode());
+    public AJoinpoint<?> insertEndImpl(AJoinpoint<?> node) {
+        Stmt newStmt = ClavaNodes.toStmt(node.getNodeImpl());
 
-        CxxActions.insertStmt("after", scope, newStmt, getWeaverEngine());
+        CxxActions.insertStmt(InsertPosition.AFTER, this.getNodeImpl(), newStmt, getWeaverEngine());
 
         return CxxJoinpoints.create(newStmt, getWeaverEngine());
     }
 
     @Override
-    public Long getNumStatementsImpl(Boolean flat) {
-        var nodesStream = flat ? scope.getChildrenStream() : scope.getDescendantsStream();
+    public long getGetNumStatementsImpl(boolean flat) {
+        var nodesStream = flat ? this.getNodeImpl().getChildrenStream() : this.getNodeImpl().getDescendantsStream();
 
         return nodesStream.filter(Stmt.class::isInstance)
                 // Ignore CompoundStmt, etc
@@ -157,34 +157,34 @@ public class CxxScope extends AScope {
     }
 
     private List<Stmt> getStatements() {
-        return scope.toStatements();
+        return this.getNodeImpl().toStatements();
     }
 
     @Override
     public void clearImpl() {
-        CxxActions.removeChildren(scope, getWeaverEngine());
+        CxxActions.removeChildren(this.getNodeImpl(), getWeaverEngine());
     }
 
     @Override
-    public Boolean getNakedImpl() {
-        return scope.isNaked();
+    public boolean getNakedImpl() {
+        return this.getNodeImpl().isNaked();
     }
 
     @Override
-    public void setNakedImpl(Boolean isNaked) {
-        scope.setNaked(isNaked);
+    public void setNakedImpl(boolean isNaked) {
+        this.getNodeImpl().setNaked(isNaked);
     }
 
     @Override
-    public AJoinPoint addLocalImpl(String name, AJoinPoint type, String initValue) {
+    public AJoinpoint<?> addLocalImpl(String name, AJoinpoint<?> type, String initValue) {
 
         // Check if joinpoint is a CxxType
         if (!(type instanceof AType)) {
-            SpecsLogs.msgInfo("addLocal: the provided join point (" + type.getJoinPointType() + ") is not a type");
+            SpecsLogs.msgInfo("addLocal: the provided join point (" + type.joinPointType() + ") is not a type");
             return null;
         }
 
-        Type typeNode = (Type) type.getNode();
+        Type typeNode = (Type) type.getNodeImpl();
 
         // defaults as no init
         Expr initExpr = null;
@@ -199,7 +199,7 @@ public class CxxScope extends AScope {
         }
         varDecl.set(VarDecl.IS_USED);
 
-        AJoinPoint varDeclJp = CxxJoinpoints.create(varDecl, getWeaverEngine());
+        AJoinpoint<?> varDeclJp = CxxJoinpoints.create(varDecl, getWeaverEngine());
 
         insertBegin(varDeclJp);
 
@@ -207,18 +207,18 @@ public class CxxScope extends AScope {
     }
 
     @Override
-    public AStatement[] getStmtsArrayImpl() {
-        return CxxJoinpoints.create(getNode().getChildren(Stmt.class), getWeaverEngine(), AStatement.class);
+    public AStatement<?>[] getStmtsImpl() {
+        return CxxJoinpoints.create(getNodeImpl().getChildren(Stmt.class), getWeaverEngine(), AStatement.class);
     }
 
     @Override
-    public AStatement[] getAllStmtsArrayImpl() {
-        return CxxSelects.select(getWeaverEngine(), AStatement.class, getStatements(), true, CxxSelects::stmtFilter).toArray(new AStatement[0]);
+    public AStatement<?>[] getAllStmtsImpl() {
+        return CxxSelects.select(getWeaverEngine(), AStatement.class, getStatements(), true, CxxSelects::stmtFilter);
     }
 
     @Override
-    public AStatement getFirstStmtImpl() {
-        AStatement[] stmts = getStmtsArrayImpl();
+    public AStatement<?> getFirstStmtImpl() {
+        AStatement<?>[] stmts = getStmtsImpl();
 
         if (stmts.length == 0) {
             return null;
@@ -229,8 +229,8 @@ public class CxxScope extends AScope {
     }
 
     @Override
-    public AStatement getLastStmtImpl() {
-        AStatement[] stmts = getStmtsArrayImpl();
+    public AStatement<?> getLastStmtImpl() {
+        AStatement<?>[] stmts = getStmtsImpl();
 
         if (stmts.length == 0) {
             return null;
@@ -240,14 +240,14 @@ public class CxxScope extends AScope {
     }
 
     @Override
-    public AJoinPoint getOwnerImpl() {
+    public AJoinpoint<?> getOwnerImpl() {
         // TODO: This should generically work, but corner cases have not been checked
         return getParentImpl();
     }
 
     @Override
     public String cfgImpl() {
-        ControlFlowGraph cfg = new ControlFlowGraph(scope);
+        ControlFlowGraph cfg = new ControlFlowGraph(this.getNodeImpl());
         var cfgDot = cfg.toDot();
         ClavaLog.info(cfgDot);
         return cfgDot;
@@ -255,19 +255,19 @@ public class CxxScope extends AScope {
 
     @Override
     public String dfgImpl() {
-        DataFlowGraph dfg = new DataFlowGraph(scope);
+        DataFlowGraph dfg = new DataFlowGraph(this.getNodeImpl());
         var dfgDot = dfg.toDot();
         ClavaLog.info(dfgDot);
         return dfgDot;
     }
 
     @Override
-    public AJoinPoint insertReturnImpl(AJoinPoint code) {
+    public AJoinpoint<?> insertReturnImpl(AJoinpoint<?> code) {
         return CxxActions.insertReturn(this, code, getWeaverEngine());
     }
 
     @Override
-    public AJoinPoint insertReturnImpl(String code) {
+    public AJoinpoint<?> insertReturnImpl(String code) {
         var stmt = CxxJoinpoints.create(getWeaverEngine().getSnippetParser().parseStmt(code), getWeaverEngine());
         return insertReturnImpl(stmt);
     }

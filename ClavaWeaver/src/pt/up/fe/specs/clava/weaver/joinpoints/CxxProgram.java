@@ -13,7 +13,15 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -26,41 +34,23 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AProgram;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-public class CxxProgram extends AProgram {
+public class CxxProgram<Self extends CxxProgram<Self>> extends AProgram<Self> {
 
     private final String name;
-    private final App app;
-    // private final File baseFolder;
-
-    // private final List<String> parserOptions;
-
-    // public CxxProgram(File baseFolder, App app, List<String> parserOptions) {
-    // this.baseFolder = baseFolder;
-    // this.app = app;
-    // this.parserOptions = parserOptions;
-    // }
 
     public CxxProgram(App app, CxxWeaver weaver) {
-        super(weaver);
+        super(app, weaver);
         this.name = weaver.getProgramName();
-        this.app = app;
     }
 
     @Override
-    public App getNode() {
-        return app;
+    public App getNodeImpl() {
+        return (App) super.getNodeImpl();
     }
 
     @Override
@@ -81,19 +71,19 @@ public class CxxProgram extends AProgram {
     }
 
     @Override
-    public AJoinPoint addFileImpl(AFile file) {
-        TranslationUnit tu = (TranslationUnit) file.getNode();
-        TranslationUnit trueTu = app.addFile(tu);
+    public AJoinpoint<?> addFileImpl(AFile<?> file) {
+        TranslationUnit tu = (TranslationUnit) file.getNodeImpl();
+        TranslationUnit trueTu = this.getNodeImpl().addFile(tu);
 
         if (tu == trueTu) {
             return file;
         }
 
-        return new CxxFile(trueTu, getWeaverEngine());
+        return new CxxFile<>(trueTu, getWeaverEngine());
     }
 
     @Override
-    public String[] getIncludeFoldersArrayImpl() {
+    public String[] getIncludeFoldersImpl() {
         Set<String> includeFolders = getWeaverEngine().getIncludeFolders();
 
         return includeFolders.toArray(new String[0]);
@@ -110,23 +100,17 @@ public class CxxProgram extends AProgram {
     }
 
     @Override
-    public String[] getDefaultFlagsArrayImpl() {
+    public String[] getDefaultFlagsImpl() {
         return CxxWeaver.getDefaultFlags().toArray(new String[0]);
     }
 
     @Override
-    public String[] getUserFlagsArrayImpl() {
+    public String[] getUserFlagsImpl() {
         return getWeaverEngine().getUserFlags().toArray(new String[0]);
     }
 
-    // @Override
-    // public void messageToUserImpl(String message) {
-    // weaver.addMessageToUser(message);
-    // }
-
     @Override
     public String getBaseFolderImpl() {
-        // ClavaLog.deprecated("attribute baseFolder should not be used, instead use file.sourcePath");
         List<File> sources = getWeaverEngine().getSources();
         if (sources.isEmpty()) {
             SpecsLogs.warn("Expected at least program to have one source folder, found none");
@@ -139,12 +123,12 @@ public class CxxProgram extends AProgram {
     }
 
     public DataStore getAppData() {
-        return app.getAppData();
+        return this.getNodeImpl().getAppData();
     }
 
     @Override
     public String getCodeImpl() {
-        return app.getCode();
+        return this.getNodeImpl().getCode();
     }
 
     @Override
@@ -163,74 +147,74 @@ public class CxxProgram extends AProgram {
     }
 
     @Override
-    public Boolean getIsCxxImpl() {
+    public boolean getIsCxxImpl() {
         return getWeaverEngine().getConfig().get(ClavaOptions.STANDARD).isCxx();
     }
 
     @Override
-    public String[] getExtraSourcesArrayImpl() {
-        return app.getExternalDependencies().getExtraSources().stream()
+    public String[] getExtraSourcesImpl() {
+        return this.getNodeImpl().getExternalDependencies().getExtraSources().stream()
                 .map(File::getAbsolutePath)
                 .collect(Collectors.toList())
                 .toArray(new String[0]);
     }
 
     @Override
-    public String[] getExtraIncludesArrayImpl() {
-        return app.getExternalDependencies().getExtraIncludes().stream()
+    public String[] getExtraIncludesImpl() {
+        return this.getNodeImpl().getExternalDependencies().getExtraIncludes().stream()
                 .map(File::getAbsolutePath)
                 .collect(Collectors.toList())
                 .toArray(new String[0]);
     }
 
     @Override
-    public String[] getExtraProjectsArrayImpl() {
-        return app.getExternalDependencies().getProjects().stream()
+    public String[] getExtraProjectsImpl() {
+        return this.getNodeImpl().getExternalDependencies().getProjects().stream()
                 .map(File::getAbsolutePath)
                 .collect(Collectors.toList())
                 .toArray(new String[0]);
     }
 
     @Override
-    public String[] getExtraLibsArrayImpl() {
+    public String[] getExtraLibsImpl() {
 
-        return app.getExternalDependencies().getLibs()
+        return this.getNodeImpl().getExternalDependencies().getLibs()
                 .toArray(new String[0]);
     }
 
     @Override
     public void addExtraIncludeImpl(String path) {
-        app.getExternalDependencies().addInclude(new File(path));
+        this.getNodeImpl().getExternalDependencies().addInclude(new File(path));
     }
 
     @Override
     public void addExtraIncludeFromGitImpl(String gitRepository, String path) {
-        app.getExternalDependencies().addIncludeFromGit(gitRepository, path);
+        this.getNodeImpl().getExternalDependencies().addIncludeFromGit(gitRepository, path);
     }
 
     @Override
     public void addExtraSourceImpl(String path) {
-        app.getExternalDependencies().addSource(new File(path));
+        this.getNodeImpl().getExternalDependencies().addSource(new File(path));
 
     }
 
     @Override
     public void addExtraSourceFromGitImpl(String gitRepository, String path) {
-        app.getExternalDependencies().addSourceFromGit(gitRepository, path);
+        this.getNodeImpl().getExternalDependencies().addSourceFromGit(gitRepository, path);
     }
 
     @Override
     public void addExtraLibImpl(String lib) {
-        app.getExternalDependencies().addLib(lib);
+        this.getNodeImpl().getExternalDependencies().addLib(lib);
     }
 
     @Override
     public void addProjectFromGitImpl(String gitRepo, String[] libs, String path) {
-        app.getExternalDependencies().addProjectFromGit(gitRepo, Arrays.asList(libs), path);
+        this.getNodeImpl().getExternalDependencies().addProjectFromGit(gitRepo, Arrays.asList(libs), path);
     }
 
     @Override
-    public AJoinPoint addFileFromPathImpl(Object filepath) {
+    public AJoinpoint<?> addFileFromPathImpl(Object filepath) {
         File file = getFile(filepath);
 
         if (!file.isFile()) {
@@ -244,7 +228,7 @@ public class CxxProgram extends AProgram {
         // Create file join point
         TranslationUnit newTu = getFactory().translationUnit(file, Arrays.asList(code));
 
-        return addFileImpl(new CxxFile(newTu, getWeaverEngine()));
+        return addFileImpl(new CxxFile<>(newTu, getWeaverEngine()));
     }
 
     private File getFile(Object filepath) {
@@ -256,21 +240,17 @@ public class CxxProgram extends AProgram {
     }
 
     @Override
-    public AFunction getMainImpl() {
-        for (TranslationUnit tunit : app.getTranslationUnits()) {
+    public AFunction<?> getMainImpl() {
+        for (TranslationUnit tunit : this.getNodeImpl().getTranslationUnits()) {
             for (ClavaNode child : tunit.getChildren()) {
-                // ClavaLog.debug("getMain: checking if child is FunctionDecl");
                 if (!(child instanceof FunctionDecl)) {
                     continue;
                 }
 
                 FunctionDecl function = (FunctionDecl) child;
-                // ClavaLog.debug("getMain: checking if function is main");
                 if (!function.getDeclName().toLowerCase().equals("main")) {
                     continue;
                 }
-
-                // ClavaLog.debug("getMain: checking if function '" + function.getDeclName() + "' is definition");
 
                 // Calling isDefinition() can be expensive, specially if there are many functions,
                 // testing name first is faster
@@ -283,26 +263,11 @@ public class CxxProgram extends AProgram {
         }
 
         return null;
-        /*
-        // Find main function
-        return (AFunction) app.getDescendantsStream()
-                // get functions
-                .filter(FunctionDecl.class::isInstance)
-                .map(FunctionDecl.class::cast)
-                // only definitions
-                .filter(FunctionDecl::isDefinition)
-                // the main function
-                .filter(fdecl -> fdecl.getDeclName().toLowerCase().equals("main"))
-                .map(CxxJoinpoints::create)
-                .findFirst()
-                .orElse(null);
-                */
     }
 
     @Override
-    public void atexitImpl(AFunction function) {
-        // ClavaLog.debug("Getting main function");
-        AFunction mainFunction = getMainImpl();
+    public void atexitImpl(AFunction<?> function) {
+        AFunction<?> mainFunction = getMainImpl();
 
         if (mainFunction == null) {
             ClavaLog.info("atexit: main() function not found, could not register function");
@@ -314,26 +279,20 @@ public class CxxProgram extends AProgram {
                 getFactory().builtinType("void"));
 
         // Insert call at the beginning of the main function
-        // ClavaLog.debug("Inserting atexit call at beginning of main");
         mainFunction.getBodyImpl().insertBegin(CxxJoinpoints.create(atexitCall, getWeaverEngine()));
 
         // Add include for atexit
-        // ClavaLog.debug("Getting file ancestor");
-        AFile file = (AFile) mainFunction.getAncestorImpl("file");
-        Objects.requireNonNull(file, () -> "Expected main function to be inside a file: " + mainFunction.getNode());
-        // ClavaLog.debug("Adding stdlib.h include");
+        AFile<?> file = (AFile<?>) mainFunction.getGetAncestorImpl("file");
+        Objects.requireNonNull(file, () -> "Expected main function to be inside a file: " + mainFunction.getNodeImpl());
         file.addInclude("stdlib.h", true);
 
         // Add include for function
-        // ClavaLog.debug("Adding function include");
         file.addIncludeJpImpl(function);
-
-        // ClavaLog.debug("Finsished");
     }
 
     @Override
-    public AFile[] getFilesArrayImpl() {
-        return app.getTranslationUnits().stream()
+    public AFile<?>[] getFilesImpl() {
+        return this.getNodeImpl().getTranslationUnits().stream()
                 .map(tunit -> CxxJoinpoints.create(tunit,
                         getWeaverEngine(), AFile.class))
                 .collect(Collectors.toList()).toArray(size -> new AFile[size]);

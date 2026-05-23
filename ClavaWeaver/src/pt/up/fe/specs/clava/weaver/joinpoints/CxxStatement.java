@@ -14,56 +14,47 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.util.List;
-import pt.up.fe.specs.clava.ClavaNode;
+
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
-public class CxxStatement extends AStatement {
-
-    private final Stmt stmt;
+public class CxxStatement<Self extends CxxStatement<Self>> extends AStatement<Self> {
 
     public CxxStatement(Stmt stmt, CxxWeaver weaver) {
-        super(weaver);
-        this.stmt = stmt;
+        super(stmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return stmt;
+    public Stmt getNodeImpl() {
+        return (Stmt) super.getNodeImpl();
     }
 
     @Override
-    public AJoinPoint replaceWithImpl(AJoinPoint node) {
+    public AJoinpoint<?> replaceWithImpl(AJoinpoint<?> node) {
         // First "transform" node to insert into a statement
-        Stmt newStmt = ClavaNodes.toStmt(node.getNode());
+        Stmt newStmt = ClavaNodes.toStmt(node.getNodeImpl());
 
-        NodeInsertUtils.replace(stmt, newStmt);
+        NodeInsertUtils.replace(this.getNodeImpl(), newStmt);
 
         // Return a statement joinpoint
         return CxxJoinpoints.create(newStmt, getWeaverEngine());
     }
 
     @Override
-    public Boolean getIsFirstImpl() {
+    public boolean getIsFirstImpl() {
         // Get parent and check Stmt position on that list
-        return stmt.getParent().getChildren(Stmt.class).indexOf(stmt) == 0;
-
-        // return stmt.indexOfSelf() == 1;
-        // List<? extends AStatement> statementJps = parent.selectStatements();
-        // Preconditions.checkArgument(!statementJps.isEmpty(), "Expected parent to ");
+        return this.getNodeImpl().getParent().getChildren(Stmt.class).indexOf(this.getNodeImpl()) == 0;
     }
 
     @Override
-    public Boolean getIsLastImpl() {
+    public boolean getIsLastImpl() {
         // Get parent and check Stmt position on that list
-        List<Stmt> siblings = stmt.getParent().getChildren(Stmt.class);
-        return siblings.indexOf(stmt) == (siblings.size() - 1);
-
-        // return stmt.indexOfSelf() == stmt.getParentImpl().numChildren();
+        List<Stmt> siblings = this.getNodeImpl().getParent().getChildren(Stmt.class);
+        return siblings.indexOf(this.getNodeImpl()) == (siblings.size() - 1);
     }
 }

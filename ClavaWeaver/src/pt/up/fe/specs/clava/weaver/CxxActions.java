@@ -14,6 +14,8 @@
 package pt.up.fe.specs.clava.weaver;
 
 import com.google.common.base.Preconditions;
+
+import org.lara.interpreter.weaver.interf.enums.InsertPosition;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -23,7 +25,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.stmt.*;
 import pt.up.fe.specs.clava.utils.NodePosition;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.util.SpecsCheck;
@@ -63,13 +65,13 @@ public class CxxActions {
      * @param position
      * @param from
      */
-    public static AJoinPoint insertAsStmt(ClavaNode target, String code, Insert insert, CxxWeaver weaver) {
+    public static AJoinpoint<?> insertAsStmt(ClavaNode target, String code, Insert insert, CxxWeaver weaver) {
         // If target is part of App, clear caches
         target.getAncestorTry(App.class).ifPresent(app -> {
             app.clearCache();
             weaver.getEventTrigger().triggerAction(Stage.DURING,
-                    "CxxActions.insertAsStmt",
-                    CxxJoinpoints.create(target, weaver), Arrays.asList(insert, code), Optional.empty());
+                    CxxJoinpoints.create(target, weaver),
+                    "CxxActions.insertAsStmt", Optional.empty(), Arrays.asList(insert, code));
         });
 
         // Convert Insert to NodePosition
@@ -99,13 +101,13 @@ public class CxxActions {
         }
     }
 
-    public static AJoinPoint[] insertAsChild(String position, ClavaNode base, ClavaNode node, CxxWeaver weaver) {
+    public static AJoinpoint<?>[] insertAsChild(String position, ClavaNode base, ClavaNode node, CxxWeaver weaver) {
         // If base is part of App, clear caches
         base.getAncestorTry(App.class).ifPresent(app -> {
             app.clearCache();
             weaver.getEventTrigger().triggerAction(Stage.DURING,
-                    "CxxActions.insertAsChild",
-                    CxxJoinpoints.create(base, weaver), Arrays.asList(position, CxxJoinpoints.create(node, weaver)), Optional.empty());
+                    CxxJoinpoints.create(base, weaver),
+                    "CxxActions.insertAsChild", Optional.empty(), Arrays.asList(position, CxxJoinpoints.create(node, weaver)));
         });
 
         switch (position) {
@@ -132,7 +134,7 @@ public class CxxActions {
                 // // Remove all children
                 // base.removeChildren(0, base.getNumChildren());
                 base.addChild(node);
-                return new AJoinPoint[]{CxxJoinpoints.create(node, weaver)};
+                return new AJoinpoint[]{CxxJoinpoints.create(node, weaver)};
             default:
                 throw new RuntimeException("Case not defined:" + position);
         }
@@ -156,10 +158,10 @@ public class CxxActions {
         return NodeInsertUtils.replace(target, newNode);
     }
 
-    public static AJoinPoint insertBefore(AJoinPoint baseJp, AJoinPoint newJp, CxxWeaver weaver) {
+    public static AJoinpoint<?> insertBefore(AJoinpoint<?> baseJp, AJoinpoint<?> newJp, CxxWeaver weaver) {
         return insert(baseJp, newJp, Insert.BEFORE, (base, node) -> NodeInsertUtils.insertBefore(base, node), weaver);
-        // Stmt newStmt = ClavaNodes.toStmt(newJp.getNode());
-        // Stmt baseStmt = getValidStatement(baseJp.getNode(), Insert.BEFORE);
+        // Stmt newStmt = ClavaNodes.toStmt(newJp.getNodeImpl());
+        // Stmt baseStmt = getValidStatement(baseJp.getNodeImpl(), Insert.BEFORE);
         // if (baseStmt == null) {
         // return null;
         // }
@@ -168,14 +170,14 @@ public class CxxActions {
         // return CxxJoinpoints.create(newStmt);
     }
 
-    public static AJoinPoint insertAfter(AJoinPoint baseJp, AJoinPoint newJp, CxxWeaver weaver) {
-        checkInsertAfterReturn(baseJp.getNode(), newJp.getNode());
+    public static AJoinpoint<?> insertAfter(AJoinpoint<?> baseJp, AJoinpoint<?> newJp, CxxWeaver weaver) {
+        checkInsertAfterReturn(baseJp.getNodeImpl(), newJp.getNodeImpl());
 
         return insert(baseJp, newJp, Insert.AFTER, (base, node) -> NodeInsertUtils.insertAfter(base, node), weaver);
         // // If inside a scope, treat nodes at the statement level
         // // if
-        // Stmt newStmt = ClavaNodes.toStmt(newJp.getNode());
-        // Stmt baseStmt = getValidStatement(baseJp.getNode(), Insert.AFTER);
+        // Stmt newStmt = ClavaNodes.toStmt(newJp.getNodeImpl());
+        // Stmt baseStmt = getValidStatement(baseJp.getNodeImpl(), Insert.AFTER);
         // if (baseStmt == null) {
         // return null;
         // }
@@ -184,36 +186,36 @@ public class CxxActions {
         // return CxxJoinpoints.create(newStmt);
     }
 
-    public static AJoinPoint insert(AJoinPoint baseJp, 
-            AJoinPoint newJp, Insert position,
+    public static AJoinpoint<?> insert(AJoinpoint<?> baseJp, 
+            AJoinpoint<?> newJp, Insert position,
             BiConsumer<ClavaNode, ClavaNode> insertFunction, CxxWeaver weaver) {
 
         // Set origin point from target to newNode if locations are invalid and no origin point is set
-        var newNode = newJp.getNode();
-        var target = baseJp.getNode();
+        var newNode = newJp.getNodeImpl();
+        var target = baseJp.getNodeImpl();
         newNode.setOrigin(target);
 
 
         // Special case: if this node is a statement in a loop header, insert using a special function.
         if (baseJp.getIsInsideLoopHeaderImpl() && (position != Insert.REPLACE && position != Insert.AROUND)
-                && baseJp.getNode() instanceof Stmt) {
+                && baseJp.getNodeImpl() instanceof Stmt) {
 
             return insertInLoopHeader(baseJp, newJp, position);
         }
 
         // If baseJp will do a statement-base insertion, adapt nodes
         // Check if base is inside a scope
-        boolean isInsideScope = baseJp.getNode().getAncestorTry(CompoundStmt.class).isPresent();
+        boolean isInsideScope = baseJp.getNodeImpl().getAncestorTry(CompoundStmt.class).isPresent();
 
-        // Optional<Stmt> targetStmt = ClavaNodes.getStatement(baseJp.getNode());
-        ClavaNode adaptedBase = isInsideScope ? ClavaNodes.getValidStatement(baseJp.getNode(), position.toPosition())
-                : baseJp.getNode();
+        // Optional<Stmt> targetStmt = ClavaNodes.getStatement(baseJp.getNodeImpl());
+        ClavaNode adaptedBase = isInsideScope ? ClavaNodes.getValidStatement(baseJp.getNodeImpl(), position.toPosition())
+                : baseJp.getNodeImpl();
 
         if (adaptedBase == null) {
             return null;
         }
 
-        ClavaNode adaptedNew = isInsideScope ? ClavaNodes.toStmt(newJp.getNode()) : newJp.getNode();
+        ClavaNode adaptedNew = isInsideScope ? ClavaNodes.toStmt(newJp.getNodeImpl()) : newJp.getNodeImpl();
 
         // If adaptedNew is not a comment or a pragma, and we are inserting before, adaptedBase should be the first
         // comment or pragma associated with current base
@@ -229,23 +231,23 @@ public class CxxActions {
         // If base is part of App, clear caches
         adaptedBase.getAncestorTry(App.class).ifPresent(app -> {
             app.clearCache();
-            weaver.getEventTrigger().triggerAction(Stage.DURING, "CxxActions.insert",
-                    baseJp,
-                    Arrays.asList(position, newJp), Optional.ofNullable((Object) returnedJp));
+            weaver.getEventTrigger().triggerAction(Stage.DURING, baseJp,
+                    "CxxActions.insert",
+                    Optional.ofNullable((Object) returnedJp), Arrays.asList(position, newJp));
         });
 
         return returnedJp;
     }
 
-    private static AJoinPoint insertInLoopHeader(AJoinPoint baseJp, AJoinPoint newJp, Insert position) {
+    private static AJoinpoint<?> insertInLoopHeader(AJoinpoint<?> baseJp, AJoinpoint<?> newJp, Insert position) {
         // Check position
         if (position != Insert.BEFORE && position != Insert.AFTER) {
             throw new RuntimeException("Insertion position not supported: " + position);
         }
 
         // System.out.println("#ASDASDSAD");
-        var baseNode = baseJp.getNode();
-        var newNode = newJp.getNode();
+        var baseNode = baseJp.getNodeImpl();
+        var newNode = newJp.getNodeImpl();
         // System.out.println("BASE NODE: " + baseNode.getClass());
         // If DeclStmt, insert as new initialization
         if (baseNode instanceof DeclStmt) {
@@ -323,10 +325,10 @@ public class CxxActions {
      * @param weaver
      * @return
      */
-    public static AJoinPoint insertJpAsStatement(AJoinPoint baseJp, AJoinPoint newJp, String position,
+    public static AJoinpoint<?> insertJpAsStatement(AJoinpoint<?> baseJp, AJoinpoint<?> newJp, String position,
                                                  CxxWeaver weaver) {
 
-        AStatement stmtJp = CxxJoinpoints.create(ClavaNodes.toStmt(newJp.getNode()), weaver, AStatement.class);
+        AStatement<?> stmtJp = CxxJoinpoints.create(ClavaNodes.toStmt(newJp.getNodeImpl()), weaver, AStatement.class);
 
         return insertJp(baseJp, stmtJp, position, weaver);
     }
@@ -338,29 +340,29 @@ public class CxxActions {
      * @param newJpS
      * @param position
      */
-    public static AJoinPoint insertJp(AJoinPoint baseJp, AJoinPoint newJp, String position, CxxWeaver weaver) {
+    public static AJoinpoint<?> insertJp(AJoinpoint<?> baseJp, AJoinpoint<?> newJp, String position, CxxWeaver weaver) {
         // If baseJp is part of App, clear caches
-        baseJp.getNode().getAncestorTry(App.class).ifPresent(app -> {
+        baseJp.getNodeImpl().getAncestorTry(App.class).ifPresent(app -> {
             app.clearCache();
             weaver.getEventTrigger().triggerAction(Stage.DURING,
-                    "CxxActions.insertJp",
-                    baseJp, Arrays.asList(position, newJp), Optional.empty());
+                    baseJp,
+                    "CxxActions.insertJp", Optional.empty(), Arrays.asList(position, newJp));
         });
 
         switch (position) {
             case "before":
-                var newBase = ClavaNodes.getFirstNodeOfTargetRegion(baseJp.getNode(), newJp.getNode());
-                NodeInsertUtils.insertBefore(newBase, newJp.getNode());
+                var newBase = ClavaNodes.getFirstNodeOfTargetRegion(baseJp.getNodeImpl(), newJp.getNodeImpl());
+                NodeInsertUtils.insertBefore(newBase, newJp.getNodeImpl());
                 break;
 
             case "after":
-                NodeInsertUtils.insertAfter(baseJp.getNode(), newJp.getNode());
+                NodeInsertUtils.insertAfter(baseJp.getNodeImpl(), newJp.getNodeImpl());
                 break;
 
             case "around":
             case "replace":
-                weaver.clearUserField(baseJp.getNode());
-                NodeInsertUtils.replace(baseJp.getNode(), newJp.getNode());
+                weaver.clearUserField(baseJp.getNodeImpl());
+                NodeInsertUtils.replace(baseJp.getNodeImpl(), newJp.getNodeImpl());
                 break;
 
             default:
@@ -370,25 +372,24 @@ public class CxxActions {
         return newJp;
     }
 
-    public static void insertStmt(String position, Stmt body, Stmt stmt, CxxWeaver weaver) {
+    public static void insertStmt(InsertPosition position, Stmt body, Stmt stmt, CxxWeaver weaver) {
         Preconditions.checkArgument(body instanceof CompoundStmt);
 
         // If body is part of App, clear caches
         body.getAncestorTry(App.class).ifPresent(app -> {
             app.clearCache();
             weaver.getEventTrigger().triggerAction(Stage.DURING,
-                    "CxxActions.insertStmt",
-                    CxxJoinpoints.create(body, weaver), Arrays.asList(position, CxxJoinpoints.create(stmt, weaver)), Optional.empty());
+                    CxxJoinpoints.create(body, weaver),
+                    "CxxActions.insertStmt", Optional.empty(), Arrays.asList(position, CxxJoinpoints.create(stmt, weaver)));
         });
 
         switch (position) {
-            case "before":
+            case BEFORE:
                 // Insert before all statements in body
                 body.addChild(0, stmt);
                 break;
 
-            case "after":
-
+            case AFTER:
                 if (body.hasChildren()) {
                     checkInsertAfterReturn(body.getChild(body.getNumChildren() - 1), stmt);
                 }
@@ -396,8 +397,7 @@ public class CxxActions {
                 body.addChild(stmt);
                 break;
 
-            case "around":
-            case "replace":
+            case REPLACE:
                 // Remove all children
                 removeChildren(body, weaver);
                 // Add given statement
@@ -413,8 +413,8 @@ public class CxxActions {
         node.getAncestorTry(App.class).ifPresent(app -> {
             app.clearCache();
             weaver.getEventTrigger().triggerAction(Stage.DURING,
-                    "CxxActions.removeChildren",
-                    CxxJoinpoints.create(node, weaver), Collections.emptyList(), Optional.empty());
+                    CxxJoinpoints.create(node, weaver),
+                    "CxxActions.removeChildren", Optional.empty(), Collections.emptyList());
         });
 
         // Clear use fields
@@ -426,11 +426,11 @@ public class CxxActions {
         node.removeChildren(0, node.getNumChildren());
     }
 
-    public static AJoinPoint insertReturn(AScope scope, AJoinPoint code, CxxWeaver weaver) {
+    public static AJoinpoint<?> insertReturn(AScope<?> scope, AJoinpoint<?> code, CxxWeaver weaver) {
         // Does not take into account situations where functions returns in all paths of an if/else.
         // This means it can lead to dead-code, although for C/C++ that does not seem to be problematic.
 
-        List<Stmt> bodyStmts = ((CompoundStmt) scope.getNode()).toStatements();
+        List<Stmt> bodyStmts = ((CompoundStmt) scope.getNodeImpl()).toStatements();
 
         // Check if it has return statement, ignoring wrapper statements
         Stmt lastStmt = SpecsCollections.reverseStream(bodyStmts)
@@ -446,14 +446,14 @@ public class CxxActions {
                 .map(ReturnStmt.class::cast)
                 .collect(Collectors.toList());
 
-        AJoinPoint lastInsertPoint = null;
+        AJoinpoint<?> lastInsertPoint = null;
 
         if (lastReturnStmt != null) {
             returnStatements = SpecsCollections.concat(returnStatements, lastReturnStmt);
         }
 
         for (ReturnStmt returnStmt : returnStatements) {
-            AJoinPoint returnJp = CxxJoinpoints.create(returnStmt, weaver);
+            AJoinpoint<?> returnJp = CxxJoinpoints.create(returnStmt, weaver);
             lastInsertPoint = returnJp.insertBeforeImpl(code);
         }
 

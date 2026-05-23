@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.lara.interpreter.weaver.ast.TreeNodeAstMethods;
-import org.lara.interpreter.weaver.interf.JoinPoint;
+import org.lara.interpreter.weaver.interf.JoinPoint2;
 import org.lara.interpreter.weaver.interf.WeaverEngine;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -44,7 +44,7 @@ public class ClavaAstMethods extends TreeNodeAstMethods<ClavaNode> {
     }
 
     public ClavaAstMethods(WeaverEngine engine, Class<ClavaNode> nodeClass,
-            Function<ClavaNode, JoinPoint> toJoinPointFunction, Function<ClavaNode, String> toJoinPointNameFunction,
+            Function<ClavaNode, JoinPoint2<?, ?>> toJoinPointFunction, Function<ClavaNode, String> toJoinPointNameFunction,
             Function<ClavaNode, List<ClavaNode>> scopeChildrenGetter) {
 
         super(engine, nodeClass, toJoinPointFunction, toJoinPointNameFunction, scopeChildrenGetter);

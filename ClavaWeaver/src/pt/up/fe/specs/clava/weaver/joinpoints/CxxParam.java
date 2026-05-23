@@ -13,27 +13,23 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
 
-public class CxxParam extends AParam {
-
-    private final ParmVarDecl param;
+public class CxxParam<Self extends CxxParam<Self>> extends AParam<Self> {
 
     public CxxParam(ParmVarDecl param, CxxWeaver weaver) {
-        super(new CxxVardecl(param, weaver), weaver);
-        this.param = param;
+        super(param, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return param;
+    public ParmVarDecl getNodeImpl() {
+        return (ParmVarDecl) super.getNodeImpl();
     }
 
     @Override
-    public Boolean getIsParamImpl() {
+    public boolean getIsParamImpl() {
         return true;
     }
 

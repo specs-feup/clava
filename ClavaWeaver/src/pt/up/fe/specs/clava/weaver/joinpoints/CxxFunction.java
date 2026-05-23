@@ -13,12 +13,23 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.lara.interpreter.weaver.interf.enums.InsertPosition;
+
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.attr.CUDAGlobalAttr;
-import pt.up.fe.specs.clava.ast.decl.*;
-import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
+import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -29,66 +40,86 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABody;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
+import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.lazy.Lazy;
+import pt.up.fe.specs.util.lazy.ThreadSafeLazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.treenode.TreeNodeUtils;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+public class CxxFunction<Self extends CxxFunction<Self>> extends AFunction<Self> {
 
-public class CxxFunction extends AFunction {
-    private final FunctionDecl function;
+    private static final Lazy<Map<pt.up.fe.specs.clava.ast.decl.enums.StorageClass, StorageClass>> STORAGE_TYPE = new ThreadSafeLazy<>(
+            () -> buildStorageTypeMap());
+
+    private static Map<pt.up.fe.specs.clava.ast.decl.enums.StorageClass, StorageClass> buildStorageTypeMap() {
+        HashMap<pt.up.fe.specs.clava.ast.decl.enums.StorageClass, StorageClass> storageClasses = new HashMap<>();
+
+        storageClasses.put(pt.up.fe.specs.clava.ast.decl.enums.StorageClass.None, StorageClass.NONE);
+        storageClasses.put(pt.up.fe.specs.clava.ast.decl.enums.StorageClass.Extern, StorageClass.EXTERN);
+        storageClasses.put(pt.up.fe.specs.clava.ast.decl.enums.StorageClass.Static, StorageClass.STATIC);
+        storageClasses.put(pt.up.fe.specs.clava.ast.decl.enums.StorageClass.PrivateExtern, StorageClass.PRIVATE_EXTERN);
+        storageClasses.put(pt.up.fe.specs.clava.ast.decl.enums.StorageClass.Auto, StorageClass.AUTO);
+        storageClasses.put(pt.up.fe.specs.clava.ast.decl.enums.StorageClass.Register, StorageClass.REGISTER);
+
+        return storageClasses;
+    }
 
     public CxxFunction(FunctionDecl function, CxxWeaver weaver) {
-        super(new CxxDeclarator(function, weaver), weaver);
-        this.function = function;
+        super(function, weaver);
     }
 
     @Override
-    public FunctionDecl getNode() {
-        return function;
+    public FunctionDecl getNodeImpl() {
+        return (FunctionDecl) super.getNodeImpl();
     }
 
     @Override
-    public AType getTypeImpl() {
-        return CxxJoinpoints.create(function.getReturnType(), getWeaverEngine(), AType.class);
+    public AType<?> getTypeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getReturnType(), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public AFunctionType getFunctionTypeImpl() {
-        return CxxJoinpoints.create(function.getFunctionType(), getWeaverEngine(), AFunctionType.class);
+    public AFunctionType<?> getFunctionTypeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getFunctionType(), getWeaverEngine(), AFunctionType.class);
     }
 
     @Override
-    public ACall newCallImpl(AJoinPoint[] args) {
-        return AstFactory.callFromFunction(getWeaverEngine(), this, SpecsCollections.asListT(AJoinPoint.class, (Object[]) args));
+    public ACall<?> newCallImpl(AJoinpoint<?>[] args) {
+        return AstFactory.callFromFunction(getWeaverEngine(), this, SpecsCollections.asListT(AJoinpoint.class, (Object[]) args));
     }
 
     @Override
-    public Boolean getHasDefinitionImpl() {
+    public boolean getHasDefinitionImpl() {
         return getIsImplementationImpl();
     }
 
     @Override
-    public Boolean getIsImplementationImpl() {
-        return function.hasBody();
+    public boolean getIsImplementationImpl() {
+        return this.getNodeImpl().hasBody();
     }
 
     @Override
-    public Boolean getIsPrototypeImpl() {
-        return !function.hasBody();
+    public boolean getIsPrototypeImpl() {
+        return !this.getNodeImpl().hasBody();
     }
 
-    private AJoinPoint processNodeToInsert(AJoinPoint node) {
+    private AJoinpoint<?> processNodeToInsert(AJoinpoint<?> node) {
 
         // If node is an expression or VarDecl, convert to Stmt first
-        var clavaNode = node.getNode();
+        var clavaNode = node.getNodeImpl();
 
         if (clavaNode instanceof VarDecl || clavaNode instanceof Expr) {
             return CxxJoinpoints.create(ClavaNodes.toStmt(clavaNode), getWeaverEngine());
@@ -99,88 +130,87 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
+    public AJoinpoint<?>[] insertImpl(InsertPosition position, String code) {
         // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
         Stmt literalStmt = getWeaverEngine().getSnippetParser().parseStmt(code);
         return insertStmt(literalStmt, position);
     }
 
     @Override
-    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+    public AJoinpoint<?> insertAfterImpl(AJoinpoint<?> node) {
         var processNode = processNodeToInsert(node);
         return CxxActions.insertJp(this, processNode, "after", getWeaverEngine());
     }
 
     @Override
-    public AJoinPoint insertAfterImpl(String code) {
+    public AJoinpoint<?> insertAfterImpl(String code) {
         return insertAfterImpl(CxxJoinpoints.create(getWeaverEngine().getSnippetParser().parseStmt(code),
                 getWeaverEngine()));
     }
 
     @Override
-    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+    public AJoinpoint<?> insertBeforeImpl(AJoinpoint<?> node) {
         var processNode = processNodeToInsert(node);
         return CxxActions.insertJp(this, processNode, "before", getWeaverEngine());
     }
 
     @Override
-    public AJoinPoint insertBeforeImpl(String code) {
+    public AJoinpoint<?> insertBeforeImpl(String code) {
         return insertBeforeImpl(CxxJoinpoints.create(getWeaverEngine().getSnippetParser().parseStmt(code),
                 getWeaverEngine()));
     }
 
     @Override
-    public AJoinPoint replaceWithImpl(AJoinPoint node) {
+    public AJoinpoint<?> replaceWithImpl(AJoinpoint<?> node) {
         var processNode = processNodeToInsert(node);
         return CxxActions.insertJp(this, processNode, "replace", getWeaverEngine());
     }
 
-    private AJoinPoint[] insertStmt(Stmt newNode, String position) {
+    private AJoinpoint<?>[] insertStmt(Stmt newNode, InsertPosition position) {
         switch (position) {
-            case "before":
-                NodeInsertUtils.insertBefore(function, newNode);
+            case BEFORE:
+                NodeInsertUtils.insertBefore(this.getNodeImpl(), newNode);
                 return null;
 
-            case "after":
-                NodeInsertUtils.insertAfter(function, newNode);
+            case AFTER:
+                NodeInsertUtils.insertAfter(this.getNodeImpl(), newNode);
                 return null;
 
-            case "around":
-            case "replace":
-                NodeInsertUtils.replace(function, newNode);
-                return new AJoinPoint[]{CxxJoinpoints.create(newNode, getWeaverEngine())};
+            case REPLACE:
+                NodeInsertUtils.replace(this.getNodeImpl(), newNode);
+                return new AJoinpoint<?>[]{CxxJoinpoints.create(newNode, getWeaverEngine())};
             default:
                 throw new RuntimeException("Case not defined:" + position);
         }
     }
 
     @Override
-    public String getDeclarationImpl(Boolean withReturnType) {
-        return function.getDeclarationId(withReturnType);
+    public String getGetDeclarationImpl(boolean withReturnType) {
+        return this.getNodeImpl().getDeclarationId(withReturnType);
     }
 
     @Override
-    public ABody getBodyImpl() {
-        if (!function.hasBody()) {
+    public ABody<?> getBodyImpl() {
+        if (!this.getNodeImpl().hasBody()) {
             return null;
         }
 
-        return CxxJoinpoints.create(function.getBody().get(), getWeaverEngine(), ABody.class);
+        return CxxJoinpoints.create(this.getNodeImpl().getBody().get(), getWeaverEngine(), ABody.class);
     }
 
     @Override
-    public AFunction cloneImpl(String newName, Boolean insert) {
+    public AFunction<?> cloneImpl(String newName, boolean insert) {
         /* make clone and insert after the function of this join point */
-        return makeCloneAndInsert(newName, function, insert);
+        return makeCloneAndInsert(newName, this.getNodeImpl(), insert);
     }
 
-    private AFunction makeCloneAndInsert(String newName, ClavaNode reference, boolean insert) {
+    private AFunction<?> makeCloneAndInsert(String newName, ClavaNode reference, boolean insert) {
 
         FunctionDecl newFunc = null;
         if (reference instanceof FunctionDecl) {
-            newFunc = function.cloneAndInsert(newName, insert);
+            newFunc = this.getNodeImpl().cloneAndInsert(newName, insert);
         } else if (reference instanceof TranslationUnit) {
-            newFunc = function.cloneAndInsertOnFile(newName, (TranslationUnit) reference, insert);
+            newFunc = this.getNodeImpl().cloneAndInsertOnFile(newName, (TranslationUnit) reference, insert);
         } else {
             throw new IllegalArgumentException(
                     "The node (" + reference + ") needs to be either a FuncDecl or a TranslationUnit.");
@@ -190,9 +220,9 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AFunction cloneOnFileImpl(String newName, String fileName) {
+    public AFunction<?> cloneOnFileImpl(String newName, String fileName) {
         if (fileName == null) {
-            boolean isCxx = function.getAncestor(TranslationUnit.class).isCXXUnit();
+            boolean isCxx = this.getNodeImpl().getAncestor(TranslationUnit.class).isCXXUnit();
             String extension = getIsPrototypeImpl() ? ".h" : isCxx ? ".cpp" : ".c";
 
             String prefix = newName;
@@ -202,7 +232,7 @@ public class CxxFunction extends AFunction {
 
 
         // First, check if the given filename is the same as a file in the AST
-        App app = (App) getRootImpl().getNode();
+        App app = (App) getRootImpl().getNodeImpl();
         var currentFile = new File(fileName);
 
         var existingFile = app.getTranslationUnits().stream()
@@ -210,7 +240,7 @@ public class CxxFunction extends AFunction {
                 .findFirst();
 
         if (existingFile.isPresent()) {
-            return cloneOnFileImpl(newName, new CxxFile(existingFile.get(), getWeaverEngine()));
+            return cloneOnFileImpl(newName, new CxxFile<>(existingFile.get(), getWeaverEngine()));
         }
 
         // Extract relative path
@@ -220,54 +250,27 @@ public class CxxFunction extends AFunction {
         var newFile = AstFactory.file(getWeaverEngine(), fileName, relativePath);
 
         // Set same source foldername
-        var originalFile = function.getAncestorTry(TranslationUnit.class).orElse(null);
+        var originalFile = this.getNodeImpl().getAncestorTry(TranslationUnit.class).orElse(null);
         if (originalFile != null) {
-            // newFile.getNode().set(TranslationUnit.SOURCE_FOLDERNAME,
-            // originalFile.get(TranslationUnit.SOURCE_FOLDERNAME));
-            newFile.getNode().copyValue(TranslationUnit.SOURCE_FOLDERNAME, originalFile);
-            // originalFile.get(TranslationUnit.SOURCE_FOLDERNAME).
+            newFile.getNodeImpl().copyValue(TranslationUnit.SOURCE_FOLDERNAME, originalFile);
         }
-        // System.out.println("NEW FILE:" + newFile.getNode());
-        // System.out.println("CURRRENT FILE:" + function.getAncestor(TranslationUnit.class));
 
-        app.addFile((TranslationUnit) newFile.getNode());
+        app.addFile((TranslationUnit) newFile.getNodeImpl());
 
         return cloneOnFileImpl(newName, newFile);
     }
 
     @Override
     // TODO: copy header file inclusion
-    public AFunction cloneOnFileImpl(String newName, AFile file) {
-
-        // if (!function.hasBody()) {
-        // /*add the clone to the original place in order to be included where needed */
-        // return makeCloneAndInsert(newName, function, true);
-        // }
-
-        /* if this is a definition, add the clone to the correct file */
-
-        // App app = getRootImpl().getNode();
-        //
-        // Optional<TranslationUnit> file = app.getFile(fileName);
-        //
-        // if (!file.isPresent()) {
-        //
-        // TranslationUnit tu = getFactory().translationUnit(new File(fileName), Collections.emptyList());
-        //
-        // app.addFile(tu);
-        //
-        // file = Optional.of(tu);
-        // }
-
-        var tu = (TranslationUnit) file.getNode();
+    public AFunction<?> cloneOnFileImpl(String newName, AFile<?> file) {
+        var tu = (TranslationUnit) file.getNodeImpl();
 
         var cloneFunction = makeCloneAndInsert(newName, tu, true);
 
         /* copy headers from the current file to the file with the clone */
-        TranslationUnit originalFile = function.getAncestorTry(TranslationUnit.class).orElse(null);
+        TranslationUnit originalFile = this.getNodeImpl().getAncestorTry(TranslationUnit.class).orElse(null);
         if (originalFile != null) {
             var includesCopy = TreeNodeUtils.copy(originalFile.getIncludes().getIncludes());
-            // List<IncludeDecl> allIncludes = getIncludesCopyFromFile(originalFile);
 
             File baseIncludePath = null;
 
@@ -284,9 +287,6 @@ public class CxxFunction extends AFunction {
                     .map(relativeFolder -> new File(relativeDepth, relativeFolder))
                     .orElse(baseIncludePath);
 
-            // System.out.println("BASE: " + baseIncludePath);
-            // System.out.println("DEPTH: " + relativeFolderDepth);
-
             // Adapt includes
             for (var includeDecl : includesCopy) {
                 var include = includeDecl.getInclude();
@@ -295,10 +295,9 @@ public class CxxFunction extends AFunction {
                 if (include.isAngled()) {
                     continue;
                 }
-                // System.out.println("INCLUDE BEFORE: " + includeDecl.getCode());
+
                 var newInclude = include.setInclude(new File(baseIncludePath, include.getInclude()).toString());
                 includeDecl.set(IncludeDecl.INCLUDE, newInclude);
-                // System.out.println("INCLUDE AFTER: " + includeDecl.getCode());
             }
 
             // Add includes
@@ -310,9 +309,8 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public String[] getParamNamesArrayImpl() {
-
-        return function.getParameters()
+    public String[] getParamNamesImpl() {
+        return this.getNodeImpl().getParameters()
                 .stream()
                 .map(ParmVarDecl::getCode)
                 .collect(Collectors.toList())
@@ -320,8 +318,8 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AParam[] getParamsArrayImpl() {
-        return function.getParameters()
+    public AParam<?>[] getParamsImpl() {
+        return this.getNodeImpl().getParameters()
                 .stream()
                 .map(param -> CxxJoinpoints.create(param,
                         getWeaverEngine(), AParam.class))
@@ -330,58 +328,23 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AJoinPoint insertReturnImpl(String code) {
+    public AJoinpoint<?> insertReturnImpl(String code) {
         return insertReturnImpl(CxxJoinpoints.create(getWeaverEngine().getSnippetParser().parseStmt(code),
                 getWeaverEngine()));
     }
 
     @Override
-    public AJoinPoint insertReturnImpl(AJoinPoint code) {
+    public AJoinpoint<?> insertReturnImpl(AJoinpoint<?> code) {
         // Does not take into account situations where functions returns in all paths of an if/else.
         // This means it can lead to dead-code, although for C/C++ that does not seem to be problematic.
 
         // Do not insert if function has no implementation
-        if (!function.hasBody()) {
+        if (!this.getNodeImpl().hasBody()) {
             ClavaLog.info("insertReturn: could not insert in function without body");
             return null;
         }
 
         return CxxActions.insertReturn(getBodyImpl(), code, getWeaverEngine());
-
-        //
-        // List<Stmt> bodyStmts = function.getBody().get().toStatements();
-        //
-        // // Check if it has return statement, ignoring wrapper statements
-        // Stmt lastStmt = SpecsCollections.reverseStream(bodyStmts)
-        // .filter(stmt -> !(stmt instanceof WrapperStmt))
-        // .findFirst().orElse(null);
-        //
-        // ReturnStmt lastReturnStmt = lastStmt instanceof ReturnStmt ? (ReturnStmt) lastStmt : null;
-        //
-        // // Get list of all return statements inside children
-        // List<ReturnStmt> returnStatements = bodyStmts.stream()
-        // .flatMap(Stmt::getDescendantsStream)
-        // .filter(ReturnStmt.class::isInstance)
-        // .map(ReturnStmt.class::cast)
-        // .collect(Collectors.toList());
-        //
-        // AJoinPoint lastInsertPoint = null;
-        //
-        // if (lastReturnStmt != null) {
-        // returnStatements = SpecsCollections.concat(returnStatements, lastReturnStmt);
-        // }
-        //
-        // for (ReturnStmt returnStmt : returnStatements) {
-        // ACxxWeaverJoinPoint returnJp = CxxJoinpoints.create(returnStmt);
-        // lastInsertPoint = returnJp.insertBefore(code);
-        // }
-        //
-        // // If there is no return in the body, add at the end of the function
-        // if (lastReturnStmt == null) {
-        // lastInsertPoint = getBodyImpl().insertEnd(code);
-        // }
-        //
-        // return lastInsertPoint;
     }
 
     /**
@@ -389,19 +352,19 @@ public class CxxFunction extends AFunction {
      */
     @Override
     public String getIdImpl() {
-        return getDeclarationImpl(false);
+        return getGetDeclarationImpl(false);
     }
 
     @Override
-    public AFunction[] getDeclarationJpsArrayImpl() {
-        return function.getPrototypes().stream()
+    public AFunction<?>[] getDeclarationJpsImpl() {
+        return this.getNodeImpl().getPrototypes().stream()
                 .map(node -> CxxJoinpoints.create(node, getWeaverEngine(), AFunction.class))
-                .toArray(size -> new AFunction[size]);
+                .toArray(AFunction[]::new);
     }
 
     @Override
-    public AFunction getDeclarationJpImpl() {
-        var prototypes = getDeclarationJpsArrayImpl();
+    public AFunction<?> getDeclarationJpImpl() {
+        var prototypes = getDeclarationJpsImpl();
 
         if (prototypes.length == 0) {
             return null;
@@ -416,8 +379,8 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AFunction getDefinitionJpImpl() {
-        return function.getImplementation()
+    public AFunction<?> getDefinitionJpImpl() {
+        return this.getNodeImpl().getImplementation()
                 .map(node -> CxxJoinpoints.create(node, getWeaverEngine(), AFunction.class))
                 .orElse(null);
     }
@@ -426,7 +389,7 @@ public class CxxFunction extends AFunction {
      * Setting the type of a Function join point sets the return type
      */
     @Override
-    public void setTypeImpl(AType type) {
+    public void setTypeImpl(AType<?> type) {
         setReturnTypeImpl(type);
     }
 
@@ -436,77 +399,92 @@ public class CxxFunction extends AFunction {
         // Needs to first fetch both definition and declaration.
         // If one is renamed before fetching the other, the other will not be found
 
-        var impl = function.getImplementation();
-        var proto = function.getPrototypes();
+        var impl = this.getNodeImpl().getImplementation();
+        var proto = this.getNodeImpl().getPrototypes();
 
         impl.ifPresent(node -> node.setName(name));
         proto.stream().forEach(node -> node.setName(name));
     }
 
     @Override
-    public String getStorageClassImpl() {
-        return function.get(FunctionDecl.STORAGE_CLASS).getString();
+    public StorageClass getStorageClassImpl() {
+        var nodeStorageClass = this.getNodeImpl().get(FunctionDecl.STORAGE_CLASS);
+        if (nodeStorageClass == null) {
+            throw new RuntimeException("Storage class of function '" + getSignatureImpl() + "' is null");
+        }
+
+        StorageClass jpStorageClass = STORAGE_TYPE.get().get(nodeStorageClass);
+        if (jpStorageClass == null) {
+            throw new RuntimeException("Storage class '" + nodeStorageClass + "' of function '" + getSignatureImpl()
+                    + "' is not supported in the join point model");
+        }
+
+        return jpStorageClass;
     }
 
     @Override
-    public boolean setStorageClassImpl(String storageClass) {
-        // Get corresponding enum
-        var storageClassEnum = StorageClass.getHelper().fromValue(storageClass);
+    public boolean setStorageClassImpl(StorageClass storageClass) {
+        var nodeStorageClass = STORAGE_TYPE.get().entrySet().stream()
+                .filter(entry -> entry.getValue() == storageClass)
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(
+                        "Storage class '" + storageClass + "' is not supported in the join point model"));
 
-        return function.setStorageClass(storageClassEnum);
+        return this.getNodeImpl().setStorageClass(nodeStorageClass);
     }
 
     @Override
-    public Boolean getIsInlineImpl() {
-        return function.get(FunctionDecl.IS_INLINE_SPECIFIED);
+    public boolean getIsInlineImpl() {
+        return this.getNodeImpl().get(FunctionDecl.IS_INLINE_SPECIFIED);
     }
 
     @Override
-    public Boolean getIsVirtualImpl() {
-        return function.get(FunctionDecl.IS_VIRTUAL_AS_WRITTEN);
+    public boolean getIsVirtualImpl() {
+        return this.getNodeImpl().get(FunctionDecl.IS_VIRTUAL_AS_WRITTEN);
     }
 
     @Override
-    public Boolean getIsModulePrivateImpl() {
-        return function.get(FunctionDecl.IS_MODULE_PRIVATE);
+    public boolean getIsModulePrivateImpl() {
+        return this.getNodeImpl().get(FunctionDecl.IS_MODULE_PRIVATE);
     }
 
     @Override
-    public Boolean getIsPureImpl() {
-        return function.get(FunctionDecl.IS_PURE);
+    public boolean getIsPureImpl() {
+        return this.getNodeImpl().get(FunctionDecl.IS_PURE);
     }
 
     @Override
-    public Boolean getIsDeleteImpl() {
-        return function.get(FunctionDecl.IS_DELETED);
+    public boolean getIsDeleteImpl() {
+        return this.getNodeImpl().get(FunctionDecl.IS_DELETED);
     }
 
     @Override
-    public ACall[] getCallsArrayImpl() {
-        return function.getCalls().stream()
+    public ACall<?>[] getCallsImpl() {
+        return this.getNodeImpl().getCalls().stream()
                 .map(call -> CxxJoinpoints.create(call, getWeaverEngine(), ACall.class))
                 .toArray(ACall[]::new);
     }
 
     @Override
-    public void setParamsImpl(AParam[] params) {
+    public void setParamsImpl(AParam<?>[] params) {
         List<ParmVarDecl> newParams = Arrays.stream(
                 params)
-                .map(param -> (ParmVarDecl) param.getNode())
+                .map(param -> (ParmVarDecl) param.getNodeImpl())
                 .collect(Collectors.toList());
 
-        function.setParameters(newParams);
+        this.getNodeImpl().setParameters(newParams);
     }
 
     @Override
     public void setParamsFromStringsImpl(String[] params) {
-        AParam[] newParams = new AParam[params.length];
+        AParam<?>[] newParams = new AParam<?>[params.length];
 
         // Each value is a type - varName pair, separate them by last space
         for (int i = 0; i < params.length; i++) {
             String typeVarname = params[i];
 
-            var parmVarDecl = ClavaNodes.toParam(typeVarname, function);
+            var parmVarDecl = ClavaNodes.toParam(typeVarname, this.getNodeImpl());
 
             newParams[i] = CxxJoinpoints.create(parmVarDecl, getWeaverEngine(), AParam.class);
         }
@@ -516,37 +494,37 @@ public class CxxFunction extends AFunction {
 
     @Override
     public String getSignatureImpl() {
-        return function.getSignature();
+        return this.getNodeImpl().getSignature();
     }
 
     @Override
-    public void setBodyImpl(AScope body) {
-        function.setBody((CompoundStmt) body.getNode());
+    public void setBodyImpl(AScope<?> body) {
+        this.getNodeImpl().setBody((CompoundStmt) body.getNodeImpl());
     }
 
     @Override
-    public void setFunctionTypeImpl(AFunctionType functionType) {
-        function.setFunctionType((FunctionType) functionType.getNode());
+    public void setFunctionTypeImpl(AFunctionType<?> functionType) {
+        this.getNodeImpl().setFunctionType((FunctionType) functionType.getNodeImpl());
     }
 
     @Override
-    public AType getReturnTypeImpl() {
-        return CxxJoinpoints.create(function.getReturnType(), getWeaverEngine(), AType.class);
+    public AType<?> getReturnTypeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getReturnType(), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public void setReturnTypeImpl(AType returnType) {
-        function.setReturnType((Type) returnType.getNode());
+    public void setReturnTypeImpl(AType<?> returnType) {
+        this.getNodeImpl().setReturnType((Type) returnType.getNodeImpl());
     }
 
     @Override
-    public void setParamTypeImpl(int index, AType newType) {
-        function.setParamType(index, (Type) newType.getNode());
+    public void setParamTypeImpl(int index, AType<?> newType) {
+        this.getNodeImpl().setParamType(index, (Type) newType.getNodeImpl());
     }
 
     @Override
-    public void addParamImpl(AParam param) {
-        var originalParams = getParamsArrayImpl();
+    public void addParamImpl(AParam<?> param) {
+        var originalParams = getParamsImpl();
         var newParams = Arrays.copyOf(originalParams, originalParams.length + 1);
 
         newParams[newParams.length - 1] = param;
@@ -555,23 +533,23 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void addParamImpl(String name, AType type) {
+    public void addParamImpl(String name, AType<?> type) {
         ClavaNode paramNode;
         if (type == null) {
-            paramNode = ClavaNodes.toParam(name, function);
+            paramNode = ClavaNodes.toParam(name, this.getNodeImpl());
         } else {
-            paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
+            paramNode = getFactory().parmVarDecl(name, (Type) type.getNodeImpl());
         }
         addParamImpl(CxxJoinpoints.create(paramNode, getWeaverEngine(), AParam.class));
     }
 
     @Override
-    public void setParamImpl(int index, AParam param) {
-        var params = getParamsArrayImpl();
+    public void setParamImpl(int index, AParam<?> param) {
+        var params = getParamsImpl();
 
         if (index >= params.length) {
             SpecsLogs.info("Tried to set parameter '" + param.getCodeImpl() + "' at index '" + index
-                    + "' but function '" + function.getSignature() + "' only has " + params.length + " parameters");
+                    + "' but function '" + this.getNodeImpl().getSignature() + "' only has " + params.length + " parameters");
             return;
         }
 
@@ -581,34 +559,34 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void setParamImpl(int index, String name, AType type) {
+    public void setParamImpl(int index, String name, AType<?> type) {
         ClavaNode paramNode;
 
         if (type == null) {
-            paramNode = ClavaNodes.toParam(name, function);
+            paramNode = ClavaNodes.toParam(name, this.getNodeImpl());
         } else {
-            paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
+            paramNode = getFactory().parmVarDecl(name, (Type) type.getNodeImpl());
         }
 
         setParamImpl(index, CxxJoinpoints.create(paramNode, getWeaverEngine(), AParam.class));
     }
 
     @Override
-    public Boolean getIsCudaKernelImpl() {
-        return function.get(FunctionDecl.ATTRIBUTES).stream()
+    public boolean getIsCudaKernelImpl() {
+        return this.getNodeImpl().get(FunctionDecl.ATTRIBUTES).stream()
                 .filter(attr -> attr instanceof CUDAGlobalAttr)
                 .findFirst()
                 .isPresent();
     }
 
     @Override
-    public AFunction getCanonicalImpl() {
-        return CxxJoinpoints.create(function.canonical(), getWeaverEngine(), AFunction.class);
+    public AFunction<?> getCanonicalImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().canonical(), getWeaverEngine(), AFunction.class);
     }
 
     @Override
-    public Boolean getIsCanonicalImpl() {
-        return function.isCanonical();
+    public boolean getIsCanonicalImpl() {
+        return this.getNodeImpl().isCanonical();
     }
 
 }

@@ -19,12 +19,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AInclude;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 
 public class CxxWeaverApi {
 
-    public static ACxxWeaverJoinPoint findJp(CxxWeaver weaver, String filepath, String astId) {
+    public static AJoinpoint<?> findJp(CxxWeaver weaver, String filepath, String astId) {
         // Get AST at the top of the stack
         App topAst = weaver.getApp();
 
@@ -37,7 +37,7 @@ public class CxxWeaverApi {
         weaver.writeCode(outputFolder);
     }
 
-    public static List<AInclude> getAvailableUserIncludes(CxxWeaver weaver) {
+    public static List<AInclude<?>> getAvailableUserIncludes(CxxWeaver weaver) {
         return weaver.getAvailableIncludes().stream()
                 .map(weaver.getFactory()::includeDecl)
                 .map(includeDecl -> CxxJoinpoints.create(includeDecl, weaver, AInclude.class))

@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -22,55 +21,52 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess;
 
-public class CxxMemberAccess extends AMemberAccess {
-
-    private final MemberExpr memberExpr;
+public class CxxMemberAccess<Self extends CxxMemberAccess<Self>> extends AMemberAccess<Self> {
 
     public CxxMemberAccess(MemberExpr memberExpr, CxxWeaver weaver) {
-        super(new CxxExpression(memberExpr, weaver), weaver);
-        this.memberExpr = memberExpr;
+        super(memberExpr, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return memberExpr;
+    public MemberExpr getNodeImpl() {
+        return (MemberExpr) super.getNodeImpl();
     }
 
     @Override
-    public AExpression getBaseImpl() {
-        return CxxJoinpoints.create(ClavaNodes.normalize(memberExpr.getBase()), getWeaverEngine(), AExpression.class);
+    public AExpression<?> getBaseImpl() {
+        return CxxJoinpoints.create(ClavaNodes.normalize(this.getNodeImpl().getBase()), getWeaverEngine(), AExpression.class);
     }
 
     @Override
     public String getNameImpl() {
-        return memberExpr.getMemberName();
+        return this.getNodeImpl().getMemberName();
     }
 
     @Override
-    public AExpression[] getMemberChainArrayImpl() {
-        return memberExpr.getExprChain().stream()
+    public AExpression<?>[] getMemberChainImpl() {
+        return this.getNodeImpl().getExprChain().stream()
                 .map(member -> CxxJoinpoints.create(member, getWeaverEngine(), AExpression.class))
                 .toArray(size -> new AExpression[size]);
     }
 
     @Override
-    public String[] getMemberChainNamesArrayImpl() {
-        return memberExpr.getChain().toArray(new String[0]);
+    public String[] getMemberChainNamesImpl() {
+        return this.getNodeImpl().getChain().toArray(new String[0]);
     }
 
     @Override
-    public ADecl getDeclImpl() {
-        return CxxJoinpoints.create(memberExpr.get(MemberExpr.MEMBER_DECL), getWeaverEngine(), ADecl.class);
+    public ADecl<?> getDeclImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().get(MemberExpr.MEMBER_DECL), getWeaverEngine(), ADecl.class);
     }
 
     @Override
-    public Boolean getArrowImpl() {
-        return memberExpr.get(MemberExpr.IS_ARROW);
+    public boolean getArrowImpl() {
+        return this.getNodeImpl().get(MemberExpr.IS_ARROW);
     }
 
     @Override
-    public void setArrowImpl(Boolean isArrow) {
-        memberExpr.set(MemberExpr.IS_ARROW, isArrow);
+    public void setArrowImpl(boolean isArrow) {
+        this.getNodeImpl().set(MemberExpr.IS_ARROW, isArrow);
     }
 
 }

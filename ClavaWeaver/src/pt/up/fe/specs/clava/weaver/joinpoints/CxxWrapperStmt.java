@@ -19,43 +19,40 @@ import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AWrapperStmt;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.AWrapperStmtKindEnum;
+import pt.up.fe.specs.clava.weaver.enums.WrapperStatementKind;
 
-public class CxxWrapperStmt extends AWrapperStmt {
-
-    private final WrapperStmt wrapperStmt;
+public class CxxWrapperStmt<Self extends CxxWrapperStmt<Self>> extends AWrapperStmt<Self> {
 
     public CxxWrapperStmt(WrapperStmt wrapperStmt, CxxWeaver weaver) {
-        super(new CxxStatement(wrapperStmt, weaver), weaver);
-        this.wrapperStmt = wrapperStmt;
+        super(wrapperStmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return wrapperStmt;
+    public WrapperStmt getNodeImpl() {
+        return (WrapperStmt) super.getNodeImpl();
     }
 
     @Override
-    public String getKindImpl() {
+    public WrapperStatementKind getKindImpl() {
 
-        ClavaNode wrappedNode = wrapperStmt.getWrappedNode();
+        ClavaNode wrappedNode = this.getNodeImpl().getWrappedNode();
 
         if (wrappedNode instanceof Comment) {
-            return AWrapperStmtKindEnum.COMMENT.getName();
+            return WrapperStatementKind.COMMENT;
         }
 
         if (wrappedNode instanceof Pragma) {
-            return AWrapperStmtKindEnum.PRAGMA.getName();
+            return WrapperStatementKind.PRAGMA;
         }
 
         throw new RuntimeException("Case not defined for wrapperStmt.kind: " + wrappedNode.getClass().getSimpleName());
     }
 
     @Override
-    public AJoinPoint getContentImpl() {
-        return CxxJoinpoints.create(wrapperStmt.getWrappedNode(), getWeaverEngine());
+    public AJoinpoint<?> getContentImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getWrappedNode(), getWeaverEngine());
     }
 
 }

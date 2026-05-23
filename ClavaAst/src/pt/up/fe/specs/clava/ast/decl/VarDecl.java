@@ -259,6 +259,10 @@ public class VarDecl extends DeclaratorDecl {
         set(STORAGE_CLASS, storageClass);
     }
 
+    public void setStorageClass(StorageClass storageClass) {
+        set(STORAGE_CLASS, storageClass);
+    }
+
     @Override
     public SpecsList<DataKey<?>> getSignatureKeys() {
         return super.getSignatureKeys().andAdd(STORAGE_CLASS);

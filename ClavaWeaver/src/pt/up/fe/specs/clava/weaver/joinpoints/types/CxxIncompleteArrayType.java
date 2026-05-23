@@ -13,24 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.IncompleteArrayType;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIncompleteArrayType;
 
-public class CxxIncompleteArrayType extends AIncompleteArrayType {
-
-    private final IncompleteArrayType arrayType;
+public class CxxIncompleteArrayType<Self extends CxxIncompleteArrayType<Self>> extends AIncompleteArrayType<Self> {
 
     public CxxIncompleteArrayType(IncompleteArrayType arrayType, CxxWeaver weaver) {
-        super(new CxxArrayType(arrayType, weaver), weaver);
-
-        this.arrayType = arrayType;
+        super(arrayType, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return arrayType;
+    public IncompleteArrayType getNodeImpl() {
+        return (IncompleteArrayType) super.getNodeImpl();
     }
     
 }

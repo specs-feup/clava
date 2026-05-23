@@ -17,18 +17,15 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEmpty;
 
-public class CxxEmpty extends AEmpty {
-
-    private final ClavaNode emptyNode;
+public class CxxEmpty<Self extends CxxEmpty<Self>> extends AEmpty<Self> {
 
     public CxxEmpty(ClavaNode emptyNode, CxxWeaver weaver) {
-        super(weaver);
-        this.emptyNode = emptyNode;
+        super(emptyNode, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return emptyNode;
+    public ClavaNode getNodeImpl() {
+        return (ClavaNode) super.getNodeImpl();
     }
 
 }

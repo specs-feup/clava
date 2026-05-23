@@ -13,12 +13,28 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
-import pt.up.fe.specs.clava.ast.stmt.*;
+import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.DoStmt;
+import pt.up.fe.specs.clava.ast.stmt.ForStmt;
+import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
+import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.transform.loop.LoopAnalysisUtils;
@@ -26,27 +42,28 @@ import pt.up.fe.specs.clava.transform.loop.LoopInterchange;
 import pt.up.fe.specs.clava.transform.loop.LoopTiling;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.*;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.ALoopKindEnum;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
+import pt.up.fe.specs.clava.weaver.enums.LoopKind;
 import pt.up.fe.specs.clava.weaver.enums.Relation;
-import pt.up.fe.specs.util.SpecsEnums;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.lazy.ThreadSafeLazy;
 
-import java.util.*;
+public class CxxLoop<Self extends CxxLoop<Self>> extends ALoop<Self> {
 
-public class CxxLoop extends ALoop {
-
-    private static final Lazy<Map<Class<? extends LoopStmt>, ALoopKindEnum>> LOOP_TYPE = new ThreadSafeLazy<>(
+    private static final Lazy<Map<Class<? extends LoopStmt>, LoopKind>> LOOP_TYPE = new ThreadSafeLazy<>(
             () -> buildLoopTypeMap());
 
-    private static Map<Class<? extends LoopStmt>, ALoopKindEnum> buildLoopTypeMap() {
-        HashMap<Class<? extends LoopStmt>, ALoopKindEnum> loopTypes = new HashMap<>();
+    private static Map<Class<? extends LoopStmt>, LoopKind> buildLoopTypeMap() {
+        HashMap<Class<? extends LoopStmt>, LoopKind> loopTypes = new HashMap<>();
 
-        loopTypes.put(ForStmt.class, ALoopKindEnum.FOR);
-        loopTypes.put(WhileStmt.class, ALoopKindEnum.WHILE);
-        loopTypes.put(DoStmt.class, ALoopKindEnum.DOWHILE);
-        loopTypes.put(CXXForRangeStmt.class, ALoopKindEnum.FOREACH);
+        loopTypes.put(ForStmt.class, LoopKind.FOR);
+        loopTypes.put(WhileStmt.class, LoopKind.WHILE);
+        loopTypes.put(DoStmt.class, LoopKind.DOWHILE);
+        loopTypes.put(CXXForRangeStmt.class, LoopKind.FOREACH);
 
         return loopTypes;
     }
@@ -54,28 +71,29 @@ public class CxxLoop extends ALoop {
     private static final Set<BinaryOperatorKind> VALID_RELATION_OP_SETTER = EnumSet.of(BinaryOperatorKind.GT,
             BinaryOperatorKind.GE, BinaryOperatorKind.LT, BinaryOperatorKind.LE);
 
-    private final LoopStmt loop;
-
     public CxxLoop(LoopStmt loop, CxxWeaver weaver) {
-        super(new CxxStatement(loop, weaver), weaver);
-
-        this.loop = loop;
+        super(loop, weaver);
     }
 
     @Override
-    public String getKindImpl() {
-        ALoopKindEnum loopType = LOOP_TYPE.get().get(loop.getClass());
+    public LoopStmt getNodeImpl() {
+        return (LoopStmt) super.getNodeImpl();
+    }
+
+    @Override
+    public LoopKind getKindImpl() {
+        LoopKind loopType = LOOP_TYPE.get().get(this.getNodeImpl().getClass());
 
         Objects.requireNonNull(loopType,
-                () -> "Could not determine type of node '" + loop.getClass().getSimpleName() + "'");
+                () -> "Could not determine type of node '" + this.getNodeImpl().getClass().getSimpleName() + "'");
 
-        return loopType.name().toLowerCase();
+        return loopType;
     }
 
     @Override
-    public Boolean getIsInnermostImpl() {
+    public boolean getIsInnermostImpl() {
         // Loop is innermost if none of its descendants is a loop
-        Optional<ClavaNode> anotherLoop = loop.getDescendantsStream()
+        Optional<ClavaNode> anotherLoop = this.getNodeImpl().getDescendantsStream()
                 .filter(node -> node instanceof LoopStmt)
                 .findFirst();
 
@@ -83,9 +101,9 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public Boolean getIsOutermostImpl() {
+    public boolean getIsOutermostImpl() {
         // Loop is outermost if none of its ancestors is a loop
-        Optional<ClavaNode> anotherLoop = loop.getAscendantsStream()
+        Optional<ClavaNode> anotherLoop = this.getNodeImpl().getAscendantsStream()
                 .filter(node -> node instanceof LoopStmt)
                 .findFirst();
 
@@ -93,9 +111,9 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public Integer getNestedLevelImpl() {
+    public int getNestedLevelImpl() {
         // Go back and count how many Loops there are
-        long parentLoops = loop.getAscendantsStream()
+        long parentLoops = this.getNodeImpl().getAscendantsStream()
                 .filter(node -> node instanceof LoopStmt)
                 .count();
 
@@ -103,10 +121,10 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public AVarref getControlVarrefImpl() {
+    public AVarref<?> getControlVarrefImpl() {
 
         // Only supported for loops of type 'for'
-        if (!(loop instanceof ForStmt forStmt)) {
+        if (!(this.getNodeImpl() instanceof ForStmt forStmt)) {
             return null;
         }
 
@@ -114,7 +132,7 @@ public class CxxLoop extends ALoop {
 
         if (controlVars.isEmpty()) {
 
-            ClavaLog.info("Could not find control variable for loop in location: " + loop.getLocation());
+            ClavaLog.info("Could not find control variable for loop in location: " + this.getNodeImpl().getLocation());
 
             return null;
         }
@@ -122,7 +140,7 @@ public class CxxLoop extends ALoop {
         if (controlVars.size() > 1) {
 
             ClavaLog.info("Found more than one control variable (" + controlVars + ") for loop in location: "
-                    + loop.getLocation());
+                    + this.getNodeImpl().getLocation());
         }
 
         return CxxJoinpoints.create(controlVars.get(0), getWeaverEngine(), AVarref.class);
@@ -142,8 +160,8 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public AStatement getCondImpl() {
-        ClavaNode condition = loop.getStmtCondition().orElse(null);
+    public AStatement<?> getCondImpl() {
+        ClavaNode condition = this.getNodeImpl().getStmtCondition().orElse(null);
 
         if (condition == null) {
             return null;
@@ -153,12 +171,12 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public AStatement getStepImpl() {
-        if (!(loop instanceof ForStmt)) {
+    public AStatement<?> getStepImpl() {
+        if (!(this.getNodeImpl() instanceof ForStmt)) {
             return null;
         }
 
-        Stmt inc = ((ForStmt) loop).getInc().orElse(null);
+        Stmt inc = ((ForStmt) this.getNodeImpl()).getInc().orElse(null);
         if (inc == null) {
             return null;
 
@@ -168,138 +186,123 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public LoopStmt getNode() {
-        return loop;
-    }
-
-    @Override
-    public int[] getRankArrayImpl() {
-        var rank = loop.getRank();
+    public int[] getRankImpl() {
+        var rank = this.getNodeImpl().getRank();
         return rank.stream().mapToInt(Integer::intValue).toArray();
     }
 
     @Override
-    public Boolean getIsParallelImpl() {
-        return loop.isParallel();
+    public boolean getIsParallelImpl() {
+        return this.getNodeImpl().isParallel();
     }
 
     @Override
     public Integer getIterationsImpl() {
-        return loop.getIterations();
+        return this.getNodeImpl().getIterations();
     }
 
     @Override
-    public void setKindImpl(String kind) {
-        ALoopKindEnum loopKind = SpecsEnums.valueOf(ALoopKindEnum.class, kind.toUpperCase());
-
-        if (loopKind == null) {
+    public void setKindImpl(LoopKind kind) {
+        if (kind == null) {
             ClavaLog.warning("Unsupported loop kind:" + kind);
             return;
         }
 
-        switch (loopKind) {
+        switch (kind) {
             case WHILE:
                 convertToWhile();
                 break;
             default:
-                throw new RuntimeException("Not implemented: " + loopKind);
+                throw new RuntimeException("Not implemented: " + kind);
         }
 
     }
 
     private void convertToWhile() {
-        if (loop instanceof WhileStmt) {
+        if (this.getNodeImpl() instanceof WhileStmt) {
             return;
         }
 
-        if (loop instanceof ForStmt) {
-
-            // WhileStmt whileStmt = ClavaNodeFactory.whileStmt(loop.getInfo(), ((ForStmt) loop).getCond().orElse(null),
-            // loop.getBody().orElse(null));
-
-            // WhileStmt whileStmt = ClavaNodeFactory.whileStmt(loop.getInfo(), ((ForStmt) loop).getCond().orElse(null),
-            // loop.getBody());
-            Stmt cond = ((ForStmt) loop).getCond().orElse(getWeaverEngine().getFactory().nullStmt());
-            WhileStmt whileStmt = getWeaverEngine().getFactory().whileStmt(cond, loop.getBody());
+        if (this.getNodeImpl() instanceof ForStmt) {
+            Stmt cond = ((ForStmt) this.getNodeImpl()).getCond().orElse(getWeaverEngine().getFactory().nullStmt());
+            WhileStmt whileStmt = getWeaverEngine().getFactory().whileStmt(cond, this.getNodeImpl().getBody());
 
             replaceWith(CxxJoinpoints.create(whileStmt, getWeaverEngine()));
-
             return;
         }
 
-        throw new RuntimeException("Case not implemented:" + loop.getClass());
-
+        throw new RuntimeException("Case not implemented:" + this.getNodeImpl().getClass());
     }
 
     @Override
     public void setInitImpl(String initCode) {
-        if (!(loop instanceof ForStmt)) {
+        if (!(this.getNodeImpl() instanceof ForStmt)) {
             return; // TODO: warn user?
         }
 
         var suffix = initCode.strip().endsWith(";") ? "" : ";";
         LiteralStmt literalStmt = getFactory().literalStmt(initCode + suffix);
 
-        ((ForStmt) loop).setInit(literalStmt);
+        ((ForStmt) this.getNodeImpl()).setInit(literalStmt);
     }
 
     @Override
     public void setInitValueImpl(String initCode) {
-        if (!(loop instanceof ForStmt)) {
+        if (!(this.getNodeImpl() instanceof ForStmt)) {
             return; // TODO: warn user?
         }
 
         Type intType = getWeaverEngine().getFactory().builtinType(BuiltinKind.Int);
 
-        ((ForStmt) loop).setInitValue(getWeaverEngine().getFactory().literalExpr(initCode, intType));
+        ((ForStmt) this.getNodeImpl()).setInitValue(getWeaverEngine().getFactory().literalExpr(initCode, intType));
     }
 
     @Override
     public void setEndValueImpl(String value) {
-        if (!(loop instanceof ForStmt)) {
+        if (!(this.getNodeImpl() instanceof ForStmt)) {
             return; // TODO: warn user?
         }
 
         Type intType = getWeaverEngine().getFactory().builtinType(BuiltinKind.Int);
 
-        ((ForStmt) loop).setConditionValue(getWeaverEngine().getFactory().literalExpr(value, intType));
+        ((ForStmt) this.getNodeImpl()).setConditionValue(getWeaverEngine().getFactory().literalExpr(value, intType));
     }
 
     @Override
     public void setCondImpl(String condCode) {
 
-        if (!(loop instanceof ForStmt)) {
+        if (!(this.getNodeImpl() instanceof ForStmt)) {
             return; // TODO: warn user?
         }
 
         var suffix = condCode.strip().endsWith(";") ? "" : ";";
         LiteralStmt literalStmt = getFactory().literalStmt(condCode + suffix);
 
-        ((ForStmt) loop).setCond(literalStmt);
+        ((ForStmt) this.getNodeImpl()).setCond(literalStmt);
     }
 
     @Override
     public void setStepImpl(String stepCode) {
 
-        if (!(loop instanceof ForStmt)) {
+        if (!(this.getNodeImpl() instanceof ForStmt)) {
             return; // TODO: warn user?
         }
 
         LiteralStmt literalStmt = getFactory().literalStmt(stepCode);
 
-        ((ForStmt) loop).setInc(literalStmt);
+        ((ForStmt) this.getNodeImpl()).setInc(literalStmt);
     }
 
     @Override
     public String getInitValueImpl() {
 
-        if (!(loop instanceof ForStmt)) {
+        if (!(this.getNodeImpl() instanceof ForStmt)) {
             ClavaLog.info(
                     "$loop.initValue: Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
             return null;
         }
 
-        String initValue = ((ForStmt) loop).getInitValueExpr()
+        String initValue = ((ForStmt) this.getNodeImpl()).getInitValueExpr()
                 .map(ClavaNode::getCode)
                 .orElse(null);
 
@@ -309,64 +312,21 @@ public class CxxLoop extends ALoop {
         }
 
         return initValue;
-        /*
-        Optional<Stmt> initOpt = ((ForStmt) loop).getInit();
-        
-        if (initOpt.isPresent()) {
-        
-            Stmt init = initOpt.get();
-        
-            ClavaNode child = init.getChild(0);
-        
-            if (child instanceof VarDecl) {
-        
-                VarDecl decl = (VarDecl) child;
-        
-                Optional<Expr> declInitOpt = decl.getInit();
-                if (declInitOpt.isPresent()) {
-        
-                    return declInitOpt.get().getCode();
-                }
-            } else if (child instanceof BinaryOperator) {
-        
-                BinaryOperator binOp = (BinaryOperator) child;
-                if (binOp.getOp() == BinaryOperatorKind.ASSIGN) {
-        
-                    return binOp.getRhs().getCode();
-                }
-            }
-        }
-        
-        ClavaLog.warning(
-                "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
-        return null;
-        */
     }
 
     @Override
     public String getEndValueImpl() {
 
-        // Set<BinaryOperatorKind> ops = new HashSet<>();
-        // ops.add(BinaryOperatorKind.LE);
-        // ops.add(BinaryOperatorKind.LT);
-        // ops.add(BinaryOperatorKind.GE);
-        // ops.add(BinaryOperatorKind.GT);
-        // ops.add(BinaryOperatorKind.NE);
-
-        if (!(loop instanceof ForStmt)) {
+        if (!(this.getNodeImpl() instanceof ForStmt)) {
             ClavaLog.info("Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops ("
                     + getLocationImpl() + ").");
             return null;
         }
 
-        ForStmt forLoop = (ForStmt) loop;
+        ForStmt forLoop = (ForStmt) this.getNodeImpl();
         String endValue = forLoop.getConditionValueExpr()
                 .map(ClavaNode::getCode)
                 .orElse(null);
-        // String endValue = forLoop.getCondOperator()
-        // .filter(binOp -> ops.contains(binOp.getOp()))
-        // .map(binOp -> binOp.getRhs().getCode())
-        // .orElse(null);
 
         if (endValue == null) {
             ClavaLog.debug(
@@ -379,27 +339,33 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public String getCondRelationImpl() {
+    public Relation getCondRelationImpl() {
 
         BinaryOperator condOp = getConditionOp();
         if (condOp == null) {
             return null;
         }
 
-        // Relation requires lowercase names
-        var opName = condOp.getOp().name().toLowerCase();
+        // Relation enum constants use the same uppercase names as BinaryOperatorKind
+        var opName = condOp.getOp().name();
 
-        var relation = Relation.getHelper().fromNameTry(opName).map(Relation::getString).orElse(null);
-
-        if (relation == null) {
-            ClavaLog.warning("Could not map operation with name '" + opName + "' to a Relation. Supported names: " + Relation.getHelper().names());
+        // Get Relation with the same name as the operator
+        Relation relation = null;
+        try {
+            relation = Relation.valueOf(opName);
+        } catch (IllegalArgumentException e) {
+            var supportedNames = Arrays.stream(Relation.values())
+                    .map(Relation::name)
+                    .collect(Collectors.joining(", "));
+            ClavaLog.warning("Could not map operation with name '" + opName
+                    + "' to a Relation. Supported names: " + supportedNames);
         }
 
         return relation;
     }
 
     @Override
-    public Boolean getHasCondRelationImpl() {
+    public boolean getHasCondRelationImpl() {
         return getConditionOp(false) != null;
     }
 
@@ -408,7 +374,7 @@ public class CxxLoop extends ALoop {
     }
 
     private BinaryOperator getConditionOp(boolean showWarnings) {
-        if (!(loop instanceof ForStmt)) {
+        if (!(this.getNodeImpl() instanceof ForStmt)) {
             if (showWarnings) {
                 ClavaLog.info(
                         "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
@@ -417,7 +383,7 @@ public class CxxLoop extends ALoop {
             return null;
         }
 
-        ForStmt forLoop = (ForStmt) loop;
+        ForStmt forLoop = (ForStmt) this.getNodeImpl();
         BinaryOperator binOp = forLoop.getCondOperator().orElse(null);
 
         if (binOp == null) {
@@ -434,8 +400,8 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public void setCondRelationImpl(String operator) {
-        BinaryOperatorKind kind = BinaryOperatorKind.getHelper().fromValueTry(operator).orElse(null);
+    public void setCondRelationImpl(Relation operator) {
+        BinaryOperatorKind kind = BinaryOperatorKind.getHelper().fromValueTry(operator.toString()).orElse(null);
 
         if (kind == null) {
             ClavaLog.info("def 'condRelation': Invalid binary operator " + operator);
@@ -458,13 +424,13 @@ public class CxxLoop extends ALoop {
 
     @Override
     public String getIdImpl() {
-        return loop.getLoopId();
+        return this.getNodeImpl().getLoopId();
     }
 
     @Override
-    public void interchangeImpl(ALoop otherLoop) {
+    public void interchangeImpl(ALoop<?> otherLoop) {
 
-        Optional<LoopInterchange> loopInterchange = LoopInterchange.newInstance(loop, (LoopStmt) otherLoop.getNode());
+        Optional<LoopInterchange> loopInterchange = LoopInterchange.newInstance(this.getNodeImpl(), (LoopStmt) otherLoop.getNodeImpl());
         if (!loopInterchange.isPresent()) {
             ClavaLog.info("Could not interchange loops");
             return;
@@ -474,20 +440,20 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public Boolean isInterchangeableImpl(ALoop otherLoop) {
-        return LoopInterchange.test(loop, (LoopStmt) otherLoop.getNode());
+    public boolean getIsInterchangeableImpl(ALoop<?> otherLoop) {
+        return LoopInterchange.test(this.getNodeImpl(), (LoopStmt) otherLoop.getNodeImpl());
     }
 
     @Override
-    public AStatement tileImpl(String blockSize, AStatement reference, Boolean useTernary) {
+    public AStatement<?> tileImpl(String blockSize, AStatement<?> reference, boolean useTernary) {
 
         LoopTiling loopTiling = new LoopTiling(getWeaverEngine().getContex());
 
-        boolean success = loopTiling.apply(loop, (Stmt) reference.getNode(),
+        boolean success = loopTiling.apply(this.getNodeImpl(), (Stmt) reference.getNodeImpl(),
                 blockSize.toString(), useTernary);
 
         if (!success) {
-            ClavaLog.info("Could not tile the loop: " + loop.getLocation());
+            ClavaLog.info("Could not tile the loop: " + this.getNodeImpl().getLocation());
         }
 
         if (loopTiling.getLastReferenceStmt() == null) {
@@ -499,19 +465,19 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public void setIsParallelImpl(Boolean isParallel) {
-        loop.setParallel(isParallel);
+    public void setIsParallelImpl(boolean isParallel) {
+        this.getNodeImpl().setParallel(isParallel);
     }
 
     @Override
-    public AExpression getIterationsExprImpl() {
-        if (!(loop instanceof ForStmt)) {
+    public AExpression<?> getIterationsExprImpl() {
+        if (!(this.getNodeImpl() instanceof ForStmt)) {
             ClavaLog.warning(
                     "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
             return null;
         }
 
-        return ((ForStmt) loop).getIterationsExpr()
+        return ((ForStmt) this.getNodeImpl()).getIterationsExpr()
                 .map(expr -> CxxJoinpoints.create(expr,
                         getWeaverEngine(), AExpression.class))
                 .orElse(null);
@@ -519,13 +485,13 @@ public class CxxLoop extends ALoop {
 
     @Override
     public String getStepValueImpl() {
-        if (!(loop instanceof ForStmt)) {
+        if (!(this.getNodeImpl() instanceof ForStmt)) {
             ClavaLog.warning(
                     "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
             return null;
         }
 
-        String stepValue = ((ForStmt) loop).getStepValueExpr()
+        String stepValue = ((ForStmt) this.getNodeImpl()).getStepValueExpr()
                 .map(ClavaNode::getCode)
                 .orElse(null);
 
@@ -538,18 +504,18 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public AStatement getInitImpl() {
+    public AStatement<?> getInitImpl() {
 
-        if (loop instanceof ForStmt) {
-            return ((ForStmt) loop).getInit()
+        if (this.getNodeImpl() instanceof ForStmt) {
+            return ((ForStmt) this.getNodeImpl()).getInit()
                     .map(init -> CxxJoinpoints.create(init,
                             getWeaverEngine(), AStatement.class))
                     .orElse(null);
         }
 
         // If range stmt, return begin
-        if (loop instanceof CXXForRangeStmt) {
-            return ((CXXForRangeStmt) loop).getBegin()
+        if (this.getNodeImpl() instanceof CXXForRangeStmt) {
+            return ((CXXForRangeStmt) this.getNodeImpl()).getBegin()
                     .map(init -> CxxJoinpoints.create(init,
                             getWeaverEngine(), AStatement.class))
                     .orElse(null);
@@ -560,13 +526,13 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public AScope getBodyImpl() {
-        return CxxJoinpoints.create(loop.getBody(), getWeaverEngine(), AScope.class);
+    public AScope<?> getBodyImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getBody(), getWeaverEngine(), AScope.class);
     }
 
     @Override
-    public void setBodyImpl(AScope body) {
-        loop.setBody((CompoundStmt) body.getNode());
+    public void setBodyImpl(AScope<?> body) {
+        this.getNodeImpl().setBody((CompoundStmt) body.getNodeImpl());
     }
 
 }

@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -23,33 +22,31 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryExprOrType;
 import pt.up.fe.specs.util.SpecsLogs;
 
-public class CxxUnaryExprOrType extends AUnaryExprOrType {
-
-    private final UnaryExprOrTypeTraitExpr expr;
+public class CxxUnaryExprOrType<Self extends CxxUnaryExprOrType<Self>> extends AUnaryExprOrType<Self> {
 
     public CxxUnaryExprOrType(UnaryExprOrTypeTraitExpr expr, CxxWeaver weaver) {
-        super(new CxxExpression(expr, weaver), weaver);
-
-        this.expr = expr;
+        super(expr, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return expr;
+    public UnaryExprOrTypeTraitExpr getNodeImpl() {
+        return (UnaryExprOrTypeTraitExpr) super.getNodeImpl();
     }
 
     @Override
-    public Boolean getHasTypeExprImpl() {
-        return expr.hasTypeExpression();
+    public boolean getHasTypeExprImpl() {
+        return this.getNodeImpl().hasTypeExpression();
     }
 
     @Override
-    public Boolean getHasArgExprImpl() {
-        return expr.hasArgumentExpression();
+    public boolean getHasArgExprImpl() {
+        return this.getNodeImpl().hasArgumentExpression();
     }
 
     @Override
-    public AType getArgTypeImpl() {
+    public AType<?> getArgTypeImpl() {
+        var expr = this.getNodeImpl();
+
         if (!expr.hasTypeExpression()) {
             return null;
         }
@@ -58,7 +55,9 @@ public class CxxUnaryExprOrType extends AUnaryExprOrType {
     }
 
     @Override
-    public AExpression getArgExprImpl() {
+    public AExpression<?> getArgExprImpl() {
+        var expr = this.getNodeImpl();
+
         if (!expr.hasArgumentExpression()) {
             return null;
         }
@@ -67,17 +66,19 @@ public class CxxUnaryExprOrType extends AUnaryExprOrType {
     }
 
     @Override
-    public void setArgTypeImpl(AType argType) {
+    public void setArgTypeImpl(AType<?> argType) {
+        var expr = this.getNodeImpl();
+
         if (!expr.hasTypeExpression()) {
             SpecsLogs.msgInfo("UnaryExprOrType '" + expr.getUettKind() + "' does not have a type argument");
             return;
         }
 
-        expr.setArgType((Type) argType.getNode());
+        expr.setArgType((Type) argType.getNodeImpl());
     }
 
     @Override
     public String getKindImpl() {
-        return expr.getUettKind().getString();
+        return this.getNodeImpl().getUettKind().getString();
     }
 }

@@ -26,56 +26,52 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 
-public class CxxVarref extends AVarref {
-
-    private final DeclRefExpr refExpr;
+public class CxxVarref<Self extends CxxVarref<Self>> extends AVarref<Self> {
 
     public CxxVarref(DeclRefExpr refExpr, CxxWeaver weaver) {
-        super(new CxxExpression(refExpr, weaver), weaver);
-
-        this.refExpr = refExpr;
+        super(refExpr, weaver);
     }
 
     @Override
-    public DeclRefExpr getNode() {
-        return refExpr;
+    public DeclRefExpr getNodeImpl() {
+        return (DeclRefExpr) super.getNodeImpl();
     }
 
     @Override
     public String getNameImpl() {
-        return refExpr.getRefName();
+        return this.getNodeImpl().getRefName();
     }
 
     @Override
     public void setNameImpl(String name) {
-        refExpr.setRefName(name);
+        this.getNodeImpl().setRefName(name);
     }
 
     @Override
     public String getKindImpl() {
-        return refExpr.getKind().name().toLowerCase();
+        return this.getNodeImpl().getKind().name().toLowerCase();
     }
 
     @Override
-    public AExpression getUseExprImpl() {
-        return CxxJoinpoints.create(refExpr.getUseExpr(), getWeaverEngine(), AExpression.class);
+    public AExpression<?> getUseExprImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getUseExpr(), getWeaverEngine(), AExpression.class);
     }
 
     @Override
-    public AVardecl getVardeclImpl() {
-        ADeclarator declarator = getDeclarationImpl();
+    public AVardecl<?> getVardeclImpl() {
+        ADeclarator<?> declarator = getDeclarationImpl();
 
-        return declarator instanceof AVardecl ? (AVardecl) declarator : null;
+        return declarator instanceof AVardecl ? (AVardecl<?>) declarator : null;
     }
 
     @Override
-    public Boolean getIsFunctionCallImpl() {
-        return refExpr.isFunctionCall();
+    public boolean getIsFunctionCallImpl() {
+        return this.getNodeImpl().isFunctionCall();
     }
 
     @Override
-    public ADeclarator getDeclarationImpl() {
-        Optional<DeclaratorDecl> declarator = refExpr.getVariableDeclaration();
+    public ADeclarator<?> getDeclarationImpl() {
+        Optional<DeclaratorDecl> declarator = this.getNodeImpl().getVariableDeclaration();
 
         if (!declarator.isPresent()) {
             return null;
@@ -85,13 +81,13 @@ public class CxxVarref extends AVarref {
     }
 
     @Override
-    public ADecl getDeclImpl() {
+    public ADecl<?> getDeclImpl() {
         return getVardeclImpl();
     }
 
     @Override
     public String getPropertyImpl() {
-        var parent = refExpr.getParent();
+        var parent = this.getNodeImpl().getParent();
 
         if (parent == null) {
             return null;
@@ -105,13 +101,13 @@ public class CxxVarref extends AVarref {
     }
 
     @Override
-    public Boolean getHasPropertyImpl() {
-        if (!refExpr.hasParent()) {
+    public boolean getHasPropertyImpl() {
+        if (!this.getNodeImpl().hasParent()) {
             return false;
         }
 
         // If parent is a MSPropertyRefExpr, this this varref has a MS-style property
-        return refExpr.getParent() instanceof MSPropertyRefExpr;
+        return this.getNodeImpl().getParent() instanceof MSPropertyRefExpr;
     }
 
 }

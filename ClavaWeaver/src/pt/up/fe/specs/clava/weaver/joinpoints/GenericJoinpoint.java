@@ -17,18 +17,10 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 
-public class GenericJoinpoint extends ACxxWeaverJoinPoint {
-
-    private final ClavaNode node;
+public class GenericJoinpoint<Self extends GenericJoinpoint<Self>> extends ACxxWeaverJoinPoint<Self> {
 
     public GenericJoinpoint(ClavaNode node, CxxWeaver weaver) {
-        super(weaver);
-        this.node = node;
-    }
-
-    @Override
-    public ClavaNode getNode() {
-        return node;
+        super(node, weaver);
     }
 
 }

@@ -20,43 +20,38 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
-public class CxxFunctionType extends AFunctionType {
-
-    private final FunctionType type;
+public class CxxFunctionType<Self extends CxxFunctionType<Self>> extends AFunctionType<Self> {
 
     public CxxFunctionType(FunctionType type, CxxWeaver weaver) {
-        super(new CxxType(type, weaver), weaver);
-        this.type = type;
+        super(type, weaver);
     }
 
     @Override
-    public Type getNode() {
-        return type;
+    public FunctionType getNodeImpl() {
+        return (FunctionType) super.getNodeImpl();
     }
 
     @Override
-    public AType getReturnTypeImpl() {
-        return CxxJoinpoints.create(type.getReturnType(), getWeaverEngine(), AType.class);
+    public AType<?> getReturnTypeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getReturnType(), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public AType[] getParamTypesArrayImpl() {
-
-        return type.getParamTypes().stream()
-                .map(paramType -> CxxJoinpoints.create(paramType, getWeaverEngine()))
-                .toArray(size -> new AType[size]);
-
+    public AType<?>[] getParamTypesImpl() {
+        return this.getNodeImpl().getParamTypes().stream()
+                .map(paramType -> CxxJoinpoints.create(paramType, getWeaverEngine(), AType.class))
+                .toArray(AType[]::new);
     }
 
     @Override
-    public void setReturnTypeImpl(AType newType) {
-        Type newClavaType = (Type) newType.getNode();
-        type.set(FunctionType.RETURN_TYPE, newClavaType);
+    public void setReturnTypeImpl(AType<?> newType) {
+        Type newClavaType = (Type) newType.getNodeImpl();
+        this.getNodeImpl().set(FunctionType.RETURN_TYPE, newClavaType);
     }
 
     @Override
-    public void setParamTypeImpl(int index, AType newType) {
-        type.setParamType(index, (Type) newType.getNode());
+    public void setParamTypeImpl(int index, AType<?> newType) {
+        this.getNodeImpl().setParamType(index, (Type) newType.getNodeImpl());
     }
 
 }

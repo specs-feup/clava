@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CXXThisExpr;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -22,34 +21,31 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APointerType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AThis;
 
-public class CxxThis extends AThis {
-
-    private final CXXThisExpr thisExpr;
+public class CxxThis<Self extends CxxThis<Self>> extends AThis<Self> {
 
     public CxxThis(CXXThisExpr thisExpr, CxxWeaver weaver) {
-        super(new CxxExpression(thisExpr, weaver), weaver);
-        this.thisExpr = thisExpr;
+        super(thisExpr, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return thisExpr;
+    public CXXThisExpr getNodeImpl() {
+        return (CXXThisExpr) super.getNodeImpl();
     }
 
     @Override
-    public ADecl getDeclImpl() {
+    public ADecl<?> getDeclImpl() {
         // type.pointee.decl
 
         var type = getTypeImpl();
 
         if (!(type instanceof APointerType)) {
-            throw new RuntimeException("Not implemented with type is " + type.getJoinPointType());
+            throw new RuntimeException("Not implemented with type is " + type.joinPointType());
         }
 
         // Get class type
-        var pointeeType = ((APointerType) type).getPointeeImpl();
+        var pointeeType = ((APointerType<?>) type).getPointeeImpl();
 
-        var thisType = pointeeType.getNode();
+        var thisType = pointeeType.getNodeImpl();
 
         if (!(thisType instanceof TagType)) {
             throw new RuntimeException("Not implemented when this type is a " + thisType.getClass());

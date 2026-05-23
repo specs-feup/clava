@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.ParenType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -21,29 +20,25 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParenType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
-public class CxxParenType extends AParenType {
-
-    private final ParenType parenType;
+public class CxxParenType<Self extends CxxParenType<Self>> extends AParenType<Self> {
 
     public CxxParenType(ParenType parenType, CxxWeaver weaver) {
-        super(new CxxType(parenType, weaver), weaver);
-
-        this.parenType = parenType;
+        super(parenType, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return parenType;
+    public ParenType getNodeImpl() {
+        return (ParenType) super.getNodeImpl();
     }
 
     @Override
-    public AType getInnerTypeImpl() {
-        return CxxJoinpoints.create(parenType.getInnerType(), getWeaverEngine(), AType.class);
+    public AType<?> getInnerTypeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getInnerType(), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public void setInnerTypeImpl(AType innerType) {
-        var newType = (Type) innerType.getNode();
-        parenType.setInnerType(newType);
+    public void setInnerTypeImpl(AType<?> innerType) {
+        var newType = (Type) innerType.getNodeImpl();
+        this.getNodeImpl().setInnerType(newType);
     }
 }
