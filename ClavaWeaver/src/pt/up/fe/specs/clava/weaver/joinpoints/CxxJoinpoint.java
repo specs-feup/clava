@@ -1,4 +1,4 @@
-package pt.up.fe.specs.clava.weaver.abstracts;
+package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -61,9 +61,9 @@ import pt.up.fe.specs.util.stringsplitter.StringSplitterRules;
  * Abstract class which can be edited by the developer.
  * This class will NOT be overwritten by the generator.
  */
-public abstract class ACxxWeaverJoinPoint<Self extends ACxxWeaverJoinPoint<Self>> extends AJoinpoint<Self> {
+public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Self> {
 
-    protected ACxxWeaverJoinPoint(ClavaNode node, ACxxWeaver weaver) {
+    public CxxJoinpoint(ClavaNode node, ACxxWeaver weaver) {
         super(node, weaver);
     }
 
@@ -269,7 +269,7 @@ public abstract class ACxxWeaverJoinPoint<Self extends ACxxWeaverJoinPoint<Self>
     }
 
     @Override
-    public AJoinpoint[] insertImpl(String position, JoinPoint2 JoinPoint) {
+    public AJoinpoint<?>[] insertImpl(InsertPosition position, AJoinpoint<?> node) {
         throw new NotImplementedException(this);
     }
 
@@ -710,7 +710,8 @@ public abstract class ACxxWeaverJoinPoint<Self extends ACxxWeaverJoinPoint<Self>
         if (!(jp instanceof AJoinpoint)) {
             return false;
         }
-                return getNode().equals(((AJoinpoint) obj).getNode());
+
+        return getNodeImpl().equals(((AJoinpoint) jp).getNodeImpl());
     }
 
     @Override
