@@ -3,10 +3,8 @@ package pt.up.fe.specs.clava.weaver;
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.weaver.ast.AstMethods;
 import org.lara.interpreter.weaver.interf.AGear;
-import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import org.lara.interpreter.weaver.options.WeaverOption;
-import org.lara.language.specification.dsl.LanguageSpecification;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
@@ -27,6 +25,7 @@ import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
 import pt.up.fe.specs.clava.utils.SourceType;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
 import pt.up.fe.specs.clava.weaver.gears.CacheHandlerGear;
 import pt.up.fe.specs.clava.weaver.gears.ModifiedFilesGear;
@@ -53,7 +52,7 @@ import java.util.stream.Collectors;
  * implementation should be done by extending those
  * abstract classes with user-defined classes.<br>
  * The abstract class
- * {@link pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint} can be used
+ * {@link pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint} can be used
  * to add user-defined
  * methods and fields which the user intends to add for all join points and are
  * not intended to be used in LARA aspects.
@@ -61,11 +60,6 @@ import java.util.stream.Collectors;
  * @author Lara Weaver Generator
  */
 public class CxxWeaver extends ACxxWeaver {
-
-    public static LanguageSpecification buildLanguageSpecification() {
-        return LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
-                ClavaWeaverResource.ACTIONS);
-    }
 
     private static final List<String> CLAVA_PREDEFINED_EXTERNAL_DEPS = Arrays.asList("LAT - Lara Autotuning Tool",
             "https://github.com/specs-feup/LAT-Lara-Autotuning-Tool.git",
@@ -214,8 +208,8 @@ public class CxxWeaver extends ACxxWeaver {
         return weaverData.getAst();
     }
 
-    public CxxProgram getAppJp() {
-        return new CxxProgram(getApp(), this);
+    public CxxProgram<?> getAppJp() {
+        return new CxxProgram<>(getApp(), this);
     }
 
     private Map<ClavaNode, Map<String, Object>> getUserValues() {
@@ -741,7 +735,7 @@ public class CxxWeaver extends ACxxWeaver {
      * @return an instance of the join point root/program
      */
     @Override
-    public JoinPoint getRootJp() {
+    public AJoinpoint<?> getRootJp() {
         return CxxJoinpoints.create(getApp(), this);
     }
 
@@ -1106,8 +1100,8 @@ public class CxxWeaver extends ACxxWeaver {
         // After rebuilding, clear current app cache
         getApp().clearCache();
         getEventTrigger().triggerAction(Stage.DURING,
-                "CxxWeaver.rebuildFile",
-                CxxJoinpoints.create(tUnit, this), Collections.emptyList(), Optional.empty());
+                CxxJoinpoints.create(tUnit, this),
+                "CxxWeaver.rebuildFile", Optional.empty(), Collections.emptyList());
 
         // Return correct TranslationUnit
         for (TranslationUnit tu : rebuiltApp.getTranslationUnits()) {
@@ -1534,11 +1528,6 @@ public class CxxWeaver extends ACxxWeaver {
         ClavaLog.debug(() -> "All sources: " + allFiles);
 
         allFiles.stream().forEach(filename -> processedFiles.put(new File(filename), baseFolder));
-    }
-
-    @Override
-    protected LanguageSpecification buildLangSpecs() {
-        return buildLanguageSpecification();
     }
 
     @Override

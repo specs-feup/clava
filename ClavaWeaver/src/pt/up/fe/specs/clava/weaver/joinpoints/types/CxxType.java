@@ -35,110 +35,93 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
-public class CxxType extends AType {
-
-    private final Type type;
+public class CxxType<Self extends CxxType<Self>> extends AType<Self> {
 
     public CxxType(Type type, CxxWeaver weaver) {
-        super(weaver);
-        this.type = type;
+        super(type, weaver);
     }
 
     @Override
-    public Type getNode() {
-        return type;
+    public Type getNodeImpl() {
+        return (Type) super.getNodeImpl();
     }
 
     @Override
-    public Boolean getIsArrayImpl() {
-        return type.isArray();
-        // return type instanceof ArrayType;
+    public boolean getIsArrayImpl() {
+        return this.getNodeImpl().isArray();
     }
 
     @Override
-    public Integer getArraySizeImpl() {
-        if (!(type instanceof ConstantArrayType)) {
+    public int getArraySizeImpl() {
+        if (!(this.getNodeImpl() instanceof ConstantArrayType)) {
             return -1;
         }
 
-        return ((ConstantArrayType) type).getArraySize();
+        return ((ConstantArrayType) this.getNodeImpl()).getArraySize();
     }
 
     @Override
-    public int[] getArrayDimsArrayImpl() {
-        if (!(type instanceof ArrayType)) {
+    public int[] getArrayDimsImpl() {
+        if (!(this.getNodeImpl() instanceof ArrayType)) {
             return new int[0];
         }
 
-        return ((ArrayType) type).getArrayDims().stream().mapToInt(Integer::intValue).toArray();
-    }
-    /*
-    @Override
-    public AJoinPoint getElementTypeImpl() {
-        if (type instanceof ArrayType) {
-            return CxxJoinpoints.create(((ArrayType) type).getElementType(), this);
-        }
-    
-        return this;
-    }
-    */
-
-    @Override
-    public Boolean getHasTemplateArgsImpl() {
-        return type.hasTemplateArgs();
+        return ((ArrayType) this.getNodeImpl()).getArrayDims().stream().mapToInt(Integer::intValue).toArray();
     }
 
     @Override
-    public String[] getTemplateArgsStringsArrayImpl() {
-        return type.getTemplateArgumentStrings(null).toArray(new String[0]);
+    public boolean getHasTemplateArgsImpl() {
+        return this.getNodeImpl().hasTemplateArgs();
     }
 
     @Override
-    public Boolean getHasSugarImpl() {
-        // return type.getTypeData().hasSugar();
-        return type.hasSugar();
-
+    public String[] getTemplateArgsStringsImpl() {
+        return this.getNodeImpl().getTemplateArgumentStrings(null).toArray(new String[0]);
     }
 
     @Override
-    public AType getDesugarImpl() {
-        return CxxJoinpoints.create(type.desugar(), getWeaverEngine(), AType.class);
+    public boolean getHasSugarImpl() {
+        return this.getNodeImpl().hasSugar();
     }
 
     @Override
-    public AType getDesugarAllImpl() {
-        return CxxJoinpoints.create(type.desugarAll(), getWeaverEngine(), AType.class);
+    public AType<?> getDesugarImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().desugar(), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public void setDesugarImpl(AType desugaredType) {
-        type.setDesugar((Type) desugaredType.getNode());
+    public AType<?> getDesugarAllImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().desugarAll(), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public Boolean getIsBuiltinImpl() {
-        return type instanceof BuiltinType;
+    public void setDesugarImpl(AType<?> desugaredType) {
+        this.getNodeImpl().setDesugar((Type) desugaredType.getNodeImpl());
     }
 
     @Override
-    public Boolean getConstantImpl() {
-        return type.isConst();
+    public boolean getIsBuiltinImpl() {
+        return this.getNodeImpl() instanceof BuiltinType;
+    }
+
+    @Override
+    public boolean getConstantImpl() {
+        return this.getNodeImpl().isConst();
     }
 
     @Override
     public String getKindImpl() {
-        return type.getNodeName();
+        return this.getNodeImpl().getNodeName();
     }
 
     @Override
-    public Boolean getIsPointerImpl() {
-        return type.isPointer();
-        // return type instanceof PointerType;
+    public boolean getIsPointerImpl() {
+        return this.getNodeImpl().isPointer();
     }
 
     @Override
-    public AType getUnwrapImpl() {
-        Type unwrappedType = Types.getSingleElement(type);
+    public AType<?> getUnwrapImpl() {
+        Type unwrappedType = Types.getSingleElement(this.getNodeImpl());
 
         if (unwrappedType == null) {
             return null;
@@ -148,51 +131,51 @@ public class CxxType extends AType {
     }
 
     @Override
-    public Boolean getIsTopLevelImpl() {
+    public boolean getIsTopLevelImpl() {
         // Type is top-level if it has not parent
-        return !type.hasParent();
+        return !this.getNodeImpl().hasParent();
     }
 
     @Override
-    public AType[] getTemplateArgsTypesArrayImpl() {
-        return type.getTemplateArgumentTypes().stream()
+    public AType<?>[] getTemplateArgsTypesImpl() {
+        return this.getNodeImpl().getTemplateArgumentTypes().stream()
                 .map(argType -> CxxJoinpoints.create(argType, getWeaverEngine(), AType.class))
-                .toArray(size -> new AType[size]);
+                .toArray(AType[]::new);
 
     }
 
     @Override
-    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
+    public void setTemplateArgsTypesImpl(AType<?>[] templateArgTypes) {
         List<Type> argTypes = Arrays.stream(
                 templateArgTypes)
-                .map(aType -> (Type) aType.getNode())
+                .map(aType -> (Type) aType.getNodeImpl())
                 .collect(Collectors.toList());
 
-        type.setTemplateArgumentTypes(argTypes);
+        this.getNodeImpl().setTemplateArgumentTypes(argTypes);
     }
 
     @Override
-    public void setTemplateArgTypeImpl(int index, AType templateArgType) {
-        type.setTemplateArgumentType(index, (Type) templateArgType.getNode());
+    public void setTemplateArgTypeImpl(int index, AType<?> templateArgType) {
+        this.getNodeImpl().setTemplateArgumentType(index, (Type) templateArgType.getNodeImpl());
     }
 
     @Override
-    public AType getNormalizeImpl() {
-        return CxxJoinpoints.create(type.normalize(), getWeaverEngine(), AType.class);
+    public AType<?> getNormalizeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().normalize(), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public Map<String, AType> getTypeFieldsImpl() {
-        Map<String, AType> typeFields = new HashMap<>();
+    public Map<String, AType<?>> getTypeFieldsImpl() {
+        Map<String, AType<?>> typeFields = new HashMap<>();
 
-        List<DataKey<?>> keys = type.getAllKeysWithNodes();
+        List<DataKey<?>> keys = this.getNodeImpl().getAllKeysWithNodes();
 
         for (DataKey<?> key : keys) {
-            if (!type.hasValue(key)) {
+            if (!this.getNodeImpl().hasValue(key)) {
                 continue;
             }
 
-            List<ClavaNode> values = type.getClavaNode(key);
+            List<ClavaNode> values = this.getNodeImpl().getClavaNode(key);
 
             // Skip fields that contain more than one node
             if (values.size() != 1) {
@@ -215,34 +198,28 @@ public class CxxType extends AType {
         return setTypeFieldByValueRecursiveImpl(this, currentValue, newValue, new HashSet<>());
     }
 
-    private static boolean setTypeFieldByValueRecursiveImpl(AType type, Object currentValue, Object newValue,
+    private static boolean setTypeFieldByValueRecursiveImpl(AType<?> type, Object currentValue, Object newValue,
             Set<Type> checkedNodes) {
 
         // If already visited this node, return false
-        if (checkedNodes.contains(type.getNode())) {
+        if (checkedNodes.contains(type.getNodeImpl())) {
             return false;
         }
         // Otherwise, add current node
         else {
-            checkedNodes.add((Type) type.getNode());
+            checkedNodes.add((Type) type.getNodeImpl());
         }
 
         // Get keys with type fields
-        @SuppressWarnings("unchecked")
-        Map<String, AType> typeFields = (Map<String, AType>) type.getTypeFieldsImpl();
+        Map<String, AType<?>> typeFields = (Map<String, AType<?>>) type.getTypeFieldsImpl();
 
-        List<AType> visitedTypes = new ArrayList<>();
+        List<AType<?>> visitedTypes = new ArrayList<>();
 
         // Iterate over each type field
-        for (Entry<String, AType> entry : typeFields.entrySet()) {
+        for (Entry<String, AType<?>> entry : typeFields.entrySet()) {
 
             // Found value to change, change it and return
             if (entry.getValue().equals(currentValue)) {
-                // System.out.println("SETTING " + newValue.getClass() + " to " + entry);
-                // System.out.println(
-                // "1.Replacing " + entry.getKey() + " with value " + entry.getValue().getNode().toTree()
-                // + " with "
-                // + ((AType) newValue).getNode().toTree());
                 type.setValueImpl(entry.getKey(), newValue);
                 return true;
             }
@@ -252,16 +229,13 @@ public class CxxType extends AType {
 
         // Did not find a key in the current node, call the function recursively on a copy of the visited fields
         // If a field is changed, update it
-        for (Entry<String, AType> entry : typeFields.entrySet()) {
-            AType fieldTypeCopy = (AType) entry.getValue().copy();
+        for (Entry<String, AType<?>> entry : typeFields.entrySet()) {
+            AType<?> fieldTypeCopy = (AType<?>) entry.getValue().copy();
             boolean changedField = setTypeFieldByValueRecursiveImpl(fieldTypeCopy, currentValue, newValue,
                     checkedNodes);
 
             // Update field
             if (changedField) {
-                // System.out.println(
-                // "2.Replacing " + entry.getKey() + " with value " + entry.getValue().getNode().toTree()
-                // + " with " + fieldTypeCopy.getNode().toTree());
                 type.setValue(entry.getKey(), fieldTypeCopy);
                 return true;
             }
@@ -271,22 +245,22 @@ public class CxxType extends AType {
 
     @Override
     public String getFieldTreeImpl() {
-        return type.toFieldTree();
+        return this.getNodeImpl().toFieldTree();
     }
 
     @Override
-    public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
-        return CxxJoinpoints.create(type.setUnderlyingType((Type) oldValue.getNode(), (Type) newValue.getNode()),
+    public AType<?> setUnderlyingTypeImpl(AType<?> oldValue, AType<?> newValue) {
+        return CxxJoinpoints.create(this.getNodeImpl().setUnderlyingType((Type) oldValue.getNodeImpl(), (Type) newValue.getNodeImpl()),
                 getWeaverEngine(), AType.class);
     }
 
     @Override
-    public Boolean getIsAutoImpl() {
-        return type.isAuto();
+    public boolean getIsAutoImpl() {
+        return this.getNodeImpl().isAuto();
     }
 
     @Override
-    public AType asConstImpl() {
-        return CxxJoinpoints.create(type.asConst(), getWeaverEngine(), AType.class);
+    public AType<?> asConstImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().asConst(), getWeaverEngine(), AType.class);
     }
 }

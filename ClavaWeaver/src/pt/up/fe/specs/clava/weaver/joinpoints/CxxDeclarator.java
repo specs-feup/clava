@@ -13,24 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeclarator;
 
-public class CxxDeclarator extends ADeclarator {
-
-    private final DeclaratorDecl declaratorDecl;
+public class CxxDeclarator<Self extends CxxDeclarator<Self>> extends ADeclarator<Self> {
 
     public CxxDeclarator(DeclaratorDecl declaratorDecl, CxxWeaver weaver) {
-        super(new CxxNamedDecl(declaratorDecl, weaver), weaver);
-
-        this.declaratorDecl = declaratorDecl;
+        super(declaratorDecl, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return declaratorDecl;
+    public DeclaratorDecl getNodeImpl() {
+        return (DeclaratorDecl) super.getNodeImpl();
     }
 
 }

@@ -16,7 +16,6 @@ package pt.up.fe.specs.clava.weaver.joinpoints.types;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -24,42 +23,38 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATemplateSpecializationType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
-public class CxxTemplateSpecializationType extends ATemplateSpecializationType {
-    private final TemplateSpecializationType templateSpecializationType;
+public class CxxTemplateSpecializationType<Self extends CxxTemplateSpecializationType<Self>> extends ATemplateSpecializationType<Self> {
 
     public CxxTemplateSpecializationType(TemplateSpecializationType templateSpecializationType, CxxWeaver weaver) {
-
-        super(new CxxType(templateSpecializationType, weaver), weaver);
-
-        this.templateSpecializationType = templateSpecializationType;
+        super(templateSpecializationType, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return templateSpecializationType;
+    public TemplateSpecializationType getNodeImpl() {
+        return (TemplateSpecializationType) super.getNodeImpl();
     }
 
     @Override
     public String getTemplateNameImpl() {
-        return templateSpecializationType.getTemplateName();
+        return this.getNodeImpl().getTemplateName();
     }
 
     @Override
-    public Integer getNumArgsImpl() {
-        return templateSpecializationType.getTemplateArguments().size();
+    public int getNumArgsImpl() {
+        return this.getNodeImpl().getTemplateArguments().size();
     }
 
     @Override
-    public String[] getArgsArrayImpl() {
-        return templateSpecializationType.getTemplateArgumentStrings(null).toArray(new String[0]);
+    public String[] getArgsImpl() {
+        return this.getNodeImpl().getTemplateArgumentStrings(null).toArray(new String[0]);
     }
 
     @Override
-    public AType getFirstArgTypeImpl() {
+    public AType<?> getFirstArgTypeImpl() {
         ClavaLog.deprecated(
                 "$templateSpecializationType.firstArgType is deprecated, please use $type.templateArgTypes");
 
-        List<Type> templateArgTypes = templateSpecializationType.getTemplateArgumentTypes();
+        List<Type> templateArgTypes = this.getNodeImpl().getTemplateArgumentTypes();
         if (templateArgTypes.isEmpty()) {
             return null;
         }

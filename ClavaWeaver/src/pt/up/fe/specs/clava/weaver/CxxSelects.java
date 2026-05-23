@@ -26,14 +26,15 @@ import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.utils.NullNode;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxArrayAccess;
+import pt.up.fe.specs.util.SpecsCollections;
 
 public class CxxSelects {
 
     /**
-     * Method that helps selecting join points.
+     * Selects join points.
+     *
      *
      * @param targetJoinpoint
      * @param directChildren
@@ -106,33 +107,28 @@ public class CxxSelects {
         return true;
     }
 
-    // public static AJoinPoint[] selectedNodesToJps(List<? extends ClavaNode> selectedNodes, WeaverEngine weaverEngine)
-    // {
-    // return selectedNodesToJps(selectedNodes.stream(), jp -> true, weaverEngine);
-    // }
-
-    public static AJoinPoint[] selectedNodesToJps(Stream<? extends ClavaNode> selectedNodes,
+    public static AJoinpoint<?>[] selectedNodesToJps(Stream<? extends ClavaNode> selectedNodes,
             CxxWeaver weaverEngine) {
         return selectedNodesToJps(selectedNodes, jp -> true, weaverEngine);
     }
 
-    public static AJoinPoint[] selectedNodesToJps(Stream<? extends ClavaNode> selectedNodes,
-            Predicate<AJoinPoint> filter, CxxWeaver weaverEngine) {
+    public static AJoinpoint[] selectedNodesToJps(Stream<? extends ClavaNode> selectedNodes,
+            Predicate<AJoinpoint> filter, CxxWeaver weaverEngine) {
 
         return selectedNodesToJpsStream(selectedNodes, filter, weaverEngine)
                 .collect(Collectors.toList())
-                // .toArray(new AJoinPoint[0]);
-                .toArray(AJoinPoint[]::new);
+                // .toArray(new AJoinpoint[0]);
+                .toArray(AJoinpoint[]::new);
     }
 
-    public static Stream<AJoinPoint> selectedNodesToJpsStream(Stream<? extends ClavaNode> selectedNodes,
+    public static Stream<AJoinpoint<?>> selectedNodesToJpsStream(Stream<? extends ClavaNode> selectedNodes,
             CxxWeaver weaverEngine) {
 
         return selectedNodesToJpsStream(selectedNodes, jp -> true, weaverEngine);
     }
 
-    public static Stream<AJoinPoint> selectedNodesToJpsStream(Stream<? extends ClavaNode> selectedNodes,
-            Predicate<AJoinPoint> filter, CxxWeaver weaverEngine) {
+    public static Stream<AJoinpoint> selectedNodesToJpsStream(Stream<? extends ClavaNode> selectedNodes,
+            Predicate<AJoinpoint> filter, CxxWeaver weaverEngine) {
 
         var selectedJps = selectedNodes
                 // Ignore null nodes
@@ -143,18 +139,18 @@ public class CxxSelects {
                 // Default filter
                 .filter(CxxSelects::defaultSelectFilter)
                 .filter(jp -> filter.test(jp))
-                // Cast back to AJoinPoint
-                .map(jp -> (AJoinPoint) jp);
+                // Cast back to AJoinpoint
+                .map(jp -> (AJoinpoint) jp);
 
         return selectedJps;
     }
 
-    private static boolean defaultSelectFilter(AJoinPoint jp) {
+    private static boolean defaultSelectFilter(AJoinpoint<?> jp) {
         // TODO: If more cases, use a ClassMap instead
 
         // If ArraySubscript, return only if top-level
         if (jp instanceof CxxArrayAccess) {
-            return ((ArraySubscriptExpr) jp.getNode()).isTopLevel();
+            return ((ArraySubscriptExpr) jp.getNodeImpl()).isTopLevel();
         }
 
         return true;

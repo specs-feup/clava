@@ -13,23 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
 
-public class CxxStruct extends AStruct {
-
-    private final RecordDecl recordDecl;
+public class CxxStruct<Self extends CxxStruct<Self>> extends AStruct<Self> {
 
     public CxxStruct(RecordDecl recordDecl, CxxWeaver weaver) {
-        super(new CxxRecord(recordDecl, weaver), weaver);
-        this.recordDecl = recordDecl;
+        super(recordDecl, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return recordDecl;
+    public RecordDecl getNodeImpl() {
+        return (RecordDecl) super.getNodeImpl();
     }
 
 }

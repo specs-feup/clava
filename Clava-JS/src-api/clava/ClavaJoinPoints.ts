@@ -486,7 +486,7 @@ export default class ClavaJoinPoints {
   }
 
   static compoundAssign(
-    op: string,
+    op: Joinpoints.OpKind,
     $leftHand: Joinpoints.Expression,
     $rightHand: Joinpoints.Expression
   ): Joinpoints.BinaryOp {
@@ -536,7 +536,7 @@ export default class ClavaJoinPoints {
    * @param $type - The return type of the operator. If a string, it is converted to a literal type.
    */
   static binaryOp(
-    op: string,
+    op: Joinpoints.OpKind,
     $left: Joinpoints.Expression | string,
     $right: Joinpoints.Expression | string,
     $type: Joinpoints.Type | string = "int"
@@ -570,7 +570,7 @@ export default class ClavaJoinPoints {
    * @param $type - The return type of the operator. If undefined, tries to infer the correct type based on the type of the $expr (inference might not be implemented for all operators).
    */
   static unaryOp(
-    op: string,
+    op: Joinpoints.OpKind,
     $expr: Joinpoints.Expression,
     $type?: Joinpoints.Type | string
   ): Joinpoints.UnaryOp;
@@ -582,12 +582,12 @@ export default class ClavaJoinPoints {
    * @param $type - The return type of the operator that will be converted to a literal type.
    */
   static unaryOp(
-    op: string,
+    op: Joinpoints.OpKind,
     $expr: string,
     $type: Joinpoints.Type | string
   ): Joinpoints.UnaryOp;
   static unaryOp(
-    op: string,
+    op: Joinpoints.OpKind,
     $expr: Joinpoints.Expression | string,
     $type?: Joinpoints.Type | string
   ): Joinpoints.UnaryOp {
@@ -1068,12 +1068,12 @@ export default class ClavaJoinPoints {
    */
   static memberAccess(
     baseExpr: Joinpoints.Expression,
-    fieldName: String,
+    fieldName: string,
     fieldType: Joinpoints.Type
   ): Joinpoints.MemberAccess;
   static memberAccess(
     baseExpr: Joinpoints.Expression,
-    field: Joinpoints.Field | String,
+    field: Joinpoints.Field | string,
     fieldType?: Joinpoints.Type
   ): Joinpoints.MemberAccess {
     if (typeof field === "string") {

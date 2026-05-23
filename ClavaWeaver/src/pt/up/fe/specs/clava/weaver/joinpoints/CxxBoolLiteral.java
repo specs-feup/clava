@@ -13,30 +13,24 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABoolLiteral;
 
-public class CxxBoolLiteral extends ABoolLiteral {
-
-    private final CXXBoolLiteralExpr literal;
+public class CxxBoolLiteral<Self extends CxxBoolLiteral<Self>> extends ABoolLiteral<Self> {
 
     public CxxBoolLiteral(CXXBoolLiteralExpr literal, CxxWeaver weaver) {
-        super(new CxxLiteral(literal, weaver), weaver);
-
-        this.literal = literal;
+        super(literal, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return literal;
+    public CXXBoolLiteralExpr getNodeImpl() {
+        return (CXXBoolLiteralExpr) super.getNodeImpl();
     }
 
     @Override
-    public Boolean getValueImpl() {
-        return literal.get(CXXBoolLiteralExpr.VALUE);
+    public boolean getValueImpl() {
+        return this.getNodeImpl().get(CXXBoolLiteralExpr.VALUE);
     }
-
 
 }

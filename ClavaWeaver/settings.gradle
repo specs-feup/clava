@@ -6,10 +6,10 @@ def laraFrameworkRoot = System.getenv('LARA_FRAMEWORK_HOME') ?: '../../lara-fram
 includeBuild("${specsJavaLibsRoot}/jOptions")
 includeBuild("${specsJavaLibsRoot}/SpecsUtils")
 
-includeBuild("${laraFrameworkRoot}/LanguageSpecification")
+includeBuild("${laraFrameworkRoot}/LangSpec2")
 includeBuild("${laraFrameworkRoot}/LARAI")
 includeBuild("${laraFrameworkRoot}/LaraUtils")
-includeBuild("${laraFrameworkRoot}/WeaverGenerator")
+includeBuild("${laraFrameworkRoot}/WeaverGen2")
 includeBuild("${laraFrameworkRoot}/WeaverInterface")
 
 includeBuild("../AntarexClavaApi")

@@ -12,53 +12,48 @@
  */
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
-
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 
-public class CxxPragma extends APragma {
-
-    private Pragma pragma;
+public class CxxPragma<Self extends CxxPragma<Self>> extends APragma<Self> {
 
     public CxxPragma(Pragma pragma, CxxWeaver weaver) {
-        super(weaver);
-        this.pragma = pragma;
+        super(pragma, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return pragma;
+    public Pragma getNodeImpl() {
+        return (Pragma) super.getNodeImpl();
     }
 
     @Override
     public String getNameImpl() {
-        return pragma.getName();
+        return this.getNodeImpl().getName();
     }
 
     @Override
-    public AJoinPoint getTargetImpl() {
-        return pragma.getTarget().map(target -> CxxJoinpoints.create(target,
-                getWeaverEngine(), AJoinPoint.class)).orElse(null);
+    public AJoinpoint<?> getTargetImpl() {
+        return this.getNodeImpl().getTarget().map(target -> CxxJoinpoints.create(target,
+                getWeaverEngine(), AJoinpoint.class)).orElse(null);
     }
 
     @Override
     public String getContentImpl() {
-        return pragma.getContent();
+        return this.getNodeImpl().getContent();
     }
 
     @Override
     public void setContentImpl(String content) {
-        pragma.setContent(content);
+        this.getNodeImpl().setContent(content);
     }
 
     @Override
     public void setNameImpl(String name) {
-        pragma.setName(name);
+        this.getNodeImpl().setName(name);
     }
 
     public void setPragma(Pragma pragma) {
@@ -66,8 +61,8 @@ public class CxxPragma extends APragma {
     }
 
     @Override
-    public AJoinPoint[] getTargetNodesArrayImpl(String endPragma) {
-        var pragmaNodes = pragma.getPragmaNodes(endPragma);
+    public AJoinpoint<?>[] getGetTargetNodesImpl(String endPragma) {
+        var pragmaNodes = this.getNodeImpl().getPragmaNodes(endPragma);
         return CxxSelects.selectedNodesToJps(pragmaNodes.stream(), getWeaverEngine());
     }
 

@@ -13,7 +13,9 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
+import java.util.HashMap;
+import java.util.Map;
+
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -21,39 +23,54 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
+import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
+import pt.up.fe.specs.util.lazy.Lazy;
+import pt.up.fe.specs.util.lazy.ThreadSafeLazy;
 
-public class CxxVardecl extends AVardecl {
+public class CxxVardecl<Self extends CxxVardecl<Self>> extends AVardecl<Self> {
 
-    private final VarDecl varDecl;
+    private static final Lazy<Map<pt.up.fe.specs.clava.ast.decl.enums.StorageClass, StorageClass>> STORAGE_TYPE = new ThreadSafeLazy<>(
+            () -> buildStorageTypeMap());
+
+    private static Map<pt.up.fe.specs.clava.ast.decl.enums.StorageClass, StorageClass> buildStorageTypeMap() {
+        HashMap<pt.up.fe.specs.clava.ast.decl.enums.StorageClass, StorageClass> storageClasses = new HashMap<>();
+
+        storageClasses.put(pt.up.fe.specs.clava.ast.decl.enums.StorageClass.None, StorageClass.NONE);
+        storageClasses.put(pt.up.fe.specs.clava.ast.decl.enums.StorageClass.Extern, StorageClass.EXTERN);
+        storageClasses.put(pt.up.fe.specs.clava.ast.decl.enums.StorageClass.Static, StorageClass.STATIC);
+        storageClasses.put(pt.up.fe.specs.clava.ast.decl.enums.StorageClass.PrivateExtern, StorageClass.PRIVATE_EXTERN);
+        storageClasses.put(pt.up.fe.specs.clava.ast.decl.enums.StorageClass.Auto, StorageClass.AUTO);
+        storageClasses.put(pt.up.fe.specs.clava.ast.decl.enums.StorageClass.Register, StorageClass.REGISTER);
+
+        return storageClasses;
+    }
 
     public CxxVardecl(VarDecl varDecl, CxxWeaver weaver) {
-        super(new CxxDeclarator(varDecl, weaver), weaver);
-
-        this.varDecl = varDecl;
+        super(varDecl, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return varDecl;
+    public VarDecl getNodeImpl() {
+        return (VarDecl) super.getNodeImpl();
     }
 
     @Override
-    public Boolean getHasInitImpl() {
-        return varDecl.getInit().isPresent();
+    public boolean getHasInitImpl() {
+        return this.getNodeImpl().getInit().isPresent();
     }
 
     @Override
-    public AExpression getInitImpl() {
-        return varDecl.getInit().map(init -> (AExpression) CxxJoinpoints.create(init, getWeaverEngine())).orElse(null);
+    public AExpression<?> getInitImpl() {
+        return this.getNodeImpl().getInit().map(init -> (AExpression<?>) CxxJoinpoints.create(init, getWeaverEngine())).orElse(null);
     }
 
     @Override
-    public void setInitImpl(AExpression init) {
+    public void setInitImpl(AExpression<?> init) {
         if (init == null) {
             removeInitImpl(true);
         } else {
-            varDecl.setInit((Expr) init.getNode());
+            this.getNodeImpl().setInit((Expr) init.getNodeImpl());
         }
     }
 
@@ -63,53 +80,65 @@ public class CxxVardecl extends AVardecl {
             removeInitImpl(true);
         }
 
-        varDecl.setInit(getWeaverEngine().getFactory().literalExpr(init, varDecl.getType()));
+        this.getNodeImpl().setInit(getWeaverEngine().getFactory().literalExpr(init, this.getNodeImpl().getType()));
     }
 
     @Override
     public void removeInitImpl(boolean removeConst) {
-        varDecl.removeInit(removeConst);
+        this.getNodeImpl().removeInit(removeConst);
     }
 
     @Override
-    public Boolean getIsParamImpl() {
+    public boolean getIsParamImpl() {
         return false;
     }
 
     @Override
-    public String getStorageClassImpl() {
-        return varDecl.get(VarDecl.STORAGE_CLASS).getString();
+    public StorageClass getStorageClassImpl() {
+        var nodeStorageClass = this.getNodeImpl().get(VarDecl.STORAGE_CLASS);
+        if (nodeStorageClass == null) {
+            throw new RuntimeException("Storage class of variable '" + getNameImpl() + "' is null");
+        }
+
+        StorageClass jpStorageClass = STORAGE_TYPE.get().get(nodeStorageClass);
+        if (jpStorageClass == null) {
+            throw new RuntimeException("Storage class '" + nodeStorageClass + "' of variable '" + getNameImpl()
+                    + "' is not supported in the join point model");
+        }
+
+        return jpStorageClass;
     }
 
     @Override
-    public void setStorageClassImpl(String storageClass) {
-        varDecl.setStorageClass(storageClass);
+    public void setStorageClassImpl(StorageClass storageClass) {
+        var nodeStorageClass = STORAGE_TYPE.get().entrySet().stream()
+                .filter(entry -> entry.getValue() == storageClass)
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(
+                        "Storage class '" + storageClass + "' is not supported in the join point model"));
+
+        this.getNodeImpl().setStorageClass(nodeStorageClass);
     }
 
     @Override
-    public Boolean getIsGlobalImpl() {
-        return varDecl.get(VarDecl.HAS_GLOBAL_STORAGE);
+    public boolean getIsGlobalImpl() {
+        return this.getNodeImpl().get(VarDecl.HAS_GLOBAL_STORAGE);
     }
 
     @Override
     public String getInitStyleImpl() {
-        return varDecl.get(VarDecl.INIT_STYLE).getString();
-        // return InitializationStyle.valueOf(varDecl.get(VarDecl.INIT_STYLE).name());
+        return this.getNodeImpl().get(VarDecl.INIT_STYLE).getString();
     }
 
     @Override
-    public AVardecl getDefinitionImpl() {
-        return CxxJoinpoints.create(varDecl.getDefinition(), getWeaverEngine(), AVardecl.class);
+    public AVardecl<?> getDefinitionImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getDefinition(), getWeaverEngine(), AVardecl.class);
     }
 
-    // @Override
-    // public void varrefImpl() {
-    // return CxxJoinpoints.create(AstFactory.varref(CxxJoinpoints.create(varDecl, AVardecl.class), AVarref.class));
-    // }
-
     @Override
-    public AVarref varrefImpl() {
-        return AstFactory.varref(getWeaverEngine(), CxxJoinpoints.create(varDecl, getWeaverEngine(), AVardecl.class));
+    public AVarref<?> varrefImpl() {
+        return AstFactory.varref(getWeaverEngine(), CxxJoinpoints.create(this.getNodeImpl(), getWeaverEngine(), AVardecl.class));
     }
 
 }

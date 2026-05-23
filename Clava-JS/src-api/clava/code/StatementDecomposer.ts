@@ -11,6 +11,7 @@ import {
   Joinpoint,
   LabelStmt,
   MemberCall,
+  OpKind,
   ReturnStmt,
   Scope,
   Statement,
@@ -332,10 +333,10 @@ export default class StatementDecomposer {
     const rightResult = this.decomposeExpr($assign.right);
 
     const $newAssign =
-      $assign.operator === "="
+      $assign.kind === OpKind.assign
         ? ClavaJoinPoints.assign($assign.left, rightResult.$resultExpr)
         : ClavaJoinPoints.compoundAssign(
-            $assign.operator,
+            $assign.kind,
             $assign.left,
             rightResult.$resultExpr
           );
@@ -407,23 +408,23 @@ export default class StatementDecomposer {
     // only decompose increment / decrement operations, separating the change
     // from the result of the change
     if (
-      kind !== "post_dec" &&
-      kind !== "post_inc" &&
-      kind !== "pre_dec" &&
-      kind !== "pre_inc"
+      kind !== OpKind.post_dec &&
+      kind !== OpKind.post_inc &&
+      kind !== OpKind.pre_dec &&
+      kind !== OpKind.pre_inc
     ) {
       return new DecomposeResult([], $unaryOp, []);
     }
 
     switch (kind) {
-      case "post_dec":
-      case "post_inc": {
+      case OpKind.post_dec:
+      case OpKind.post_inc: {
         const $innerExpr = $unaryOp.operand.copy() as Expression;
         const succeedingStmts = [ClavaJoinPoints.exprStmt($unaryOp)];
         return new DecomposeResult([], $innerExpr, succeedingStmts);
       }
-      case "pre_dec":
-      case "pre_inc": {
+      case OpKind.pre_dec:
+      case OpKind.pre_inc: {
         const $innerExpr = $unaryOp.operand.copy() as Expression;
         const precedingStmts = [ClavaJoinPoints.exprStmt($unaryOp)];
         return new DecomposeResult(precedingStmts, $innerExpr, []);

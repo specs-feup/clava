@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
@@ -21,23 +20,20 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEnumDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEnumeratorDecl;
 
-public class CxxEnumDecl extends AEnumDecl {
-
-    private final EnumDecl enumDecl;
+public class CxxEnumDecl<Self extends CxxEnumDecl<Self>> extends AEnumDecl<Self> {
 
     public CxxEnumDecl(EnumDecl enumDecl, CxxWeaver weaver) {
-        super(new CxxNamedDecl(enumDecl, weaver), weaver);
-        this.enumDecl = enumDecl;
+        super(enumDecl, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return enumDecl;
+    public EnumDecl getNodeImpl() {
+        return (EnumDecl) super.getNodeImpl();
     }
 
     @Override
-    public AEnumeratorDecl[] getEnumeratorsArrayImpl() {
-        return CxxSelects.select(getWeaverEngine(), AEnumeratorDecl.class, enumDecl.getChildren(), false, EnumConstantDecl.class).toArray(new AEnumeratorDecl[0]);
+    public AEnumeratorDecl<?>[] getEnumeratorsImpl() {
+        return CxxSelects.select(getWeaverEngine(), AEnumeratorDecl.class, this.getNodeImpl().getChildren(), false, EnumConstantDecl.class);
     }
 
 }

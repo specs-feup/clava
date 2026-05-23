@@ -7,132 +7,132 @@ import {
   registerJoinpointMapper,
   wrapJoinPoint,
   unwrapJoinPoint,
+  InsertPosition,
 } from "@specs-feup/lara/api/LaraJoinPoint.js";
 
 type PrivateMapper = {
   "Joinpoint": typeof Joinpoint,
-  "Attribute": typeof Attribute,
-  "ClavaException": typeof ClavaException,
-  "Comment": typeof Comment,
-  "Decl": typeof Decl,
   "Empty": typeof Empty,
-  "Expression": typeof Expression,
-  "FileJp": typeof FileJp,
-  "ImplicitValue": typeof ImplicitValue,
-  "Include": typeof Include,
-  "InitList": typeof InitList,
-  "Literal": typeof Literal,
-  "MemberAccess": typeof MemberAccess,
-  "NamedDecl": typeof NamedDecl,
-  "NewExpr": typeof NewExpr,
-  "Op": typeof Op,
-  "ParenExpr": typeof ParenExpr,
-  "Pragma": typeof Pragma,
   "Program": typeof Program,
-  "RecordJp": typeof RecordJp,
-  "Statement": typeof Statement,
-  "Struct": typeof Struct,
-  "Switch": typeof Switch,
-  "SwitchCase": typeof SwitchCase,
-  "Tag": typeof Tag,
-  "TernaryOp": typeof TernaryOp,
-  "This": typeof This,
-  "Type": typeof Type,
-  "TypedefNameDecl": typeof TypedefNameDecl,
-  "TypedefType": typeof TypedefType,
-  "UnaryExprOrType": typeof UnaryExprOrType,
-  "UnaryOp": typeof UnaryOp,
-  "UndefinedType": typeof UndefinedType,
-  "Varref": typeof Varref,
-  "WrapperStmt": typeof WrapperStmt,
-  "AccessSpecifier": typeof AccessSpecifier,
-  "AdjustedType": typeof AdjustedType,
-  "ArrayAccess": typeof ArrayAccess,
-  "ArrayType": typeof ArrayType,
-  "AsmStmt": typeof AsmStmt,
-  "BinaryOp": typeof BinaryOp,
-  "BoolLiteral": typeof BoolLiteral,
-  "Break": typeof Break,
-  "BuiltinType": typeof BuiltinType,
-  "Call": typeof Call,
-  "Case": typeof Case,
-  "Cast": typeof Cast,
-  "CilkSpawn": typeof CilkSpawn,
-  "CilkSync": typeof CilkSync,
-  "Class": typeof Class,
-  "Continue": typeof Continue,
-  "CudaKernelCall": typeof CudaKernelCall,
-  "DeclStmt": typeof DeclStmt,
+  "FileJp": typeof FileJp,
+  "Decl": typeof Decl,
+  "NamedDecl": typeof NamedDecl,
   "Declarator": typeof Declarator,
-  "Default": typeof Default,
-  "DeleteExpr": typeof DeleteExpr,
-  "ElaboratedType": typeof ElaboratedType,
-  "EmptyStmt": typeof EmptyStmt,
+  "Include": typeof Include,
+  "RecordJp": typeof RecordJp,
+  "Field": typeof Field,
+  "Struct": typeof Struct,
+  "Class": typeof Class,
+  "Vardecl": typeof Vardecl,
+  "TypedefNameDecl": typeof TypedefNameDecl,
+  "TypedefDecl": typeof TypedefDecl,
   "EnumDecl": typeof EnumDecl,
   "EnumeratorDecl": typeof EnumeratorDecl,
-  "ExprStmt": typeof ExprStmt,
-  "Field": typeof Field,
-  "FloatLiteral": typeof FloatLiteral,
-  "FunctionJp": typeof FunctionJp,
-  "FunctionType": typeof FunctionType,
-  "GotoStmt": typeof GotoStmt,
-  "If": typeof If,
-  "IncompleteArrayType": typeof IncompleteArrayType,
-  "IntLiteral": typeof IntLiteral,
   "LabelDecl": typeof LabelDecl,
-  "LabelStmt": typeof LabelStmt,
-  "Loop": typeof Loop,
-  "Marker": typeof Marker,
-  "MemberCall": typeof MemberCall,
-  "Method": typeof Method,
-  "Omp": typeof Omp,
-  "ParenType": typeof ParenType,
-  "PointerType": typeof PointerType,
-  "QualType": typeof QualType,
-  "ReturnStmt": typeof ReturnStmt,
-  "Scope": typeof Scope,
-  "TagType": typeof TagType,
-  "TemplateSpecializationType": typeof TemplateSpecializationType,
-  "TypedefDecl": typeof TypedefDecl,
-  "Vardecl": typeof Vardecl,
-  "VariableArrayType": typeof VariableArrayType,
-  "Body": typeof Body,
-  "CilkFor": typeof CilkFor,
-  "EnumType": typeof EnumType,
+  "AccessSpecifier": typeof AccessSpecifier,
   "Param": typeof Param,
+  "FunctionJp": typeof FunctionJp,
+  "Method": typeof Method,
+  "Pragma": typeof Pragma,
+  "Marker": typeof Marker,
+  "Tag": typeof Tag,
+  "Omp": typeof Omp,
+  "Statement": typeof Statement,
+  "Scope": typeof Scope,
+  "Body": typeof Body,
+  "Loop": typeof Loop,
+  "If": typeof If,
+  "WrapperStmt": typeof WrapperStmt,
+  "ReturnStmt": typeof ReturnStmt,
+  "Switch": typeof Switch,
+  "SwitchCase": typeof SwitchCase,
+  "Case": typeof Case,
+  "Default": typeof Default,
+  "DeclStmt": typeof DeclStmt,
+  "ExprStmt": typeof ExprStmt,
+  "GotoStmt": typeof GotoStmt,
+  "LabelStmt": typeof LabelStmt,
+  "EmptyStmt": typeof EmptyStmt,
+  "Continue": typeof Continue,
+  "Break": typeof Break,
+  "AsmStmt": typeof AsmStmt,
+  "Expression": typeof Expression,
+  "Call": typeof Call,
+  "MemberCall": typeof MemberCall,
+  "CudaKernelCall": typeof CudaKernelCall,
+  "Op": typeof Op,
+  "BinaryOp": typeof BinaryOp,
+  "UnaryOp": typeof UnaryOp,
+  "TernaryOp": typeof TernaryOp,
+  "NewExpr": typeof NewExpr,
+  "DeleteExpr": typeof DeleteExpr,
+  "Varref": typeof Varref,
+  "Cast": typeof Cast,
+  "ParenExpr": typeof ParenExpr,
+  "ArrayAccess": typeof ArrayAccess,
+  "MemberAccess": typeof MemberAccess,
+  "UnaryExprOrType": typeof UnaryExprOrType,
+  "This": typeof This,
+  "Literal": typeof Literal,
+  "IntLiteral": typeof IntLiteral,
+  "FloatLiteral": typeof FloatLiteral,
+  "BoolLiteral": typeof BoolLiteral,
+  "InitList": typeof InitList,
+  "ImplicitValue": typeof ImplicitValue,
+  "Comment": typeof Comment,
+  "CilkFor": typeof CilkFor,
+  "CilkSync": typeof CilkSync,
+  "CilkSpawn": typeof CilkSpawn,
+  "Attribute": typeof Attribute,
+  "Type": typeof Type,
+  "PointerType": typeof PointerType,
+  "ArrayType": typeof ArrayType,
+  "AdjustedType": typeof AdjustedType,
+  "VariableArrayType": typeof VariableArrayType,
+  "IncompleteArrayType": typeof IncompleteArrayType,
+  "TagType": typeof TagType,
+  "EnumType": typeof EnumType,
+  "TemplateSpecializationType": typeof TemplateSpecializationType,
+  "FunctionType": typeof FunctionType,
+  "QualType": typeof QualType,
+  "BuiltinType": typeof BuiltinType,
+  "ParenType": typeof ParenType,
+  "UndefinedType": typeof UndefinedType,
+  "ElaboratedType": typeof ElaboratedType,
+  "TypedefType": typeof TypedefType,
 };
 
 type DefaultAttributeMap = {
-  FileJp: "name",
-  Include: "name",
-  NamedDecl: "name",
-  Pragma: "name",
   Program: "name",
-  RecordJp: "name",
-  Struct: "name",
-  Tag: "id",
-  TypedefNameDecl: "name",
-  Varref: "name",
-  AccessSpecifier: "kind",
-  Call: "name",
-  CilkSpawn: "name",
-  Class: "name",
-  CudaKernelCall: "name",
+  FileJp: "name",
+  NamedDecl: "name",
   Declarator: "name",
+  Include: "name",
+  RecordJp: "name",
+  Field: "name",
+  Struct: "name",
+  Class: "name",
+  Vardecl: "name",
+  TypedefNameDecl: "name",
+  TypedefDecl: "name",
   EnumDecl: "name",
   EnumeratorDecl: "name",
-  Field: "name",
-  FunctionJp: "name",
   LabelDecl: "name",
-  Loop: "kind",
-  Marker: "id",
-  MemberCall: "name",
-  Method: "name",
-  Omp: "kind",
-  TypedefDecl: "name",
-  Vardecl: "name",
-  CilkFor: "kind",
+  AccessSpecifier: "kind",
   Param: "name",
+  FunctionJp: "name",
+  Method: "name",
+  Pragma: "name",
+  Marker: "id",
+  Tag: "id",
+  Omp: "kind",
+  Loop: "kind",
+  Call: "name",
+  MemberCall: "name",
+  CudaKernelCall: "name",
+  Varref: "name",
+  CilkFor: "kind",
+  CilkSpawn: "name",
 }
 
 export class Joinpoint extends LaraJoinPoint {
@@ -145,145 +145,134 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'
    */
-  get ast(): string { return wrapJoinPoint(this._javaObject.getAst()) }
+  get ast(): string { return wrapJoinPoint(this._javaObject.ast()) }
   /**
    * Returns an array with the children of the node, considering null nodes
    */
-  get astChildren(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getAstChildren()) }
+  get astChildren(): Joinpoint[] { return wrapJoinPoint(this._javaObject.astChildren()) }
   /**
-   * String that uniquely identifies this node
+   * The AST ID of the current node
    */
-  get astId(): string { return wrapJoinPoint(this._javaObject.getAstId()) }
+  get astId(): string { return wrapJoinPoint(this._javaObject.astId()) }
   /**
    * The name of the Java class of this node, which is similar to the equivalent node in Clang AST
    */
-  get astName(): string { return wrapJoinPoint(this._javaObject.getAstName()) }
+  get astName(): string { return wrapJoinPoint(this._javaObject.astName()) }
   /**
    * Returns the number of children of the node, considering null nodes
    */
-  get astNumChildren(): number { return wrapJoinPoint(this._javaObject.getAstNumChildren()) }
+  get astNumChildren(): number { return wrapJoinPoint(this._javaObject.astNumChildren()) }
   /**
    * The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit
    */
-  get bitWidth(): number { return wrapJoinPoint(this._javaObject.getBitWidth()) }
+  get bitWidth(): number { return wrapJoinPoint(this._javaObject.bitWidth()) }
   /**
    * String list of the names of the join points that form a path from the root to this node
    */
-  get chain(): string[] { return wrapJoinPoint(this._javaObject.getChain()) }
+  get chain(): string[] { return wrapJoinPoint(this._javaObject.chain()) }
   /**
-   * Returns an array with the children of the node, ignoring null nodes
+   * The children of this join point, ignoring null nodes
    */
-  get children(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getChildren()) }
+  get children(): Joinpoint[] { return wrapJoinPoint(this._javaObject.children()) }
   /**
-   * String with the code represented by this node
+   * Returns the current region of this join point
    */
-  get code(): string { return wrapJoinPoint(this._javaObject.getCode()) }
-  /**
-   * The starting column of the current node in the original code
-   */
-  get column(): number { return wrapJoinPoint(this._javaObject.getColumn()) }
-  /**
-   * Returns the node that declares the scope of this node
-   */
-  get currentRegion(): Joinpoint { return wrapJoinPoint(this._javaObject.getCurrentRegion()) }
+  get currentRegion(): Joinpoint { return wrapJoinPoint(this._javaObject.currentRegion()) }
   /**
    * JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.
    */
-  get data(): any { const data = (this._javaObject.getData() as string | undefined); return data ? JSON.parse(data) : data; }
+  get data(): any { const data = (this._javaObject.data() as string | undefined); return data ? JSON.parse(data) : data; }
   /**
    * JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.
    */
   set data(value: object) { this._javaObject.setData(JSON.stringify(value)); }
   /**
-   * The depth of this join point in the AST. If it is the root join point returns 0, if it is a child of the root node returns 1, etc.
+   * Returns the depth of this node in the AST. Root=0
    */
-  get depth(): number { return wrapJoinPoint(this._javaObject.getDepth()) }
+  get depth(): number { return wrapJoinPoint(this._javaObject.depth()) }
   /**
-   * Retrieves all descendants of the join point
+   * All descendants of this join point
    */
-  get descendants(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getDescendants()) }
+  get descendants(): Joinpoint[] { return wrapJoinPoint(this._javaObject.descendants()) }
   /**
    * The ending column of the current node in the original code
    */
-  get endColumn(): number { return wrapJoinPoint(this._javaObject.getEndColumn()) }
+  get endColumn(): number { return wrapJoinPoint(this._javaObject.endColumn()) }
   /**
    * The ending line of the current node in the original code
    */
-  get endLine(): number { return wrapJoinPoint(this._javaObject.getEndLine()) }
+  get endLine(): number { return wrapJoinPoint(this._javaObject.endLine()) }
   /**
-   * The name of the file where the code of this node is located, if available
+   * The filename of the current node
    */
-  get filename(): string { return wrapJoinPoint(this._javaObject.getFilename()) }
+  get filename(): string { return wrapJoinPoint(this._javaObject.filename()) }
   /**
-   * The complete path to the file where the code of this node comes from
+   * The file path of the current node
    */
-  get filepath(): string { return wrapJoinPoint(this._javaObject.getFilepath()) }
+  get filepath(): string { return wrapJoinPoint(this._javaObject.filepath()) }
   /**
    * Returns the first child of this node, or undefined if it has no child
    */
-  get firstChild(): Joinpoint { return wrapJoinPoint(this._javaObject.getFirstChild()) }
+  get firstChild(): Joinpoint { return wrapJoinPoint(this._javaObject.firstChild()) }
   /**
    * Returns the first child of this node, or undefined if it has no child
    */
   set firstChild(value: Joinpoint) { this._javaObject.setFirstChild(unwrapJoinPoint(value)); }
   /**
-   * True if the node has children, false otherwise
+   * True if the node has any children
    */
-  get hasChildren(): boolean { return wrapJoinPoint(this._javaObject.getHasChildren()) }
-  /**
-   * True if this node has a parent
-   */
-  get hasParent(): boolean { return wrapJoinPoint(this._javaObject.getHasParent()) }
+  get hasChildren(): boolean { return wrapJoinPoint(this._javaObject.hasChildren()) }
+  get hasParent(): boolean { return wrapJoinPoint(this._javaObject.hasParent()) }
   /**
    * True, if the join point has a type
    */
-  get hasType(): boolean { return wrapJoinPoint(this._javaObject.getHasType()) }
+  get hasType(): boolean { return wrapJoinPoint(this._javaObject.hasType()) }
   /**
    * Returns comments that are not explicitly in the AST, but embedded in other nodes
    */
-  get inlineComments(): Comment[] { return wrapJoinPoint(this._javaObject.getInlineComments()) }
+  get inlineComments(): Comment[] { return wrapJoinPoint(this._javaObject.inlineComments()) }
   /**
    * Returns comments that are not explicitly in the AST, but embedded in other nodes
    */
   set inlineComments(value: string[] | string) { this._javaObject.setInlineComments(unwrapJoinPoint(value)); }
   /**
-   * True if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)
+   * True if the node is a Cilk node
    */
-  get isCilk(): boolean { return wrapJoinPoint(this._javaObject.getIsCilk()) }
+  get isCilk(): boolean { return wrapJoinPoint(this._javaObject.isCilk()) }
   /**
-   * True, if the join point is part of a system header file
+   * True, if the join point is inside a header (e.g., function declaration)
    */
-  get isInSystemHeader(): boolean { return wrapJoinPoint(this._javaObject.getIsInSystemHeader()) }
-  /**
-   * True, if the join point is inside a header (e.g., if condition, for, while)
-   */
-  get isInsideHeader(): boolean { return wrapJoinPoint(this._javaObject.getIsInsideHeader()) }
+  get isInsideHeader(): boolean { return wrapJoinPoint(this._javaObject.isInsideHeader()) }
   /**
    * True, if the join point is inside a loop header (e.g., for, while)
    */
-  get isInsideLoopHeader(): boolean { return wrapJoinPoint(this._javaObject.getIsInsideLoopHeader()) }
+  get isInsideLoopHeader(): boolean { return wrapJoinPoint(this._javaObject.isInsideLoopHeader()) }
+  /**
+   * True, if the join point is inside a system header (e.g., #include <stdio.h>)
+   */
+  get isInSystemHeader(): boolean { return wrapJoinPoint(this._javaObject.isInSystemHeader()) }
   /**
    * True if any descendant or the node itself was defined as a macro
    */
-  get isMacro(): boolean { return wrapJoinPoint(this._javaObject.getIsMacro()) }
+  get isMacro(): boolean { return wrapJoinPoint(this._javaObject.isMacro()) }
   /**
    * The names of the Java fields of this node. Can be used as key of the attribute 'javaValue'
    * 
    * @deprecated used attribute 'keys' instead, together with 'getValue'
    */
-  get javaFields(): string[] { return wrapJoinPoint(this._javaObject.getJavaFields()) }
+  get javaFields(): string[] { return wrapJoinPoint(this._javaObject.javaFields()) }
   /**
-   * Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)
+   * Returns the ID of this join point. The ID is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)
    */
-  get jpId(): string { return wrapJoinPoint(this._javaObject.getJpId()) }
+  get jpId(): string { return wrapJoinPoint(this._javaObject.jpId()) }
   /**
    * A list of the properties currently supported by this node. Can be used as parameter of the attribute 'getValue'
    */
-  get keys(): string[] { return wrapJoinPoint(this._javaObject.getKeys()) }
+  get keys(): string[] { return wrapJoinPoint(this._javaObject.keys()) }
   /**
    * Returns the last child of this node, or undefined if it has no child
    */
-  get lastChild(): Joinpoint { return wrapJoinPoint(this._javaObject.getLastChild()) }
+  get lastChild(): Joinpoint { return wrapJoinPoint(this._javaObject.lastChild()) }
   /**
    * Returns the last child of this node, or undefined if it has no child
    */
@@ -291,69 +280,85 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Returns the node that came before this node, or undefined if there is none
    */
-  get leftJp(): Joinpoint { return wrapJoinPoint(this._javaObject.getLeftJp()) }
-  /**
-   * The starting line of the current node in the original code
-   */
-  get line(): number { return wrapJoinPoint(this._javaObject.getLine()) }
+  get leftJp(): Joinpoint { return wrapJoinPoint(this._javaObject.leftJp()) }
   /**
    * A string with information about the file and code position of this node, if available
    */
-  get location(): string { return wrapJoinPoint(this._javaObject.getLocation()) }
+  get location(): string { return wrapJoinPoint(this._javaObject.location()) }
   /**
    * Returns the number of children of the node, ignoring null nodes
    */
-  get numChildren(): number { return wrapJoinPoint(this._javaObject.getNumChildren()) }
+  get numChildren(): number { return wrapJoinPoint(this._javaObject.numChildren()) }
   /**
    * If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin
    */
-  get originNode(): Joinpoint { return wrapJoinPoint(this._javaObject.getOriginNode()) }
+  get originNode(): Joinpoint { return wrapJoinPoint(this._javaObject.originNode()) }
   /**
    * Returns the parent node in the AST, or undefined if it is the root node
    */
-  get parent(): Joinpoint { return wrapJoinPoint(this._javaObject.getParent()) }
+  get parent(): Joinpoint { return wrapJoinPoint(this._javaObject.parent()) }
   /**
-   * Returns the node that declares the scope that is a parent of the scope of this node
+   * Returns the parent region of this join point, or undefined if there is none
    */
-  get parentRegion(): Joinpoint { return wrapJoinPoint(this._javaObject.getParentRegion()) }
+  get parentRegion(): Joinpoint { return wrapJoinPoint(this._javaObject.parentRegion()) }
   /**
-   * The pragmas associated with this node
+   * Returns the pragmas associated with this join point
    */
-  get pragmas(): Pragma[] { return wrapJoinPoint(this._javaObject.getPragmas()) }
+  get pragmas(): Pragma[] { return wrapJoinPoint(this._javaObject.pragmas()) }
   /**
    * Returns the node that comes after this node, or undefined if there is none
    */
-  get rightJp(): Joinpoint { return wrapJoinPoint(this._javaObject.getRightJp()) }
+  get rightJp(): Joinpoint { return wrapJoinPoint(this._javaObject.rightJp()) }
   /**
-   * Returns the 'program' joinpoint
+   * Returns the 'program' joinpoint at the root of the hierarchy
    */
-  get root(): Program { return wrapJoinPoint(this._javaObject.getRoot()) }
+  get root(): Program { return wrapJoinPoint(this._javaObject.root()) }
   /**
-   * The nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array
+   * The scope nodes of this join point
    */
-  get scopeNodes(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getScopeNodes()) }
+  get scopeNodes(): Joinpoint[] { return wrapJoinPoint(this._javaObject.scopeNodes()) }
   /**
    * Returns an array with the siblings that came before this node
    */
-  get siblingsLeft(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getSiblingsLeft()) }
+  get siblingsLeft(): Joinpoint[] { return wrapJoinPoint(this._javaObject.siblingsLeft()) }
   /**
    * Returns an array with the siblings that come after this node
    */
-  get siblingsRight(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getSiblingsRight()) }
+  get siblingsRight(): Joinpoint[] { return wrapJoinPoint(this._javaObject.siblingsRight()) }
   /**
    * Converts this join point to a statement, or returns undefined if it was not possible
    */
-  get stmt(): Statement { return wrapJoinPoint(this._javaObject.getStmt()) }
-  get type(): Type { return wrapJoinPoint(this._javaObject.getType()) }
+  get stmt(): Statement { return wrapJoinPoint(this._javaObject.stmt()) }
+  get type(): Type { return wrapJoinPoint(this._javaObject.type()) }
   set type(value: Type) { this._javaObject.setType(unwrapJoinPoint(value)); }
   /**
    * True, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
    */
   astIsInstance(className: string): boolean { return wrapJoinPoint(this._javaObject.astIsInstance(unwrapJoinPoint(className))); }
   /**
-   * True if the given node is a descendant of this node
+   * Compares this join point with another join point for identity (i.e., whether they represent the same AST node)
+   */
+  compareNodes(aJoinPoint: Joinpoint): boolean { return wrapJoinPoint(this._javaObject.compareNodes(unwrapJoinPoint(aJoinPoint))); }
+  /**
+   * Checks if the joinpoint contains the given joinpoint
    */
   contains(jp: Joinpoint): boolean { return wrapJoinPoint(this._javaObject.contains(unwrapJoinPoint(jp))); }
+  /**
+   * Performs a copy of the node and its children, but not of the nodes in its fields
+   */
+  copy(): Joinpoint { return wrapJoinPoint(this._javaObject.copy()); }
+  /**
+   * Clears all properties from the .data object
+   */
+  dataClear(): void { return wrapJoinPoint(this._javaObject.dataClear()); }
+  /**
+   * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+   */
+  deepCopy(): Joinpoint { return wrapJoinPoint(this._javaObject.deepCopy()); }
+  /**
+   * Removes the node associated to this joinpoint from the AST
+   */
+  detach(): Joinpoint { return wrapJoinPoint(this._javaObject.detach()); }
   /**
    * Looks for an ancestor joinpoint name, walking back on the AST
    */
@@ -379,11 +384,11 @@ export class Joinpoint extends LaraJoinPoint {
    */
   getDescendants(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getDescendants(unwrapJoinPoint(type))); }
   /**
-   * Retrieves the descendants of the given type, including the node itself
+   * Retrieves the descendants of the given type, including the current joinpoint
    */
   getDescendantsAndSelf(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getDescendantsAndSelf(unwrapJoinPoint(type))); }
   /**
-   * Looks in the descendants for the first node of the given type
+   * Retrieves the  first node of the given type in the descendants
    */
   getFirstJp(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getFirstJp(unwrapJoinPoint(type))); }
   /**
@@ -391,7 +396,7 @@ export class Joinpoint extends LaraJoinPoint {
    */
   getJavaFieldType(fieldName: string): string { return wrapJoinPoint(this._javaObject.getJavaFieldType(unwrapJoinPoint(fieldName))); }
   /**
-   * Java Class instance with the type of the given key
+   * Returns the type of the property with the given name
    */
   getKeyType(key: string): object { return wrapJoinPoint(this._javaObject.getKeyType(unwrapJoinPoint(key))); }
   /**
@@ -399,57 +404,44 @@ export class Joinpoint extends LaraJoinPoint {
    */
   getUserField(fieldName: string): object { return wrapJoinPoint(this._javaObject.getUserField(unwrapJoinPoint(fieldName))); }
   /**
-   * The value associated with the given property key
+   * Returns the value of the property with the given name
    */
   getValue(key: string): object { return wrapJoinPoint(this._javaObject.getValue(unwrapJoinPoint(key))); }
   /**
    * True, if the given join point or AST node is the same (== test) as the current join point AST node
    */
   hasNode(nodeOrJp: object): boolean { return wrapJoinPoint(this._javaObject.hasNode(unwrapJoinPoint(nodeOrJp))); }
+  insert(position: InsertPosition, code: string): Joinpoint[];
+  insert(position: InsertPosition, joinpoint: Joinpoint): Joinpoint[];
+  insert(p1: InsertPosition, p2: string | Joinpoint): Joinpoint[] { return wrapJoinPoint(this._javaObject.insert(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  /**
+   * Inserts the given joinpoint after this joinpoint
+   */
+  insertAfter(node: Joinpoint): Joinpoint;
+  /**
+   * Overload that accepts a string
+   */
+  insertAfter(node: string): Joinpoint;
+  /**
+   * Inserts the given joinpoint after this joinpoint
+   */
+  insertAfter(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(p1))); }
+  /**
+   * Inserts the given joinpoint before this joinpoint
+   */
+  insertBefore(node: Joinpoint): Joinpoint;
+  /**
+   * Overload that accepts a string
+   */
+  insertBefore(node: string): Joinpoint;
+  /**
+   * Inserts the given joinpoint before this joinpoint
+   */
+  insertBefore(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(p1))); }
   /**
    * List with the values of fields that are join points, recursively
    */
   jpFields(recursive: boolean = false): Joinpoint[] { return wrapJoinPoint(this._javaObject.jpFields(unwrapJoinPoint(recursive))); }
-  /**
-   * Performs a copy of the node and its children, but not of the nodes in its fields
-   */
-  copy(): Joinpoint { return wrapJoinPoint(this._javaObject.copy()); }
-  /**
-   * Clears all properties from the .data object
-   */
-  dataClear(): void { return wrapJoinPoint(this._javaObject.dataClear()); }
-  /**
-   * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
-   */
-  deepCopy(): Joinpoint { return wrapJoinPoint(this._javaObject.deepCopy()); }
-  /**
-   * Removes the node associated to this joinpoint from the AST
-   */
-  detach(): Joinpoint { return wrapJoinPoint(this._javaObject.detach()); }
-  /**
-   * Inserts the given join point after this join point
-   */
-  insertAfter(node: Joinpoint): Joinpoint;
-  /**
-   * Overload which accepts a string
-   */
-  insertAfter(code: string): Joinpoint;
-  /**
-   * Inserts the given join point after this join point
-   */
-  insertAfter(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(p1))); }
-  /**
-   * Inserts the given join point before this join point
-   */
-  insertBefore(node: Joinpoint): Joinpoint;
-  /**
-   * Overload which accepts a string
-   */
-  insertBefore(node: string): Joinpoint;
-  /**
-   * Inserts the given join point before this join point
-   */
-  insertBefore(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(p1))); }
   /**
    * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
    */
@@ -463,11 +455,11 @@ export class Joinpoint extends LaraJoinPoint {
    */
   replaceWith(node: Joinpoint): Joinpoint;
   /**
-   * Overload which accepts a string
+   * Overload that accepts a string
    */
   replaceWith(node: string): Joinpoint;
   /**
-   * Overload which accepts a list of join points
+   * Overload that accepts a list of joinpoints
    */
   replaceWith(node: Joinpoint[]): Joinpoint;
   /**
@@ -475,31 +467,35 @@ export class Joinpoint extends LaraJoinPoint {
    */
   replaceWith(p1: Joinpoint | string | Joinpoint[]): Joinpoint { return wrapJoinPoint(this._javaObject.replaceWith(unwrapJoinPoint(p1))); }
   /**
-   * Overload which accepts a list of strings
+   * Overload that accepts a list of strings
    */
   replaceWithStrings(node: string[]): Joinpoint { return wrapJoinPoint(this._javaObject.replaceWithStrings(unwrapJoinPoint(node))); }
+  /**
+   * Compares this join point with another join point for identity (i.e., whether they represent the same AST node)
+   */
+  same(other: Joinpoint): boolean { return wrapJoinPoint(this._javaObject.same(unwrapJoinPoint(other))); }
   /**
    * Setting data directly is not supported, this action just emits a warning and does nothing
    */
   setData(source: object): void { return wrapJoinPoint(this._javaObject.setData(JSON.stringify(source))); }
   /**
-   * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
+   * Replaces the first child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present
    */
   setFirstChild(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); }
   /**
-   * Sets the commented that are embedded in a node
+   * Sets the comments that are embedded in a node
    */
   setInlineComments(comments: string[]): void;
   /**
-   * Sets the commented that are embedded in a node
+   * Sets the comments that are embedded in a node
    */
   setInlineComments(comments: string): void;
   /**
-   * Sets the commented that are embedded in a node
+   * Sets the comments that are embedded in a node
    */
   setInlineComments(p1: string[] | string): void { return wrapJoinPoint(this._javaObject.setInlineComments(unwrapJoinPoint(p1))); }
   /**
-   * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present.
+   * Replaces the last child, or inserts the join point if no child is present. Returns the replaced child, or undefined if there was no child present
    */
   setLastChild(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); }
   /**
@@ -511,7 +507,7 @@ export class Joinpoint extends LaraJoinPoint {
    */
   setUserField(fieldName: string, value: object): object;
   /**
-   * Overload which accepts a map
+   * Overload that accepts a map
    */
   setUserField(fieldNameAndValue: Record<string, any>): object;
   /**
@@ -528,59 +524,6 @@ export class Joinpoint extends LaraJoinPoint {
   toComment(prefix: string = "", suffix: string = ""): Joinpoint { return wrapJoinPoint(this._javaObject.toComment(unwrapJoinPoint(prefix), unwrapJoinPoint(suffix))); }
 }
 
-export class Attribute extends Joinpoint {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
-}
-
-  /**
-   * Utility joinpoint, to represent certain problems when generating join points
-   */
-export class ClavaException extends Joinpoint {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get exception(): object { return wrapJoinPoint(this._javaObject.getException()) }
-  get exceptionType(): string { return wrapJoinPoint(this._javaObject.getExceptionType()) }
-  get message(): string { return wrapJoinPoint(this._javaObject.getMessage()) }
-}
-
-export class Comment extends Joinpoint {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get text(): string { return wrapJoinPoint(this._javaObject.getText()) }
-  set text(value: string) { this._javaObject.setText(unwrapJoinPoint(value)); }
-  setText(text: string): void { return wrapJoinPoint(this._javaObject.setText(unwrapJoinPoint(text))); }
-}
-
-  /**
-   * Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code
-   */
-export class Decl extends Joinpoint {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * The attributes (e.g. Pure, CUDAGlobal) associated to this decl
-   */
-  get attrs(): Attribute[] { return wrapJoinPoint(this._javaObject.getAttrs()) }
-}
-
   /**
    * Utility joinpoint, to represent empty nodes when directly accessing the tree
    */
@@ -593,359 +536,6 @@ export class Empty extends Joinpoint {
   };
 }
 
-export class Expression extends Joinpoint {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * A 'decl' join point that represents the declaration associated with this expression, or undefined if there is none
-   */
-  get decl(): Decl { return wrapJoinPoint(this._javaObject.getDecl()) }
-  /**
-   * Returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
-   */
-  get implicitCast(): Cast { return wrapJoinPoint(this._javaObject.getImplicitCast()) }
-  /**
-   * True if the expression is part of an argument of a function call
-   */
-  get isFunctionArgument(): boolean { return wrapJoinPoint(this._javaObject.getIsFunctionArgument()) }
-  get use(): "read" | "write" | "readwrite" { return wrapJoinPoint(this._javaObject.getUse()) }
-  get vardecl(): Vardecl { return wrapJoinPoint(this._javaObject.getVardecl()) }
-}
-
-  /**
-   * Represents a source file (.c, .cpp., .cl, etc)
-   */
-export class FileJp extends Joinpoint {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-  /**
-   * The path to the source folder that was given as the base folder of this file
-   */
-  get baseSourcePath(): string { return wrapJoinPoint(this._javaObject.getBaseSourcePath()) }
-  /**
-   * The output of the parser if there were errors during parsing
-   */
-  get errorOutput(): string { return wrapJoinPoint(this._javaObject.getErrorOutput()) }
-  /**
-   * A Java file to the file that originated this translation unit
-   */
-  get file(): object { return wrapJoinPoint(this._javaObject.getFile()) }
-  /**
-   * True if this file contains a 'main' method
-   */
-  get hasMain(): boolean { return wrapJoinPoint(this._javaObject.getHasMain()) }
-  /**
-   * True if there were errors during parsing
-   */
-  get hasParsingErrors(): boolean { return wrapJoinPoint(this._javaObject.getHasParsingErrors()) }
-  /**
-   * The includes of this file
-   */
-  get includes(): Include[] { return wrapJoinPoint(this._javaObject.getIncludes()) }
-  /**
-   * True if this file is considered a C++ file
-   */
-  get isCxx(): boolean { return wrapJoinPoint(this._javaObject.getIsCxx()) }
-  /**
-   * True if this file is considered a header file
-   */
-  get isHeader(): boolean { return wrapJoinPoint(this._javaObject.getIsHeader()) }
-  /**
-   * True if this file is an OpenCL filetype
-   */
-  get isOpenCL(): boolean { return wrapJoinPoint(this._javaObject.getIsOpenCL()) }
-  /**
-   * The name of the file
-   */
-  get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
-  /**
-   * The name of the file
-   */
-  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
-  /**
-   * The folder of the source file
-   */
-  get path(): string { return wrapJoinPoint(this._javaObject.getPath()) }
-  /**
-   * The path to the file relative to the base source path
-   */
-  get relativeFilepath(): string { return wrapJoinPoint(this._javaObject.getRelativeFilepath()) }
-  /**
-   * The path to the folder of the source file relative to the base source path
-   */
-  get relativeFolderpath(): string { return wrapJoinPoint(this._javaObject.getRelativeFolderpath()) }
-  /**
-   * The path to the folder of the source file relative to the base source path
-   */
-  set relativeFolderpath(value: string) { this._javaObject.setRelativeFolderpath(unwrapJoinPoint(value)); }
-  /**
-   * The name of the source folder of this file, or undefined if it has none
-   */
-  get sourceFoldername(): string { return wrapJoinPoint(this._javaObject.getSourceFoldername()) }
-  /**
-   * The complete path to the file that will be generated by the weaver, given a destination folder
-   */
-  getDestinationFilepath(destinationFolderpath?: string): string { return wrapJoinPoint(this._javaObject.getDestinationFilepath(unwrapJoinPoint(destinationFolderpath))); }
-  /**
-   * Adds a C include to the current file. If the file already has the include, it does nothing
-   */
-  addCInclude(name: string, isAngled: boolean = false): void { return wrapJoinPoint(this._javaObject.addCInclude(unwrapJoinPoint(name), unwrapJoinPoint(isAngled))); }
-  /**
-   * Adds a function to the file that returns void and has no parameters
-   */
-  addFunction(name: string): Joinpoint { return wrapJoinPoint(this._javaObject.addFunction(unwrapJoinPoint(name))); }
-  /**
-   * Adds a global variable to this file
-   */
-  addGlobal(name: string, type: Joinpoint, initValue: string): Vardecl { return wrapJoinPoint(this._javaObject.addGlobal(unwrapJoinPoint(name), unwrapJoinPoint(type), unwrapJoinPoint(initValue))); }
-  /**
-   * Adds an include to the current file. If the file already has the include, it does nothing
-   */
-  addInclude(name: string, isAngled: boolean = false): void { return wrapJoinPoint(this._javaObject.addInclude(unwrapJoinPoint(name), unwrapJoinPoint(isAngled))); }
-  /**
-   * Overload of addInclude which accepts a join point
-   */
-  addIncludeJp(jp: Joinpoint): void { return wrapJoinPoint(this._javaObject.addIncludeJp(unwrapJoinPoint(jp))); }
-  /**
-   * Adds the node in the join point to the start of the file
-   */
-  insertBegin(node: Joinpoint): void;
-  /**
-   * Adds the String as a Decl to the end of the file
-   */
-  insertBegin(code: string): void;
-  /**
-   * Adds the node in the join point to the start of the file
-   */
-  insertBegin(p1: Joinpoint | string): void { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); }
-  /**
-   * Adds the node in the join point to the end of the file
-   */
-  insertEnd(node: Joinpoint): void;
-  /**
-   * Adds the String as a Decl to the end of the file
-   */
-  insertEnd(code: string): void;
-  /**
-   * Adds the node in the join point to the end of the file
-   */
-  insertEnd(p1: Joinpoint | string): void { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(p1))); }
-  /**
-   * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
-   */
-  rebuild(): FileJp { return wrapJoinPoint(this._javaObject.rebuild()); }
-  /**
-   * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
-   */
-  rebuildTry(): Joinpoint { return wrapJoinPoint(this._javaObject.rebuildTry()); }
-  /**
-   * Changes the name of the file
-   */
-  setName(filename: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(filename))); }
-  /**
-   * Sets the path to the folder of the source file relative to the base source path
-   */
-  setRelativeFolderpath(path: string): void { return wrapJoinPoint(this._javaObject.setRelativeFolderpath(unwrapJoinPoint(path))); }
-  /**
-   * Writes the code of this file to a given folder
-   */
-  write(destinationFoldername: string): string { return wrapJoinPoint(this._javaObject.write(unwrapJoinPoint(destinationFoldername))); }
-}
-
-export class ImplicitValue extends Expression {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-}
-
-  /**
-   * Represents an include directive (e.g., #include <stdio.h>)
-   */
-export class Include extends Decl {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-  /**
-   * True if this is an angled include (i.e., system include)
-   */
-  get isAngled(): boolean { return wrapJoinPoint(this._javaObject.getIsAngled()) }
-  /**
-   * The name of the include
-   */
-  get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
-  /**
-   * The path to the folder of the source file of the include, relative to the name of the include
-   */
-  get relativeFolderpath(): string { return wrapJoinPoint(this._javaObject.getRelativeFolderpath()) }
-}
-
-export class InitList extends Expression {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * [May be undefined] If this initializer list initializes an array with more elements than there are initializers in the list, specifies an expression to be used for value initialization of the rest of the elements
-   */
-  get arrayFiller(): Expression { return wrapJoinPoint(this._javaObject.getArrayFiller()) }
-}
-
-export class Literal extends Expression {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-}
-
-export class MemberAccess extends Expression {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * True if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
-   */
-  get arrow(): boolean { return wrapJoinPoint(this._javaObject.getArrow()) }
-  /**
-   * True if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
-   */
-  set arrow(value: boolean) { this._javaObject.setArrow(unwrapJoinPoint(value)); }
-  /**
-   * Expression of the base of this member access
-   */
-  get base(): Expression { return wrapJoinPoint(this._javaObject.getBase()) }
-  get memberChain(): Expression[] { return wrapJoinPoint(this._javaObject.getMemberChain()) }
-  get memberChainNames(): string[] { return wrapJoinPoint(this._javaObject.getMemberChainNames()) }
-  get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
-  setArrow(isArrow: boolean): void { return wrapJoinPoint(this._javaObject.setArrow(unwrapJoinPoint(isArrow))); }
-}
-
-  /**
-   * Represents a decl with a name
-   */
-export class NamedDecl extends Decl {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-  get isPublic(): boolean { return wrapJoinPoint(this._javaObject.getIsPublic()) }
-  get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
-  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
-  get qualifiedName(): string { return wrapJoinPoint(this._javaObject.getQualifiedName()) }
-  set qualifiedName(value: string) { this._javaObject.setQualifiedName(unwrapJoinPoint(value)); }
-  get qualifiedPrefix(): string { return wrapJoinPoint(this._javaObject.getQualifiedPrefix()) }
-  set qualifiedPrefix(value: string) { this._javaObject.setQualifiedPrefix(unwrapJoinPoint(value)); }
-  /**
-   * Sets the name of this namedDecl
-   */
-  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
-  /**
-   * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
-   */
-  setQualifiedName(name: string): void { return wrapJoinPoint(this._javaObject.setQualifiedName(unwrapJoinPoint(name))); }
-  /**
-   * Sets the qualified prefix of this namedDecl
-   */
-  setQualifiedPrefix(qualifiedPrefix: string): void { return wrapJoinPoint(this._javaObject.setQualifiedPrefix(unwrapJoinPoint(qualifiedPrefix))); }
-}
-
-export class NewExpr extends Expression {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-}
-
-export class Op extends Expression {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get isBitwise(): boolean { return wrapJoinPoint(this._javaObject.getIsBitwise()) }
-  /**
-   * The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div,                 rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign,                 rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a                 unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not,                 real, imag, extension, cowait. If it is a ternary operator, the value will be 'ternary'
-   */
-  get kind(): "ptr_mem_d" | "ptr_mem_i" | "mul" | "div" | "rem" | "add" | "sub" | "shl" | "shr" | "cmp" | "lt" | "gt" | "le" | "ge" | "eq" | "ne" | "and" | "xor" | "or" | "l_and" | "l_or" | "assign" | "mul_assign" | "div_assign" | "rem_assign" | "add_assign" | "sub_assign" | "shl_assign" | "shr_assign" | "and_assign" | "xor_assign" | "or_assign" | "comma" | "post_inc" | "post_dec" | "pre_inc" | "pre_dec" | "addr_of" | "deref" | "plus" | "minus" | "not" | "l_not" | "real" | "imag" | "extension" | "cowait" | "ternary" { return wrapJoinPoint(this._javaObject.getKind()) }
-  get operator(): string { return wrapJoinPoint(this._javaObject.getOperator()) }
-}
-
-export class ParenExpr extends Expression {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * Returns the expression inside this parenthesis expression
-   */
-  get subExpr(): Expression { return wrapJoinPoint(this._javaObject.getSubExpr()) }
-}
-
-  /**
-   * Represents a pragma in the code (e.g., #pragma kernel)
-   */
-export class Pragma extends Joinpoint {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-  /**
-   * Everything that is after the name of the pragma
-   */
-  get content(): string { return wrapJoinPoint(this._javaObject.getContent()) }
-  /**
-   * Everything that is after the name of the pragma
-   */
-  set content(value: string) { this._javaObject.setContent(unwrapJoinPoint(value)); }
-  /**
-   * The name of the pragma. E.g. for #pragma foo bar, returns 'foo'
-   */
-  get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
-  /**
-   * The name of the pragma. E.g. for #pragma foo bar, returns 'foo'
-   */
-  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
-  /**
-   * The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations
-   */
-  get target(): Joinpoint { return wrapJoinPoint(this._javaObject.getTarget()) }
-  /**
-   * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
-   */
-  getTargetNodes(endPragma?: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getTargetNodes(unwrapJoinPoint(endPragma))); }
-  setContent(content: string): void { return wrapJoinPoint(this._javaObject.setContent(unwrapJoinPoint(content))); }
-  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
-}
-
   /**
    * Represents the complete program and is the top-most joinpoint in the hierarchy
    */
@@ -956,48 +546,48 @@ export class Program extends Joinpoint {
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
-  get baseFolder(): string { return wrapJoinPoint(this._javaObject.getBaseFolder()) }
-  get defaultFlags(): string[] { return wrapJoinPoint(this._javaObject.getDefaultFlags()) }
+  get baseFolder(): string { return wrapJoinPoint(this._javaObject.baseFolder()) }
+  get defaultFlags(): string[] { return wrapJoinPoint(this._javaObject.defaultFlags()) }
   /**
    * Paths to includes that the current program depends on
    */
-  get extraIncludes(): string[] { return wrapJoinPoint(this._javaObject.getExtraIncludes()) }
+  get extraIncludes(): string[] { return wrapJoinPoint(this._javaObject.extraIncludes()) }
   /**
    * Link libraries of external projects the current program depends on
    */
-  get extraLibs(): string[] { return wrapJoinPoint(this._javaObject.getExtraLibs()) }
+  get extraLibs(): string[] { return wrapJoinPoint(this._javaObject.extraLibs()) }
   /**
    * Paths to folders of projects that the current program depends on
    */
-  get extraProjects(): string[] { return wrapJoinPoint(this._javaObject.getExtraProjects()) }
+  get extraProjects(): string[] { return wrapJoinPoint(this._javaObject.extraProjects()) }
   /**
    * Paths to sources that the current program depends on
    */
-  get extraSources(): string[] { return wrapJoinPoint(this._javaObject.getExtraSources()) }
+  get extraSources(): string[] { return wrapJoinPoint(this._javaObject.extraSources()) }
   /**
-   * The source files in this program
+   * The files of the program
    */
-  get files(): FileJp[] { return wrapJoinPoint(this._javaObject.getFiles()) }
-  get includeFolders(): string[] { return wrapJoinPoint(this._javaObject.getIncludeFolders()) }
+  get files(): FileJp[] { return wrapJoinPoint(this._javaObject.files()) }
+  get includeFolders(): string[] { return wrapJoinPoint(this._javaObject.includeFolders()) }
   /**
    * True if the program was compiled with a C++ standard
    */
-  get isCxx(): boolean { return wrapJoinPoint(this._javaObject.getIsCxx()) }
+  get isCxx(): boolean { return wrapJoinPoint(this._javaObject.isCxx()) }
   /**
    * A function join point with the main function of the program, if one is available
    */
-  get main(): FunctionJp { return wrapJoinPoint(this._javaObject.getMain()) }
-  get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
+  get main(): FunctionJp { return wrapJoinPoint(this._javaObject.main()) }
+  get name(): string { return wrapJoinPoint(this._javaObject.name()) }
   /**
    * The name of the standard (e.g., c99, c++11)
    */
-  get standard(): string { return wrapJoinPoint(this._javaObject.getStandard()) }
+  get standard(): string { return wrapJoinPoint(this._javaObject.standard()) }
   /**
    * The flag of the standard (e.g., -std=c++11)
    */
-  get stdFlag(): string { return wrapJoinPoint(this._javaObject.getStdFlag()) }
-  get userFlags(): string[] { return wrapJoinPoint(this._javaObject.getUserFlags()) }
-  get weavingFolder(): string { return wrapJoinPoint(this._javaObject.getWeavingFolder()) }
+  get stdFlag(): string { return wrapJoinPoint(this._javaObject.stdFlag()) }
+  get userFlags(): string[] { return wrapJoinPoint(this._javaObject.userFlags()) }
+  get weavingFolder(): string { return wrapJoinPoint(this._javaObject.weavingFolder()) }
   /**
    * Adds a path to an include that the current program depends on
    */
@@ -1035,7 +625,7 @@ export class Program extends Joinpoint {
    */
   atexit(func: FunctionJp): void { return wrapJoinPoint(this._javaObject.atexit(unwrapJoinPoint(func))); }
   /**
-   * Discards the AST at the top of the ASt stack
+   * Discards the AST at the top of the AST stack
    */
   pop(): void { return wrapJoinPoint(this._javaObject.pop()); }
   /**
@@ -1053,7 +643,221 @@ export class Program extends Joinpoint {
 }
 
   /**
-   * Common class of struct, union and class
+   * Represents a source file (.c, .cpp, .cl, etc)
+   */
+export class FileJp extends Joinpoint {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: "name",
+  };
+  /**
+   * The base source path for this file
+   */
+  get baseSourcePath(): string { return wrapJoinPoint(this._javaObject.baseSourcePath()) }
+  /**
+   * The error output produced during the parsing of this file, if any
+   */
+  get errorOutput(): string { return wrapJoinPoint(this._javaObject.errorOutput()) }
+  /**
+   * The Java File object associated with this file
+   */
+  get file(): object { return wrapJoinPoint(this._javaObject.file()) }
+  /**
+   * True if this file has the main function as a descendant
+   */
+  get hasMain(): boolean { return wrapJoinPoint(this._javaObject.hasMain()) }
+  /**
+   * True if there were errors during the parsing of this file
+   */
+  get hasParsingErrors(): boolean { return wrapJoinPoint(this._javaObject.hasParsingErrors()) }
+  /**
+   * The include directives in this file
+   */
+  get includes(): Include[] { return wrapJoinPoint(this._javaObject.includes()) }
+  /**
+   * True if this file is a being parsed as a C++ file
+   */
+  get isCxx(): boolean { return wrapJoinPoint(this._javaObject.isCxx()) }
+  /**
+   * True if this file is a header file
+   */
+  get isHeader(): boolean { return wrapJoinPoint(this._javaObject.isHeader()) }
+  /**
+   * True if this file is an OpenCL file
+   */
+  get isOpenCL(): boolean { return wrapJoinPoint(this._javaObject.isOpenCL()) }
+  get name(): string { return wrapJoinPoint(this._javaObject.name()) }
+  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
+  /**
+   * The folder path for this file
+   */
+  get path(): string { return wrapJoinPoint(this._javaObject.path()) }
+  /**
+   * The file path relative to the base folder of the program
+   */
+  get relativeFilepath(): string { return wrapJoinPoint(this._javaObject.relativeFilepath()) }
+  /**
+   * The folder path relative to the base folder of the program
+   */
+  get relativeFolderpath(): string { return wrapJoinPoint(this._javaObject.relativeFolderpath()) }
+  /**
+   * The folder path relative to the base folder of the program
+   */
+  set relativeFolderpath(value: string) { this._javaObject.setRelativeFolderpath(unwrapJoinPoint(value)); }
+  /**
+   * The name of the source folder of this file, or undefined if it has none
+   */
+  get sourceFoldername(): string { return wrapJoinPoint(this._javaObject.sourceFoldername()) }
+  /**
+   * Adds a C include to the current file. If the file already has the include, it does nothing
+   */
+  addCInclude(name: string, isAngled: boolean = false): void { return wrapJoinPoint(this._javaObject.addCInclude(unwrapJoinPoint(name), unwrapJoinPoint(isAngled))); }
+  /**
+   * Adds a function to the file that returns void and has no parameters
+   */
+  addFunction(name: string): Joinpoint { return wrapJoinPoint(this._javaObject.addFunction(unwrapJoinPoint(name))); }
+  /**
+   * Adds a global variable to this file
+   */
+  addGlobal(name: string, type: Joinpoint, initValue: string): Vardecl { return wrapJoinPoint(this._javaObject.addGlobal(unwrapJoinPoint(name), unwrapJoinPoint(type), unwrapJoinPoint(initValue))); }
+  /**
+   * Adds an include to the current file. If the file already has the include, it does nothing
+   */
+  addInclude(name: string, isAngled: boolean = false): void { return wrapJoinPoint(this._javaObject.addInclude(unwrapJoinPoint(name), unwrapJoinPoint(isAngled))); }
+  /**
+   * Overload of addInclude which accepts a join point
+   */
+  addIncludeJp(jp: Joinpoint): void { return wrapJoinPoint(this._javaObject.addIncludeJp(unwrapJoinPoint(jp))); }
+  /**
+   * The complete path to the file that will be generated by the weaver, given a destination folder
+   */
+  getDestinationFilepath(destinationFolderpath?: string): string { return wrapJoinPoint(this._javaObject.getDestinationFilepath(unwrapJoinPoint(destinationFolderpath))); }
+  /**
+   * Adds the node in the join point to the start of the file
+   */
+  insertBegin(node: Joinpoint): void;
+  /**
+   * Adds the String as a Decl to the end of the file
+   */
+  insertBegin(code: string): void;
+  /**
+   * Adds the node in the join point to the start of the file
+   */
+  insertBegin(p1: Joinpoint | string): void { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); }
+  /**
+   * Adds the node in the join point to the end of the file
+   */
+  insertEnd(node: Joinpoint): void;
+  /**
+   * Adds the String as a Decl to the end of the file
+   */
+  insertEnd(code: string): void;
+  /**
+   * Adds the node in the join point to the end of the file
+   */
+  insertEnd(p1: Joinpoint | string): void { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(p1))); }
+  /**
+   * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
+   */
+  rebuild(): FileJp { return wrapJoinPoint(this._javaObject.rebuild()); }
+  /**
+   * Changes the name of the file
+   */
+  setName(filename: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(filename))); }
+  /**
+   * Sets the path to the folder of the source file relative to the base source path
+   */
+  setRelativeFolderpath(path: string): void { return wrapJoinPoint(this._javaObject.setRelativeFolderpath(unwrapJoinPoint(path))); }
+  /**
+   * Writes the code of this file to a given folder
+   */
+  write(destinationFoldername: string): string { return wrapJoinPoint(this._javaObject.write(unwrapJoinPoint(destinationFoldername))); }
+}
+
+  /**
+   * Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();)
+   */
+export class Decl extends Joinpoint {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * The attributes of this declaration (e.g. Pure, CUDAGlobal), if any
+   */
+  get attrs(): Attribute[] { return wrapJoinPoint(this._javaObject.attrs()) }
+}
+
+  /**
+   * Represents a decl with a name
+   */
+export class NamedDecl extends Decl {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: "name",
+  };
+  get isPublic(): boolean { return wrapJoinPoint(this._javaObject.isPublic()) }
+  get name(): string { return wrapJoinPoint(this._javaObject.name()) }
+  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
+  get qualifiedName(): string { return wrapJoinPoint(this._javaObject.qualifiedName()) }
+  set qualifiedName(value: string) { this._javaObject.setQualifiedName(unwrapJoinPoint(value)); }
+  get qualifiedPrefix(): string { return wrapJoinPoint(this._javaObject.qualifiedPrefix()) }
+  set qualifiedPrefix(value: string) { this._javaObject.setQualifiedPrefix(unwrapJoinPoint(value)); }
+  /**
+   * Sets the name of this namedDecl
+   */
+  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
+  /**
+   * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
+   */
+  setQualifiedName(name: string): void { return wrapJoinPoint(this._javaObject.setQualifiedName(unwrapJoinPoint(name))); }
+  /**
+   * Sets the qualified prefix of this namedDecl
+   */
+  setQualifiedPrefix(qualifiedPrefix: string): void { return wrapJoinPoint(this._javaObject.setQualifiedPrefix(unwrapJoinPoint(qualifiedPrefix))); }
+}
+
+  /**
+   * Represents a decl that comes from a declarator (e.g., function, field, variable)
+   */
+export class Declarator extends NamedDecl {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: "name",
+  };
+}
+
+  /**
+   * Represents an include directive (e.g., #include <stdio.h>)
+   */
+export class Include extends Decl {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: "name",
+  };
+  /**
+   * True if the include is angled (e.g., #include <stdio.h>) instead of quoted (e.g., #include "myheader.h")
+   */
+  get isAngled(): boolean { return wrapJoinPoint(this._javaObject.isAngled()) }
+  get name(): string { return wrapJoinPoint(this._javaObject.name()) }
+  /**
+   * The path to the folder of the source file of the include, relative to the name of the include
+   */
+  get relativeFolderpath(): string { return wrapJoinPoint(this._javaObject.relativeFolderpath()) }
+}
+
+  /**
+   * Represents a record declaration (struct, union, or class)
    */
 export class RecordJp extends NamedDecl {
   /**
@@ -1062,36 +866,37 @@ export class RecordJp extends NamedDecl {
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
-  get fields(): Field[] { return wrapJoinPoint(this._javaObject.getFields()) }
-  get functions(): FunctionJp[] { return wrapJoinPoint(this._javaObject.getFunctions()) }
+  get fields(): Field[] { return wrapJoinPoint(this._javaObject.fields()) }
+  get functions(): FunctionJp[] { return wrapJoinPoint(this._javaObject.functions()) }
   /**
-   * True if this particular join point is an implementation (i.e. has its body fully specified), false otherwise
+   * True if this record declaration is an implementation (i.e., it has a body) instead of just a forward declaration
    */
-  get isImplementation(): boolean { return wrapJoinPoint(this._javaObject.getIsImplementation()) }
+  get isImplementation(): boolean { return wrapJoinPoint(this._javaObject.isImplementation()) }
   /**
-   * True if this particular join point is a prototype (i.e. does not have its body fully specified), false otherwise
+   * True if this record declaration is a prototype (i.e., it has no body) instead of an implementation
    */
-  get isPrototype(): boolean { return wrapJoinPoint(this._javaObject.getIsPrototype()) }
-  get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
+  get isPrototype(): boolean { return wrapJoinPoint(this._javaObject.isPrototype()) }
+  get kind(): string { return wrapJoinPoint(this._javaObject.kind()) }
   /**
-   * Adds a field to a record (struct, class).
+   * Adds a field to a record (struct, class)
    */
   addField(field: Field): void { return wrapJoinPoint(this._javaObject.addField(unwrapJoinPoint(field))); }
 }
 
-export class Statement extends Joinpoint {
+  /**
+   * Represents a member of a struct/union/class
+   */
+export class Field extends Declarator {
   /**
    * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
+    name: "name",
   };
-  get isFirst(): boolean { return wrapJoinPoint(this._javaObject.getIsFirst()) }
-  get isLast(): boolean { return wrapJoinPoint(this._javaObject.getIsLast()) }
 }
 
   /**
-   * Represets a struct declaration
+   * Represents a struct declaration
    */
 export class Struct extends RecordJp {
   /**
@@ -1102,153 +907,132 @@ export class Struct extends RecordJp {
   };
 }
 
-export class Switch extends Statement {
+  /**
+   * Represents a C++ class declaration
+   */
+export class Class extends RecordJp {
   /**
    * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
+    name: "name",
   };
   /**
-   * The case statements inside this switch
+   * The base classes of this class and its base classes
    */
-  get cases(): Case[] { return wrapJoinPoint(this._javaObject.getCases()) }
+  get allBases(): Class[] { return wrapJoinPoint(this._javaObject.allBases()) }
   /**
-   * The condition of this switch statement
+   * The methods of this class and its base classes
    */
-  get condition(): Expression { return wrapJoinPoint(this._javaObject.getCondition()) }
+  get allMethods(): Method[] { return wrapJoinPoint(this._javaObject.allMethods()) }
   /**
-   * The default case statement of this switch statement or undefined if it does not have a default case
+   * The base classes of this class
    */
-  get getDefaultCase(): Case { return wrapJoinPoint(this._javaObject.getGetDefaultCase()) }
+  get bases(): Class[] { return wrapJoinPoint(this._javaObject.bases()) }
   /**
-   * True if there is a default case in this switch statement, false otherwise
+   * Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present
    */
-  get hasDefaultCase(): boolean { return wrapJoinPoint(this._javaObject.getHasDefaultCase()) }
+  get canonical(): Class { return wrapJoinPoint(this._javaObject.canonical()) }
+  /**
+   * The implementation (or definition) of this class present in the AST, or undefined if none is found
+   */
+  get implementation(): Class { return wrapJoinPoint(this._javaObject.implementation()) }
+  /**
+   * True if this class contains at least one pure function
+   */
+  get isAbstract(): boolean { return wrapJoinPoint(this._javaObject.isAbstract()) }
+  /**
+   * True if this class join point is the canonical one, which is the definition if it is present, or the first declaration if only declarations are present
+   */
+  get isCanonical(): boolean { return wrapJoinPoint(this._javaObject.isCanonical()) }
+  /**
+   * True if this class contains only pure functions
+   */
+  get isInterface(): boolean { return wrapJoinPoint(this._javaObject.isInterface()) }
+  /**
+   * The methods of this class
+   */
+  get methods(): Method[] { return wrapJoinPoint(this._javaObject.methods()) }
+  /**
+   * The prototypes (or declarations) of this class present in the AST, if any
+   */
+  get prototypes(): Class[] { return wrapJoinPoint(this._javaObject.prototypes()) }
+  /**
+   * Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply adds the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature
+   */
+  addMethod(method: Method): void { return wrapJoinPoint(this._javaObject.addMethod(unwrapJoinPoint(method))); }
 }
 
-export class SwitchCase extends Statement {
+  /**
+   * Represents a variable declaration or definition
+   */
+export class Vardecl extends Declarator {
   /**
    * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-}
-
-  /**
-   * A pragma that references a point in the code and sticks to it
-   */
-export class Tag extends Pragma {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "id",
+    name: "name",
   };
   /**
-   * The ID of the pragma
+   * The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)
    */
-  get id(): string { return wrapJoinPoint(this._javaObject.getId()) }
-}
-
-export class TernaryOp extends Op {
+  get definition(): Vardecl { return wrapJoinPoint(this._javaObject.definition()) }
   /**
-   * @internal
+   * True if this variable declaration has an initializer
    */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get cond(): Expression { return wrapJoinPoint(this._javaObject.getCond()) }
-  get falseExpr(): Expression { return wrapJoinPoint(this._javaObject.getFalseExpr()) }
-  get trueExpr(): Expression { return wrapJoinPoint(this._javaObject.getTrueExpr()) }
-}
-
-export class This extends Expression {
+  get hasInit(): boolean { return wrapJoinPoint(this._javaObject.hasInit()) }
   /**
-   * @internal
+   * The initializer of this variable declaration, if it has one
    */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-}
-
-export class Type extends Joinpoint {
+  get init(): Expression { return wrapJoinPoint(this._javaObject.init()) }
   /**
-   * @internal
+   * The initializer of this variable declaration, if it has one
    */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get arrayDims(): number[] { return wrapJoinPoint(this._javaObject.getArrayDims()) }
-  get arraySize(): number { return wrapJoinPoint(this._javaObject.getArraySize()) }
-  get constant(): boolean { return wrapJoinPoint(this._javaObject.getConstant()) }
+  set init(value: Expression | string) { this._javaObject.setInit(unwrapJoinPoint(value)); }
   /**
-   * Single-step desugar. Returns the type itself if it does not have sugar
+   * The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit
    */
-  get desugar(): Type { return wrapJoinPoint(this._javaObject.getDesugar()) }
+  get initStyle(): string { return wrapJoinPoint(this._javaObject.initStyle()) }
   /**
-   * Single-step desugar. Returns the type itself if it does not have sugar
+   * True if this variable declaration is global. This includes all global variables as well as static variables declared within a function.
    */
-  set desugar(value: Type) { this._javaObject.setDesugar(unwrapJoinPoint(value)); }
+  get isGlobal(): boolean { return wrapJoinPoint(this._javaObject.isGlobal()) }
   /**
-   * Completely desugars the type
+   * True if this variable declaration is a function parameter
    */
-  get desugarAll(): Type { return wrapJoinPoint(this._javaObject.getDesugarAll()) }
+  get isParam(): boolean { return wrapJoinPoint(this._javaObject.isParam()) }
   /**
-   * A tree representation of the fields of this type
+   * The storage class of this variable declaration. Can be 'none', 'extern', 'static', '__private_extern__', 'auto' or 'register'
    */
-  get fieldTree(): string { return wrapJoinPoint(this._javaObject.getFieldTree()) }
-  get hasSugar(): boolean { return wrapJoinPoint(this._javaObject.getHasSugar()) }
-  get hasTemplateArgs(): boolean { return wrapJoinPoint(this._javaObject.getHasTemplateArgs()) }
-  get isArray(): boolean { return wrapJoinPoint(this._javaObject.getIsArray()) }
+  get storageClass(): StorageClass { return wrapJoinPoint(this._javaObject.storageClass()) }
   /**
-   * True if this is a type declared with the 'auto' keyword
+   * The storage class of this variable declaration. Can be 'none', 'extern', 'static', '__private_extern__', 'auto' or 'register'
    */
-  get isAuto(): boolean { return wrapJoinPoint(this._javaObject.getIsAuto()) }
-  get isBuiltin(): boolean { return wrapJoinPoint(this._javaObject.getIsBuiltin()) }
-  get isPointer(): boolean { return wrapJoinPoint(this._javaObject.getIsPointer()) }
-  get isTopLevel(): boolean { return wrapJoinPoint(this._javaObject.getIsTopLevel()) }
-  get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
+  set storageClass(value: StorageClass) { this._javaObject.setStorageClass(unwrapJoinPoint(value)); }
   /**
-   * Ignores certain types (e.g., DecayedType)
+   * If vardecl already has an initialization, removes it
    */
-  get normalize(): Type { return wrapJoinPoint(this._javaObject.getNormalize()) }
-  get templateArgsStrings(): string[] { return wrapJoinPoint(this._javaObject.getTemplateArgsStrings()) }
-  get templateArgsTypes(): Type[] { return wrapJoinPoint(this._javaObject.getTemplateArgsTypes()) }
-  set templateArgsTypes(value: Type[]) { this._javaObject.setTemplateArgsTypes(unwrapJoinPoint(value)); }
+  removeInit(removeConst: boolean = true): void { return wrapJoinPoint(this._javaObject.removeInit(unwrapJoinPoint(removeConst))); }
   /**
-   * Maps names of join point fields that represent type join points, to their respective values
+   * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
    */
-  get typeFields(): Record<string, any> { return wrapJoinPoint(this._javaObject.getTypeFields()) }
+  setInit(init: Expression): void;
   /**
-   * If the type encapsulates another type, returns the encapsulated type
+   * Converts the given string to a literal expression and sets it as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
    */
-  get unwrap(): Type { return wrapJoinPoint(this._javaObject.getUnwrap()) }
+  setInit(init: string): void;
   /**
-   * Returns a new node based on this type with the qualifier const
+   * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
    */
-  asConst(): Type { return wrapJoinPoint(this._javaObject.asConst()); }
+  setInit(p1: Expression | string): void { return wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(p1))); }
   /**
-   * Sets the desugared type of this type
+   * Sets the storage class specifier, which can be none, extern, static, __private_extern__, auto
    */
-  setDesugar(desugaredType: Type): void { return wrapJoinPoint(this._javaObject.setDesugar(unwrapJoinPoint(desugaredType))); }
+  setStorageClass(storageClass: StorageClass): void { return wrapJoinPoint(this._javaObject.setStorageClass(unwrapJoinPoint(storageClass))); }
   /**
-   * Sets a single template argument type of a template type
+   * Creates a new varref based on this vardecl
    */
-  setTemplateArgType(index: number, templateArgType: Type): void { return wrapJoinPoint(this._javaObject.setTemplateArgType(unwrapJoinPoint(index), unwrapJoinPoint(templateArgType))); }
-  /**
-   * Sets the template argument types of a template type
-   */
-  setTemplateArgsTypes(templateArgTypes: Type[]): void { return wrapJoinPoint(this._javaObject.setTemplateArgsTypes(unwrapJoinPoint(templateArgTypes))); }
-  /**
-   * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
-   */
-  setTypeFieldByValueRecursive(currentValue: object, newValue: object): boolean { return wrapJoinPoint(this._javaObject.setTypeFieldByValueRecursive(unwrapJoinPoint(currentValue), unwrapJoinPoint(newValue))); }
-  /**
-   * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
-   */
-  setUnderlyingType(oldValue: Type, newValue: Type): Type { return wrapJoinPoint(this._javaObject.setUnderlyingType(unwrapJoinPoint(oldValue), unwrapJoinPoint(newValue))); }
+  varref(): Varref { return wrapJoinPoint(this._javaObject.varref()); }
 }
 
   /**
@@ -1264,105 +1048,58 @@ export class TypedefNameDecl extends NamedDecl {
 }
 
   /**
-   * Represents the type of a typedef.
+   * Declaration of a typedef-name via the 'typedef' type specifier
    */
-export class TypedefType extends Type {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * The typedef declaration associated with this typedef type
-   */
-  get decl(): TypedefNameDecl { return wrapJoinPoint(this._javaObject.getDecl()) }
-  /**
-   * The type that is being typedef'd
-   */
-  get underlyingType(): Type { return wrapJoinPoint(this._javaObject.getUnderlyingType()) }
-}
-
-export class UnaryExprOrType extends Expression {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get argExpr(): Expression { return wrapJoinPoint(this._javaObject.getArgExpr()) }
-  get argType(): Type { return wrapJoinPoint(this._javaObject.getArgType()) }
-  set argType(value: Type) { this._javaObject.setArgType(unwrapJoinPoint(value)); }
-  get hasArgExpr(): boolean { return wrapJoinPoint(this._javaObject.getHasArgExpr()) }
-  get hasTypeExpr(): boolean { return wrapJoinPoint(this._javaObject.getHasTypeExpr()) }
-  get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
-  setArgType(argType: Type): void { return wrapJoinPoint(this._javaObject.setArgType(unwrapJoinPoint(argType))); }
-}
-
-export class UnaryOp extends Op {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get isPointerDeref(): boolean { return wrapJoinPoint(this._javaObject.getIsPointerDeref()) }
-  get operand(): Expression { return wrapJoinPoint(this._javaObject.getOperand()) }
-}
-
-export class UndefinedType extends Type {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-}
-
-  /**
-   * A reference to a variable
-   */
-export class Varref extends Expression {
+export class TypedefDecl extends TypedefNameDecl {
   /**
    * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
-  get declaration(): Declarator { return wrapJoinPoint(this._javaObject.getDeclaration()) }
-  /**
-   * True if this variable reference has a MS-style property, false otherwise
-   */
-  get hasProperty(): boolean { return wrapJoinPoint(this._javaObject.getHasProperty()) }
-  /**
-   * True if this varref represents a function call
-   */
-  get isFunctionCall(): boolean { return wrapJoinPoint(this._javaObject.getIsFunctionCall()) }
-  get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
-  get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
-  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
-  /**
-   * If this variable reference has a MS-style property, returns the property name. Returns undefined otherwise
-   */
-  get property(): string { return wrapJoinPoint(this._javaObject.getProperty()) }
-  /**
-   * Expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
-   */
-  get useExpr(): Expression { return wrapJoinPoint(this._javaObject.getUseExpr()) }
-  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
 }
 
-export class WrapperStmt extends Statement {
+  /**
+   * Represents an enum declaration
+   */
+export class EnumDecl extends NamedDecl {
   /**
    * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
+    name: "name",
   };
-  get content(): Joinpoint { return wrapJoinPoint(this._javaObject.getContent()) }
-  get kind(): "comment" | "pragma" { return wrapJoinPoint(this._javaObject.getKind()) }
+  get enumerators(): EnumeratorDecl[] { return wrapJoinPoint(this._javaObject.enumerators()) }
 }
 
+  /**
+   * Represents an enumerator in an enum
+   */
+export class EnumeratorDecl extends NamedDecl {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: "name",
+  };
+}
+
+  /**
+   * Represents a label declaration
+   */
+export class LabelDecl extends NamedDecl {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: "name",
+  };
+  get labelStmt(): LabelStmt { return wrapJoinPoint(this._javaObject.labelStmt()) }
+}
+
+  /**
+   * Represents an access specifier (public:, private:, or protected:) in a class declaration
+   */
 export class AccessSpecifier extends Decl {
   /**
    * @internal
@@ -1373,502 +1110,19 @@ export class AccessSpecifier extends Decl {
   /**
    * The type of specifier. Can return 'public', 'protected', 'private' or 'none'
    */
-  get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
+  get kind(): string { return wrapJoinPoint(this._javaObject.kind()) }
 }
 
-export class AdjustedType extends Type {
   /**
-   * @internal
+   * Represents a function parameter
    */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * The type that is being adjusted
-   */
-  get originalType(): Type { return wrapJoinPoint(this._javaObject.getOriginalType()) }
-}
-
-export class ArrayAccess extends Expression {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * Expression representing the variable of the array access (can be a varref, memberAccess...)
-   */
-  get arrayVar(): Expression { return wrapJoinPoint(this._javaObject.getArrayVar()) }
-  /**
-   * If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name
-   */
-  get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
-  /**
-   * The number of subscripts of this array access
-   */
-  get numSubscripts(): number { return wrapJoinPoint(this._javaObject.getNumSubscripts()) }
-  /**
-   * A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript
-   */
-  get parentAccess(): ArrayAccess { return wrapJoinPoint(this._javaObject.getParentAccess()) }
-  /**
-   * Expression of the array access subscript
-   */
-  get subscript(): Expression[] { return wrapJoinPoint(this._javaObject.getSubscript()) }
-}
-
-export class ArrayType extends Type {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get elementType(): Type { return wrapJoinPoint(this._javaObject.getElementType()) }
-  set elementType(value: Type) { this._javaObject.setElementType(unwrapJoinPoint(value)); }
-  /**
-   * Sets the element type of the array
-   */
-  setElementType(arrayElementType: Type): void { return wrapJoinPoint(this._javaObject.setElementType(unwrapJoinPoint(arrayElementType))); }
-}
-
-export class AsmStmt extends Statement {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get clobbers(): string[] { return wrapJoinPoint(this._javaObject.getClobbers()) }
-  get isSimple(): boolean { return wrapJoinPoint(this._javaObject.getIsSimple()) }
-  get isVolatile(): boolean { return wrapJoinPoint(this._javaObject.getIsVolatile()) }
-}
-
-export class BinaryOp extends Op {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get isAssignment(): boolean { return wrapJoinPoint(this._javaObject.getIsAssignment()) }
-  get left(): Expression { return wrapJoinPoint(this._javaObject.getLeft()) }
-  set left(value: Expression) { this._javaObject.setLeft(unwrapJoinPoint(value)); }
-  get right(): Expression { return wrapJoinPoint(this._javaObject.getRight()) }
-  set right(value: Expression) { this._javaObject.setRight(unwrapJoinPoint(value)); }
-  setLeft(left: Expression): void { return wrapJoinPoint(this._javaObject.setLeft(unwrapJoinPoint(left))); }
-  setRight(right: Expression): void { return wrapJoinPoint(this._javaObject.setRight(unwrapJoinPoint(right))); }
-}
-
-export class BoolLiteral extends Literal {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get value(): boolean { return wrapJoinPoint(this._javaObject.getValue()) }
-}
-
-export class Break extends Statement {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * The enclosing statement related to this break. It should be either a loop or a switch statement.
-   */
-  get enclosingStmt(): Statement { return wrapJoinPoint(this._javaObject.getEnclosingStmt()) }
-}
-
-export class BuiltinType extends Type {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get builtinKind(): string { return wrapJoinPoint(this._javaObject.getBuiltinKind()) }
-  /**
-   * True, if ot is a floating type (e.g., float, double)
-   */
-  get isFloat(): boolean { return wrapJoinPoint(this._javaObject.getIsFloat()) }
-  /**
-   * True, if it is an integer type
-   */
-  get isInteger(): boolean { return wrapJoinPoint(this._javaObject.getIsInteger()) }
-  /**
-   * True, if it is a signed integer type
-   */
-  get isSigned(): boolean { return wrapJoinPoint(this._javaObject.getIsSigned()) }
-  /**
-   * True, if it is an unsigned integer type
-   */
-  get isUnsigned(): boolean { return wrapJoinPoint(this._javaObject.getIsUnsigned()) }
-  /**
-   * True, if it is the type 'void'
-   */
-  get isVoid(): boolean { return wrapJoinPoint(this._javaObject.getIsVoid()) }
-}
-
-export class Call extends Expression {
+export class Param extends Vardecl {
   /**
    * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
-  /**
-   * An alias for 'args'
-   */
-  get argList(): Expression[] { return wrapJoinPoint(this._javaObject.getArgList()) }
-  /**
-   * An array with the arguments of the call
-   */
-  get args(): Expression[] { return wrapJoinPoint(this._javaObject.getArgs()) }
-  /**
-   * A 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found
-   */
-  get declaration(): FunctionJp { return wrapJoinPoint(this._javaObject.getDeclaration()) }
-  /**
-   * A 'function' join point that represents the function definition of the call; 'undefined' if no definition was found
-   */
-  get definition(): FunctionJp { return wrapJoinPoint(this._javaObject.getDefinition()) }
-  /**
-   * A function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)
-   */
-  get directCallee(): FunctionJp { return wrapJoinPoint(this._javaObject.getDirectCallee()) }
-  /**
-   * A function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration
-   */
-  get function(): FunctionJp { return wrapJoinPoint(this._javaObject.getFunction()) }
-  /**
-   * The function type of the call, which includes the return type and the types of the parameters
-   */
-  get functionType(): FunctionType { return wrapJoinPoint(this._javaObject.getFunctionType()) }
-  get isMemberAccess(): boolean { return wrapJoinPoint(this._javaObject.getIsMemberAccess()) }
-  get isStmtCall(): boolean { return wrapJoinPoint(this._javaObject.getIsStmtCall()) }
-  get memberAccess(): MemberAccess { return wrapJoinPoint(this._javaObject.getMemberAccess()) }
-  get memberNames(): string[] { return wrapJoinPoint(this._javaObject.getMemberNames()) }
-  get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
-  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
-  get numArgs(): number { return wrapJoinPoint(this._javaObject.getNumArgs()) }
-  /**
-   * The return type of the call
-   */
-  get returnType(): Type { return wrapJoinPoint(this._javaObject.getReturnType()) }
-  /**
-   * Similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function
-   */
-  get signature(): string { return wrapJoinPoint(this._javaObject.getSignature()) }
-  getArg(index: number): Expression { return wrapJoinPoint(this._javaObject.getArg(unwrapJoinPoint(index))); }
-  /**
-   * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
-   */
-  addArg(argCode: string, type?: Type): void;
-  /**
-   * Adds an argument at the end of the call, creating a literal 'type' from the type string
-   */
-  addArg(arg: string, type: string): void;
-  /**
-   * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
-   */
-  addArg(p1: string, p2?: Type | string): void { return wrapJoinPoint(this._javaObject.addArg(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
-  /**
-   * Tries to inline this call
-   */
-  inline(): boolean { return wrapJoinPoint(this._javaObject.inline()); }
-  setArg(index: number, expr: Expression): void { return wrapJoinPoint(this._javaObject.setArg(unwrapJoinPoint(index), unwrapJoinPoint(expr))); }
-  setArgFromString(index: number, expr: string): void { return wrapJoinPoint(this._javaObject.setArgFromString(unwrapJoinPoint(index), unwrapJoinPoint(expr))); }
-  /**
-   * Changes the name of the call
-   */
-  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
-  /**
-   * Wraps this call with a possibly new wrapping function
-   */
-  wrap(name: string): void { return wrapJoinPoint(this._javaObject.wrap(unwrapJoinPoint(name))); }
-}
-
-export class Case extends SwitchCase {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * The instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
-   */
-  get instructions(): Statement[] { return wrapJoinPoint(this._javaObject.getInstructions()) }
-  /**
-   * True if this is a default case, false otherwise
-   */
-  get isDefault(): boolean { return wrapJoinPoint(this._javaObject.getIsDefault()) }
-  /**
-   * True if this case does not contain instructions (i.e., it is directly above another case), false otherwise
-   */
-  get isEmpty(): boolean { return wrapJoinPoint(this._javaObject.getIsEmpty()) }
-  /**
-   * The case statement that comes after this case, or undefined if there are no more case statements
-   */
-  get nextCase(): Case { return wrapJoinPoint(this._javaObject.getNextCase()) }
-  /**
-   * The first statement that is not a case that will be executed by this case statement
-   */
-  get nextInstruction(): Statement { return wrapJoinPoint(this._javaObject.getNextInstruction()) }
-  /**
-   * The values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
-   */
-  get values(): Expression[] { return wrapJoinPoint(this._javaObject.getValues()) }
-}
-
-export class Cast extends Expression {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get fromType(): Type { return wrapJoinPoint(this._javaObject.getFromType()) }
-  /**
-   * @deprecated Use expr.implicitCast instead
-   */
-  get isImplicitCast(): boolean { return wrapJoinPoint(this._javaObject.getIsImplicitCast()) }
-  get subExpr(): Expression { return wrapJoinPoint(this._javaObject.getSubExpr()) }
-  get toType(): Type { return wrapJoinPoint(this._javaObject.getToType()) }
-}
-
-export class CilkSpawn extends Call {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-}
-
-export class CilkSync extends Statement {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-}
-
-  /**
-   * Represents a C++ class
-   */
-export class Class extends RecordJp {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-  /**
-   * All the classes this class inherits from
-   */
-  get allBases(): Class[] { return wrapJoinPoint(this._javaObject.getAllBases()) }
-  /**
-   * All the methods of this class, including inherited ones
-   */
-  get allMethods(): Method[] { return wrapJoinPoint(this._javaObject.getAllMethods()) }
-  /**
-   * The classes this class directly inherits from
-   */
-  get bases(): Class[] { return wrapJoinPoint(this._javaObject.getBases()) }
-  /**
-   * Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present
-   */
-  get canonical(): Class { return wrapJoinPoint(this._javaObject.getCanonical()) }
-  /**
-   * The implementation (or definition) of this class present in the AST, or undefined if none is found
-   */
-  get implementation(): Class { return wrapJoinPoint(this._javaObject.getImplementation()) }
-  /**
-   * True, if contains at least one pure function
-   */
-  get isAbstract(): boolean { return wrapJoinPoint(this._javaObject.getIsAbstract()) }
-  /**
-   * True if this is the class returned by the 'canonical' attribute
-   */
-  get isCanonical(): boolean { return wrapJoinPoint(this._javaObject.getIsCanonical()) }
-  /**
-   * True, if all functions are pure
-   */
-  get isInterface(): boolean { return wrapJoinPoint(this._javaObject.getIsInterface()) }
-  /**
-   * The methods declared by this class
-   */
-  get methods(): Method[] { return wrapJoinPoint(this._javaObject.getMethods()) }
-  /**
-   * The prototypes (or declarations) of this class present in the AST, if any
-   */
-  get prototypes(): Class[] { return wrapJoinPoint(this._javaObject.getPrototypes()) }
-  /**
-   * Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply added the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature.
-   */
-  addMethod(method: Method): void { return wrapJoinPoint(this._javaObject.addMethod(unwrapJoinPoint(method))); }
-}
-
-export class Continue extends Statement {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-}
-
-export class CudaKernelCall extends Call {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-  get config(): Expression[] { return wrapJoinPoint(this._javaObject.getConfig()) }
-  set config(value: Expression[]) { this._javaObject.setConfig(unwrapJoinPoint(value)); }
-  setConfig(args: Expression[]): void { return wrapJoinPoint(this._javaObject.setConfig(unwrapJoinPoint(args))); }
-  setConfigFromStrings(args: string[]): void { return wrapJoinPoint(this._javaObject.setConfigFromStrings(unwrapJoinPoint(args))); }
-}
-
-export class DeclStmt extends Statement {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * The declarations in this statement
-   */
-  get decls(): Decl[] { return wrapJoinPoint(this._javaObject.getDecls()) }
-}
-
-  /**
-   * Represents a decl that comes from a declarator (e.g., function, field, variable)
-   */
-export class Declarator extends NamedDecl {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-}
-
-export class Default extends SwitchCase {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-}
-
-export class DeleteExpr extends Expression {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-}
-
-  /**
-   * Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name, e.g., N::M::type, or both. This type is used to keep track of a type name as written in the source code, including tag keywords and any nested-name-specifiers. The type itself is always 'sugar', used to express what was written in the source code but containing no additional semantic information.
-   */
-export class ElaboratedType extends Type {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * The keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename
-   */
-  get keyword(): string { return wrapJoinPoint(this._javaObject.getKeyword()) }
-  /**
-   * The type that is being prefixed with the qualifier
-   */
-  get namedType(): Type { return wrapJoinPoint(this._javaObject.getNamedType()) }
-  /**
-   * The qualifier of this elaborated type, if present (e.g., A::)
-   */
-  get qualifier(): string { return wrapJoinPoint(this._javaObject.getQualifier()) }
-}
-
-export class EmptyStmt extends Statement {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-}
-
-  /**
-   * Represents an enum
-   */
-export class EnumDecl extends NamedDecl {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-  get enumerators(): EnumeratorDecl[] { return wrapJoinPoint(this._javaObject.getEnumerators()) }
-}
-
-export class EnumeratorDecl extends NamedDecl {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-}
-
-export class ExprStmt extends Statement {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * The expression join point associated to this exprStmt
-   */
-  get expr(): Expression { return wrapJoinPoint(this._javaObject.getExpr()) }
-}
-
-  /**
-   * Represents a member of a struct/union/class
-   */
-export class Field extends Declarator {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-}
-
-export class FloatLiteral extends Literal {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get value(): number { return wrapJoinPoint(this._javaObject.getValue()) }
 }
 
   /**
@@ -1881,31 +1135,31 @@ export class FunctionJp extends Declarator {
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
-  get body(): Scope { return wrapJoinPoint(this._javaObject.getBody()) }
+  get body(): Scope { return wrapJoinPoint(this._javaObject.body()) }
   set body(value: Scope) { this._javaObject.setBody(unwrapJoinPoint(value)); }
-  get calls(): Call[] { return wrapJoinPoint(this._javaObject.getCalls()) }
+  get calls(): Call[] { return wrapJoinPoint(this._javaObject.calls()) }
   /**
    * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
    */
-  get canonical(): FunctionJp { return wrapJoinPoint(this._javaObject.getCanonical()) }
+  get canonical(): FunctionJp { return wrapJoinPoint(this._javaObject.canonical()) }
   /**
    * Returns the first prototype of this function that could be found, or undefined if there is none
    */
-  get declarationJp(): FunctionJp { return wrapJoinPoint(this._javaObject.getDeclarationJp()) }
+  get declarationJp(): FunctionJp { return wrapJoinPoint(this._javaObject.declarationJp()) }
   /**
    * Returns the prototypes of this function that are present in the code. If there are none, returns an empty array
    */
-  get declarationJps(): FunctionJp[] { return wrapJoinPoint(this._javaObject.getDeclarationJps()) }
+  get declarationJps(): FunctionJp[] { return wrapJoinPoint(this._javaObject.declarationJps()) }
   /**
    * Returns the implementation of this function if there is one, or undefined otherwise
    */
-  get definitionJp(): FunctionJp { return wrapJoinPoint(this._javaObject.getDefinitionJp()) }
+  get definitionJp(): FunctionJp { return wrapJoinPoint(this._javaObject.definitionJp()) }
   /**
-   * The type of the call, which includes the return type and the types of the parameters
+   * The function type of this function, which includes the return type and the parameter types
    */
-  get functionType(): FunctionType { return wrapJoinPoint(this._javaObject.getFunctionType()) }
+  get functionType(): FunctionType { return wrapJoinPoint(this._javaObject.functionType()) }
   /**
-   * The type of the call, which includes the return type and the types of the parameters
+   * The function type of this function, which includes the return type and the parameter types
    */
   set functionType(value: FunctionType) { this._javaObject.setFunctionType(unwrapJoinPoint(value)); }
   /**
@@ -1913,44 +1167,37 @@ export class FunctionJp extends Declarator {
    * 
    * @deprecated Use .isImplementation instead
    */
-  get hasDefinition(): boolean { return wrapJoinPoint(this._javaObject.getHasDefinition()) }
-  get id(): string { return wrapJoinPoint(this._javaObject.getId()) }
+  get hasDefinition(): boolean { return wrapJoinPoint(this._javaObject.hasDefinition()) }
+  get id(): string { return wrapJoinPoint(this._javaObject.id()) }
   /**
    * True, if this is the function returned by the 'canonical' attribute
    */
-  get isCanonical(): boolean { return wrapJoinPoint(this._javaObject.getIsCanonical()) }
-  get isCudaKernel(): boolean { return wrapJoinPoint(this._javaObject.getIsCudaKernel()) }
-  get isDelete(): boolean { return wrapJoinPoint(this._javaObject.getIsDelete()) }
+  get isCanonical(): boolean { return wrapJoinPoint(this._javaObject.isCanonical()) }
+  get isCudaKernel(): boolean { return wrapJoinPoint(this._javaObject.isCudaKernel()) }
+  get isDelete(): boolean { return wrapJoinPoint(this._javaObject.isDelete()) }
   /**
-   * True if this particular function join point is an implementation (i.e. has a body), false otherwise
+   * True if this function join point is an implementation, false otherwise
    */
-  get isImplementation(): boolean { return wrapJoinPoint(this._javaObject.getIsImplementation()) }
-  get isInline(): boolean { return wrapJoinPoint(this._javaObject.getIsInline()) }
-  get isModulePrivate(): boolean { return wrapJoinPoint(this._javaObject.getIsModulePrivate()) }
+  get isImplementation(): boolean { return wrapJoinPoint(this._javaObject.isImplementation()) }
+  get isInline(): boolean { return wrapJoinPoint(this._javaObject.isInline()) }
+  get isModulePrivate(): boolean { return wrapJoinPoint(this._javaObject.isModulePrivate()) }
   /**
-   * True if this particular function join point is a prototype (i.e. does not have a body), false otherwise
+   * True if this function join point is a prototype, false otherwise
    */
-  get isPrototype(): boolean { return wrapJoinPoint(this._javaObject.getIsPrototype()) }
-  get isPure(): boolean { return wrapJoinPoint(this._javaObject.getIsPure()) }
-  get isVirtual(): boolean { return wrapJoinPoint(this._javaObject.getIsVirtual()) }
-  get paramNames(): string[] { return wrapJoinPoint(this._javaObject.getParamNames()) }
-  get params(): Param[] { return wrapJoinPoint(this._javaObject.getParams()) }
+  get isPrototype(): boolean { return wrapJoinPoint(this._javaObject.isPrototype()) }
+  get isPure(): boolean { return wrapJoinPoint(this._javaObject.isPure()) }
+  get isVirtual(): boolean { return wrapJoinPoint(this._javaObject.isVirtual()) }
+  get paramNames(): string[] { return wrapJoinPoint(this._javaObject.paramNames()) }
+  get params(): Param[] { return wrapJoinPoint(this._javaObject.params()) }
   set params(value: Param[]) { this._javaObject.setParams(unwrapJoinPoint(value)); }
-  get returnType(): Type { return wrapJoinPoint(this._javaObject.getReturnType()) }
+  get returnType(): Type { return wrapJoinPoint(this._javaObject.returnType()) }
   set returnType(value: Type) { this._javaObject.setReturnType(unwrapJoinPoint(value)); }
   /**
-   * A string with the signature of this function (e.g., name of the function, plus the parameters types)
+   * The signature of this function (e.g., name of the function, plus the parameters types)
    */
-  get signature(): string { return wrapJoinPoint(this._javaObject.getSignature()) }
-  /**
-   * The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)
-   */
-  get storageClass(): StorageClass { return wrapJoinPoint(this._javaObject.getStorageClass()) }
-  /**
-   * The storage class of this function (i.e., one of NONE, EXTERN, PRIVATE_EXTERN or STATIC)
-   */
+  get signature(): string { return wrapJoinPoint(this._javaObject.signature()) }
+  get storageClass(): StorageClass { return wrapJoinPoint(this._javaObject.storageClass()) }
   set storageClass(value: StorageClass) { this._javaObject.setStorageClass(unwrapJoinPoint(value)); }
-  getDeclaration(withReturnType: boolean): string { return wrapJoinPoint(this._javaObject.getDeclaration(unwrapJoinPoint(withReturnType))); }
   /**
    * Adds a new parameter to the function
    */
@@ -1968,17 +1215,18 @@ export class FunctionJp extends Declarator {
    */
   clone(newName: string, insert: boolean = true): FunctionJp { return wrapJoinPoint(this._javaObject.clone(unwrapJoinPoint(newName), unwrapJoinPoint(insert))); }
   /**
-   * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
+   * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided)
    */
   cloneOnFile(newName: string, fileName?: string): FunctionJp;
   /**
-   * Generates a clone of the provided function on a new file (with the provided join point).
+   * Generates a clone of the provided function on a new file (with the provided join point)
    */
-  cloneOnFile(newName: string, fileName: FileJp): FunctionJp;
+  cloneOnFile(newName: string, file: FileJp): FunctionJp;
   /**
-   * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
+   * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided)
    */
   cloneOnFile(p1: string, p2?: string | FileJp): FunctionJp { return wrapJoinPoint(this._javaObject.cloneOnFile(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  getDeclaration(withReturnType: boolean): string { return wrapJoinPoint(this._javaObject.getDeclaration(unwrapJoinPoint(withReturnType))); }
   /**
    * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
    */
@@ -2016,10 +1264,6 @@ export class FunctionJp extends Declarator {
    */
   setParam(p1: number, p2: Param | string, p3?: Type): void { return wrapJoinPoint(this._javaObject.setParam(unwrapJoinPoint(p1), unwrapJoinPoint(p2), unwrapJoinPoint(p3))); }
   /**
-   * Sets the type of a parameter of the function
-   */
-  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(unwrapJoinPoint(index), unwrapJoinPoint(newType))); }
-  /**
    * Sets the parameters of the function
    */
   setParams(params: Param[]): void { return wrapJoinPoint(this._javaObject.setParams(unwrapJoinPoint(params))); }
@@ -2028,249 +1272,76 @@ export class FunctionJp extends Declarator {
    */
   setParamsFromStrings(params: string[]): void { return wrapJoinPoint(this._javaObject.setParamsFromStrings(unwrapJoinPoint(params))); }
   /**
+   * Sets the type of a parameter of the function
+   */
+  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(unwrapJoinPoint(index), unwrapJoinPoint(newType))); }
+  /**
    * Sets the return type of the function
    */
   setReturnType(returnType: Type): void { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(returnType))); }
   /**
-   * Sets the storage class of this specific function decl. AUTO and REGISTER are not allowed for functions, and EXTERN is not allowed in function implementations, or function declarations that are in the same file as the implementation. Returns true if the storage class changed, false otherwise.
+   * Sets the storage class of this specific function decl. AUTO and REGISTER are not allowed for functions, and EXTERN is not allowed in function implementations, or function declarations that are in the same file as the implementation. Returns true if the storage class changed, false otherwise
    */
   setStorageClass(storageClass: StorageClass): boolean { return wrapJoinPoint(this._javaObject.setStorageClass(unwrapJoinPoint(storageClass))); }
 }
 
-export class FunctionType extends Type {
   /**
-   * @internal
+   * Represents a method in a class declaration
    */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get paramTypes(): Type[] { return wrapJoinPoint(this._javaObject.getParamTypes()) }
-  get returnType(): Type { return wrapJoinPoint(this._javaObject.getReturnType()) }
-  set returnType(value: Type) { this._javaObject.setReturnType(unwrapJoinPoint(value)); }
-  /**
-   * Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType
-   */
-  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(unwrapJoinPoint(index), unwrapJoinPoint(newType))); }
-  /**
-   * Sets the return type of the FunctionType
-   */
-  setReturnType(newType: Type): void { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(newType))); }
-}
-
-export class GotoStmt extends Statement {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get label(): LabelDecl { return wrapJoinPoint(this._javaObject.getLabel()) }
-  set label(value: LabelDecl) { this._javaObject.setLabel(unwrapJoinPoint(value)); }
-  /**
-   * Sets the label of the goto
-   */
-  setLabel(label: LabelDecl): void { return wrapJoinPoint(this._javaObject.setLabel(unwrapJoinPoint(label))); }
-}
-
-export class If extends Statement {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get cond(): Expression { return wrapJoinPoint(this._javaObject.getCond()) }
-  set cond(value: Expression) { this._javaObject.setCond(unwrapJoinPoint(value)); }
-  get condDecl(): Vardecl { return wrapJoinPoint(this._javaObject.getCondDecl()) }
-  get else(): Scope { return wrapJoinPoint(this._javaObject.getElse()) }
-  set else(value: Statement) { this._javaObject.setElse(unwrapJoinPoint(value)); }
-  get then(): Scope { return wrapJoinPoint(this._javaObject.getThen()) }
-  set then(value: Statement) { this._javaObject.setThen(unwrapJoinPoint(value)); }
-  /**
-   * Sets the condition of the if
-   */
-  setCond(cond: Expression): void { return wrapJoinPoint(this._javaObject.setCond(unwrapJoinPoint(cond))); }
-  /**
-   * Sets the body of the else
-   */
-  setElse(elseStatement: Statement): void { return wrapJoinPoint(this._javaObject.setElse(unwrapJoinPoint(elseStatement))); }
-  /**
-   * Sets the body of the if
-   */
-  setThen(then: Statement): void { return wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then))); }
-}
-
-export class IncompleteArrayType extends ArrayType {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-}
-
-export class IntLiteral extends Literal {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get value(): number { return wrapJoinPoint(this._javaObject.getValue()) }
-}
-
-export class LabelDecl extends NamedDecl {
+export class Method extends FunctionJp {
   /**
    * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: "name",
   };
-  get labelStmt(): LabelStmt { return wrapJoinPoint(this._javaObject.getLabelStmt()) }
+  get record(): Class { return wrapJoinPoint(this._javaObject.record()) }
+  /**
+   * Removes the class of the method
+   */
+  removeRecord(): void { return wrapJoinPoint(this._javaObject.removeRecord()); }
 }
 
-export class LabelStmt extends Statement {
+  /**
+   * Represents a pragma in the code (e.g., #pragma kernel)
+   */
+export class Pragma extends Joinpoint {
   /**
    * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
+    name: "name",
   };
-  get decl(): LabelDecl { return wrapJoinPoint(this._javaObject.getDecl()) }
-  set decl(value: LabelDecl) { this._javaObject.setDecl(unwrapJoinPoint(value)); }
   /**
-   * Sets the label of the label statement
+   * Everything that is after the name of the pragma
    */
-  setDecl(label: LabelDecl): void { return wrapJoinPoint(this._javaObject.setDecl(unwrapJoinPoint(label))); }
-}
-
-export class Loop extends Statement {
+  get content(): string { return wrapJoinPoint(this._javaObject.content()) }
   /**
-   * @internal
+   * Everything that is after the name of the pragma
    */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "kind",
-  };
-  get body(): Scope { return wrapJoinPoint(this._javaObject.getBody()) }
-  set body(value: Scope) { this._javaObject.setBody(unwrapJoinPoint(value)); }
+  set content(value: string) { this._javaObject.setContent(unwrapJoinPoint(value)); }
   /**
-   * The statement of the loop condition
+   * The name of the pragma. E.g. for #pragma foo bar, returns 'foo'
    */
-  get cond(): Statement { return wrapJoinPoint(this._javaObject.getCond()) }
+  get name(): string { return wrapJoinPoint(this._javaObject.name()) }
   /**
-   * The statement of the loop condition
+   * The name of the pragma. E.g. for #pragma foo bar, returns 'foo'
    */
-  set cond(value: string) { this._javaObject.setCond(unwrapJoinPoint(value)); }
-  get condRelation(): Relation { return wrapJoinPoint(this._javaObject.getCondRelation()) }
-  set condRelation(value: Relation) { this._javaObject.setCondRelation(unwrapJoinPoint(value)); }
-  get controlVar(): string { return wrapJoinPoint(this._javaObject.getControlVar()) }
-  get controlVarref(): Varref { return wrapJoinPoint(this._javaObject.getControlVarref()) }
+  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
   /**
-   * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
+   * The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations
    */
-  get endValue(): string { return wrapJoinPoint(this._javaObject.getEndValue()) }
+  get target(): Joinpoint { return wrapJoinPoint(this._javaObject.target()) }
   /**
-   * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
+   * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
    */
-  set endValue(value: string) { this._javaObject.setEndValue(unwrapJoinPoint(value)); }
-  /**
-   * True if the condition of the loop in the canonical format, and is one of: <, <=, >, >=
-   */
-  get hasCondRelation(): boolean { return wrapJoinPoint(this._javaObject.getHasCondRelation()) }
-  /**
-   * Uniquely identifies the loop inside the program
-   */
-  get id(): string { return wrapJoinPoint(this._javaObject.getId()) }
-  /**
-   * The statement of the loop initialization
-   */
-  get init(): Statement { return wrapJoinPoint(this._javaObject.getInit()) }
-  /**
-   * The statement of the loop initialization
-   */
-  set init(value: string) { this._javaObject.setInit(unwrapJoinPoint(value)); }
-  /**
-   * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
-   */
-  get initValue(): string { return wrapJoinPoint(this._javaObject.getInitValue()) }
-  /**
-   * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
-   */
-  set initValue(value: string) { this._javaObject.setInitValue(unwrapJoinPoint(value)); }
-  get isInnermost(): boolean { return wrapJoinPoint(this._javaObject.getIsInnermost()) }
-  get isOutermost(): boolean { return wrapJoinPoint(this._javaObject.getIsOutermost()) }
-  get isParallel(): boolean { return wrapJoinPoint(this._javaObject.getIsParallel()) }
-  set isParallel(value: boolean) { this._javaObject.setIsParallel(unwrapJoinPoint(value)); }
-  get iterations(): number { return wrapJoinPoint(this._javaObject.getIterations()) }
-  get iterationsExpr(): Expression { return wrapJoinPoint(this._javaObject.getIterationsExpr()) }
-  get kind(): "for" | "while" | "dowhile" | "foreach" { return wrapJoinPoint(this._javaObject.getKind()) }
-  set kind(value: string) { this._javaObject.setKind(unwrapJoinPoint(value)); }
-  get nestedLevel(): number { return wrapJoinPoint(this._javaObject.getNestedLevel()) }
-  get rank(): number[] { return wrapJoinPoint(this._javaObject.getRank()) }
-  /**
-   * The statement of the loop step
-   */
-  get step(): Statement { return wrapJoinPoint(this._javaObject.getStep()) }
-  /**
-   * The statement of the loop step
-   */
-  set step(value: string) { this._javaObject.setStep(unwrapJoinPoint(value)); }
-  /**
-   * The expression of the iteration step
-   */
-  get stepValue(): string { return wrapJoinPoint(this._javaObject.getStepValue()) }
-  /**
-   * Tests whether the loops are interchangeable. This is a conservative test.
-   */
-  isInterchangeable(otherLoop: Loop): boolean { return wrapJoinPoint(this._javaObject.isInterchangeable(unwrapJoinPoint(otherLoop))); }
-  /**
-   * Interchanges two for loops, if possible
-   */
-  interchange(otherLoop: Loop): void { return wrapJoinPoint(this._javaObject.interchange(unwrapJoinPoint(otherLoop))); }
-  /**
-   * Sets the body of the loop
-   */
-  setBody(body: Scope): void { return wrapJoinPoint(this._javaObject.setBody(unwrapJoinPoint(body))); }
-  /**
-   * Sets the conditional statement of the loop. Works with loops of kind 'for'
-   */
-  setCond(condCode: string): void { return wrapJoinPoint(this._javaObject.setCond(unwrapJoinPoint(condCode))); }
-  /**
-   * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
-   */
-  setCondRelation(operator: Relation): void { return wrapJoinPoint(this._javaObject.setCondRelation(unwrapJoinPoint(operator))); }
-  /**
-   * Sets the end value of the loop. Works with loops of kind 'for'
-   */
-  setEndValue(initCode: string): void { return wrapJoinPoint(this._javaObject.setEndValue(unwrapJoinPoint(initCode))); }
-  /**
-   * Sets the init statement of the loop
-   */
-  setInit(initCode: string): void { return wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(initCode))); }
-  /**
-   * Sets the init value of the loop. Works with loops of kind 'for'
-   */
-  setInitValue(initCode: string): void { return wrapJoinPoint(this._javaObject.setInitValue(unwrapJoinPoint(initCode))); }
-  /**
-   * Sets the attribute 'isParallel' of the loop
-   */
-  setIsParallel(isParallel: boolean): void { return wrapJoinPoint(this._javaObject.setIsParallel(unwrapJoinPoint(isParallel))); }
-  /**
-   * Sets the kind of the loop
-   */
-  setKind(kind: string): void { return wrapJoinPoint(this._javaObject.setKind(unwrapJoinPoint(kind))); }
-  /**
-   * Sets the step statement of the loop. Works with loops of kind 'for'
-   */
-  setStep(stepCode: string): void { return wrapJoinPoint(this._javaObject.setStep(unwrapJoinPoint(stepCode))); }
-  /**
-   * Applies loop tiling to this loop.
-   */
-  tile(blockSize: string, reference: Statement, useTernary: boolean = true): Statement { return wrapJoinPoint(this._javaObject.tile(unwrapJoinPoint(blockSize), unwrapJoinPoint(reference), unwrapJoinPoint(useTernary))); }
+  getTargetNodes(endPragma?: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getTargetNodes(unwrapJoinPoint(endPragma))); }
+  setContent(content: string): void { return wrapJoinPoint(this._javaObject.setContent(unwrapJoinPoint(content))); }
+  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
 }
 
   /**
-   * Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)
+   * Represents a marker pragma, which is used to mark a specific node in the code (e.g., #pragma myMarker) and can be used to store custom data
    */
 export class Marker extends Pragma {
   /**
@@ -2280,38 +1351,23 @@ export class Marker extends Pragma {
     name: "id",
   };
   /**
-   * A scope, associated with this marker
+   * The scope that is targeted by the marker
    */
-  get contents(): Joinpoint { return wrapJoinPoint(this._javaObject.getContents()) }
-  get id(): string { return wrapJoinPoint(this._javaObject.getId()) }
+  get contents(): Scope { return wrapJoinPoint(this._javaObject.contents()) }
+  get id(): string { return wrapJoinPoint(this._javaObject.id()) }
 }
 
-export class MemberCall extends Call {
+  /**
+   * Represents a tag pragma, which is used to reference a specific node in the code
+   */
+export class Tag extends Pragma {
   /**
    * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
+    name: "id",
   };
-  get base(): Expression { return wrapJoinPoint(this._javaObject.getBase()) }
-  get rootBase(): Expression { return wrapJoinPoint(this._javaObject.getRootBase()) }
-}
-
-  /**
-   * Represents a C++ class method declaration or definition
-   */
-export class Method extends FunctionJp {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-  get record(): Class { return wrapJoinPoint(this._javaObject.getRecord()) }
-  /**
-   * Removes the of the method
-   */
-  removeRecord(): void { return wrapJoinPoint(this._javaObject.removeRecord()); }
+  get id(): string { return wrapJoinPoint(this._javaObject.id()) }
 }
 
   /**
@@ -2327,11 +1383,11 @@ export class Omp extends Pragma {
   /**
    * The names of the kinds of all clauses in the pragma, or empty array if no clause is defined
    */
-  get clauseKinds(): string[] { return wrapJoinPoint(this._javaObject.getClauseKinds()) }
+  get clauseKinds(): string[] { return wrapJoinPoint(this._javaObject.clauseKinds()) }
   /**
    * An integer expression, or undefined if no 'collapse' clause is defined
    */
-  get collapse(): string { return wrapJoinPoint(this._javaObject.getCollapse()) }
+  get collapse(): string { return wrapJoinPoint(this._javaObject.collapse()) }
   /**
    * An integer expression, or undefined if no 'collapse' clause is defined
    */
@@ -2339,7 +1395,7 @@ export class Omp extends Pragma {
   /**
    * The variable names of all copyin clauses, or empty array if no copyin clause is defined
    */
-  get copyin(): string[] { return wrapJoinPoint(this._javaObject.getCopyin()) }
+  get copyin(): string[] { return wrapJoinPoint(this._javaObject.copyin()) }
   /**
    * The variable names of all copyin clauses, or empty array if no copyin clause is defined
    */
@@ -2347,7 +1403,7 @@ export class Omp extends Pragma {
   /**
    * One of 'shared' or 'none', or undefined if no 'default' clause is defined
    */
-  get default(): string { return wrapJoinPoint(this._javaObject.getDefault()) }
+  get default(): string { return wrapJoinPoint(this._javaObject.default()) }
   /**
    * One of 'shared' or 'none', or undefined if no 'default' clause is defined
    */
@@ -2355,7 +1411,7 @@ export class Omp extends Pragma {
   /**
    * The variable names of all firstprivate clauses, or empty array if no firstprivate clause is defined
    */
-  get firstprivate(): string[] { return wrapJoinPoint(this._javaObject.getFirstprivate()) }
+  get firstprivate(): string[] { return wrapJoinPoint(this._javaObject.firstprivate()) }
   /**
    * The variable names of all firstprivate clauses, or empty array if no firstprivate clause is defined
    */
@@ -2363,7 +1419,7 @@ export class Omp extends Pragma {
   /**
    * The kind of the directive
    */
-  get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
+  get kind(): string { return wrapJoinPoint(this._javaObject.kind()) }
   /**
    * The kind of the directive
    */
@@ -2371,7 +1427,7 @@ export class Omp extends Pragma {
   /**
    * The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined
    */
-  get lastprivate(): string[] { return wrapJoinPoint(this._javaObject.getLastprivate()) }
+  get lastprivate(): string[] { return wrapJoinPoint(this._javaObject.lastprivate()) }
   /**
    * The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined
    */
@@ -2379,7 +1435,7 @@ export class Omp extends Pragma {
   /**
    * An integer expression, or undefined if no 'num_threads' clause is defined
    */
-  get numThreads(): string { return wrapJoinPoint(this._javaObject.getNumThreads()) }
+  get numThreads(): string { return wrapJoinPoint(this._javaObject.numThreads()) }
   /**
    * An integer expression, or undefined if no 'num_threads' clause is defined
    */
@@ -2387,7 +1443,7 @@ export class Omp extends Pragma {
   /**
    * An integer expression, or undefined if no 'ordered' clause with a parameter is defined
    */
-  get ordered(): string { return wrapJoinPoint(this._javaObject.getOrdered()) }
+  get ordered(): string { return wrapJoinPoint(this._javaObject.ordered()) }
   /**
    * An integer expression, or undefined if no 'ordered' clause with a parameter is defined
    */
@@ -2395,7 +1451,7 @@ export class Omp extends Pragma {
   /**
    * The variable names of all private clauses, or empty array if no private clause is defined
    */
-  get private(): string[] { return wrapJoinPoint(this._javaObject.getPrivate()) }
+  get private(): string[] { return wrapJoinPoint(this._javaObject.private()) }
   /**
    * The variable names of all private clauses, or empty array if no private clause is defined
    */
@@ -2403,7 +1459,7 @@ export class Omp extends Pragma {
   /**
    * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
    */
-  get procBind(): string { return wrapJoinPoint(this._javaObject.getProcBind()) }
+  get procBind(): string { return wrapJoinPoint(this._javaObject.procBind()) }
   /**
    * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
    */
@@ -2411,11 +1467,11 @@ export class Omp extends Pragma {
   /**
    * The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined
    */
-  get reductionKinds(): string[] { return wrapJoinPoint(this._javaObject.getReductionKinds()) }
+  get reductionKinds(): string[] { return wrapJoinPoint(this._javaObject.reductionKinds()) }
   /**
    * An integer expression, or undefined if no 'schedule' clause with chunk size is defined
    */
-  get scheduleChunkSize(): string { return wrapJoinPoint(this._javaObject.getScheduleChunkSize()) }
+  get scheduleChunkSize(): string { return wrapJoinPoint(this._javaObject.scheduleChunkSize()) }
   /**
    * An integer expression, or undefined if no 'schedule' clause with chunk size is defined
    */
@@ -2423,7 +1479,7 @@ export class Omp extends Pragma {
   /**
    * One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined
    */
-  get scheduleKind(): string { return wrapJoinPoint(this._javaObject.getScheduleKind()) }
+  get scheduleKind(): string { return wrapJoinPoint(this._javaObject.scheduleKind()) }
   /**
    * One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined
    */
@@ -2431,7 +1487,7 @@ export class Omp extends Pragma {
   /**
    * A list with possible values of 'monotonic', 'nonmonotonic' or 'simd', or undefined if no 'schedule' clause with modifiers is defined
    */
-  get scheduleModifiers(): string[] { return wrapJoinPoint(this._javaObject.getScheduleModifiers()) }
+  get scheduleModifiers(): string[] { return wrapJoinPoint(this._javaObject.scheduleModifiers()) }
   /**
    * A list with possible values of 'monotonic', 'nonmonotonic' or 'simd', or undefined if no 'schedule' clause with modifiers is defined
    */
@@ -2439,7 +1495,7 @@ export class Omp extends Pragma {
   /**
    * The variable names of all shared clauses, or empty array if no shared clause is defined
    */
-  get shared(): string[] { return wrapJoinPoint(this._javaObject.getShared()) }
+  get shared(): string[] { return wrapJoinPoint(this._javaObject.shared()) }
   /**
    * The variable names of all shared clauses, or empty array if no shared clause is defined
    */
@@ -2453,7 +1509,7 @@ export class Omp extends Pragma {
    */
   hasClause(clauseName: string): boolean { return wrapJoinPoint(this._javaObject.hasClause(unwrapJoinPoint(clauseName))); }
   /**
-   * True if it is legal to use the given clause kind in this directive, false otherwise
+   * True if the directive has the given clause kind, false otherwise
    */
   isClauseLegal(clauseName: string): boolean { return wrapJoinPoint(this._javaObject.isClauseLegal(unwrapJoinPoint(clauseName))); }
   /**
@@ -2513,15 +1569,15 @@ export class Omp extends Pragma {
    */
   setReduction(kind: string, newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setReduction(unwrapJoinPoint(kind), unwrapJoinPoint(newVariables))); }
   /**
-   * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+   * Sets the value of the chunk size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
    */
   setScheduleChunkSize(chunkSize: string): void;
   /**
-   * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+   * Sets the value of the chunk size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
    */
   setScheduleChunkSize(chunkSize: number): void;
   /**
-   * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+   * Sets the value of the chunk size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
    */
   setScheduleChunkSize(p1: string | number): void { return wrapJoinPoint(this._javaObject.setScheduleChunkSize(unwrapJoinPoint(p1))); }
   /**
@@ -2538,63 +1594,19 @@ export class Omp extends Pragma {
   setShared(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setShared(unwrapJoinPoint(newVariables))); }
 }
 
-export class ParenType extends Type {
+export class Statement extends Joinpoint {
   /**
    * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
-  get innerType(): Type { return wrapJoinPoint(this._javaObject.getInnerType()) }
-  set innerType(value: Type) { this._javaObject.setInnerType(unwrapJoinPoint(value)); }
-  /**
-   * Sets the inner type of this paren type
-   */
-  setInnerType(innerType: Type): void { return wrapJoinPoint(this._javaObject.setInnerType(unwrapJoinPoint(innerType))); }
-}
-
-export class PointerType extends Type {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get pointee(): Type { return wrapJoinPoint(this._javaObject.getPointee()) }
-  set pointee(value: Type) { this._javaObject.setPointee(unwrapJoinPoint(value)); }
-  /**
-   * Number of pointer levels from this pointer
-   */
-  get pointerLevels(): number { return wrapJoinPoint(this._javaObject.getPointerLevels()) }
-  /**
-   * Sets the pointee type of this pointer type
-   */
-  setPointee(pointeeType: Type): void { return wrapJoinPoint(this._javaObject.setPointee(unwrapJoinPoint(pointeeType))); }
-}
-
-export class QualType extends Type {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get qualifiers(): string[] { return wrapJoinPoint(this._javaObject.getQualifiers()) }
-  get unqualifiedType(): Type { return wrapJoinPoint(this._javaObject.getUnqualifiedType()) }
-}
-
-export class ReturnStmt extends Statement {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get returnExpr(): Expression { return wrapJoinPoint(this._javaObject.getReturnExpr()) }
+  get isFirst(): boolean { return wrapJoinPoint(this._javaObject.isFirst()) }
+  get isLast(): boolean { return wrapJoinPoint(this._javaObject.isLast()) }
 }
 
   /**
-   * Represents a group of statements
+   * Represents a group of statements (e.g., function body, loop body, if/else body, etc.)
    */
 export class Scope extends Statement {
   /**
@@ -2606,13 +1618,19 @@ export class Scope extends Statement {
   /**
    * Returns the descendant statements of this scope, excluding other scopes, loops, ifs and wrapper statements
    */
-  get allStmts(): Statement[] { return wrapJoinPoint(this._javaObject.getAllStmts()) }
-  get firstStmt(): Statement { return wrapJoinPoint(this._javaObject.getFirstStmt()) }
-  get lastStmt(): Statement { return wrapJoinPoint(this._javaObject.getLastStmt()) }
+  get allStmts(): Statement[] { return wrapJoinPoint(this._javaObject.allStmts()) }
+  /**
+   * Returns the first statement in the scope
+   */
+  get firstStmt(): Statement { return wrapJoinPoint(this._javaObject.firstStmt()) }
+  /**
+   * Returns the last statement in the scope
+   */
+  get lastStmt(): Statement { return wrapJoinPoint(this._javaObject.lastStmt()) }
   /**
    * True if the scope does not have curly braces
    */
-  get naked(): boolean { return wrapJoinPoint(this._javaObject.getNaked()) }
+  get naked(): boolean { return wrapJoinPoint(this._javaObject.naked()) }
   /**
    * True if the scope does not have curly braces
    */
@@ -2620,15 +1638,11 @@ export class Scope extends Statement {
   /**
    * The statement that owns the scope (e.g., function, loop...)
    */
-  get owner(): Joinpoint { return wrapJoinPoint(this._javaObject.getOwner()) }
+  get owner(): Joinpoint { return wrapJoinPoint(this._javaObject.owner()) }
   /**
    * Returns the direct (children) statements of this scope
    */
-  get stmts(): Statement[] { return wrapJoinPoint(this._javaObject.getStmts()) }
-  /**
-   * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)
-   */
-  getNumStatements(flat: boolean = false): number { return wrapJoinPoint(this._javaObject.getNumStatements(unwrapJoinPoint(flat))); }
+  get stmts(): Statement[] { return wrapJoinPoint(this._javaObject.stmts()) }
   /**
    * Adds a new local variable to this scope
    */
@@ -2645,6 +1659,10 @@ export class Scope extends Statement {
    * DFG tester
    */
   dfg(): string { return wrapJoinPoint(this._javaObject.dfg()); }
+  /**
+   * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)
+   */
+  getNumStatements(flat: boolean = false): number { return wrapJoinPoint(this._javaObject.getNumStatements(unwrapJoinPoint(flat))); }
   insertBegin(node: Joinpoint): Joinpoint;
   insertBegin(code: string): Joinpoint;
   insertBegin(p1: Joinpoint | string): Joinpoint { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); }
@@ -2669,132 +1687,6 @@ export class Scope extends Statement {
   setNaked(isNaked: boolean): void { return wrapJoinPoint(this._javaObject.setNaked(unwrapJoinPoint(isNaked))); }
 }
 
-export class TagType extends Type {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  /**
-   * A 'decl' join point that represents the declaration of this tag type
-   */
-  get decl(): Decl { return wrapJoinPoint(this._javaObject.getDecl()) }
-  get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
-}
-
-export class TemplateSpecializationType extends Type {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get args(): string[] { return wrapJoinPoint(this._javaObject.getArgs()) }
-  get firstArgType(): Type { return wrapJoinPoint(this._javaObject.getFirstArgType()) }
-  get numArgs(): number { return wrapJoinPoint(this._javaObject.getNumArgs()) }
-  get templateName(): string { return wrapJoinPoint(this._javaObject.getTemplateName()) }
-}
-
-  /**
-   * Declaration of a typedef-name via the 'typedef' type specifier
-   */
-export class TypedefDecl extends TypedefNameDecl {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-}
-
-  /**
-   * Represents a variable declaration or definition
-   */
-export class Vardecl extends Declarator {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: "name",
-  };
-  /**
-   * The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)
-   */
-  get definition(): Vardecl { return wrapJoinPoint(this._javaObject.getDefinition()) }
-  /**
-   * True, if vardecl has an initialization value
-   */
-  get hasInit(): boolean { return wrapJoinPoint(this._javaObject.getHasInit()) }
-  /**
-   * If vardecl has an initialization value, returns an expression with that value
-   */
-  get init(): Expression { return wrapJoinPoint(this._javaObject.getInit()) }
-  /**
-   * If vardecl has an initialization value, returns an expression with that value
-   */
-  set init(value: Expression | string) { this._javaObject.setInit(unwrapJoinPoint(value)); }
-  /**
-   * The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit
-   */
-  get initStyle(): string { return wrapJoinPoint(this._javaObject.getInitStyle()) }
-  /**
-   * True, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function.
-   */
-  get isGlobal(): boolean { return wrapJoinPoint(this._javaObject.getIsGlobal()) }
-  /**
-   * True, if vardecl is a function parameter
-   */
-  get isParam(): boolean { return wrapJoinPoint(this._javaObject.getIsParam()) }
-  /**
-   * Storage class specifier, which can be none, extern, static, __private_extern__, auto, register
-   */
-  get storageClass(): StorageClass { return wrapJoinPoint(this._javaObject.getStorageClass()) }
-  /**
-   * Storage class specifier, which can be none, extern, static, __private_extern__, auto, register
-   */
-  set storageClass(value: StorageClass) { this._javaObject.setStorageClass(unwrapJoinPoint(value)); }
-  /**
-   * If vardecl already has an initialization, removes it.
-   */
-  removeInit(removeConst: boolean = true): void { return wrapJoinPoint(this._javaObject.removeInit(unwrapJoinPoint(removeConst))); }
-  /**
-   * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
-   */
-  setInit(init: Expression): void;
-  /**
-   * Converts the given string to a literal expression and sets it as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
-   */
-  setInit(init: string): void;
-  /**
-   * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
-   */
-  setInit(p1: Expression | string): void { return wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(p1))); }
-  /**
-   * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
-   */
-  setStorageClass(storageClass: StorageClass): void { return wrapJoinPoint(this._javaObject.setStorageClass(unwrapJoinPoint(storageClass))); }
-  /**
-   * Creates a new varref based on this vardecl
-   */
-  varref(): Varref { return wrapJoinPoint(this._javaObject.varref()); }
-}
-
-export class VariableArrayType extends ArrayType {
-  /**
-   * @internal
-   */
-  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
-    name: null,
-  };
-  get sizeExpr(): Expression { return wrapJoinPoint(this._javaObject.getSizeExpr()) }
-  set sizeExpr(value: Expression) { this._javaObject.setSizeExpr(unwrapJoinPoint(value)); }
-  /**
-   * Sets the size expression of this variable array type
-   */
-  setSizeExpr(sizeExpr: Expression): void { return wrapJoinPoint(this._javaObject.setSizeExpr(unwrapJoinPoint(sizeExpr))); }
-}
-
 export class Body extends Scope {
   /**
    * @internal
@@ -2802,6 +1694,766 @@ export class Body extends Scope {
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
+}
+
+export class Loop extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: "kind",
+  };
+  get body(): Scope { return wrapJoinPoint(this._javaObject.body()) }
+  set body(value: Scope) { this._javaObject.setBody(unwrapJoinPoint(value)); }
+  /**
+   * The statement of the loop condition
+   */
+  get cond(): Statement { return wrapJoinPoint(this._javaObject.cond()) }
+  /**
+   * The statement of the loop condition
+   */
+  set cond(value: string) { this._javaObject.setCond(unwrapJoinPoint(value)); }
+  get condRelation(): Relation { return wrapJoinPoint(this._javaObject.condRelation()) }
+  set condRelation(value: Relation) { this._javaObject.setCondRelation(unwrapJoinPoint(value)); }
+  get controlVar(): string { return wrapJoinPoint(this._javaObject.controlVar()) }
+  get controlVarref(): Varref { return wrapJoinPoint(this._javaObject.controlVarref()) }
+  /**
+   * The expression of the last value of the control variable (e.g. '10' in 'size_t i = 0; i < 10; i++')
+   */
+  get endValue(): string { return wrapJoinPoint(this._javaObject.endValue()) }
+  /**
+   * The expression of the last value of the control variable (e.g. '10' in 'size_t i = 0; i < 10; i++')
+   */
+  set endValue(value: string) { this._javaObject.setEndValue(unwrapJoinPoint(value)); }
+  /**
+   * True if the condition of the loop in the canonical format, and is one of: <, <=, >, >=
+   */
+  get hasCondRelation(): boolean { return wrapJoinPoint(this._javaObject.hasCondRelation()) }
+  /**
+   * Uniquely identifies the loop inside the program
+   */
+  get id(): string { return wrapJoinPoint(this._javaObject.id()) }
+  /**
+   * The statement of the loop initialization
+   */
+  get init(): Statement { return wrapJoinPoint(this._javaObject.init()) }
+  /**
+   * The statement of the loop initialization
+   */
+  set init(value: string) { this._javaObject.setInit(unwrapJoinPoint(value)); }
+  /**
+   * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
+   */
+  get initValue(): string { return wrapJoinPoint(this._javaObject.initValue()) }
+  /**
+   * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
+   */
+  set initValue(value: string) { this._javaObject.setInitValue(unwrapJoinPoint(value)); }
+  get isInnermost(): boolean { return wrapJoinPoint(this._javaObject.isInnermost()) }
+  get isOutermost(): boolean { return wrapJoinPoint(this._javaObject.isOutermost()) }
+  get isParallel(): boolean { return wrapJoinPoint(this._javaObject.isParallel()) }
+  set isParallel(value: boolean) { this._javaObject.setIsParallel(unwrapJoinPoint(value)); }
+  get iterations(): number { return wrapJoinPoint(this._javaObject.iterations()) }
+  get iterationsExpr(): Expression { return wrapJoinPoint(this._javaObject.iterationsExpr()) }
+  get kind(): LoopKind { return wrapJoinPoint(this._javaObject.kind()) }
+  set kind(value: LoopKind) { this._javaObject.setKind(unwrapJoinPoint(value)); }
+  get nestedLevel(): number { return wrapJoinPoint(this._javaObject.nestedLevel()) }
+  get rank(): number[] { return wrapJoinPoint(this._javaObject.rank()) }
+  /**
+   * The statement of the loop step
+   */
+  get step(): Statement { return wrapJoinPoint(this._javaObject.step()) }
+  /**
+   * The statement of the loop step
+   */
+  set step(value: string) { this._javaObject.setStep(unwrapJoinPoint(value)); }
+  /**
+   * The expression of the step value of the control variable (e.g. '1' in 'size_t i = 0; i < 10; i++')
+   */
+  get stepValue(): string { return wrapJoinPoint(this._javaObject.stepValue()) }
+  /**
+   * Interchanges two for loops, if possible
+   */
+  interchange(otherLoop: Loop): void { return wrapJoinPoint(this._javaObject.interchange(unwrapJoinPoint(otherLoop))); }
+  /**
+   * True if this loop can be interchanged with the given loop, which means that they are adjacent and have no data dependencies that would prevent their interchange. This is a conservative test.
+   */
+  isInterchangeable(otherLoop: Loop): boolean { return wrapJoinPoint(this._javaObject.isInterchangeable(unwrapJoinPoint(otherLoop))); }
+  /**
+   * Sets the body of the loop
+   */
+  setBody(body: Scope): void { return wrapJoinPoint(this._javaObject.setBody(unwrapJoinPoint(body))); }
+  /**
+   * Sets the conditional statement of the loop. Works with loops of kind 'for'
+   */
+  setCond(condCode: string): void { return wrapJoinPoint(this._javaObject.setCond(unwrapJoinPoint(condCode))); }
+  /**
+   * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
+   */
+  setCondRelation(operator: Relation): void { return wrapJoinPoint(this._javaObject.setCondRelation(unwrapJoinPoint(operator))); }
+  /**
+   * Sets the end value of the loop. Works with loops of kind 'for'
+   */
+  setEndValue(initCode: string): void { return wrapJoinPoint(this._javaObject.setEndValue(unwrapJoinPoint(initCode))); }
+  /**
+   * Sets the init statement of the loop
+   */
+  setInit(initCode: string): void { return wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(initCode))); }
+  /**
+   * Sets the init value of the loop. Works with loops of kind 'for'
+   */
+  setInitValue(initCode: string): void { return wrapJoinPoint(this._javaObject.setInitValue(unwrapJoinPoint(initCode))); }
+  /**
+   * Sets the attribute 'isParallel' of the loop
+   */
+  setIsParallel(isParallel: boolean): void { return wrapJoinPoint(this._javaObject.setIsParallel(unwrapJoinPoint(isParallel))); }
+  /**
+   * Sets the kind of the loop
+   */
+  setKind(kind: LoopKind): void { return wrapJoinPoint(this._javaObject.setKind(unwrapJoinPoint(kind))); }
+  /**
+   * Sets the step statement of the loop. Works with loops of kind 'for'
+   */
+  setStep(stepCode: string): void { return wrapJoinPoint(this._javaObject.setStep(unwrapJoinPoint(stepCode))); }
+  /**
+   * Applies loop tiling to this loop
+   */
+  tile(blockSize: string, reference: Statement, useTernary: boolean = true): Statement { return wrapJoinPoint(this._javaObject.tile(unwrapJoinPoint(blockSize), unwrapJoinPoint(reference), unwrapJoinPoint(useTernary))); }
+}
+
+export class If extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get cond(): Expression { return wrapJoinPoint(this._javaObject.cond()) }
+  set cond(value: Expression) { this._javaObject.setCond(unwrapJoinPoint(value)); }
+  get condDecl(): Vardecl { return wrapJoinPoint(this._javaObject.condDecl()) }
+  get else(): Scope { return wrapJoinPoint(this._javaObject.else()) }
+  set else(value: Statement) { this._javaObject.setElse(unwrapJoinPoint(value)); }
+  get then(): Scope { return wrapJoinPoint(this._javaObject.then()) }
+  set then(value: Statement) { this._javaObject.setThen(unwrapJoinPoint(value)); }
+  /**
+   * Sets the condition of the if
+   */
+  setCond(cond: Expression): void { return wrapJoinPoint(this._javaObject.setCond(unwrapJoinPoint(cond))); }
+  /**
+   * Sets the body of the else
+   */
+  setElse(elseStatement: Statement): void { return wrapJoinPoint(this._javaObject.setElse(unwrapJoinPoint(elseStatement))); }
+  /**
+   * Sets the body of the if
+   */
+  setThen(then: Statement): void { return wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then))); }
+}
+
+export class WrapperStmt extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get content(): Joinpoint { return wrapJoinPoint(this._javaObject.content()) }
+  get kind(): WrapperStatementKind { return wrapJoinPoint(this._javaObject.kind()) }
+}
+
+export class ReturnStmt extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get returnExpr(): Expression { return wrapJoinPoint(this._javaObject.returnExpr()) }
+}
+
+export class Switch extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * The case statements inside this switch
+   */
+  get cases(): Case[] { return wrapJoinPoint(this._javaObject.cases()) }
+  get condition(): Expression { return wrapJoinPoint(this._javaObject.condition()) }
+  /**
+   * The default case statement of this switch statement or undefined if it does not have a default case
+   */
+  get getDefaultCase(): Case { return wrapJoinPoint(this._javaObject.getDefaultCase()) }
+  /**
+   * True if there is a default case in this switch statement, false otherwise
+   */
+  get hasDefaultCase(): boolean { return wrapJoinPoint(this._javaObject.hasDefaultCase()) }
+}
+
+export class SwitchCase extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
+export class Case extends SwitchCase {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * The instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
+   */
+  get instructions(): Statement[] { return wrapJoinPoint(this._javaObject.instructions()) }
+  get isDefault(): boolean { return wrapJoinPoint(this._javaObject.isDefault()) }
+  /**
+   * True if this case does not contain instructions (i.e., it is directly above another case), false otherwise
+   */
+  get isEmpty(): boolean { return wrapJoinPoint(this._javaObject.isEmpty()) }
+  /**
+   * The case statement that comes after this case, or undefined if there are no more case statements
+   */
+  get nextCase(): Case { return wrapJoinPoint(this._javaObject.nextCase()) }
+  /**
+   * The first statement that is not a case that will be executed by this case statement
+   */
+  get nextInstruction(): Statement { return wrapJoinPoint(this._javaObject.nextInstruction()) }
+  /**
+   * The values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
+   */
+  get values(): Expression[] { return wrapJoinPoint(this._javaObject.values()) }
+}
+
+export class Default extends SwitchCase {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
+export class DeclStmt extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * The declarations in this statement
+   */
+  get decls(): Decl[] { return wrapJoinPoint(this._javaObject.decls()) }
+}
+
+export class ExprStmt extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * The expression join point associated to this exprStmt
+   */
+  get expr(): Expression { return wrapJoinPoint(this._javaObject.expr()) }
+}
+
+export class GotoStmt extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get label(): LabelDecl { return wrapJoinPoint(this._javaObject.label()) }
+  set label(value: LabelDecl) { this._javaObject.setLabel(unwrapJoinPoint(value)); }
+  /**
+   * Sets the label of the goto
+   */
+  setLabel(label: LabelDecl): void { return wrapJoinPoint(this._javaObject.setLabel(unwrapJoinPoint(label))); }
+}
+
+export class LabelStmt extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get decl(): LabelDecl { return wrapJoinPoint(this._javaObject.decl()) }
+  set decl(value: LabelDecl) { this._javaObject.setDecl(unwrapJoinPoint(value)); }
+  /**
+   * Sets the label of the label statement
+   */
+  setDecl(label: LabelDecl): void { return wrapJoinPoint(this._javaObject.setDecl(unwrapJoinPoint(label))); }
+}
+
+export class EmptyStmt extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
+export class Continue extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
+export class Break extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * The enclosing statement related to this break. It should be either a loop or a switch statement.
+   */
+  get enclosingStmt(): Statement { return wrapJoinPoint(this._javaObject.enclosingStmt()) }
+}
+
+export class AsmStmt extends Statement {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get clobbers(): string[] { return wrapJoinPoint(this._javaObject.clobbers()) }
+  get isSimple(): boolean { return wrapJoinPoint(this._javaObject.isSimple()) }
+  get isVolatile(): boolean { return wrapJoinPoint(this._javaObject.isVolatile()) }
+}
+
+export class Expression extends Joinpoint {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * A 'decl' join point that represents the declaration associated with this expression, or undefined if there is none
+   */
+  get decl(): Decl { return wrapJoinPoint(this._javaObject.decl()) }
+  /**
+   * Returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
+   */
+  get implicitCast(): Cast { return wrapJoinPoint(this._javaObject.implicitCast()) }
+  /**
+   * True if the expression is part of an argument of a function call
+   */
+  get isFunctionArgument(): boolean { return wrapJoinPoint(this._javaObject.isFunctionArgument()) }
+  get use(): ExpressionUse { return wrapJoinPoint(this._javaObject.use()) }
+  /**
+   * A 'vardecl' join point that represents the variable declaration associated with this expression, or undefined if there is none
+   */
+  get vardecl(): Vardecl { return wrapJoinPoint(this._javaObject.vardecl()) }
+}
+
+export class Call extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: "name",
+  };
+  /**
+   * An alias for 'args'
+   * 
+   * @deprecated
+   */
+  get argList(): Expression[] { return wrapJoinPoint(this._javaObject.argList()) }
+  /**
+   * An array with the arguments of the call
+   */
+  get args(): Expression[] { return wrapJoinPoint(this._javaObject.args()) }
+  /**
+   * A 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found
+   */
+  get declaration(): FunctionJp { return wrapJoinPoint(this._javaObject.declaration()) }
+  /**
+   * A 'function' join point that represents the function definition of the call; 'undefined' if no definition was found
+   */
+  get definition(): FunctionJp { return wrapJoinPoint(this._javaObject.definition()) }
+  /**
+   * A function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)
+   */
+  get directCallee(): FunctionJp { return wrapJoinPoint(this._javaObject.directCallee()) }
+  /**
+   * A function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration
+   */
+  get function(): FunctionJp { return wrapJoinPoint(this._javaObject.function()) }
+  /**
+   * The function type of the call, which includes the return type and the types of the parameters
+   */
+  get functionType(): FunctionType { return wrapJoinPoint(this._javaObject.functionType()) }
+  get isMemberAccess(): boolean { return wrapJoinPoint(this._javaObject.isMemberAccess()) }
+  get isStmtCall(): boolean { return wrapJoinPoint(this._javaObject.isStmtCall()) }
+  get memberAccess(): MemberAccess { return wrapJoinPoint(this._javaObject.memberAccess()) }
+  get memberNames(): string[] { return wrapJoinPoint(this._javaObject.memberNames()) }
+  get name(): string { return wrapJoinPoint(this._javaObject.name()) }
+  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
+  get numArgs(): number { return wrapJoinPoint(this._javaObject.numArgs()) }
+  /**
+   * The return type of the call
+   */
+  get returnType(): Type { return wrapJoinPoint(this._javaObject.returnType()) }
+  /**
+   * Similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function
+   */
+  get signature(): string { return wrapJoinPoint(this._javaObject.signature()) }
+  /**
+   * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
+   */
+  addArg(argCode: string, type?: Type): void;
+  /**
+   * Adds an argument at the end of the call, creating a literal 'type' from the type string
+   */
+  addArg(arg: string, type: string): void;
+  /**
+   * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
+   */
+  addArg(p1: string, p2?: Type | string): void { return wrapJoinPoint(this._javaObject.addArg(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  getArg(index: number): Expression { return wrapJoinPoint(this._javaObject.getArg(unwrapJoinPoint(index))); }
+  /**
+   * Tries to inline this call
+   */
+  inline(): boolean { return wrapJoinPoint(this._javaObject.inline()); }
+  setArg(index: number, expr: Expression): void { return wrapJoinPoint(this._javaObject.setArg(unwrapJoinPoint(index), unwrapJoinPoint(expr))); }
+  setArgFromString(index: number, expr: string): void { return wrapJoinPoint(this._javaObject.setArgFromString(unwrapJoinPoint(index), unwrapJoinPoint(expr))); }
+  /**
+   * Changes the name of the call
+   */
+  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
+  /**
+   * Wraps this call with a possibly new wrapping function
+   */
+  wrap(name: string): void { return wrapJoinPoint(this._javaObject.wrap(unwrapJoinPoint(name))); }
+}
+
+export class MemberCall extends Call {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: "name",
+  };
+  get base(): Expression { return wrapJoinPoint(this._javaObject.base()) }
+  get rootBase(): Expression { return wrapJoinPoint(this._javaObject.rootBase()) }
+}
+
+export class CudaKernelCall extends Call {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: "name",
+  };
+  get config(): Expression[] { return wrapJoinPoint(this._javaObject.config()) }
+  set config(value: Expression[]) { this._javaObject.setConfig(unwrapJoinPoint(value)); }
+  setConfig(args: Expression[]): void { return wrapJoinPoint(this._javaObject.setConfig(unwrapJoinPoint(args))); }
+  setConfigFromStrings(args: string[]): void { return wrapJoinPoint(this._javaObject.setConfigFromStrings(unwrapJoinPoint(args))); }
+}
+
+export class Op extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get isBitwise(): boolean { return wrapJoinPoint(this._javaObject.isBitwise()) }
+  /**
+   * The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div, rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign, rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not, real, imag, extension, cowait. If it is a ternary operator, the value will be 'ternary'
+   */
+  get kind(): OpKind { return wrapJoinPoint(this._javaObject.kind()) }
+  get operator(): string { return wrapJoinPoint(this._javaObject.operator()) }
+}
+
+export class BinaryOp extends Op {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get isAssignment(): boolean { return wrapJoinPoint(this._javaObject.isAssignment()) }
+  get left(): Expression { return wrapJoinPoint(this._javaObject.left()) }
+  set left(value: Expression) { this._javaObject.setLeft(unwrapJoinPoint(value)); }
+  get right(): Expression { return wrapJoinPoint(this._javaObject.right()) }
+  set right(value: Expression) { this._javaObject.setRight(unwrapJoinPoint(value)); }
+  setLeft(left: Expression): void { return wrapJoinPoint(this._javaObject.setLeft(unwrapJoinPoint(left))); }
+  setRight(right: Expression): void { return wrapJoinPoint(this._javaObject.setRight(unwrapJoinPoint(right))); }
+}
+
+export class UnaryOp extends Op {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get isPointerDeref(): boolean { return wrapJoinPoint(this._javaObject.isPointerDeref()) }
+  get operand(): Expression { return wrapJoinPoint(this._javaObject.operand()) }
+}
+
+export class TernaryOp extends Op {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get cond(): Expression { return wrapJoinPoint(this._javaObject.cond()) }
+  get falseExpr(): Expression { return wrapJoinPoint(this._javaObject.falseExpr()) }
+  get trueExpr(): Expression { return wrapJoinPoint(this._javaObject.trueExpr()) }
+}
+
+export class NewExpr extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
+export class DeleteExpr extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
+  /**
+   * A reference to a variable
+   */
+export class Varref extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: "name",
+  };
+  get declaration(): Declarator { return wrapJoinPoint(this._javaObject.declaration()) }
+  /**
+   * True if this variable reference has a MS-style property, false otherwise
+   */
+  get hasProperty(): boolean { return wrapJoinPoint(this._javaObject.hasProperty()) }
+  /**
+   * True if this varref represents a function call
+   */
+  get isFunctionCall(): boolean { return wrapJoinPoint(this._javaObject.isFunctionCall()) }
+  get kind(): string { return wrapJoinPoint(this._javaObject.kind()) }
+  get name(): string { return wrapJoinPoint(this._javaObject.name()) }
+  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
+  /**
+   * If this variable reference has a MS-style property, returns the property name. Returns undefined otherwise
+   */
+  get property(): string { return wrapJoinPoint(this._javaObject.property()) }
+  /**
+   * Expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
+   */
+  get useExpr(): Expression { return wrapJoinPoint(this._javaObject.useExpr()) }
+  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
+}
+
+export class Cast extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get fromType(): Type { return wrapJoinPoint(this._javaObject.fromType()) }
+  /**
+   * @deprecated Use expr.implicitCast instead
+   */
+  get isImplicitCast(): boolean { return wrapJoinPoint(this._javaObject.isImplicitCast()) }
+  get subExpr(): Expression { return wrapJoinPoint(this._javaObject.subExpr()) }
+  get toType(): Type { return wrapJoinPoint(this._javaObject.toType()) }
+}
+
+export class ParenExpr extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * Returns the expression inside this parenthesis expression
+   */
+  get subExpr(): Expression { return wrapJoinPoint(this._javaObject.subExpr()) }
+}
+
+export class ArrayAccess extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * Expression representing the variable of the array access (can be a varref, memberAccess...)
+   */
+  get arrayVar(): Expression { return wrapJoinPoint(this._javaObject.arrayVar()) }
+  /**
+   * If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name
+   */
+  get name(): string { return wrapJoinPoint(this._javaObject.name()) }
+  /**
+   * The number of subscripts of this array access
+   */
+  get numSubscripts(): number { return wrapJoinPoint(this._javaObject.numSubscripts()) }
+  /**
+   * A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript
+   */
+  get parentAccess(): ArrayAccess { return wrapJoinPoint(this._javaObject.parentAccess()) }
+  /**
+   * Expression of the array access subscript
+   */
+  get subscript(): Expression[] { return wrapJoinPoint(this._javaObject.subscript()) }
+}
+
+export class MemberAccess extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * True if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
+   */
+  get arrow(): boolean { return wrapJoinPoint(this._javaObject.arrow()) }
+  /**
+   * True if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
+   */
+  set arrow(value: boolean) { this._javaObject.setArrow(unwrapJoinPoint(value)); }
+  /**
+   * Expression of the base of this member access
+   */
+  get base(): Expression { return wrapJoinPoint(this._javaObject.base()) }
+  get memberChain(): Expression[] { return wrapJoinPoint(this._javaObject.memberChain()) }
+  get memberChainNames(): string[] { return wrapJoinPoint(this._javaObject.memberChainNames()) }
+  get name(): string { return wrapJoinPoint(this._javaObject.name()) }
+  setArrow(isArrow: boolean): void { return wrapJoinPoint(this._javaObject.setArrow(unwrapJoinPoint(isArrow))); }
+}
+
+export class UnaryExprOrType extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get argExpr(): Expression { return wrapJoinPoint(this._javaObject.argExpr()) }
+  get argType(): Type { return wrapJoinPoint(this._javaObject.argType()) }
+  set argType(value: Type) { this._javaObject.setArgType(unwrapJoinPoint(value)); }
+  get hasArgExpr(): boolean { return wrapJoinPoint(this._javaObject.hasArgExpr()) }
+  get hasTypeExpr(): boolean { return wrapJoinPoint(this._javaObject.hasTypeExpr()) }
+  get kind(): string { return wrapJoinPoint(this._javaObject.kind()) }
+  setArgType(argType: Type): void { return wrapJoinPoint(this._javaObject.setArgType(unwrapJoinPoint(argType))); }
+}
+
+export class This extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
+export class Literal extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
+export class IntLiteral extends Literal {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get value(): number { return wrapJoinPoint(this._javaObject.value()) }
+}
+
+export class FloatLiteral extends Literal {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get value(): number { return wrapJoinPoint(this._javaObject.value()) }
+}
+
+export class BoolLiteral extends Literal {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get value(): boolean { return wrapJoinPoint(this._javaObject.value()) }
+}
+
+export class InitList extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * [May be undefined] If this initializer list initializes an array with more elements than there are initializers in the list, specifies an expression to be used for value initialization of the rest of the elements
+   */
+  get arrayFiller(): Expression { return wrapJoinPoint(this._javaObject.arrayFiller()) }
+}
+
+export class ImplicitValue extends Expression {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
+export class Comment extends Joinpoint {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get text(): string { return wrapJoinPoint(this._javaObject.text()) }
+  set text(value: string) { this._javaObject.setText(unwrapJoinPoint(value)); }
+  setText(text: string): void { return wrapJoinPoint(this._javaObject.setText(unwrapJoinPoint(text))); }
 }
 
 export class CilkFor extends Loop {
@@ -2813,17 +2465,16 @@ export class CilkFor extends Loop {
   };
 }
 
-export class EnumType extends TagType {
+export class CilkSync extends Statement {
   /**
    * @internal
    */
   static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
     name: null,
   };
-  get integerType(): Type { return wrapJoinPoint(this._javaObject.getIntegerType()) }
 }
 
-export class Param extends Vardecl {
+export class CilkSpawn extends Call {
   /**
    * @internal
    */
@@ -2832,115 +2483,505 @@ export class Param extends Vardecl {
   };
 }
 
+export class Attribute extends Joinpoint {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get kind(): string { return wrapJoinPoint(this._javaObject.kind()) }
+}
+
+export class Type extends Joinpoint {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get arrayDims(): number[] { return wrapJoinPoint(this._javaObject.arrayDims()) }
+  get arraySize(): number { return wrapJoinPoint(this._javaObject.arraySize()) }
+  get constant(): boolean { return wrapJoinPoint(this._javaObject.constant()) }
+  /**
+   * Single-step desugar. Returns the type itself if it does not have sugar
+   */
+  get desugar(): Type { return wrapJoinPoint(this._javaObject.desugar()) }
+  /**
+   * Single-step desugar. Returns the type itself if it does not have sugar
+   */
+  set desugar(value: Type) { this._javaObject.setDesugar(unwrapJoinPoint(value)); }
+  /**
+   * Completely desugars the type
+   */
+  get desugarAll(): Type { return wrapJoinPoint(this._javaObject.desugarAll()) }
+  /**
+   * A tree representation of the fields of this type
+   */
+  get fieldTree(): string { return wrapJoinPoint(this._javaObject.fieldTree()) }
+  get hasSugar(): boolean { return wrapJoinPoint(this._javaObject.hasSugar()) }
+  get hasTemplateArgs(): boolean { return wrapJoinPoint(this._javaObject.hasTemplateArgs()) }
+  get isArray(): boolean { return wrapJoinPoint(this._javaObject.isArray()) }
+  /**
+   * True if this is a type declared with the 'auto' keyword
+   */
+  get isAuto(): boolean { return wrapJoinPoint(this._javaObject.isAuto()) }
+  get isBuiltin(): boolean { return wrapJoinPoint(this._javaObject.isBuiltin()) }
+  get isPointer(): boolean { return wrapJoinPoint(this._javaObject.isPointer()) }
+  get isTopLevel(): boolean { return wrapJoinPoint(this._javaObject.isTopLevel()) }
+  get kind(): string { return wrapJoinPoint(this._javaObject.kind()) }
+  /**
+   * Ignores certain types (e.g., DecayedType)
+   */
+  get normalize(): Type { return wrapJoinPoint(this._javaObject.normalize()) }
+  get templateArgsStrings(): string[] { return wrapJoinPoint(this._javaObject.templateArgsStrings()) }
+  get templateArgsTypes(): Type[] { return wrapJoinPoint(this._javaObject.templateArgsTypes()) }
+  set templateArgsTypes(value: Type[]) { this._javaObject.setTemplateArgsTypes(unwrapJoinPoint(value)); }
+  /**
+   * Maps names of join point fields that represent type join points, to their respective values
+   */
+  get typeFields(): Record<string, Type> { return wrapJoinPoint(this._javaObject.typeFields()) }
+  /**
+   * If the type encapsulates another type, returns the encapsulated type
+   */
+  get unwrap(): Type { return wrapJoinPoint(this._javaObject.unwrap()) }
+  /**
+   * Returns a new node based on this type with the qualifier const
+   */
+  asConst(): Type { return wrapJoinPoint(this._javaObject.asConst()); }
+  /**
+   * Sets the desugared type of this type
+   */
+  setDesugar(desugaredType: Type): void { return wrapJoinPoint(this._javaObject.setDesugar(unwrapJoinPoint(desugaredType))); }
+  /**
+   * Sets the template argument types of a template type
+   */
+  setTemplateArgsTypes(templateArgTypes: Type[]): void { return wrapJoinPoint(this._javaObject.setTemplateArgsTypes(unwrapJoinPoint(templateArgTypes))); }
+  /**
+   * Sets a single template argument type of a template type
+   */
+  setTemplateArgType(index: number, templateArgType: Type): void { return wrapJoinPoint(this._javaObject.setTemplateArgType(unwrapJoinPoint(index), unwrapJoinPoint(templateArgType))); }
+  /**
+   * Changes a single occurrence of a type field that has the current value with new value. Returns true if there was a change
+   */
+  setTypeFieldByValueRecursive(currentValue: object, newValue: object): boolean { return wrapJoinPoint(this._javaObject.setTypeFieldByValueRecursive(unwrapJoinPoint(currentValue), unwrapJoinPoint(newValue))); }
+  /**
+   * Replaces an underlying type of this instance with new type, if it matches the old type
+   */
+  setUnderlyingType(oldValue: Type, newValue: Type): Type { return wrapJoinPoint(this._javaObject.setUnderlyingType(unwrapJoinPoint(oldValue), unwrapJoinPoint(newValue))); }
+}
+
+export class PointerType extends Type {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get pointee(): Type { return wrapJoinPoint(this._javaObject.pointee()) }
+  set pointee(value: Type) { this._javaObject.setPointee(unwrapJoinPoint(value)); }
+  /**
+   * Number of pointer levels from this pointer
+   */
+  get pointerLevels(): number { return wrapJoinPoint(this._javaObject.pointerLevels()) }
+  /**
+   * Sets the pointee type of this pointer type
+   */
+  setPointee(pointeeType: Type): void { return wrapJoinPoint(this._javaObject.setPointee(unwrapJoinPoint(pointeeType))); }
+}
+
+export class ArrayType extends Type {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get elementType(): Type { return wrapJoinPoint(this._javaObject.elementType()) }
+  set elementType(value: Type) { this._javaObject.setElementType(unwrapJoinPoint(value)); }
+  /**
+   * Sets the element type of the array
+   */
+  setElementType(arrayElementType: Type): void { return wrapJoinPoint(this._javaObject.setElementType(unwrapJoinPoint(arrayElementType))); }
+}
+
+export class AdjustedType extends Type {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * The type that is being adjusted
+   */
+  get originalType(): Type { return wrapJoinPoint(this._javaObject.originalType()) }
+}
+
+export class VariableArrayType extends ArrayType {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get sizeExpr(): Expression { return wrapJoinPoint(this._javaObject.sizeExpr()) }
+  set sizeExpr(value: Expression) { this._javaObject.setSizeExpr(unwrapJoinPoint(value)); }
+  /**
+   * Sets the size expression of this variable array type
+   */
+  setSizeExpr(sizeExpr: Expression): void { return wrapJoinPoint(this._javaObject.setSizeExpr(unwrapJoinPoint(sizeExpr))); }
+}
+
+export class IncompleteArrayType extends ArrayType {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
+export class TagType extends Type {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * A 'decl' join point that represents the declaration of this tag type
+   */
+  get decl(): Decl { return wrapJoinPoint(this._javaObject.decl()) }
+  get name(): string { return wrapJoinPoint(this._javaObject.name()) }
+}
+
+export class EnumType extends TagType {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get integerType(): Type { return wrapJoinPoint(this._javaObject.integerType()) }
+}
+
+export class TemplateSpecializationType extends Type {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get args(): string[] { return wrapJoinPoint(this._javaObject.args()) }
+  get firstArgType(): Type { return wrapJoinPoint(this._javaObject.firstArgType()) }
+  get numArgs(): number { return wrapJoinPoint(this._javaObject.numArgs()) }
+  get templateName(): string { return wrapJoinPoint(this._javaObject.templateName()) }
+}
+
+export class FunctionType extends Type {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get paramTypes(): Type[] { return wrapJoinPoint(this._javaObject.paramTypes()) }
+  get returnType(): Type { return wrapJoinPoint(this._javaObject.returnType()) }
+  set returnType(value: Type) { this._javaObject.setReturnType(unwrapJoinPoint(value)); }
+  /**
+   * Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a parameter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use function.setParamType
+   */
+  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(unwrapJoinPoint(index), unwrapJoinPoint(newType))); }
+  /**
+   * Sets the return type of the FunctionType
+   */
+  setReturnType(newType: Type): void { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(newType))); }
+}
+
+export class QualType extends Type {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get qualifiers(): string[] { return wrapJoinPoint(this._javaObject.qualifiers()) }
+  get unqualifiedType(): Type { return wrapJoinPoint(this._javaObject.unqualifiedType()) }
+}
+
+export class BuiltinType extends Type {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get builtinKind(): string { return wrapJoinPoint(this._javaObject.builtinKind()) }
+  /**
+   * True, if it is a floating type (e.g., float, double)
+   */
+  get isFloat(): boolean { return wrapJoinPoint(this._javaObject.isFloat()) }
+  /**
+   * True, if it is an integer type
+   */
+  get isInteger(): boolean { return wrapJoinPoint(this._javaObject.isInteger()) }
+  /**
+   * True, if it is a signed type
+   */
+  get isSigned(): boolean { return wrapJoinPoint(this._javaObject.isSigned()) }
+  /**
+   * True, if it is an unsigned type
+   */
+  get isUnsigned(): boolean { return wrapJoinPoint(this._javaObject.isUnsigned()) }
+  /**
+   * True, if it is a void type
+   */
+  get isVoid(): boolean { return wrapJoinPoint(this._javaObject.isVoid()) }
+}
+
+export class ParenType extends Type {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  get innerType(): Type { return wrapJoinPoint(this._javaObject.innerType()) }
+  set innerType(value: Type) { this._javaObject.setInnerType(unwrapJoinPoint(value)); }
+  /**
+   * Sets the inner type of this paren type
+   */
+  setInnerType(innerType: Type): void { return wrapJoinPoint(this._javaObject.setInnerType(unwrapJoinPoint(innerType))); }
+}
+
+export class UndefinedType extends Type {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+}
+
+  /**
+   * Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name, e.g., N::M::type, or both. This type is used to keep track of a type name as written in the source code, including tag keywords and any nested-name-specifiers. The type itself is always 'sugar', used to express what was written in the source code but containing no additional semantic information.
+   */
+export class ElaboratedType extends Type {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * The keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename
+   */
+  get keyword(): string { return wrapJoinPoint(this._javaObject.keyword()) }
+  /**
+   * The type that is being prefixed with the qualifier
+   */
+  get namedType(): Type { return wrapJoinPoint(this._javaObject.namedType()) }
+  /**
+   * The qualifier of this elaborated type, if present (e.g., A::)
+   */
+  get qualifier(): string { return wrapJoinPoint(this._javaObject.qualifier()) }
+}
+
+export class TypedefType extends Type {
+  /**
+   * @internal
+   */
+  static readonly _defaultAttributeInfo: {readonly map?: DefaultAttributeMap, readonly name: string | null, readonly type?: PrivateMapper, readonly jpMapper?: typeof JoinpointMapper} = {
+    name: null,
+  };
+  /**
+   * The typedef declaration associated with this typedef type
+   */
+  get decl(): TypedefNameDecl { return wrapJoinPoint(this._javaObject.decl()) }
+  /**
+   * The type being aliased
+   */
+  get underlyingType(): Type { return wrapJoinPoint(this._javaObject.underlyingType()) }
+}
+
 export enum StorageClass {
+  NONE = "none",
   AUTO = "auto",
   EXTERN = "extern",
-  NONE = "none",
   PRIVATE_EXTERN = "private_extern",
   REGISTER = "register",
   STATIC = "static",
 }
 
 export enum Relation {
-  EQ = "eq",
-  GE = "ge",
-  GT = "gt",
   LE = "le",
   LT = "lt",
+  GE = "ge",
+  GT = "gt",
+  EQ = "eq",
   NE = "ne",
+}
+
+export enum LoopKind {
+  for = "for",
+  while = "while",
+  dowhile = "dowhile",
+  foreach = "foreach",
+}
+
+export enum ExpressionUse {
+  read = "read",
+  write = "write",
+  readwrite = "readwrite",
+}
+
+export enum OpKind {
+  ptr_mem_d = "ptr_mem_d",
+  ptr_mem_i = "ptr_mem_i",
+  mul = "mul",
+  div = "div",
+  rem = "rem",
+  add = "add",
+  sub = "sub",
+  shl = "shl",
+  shr = "shr",
+  cmp = "cmp",
+  lt = "lt",
+  gt = "gt",
+  le = "le",
+  ge = "ge",
+  eq = "eq",
+  ne = "ne",
+  and = "and",
+  xor = "xor",
+  or = "or",
+  l_and = "l_and",
+  l_or = "l_or",
+  assign = "assign",
+  mul_assign = "mul_assign",
+  div_assign = "div_assign",
+  rem_assign = "rem_assign",
+  add_assign = "add_assign",
+  sub_assign = "sub_assign",
+  shl_assign = "shl_assign",
+  shr_assign = "shr_assign",
+  and_assign = "and_assign",
+  xor_assign = "xor_assign",
+  or_assign = "or_assign",
+  comma = "comma",
+  post_inc = "post_inc",
+  post_dec = "post_dec",
+  pre_inc = "pre_inc",
+  pre_dec = "pre_dec",
+  addr_of = "addr_of",
+  deref = "deref",
+  plus = "plus",
+  minus = "minus",
+  not = "not",
+  l_not = "l_not",
+  real = "real",
+  imag = "imag",
+  extension = "extension",
+  cowait = "cowait",
+  ternary = "ternary",
+}
+
+export enum WrapperStatementKind {
+  comment = "comment",
+  pragma = "pragma",
 }
 
 const JoinpointMapper = {
   joinpoint: Joinpoint,
-  attribute: Attribute,
-  clavaException: ClavaException,
-  comment: Comment,
-  decl: Decl,
   empty: Empty,
-  expression: Expression,
-  file: FileJp,
-  implicitValue: ImplicitValue,
-  include: Include,
-  initList: InitList,
-  literal: Literal,
-  memberAccess: MemberAccess,
-  namedDecl: NamedDecl,
-  newExpr: NewExpr,
-  op: Op,
-  parenExpr: ParenExpr,
-  pragma: Pragma,
   program: Program,
-  record: RecordJp,
-  statement: Statement,
-  struct: Struct,
-  switch: Switch,
-  switchCase: SwitchCase,
-  tag: Tag,
-  ternaryOp: TernaryOp,
-  this: This,
-  type: Type,
-  typedefNameDecl: TypedefNameDecl,
-  typedefType: TypedefType,
-  unaryExprOrType: UnaryExprOrType,
-  unaryOp: UnaryOp,
-  undefinedType: UndefinedType,
-  varref: Varref,
-  wrapperStmt: WrapperStmt,
-  accessSpecifier: AccessSpecifier,
-  adjustedType: AdjustedType,
-  arrayAccess: ArrayAccess,
-  arrayType: ArrayType,
-  asmStmt: AsmStmt,
-  binaryOp: BinaryOp,
-  boolLiteral: BoolLiteral,
-  break: Break,
-  builtinType: BuiltinType,
-  call: Call,
-  case: Case,
-  cast: Cast,
-  cilkSpawn: CilkSpawn,
-  cilkSync: CilkSync,
-  class: Class,
-  continue: Continue,
-  cudaKernelCall: CudaKernelCall,
-  declStmt: DeclStmt,
+  file: FileJp,
+  decl: Decl,
+  namedDecl: NamedDecl,
   declarator: Declarator,
-  default: Default,
-  deleteExpr: DeleteExpr,
-  elaboratedType: ElaboratedType,
-  emptyStmt: EmptyStmt,
+  include: Include,
+  record: RecordJp,
+  field: Field,
+  struct: Struct,
+  class: Class,
+  vardecl: Vardecl,
+  typedefNameDecl: TypedefNameDecl,
+  typedefDecl: TypedefDecl,
   enumDecl: EnumDecl,
   enumeratorDecl: EnumeratorDecl,
-  exprStmt: ExprStmt,
-  field: Field,
-  floatLiteral: FloatLiteral,
-  function: FunctionJp,
-  functionType: FunctionType,
-  gotoStmt: GotoStmt,
-  if: If,
-  incompleteArrayType: IncompleteArrayType,
-  intLiteral: IntLiteral,
   labelDecl: LabelDecl,
-  labelStmt: LabelStmt,
-  loop: Loop,
-  marker: Marker,
-  memberCall: MemberCall,
-  method: Method,
-  omp: Omp,
-  parenType: ParenType,
-  pointerType: PointerType,
-  qualType: QualType,
-  returnStmt: ReturnStmt,
-  scope: Scope,
-  tagType: TagType,
-  templateSpecializationType: TemplateSpecializationType,
-  typedefDecl: TypedefDecl,
-  vardecl: Vardecl,
-  variableArrayType: VariableArrayType,
-  body: Body,
-  cilkFor: CilkFor,
-  enumType: EnumType,
+  accessSpecifier: AccessSpecifier,
   param: Param,
+  function: FunctionJp,
+  method: Method,
+  pragma: Pragma,
+  marker: Marker,
+  tag: Tag,
+  omp: Omp,
+  statement: Statement,
+  scope: Scope,
+  body: Body,
+  loop: Loop,
+  if: If,
+  wrapperStmt: WrapperStmt,
+  returnStmt: ReturnStmt,
+  switch: Switch,
+  switchCase: SwitchCase,
+  case: Case,
+  default: Default,
+  declStmt: DeclStmt,
+  exprStmt: ExprStmt,
+  gotoStmt: GotoStmt,
+  labelStmt: LabelStmt,
+  emptyStmt: EmptyStmt,
+  continue: Continue,
+  break: Break,
+  asmStmt: AsmStmt,
+  expression: Expression,
+  call: Call,
+  memberCall: MemberCall,
+  cudaKernelCall: CudaKernelCall,
+  op: Op,
+  binaryOp: BinaryOp,
+  unaryOp: UnaryOp,
+  ternaryOp: TernaryOp,
+  newExpr: NewExpr,
+  deleteExpr: DeleteExpr,
+  varref: Varref,
+  cast: Cast,
+  parenExpr: ParenExpr,
+  arrayAccess: ArrayAccess,
+  memberAccess: MemberAccess,
+  unaryExprOrType: UnaryExprOrType,
+  This: This,
+  literal: Literal,
+  intLiteral: IntLiteral,
+  floatLiteral: FloatLiteral,
+  boolLiteral: BoolLiteral,
+  initList: InitList,
+  implicitValue: ImplicitValue,
+  comment: Comment,
+  cilkFor: CilkFor,
+  cilkSync: CilkSync,
+  cilkSpawn: CilkSpawn,
+  attribute: Attribute,
+  type: Type,
+  pointerType: PointerType,
+  arrayType: ArrayType,
+  adjustedType: AdjustedType,
+  variableArrayType: VariableArrayType,
+  incompleteArrayType: IncompleteArrayType,
+  tagType: TagType,
+  enumType: EnumType,
+  templateSpecializationType: TemplateSpecializationType,
+  functionType: FunctionType,
+  qualType: QualType,
+  builtinType: BuiltinType,
+  parenType: ParenType,
+  undefinedType: UndefinedType,
+  elaboratedType: ElaboratedType,
+  typedefType: TypedefType,
 };
 
 let registered = false;

@@ -13,25 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.cilk;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.cilk.CilkFor;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkFor;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxLoop;
 
-public class CxxCilkFor extends ACilkFor {
-
-    private final CilkFor loop;
+public class CxxCilkFor<Self extends CxxCilkFor<Self>> extends ACilkFor<Self> {
 
     public CxxCilkFor(CilkFor loop, CxxWeaver weaver) {
-        super(new CxxLoop(loop, weaver), weaver);
-
-        this.loop = loop;
+        super(loop, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return loop;
+    public CilkFor getNodeImpl() {
+        return (CilkFor) super.getNodeImpl();
     }
 
 }

@@ -4,6 +4,7 @@ import {
   FunctionJp,
   If,
   Loop,
+  LoopKind,
   Scope,
   Statement,
 } from "../../../Joinpoints.js";
@@ -117,15 +118,15 @@ export default class NextCfgNode {
       // Next stmt is what comes next of if
 
       switch ($scopeParent.kind) {
-        case "while":
-        case "dowhile":
+        case LoopKind.while:
+        case LoopKind.dowhile:
           if ($scopeParent.cond === undefined) {
             throw new Error(
               "Not implemented when for loops do not have a condition statement"
             );
           }
           return $scopeParent.cond;
-        case "for":
+        case LoopKind.for:
           if ($scopeParent.step === undefined) {
             throw new Error(
               "Not implemented when for loops do not have a step statement"

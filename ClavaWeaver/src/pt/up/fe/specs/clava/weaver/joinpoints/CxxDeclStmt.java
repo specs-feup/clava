@@ -13,30 +13,26 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeclStmt;
 
-public class CxxDeclStmt extends ADeclStmt {
-
-    private final DeclStmt declStmt;
+public class CxxDeclStmt<Self extends CxxDeclStmt<Self>> extends ADeclStmt<Self> {
 
     public CxxDeclStmt(DeclStmt declStmt, CxxWeaver weaver) {
-        super(new CxxStatement(declStmt, weaver), weaver);
-        this.declStmt = declStmt;
+        super(declStmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return declStmt;
+    public DeclStmt getNodeImpl() {
+        return (DeclStmt) super.getNodeImpl();
     }
 
     @Override
-    public ADecl[] getDeclsArrayImpl() {
-        return CxxJoinpoints.create(declStmt.getDecls(), getWeaverEngine(), ADecl.class);
+    public ADecl<?>[] getDeclsImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getDecls(), getWeaverEngine(), ADecl.class);
     }
 
 }

@@ -13,24 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.ContinueStmt;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AContinue;
 
-public class CxxContinue extends AContinue {
-
-    private final ContinueStmt continueStmt;
+public class CxxContinue<Self extends CxxContinue<Self>> extends AContinue<Self> {
 
     public CxxContinue(ContinueStmt continueStmt, CxxWeaver weaver) {
-        super(new CxxStatement(continueStmt, weaver), weaver);
-
-        this.continueStmt = continueStmt;
+        super(continueStmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return continueStmt;
+    public ContinueStmt getNodeImpl() {
+        return (ContinueStmt) super.getNodeImpl();
     }
 
 }

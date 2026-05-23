@@ -16,7 +16,6 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.Arrays;
 import java.util.List;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
@@ -31,70 +30,53 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOmp;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
-public class CxxOmp extends AOmp {
-
-    private OmpPragma ompPragma;
+public class CxxOmp<Self extends CxxOmp<Self>> extends AOmp<Self> {
 
     public CxxOmp(OmpPragma ompPragma, CxxWeaver weaver) {
-        super(new CxxPragma(ompPragma, weaver), weaver);
-
-        this.ompPragma = ompPragma;
+        super(ompPragma, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return ompPragma;
+    public OmpPragma getNodeImpl() {
+        return (OmpPragma) super.getNodeImpl();
     }
 
     @Override
     public String getKindImpl() {
-        return ompPragma.getDirectiveKind().getString();
+        return this.getNodeImpl().getDirectiveKind().getString();
     }
 
     @Override
     public String getNumThreadsImpl() {
-        return ompPragma.clauses().getNumThreads().orElse(null);
+        return this.getNodeImpl().clauses().getNumThreads().orElse(null);
     }
 
     @Override
     public String getProcBindImpl() {
-        return ompPragma.clauses().getProcBind()
+        return this.getNodeImpl().clauses().getProcBind()
                 .map(ProcBindKind::getKey)
                 .orElse(null);
     }
 
     @Override
-    public Boolean hasClauseImpl(String clauseName) {
+    public boolean getHasClauseImpl(String clauseName) {
         OmpClauseKind clauseKind = parseClauseName(clauseName);
-        // if (clauseKind == null) {
-        // return false;
-        // }
-
-        return ompPragma.hasClause(clauseKind);
+        return this.getNodeImpl().hasClause(clauseKind);
     }
 
     private OmpClauseKind parseClauseName(String clauseName) {
         return OmpClauseKind.getHelper().fromValue(clauseName);
-        // OmpClauseKind clauseKind = OmpClauseKind.getHelper().valueOfTry(clauseName).orElse(null);
-        // if (clauseKind == null) {
-        //
-        // }
-        // return clauseKind;
     }
 
     @Override
-    public Boolean isClauseLegalImpl(String clauseName) {
+    public boolean getIsClauseLegalImpl(String clauseName) {
         OmpClauseKind clauseKind = parseClauseName(clauseName);
-        // if (clauseKind == null) {
-        // return false;
-        // }
-
-        return ompPragma.getDirectiveKind().isClauseLegal(clauseKind);
+        return this.getNodeImpl().getDirectiveKind().isClauseLegal(clauseKind);
     }
 
     @Override
     public void setNumThreadsImpl(String newExpr) {
-        ompPragma.clauses().setNumThreads(newExpr);
+        this.getNodeImpl().clauses().setNumThreads(newExpr);
     }
 
     @Override
@@ -102,67 +84,44 @@ public class CxxOmp extends AOmp {
         ProcBindKind kind = ProcBindKind.getHelper().fromValueTry(newBind)
                 .orElseThrow(() -> new RuntimeException("Can't set '" + newBind
                         + "' as a proc bind value, valid values: " + ProcBindKind.getHelper().getAvailableValues()));
-        ompPragma.clauses().setProcBind(kind);
-        // ProcBindKind kind = ProcBindKind.getHelper().valueOfTry(newBind).orElse(null);
-        // if (kind == null) {
-        // ClavaLog.info("Can't set '" + newBind + "' as a proc bind value, valid values: "
-        // + ProcBindKind.getHelper().getAvailableOptions());
-        // return;
-        // }
-
-        // setClause(new OmpProcBindClause(kind));
-
+        this.getNodeImpl().clauses().setProcBind(kind);
     }
 
-    // private void setClause(OmpClause clause) {
-    // ompPragma.setClause(clause);
-    // }
-
     @Override
-    public String[] getPrivateArrayImpl() {
-        return ompPragma.clauses().getPrivate().toArray(new String[0]);
+    public String[] getPrivateImpl() {
+        return this.getNodeImpl().clauses().getPrivate().toArray(new String[0]);
     }
 
     @Override
     public void setPrivateImpl(String[] newVariables) {
-        ompPragma.clauses().setPrivate(Arrays.asList(newVariables));
+        this.getNodeImpl().clauses().setPrivate(Arrays.asList(newVariables));
     }
 
     @Override
-    public String[] getClauseKindsArrayImpl() {
-        return SpecsCollections.toStringArray(ompPragma.getClauseKinds());
-
-        // return ompPragma.getClauseKinds().stream()
-        // .map(OmpClauseKind::getKey)
-        // .collect(Collectors.toList())
-        // .toArray(new String[0]);
+    public String[] getClauseKindsImpl() {
+        return SpecsCollections.toStringArray(this.getNodeImpl().getClauseKinds());
     }
 
     @Override
-    public String[] getReductionArrayImpl(String kind) {
-        return ompPragma.clauses().getReduction(kind).toArray(new String[0]);
+    public String[] getGetReductionImpl(String kind) {
+        return this.getNodeImpl().clauses().getReduction(kind).toArray(new String[0]);
     }
 
     @Override
     public void setReductionImpl(String reductionKindString, String[] newVariables) {
         ReductionKind reductionKind = ReductionKind.getHelper().fromValue(reductionKindString.toLowerCase());
 
-        ompPragma.clauses().setReduction(reductionKind, Arrays.asList(newVariables));
+        this.getNodeImpl().clauses().setReduction(reductionKind, Arrays.asList(newVariables));
     }
 
     @Override
-    public String[] getReductionKindsArrayImpl() {
-        return SpecsCollections.toStringArray(ompPragma.clauses().getReductionKinds());
-        // String[] a = SpecsCollections.toStringArray(ompPragma.clauses().getReductionKinds());
-        // return ompPragma.clauses().getReductionKinds().stream()
-        // .map(ReductionKind::getKey)
-        // .collect(Collectors.toList())
-        // .toArray(new String[0]);
+    public String[] getReductionKindsImpl() {
+        return SpecsCollections.toStringArray(this.getNodeImpl().clauses().getReductionKinds());
     }
 
     @Override
     public String getDefaultImpl() {
-        return ompPragma.clauses().getDefault()
+        return this.getNodeImpl().clauses().getDefault()
                 .map(DefaultKind::getKey)
                 .orElse(null);
     }
@@ -172,52 +131,52 @@ public class CxxOmp extends AOmp {
         DefaultKind kind = DefaultKind.getHelper().fromValueTry(newDefault)
                 .orElseThrow(() -> new RuntimeException("Can't set '" + newDefault
                         + "' as a 'default' value, valid values: " + DefaultKind.getHelper().getAvailableValues()));
-        ompPragma.clauses().setDefault(kind);
+        this.getNodeImpl().clauses().setDefault(kind);
     }
 
     @Override
-    public String[] getFirstprivateArrayImpl() {
-        return ompPragma.clauses().getFirstprivate().toArray(new String[0]);
+    public String[] getFirstprivateImpl() {
+        return this.getNodeImpl().clauses().getFirstprivate().toArray(new String[0]);
     }
 
     @Override
     public void setFirstprivateImpl(String[] newVariables) {
-        ompPragma.clauses().setFirstprivate(Arrays.asList(newVariables));
+        this.getNodeImpl().clauses().setFirstprivate(Arrays.asList(newVariables));
     }
 
     @Override
-    public String[] getLastprivateArrayImpl() {
-        return ompPragma.clauses().getLastprivate().toArray(new String[0]);
+    public String[] getLastprivateImpl() {
+        return this.getNodeImpl().clauses().getLastprivate().toArray(new String[0]);
     }
 
     @Override
     public void setLastprivateImpl(String[] newVariables) {
-        ompPragma.clauses().setLastprivate(Arrays.asList(newVariables));
+        this.getNodeImpl().clauses().setLastprivate(Arrays.asList(newVariables));
     }
 
     @Override
-    public String[] getSharedArrayImpl() {
-        return ompPragma.clauses().getShared().toArray(new String[0]);
+    public String[] getSharedImpl() {
+        return this.getNodeImpl().clauses().getShared().toArray(new String[0]);
     }
 
     @Override
     public void setSharedImpl(String[] newVariables) {
-        ompPragma.clauses().setShared(Arrays.asList(newVariables));
+        this.getNodeImpl().clauses().setShared(Arrays.asList(newVariables));
     }
 
     @Override
-    public String[] getCopyinArrayImpl() {
-        return ompPragma.clauses().getCopyin().toArray(new String[0]);
+    public String[] getCopyinImpl() {
+        return this.getNodeImpl().clauses().getCopyin().toArray(new String[0]);
     }
 
     @Override
     public void setCopyinImpl(String[] newVariables) {
-        ompPragma.clauses().setCopyin(Arrays.asList(newVariables));
+        this.getNodeImpl().clauses().setCopyin(Arrays.asList(newVariables));
     }
 
     @Override
     public String getScheduleKindImpl() {
-        return ompPragma.clauses().getScheduleKind().map(ScheduleKind::getKey).orElse(null);
+        return this.getNodeImpl().clauses().getScheduleKind().map(ScheduleKind::getKey).orElse(null);
     }
 
     @Override
@@ -226,17 +185,17 @@ public class CxxOmp extends AOmp {
                 .orElseThrow(() -> new RuntimeException("Can't set '" + scheduleKindString
                         + "' as a schedule kind, valid values: " + ScheduleKind.getHelper().getAvailableValues()));
 
-        ompPragma.clauses().setScheduleKind(kind);
+        this.getNodeImpl().clauses().setScheduleKind(kind);
     }
 
     @Override
     public String getScheduleChunkSizeImpl() {
-        return ompPragma.clauses().getScheduleChunkSize().orElse(null);
+        return this.getNodeImpl().clauses().getScheduleChunkSize().orElse(null);
     }
 
     @Override
     public void setScheduleChunkSizeImpl(String chunkSize) {
-        ompPragma.clauses().setScheduleChunkSize(chunkSize);
+        this.getNodeImpl().clauses().setScheduleChunkSize(chunkSize);
     }
 
     @Override
@@ -245,24 +204,24 @@ public class CxxOmp extends AOmp {
     }
 
     @Override
-    public String[] getScheduleModifiersArrayImpl() {
-        return SpecsCollections.toStringArray(ompPragma.clauses().getScheduleModifiers());
+    public String[] getScheduleModifiersImpl() {
+        return SpecsCollections.toStringArray(this.getNodeImpl().clauses().getScheduleModifiers());
     }
 
     @Override
     public void setScheduleModifiersImpl(String[] modifiers) {
         List<ScheduleModifier> parsedModifiers = ScheduleModifier.getHelper().fromValue(Arrays.asList(modifiers));
-        ompPragma.clauses().setScheduleModifiers(parsedModifiers);
+        this.getNodeImpl().clauses().setScheduleModifiers(parsedModifiers);
     }
 
     @Override
     public String getCollapseImpl() {
-        return ompPragma.clauses().getCollapse().orElse(null);
+        return this.getNodeImpl().clauses().getCollapse().orElse(null);
     }
 
     @Override
     public void setCollapseImpl(String newExpr) {
-        ompPragma.clauses().setCollapse(newExpr);
+        this.getNodeImpl().clauses().setCollapse(newExpr);
     }
 
     @Override
@@ -272,13 +231,12 @@ public class CxxOmp extends AOmp {
 
     @Override
     public String getOrderedImpl() {
-        return ompPragma.clauses().getOrdered().orElse(null);
-
+        return this.getNodeImpl().clauses().getOrdered().orElse(null);
     }
 
     @Override
     public void setOrderedImpl(String newExpr) {
-        ompPragma.clauses().setOrdered(newExpr);
+        this.getNodeImpl().clauses().setOrdered(newExpr);
     }
 
     @Override
@@ -288,7 +246,7 @@ public class CxxOmp extends AOmp {
                         + "', name is not valid. Valid clause names: "
                         + OmpClauseKind.getHelper().getAvailableValues()));
 
-        ompPragma.removeClause(clauseKind);
+        this.getNodeImpl().removeClause(clauseKind);
     }
 
     @Override
@@ -299,10 +257,10 @@ public class CxxOmp extends AOmp {
                         + OmpDirectiveKind.getHelper().getAvailableValues()));
 
         // Create new pragma based on the previous pragma
-        OmpPragma newOmpPragma = OmpParser.newOmpPragma(directiveKind, ompPragma);
+        OmpPragma newOmpPragma = OmpParser.newOmpPragma(directiveKind, this.getNodeImpl());
 
         // Replace previous pragma
-        NodeInsertUtils.replace(ompPragma, newOmpPragma);
+        NodeInsertUtils.replace(this.getNodeImpl(), newOmpPragma);
 
         // Update join point pragma
         this.ompPragma = newOmpPragma;

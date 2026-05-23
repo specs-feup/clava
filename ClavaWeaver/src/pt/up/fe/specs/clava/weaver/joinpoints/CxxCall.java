@@ -40,32 +40,30 @@ import pt.up.fe.specs.clava.weaver.actions.CallWrap;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
-public class CxxCall extends ACall {
-
-    private final CallExpr call;
+public class CxxCall<Self extends CxxCall<Self>> extends ACall<Self> {
 
     public CxxCall(CallExpr call, CxxWeaver weaver) {
-        super(new CxxExpression(call, weaver), weaver);
+        super(call, weaver);
+    }
 
-        this.call = call;
+    @Override
+    public CallExpr getNodeImpl() {
+        return (CallExpr) super.getNodeImpl();
     }
 
     @Override
     public String getNameImpl() {
-        return call.getCalleeNameTry().orElse(null);
+        return this.getNodeImpl().getCalleeNameTry().orElse(null);
     }
 
     @Override
-    public Integer getNumArgsImpl() {
-        return call.getArgs().size();
+    public int getNumArgsImpl() {
+        return this.getNodeImpl().getArgs().size();
     }
 
-    @Override
-    public CallExpr getNode() {
-        return call;
-    }
+    public void extractImpl(String variableName, boolean declareVariable) {
+        var call = this.getNodeImpl();
 
-    public void extractImpl(String variableName, Boolean declareVariable) {
         // Check that call is inside an ExprStmt
         if (!(call.getParent() instanceof ExprStmt)) {
             SpecsLogs.msgInfo("Action currently supported only for calls alone in a statement. Skipping for code:"
@@ -82,19 +80,11 @@ public class CxxCall extends ACall {
         // DeclStmt -> VarDecl -> Call
         if (declareVariable) {
 
-            // VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, false,
-            // InitializationStyle.CINIT, false);
-            // DeclData declData = new DeclData(false, false, true, false, false, false);
-            // VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, variableName, returnType, declData,
-            // call.getInfo(),
-            // call);
-
             VarDecl varDecl = getFactory().varDecl(variableName, returnType);
             varDecl.setInit(call);
             varDecl.set(VarDecl.IS_USED);
 
             DeclStmt declStmt = call.getFactoryWithNode().declStmt(varDecl);
-            // DeclStmt declStmt = ClavaNodeFactory.declStmt(call.getInfo(), Arrays.asList(varDecl));
 
             // Replace stmt
             NodeInsertUtils.replace(exprStmt, declStmt, true);
@@ -105,83 +95,65 @@ public class CxxCall extends ACall {
             Expr varExpr = getWeaverEngine().getFactory().literalExpr(variableName, returnType);
             BinaryOperator assign = getWeaverEngine().getFactory().binaryOperator(BinaryOperatorKind.Assign, returnType,
                     varExpr, call);
-            // BinaryOperator assign = ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new
-            // ExprData(returnType),
-            // call.getInfo(), varExpr, call);
             ExprStmt newStmt = getWeaverEngine().getFactory().exprStmt(assign);
 
             // Replace stmt
             NodeInsertUtils.replace(exprStmt, newStmt, true);
             /*
-            ExprStmt: (0x46d4420)
-             BinaryOperator: (0x46d4420) types:int, valueKind:L_VALUE, op:ASSIGNMENT
-              DeclRefExpr: (0x46d43d8) types:int, valueKind:L_VALUE, refType:Var, refName:samples, type2:<same as type>
-              IntegerLiteral: (0x46d4400) types:int, valueKind:R_VALUE
+             * ExprStmt: (0x46d4420)
+             * BinaryOperator: (0x46d4420) types:int, valueKind:L_VALUE, op:ASSIGNMENT
+             * DeclRefExpr: (0x46d43d8) types:int, valueKind:L_VALUE, refType:Var,
+             * refName:samples, type2:<same as type>
+             * IntegerLiteral: (0x46d4400) types:int, valueKind:R_VALUE
              */
         }
     }
 
     @Override
-    public AType getTypeImpl() {
+    public AType<?> getTypeImpl() {
+        var call = this.getNodeImpl();
         if (call instanceof CXXMemberCallExpr) {
             return CxxJoinpoints.create(((CXXMemberCallExpr) call).getType(), getWeaverEngine(), AType.class);
         }
 
         // Return the type of the function (return type), after desugaring
         Type calleeType = call.getCallee().getType().desugarAll();
-        // System.out.println("CALLEE:" + call.getCallee());
         // If PointerType to FunctionType, remove pointer
-        // if (calleeType instanceof PointerType && ((PointerType) calleeType).getPointeeType() instanceof FunctionType)
-        // {
-        // calleeType = ((PointerType) calleeType).getPointeeType();
-        // }
-        // System.out.println("CALLEE TYPE:" + calleeType);
         if (calleeType instanceof FunctionType) {
             return CxxJoinpoints.create(((FunctionType) calleeType).getReturnType(), getWeaverEngine(), AType.class);
         }
-
-        /*
-        if (!(calleeType instanceof LiteralType)) {
-            LoggingUtils
-                    .msgWarn("Expected LiteralType, got '" + calleeType.getClass().getSimpleName() + "'. Check if ok");
-        }
-        */
 
         return CxxJoinpoints.create(calleeType, getWeaverEngine(), AType.class);
     }
 
     @Override
-    public String[] getMemberNamesArrayImpl() {
-        return call.getCallMemberNames().toArray(new String[0]);
+    public String[] getMemberNamesImpl() {
+        return this.getNodeImpl().getCallMemberNames().toArray(new String[0]);
     }
 
     @Override
     public void setNameImpl(String name) {
-        call.setCallName(name);
+        this.getNodeImpl().setCallName(name);
     }
 
     @Override
-    public AFunction getDeclarationImpl() {
-        return call.getPrototypes().stream()
+    public AFunction<?> getDeclarationImpl() {
+        return this.getNodeImpl().getPrototypes().stream()
                 .map(decl -> CxxJoinpoints.create(decl,
                         getWeaverEngine(), AFunction.class))
                 .findFirst()
                 .orElse(null);
-        // return call.getFunctionDecl().map(FunctionDecl::getPrototypes)
-        // .map(decl -> CxxJoinpoints.create(decl, AFunction.class)).orElse(null);
-        // var declarations = getDeclarationsArrayImpl();
-        // return declarations.length != 0 ? declarations[0] : null;
-        // return call.getDeclaration().map(decl -> (AFunction) CxxJoinpoints.create(decl)).orElse(null);
     }
 
     @Override
-    public AFunction getDefinitionImpl() {
-        return call.getDefinition().map(decl -> CxxJoinpoints.create(decl, getWeaverEngine(), AFunction.class)).orElse(null);
+    public AFunction<?> getDefinitionImpl() {
+        return this.getNodeImpl().getDefinition().map(decl -> CxxJoinpoints.create(decl, getWeaverEngine(), AFunction.class))
+                .orElse(null);
     }
 
     @Override
-    public AExpression[] getArgsArrayImpl() {
-        return call.getArgs()
+    public AExpression<?>[] getArgsImpl() {
+        return this.getNodeImpl().getArgs()
                 .stream()
                 // .map(Expr::getCode)
                 .map(arg -> CxxJoinpoints.create(arg, getWeaverEngine(), AExpression.class))
@@ -190,14 +162,13 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public AExpression[] getArgListArrayImpl() {
-        return getArgsArrayImpl();
+    public AExpression<?>[] getArgListImpl() {
+        return getArgsImpl();
     }
 
     @Override
-    public AType getReturnTypeImpl() {
-
-        return CxxJoinpoints.create(call.getType(), getWeaverEngine(), AType.class);
+    public AType<?> getReturnTypeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getType(), getWeaverEngine(), AType.class);
     }
 
     @Override
@@ -207,6 +178,8 @@ public class CxxCall extends ACall {
 
     @Override
     public boolean inlineImpl() {
+        var call = this.getNodeImpl();
+
         // Only inline if call is associated to an App
         if (!call.getAppTry().isPresent()) {
             SpecsLogs.msgInfo("Tried to inline call that is not associated to an app");
@@ -214,98 +187,78 @@ public class CxxCall extends ACall {
         }
 
         return call.getApp().inline(call);
-        // call.getAncestor(App.class).inline(call);
-        // new CallInliner(call).inline();
     }
 
     @Override
     public void setArgFromStringImpl(int index, String expr) {
         // Get arg of equivalent index, to extract type
-        Expr arg = call.getArgs().get(index);
+        Expr arg = this.getNodeImpl().getArgs().get(index);
         Expr literalExpr = getWeaverEngine().getFactory().literalExpr(expr, arg.getExprType());
         setArgImpl(index, CxxJoinpoints.create(literalExpr, getWeaverEngine(), AExpression.class));
     }
 
     @Override
-    public void addArgImpl(String arg, AType type) {
+    public void addArgImpl(String arg, AType<?> type) {
         Type processedType;
-        
+
         if (type == null) {
             processedType = getWeaverEngine().getFactory().dummyType("from $call.addArg()");
         } else {
-            processedType = (Type) type.getNode();
+            processedType = (Type) type.getNodeImpl();
         }
-        
-        call.addArgument(arg, processedType);
+
+        this.getNodeImpl().addArgument(arg, processedType);
     }
 
     @Override
     public void addArgImpl(String arg, String type) {
-        call.addArgument(arg, getWeaverEngine().getFactory().literalType(type));
+        this.getNodeImpl().addArgument(arg, getWeaverEngine().getFactory().literalType(type));
     }
 
     @Override
-    public void setArgImpl(int index, AExpression expr) {
-        // Check num args
-        // int numArgs = getArgListArrayImpl().length;
-        // if (index >= 0 && index < numArgs) {
-        // SpecsLogs.msgInfo(
-        // "Not setting call argument, index is '" + index + "' and call has " + numArgs + " arguments");
-        // return;
-        // }
-
-        call.setArgument(index, (Expr) expr.getNode());
+    public void setArgImpl(int index, AExpression<?> expr) {
+        this.getNodeImpl().setArgument(index, (Expr) expr.getNodeImpl());
     }
 
     @Override
-    public AExpression getArgImpl(int index) {
-        call.checkIndex(index);
-        Expr arg = call.getArgs().get(index);
+    public AExpression<?> getGetArgImpl(int index) {
+        this.getNodeImpl().checkIndex(index);
+        Expr arg = this.getNodeImpl().getArgs().get(index);
         return CxxJoinpoints.create(arg, getWeaverEngine(), AExpression.class);
-
     }
 
     @Override
-    public Boolean getIsMemberAccessImpl() {
-        return call instanceof CXXMemberCallExpr;
+    public boolean getIsMemberAccessImpl() {
+        return this.getNodeImpl() instanceof CXXMemberCallExpr;
     }
 
     @Override
-    public AMemberAccess getMemberAccessImpl() {
-        if (!(call instanceof CXXMemberCallExpr)) {
+    public AMemberAccess<?> getMemberAccessImpl() {
+        if (!(this.getNodeImpl() instanceof CXXMemberCallExpr)) {
             return null;
         }
 
-        var callee = ((CXXMemberCallExpr) call).getCallee();
-
-        // if (!(callee instanceof MemberExpr)) {
-        // return null;
-        // }
+        var callee = ((CXXMemberCallExpr) this.getNodeImpl()).getCallee();
 
         MemberExpr memberExpr = callee;
 
-        // MemberExpr memberExpr = ((CXXMemberCallExpr) call).getCallee();
-
         return CxxJoinpoints.create(memberExpr, getWeaverEngine(), AMemberAccess.class);
-
     }
 
     @Override
-    public AFunctionType getFunctionTypeImpl() {
-        return call.getFunctionType()
+    public AFunctionType<?> getFunctionTypeImpl() {
+        return this.getNodeImpl().getFunctionType()
                 .map(type -> CxxJoinpoints.create(type, getWeaverEngine(), AFunctionType.class))
                 .orElse(null);
-
-        // return (AType) CxxJoinpoints.create(call.getFunctionType(), this);
     }
 
     @Override
-    public Boolean getIsStmtCallImpl() {
-        return call.isStmtCall();
+    public boolean getIsStmtCallImpl() {
+        return this.getNodeImpl().isStmtCall();
     }
 
     @Override
-    public AFunction getFunctionImpl() {
+    public AFunction<?> getFunctionImpl() {
         // First, try the implementation
         var definition = getDefinitionImpl();
 
@@ -315,47 +268,32 @@ public class CxxCall extends ACall {
 
         // Implementation not found return declaration
         return getDeclarationImpl();
-
-        // return call.getFunctionDecl()
-        // .map(fDecl -> CxxJoinpoints.create(fDecl, AFunction.class))
-        // .orElse(null);
     }
 
     @Override
     public String getSignatureImpl() {
-        AFunction function = getFunctionImpl();
+        AFunction<?> function = getFunctionImpl();
 
         if (function != null) {
             return function.getSignatureImpl();
         }
 
-        // if (getDeclarationImpl() != null) {
-        // System.out.println("DECL SIG:" + getDeclarationImpl().getSignatureImpl());
-        // }
-        // System.out.println("DECL:" + getDeclarationImpl());
-        // System.out.println("DEF:" + getDefinitionImpl());
-
         return "<" + getNameImpl() + ">";
     }
 
     @Override
-    public AFunction getDeclImpl() {
-        return call.getFunctionDecl()
+    public AFunction<?> getDeclImpl() {
+        return this.getNodeImpl().getFunctionDecl()
                 .map(fDecl -> CxxJoinpoints.create(fDecl,
                         getWeaverEngine(), AFunction.class))
                 .orElse(null);
     }
 
     @Override
-    public AFunction getDirectCalleeImpl() {
-        return call.get(CallExpr.DIRECT_CALLEE)
+    public AFunction<?> getDirectCalleeImpl() {
+        return this.getNodeImpl().get(CallExpr.DIRECT_CALLEE)
                 .map(callee -> CxxJoinpoints.create(callee,
                         getWeaverEngine(), AFunction.class))
                 .orElse(null);
     }
-
-    // @Override
-    // public String getSignatureImpl() {
-    // return call.getSignature();
-    // }
 }

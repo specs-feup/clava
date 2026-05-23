@@ -11,7 +11,6 @@ java {
     withSourcesJar()
 }
 
-
 // Repositories providers
 repositories {
     mavenCentral()
@@ -21,11 +20,26 @@ configurations {
     weaverGeneratorRuntime
 }
 
+// Project sources
+sourceSets {
+    // Spec source set: compiled independently to avoid circular dependency
+    spec {
+        java {
+            srcDir 'src-spec'
+        }
+    }
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
 dependencies {
     implementation ":jOptions"
     implementation ":SpecsUtils"
 
-    implementation ":LanguageSpecification"
+    implementation ":LangSpec2"
     implementation ":LARAI"
     implementation ":LaraUtils"
     implementation ":WeaverInterface"
@@ -37,32 +51,24 @@ dependencies {
 
     implementation 'com.google.guava:guava:33.4.0-jre'
 
-    weaverGeneratorRuntime ":WeaverGenerator"
+    weaverGeneratorRuntime ":WeaverGen2"
+
+    // Spec source set: only needs LangSpec2 and WeaverInterface (for BaseJoinPointSpec)
+    specImplementation ":LangSpec2"
+    specImplementation ":WeaverInterface"
 }
 
-// Project sources
-sourceSets {
-    main {
-        java {
-            srcDir 'src'
-        }
-    }
-}
-
-// Re-run the weaver generator
+// Generate weaver abstracts using WeaverGen2 (Java DSL-based)
 tasks.register('generateWeaver', JavaExec) {
     group = "Execution"
-    description = "Generates the Weaver Abstracts"
-    classpath = configurations.weaverGeneratorRuntime
-    mainClass = 'org.lara.interpreter.weaver.generator.commandline.WeaverGenerator'
+    description = "Generates the Weaver Abstracts using WeaverGen2"
+    classpath = configurations.weaverGeneratorRuntime + sourceSets.spec.runtimeClasspath
+    mainClass = 'org.lara.weavergen2.WeaverGen2'
     args = [
-        "-w", "CxxWeaver",
-        "-x", "./resources/clava/weaverspecs",
-        "-o", "./src",
-        "-p", "pt.up.fe.specs.clava.weaver",
-        "-n", "pt.up.fe.specs.clava.ClavaNode",
-        "-e",
-        "-j"
+        "pt.up.fe.specs.clava.weaver.CxxSpec",
+        "${projectDir}/src",
+        "--base", "org.lara.interpreter.weaver.interf.BaseJoinPointSpec",
+        "--node", "pt.up.fe.specs.clava.ClavaNode"
     ]
 }
 

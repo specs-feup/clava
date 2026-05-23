@@ -8,6 +8,7 @@ import {
   GotoStmt,
   If,
   Joinpoint,
+  OpKind,
   Statement,
   Switch,
 } from "../../Joinpoints.js";
@@ -180,26 +181,26 @@ export default class TransformSwitchToIf extends SimplePass {
       let $ifCondition;
       if ($case.values.length == 1)
         $ifCondition = ClavaJoinPoints.binaryOp(
-          "==",
+          OpKind.eq,
           $switchCondition,
           $case.values[0],
           "boolean"
         );
       else {
         const $binOpGE = ClavaJoinPoints.binaryOp(
-          ">=",
+          OpKind.ge,
           $switchCondition,
           $case.values[0],
           "boolean"
         );
         const $binOpLE = ClavaJoinPoints.binaryOp(
-          "<=",
+          OpKind.le,
           $switchCondition,
           $case.values[1],
           "boolean"
         );
         $ifCondition = ClavaJoinPoints.binaryOp(
-          "&&",
+          OpKind.l_and,
           $binOpGE,
           $binOpLE,
           "boolean"

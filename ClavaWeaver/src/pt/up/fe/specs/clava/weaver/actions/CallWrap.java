@@ -65,18 +65,18 @@ public class CallWrap {
 
     private static final String WRAPPERS_FOLDERNAME = "clava_wrappers";
 
-    private final CxxCall cxxCall;
-    private final CxxProgram app;
+    private final CxxCall<?> cxxCall;
+    private final CxxProgram<?> app;
 
     private final ClavaFactory factory;
     private final CxxWeaver weaver;
 
-    public CallWrap(CxxWeaver cxxWeaver, CxxCall cxxCall) {
+    public CallWrap(CxxWeaver cxxWeaver, CxxCall<?> cxxCall) {
         this.weaver = cxxWeaver;
         this.cxxCall = cxxCall;
-        app = (CxxProgram) cxxCall.getRootImpl();
+        app = (CxxProgram<?>) cxxCall.getRootImpl();
 
-        factory = app.getNode().getFactory();
+        factory = app.getNodeImpl().getFactory();
     }
 
     public void addWrapper(String name) {
@@ -116,7 +116,7 @@ public class CallWrap {
         // Add include
         String includePath = getHeaderFile().getRelativeFilepath();
 
-        cxxCall.getNode().getAncestor(TranslationUnit.class).addInclude(includePath, false);
+        cxxCall.getNodeImpl().getAncestor(TranslationUnit.class).addInclude(includePath, false);
 
         // Set call name
         cxxCall.setName(name);
@@ -131,7 +131,7 @@ public class CallWrap {
     private void createUserIncludeWrapper(String name) {
 
         // Get declaration of function call
-        FunctionDecl declaration = (FunctionDecl) cxxCall.getDeclarationImpl().getNode();
+        FunctionDecl declaration = (FunctionDecl) cxxCall.getDeclarationImpl().getNodeImpl();
 
         // Get include file
         TranslationUnit includeFile = declaration.getAncestor(TranslationUnit.class);
@@ -178,7 +178,7 @@ public class CallWrap {
      */
     private void addWrapperFunctionInPlace(String name, boolean hasDecl) {
 
-        FunctionDecl originalDefinition = (FunctionDecl) cxxCall.getDefinitionImpl().getNode();
+        FunctionDecl originalDefinition = (FunctionDecl) cxxCall.getDefinitionImpl().getNodeImpl();
 
         FunctionDecl wrapperFunctionDeclImpl = (FunctionDecl) originalDefinition.copy();
         wrapperFunctionDeclImpl.setDeclName(name);
@@ -194,7 +194,7 @@ public class CallWrap {
 
         // add to original file
         TranslationUnit originalFile = originalDefinition.getAncestor(TranslationUnit.class);
-        TranslationUnit updatedFile = cxxCall.getNode().getApp().getTranslationUnit(originalFile.getLocation());
+        TranslationUnit updatedFile = cxxCall.getNodeImpl().getApp().getTranslationUnit(originalFile.getLocation());
 
         // adds the wrapper implementation after the implementation of the original
         int originalDefinitionIndex = getIndex(originalDefinition, updatedFile);
@@ -205,7 +205,7 @@ public class CallWrap {
         forwardDecl.getBody().get().detach();
         if (hasDecl) {
             // ... after the declaration of the original
-            FunctionDecl originalDeclaration = (FunctionDecl) cxxCall.getDeclarationImpl().getNode();
+            FunctionDecl originalDeclaration = (FunctionDecl) cxxCall.getDeclarationImpl().getNodeImpl();
             int originalDeclarationIndex = getIndex(originalDeclaration, updatedFile);
             updatedFile.addChild(originalDeclarationIndex + 1, forwardDecl);
         } else {
@@ -265,9 +265,9 @@ public class CallWrap {
     private CallWrapType getWrapType() {
 
         // Get declaration of function call
-        AFunction functionDeclJp = cxxCall.getDeclarationImpl();
-        AFunction functionDefJp = cxxCall.getDefinitionImpl();
-        // AJoinPoint functionDeclJp = cxxCall.getDeclImpl();
+        AFunction<?> functionDeclJp = cxxCall.getDeclarationImpl();
+        AFunction<?> functionDefJp = cxxCall.getDefinitionImpl();
+        // AJoinpoint functionDeclJp = cxxCall.getDeclImpl();
 
         // If no declaration join point is found, this probably means that the call is from
         // a system header. Currently we cannot know a system include from a function call,
@@ -283,25 +283,25 @@ public class CallWrap {
 
             // If definition but no declaration, check if it is associated with a File. If not, consider it a system
             // header function
-            if (functionDefJp.getNode().getAncestorTry(TranslationUnit.class).isEmpty()) {
+            if (functionDefJp.getNodeImpl().getAncestorTry(TranslationUnit.class).isEmpty()) {
                 return CallWrapType.SYSTEM_INCLUDE;
             }
 
             // If no declaration but definition is present, this most likely indicates that the function is defined in
             // the
             // file of the function call
-            FunctionDecl funcDef = (FunctionDecl) functionDefJp.getNode();
+            FunctionDecl funcDef = (FunctionDecl) functionDefJp.getNodeImpl();
             SpecsLogs.msgLib("Could not find declaration of function '" + funcDef.getDeclName() + "' at "
                     + funcDef.getLocation());
             return CallWrapType.NO_INCLUDE;
 
         }
 
-        FunctionDecl functionDecl = (FunctionDecl) functionDeclJp.getNode();
+        FunctionDecl functionDecl = (FunctionDecl) functionDeclJp.getNodeImpl();
 
         // Get include file of declaration
         // FunctionDecl declaration = declarationTry.get();
-        FunctionDecl declaration = (FunctionDecl) functionDeclJp.getNode();
+        FunctionDecl declaration = (FunctionDecl) functionDeclJp.getNodeImpl();
         Optional<TranslationUnit> includeFileTry = declaration.getAncestorTry(TranslationUnit.class);
 
         // TODO: Confirm with Pedro what should be done here
@@ -331,24 +331,24 @@ public class CallWrap {
 
         // If wrapper files do not exist, create them
         String implementationFilename = getImplFilename();
-        Optional<TranslationUnit> wrapperImpl = app.getNode().getFile(implementationFilename);
+        Optional<TranslationUnit> wrapperImpl = app.getNodeImpl().getFile(implementationFilename);
 
         if (!wrapperImpl.isPresent()) {
 
             // Ensure the header file does not exit yet
-            Preconditions.checkArgument(!app.getNode().getFile(WRAPPER_H_FILENAME).isPresent(),
+            Preconditions.checkArgument(!app.getNodeImpl().getFile(WRAPPER_H_FILENAME).isPresent(),
                     "Expected header file to not exist yet");
 
             // Create implementation and header file
-            AFile implFile = AstFactory.file(this.weaver, implementationFilename, WRAPPERS_FOLDERNAME);
-            AFile headerFile = AstFactory.file(this.weaver, WRAPPER_H_FILENAME, WRAPPERS_FOLDERNAME);
+            AFile<?> implFile = AstFactory.file(this.weaver, implementationFilename, WRAPPERS_FOLDERNAME);
+            AFile<?> headerFile = AstFactory.file(this.weaver, WRAPPER_H_FILENAME, WRAPPERS_FOLDERNAME);
 
             app.addFileImpl(headerFile);
             app.addFileImpl(implFile);
         }
 
         // Ensure the header file also exists
-        Preconditions.checkArgument(app.getNode().getFile(WRAPPER_H_FILENAME).isPresent(),
+        Preconditions.checkArgument(app.getNodeImpl().getFile(WRAPPER_H_FILENAME).isPresent(),
                 "Expected header file to exist");
 
         return;
@@ -362,16 +362,16 @@ public class CallWrap {
     }
 
     private List<IncludeDecl> getWrapperIncludesFromFile() {
-        TranslationUnit callFile = cxxCall.getNode().getAncestor(TranslationUnit.class);
+        TranslationUnit callFile = cxxCall.getNodeImpl().getAncestor(TranslationUnit.class);
         return TreeNodeUtils.copy(callFile.getIncludes().getIncludes());
     }
 
     private FunctionType getFunctionType() {
-        return cxxCall.getNode().getCalleeDeclRef().getType().toTry(FunctionType.class).get();
+        return cxxCall.getNodeImpl().getCalleeDeclRef().getType().toTry(FunctionType.class).get();
     }
 
     private List<Stmt> createFunctionCallCode(List<String> paramNames) {
-        CallExpr call = cxxCall.getNode();
+        CallExpr call = cxxCall.getNodeImpl();
 
         List<Stmt> wrapperStmts = new ArrayList<>();
 
@@ -430,7 +430,7 @@ public class CallWrap {
         // Make sure Clava wrapper files exist
         initClavaWrappers();
 
-        return app.getNode().getFile(getImplFilename()).orElseThrow(() -> new RuntimeException(
+        return app.getNodeImpl().getFile(getImplFilename()).orElseThrow(() -> new RuntimeException(
                 "Implementation file not found, make sure init function was called"));
     }
 
@@ -439,7 +439,7 @@ public class CallWrap {
         // Make sure Clava wrapper files exist
         initClavaWrappers();
 
-        return app.getNode().getFile(WRAPPER_H_FILENAME).orElseThrow(() -> new RuntimeException(
+        return app.getNodeImpl().getFile(WRAPPER_H_FILENAME).orElseThrow(() -> new RuntimeException(
                 "Header file not found, make sure init function was called"));
     }
 }
