@@ -138,7 +138,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(CilkFor.class, CxxCilkFor::new);
         JOINPOINT_FACTORY.put(CilkSync.class, CxxCilkSync::new);
         JOINPOINT_FACTORY.put(CilkSpawn.class, CxxCilkSpawn::new);
-        JOINPOINT_FACTORY.put(TagDeclVars.class, GenericJoinpoint::new);
+        JOINPOINT_FACTORY.put(TagDeclVars.class, CxxJoinpoint::new);
         JOINPOINT_FACTORY.put(ClavaNode.class, CxxJoinpoints::defaultFactory);
     }
 
@@ -165,7 +165,7 @@ public class CxxJoinpoints {
 
     private static AJoinpoint<?> defaultFactory(ClavaNode node, CxxWeaver weaver) {
         SpecsLogs.warn("Factory not defined for nodes of class '" + node.getClass().getSimpleName() + "'");
-        return new GenericJoinpoint<>(node, weaver);
+        return new CxxJoinpoint<>(node, weaver);
     }
 
     public static AJoinpoint<?> createFromLara(Object node, CxxWeaver weaver) {
