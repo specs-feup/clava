@@ -13,7 +13,7 @@ public class CxxSpec extends WeaverSpec {
 
     @Override
     public void define() {
-        weaverName("CxxWeaver");
+        weaverPrefix("Cxx");
         packageName("pt.up.fe.specs.clava.weaver");
         rootJoinPoint("program");
 
