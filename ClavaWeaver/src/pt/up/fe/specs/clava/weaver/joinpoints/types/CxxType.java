@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -211,32 +210,30 @@ public class CxxType<Self extends CxxType<Self>> extends AType<Self> {
         }
 
         // Get keys with type fields
-        Map<String, AType<?>> typeFields = (Map<String, AType<?>>) type.getTypeFieldsImpl();
-
-        List<AType<?>> visitedTypes = new ArrayList<>();
+        Map<String, AType<?>> typeFields = type.getTypeFieldsImpl();
 
         // Iterate over each type field
         for (Entry<String, AType<?>> entry : typeFields.entrySet()) {
 
             // Found value to change, change it and return
-            if (entry.getValue().equals(currentValue)) {
-                type.setValueImpl(entry.getKey(), newValue);
-                return true;
+            if (currentValue instanceof CxxType cxxType){
+                if (((AType)entry.getValue()).equalsImpl(cxxType)) {
+                    type.setValueImpl(entry.getKey(), newValue);
+                    return true;
+                }
             }
-
-            visitedTypes.add(entry.getValue());
         }
 
         // Did not find a key in the current node, call the function recursively on a copy of the visited fields
         // If a field is changed, update it
         for (Entry<String, AType<?>> entry : typeFields.entrySet()) {
-            AType<?> fieldTypeCopy = (AType<?>) entry.getValue().copy();
+            AType<?> fieldTypeCopy = (AType<?>) entry.getValue().copyImpl();
             boolean changedField = setTypeFieldByValueRecursiveImpl(fieldTypeCopy, currentValue, newValue,
                     checkedNodes);
 
             // Update field
             if (changedField) {
-                type.setValue(entry.getKey(), fieldTypeCopy);
+                type.setValueImpl(entry.getKey(), fieldTypeCopy);
                 return true;
             }
         }

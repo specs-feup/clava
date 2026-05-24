@@ -279,12 +279,12 @@ public class CxxProgram<Self extends CxxProgram<Self>> extends AProgram<Self> {
                 getFactory().builtinType("void"));
 
         // Insert call at the beginning of the main function
-        mainFunction.getBodyImpl().insertBegin(CxxJoinpoints.create(atexitCall, getWeaverEngine()));
+        mainFunction.getBodyImpl().insertBeginImpl(CxxJoinpoints.create(atexitCall, getWeaverEngine()));
 
         // Add include for atexit
         AFile<?> file = (AFile<?>) mainFunction.getGetAncestorImpl("file");
         Objects.requireNonNull(file, () -> "Expected main function to be inside a file: " + mainFunction.getNodeImpl());
-        file.addInclude("stdlib.h", true);
+        file.addIncludeImpl("stdlib.h", true);
 
         // Add include for function
         file.addIncludeJpImpl(function);

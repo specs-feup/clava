@@ -137,7 +137,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
             // Create join point for testing type
             AJoinpoint<?> parentJp = CxxJoinpoints.create(currentNode.getParent(), getWeaverEngine());
 
-            if (parentJp.instanceOf(type)) {
+            if (parentJp.instanceOfImpl(type)) {
                 return parentJp;
             }
 
@@ -151,7 +151,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
     public AJoinpoint<?>[] getGetDescendantsImpl(String type) {
         Objects.requireNonNull(type, () -> "Missing type of descendants in attribute 'descendants'");
 
-        return CxxSelects.selectedNodesToJps(getNodeImpl().getDescendantsStream(), jp -> jp.instanceOf(type),
+        return CxxSelects.selectedNodesToJps(getNodeImpl().getDescendantsStream(), jp -> jp.instanceOfImpl(type),
                 getWeaverEngine());
     }
 
@@ -164,7 +164,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
     public AJoinpoint<?>[] getGetDescendantsAndSelfImpl(String type) {
         Objects.requireNonNull(type, () -> "Missing type of descendants in attribute 'descendants'");
 
-        return CxxSelects.selectedNodesToJps(getNodeImpl().getDescendantsAndSelfStream(), jp -> jp.instanceOf(type),
+        return CxxSelects.selectedNodesToJps(getNodeImpl().getDescendantsAndSelfStream(), jp -> jp.instanceOfImpl(type),
                 getWeaverEngine());
     }
 
@@ -179,7 +179,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
         AJoinpoint<?> currentJp = this;
         while (currentJp.getHasParentImpl()) {
             var parentJp = currentJp.getParentImpl();
-            if (parentJp.instanceOf(type)) {
+            if (parentJp.instanceOfImpl(type)) {
                 return parentJp;
             }
 
@@ -363,7 +363,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
 
             throw new RuntimeException(
                     "Inserting before/after a loop header statement only support for 'declStmt' and 'exprStmt', this is a "
-                            + joinPointType());
+                            + getJoinPointTypeImpl());
 
         }
 
@@ -392,7 +392,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
         }
 
         // Remove current node from the tree
-        detach();
+        detachImpl();
 
         // Return the first inserted element
         return topInserted;
@@ -410,7 +410,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
         }
 
         // Remove current node from the tree
-        detach();
+        detachImpl();
 
         // Return the first inserted element
         return topInserted;
@@ -422,7 +422,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
 
         if (!node.hasParent()) {
             SpecsLogs.msgInfo(
-                    "action detach: could not find a parent in joinpoint of type '" + joinPointType() + "'");
+                    "action detach: could not find a parent in joinpoint of type '" + getJoinPointTypeImpl() + "'");
             return this;
         }
 
@@ -441,7 +441,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
         ClavaNode node = getNodeImpl();
 
         if (!(node instanceof Typable)) {
-            SpecsLogs.msgInfo("Joinpoint of type '" + joinPointType() + "' with node '" + node.getNodeName()
+            SpecsLogs.msgInfo("Joinpoint of type '" + getJoinPointTypeImpl() + "' with node '" + node.getNodeName()
                     + "' does not have a type");
             return null;
         }
@@ -678,7 +678,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
 
         Object lastPrevious = null;
         for (Entry<String, ?> entry : fieldNameAndValue.entrySet()) {
-            lastPrevious = setUserField(entry.getKey(), entry.getValue());
+            lastPrevious = setUserFieldImpl(entry.getKey(), entry.getValue());
         }
 
         return lastPrevious;
@@ -697,7 +697,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
 
         if (!currentRegionTry.isPresent()) {
             ClavaLog.info(
-                    "Join point '" + joinPointType() + "'@" + getLocationImpl() + " does not support currentRegion");
+                    "Join point '" + getJoinPointTypeImpl() + "'@" + getLocationImpl() + " does not support currentRegion");
             return null;
         }
 
@@ -879,7 +879,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
     public Object getGetValueImpl(String key) {
         var keys = getNodeImpl().getStoreDefinition();
         if (!keys.hasKey(key)) {
-            ClavaLog.info("getValue(): key '" + key + "' not supported for join point '" + joinPointType() + "'");
+            ClavaLog.info("getValue(): key '" + key + "' not supported for join point '" + getJoinPointTypeImpl() + "'");
             return null;
         }
 
@@ -897,13 +897,13 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
         DataKey<Object> datakey = getNodeImpl().getStoreDefinition().getKeyRaw(key);
 
         // If string, use decoder
-        if (value instanceof String) {
-            value = datakey.decode((String) value);
+        if (value instanceof String str) {
+            value = datakey.decode(str);
         }
 
         // If join point, use underlying node
-        if (value instanceof AJoinpoint) {
-            value = ((AJoinpoint<?>) value).getNodeImpl();
+        if (value instanceof AJoinpoint jp) {
+            value = jp.getNodeImpl();
         }
 
         // Adapt to optional, if needed
@@ -982,7 +982,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
 
         // Otherwise, replace node
         var firstChild = getFirstChildImpl();
-        firstChild.replaceWith(value);
+        firstChild.replaceWithImpl(value);
         return firstChild;
     }
 
@@ -1009,7 +1009,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
 
         // Otherwise, replace node
         var lastChild = getLastChildImpl();
-        lastChild.replaceWith(value);
+        lastChild.replaceWithImpl(value);
         return lastChild;
     }
 
