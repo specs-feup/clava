@@ -48,7 +48,6 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AProgram;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
-import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -63,7 +62,7 @@ import pt.up.fe.specs.util.stringsplitter.StringSplitterRules;
  */
 public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Self> {
 
-    public CxxJoinpoint(ClavaNode node, ACxxWeaver weaver) {
+    public CxxJoinpoint(ClavaNode node, CxxWeaver weaver) {
         super(node, weaver);
     }
 
