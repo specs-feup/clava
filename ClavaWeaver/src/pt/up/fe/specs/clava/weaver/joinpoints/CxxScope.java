@@ -180,7 +180,7 @@ public class CxxScope<Self extends CxxScope<Self>> extends AScope<Self> {
 
         // Check if joinpoint is a CxxType
         if (!(type instanceof AType)) {
-            SpecsLogs.msgInfo("addLocal: the provided join point (" + type.joinPointType() + ") is not a type");
+            SpecsLogs.msgInfo("addLocal: the provided join point (" + type.getJoinPointTypeImpl() + ") is not a type");
             return null;
         }
 
@@ -201,7 +201,7 @@ public class CxxScope<Self extends CxxScope<Self>> extends AScope<Self> {
 
         AJoinpoint<?> varDeclJp = CxxJoinpoints.create(varDecl, getWeaverEngine());
 
-        insertBegin(varDeclJp);
+        insertBeginImpl(varDeclJp);
 
         return varDeclJp;
     }

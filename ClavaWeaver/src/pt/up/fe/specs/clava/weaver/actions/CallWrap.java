@@ -102,12 +102,12 @@ public class CallWrap {
                 break;
             case NO_INCLUDE:
                 addWrapperFunctionInPlace(name, false);
-                cxxCall.setName(name); // need to call this here before returning
+                cxxCall.setNameImpl(name); // need to call this here before returning
                 return;
             case DECLARATION_IN_IMPLEMENTATION:
 
                 addWrapperFunctionInPlace(name, true);
-                cxxCall.setName(name);
+                cxxCall.setNameImpl(name);
                 return;
             }
 
@@ -119,7 +119,7 @@ public class CallWrap {
         cxxCall.getNodeImpl().getAncestor(TranslationUnit.class).addInclude(includePath, false);
 
         // Set call name
-        cxxCall.setName(name);
+        cxxCall.setNameImpl(name);
     }
 
     /**

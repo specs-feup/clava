@@ -45,7 +45,7 @@ public class CxxExpression<Self extends CxxExpression<Self>> extends AExpression
     @Override
     public AVardecl<?> getVardeclImpl() {
         // Get more specific join point for current node
-        SpecsLogs.msgInfo("attribute 'vardecl' not implemented yet for joinpoint " + joinPointType());
+        SpecsLogs.msgInfo("attribute 'vardecl' not implemented yet for joinpoint " + getJoinPointTypeImpl());
         return null;
     }
 

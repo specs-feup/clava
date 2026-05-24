@@ -200,7 +200,7 @@ public class CxxOmp<Self extends CxxOmp<Self>> extends AOmp<Self> {
 
     @Override
     public void setScheduleChunkSizeImpl(int chunkSize) {
-        setScheduleChunkSize(Integer.toString(chunkSize));
+        this.setScheduleChunkSizeImpl(Integer.toString(chunkSize));
     }
 
     @Override

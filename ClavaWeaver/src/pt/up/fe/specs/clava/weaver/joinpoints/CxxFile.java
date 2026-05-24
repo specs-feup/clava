@@ -111,7 +111,7 @@ public class CxxFile<Self extends CxxFile<Self>> extends AFile<Self> {
         // Check node is a decl
         if (!(node.getNodeImpl() instanceof Decl)) {
             SpecsLogs.msgInfo(
-                    "Can only insert Decl nodes in a file, tried to insert a '" + node.joinPointType() + "'");
+                    "Can only insert Decl nodes in a file, tried to insert a '" + node.getJoinPointTypeImpl() + "'");
             return null;
         }
 
@@ -126,7 +126,7 @@ public class CxxFile<Self extends CxxFile<Self>> extends AFile<Self> {
         // Check node is a decl
         if (node.getNodeImpl() instanceof Decl) {
             SpecsLogs.msgInfo(
-                    "Can only insert Decl nodes in a file, tried to insert a '" + node.joinPointType() + "'");
+                    "Can only insert Decl nodes in a file, tried to insert a '" + node.getJoinPointTypeImpl() + "'");
             return null;
         }
 
@@ -144,7 +144,7 @@ public class CxxFile<Self extends CxxFile<Self>> extends AFile<Self> {
     public void addIncludeJpImpl(AJoinpoint<?> jp) {
 
         // If jp is a function, include declaration if available
-        if (jp.instanceOf("function")) {
+        if (jp.instanceOfImpl("function")) {
             AFunction<?> functionJp = (AFunction<?>) jp;
             AJoinpoint<?> decl = functionJp.getDeclarationJpImpl();
             jp = decl != null ? decl : jp;
@@ -201,7 +201,7 @@ public class CxxFile<Self extends CxxFile<Self>> extends AFile<Self> {
 
         // Check if joinpoint is a CxxType
         if (!(type instanceof AType)) {
-            SpecsLogs.msgInfo("addGlobal: the provided join point (" + type.joinPointType() + ") is not a type");
+            SpecsLogs.msgInfo("addGlobal: the provided join point (" + type.getJoinPointTypeImpl() + ") is not a type");
             return null;
         }
 
@@ -307,7 +307,7 @@ public class CxxFile<Self extends CxxFile<Self>> extends AFile<Self> {
         TranslationUnit rebuiltTunit = getWeaverEngine().rebuildFile(this.getNodeImpl());
 
         AFile<?> rebuiltFile = CxxJoinpoints.create(rebuiltTunit, getWeaverEngine(), AFile.class);
-        replaceWith(rebuiltFile);
+        replaceWithImpl(rebuiltFile);
         return rebuiltFile;
     }
 

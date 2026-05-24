@@ -34,7 +34,7 @@ public class CxxEnumType<Self extends CxxEnumType<Self>> extends AEnumType<Self>
 
     @Override
     public AType<?> getIntegerTypeImpl() {
-        if (root() == null) {
+        if (getRootImpl() == null) {
             SpecsLogs.msgInfo("Root not defined, is this a detached join point? -> " + this);
             return null;
         }

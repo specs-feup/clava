@@ -227,7 +227,7 @@ public class CxxLoop<Self extends CxxLoop<Self>> extends ALoop<Self> {
             Stmt cond = ((ForStmt) this.getNodeImpl()).getCond().orElse(getWeaverEngine().getFactory().nullStmt());
             WhileStmt whileStmt = getWeaverEngine().getFactory().whileStmt(cond, this.getNodeImpl().getBody());
 
-            replaceWith(CxxJoinpoints.create(whileStmt, getWeaverEngine()));
+            replaceWithImpl(CxxJoinpoints.create(whileStmt, getWeaverEngine()));
             return;
         }
 
