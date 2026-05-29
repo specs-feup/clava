@@ -144,7 +144,7 @@ public class CxxFile<Self extends CxxFile<Self>> extends AFile<Self> {
     public void addIncludeJpImpl(AJoinpoint<?> jp) {
 
         // If jp is a function, include declaration if available
-        if (jp.instanceOfImpl("function")) {
+        if (jp.getInstanceOfImpl("function")) {
             AFunction<?> functionJp = (AFunction<?>) jp;
             AJoinpoint<?> decl = functionJp.getDeclarationJpImpl();
             jp = decl != null ? decl : jp;

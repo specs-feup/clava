@@ -217,7 +217,7 @@ public class CxxType<Self extends CxxType<Self>> extends AType<Self> {
 
             // Found value to change, change it and return
             if (currentValue instanceof CxxType cxxType){
-                if (((AType)entry.getValue()).equalsImpl(cxxType)) {
+                if (((AType)entry.getValue()).getEqualsImpl(cxxType)) {
                     type.setValueImpl(entry.getKey(), newValue);
                     return true;
                 }

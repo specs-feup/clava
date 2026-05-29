@@ -137,7 +137,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
             // Create join point for testing type
             AJoinpoint<?> parentJp = CxxJoinpoints.create(currentNode.getParent(), getWeaverEngine());
 
-            if (parentJp.instanceOfImpl(type)) {
+            if (parentJp.getInstanceOfImpl(type)) {
                 return parentJp;
             }
 
@@ -151,7 +151,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
     public AJoinpoint<?>[] getGetDescendantsImpl(String type) {
         Objects.requireNonNull(type, () -> "Missing type of descendants in attribute 'descendants'");
 
-        return CxxSelects.selectedNodesToJps(getNodeImpl().getDescendantsStream(), jp -> jp.instanceOfImpl(type),
+        return CxxSelects.selectedNodesToJps(getNodeImpl().getDescendantsStream(), jp -> jp.getInstanceOfImpl(type),
                 getWeaverEngine());
     }
 
@@ -164,7 +164,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
     public AJoinpoint<?>[] getGetDescendantsAndSelfImpl(String type) {
         Objects.requireNonNull(type, () -> "Missing type of descendants in attribute 'descendants'");
 
-        return CxxSelects.selectedNodesToJps(getNodeImpl().getDescendantsAndSelfStream(), jp -> jp.instanceOfImpl(type),
+        return CxxSelects.selectedNodesToJps(getNodeImpl().getDescendantsAndSelfStream(), jp -> jp.getInstanceOfImpl(type),
                 getWeaverEngine());
     }
 
@@ -179,7 +179,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
         AJoinpoint<?> currentJp = this;
         while (currentJp.getHasParentImpl()) {
             var parentJp = currentJp.getParentImpl();
-            if (parentJp.instanceOfImpl(type)) {
+            if (parentJp.getInstanceOfImpl(type)) {
                 return parentJp;
             }
 
@@ -705,7 +705,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
     }
 
     @Override
-    public boolean equalsImpl(Self jp) {
+    public boolean getEqualsImpl(Self jp) {
         if (!(jp instanceof AJoinpoint)) {
             return false;
         }
