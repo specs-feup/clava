@@ -2,5 +2,5 @@ Cond: {
 i < len;
 }
 
-lt
+LT
 Found 1 forloops.
