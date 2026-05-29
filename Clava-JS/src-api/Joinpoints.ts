@@ -1403,7 +1403,7 @@ export class Omp extends Pragma {
   /**
    * One of 'shared' or 'none', or undefined if no 'default' clause is defined
    */
-  get default(): string { return wrapJoinPoint(this._javaObject.default()) }
+  get default(): string { return wrapJoinPoint(this._javaObject._default()) }
   /**
    * One of 'shared' or 'none', or undefined if no 'default' clause is defined
    */
@@ -1451,7 +1451,7 @@ export class Omp extends Pragma {
   /**
    * The variable names of all private clauses, or empty array if no private clause is defined
    */
-  get private(): string[] { return wrapJoinPoint(this._javaObject.private()) }
+  get private(): string[] { return wrapJoinPoint(this._javaObject._private()) }
   /**
    * The variable names of all private clauses, or empty array if no private clause is defined
    */
@@ -1831,7 +1831,7 @@ export class If extends Statement {
   get cond(): Expression { return wrapJoinPoint(this._javaObject.cond()) }
   set cond(value: Expression) { this._javaObject.setCond(unwrapJoinPoint(value)); }
   get condDecl(): Vardecl { return wrapJoinPoint(this._javaObject.condDecl()) }
-  get else(): Scope { return wrapJoinPoint(this._javaObject.else()) }
+  get else(): Scope { return wrapJoinPoint(this._javaObject._else()) }
   set else(value: Statement) { this._javaObject.setElse(unwrapJoinPoint(value)); }
   get then(): Scope { return wrapJoinPoint(this._javaObject.then()) }
   set then(value: Statement) { this._javaObject.setThen(unwrapJoinPoint(value)); }
