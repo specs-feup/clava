@@ -58,7 +58,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(UnaryOperator.class, CxxUnaryOp::new);
         JOINPOINT_FACTORY.put(ConditionalOperator.class, CxxTernaryOp::new);
         JOINPOINT_FACTORY.put(CXXMemberCallExpr.class, CxxMemberCall::new);
-        JOINPOINT_FACTORY.put(CUDAKernelCallExpr.class, CXXCudaKernelCall::new);
+        JOINPOINT_FACTORY.put(CUDAKernelCallExpr.class, CxxCudaKernelCall::new);
         JOINPOINT_FACTORY.put(CallExpr.class, CxxCall::new);
         JOINPOINT_FACTORY.put(DeclRefExpr.class, CxxVarref::new);
         JOINPOINT_FACTORY.put(ArraySubscriptExpr.class, CxxArrayAccess::new);
