@@ -63,7 +63,7 @@ tasks.register('generateWeaver', JavaExec) {
     group = "Execution"
     description = "Generates the Weaver Abstracts using WeaverGen2"
     classpath = configurations.weaverGeneratorRuntime + sourceSets.spec.runtimeClasspath
-    mainClass = 'org.lara.weavergen2.WeaverGen2'
+    mainClass = 'org.lara.weavergen2.cli.WeaverGen2Cli'
     args = [
         "pt.up.fe.specs.clava.weaver.CxxSpec",
         "${projectDir}/src",
