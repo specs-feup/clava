@@ -11,9 +11,9 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.util.SpecsCollections;
 
-public class CXXCudaKernelCall<Self extends CXXCudaKernelCall<Self>> extends ACudaKernelCall<Self> {
+public class CxxCudaKernelCall<Self extends CxxCudaKernelCall<Self>> extends ACudaKernelCall<Self> {
 
-    public CXXCudaKernelCall(CUDAKernelCallExpr kernelCall, CxxWeaver weaver) {
+    public CxxCudaKernelCall(CUDAKernelCallExpr kernelCall, CxxWeaver weaver) {
         super(kernelCall, weaver);
     }
 
