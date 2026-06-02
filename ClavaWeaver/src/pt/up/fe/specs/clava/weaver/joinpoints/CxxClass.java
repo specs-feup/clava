@@ -27,23 +27,6 @@ public class CxxClass<Self extends CxxClass<Self>> extends AClass<Self> {
         super(cxxRecordDecl, weaver);
     }
 
-    public Boolean isAbstract() {
-        return (Boolean) this.getIsAbstract();
-        /*
-        return this.cxxRecordDecl.getMethods().stream()
-                .filter(method -> !(method instanceof CXXDestructorDecl))
-                .anyMatch(method -> {/*
-                    System.err.println(" -> " + method.getFullyQualifiedName() 
-                    + " " + method.get(CXXMethodDecl.IS_VIRTUAL).booleanValue()
-                    + " " + method.get(CXXMethodDecl.IS_PURE).booleanValue());
-                    /** /
-                    // System.err.println(method.getCode());
-                    
-                    return method.get(CXXMethodDecl.IS_PURE).booleanValue();
-                });
-        */
-    }
-
     @Override
     public CXXRecordDecl getNodeImpl() {
         return (CXXRecordDecl) super.getNodeImpl();

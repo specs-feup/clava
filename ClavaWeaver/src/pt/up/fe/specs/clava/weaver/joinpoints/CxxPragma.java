@@ -57,7 +57,7 @@ public class CxxPragma<Self extends CxxPragma<Self>> extends APragma<Self> {
     }
 
     public void setPragma(Pragma pragma) {
-        this.pragma = pragma;
+        this.node = pragma;
     }
 
     @Override

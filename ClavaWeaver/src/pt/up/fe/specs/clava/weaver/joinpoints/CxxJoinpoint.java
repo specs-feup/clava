@@ -269,7 +269,18 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
 
     @Override
     public AJoinpoint<?>[] insertImpl(InsertPosition position, AJoinpoint<?> node) {
-        throw new NotImplementedException(this);
+        Insert insert = Insert.getHelper().fromValue(position.getDisplay());
+        switch (insert) {
+            case AFTER:
+                return new AJoinpoint<?>[]{insertAfterImpl(node)};
+            case BEFORE:
+                return new AJoinpoint<?>[]{insertBeforeImpl(node)};
+            case REPLACE:
+                return new AJoinpoint<?>[]{replaceWithImpl(node)};
+            case AROUND:
+            default:
+                throw new NotImplementedException(insert);
+        }
     }
 
     @Override
@@ -710,7 +721,7 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
             return false;
         }
 
-        return getNodeImpl().equals(((AJoinpoint) jp).getNodeImpl());
+        return this.getSameImpl(jp);
     }
 
     @Override

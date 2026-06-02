@@ -263,9 +263,6 @@ public class CxxOmp<Self extends CxxOmp<Self>> extends AOmp<Self> {
         NodeInsertUtils.replace(this.getNodeImpl(), newOmpPragma);
 
         // Update join point pragma
-        this.ompPragma = newOmpPragma;
-
-        // Update parent join point
-        this.aPragma = new CxxPragma(ompPragma, getWeaverEngine());
+        this.node = newOmpPragma;
     }
 }
