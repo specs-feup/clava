@@ -37,7 +37,7 @@ public class CxxWeaverApi {
         weaver.writeCode(outputFolder);
     }
 
-    public static List<AInclude<?>> getAvailableUserIncludes(CxxWeaver weaver) {
+    public static List<AInclude> getAvailableUserIncludes(CxxWeaver weaver) {
         return weaver.getAvailableIncludes().stream()
                 .map(weaver.getFactory()::includeDecl)
                 .map(includeDecl -> CxxJoinpoints.create(includeDecl, weaver, AInclude.class))

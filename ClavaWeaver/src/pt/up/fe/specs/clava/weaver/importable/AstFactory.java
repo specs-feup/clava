@@ -157,7 +157,7 @@ public class AstFactory {
         return cxxConstructExpr(weaver, type, SpecsCollections.asListT(AJoinpoint.class, constructorArguments));
     }
 
-    public static AExpression<?> cxxConstructExpr(CxxWeaver weaver, AType<?> type, List<AJoinpoint<?>> constructorArguments) {
+    public static AExpression<?> cxxConstructExpr(CxxWeaver weaver, AType<?> type, List<AJoinpoint> constructorArguments) {
         List<Expr> exprArgs = constructorArguments.stream()
                 .map(arg -> (Expr) arg.getNodeImpl())
                 .collect(Collectors.toList());
@@ -169,7 +169,7 @@ public class AstFactory {
         return callFromFunction(weaver, function, SpecsCollections.asListT(AJoinpoint.class, args));
     }
 
-    public static ACall<?> callFromFunction(CxxWeaver weaver, AFunction<?> function, List<? extends AJoinpoint<?>> args) {
+    public static ACall<?> callFromFunction(CxxWeaver weaver, AFunction<?> function, List<? extends AJoinpoint> args) {
         var functionDecl = (FunctionDecl) function.getNodeImpl();
         List<Expr> exprArgs = args.stream()
                 .map(arg -> (Expr) arg.getNodeImpl())
@@ -185,7 +185,7 @@ public class AstFactory {
     }
 
 
-    public static ACall<?> call(CxxWeaver weaver, String functionName, AType<?> typeJp, List<AJoinpoint<?>> args) {
+    public static ACall<?> call(CxxWeaver weaver, String functionName, AType<?> typeJp, List<AJoinpoint> args) {
 
         Type returnType = (Type) typeJp.getNodeImpl();
 
@@ -478,7 +478,7 @@ public class AstFactory {
         return scope(weaver, SpecsCollections.asListT(AStatement.class, statements));
     }
 
-    public static AScope<?> scope(CxxWeaver weaver, List<? extends AStatement<?>> statements) {
+    public static AScope<?> scope(CxxWeaver weaver, List<? extends AStatement> statements) {
         List<Stmt> stmtNodes = SpecsCollections.map(statements, stmt -> (Stmt) stmt.getNodeImpl());
         return CxxJoinpoints.create(weaver.getFactory().compoundStmt(stmtNodes), weaver, AScope.class);
     }
@@ -513,7 +513,7 @@ public class AstFactory {
     }
 
 
-    public static AFunctionType<?> functionType(CxxWeaver weaver, AType<?> returnTypeJp, List<AType<?>> argTypesJps) {
+    public static AFunctionType<?> functionType(CxxWeaver weaver, AType<?> returnTypeJp, List<AType> argTypesJps) {
 
         Type returnType = (Type) returnTypeJp.getNodeImpl();
 
@@ -532,7 +532,7 @@ public class AstFactory {
                 weaver, AFunction.class);
     }
 
-    public static AFunction<?> functionDecl(CxxWeaver weaver, String functionName, AType<?> returnTypeJp, List<AJoinpoint<?>> namedDeclJps) {
+    public static AFunction<?> functionDecl(CxxWeaver weaver, String functionName, AType<?> returnTypeJp, List<AJoinpoint> namedDeclJps) {
 
         Type returnType = (Type) returnTypeJp.getNodeImpl();
 
@@ -635,7 +635,7 @@ public class AstFactory {
         return CxxJoinpoints.create(parenExpr, weaver, AExpression.class);
     }
 
-    public static AArrayAccess<?> arrayAccess(CxxWeaver weaver, AExpression<?> base, List<AExpression<?>> subscripts) {
+    public static AArrayAccess<?> arrayAccess(CxxWeaver weaver, AExpression<?> base, List<AExpression> subscripts) {
         var subscriptsExpr = subscripts.stream()
                 .map(arg -> ((Expr) arg.getNodeImpl()))
                 .collect(Collectors.toList());
@@ -648,7 +648,7 @@ public class AstFactory {
         return arrayAccess(weaver, base, SpecsCollections.asListT(AExpression.class, subscripts));
     }
 
-    public static AInitList<?> initList(CxxWeaver weaver, List<AExpression<?>> values) {
+    public static AInitList<?> initList(CxxWeaver weaver, List<AExpression> values) {
         var valuesExpr = values.stream()
                 .map(arg -> ((Expr) arg.getNodeImpl()))
                 .collect(Collectors.toList());
@@ -698,7 +698,7 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static AClass<?> classDecl(CxxWeaver weaver, String className, List<AField<?>> fields) {
+    public static AClass<?> classDecl(CxxWeaver weaver, String className, List<AField> fields) {
         var fieldsNodes = fields.stream().map(field -> (FieldDecl) field.getNodeImpl())
                 .collect(Collectors.toList());
 
@@ -800,7 +800,7 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static ADeclStmt<?> declStmt(CxxWeaver weaver, List<ADecl<?>> decls) {
+    public static ADeclStmt<?> declStmt(CxxWeaver weaver, List<ADecl> decls) {
         var declNodes = decls.stream().map(decl -> (Decl) decl.getNodeImpl())
                 .collect(Collectors.toList());
 
