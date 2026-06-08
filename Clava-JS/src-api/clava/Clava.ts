@@ -1,7 +1,7 @@
 import { wrapJoinPoint } from "@specs-feup/lara/api/LaraJoinPoint.js";
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import JavaInterop from "@specs-feup/lara/api/lara/JavaInterop.js";
-import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import { type JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import Weaver from "@specs-feup/lara/api/weaver/Weaver.js";
 import WeaverOptions from "@specs-feup/lara/api/weaver/WeaverOptions.js";
