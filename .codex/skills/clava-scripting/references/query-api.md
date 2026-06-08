@@ -4,11 +4,11 @@ Use this when writing or debugging joinpoint selection logic.
 
 ## Primary sources
 
-- Query API: `../lara/Lara-JS/src-api/weaver/Query.ts` (sibling worktree)
-- Selector behavior: `../lara/Lara-JS/src-api/weaver/Selector.ts` (sibling worktree)
-- Query usage tests: `Clava-JS/src-api/Query.test.ts`
+- Query API: `../lara/Lara-JS/api/weaver/Query.ts` (sibling worktree)
+- Selector behavior: `../lara/Lara-JS/api/weaver/Selector.ts` (sibling worktree)
+- Query usage tests: `Clava-JS/api/Query.test.ts`
 
-If the Lara-JS repo is not a sibling of Clava, search for `Lara-JS/src-api/weaver/Query.ts`.
+If the Lara-JS repo is not a sibling of Clava, search for `Lara-JS/api/weaver/Query.ts`.
 
 ## Core patterns
 
