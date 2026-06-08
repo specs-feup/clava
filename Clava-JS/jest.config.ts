@@ -1,4 +1,6 @@
-const config = {
+import { defineConfig } from "jest";
+
+export default defineConfig({
   preset: "ts-jest/presets/default-esm",
   testEnvironment: "node",
   notify: true,
@@ -13,6 +15,4 @@ const config = {
     "(.+)\\.js": "$1",
   },
   projects: ["api", "code"],
-};
-
-export default config;
+});
