@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    //"noEmit": true,
+    "noEmit": true,
     "module": "NodeNext",
     "isolatedModules": true,
     "declaration": true,

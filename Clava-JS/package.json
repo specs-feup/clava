@@ -6,8 +6,6 @@
   "files": [
     "api",
     "code",
-    "src-api",
-    "src-code",
     "java-binaries",
     ".gitignore",
     "eslint.config.js",
@@ -20,21 +18,21 @@
     "typedoc.config.js"
   ],
   "bin": {
-    "clava": "./code/index.js"
+    "clava": "./code/index.ts"
   },
   "scripts": {
-    "run": "node ./code/index.js",
-    "build": "tsc -b src-api src-code",
-    "build:api": "tsc -b src-api",
-    "build:code": "tsc -b src-code",
+    "run": "node ./code/index.ts",
+    "build": "tsc -b api code",
+    "build:api": "tsc -b api",
+    "build:code": "tsc -b code",
     "build:watch": "npm run build -- --watch",
     "lint": "eslint .",
     "test": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --detectOpenHandles --forceExit",
-    "test:api": "npm run test -- src-api",
-    "test:code": "npm run test -- src-code",
+    "test:api": "npm run test -- api",
+    "test:code": "npm run test -- code",
     "test:cov": "npm run test -- --coverage",
     "test:watch": "npm run test -- --watch",
-    "build-interfaces": "npx lara-build-interfaces --input ../ClavaWeaver/src/pt/up/fe/specs/clava/weaver/CxxWeaver.json --lara @specs-feup/lara/LaraJoinPointSpecification.json --output src-api/Joinpoints.ts"
+    "build-interfaces": "npx lara-build-interfaces --input ../ClavaWeaver/src/pt/up/fe/specs/clava/weaver/CxxWeaver.json --lara @specs-feup/lara/LaraJoinPointSpecification.json --output api/Joinpoints.ts"
   },
   "repository": {
     "type": "git",
