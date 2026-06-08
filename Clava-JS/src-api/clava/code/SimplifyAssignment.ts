@@ -26,7 +26,7 @@ export default function SimplifyAssignment($complexAssignment: BinaryOp): void {
 /**
  * Non-assignment counterparts of complex assignment operators (lookup table)
  */
-const ops = new Map([
+const ops = new Map<OpKind, OpKind>([
   [OpKind.mul_assign, OpKind.mul],
   [OpKind.div_assign, OpKind.div],
   [OpKind.rem_assign, OpKind.rem],

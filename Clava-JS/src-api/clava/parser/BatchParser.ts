@@ -4,7 +4,7 @@ import System from "@specs-feup/lara/api/lara/System.js";
 import Strings from "@specs-feup/lara/api/lara/Strings.js";
 import Clava from "../Clava.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
-import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import { type JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
 import { FileJp } from "../../Joinpoints.js";
 

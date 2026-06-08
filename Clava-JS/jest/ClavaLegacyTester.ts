@@ -1,5 +1,5 @@
 import ClavaJavaTypes, {
-    ClavaJavaClasses,
+    type ClavaJavaClasses,
 } from "@specs-feup/clava/api/clava/ClavaJavaTypes.js";
 
 import { WeaverLegacyTester } from "@specs-feup/lara/jest/WeaverLegacyTester.js";

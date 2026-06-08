@@ -1,6 +1,6 @@
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
-import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import { type JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import {
   FileJp,

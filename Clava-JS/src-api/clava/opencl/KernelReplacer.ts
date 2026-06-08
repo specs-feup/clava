@@ -484,22 +484,40 @@ class Buffer {
 
 /* ------------------------------ ENUMS ----------------------------- */
 
-enum BufferKind {
-  INPUT = "CL_MEM_READ_ONLY",
-  OUTPUT = "CL_MEM_WRITE_ONLY",
-  INPUT_OUTPUT = "CL_MEM_READ_WRITE",
-}
+/**
+ * This is supposed to be an enum, but Node.js v25 does bot support TS' enums, only erasable-syntax.
+ * Revert to an enum when Node.js supports it, or when we move to a different engine that supports it.
+ * This and the "type" declaration below.
+ */
+const BufferKind = {
+  INPUT: "CL_MEM_READ_ONLY",
+  OUTPUT: "CL_MEM_WRITE_ONLY",
+  INPUT_OUTPUT: "CL_MEM_READ_WRITE",
+} as const;
+type BufferKind = typeof BufferKind[keyof typeof BufferKind];
 
-enum DeviceType {
-  CL_DEVICE_TYPE_ALL = "CL_DEVICE_TYPE_ALL",
-  CL_DEVICE_TYPE_CPU = "CL_DEVICE_TYPE_CPU",
-  CL_DEVICE_TYPE_GPU = "CL_DEVICE_TYPE_GPU",
-  CL_DEVICE_TYPE_ACCELERATOR = "CL_DEVICE_TYPE_ACCELERATOR",
-  CL_DEVICE_TYPE_DEFAULT = "CL_DEVICE_TYPE_DEFAULT",
-}
+/**
+ * This is supposed to be an enum, but Node.js v25 does bot support TS' enums, only erasable-syntax.
+ * Revert to an enum when Node.js supports it, or when we move to a different engine that supports it.
+ * This and the "type" declaration below.
+ */
+const DeviceType = {
+  CL_DEVICE_TYPE_ALL: "CL_DEVICE_TYPE_ALL",
+  CL_DEVICE_TYPE_CPU: "CL_DEVICE_TYPE_CPU",
+  CL_DEVICE_TYPE_GPU: "CL_DEVICE_TYPE_GPU",
+  CL_DEVICE_TYPE_ACCELERATOR: "CL_DEVICE_TYPE_ACCELERATOR",
+  CL_DEVICE_TYPE_DEFAULT: "CL_DEVICE_TYPE_DEFAULT",
+} as const;
+type DeviceType = typeof DeviceType[keyof typeof DeviceType];
 
-enum ErrorHandling {
-  EXIT = 0,
-  RETURN = 1,
-  USER = 2,
-}
+/**
+ * This is supposed to be an enum, but Node.js v25 does bot support TS' enums, only erasable-syntax.
+ * Revert to an enum when Node.js supports it, or when we move to a different engine that supports it.
+ * This and the "type" declaration below.
+ */
+const ErrorHandling = {
+  EXIT: 0,
+  RETURN: 1,
+  USER: 2,
+} as const;
+type ErrorHandling = typeof ErrorHandling[keyof typeof ErrorHandling];

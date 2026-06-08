@@ -9,31 +9,37 @@ import {
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 import Format from "../Format.js";
 
-enum HDF5Types {
-  "char" = "C_S1",
-  "signed char" = "NATIVE_SCHAR",
-  "unsigned char" = "NATIVE_UCHAR",
-  "short" = "NATIVE_SHORT",
-  "unsigned short" = "NATIVE_USHORT",
-  "int" = "NATIVE_INT",
-  "unsigned int" = "NATIVE_UINT",
-  "long" = "NATIVE_LONG",
-  "unsigned long" = "NATIVE_ULONG",
-  "long long" = "NATIVE_LLONG",
-  "unsigned long long" = "NATIVE_ULLONG",
-  "float" = "NATIVE_FLOAT",
-  "double" = "NATIVE_DOUBLE",
-  "long double" = "NATIVE_LDOUBLE",
+/**
+ * This is supposed to be an enum, but Node.js v25 does bot support TS' enums, only erasable-syntax.
+ * Revert to an enum when Node.js supports it, or when we move to a different engine that supports it.
+ * This and the "type" declaration below.
+ */
+const HDF5Types = {
+  "char": "C_S1",
+  "signed char": "NATIVE_SCHAR",
+  "unsigned char": "NATIVE_UCHAR",
+  "short": "NATIVE_SHORT",
+  "unsigned short": "NATIVE_USHORT",
+  "int": "NATIVE_INT",
+  "unsigned int": "NATIVE_UINT",
+  "long": "NATIVE_LONG",
+  "unsigned long": "NATIVE_ULONG",
+  "long long": "NATIVE_LLONG",
+  "unsigned long long": "NATIVE_ULLONG",
+  "float": "NATIVE_FLOAT",
+  "double": "NATIVE_DOUBLE",
+  "long double": "NATIVE_LDOUBLE",
 
-  "int8_t" = "NATIVE_INT8",
-  "uint8_t" = "NATIVE_UINT8",
-  "int16_t" = "NATIVE_INT16",
-  "uint16_t" = "NATIVE_UINT16",
-  "int32_t" = "NATIVE_INT32",
-  "uin32_t" = "NATIVE_UINT32",
-  "int64_t" = "NATIVE_INT64",
-  "uint64_t" = "NATIVE_UINT64",
-}
+  "int8_t": "NATIVE_INT8",
+  "uint8_t": "NATIVE_UINT8",
+  "int16_t": "NATIVE_INT16",
+  "uint16_t": "NATIVE_UINT16",
+  "int32_t": "NATIVE_INT32",
+  "uint32_t": "NATIVE_UINT32",
+  "int64_t": "NATIVE_INT64",
+  "uint64_t": "NATIVE_UINT64",
+} as const;
+type HDF5Types = typeof HDF5Types[keyof typeof HDF5Types];
 
 /**
  * Utility methods related to the HDF5 library.

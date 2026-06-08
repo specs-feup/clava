@@ -1,5 +1,5 @@
 import JavaTypes, {
-  JavaClasses,
+  type JavaClasses,
 } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
