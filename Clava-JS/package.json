@@ -22,9 +22,7 @@
   },
   "scripts": {
     "run": "node ./code/index.ts",
-    "build": "tsc -b api code",
-    "build:api": "tsc -b api",
-    "build:code": "tsc -b code",
+    "build": "tsc",
     "build:watch": "npm run build -- --watch",
     "lint": "eslint .",
     "test": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --detectOpenHandles --forceExit",
