@@ -14,9 +14,6 @@ export default [
   eslintConfigPrettier,
   ...typescriptEslint.configs.recommended,
   {
-    ignores: ["**/*.d.ts", "**/*.config.js"],
-  },
-  {
     plugins: {
       "@typescript-eslint": typescriptEslint.plugin,
       tsdoc,
@@ -28,7 +25,7 @@ export default [
       sourceType: "script",
 
       parserOptions: {
-        project: ["./*/tsconfig.json", "./tsconfig.*.json"],
+        project: ["./tsconfig.json", "./tsconfig.*.json"],
         tsconfigRootDir: __dirname,
       },
     },
@@ -36,10 +33,6 @@ export default [
     rules: {
       "tsdoc/syntax": "warn",
     },
-  },
-  {
-    ...typescriptEslint.configs.disableTypeChecked,
-    files: ["scripts/**/*.js"],
   },
   {
     ...jest.configs["flat/recommended"],
