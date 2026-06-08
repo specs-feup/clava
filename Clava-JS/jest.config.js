@@ -12,7 +12,7 @@ const config = {
   moduleNameMapper: {
     "(.+)\\.js": "$1",
   },
-  projects: ["src-api", "src-code"],
+  projects: ["api", "code"],
 };
 
 export default config;

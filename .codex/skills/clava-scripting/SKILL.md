@@ -14,8 +14,8 @@ Write and modify Clava scripts in TypeScript using Clava/Lara APIs for joinpoint
 Use ESM imports with `.js` extensions, select joinpoints with `Query`, and transform with Clava APIs.
 
 ```ts
-import Query from "@specs-feup/lara/api/weaver/Query.js";
-import { FunctionJp } from "@specs-feup/clava/api/Joinpoints.js";
+import Query from "@specs-feup/lara/api/weaver/Query.ts";
+import { FunctionJp } from "@specs-feup/clava/api/Joinpoints.ts";
 
 const $fn = Query.search(FunctionJp, { isImplementation: true }).first();
 if ($fn) $fn.clone(`${$fn.name}_clone`);
@@ -24,7 +24,7 @@ if ($fn) $fn.clone(`${$fn.name}_clone`);
 ## Workflow
 
 1. Identify joinpoints and attributes.
-Use the generated joinpoint wrappers in `@specs-feup/clava/api/Joinpoints.js` and check `Joinpoints.ts` for default attributes and available fields.
+Use the generated joinpoint wrappers in `@specs-feup/clava/api/Joinpoints.ts` and check `Joinpoints.ts` for default attributes and available fields.
 
 2. Select joinpoints with Query/Selector.
 Use `Query.search`, `Query.searchFrom`, `Query.searchFromInclusive`, `Query.childrenFrom`, and `Selector.scope`. Filters accept strings, regex, predicate functions, or objects keyed by attributes. `Selector` is iterable and methods like `.get()`, `.first()`, and `.chain()` consume the current selection.
