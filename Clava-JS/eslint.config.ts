@@ -1,15 +1,16 @@
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-import typescriptEslint from "typescript-eslint";
-import tsdoc from "eslint-plugin-tsdoc";
-import jest from "eslint-plugin-jest";
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
+import jest from "eslint-plugin-jest";
+import tsdoc from "eslint-plugin-tsdoc";
+import { defineConfig } from "eslint/config";
+import { dirname } from "path";
+import typescriptEslint from "typescript-eslint";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export default [
+export default defineConfig([
   js.configs.recommended,
   eslintConfigPrettier,
   ...typescriptEslint.configs.recommended,
@@ -48,4 +49,4 @@ export default [
       },
     },
   },
-];
+]);
