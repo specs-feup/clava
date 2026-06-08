@@ -2805,92 +2805,128 @@ export class TypedefType extends Type {
   get underlyingType(): Type { return wrapJoinPoint(this._javaObject.underlyingType()) }
 }
 
-export enum StorageClass {
-  NONE = "none",
-  AUTO = "auto",
-  EXTERN = "extern",
-  PRIVATE_EXTERN = "private_extern",
-  REGISTER = "register",
-  STATIC = "static",
-}
+/**
+ * This is supposed to be an enum, but Node.js v25 does bot support TS' enums, only erasable-syntax.
+ * Revert to an enum when Node.js supports it, or when we move to a different engine that supports it.
+ * This and the "type" declaration below.
+ */
+export const StorageClass = {
+  NONE: "none",
+  AUTO: "auto",
+  EXTERN: "extern",
+  PRIVATE_EXTERN: "private_extern",
+  REGISTER: "register",
+  STATIC: "static",
+} as const;
+export type StorageClass = typeof StorageClass[keyof typeof StorageClass];
 
-export enum Relation {
-  LE = "le",
-  LT = "lt",
-  GE = "ge",
-  GT = "gt",
-  EQ = "eq",
-  NE = "ne",
-}
+/**
+ * This is supposed to be an enum, but Node.js v25 does bot support TS' enums, only erasable-syntax.
+ * Revert to an enum when Node.js supports it, or when we move to a different engine that supports it.
+ * This and the "type" declaration below.
+ */
+export const Relation = {
+  LE: "le",
+  LT: "lt",
+  GE: "ge",
+  GT: "gt",
+  EQ: "eq",
+  NE: "ne",
+} as const;
+export type Relation = typeof Relation[keyof typeof Relation];
 
-export enum LoopKind {
-  for = "for",
-  while = "while",
-  dowhile = "dowhile",
-  foreach = "foreach",
-}
+/**
+ * This is supposed to be an enum, but Node.js v25 does bot support TS' enums, only erasable-syntax.
+ * Revert to an enum when Node.js supports it, or when we move to a different engine that supports it.
+ * This and the "type" declaration below.
+ */
+export const LoopKind = {
+  for: "for",
+  while: "while",
+  dowhile: "dowhile",
+  foreach: "foreach",
+} as const;
+export type LoopKind = typeof LoopKind[keyof typeof LoopKind];
 
-export enum ExpressionUse {
-  read = "read",
-  write = "write",
-  readwrite = "readwrite",
-}
+/**
+ * This is supposed to be an enum, but Node.js v25 does bot support TS' enums, only erasable-syntax.
+ * Revert to an enum when Node.js supports it, or when we move to a different engine that supports it.
+ * This and the "type" declaration below.
+ */
+export const ExpressionUse = {
+  read: "read",
+  write: "write",
+  readwrite: "readwrite",
+} as const;
+export type ExpressionUse = typeof ExpressionUse[keyof typeof ExpressionUse];
 
-export enum OpKind {
-  ptr_mem_d = "ptr_mem_d",
-  ptr_mem_i = "ptr_mem_i",
-  mul = "mul",
-  div = "div",
-  rem = "rem",
-  add = "add",
-  sub = "sub",
-  shl = "shl",
-  shr = "shr",
-  cmp = "cmp",
-  lt = "lt",
-  gt = "gt",
-  le = "le",
-  ge = "ge",
-  eq = "eq",
-  ne = "ne",
-  and = "and",
-  xor = "xor",
-  or = "or",
-  l_and = "l_and",
-  l_or = "l_or",
-  assign = "assign",
-  mul_assign = "mul_assign",
-  div_assign = "div_assign",
-  rem_assign = "rem_assign",
-  add_assign = "add_assign",
-  sub_assign = "sub_assign",
-  shl_assign = "shl_assign",
-  shr_assign = "shr_assign",
-  and_assign = "and_assign",
-  xor_assign = "xor_assign",
-  or_assign = "or_assign",
-  comma = "comma",
-  post_inc = "post_inc",
-  post_dec = "post_dec",
-  pre_inc = "pre_inc",
-  pre_dec = "pre_dec",
-  addr_of = "addr_of",
-  deref = "deref",
-  plus = "plus",
-  minus = "minus",
-  not = "not",
-  l_not = "l_not",
-  real = "real",
-  imag = "imag",
-  extension = "extension",
-  cowait = "cowait",
-  ternary = "ternary",
-}
+/**
+ * This is supposed to be an enum, but Node.js v25 does bot support TS' enums, only erasable-syntax.
+ * Revert to an enum when Node.js supports it, or when we move to a different engine that supports it.
+ * This and the "type" declaration below.
+ */
+export const OpKind = {
+  ptr_mem_d: "ptr_mem_d",
+  ptr_mem_i: "ptr_mem_i",
+  mul: "mul",
+  div: "div",
+  rem: "rem",
+  add: "add",
+  sub: "sub",
+  shl: "shl",
+  shr: "shr",
+  cmp: "cmp",
+  lt: "lt",
+  gt: "gt",
+  le: "le",
+  ge: "ge",
+  eq: "eq",
+  ne: "ne",
+  and: "and",
+  xor: "xor",
+  or: "or",
+  l_and: "l_and",
+  l_or: "l_or",
+  assign: "assign",
+  mul_assign: "mul_assign",
+  div_assign: "div_assign",
+  rem_assign: "rem_assign",
+  add_assign: "add_assign",
+  sub_assign: "sub_assign",
+  shl_assign: "shl_assign",
+  shr_assign: "shr_assign",
+  and_assign: "and_assign",
+  xor_assign: "xor_assign",
+  or_assign: "or_assign",
+  comma: "comma",
+  post_inc: "post_inc",
+  post_dec: "post_dec",
+  pre_inc: "pre_inc",
+  pre_dec: "pre_dec",
+  addr_of: "addr_of",
+  deref: "deref",
+  plus: "plus",
+  minus: "minus",
+  not: "not",
+  l_not: "l_not",
+  real: "real",
+  imag: "imag",
+  extension: "extension",
+  cowait: "cowait",
+  ternary: "ternary",
+} as const;
+export type OpKind = typeof OpKind[keyof typeof OpKind];
 
-export enum WrapperStatementKind {
-  comment = "comment",
-  pragma = "pragma",
-}
+/**
+ * This is supposed to be an enum, but Node.js v25 does bot support TS' enums, only erasable-syntax.
+ * Revert to an enum when Node.js supports it, or when we move to a different engine that supports it.
+ * This and the "type" declaration below.
+ */
+export const WrapperStatementKind = {
+  comment: "comment",
+  pragma: "pragma",
+} as const;
+export type WrapperStatementKind = typeof WrapperStatementKind[keyof typeof WrapperStatementKind];
 
 const JoinpointMapper = {
   joinpoint: Joinpoint,

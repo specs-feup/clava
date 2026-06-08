@@ -5,7 +5,7 @@ import {
   debug,
   debugObject,
 } from "@specs-feup/lara/api/lara/core/LaraCore.js";
-import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import { type JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import ProcessExecutor from "@specs-feup/lara/api/lara/util/ProcessExecutor.js";
 import { FileJp } from "../../Joinpoints.js";
 import Clava from "../Clava.js";

@@ -1,7 +1,7 @@
 import WeaverDataStore from "@specs-feup/lara/api/weaver/util/WeaverDataStore.js";
 import ClavaJavaTypes from "../ClavaJavaTypes.js";
 import JavaTypes, {
-  JavaClasses,
+  type JavaClasses,
 } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import DataStore from "@specs-feup/lara/api/lara/util/DataStore.js";

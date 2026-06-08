@@ -3,7 +3,7 @@ import Strings from "@specs-feup/lara/api/lara/Strings.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { Call, FileJp, Pragma } from "../../Joinpoints.js";
 import KernelReplacer, {
-  OpenClKernelReplacerConfiguration,
+  type OpenClKernelReplacerConfiguration,
 } from "./KernelReplacer.js";
 
 //	This aspect can be included in a library, imported and
