@@ -1,7 +1,7 @@
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import Strings from "@specs-feup/lara/api/lara/Strings.js";
 import JavaTypes, {
-  JavaClasses,
+  type JavaClasses,
 } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { FileJp, FunctionJp } from "../../Joinpoints.js";

@@ -1,6 +1,6 @@
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import BenchmarkInstance from "@specs-feup/lara/api/lara/benchmark/BenchmarkInstance.js";
-import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
+import { type JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import Clava from "../..//clava/Clava.js";
 import { Pragma } from "../../Joinpoints.js";
