@@ -2,15 +2,10 @@
   "compilerOptions": {
     "noEmit": true,
     "module": "NodeNext",
-    "isolatedModules": true,
     "declaration": true,
     "strict": true,
-    //"allowJs": true,
-    //"checkJs": true,
-    "sourceMap": true,
-    "declarationMap": true,
+    "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
-    //"esModuleInterop": true
     "types": ["node", "jest"],
     "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
