@@ -5,5 +5,5 @@ export default {
     fileURLToPath(import.meta.resolve("@specs-feup/lara/typedoc.base.json")),
   ],
   entryPoints: ["api/"],
-  tsconfig: "api/tsconfig.json",
+  tsconfig: "tsconfig.json",
 };
