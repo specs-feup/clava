@@ -3,23 +3,32 @@
   "version": "3.5.1",
   "description": "A C/C++ source-to-source compiler written in Typescript",
   "type": "module",
+  "bin": {
+    "clava": "./code/index.ts"
+  },
+  "exports": {
+    "./api/*.test.ts": null,
+    "./api/*.config.ts": null,
+    "./api/*": "./api/*.ts",
+    "./api/*.ts": "./api/*.ts",
+    "./code/*.test.ts": null,
+    "./code/*.config.ts": null,
+    "./code/*": "./code/*.ts",
+    "./code/*.ts": "./code/*.ts"
+  },
   "files": [
     "api",
     "code",
     "java-binaries",
     ".gitignore",
-    "eslint.config.js",
-    "jest.config.js",
+    "eslint.config.ts",
+    "jest.config.ts",
     "LICENSE",
     "package.json",
     "README.md",
-    "tsconfig.jest.json",
     "tsconfig.json",
     "typedoc.config.js"
   ],
-  "bin": {
-    "clava": "./code/index.ts"
-  },
   "scripts": {
     "run": "node ./code/index.ts",
     "build": "tsc",
