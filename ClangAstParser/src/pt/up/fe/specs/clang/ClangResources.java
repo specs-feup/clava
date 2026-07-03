@@ -30,11 +30,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HexFormat;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -229,44 +226,16 @@ public class ClangResources {
     }
 
     private List<File> getIncludeFolders(File extractedFolder) {
-        var includeFolders = new LinkedHashSet<File>();
-
-        var usrFolder = new File(extractedFolder, "usr");
-        var targetFolders = SpecsIo.getFolders(usrFolder).stream()
-                .filter(folder -> folder.getName().contains("-"))
-                .sorted(Comparator.comparing(File::getName))
-                .toList();
-
-        var cxxFolder = new File(usrFolder, "c++");
-        var cxxVersionFolders = SpecsIo.getFolders(cxxFolder).stream()
-                .filter(folder -> folder.getName().chars().allMatch(Character::isDigit))
-                .sorted(Comparator.comparing(File::getName).reversed())
-                .toList();
-
-        addIfDirectory(includeFolders, extractedFolder, "clang");
-
-        if (!cxxVersionFolders.isEmpty()) {
-            var cxxVersionFolder = cxxVersionFolders.get(0);
-            includeFolders.add(cxxVersionFolder);
-
-            for (var targetFolder : targetFolders) {
-                addIfDirectory(includeFolders, targetFolder, "c++/" + cxxVersionFolder.getName());
-            }
+        var entrypointsFile = new File(extractedFolder, "entrypoints.txt");
+        if (!entrypointsFile.isFile()) {
+            throw new RuntimeException("Could not find include archive entrypoints file '" + entrypointsFile + "'");
         }
 
-        addIfDirectory(includeFolders, extractedFolder, "usr");
-        includeFolders.addAll(targetFolders);
-
-        addIfDirectory(includeFolders, extractedFolder, "include");
-
-        return new ArrayList<>(includeFolders);
-    }
-
-    private static void addIfDirectory(LinkedHashSet<File> folders, File parent, String relativePath) {
-        var folder = new File(parent, relativePath);
-        if (folder.isDirectory()) {
-            folders.add(folder);
-        }
+        return SpecsIo.read(entrypointsFile).lines()
+                .map(String::trim)
+                .filter(line -> !line.isEmpty())
+                .map(line -> new File(extractedFolder, line))
+                .toList();
     }
 
     private ResourceWriteData downloadAsset(ClangDumperManifest manifest, String kind, File resourceFolder) {
