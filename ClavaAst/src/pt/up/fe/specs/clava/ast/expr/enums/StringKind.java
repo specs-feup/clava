@@ -18,12 +18,12 @@ import java.nio.charset.Charset;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public enum StringKind {
-
     ORDINARY,
     WIDE,
     UTF8(true),
     UTF16(true),
-    UTF32(true);
+    UTF32(true),
+    UNEVALUATED;
 
     private final boolean isUTF;
 
@@ -47,6 +47,8 @@ public enum StringKind {
             return "u";
         case UTF32:
             return "U";
+        case UNEVALUATED:
+            return "";
         default:
             throw new NotImplementedException(this);
         }
