@@ -13,40 +13,93 @@
 
 package pt.up.fe.specs.clang;
 
+import com.google.gson.Gson;
+import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.providers.WebResourceProvider;
 
-public interface ClangAstWebResource {
+import java.io.File;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
-    String ROOT_16_0_5 = "https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_16.0.5/";
-    String ROOT_12_0_7 = "https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/";
+public final class ClangAstWebResource {
 
-    WebResourceProvider LIBC_CXX_LINUX_COMPLETE = WebResourceProvider.newInstance(ROOT_16_0_5, "libc_cxx_linux_complete.zip", "v16.0.5");
-    WebResourceProvider LIBC_CXX_MACOS_COMPLETE = WebResourceProvider.newInstance(ROOT_16_0_5, "libc_cxx_macos_complete.zip", "v16.0.6");
-    WebResourceProvider LIBC_CXX_WIN32_COMPLETE = WebResourceProvider.newInstance(ROOT_16_0_5, "libc_cxx_win32_complete.zip", "v16.0.5");
+    private static final String RELEASE_ROOT = "https://github.com/specs-feup/clang-dumper/releases/download/";
+    private static final String RELEASE_TAG_RESOURCE = "clang-dumper-release.tag";
+    private static final String MANIFEST_FILENAME = "clang-dumper-release-manifest.json";
 
-    WebResourceProvider OPENMP_INCLUDES = WebResourceProvider.newInstance(ROOT_16_0_5, "openmp_includes.zip");
+    private static final Gson GSON = new Gson();
 
-    WebResourceProvider CUDA_LIB = WebResourceProvider.newInstance(ROOT_12_0_7, "cudalib.zip", "v11.3.0");
+    private ClangAstWebResource() {
+    }
 
-    WebResourceProvider WIN_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_windows.exe", "v16.0.5_1");
-    WebResourceProvider WIN_DLL1 = WebResourceProvider.newInstance(ROOT_12_0_7, "libwinpthread-1.dll");
-    WebResourceProvider WIN_DLL2 = WebResourceProvider.newInstance(ROOT_12_0_7, "zlib1.dll");
-    WebResourceProvider WIN_DLL3 = WebResourceProvider.newInstance(ROOT_12_0_7, "libzstd.dll");
-    WebResourceProvider WIN_DLL4 = WebResourceProvider.newInstance(ROOT_12_0_7, "libstdc++-6.dll");
-    WebResourceProvider WIN_DLL5 = WebResourceProvider.newInstance(ROOT_12_0_7, "libgcc_s_seh-1.dll");
-    WebResourceProvider WIN_DLL6 = WebResourceProvider.newInstance(ROOT_12_0_7, "libffi-8.dll");
-    WebResourceProvider WIN_DLL7 = WebResourceProvider.newInstance(ROOT_12_0_7, "libxml2-2.dll");
-    WebResourceProvider WIN_DLL8 = WebResourceProvider.newInstance(ROOT_12_0_7, "liblzma-5.dll");
-    WebResourceProvider WIN_DLL9 = WebResourceProvider.newInstance(ROOT_12_0_7, "libiconv-2.dll");
-    WebResourceProvider WIN_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM-16.dll");
-    WebResourceProvider WIN_CLANG_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libclang-cpp.dll");
+    public static String getReleaseTag() {
+        var inputStream = ClangAstWebResource.class.getClassLoader().getResourceAsStream(RELEASE_TAG_RESOURCE);
 
-    WebResourceProvider LINUX_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_linux", "v16.0.5");
-    WebResourceProvider LINUX_PLUGIN = WebResourceProvider.newInstance(ROOT_16_0_5, "clang-plugin.so", "v16.0.5");
-    WebResourceProvider LINUX_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM-16.so.1", "v16.0.5");
+        if (inputStream == null) {
+            throw new RuntimeException("Could not find resource '" + RELEASE_TAG_RESOURCE + "'");
+        }
 
-    WebResourceProvider MAC_OS_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_macos", "v16.0.5");
-    WebResourceProvider MAC_OS_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM.dylib", "v16.0.5");
-    WebResourceProvider MAC_OS_DLL1 = WebResourceProvider.newInstance(ROOT_16_0_5, "libzstd.1.dylib", "v16.0.5");
+        var tag = SpecsIo.read(inputStream).trim();
+        if (tag.isBlank()) {
+            throw new RuntimeException("Resource '" + RELEASE_TAG_RESOURCE + "' is empty");
+        }
 
+        return tag;
+    }
+
+    public static ClangDumperManifest getManifest(File resourceFolder) {
+        var manifestResource = WebResourceProvider.newInstance(getReleaseBaseUrl(), MANIFEST_FILENAME, getReleaseTag());
+        var manifestFile = manifestResource.writeVersioned(resourceFolder, ClangAstWebResource.class).getFile();
+        var manifest = GSON.fromJson(SpecsIo.read(manifestFile), ClangDumperManifest.class);
+
+        if (manifest == null) {
+            throw new RuntimeException("Could not parse clang-dumper manifest from '" + manifestFile + "'");
+        }
+
+        manifest.validate();
+        return manifest;
+    }
+
+    public static WebResourceProvider getAssetResource(ClangDumperManifestAsset asset) {
+        return WebResourceProvider.newInstance(getReleaseBaseUrl(), asset.filename(), getReleaseTag() + "-" + asset.sha256());
+    }
+
+    private static String getReleaseBaseUrl() {
+        return RELEASE_ROOT + getReleaseTag() + "/";
+    }
+
+    public record ClangDumperManifest(int schema_version, List<ClangDumperManifestAsset> assets) {
+
+        public void validate() {
+            if (schema_version != 1) {
+                throw new RuntimeException("Unsupported clang-dumper manifest schema version: " + schema_version);
+            }
+
+            if (assets == null || assets.isEmpty()) {
+                throw new RuntimeException("Clang-dumper manifest does not contain assets");
+            }
+        }
+
+        public ClangDumperManifestAsset getAsset(String platform, String arch, String kind) {
+            Objects.requireNonNull(platform);
+            Objects.requireNonNull(arch);
+            Objects.requireNonNull(kind);
+
+            Optional<ClangDumperManifestAsset> asset = assets.stream()
+                    .filter(candidate -> candidate.matches(platform, arch, kind))
+                    .findFirst();
+
+            return asset.orElseThrow(() -> new RuntimeException("Could not find clang-dumper asset for platform '"
+                    + platform + "', architecture '" + arch + "' and kind '" + kind + "'"));
+        }
+    }
+
+    public record ClangDumperManifestAsset(String filename, String kind, String platform, String arch, int llvm_major,
+                                           String sha256) {
+
+        public boolean matches(String platform, String arch, String kind) {
+            return this.platform.equals(platform) && this.arch.equals(arch) && this.kind.equals(kind);
+        }
+    }
 }

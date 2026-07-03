@@ -18,7 +18,6 @@ import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum CallingConvention implements StringProvider {
-
     C,
     X86StdCall,
     X86FastCall,
@@ -39,7 +38,8 @@ public enum CallingConvention implements StringProvider {
     PreserveAll,
     AArch64VectorCall,
     AArch64SVEPCS,
-    AMDGPUKernelCall;
+    AMDGPUKernelCall,
+    M68kRTD;
 
     private static final Lazy<EnumHelperWithValue<CallingConvention>> HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(CallingConvention.class);
