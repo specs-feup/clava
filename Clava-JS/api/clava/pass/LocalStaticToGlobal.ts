@@ -42,7 +42,7 @@ export default class LocalStaticToGlobal extends SimplePass {
     }
 
     // With static storage
-    if ($jp.storageClass !== StorageClass.STATIC) {
+    if ($jp.storageClass.toLowerCase() !== StorageClass.STATIC) {
       return false;
     }
 

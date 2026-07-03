@@ -145,15 +145,13 @@ public class ClangAstParser {
             if (ClavaNodes.isNullId(topLevelTypeId)) {
                 continue;
             }
-            ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelTypeId);
-            Objects.requireNonNull(parsedNode, () -> "No node for type '" + topLevelTypeId + "'");
+            data.get(ClangAstData.CLAVA_NODES).getOptional(topLevelTypeId);
 
         }
 
         // Parse top-level attributes
         for (String topLevelAttributeId : topLevelAttributes) {
-            ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelAttributeId);
-            Objects.requireNonNull(parsedNode, () -> "No node for attribute '" + topLevelAttributeId + "'");
+            data.get(ClangAstData.CLAVA_NODES).getOptional(topLevelAttributeId);
         }
 
         // Create TU node

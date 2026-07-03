@@ -119,7 +119,7 @@ public class ExprDataParser {
         DataStore data = parseLiteralData(lines, dataStore);
 
         data.add(CharacterLiteral.VALUE, LineStreamParsers.longInt(lines));
-        data.add(CharacterLiteral.KIND, LineStreamParsers.enumFromInt(CharacterKind.getEnumHelper(), lines));
+        data.add(CharacterLiteral.KIND, LineStreamParsers.enumFromName(CharacterKind.getEnumHelper(), lines));
 
         return data;
     }

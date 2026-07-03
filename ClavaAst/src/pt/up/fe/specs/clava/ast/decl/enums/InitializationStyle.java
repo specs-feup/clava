@@ -24,13 +24,13 @@ import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum InitializationStyle implements StringProvider {
-    NO_INIT,
-    CINIT, // C-style initialization with assignment
-    CALL_INIT("callinit"), // Call-style initialization (C++98)
-    LIST_INIT("listinit"); // Direct list-initialization (C++11)
+    CINIT,
+    CALL_INIT,
+    LIST_INIT,
+    ParenListInit;
 
     private static Lazy<EnumHelperWithValue<InitializationStyle>> ENUM_HELPER = EnumHelperWithValue
-            .newLazyHelperWithValue(InitializationStyle.class, NO_INIT);
+            .newLazyHelperWithValue(InitializationStyle.class);
 
     public static EnumHelperWithValue<InitializationStyle> getHelper() {
         return ENUM_HELPER.get();
@@ -56,9 +56,8 @@ public enum InitializationStyle implements StringProvider {
         switch (this) {
         case CINIT:
             return cinitCode(node);
-        case NO_INIT:
-            return "";
         case CALL_INIT:
+        case ParenListInit:
             return callInitCode(node);
         case LIST_INIT:
             return listInitCode(node);
