@@ -680,7 +680,7 @@ public class AstFactory {
 
     public static AElaboratedType<?> structType(CxxWeaver weaver, AStruct<?> struct) {
         var namedType = (Type) struct.getTypeImpl().getNodeImpl();
-        var elaboratedType = weaver.getFactory().elaboratedType(ElaboratedTypeKeyword.STRUCT, namedType);
+        var elaboratedType = weaver.getFactory().elaboratedType(ElaboratedTypeKeyword.Struct, namedType);
 
         return CxxJoinpoints.create(elaboratedType, weaver, AElaboratedType.class);
     }

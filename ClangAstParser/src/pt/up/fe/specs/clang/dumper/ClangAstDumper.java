@@ -17,6 +17,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import pt.up.fe.specs.clang.ClangAstKeys;
+import pt.up.fe.specs.clang.ClangAstResource;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.cilk.CilkParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
@@ -194,7 +195,9 @@ public class ClangAstDumper {
         }
         // Set standard to CUDA
         else if (isCuda && !standard.isCuda()) {
-            arguments.add("-std=cuda");
+            arguments.add(standard.isCxx() ? standard.getFlag() : Standard.CXX17.getFlag());
+        } else if (isCuda) {
+            arguments.add(Standard.CXX17.getFlag());
         } else {
             arguments.add(standard.getFlag());
         }
@@ -223,6 +226,9 @@ public class ClangAstDumper {
         }
         // If CUDA, add corresponding flags
         else if (isCuda) {
+            arguments.add("-x");
+            arguments.add("cuda");
+
             if (SpecsPlatforms.isWindows()) {
                 ClavaLog.info("CUDA parsing is not supported in Windows, run at your own risk");
                 arguments.addAll(Arrays.asList("-fms-compatibility", "-D_MSC_VER", "-D_LIBCPP_MSVCRT"));
@@ -231,12 +237,18 @@ public class ClangAstDumper {
             arguments.add("--cuda-gpu-arch=" + parserConfig.get(CodeParser.CUDA_GPU_ARCH));
 
             var cudaPath = parserConfig.get(CodeParser.CUDA_PATH);
-            if (!cudaPath.isBlank()) {
+            var useBuiltinCudaLib = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption());
 
-                // Check if should use built-in CUDA lib
-                File cudaFolder = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption())
-                        ? clangResources.getBuiltinCudaLib()
-                        : SpecsIo.existingFolder(cudaPath);
+            if (useBuiltinCudaLib) {
+                arguments.add("-nocudainc");
+                arguments.add("-nocudalib");
+                arguments.add("-include");
+                arguments.add("__clang_cuda_runtime_wrapper.h");
+                arguments.add("-include");
+                arguments.add(ClangAstResource.CUDA_COMPATIBILITY.write(SpecsIo.getTempFolder()).getAbsolutePath());
+            } else if (!cudaPath.isBlank()) {
+
+                File cudaFolder = SpecsIo.existingFolder(cudaPath);
 
                 ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
                 arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
