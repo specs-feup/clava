@@ -26,7 +26,7 @@ public final class ClangAstWebResource {
 
     private static final String RELEASE_ROOT = "https://github.com/specs-feup/clang-dumper/releases/download/";
     private static final String RELEASE_TAG_RESOURCE = "clang-dumper-release.tag";
-    private static final String MANIFEST_FILENAME = "clang-dumper-release-manifest.json";
+    public static final String MANIFEST_FILENAME = "clang-dumper-release-manifest.json";
 
     private static final Gson GSON = new Gson();
 
