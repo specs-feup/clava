@@ -35,20 +35,18 @@ Starting from the `workspace` directory, execute the following commands to build
 
 ```bash
 npm install
-npm run build -w lara-framework/Lara-JS
-npm run build -w clava/Clava-JS
-npm install
-cd clava/ClavaWeaver
-gradle installDist
-cd ../..
+gradle -p clava clavaJsBuild
 ```
 
-Finally, copy the JARs in the folder `./clava/ClavaWeaver/build/install/ClavaWeaver/lib` into a new folder called java-binaries in `./clava/Clava-JS`:
+The `clavaJsBuild` task builds Lara-JS, runs `ClavaWeaver:installDist`, and checks that `./clava/Clava-JS/java-binaries` is the symlink to `../ClavaWeaver/build/install/ClavaWeaver`. Keep this symlink instead of copying the JARs, otherwise Clava-JS can silently run against stale Java binaries.
+
+To run the Java and Clava-JS tests from one place and generate the merged Java coverage report:
 
 ```bash
-mkdir clava/Clava-JS/java-binaries
-cp -r ./clava/ClavaWeaver/build/install/ClavaWeaver/lib ./clava/Clava-JS/java-binaries
+gradle -p clava check clavaMergedJacocoReport
 ```
+
+The merged report is written to `./clava/build/reports/jacoco/clavaMergedJacocoReport/html/index.html`. It combines normal Gradle JaCoCo execution data with the JaCoCo data captured from the JVM embedded in Clava-JS tests.
 
 Install the package globally:
 
