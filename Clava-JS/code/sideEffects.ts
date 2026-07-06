@@ -18,14 +18,14 @@ const datastore = Weaver.getWeaverEngine().getData().get();
 datastore.set(CxxWeaverOptions.DISABLE_CLAVA_INFO, true);
 datastore.set(
   CodeParser.DUMPER_FOLDER,
-  new JavaTypes.File(getVersionedCacheDir())
+  new JavaTypes.File(getClangDumperCacheDir())
 );
 
 /** Code to obtain temporary folder **/
 
-function getVersionedCacheDir(): string {
-  // Use name+version to isolate different installed versions
-  return path.join(getCacheBaseDir(), pkg.name, pkg.version);
+function getClangDumperCacheDir(): string {
+  // The version will be added by the installer to isolate different installed versions
+  return path.join(getCacheBaseDir(), pkg.name, "clang-dumper");
 }
 
 function getCacheBaseDir(): string {
