@@ -49,12 +49,15 @@ import java.util.stream.Stream;
 public class ClangResources {
 
     private static final Map<String, ClangFiles> CLANG_FILES_CACHE = new ConcurrentHashMap<>();
+    private static final Set<String> INCLUDES_DEEP_VALIDATION_CACHE = ConcurrentHashMap.newKeySet();
 
     private final static String CLANG_FOLDERNAME = "clang_ast_exe";
     private final static String INCLUDES_FOLDERNAME = "includes";
     private final static String INCLUDES_HASHES_FILENAME = "includes.sha256";
+    private final static String INCLUDES_VALIDATED_FILENAME = "includes-validated.txt";
     private final static String LAST_USED_FILENAME = "last-used.txt";
     private final static Duration STALE_CACHE_MAX_AGE = Duration.ofDays(60);
+    private final static Duration INCLUDES_DEEP_VALIDATION_INTERVAL = Duration.ofDays(1);
 
     private static final AtomicInteger HAS_LIBC = new AtomicInteger(-1);
 
@@ -230,18 +233,21 @@ public class ClangResources {
         var includesAsset = getCurrentAsset(manifest, "includes");
         var extractedFolder = new File(resourceFolder, INCLUDES_FOLDERNAME);
         var includesHashesFile = new File(resourceFolder, INCLUDES_HASHES_FILENAME);
+        var includesValidatedFile = new File(resourceFolder, INCLUDES_VALIDATED_FILENAME);
 
         if (isIncludesCacheValid(extractedFolder, includesHashesFile, includesAsset)) {
+            validateIncludesCacheInBackground(extractedFolder, includesHashesFile, includesValidatedFile, includesAsset);
             return extractedFolder;
         }
 
-        ResourceWriteData zipFile = downloadAsset(manifest, "includes", resourceFolder);
+        ResourceWriteData zipFile = downloadAsset(includesAsset, resourceFolder);
 
         try {
             SpecsIo.mkdir(extractedFolder);
             SpecsIo.deleteFolderContents(extractedFolder);
             SpecsIo.extractZip(zipFile.getFile(), extractedFolder);
             writeIncludesHashes(extractedFolder, includesHashesFile, includesAsset);
+            writeTimestamp(includesValidatedFile, Instant.now());
         } finally {
             SpecsIo.delete(zipFile.getFile());
         }
@@ -264,6 +270,10 @@ public class ClangResources {
 
     private ResourceWriteData downloadAsset(ClangDumperManifest manifest, String kind, File resourceFolder) {
         var asset = getCurrentAsset(manifest, kind);
+        return downloadAsset(asset, resourceFolder);
+    }
+
+    private ResourceWriteData downloadAsset(ClangDumperManifestAsset asset, File resourceFolder) {
         var resource = ClangAstWebResource.getAssetResource(asset);
         var writeData = resource.writeVersioned(resourceFolder, ClangResources.class);
 
@@ -295,6 +305,63 @@ public class ClangResources {
             return false;
         }
 
+        if (!hasExpectedIncludesAssetHash(includesHashesFile, includesAsset)) {
+            return false;
+        }
+
+        var entrypointsFile = new File(includesFolder, "entrypoints.txt");
+        if (!entrypointsFile.isFile()) {
+            SpecsLogs.info("Cached clang-dumper includes are missing entrypoints, extracting them again.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void validateIncludesCacheInBackground(File includesFolder, File includesHashesFile,
+                                                   File includesValidatedFile,
+                                                   ClangDumperManifestAsset includesAsset) {
+
+        if (!shouldRunIncludesDeepValidation(includesValidatedFile)) {
+            return;
+        }
+
+        var validationKey = includesFolder.getAbsolutePath() + "_" + includesAsset.sha256();
+        if (!INCLUDES_DEEP_VALIDATION_CACHE.add(validationKey)) {
+            return;
+        }
+
+        var deepValidation = new Thread(() -> {
+            if (isIncludesCacheDeepValid(includesFolder, includesHashesFile, includesAsset)) {
+                writeTimestamp(includesValidatedFile, Instant.now());
+                return;
+            }
+
+            SpecsLogs.info("Invalidating clang-dumper includes cache metadata: " + includesHashesFile);
+            SpecsIo.delete(includesHashesFile);
+            SpecsIo.delete(includesValidatedFile);
+        }, "clang-dumper-includes-cache-validation");
+
+        deepValidation.setDaemon(true);
+        deepValidation.start();
+    }
+
+    private static boolean shouldRunIncludesDeepValidation(File includesValidatedFile) {
+        if (!includesValidatedFile.isFile()) {
+            return true;
+        }
+
+        try {
+            var lastValidated = Instant.parse(SpecsIo.read(includesValidatedFile).trim());
+            return lastValidated.isBefore(Instant.now().minus(INCLUDES_DEEP_VALIDATION_INTERVAL));
+        } catch (RuntimeException e) {
+            return true;
+        }
+    }
+
+    private boolean isIncludesCacheDeepValid(File includesFolder, File includesHashesFile,
+                                             ClangDumperManifestAsset includesAsset) {
+
         var expectedHashes = readIncludesHashes(includesHashesFile, includesAsset);
         if (expectedHashes == null) {
             return false;
@@ -318,6 +385,16 @@ public class ClangResources {
         }
 
         return true;
+    }
+
+    private static boolean hasExpectedIncludesAssetHash(File includesHashesFile,
+                                                        ClangDumperManifestAsset includesAsset) {
+
+        try (var reader = Files.newBufferedReader(includesHashesFile.toPath())) {
+            return ("# clang-dumper-includes " + includesAsset.sha256()).equals(reader.readLine());
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     private static Map<String, String> readIncludesHashes(File includesHashesFile,
@@ -388,6 +465,7 @@ public class ClangResources {
         expectedNames.add(clangExecutable.getName());
         expectedNames.add(INCLUDES_FOLDERNAME);
         expectedNames.add(INCLUDES_HASHES_FILENAME);
+        expectedNames.add(INCLUDES_VALIDATED_FILENAME);
         expectedNames.add(LAST_USED_FILENAME);
 
         var files = resourceFolder.listFiles();
@@ -417,7 +495,11 @@ public class ClangResources {
     }
 
     private void writeLastUsed(Instant timestamp) {
-        SpecsIo.write(new File(getClangResourceFolder(), LAST_USED_FILENAME), timestamp.toString());
+        writeTimestamp(new File(getClangResourceFolder(), LAST_USED_FILENAME), timestamp);
+    }
+
+    private static void writeTimestamp(File file, Instant timestamp) {
+        SpecsIo.write(file, timestamp.toString());
     }
 
     private void deleteStaleVersions(Instant now, File currentVersionFolder) {
