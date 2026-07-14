@@ -1,10 +1,9 @@
-import laraGlobalSetup from "@specs-feup/lara/jest/jestGlobalSetup.ts";
+import { weaverConfig } from "../code/WeaverConfiguration.ts";
+import { setupWeaver } from "@specs-feup/lara/vitest/setupWeaver.ts";
 import java from "java";
 
-export default async function (...args: Parameters<typeof laraGlobalSetup>) {
-  applyJavaOptions();
-  await laraGlobalSetup(...args);
-}
+applyJavaOptions();
+setupWeaver(weaverConfig);
 
 function applyJavaOptions(): void {
   const rawJavaOptions = process.env.CLAVA_JS_JAVA_OPTIONS;
@@ -13,9 +12,7 @@ function applyJavaOptions(): void {
     return;
   }
 
-  const javaOptions = parseJavaOptions(rawJavaOptions);
-
-  for (const javaOption of javaOptions) {
+  for (const javaOption of parseJavaOptions(rawJavaOptions)) {
     if (!java.options.includes(javaOption)) {
       java.options.push(javaOption);
     }
@@ -24,7 +21,7 @@ function applyJavaOptions(): void {
 
 function parseJavaOptions(rawJavaOptions: string): string[] {
   try {
-    const parsed = JSON.parse(rawJavaOptions);
+    const parsed: unknown = JSON.parse(rawJavaOptions);
 
     if (
       Array.isArray(parsed) &&
