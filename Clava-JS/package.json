@@ -34,7 +34,7 @@
     "build": "tsc",
     "build:watch": "npm run build -- --watch",
     "lint": "eslint --flag unstable_native_nodejs_ts_config .",
-    "test": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --detectOpenHandles --forceExit",
+    "test": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --runInBand",
     "test:api": "npm run test -- api",
     "test:code": "npm run test -- code",
     "test:cov": "npm run test -- --coverage",
