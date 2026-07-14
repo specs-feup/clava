@@ -6,7 +6,7 @@ import path from "path";
 const isWindows = process.platform === "win32";
 const isMacOS = process.platform === "darwin";
 
-/* eslint-disable vitest/expect-expect */
+/* oxlint-disable vitest/expect-expect */
 describe("CxxTest", () => {
     function newTester() {
         return new ClavaLegacyTester(

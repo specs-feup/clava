@@ -2,7 +2,7 @@ import { ClavaLegacyTester } from "../vitest/ClavaLegacyTester.ts";
 import ClavaJavaTypes from "./clava/ClavaJavaTypes.ts";
 import path from "path";
 
-/* eslint-disable vitest/expect-expect */
+/* oxlint-disable vitest/expect-expect */
 describe("IssuesTest", () => {
     function newTester() {
         return new ClavaLegacyTester(
