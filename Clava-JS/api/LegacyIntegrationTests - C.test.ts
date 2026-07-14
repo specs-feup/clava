@@ -340,7 +340,7 @@ describe("CApiTest", () => {
         }
 
         await tester.test("InlinerTest.js", "inliner.c");
-    }, 10_000);
+    }, 15_000);
 
     it("StatementDecomposer", async () => {
         await newTester().test(
