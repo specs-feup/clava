@@ -1,13 +1,6 @@
-import { defineConfig } from "vitest/config";
+import { createWeaverVitestConfig } from "@specs-feup/lara/vitest/weaverVitestConfig.ts";
+import { weaverConfig } from "./code/WeaverConfiguration.ts";
 
-export default defineConfig({
-  test: {
-    coverage: {
-      include: ["**/*[^.d].(t|j)s"],
-      provider: "v8",
-      reporter: ["text", "lcov"],
-    },
-    maxWorkers: 1,
-    projects: ["api/vitest.config.ts", "code/vitest.config.ts"],
-  },
+export default createWeaverVitestConfig(weaverConfig, {
+  javaOptionsEnvironmentVariable: "CLAVA_JS_JAVA_OPTIONS",
 });
