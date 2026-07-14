@@ -1,4 +1,4 @@
-import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.ts";
+import { ClavaLegacyTester } from "../vitest/ClavaLegacyTester.ts";
 import ClavaJavaTypes from "./clava/ClavaJavaTypes.ts";
 import JavaInterop from "@specs-feup/lara/api/lara/JavaInterop.ts";
 import path from "path";
@@ -6,7 +6,7 @@ import path from "path";
 const isWindows = process.platform === "win32";
 const isMacOS = process.platform === "darwin";
 
-/* eslint-disable jest/expect-expect */
+/* eslint-disable vitest/expect-expect */
 describe("CxxTest", () => {
     function newTester() {
         return new ClavaLegacyTester(

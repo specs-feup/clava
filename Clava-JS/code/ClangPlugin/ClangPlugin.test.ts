@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { vi } from "vitest";
 import fs from "fs";
 import path from "path";
 
@@ -76,17 +76,17 @@ describe("ClangPlugin", () => {
       const actualMap = await ClangPlugin.getAvailablePlugins();
 
       expect(actualMap).toEqual(expectedMap);
-      jest.restoreAllMocks();
+      vi.restoreAllMocks();
     });
 
     it("should throw an error when the clang-plugin-binaries directory does not exist", async () => {
-      jest.spyOn(fs, "existsSync").mockClear().mockReturnValue(false);
+      vi.spyOn(fs, "existsSync").mockClear().mockReturnValue(false);
 
       await expect(ClangPlugin.getAvailablePlugins()).rejects.toThrow(
         "Could not find 'clang-plugin-binaries' directory"
       );
 
-      jest.restoreAllMocks();
+      vi.restoreAllMocks();
     });
   });
   */

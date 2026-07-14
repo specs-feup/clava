@@ -6,7 +6,7 @@
     "strict": true,
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["node", "jest"],
+    "types": ["node", "vitest/globals"],
     "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
     "verbatimModuleSyntax": true

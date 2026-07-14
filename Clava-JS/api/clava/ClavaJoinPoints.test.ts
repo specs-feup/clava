@@ -1,4 +1,4 @@
-import { registerSourceCode } from "@specs-feup/lara/jest/jestHelpers.ts";
+import { registerSourceCode } from "@specs-feup/lara/vitest/weaverTestHelpers.ts";
 import Query from "@specs-feup/lara/api/weaver/Query.ts";
 import { ExprStmt } from "../Joinpoints.ts";
 import ClavaJoinPoints from "./ClavaJoinPoints.ts";
