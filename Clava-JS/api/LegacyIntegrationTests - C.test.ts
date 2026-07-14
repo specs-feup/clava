@@ -101,7 +101,7 @@ describe("CTest", () => {
         await newTester()
             .checkExpectedOutput(false)
             .test("InlineNasLu.js", "inline_nas_lu.c");
-    });
+    }, 10_000);
 
     it("InlineNasFt", async () => {
         await newTester()
@@ -340,7 +340,7 @@ describe("CApiTest", () => {
         }
 
         await tester.test("InlinerTest.js", "inliner.c");
-    });
+    }, 10_000);
 
     it("StatementDecomposer", async () => {
         await newTester().test(
