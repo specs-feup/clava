@@ -1,7 +1,7 @@
 import {
   registerSourceCode,
   registerSourceCodes,
-} from "@specs-feup/lara/jest/jestHelpers.ts";
+} from "@specs-feup/lara/vitest/weaverTestHelpers.ts";
 import Query from "@specs-feup/lara/api/weaver/Query.ts";
 import { FunctionJp } from "./Joinpoints.ts";
 import ClavaJoinPoints from "./clava/ClavaJoinPoints.ts";
