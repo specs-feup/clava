@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.TypedefNameDecl;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefNameDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefType;
@@ -25,14 +26,14 @@ public class CxxTypedefType extends ATypedefType {
 
     private final TypedefType typedefType;
 
-    public CxxTypedefType(TypedefType typedefType) {
-        super(new CxxType(typedefType));
+    public CxxTypedefType(TypedefType typedefType, CxxWeaver weaver) {
+        super(new CxxType(typedefType, weaver), weaver);
         this.typedefType = typedefType;
     }
 
     @Override
     public ATypedefNameDecl getDeclImpl() {
-        return CxxJoinpoints.create(typedefType.get(TypedefType.DECL), ATypedefNameDecl.class);
+        return CxxJoinpoints.create(typedefType.get(TypedefType.DECL), getWeaverEngine(), ATypedefNameDecl.class);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class CxxTypedefType extends ATypedefType {
     @Override
     public AType getUnderlyingTypeImpl() {
         return CxxJoinpoints.create(typedefType.get(TypedefType.DECL).get(TypedefNameDecl.UNDERLYING_TYPE),
-                AType.class);
+                getWeaverEngine(), AType.class);
     }
 
 }

@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryExprOrType;
@@ -26,8 +27,8 @@ public class CxxUnaryExprOrType extends AUnaryExprOrType {
 
     private final UnaryExprOrTypeTraitExpr expr;
 
-    public CxxUnaryExprOrType(UnaryExprOrTypeTraitExpr expr) {
-        super(new CxxExpression(expr));
+    public CxxUnaryExprOrType(UnaryExprOrTypeTraitExpr expr, CxxWeaver weaver) {
+        super(new CxxExpression(expr, weaver), weaver);
 
         this.expr = expr;
     }
@@ -53,7 +54,7 @@ public class CxxUnaryExprOrType extends AUnaryExprOrType {
             return null;
         }
 
-        return CxxJoinpoints.create(expr.getArgumentType().get(), AType.class);
+        return CxxJoinpoints.create(expr.getArgumentType().get(), getWeaverEngine(), AType.class);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class CxxUnaryExprOrType extends AUnaryExprOrType {
             return null;
         }
 
-        return CxxJoinpoints.create(expr.getArgumentExpression(), AExpression.class);
+        return CxxJoinpoints.create(expr.getArgumentExpression(), getWeaverEngine(), AExpression.class);
     }
 
     @Override

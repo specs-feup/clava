@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.IncompleteArrayType;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIncompleteArrayType;
 
 public class CxxIncompleteArrayType extends AIncompleteArrayType {
 
     private final IncompleteArrayType arrayType;
 
-    public CxxIncompleteArrayType(IncompleteArrayType arrayType) {
-        super(new CxxArrayType(arrayType));
+    public CxxIncompleteArrayType(IncompleteArrayType arrayType, CxxWeaver weaver) {
+        super(new CxxArrayType(arrayType, weaver), weaver);
 
         this.arrayType = arrayType;
     }

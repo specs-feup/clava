@@ -15,13 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.comment.Comment;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 
 public class CxxComment extends AComment {
 
     private final Comment comment;
 
-    public CxxComment(Comment comment) {
+    public CxxComment(Comment comment, CxxWeaver weaver) {
+        super(weaver);
         this.comment = comment;
     }
 

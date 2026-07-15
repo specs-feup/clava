@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AInitList;
 
@@ -23,8 +24,8 @@ public class CxxInitList extends AInitList {
 
     private final InitListExpr initList;
 
-    public CxxInitList(InitListExpr initList) {
-        super(new CxxExpression(initList));
+    public CxxInitList(InitListExpr initList, CxxWeaver weaver) {
+        super(new CxxExpression(initList, weaver), weaver);
 
         this.initList = initList;
     }
@@ -37,7 +38,8 @@ public class CxxInitList extends AInitList {
     @Override
     public AExpression getArrayFillerImpl() {
         return initList.get(InitListExpr.ARRAY_FILLER)
-                .map(n -> CxxJoinpoints.create(n, AExpression.class))
+                .map(n -> CxxJoinpoints.create(n,
+                        getWeaverEngine(), AExpression.class))
                 .orElse(null);
 
     }

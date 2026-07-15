@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints.types;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AQualType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
@@ -23,8 +24,8 @@ public class CxxQualType extends AQualType {
 
     private final QualType qualType;
 
-    public CxxQualType(QualType qualType) {
-        super(new CxxType(qualType));
+    public CxxQualType(QualType qualType, CxxWeaver weaver) {
+        super(new CxxType(qualType, weaver), weaver);
 
         this.qualType = qualType;
     }
@@ -41,6 +42,6 @@ public class CxxQualType extends AQualType {
 
     @Override
     public AType getUnqualifiedTypeImpl() {
-        return CxxJoinpoints.create(qualType.getUnqualifiedType(), AType.class);
+        return CxxJoinpoints.create(qualType.getUnqualifiedType(), getWeaverEngine(), AType.class);
     }
 }

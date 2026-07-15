@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 
@@ -29,8 +30,8 @@ public class CxxBinaryOp extends ABinaryOp {
 
     private final BinaryOperator op;
 
-    public CxxBinaryOp(BinaryOperator op) {
-        super(new CxxOp(op));
+    public CxxBinaryOp(BinaryOperator op, CxxWeaver weaver) {
+        super(new CxxOp(op, weaver), weaver);
 
         this.op = op;
     }
@@ -42,13 +43,15 @@ public class CxxBinaryOp extends ABinaryOp {
 
     @Override
     public AExpression getLeftImpl() {
-        List<? extends AExpression> left = Arrays.asList((AExpression) CxxJoinpoints.create(op.getLhs()));
+        List<? extends AExpression> left = Arrays.asList((AExpression) CxxJoinpoints.create(op.getLhs(),
+                getWeaverEngine()));
         return left.isEmpty() ? null : left.get(0);
     }
 
     @Override
     public AExpression getRightImpl() {
-        List<? extends AExpression> right = Arrays.asList((AExpression) CxxJoinpoints.create(op.getRhs()));
+        List<? extends AExpression> right = Arrays.asList((AExpression) CxxJoinpoints.create(op.getRhs(),
+                getWeaverEngine()));
         return right.isEmpty() ? null : right.get(0);
     }
 

@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEnumeratorDecl;
 
 public class CxxEnumeratorDecl extends AEnumeratorDecl {
 
     private final EnumConstantDecl enumConstantDecl;
 
-    public CxxEnumeratorDecl(EnumConstantDecl enumDecl) {
-        super(new CxxNamedDecl(enumDecl));
+    public CxxEnumeratorDecl(EnumConstantDecl enumDecl, CxxWeaver weaver) {
+        super(new CxxNamedDecl(enumDecl, weaver), weaver);
         this.enumConstantDecl = enumDecl;
     }
 

@@ -23,6 +23,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
@@ -34,8 +35,8 @@ public class CxxIf extends AIf {
 
     private final IfStmt ifStmt;
 
-    public CxxIf(IfStmt ifStmt) {
-        super(new CxxStatement(ifStmt));
+    public CxxIf(IfStmt ifStmt, CxxWeaver weaver) {
+        super(new CxxStatement(ifStmt, weaver), weaver);
         this.ifStmt = ifStmt;
     }
 
@@ -49,7 +50,7 @@ public class CxxIf extends AIf {
         List<? extends AExpression> list = Collections.emptyList();
 
         if ((ifStmt.getCondition() instanceof Expr)) {
-            list = Arrays.asList(CxxJoinpoints.create(ifStmt.getCondition(), AExpression.class));
+            list = Arrays.asList(CxxJoinpoints.create(ifStmt.getCondition(), getWeaverEngine(), AExpression.class));
         }
 
         return SpecsCollections.orElseNull(list);
@@ -58,20 +59,22 @@ public class CxxIf extends AIf {
     @Override
     public AVardecl getCondDeclImpl() {
         return SpecsCollections.orElseNull(SpecsCollections.toList(ifStmt.getDeclCondition()
-                .map(varDecl -> CxxJoinpoints.create(varDecl, AVardecl.class))));
+                .map(varDecl -> CxxJoinpoints.create(varDecl, getWeaverEngine(), AVardecl.class))));
     }
 
     @Override
     public AScope getThenImpl() {
         return SpecsCollections.orElseNull(
-                ifStmt.getThen().map(then -> Arrays.asList(CxxJoinpoints.create(then, AScope.class)))
+                ifStmt.getThen().map(then -> Arrays.asList(CxxJoinpoints.create(then,
+                        getWeaverEngine(), AScope.class)))
                         .orElse(Collections.emptyList()));
     }
 
     @Override
     public AScope getElseImpl() {
         return SpecsCollections.orElseNull(SpecsCollections.toStream(ifStmt.getElse())
-                .map(stmt -> CxxJoinpoints.create(stmt, AScope.class))
+                .map(stmt -> CxxJoinpoints.create(stmt,
+                        getWeaverEngine(), AScope.class))
                 .collect(Collectors.toList()));
     }
 

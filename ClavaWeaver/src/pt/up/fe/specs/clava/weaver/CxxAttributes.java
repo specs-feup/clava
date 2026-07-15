@@ -206,19 +206,19 @@ public class CxxAttributes {
      * @param value
      * @return
      */
-    public static Object toLara(Object value) {
+    public static Object toLara(Object value, CxxWeaver weaver) {
         // Special cases
 
         // If Clava node, convert to join point
         if (value instanceof ClavaNode) {
-            return CxxJoinpoints.create((ClavaNode) value);
+            return CxxJoinpoints.create((ClavaNode) value, weaver);
         }
 
         // If DataClass, wrap around special version that converts nodes into join points
         if (value instanceof DataClass) {
             // System.out.println("ASDADASD");
             var dataClass = (DataClass<?>) value;
-            return new CxxWeaverDataClass(dataClass);
+            return new CxxWeaverDataClass(weaver, dataClass);
         }
 
         // If a List, apply adapt over all elements of the list
@@ -227,7 +227,7 @@ public class CxxAttributes {
             var newValue = new ArrayList<Object>(valueList.size());
 
             for (var valueElement : valueList) {
-                newValue.add(toLara(valueElement));
+                newValue.add(toLara(valueElement, weaver));
             }
 
             return newValue;

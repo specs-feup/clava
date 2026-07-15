@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField;
 
 public class CxxField extends AField {
 
     private final FieldDecl field;
 
-    public CxxField(FieldDecl field) {
-        super(new CxxDeclarator(field));
+    public CxxField(FieldDecl field, CxxWeaver weaver) {
+        super(new CxxDeclarator(field, weaver), weaver);
         this.field = field;
     }
 

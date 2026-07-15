@@ -41,8 +41,8 @@ public class CxxScope extends AScope {
 
     private final CompoundStmt scope;
 
-    public CxxScope(CompoundStmt scope) {
-        super(new CxxStatement(scope));
+    public CxxScope(CompoundStmt scope, CxxWeaver weaver) {
+        super(new CxxStatement(scope, weaver), weaver);
         this.scope = scope;
     }
 
@@ -56,9 +56,9 @@ public class CxxScope extends AScope {
 
         // 'body' behaviour
         if (!scope.isNestedScope()) {
-            Stmt literalStmt = CxxWeaver.getSnippetParser().parseStmt(code);
+            Stmt literalStmt = getWeaverEngine().getSnippetParser().parseStmt(code);
             CxxActions.insertStmt(position, scope, literalStmt, getWeaverEngine());
-            return new AJoinPoint[] { CxxJoinpoints.create(literalStmt) };
+            return new AJoinPoint[] { CxxJoinpoints.create(literalStmt, getWeaverEngine()) };
         }
 
         // Default behaviour
@@ -114,12 +114,12 @@ public class CxxScope extends AScope {
         CxxActions.insertStmt(position, scope, newStmt, getWeaverEngine());
 
         // Body becomes the parent of this statement
-        return CxxJoinpoints.create(newStmt);
+        return CxxJoinpoints.create(newStmt, getWeaverEngine());
     }
 
     @Override
     public AJoinPoint insertBeginImpl(String code) {
-        return insertBeginImpl(AstFactory.stmtLiteral(code));
+        return insertBeginImpl(AstFactory.stmtLiteral(getWeaverEngine(), code));
     }
 
     @Override
@@ -128,12 +128,12 @@ public class CxxScope extends AScope {
 
         CxxActions.insertStmt("before", scope, newStmt, getWeaverEngine());
 
-        return CxxJoinpoints.create(newStmt);
+        return CxxJoinpoints.create(newStmt, getWeaverEngine());
     }
 
     @Override
     public AJoinPoint insertEndImpl(String code) {
-        return insertEndImpl(AstFactory.stmtLiteral(code));
+        return insertEndImpl(AstFactory.stmtLiteral(getWeaverEngine(), code));
     }
 
     @Override
@@ -142,7 +142,7 @@ public class CxxScope extends AScope {
 
         CxxActions.insertStmt("after", scope, newStmt, getWeaverEngine());
 
-        return CxxJoinpoints.create(newStmt);
+        return CxxJoinpoints.create(newStmt, getWeaverEngine());
     }
 
     @Override
@@ -199,7 +199,7 @@ public class CxxScope extends AScope {
         }
         varDecl.set(VarDecl.IS_USED);
 
-        AJoinPoint varDeclJp = CxxJoinpoints.create(varDecl);
+        AJoinPoint varDeclJp = CxxJoinpoints.create(varDecl, getWeaverEngine());
 
         insertBegin(varDeclJp);
 
@@ -208,12 +208,12 @@ public class CxxScope extends AScope {
 
     @Override
     public AStatement[] getStmtsArrayImpl() {
-        return CxxJoinpoints.create(getNode().getChildren(Stmt.class), AStatement.class);
+        return CxxJoinpoints.create(getNode().getChildren(Stmt.class), getWeaverEngine(), AStatement.class);
     }
 
     @Override
     public AStatement[] getAllStmtsArrayImpl() {
-        return CxxSelects.select(AStatement.class, getStatements(), true, CxxSelects::stmtFilter).toArray(new AStatement[0]);
+        return CxxSelects.select(getWeaverEngine(), AStatement.class, getStatements(), true, CxxSelects::stmtFilter).toArray(new AStatement[0]);
     }
 
     @Override
@@ -263,12 +263,12 @@ public class CxxScope extends AScope {
 
     @Override
     public AJoinPoint insertReturnImpl(AJoinPoint code) {
-        return CxxActions.insertReturn(this, code);
+        return CxxActions.insertReturn(this, code, getWeaverEngine());
     }
 
     @Override
     public AJoinPoint insertReturnImpl(String code) {
-        var stmt = CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code));
+        var stmt = CxxJoinpoints.create(getWeaverEngine().getSnippetParser().parseStmt(code), getWeaverEngine());
         return insertReturnImpl(stmt);
     }
 }

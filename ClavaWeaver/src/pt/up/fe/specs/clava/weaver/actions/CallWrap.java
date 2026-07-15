@@ -69,8 +69,10 @@ public class CallWrap {
     private final CxxProgram app;
 
     private final ClavaFactory factory;
+    private final CxxWeaver weaver;
 
-    public CallWrap(CxxCall cxxCall) {
+    public CallWrap(CxxWeaver cxxWeaver, CxxCall cxxCall) {
+        this.weaver = cxxWeaver;
         this.cxxCall = cxxCall;
         app = (CxxProgram) cxxCall.getRootImpl();
 
@@ -338,8 +340,8 @@ public class CallWrap {
                     "Expected header file to not exist yet");
 
             // Create implementation and header file
-            AFile implFile = AstFactory.file(implementationFilename, WRAPPERS_FOLDERNAME);
-            AFile headerFile = AstFactory.file(WRAPPER_H_FILENAME, WRAPPERS_FOLDERNAME);
+            AFile implFile = AstFactory.file(this.weaver, implementationFilename, WRAPPERS_FOLDERNAME);
+            AFile headerFile = AstFactory.file(this.weaver, WRAPPER_H_FILENAME, WRAPPERS_FOLDERNAME);
 
             app.addFileImpl(headerFile);
             app.addFileImpl(implFile);
@@ -354,7 +356,7 @@ public class CallWrap {
     }
 
     private String getImplFilename() {
-        boolean isCxx = CxxWeaver.getCxxWeaver().getConfig().get(ClavaOptions.STANDARD).isCxx();
+        boolean isCxx = this.weaver.getConfig().get(ClavaOptions.STANDARD).isCxx();
         String extension = isCxx ? "cpp" : "c";
         return WRAPPER_IMPL_FILENAME_PREFIX + "." + extension;
     }
@@ -393,10 +395,10 @@ public class CallWrap {
                 .map(param -> factory.literalExpr(param, factory.nullType()))
                 .collect(Collectors.toList());
 
-        CallExpr callExpr = CxxWeaver.getFactory().callExpr(function, returnType, args);
+        CallExpr callExpr = this.weaver.getFactory().callExpr(function, returnType, args);
 
         if (isVoid) {
-            wrapperStmts.add(CxxWeaver.getFactory().exprStmt(callExpr));
+            wrapperStmts.add(this.weaver.getFactory().exprStmt(callExpr));
         } else {
             DeclRefExpr varAssigned = factory.declRefExpr(varName, returnType);
             BinaryOperator op = factory.binaryOperator(BinaryOperatorKind.Assign, returnType, varAssigned, callExpr);

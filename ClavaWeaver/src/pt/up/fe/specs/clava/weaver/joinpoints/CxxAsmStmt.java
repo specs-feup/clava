@@ -2,6 +2,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.AsmStmt;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AAsmStmt;
 
 public class CxxAsmStmt extends AAsmStmt {
@@ -11,8 +12,8 @@ public class CxxAsmStmt extends AAsmStmt {
     /**
      * @param asmStmt
      */
-    public CxxAsmStmt(AsmStmt asmStmt) {
-        super(new CxxStatement(asmStmt));
+    public CxxAsmStmt(AsmStmt asmStmt, CxxWeaver weaver) {
+        super(new CxxStatement(asmStmt, weaver), weaver);
 
         this.asmStmt = asmStmt;
     }

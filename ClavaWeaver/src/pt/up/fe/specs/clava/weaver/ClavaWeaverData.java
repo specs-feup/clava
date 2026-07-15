@@ -34,8 +34,10 @@ public class ClavaWeaverData {
     private final Set<File> manuallyWrittenFiles;
     private Collection<File> generatedFiles;
     private ClavaContext context;
+    private final CxxWeaver weaver;
 
-    public ClavaWeaverData() {
+    public ClavaWeaverData(CxxWeaver weaver) {
+        this.weaver = weaver;
 
         // this.apps = new ArrayDeque<>();
         this.userValuesStack = new ArrayDeque<>();
@@ -102,7 +104,7 @@ public class ClavaWeaverData {
         // Executing here since execution might depend on code that consults the current App (e.g., for ClavaContext,
         // factory...)
         long tic = System.nanoTime();
-        ClavaPragmas.processClavaPragmas(app);
+        ClavaPragmas.processClavaPragmas(app, weaver);
         SpecsLogs.debug(() -> SpecsStrings.takeTime("Weaver AST processing after push", tic));
 
     }
