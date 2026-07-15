@@ -38,6 +38,7 @@
     "lint": "oxlint .",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
+    "prepack": "node --input-type=module --eval \"import { validateJavaBinaries } from '@specs-feup/lara/scripts/validateJavaBinaries.js'; validateJavaBinaries();\"",
     "test": "vitest run",
     "test:api": "npm run test -- api",
     "test:code": "npm run test -- code",
