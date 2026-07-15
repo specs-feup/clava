@@ -92,6 +92,10 @@ public abstract class AClangAstTester {
         this.outputFoldername = OUTPUT_FOLDERNAME_PREFIX + System.nanoTime() + "-" + Thread.currentThread().getId();
 
         codeParser = CodeParser.newInstance();
+        var testDumperExecutable = System.getenv("CLAVA_TEST_DUMPER_EXECUTABLE");
+        if (testDumperExecutable != null && !testDumperExecutable.isBlank()) {
+            codeParser.set(CodeParser.DUMPER_EXECUTABLE, testDumperExecutable);
+        }
         // Set strict mode
         // ClangAstParser.strictMode(true);
     }

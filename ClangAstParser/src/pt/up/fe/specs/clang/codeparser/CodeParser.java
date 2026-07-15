@@ -47,6 +47,9 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     public static final DataKey<File> DUMPER_FOLDER = KeyFactory.folder("dumperFolder")
             .setLabel("The base cache folder for the clang-dumper. Clava stores each dumper release in a versioned subfolder and downloads it if not found. If not set, a temporary folder will be used.")
             .setDefault(ClangResources::getDefaultTempFolder);
+    public static final DataKey<String> DUMPER_EXECUTABLE = KeyFactory.string("dumperExecutable")
+            .setLabel("Optional local clang-dumper executable. Intended for development and testing; release includes are still prepared normally.")
+            .setDefaultString("");
 
     /**
      * Execution information, such as execution time and memory used.
