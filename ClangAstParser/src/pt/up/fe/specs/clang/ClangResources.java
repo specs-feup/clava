@@ -72,7 +72,9 @@ public class ClangResources {
     public ClangFiles getClangFiles(LibcMode libcMode) {
 
         var useBuiltinCuda = options.get(CodeParser.CUDA_PATH).equalsIgnoreCase(CodeParser.getBuiltinOption());
-        var key = libcMode.name() + "_" + useBuiltinCuda + "_" + getClangResourceFolder().getAbsolutePath();
+        var dumperExecutable = options.get(CodeParser.DUMPER_EXECUTABLE).trim();
+        var key = libcMode.name() + "_" + useBuiltinCuda + "_" + dumperExecutable + "_"
+                + getClangResourceFolder().getAbsolutePath();
 
         var cachedFiles = CLANG_FILES_CACHE.get(key);
         if (cachedFiles != null) {
@@ -95,10 +97,10 @@ public class ClangResources {
                     var ignored = lockChannel.lock()) {
 
                 var manifest = ClangAstWebResource.getManifest(getClangResourceFolder());
-                File clangExecutable = prepareResources(manifest);
+                File clangExecutable = getClangExecutable(manifest, dumperExecutable);
                 List<String> builtinIncludes = prepareIncludes(manifest, clangExecutable, libcMode);
 
-                validateTopLevelCacheFiles(clangExecutable);
+                validateTopLevelCacheFiles(manifest);
                 updateLastUsedAndCleanupStaleVersions();
 
                 var newFiles = new ClangFiles(clangExecutable, builtinIncludes);
@@ -115,6 +117,20 @@ public class ClangResources {
     /**
      * @return path to the executable that was copied
      */
+    private File getClangExecutable(ClangDumperManifest manifest, String dumperExecutable) {
+        if (dumperExecutable.isEmpty()) {
+            return prepareResources(manifest);
+        }
+
+        var executable = new File(dumperExecutable).getAbsoluteFile();
+        if (!executable.isFile()) {
+            throw new RuntimeException("Could not find custom clang-dumper executable '" + executable + "'");
+        }
+
+        SpecsLogs.info("Using custom clang-dumper executable: " + executable);
+        return executable;
+    }
+
     private File prepareResources(ClangDumperManifest manifest) {
         File resourceFolder = getClangResourceFolder();
         SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
@@ -471,11 +487,12 @@ public class ClangResources {
         }
     }
 
-    private void validateTopLevelCacheFiles(File clangExecutable) {
+    private void validateTopLevelCacheFiles(ClangDumperManifest manifest) {
         File resourceFolder = getClangResourceFolder();
         Set<String> expectedNames = new HashSet<>();
         expectedNames.add(ClangAstWebResource.MANIFEST_FILENAME);
-        expectedNames.add(clangExecutable.getName());
+        var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
+        expectedNames.add(getCurrentAsset(manifest, executableKind).filename());
         expectedNames.add(INCLUDES_FOLDERNAME);
         expectedNames.add(INCLUDES_HASHES_FILENAME);
         expectedNames.add(INCLUDES_VALIDATED_FILENAME);

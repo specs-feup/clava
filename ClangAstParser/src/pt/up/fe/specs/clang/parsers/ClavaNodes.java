@@ -199,8 +199,11 @@ public class ClavaNodes {
 
         Runnable nodeToAdd = () -> {
 
+            @SuppressWarnings("unchecked")
             Optional<T> value = isNullId(nodeId) ? Optional.empty()
-                    : key.getValueClass().cast(getOptional(nodeId));
+                    : Optional.of((T) Objects.requireNonNull(clavaNodes.get(nodeId),
+                            () -> "Could not resolve optional node '" + nodeId + "' for key '" + key.getName()
+                                    + "'. Node data:\n" + data));
 
             data.set(key, value);
         };
@@ -213,7 +216,10 @@ public class ClavaNodes {
 
         Runnable nodeToAdd = () -> {
 
-            ClavaNode value = isNullId(nodeId) ? getNullNodeType(nodeId).newNullNode(factory) : get(nodeId);
+            ClavaNode value = isNullId(nodeId) ? getNullNodeType(nodeId).newNullNode(factory)
+                    : Objects.requireNonNull(clavaNodes.get(nodeId),
+                            () -> "Could not resolve nullable node '" + nodeId + "' for key '" + key.getName()
+                                    + "'. Node data:\n" + data);
 
             data.set(key, key.getValueClass().cast(value));
         };
@@ -227,24 +233,10 @@ public class ClavaNodes {
         Runnable nodeToAdd = () -> {
 
             @SuppressWarnings("unchecked") // If the nodes exist, they should be of the requested type
-            List<T> nodes = nodeIds.stream().map(id -> (T) get(id)).collect(Collectors.toList());
-
-            data.set(key, nodes);
-        };
-
-        queuedActions.add(nodeToAdd);
-    }
-
-    public <T extends ClavaNode> void queueSetOptionalNodeList(DataClass<?> data, DataKey<List<T>> key,
-            List<String> nodeIds) {
-
-        Runnable nodeToAdd = () -> {
-
-            @SuppressWarnings("unchecked") // If present, the nodes should be of the requested type
             List<T> nodes = nodeIds.stream()
-                    .map(this::getOptional)
-                    .flatMap(Optional::stream)
-                    .map(node -> (T) node)
+                    .map(id -> (T) Objects.requireNonNull(clavaNodes.get(id),
+                            () -> "Could not resolve node '" + id + "' in list for key '" + key.getName()
+                                    + "'. Node data:\n" + data))
                     .collect(Collectors.toList());
 
             data.set(key, nodes);
