@@ -156,7 +156,7 @@ jobs:
       fail-fast: false
       matrix:
         #node-version: ['latest', '22.x', '20.x']
-        node-version: ['22.x', '20.x']
+        node-version: ['25.x', '24.x']
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     runs-on: ${{ matrix.os }}
@@ -197,7 +197,7 @@ jobs:
 
       - name: Setup js workspace
         run: |
-          echo '{ "name": "SPeCS Workspace", "type": "module", "workspaces": [ "clava/Clava-JS", "lara-framework/Lara-JS" ] }' > package.json
+          echo '{ "name": "SPeCS Workspace", "type": "module", "workspaces": [ "clava/Clava-JS", "lara-framework/Lara-JS" ], "overrides": { "node-gyp": "^12.1.0" } }' > package.json
           npm install
 
       - name: Build Lara-JS
@@ -223,25 +223,14 @@ jobs:
 
       # Only on ubuntu-latest
       - name: Publish JS
-        if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/staging' && matrix.os == 'ubuntu-latest' && matrix.node-version == '25.x'
         run: | 
             cd clava/Clava-JS
             npm whoami
             echo "Attempt to publish while running on ${{ matrix.os }} and Node.js ${{matrix.node-version}}"
-            if [[ "${{ github.event_name }}" == "push" ]]; then
-                if [ "${{ github.ref }}" == "refs/heads/staging" ]; then
-                    echo "Publishing from staging, creating timestamped prerelease and updating tag 'staging'"
-                    TIMESTAMP=$(date +"%Y%m%d%H%M")
-                    npm version prerelease --preid="$TIMESTAMP"
-                    npm publish --tag staging --access public
-                elif [ "${{ github.ref }}" == "refs/heads/master" ]; then
-                    echo "Publishing from main, assumes version was changed before publishing"
-                    npm publish
-                else
-                    echo "Not master or staging branches, not publishing even if it is a push event"
-                fi
-            else
-                echo "Not a push event, skipping publish."
-            fi
+            echo "Publishing from staging, creating timestamped prerelease and updating tag 'staging'"
+            TIMESTAMP=$(date +"%Y%m%d%H%M")
+            npm version prerelease --preid="$TIMESTAMP"
+            npm publish --tag staging --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

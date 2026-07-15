@@ -24,5 +24,5 @@ Use these files for concrete patterns and idioms.
 - `ClavaWeaver/resources/clava/test/api/ClavaJoinPointsTest.js`
   - Large catalog of `ClavaJoinPoints` factory helpers.
 
-- `Clava-JS/src-api/Query.test.ts`
+- `Clava-JS/api/Query.test.ts`
   - Query chaining, `.scope()`, `.chain()`, and regex selection.
