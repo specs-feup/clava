@@ -64,7 +64,7 @@ public class StmtDataParser {
     public static DataStore parseAttributedStmtData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseStmtData(lines, dataStore);
 
-        dataStore.getClavaNodes().queueSetOptionalNodeList(data, AttributedStmt.STMT_ATTRIBUTES,
+        dataStore.getClavaNodes().queueSetNodeList(data, AttributedStmt.STMT_ATTRIBUTES,
                 LineStreamParsers.stringList(lines));
 
         return data;
