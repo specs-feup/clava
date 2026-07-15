@@ -91,7 +91,7 @@ public class StringLiteral extends Literal {
         }
 
         // If ASCII, convert each byte directly
-        if (kind == StringKind.ORDINARY) {
+        if (kind == StringKind.ORDINARY || kind == StringKind.UNEVALUATED) {
             var literal = new StringBuilder();
 
             for (var aByte : get(STRING_BYTES)) {

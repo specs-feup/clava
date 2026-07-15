@@ -55,6 +55,7 @@ public class LanguageParser implements LineStreamWorker<ClangAstData> {
                 .set(Language.C_PLUS_PLUS_17, LineStreamParsers.oneOrZero(lineStream))
                 .set(Language.C_PLUS_PLUS_20, LineStreamParsers.oneOrZero(lineStream))
                 .set(Language.C_PLUS_PLUS_23, LineStreamParsers.oneOrZero(lineStream))
+                .set(Language.C_PLUS_PLUS_26, LineStreamParsers.oneOrZero(lineStream))
                 .set(Language.HAS_DIGRAPHS, LineStreamParsers.oneOrZero(lineStream))
                 .set(Language.IS_GNU, LineStreamParsers.oneOrZero(lineStream))
                 .set(Language.HEX_FLOATS, LineStreamParsers.oneOrZero(lineStream))

@@ -28,8 +28,10 @@ import pt.up.fe.specs.util.system.ProcessOutputAsString;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
@@ -49,13 +51,13 @@ import java.util.stream.Stream;
 public class ClangResources {
 
     private static final Map<String, ClangFiles> CLANG_FILES_CACHE = new ConcurrentHashMap<>();
-    private static final Set<String> INCLUDES_DEEP_VALIDATION_CACHE = ConcurrentHashMap.newKeySet();
-
+    private static final Map<String, Object> CLANG_FILES_LOCKS = new ConcurrentHashMap<>();
     private final static String CLANG_FOLDERNAME = "clang_ast_exe";
     private final static String INCLUDES_FOLDERNAME = "includes";
     private final static String INCLUDES_HASHES_FILENAME = "includes.sha256";
     private final static String INCLUDES_VALIDATED_FILENAME = "includes-validated.txt";
     private final static String LAST_USED_FILENAME = "last-used.txt";
+    private final static String CACHE_LOCK_FILENAME = ".cache.lock";
     private final static Duration STALE_CACHE_MAX_AGE = Duration.ofDays(60);
     private final static Duration INCLUDES_DEEP_VALIDATION_INTERVAL = Duration.ofDays(1);
 
@@ -69,28 +71,45 @@ public class ClangResources {
 
     public ClangFiles getClangFiles(LibcMode libcMode) {
 
-        var key = libcMode.name() + "_" + getClangResourceFolder().getAbsolutePath();
+        var useBuiltinCuda = options.get(CodeParser.CUDA_PATH).equalsIgnoreCase(CodeParser.getBuiltinOption());
+        var key = libcMode.name() + "_" + useBuiltinCuda + "_" + getClangResourceFolder().getAbsolutePath();
 
-        var files = CLANG_FILES_CACHE.get(key);
-        if (files != null) {
+        var cachedFiles = CLANG_FILES_CACHE.get(key);
+        if (cachedFiles != null) {
             writeLastUsed(Instant.now());
-            SpecsLogs.debug(() -> "Using cached version of Clang files: " + files);
-            return files;
+            SpecsLogs.debug(() -> "Using cached version of Clang files: " + cachedFiles);
+            return cachedFiles;
         }
 
-        var manifest = ClangAstWebResource.getManifest(getClangResourceFolder());
-        File clangExecutable = prepareResources(manifest);
-        List<String> builtinIncludes = prepareIncludes(manifest, clangExecutable, libcMode);
+        var jvmLock = CLANG_FILES_LOCKS.computeIfAbsent(key, ignored -> new Object());
+        synchronized (jvmLock) {
+            var files = CLANG_FILES_CACHE.get(key);
+            if (files != null) {
+                writeLastUsed(Instant.now());
+                return files;
+            }
 
-        validateTopLevelCacheFiles(clangExecutable);
-        updateLastUsedAndCleanupStaleVersions();
+            var lockFile = new File(getClangResourceFolder(), CACHE_LOCK_FILENAME);
+            try (var lockChannel = FileChannel.open(lockFile.toPath(), StandardOpenOption.CREATE,
+                    StandardOpenOption.WRITE);
+                    var ignored = lockChannel.lock()) {
 
-        var newFiles = new ClangFiles(clangExecutable, builtinIncludes);
-        SpecsLogs.debug(() -> "Using downloaded version of Clang files: " + newFiles);
+                var manifest = ClangAstWebResource.getManifest(getClangResourceFolder());
+                File clangExecutable = prepareResources(manifest);
+                List<String> builtinIncludes = prepareIncludes(manifest, clangExecutable, libcMode);
 
-        CLANG_FILES_CACHE.put(key, newFiles);
+                validateTopLevelCacheFiles(clangExecutable);
+                updateLastUsedAndCleanupStaleVersions();
 
-        return newFiles;
+                var newFiles = new ClangFiles(clangExecutable, builtinIncludes);
+                SpecsLogs.debug(() -> "Using downloaded version of Clang files: " + newFiles);
+
+                CLANG_FILES_CACHE.put(key, newFiles);
+                return newFiles;
+            } catch (IOException e) {
+                throw new UncheckedIOException("Could not lock clang-dumper cache '" + lockFile + "'", e);
+            }
+        }
     }
 
     /**
@@ -213,7 +232,10 @@ public class ClangResources {
     }
 
     private List<String> prepareIncludes(ClangDumperManifest manifest, File clangExecutable, LibcMode libcMode) {
-        if (!useBuiltinLibc(clangExecutable, libcMode)) {
+        var useBuiltinLibc = useBuiltinLibc(clangExecutable, libcMode);
+        var useBuiltinCuda = options.get(CodeParser.CUDA_PATH).equalsIgnoreCase(CodeParser.getBuiltinOption());
+
+        if (!useBuiltinLibc && !useBuiltinCuda) {
             return List.of();
         }
 
@@ -235,8 +257,7 @@ public class ClangResources {
         var includesHashesFile = new File(resourceFolder, INCLUDES_HASHES_FILENAME);
         var includesValidatedFile = new File(resourceFolder, INCLUDES_VALIDATED_FILENAME);
 
-        if (isIncludesCacheValid(extractedFolder, includesHashesFile, includesAsset)) {
-            validateIncludesCacheInBackground(extractedFolder, includesHashesFile, includesValidatedFile, includesAsset);
+        if (isIncludesCacheValid(extractedFolder, includesHashesFile, includesValidatedFile, includesAsset)) {
             return extractedFolder;
         }
 
@@ -298,7 +319,7 @@ public class ClangResources {
         return manifest.getAsset(platform, arch, kind);
     }
 
-    private boolean isIncludesCacheValid(File includesFolder, File includesHashesFile,
+    private boolean isIncludesCacheValid(File includesFolder, File includesHashesFile, File includesValidatedFile,
                                          ClangDumperManifestAsset includesAsset) {
 
         if (!includesFolder.isDirectory() || !includesHashesFile.isFile()) {
@@ -315,35 +336,27 @@ public class ClangResources {
             return false;
         }
 
-        return true;
-    }
-
-    private void validateIncludesCacheInBackground(File includesFolder, File includesHashesFile,
-                                                   File includesValidatedFile,
-                                                   ClangDumperManifestAsset includesAsset) {
-
         if (!shouldRunIncludesDeepValidation(includesValidatedFile)) {
-            return;
+            return true;
         }
 
-        var validationKey = includesFolder.getAbsolutePath() + "_" + includesAsset.sha256();
-        if (!INCLUDES_DEEP_VALIDATION_CACHE.add(validationKey)) {
-            return;
+        var validationStart = Instant.now();
+        SpecsLogs.info("Validating clang-dumper includes cache: " + includesFolder);
+        if (isIncludesCacheDeepValid(includesFolder, includesHashesFile, includesAsset)) {
+            writeTimestamp(includesValidatedFile, Instant.now());
+            SpecsLogs.info("Validated clang-dumper includes cache in "
+                    + Duration.between(validationStart, Instant.now()).toMillis() + " ms");
+            return true;
         }
 
-        var deepValidation = new Thread(() -> {
-            if (isIncludesCacheDeepValid(includesFolder, includesHashesFile, includesAsset)) {
-                writeTimestamp(includesValidatedFile, Instant.now());
-                return;
-            }
-
-            SpecsLogs.info("Invalidating clang-dumper includes cache metadata: " + includesHashesFile);
+        SpecsLogs.info("Invalidating clang-dumper includes cache metadata: " + includesHashesFile);
+        if (includesHashesFile.isFile()) {
             SpecsIo.delete(includesHashesFile);
+        }
+        if (includesValidatedFile.isFile()) {
             SpecsIo.delete(includesValidatedFile);
-        }, "clang-dumper-includes-cache-validation");
-
-        deepValidation.setDaemon(true);
-        deepValidation.start();
+        }
+        return false;
     }
 
     private static boolean shouldRunIncludesDeepValidation(File includesValidatedFile) {
@@ -467,6 +480,7 @@ public class ClangResources {
         expectedNames.add(INCLUDES_HASHES_FILENAME);
         expectedNames.add(INCLUDES_VALIDATED_FILENAME);
         expectedNames.add(LAST_USED_FILENAME);
+        expectedNames.add(CACHE_LOCK_FILENAME);
 
         var files = resourceFolder.listFiles();
         if (files == null) {
@@ -590,8 +604,4 @@ public class ClangResources {
         throw new RuntimeException("Unsupported architecture for clang-dumper: " + osArch);
     }
 
-    public File getBuiltinCudaLib() {
-        var manifest = ClangAstWebResource.getManifest(getClangResourceFolder());
-        return prepareIncludesFolder(manifest);
-    }
 }
