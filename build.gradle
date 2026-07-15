@@ -28,9 +28,6 @@ dependencies {
 }
 
 def workspaceRoot = layout.projectDirectory.dir('..')
-def clavaJsDir = layout.projectDirectory.dir('Clava-JS')
-def clavaWeaverInstallDir = layout.projectDirectory.dir('ClavaWeaver/build/install/ClavaWeaver')
-def clavaJsJavaBinaries = clavaJsDir.file('java-binaries')
 def clavaJsJacocoExec = layout.buildDirectory.file('jacoco/clava-js.exec')
 
 def clavaJavaBuilds = [
@@ -66,32 +63,8 @@ tasks.register('clavaJavaTest') {
 
 tasks.register('installClavaWeaver') {
     group = 'distribution'
-    description = 'Installs the ClavaWeaver distribution used by Clava-JS.'
-    dependsOn gradle.includedBuild('ClavaWeaver').task(':installDist')
-}
-
-tasks.register('validateClavaJsJavaBinariesSymlink') {
-    group = 'verification'
-    description = 'Checks that Clava-JS/java-binaries points at the current ClavaWeaver installDist output.'
-    dependsOn 'installClavaWeaver'
-
-    doLast {
-        def link = clavaJsJavaBinaries.asFile.toPath()
-        def expectedTarget = java.nio.file.Paths.get('../ClavaWeaver/build/install/ClavaWeaver')
-
-        if (!java.nio.file.Files.isSymbolicLink(link)) {
-            throw new GradleException("${clavaJsJavaBinaries.asFile} must be a symbolic link to ${expectedTarget}")
-        }
-
-        def actualTarget = java.nio.file.Files.readSymbolicLink(link)
-        if (actualTarget != expectedTarget) {
-            throw new GradleException("${clavaJsJavaBinaries.asFile} points to ${actualTarget}, expected ${expectedTarget}")
-        }
-
-        if (!clavaWeaverInstallDir.file('lib').asFile.isDirectory()) {
-            throw new GradleException("ClavaWeaver installDist output is missing: ${clavaWeaverInstallDir.file('lib').asFile}")
-        }
-    }
+    description = 'Installs ClavaWeaver and synchronizes the distribution used by Clava-JS.'
+    dependsOn gradle.includedBuild('ClavaWeaver').task(':syncClavaJsJavaBinaries')
 }
 
 tasks.register('npmInstall', Exec) {
@@ -114,8 +87,8 @@ tasks.register('laraJsBuild', Exec) {
 
 tasks.register('clavaJsBuild', Exec) {
     group = 'build'
-    description = 'Builds Clava-JS after refreshing the Java distribution symlink target.'
-    dependsOn 'validateClavaJsJavaBinariesSymlink', 'laraJsBuild'
+    description = 'Builds Clava-JS after synchronizing its Java distribution.'
+    dependsOn 'installClavaWeaver', 'laraJsBuild'
     workingDir = workspaceRoot.asFile
     commandLine 'npm', 'run', 'build', '-w', 'clava/Clava-JS'
 }

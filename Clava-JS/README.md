@@ -38,7 +38,9 @@ npm install
 gradle -p clava clavaJsBuild
 ```
 
-The `clavaJsBuild` task builds Lara-JS, runs `ClavaWeaver:installDist`, and checks that `./clava/Clava-JS/java-binaries` is the symlink to `../ClavaWeaver/build/install/ClavaWeaver`. Keep this symlink instead of copying the JARs, otherwise Clava-JS can silently run against stale Java binaries.
+The `clavaJsBuild` task builds Lara-JS, runs `ClavaWeaver:installDist`, and synchronizes its complete distribution into `./clava/Clava-JS/java-binaries`. The generated directory is refreshed automatically, including when `installDist` is invoked directly, so do not copy or edit its contents manually.
+
+Clava-JS tests invoked through the combined Gradle build always run after this synchronization. Local `npm pack` and `npm publish` also validate that `java-binaries` is a real, populated directory before creating a package.
 
 To run the Java and Clava-JS tests from one place and generate the merged Java coverage report:
 
