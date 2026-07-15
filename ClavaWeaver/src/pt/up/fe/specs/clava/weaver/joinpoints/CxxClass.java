@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -22,102 +21,75 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod;
 
-public class CxxClass extends AClass {
-
-    private final CXXRecordDecl cxxRecordDecl;
+public class CxxClass<Self extends CxxClass<Self>> extends AClass<Self> {
 
     public CxxClass(CXXRecordDecl cxxRecordDecl, CxxWeaver weaver) {
-        super(new CxxStruct(cxxRecordDecl, weaver), weaver);
-
-        this.cxxRecordDecl = cxxRecordDecl;
-    }
-    
-    public Boolean isAbstract() {
-        return (Boolean) this.getIsAbstract();
-        /*
-        return this.cxxRecordDecl.getMethods().stream()
-                .filter(method -> !(method instanceof CXXDestructorDecl))
-                .anyMatch(method -> {/*
-                    System.err.println(" -> " + method.getFullyQualifiedName() 
-                    + " " + method.get(CXXMethodDecl.IS_VIRTUAL).booleanValue()
-                    + " " + method.get(CXXMethodDecl.IS_PURE).booleanValue());
-                    /** /
-                    // System.err.println(method.getCode());
-                    
-                    return method.get(CXXMethodDecl.IS_PURE).booleanValue();
-                });
-        */
+        super(cxxRecordDecl, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return cxxRecordDecl;
+    public CXXRecordDecl getNodeImpl() {
+        return (CXXRecordDecl) super.getNodeImpl();
     }
 
     @Override
-    public AMethod[] getMethodsArrayImpl() {
-        return CxxSelects.select(getWeaverEngine(), AMethod.class, cxxRecordDecl.getMethods(), false, node -> true).toArray(new AMethod[0]);
+    public AMethod<?>[] getMethodsImpl() {
+        return CxxSelects.select(getWeaverEngine(), AMethod.class, this.getNodeImpl().getMethods(), false, node -> true);
     }
 
     @Override
-    public void addMethodImpl(AMethod method) {
-        cxxRecordDecl.addMethod((CXXMethodDecl) method.getNode());
+    public void addMethodImpl(AMethod<?> method) {
+        this.getNodeImpl().addMethod((CXXMethodDecl) method.getNodeImpl());
     }
 
     @Override
-    public AClass[] getBasesArrayImpl() {
+    public AClass<?>[] getBasesImpl() {
 
-        return cxxRecordDecl.getBases().stream()
+        return this.getNodeImpl().getBases().stream()
                 .map(decl -> CxxJoinpoints.create(decl,
                         getWeaverEngine(), AClass.class))
                 // Collect to array
                 .toArray(size -> new AClass[size]);
-
-        // return cxxRecordDecl.get(CXXRecordDecl.RECORD_BASES).stream()
-        // // Map Decl
-        // .map(baseSpec -> CxxJoinpoints.create(baseSpec.getBaseDecl(cxxRecordDecl), AClass.class))
-        // // Collect to array
-        // .toArray(size -> new AClass[size]);
     }
 
     @Override
-    public AMethod[] getAllMethodsArrayImpl() {
-        return CxxJoinpoints.create(cxxRecordDecl.getAllMethods(false), getWeaverEngine(), AMethod.class);
+    public AMethod<?>[] getAllMethodsImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getAllMethods(false), getWeaverEngine(), AMethod.class);
     }
 
     @Override
-    public AClass[] getAllBasesArrayImpl() {
-        return CxxJoinpoints.create(cxxRecordDecl.getAllBases(), getWeaverEngine(), AClass.class);
+    public AClass<?>[] getAllBasesImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getAllBases(), getWeaverEngine(), AClass.class);
     }
 
     @Override
-    public Boolean getIsAbstractImpl() {
-        return cxxRecordDecl.isAbstract();
+    public boolean getIsAbstractImpl() {
+        return this.getNodeImpl().isAbstract();
     }
 
     @Override
-    public Boolean getIsInterfaceImpl() {
-        return cxxRecordDecl.isInterface();
+    public boolean getIsInterfaceImpl() {
+        return this.getNodeImpl().isInterface();
     }
 
     @Override
-    public AClass[] getPrototypesArrayImpl() {
-        return cxxRecordDecl.getDeclarations().stream()
+    public AClass<?>[] getPrototypesImpl() {
+        return this.getNodeImpl().getDeclarations().stream()
                 .map(node -> CxxJoinpoints.create(node,
                         getWeaverEngine(), AClass.class))
-                .toArray(size -> new AClass[size]);
+                .toArray(AClass[]::new);
     }
 
     @Override
-    public AClass getImplementationImpl() {
-        return cxxRecordDecl.getDefinition()
+    public AClass<?> getImplementationImpl() {
+        return this.getNodeImpl().getDefinition()
                 .map(node -> CxxJoinpoints.create(node,
                         getWeaverEngine(), AClass.class))
                 .orElse(null);
     }
 
     @Override
-    public AClass getCanonicalImpl() {
+    public AClass<?> getCanonicalImpl() {
         // First, try the implementation
         var implementation = getImplementationImpl();
 
@@ -126,7 +98,7 @@ public class CxxClass extends AClass {
         }
 
         // Implementation not found return prototype
-        var prototypes = getPrototypesArrayImpl();
+        var prototypes = getPrototypesImpl();
 
         if (prototypes.length == 0) {
             return null;
@@ -136,8 +108,8 @@ public class CxxClass extends AClass {
     }
 
     @Override
-    public Boolean getIsCanonicalImpl() {
-        return cxxRecordDecl.equals(getCanonicalImpl().getNode());
+    public boolean getIsCanonicalImpl() {
+        return this.getNodeImpl().equals(getCanonicalImpl().getNodeImpl());
     }
 
 }

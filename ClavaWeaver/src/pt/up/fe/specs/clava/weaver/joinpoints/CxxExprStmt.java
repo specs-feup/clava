@@ -13,31 +13,26 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExprStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 
-public class CxxExprStmt extends AExprStmt {
-
-    private final ExprStmt exprStmt;
+public class CxxExprStmt<Self extends CxxExprStmt<Self>> extends AExprStmt<Self> {
 
     public CxxExprStmt(ExprStmt exprStmt, CxxWeaver weaver) {
-        super(new CxxStatement(exprStmt, weaver), weaver);
-
-        this.exprStmt = exprStmt;
+        super(exprStmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return exprStmt;
+    public ExprStmt getNodeImpl() {
+        return (ExprStmt) super.getNodeImpl();
     }
 
     @Override
-    public AExpression getExprImpl() {
-        return CxxJoinpoints.create(exprStmt.getExpr(), getWeaverEngine(), AExpression.class);
+    public AExpression<?> getExprImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getExpr(), getWeaverEngine(), AExpression.class);
     }
 
 }

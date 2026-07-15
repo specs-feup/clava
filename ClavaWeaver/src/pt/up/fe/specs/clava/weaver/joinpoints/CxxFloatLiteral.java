@@ -13,29 +13,24 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFloatLiteral;
 
-public class CxxFloatLiteral extends AFloatLiteral {
-
-    private final FloatingLiteral literal;
+public class CxxFloatLiteral<Self extends CxxFloatLiteral<Self>> extends AFloatLiteral<Self> {
 
     public CxxFloatLiteral(FloatingLiteral literal, CxxWeaver weaver) {
-        super(new CxxLiteral(literal, weaver), weaver);
-
-        this.literal = literal;
+        super(literal, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return literal;
+    public FloatingLiteral getNodeImpl() {
+        return (FloatingLiteral) super.getNodeImpl();
     }
 
     @Override
-    public Double getValueImpl() {
-        return literal.get(FloatingLiteral.VALUE).doubleValue();
+    public double getValueImpl() {
+        return this.getNodeImpl().get(FloatingLiteral.VALUE).doubleValue();
     }
 
 }

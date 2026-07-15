@@ -17,8 +17,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class LowLevelApi {
@@ -37,20 +35,6 @@ public class LowLevelApi {
         return fieldNames;
     }
 
-    public static Object getValue(Object object, String fieldName) {
-        try {
-            Field field = object.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true); // You might want to set modifier to public first.
-            Object value = field.get(object);
-            return value;
-        } catch (
-                IllegalArgumentException | NoSuchFieldException | SecurityException | IllegalAccessException e) {
-            SpecsLogs.warn("Error message:\n", e);
-        }
-
-        return null;
-    }
-
     public static Class<?> getFieldClass(Object object, String fieldName) {
         try {
             Field field = object.getClass().getDeclaredField(fieldName);
@@ -63,9 +47,4 @@ public class LowLevelApi {
 
         return null;
     }
-
-    public static ClavaNode getNode(ACxxWeaverJoinPoint joinpoint) {
-        return joinpoint.getNode();
-    }
-
 }

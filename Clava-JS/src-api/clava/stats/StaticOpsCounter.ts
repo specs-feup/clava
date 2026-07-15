@@ -5,10 +5,13 @@ import {
   BuiltinType,
   Call,
   Expression,
+  ExpressionUse,
   FunctionJp,
   Joinpoint,
   Loop,
+  LoopKind,
   Op,
+  OpKind,
   Param,
   Statement,
   Type,
@@ -105,7 +108,7 @@ export default class StaticOpsCounter {
     }
 
     if ($stmt instanceof Loop) {
-      if ($stmt.kind !== "for") {
+      if ($stmt.kind !== LoopKind.for) {
         console.log(
           `Ignoring loops that are not 'fors' (location ${$stmt.location}) for now`
         );
@@ -280,19 +283,19 @@ export default class StaticOpsCounter {
 
       for (const $ref of refs) {
         // Ignore
-        if ($ref.use === "read") {
+        if ($ref.use === ExpressionUse.read) {
           continue;
         }
 
         // Not supported yet
-        if ($ref.use === "readwrite") {
+        if ($ref.use === ExpressionUse.readwrite) {
           console.log("Readwrite not supported yet");
           return undefined;
         }
 
         // Check if assignment
         const $refParent = $ref.parent as Op;
-        if ($refParent.kind !== "assign") {
+        if ($refParent.kind !== OpKind.assign) {
           console.log("Not supported when not an assignment");
           return undefined;
         }

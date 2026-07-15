@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -22,28 +21,25 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEnumType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.util.SpecsLogs;
 
-public class CxxEnumType extends AEnumType {
-    private final EnumType enumType;
+public class CxxEnumType<Self extends CxxEnumType<Self>> extends AEnumType<Self> {
 
     public CxxEnumType(EnumType enumType, CxxWeaver weaver) {
-        super(new CxxTagType(enumType, weaver), weaver);
-
-        this.enumType = enumType;
+        super(enumType, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return enumType;
+    public EnumType getNodeImpl() {
+        return (EnumType) super.getNodeImpl();
     }
 
     @Override
-    public AType getIntegerTypeImpl() {
-        if (getRoot() == null) {
+    public AType<?> getIntegerTypeImpl() {
+        if (getRootImpl() == null) {
             SpecsLogs.msgInfo("Root not defined, is this a detached join point? -> " + this);
             return null;
         }
 
-        return CxxJoinpoints.create(enumType.getEnumDecl((App) getRootImpl().getNode()).getIntegerType(), getWeaverEngine(), AType.class);
+        return CxxJoinpoints.create(this.getNodeImpl().getEnumDecl((App) getRootImpl().getNodeImpl()).getIntegerType(), getWeaverEngine(), AType.class);
     }
 
 }

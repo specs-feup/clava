@@ -1,6 +1,6 @@
 import Pass from "@specs-feup/lara/api/lara/pass/Pass.js";
 import PassResult from "@specs-feup/lara/api/lara/pass/results/PassResult.js";
-import { DeclStmt, ExprStmt, Joinpoint, Loop } from "../../Joinpoints.js";
+import { DeclStmt, ExprStmt, Joinpoint, Loop, LoopKind } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 import DoToWhileStmt from "../code/DoToWhileStmt.js";
 import ForToWhileStmt from "../code/ForToWhileStmt.js";
@@ -49,17 +49,17 @@ export default class SimplifyLoops extends Pass {
     }
     if (
       $jp instanceof Loop &&
-      ($jp.kind === "for" || $jp.kind === "dowhile" || $jp.kind === "while")
+      ($jp.kind === LoopKind.for || $jp.kind === LoopKind.dowhile || $jp.kind === LoopKind.while)
     ) {
       yield $jp;
     }
   }
 
   private makeWhileLoop($loop: Loop): Loop {
-    if ($loop.kind === "for") {
+    if ($loop.kind === LoopKind.for) {
       const $forToWhileScope = ForToWhileStmt($loop, this.label_suffix++);
       return $forToWhileScope.children[1] as Loop;
-    } else if ($loop.kind === "dowhile") {
+    } else if ($loop.kind === LoopKind.dowhile) {
       return DoToWhileStmt($loop, this.label_suffix++);
     } else {
       return $loop;

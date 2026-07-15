@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
@@ -21,41 +20,38 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACase;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ASwitch;
 
-public class CxxSwitch extends ASwitch {
-
-    private final SwitchStmt switchStmt;
+public class CxxSwitch<Self extends CxxSwitch<Self>> extends ASwitch<Self> {
 
     public CxxSwitch(SwitchStmt switchStmt, CxxWeaver weaver) {
-        super(new CxxStatement(switchStmt, weaver), weaver);
-        this.switchStmt = switchStmt;
+        super(switchStmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return switchStmt;
+    public SwitchStmt getNodeImpl() {
+        return (SwitchStmt) super.getNodeImpl();
     }
 
     @Override
-    public Boolean getHasDefaultCaseImpl() {
-        return switchStmt.hasDefaultCase();
+    public boolean getHasDefaultCaseImpl() {
+        return this.getNodeImpl().hasDefaultCase();
     }
 
     @Override
-    public ACase getGetDefaultCaseImpl() {
-        return switchStmt.getDefaultCase()
+    public ACase<?> getGetDefaultCaseImpl() {
+        return this.getNodeImpl().getDefaultCase()
                 .map(node -> CxxJoinpoints.create(node,
                         getWeaverEngine(), ACase.class))
                 .orElse(null);
     }
 
     @Override
-    public ACase[] getCasesArrayImpl() {
-        return CxxJoinpoints.create(switchStmt.getCases(), getWeaverEngine(), ACase.class);
+    public ACase<?>[] getCasesImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getCases(), getWeaverEngine(), ACase.class);
     }
 
     @Override
-    public AExpression getConditionImpl() {
-        return CxxJoinpoints.create(switchStmt.getCond(), getWeaverEngine(), AExpression.class);
+    public AExpression<?> getConditionImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getCond(), getWeaverEngine(), AExpression.class);
     }
 
 }

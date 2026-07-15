@@ -19,28 +19,24 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberCall;
 
-public class CxxMemberCall extends AMemberCall {
-
-    private final CXXMemberCallExpr memberCall;
+public class CxxMemberCall<Self extends CxxMemberCall<Self>> extends AMemberCall<Self> {
 
     public CxxMemberCall(CXXMemberCallExpr memberCall, CxxWeaver weaver) {
-        super(new CxxCall(memberCall, weaver), weaver);
-
-        this.memberCall = memberCall;
+        super(memberCall, weaver);
     }
 
     @Override
-    public CXXMemberCallExpr getNode() {
-        return memberCall;
+    public CXXMemberCallExpr getNodeImpl() {
+        return (CXXMemberCallExpr) super.getNodeImpl();
     }
 
     @Override
-    public AExpression getBaseImpl() {
-        return CxxJoinpoints.create(memberCall.getBase(), getWeaverEngine(), AExpression.class);
+    public AExpression<?> getBaseImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getBase(), getWeaverEngine(), AExpression.class);
     }
 
     @Override
-    public AExpression getRootBaseImpl() {
-        return CxxJoinpoints.create(memberCall.getRootBase(), getWeaverEngine(), AExpression.class);
+    public AExpression<?> getRootBaseImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getRootBase(), getWeaverEngine(), AExpression.class);
     }
 }

@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.SwitchCase;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
@@ -21,33 +20,30 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACase;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 
-public class CxxCase extends ACase {
-
-    private final SwitchCase caseStmt;
+public class CxxCase<Self extends CxxCase<Self>> extends ACase<Self> {
 
     public CxxCase(SwitchCase caseStmt, CxxWeaver weaver) {
-        super(new CxxSwitchCase(caseStmt, weaver), weaver);
-        this.caseStmt = caseStmt;
+        super(caseStmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return caseStmt;
+    public SwitchCase getNodeImpl() {
+        return (SwitchCase) super.getNodeImpl();
     }
 
     @Override
-    public Boolean getIsDefaultImpl() {
-        return caseStmt.isDefaultCase();
+    public boolean getIsDefaultImpl() {
+        return this.getNodeImpl().isDefaultCase();
     }
 
     @Override
-    public Boolean getIsEmptyImpl() {
-        return caseStmt.isEmptyCase();
+    public boolean getIsEmptyImpl() {
+        return this.getNodeImpl().isEmptyCase();
     }
 
     @Override
-    public AStatement getNextInstructionImpl() {
-        var nextInst = caseStmt.nextExecutedInstruction();
+    public AStatement<?> getNextInstructionImpl() {
+        var nextInst = this.getNodeImpl().nextExecutedInstruction();
         if (nextInst == null) {
             return null;
         }
@@ -56,18 +52,18 @@ public class CxxCase extends ACase {
     }
 
     @Override
-    public AStatement[] getInstructionsArrayImpl() {
-        return CxxJoinpoints.create(caseStmt.getInstructions(), getWeaverEngine(), AStatement.class);
+    public AStatement<?>[] getInstructionsImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getInstructions(), getWeaverEngine(), AStatement.class);
     }
 
     @Override
-    public ACase getNextCaseImpl() {
-        return CxxJoinpoints.create(caseStmt.nextCase(), getWeaverEngine(), ACase.class);
+    public ACase<?> getNextCaseImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().nextCase(), getWeaverEngine(), ACase.class);
     }
 
     @Override
-    public AExpression[] getValuesArrayImpl() {
-        return CxxJoinpoints.create(caseStmt.getValues(), getWeaverEngine(), AExpression.class);
+    public AExpression<?>[] getValuesImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getValues(), getWeaverEngine(), AExpression.class);
     }
 
 }

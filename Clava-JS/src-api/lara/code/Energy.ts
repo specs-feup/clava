@@ -6,6 +6,7 @@ import Logger from "./Logger.js";
 import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
 import PrintOnce from "@specs-feup/lara/api/lara/util/PrintOnce.js";
 import { FileJp, Joinpoint } from "../../Joinpoints.js";
+import { InsertPosition } from "@specs-feup/lara/api/LaraJoinPoint.js";
 
 export default class Energy extends EnergyBase<Joinpoint> {
   /**
@@ -59,7 +60,7 @@ export default class Energy extends EnergyBase<Joinpoint> {
 
     const codeBefore = Energy.energy_rapl_measure(energyVarStart);
     const codeAfter = Energy.energy_rapl_measure(energyVarEnd);
-    $start.insert("before", codeBefore);
+    $start.insert(InsertPosition.before, codeBefore);
 
     logger.append(prefix).appendLongLong(energyVarEnd + " - " + energyVarStart);
     if (this.printUnit) {
@@ -67,7 +68,7 @@ export default class Energy extends EnergyBase<Joinpoint> {
     }
     logger.ln();
     logger.log($end);
-    $end.insert("after", codeAfter);
+    $end.insert(InsertPosition.after, codeAfter);
   }
 
   private static energy_rapl_measure(energyVar: string): string {

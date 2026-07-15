@@ -13,33 +13,29 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 
-public class CxxComment extends AComment {
-
-    private final Comment comment;
+public class CxxComment<Self extends CxxComment<Self>> extends AComment<Self> {
 
     public CxxComment(Comment comment, CxxWeaver weaver) {
-        super(weaver);
-        this.comment = comment;
+        super(comment, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return comment;
+    public Comment getNodeImpl() {
+        return (Comment) super.getNodeImpl();
     }
 
     @Override
     public String getTextImpl() {
-        return comment.getText();
+        return this.getNodeImpl().getText();
     }
 
     @Override
     public void setTextImpl(String text) {
-        comment.setText(text);
+        this.getNodeImpl().setText(text);
     }
 
 }

@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
@@ -22,33 +21,30 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryOp;
 
-public class CxxUnaryOp extends AUnaryOp {
-
-    private final UnaryOperator unaryOp;
+public class CxxUnaryOp<Self extends CxxUnaryOp<Self>> extends AUnaryOp<Self> {
 
     public CxxUnaryOp(UnaryOperator unaryOp, CxxWeaver weaver) {
-        super(new CxxOp(unaryOp, weaver), weaver);
-        this.unaryOp = unaryOp;
+        super(unaryOp, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return unaryOp;
+    public UnaryOperator getNodeImpl() {
+        return (UnaryOperator) super.getNodeImpl();
     }
 
     @Override
-    public AExpression getOperandImpl() {
-        return CxxJoinpoints.create(ClavaNodes.normalize(unaryOp.getSubExpr()), getWeaverEngine(), AExpression.class);
+    public AExpression<?> getOperandImpl() {
+        return CxxJoinpoints.create(ClavaNodes.normalize(this.getNodeImpl().getSubExpr()), getWeaverEngine(), AExpression.class);
     }
 
     @Override
-    public Boolean getIsPointerDerefImpl() {
-        return unaryOp.getOp() == UnaryOperatorKind.Deref;
+    public boolean getIsPointerDerefImpl() {
+        return this.getNodeImpl().getOp() == UnaryOperatorKind.Deref;
     }
 
     @Override
-    public Boolean getIsBitwiseImpl() {
-        return unaryOp.getOp().isBitwise();
+    public boolean getIsBitwiseImpl() {
+        return this.getNodeImpl().getOp().isBitwise();
     }
 
 }
