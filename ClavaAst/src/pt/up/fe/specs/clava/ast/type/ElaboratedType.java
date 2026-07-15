@@ -50,10 +50,6 @@ public class ElaboratedType extends TypeWithKeyword {
 
     @Override
     public Type desugar() {
-        if (!hasValue(NAMED_TYPE)) {
-            return this;
-        }
-
         return getNamedType();
     }
 
@@ -67,10 +63,6 @@ public class ElaboratedType extends TypeWithKeyword {
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
-        if (!hasValue(NAMED_TYPE) || getNamedType() instanceof NullType) {
-            return super.getCode(sourceNode, name);
-        }
-
         String code = getKeyword().getCode();
         if (!code.isEmpty()) {
             code += " ";

@@ -108,10 +108,6 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
 
         ClavaNode node = parseNode(nodeId, classname, data, lineStream);
 
-        if (node == null) {
-            return;
-        }
-
         // If UnsupportedNode, transform to DummyNode
         // node = transformUnsupportedNode(node);
 
@@ -173,11 +169,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
         DataStore nodeData = data.get(ClangAstData.NODE_DATA).get(nodeId);
 
         if (nodeData == null) {
-            if (debug) {
-                SpecsLogs.msgInfo("No ClavaData/DataStore for node '" + nodeId + "' (classname: " + classname
-                        + "), skipping node (linestream index '" + lineStream.getLastLineIndex() + "')");
-            }
-            return null;
+            throw new RuntimeException("No ClavaData/DataStore for node '" + nodeId + "' (classname: " + classname
+                    + "), data dumper is not being called (linestream index '" + lineStream.getLastLineIndex() + "')");
         }
 
         // Get corresponding ClavaNode class
@@ -240,14 +233,10 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
                 // }
                 // }
 
-                if (child == null) {
-                    if (debug) {
-                        int index = i;
-                        SpecsLogs.msgInfo("Did not find ClavaNode for child with index '" + index + "' and id '"
-                                + childId + "' when parsing " + clavaNodeClass.getSimpleName() + ", skipping child");
-                    }
-                    continue;
-                }
+                int index = i;
+                Objects.requireNonNull(child,
+                        () -> "Did not find ClavaNode for child with index '" + index + "' and id '" + childId
+                                + "' when parsing " + clavaNodeClass.getSimpleName() + " -> " + nodeData);
 
                 child = processChild(child, clavaNodeClass, data);
 

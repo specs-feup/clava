@@ -31,10 +31,6 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.NullNodeType;
-import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -152,20 +148,10 @@ public class ClavaNodes {
                                 + "', if node can be null, use queueOptional instead. Node data:\n" + data);
             }
 
+            ClavaNode node = Objects.requireNonNull(clavaNodes.get(nodeId),
+                    () -> "Could not resolve required node '" + nodeId + "' for key '" + key.getName()
+                            + "'. Node data:\n" + data);
             Class<T> valueClass = key.getValueClass();
-            ClavaNode node = clavaNodes.get(nodeId);
-            if (node == null) {
-                var nullNode = nullNodeFor(valueClass);
-                if (nullNode != null) {
-                    data.set(key, valueClass.cast(nullNode));
-                    return;
-                }
-
-                ClavaLog.debug("Could not find ClavaNode with id '" + nodeId
-                        + "', skipping key '" + key.getName()
-                        + "'. Check if node is being visited. If parsing of includes is enabled, check that the parsing level is sufficient.");
-                return;
-            }
 
             ClavaNode adaptedNode = adaptNode(node, valueClass);
 
@@ -208,26 +194,6 @@ public class ClavaNodes {
         return node;
     }
 
-    private ClavaNode nullNodeFor(Class<? extends ClavaNode> valueClass) {
-        if (valueClass.equals(Type.class)) {
-            return factory.nullType();
-        }
-
-        if (valueClass.equals(Decl.class)) {
-            return factory.nullDecl();
-        }
-
-        if (valueClass.equals(Stmt.class)) {
-            return factory.nullStmt();
-        }
-
-        if (valueClass.equals(Expr.class)) {
-            return factory.nullExpr();
-        }
-
-        return null;
-    }
-
     public <T extends ClavaNode> void queueSetOptionalNode(DataClass<?> data, DataKey<Optional<T>> key,
             String nodeId) {
 
@@ -261,11 +227,7 @@ public class ClavaNodes {
         Runnable nodeToAdd = () -> {
 
             @SuppressWarnings("unchecked") // If the nodes exist, they should be of the requested type
-            List<T> nodes = nodeIds.stream()
-                    .map(this::getOptional)
-                    .flatMap(Optional::stream)
-                    .map(node -> (T) node)
-                    .collect(Collectors.toList());
+            List<T> nodes = nodeIds.stream().map(id -> (T) get(id)).collect(Collectors.toList());
 
             data.set(key, nodes);
         };
