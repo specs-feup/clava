@@ -53,6 +53,7 @@ import java.util.Objects;
 public class ClangAstDumper {
 
     private final static boolean USE_PLUGIN = false;
+    private final static String SYSTEM_HEADER_THRESHOLD_OPTION = "-system-header-threshold=";
 
     public static boolean usePlugin() {
         return USE_PLUGIN;
@@ -169,7 +170,7 @@ public class ClangAstDumper {
             arguments.add("-Xclang");
             arguments.add("-plugin-arg-DumpAst");
             arguments.add("-Xclang");
-            arguments.add("-system-threshold=" + systemIncludesThreshold);
+            arguments.add(SYSTEM_HEADER_THRESHOLD_OPTION + systemIncludesThreshold);
         } else {
             arguments.add(clangExecutable.getAbsolutePath());
 
@@ -177,7 +178,7 @@ public class ClangAstDumper {
 
             arguments.add("-id=" + id);
 
-            arguments.add("-system-header-threshold=" + systemIncludesThreshold);
+            arguments.add(SYSTEM_HEADER_THRESHOLD_OPTION + systemIncludesThreshold);
 
             arguments.add("--");
         }
