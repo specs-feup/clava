@@ -32,6 +32,7 @@ if git -C "$source_directory" show-ref --verify --quiet "refs/remotes/origin/${s
 elif git -C "$source_directory" show-ref --verify --quiet "refs/heads/${source_branch}"; then
   source_ref="refs/heads/${source_branch}"
 fi
+git -C "$source_directory" rev-parse --verify "${source_ref}^{commit}" >/dev/null
 
 add_candidate "$source_branch"
 
@@ -47,6 +48,12 @@ elif git -C "$source_directory" show-ref --verify --quiet "refs/heads/${root_bra
   root_ref="refs/heads/${root_branch}"
 fi
 
+if [[ -z $root_ref ]]; then
+  echo "Cannot find the root branch '${root_branch}' in ${source_directory}" >&2
+  exit 1
+fi
+
+reached_root=false
 while IFS= read -r commit; do
   first_parent_distance[$commit]=$distance
   ((distance += 1))
@@ -55,9 +62,15 @@ while IFS= read -r commit; do
   # first-parent commit contained in its current history, not at its tip.
   if [[ -n $root_ref ]] &&
     git -C "$source_directory" merge-base --is-ancestor "$commit" "$root_ref"; then
+    reached_root=true
     break
   fi
 done < <(git -C "$source_directory" rev-list --first-parent "$source_ref")
+
+if [[ $reached_root != true ]]; then
+  echo "The first-parent history of '${source_branch}' does not reach '${root_branch}'" >&2
+  exit 1
+fi
 
 ancestry_candidates=$(mktemp)
 trap 'rm -f "$ancestry_candidates"' EXIT
@@ -97,11 +110,20 @@ while (( $# )); do
   repository=$2
   shift 2
 
-  url="https://github.com/${repository}.git"
+  if [[ $repository == *://* || $repository == /* ]]; then
+    url=$repository
+  else
+    url="https://github.com/${repository}.git"
+  fi
+
   default_branch=$(
     git ls-remote --symref "$url" HEAD |
       awk '/^ref:/ {sub("refs/heads/", "", $2); print $2; exit}'
   )
+  if [[ -z $default_branch ]]; then
+    echo "Cannot determine the default branch for ${repository}" >&2
+    exit 1
+  fi
 
   declare -A dependency_branches=()
   while IFS=$'\t' read -r _ ref; do

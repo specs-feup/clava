@@ -49,6 +49,9 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
+      - name: Test dependency ref resolver
+        run: bash clava/.github/scripts/test-resolve-dependency-refs.sh
+
       - name: Determine repository refs
         id: repo-refs
         shell: bash
