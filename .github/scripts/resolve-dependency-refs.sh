@@ -277,10 +277,6 @@ while [[ $proof_changed == true ]]; do
       ${candidate_proven[$older_index]:-false} != true ]]; then
       candidate_proven[$older_index]=true
       proof_changed=true
-    elif [[ ${candidate_proven[$older_index]:-false} == true &&
-      ${candidate_proven[$newer_index]:-false} != true ]]; then
-      candidate_proven[$newer_index]=true
-      proof_changed=true
     fi
   done
 done

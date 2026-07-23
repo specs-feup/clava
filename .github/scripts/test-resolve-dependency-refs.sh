@@ -223,6 +223,8 @@ grep -Fqx "rebased_ref=${rebased_lmsousa_tip}" \
 
 # A shared sibling with the same fork point is not a proven stack member.
 git -C "$source_repository" update-ref \
+  refs/remotes/origin/lmsousa "$lmsousa_tip"
+git -C "$source_repository" update-ref \
   refs/remotes/origin/unrelated-sibling "$unrelated_sibling_tip"
 if SOURCE_BRANCH=workflow-fix GITHUB_OUTPUT="${test_directory}/sibling-output" \
   bash "$resolver" "$source_repository" \
