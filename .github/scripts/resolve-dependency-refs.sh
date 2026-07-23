@@ -14,82 +14,138 @@ source_branch=${SOURCE_BRANCH:?SOURCE_BRANCH must name the branch being tested}
 integration_branch=${INTEGRATION_BRANCH:-staging}
 root_branch=${ROOT_BRANCH:-master}
 
+declare -a dependency_prefixes=()
+declare -a dependency_repositories=()
+while (( $# )); do
+  dependency_prefixes+=("$1")
+  dependency_repositories+=("$2")
+  shift 2
+done
+
+repository_url() {
+  local repository=$1
+  if [[ $repository == *://* || $repository == /* ]]; then
+    echo "$repository"
+  else
+    echo "https://github.com/${repository}.git"
+  fi
+}
+
+evidence_directory=$(mktemp -d)
+declare -a evidence_paths=("$source_directory")
+declare -a evidence_ref_prefixes=("refs/remotes/origin/")
+declare -A cloned_paths=()
+
+clone_evidence_repository() {
+  local repository=$1
+
+  if [[ -n ${cloned_paths[$repository]+yes} ]]; then
+    return
+  fi
+
+  local clone_path="${evidence_directory}/repository-${#cloned_paths[@]}.git"
+  git clone --quiet --bare --filter=blob:none \
+    "$(repository_url "$repository")" "$clone_path"
+  cloned_paths[$repository]=$clone_path
+  evidence_paths+=("$clone_path")
+  evidence_ref_prefixes+=("refs/heads/")
+}
+
+for repository in "${dependency_repositories[@]}"; do
+  clone_evidence_repository "$repository"
+done
+
+if [[ -n ${EVIDENCE_REPOSITORIES:-} ]]; then
+  read -r -a additional_evidence <<< "$EVIDENCE_REPOSITORIES"
+  for repository in "${additional_evidence[@]}"; do
+    clone_evidence_repository "$repository"
+  done
+fi
+
 declare -a candidates=()
 declare -A seen_candidates=()
 
 add_candidate() {
   local branch=$1
-
   if [[ -n $branch && -z ${seen_candidates[$branch]+yes} ]]; then
+    seen_candidates[$branch]=${#candidates[@]}
     candidates+=("$branch")
-    seen_candidates[$branch]=1
   fi
 }
 
-source_ref=HEAD
-git -C "$source_directory" rev-parse --verify "${source_ref}^{commit}" >/dev/null
-
 add_candidate "$source_branch"
 
-# Branch creation has no durable metadata in Git. Branch tips that still occur
-# on the source branch's first-parent history are the reliable part of the
-# stack. Sort them by their distance from the source tip.
-declare -A first_parent_distance=()
-distance=0
-root_ref=
-if git -C "$source_directory" show-ref --verify --quiet "refs/remotes/origin/${root_branch}"; then
-  root_ref="refs/remotes/origin/${root_branch}"
-elif git -C "$source_directory" show-ref --verify --quiet "refs/heads/${root_branch}"; then
-  root_ref="refs/heads/${root_branch}"
-fi
+collect_candidates() {
+  local repository_path=$1
+  local ref_prefix=$2
+  local start_ref=$3
+  local required=$4
+  local root_ref="${ref_prefix}${root_branch}"
 
-if [[ -z $root_ref ]]; then
-  echo "Cannot find the root branch '${root_branch}' in ${source_directory}" >&2
-  exit 1
-fi
-
-reached_root=false
-while IFS= read -r commit; do
-  first_parent_distance[$commit]=$distance
-  ((distance += 1))
-
-  # The root branch is allowed to advance independently. Stop at the first
-  # first-parent commit contained in its current history, not at its tip.
-  if [[ -n $root_ref ]] &&
-    git -C "$source_directory" merge-base --is-ancestor "$commit" "$root_ref"; then
-    reached_root=true
-    break
+  if ! git -C "$repository_path" rev-parse --verify "${start_ref}^{commit}" >/dev/null 2>&1; then
+    if [[ $required == true ]]; then
+      echo "Cannot resolve the workflow commit in ${repository_path}" >&2
+      exit 1
+    fi
+    return
   fi
-done < <(git -C "$source_directory" rev-list --first-parent "$source_ref")
+  if ! git -C "$repository_path" rev-parse --verify "${root_ref}^{commit}" >/dev/null 2>&1; then
+    echo "Cannot find root branch '${root_branch}' in ${repository_path}" >&2
+    exit 1
+  fi
 
-if [[ $reached_root != true ]]; then
-  echo "The first-parent history of '${source_branch}' does not reach '${root_branch}'" >&2
-  exit 1
-fi
+  declare -A distance_by_commit=()
+  local distance=0
+  local reached_root=false
+  local commit
+  while IFS= read -r commit; do
+    distance_by_commit[$commit]=$distance
+    ((distance += 1))
+    if git -C "$repository_path" merge-base --is-ancestor "$commit" "$root_ref"; then
+      reached_root=true
+      break
+    fi
+  done < <(git -C "$repository_path" rev-list --first-parent "$start_ref")
 
-ancestry_candidates=$(mktemp)
-trap 'rm -f "$ancestry_candidates"' EXIT
+  if [[ $reached_root != true ]]; then
+    if [[ $required == true ]]; then
+      echo "The workflow commit's first-parent history does not reach '${root_branch}'" >&2
+      exit 1
+    fi
+    return
+  fi
 
-while IFS=$'\t' read -r ref_name object_name; do
-  branch=${ref_name#origin/}
+  local ordered_refs="${evidence_directory}/candidate-refs-${#candidates[@]}-${distance}"
+  : > "$ordered_refs"
+  local ref object branch
+  while IFS=$'\t' read -r ref object; do
+    branch=${ref#"$ref_prefix"}
+    [[ $branch == HEAD ]] && continue
+    [[ $branch == "$source_branch" ]] && continue
+    [[ $branch == "$integration_branch" ]] && continue
+    [[ $branch == "$root_branch" ]] && continue
+    [[ -n ${distance_by_commit[$object]+yes} ]] || continue
+    printf '%s\t%s\n' "${distance_by_commit[$object]}" "$branch" >> "$ordered_refs"
+  done < <(
+    git -C "$repository_path" for-each-ref \
+      --format='%(refname)%09%(objectname)' "${ref_prefix%/}"
+  )
 
-  [[ $ref_name == origin || $branch == HEAD ]] && continue
-  [[ $branch == "$source_branch" ]] && continue
-  [[ $branch == "$integration_branch" ]] && continue
-  [[ $branch == "$root_branch" ]] && continue
-  [[ -n ${first_parent_distance[$object_name]+yes} ]] || continue
+  while IFS=$'\t' read -r _ branch; do
+    add_candidate "$branch"
+  done < <(sort -k1,1n -k2,2 -u "$ordered_refs")
+}
 
-  printf '%s\t%s\n' "${first_parent_distance[$object_name]}" "$branch" \
-    >> "$ancestry_candidates"
-done < <(
-  git -C "$source_directory" for-each-ref \
-    --format='%(refname:short)%09%(objectname)' \
-    refs/remotes/origin
-)
+# HEAD is the immutable event commit. Never substitute the mutable remote tip.
+collect_candidates "$source_directory" "refs/remotes/origin/" HEAD true
 
-while IFS=$'\t' read -r _ branch; do
-  add_candidate "$branch"
-done < <(sort -k1,1n -k2,2 -u "$ancestry_candidates")
+for ((repository_index = 1; repository_index < ${#evidence_paths[@]}; repository_index++)); do
+  repository_path=${evidence_paths[$repository_index]}
+  source_ref="refs/heads/${source_branch}"
+  if git -C "$repository_path" show-ref --verify --quiet "$source_ref"; then
+    collect_candidates "$repository_path" "refs/heads/" "$source_ref" false
+  fi
+done
 
 if [[ $source_branch != "$root_branch" ]]; then
   add_candidate "$integration_branch"
@@ -100,47 +156,150 @@ printf -v candidate_chain '%s -> ' "${candidates[@]}"
 candidate_chain=${candidate_chain% -> }
 echo "Dependency branch candidates: ${candidate_chain}"
 
-while (( $# )); do
-  prefix=$1
-  repository=$2
-  shift 2
+candidate_count=${#candidates[@]}
+declare -A edges=()
 
-  if [[ $repository == *://* || $repository == /* ]]; then
-    url=$repository
-  else
-    url="https://github.com/${repository}.git"
+add_edge() {
+  local newer=$1
+  local older=$2
+  [[ $newer == "$older" ]] || edges["${newer},${older}"]=1
+}
+
+is_first_parent_ancestor() {
+  local repository_path=$1
+  local older=$2
+  local newer=$3
+  local commit
+
+  while IFS= read -r commit; do
+    [[ $commit == "$older" ]] && return 0
+  done < <(git -C "$repository_path" rev-list --first-parent "$newer")
+  return 1
+}
+
+# The event branch is newest by definition. staging and master are the two
+# conventional terminal levels, even when their tips have advanced.
+for ((i = 0; i < candidate_count; i++)); do
+  branch=${candidates[$i]}
+  if [[ $branch != "$source_branch" ]]; then
+    add_edge 0 "$i"
   fi
+  if [[ $source_branch != "$root_branch" &&
+    $branch != "$integration_branch" && $branch != "$root_branch" ]]; then
+    integration_index=${seen_candidates[$integration_branch]}
+    add_edge "$i" "$integration_index"
+  fi
+done
+root_index=${seen_candidates[$root_branch]}
+if [[ $source_branch != "$root_branch" ]]; then
+  integration_index=${seen_candidates[$integration_branch]}
+  add_edge "$integration_index" "$root_index"
+fi
 
-  default_branch=$(
-    git ls-remote --symref "$url" HEAD |
-      awk '/^ref:/ {sub("refs/heads/", "", $2); print $2; exit}'
-  )
-  if [[ -z $default_branch ]]; then
-    echo "Cannot determine the default branch for ${repository}" >&2
+# Each repository contributes only strict first-parent evidence. Equal refs
+# are neutral; missing or diverged refs contribute no ordering.
+for ((repository_index = 0; repository_index < ${#evidence_paths[@]}; repository_index++)); do
+  repository_path=${evidence_paths[$repository_index]}
+  ref_prefix=${evidence_ref_prefixes[$repository_index]}
+
+  for ((i = 0; i < candidate_count; i++)); do
+    left_branch=${candidates[$i]}
+    [[ $left_branch == "$source_branch" || $left_branch == "$integration_branch" || $left_branch == "$root_branch" ]] && continue
+    left_ref="${ref_prefix}${left_branch}"
+    left_sha=$(git -C "$repository_path" rev-parse --verify "${left_ref}^{commit}" 2>/dev/null || true)
+    [[ -n $left_sha ]] || continue
+
+    for ((j = i + 1; j < candidate_count; j++)); do
+      right_branch=${candidates[$j]}
+      [[ $right_branch == "$source_branch" || $right_branch == "$integration_branch" || $right_branch == "$root_branch" ]] && continue
+      right_ref="${ref_prefix}${right_branch}"
+      right_sha=$(git -C "$repository_path" rev-parse --verify "${right_ref}^{commit}" 2>/dev/null || true)
+      [[ -n $right_sha && $left_sha != "$right_sha" ]] || continue
+
+      if is_first_parent_ancestor "$repository_path" "$right_sha" "$left_sha"; then
+        add_edge "$i" "$j"
+      elif is_first_parent_ancestor "$repository_path" "$left_sha" "$right_sha"; then
+        add_edge "$j" "$i"
+      fi
+    done
+  done
+done
+
+# Compute transitive closure and reject contradictory evidence.
+for ((k = 0; k < candidate_count; k++)); do
+  for ((i = 0; i < candidate_count; i++)); do
+    [[ -n ${edges["${i},${k}"]+yes} ]] || continue
+    for ((j = 0; j < candidate_count; j++)); do
+      if [[ -n ${edges["${k},${j}"]+yes} ]]; then
+        edges["${i},${j}"]=1
+      fi
+    done
+  done
+done
+
+for ((i = 0; i < candidate_count; i++)); do
+  if [[ -n ${edges["${i},${i}"]+yes} ]]; then
+    echo "Contradictory branch ordering evidence involves '${candidates[$i]}'" >&2
     exit 1
   fi
+done
 
-  declare -A dependency_branches=()
-  while IFS=$'\t' read -r _ ref; do
-    dependency_branches[${ref#refs/heads/}]=1
-  done < <(git ls-remote --heads "$url")
+for ((dependency_index = 0; dependency_index < ${#dependency_repositories[@]}; dependency_index++)); do
+  prefix=${dependency_prefixes[$dependency_index]}
+  repository=${dependency_repositories[$dependency_index]}
+  repository_path=${cloned_paths[$repository]}
 
-  selected=
-  for branch in "${candidates[@]}"; do
-    if [[ -n ${dependency_branches[$branch]+yes} ]]; then
-      selected=$branch
-      break
+  default_branch=$(git -C "$repository_path" symbolic-ref --short HEAD)
+  default_branch=${default_branch#refs/heads/}
+
+  declare -a available_indices=()
+  declare -A available_shas=()
+  for ((i = 0; i < candidate_count; i++)); do
+    branch=${candidates[$i]}
+    sha=$(git -C "$repository_path" rev-parse --verify "refs/heads/${branch}^{commit}" 2>/dev/null || true)
+    if [[ -n $sha ]]; then
+      available_indices+=("$i")
+      available_shas[$i]=$sha
     fi
   done
 
-  if [[ -z $selected ]]; then
+  declare -a newest_indices=()
+  for i in "${available_indices[@]}"; do
+    dominated=false
+    for j in "${available_indices[@]}"; do
+      if [[ $i != "$j" && -n ${edges["${j},${i}"]+yes} ]]; then
+        dominated=true
+        break
+      fi
+    done
+    [[ $dominated == true ]] || newest_indices+=("$i")
+  done
+
+  if (( ${#newest_indices[@]} == 0 )); then
     echo "None of the candidate branches exists in ${repository}" >&2
     exit 1
   fi
 
-  echo "Using '${selected}' for ${repository}"
+  selected_index=${newest_indices[0]}
+  selected_sha=${available_shas[$selected_index]}
+  if (( ${#newest_indices[@]} > 1 )); then
+    ambiguous=()
+    for i in "${newest_indices[@]}"; do
+      ambiguous+=("${candidates[$i]}")
+      if [[ ${available_shas[$i]} != "$selected_sha" ]]; then
+        printf -v ambiguous_list '%s, ' "${ambiguous[@]}"
+        ambiguous_list=${ambiguous_list%, }
+        echo "Ambiguous newest branches in ${repository}: ${ambiguous_list}" >&2
+        exit 1
+      fi
+    done
+  fi
+
+  selected_branch=${candidates[$selected_index]}
+  echo "Using '${selected_branch}' (${selected_sha}) for ${repository}"
   {
-    echo "${prefix}_ref=${selected}"
+    echo "${prefix}_ref=${selected_sha}"
+    echo "${prefix}_branch=${selected_branch}"
     echo "${prefix}_default=${default_branch}"
   } >> "${GITHUB_OUTPUT:?GITHUB_OUTPUT is not set}"
 done
