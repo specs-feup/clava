@@ -62,6 +62,23 @@ if [[ -n ${EVIDENCE_REPOSITORIES:-} ]]; then
   done
 fi
 
+# A moved branch is relevant only when its name is shared by repositories.
+# Count each repository once so private one-off branches do not pollute the
+# global candidate set.
+declare -A branch_presence=()
+for ((repository_index = 0; repository_index < ${#evidence_paths[@]}; repository_index++)); do
+  repository_path=${evidence_paths[$repository_index]}
+  ref_prefix=${evidence_ref_prefixes[$repository_index]}
+  while IFS= read -r ref; do
+    branch=${ref#"$ref_prefix"}
+    [[ $branch == HEAD ]] && continue
+    branch_presence[$branch]=$(( ${branch_presence[$branch]:-0} + 1 ))
+  done < <(
+    git -C "$repository_path" for-each-ref \
+      --format='%(refname)' "${ref_prefix%/}"
+  )
+done
+
 declare -a candidates=()
 declare -A seen_candidates=()
 
@@ -114,6 +131,7 @@ collect_candidates() {
     fi
     return
   fi
+  local root_distance=$((distance - 1))
 
   local ordered_refs="${evidence_directory}/candidate-refs-${#candidates[@]}-${distance}"
   : > "$ordered_refs"
@@ -124,8 +142,21 @@ collect_candidates() {
     [[ $branch == "$source_branch" ]] && continue
     [[ $branch == "$integration_branch" ]] && continue
     [[ $branch == "$root_branch" ]] && continue
-    [[ -n ${distance_by_commit[$object]+yes} ]] || continue
-    printf '%s\t%s\n' "${distance_by_commit[$object]}" "$branch" >> "$ordered_refs"
+
+    if [[ -n ${distance_by_commit[$object]+yes} ]]; then
+      printf '%s\t%s\n' "${distance_by_commit[$object]}" "$branch" >> "$ordered_refs"
+      continue
+    fi
+
+    # The branch may have advanced after a child was created. Its merge-base
+    # still identifies the old tip on the event's stack. Requiring the name in
+    # multiple repositories and a fork point newer than the root boundary
+    # avoids treating every branch from master as part of this stack.
+    [[ ${branch_presence[$branch]:-0} -ge 2 ]] || continue
+    merge_base=$(git -C "$repository_path" merge-base "$start_ref" "$ref" 2>/dev/null || true)
+    [[ -n $merge_base && -n ${distance_by_commit[$merge_base]+yes} ]] || continue
+    [[ ${distance_by_commit[$merge_base]} -lt $root_distance ]] || continue
+    printf '%s\t%s\n' "${distance_by_commit[$merge_base]}" "$branch" >> "$ordered_refs"
   done < <(
     git -C "$repository_path" for-each-ref \
       --format='%(refname)%09%(objectname)' "${ref_prefix%/}"
