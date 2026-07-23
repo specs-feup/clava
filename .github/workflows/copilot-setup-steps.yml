@@ -70,9 +70,11 @@ jobs:
       - name: Echo checks
         run: |
           echo "Weaver branch: ${{ env.BRANCH_NAME }}"
-          echo "Lara framework ref: ${{ steps.repo-refs.outputs.lara_ref }}"
+          echo "Lara framework branch: ${{ steps.repo-refs.outputs.lara_branch }}"
+          echo "Lara framework commit: ${{ steps.repo-refs.outputs.lara_ref }}"
           echo "Lara framework default: ${{ steps.repo-refs.outputs.lara_default }}"
-          echo "Specs-java-libs ref: ${{ steps.repo-refs.outputs.specs_ref }}"
+          echo "Specs-java-libs branch: ${{ steps.repo-refs.outputs.specs_branch }}"
+          echo "Specs-java-libs commit: ${{ steps.repo-refs.outputs.specs_ref }}"
           echo "Specs-java-libs default: ${{ steps.repo-refs.outputs.specs_default }}"
 
       - name: Checkout lara-framework
