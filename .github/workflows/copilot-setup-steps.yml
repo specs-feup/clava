@@ -9,9 +9,13 @@ on:
   push:
     paths:
       - .github/workflows/copilot-setup-steps.yml
+      - .github/scripts/resolve-dependency-refs.sh
+      - .github/scripts/test-resolve-dependency-refs.sh
   pull_request:
     paths:
       - .github/workflows/copilot-setup-steps.yml
+      - .github/scripts/resolve-dependency-refs.sh
+      - .github/scripts/test-resolve-dependency-refs.sh
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
