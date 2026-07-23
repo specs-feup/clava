@@ -81,12 +81,17 @@ done
 
 declare -a candidates=()
 declare -A seen_candidates=()
+declare -A candidate_proven=()
 
 add_candidate() {
   local branch=$1
+  local proven=${2:-true}
   if [[ -n $branch && -z ${seen_candidates[$branch]+yes} ]]; then
     seen_candidates[$branch]=${#candidates[@]}
+    candidate_proven[${#candidates[@]}]=$proven
     candidates+=("$branch")
+  elif [[ -n $branch && $proven == true ]]; then
+    candidate_proven[${seen_candidates[$branch]}]=true
   fi
 }
 
@@ -144,7 +149,7 @@ collect_candidates() {
     [[ $branch == "$root_branch" ]] && continue
 
     if [[ -n ${distance_by_commit[$object]+yes} ]]; then
-      printf '%s\t%s\n' "${distance_by_commit[$object]}" "$branch" >> "$ordered_refs"
+      printf '%s\t%s\ttrue\n' "${distance_by_commit[$object]}" "$branch" >> "$ordered_refs"
       continue
     fi
 
@@ -156,14 +161,14 @@ collect_candidates() {
     merge_base=$(git -C "$repository_path" merge-base "$start_ref" "$ref" 2>/dev/null || true)
     [[ -n $merge_base && -n ${distance_by_commit[$merge_base]+yes} ]] || continue
     [[ ${distance_by_commit[$merge_base]} -lt $root_distance ]] || continue
-    printf '%s\t%s\n' "${distance_by_commit[$merge_base]}" "$branch" >> "$ordered_refs"
+    printf '%s\t%s\tfalse\n' "${distance_by_commit[$merge_base]}" "$branch" >> "$ordered_refs"
   done < <(
     git -C "$repository_path" for-each-ref \
       --format='%(refname)%09%(objectname)' "${ref_prefix%/}"
   )
 
-  while IFS=$'\t' read -r _ branch; do
-    add_candidate "$branch"
+  while IFS=$'\t' read -r _ branch proven; do
+    add_candidate "$branch" "$proven"
   done < <(sort -k1,1n -k2,2 -u "$ordered_refs")
 }
 
@@ -189,6 +194,7 @@ echo "Dependency branch candidates: ${candidate_chain}"
 
 candidate_count=${#candidates[@]}
 declare -A edges=()
+declare -A strict_edges=()
 
 add_edge() {
   local newer=$1
@@ -249,10 +255,33 @@ for ((repository_index = 0; repository_index < ${#evidence_paths[@]}; repository
 
       if is_first_parent_ancestor "$repository_path" "$right_sha" "$left_sha"; then
         add_edge "$i" "$j"
+        strict_edges["${i},${j}"]=1
       elif is_first_parent_ancestor "$repository_path" "$left_sha" "$right_sha"; then
         add_edge "$j" "$i"
+        strict_edges["${j},${i}"]=1
       fi
     done
+  done
+done
+
+# Strict evidence validates an uncertain candidate only when it connects to a
+# branch already observed directly on a stack. Propagate that proof through a
+# chain of strict first-parent relationships.
+proof_changed=true
+while [[ $proof_changed == true ]]; do
+  proof_changed=false
+  for edge in "${!strict_edges[@]}"; do
+    newer_index=${edge%,*}
+    older_index=${edge#*,}
+    if [[ ${candidate_proven[$newer_index]:-false} == true &&
+      ${candidate_proven[$older_index]:-false} != true ]]; then
+      candidate_proven[$older_index]=true
+      proof_changed=true
+    elif [[ ${candidate_proven[$older_index]:-false} == true &&
+      ${candidate_proven[$newer_index]:-false} != true ]]; then
+      candidate_proven[$newer_index]=true
+      proof_changed=true
+    fi
   done
 done
 
@@ -295,6 +324,27 @@ for ((dependency_index = 0; dependency_index < ${#dependency_repositories[@]}; d
   done
 
   declare -a newest_indices=()
+
+  # A merge-base-only branch may be a moved parent or an unrelated sibling.
+  # Without strict evidence elsewhere, selecting its distinct commit would be
+  # a guess. Equal target SHAs remain harmless aliases.
+  for i in "${available_indices[@]}"; do
+    [[ ${candidate_proven[$i]:-false} == true ]] && continue
+    harmless_uncertain=false
+    for j in "${available_indices[@]}"; do
+      if [[ ${candidate_proven[$j]:-false} == true &&
+        ( ${available_shas[$j]} == "${available_shas[$i]}" ||
+          -n ${edges["${j},${i}"]+yes} ) ]]; then
+        harmless_uncertain=true
+        break
+      fi
+    done
+    if [[ $harmless_uncertain != true ]]; then
+      echo "Cannot place shared branch '${candidates[$i]}' in the stack for ${repository}" >&2
+      exit 1
+    fi
+  done
+
   for i in "${available_indices[@]}"; do
     dominated=false
     for j in "${available_indices[@]}"; do

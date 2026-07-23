@@ -64,6 +64,11 @@ git -C "$source_repository" switch --quiet staging
 git -C "$source_repository" switch --quiet -c rebased-parent-fixture
 commit "rebased parent branch"
 rebased_lmsousa_tip=$(git -C "$source_repository" rev-parse HEAD)
+
+git -C "$source_repository" switch --quiet --detach "$lmsousa_tip"
+git -C "$source_repository" switch --quiet -c unrelated-sibling
+commit "unrelated sibling branch"
+unrelated_sibling_tip=$(git -C "$source_repository" rev-parse HEAD)
 git -C "$source_repository" switch --quiet --detach "$workflow_fix_tip"
 
 for branch in workflow-fix java-deprecation vitest lmsousa staging master; do
@@ -121,6 +126,7 @@ git -C "$advanced_dependency" update-ref \
 rebased_dependency=$(make_dependency rebased lmsousa staging)
 git -C "$rebased_dependency" update-ref \
   refs/heads/lmsousa "$rebased_lmsousa_tip"
+sibling_dependency=$(make_dependency sibling unrelated-sibling staging)
 
 output_file="${test_directory}/github-output"
 log_file="${test_directory}/resolver.log"
@@ -199,7 +205,8 @@ grep -Fqx "root_ref=${master_tip}" "${test_directory}/master-output"
 git -C "$source_repository" switch --quiet --detach "$workflow_fix_tip"
 git -C "$source_repository" update-ref \
   refs/remotes/origin/lmsousa "$advanced_lmsousa_tip"
-SOURCE_BRANCH=workflow-fix GITHUB_OUTPUT="${test_directory}/advanced-output" \
+SOURCE_BRANCH=workflow-fix EVIDENCE_REPOSITORIES="$middle_dependency" \
+  GITHUB_OUTPUT="${test_directory}/advanced-output" \
   bash "$resolver" "$source_repository" \
     advanced "$advanced_dependency" >/dev/null
 grep -Fqx "advanced_ref=${advanced_lmsousa_tip}" \
@@ -207,10 +214,24 @@ grep -Fqx "advanced_ref=${advanced_lmsousa_tip}" \
 
 git -C "$source_repository" update-ref \
   refs/remotes/origin/lmsousa "$rebased_lmsousa_tip"
-SOURCE_BRANCH=workflow-fix GITHUB_OUTPUT="${test_directory}/rebased-output" \
+SOURCE_BRANCH=workflow-fix EVIDENCE_REPOSITORIES="$middle_dependency" \
+  GITHUB_OUTPUT="${test_directory}/rebased-output" \
   bash "$resolver" "$source_repository" \
     rebased "$rebased_dependency" >/dev/null
 grep -Fqx "rebased_ref=${rebased_lmsousa_tip}" \
   "${test_directory}/rebased-output"
+
+# A shared sibling with the same fork point is not a proven stack member.
+git -C "$source_repository" update-ref \
+  refs/remotes/origin/unrelated-sibling "$unrelated_sibling_tip"
+if SOURCE_BRANCH=workflow-fix GITHUB_OUTPUT="${test_directory}/sibling-output" \
+  bash "$resolver" "$source_repository" \
+    sibling "$sibling_dependency" \
+    >"${test_directory}/sibling.log" 2>&1; then
+  echo "Resolver selected an unproven sibling branch" >&2
+  exit 1
+fi
+grep -Fq "Cannot place shared branch 'unrelated-sibling'" \
+  "${test_directory}/sibling.log"
 
 echo "All dependency ref resolver tests passed"
