@@ -56,6 +56,16 @@ commit "post-event source update"
 post_event_source_tip=$(git -C "$source_repository" rev-parse HEAD)
 git -C "$source_repository" switch --quiet --detach "$workflow_fix_tip"
 
+git -C "$source_repository" switch --quiet lmsousa
+commit "advanced parent branch"
+advanced_lmsousa_tip=$(git -C "$source_repository" rev-parse HEAD)
+
+git -C "$source_repository" switch --quiet staging
+git -C "$source_repository" switch --quiet -c rebased-parent-fixture
+commit "rebased parent branch"
+rebased_lmsousa_tip=$(git -C "$source_repository" rev-parse HEAD)
+git -C "$source_repository" switch --quiet --detach "$workflow_fix_tip"
+
 for branch in workflow-fix java-deprecation vitest lmsousa staging master; do
   branch_variable=${branch//-/_}_tip
   git -C "$source_repository" update-ref \
@@ -105,6 +115,12 @@ git -C "$reverse_dependency" update-ref \
   refs/heads/java-deprecation "$vitest_tip"
 git -C "$reverse_dependency" update-ref \
   refs/heads/vitest "$java_deprecation_tip"
+advanced_dependency=$(make_dependency advanced lmsousa staging)
+git -C "$advanced_dependency" update-ref \
+  refs/heads/lmsousa "$advanced_lmsousa_tip"
+rebased_dependency=$(make_dependency rebased lmsousa staging)
+git -C "$rebased_dependency" update-ref \
+  refs/heads/lmsousa "$rebased_lmsousa_tip"
 
 output_file="${test_directory}/github-output"
 log_file="${test_directory}/resolver.log"
@@ -177,5 +193,24 @@ SOURCE_BRANCH=master GITHUB_OUTPUT="${test_directory}/master-output" \
   bash "$resolver" "$source_repository" \
     root "$root_dependency" >/dev/null
 grep -Fqx "root_ref=${master_tip}" "${test_directory}/master-output"
+
+# A shared parent remains a candidate when its tip advances or is rebased,
+# provided its merge-base still identifies this post-master stack.
+git -C "$source_repository" switch --quiet --detach "$workflow_fix_tip"
+git -C "$source_repository" update-ref \
+  refs/remotes/origin/lmsousa "$advanced_lmsousa_tip"
+SOURCE_BRANCH=workflow-fix GITHUB_OUTPUT="${test_directory}/advanced-output" \
+  bash "$resolver" "$source_repository" \
+    advanced "$advanced_dependency" >/dev/null
+grep -Fqx "advanced_ref=${advanced_lmsousa_tip}" \
+  "${test_directory}/advanced-output"
+
+git -C "$source_repository" update-ref \
+  refs/remotes/origin/lmsousa "$rebased_lmsousa_tip"
+SOURCE_BRANCH=workflow-fix GITHUB_OUTPUT="${test_directory}/rebased-output" \
+  bash "$resolver" "$source_repository" \
+    rebased "$rebased_dependency" >/dev/null
+grep -Fqx "rebased_ref=${rebased_lmsousa_tip}" \
+  "${test_directory}/rebased-output"
 
 echo "All dependency ref resolver tests passed"
