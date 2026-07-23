@@ -27,11 +27,6 @@ add_candidate() {
 }
 
 source_ref=HEAD
-if git -C "$source_directory" show-ref --verify --quiet "refs/remotes/origin/${source_branch}"; then
-  source_ref="refs/remotes/origin/${source_branch}"
-elif git -C "$source_directory" show-ref --verify --quiet "refs/heads/${source_branch}"; then
-  source_ref="refs/heads/${source_branch}"
-fi
 git -C "$source_directory" rev-parse --verify "${source_ref}^{commit}" >/dev/null
 
 add_candidate "$source_branch"

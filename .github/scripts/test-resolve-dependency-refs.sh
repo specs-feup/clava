@@ -46,11 +46,25 @@ git -C "$source_repository" switch --quiet master
 commit "advanced master"
 master_tip=$(git -C "$source_repository" rev-parse HEAD)
 
+# Simulate a later push after the workflow event was created. Resolution must
+# use the detached event commit, never the newer remote source branch tip.
+git -C "$source_repository" switch --quiet workflow-fix
+commit "post-event parent branch"
+later_parent_tip=$(git -C "$source_repository" rev-parse HEAD)
+git -C "$source_repository" branch later-parent
+commit "post-event source update"
+post_event_source_tip=$(git -C "$source_repository" rev-parse HEAD)
+git -C "$source_repository" switch --quiet --detach "$workflow_fix_tip"
+
 for branch in workflow-fix java-deprecation vitest lmsousa staging master; do
   branch_variable=${branch//-/_}_tip
   git -C "$source_repository" update-ref \
     "refs/remotes/origin/${branch}" "${!branch_variable}"
 done
+git -C "$source_repository" update-ref \
+  refs/remotes/origin/workflow-fix "$post_event_source_tip"
+git -C "$source_repository" update-ref \
+  refs/remotes/origin/later-parent "$later_parent_tip"
 
 make_dependency() {
   local name=$1
@@ -91,6 +105,10 @@ SOURCE_BRANCH=workflow-fix GITHUB_OUTPUT="$output_file" \
 grep -Fqx \
   "Dependency branch candidates: workflow-fix -> java-deprecation -> vitest -> lmsousa -> staging -> master" \
   "$log_file"
+if grep -Fq "later-parent" "$log_file"; then
+  echo "Resolver used a branch created after the workflow event" >&2
+  exit 1
+fi
 grep -Fqx "current_ref=workflow-fix" "$output_file"
 grep -Fqx "middle_ref=java-deprecation" "$output_file"
 grep -Fqx "older_ref=vitest" "$output_file"
