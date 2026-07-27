@@ -87,6 +87,7 @@ public class ClangAstDumper {
     private File baseFolder;
     private File clangExecutable;
     private List<String> builtinIncludes;
+    private final boolean useSystemHeaders;
     private int systemIncludesThreshold;
     private ClangResources clangResources;
 
@@ -103,12 +104,14 @@ public class ClangAstDumper {
      * @param parserConfig
      */
     public ClangAstDumper(boolean streamConsoleOutput,
-                          File clangExecutable, List<String> builtinIncludes, CodeParser parserConfig) {
+                          File clangExecutable, List<String> builtinIncludes, boolean useSystemHeaders,
+                          CodeParser parserConfig) {
 
         this.streamConsoleOutput = streamConsoleOutput;
 
         this.clangExecutable = clangExecutable;
         this.builtinIncludes = builtinIncludes;
+        this.useSystemHeaders = useSystemHeaders;
 
         this.workingFolders = new ArrayList<>();
         this.lastWorkingFolder = null;
@@ -240,7 +243,7 @@ public class ClangAstDumper {
             var cudaPath = parserConfig.get(CodeParser.CUDA_PATH);
             var useBuiltinCudaLib = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption());
 
-            if (useBuiltinCudaLib) {
+            if (useBuiltinCudaLib && !useSystemHeaders) {
                 arguments.add("-nocudainc");
                 arguments.add("-nocudalib");
                 arguments.add("-include");
@@ -268,7 +271,8 @@ public class ClangAstDumper {
         }
 
         // If it was determined that built-in includes will be used, disable system includes
-        if (ClangResources.useBuiltinLibc(clangExecutable, config.get(ClangAstKeys.LIBC_CXX_MODE))) {
+        if (!useSystemHeaders
+                && ClangResources.useBuiltinLibc(clangExecutable, config.get(ClangAstKeys.LIBC_CXX_MODE))) {
             arguments.add("-nostdinc");
             arguments.add("-nostdinc++");
         }

@@ -16,6 +16,6 @@ package pt.up.fe.specs.clang;
 import java.io.File;
 import java.util.List;
 
-public record ClangFiles(File clangExecutable, List<String> builtinIncludes) {
+public record ClangFiles(File clangExecutable, List<String> builtinIncludes, boolean useSystemHeaders) {
 
 }
