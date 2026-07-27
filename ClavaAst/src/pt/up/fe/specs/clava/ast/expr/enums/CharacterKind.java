@@ -18,7 +18,7 @@ import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum CharacterKind implements StringProvider {
-    ORDINARY,
+    ASCII,
     WIDE,
     UTF8,
     UTF16,
