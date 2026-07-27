@@ -145,7 +145,8 @@ public class ParallelCodeParser extends CodeParser {
 
             Future<ClangAstData> tUnit = executor
                     .submit(() -> parseSource(source, id, standard, options, clangDump,
-                            counter, parsingFolder, clangFiles.clangExecutable(), clangFiles.builtinIncludes()));
+                            counter, parsingFolder, clangFiles.clangExecutable(), clangFiles.builtinIncludes(),
+                            clangFiles.useSystemHeaders()));
 
             futureTUnits.add(tUnit);
 
@@ -362,7 +363,7 @@ public class ParallelCodeParser extends CodeParser {
 
     private ClangAstData parseSource(File sourceFile, String id, Standard standard, DataStore options,
                                      ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
-                                     File clangExecutable, List<String> builtinIncludes) {
+                                     File clangExecutable, List<String> builtinIncludes, boolean useSystemHeaders) {
 
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
 
@@ -374,7 +375,7 @@ public class ParallelCodeParser extends CodeParser {
         boolean streamConsoleOutput = !get(PARALLEL_PARSING);
 
         ClangAstDumper clangParser = new ClangAstDumper(streamConsoleOutput, clangExecutable, builtinIncludes,
-                this)
+                useSystemHeaders, this)
                 .setBaseFolder(parsingFolder)
                 .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
 
