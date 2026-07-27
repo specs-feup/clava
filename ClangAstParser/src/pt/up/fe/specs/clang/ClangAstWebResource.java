@@ -18,6 +18,7 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.providers.WebResourceProvider;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,19 +34,42 @@ public final class ClangAstWebResource {
     private ClangAstWebResource() {
     }
 
-    public static String getReleaseTag() {
+    public static DumperSource getDumperSource() {
         var inputStream = ClangAstWebResource.class.getClassLoader().getResourceAsStream(RELEASE_TAG_RESOURCE);
 
         if (inputStream == null) {
             throw new RuntimeException("Could not find resource '" + RELEASE_TAG_RESOURCE + "'");
         }
 
-        var tag = SpecsIo.read(inputStream).trim();
-        if (tag.isBlank()) {
+        var value = SpecsIo.read(inputStream).trim();
+        if (value.isBlank()) {
             throw new RuntimeException("Resource '" + RELEASE_TAG_RESOURCE + "' is empty");
         }
 
-        return tag;
+        return parseDumperSource(value);
+    }
+
+    static DumperSource parseDumperSource(String value) {
+        var path = Path.of(value);
+        if (path.isAbsolute()) {
+            return new LocalBuild(path.toFile());
+        }
+
+        if (value.contains("/") || value.contains("\\") || value.equals(".") || value.equals("..")) {
+            throw new RuntimeException("Relative paths are not supported in resource '" + RELEASE_TAG_RESOURCE
+                    + "': '" + value + "'");
+        }
+
+        return new Release(value);
+    }
+
+    public static String getReleaseTag() {
+        var source = getDumperSource();
+        if (source instanceof Release release) {
+            return release.tag();
+        }
+
+        throw new IllegalStateException("The clang-dumper resource points to a local build");
     }
 
     public static ClangDumperManifest getManifest(File resourceFolder) {
@@ -67,6 +91,15 @@ public final class ClangAstWebResource {
 
     private static String getReleaseBaseUrl() {
         return RELEASE_ROOT + getReleaseTag() + "/";
+    }
+
+    public sealed interface DumperSource permits Release, LocalBuild {
+    }
+
+    public record Release(String tag) implements DumperSource {
+    }
+
+    public record LocalBuild(File folder) implements DumperSource {
     }
 
     public record ClangDumperManifest(int schema_version, List<ClangDumperManifestAsset> assets) {

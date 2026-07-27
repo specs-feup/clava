@@ -15,6 +15,8 @@ package pt.up.fe.specs.clang;
 
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifest;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
+import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
+import pt.up.fe.specs.clang.ClangAstWebResource.Release;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
@@ -71,14 +73,18 @@ public class ClangResources {
 
     public ClangFiles getClangFiles(LibcMode libcMode) {
 
+        var source = ClangAstWebResource.getDumperSource();
         var useBuiltinCuda = options.get(CodeParser.CUDA_PATH).equalsIgnoreCase(CodeParser.getBuiltinOption());
-        var dumperExecutable = options.get(CodeParser.DUMPER_EXECUTABLE).trim();
-        var key = libcMode.name() + "_" + useBuiltinCuda + "_" + dumperExecutable + "_"
-                + getClangResourceFolder().getAbsolutePath();
+        var sourceKey = source instanceof Release
+                ? source + "_" + getClangResourceFolder().getAbsolutePath()
+                : source.toString();
+        var key = libcMode.name() + "_" + useBuiltinCuda + "_" + sourceKey;
 
         var cachedFiles = CLANG_FILES_CACHE.get(key);
         if (cachedFiles != null) {
-            writeLastUsed(Instant.now());
+            if (source instanceof Release) {
+                writeLastUsed(Instant.now());
+            }
             SpecsLogs.debug(() -> "Using cached version of Clang files: " + cachedFiles);
             return cachedFiles;
         }
@@ -87,8 +93,16 @@ public class ClangResources {
         synchronized (jvmLock) {
             var files = CLANG_FILES_CACHE.get(key);
             if (files != null) {
-                writeLastUsed(Instant.now());
+                if (source instanceof Release) {
+                    writeLastUsed(Instant.now());
+                }
                 return files;
+            }
+
+            if (source instanceof LocalBuild localBuild) {
+                var newFiles = new ClangFiles(getLocalExecutable(localBuild.folder()), List.of(), true);
+                CLANG_FILES_CACHE.put(key, newFiles);
+                return newFiles;
             }
 
             var lockFile = new File(getClangResourceFolder(), CACHE_LOCK_FILENAME);
@@ -97,13 +111,13 @@ public class ClangResources {
                     var ignored = lockChannel.lock()) {
 
                 var manifest = ClangAstWebResource.getManifest(getClangResourceFolder());
-                File clangExecutable = getClangExecutable(manifest, dumperExecutable);
+                File clangExecutable = prepareResources(manifest);
                 List<String> builtinIncludes = prepareIncludes(manifest, clangExecutable, libcMode);
 
                 validateTopLevelCacheFiles(manifest);
                 updateLastUsedAndCleanupStaleVersions();
 
-                var newFiles = new ClangFiles(clangExecutable, builtinIncludes);
+                var newFiles = new ClangFiles(clangExecutable, builtinIncludes, false);
                 SpecsLogs.debug(() -> "Using downloaded version of Clang files: " + newFiles);
 
                 CLANG_FILES_CACHE.put(key, newFiles);
@@ -114,20 +128,25 @@ public class ClangResources {
         }
     }
 
-    /**
-     * @return path to the executable that was copied
-     */
-    private File getClangExecutable(ClangDumperManifest manifest, String dumperExecutable) {
-        if (dumperExecutable.isEmpty()) {
-            return prepareResources(manifest);
+    static File getLocalExecutable(File buildFolder) {
+        if (!buildFolder.isDirectory()) {
+            throw new RuntimeException("Local clang-dumper build directory does not exist: '" + buildFolder + "'");
         }
 
-        var executable = new File(dumperExecutable).getAbsoluteFile();
+        String filename;
+        if (ClangAstDumper.usePlugin()) {
+            filename = System.mapLibraryName("plugin");
+        } else {
+            filename = SupportedPlatform.getCurrentPlatform().isWindows() ? "tool.exe" : "tool";
+        }
+
+        var executable = new File(buildFolder, filename);
         if (!executable.isFile()) {
-            throw new RuntimeException("Could not find custom clang-dumper executable '" + executable + "'");
+            throw new RuntimeException("Could not find local clang-dumper "
+                    + (ClangAstDumper.usePlugin() ? "plugin" : "tool") + " '" + executable + "'");
         }
 
-        SpecsLogs.info("Using custom clang-dumper executable: " + executable);
+        SpecsLogs.info("Using local clang-dumper build: " + executable);
         return executable;
     }
 
