@@ -366,7 +366,7 @@ public class TypeDataParser {
         DataStore data = parseTypeData(lines, parserData);
 
         data.add(UnaryTransformType.KIND, LineStreamParsers.enumFromName(UnaryTransformTypeKind.class, lines));
-        parserData.getClavaNodes().queueSetNode(data, UnaryTransformType.UNDERLYING_TYPE, lines.nextLine());
+        parserData.getClavaNodes().queueSetOptionalNode(data, UnaryTransformType.UNDERLYING_TYPE, lines.nextLine());
         parserData.getClavaNodes().queueSetNode(data, UnaryTransformType.BASE_TYPE, lines.nextLine());
 
         return data;
