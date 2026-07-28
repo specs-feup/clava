@@ -102,7 +102,7 @@ public class ClangResources {
             }
 
             if (source instanceof LocalBuild localBuild) {
-                var newFiles = new ClangFiles(getLocalExecutable(localBuild.folder()), List.of(), true);
+                var newFiles = new ClangFiles(getLocalExecutable(localBuild.folder()), List.of());
                 CLANG_FILES_CACHE.put(key, newFiles);
                 return newFiles;
             }
@@ -119,7 +119,7 @@ public class ClangResources {
                 validateTopLevelCacheFiles(manifest);
                 updateLastUsedAndCleanupStaleVersions();
 
-                var newFiles = new ClangFiles(clangExecutable, builtinIncludes, false);
+                var newFiles = new ClangFiles(clangExecutable, builtinIncludes);
                 SpecsLogs.debug(() -> "Using downloaded version of Clang files: " + newFiles);
 
                 CLANG_FILES_CACHE.put(key, newFiles);
