@@ -87,7 +87,6 @@ public class ClangAstDumper {
     private File baseFolder;
     private File clangExecutable;
     private List<String> builtinIncludes;
-    private final boolean useSystemHeaders;
     private int systemIncludesThreshold;
     private ClangResources clangResources;
 
@@ -104,14 +103,12 @@ public class ClangAstDumper {
      * @param parserConfig
      */
     public ClangAstDumper(boolean streamConsoleOutput,
-                          File clangExecutable, List<String> builtinIncludes, boolean useSystemHeaders,
-                          CodeParser parserConfig) {
+                          File clangExecutable, List<String> builtinIncludes, CodeParser parserConfig) {
 
         this.streamConsoleOutput = streamConsoleOutput;
 
         this.clangExecutable = clangExecutable;
         this.builtinIncludes = builtinIncludes;
-        this.useSystemHeaders = useSystemHeaders;
 
         this.workingFolders = new ArrayList<>();
         this.lastWorkingFolder = null;
@@ -243,14 +240,14 @@ public class ClangAstDumper {
             var cudaPath = parserConfig.get(CodeParser.CUDA_PATH);
             var useBuiltinCudaLib = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption());
 
-            if (useBuiltinCudaLib && !useSystemHeaders) {
+            if (useBuiltinCudaLib && !builtinIncludes.isEmpty()) {
                 arguments.add("-nocudainc");
                 arguments.add("-nocudalib");
                 arguments.add("-include");
                 arguments.add("__clang_cuda_runtime_wrapper.h");
                 arguments.add("-include");
                 arguments.add(ClangAstResource.CUDA_COMPATIBILITY.write(SpecsIo.getTempFolder()).getAbsolutePath());
-            } else if (!cudaPath.isBlank()) {
+            } else if (!useBuiltinCudaLib && !cudaPath.isBlank()) {
 
                 File cudaFolder = SpecsIo.existingFolder(cudaPath);
 
@@ -270,8 +267,8 @@ public class ClangAstDumper {
             arguments.add(standard.isCxx() ? "c++" : "c");
         }
 
-        // If it was determined that built-in includes will be used, disable system includes
-        if (!useSystemHeaders
+        // Bundled include directories replace system headers when built-in libc/cxx is required.
+        if (!builtinIncludes.isEmpty()
                 && ClangResources.useBuiltinLibc(clangExecutable, config.get(ClangAstKeys.LIBC_CXX_MODE))) {
             arguments.add("-nostdinc");
             arguments.add("-nostdinc++");
