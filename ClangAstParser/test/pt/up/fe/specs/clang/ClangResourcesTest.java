@@ -14,13 +14,19 @@
 package pt.up.fe.specs.clang;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.time.Duration;
+import java.time.Instant;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -67,6 +73,29 @@ public class ClangResourcesTest {
     @Test
     public void localBuildRequiresExpectedTool() {
         assertThrows(RuntimeException.class, () -> ClangResources.getLocalExecutable(tempFolder.toFile()));
+    }
+
+    @Test
+    public void staleCacheCleanupSkipsLockedVersions() throws IOException {
+        var currentVersion = Files.createDirectory(tempFolder.resolve("current")).toFile();
+        var staleVersion = Files.createDirectory(tempFolder.resolve("stale")).toFile();
+        Files.writeString(staleVersion.toPath().resolve("last-used.txt"),
+                Instant.now().minus(Duration.ofDays(61)).toString());
+
+        var parser = CodeParser.newInstance();
+        parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
+        var resources = new ClangResources(parser);
+
+        var lockFile = staleVersion.toPath().resolve(".cache.lock");
+        try (var lockChannel = FileChannel.open(lockFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+                var ignored = lockChannel.lock()) {
+
+            resources.deleteStaleVersions(Instant.now(), currentVersion);
+            assertTrue(staleVersion.isDirectory());
+        }
+
+        resources.deleteStaleVersions(Instant.now(), currentVersion);
+        assertFalse(staleVersion.exists());
     }
 
     @Test
