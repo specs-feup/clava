@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.channels.OverlappingFileLockException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -552,7 +554,7 @@ public class ClangResources {
         SpecsIo.write(file, timestamp.toString());
     }
 
-    private void deleteStaleVersions(Instant now, File currentVersionFolder) {
+    void deleteStaleVersions(Instant now, File currentVersionFolder) {
         File cacheBaseFolder = options.get(CodeParser.DUMPER_FOLDER);
         var versions = cacheBaseFolder.listFiles(File::isDirectory);
         if (versions == null) {
@@ -569,15 +571,38 @@ public class ClangResources {
                 continue;
             }
 
-            try {
-                var lastUsed = Instant.parse(SpecsIo.read(lastUsedFile).trim());
-                if (lastUsed.isBefore(now.minus(STALE_CACHE_MAX_AGE))) {
-                    SpecsLogs.info("Deleting stale clang-dumper cache folder: " + versionFolder);
-                    SpecsIo.deleteFolder(versionFolder);
+            var lockFile = new File(versionFolder, CACHE_LOCK_FILENAME);
+            try (var lockChannel = FileChannel.open(lockFile.toPath(), StandardOpenOption.CREATE,
+                    StandardOpenOption.WRITE)) {
+
+                var lock = tryLock(lockChannel);
+                if (lock == null) {
+                    SpecsLogs.debug(() -> "Skipping locked clang-dumper cache folder: " + versionFolder);
+                    continue;
                 }
-            } catch (RuntimeException e) {
-                SpecsLogs.warn("Could not inspect clang-dumper cache timestamp '" + lastUsedFile + "'", e);
+
+                try (lock) {
+                    if (!lastUsedFile.isFile()) {
+                        continue;
+                    }
+
+                    var lastUsed = Instant.parse(SpecsIo.read(lastUsedFile).trim());
+                    if (lastUsed.isBefore(now.minus(STALE_CACHE_MAX_AGE))) {
+                        SpecsLogs.info("Deleting stale clang-dumper cache folder: " + versionFolder);
+                        SpecsIo.deleteFolder(versionFolder);
+                    }
+                }
+            } catch (IOException | RuntimeException e) {
+                SpecsLogs.warn("Could not inspect clang-dumper cache folder '" + versionFolder + "'", e);
             }
+        }
+    }
+
+    private static FileLock tryLock(FileChannel lockChannel) throws IOException {
+        try {
+            return lockChannel.tryLock();
+        } catch (OverlappingFileLockException e) {
+            return null;
         }
     }
 
