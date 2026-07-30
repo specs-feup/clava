@@ -57,8 +57,9 @@ public enum InitializationStyle implements StringProvider {
         case CINIT:
             return cinitCode(node);
         case CALL_INIT:
-        case ParenListInit:
             return callInitCode(node);
+        case ParenListInit:
+            return parenListInitCode(node);
         case LIST_INIT:
             return listInitCode(node);
         default:
@@ -95,6 +96,16 @@ public enum InitializationStyle implements StringProvider {
                 "Expected an Expr, got '" + init.getClass().getSimpleName() + "'");
 
         return "(" + init.getCode() + ")";
+    }
+
+    private String parenListInitCode(VarDecl node) {
+        Preconditions.checkArgument(node.getNumChildren() == 1, "Expected one child");
+        ClavaNode init = node.getChild(0);
+
+        Preconditions.checkArgument(init instanceof Expr,
+                "Expected an Expr, got '" + init.getClass().getSimpleName() + "'");
+
+        return init.getCode();
     }
 
     private String listInitCode(VarDecl node) {
