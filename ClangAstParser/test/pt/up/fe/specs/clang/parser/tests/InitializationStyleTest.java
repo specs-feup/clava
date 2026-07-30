@@ -24,6 +24,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -46,5 +47,11 @@ public class InitializationStyleTest {
                 .orElseThrow();
 
         assertEquals("Point point(1, 2)", point.getCode());
+    }
+
+    @Test
+    public void javascriptInitializationStyleNamesRemainCompatible() {
+        assertEquals("callinit", InitializationStyle.CALL_INIT.getString());
+        assertEquals("listinit", InitializationStyle.LIST_INIT.getString());
     }
 }

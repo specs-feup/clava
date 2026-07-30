@@ -25,8 +25,10 @@ import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum InitializationStyle implements StringProvider {
     CINIT, // C-style initialization with assignment
-    CALL_INIT, // Call-style initialization (C++98)
-    LIST_INIT, // Direct list-initialization (C++11)
+    // Keep these explicit names for compatibility: build-interfaces exposes strings to TS, with no TS enum to convert
+    // them to.
+    CALL_INIT("callinit"), // Call-style initialization (C++98)
+    LIST_INIT("listinit"), // Direct list-initialization (C++11)
     ParenListInit;
 
     private static Lazy<EnumHelperWithValue<InitializationStyle>> ENUM_HELPER = EnumHelperWithValue
