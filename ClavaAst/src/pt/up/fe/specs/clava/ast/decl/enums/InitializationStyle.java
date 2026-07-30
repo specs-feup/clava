@@ -24,9 +24,9 @@ import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum InitializationStyle implements StringProvider {
-    CINIT,
-    CALL_INIT,
-    LIST_INIT,
+    CINIT, // C-style initialization with assignment
+    CALL_INIT, // Call-style initialization (C++98)
+    LIST_INIT, // Direct list-initialization (C++11)
     ParenListInit;
 
     private static Lazy<EnumHelperWithValue<InitializationStyle>> ENUM_HELPER = EnumHelperWithValue
