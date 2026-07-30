@@ -40,17 +40,21 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.regex.Pattern;
 
 public class ClangResources {
 
@@ -71,6 +75,74 @@ public class ClangResources {
 
     public ClangResources(CodeParser options) {
         this.options = options;
+    }
+
+    public Optional<File> getSystemCudaInstallation() {
+        return findCudaInstallation(
+                Arrays.asList(System.getenv("CUDA_HOME"), System.getenv("CUDA_PATH"), System.getenv("CUDA_ROOT")),
+                System.getenv("PATH"), getConventionalCudaRoots());
+    }
+
+    static Optional<File> findCudaInstallation(List<String> configuredRoots, String pathValue,
+                                                List<File> conventionalRoots) {
+        var candidates = new ArrayList<File>();
+
+        configuredRoots.stream()
+                .filter(root -> root != null && !root.isBlank())
+                .map(File::new)
+                .forEach(candidates::add);
+
+        if (pathValue != null) {
+            for (var pathEntry : pathValue.split(Pattern.quote(File.pathSeparator))) {
+                if (pathEntry.isBlank()) {
+                    continue;
+                }
+
+                var binFolder = new File(pathEntry);
+                for (var executableName : List.of("nvcc", "nvcc.exe")) {
+                    var executable = new File(binFolder, executableName);
+                    if (executable.isFile() && binFolder.getParentFile() != null) {
+                        candidates.add(binFolder.getParentFile());
+                    }
+                }
+            }
+        }
+
+        candidates.addAll(conventionalRoots);
+
+        return candidates.stream()
+                .map(File::getAbsoluteFile)
+                .filter(ClangResources::isCudaInstallation)
+                .findFirst();
+    }
+
+    private static boolean isCudaInstallation(File folder) {
+        return folder.isDirectory() && new File(folder, "include/cuda_runtime.h").isFile();
+    }
+
+    private static List<File> getConventionalCudaRoots() {
+        if (!SupportedPlatform.getCurrentPlatform().isWindows()) {
+            return List.of(
+                    new File("/usr/local/cuda"),
+                    new File("/opt/cuda"),
+                    new File("/opt/homebrew/opt/cuda"));
+        }
+
+        var roots = new ArrayList<File>();
+        for (var programFiles : Arrays.asList(System.getenv("ProgramFiles"), System.getenv("ProgramFiles(x86)"))) {
+            if (programFiles == null || programFiles.isBlank()) {
+                continue;
+            }
+
+            var cudaRoot = new File(programFiles, "NVIDIA GPU Computing Toolkit/CUDA");
+            var versions = cudaRoot.listFiles(File::isDirectory);
+            if (versions != null) {
+                Arrays.sort(versions, Comparator.comparing(File::getName).reversed());
+                roots.addAll(Arrays.asList(versions));
+            }
+        }
+
+        return roots;
     }
 
     public ClangFiles getClangFiles(LibcMode libcMode) {

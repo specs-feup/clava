@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -73,6 +74,28 @@ public class ClangResourcesTest {
     @Test
     public void localBuildRequiresExpectedTool() {
         assertThrows(RuntimeException.class, () -> ClangResources.getLocalExecutable(tempFolder.toFile()));
+    }
+
+    @Test
+    public void cudaInstallationIsFoundFromConfiguredRoot() throws IOException {
+        var cudaFolder = Files.createDirectories(tempFolder.resolve("cuda"));
+        Files.createDirectories(cudaFolder.resolve("include"));
+        Files.createFile(cudaFolder.resolve("include/cuda_runtime.h"));
+
+        assertEquals(cudaFolder.toFile().getAbsoluteFile(),
+                ClangResources.findCudaInstallation(List.of(cudaFolder.toString()), "", List.of()).orElseThrow());
+    }
+
+    @Test
+    public void cudaInstallationIsFoundFromNvccPath() throws IOException {
+        var cudaFolder = Files.createDirectories(tempFolder.resolve("cuda"));
+        var binFolder = Files.createDirectories(cudaFolder.resolve("bin"));
+        Files.createDirectories(cudaFolder.resolve("include"));
+        Files.createFile(cudaFolder.resolve("include/cuda_runtime.h"));
+        Files.createFile(binFolder.resolve("nvcc"));
+
+        assertEquals(cudaFolder.toFile().getAbsoluteFile(),
+                ClangResources.findCudaInstallation(List.of(), binFolder.toString(), List.of()).orElseThrow());
     }
 
     @Test
