@@ -30,11 +30,11 @@ import pt.up.fe.specs.util.system.ProcessOutputAsString;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
-import java.nio.channels.OverlappingFileLockException;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -65,7 +66,10 @@ public class ClangResources {
     private final static String INCLUDES_HASHES_FILENAME = "includes.sha256";
     private final static String INCLUDES_VALIDATED_FILENAME = "includes-validated.txt";
     private final static String LAST_USED_FILENAME = "last-used.txt";
-    private final static String CACHE_LOCK_FILENAME = ".cache.lock";
+    private final static String CACHE_LOCK_FOLDERNAME = ".cache.lock";
+    private final static String CACHE_LOCK_OWNER_FILENAME = "owner";
+    private final static Duration CACHE_LOCK_RETRY_INTERVAL = Duration.ofMillis(100);
+    private final static Duration CACHE_LOCK_STALE_MAX_AGE = Duration.ofMinutes(5);
     private final static Duration STALE_CACHE_MAX_AGE = Duration.ofDays(60);
     private final static Duration INCLUDES_DEEP_VALIDATION_INTERVAL = Duration.ofDays(1);
 
@@ -163,11 +167,11 @@ public class ClangResources {
             return cachedFiles;
         }
 
-        // The JVM lock must protect the same cache file as the inter-process lock. The cache key also contains the
+        // The JVM lock must protect the same cache folder as the inter-process lock. The cache key also contains the
         // libc and CUDA configuration, so using it here would let two configurations acquire different JVM locks for
-        // the same release folder and trigger OverlappingFileLockException.
+        // the same release folder and race while initializing it.
         var jvmLockKey = source instanceof Release
-                ? getCacheLockFile(getClangResourceFolder()).getAbsolutePath()
+                ? getCacheLockFolder(getClangResourceFolder()).getAbsolutePath()
                 : source.toString();
         var jvmLock = CLANG_FILES_LOCKS.computeIfAbsent(jvmLockKey, ignored -> new Object());
         synchronized (jvmLock) {
@@ -185,10 +189,8 @@ public class ClangResources {
                 return newFiles;
             }
 
-            var lockFile = getCacheLockFile(getClangResourceFolder());
-            try (var lockChannel = FileChannel.open(lockFile.toPath(), StandardOpenOption.CREATE,
-                    StandardOpenOption.WRITE);
-                    var ignored = lockChannel.lock()) {
+            var lockFolder = getCacheLockFolder(getClangResourceFolder());
+            try (var ignored = acquireCacheLock(getClangResourceFolder())) {
 
                 var manifest = ClangAstWebResource.getManifest(getClangResourceFolder());
                 File clangExecutable = prepareResources(manifest);
@@ -203,7 +205,7 @@ public class ClangResources {
                 CLANG_FILES_CACHE.put(key, newFiles);
                 return newFiles;
             } catch (IOException e) {
-                throw new UncheckedIOException("Could not lock clang-dumper cache '" + lockFile + "'", e);
+                throw new UncheckedIOException("Could not lock clang-dumper cache '" + lockFolder + "'", e);
             }
         }
     }
@@ -648,26 +650,20 @@ public class ClangResources {
                 continue;
             }
 
-            var lockFile = getCacheLockFile(versionFolder);
-            try (var lockChannel = FileChannel.open(lockFile.toPath(), StandardOpenOption.CREATE,
-                    StandardOpenOption.WRITE)) {
-
-                var lock = tryLock(lockChannel);
+            try (var lock = tryAcquireCacheLock(versionFolder)) {
                 if (lock == null) {
                     SpecsLogs.debug(() -> "Skipping locked clang-dumper cache folder: " + versionFolder);
                     continue;
                 }
 
-                try (lock) {
-                    if (!lastUsedFile.isFile()) {
-                        continue;
-                    }
+                if (!lastUsedFile.isFile()) {
+                    continue;
+                }
 
-                    var lastUsed = Instant.parse(SpecsIo.read(lastUsedFile).trim());
-                    if (lastUsed.isBefore(now.minus(STALE_CACHE_MAX_AGE))) {
-                        SpecsLogs.info("Deleting stale clang-dumper cache folder: " + versionFolder);
-                        SpecsIo.deleteFolder(versionFolder);
-                    }
+                var lastUsed = Instant.parse(SpecsIo.read(lastUsedFile).trim());
+                if (lastUsed.isBefore(now.minus(STALE_CACHE_MAX_AGE))) {
+                    SpecsLogs.info("Deleting stale clang-dumper cache folder: " + versionFolder);
+                    SpecsIo.deleteFolder(versionFolder);
                 }
             } catch (IOException | RuntimeException e) {
                 SpecsLogs.warn("Could not inspect clang-dumper cache folder '" + versionFolder + "'", e);
@@ -675,23 +671,143 @@ public class ClangResources {
         }
     }
 
-    private static FileLock tryLock(FileChannel lockChannel) throws IOException {
-        try {
-            return lockChannel.tryLock();
-        } catch (OverlappingFileLockException e) {
-            return null;
+    static CacheLock acquireCacheLock(File versionFolder) throws IOException {
+        return acquireCacheLock(versionFolder, true);
+    }
+
+    private static CacheLock tryAcquireCacheLock(File versionFolder) throws IOException {
+        return acquireCacheLock(versionFolder, false);
+    }
+
+    private static CacheLock acquireCacheLock(File versionFolder, boolean wait) throws IOException {
+        var lockFolder = getCacheLockFolder(versionFolder);
+        Files.createDirectories(lockFolder.getParentFile().toPath());
+
+        while (true) {
+            try {
+                Files.createDirectory(lockFolder.toPath());
+            } catch (FileAlreadyExistsException e) {
+                if (!isCacheLockStale(lockFolder)) {
+                    if (!wait) {
+                        return null;
+                    }
+
+                    waitForCacheLock();
+                    continue;
+                }
+
+                deleteCacheLock(lockFolder);
+                continue;
+            }
+
+            var ownerFile = new File(lockFolder, CACHE_LOCK_OWNER_FILENAME);
+            try {
+                Files.writeString(ownerFile.toPath(), getProcessIdentity(), StandardOpenOption.CREATE_NEW,
+                        StandardOpenOption.WRITE);
+            } catch (FileAlreadyExistsException e) {
+                // A stale-lock recovery raced with another process that claimed this directory.
+                continue;
+            }
+
+            return new CacheLock(lockFolder);
         }
     }
 
     /**
-     * Returns the lock file for a cache version.
+     * Returns the temporary lock folder for a cache version.
      *
-     * <p>The lock file must be outside the version folder because stale cleanup deletes that folder while holding the
-     * lock. Keeping the lock inside the folder prevents deletion on Windows.</p>
+     * <p>The lock folder is outside the version folder because stale cleanup deletes that folder while holding the
+     * lock. The folder is removed when the lock is released, so normal operation leaves no lock artifact behind.</p>
      */
-    static File getCacheLockFile(File versionFolder) {
+    static File getCacheLockFolder(File versionFolder) {
         var absoluteVersionFolder = versionFolder.getAbsoluteFile();
-        return new File(absoluteVersionFolder.getParentFile(), absoluteVersionFolder.getName() + CACHE_LOCK_FILENAME);
+        return new File(absoluteVersionFolder.getParentFile(), absoluteVersionFolder.getName() + CACHE_LOCK_FOLDERNAME);
+    }
+
+    private static String getProcessIdentity() {
+        var process = ProcessHandle.current();
+        var startTime = process.info().startInstant().map(Instant::toString).orElse("");
+        return process.pid() + System.lineSeparator() + startTime;
+    }
+
+    private static boolean isCacheLockStale(File lockFolder) throws IOException {
+        if (!lockFolder.isDirectory()) {
+            throw new IOException("Cache lock path is not a directory: '" + lockFolder + "'");
+        }
+
+        var ownerFile = new File(lockFolder, CACHE_LOCK_OWNER_FILENAME);
+        if (!ownerFile.isFile()) {
+            return isCacheLockOld(lockFolder);
+        }
+
+        var lines = Files.readAllLines(ownerFile.toPath());
+        if (lines.isEmpty()) {
+            return isCacheLockOld(lockFolder);
+        }
+
+        try {
+            var pid = Long.parseLong(lines.get(0).trim());
+            var process = ProcessHandle.of(pid);
+            if (process.isEmpty() || !process.get().isAlive()) {
+                return true;
+            }
+
+            if (lines.size() > 1 && !lines.get(1).isBlank()) {
+                var processStart = process.get().info().startInstant();
+                if (processStart.isPresent() && !processStart.get().toString().equals(lines.get(1).trim())) {
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (NumberFormatException e) {
+            return isCacheLockOld(lockFolder);
+        }
+    }
+
+    private static boolean isCacheLockOld(File lockFolder) throws IOException {
+        return Files.getLastModifiedTime(lockFolder.toPath()).toInstant()
+                .isBefore(Instant.now().minus(CACHE_LOCK_STALE_MAX_AGE));
+    }
+
+    private static void waitForCacheLock() throws IOException {
+        try {
+            Thread.sleep(CACHE_LOCK_RETRY_INTERVAL.toMillis());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IOException("Interrupted while waiting for clang-dumper cache lock", e);
+        }
+    }
+
+    private static void deleteCacheLock(File lockFolder) throws IOException {
+        Files.deleteIfExists(new File(lockFolder, CACHE_LOCK_OWNER_FILENAME).toPath());
+        Files.deleteIfExists(lockFolder.toPath());
+    }
+
+    static final class CacheLock implements AutoCloseable {
+
+        private final File lockFolder;
+
+        private CacheLock(File lockFolder) {
+            this.lockFolder = lockFolder;
+        }
+
+        @Override
+        public void close() {
+            try {
+                var releasedFolder = new File(lockFolder.getParentFile(),
+                        lockFolder.getName() + ".released-" + UUID.randomUUID());
+                try {
+                    Files.move(lockFolder.toPath(), releasedFolder.toPath(), StandardCopyOption.ATOMIC_MOVE);
+                } catch (AtomicMoveNotSupportedException e) {
+                    Files.move(lockFolder.toPath(), releasedFolder.toPath());
+                }
+
+                deleteCacheLock(releasedFolder);
+            } catch (IOException e) {
+                SpecsLogs.warn("Could not remove temporary clang-dumper cache lock '" + lockFolder + "'", e);
+            }
+        }
     }
 
     private static boolean hasExpectedSha256(File file, ClangDumperManifestAsset asset) {
