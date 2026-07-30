@@ -91,7 +91,13 @@ public class ClangResources {
             return cachedFiles;
         }
 
-        var jvmLock = CLANG_FILES_LOCKS.computeIfAbsent(key, ignored -> new Object());
+        // The JVM lock must protect the same cache file as the inter-process lock. The cache key also contains the
+        // libc and CUDA configuration, so using it here would let two configurations acquire different JVM locks for
+        // the same release folder and trigger OverlappingFileLockException.
+        var jvmLockKey = source instanceof Release
+                ? new File(getClangResourceFolder(), CACHE_LOCK_FILENAME).getAbsolutePath()
+                : source.toString();
+        var jvmLock = CLANG_FILES_LOCKS.computeIfAbsent(jvmLockKey, ignored -> new Object());
         synchronized (jvmLock) {
             var files = CLANG_FILES_CACHE.get(key);
             if (files != null) {
