@@ -95,7 +95,7 @@ public class ClangResources {
         // libc and CUDA configuration, so using it here would let two configurations acquire different JVM locks for
         // the same release folder and trigger OverlappingFileLockException.
         var jvmLockKey = source instanceof Release
-                ? new File(getClangResourceFolder(), CACHE_LOCK_FILENAME).getAbsolutePath()
+                ? getCacheLockFile(getClangResourceFolder()).getAbsolutePath()
                 : source.toString();
         var jvmLock = CLANG_FILES_LOCKS.computeIfAbsent(jvmLockKey, ignored -> new Object());
         synchronized (jvmLock) {
@@ -113,7 +113,7 @@ public class ClangResources {
                 return newFiles;
             }
 
-            var lockFile = new File(getClangResourceFolder(), CACHE_LOCK_FILENAME);
+            var lockFile = getCacheLockFile(getClangResourceFolder());
             try (var lockChannel = FileChannel.open(lockFile.toPath(), StandardOpenOption.CREATE,
                     StandardOpenOption.WRITE);
                     var ignored = lockChannel.lock()) {
@@ -524,7 +524,6 @@ public class ClangResources {
         expectedNames.add(INCLUDES_HASHES_FILENAME);
         expectedNames.add(INCLUDES_VALIDATED_FILENAME);
         expectedNames.add(LAST_USED_FILENAME);
-        expectedNames.add(CACHE_LOCK_FILENAME);
 
         var files = resourceFolder.listFiles();
         if (files == null) {
@@ -577,7 +576,7 @@ public class ClangResources {
                 continue;
             }
 
-            var lockFile = new File(versionFolder, CACHE_LOCK_FILENAME);
+            var lockFile = getCacheLockFile(versionFolder);
             try (var lockChannel = FileChannel.open(lockFile.toPath(), StandardOpenOption.CREATE,
                     StandardOpenOption.WRITE)) {
 
@@ -610,6 +609,17 @@ public class ClangResources {
         } catch (OverlappingFileLockException e) {
             return null;
         }
+    }
+
+    /**
+     * Returns the lock file for a cache version.
+     *
+     * <p>The lock file must be outside the version folder because stale cleanup deletes that folder while holding the
+     * lock. Keeping the lock inside the folder prevents deletion on Windows.</p>
+     */
+    static File getCacheLockFile(File versionFolder) {
+        var absoluteVersionFolder = versionFolder.getAbsoluteFile();
+        return new File(absoluteVersionFolder.getParentFile(), absoluteVersionFolder.getName() + CACHE_LOCK_FILENAME);
     }
 
     private static boolean hasExpectedSha256(File file, ClangDumperManifestAsset asset) {

@@ -86,8 +86,8 @@ public class ClangResourcesTest {
         parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
         var resources = new ClangResources(parser);
 
-        var lockFile = staleVersion.toPath().resolve(".cache.lock");
-        try (var lockChannel = FileChannel.open(lockFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+        var lockFile = ClangResources.getCacheLockFile(staleVersion);
+        try (var lockChannel = FileChannel.open(lockFile.toPath(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
                 var ignored = lockChannel.lock()) {
 
             resources.deleteStaleVersions(Instant.now(), currentVersion);
