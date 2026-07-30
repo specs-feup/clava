@@ -23,10 +23,42 @@ package pt.up.fe.specs.clava.ast.decl.enums;
  */
 public enum Linkage {
     Invalid,
+
+    /**
+     * The entity is unique and can only be referred to from within its scope.
+     */
     None,
+
+    /**
+     * the entity can be referred to from within the translation unit, but not other translation units.
+     */
     Internal,
+
+    /**
+     * External linkage within a unique namespace.
+     * 
+     * <p>
+     * From the language perspective, these entities have external linkage. However, since they reside in an anonymous
+     * namespace, their names are unique to this translation unit, which is equivalent to having internal linkage from
+     * the code-generation point of view.
+     */
     UniqueExternal,
+
+    /**
+     * No linkage according to the standard, but is visible from other translation units because of types defined in a
+     * inline function.
+     */
     VisibleNone,
+
+    /**
+     * Module linkage, which indicates that the entity can be referred to from other translation units within the same
+     * module, and indirectly from arbitrary other translation units through inline functions and templates in the
+     * module interface.
+     */
     Module,
+
+    /**
+     * The entity can be referred to from other translation units.
+     */
     External;
 }
