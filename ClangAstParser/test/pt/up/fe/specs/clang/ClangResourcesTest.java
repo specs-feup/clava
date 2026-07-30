@@ -21,13 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -109,16 +110,42 @@ public class ClangResourcesTest {
         parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
         var resources = new ClangResources(parser);
 
-        var lockFile = ClangResources.getCacheLockFile(staleVersion);
-        try (var lockChannel = FileChannel.open(lockFile.toPath(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-                var ignored = lockChannel.lock()) {
+        try (var ignored = ClangResources.acquireCacheLock(staleVersion)) {
 
             resources.deleteStaleVersions(Instant.now(), currentVersion);
             assertTrue(staleVersion.isDirectory());
         }
 
+        assertFalse(ClangResources.getCacheLockFolder(staleVersion).exists());
+
         resources.deleteStaleVersions(Instant.now(), currentVersion);
         assertFalse(staleVersion.exists());
+    }
+
+    @Test
+    public void cacheLockSerializesConcurrentAcquisition() throws Exception {
+        var versionFolder = Files.createDirectory(tempFolder.resolve("version")).toFile();
+        var executor = Executors.newSingleThreadExecutor();
+        ClangResources.CacheLock firstLock = ClangResources.acquireCacheLock(versionFolder);
+
+        try {
+            var secondLock = executor.submit(() -> ClangResources.acquireCacheLock(versionFolder));
+            assertFalse(secondLock.isDone());
+
+            firstLock.close();
+            firstLock = null;
+            try (var ignored = secondLock.get(10, TimeUnit.SECONDS)) {
+                assertTrue(versionFolder.isDirectory());
+            }
+        } finally {
+            if (firstLock != null) {
+                firstLock.close();
+            }
+            executor.shutdownNow();
+            executor.awaitTermination(10, TimeUnit.SECONDS);
+        }
+
+        assertFalse(ClangResources.getCacheLockFolder(versionFolder).exists());
     }
 
     @Test
