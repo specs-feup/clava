@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
@@ -61,6 +62,7 @@ public class ClangAstDumper {
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
+    private static final AtomicBoolean CUDA_UNAVAILABLE_WARNING_SHOWN = new AtomicBoolean();
 
     private static final List<String> CLANG_AST_DUMPER_TEMP_FILES = Arrays.asList("includes.txt", CLANG_DUMP_FILENAME,
             // "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt", "template_args.txt",
@@ -247,6 +249,17 @@ public class ClangAstDumper {
                 arguments.add("__clang_cuda_runtime_wrapper.h");
                 arguments.add("-include");
                 arguments.add(ClangAstResource.CUDA_COMPATIBILITY.write(SpecsIo.getTempFolder()).getAbsolutePath());
+            } else if (useBuiltinCudaLib) {
+                clangResources.getSystemCudaInstallation().ifPresentOrElse(cudaFolder -> {
+                    ClavaLog.debug("Setting --cuda-path to discovered CUDA folder '"
+                            + cudaFolder.getAbsolutePath() + "'");
+                    arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
+                }, () -> {
+                    if (CUDA_UNAVAILABLE_WARNING_SHOWN.compareAndSet(false, true)) {
+                        ClavaLog.warning("CUDA parsing requested, but no system CUDA toolkit was found. "
+                                + "Continuing without CUDA headers; CUDA parsing may fail.");
+                    }
+                });
             } else if (!useBuiltinCudaLib && !cudaPath.isBlank()) {
 
                 File cudaFolder = SpecsIo.existingFolder(cudaPath);
