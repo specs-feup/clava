@@ -158,15 +158,6 @@ public class ClangResources {
                 : source.toString();
         var key = libcMode.name() + "_" + useBuiltinCuda + "_" + sourceKey;
 
-        var cachedFiles = CLANG_FILES_CACHE.get(key);
-        if (cachedFiles != null) {
-            if (source instanceof Release) {
-                writeLastUsed(Instant.now());
-            }
-            SpecsLogs.debug(() -> "Using cached version of Clang files: " + cachedFiles);
-            return cachedFiles;
-        }
-
         // The JVM lock must protect the same cache folder as the inter-process lock. The cache key also contains the
         // libc and CUDA configuration, so using it here would let two configurations acquire different JVM locks for
         // the same release folder and race while initializing it.
@@ -178,8 +169,16 @@ public class ClangResources {
             var files = CLANG_FILES_CACHE.get(key);
             if (files != null) {
                 if (source instanceof Release) {
-                    writeLastUsed(Instant.now());
+                    var resourceFolder = getClangResourceFolder();
+                    try (var ignored = acquireCacheLock(resourceFolder)) {
+                        writeLastUsed(Instant.now());
+                    } catch (IOException e) {
+                        var lockFolder = getCacheLockFolder(resourceFolder);
+                        throw new UncheckedIOException("Could not lock clang-dumper cache '" + lockFolder + "'", e);
+                    }
                 }
+
+                SpecsLogs.debug(() -> "Using cached version of Clang files: " + files);
                 return files;
             }
 
