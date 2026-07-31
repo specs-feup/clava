@@ -84,6 +84,25 @@ public class ClangResourcesTest {
     }
 
     @Test
+    public void includesCacheValidationOnlyChecksRequiredFiles() throws IOException {
+        var includesFolder = tempFolder.resolve("includes");
+        assertFalse(ClangResources.isIncludesCacheValid(includesFolder.toFile()));
+
+        Files.createDirectory(includesFolder);
+        assertFalse(ClangResources.isIncludesCacheValid(includesFolder.toFile()));
+
+        Files.createDirectories(includesFolder.resolve("builtin"));
+        Files.writeString(includesFolder.resolve("entrypoints.txt"), "builtin\n");
+        Files.writeString(includesFolder.resolve("builtin/header.h"), "original");
+        Files.writeString(includesFolder.resolve("unexpected.txt"), "extra");
+
+        assertTrue(ClangResources.isIncludesCacheValid(includesFolder.toFile()));
+
+        Files.writeString(includesFolder.resolve("builtin/header.h"), "modified");
+        assertTrue(ClangResources.isIncludesCacheValid(includesFolder.toFile()));
+    }
+
+    @Test
     public void cudaInstallationIsFoundFromConfiguredRoot() throws IOException {
         var cudaFolder = Files.createDirectories(tempFolder.resolve("cuda"));
         Files.createDirectories(cudaFolder.resolve("include"));
