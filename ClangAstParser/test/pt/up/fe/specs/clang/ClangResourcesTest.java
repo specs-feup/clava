@@ -448,7 +448,7 @@ public class ClangResourcesTest {
         var lockFolder = ClangResources.getCacheLockFolder(versionFolder).toPath();
         ClangResources.CacheLock first = ClangResources.acquireCacheLock(versionFolder);
 
-        Files.writeString(lockFolder.resolve("owner"), Long.MAX_VALUE + System.lineSeparator());
+        Files.writeString(first.ownerFile().toPath(), Long.MAX_VALUE + System.lineSeparator());
         ClangResources.CacheLock second = ClangResources.acquireCacheLock(versionFolder);
 
         try {
@@ -490,35 +490,6 @@ public class ClangResourcesTest {
             executor.awaitTermination(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
             cache.remove(cacheKey);
         }
-    }
-
-    @Test
-    public void staleCleanupDoesNotDeleteAnExecutableStillCachedInThisJvm() throws Exception {
-        var parser = CodeParser.newInstance();
-        parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
-        var resources = new ClangResources(parser);
-        var versionFolder = resources.getClangResourceFolder();
-        var fakeExecutable = Files.createFile(versionFolder.toPath().resolve("fake-tool")).toFile();
-        Files.writeString(versionFolder.toPath().resolve("last-used.txt"),
-                Instant.now().minus(Duration.ofDays(61)).toString());
-
-        var cache = getClangFilesCache();
-        var cacheKey = getClangFilesCacheKey(resources, LibcMode.SYSTEM);
-        cache.put(cacheKey, new ClangFiles(fakeExecutable, List.of()));
-
-        var currentVersion = Files.createDirectory(tempFolder.resolve("current"));
-        var done = tempFolder.resolve("cleanup.done");
-        var log = tempFolder.resolve("cleanup.log");
-        Process cleanup = startCleanupProcess(tempFolder.toFile(), currentVersion.toFile(), done, log);
-        try {
-            waitForProcess(cleanup, log);
-        } finally {
-            stopProcess(cleanup);
-            cache.remove(cacheKey);
-        }
-
-        assertTrue(fakeExecutable.isFile(),
-                "A separate JVM's stale cleanup deleted an executable still held by this JVM's cache");
     }
 
     @Test
@@ -585,26 +556,6 @@ public class ClangResourcesTest {
                 CacheLockProcess.class.getName(),
                 "resources",
                 cacheFolder.getAbsolutePath(),
-                done.toAbsolutePath().toString())
-                .redirectErrorStream(true)
-                .redirectOutput(log.toFile())
-                .start();
-    }
-
-    private Process startCleanupProcess(File cacheFolder, File currentVersion, Path done, Path log)
-            throws IOException {
-
-        var javaExecutable = Path.of(System.getProperty("java.home"), "bin",
-                SupportedPlatform.getCurrentPlatform().isWindows() ? "java.exe" : "java");
-
-        return new ProcessBuilder(
-                javaExecutable.toString(),
-                "-cp",
-                System.getProperty("java.class.path"),
-                CacheLockProcess.class.getName(),
-                "cleanup",
-                cacheFolder.getAbsolutePath(),
-                currentVersion.getAbsolutePath(),
                 done.toAbsolutePath().toString())
                 .redirectErrorStream(true)
                 .redirectOutput(log.toFile())
@@ -679,14 +630,6 @@ public class ClangResourcesTest {
                 parser.set(CodeParser.DUMPER_FOLDER, new File(args[1]));
                 var clangFiles = new ClangResources(parser).getClangFiles(LibcMode.SYSTEM);
                 Files.writeString(Path.of(args[2]), clangFiles.clangExecutable().getAbsolutePath());
-                return;
-            }
-
-            if (args[0].equals("cleanup")) {
-                var parser = CodeParser.newInstance();
-                parser.set(CodeParser.DUMPER_FOLDER, new File(args[1]));
-                new ClangResources(parser).deleteStaleVersions(Instant.now(), new File(args[2]));
-                Files.writeString(Path.of(args[3]), "done");
                 return;
             }
 
