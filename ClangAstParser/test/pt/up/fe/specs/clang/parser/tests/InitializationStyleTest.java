@@ -46,6 +46,7 @@ public class InitializationStyleTest {
                 .findFirst()
                 .orElseThrow();
 
+        assertEquals(InitializationStyle.ParenListInit, point.get(VarDecl.INIT_STYLE));
         assertEquals("Point point(1, 2)", point.getCode());
     }
 
