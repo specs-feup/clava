@@ -16,6 +16,7 @@ package pt.up.fe.specs.clang;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
@@ -32,7 +33,10 @@ public interface ClangAstKeys {
      */
     DataKey<LibcMode> LIBC_CXX_MODE = KeyFactory.enumeration("libcCxxMode", LibcMode.class)
             .setLabel("Libc/Libc++ mode. builtin (default): uses built-in libc/libc++; system: uses includes available in the system; auto: detects if the built-in includes are needed")
-            .setDefault(() -> LibcMode.BUILTIN_AND_LIBC);
+            .setDefault(() -> LibcMode.BUILTIN_AND_LIBC)
+            .setCustomGetter((mode, ignored) -> ClangAstWebResource.getDumperSource() instanceof LocalBuild
+                    ? LibcMode.SYSTEM
+                    : mode);
 
     DataKey<Boolean> USES_CILK = KeyFactory.bool("usesCilk");
 
