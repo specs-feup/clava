@@ -23,6 +23,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
 import pt.up.fe.specs.util.system.ProcessOutputAsString;
 
@@ -65,13 +66,33 @@ public class ClangResources {
     private final static Duration CACHE_LOCK_RETRY_INTERVAL = Duration.ofMillis(100);
     private final static Duration CACHE_LOCK_STALE_MAX_AGE = Duration.ofMinutes(5);
     private final static Duration STALE_CACHE_MAX_AGE = Duration.ofDays(60);
+    private static final String CUDA_ARCHIVE_FILENAME = "cudalib.zip";
+    private static final String CUDA_FOLDERNAME = "cudalib";
 
     private static final Map<String, Boolean> HAS_LIBC = new ConcurrentHashMap<>();
 
     private final CodeParser options;
+    private final Lazy<File> builtinCudaLib = Lazy.newInstance(this::prepareBuiltinCudaLib);
 
     public ClangResources(CodeParser options) {
         this.options = options;
+    }
+
+    public File getBuiltinCudaLib() {
+        return builtinCudaLib.get();
+    }
+
+    private File prepareBuiltinCudaLib() {
+        var resourceFolder = getClangResourceFolder();
+        var cudaFolder = SpecsIo.mkdir(new File(resourceFolder, CUDA_FOLDERNAME));
+        var zipFile = ClangAstWebResource.CUDA_LIB.writeVersioned(resourceFolder, ClangResources.class);
+
+        if (zipFile.isNewFile() || !isCudaInstallation(cudaFolder)) {
+            SpecsIo.deleteFolderContents(cudaFolder);
+            SpecsIo.extractZip(zipFile.getFile(), cudaFolder);
+        }
+
+        return cudaFolder;
     }
 
     public Optional<File> getSystemCudaInstallation() {
@@ -417,6 +438,8 @@ public class ClangResources {
                 ClangAstWebResource.MANIFEST_FILENAME,
                 getCurrentAsset(manifest, executableKind).filename(),
                 INCLUDES_FOLDERNAME,
+                CUDA_ARCHIVE_FILENAME,
+                CUDA_FOLDERNAME,
                 LAST_USED_FILENAME);
 
         var files = resourceFolder.listFiles();

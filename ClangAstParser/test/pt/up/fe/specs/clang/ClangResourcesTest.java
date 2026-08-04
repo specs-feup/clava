@@ -661,6 +661,19 @@ public class ClangResourcesTest {
     }
 
     @Test
+    public void builtinCudaArchiveHasCanonicalInstallationLayout() {
+        var parser = CodeParser.newInstance();
+        parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
+        parser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
+
+        var cudaFolder = new ClangResources(parser).getBuiltinCudaLib();
+
+        assertTrue(new File(cudaFolder, "include/cuda.h").isFile());
+        assertTrue(new File(cudaFolder, "include/cuda_runtime.h").isFile());
+        assertTrue(new File(cudaFolder, "nvvm/libdevice/libdevice.10.bc").isFile());
+    }
+
+    @Test
     public void libcDetectionIsScopedToTheExecutable() throws IOException {
         assumeTrue(!SupportedPlatform.getCurrentPlatform().isWindows(), "Shell fixtures require a Unix executable");
 
