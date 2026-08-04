@@ -23,7 +23,6 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
-import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
 import pt.up.fe.specs.util.system.ProcessOutputAsString;
 
@@ -44,15 +43,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
 
 public class ClangResources {
 
@@ -66,26 +62,19 @@ public class ClangResources {
     private final static Duration CACHE_LOCK_RETRY_INTERVAL = Duration.ofMillis(100);
     private final static Duration CACHE_LOCK_STALE_MAX_AGE = Duration.ofMinutes(5);
     private final static Duration STALE_CACHE_MAX_AGE = Duration.ofDays(60);
-    private static final String CUDA_ARCHIVE_FILENAME = "cudalib.zip";
-    private static final String CUDA_FOLDERNAME = "cudalib";
 
     private static final Map<String, Boolean> HAS_LIBC = new ConcurrentHashMap<>();
 
     private final CodeParser options;
-    private final Lazy<File> builtinCudaLib = Lazy.newInstance(this::prepareBuiltinCudaLib);
 
     public ClangResources(CodeParser options) {
         this.options = options;
     }
 
     public File getBuiltinCudaLib() {
-        return builtinCudaLib.get();
-    }
-
-    private File prepareBuiltinCudaLib() {
-        var resourceFolder = getClangResourceFolder();
-        var cudaFolder = SpecsIo.mkdir(new File(resourceFolder, CUDA_FOLDERNAME));
-        var zipFile = ClangAstWebResource.CUDA_LIB.writeVersioned(resourceFolder, ClangResources.class);
+        var cudaResourceFolder = SpecsIo.mkdir(options.get(CodeParser.DUMPER_FOLDER), "cuda");
+        var cudaFolder = SpecsIo.mkdir(cudaResourceFolder, "cudalib");
+        var zipFile = ClangAstWebResource.CUDA_LIB.writeVersioned(cudaResourceFolder, ClangResources.class);
 
         if (zipFile.isNewFile() || !isCudaInstallation(cudaFolder)) {
             SpecsIo.deleteFolderContents(cudaFolder);
@@ -95,72 +84,8 @@ public class ClangResources {
         return cudaFolder;
     }
 
-    public Optional<File> getSystemCudaInstallation() {
-        return findCudaInstallation(
-                Arrays.asList(System.getenv("CUDA_HOME"), System.getenv("CUDA_PATH"), System.getenv("CUDA_ROOT")),
-                System.getenv("PATH"), getConventionalCudaRoots());
-    }
-
-    static Optional<File> findCudaInstallation(List<String> configuredRoots, String pathValue,
-                                                List<File> conventionalRoots) {
-        var candidates = new ArrayList<File>();
-
-        configuredRoots.stream()
-                .filter(root -> root != null && !root.isBlank())
-                .map(File::new)
-                .forEach(candidates::add);
-
-        if (pathValue != null) {
-            for (var pathEntry : pathValue.split(Pattern.quote(File.pathSeparator))) {
-                if (pathEntry.isBlank()) {
-                    continue;
-                }
-
-                var binFolder = new File(pathEntry);
-                for (var executableName : List.of("nvcc", "nvcc.exe")) {
-                    var executable = new File(binFolder, executableName);
-                    if (executable.isFile() && binFolder.getParentFile() != null) {
-                        candidates.add(binFolder.getParentFile());
-                    }
-                }
-            }
-        }
-
-        candidates.addAll(conventionalRoots);
-
-        return candidates.stream()
-                .map(File::getAbsoluteFile)
-                .filter(ClangResources::isCudaInstallation)
-                .findFirst();
-    }
-
     private static boolean isCudaInstallation(File folder) {
         return folder.isDirectory() && new File(folder, "include/cuda_runtime.h").isFile();
-    }
-
-    private static List<File> getConventionalCudaRoots() {
-        if (!SupportedPlatform.getCurrentPlatform().isWindows()) {
-            return List.of(
-                    new File("/usr/local/cuda"),
-                    new File("/opt/cuda"),
-                    new File("/opt/homebrew/opt/cuda"));
-        }
-
-        var roots = new ArrayList<File>();
-        for (var programFiles : Arrays.asList(System.getenv("ProgramFiles"), System.getenv("ProgramFiles(x86)"))) {
-            if (programFiles == null || programFiles.isBlank()) {
-                continue;
-            }
-
-            var cudaRoot = new File(programFiles, "NVIDIA GPU Computing Toolkit/CUDA");
-            var versions = cudaRoot.listFiles(File::isDirectory);
-            if (versions != null) {
-                Arrays.sort(versions, Comparator.comparing(File::getName).reversed());
-                roots.addAll(Arrays.asList(versions));
-            }
-        }
-
-        return roots;
     }
 
     public ClangFiles getClangFiles(LibcMode libcMode) {
@@ -193,6 +118,10 @@ public class ClangResources {
                 var manifest = ClangAstWebResource.getManifest(resourceFolder);
                 File clangExecutable = prepareResources(manifest, resourceFolder);
                 List<String> builtinIncludes = prepareIncludes(manifest, resourceFolder, clangExecutable, libcMode);
+
+                if (useBuiltinCuda) {
+                    getBuiltinCudaLib();
+                }
 
                 validateTopLevelCacheFiles(manifest, resourceFolder);
                 updateLastUsedAndCleanupStaleVersions(resourceFolder);
@@ -438,8 +367,6 @@ public class ClangResources {
                 ClangAstWebResource.MANIFEST_FILENAME,
                 getCurrentAsset(manifest, executableKind).filename(),
                 INCLUDES_FOLDERNAME,
-                CUDA_ARCHIVE_FILENAME,
-                CUDA_FOLDERNAME,
                 LAST_USED_FILENAME);
 
         var files = resourceFolder.listFiles();

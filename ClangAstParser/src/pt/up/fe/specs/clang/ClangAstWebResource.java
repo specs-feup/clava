@@ -28,10 +28,11 @@ import java.util.Optional;
 public final class ClangAstWebResource {
 
     private static final String RELEASE_ROOT = "https://github.com/specs-feup/clang-dumper/releases/download/";
-    private static final String LEGACY_CUDA_RELEASE_ROOT =
+    private static final String CUDA_RELEASE_ROOT =
             "https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/";
+    public static final String CUDA_LIB_FILENAME = "cudalib.zip";
     static final WebResourceProvider CUDA_LIB =
-            WebResourceProvider.newInstance(LEGACY_CUDA_RELEASE_ROOT, "cudalib.zip", "v11.3.0");
+            WebResourceProvider.newInstance(CUDA_RELEASE_ROOT, CUDA_LIB_FILENAME, "v11.3.0");
     private static final String RELEASE_TAG_RESOURCE = "clang-dumper-release.tag";
     public static final String MANIFEST_FILENAME = "clang-dumper-release-manifest.json";
 
