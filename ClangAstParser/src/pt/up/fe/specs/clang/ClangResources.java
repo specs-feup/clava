@@ -146,14 +146,14 @@ public class ClangResources {
     public ClangFiles getClangFiles(LibcMode libcMode) {
 
         var source = ClangAstWebResource.getDumperSource();
-        var useBuiltinCuda = options.get(CodeParser.CUDA_PATH).equalsIgnoreCase(CodeParser.getBuiltinOption());
 
         if (source instanceof LocalBuild localBuild) {
-            var key = libcMode.name() + "_" + useBuiltinCuda + "_" + source;
+            var key = source.toString();
             return CLANG_FILES_CACHE.computeIfAbsent(key,
                     ignored -> new ClangFiles(getLocalExecutable(localBuild.folder()), List.of()));
         }
 
+        var useBuiltinCuda = options.get(CodeParser.CUDA_PATH).equalsIgnoreCase(CodeParser.getBuiltinOption());
         var resourceFolder = getClangResourceFolder();
         var key = libcMode.name() + "_" + useBuiltinCuda + "_" + source + "_"
                 + resourceFolder.getAbsolutePath();

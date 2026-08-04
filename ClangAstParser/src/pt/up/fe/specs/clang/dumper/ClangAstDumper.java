@@ -347,9 +347,8 @@ public class ClangAstDumper {
             arguments.add(standard.isCxx() ? "c++" : "c");
         }
 
-        // Bundled include directories replace system headers when built-in libc/cxx is required.
-        if (!builtinIncludes.isEmpty()
-                && ClangResources.useBuiltinLibc(clangExecutable, config.get(ClangAstKeys.LIBC_CXX_MODE))) {
+        // If it was determined that built-in includes will be used, disable system includes
+        if (ClangResources.useBuiltinLibc(clangExecutable, config.get(ClangAstKeys.LIBC_CXX_MODE))) {
             arguments.add("-nostdinc");
             arguments.add("-nostdinc++");
         }
