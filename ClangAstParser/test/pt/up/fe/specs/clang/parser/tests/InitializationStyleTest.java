@@ -39,7 +39,7 @@ public class InitializationStyleTest {
         SpecsSystem.programStandardInit();
 
         File sourceFile = SpecsIo.resourceCopy("cxx/paren_list_initialization.cpp", tempFolder.toFile(), false, true);
-        App app = CodeParser.newInstance().parse(List.of(sourceFile), List.of("-std=c++2a"));
+        App app = CodeParser.newInstance().parse(List.of(sourceFile), List.of("-std=c++20"));
 
         VarDecl point = app.getDescendants(VarDecl.class).stream()
                 .filter(varDecl -> varDecl.getDeclName().equals("point"))
