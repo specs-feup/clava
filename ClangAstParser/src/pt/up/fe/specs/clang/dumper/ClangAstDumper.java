@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
@@ -61,7 +60,6 @@ public class ClangAstDumper {
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
-    private static final AtomicBoolean CUDA_UNAVAILABLE_WARNING_SHOWN = new AtomicBoolean();
 
     private static final List<String> CLANG_AST_DUMPER_TEMP_FILES = List.of("includes.txt", CLANG_DUMP_FILENAME,
             // "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt", "template_args.txt",
@@ -239,32 +237,7 @@ public class ClangAstDumper {
             arguments.add("--cuda-gpu-arch=" + parserConfig.get(CodeParser.CUDA_GPU_ARCH));
 
             var cudaPath = parserConfig.get(CodeParser.CUDA_PATH);
-            var useBuiltinCudaLib = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption());
-
-            if (useBuiltinCudaLib && !builtinIncludes.isEmpty()) {
-                File cudaFolder = clangResources.getBuiltinCudaLib();
-
-                ClavaLog.debug("Setting --cuda-path to built-in CUDA folder '"
-                        + cudaFolder.getAbsolutePath() + "'");
-                arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
-            } else if (useBuiltinCudaLib) {
-                clangResources.getSystemCudaInstallation().ifPresentOrElse(cudaFolder -> {
-                    ClavaLog.debug("Setting --cuda-path to discovered CUDA folder '"
-                            + cudaFolder.getAbsolutePath() + "'");
-                    arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
-                }, () -> {
-                    if (CUDA_UNAVAILABLE_WARNING_SHOWN.compareAndSet(false, true)) {
-                        ClavaLog.warning("CUDA parsing requested, but no system CUDA toolkit was found. "
-                                + "Continuing without CUDA headers; CUDA parsing may fail.");
-                    }
-                });
-            } else if (!useBuiltinCudaLib && !cudaPath.isBlank()) {
-
-                File cudaFolder = SpecsIo.existingFolder(cudaPath);
-
-                ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
-                arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
-            }
+            addCudaPathArgument(arguments, cudaPath);
 
             // Since we only need parsing, enable host-only
             // Can help with errors such as "__float128 is not supported on this target"
@@ -358,6 +331,23 @@ public class ClangAstDumper {
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
 
         return parsedData;
+    }
+
+    void addCudaPathArgument(List<String> arguments, String cudaPath) {
+        var useBuiltinCudaLib = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption());
+
+        if (useBuiltinCudaLib) {
+            File cudaFolder = clangResources.getBuiltinCudaLib();
+
+            ClavaLog.debug("Setting --cuda-path to built-in CUDA folder '"
+                    + cudaFolder.getAbsolutePath() + "'");
+            arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
+        } else if (!cudaPath.isBlank()) {
+            File cudaFolder = SpecsIo.existingFolder(cudaPath);
+
+            ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
+            arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
+        }
     }
 
     private String processOutput(InputStream inputStream) {
