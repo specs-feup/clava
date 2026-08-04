@@ -40,6 +40,7 @@ import org.junit.jupiter.api.io.TempDir;
 import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.ClangAstWebResource.Release;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
+import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 
 public class ClangResourcesTest {
 
@@ -657,5 +658,22 @@ public class ClangResourcesTest {
                 .anyMatch(File::isFile);
 
         assertTrue(hasCudaWrapper, "Built-in CUDA must provide Clang's CUDA runtime wrapper independently of libc");
+    }
+
+    @Test
+    public void libcDetectionIsScopedToTheExecutable() throws IOException {
+        assumeTrue(!SupportedPlatform.getCurrentPlatform().isWindows(), "Shell fixtures require a Unix executable");
+
+        var systemLibcDumper = tempFolder.resolve("system-libc-dumper");
+        Files.writeString(systemLibcDumper,
+                "#!/bin/sh\nprintf '%s\\n' '" + TopLevelNodesParser.getTopLevelNodesHeader() + "'\n");
+        assertTrue(systemLibcDumper.toFile().setExecutable(true));
+
+        var builtinLibcDumper = tempFolder.resolve("builtin-libc-dumper");
+        Files.writeString(builtinLibcDumper, "#!/bin/sh\nexit 1\n");
+        assertTrue(builtinLibcDumper.toFile().setExecutable(true));
+
+        assertFalse(ClangResources.useBuiltinLibc(systemLibcDumper.toFile(), LibcMode.AUTO));
+        assertTrue(ClangResources.useBuiltinLibc(builtinLibcDumper.toFile(), LibcMode.AUTO));
     }
 }
