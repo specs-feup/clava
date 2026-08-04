@@ -18,6 +18,8 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.providers.WebResourceProvider;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
@@ -30,18 +32,29 @@ public final class ClangAstWebResource {
     public static final String MANIFEST_FILENAME = "clang-dumper-release-manifest.json";
 
     private static final Gson GSON = new Gson();
+    private static final DumperSource DUMPER_SOURCE = readDumperSource();
 
     private ClangAstWebResource() {
     }
 
     public static DumperSource getDumperSource() {
+        return DUMPER_SOURCE;
+    }
+
+    private static DumperSource readDumperSource() {
         var inputStream = ClangAstWebResource.class.getClassLoader().getResourceAsStream(RELEASE_TAG_RESOURCE);
 
         if (inputStream == null) {
             throw new RuntimeException("Could not find resource '" + RELEASE_TAG_RESOURCE + "'");
         }
 
-        var value = SpecsIo.read(inputStream).trim();
+        String value;
+        try (inputStream) {
+            value = SpecsIo.read(inputStream).trim();
+        } catch (IOException e) {
+            throw new UncheckedIOException("Could not read resource '" + RELEASE_TAG_RESOURCE + "'", e);
+        }
+
         if (value.isBlank()) {
             throw new RuntimeException("Resource '" + RELEASE_TAG_RESOURCE + "' is empty");
         }
@@ -73,7 +86,9 @@ public final class ClangAstWebResource {
     }
 
     public static ClangDumperManifest getManifest(File resourceFolder) {
-        var manifestResource = WebResourceProvider.newInstance(getReleaseBaseUrl(), MANIFEST_FILENAME, getReleaseTag());
+        var releaseTag = getReleaseTag();
+        var manifestResource = WebResourceProvider.newInstance(getReleaseBaseUrl(releaseTag), MANIFEST_FILENAME,
+                releaseTag);
         var manifestFile = manifestResource.writeVersioned(resourceFolder, ClangAstWebResource.class).getFile();
         var manifest = GSON.fromJson(SpecsIo.read(manifestFile), ClangDumperManifest.class);
 
@@ -86,11 +101,13 @@ public final class ClangAstWebResource {
     }
 
     public static WebResourceProvider getAssetResource(ClangDumperManifestAsset asset) {
-        return WebResourceProvider.newInstance(getReleaseBaseUrl(), asset.filename(), getReleaseTag() + "-" + asset.sha256());
+        var releaseTag = getReleaseTag();
+        return WebResourceProvider.newInstance(getReleaseBaseUrl(releaseTag), asset.filename(),
+                releaseTag + "-" + asset.sha256());
     }
 
-    private static String getReleaseBaseUrl() {
-        return RELEASE_ROOT + getReleaseTag() + "/";
+    private static String getReleaseBaseUrl(String releaseTag) {
+        return RELEASE_ROOT + releaseTag + "/";
     }
 
     public sealed interface DumperSource permits Release, LocalBuild {
