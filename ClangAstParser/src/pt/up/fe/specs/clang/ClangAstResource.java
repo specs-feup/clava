@@ -21,8 +21,7 @@ import pt.up.fe.specs.util.providers.ResourceProvider;
  */
 public enum ClangAstResource implements ResourceProvider {
     TEST_INCLUDES_C("test_includes.c"),
-    TEST_INCLUDES_CPP("test_includes.cpp"),
-    CUDA_COMPATIBILITY("cuda_compatibility.h");
+    TEST_INCLUDES_CPP("test_includes.cpp");
 
     private final String resource;
 
