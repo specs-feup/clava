@@ -41,7 +41,6 @@ import pt.up.fe.specs.util.utilities.LineStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -80,6 +79,8 @@ public class ClangAstDumper {
     private File systemResourceDir;
     private int systemIncludesThreshold;
     private final ClangResources clangResources;
+    private boolean validationOnly;
+    private String lastValidationError;
 
     private final CodeParser parserConfig;
 
@@ -136,6 +137,27 @@ public class ClangAstDumper {
         }
 
         return parsePrivate(sourceFile, id, standard, config);
+    }
+
+    /**
+     * Invokes Clang with the same arguments as parsing, while discarding dumper output.
+     */
+    public boolean validateSyntax(File sourceFile, String id, Standard standard, DataStore config) {
+        if (config.get(ClangAstKeys.USES_CILK)) {
+            sourceFile = new CilkParser().prepareCilkFile(sourceFile);
+        }
+
+        validationOnly = true;
+        try {
+            parsePrivate(sourceFile, id, standard, config);
+            return lastValidationError == null;
+        } finally {
+            validationOnly = false;
+        }
+    }
+
+    public String getLastValidationError() {
+        return lastValidationError;
     }
 
     private ClangAstData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
@@ -277,6 +299,11 @@ public class ClangAstDumper {
 
         ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments);
 
+        if (validationOnly) {
+            lastValidationError = validateSyntax(arguments, sourceFile, id);
+            return null;
+        }
+
         ClangAstData parsedData = null;
         ProcessOutput<String, ClangAstData> output = null;
 
@@ -348,6 +375,36 @@ public class ClangAstDumper {
             ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
             arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
         }
+    }
+
+    private String validateSyntax(List<String> arguments, File sourceFile, String id) {
+        lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
+        SpecsIo.deleteFolderContents(lastWorkingFolder);
+        workingFolders.add(lastWorkingFolder);
+
+        var output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
+                this::discardOutput,
+                inputStream -> processOutput(inputStream));
+
+        output.getOutputException().ifPresent(exception -> {
+            throw new RuntimeException("Exception while validating syntax", exception);
+        });
+
+        if (output.isError()) {
+            return "Syntax validation failed for '" + sourceFile.getAbsolutePath() + "':\n" + output.getStdErr();
+        }
+
+        return null;
+    }
+
+    private String discardOutput(InputStream inputStream) {
+        try (LineStream lines = LineStream.newInstance(inputStream, null)) {
+            while (lines.hasNextLine()) {
+                lines.nextLine();
+            }
+        }
+
+        return "";
     }
 
     private String processOutput(InputStream inputStream) {
