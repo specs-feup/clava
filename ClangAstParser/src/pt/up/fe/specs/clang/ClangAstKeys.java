@@ -33,10 +33,7 @@ public interface ClangAstKeys {
      */
     DataKey<LibcMode> LIBC_CXX_MODE = KeyFactory.enumeration("libcCxxMode", LibcMode.class)
             .setLabel("Libc/Libc++ mode. builtin (default): uses built-in libc/libc++; system: uses includes available in the system; auto: detects if the built-in includes are needed")
-            .setDefault(() -> LibcMode.BUILTIN_AND_LIBC)
-            .setCustomGetter((mode, ignored) -> ClangAstWebResource.getDumperSource() instanceof LocalBuild
-                    ? LibcMode.SYSTEM
-                    : mode);
+            .setDefault(() -> LibcMode.BUILTIN_AND_LIBC);
 
     DataKey<Boolean> USES_CILK = KeyFactory.bool("usesCilk");
 
@@ -101,6 +98,10 @@ public interface ClangAstKeys {
         }
 
         config.add(ClavaOptions.FLAGS_LIST, parsedFlags);
+
+        if (ClangAstWebResource.getDumperSource() instanceof LocalBuild) {
+            config.set(ClangAstKeys.LIBC_CXX_MODE, LibcMode.SYSTEM);
+        }
 
         return config;
     }

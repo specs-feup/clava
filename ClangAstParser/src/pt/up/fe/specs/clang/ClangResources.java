@@ -28,6 +28,7 @@ import pt.up.fe.specs.util.system.ProcessOutputAsString;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.FileAlreadyExistsException;
@@ -35,6 +36,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
@@ -42,7 +44,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
@@ -50,8 +51,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import java.util.regex.Pattern;
 
 public class ClangResources {
@@ -67,7 +66,7 @@ public class ClangResources {
     private final static Duration CACHE_LOCK_STALE_MAX_AGE = Duration.ofMinutes(5);
     private final static Duration STALE_CACHE_MAX_AGE = Duration.ofDays(60);
 
-    private static final AtomicInteger HAS_LIBC = new AtomicInteger(-1);
+    private static final Map<String, Boolean> HAS_LIBC = new ConcurrentHashMap<>();
 
     private final CodeParser options;
 
@@ -148,9 +147,7 @@ public class ClangResources {
         var source = ClangAstWebResource.getDumperSource();
 
         if (source instanceof LocalBuild localBuild) {
-            var key = source.toString();
-            return CLANG_FILES_CACHE.computeIfAbsent(key,
-                    ignored -> new ClangFiles(getLocalExecutable(localBuild.folder()), List.of()));
+            return new ClangFiles(getLocalExecutable(localBuild.folder()), List.of());
         }
 
         var useBuiltinCuda = options.get(CodeParser.CUDA_PATH).equalsIgnoreCase(CodeParser.getBuiltinOption());
@@ -265,65 +262,49 @@ public class ClangResources {
     }
 
     private static boolean hasLibC(File clangExecutable) {
-        var value = HAS_LIBC.get();
-
-        if (value == -1) {
-            var hasLibC = detectLibC(clangExecutable);
-            value = hasLibC ? 1 : 0;
-            HAS_LIBC.set(value);
-        }
-
-        if (value == 0) {
-            return false;
-        }
-
-        if (value == 1) {
-            return true;
-        }
-
-        throw new RuntimeException("Unexpected value: '" + value + "'");
+        var executableKey = SpecsIo.getCanonicalPath(clangExecutable);
+        return HAS_LIBC.computeIfAbsent(executableKey, ignored -> detectLibC(clangExecutable));
     }
 
     private static boolean detectLibC(File clangExecutable) {
-        File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
+        File clangTest = SpecsIo.getTempFolder("clang_ast_test_" + UUID.randomUUID());
 
-        List<File> testFiles = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
-                .stream()
-                .map(resource -> resource.write(clangTest))
-                .collect(Collectors.toList());
+        try {
+            var testFiles = List.of(
+                    ClangAstResource.TEST_INCLUDES_C.write(clangTest),
+                    ClangAstResource.TEST_INCLUDES_CPP.write(clangTest));
 
-        boolean needsLib = false;
-        for (File testFile : testFiles) {
-            var output = runClangAstDumper(clangExecutable, testFile);
+            boolean needsLib = false;
+            for (var testFile : testFiles) {
+                var output = runClangAstDumper(clangExecutable, testFile);
 
-            if (output.getReturnValue() != 0) {
-                ClavaLog.info("Problems while running dumper to test if libc/libcxx is needed");
-                needsLib = true;
-                break;
+                if (output.getReturnValue() != 0) {
+                    ClavaLog.info("Problems while running dumper to test if libc/libcxx is needed");
+                    needsLib = true;
+                    break;
+                }
+
+                if (testFile.getName().endsWith(".cpp")
+                        && !output.getOutput().contains(TopLevelNodesParser.getTopLevelNodesHeader())) {
+                    needsLib = true;
+                    break;
+                }
             }
 
-            if (!testFile.getName().endsWith(".cpp")) {
-                continue;
+            if (needsLib) {
+                ClavaLog.debug("Could not find system libc/libcxx");
+            } else {
+                ClavaLog.debug("Detected system's libc and libcxx");
             }
 
-            var topLevelNodesHeader = TopLevelNodesParser.getTopLevelNodesHeader();
-            if (!output.getOutput().contains(topLevelNodesHeader)) {
-                needsLib = true;
-                break;
-            }
+            return !needsLib;
+        } finally {
+            SpecsIo.deleteFolder(clangTest);
         }
-
-        if (needsLib) {
-            ClavaLog.debug("Could not find system libc/libcxx");
-        } else {
-            ClavaLog.debug("Detected system's libc and libcxx");
-        }
-
-        return !needsLib;
     }
 
     private static ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile) {
-        List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
+        List<String> arguments = List.of(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
         return SpecsSystem.runProcess(arguments, true, false);
     }
 
@@ -431,12 +412,12 @@ public class ClangResources {
     }
 
     private void validateTopLevelCacheFiles(ClangDumperManifest manifest, File resourceFolder) {
-        Set<String> expectedNames = new HashSet<>();
-        expectedNames.add(ClangAstWebResource.MANIFEST_FILENAME);
         var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
-        expectedNames.add(getCurrentAsset(manifest, executableKind).filename());
-        expectedNames.add(INCLUDES_FOLDERNAME);
-        expectedNames.add(LAST_USED_FILENAME);
+        Set<String> expectedNames = Set.of(
+                ClangAstWebResource.MANIFEST_FILENAME,
+                getCurrentAsset(manifest, executableKind).filename(),
+                INCLUDES_FOLDERNAME,
+                LAST_USED_FILENAME);
 
         var files = resourceFolder.listFiles();
         if (files == null) {
@@ -720,18 +701,8 @@ public class ClangResources {
     private static String calculateSha256(File file) {
         try {
             var digest = MessageDigest.getInstance("SHA-256");
-            try (var inputStream = Files.newInputStream(file.toPath())) {
-                inputStream.transferTo(new java.io.OutputStream() {
-                    @Override
-                    public void write(int b) {
-                        digest.update((byte) b);
-                    }
-
-                    @Override
-                    public void write(byte[] b, int off, int len) {
-                        digest.update(b, off, len);
-                    }
-                });
+            try (var inputStream = new DigestInputStream(Files.newInputStream(file.toPath()), digest)) {
+                inputStream.transferTo(OutputStream.nullOutputStream());
             }
 
             return HexFormat.of().formatHex(digest.digest());
