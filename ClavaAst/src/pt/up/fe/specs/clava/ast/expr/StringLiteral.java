@@ -55,8 +55,8 @@ public class StringLiteral extends Literal {
 
     @Override
     public String getLiteral() {
-        // C++26 unevaluated strings only allow simple escapes and UCNs. The evaluated byte payload does not retain
-        // enough information to reconstruct those spellings, so keep Clang's validated source spelling.
+        // Unevaluated strings can contain source-level details, such as adjacent tokens separated by a line break, that
+        // are lost when using the evaluated byte payload. Keep Clang's validated source spelling.
         if (get(STRING_KIND) == StringKind.UNEVALUATED) {
             return super.getLiteral();
         }
