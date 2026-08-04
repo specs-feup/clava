@@ -17,7 +17,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import pt.up.fe.specs.clang.ClangAstKeys;
-import pt.up.fe.specs.clang.ClangAstResource;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.cilk.CilkParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
@@ -39,14 +38,7 @@ import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.nio.file.AtomicMoveNotSupportedException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,7 +62,6 @@ public class ClangAstDumper {
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
     private static final AtomicBoolean CUDA_UNAVAILABLE_WARNING_SHOWN = new AtomicBoolean();
-    private static final Object CUDA_COMPATIBILITY_LOCK = new Object();
 
     private static final List<String> CLANG_AST_DUMPER_TEMP_FILES = List.of("includes.txt", CLANG_DUMP_FILENAME,
             // "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt", "template_args.txt",
@@ -80,65 +71,6 @@ public class ClangAstDumper {
 
     public static List<String> getTempFiles() {
         return CLANG_AST_DUMPER_TEMP_FILES;
-    }
-
-    static File getCudaCompatibilityFile(File folder) {
-        var destination = new File(folder, ClangAstResource.CUDA_COMPATIBILITY.getFilename());
-        if (destination.isFile()) {
-            return destination;
-        }
-
-        synchronized (CUDA_COMPATIBILITY_LOCK) {
-            if (destination.isFile()) {
-                return destination;
-            }
-
-            return writeCudaCompatibilityFile(destination);
-        }
-    }
-
-    private static File writeCudaCompatibilityFile(File destination) {
-        var destinationPath = destination.toPath();
-        Path temporaryPath = null;
-
-        try {
-            Files.createDirectories(destinationPath.getParent());
-            temporaryPath = Files.createTempFile(destinationPath.getParent(), destination.getName(), ".tmp");
-
-            try (var inputStream = ClangAstResource.CUDA_COMPATIBILITY.toStream()) {
-                if (inputStream == null) {
-                    throw new IOException("Could not load CUDA compatibility resource");
-                }
-
-                Files.copy(inputStream, temporaryPath, StandardCopyOption.REPLACE_EXISTING);
-            }
-
-            try {
-                Files.move(temporaryPath, destinationPath, StandardCopyOption.ATOMIC_MOVE);
-            } catch (AtomicMoveNotSupportedException e) {
-                try {
-                    Files.move(temporaryPath, destinationPath);
-                } catch (FileAlreadyExistsException ignored) {
-                    // Another JVM installed the complete file first.
-                }
-            } catch (FileAlreadyExistsException ignored) {
-                // Another JVM installed the complete file first.
-            }
-
-            return destination;
-        } catch (IOException e) {
-            throw new UncheckedIOException("Could not write CUDA compatibility resource '"
-                    + destination + "'", e);
-        } finally {
-            if (temporaryPath != null) {
-                try {
-                    Files.deleteIfExists(temporaryPath);
-                } catch (IOException e) {
-                    SpecsLogs.warn("Could not delete temporary CUDA compatibility resource '"
-                            + temporaryPath + "'", e);
-                }
-            }
-        }
     }
 
     /**
@@ -310,12 +242,11 @@ public class ClangAstDumper {
             var useBuiltinCudaLib = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption());
 
             if (useBuiltinCudaLib && !builtinIncludes.isEmpty()) {
-                arguments.add("-nocudainc");
-                arguments.add("-nocudalib");
-                arguments.add("-include");
-                arguments.add("__clang_cuda_runtime_wrapper.h");
-                arguments.add("-include");
-                arguments.add(getCudaCompatibilityFile(SpecsIo.getTempFolder()).getAbsolutePath());
+                File cudaFolder = clangResources.getBuiltinCudaLib();
+
+                ClavaLog.debug("Setting --cuda-path to built-in CUDA folder '"
+                        + cudaFolder.getAbsolutePath() + "'");
+                arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
             } else if (useBuiltinCudaLib) {
                 clangResources.getSystemCudaInstallation().ifPresentOrElse(cudaFolder -> {
                     ClavaLog.debug("Setting --cuda-path to discovered CUDA folder '"
