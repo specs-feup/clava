@@ -575,26 +575,26 @@ public class CxxWeaver extends ACxxWeaver {
         ClavaLog.debug(() -> "Creating App using the following options: " + parserOptions);
         ClavaLog.debug(() -> "Creating App using the following extra options: " + extraOptions);
 
-        // Collect additional include folders
-        Set<String> sourceIncludeFolders = getSourceIncludes(sources);
-        ClavaLog.debug(() -> "Source include folders: " + sourceIncludeFolders);
+        CodeParser codeParser = newCodeParser();
 
-        // Add include folders to extra options
-        List<String> adaptedExtraOptions = new ArrayList<>(sourceIncludeFolders.size() + extraOptions.size());
-        adaptedExtraOptions.addAll(extraOptions);
-        sourceIncludeFolders.stream().map(includeFolder -> "-I" + includeFolder).forEach(adaptedExtraOptions::add);
+        List<String> allParserOptions = addSourceIncludes(sources, parserOptions, extraOptions);
+        App app = codeParser.parse(sources, allParserOptions, context);
 
-        List<String> allFiles = sources.stream().map(File::toString).collect(Collectors.toList());
+        // Set source paths of each TranslationUnit
+        app.setSources(currentBases);
+        app.setSourceFoldernames(sourceFoldernames);
 
-        // Sort filenames so that select order of files is consistent between OSes
-        Collections.sort(allFiles);
+        // Set external dependencies
+        app.getExternalDependencies()
+                .setDisableRemoteDependencies(this.dataStore.get(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES));
 
-        boolean useCustomResources = this.dataStore.get(ClavaOptions.CUSTOM_RESOURCES);
+        return app;
+    }
 
+    private CodeParser newCodeParser() {
         CodeParser codeParser = CodeParser.newInstance();
 
-        // Setup code parser
-        codeParser.set(CodeParser.USE_CUSTOM_RESOURCES, useCustomResources);
+        codeParser.set(CodeParser.USE_CUSTOM_RESOURCES, this.dataStore.get(ClavaOptions.CUSTOM_RESOURCES));
         codeParser.set(CodeParser.CUDA_GPU_ARCH, this.dataStore.get(CodeParser.CUDA_GPU_ARCH));
         codeParser.set(CodeParser.CUDA_PATH, this.dataStore.get(CodeParser.CUDA_PATH));
         codeParser.set(ParallelCodeParser.PARALLEL_PARSING, this.dataStore.get(ParallelCodeParser.PARALLEL_PARSING));
@@ -606,20 +606,18 @@ public class CxxWeaver extends ACxxWeaver {
         codeParser.set(ClangAstKeys.LIBC_CXX_MODE, this.dataStore.get(ClangAstKeys.LIBC_CXX_MODE));
         codeParser.set(CodeParser.DUMPER_FOLDER, this.dataStore.get(CodeParser.DUMPER_FOLDER));
 
-        List<String> allParserOptions = new ArrayList<>(parserOptions.size() + adaptedExtraOptions.size());
+        return codeParser;
+    }
+
+    private List<String> addSourceIncludes(List<File> sources, List<String> parserOptions, List<String> extraOptions) {
+        Set<String> sourceIncludeFolders = getSourceIncludes(sources);
+        ClavaLog.debug(() -> "Source include folders: " + sourceIncludeFolders);
+
+        List<String> allParserOptions = new ArrayList<>(parserOptions.size() + sourceIncludeFolders.size() + extraOptions.size());
         allParserOptions.addAll(parserOptions);
-        allParserOptions.addAll(adaptedExtraOptions);
-        App app = codeParser.parse(SpecsCollections.map(allFiles, File::new), allParserOptions, context);
-
-        // Set source paths of each TranslationUnit
-        app.setSources(currentBases);
-        app.setSourceFoldernames(sourceFoldernames);
-
-        // Set external dependencies
-        app.getExternalDependencies()
-                .setDisableRemoteDependencies(this.dataStore.get(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES));
-
-        return app;
+        allParserOptions.addAll(extraOptions);
+        sourceIncludeFolders.stream().map(includeFolder -> "-I" + includeFolder).forEach(allParserOptions::add);
+        return allParserOptions;
     }
 
     private Set<String> getSourceIncludes(List<File> sources) {
@@ -1233,6 +1231,13 @@ public class CxxWeaver extends ACxxWeaver {
                 .forEach(writtenFile -> rebuildBases.put(SpecsIo.getCanonicalFile(writtenFile), tempFolder));
 
         currentBases = rebuildBases;
+        if (!update) {
+            newCodeParser().validateSyntax(writtenFiles,
+                    addSourceIncludes(writtenFiles, rebuildOptions, extraOptions), context);
+            currentBases = previousBases;
+            return true;
+        }
+
         App rebuiltApp = createApp(writtenFiles, rebuildOptions, extraOptions);
 
         // Restore current bases
