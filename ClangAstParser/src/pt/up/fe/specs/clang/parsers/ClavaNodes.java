@@ -93,7 +93,7 @@ public class ClavaNodes {
         ClavaNode clavaNode = clavaNodes.get(nodeId);
 
         if (clavaNode == null) {
-            ClavaLog.debug("Could not find ClavaNode with id '" + nodeId
+            ClavaLog.warning("Could not find ClavaNode with id '" + nodeId
                     + "', returning an empty optional. Check if node is being visited. If parsing of includes is enabled, check that the parsing level is sufficient.");
 
             return Optional.empty();
