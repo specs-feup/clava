@@ -194,10 +194,9 @@ public class ClangAstDumper {
             arguments.add("-std=cl2.0");
         }
         // Set standard to CUDA
-        else if (isCuda && !standard.isCuda()) {
+        else if (isCuda) {
+            // Clang does not accept '-std=cuda'; CUDA sources still use a C++ standard.
             arguments.add(standard.isCxx() ? standard.getFlag() : Standard.CXX17.getFlag());
-        } else if (isCuda) {
-            arguments.add(Standard.CXX17.getFlag());
         } else {
             arguments.add(standard.getFlag());
         }
@@ -226,12 +225,13 @@ public class ClangAstDumper {
         }
         // If CUDA, add corresponding flags
         else if (isCuda) {
-            arguments.add("-x");
-            arguments.add("cuda");
-
-            if (SpecsPlatforms.isWindows()) {
-                ClavaLog.info("CUDA parsing is not supported in Windows, run at your own risk");
-                arguments.addAll(Arrays.asList("-fms-compatibility", "-D_MSC_VER", "-D_LIBCPP_MSVCRT"));
+            if (!SpecsPlatforms.isLinux()) {
+                ClavaLog.info("We only officially support CUDA parsing in Linux, run at your own risk");
+                arguments.add("-fms-compatibility");
+                if (SpecsPlatforms.isWindows()) {
+                    arguments.add("-D_MSC_VER");
+                    arguments.add("-D_LIBCPP_MSVCRT");
+                }
             }
 
             arguments.add("--cuda-gpu-arch=" + parserConfig.get(CodeParser.CUDA_GPU_ARCH));
@@ -333,7 +333,7 @@ public class ClangAstDumper {
         return parsedData;
     }
 
-    void addCudaPathArgument(List<String> arguments, String cudaPath) {
+    private void addCudaPathArgument(List<String> arguments, String cudaPath) {
         var useBuiltinCudaLib = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption());
 
         if (useBuiltinCudaLib) {
