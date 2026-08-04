@@ -195,7 +195,8 @@ public class ClangAstDumper {
         }
         // Set standard to CUDA
         else if (isCuda) {
-            // Clang does not accept '-std=cuda'; CUDA sources still use a C++ standard.
+            // The LLVM 18 driver bundled with clang-dumper rejects '-std=cuda'. The .cu extension already
+            // selects CUDA mode, so use a C++ standard for host-side parsing.
             arguments.add(standard.isCxx() ? standard.getFlag() : Standard.CXX17.getFlag());
         } else {
             arguments.add(standard.getFlag());
