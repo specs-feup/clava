@@ -72,7 +72,7 @@ public class ClangAstDumper {
     private static final AtomicBoolean CUDA_UNAVAILABLE_WARNING_SHOWN = new AtomicBoolean();
     private static final Object CUDA_COMPATIBILITY_LOCK = new Object();
 
-    private static final List<String> CLANG_AST_DUMPER_TEMP_FILES = Arrays.asList("includes.txt", CLANG_DUMP_FILENAME,
+    private static final List<String> CLANG_AST_DUMPER_TEMP_FILES = List.of("includes.txt", CLANG_DUMP_FILENAME,
             // "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt", "template_args.txt",
             "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt",
             "omp.txt", "invalid_source.txt", "enum_integer_type.txt", "consumer_order.txt",
@@ -157,7 +157,7 @@ public class ClangAstDumper {
     private File clangExecutable;
     private List<String> builtinIncludes;
     private int systemIncludesThreshold;
-    private ClangResources clangResources;
+    private final ClangResources clangResources;
 
     private final CodeParser parserConfig;
 
@@ -392,7 +392,7 @@ public class ClangAstDumper {
             workingFolders.add(lastWorkingFolder);
 
             output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
-                    inputStream -> this.processOutput(sourceFile, inputStream),
+                    this::processOutput,
                     inputStream -> this.processStdErr(inputStream, config.get(ClavaNode.CONTEXT)));
 
             if (output.isError()) {
@@ -429,7 +429,7 @@ public class ClangAstDumper {
         return parsedData;
     }
 
-    private String processOutput(File sourceFile, InputStream inputStream) {
+    private String processOutput(InputStream inputStream) {
         StringBuilder output = new StringBuilder();
         try (LineStream lines = LineStream.newInstance(inputStream, null)) {
 
