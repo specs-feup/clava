@@ -33,10 +33,14 @@ public enum Standard implements StringProvider {
     C99,
     C11,
     C17,
+    C18,
+    C23,
     GNU90,
     GNU99,
     GNU11,
     GNU17,
+    GNU18,
+    GNU23,
     CXX98("c++98", true),
     CXX03("c++03", true),
     CXX11("c++11", true),
@@ -67,8 +71,8 @@ public enum Standard implements StringProvider {
     private static final Lazy<EnumHelperWithValue<Standard>> ENUM_HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(Standard.class);
 
-    private static final Set<Standard> GNU_STANDARDS = SpecsCollections.asSet(GNU90, GNU99, GNU11, GNU17, GNUXX98, GNUXX11,
-            GNUXX14, GNUXX17, GNUXX20, GNUXX23, GNUXX26);
+    private static final Set<Standard> GNU_STANDARDS = SpecsCollections.asSet(GNU90, GNU99, GNU11, GNU17, GNU18, GNU23,
+            GNUXX98, GNUXX11, GNUXX14, GNUXX17, GNUXX20, GNUXX23, GNUXX26);
 
     public static EnumHelperWithValue<Standard> getEnumHelper() {
         return ENUM_HELPER.get();
