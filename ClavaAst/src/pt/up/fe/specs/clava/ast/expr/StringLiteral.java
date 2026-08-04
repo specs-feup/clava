@@ -55,6 +55,12 @@ public class StringLiteral extends Literal {
 
     @Override
     public String getLiteral() {
+        // C++26 unevaluated strings only allow simple escapes and UCNs. The evaluated byte payload does not retain
+        // enough information to reconstruct those spellings, so keep Clang's validated source spelling.
+        if (get(STRING_KIND) == StringKind.UNEVALUATED) {
+            return super.getLiteral();
+        }
+
         // Update: Unfortunately it is not possible to blindly use the source code literal
         // For instance, if directives and macros appear in the middle of the literal, they will also appear in the
         // generated source code
@@ -90,8 +96,8 @@ public class StringLiteral extends Literal {
             return SpecsStrings.escapeJson(new String(bytes, kind.getCharset()));
         }
 
-        // If ASCII, convert each byte directly
-        if (kind == StringKind.ORDINARY || kind == StringKind.UNEVALUATED) {
+        // Ordinary strings use one-byte characters; convert each byte directly.
+        if (kind == StringKind.ORDINARY) {
             var literal = new StringBuilder();
 
             for (var aByte : get(STRING_BYTES)) {
