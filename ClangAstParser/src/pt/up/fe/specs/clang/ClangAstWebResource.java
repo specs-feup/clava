@@ -94,8 +94,9 @@ public final class ClangAstWebResource {
         var releaseTag = getReleaseTag();
         var manifestResource = WebResourceProvider.newInstance(getReleaseBaseUrl(releaseTag), MANIFEST_FILENAME,
                 releaseTag);
-        var manifestFile = CacheFiles.installFile(new File(resourceFolder, MANIFEST_FILENAME), manifestResource, null,
-                "clang-dumper release manifest");
+        var cacheRoot = resourceFolder.toPath().getParent().getParent();
+        var manifestFile = CacheFiles.installFile(cacheRoot, new File(resourceFolder, MANIFEST_FILENAME),
+                manifestResource, null, "clang-dumper release manifest");
         var manifest = GSON.fromJson(SpecsIo.read(manifestFile), ClangDumperManifest.class);
 
         if (manifest == null) {
