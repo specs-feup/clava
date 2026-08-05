@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
+import java.nio.channels.FileChannel;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileAlreadyExistsException;
@@ -28,16 +29,44 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.HexFormat;
+import java.util.function.Supplier;
 
 final class CacheFiles {
 
+    // FileChannel rejects overlapping locks in one JVM; this monitor serializes the small critical section.
+    private static final Object MAINTENANCE_MONITOR = new Object();
+    private static final String MAINTENANCE_LOCK_FILENAME = ".maintenance.lock";
+
     private CacheFiles() {
+    }
+
+    static <T> T withMaintenanceLock(Path cacheRoot, Supplier<T> action) {
+        var lockPath = cacheRoot.resolve(MAINTENANCE_LOCK_FILENAME);
+        synchronized (MAINTENANCE_MONITOR) {
+            try {
+                Files.createDirectories(cacheRoot);
+                try (var channel = FileChannel.open(lockPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+                        var ignored = channel.lock()) {
+                    return action.get();
+                }
+            } catch (IOException e) {
+                throw new UncheckedIOException("Could not access cache maintenance lock '" + lockPath + "'", e);
+            }
+        }
+    }
+
+    static void withMaintenanceLock(Path cacheRoot, Runnable action) {
+        withMaintenanceLock(cacheRoot, () -> {
+            action.run();
+            return null;
+        });
     }
 
     static Path createStagingDirectory(Path parent, String prefix) {
@@ -123,12 +152,7 @@ final class CacheFiles {
         }
     }
 
-    static void deleteStaleDirectories(Path parent, Instant cutoff, Path excluded) {
-        deleteStaleDirectories(parent, cutoff, excluded, () -> {});
-    }
-
-    static void deleteStaleDirectories(Path parent, Instant cutoff, Path excluded,
-                                       Runnable beforeRevalidation) {
+    static void deleteStaleDirectories(Path cacheRoot, Path parent, Instant cutoff, Path excluded) {
         if (!Files.isDirectory(parent)) {
             return;
         }
@@ -143,16 +167,14 @@ final class CacheFiles {
                     continue;
                 }
 
-                if (isStaleAndUnchanged(child, cutoff, beforeRevalidation)) {
-                    delete(child);
-                }
+                withMaintenanceLock(cacheRoot, () -> deleteIfStale(child, cutoff));
             }
         } catch (IOException e) {
             throw new UncheckedIOException("Could not clean stale cache directories below '" + parent + "'", e);
         }
     }
 
-    static void deleteStaleStagingDirectories(Path parent, Instant cutoff) {
+    static void deleteStaleStagingDirectories(Path cacheRoot, Path parent, Instant cutoff) {
         if (!Files.isDirectory(parent)) {
             return;
         }
@@ -164,9 +186,7 @@ final class CacheFiles {
                     continue;
                 }
 
-                if (isStaleAndUnchanged(child, cutoff, () -> {})) {
-                    delete(child);
-                }
+                withMaintenanceLock(cacheRoot, () -> deleteIfStale(child, cutoff));
             }
         } catch (IOException e) {
             throw new UncheckedIOException("Could not clean stale cache staging directories below '" + parent + "'",
@@ -174,18 +194,14 @@ final class CacheFiles {
         }
     }
 
-    private static boolean isStaleAndUnchanged(Path path, Instant cutoff, Runnable beforeRevalidation) {
+    private static void deleteIfStale(Path path, Instant cutoff) {
         try {
-            var initialMtime = Files.getLastModifiedTime(path);
-            if (!initialMtime.toInstant().isBefore(cutoff)) {
-                return false;
+            if (Files.isDirectory(path)
+                    && Files.getLastModifiedTime(path).toInstant().isBefore(cutoff)) {
+                delete(path);
             }
-
-            beforeRevalidation.run();
-            var currentMtime = Files.getLastModifiedTime(path);
-            return initialMtime.equals(currentMtime);
         } catch (NoSuchFileException e) {
-            return false;
+            // Another cleanup or publisher already removed the candidate.
         } catch (IOException e) {
             throw new UncheckedIOException("Could not inspect cache path '" + path + "'", e);
         }

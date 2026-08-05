@@ -86,10 +86,6 @@ public class ClangResources {
         var key = libcMode.name() + "_" + useBuiltinCuda + "_" + source + "_"
                 + resourceFolder.getAbsolutePath();
         var cached = CLANG_FILES_CACHE.get(key);
-        if (cached != null) {
-            touchUse(resourceFolder, cached.includesFolder());
-        }
-
         if (isUsable(cached)) {
             SpecsLogs.debug(() -> "Using cached version of Clang files: " + cached.files());
             return cached.files();
@@ -119,17 +115,41 @@ public class ClangResources {
         return selectedFiles.files();
     }
 
-    private static boolean isUsable(CachedClangFiles cached) {
-        return cached != null
-                && cached.files().clangExecutable().isFile()
-                && (cached.includesFolder() == null || isIncludesCacheValid(cached.includesFolder()));
+    private boolean isUsable(CachedClangFiles cached) {
+        if (cached == null) {
+            return false;
+        }
+
+        return CacheFiles.withMaintenanceLock(options.get(CodeParser.DUMPER_FOLDER).toPath(), () -> {
+            if (!cached.files().clangExecutable().isFile()) {
+                return false;
+            }
+
+            var includesFolder = cached.includesFolder();
+            if (includesFolder == null) {
+                return true;
+            }
+
+            if (!includesFolder.exists()) {
+                return false;
+            }
+
+            CacheFiles.touch(includesFolder.toPath());
+            if (!isIncludesCacheValid(includesFolder)) {
+                throw invalidIncludesCache(includesFolder, includesFolder.getName());
+            }
+
+            return true;
+        });
     }
 
-    private static void touchUse(File resourceFolder, File includesFolder) {
-        CacheFiles.touch(resourceFolder.toPath());
-        if (includesFolder != null) {
-            CacheFiles.touch(includesFolder.toPath());
-        }
+    private void touchUse(File resourceFolder, File includesFolder) {
+        CacheFiles.withMaintenanceLock(options.get(CodeParser.DUMPER_FOLDER).toPath(), () -> {
+            CacheFiles.touch(resourceFolder.toPath());
+            if (includesFolder != null) {
+                CacheFiles.touch(includesFolder.toPath());
+            }
+        });
     }
 
     static File getLocalExecutable(File buildFolder) {
@@ -194,9 +214,12 @@ public class ClangResources {
     }
 
     public File getClangResourceFolder() {
-        var releaseFolder = SpecsIo.mkdir(getReleasesFolder(), ClangAstWebResource.getReleaseTag());
-        CacheFiles.touch(releaseFolder.toPath());
-        return releaseFolder;
+        var cacheFolder = options.get(CodeParser.DUMPER_FOLDER);
+        return CacheFiles.withMaintenanceLock(cacheFolder.toPath(), () -> {
+            var releaseFolder = SpecsIo.mkdir(getReleasesFolder(), ClangAstWebResource.getReleaseTag());
+            CacheFiles.touch(releaseFolder.toPath());
+            return releaseFolder;
+        });
     }
 
     public static File getDefaultTempFolder() {
@@ -295,17 +318,14 @@ public class ClangResources {
     static File resolveIncludes(File cacheFolder, ClangDumperManifestAsset includesAsset,
                                 FileResourceProvider archiveResource) {
         var extractedFolder = getSharedIncludesFolder(cacheFolder, includesAsset.sha256());
-        if (extractedFolder.exists()) {
-            CacheFiles.touch(extractedFolder.toPath());
-            if (isIncludesCacheValid(extractedFolder)) {
-                return extractedFolder;
-            }
-
-            throw invalidIncludesCache(extractedFolder, includesAsset.sha256());
+        var existingFolder = useExistingIncludes(cacheFolder, extractedFolder, includesAsset.sha256());
+        if (existingFolder != null) {
+            return existingFolder;
         }
 
         var includesRoot = extractedFolder.getParentFile().toPath();
-        CacheFiles.deleteStaleStagingDirectories(includesRoot, Instant.now().minus(STALE_STAGING_MAX_AGE));
+        CacheFiles.deleteStaleStagingDirectories(cacheFolder.toPath(), includesRoot,
+                Instant.now().minus(STALE_STAGING_MAX_AGE));
         var stagingFolder = CacheFiles.createStagingDirectory(includesRoot,
                 "." + includesAsset.sha256() + ".tmp-");
         try {
@@ -331,25 +351,41 @@ public class ClangResources {
             }
 
             getIncludeFolders(stagingFolder.toFile());
-            if (extractedFolder.exists()) {
-                CacheFiles.touch(extractedFolder.toPath());
-                if (isIncludesCacheValid(extractedFolder)) {
-                    return extractedFolder;
-                }
-
-                throw invalidIncludesCache(extractedFolder, includesAsset.sha256());
+            existingFolder = useExistingIncludes(cacheFolder, extractedFolder, includesAsset.sha256());
+            if (existingFolder != null) {
+                return existingFolder;
             }
 
             var publishedFolder = CacheFiles.publish(stagingFolder, extractedFolder.toPath()).toFile();
-            CacheFiles.touch(publishedFolder.toPath());
-            if (!isIncludesCacheValid(publishedFolder)) {
-                throw invalidIncludesCache(publishedFolder, includesAsset.sha256());
+            existingFolder = useExistingIncludes(cacheFolder, publishedFolder, includesAsset.sha256());
+            if (existingFolder == null) {
+                throw new RuntimeException("Published clang-dumper includes disappeared: '"
+                        + publishedFolder.getAbsolutePath() + "'");
             }
 
-            return publishedFolder;
+            return existingFolder;
         } finally {
             CacheFiles.delete(stagingFolder);
         }
+    }
+
+    private static File useExistingIncludes(File cacheFolder, File includesFolder, String sha256) {
+        if (!includesFolder.exists()) {
+            return null;
+        }
+
+        return CacheFiles.withMaintenanceLock(cacheFolder.toPath(), () -> {
+            if (!includesFolder.exists()) {
+                return null;
+            }
+
+            CacheFiles.touch(includesFolder.toPath());
+            if (!isIncludesCacheValid(includesFolder)) {
+                throw invalidIncludesCache(includesFolder, sha256);
+            }
+
+            return includesFolder;
+        });
     }
 
     private static RuntimeException invalidIncludesCache(File includesFolder, String sha256) {
@@ -414,13 +450,15 @@ public class ClangResources {
 
     private void deleteStaleVersions(Instant now, File currentVersionFolder, File currentIncludesFolder) {
         var cutoff = now.minus(STALE_CACHE_MAX_AGE);
+        var cacheRoot = options.get(CodeParser.DUMPER_FOLDER).toPath();
         try {
-            CacheFiles.deleteStaleDirectories(getReleasesFolder().toPath(), cutoff, currentVersionFolder.toPath());
-            CacheFiles.deleteStaleDirectories(getIncludesRoot().toPath(), cutoff,
+            CacheFiles.deleteStaleDirectories(cacheRoot, getReleasesFolder().toPath(), cutoff,
+                    currentVersionFolder.toPath());
+            CacheFiles.deleteStaleDirectories(cacheRoot, getIncludesRoot().toPath(), cutoff,
                     currentIncludesFolder == null ? null : currentIncludesFolder.toPath());
-            CacheFiles.deleteStaleStagingDirectories(getReleasesFolder().toPath(),
+            CacheFiles.deleteStaleStagingDirectories(cacheRoot, getReleasesFolder().toPath(),
                     now.minus(STALE_STAGING_MAX_AGE));
-            CacheFiles.deleteStaleStagingDirectories(getIncludesRoot().toPath(),
+            CacheFiles.deleteStaleStagingDirectories(cacheRoot, getIncludesRoot().toPath(),
                     now.minus(STALE_STAGING_MAX_AGE));
         } catch (RuntimeException e) {
             SpecsLogs.warn("Could not clean stale clang-dumper cache resources", e);
