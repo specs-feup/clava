@@ -269,14 +269,33 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void abandonedStagingDirectoriesAreCleaned() throws IOException {
+    public void activelyLockedStagingDirectoriesArePreserved() throws Exception {
         var includesRoot = Files.createDirectories(tempFolder.resolve("includes"));
         var staging = CacheFiles.createStagingDirectory(includesRoot, ".sha.tmp-");
-        Files.setLastModifiedTime(staging, FileTime.from(Instant.now().minus(Duration.ofHours(2))));
+        try {
+            CacheFiles.deleteUnlockedStagingDirectories(includesRoot);
+            assertTrue(Files.exists(staging.path()));
+            assertTrue(Files.exists(staging.lockPath()));
+        } finally {
+            staging.close();
+            CacheFiles.delete(staging.path());
+        }
+    }
 
-        CacheFiles.deleteStaleStagingDirectories(tempFolder, includesRoot, Instant.now().minus(Duration.ofHours(1)));
+    @Test
+    public void unlockedStagingDirectoriesAreCleaned() throws Exception {
+        var includesRoot = Files.createDirectories(tempFolder.resolve("includes"));
+        var staging = CacheFiles.createStagingDirectory(includesRoot, ".sha.tmp-");
+        var stagingPath = staging.path();
+        var lockPath = staging.lockPath();
+        staging.close();
+        Files.createFile(lockPath);
 
-        assertFalse(Files.exists(staging));
+        assertTrue(Files.exists(lockPath));
+        CacheFiles.deleteUnlockedStagingDirectories(includesRoot);
+
+        assertFalse(Files.exists(stagingPath));
+        assertFalse(Files.exists(lockPath));
     }
 
     @Test
