@@ -323,13 +323,13 @@ public class ClangResources {
         }
 
         var includesRoot = extractedFolder.getParentFile().toPath();
-        CacheFiles.deleteUnlockedStagingDirectories(includesRoot);
+        CacheFiles.deleteUnlockedStagingLocks(includesRoot);
         var stagingFolder = CacheFiles.createStagingDirectory(includesRoot,
                 "." + includesAsset.sha256() + ".tmp-");
         try {
-            var downloadFolder = CacheFiles.createStagingDirectory(stagingFolder.path(), ".download-");
+            var downloadFolder = CacheFiles.createTemporaryDirectory(stagingFolder.path(), ".download-");
             try {
-                var archive = archiveResource.write(downloadFolder.path().toFile());
+                var archive = archiveResource.write(downloadFolder.toFile());
                 if (archive == null || !archive.isFile()) {
                     throw new RuntimeException("Could not download clang-dumper includes archive '"
                             + includesAsset.filename() + "'");
@@ -345,11 +345,7 @@ public class ClangResources {
                             + includesAsset.filename() + "'");
                 }
             } finally {
-                try {
-                    CacheFiles.delete(downloadFolder.path());
-                } finally {
-                    downloadFolder.close();
-                }
+                CacheFiles.delete(downloadFolder);
             }
 
             getIncludeFolders(stagingFolder.path().toFile());
@@ -462,8 +458,8 @@ public class ClangResources {
                     currentVersionFolder.toPath());
             CacheFiles.deleteStaleDirectories(cacheRoot, getIncludesRoot().toPath(), cutoff,
                     currentIncludesFolder == null ? null : currentIncludesFolder.toPath());
-            CacheFiles.deleteUnlockedStagingDirectories(getReleasesFolder().toPath());
-            CacheFiles.deleteUnlockedStagingDirectories(getIncludesRoot().toPath());
+            CacheFiles.deleteUnlockedStagingLocks(getReleasesFolder().toPath());
+            CacheFiles.deleteUnlockedStagingLocks(getIncludesRoot().toPath());
         } catch (RuntimeException e) {
             SpecsLogs.warn("Could not clean stale clang-dumper cache resources", e);
         }

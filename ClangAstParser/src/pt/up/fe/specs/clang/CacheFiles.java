@@ -81,20 +81,28 @@ final class CacheFiles {
         }
 
         FileChannel channel = null;
-        FileLock lock = null;
         Path stagingPath = null;
         try {
             channel = FileChannel.open(lockPath, StandardOpenOption.WRITE);
-            lock = channel.lock();
+            channel.lock();
             stagingPath = lockPath.resolveSibling(removeLockSuffix(lockPath.getFileName().toString()));
             Files.createDirectory(stagingPath);
-            return new StagingDirectory(stagingPath, lockPath, channel, lock);
+            return new StagingDirectory(stagingPath, lockPath, channel);
         } catch (IOException e) {
-            cleanupStagingCreation(stagingPath, lockPath, channel, lock);
+            cleanupStagingCreation(stagingPath, lockPath, channel);
             throw new UncheckedIOException("Could not create cache staging directory below '" + parent + "'", e);
         } catch (RuntimeException e) {
-            cleanupStagingCreation(stagingPath, lockPath, channel, lock);
+            cleanupStagingCreation(stagingPath, lockPath, channel);
             throw e;
+        }
+    }
+
+    static Path createTemporaryDirectory(Path parent, String prefix) {
+        try {
+            Files.createDirectories(parent);
+            return Files.createTempDirectory(parent, prefix);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Could not create cache temporary directory below '" + parent + "'", e);
         }
     }
 
@@ -102,16 +110,7 @@ final class CacheFiles {
         return filename.substring(0, filename.length() - ".lock".length());
     }
 
-    private static void cleanupStagingCreation(Path stagingPath, Path lockPath,
-                                               FileChannel channel, FileLock lock) {
-        if (lock != null) {
-            try {
-                lock.release();
-            } catch (IOException ignored) {
-                // The channel close below also releases the OS lock.
-            }
-        }
-
+    private static void cleanupStagingCreation(Path stagingPath, Path lockPath, FileChannel channel) {
         if (channel != null) {
             try {
                 channel.close();
@@ -131,61 +130,20 @@ final class CacheFiles {
         }
     }
 
-    static final class StagingDirectory implements AutoCloseable {
-
-        private final Path path;
-        private final Path lockPath;
-        private final FileChannel channel;
-        private final FileLock lock;
-        private boolean closed;
-
-        private StagingDirectory(Path path, Path lockPath, FileChannel channel, FileLock lock) {
-            this.path = path;
-            this.lockPath = lockPath;
-            this.channel = channel;
-            this.lock = lock;
-        }
-
-        Path path() {
-            return path;
-        }
-
-        Path lockPath() {
-            return lockPath;
-        }
+    record StagingDirectory(Path path, Path lockPath, FileChannel channel) implements AutoCloseable {
 
         @Override
         public void close() {
-            if (closed) {
-                return;
-            }
-
-            closed = true;
-            IOException failure = null;
-            try {
-                lock.release();
-            } catch (IOException e) {
-                failure = e;
-            }
-
             try {
                 channel.close();
             } catch (IOException e) {
-                if (failure == null) {
-                    failure = e;
-                }
+                throw new UncheckedIOException("Could not close cache staging lock '" + lockPath + "'", e);
             }
 
             try {
                 Files.deleteIfExists(lockPath);
             } catch (IOException e) {
-                if (failure == null) {
-                    failure = e;
-                }
-            }
-
-            if (failure != null) {
-                throw new UncheckedIOException("Could not close cache staging lock '" + lockPath + "'", failure);
+                throw new UncheckedIOException("Could not close cache staging lock '" + lockPath + "'", e);
             }
         }
     }
@@ -301,19 +259,14 @@ final class CacheFiles {
         }
     }
 
-    static void deleteUnlockedStagingDirectories(Path parent) {
+    static void deleteUnlockedStagingLocks(Path parent) {
         if (!Files.isDirectory(parent)) {
             return;
         }
 
-        try (DirectoryStream<Path> children = Files.newDirectoryStream(parent)) {
-            for (Path child : children) {
-                String name = child.getFileName().toString();
-                if (!Files.isDirectory(child) || !name.startsWith(".") || !name.contains(".tmp-")) {
-                    continue;
-                }
-
-                deleteIfUnlockedStaging(child);
+        try (DirectoryStream<Path> locks = Files.newDirectoryStream(parent, ".*.tmp-*.lock")) {
+            for (Path lock : locks) {
+                deleteIfUnlockedStagingLock(lock);
             }
         } catch (IOException e) {
             throw new UncheckedIOException("Could not clean cache staging directories below '" + parent + "'",
@@ -321,11 +274,9 @@ final class CacheFiles {
         }
     }
 
-    private static void deleteIfUnlockedStaging(Path stagingPath) {
-        var lockPath = stagingPath.resolveSibling(stagingPath.getFileName() + ".lock");
-        boolean acquired = false;
+    private static void deleteIfUnlockedStagingLock(Path lockPath) {
         try {
-            try (var channel = FileChannel.open(lockPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
+            try (var channel = FileChannel.open(lockPath, StandardOpenOption.WRITE)) {
                 FileLock lock;
                 try {
                     lock = channel.tryLock();
@@ -337,23 +288,15 @@ final class CacheFiles {
                     return;
                 }
 
-                acquired = true;
                 try (lock) {
-                    delete(stagingPath);
+                    delete(lockPath.resolveSibling(removeLockSuffix(lockPath.getFileName().toString())));
                 }
             }
+            Files.deleteIfExists(lockPath);
         } catch (NoSuchFileException e) {
             // Another cleanup or publisher already removed the candidate.
         } catch (IOException e) {
             throw new UncheckedIOException("Could not inspect cache staging lock '" + lockPath + "'", e);
-        } finally {
-            if (acquired) {
-                try {
-                    Files.deleteIfExists(lockPath);
-                } catch (IOException e) {
-                    throw new UncheckedIOException("Could not delete cache staging lock '" + lockPath + "'", e);
-                }
-            }
         }
     }
 
