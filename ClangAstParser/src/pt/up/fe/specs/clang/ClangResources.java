@@ -23,45 +23,29 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
-import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
 import pt.up.fe.specs.util.system.ProcessOutputAsString;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UncheckedIOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.security.DigestInputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HexFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClangResources {
 
-    private static final Map<String, ClangFiles> CLANG_FILES_CACHE = new ConcurrentHashMap<>();
-    private static final Map<String, Object> CLANG_FILES_LOCKS = new ConcurrentHashMap<>();
-    private final static String CLANG_FOLDERNAME = "clang_ast_exe";
-    private final static String INCLUDES_FOLDERNAME = "includes";
-    private final static String LAST_USED_FILENAME = "last-used.txt";
-    private final static String CACHE_LOCK_FOLDERNAME = ".cache.lock";
-    private final static String CACHE_LOCK_OWNER_PREFIX = "owner-";
-    private final static Duration CACHE_LOCK_RETRY_INTERVAL = Duration.ofMillis(100);
-    private final static Duration CACHE_LOCK_STALE_MAX_AGE = Duration.ofMinutes(5);
-    private final static Duration STALE_CACHE_MAX_AGE = Duration.ofDays(60);
+    private static final Map<String, CachedClangFiles> CLANG_FILES_CACHE = new ConcurrentHashMap<>();
+    private static final String CLANG_FOLDERNAME = "clang_ast_exe";
+    private static final String RELEASES_FOLDERNAME = "releases";
+    private static final String INCLUDES_FOLDERNAME = "includes";
+    private static final Duration STALE_CACHE_MAX_AGE = Duration.ofDays(60);
+    private static final Duration STALE_STAGING_MAX_AGE = Duration.ofHours(1);
 
     private static final Map<String, Boolean> HAS_LIBC = new ConcurrentHashMap<>();
 
@@ -73,19 +57,35 @@ public class ClangResources {
 
     public File getBuiltinCudaLib() {
         var cudaResourceFolder = SpecsIo.mkdir(options.get(CodeParser.DUMPER_FOLDER), "cuda");
-        var cudaFolder = SpecsIo.mkdir(cudaResourceFolder, "cudalib");
-        var zipFile = ClangAstWebResource.CUDA_LIB.writeVersioned(cudaResourceFolder, ClangResources.class);
+        var cudaFolder = new File(cudaResourceFolder, "cudalib");
+        var zipFile = CacheFiles.installFile(new File(cudaResourceFolder, ClangAstWebResource.CUDA_LIB_FILENAME),
+                ClangAstWebResource.CUDA_LIB, null, "built-in CUDA archive");
 
-        if (zipFile.isNewFile() || !isCudaInstallation(cudaFolder)) {
-            SpecsIo.deleteFolderContents(cudaFolder);
-            SpecsIo.extractZip(zipFile.getFile(), cudaFolder);
+        if (isCudaInstallation(cudaFolder)) {
+            return cudaFolder;
         }
 
-        return cudaFolder;
+        if (cudaFolder.exists()) {
+            CacheFiles.delete(cudaFolder.toPath());
+        }
+
+        var stagingFolder = CacheFiles.createStagingDirectory(cudaResourceFolder.toPath(), ".cudalib.tmp-");
+        try {
+            if (!SpecsIo.extractZip(zipFile, stagingFolder.toFile()) || !isCudaInstallation(stagingFolder.toFile())) {
+                throw new RuntimeException("Built-in CUDA archive did not contain a valid CUDA installation");
+            }
+
+            return CacheFiles.publish(stagingFolder, cudaFolder.toPath()).toFile();
+        } finally {
+            CacheFiles.delete(stagingFolder);
+        }
     }
 
     private static boolean isCudaInstallation(File folder) {
-        return folder.isDirectory() && new File(folder, "include/cuda_runtime.h").isFile();
+        return folder.isDirectory()
+                && new File(folder, "include/cuda.h").isFile()
+                && new File(folder, "include/cuda_runtime.h").isFile()
+                && new File(folder, "nvvm/libdevice/libdevice.10.bc").isFile();
     }
 
     public ClangFiles getClangFiles(LibcMode libcMode) {
@@ -100,40 +100,47 @@ public class ClangResources {
         var resourceFolder = getClangResourceFolder();
         var key = libcMode.name() + "_" + useBuiltinCuda + "_" + source + "_"
                 + resourceFolder.getAbsolutePath();
-        var jvmLock = CLANG_FILES_LOCKS.computeIfAbsent(resourceFolder.getAbsolutePath(), ignored -> new Object());
-        synchronized (jvmLock) {
-            var lockFolder = getCacheLockFolder(resourceFolder);
-            try (var ignored = acquireCacheLock(resourceFolder)) {
-                var files = CLANG_FILES_CACHE.get(key);
-                if (files != null) {
-                    if (files.clangExecutable().isFile()) {
-                        writeLastUsed(resourceFolder, Instant.now());
-                        SpecsLogs.debug(() -> "Using cached version of Clang files: " + files);
-                        return files;
-                    }
+        var cached = CLANG_FILES_CACHE.get(key);
+        if (isUsable(cached)) {
+            touchUse(resourceFolder, cached.includesFolder());
+            SpecsLogs.debug(() -> "Using cached version of Clang files: " + cached.files());
+            return cached.files();
+        }
 
-                    CLANG_FILES_CACHE.remove(key, files);
-                }
+        if (cached != null) {
+            CLANG_FILES_CACHE.remove(key, cached);
+        }
 
-                var manifest = ClangAstWebResource.getManifest(resourceFolder);
-                File clangExecutable = prepareResources(manifest, resourceFolder);
-                List<String> builtinIncludes = prepareIncludes(manifest, resourceFolder, clangExecutable, libcMode);
+        var manifest = ClangAstWebResource.getManifest(resourceFolder);
+        File clangExecutable = prepareResources(manifest, resourceFolder);
+        var includes = prepareIncludes(manifest, clangExecutable, libcMode);
 
-                if (useBuiltinCuda) {
-                    getBuiltinCudaLib();
-                }
+        if (useBuiltinCuda) {
+            getBuiltinCudaLib();
+        }
 
-                validateTopLevelCacheFiles(manifest, resourceFolder);
-                updateLastUsedAndCleanupStaleVersions(resourceFolder);
+        touchUse(resourceFolder, includes.extractedFolder());
+        updateLastUsedAndCleanupStaleVersions(resourceFolder, includes.extractedFolder());
 
-                var newFiles = new ClangFiles(clangExecutable, builtinIncludes);
-                SpecsLogs.debug(() -> "Using downloaded version of Clang files: " + newFiles);
+        var newFiles = new CachedClangFiles(new ClangFiles(clangExecutable, includes.folders()),
+                includes.extractedFolder());
+        var existingFiles = CLANG_FILES_CACHE.putIfAbsent(key, newFiles);
+        var selectedFiles = existingFiles == null ? newFiles : existingFiles;
+        touchUse(resourceFolder, selectedFiles.includesFolder());
+        SpecsLogs.debug(() -> "Using downloaded version of Clang files: " + selectedFiles.files());
+        return selectedFiles.files();
+    }
 
-                CLANG_FILES_CACHE.put(key, newFiles);
-                return newFiles;
-            } catch (IOException e) {
-                throw new UncheckedIOException("Could not lock clang-dumper cache '" + lockFolder + "'", e);
-            }
+    private static boolean isUsable(CachedClangFiles cached) {
+        return cached != null
+                && cached.files().clangExecutable().isFile()
+                && (cached.includesFolder() == null || isIncludesCacheValid(cached.includesFolder()));
+    }
+
+    private static void touchUse(File resourceFolder, File includesFolder) {
+        CacheFiles.touch(resourceFolder.toPath());
+        if (includesFolder != null) {
+            CacheFiles.touch(includesFolder.toPath());
         }
     }
 
@@ -163,17 +170,20 @@ public class ClangResources {
         SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
 
         var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
-        ResourceWriteData executable = downloadAsset(manifest, executableKind, resourceFolder);
+        var asset = getCurrentAsset(manifest, executableKind);
+        File executable = CacheFiles.installFile(new File(resourceFolder, asset.filename()),
+                ClangAstWebResource.getAssetResource(asset), asset.sha256(),
+                "clang-dumper asset '" + asset.filename() + "'");
 
         if (platform.isWindows()) {
-            unblockWindowsFile(executable.getFile());
+            unblockWindowsFile(executable);
         }
 
-        if (executable.isNewFile() && (platform.isLinux() || platform.isMacOs())) {
-            SpecsSystem.runProcess(Arrays.asList("chmod", "+x", executable.getFile().getAbsolutePath()), false, true);
+        if (platform.isLinux() || platform.isMacOs()) {
+            SpecsSystem.runProcess(Arrays.asList("chmod", "+x", executable.getAbsolutePath()), false, true);
         }
 
-        return executable.getFile();
+        return executable;
     }
 
     private void unblockWindowsFile(File executable) {
@@ -196,11 +206,29 @@ public class ClangResources {
     }
 
     public File getClangResourceFolder() {
-        return SpecsIo.mkdir(options.get(CodeParser.DUMPER_FOLDER), ClangAstWebResource.getReleaseTag());
+        var releaseFolder = SpecsIo.mkdir(getReleasesFolder(), ClangAstWebResource.getReleaseTag());
+        CacheFiles.touch(releaseFolder.toPath());
+        return releaseFolder;
     }
 
     public static File getDefaultTempFolder() {
         return SpecsIo.getTempFolder(CLANG_FOLDERNAME);
+    }
+
+    private File getReleasesFolder() {
+        return SpecsIo.mkdir(options.get(CodeParser.DUMPER_FOLDER), RELEASES_FOLDERNAME);
+    }
+
+    private File getIncludesRoot() {
+        return new File(options.get(CodeParser.DUMPER_FOLDER), INCLUDES_FOLDERNAME);
+    }
+
+    private File getIncludesFolder(String sha256) {
+        return getSharedIncludesFolder(options.get(CodeParser.DUMPER_FOLDER), sha256);
+    }
+
+    static File getSharedIncludesFolder(File cacheFolder, String sha256) {
+        return new File(new File(cacheFolder, INCLUDES_FOLDERNAME), sha256.toLowerCase(Locale.ROOT));
     }
 
     public static boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode) {
@@ -258,86 +286,105 @@ public class ClangResources {
         return SpecsSystem.runProcess(arguments, true, false);
     }
 
-    private List<String> prepareIncludes(ClangDumperManifest manifest, File resourceFolder, File clangExecutable,
-                                         LibcMode libcMode) {
+    private PreparedIncludes prepareIncludes(ClangDumperManifest manifest, File clangExecutable,
+                                             LibcMode libcMode) {
         var useBuiltinLibc = useBuiltinLibc(clangExecutable, libcMode);
         var useBuiltinCuda = options.get(CodeParser.CUDA_PATH).equalsIgnoreCase(CodeParser.getBuiltinOption());
 
         if (!useBuiltinLibc && !useBuiltinCuda) {
-            return List.of();
+            return new PreparedIncludes(List.of(), null);
         }
 
-        return prepareIncludes(manifest, resourceFolder);
-    }
-
-    private List<String> prepareIncludes(ClangDumperManifest manifest, File resourceFolder) {
-        var extractedFolder = prepareIncludesFolder(manifest, resourceFolder);
+        var extractedFolder = prepareIncludesFolder(manifest);
         var includeFolders = getIncludeFolders(extractedFolder);
         SpecsLogs.debug(() -> "Includes folders: " + includeFolders);
 
-        return includeFolders.stream().map(File::getAbsolutePath).toList();
+        return new PreparedIncludes(includeFolders.stream().map(File::getAbsolutePath).toList(), extractedFolder);
     }
 
-    private File prepareIncludesFolder(ClangDumperManifest manifest, File resourceFolder) {
+    private File prepareIncludesFolder(ClangDumperManifest manifest) {
         var includesAsset = getCurrentAsset(manifest, "includes");
-        var extractedFolder = new File(resourceFolder, INCLUDES_FOLDERNAME);
+        var extractedFolder = getIncludesFolder(includesAsset.sha256());
 
         if (isIncludesCacheValid(extractedFolder)) {
             return extractedFolder;
         }
 
-        ResourceWriteData zipFile = downloadAsset(includesAsset, resourceFolder);
-
+        var includesRoot = getIncludesRoot();
+        CacheFiles.deleteStaleStagingDirectories(includesRoot.toPath(),
+                Instant.now().minus(STALE_STAGING_MAX_AGE));
+        var stagingFolder = CacheFiles.createStagingDirectory(includesRoot.toPath(),
+                "." + includesAsset.sha256() + ".tmp-");
         try {
-            SpecsIo.mkdir(extractedFolder);
-            SpecsIo.deleteFolderContents(extractedFolder);
-            SpecsIo.extractZip(zipFile.getFile(), extractedFolder);
-        } finally {
-            SpecsIo.delete(zipFile.getFile());
-        }
+            var downloadFolder = CacheFiles.createStagingDirectory(stagingFolder, ".download-");
+            try {
+                var archive = ClangAstWebResource.getAssetResource(includesAsset).write(downloadFolder.toFile());
+                if (archive == null || !archive.isFile()) {
+                    throw new RuntimeException("Could not download clang-dumper includes archive '"
+                            + includesAsset.filename() + "'");
+                }
 
-        return extractedFolder;
+                if (!CacheFiles.hasExpectedSha256(archive, includesAsset.sha256())) {
+                    throw new RuntimeException("Downloaded clang-dumper asset '" + includesAsset.filename()
+                            + "' does not match expected SHA-256 '" + includesAsset.sha256() + "'");
+                }
+
+                if (!SpecsIo.extractZip(archive, stagingFolder.toFile())) {
+                    throw new RuntimeException("Could not extract clang-dumper includes archive '"
+                            + includesAsset.filename() + "'");
+                }
+            } finally {
+                CacheFiles.delete(downloadFolder);
+            }
+
+            getIncludeFolders(stagingFolder.toFile());
+            if (isIncludesCacheValid(extractedFolder)) {
+                CacheFiles.touch(extractedFolder.toPath());
+                return extractedFolder;
+            }
+
+            if (extractedFolder.exists()) {
+                CacheFiles.delete(extractedFolder.toPath());
+            }
+
+            var publishedFolder = CacheFiles.publish(stagingFolder, extractedFolder.toPath()).toFile();
+            if (!isIncludesCacheValid(publishedFolder)) {
+                throw new RuntimeException("Published clang-dumper includes are invalid: '" + publishedFolder + "'");
+            }
+
+            CacheFiles.touch(publishedFolder.toPath());
+            return publishedFolder;
+        } finally {
+            CacheFiles.delete(stagingFolder);
+        }
     }
 
-    private List<File> getIncludeFolders(File extractedFolder) {
+    static List<File> getIncludeFolders(File extractedFolder) {
+        if (!extractedFolder.isDirectory()) {
+            throw new RuntimeException("Could not find extracted clang-dumper includes folder '" + extractedFolder + "'");
+        }
+
         var entrypointsFile = new File(extractedFolder, "entrypoints.txt");
         if (!entrypointsFile.isFile()) {
             throw new RuntimeException("Could not find include archive entrypoints file '" + entrypointsFile + "'");
         }
 
-        return SpecsIo.read(entrypointsFile).lines()
+        Path root = extractedFolder.toPath().toAbsolutePath().normalize();
+        var includeFolders = new ArrayList<File>();
+        var entrypoints = SpecsIo.read(entrypointsFile).lines()
                 .map(String::trim)
-                .filter(line -> !line.isEmpty())
-                .map(line -> new File(extractedFolder, line))
+                .filter(value -> !value.isEmpty())
                 .toList();
-    }
+        for (String line : entrypoints) {
+            Path includeFolder = root.resolve(line).normalize();
+            if (!includeFolder.startsWith(root) || !Files.isDirectory(includeFolder)) {
+                throw new RuntimeException("Include archive entrypoint is not a usable directory: '" + line + "'");
+            }
 
-    private ResourceWriteData downloadAsset(ClangDumperManifest manifest, String kind, File resourceFolder) {
-        var asset = getCurrentAsset(manifest, kind);
-        return downloadAsset(asset, resourceFolder);
-    }
-
-    private ResourceWriteData downloadAsset(ClangDumperManifestAsset asset, File resourceFolder) {
-        var resource = ClangAstWebResource.getAssetResource(asset);
-        var writeData = resource.writeVersioned(resourceFolder, ClangResources.class);
-
-        if (!writeData.isNewFile()) {
-            return writeData;
+            includeFolders.add(includeFolder.toFile());
         }
 
-        if (!hasExpectedSha256(writeData.getFile(), asset)) {
-            SpecsLogs.info("Downloaded clang-dumper asset '" + asset.filename()
-                    + "' does not match the expected checksum, downloading it again.");
-            SpecsIo.delete(writeData.getFile());
-            writeData = resource.writeVersioned(resourceFolder, ClangResources.class);
-        }
-
-        if (!hasExpectedSha256(writeData.getFile(), asset)) {
-            throw new RuntimeException("Downloaded clang-dumper asset '" + asset.filename()
-                    + "' does not match expected SHA-256 '" + asset.sha256() + "'");
-        }
-
-        return writeData;
+        return includeFolders;
     }
 
     private ClangDumperManifestAsset getCurrentAsset(ClangDumperManifest manifest, String kind) {
@@ -347,317 +394,41 @@ public class ClangResources {
     }
 
     static boolean isIncludesCacheValid(File includesFolder) {
-
-        if (!includesFolder.isDirectory()) {
+        try {
+            getIncludeFolders(includesFolder);
+            return true;
+        } catch (RuntimeException e) {
+            SpecsLogs.info("Cached clang-dumper includes are invalid: " + includesFolder);
             return false;
-        }
-
-        var entrypointsFile = new File(includesFolder, "entrypoints.txt");
-        if (!entrypointsFile.isFile()) {
-            SpecsLogs.info("Cached clang-dumper includes are missing entrypoints, extracting them again.");
-            return false;
-        }
-
-        return true;
-    }
-
-    private void validateTopLevelCacheFiles(ClangDumperManifest manifest, File resourceFolder) {
-        var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
-        Set<String> expectedNames = Set.of(
-                ClangAstWebResource.MANIFEST_FILENAME,
-                getCurrentAsset(manifest, executableKind).filename(),
-                INCLUDES_FOLDERNAME,
-                LAST_USED_FILENAME);
-
-        var files = resourceFolder.listFiles();
-        if (files == null) {
-            return;
-        }
-
-        for (var file : files) {
-            if (expectedNames.contains(file.getName())) {
-                continue;
-            }
-
-            SpecsLogs.info("Deleting unexpected file from clang-dumper cache: " + file);
-            SpecsIo.delete(file);
         }
     }
 
-    private void updateLastUsedAndCleanupStaleVersions(File resourceFolder) {
+    private void updateLastUsedAndCleanupStaleVersions(File resourceFolder, File includesFolder) {
         var now = Instant.now();
-        writeLastUsed(resourceFolder, now);
+        touchUse(resourceFolder, includesFolder);
 
-        var staleCleanup = new Thread(() -> deleteStaleVersions(now, resourceFolder),
+        var staleCleanup = new Thread(() -> deleteStaleVersions(now, resourceFolder, includesFolder),
                 "clang-dumper-stale-cache-cleanup");
         staleCleanup.setDaemon(true);
         staleCleanup.start();
     }
 
-    private static void writeLastUsed(File resourceFolder, Instant timestamp) {
-        writeTimestamp(new File(resourceFolder, LAST_USED_FILENAME), timestamp);
-    }
-
-    private static void writeTimestamp(File file, Instant timestamp) {
-        SpecsIo.write(file, timestamp.toString());
-    }
-
     void deleteStaleVersions(Instant now, File currentVersionFolder) {
-        File cacheBaseFolder = options.get(CodeParser.DUMPER_FOLDER);
-        var versions = cacheBaseFolder.listFiles(File::isDirectory);
-        if (versions == null) {
-            return;
-        }
-
-        for (var versionFolder : versions) {
-            if (versionFolder.getAbsoluteFile().equals(currentVersionFolder.getAbsoluteFile())) {
-                continue;
-            }
-
-            var jvmLock = CLANG_FILES_LOCKS.computeIfAbsent(versionFolder.getAbsolutePath(), ignored -> new Object());
-            try {
-                synchronized (jvmLock) {
-                    var lastUsedFile = new File(versionFolder, LAST_USED_FILENAME);
-                    if (!lastUsedFile.isFile()) {
-                        continue;
-                    }
-
-                    try (var lock = tryAcquireCacheLock(versionFolder)) {
-                        if (lock == null) {
-                            SpecsLogs.debug(() -> "Skipping locked clang-dumper cache folder: " + versionFolder);
-                            continue;
-                        }
-
-                        if (!lastUsedFile.isFile()) {
-                            continue;
-                        }
-
-                        var lastUsed = Instant.parse(SpecsIo.read(lastUsedFile).trim());
-                        if (lastUsed.isBefore(now.minus(STALE_CACHE_MAX_AGE))) {
-                            SpecsLogs.info("Deleting stale clang-dumper cache folder: " + versionFolder);
-                            SpecsIo.deleteFolder(versionFolder);
-                        }
-                    }
-                }
-            } catch (IOException | RuntimeException e) {
-                SpecsLogs.warn("Could not inspect clang-dumper cache folder '" + versionFolder + "'", e);
-            }
-        }
+        deleteStaleVersions(now, currentVersionFolder, null);
     }
 
-    static CacheLock acquireCacheLock(File versionFolder) throws IOException {
-        return acquireCacheLock(versionFolder, true);
-    }
-
-    private static CacheLock tryAcquireCacheLock(File versionFolder) throws IOException {
-        return acquireCacheLock(versionFolder, false);
-    }
-
-    private static CacheLock acquireCacheLock(File versionFolder, boolean wait) throws IOException {
-        var lockFolder = getCacheLockFolder(versionFolder);
-        Files.createDirectories(lockFolder.getParentFile().toPath());
-
-        while (true) {
-            try {
-                Files.createDirectory(lockFolder.toPath());
-            } catch (FileAlreadyExistsException e) {
-                if (!isCacheLockStale(lockFolder)) {
-                    if (!wait) {
-                        return null;
-                    }
-
-                    waitForCacheLock();
-                    continue;
-                }
-
-                recoverStaleCacheLock(lockFolder);
-                continue;
-            }
-
-            var ownerFile = new File(lockFolder, CACHE_LOCK_OWNER_PREFIX + UUID.randomUUID());
-            try {
-                Files.writeString(ownerFile.toPath(), getProcessIdentity(), StandardOpenOption.CREATE_NEW,
-                        StandardOpenOption.WRITE);
-            } catch (NoSuchFileException e) {
-                // Stale-lock recovery removed the directory while this process was claiming it.
-                continue;
-            } catch (IOException e) {
-                deleteEmptyCacheLock(lockFolder);
-                throw e;
-            }
-
-            return new CacheLock(lockFolder, ownerFile);
-        }
-    }
-
-    /**
-     * Returns the temporary lock folder for a cache version.
-     *
-     * <p>The lock folder is outside the version folder because stale cleanup deletes that folder while holding the
-     * lock. The folder is removed when the lock is released, so normal operation leaves no lock artifact behind.</p>
-     */
-    static File getCacheLockFolder(File versionFolder) {
-        var absoluteVersionFolder = versionFolder.getAbsoluteFile();
-        return new File(absoluteVersionFolder.getParentFile(), absoluteVersionFolder.getName() + CACHE_LOCK_FOLDERNAME);
-    }
-
-    private static String getProcessIdentity() {
-        var process = ProcessHandle.current();
-        var startTime = process.info().startInstant().map(Instant::toString).orElse("");
-        return process.pid() + System.lineSeparator() + startTime;
-    }
-
-    private static boolean isCacheLockStale(File lockFolder) throws IOException {
-        if (!lockFolder.exists()) {
-            return true;
-        }
-
-        if (!lockFolder.isDirectory()) {
-            throw new IOException("Cache lock path is not a directory: '" + lockFolder + "'");
-        }
-
-        var ownerFiles = lockFolder.listFiles(File::isFile);
-        if (ownerFiles == null) {
-            if (!lockFolder.exists()) {
-                return true;
-            }
-
-            throw new IOException("Could not list cache lock folder: '" + lockFolder + "'");
-        }
-
-        if (ownerFiles.length == 0) {
-            return isCacheLockOld(lockFolder);
-        }
-
-        for (var ownerFile : ownerFiles) {
-            if (!isCacheLockOwnerStale(lockFolder, ownerFile)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private static boolean isCacheLockOwnerStale(File lockFolder, File ownerFile) throws IOException {
-        List<String> lines;
+    private void deleteStaleVersions(Instant now, File currentVersionFolder, File currentIncludesFolder) {
+        var cutoff = now.minus(STALE_CACHE_MAX_AGE);
         try {
-            lines = Files.readAllLines(ownerFile.toPath());
-        } catch (NoSuchFileException e) {
-            return true;
-        }
-
-        if (lines.isEmpty()) {
-            return isCacheLockOld(lockFolder);
-        }
-
-        try {
-            var pid = Long.parseLong(lines.get(0).trim());
-            var process = ProcessHandle.of(pid);
-            if (process.isEmpty() || !process.get().isAlive()) {
-                return true;
-            }
-
-            if (lines.size() > 1 && !lines.get(1).isBlank()) {
-                var processStart = process.get().info().startInstant();
-                if (processStart.isPresent() && !processStart.get().toString().equals(lines.get(1).trim())) {
-                    return true;
-                }
-            }
-
-            return false;
-        } catch (NumberFormatException e) {
-            return isCacheLockOld(lockFolder);
-        }
-    }
-
-    private static boolean isCacheLockOld(File lockFolder) throws IOException {
-        try {
-            return Files.getLastModifiedTime(lockFolder.toPath()).toInstant()
-                    .isBefore(Instant.now().minus(CACHE_LOCK_STALE_MAX_AGE));
-        } catch (NoSuchFileException e) {
-            return true;
-        }
-    }
-
-    private static void waitForCacheLock() throws IOException {
-        try {
-            Thread.sleep(CACHE_LOCK_RETRY_INTERVAL.toMillis());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new IOException("Interrupted while waiting for clang-dumper cache lock", e);
-        }
-    }
-
-    private static void recoverStaleCacheLock(File lockFolder) throws IOException {
-        if (!lockFolder.isDirectory()) {
-            return;
-        }
-
-        var ownerFiles = lockFolder.listFiles(File::isFile);
-        if (ownerFiles == null) {
-            return;
-        }
-
-        for (var ownerFile : ownerFiles) {
-            if (isCacheLockOwnerStale(lockFolder, ownerFile)) {
-                Files.deleteIfExists(ownerFile.toPath());
-            }
-        }
-
-        deleteEmptyCacheLock(lockFolder);
-    }
-
-    private static void deleteEmptyCacheLock(File lockFolder) throws IOException {
-        try {
-            Files.deleteIfExists(lockFolder.toPath());
-        } catch (DirectoryNotEmptyException e) {
-            // A replacement owner claimed the lock while stale recovery was in progress.
-        }
-    }
-
-    /**
-     * A temporary claim on one cache version. Each claim has its own owner marker, so releasing an old claim cannot
-     * remove a newer claim created after stale-lock recovery.
-     */
-    static final class CacheLock implements AutoCloseable {
-
-        private final File lockFolder;
-        private final File ownerFile;
-
-        private CacheLock(File lockFolder, File ownerFile) {
-            this.lockFolder = lockFolder;
-            this.ownerFile = ownerFile;
-        }
-
-        File ownerFile() {
-            return ownerFile;
-        }
-
-        @Override
-        public void close() {
-            try {
-                Files.deleteIfExists(ownerFile.toPath());
-                deleteEmptyCacheLock(lockFolder);
-            } catch (IOException e) {
-                SpecsLogs.warn("Could not remove temporary clang-dumper cache lock '" + lockFolder + "'", e);
-            }
-        }
-    }
-
-    private static boolean hasExpectedSha256(File file, ClangDumperManifestAsset asset) {
-        return asset.sha256().equalsIgnoreCase(calculateSha256(file));
-    }
-
-    private static String calculateSha256(File file) {
-        try {
-            var digest = MessageDigest.getInstance("SHA-256");
-            try (var inputStream = new DigestInputStream(Files.newInputStream(file.toPath()), digest)) {
-                inputStream.transferTo(OutputStream.nullOutputStream());
-            }
-
-            return HexFormat.of().formatHex(digest.digest());
-        } catch (IOException | NoSuchAlgorithmException e) {
-            throw new RuntimeException("Could not calculate SHA-256 for file '" + file + "'", e);
+            CacheFiles.deleteStaleDirectories(getReleasesFolder().toPath(), cutoff, currentVersionFolder.toPath());
+            CacheFiles.deleteStaleDirectories(getIncludesRoot().toPath(), cutoff,
+                    currentIncludesFolder == null ? null : currentIncludesFolder.toPath());
+            CacheFiles.deleteStaleStagingDirectories(getReleasesFolder().toPath(),
+                    now.minus(STALE_STAGING_MAX_AGE));
+            CacheFiles.deleteStaleStagingDirectories(getIncludesRoot().toPath(),
+                    now.minus(STALE_STAGING_MAX_AGE));
+        } catch (RuntimeException e) {
+            SpecsLogs.warn("Could not clean stale clang-dumper cache resources", e);
         }
     }
 
@@ -693,4 +464,9 @@ public class ClangResources {
         throw new RuntimeException("Unsupported architecture for clang-dumper: " + osArch);
     }
 
+    private record PreparedIncludes(List<String> folders, File extractedFolder) {
+    }
+
+    private record CachedClangFiles(ClangFiles files, File includesFolder) {
+    }
 }
