@@ -23,6 +23,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.system.ProcessOutputAsString;
 
 import java.io.File;
@@ -57,35 +58,19 @@ public class ClangResources {
 
     public File getBuiltinCudaLib() {
         var cudaResourceFolder = SpecsIo.mkdir(options.get(CodeParser.DUMPER_FOLDER), "cuda");
-        var cudaFolder = new File(cudaResourceFolder, "cudalib");
-        var zipFile = CacheFiles.installFile(new File(cudaResourceFolder, ClangAstWebResource.CUDA_LIB_FILENAME),
-                ClangAstWebResource.CUDA_LIB, null, "built-in CUDA archive");
+        var cudaFolder = SpecsIo.mkdir(cudaResourceFolder, "cudalib");
+        var zipFile = ClangAstWebResource.CUDA_LIB.writeVersioned(cudaResourceFolder, ClangResources.class);
 
-        if (isCudaInstallation(cudaFolder)) {
-            return cudaFolder;
+        if (zipFile.isNewFile() || !isCudaInstallation(cudaFolder)) {
+            SpecsIo.deleteFolderContents(cudaFolder);
+            SpecsIo.extractZip(zipFile.getFile(), cudaFolder);
         }
 
-        if (cudaFolder.exists()) {
-            CacheFiles.delete(cudaFolder.toPath());
-        }
-
-        var stagingFolder = CacheFiles.createStagingDirectory(cudaResourceFolder.toPath(), ".cudalib.tmp-");
-        try {
-            if (!SpecsIo.extractZip(zipFile, stagingFolder.toFile()) || !isCudaInstallation(stagingFolder.toFile())) {
-                throw new RuntimeException("Built-in CUDA archive did not contain a valid CUDA installation");
-            }
-
-            return CacheFiles.publish(stagingFolder, cudaFolder.toPath()).toFile();
-        } finally {
-            CacheFiles.delete(stagingFolder);
-        }
+        return cudaFolder;
     }
 
     private static boolean isCudaInstallation(File folder) {
-        return folder.isDirectory()
-                && new File(folder, "include/cuda.h").isFile()
-                && new File(folder, "include/cuda_runtime.h").isFile()
-                && new File(folder, "nvvm/libdevice/libdevice.10.bc").isFile();
+        return folder.isDirectory() && new File(folder, "include/cuda_runtime.h").isFile();
     }
 
     public ClangFiles getClangFiles(LibcMode libcMode) {
@@ -101,8 +86,11 @@ public class ClangResources {
         var key = libcMode.name() + "_" + useBuiltinCuda + "_" + source + "_"
                 + resourceFolder.getAbsolutePath();
         var cached = CLANG_FILES_CACHE.get(key);
-        if (isUsable(cached)) {
+        if (cached != null) {
             touchUse(resourceFolder, cached.includesFolder());
+        }
+
+        if (isUsable(cached)) {
             SpecsLogs.debug(() -> "Using cached version of Clang files: " + cached.files());
             return cached.files();
         }
@@ -223,10 +211,6 @@ public class ClangResources {
         return new File(options.get(CodeParser.DUMPER_FOLDER), INCLUDES_FOLDERNAME);
     }
 
-    private File getIncludesFolder(String sha256) {
-        return getSharedIncludesFolder(options.get(CodeParser.DUMPER_FOLDER), sha256);
-    }
-
     static File getSharedIncludesFolder(File cacheFolder, String sha256) {
         return new File(new File(cacheFolder, INCLUDES_FOLDERNAME), sha256.toLowerCase(Locale.ROOT));
     }
@@ -304,21 +288,30 @@ public class ClangResources {
 
     private File prepareIncludesFolder(ClangDumperManifest manifest) {
         var includesAsset = getCurrentAsset(manifest, "includes");
-        var extractedFolder = getIncludesFolder(includesAsset.sha256());
+        return resolveIncludes(options.get(CodeParser.DUMPER_FOLDER), includesAsset,
+                ClangAstWebResource.getAssetResource(includesAsset));
+    }
 
-        if (isIncludesCacheValid(extractedFolder)) {
-            return extractedFolder;
+    static File resolveIncludes(File cacheFolder, ClangDumperManifestAsset includesAsset,
+                                FileResourceProvider archiveResource) {
+        var extractedFolder = getSharedIncludesFolder(cacheFolder, includesAsset.sha256());
+        if (extractedFolder.exists()) {
+            CacheFiles.touch(extractedFolder.toPath());
+            if (isIncludesCacheValid(extractedFolder)) {
+                return extractedFolder;
+            }
+
+            throw invalidIncludesCache(extractedFolder, includesAsset.sha256());
         }
 
-        var includesRoot = getIncludesRoot();
-        CacheFiles.deleteStaleStagingDirectories(includesRoot.toPath(),
-                Instant.now().minus(STALE_STAGING_MAX_AGE));
-        var stagingFolder = CacheFiles.createStagingDirectory(includesRoot.toPath(),
+        var includesRoot = extractedFolder.getParentFile().toPath();
+        CacheFiles.deleteStaleStagingDirectories(includesRoot, Instant.now().minus(STALE_STAGING_MAX_AGE));
+        var stagingFolder = CacheFiles.createStagingDirectory(includesRoot,
                 "." + includesAsset.sha256() + ".tmp-");
         try {
             var downloadFolder = CacheFiles.createStagingDirectory(stagingFolder, ".download-");
             try {
-                var archive = ClangAstWebResource.getAssetResource(includesAsset).write(downloadFolder.toFile());
+                var archive = archiveResource.write(downloadFolder.toFile());
                 if (archive == null || !archive.isFile()) {
                     throw new RuntimeException("Could not download clang-dumper includes archive '"
                             + includesAsset.filename() + "'");
@@ -338,25 +331,31 @@ public class ClangResources {
             }
 
             getIncludeFolders(stagingFolder.toFile());
-            if (isIncludesCacheValid(extractedFolder)) {
-                CacheFiles.touch(extractedFolder.toPath());
-                return extractedFolder;
-            }
-
             if (extractedFolder.exists()) {
-                CacheFiles.delete(extractedFolder.toPath());
+                CacheFiles.touch(extractedFolder.toPath());
+                if (isIncludesCacheValid(extractedFolder)) {
+                    return extractedFolder;
+                }
+
+                throw invalidIncludesCache(extractedFolder, includesAsset.sha256());
             }
 
             var publishedFolder = CacheFiles.publish(stagingFolder, extractedFolder.toPath()).toFile();
+            CacheFiles.touch(publishedFolder.toPath());
             if (!isIncludesCacheValid(publishedFolder)) {
-                throw new RuntimeException("Published clang-dumper includes are invalid: '" + publishedFolder + "'");
+                throw invalidIncludesCache(publishedFolder, includesAsset.sha256());
             }
 
-            CacheFiles.touch(publishedFolder.toPath());
             return publishedFolder;
         } finally {
             CacheFiles.delete(stagingFolder);
         }
+    }
+
+    private static RuntimeException invalidIncludesCache(File includesFolder, String sha256) {
+        return new RuntimeException("Invalid clang-dumper includes cache directory '"
+                + includesFolder.getAbsolutePath() + "' for SHA-256 '" + sha256
+                + "'; delete this directory manually to regenerate");
     }
 
     static List<File> getIncludeFolders(File extractedFolder) {
@@ -406,11 +405,7 @@ public class ClangResources {
     private void updateLastUsedAndCleanupStaleVersions(File resourceFolder, File includesFolder) {
         var now = Instant.now();
         touchUse(resourceFolder, includesFolder);
-
-        var staleCleanup = new Thread(() -> deleteStaleVersions(now, resourceFolder, includesFolder),
-                "clang-dumper-stale-cache-cleanup");
-        staleCleanup.setDaemon(true);
-        staleCleanup.start();
+        deleteStaleVersions(now, resourceFolder, includesFolder);
     }
 
     void deleteStaleVersions(Instant now, File currentVersionFolder) {
