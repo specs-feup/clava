@@ -273,7 +273,7 @@ public class ClangResourcesTest {
         var includesRoot = Files.createDirectories(tempFolder.resolve("includes"));
         var staging = CacheFiles.createStagingDirectory(includesRoot, ".sha.tmp-");
         try {
-            CacheFiles.deleteUnlockedStagingDirectories(includesRoot);
+            CacheFiles.deleteUnlockedStagingLocks(includesRoot);
             assertTrue(Files.exists(staging.path()));
             assertTrue(Files.exists(staging.lockPath()));
         } finally {
@@ -292,9 +292,20 @@ public class ClangResourcesTest {
         Files.createFile(lockPath);
 
         assertTrue(Files.exists(lockPath));
-        CacheFiles.deleteUnlockedStagingDirectories(includesRoot);
+        CacheFiles.deleteUnlockedStagingLocks(includesRoot);
 
         assertFalse(Files.exists(stagingPath));
+        assertFalse(Files.exists(lockPath));
+    }
+
+    @Test
+    public void orphanedStagingLocksAreCleaned() throws IOException {
+        var includesRoot = Files.createDirectories(tempFolder.resolve("includes"));
+        var lockPath = includesRoot.resolve(".orphan.tmp-123.lock");
+        Files.createFile(lockPath);
+
+        CacheFiles.deleteUnlockedStagingLocks(includesRoot);
+
         assertFalse(Files.exists(lockPath));
     }
 
