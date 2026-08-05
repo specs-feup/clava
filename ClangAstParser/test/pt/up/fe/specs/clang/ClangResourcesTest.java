@@ -210,7 +210,8 @@ public class ClangResourcesTest {
         var destination = tempFolder.resolve("release/tool").toFile();
 
         assertThrows(RuntimeException.class,
-                () -> CacheFiles.installFile(destination, copyingResource(source, writes), HELLO_SHA256, "test asset"));
+                () -> CacheFiles.installFile(tempFolder, destination, copyingResource(source, writes), HELLO_SHA256,
+                        "test asset"));
 
         assertEquals(1, writes.get());
         assertFalse(destination.exists());
@@ -228,7 +229,8 @@ public class ClangResourcesTest {
         var source = Files.writeString(tempFolder.resolve("source"), "new");
 
         assertEquals(destination,
-                CacheFiles.installFile(destination, copyingResource(source, writes), HELLO_SHA256, "test asset"));
+                CacheFiles.installFile(tempFolder, destination, copyingResource(source, writes), HELLO_SHA256,
+                        "test asset"));
         assertEquals(0, writes.get());
         assertEquals("cached", Files.readString(destination.toPath()));
     }
@@ -271,9 +273,9 @@ public class ClangResourcesTest {
     @Test
     public void activelyLockedStagingDirectoriesArePreserved() throws Exception {
         var includesRoot = Files.createDirectories(tempFolder.resolve("includes"));
-        var staging = CacheFiles.createStagingDirectory(includesRoot, ".sha.tmp-");
+        var staging = CacheFiles.createStagingDirectory(tempFolder, includesRoot, ".sha.tmp-");
         try {
-            CacheFiles.deleteUnlockedStagingLocks(includesRoot);
+            CacheFiles.deleteUnlockedStagingLocks(tempFolder, includesRoot);
             assertTrue(Files.exists(staging.path()));
             assertTrue(Files.exists(staging.lockPath()));
         } finally {
@@ -285,14 +287,14 @@ public class ClangResourcesTest {
     @Test
     public void unlockedStagingDirectoriesAreCleaned() throws Exception {
         var includesRoot = Files.createDirectories(tempFolder.resolve("includes"));
-        var staging = CacheFiles.createStagingDirectory(includesRoot, ".sha.tmp-");
+        var staging = CacheFiles.createStagingDirectory(tempFolder, includesRoot, ".sha.tmp-");
         var stagingPath = staging.path();
         var lockPath = staging.lockPath();
         staging.close();
         Files.createFile(lockPath);
 
         assertTrue(Files.exists(lockPath));
-        CacheFiles.deleteUnlockedStagingLocks(includesRoot);
+        CacheFiles.deleteUnlockedStagingLocks(tempFolder, includesRoot);
 
         assertFalse(Files.exists(stagingPath));
         assertFalse(Files.exists(lockPath));
@@ -304,7 +306,7 @@ public class ClangResourcesTest {
         var lockPath = includesRoot.resolve(".orphan.tmp-123.lock");
         Files.createFile(lockPath);
 
-        CacheFiles.deleteUnlockedStagingLocks(includesRoot);
+        CacheFiles.deleteUnlockedStagingLocks(tempFolder, includesRoot);
 
         assertFalse(Files.exists(lockPath));
     }

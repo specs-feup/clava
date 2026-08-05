@@ -71,7 +71,11 @@ final class CacheFiles {
         });
     }
 
-    static StagingDirectory createStagingDirectory(Path parent, String prefix) {
+    static StagingDirectory createStagingDirectory(Path cacheRoot, Path parent, String prefix) {
+        return withMaintenanceLock(cacheRoot, () -> createStagingDirectoryLocked(parent, prefix));
+    }
+
+    private static StagingDirectory createStagingDirectoryLocked(Path parent, String prefix) {
         Path lockPath;
         try {
             Files.createDirectories(parent);
@@ -148,13 +152,13 @@ final class CacheFiles {
         }
     }
 
-    static File installFile(File destination, FileResourceProvider resource, String expectedSha256,
+    static File installFile(Path cacheRoot, File destination, FileResourceProvider resource, String expectedSha256,
                             String description) {
         if (destination.isFile()) {
             return destination;
         }
 
-        var stagingDirectory = createStagingDirectory(destination.getParentFile().toPath(),
+        var stagingDirectory = createStagingDirectory(cacheRoot, destination.getParentFile().toPath(),
                 "." + destination.getName() + ".tmp-");
         try {
             File stagedFile = resource.write(stagingDirectory.path().toFile());
@@ -259,14 +263,14 @@ final class CacheFiles {
         }
     }
 
-    static void deleteUnlockedStagingLocks(Path parent) {
+    static void deleteUnlockedStagingLocks(Path cacheRoot, Path parent) {
         if (!Files.isDirectory(parent)) {
             return;
         }
 
         try (DirectoryStream<Path> locks = Files.newDirectoryStream(parent, ".*.tmp-*.lock")) {
             for (Path lock : locks) {
-                deleteIfUnlockedStagingLock(lock);
+                withMaintenanceLock(cacheRoot, () -> deleteIfUnlockedStagingLock(lock));
             }
         } catch (IOException e) {
             throw new UncheckedIOException("Could not clean cache staging directories below '" + parent + "'",

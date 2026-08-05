@@ -178,7 +178,8 @@ public class ClangResources {
 
         var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
         var asset = getCurrentAsset(manifest, executableKind);
-        File executable = CacheFiles.installFile(new File(resourceFolder, asset.filename()),
+        File executable = CacheFiles.installFile(options.get(CodeParser.DUMPER_FOLDER).toPath(),
+                new File(resourceFolder, asset.filename()),
                 ClangAstWebResource.getAssetResource(asset), asset.sha256(),
                 "clang-dumper asset '" + asset.filename() + "'");
 
@@ -323,8 +324,8 @@ public class ClangResources {
         }
 
         var includesRoot = extractedFolder.getParentFile().toPath();
-        CacheFiles.deleteUnlockedStagingLocks(includesRoot);
-        var stagingFolder = CacheFiles.createStagingDirectory(includesRoot,
+        CacheFiles.deleteUnlockedStagingLocks(cacheFolder.toPath(), includesRoot);
+        var stagingFolder = CacheFiles.createStagingDirectory(cacheFolder.toPath(), includesRoot,
                 "." + includesAsset.sha256() + ".tmp-");
         try {
             var downloadFolder = CacheFiles.createTemporaryDirectory(stagingFolder.path(), ".download-");
@@ -458,8 +459,8 @@ public class ClangResources {
                     currentVersionFolder.toPath());
             CacheFiles.deleteStaleDirectories(cacheRoot, getIncludesRoot().toPath(), cutoff,
                     currentIncludesFolder == null ? null : currentIncludesFolder.toPath());
-            CacheFiles.deleteUnlockedStagingLocks(getReleasesFolder().toPath());
-            CacheFiles.deleteUnlockedStagingLocks(getIncludesRoot().toPath());
+            CacheFiles.deleteUnlockedStagingLocks(cacheRoot, getReleasesFolder().toPath());
+            CacheFiles.deleteUnlockedStagingLocks(cacheRoot, getIncludesRoot().toPath());
         } catch (RuntimeException e) {
             SpecsLogs.warn("Could not clean stale clang-dumper cache resources", e);
         }
