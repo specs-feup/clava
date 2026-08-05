@@ -13,38 +13,45 @@
 
 package pt.up.fe.specs.clang;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifest;
+import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
+import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
+import pt.up.fe.specs.clang.ClangAstWebResource.Release;
+import pt.up.fe.specs.clang.codeparser.CodeParser;
+import pt.up.fe.specs.clang.dumper.ClangAstDumper;
+import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
+import pt.up.fe.specs.util.providers.FileResourceProvider;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.FileTime;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
-import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
-import pt.up.fe.specs.clang.ClangAstWebResource.Release;
-import pt.up.fe.specs.clang.codeparser.CodeParser;
-import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class ClangResourcesTest {
 
-    private static final Duration PROCESS_TIMEOUT = Duration.ofSeconds(10);
+    private static final Duration PROCESS_TIMEOUT = Duration.ofSeconds(30);
+    private static final String HELLO_SHA256 = "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824";
 
     @TempDir
     Path tempFolder;
@@ -72,7 +79,9 @@ public class ClangResourcesTest {
 
     @Test
     public void localBuildSelectsExpectedTool() throws IOException {
-        var toolName = SupportedPlatform.getCurrentPlatform().isWindows() ? "tool.exe" : "tool";
+        var toolName = ClangAstDumper.usePlugin()
+                ? System.mapLibraryName("plugin")
+                : SupportedPlatform.getCurrentPlatform().isWindows() ? "tool.exe" : "tool";
         var tool = tempFolder.resolve(toolName).toFile();
         assertTrue(tool.createNewFile());
 
@@ -85,11 +94,23 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void includesCacheValidationOnlyChecksRequiredFiles() throws IOException {
-        var includesFolder = tempFolder.resolve("includes");
-        assertFalse(ClangResources.isIncludesCacheValid(includesFolder.toFile()));
+    public void manifestValidationAndAssetSelectionArePreserved() {
+        var tool = asset("tool", "tool", "linux", "x64");
+        var plugin = asset("plugin", "plugin", "linux", "x64");
+        var manifest = new ClangDumperManifest(1, List.of(tool, plugin));
 
-        Files.createDirectory(includesFolder);
+        assertDoesNotThrow(manifest::validate);
+        assertEquals(tool, manifest.getAsset("linux", "x64", "tool"));
+        assertEquals(plugin, manifest.getAsset("linux", "x64", "plugin"));
+        assertEquals(HELLO_SHA256, tool.sha256());
+        assertThrows(RuntimeException.class, () -> manifest.getAsset("windows", "x64", "tool"));
+        assertThrows(RuntimeException.class, () -> new ClangDumperManifest(2, List.of(tool)).validate());
+        assertThrows(RuntimeException.class, () -> new ClangDumperManifest(1, List.of()).validate());
+    }
+
+    @Test
+    public void includesCacheValidationChecksEntrypointsButNotEveryFile() throws IOException {
+        var includesFolder = tempFolder.resolve("includes");
         assertFalse(ClangResources.isIncludesCacheValid(includesFolder.toFile()));
 
         Files.createDirectories(includesFolder.resolve("builtin"));
@@ -101,299 +122,140 @@ public class ClangResourcesTest {
 
         Files.writeString(includesFolder.resolve("builtin/header.h"), "modified");
         assertTrue(ClangResources.isIncludesCacheValid(includesFolder.toFile()));
+        Files.writeString(includesFolder.resolve("entrypoints.txt"), "missing\n");
+        assertFalse(ClangResources.isIncludesCacheValid(includesFolder.toFile()));
     }
 
     @Test
-    public void staleCacheCleanupSkipsLockedVersions() throws IOException {
-        var currentVersion = Files.createDirectory(tempFolder.resolve("current")).toFile();
-        var staleVersion = Files.createDirectory(tempFolder.resolve("stale")).toFile();
-        Files.writeString(staleVersion.toPath().resolve("last-used.txt"),
-                Instant.now().minus(Duration.ofDays(61)).toString());
+    public void entrypointsPreserveDeclaredIncludeOrder() throws IOException {
+        var includesFolder = Files.createDirectories(tempFolder.resolve("includes"));
+        var first = Files.createDirectories(includesFolder.resolve("first"));
+        var second = Files.createDirectories(includesFolder.resolve("second"));
+        Files.writeString(includesFolder.resolve("entrypoints.txt"), "second\nfirst\n");
 
-        var parser = CodeParser.newInstance();
-        parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
-        var resources = new ClangResources(parser);
+        assertEquals(List.of(second.toFile(), first.toFile()),
+                ClangResources.getIncludeFolders(includesFolder.toFile()));
+    }
 
-        try (var ignored = ClangResources.acquireCacheLock(staleVersion)) {
+    @Test
+    public void sharedIncludesAreAddressedOnlyBySha() throws IOException {
+        var sha = "a".repeat(64);
+        var sharedFolder = ClangResources.getSharedIncludesFolder(tempFolder.toFile(), sha);
+        Files.createDirectories(sharedFolder.toPath().resolve("builtin"));
+        Files.writeString(sharedFolder.toPath().resolve("entrypoints.txt"), "builtin\n");
 
-            resources.deleteStaleVersions(Instant.now(), currentVersion);
-            assertTrue(staleVersion.isDirectory());
+        var firstRelease = tempFolder.resolve("releases/v1").toFile();
+        var secondRelease = tempFolder.resolve("releases/v2").toFile();
+        assertNotEquals(firstRelease, secondRelease);
+        assertEquals(sharedFolder, ClangResources.getSharedIncludesFolder(tempFolder.toFile(), sha));
+        assertTrue(ClangResources.isIncludesCacheValid(sharedFolder));
+    }
+
+    @Test
+    public void corruptNewDownloadIsRejectedWithoutRetry() throws IOException {
+        var source = Files.writeString(tempFolder.resolve("source"), "bad");
+        var writes = new AtomicInteger();
+        var destination = tempFolder.resolve("release/tool").toFile();
+
+        assertThrows(RuntimeException.class,
+                () -> CacheFiles.installFile(destination, copyingResource(source, writes), HELLO_SHA256, "test asset"));
+
+        assertEquals(1, writes.get());
+        assertFalse(destination.exists());
+        try (var children = Files.list(destination.getParentFile().toPath())) {
+            assertTrue(children.noneMatch(path -> path.getFileName().toString().startsWith(".tool.tmp-")));
         }
-
-        assertFalse(ClangResources.getCacheLockFolder(staleVersion).exists());
-
-        resources.deleteStaleVersions(Instant.now(), currentVersion);
-        assertFalse(staleVersion.exists());
     }
 
     @Test
-    public void cacheLockSerializesConcurrentAcquisition() throws Exception {
-        var versionFolder = Files.createDirectory(tempFolder.resolve("version")).toFile();
-        var executor = Executors.newSingleThreadExecutor();
-        ClangResources.CacheLock firstLock = ClangResources.acquireCacheLock(versionFolder);
+    public void existingReleaseResourceIsReused() throws IOException {
+        var destination = tempFolder.resolve("release/tool").toFile();
+        Files.createDirectories(destination.toPath().getParent());
+        Files.writeString(destination.toPath(), "cached");
+        var writes = new AtomicInteger();
+        var source = Files.writeString(tempFolder.resolve("source"), "new");
+
+        assertEquals(destination,
+                CacheFiles.installFile(destination, copyingResource(source, writes), HELLO_SHA256, "test asset"));
+        assertEquals(0, writes.get());
+        assertEquals("cached", Files.readString(destination.toPath()));
+    }
+
+    @Test
+    public void concurrentPublicationLeavesOneValidIncludesTree() throws Exception {
+        var includesRoot = Files.createDirectories(tempFolder.resolve("includes"));
+        var sha = "b".repeat(64);
+        var finalFolder = includesRoot.resolve(sha);
+        var executor = Executors.newFixedThreadPool(4);
+        var futures = new ArrayList<Future<Path>>();
 
         try {
-            var secondLock = executor.submit(() -> ClangResources.acquireCacheLock(versionFolder));
-            assertFalse(secondLock.isDone());
+            for (int i = 0; i < 4; i++) {
+                futures.add(executor.submit(() -> publishTestIncludes(includesRoot, finalFolder, sha)));
+            }
 
-            firstLock.close();
-            firstLock = null;
-            try (var ignored = secondLock.get(10, TimeUnit.SECONDS)) {
-                assertTrue(versionFolder.isDirectory());
+            for (var future : futures) {
+                assertEquals(finalFolder, future.get(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS));
             }
         } finally {
-            if (firstLock != null) {
-                firstLock.close();
-            }
             executor.shutdownNow();
-            executor.awaitTermination(10, TimeUnit.SECONDS);
+            executor.awaitTermination(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
         }
 
-        assertFalse(ClangResources.getCacheLockFolder(versionFolder).exists());
+        assertTrue(ClangResources.isIncludesCacheValid(finalFolder.toFile()));
+        try (var children = Files.list(includesRoot)) {
+            assertTrue(children.noneMatch(path -> path.getFileName().toString().startsWith("." + sha + ".tmp-")));
+        }
     }
 
     @Test
-    public void cacheLockSerializesAcquisitionAcrossJvms() throws Exception {
-        var versionFolder = Files.createDirectory(tempFolder.resolve("version")).toFile();
-        var firstAcquired = tempFolder.resolve("first.acquired");
-        var firstRelease = tempFolder.resolve("first.release");
-        var secondAcquired = tempFolder.resolve("second.acquired");
-        var secondRelease = tempFolder.resolve("second.release");
-        var firstLog = tempFolder.resolve("first.log");
-        var secondLog = tempFolder.resolve("second.log");
+    public void abandonedStagingDirectoriesAreCleaned() throws IOException {
+        var includesRoot = Files.createDirectories(tempFolder.resolve("includes"));
+        var staging = CacheFiles.createStagingDirectory(includesRoot, ".sha.tmp-");
+        Files.setLastModifiedTime(staging, FileTime.from(Instant.now().minus(Duration.ofHours(2))));
 
-        Process first = startCacheLockProcess(versionFolder, firstAcquired, firstRelease, firstLog);
-        Process second = null;
-        try {
-            assertTrue(waitForFile(firstAcquired, PROCESS_TIMEOUT));
+        CacheFiles.deleteStaleStagingDirectories(includesRoot, Instant.now().minus(Duration.ofHours(1)));
 
-            second = startCacheLockProcess(versionFolder, secondAcquired, secondRelease, secondLog);
-            assertFalse(waitForFile(secondAcquired, Duration.ofMillis(750)),
-                    "A second JVM acquired a cache lock that was still held");
-
-            Files.createFile(firstRelease);
-            assertTrue(waitForFile(secondAcquired, PROCESS_TIMEOUT));
-
-            Files.createFile(secondRelease);
-            waitForProcess(first, firstLog);
-            waitForProcess(second, secondLog);
-        } finally {
-            releaseProcess(firstRelease);
-            releaseProcess(secondRelease);
-            stopProcess(first);
-            stopProcess(second);
-        }
-
-        assertFalse(ClangResources.getCacheLockFolder(versionFolder).exists());
+        assertFalse(Files.exists(staging));
     }
 
     @Test
-    public void cacheLockAllowsDifferentVersionsToProceedAcrossJvms() throws Exception {
-        var firstVersion = Files.createDirectory(tempFolder.resolve("version-1")).toFile();
-        var secondVersion = Files.createDirectory(tempFolder.resolve("version-2")).toFile();
-        var firstAcquired = tempFolder.resolve("first.acquired");
-        var firstRelease = tempFolder.resolve("first.release");
-        var secondAcquired = tempFolder.resolve("second.acquired");
-        var secondRelease = tempFolder.resolve("second.release");
-        var firstLog = tempFolder.resolve("first.log");
-        var secondLog = tempFolder.resolve("second.log");
-
-        Process first = startCacheLockProcess(firstVersion, firstAcquired, firstRelease, firstLog);
-        Process second = null;
-        try {
-            assertTrue(waitForFile(firstAcquired, PROCESS_TIMEOUT));
-
-            second = startCacheLockProcess(secondVersion, secondAcquired, secondRelease, secondLog);
-            assertTrue(waitForFile(secondAcquired, PROCESS_TIMEOUT),
-                    "A different dumper version was blocked by an unrelated cache lock");
-
-            Files.createFile(firstRelease);
-            Files.createFile(secondRelease);
-            waitForProcess(first, firstLog);
-            waitForProcess(second, secondLog);
-        } finally {
-            releaseProcess(firstRelease);
-            releaseProcess(secondRelease);
-            stopProcess(first);
-            stopProcess(second);
-        }
-
-        assertFalse(ClangResources.getCacheLockFolder(firstVersion).exists());
-        assertFalse(ClangResources.getCacheLockFolder(secondVersion).exists());
-    }
-
-    @Test
-    public void cacheLockRecoversAfterOwningJvmIsTerminated() throws Exception {
-        var versionFolder = Files.createDirectory(tempFolder.resolve("version")).toFile();
-        var firstAcquired = tempFolder.resolve("first.acquired");
-        var firstRelease = tempFolder.resolve("first.release");
-        var secondAcquired = tempFolder.resolve("second.acquired");
-        var secondRelease = tempFolder.resolve("second.release");
-        var firstLog = tempFolder.resolve("first.log");
-        var secondLog = tempFolder.resolve("second.log");
-
-        Process first = startCacheLockProcess(versionFolder, firstAcquired, firstRelease, firstLog);
-        Process second = null;
-        try {
-            assertTrue(waitForFile(firstAcquired, PROCESS_TIMEOUT));
-            first.destroyForcibly();
-            assertTrue(first.waitFor(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS));
-
-            second = startCacheLockProcess(versionFolder, secondAcquired, secondRelease, secondLog);
-            assertTrue(waitForFile(secondAcquired, PROCESS_TIMEOUT),
-                    "A cache lock left by a terminated JVM was not recovered");
-
-            Files.createFile(secondRelease);
-            waitForProcess(second, secondLog);
-        } finally {
-            releaseProcess(firstRelease);
-            releaseProcess(secondRelease);
-            stopProcess(first);
-            stopProcess(second);
-        }
-
-        assertFalse(ClangResources.getCacheLockFolder(versionFolder).exists());
-    }
-
-    @Test
-    public void cacheLockDoesNotTreatLiveOwnerAsStaleWhenDirectoryIsOld() throws Exception {
-        var versionFolder = Files.createDirectory(tempFolder.resolve("version")).toFile();
-        var lockFolder = ClangResources.getCacheLockFolder(versionFolder).toPath();
-        var secondAcquired = tempFolder.resolve("second.acquired");
-        var secondRelease = tempFolder.resolve("second.release");
-        var secondLog = tempFolder.resolve("second.log");
-
-        ClangResources.CacheLock first = ClangResources.acquireCacheLock(versionFolder);
-        Process second = null;
-        try {
-            Files.setLastModifiedTime(lockFolder, FileTime.from(Instant.now().minus(Duration.ofHours(1))));
-
-            second = startCacheLockProcess(versionFolder, secondAcquired, secondRelease, secondLog);
-            assertFalse(waitForFile(secondAcquired, Duration.ofMillis(750)),
-                    "A live cache-lock owner was incorrectly treated as stale");
-
-            first.close();
-            first = null;
-            assertTrue(waitForFile(secondAcquired, PROCESS_TIMEOUT));
-            Files.createFile(secondRelease);
-            waitForProcess(second, secondLog);
-        } finally {
-            if (first != null) {
-                first.close();
-            }
-            releaseProcess(secondRelease);
-            stopProcess(second);
-        }
-
-        assertFalse(lockFolder.toFile().exists());
-    }
-
-    @Test
-    public void cacheLockUsesProcessStartTimeWhenPidIsStillAlive() throws Exception {
-        var versionFolder = Files.createDirectory(tempFolder.resolve("version")).toFile();
-        var lockFolder = ClangResources.getCacheLockFolder(versionFolder).toPath();
-        Files.createDirectory(lockFolder);
-        assumeTrue(ProcessHandle.current().info().startInstant().isPresent(),
-                "The current platform does not expose process start times");
-        Files.writeString(lockFolder.resolve("owner"),
-                ProcessHandle.current().pid() + System.lineSeparator() + Instant.EPOCH + System.lineSeparator());
-
-        var acquired = tempFolder.resolve("acquired");
-        var release = tempFolder.resolve("release");
-        var log = tempFolder.resolve("child.log");
-        Process child = startCacheLockProcess(versionFolder, acquired, release, log);
-        try {
-            assertTrue(waitForFile(acquired, PROCESS_TIMEOUT),
-                    "A lock with a reused PID and a different process start time was not recovered");
-            Files.createFile(release);
-            waitForProcess(child, log);
-        } finally {
-            releaseProcess(release);
-            stopProcess(child);
-        }
-
-        assertFalse(lockFolder.toFile().exists());
-    }
-
-    @Test
-    public void cacheLockRecoversAnOldOwnerlessLock() throws Exception {
-        var versionFolder = Files.createDirectory(tempFolder.resolve("version")).toFile();
-        var lockFolder = ClangResources.getCacheLockFolder(versionFolder).toPath();
-        Files.createDirectory(lockFolder);
-        Files.setLastModifiedTime(lockFolder, FileTime.from(Instant.now().minus(Duration.ofHours(1))));
-
-        var acquired = tempFolder.resolve("acquired");
-        var release = tempFolder.resolve("release");
-        var log = tempFolder.resolve("child.log");
-        Process child = startCacheLockProcess(versionFolder, acquired, release, log);
-        try {
-            assertTrue(waitForFile(acquired, PROCESS_TIMEOUT), "An old ownerless cache lock was not recovered");
-            Files.createFile(release);
-            waitForProcess(child, log);
-        } finally {
-            releaseProcess(release);
-            stopProcess(child);
-        }
-
-        assertFalse(lockFolder.toFile().exists());
-    }
-
-    @Test
-    public void cacheLockDoesNotStealARecentOwnerlessLock() throws Exception {
-        var versionFolder = Files.createDirectory(tempFolder.resolve("version")).toFile();
-        var lockFolder = ClangResources.getCacheLockFolder(versionFolder).toPath();
-        Files.createDirectory(lockFolder);
-
-        var acquired = tempFolder.resolve("acquired");
-        var release = tempFolder.resolve("release");
-        var log = tempFolder.resolve("child.log");
-        Process child = startCacheLockProcess(versionFolder, acquired, release, log);
-        try {
-            assertFalse(waitForFile(acquired, Duration.ofMillis(750)),
-                    "A lock without owner metadata was stolen before its claim was old enough");
-
-            Files.delete(lockFolder);
-            assertTrue(waitForFile(acquired, PROCESS_TIMEOUT));
-            Files.createFile(release);
-            waitForProcess(child, log);
-        } finally {
-            releaseProcess(release);
-            stopProcess(child);
-        }
-
-        assertFalse(lockFolder.toFile().exists());
-    }
-
-    @Test
-    public void staleCacheCleanupSkipsLockedVersionAcrossJvms() throws Exception {
-        var currentVersion = Files.createDirectory(tempFolder.resolve("current")).toFile();
-        var staleVersion = Files.createDirectory(tempFolder.resolve("stale")).toFile();
-        Files.writeString(staleVersion.toPath().resolve("last-used.txt"),
-                Instant.now().minus(Duration.ofDays(61)).toString());
-
-        var acquired = tempFolder.resolve("acquired");
-        var release = tempFolder.resolve("release");
-        var log = tempFolder.resolve("child.log");
-        Process child = startCacheLockProcess(staleVersion, acquired, release, log);
-        try {
-            assertTrue(waitForFile(acquired, PROCESS_TIMEOUT));
-
-            var parser = CodeParser.newInstance();
-            parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
-            new ClangResources(parser).deleteStaleVersions(Instant.now(), currentVersion);
-            assertTrue(staleVersion.isDirectory(), "Stale cleanup deleted a version locked by another JVM");
-
-            Files.createFile(release);
-            waitForProcess(child, log);
-        } finally {
-            releaseProcess(release);
-            stopProcess(child);
-        }
+    public void staleReleaseAndSharedIncludesAreRemovedAfterSixtyDays() throws IOException {
+        var releases = Files.createDirectories(tempFolder.resolve("releases"));
+        var current = Files.createDirectories(releases.resolve("current"));
+        var staleRelease = Files.createDirectories(releases.resolve("stale"));
+        var staleIncludes = Files.createDirectories(
+                ClangResources.getSharedIncludesFolder(tempFolder.toFile(), "c".repeat(64)).toPath().resolve("builtin"));
+        Files.writeString(staleIncludes.getParent().resolve("entrypoints.txt"), "builtin\n");
+        var old = FileTime.from(Instant.now().minus(Duration.ofDays(61)));
+        Files.setLastModifiedTime(staleRelease, old);
+        Files.setLastModifiedTime(staleIncludes.getParent(), old);
 
         var parser = CodeParser.newInstance();
         parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
-        new ClangResources(parser).deleteStaleVersions(Instant.now(), currentVersion);
-        assertFalse(staleVersion.exists());
+        new ClangResources(parser).deleteStaleVersions(Instant.now(), current.toFile());
+
+        assertTrue(Files.exists(current));
+        assertFalse(Files.exists(staleRelease));
+        assertFalse(Files.exists(staleIncludes.getParent()));
+    }
+
+    @Test
+    public void usingSharedIncludesRefreshesItsLastUsedTime() throws IOException {
+        var shared = Files.createDirectories(
+                ClangResources.getSharedIncludesFolder(tempFolder.toFile(), "d".repeat(64)).toPath());
+        Files.createDirectories(shared.resolve("builtin"));
+        Files.writeString(shared.resolve("entrypoints.txt"), "builtin\n");
+        Files.setLastModifiedTime(shared, FileTime.from(Instant.now().minus(Duration.ofDays(61))));
+
+        CacheFiles.touch(shared);
+
+        var parser = CodeParser.newInstance();
+        parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
+        new ClangResources(parser).deleteStaleVersions(Instant.now(),
+                Files.createDirectories(tempFolder.resolve("releases/current")).toFile());
+
+        assertTrue(Files.exists(shared));
     }
 
     @Test
@@ -418,218 +280,49 @@ public class ClangResourcesTest {
         var secondExecutable = new File(Files.readString(secondDone).trim());
         assertEquals(firstExecutable.getAbsoluteFile(), secondExecutable.getAbsoluteFile());
         assertTrue(firstExecutable.isFile());
-        assertFalse(cacheFolder.toPath().resolve(ClangAstWebResource.getReleaseTag() + ".cache.lock").toFile().exists());
+        assertTrue(cacheFolder.toPath().resolve("releases").resolve(ClangAstWebResource.getReleaseTag()).toFile().isDirectory());
     }
 
     @Test
-    public void cacheLockReleaseDoesNotRemoveAReclaimedLock() throws Exception {
-        var versionFolder = Files.createDirectory(tempFolder.resolve("version")).toFile();
-        var lockFolder = ClangResources.getCacheLockFolder(versionFolder).toPath();
-        ClangResources.CacheLock first = ClangResources.acquireCacheLock(versionFolder);
-
-        Files.writeString(first.ownerFile().toPath(), Long.MAX_VALUE + System.lineSeparator());
-        ClangResources.CacheLock second = ClangResources.acquireCacheLock(versionFolder);
-
-        try {
-            first.close();
-            assertTrue(Files.isDirectory(lockFolder),
-                    "A stale lock owner released and deleted a replacement owner's lock");
-        } finally {
-            second.close();
-        }
-    }
-
-    @Test
-    public void cachedUseDoesNotBypassTheCacheLockBeforeUpdatingLastUsed() throws Exception {
-        var parser = CodeParser.newInstance();
-        parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
-        var resources = new ClangResources(parser);
-        var versionFolder = resources.getClangResourceFolder();
-        var fakeExecutable = Files.createFile(tempFolder.resolve("fake-tool")).toFile();
-        var cache = getClangFilesCache();
-        var cacheKey = getClangFilesCacheKey(resources, LibcMode.SYSTEM);
-        var cachedFiles = new ClangFiles(fakeExecutable, List.of());
-        cache.put(cacheKey, cachedFiles);
-
-        ClangResources.CacheLock lock = ClangResources.acquireCacheLock(versionFolder);
-        var executor = Executors.newSingleThreadExecutor();
-        try {
-            var future = executor.submit(() -> resources.getClangFiles(LibcMode.SYSTEM));
-            assertThrows(TimeoutException.class, () -> future.get(750, TimeUnit.MILLISECONDS),
-                    "A cached use updated last-used without coordinating with the cache lock");
-
-            lock.close();
-            lock = null;
-            assertSame(cachedFiles, future.get(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS));
-        } finally {
-            if (lock != null) {
-                lock.close();
-            }
-            executor.shutdownNow();
-            executor.awaitTermination(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
-            cache.remove(cacheKey);
-        }
-    }
-
-    @Test
-    public void sameJvmInstancesShareReleaseCacheInitialization() throws Exception {
-        var firstParser = CodeParser.newInstance();
-        firstParser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
-        firstParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
-
-        var secondParser = CodeParser.newInstance();
-        secondParser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
-        secondParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
-
-        var thirdParser = CodeParser.newInstance();
-        thirdParser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
-        thirdParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
+    public void sameJvmInstancesReuseReleaseFilesAndRefreshSharedIncludes() throws Exception {
+        var firstParser = newParser(CodeParser.getBuiltinOption());
+        var secondParser = newParser(CodeParser.getBuiltinOption());
+        var thirdParser = newParser(CodeParser.getBuiltinOption());
+        var firstResources = new ClangResources(firstParser);
+        var secondResources = new ClangResources(secondParser);
+        var thirdResources = new ClangResources(thirdParser);
 
         var executor = Executors.newFixedThreadPool(3);
         try {
-            var first = executor.submit(() -> new ClangResources(firstParser).getClangFiles(LibcMode.SYSTEM));
-            var second = executor.submit(() -> new ClangResources(secondParser).getClangFiles(LibcMode.SYSTEM));
-            var third = executor.submit(
-                    () -> new ClangResources(thirdParser).getClangFiles(LibcMode.BUILTIN_AND_LIBC));
+            var first = executor.submit(() -> firstResources.getClangFiles(LibcMode.SYSTEM));
+            var second = executor.submit(() -> secondResources.getClangFiles(LibcMode.SYSTEM));
+            var third = executor.submit(() -> thirdResources.getClangFiles(LibcMode.BUILTIN_AND_LIBC));
 
             var firstFiles = first.get(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
             var secondFiles = second.get(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
             var thirdFiles = third.get(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
 
-            assertSame(firstFiles, secondFiles, "Same-JVM instances did not share the ClangFiles cache entry");
+            assertEquals(firstFiles, secondFiles);
             assertEquals(firstFiles.clangExecutable().getAbsoluteFile(), thirdFiles.clangExecutable().getAbsoluteFile());
             assertTrue(firstFiles.clangExecutable().isFile());
+
+            assumeTrue(!firstFiles.builtinIncludes().isEmpty());
+            var shared = new File(firstFiles.builtinIncludes().get(0)).toPath();
+            while (!Files.isRegularFile(shared.resolve("entrypoints.txt"))) {
+                shared = shared.getParent();
+            }
+            Files.setLastModifiedTime(shared, FileTime.from(Instant.now().minus(Duration.ofDays(61))));
+            firstResources.getClangFiles(LibcMode.SYSTEM);
+            assertTrue(Files.getLastModifiedTime(shared).toInstant().isAfter(Instant.now().minus(Duration.ofDays(1))));
         } finally {
             executor.shutdownNow();
             executor.awaitTermination(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
         }
     }
 
-    private Process startCacheLockProcess(File versionFolder, Path acquired, Path release, Path log)
-            throws IOException {
-
-        var javaExecutable = Path.of(System.getProperty("java.home"), "bin",
-                SupportedPlatform.getCurrentPlatform().isWindows() ? "java.exe" : "java");
-
-        return new ProcessBuilder(
-                javaExecutable.toString(),
-                "-cp",
-                System.getProperty("java.class.path"),
-                CacheLockProcess.class.getName(),
-                versionFolder.getAbsolutePath(),
-                acquired.toAbsolutePath().toString(),
-                release.toAbsolutePath().toString())
-                .redirectErrorStream(true)
-                .redirectOutput(log.toFile())
-                .start();
-    }
-
-    private Process startResourceProcess(File cacheFolder, Path done, Path log) throws IOException {
-        var javaExecutable = Path.of(System.getProperty("java.home"), "bin",
-                SupportedPlatform.getCurrentPlatform().isWindows() ? "java.exe" : "java");
-
-        return new ProcessBuilder(
-                javaExecutable.toString(),
-                "-cp",
-                System.getProperty("java.class.path"),
-                CacheLockProcess.class.getName(),
-                "resources",
-                cacheFolder.getAbsolutePath(),
-                done.toAbsolutePath().toString())
-                .redirectErrorStream(true)
-                .redirectOutput(log.toFile())
-                .start();
-    }
-
-    @SuppressWarnings("unchecked")
-    private Map<String, ClangFiles> getClangFilesCache() throws ReflectiveOperationException {
-        var cacheField = ClangResources.class.getDeclaredField("CLANG_FILES_CACHE");
-        cacheField.setAccessible(true);
-        return (Map<String, ClangFiles>) cacheField.get(null);
-    }
-
-    private String getClangFilesCacheKey(ClangResources resources, LibcMode libcMode) {
-        var source = ClangAstWebResource.getDumperSource();
-        var sourceKey = source instanceof Release
-                ? source + "_" + resources.getClangResourceFolder().getAbsolutePath()
-                : source.toString();
-        return libcMode.name() + "_false_" + sourceKey;
-    }
-
-    private boolean waitForFile(Path file, Duration timeout) throws InterruptedException {
-        var deadline = System.nanoTime() + timeout.toNanos();
-        do {
-            if (Files.isRegularFile(file)) {
-                return true;
-            }
-
-            Thread.sleep(10);
-        } while (System.nanoTime() < deadline);
-
-        return Files.isRegularFile(file);
-    }
-
-    private void waitForProcess(Process process, Path log) throws Exception {
-        assertTrue(process.waitFor(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS),
-                () -> "Child JVM did not finish. Output: " + readLog(log));
-        assertEquals(0, process.exitValue(), () -> "Child JVM failed. Output: " + readLog(log));
-    }
-
-    private String readLog(Path log) {
-        try {
-            return Files.readString(log);
-        } catch (IOException e) {
-            return "<could not read child log: " + e + ">";
-        }
-    }
-
-    private void releaseProcess(Path release) throws IOException {
-        if (release != null && !Files.exists(release)) {
-            Files.createFile(release);
-        }
-    }
-
-    private void stopProcess(Process process) throws InterruptedException {
-        if (process == null || !process.isAlive()) {
-            return;
-        }
-
-        process.destroyForcibly();
-        process.waitFor(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
-    }
-
-    public static final class CacheLockProcess {
-
-        private CacheLockProcess() {
-        }
-
-        public static void main(String[] args) throws Exception {
-            if (args[0].equals("resources")) {
-                var parser = CodeParser.newInstance();
-                parser.set(CodeParser.DUMPER_FOLDER, new File(args[1]));
-                var clangFiles = new ClangResources(parser).getClangFiles(LibcMode.SYSTEM);
-                Files.writeString(Path.of(args[2]), clangFiles.clangExecutable().getAbsolutePath());
-                return;
-            }
-
-            var versionFolder = new File(args[0]);
-            var acquired = Path.of(args[1]);
-            var release = Path.of(args[2]);
-
-            try (var ignored = ClangResources.acquireCacheLock(versionFolder)) {
-                Files.writeString(acquired, Long.toString(ProcessHandle.current().pid()));
-                while (!Files.exists(release)) {
-                    Thread.sleep(10);
-                }
-            }
-        }
-    }
-
     @Test
     public void builtinCudaIncludesAreAvailableWithSystemLibc() {
-        var parser = CodeParser.newInstance();
-        parser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
-
+        var parser = newParser(CodeParser.getBuiltinOption());
         var clangFiles = new ClangResources(parser).getClangFiles(LibcMode.SYSTEM);
         var hasCudaWrapper = clangFiles.builtinIncludes().stream()
                 .map(folder -> new File(folder, "__clang_cuda_runtime_wrapper.h"))
@@ -640,14 +333,10 @@ public class ClangResourcesTest {
 
     @Test
     public void builtinCudaArchiveHasCanonicalInstallationLayout() {
-        var parser = CodeParser.newInstance();
-        parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
-        parser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
-
+        var parser = newParser(CodeParser.getBuiltinOption());
         var cudaFolder = new ClangResources(parser).getBuiltinCudaLib();
 
-        assertEquals(tempFolder.resolve("cuda/cudalib").toFile().getAbsolutePath(),
-                cudaFolder.getAbsolutePath());
+        assertEquals(tempFolder.resolve("cuda/cudalib").toFile().getAbsolutePath(), cudaFolder.getAbsolutePath());
         assertTrue(new File(cudaFolder, "include/cuda.h").isFile());
         assertTrue(new File(cudaFolder, "include/cuda_runtime.h").isFile());
         assertTrue(new File(cudaFolder, "nvvm/libdevice/libdevice.10.bc").isFile());
@@ -668,5 +357,110 @@ public class ClangResourcesTest {
 
         assertFalse(ClangResources.useBuiltinLibc(systemLibcDumper.toFile(), LibcMode.AUTO));
         assertTrue(ClangResources.useBuiltinLibc(builtinLibcDumper.toFile(), LibcMode.AUTO));
+    }
+
+    private CodeParser newParser(String cudaPath) {
+        var parser = CodeParser.newInstance();
+        parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
+        parser.set(CodeParser.CUDA_PATH, cudaPath);
+        return parser;
+    }
+
+    private static ClangDumperManifestAsset asset(String filename, String kind, String platform, String arch) {
+        return new ClangDumperManifestAsset(filename, kind, platform, arch, 18, HELLO_SHA256);
+    }
+
+    private static FileResourceProvider copyingResource(Path source, AtomicInteger writes) {
+        return new FileResourceProvider() {
+            @Override
+            public File write(File folder) {
+                writes.incrementAndGet();
+                try {
+                    var destination = folder.toPath().resolve(getFilename());
+                    Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+                    return destination.toFile();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public String version() {
+                return "test";
+            }
+
+            @Override
+            public String getFilename() {
+                return source.getFileName().toString();
+            }
+        };
+    }
+
+    private static Path publishTestIncludes(Path includesRoot, Path finalFolder, String sha) {
+        Path staging = CacheFiles.createStagingDirectory(includesRoot, "." + sha + ".tmp-");
+        try {
+            try {
+                Files.createDirectories(staging.resolve("builtin"));
+                Files.writeString(staging.resolve("entrypoints.txt"), "builtin\n");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            return CacheFiles.publish(staging, finalFolder);
+        } finally {
+            CacheFiles.delete(staging);
+        }
+    }
+
+    private Process startResourceProcess(File cacheFolder, Path done, Path log) throws IOException {
+        var javaExecutable = Path.of(System.getProperty("java.home"), "bin",
+                SupportedPlatform.getCurrentPlatform().isWindows() ? "java.exe" : "java");
+
+        return new ProcessBuilder(
+                javaExecutable.toString(),
+                "-cp",
+                System.getProperty("java.class.path"),
+                ResourceProcess.class.getName(),
+                cacheFolder.getAbsolutePath(),
+                done.toAbsolutePath().toString())
+                .redirectErrorStream(true)
+                .redirectOutput(log.toFile())
+                .start();
+    }
+
+    private void waitForProcess(Process process, Path log) throws Exception {
+        assertTrue(process.waitFor(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS),
+                () -> "Child JVM did not finish. Output: " + readLog(log));
+        assertEquals(0, process.exitValue(), () -> "Child JVM failed. Output: " + readLog(log));
+    }
+
+    private String readLog(Path log) {
+        try {
+            return Files.readString(log);
+        } catch (IOException e) {
+            return "<could not read child log: " + e + ">";
+        }
+    }
+
+    private void stopProcess(Process process) throws InterruptedException {
+        if (process == null || !process.isAlive()) {
+            return;
+        }
+
+        process.destroyForcibly();
+        process.waitFor(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+    }
+
+    public static final class ResourceProcess {
+
+        private ResourceProcess() {
+        }
+
+        public static void main(String[] args) throws Exception {
+            var parser = CodeParser.newInstance();
+            parser.set(CodeParser.DUMPER_FOLDER, new File(args[0]));
+            var clangFiles = new ClangResources(parser).getClangFiles(LibcMode.SYSTEM);
+            Files.writeString(Path.of(args[1]), clangFiles.clangExecutable().getAbsolutePath());
+        }
     }
 }
