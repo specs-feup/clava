@@ -24,12 +24,16 @@ import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -39,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -269,7 +274,7 @@ public class ClangResourcesTest {
         var staging = CacheFiles.createStagingDirectory(includesRoot, ".sha.tmp-");
         Files.setLastModifiedTime(staging, FileTime.from(Instant.now().minus(Duration.ofHours(2))));
 
-        CacheFiles.deleteStaleStagingDirectories(includesRoot, Instant.now().minus(Duration.ofHours(1)));
+        CacheFiles.deleteStaleStagingDirectories(tempFolder, includesRoot, Instant.now().minus(Duration.ofHours(1)));
 
         assertFalse(Files.exists(staging));
     }
@@ -318,15 +323,60 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void cleanupRevalidationKeepsAnEntryTouchedDuringDeletionCheck() throws IOException {
+    public void maintenanceLockMakesUsageWinOverContendingCleanup() throws Exception {
         var releases = Files.createDirectories(tempFolder.resolve("releases"));
         var stale = Files.createDirectories(releases.resolve("stale"));
         Files.setLastModifiedTime(stale, FileTime.from(Instant.now().minus(Duration.ofDays(61))));
+        var usageStarted = new CountDownLatch(1);
+        var allowUsageToFinish = new CountDownLatch(1);
+        var cleanupStarted = new CountDownLatch(1);
+        var executor = Executors.newFixedThreadPool(2);
 
-        CacheFiles.deleteStaleDirectories(releases, Instant.now().minus(Duration.ofDays(60)), null,
-                () -> CacheFiles.touch(stale));
+        try {
+            var usage = executor.submit(() -> CacheFiles.withMaintenanceLock(tempFolder, () -> {
+                CacheFiles.touch(stale);
+                usageStarted.countDown();
+                awaitLatch(allowUsageToFinish);
+            }));
+            assertTrue(usageStarted.await(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS));
 
-        assertTrue(Files.exists(stale));
+            var cleanup = executor.submit(() -> {
+                cleanupStarted.countDown();
+                CacheFiles.deleteStaleDirectories(tempFolder, releases,
+                        Instant.now().minus(Duration.ofDays(60)), null);
+            });
+            assertTrue(cleanupStarted.await(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS));
+            assertFalse(cleanup.isDone());
+
+            allowUsageToFinish.countDown();
+            usage.get(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+            cleanup.get(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+            assertTrue(Files.exists(stale));
+        } finally {
+            allowUsageToFinish.countDown();
+            executor.shutdownNow();
+            executor.awaitTermination(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+        }
+    }
+
+    @Test
+    public void cleanupWinnerMakesSubsequentIncludesResolutionAcknowledgeTheMiss() throws Exception {
+        var archive = createIncludesArchive();
+        var sha = sha256(archive);
+        var asset = new ClangDumperManifestAsset("includes.zip", "includes", "linux", "x64", 18, sha);
+        var shared = ClangResources.getSharedIncludesFolder(tempFolder.toFile(), sha);
+        Files.createDirectories(shared.toPath().resolve("builtin"));
+        Files.writeString(shared.toPath().resolve("entrypoints.txt"), "builtin\n");
+        Files.setLastModifiedTime(shared.toPath(), FileTime.from(Instant.now().minus(Duration.ofDays(61))));
+
+        CacheFiles.deleteStaleDirectories(tempFolder, shared.toPath().getParent(),
+                Instant.now().minus(Duration.ofDays(60)), null);
+        assertFalse(shared.exists());
+
+        var writes = new AtomicInteger();
+        assertEquals(shared, ClangResources.resolveIncludes(tempFolder.toFile(), asset,
+                copyingResource(archive, writes)));
+        assertEquals(1, writes.get());
     }
 
     @Test
@@ -352,6 +402,50 @@ public class ClangResourcesTest {
         assertEquals(firstExecutable.getAbsoluteFile(), secondExecutable.getAbsoluteFile());
         assertTrue(firstExecutable.isFile());
         assertTrue(cacheFolder.toPath().resolve("releases").resolve(ClangAstWebResource.getReleaseTag()).toFile().isDirectory());
+    }
+
+    @Test
+    public void maintenanceLockIsSharedAcrossJvmProcesses() throws Exception {
+        var holder = startMaintenanceProcess(MaintenanceLockHolderProcess.class, tempFolder);
+        var contender = (Process) null;
+        try (var holderOutput = new BufferedReader(
+                new InputStreamReader(holder.getInputStream(), StandardCharsets.UTF_8))) {
+            assertEquals("READY", holderOutput.readLine());
+
+            contender = startMaintenanceProcess(MaintenanceLockProbeProcess.class, tempFolder);
+            try (var contenderOutput = new BufferedReader(
+                    new InputStreamReader(contender.getInputStream(), StandardCharsets.UTF_8))) {
+                assertEquals("BLOCKED", contenderOutput.readLine());
+
+                holder.getOutputStream().write('\n');
+                holder.getOutputStream().flush();
+                assertEquals("DONE", holderOutput.readLine());
+
+                contender.getOutputStream().write('\n');
+                contender.getOutputStream().flush();
+                assertEquals("ENTERED", contenderOutput.readLine());
+                assertEquals("DONE", contenderOutput.readLine());
+                assertTrue(contender.waitFor(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS));
+                assertEquals(0, contender.exitValue());
+            }
+        } finally {
+            try {
+                holder.getOutputStream().write('\n');
+                holder.getOutputStream().flush();
+            } catch (IOException ignored) {
+                // The holder may already have exited after the assertion path.
+            }
+            if (contender != null) {
+                try {
+                    contender.getOutputStream().write('\n');
+                    contender.getOutputStream().flush();
+                } catch (IOException ignored) {
+                    // The contender may already have exited after the assertion path.
+                }
+            }
+            stopProcess(contender);
+            stopProcess(holder);
+        }
     }
 
     @Test
@@ -467,6 +561,17 @@ public class ClangResourcesTest {
         };
     }
 
+    private static void awaitLatch(CountDownLatch latch) {
+        try {
+            if (!latch.await(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS)) {
+                throw new RuntimeException("Timed out waiting for maintenance-lock test coordination");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+    }
+
     private Path createIncludesArchive() throws IOException {
         var archive = tempFolder.resolve("includes.zip");
         try (var zip = new ZipOutputStream(Files.newOutputStream(archive))) {
@@ -508,6 +613,19 @@ public class ClangResourcesTest {
                 .start();
     }
 
+    private Process startMaintenanceProcess(Class<?> processClass, Path cacheFolder) throws IOException {
+        var javaExecutable = Path.of(System.getProperty("java.home"), "bin",
+                SupportedPlatform.getCurrentPlatform().isWindows() ? "java.exe" : "java");
+
+        return new ProcessBuilder(
+                javaExecutable.toString(),
+                "-cp",
+                System.getProperty("java.class.path"),
+                processClass.getName(),
+                cacheFolder.toAbsolutePath().toString())
+                .start();
+    }
+
     private void waitForProcess(Process process, Path log) throws Exception {
         assertTrue(process.waitFor(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS),
                 () -> "Child JVM did not finish. Output: " + readLog(log));
@@ -541,6 +659,63 @@ public class ClangResourcesTest {
             parser.set(CodeParser.DUMPER_FOLDER, new File(args[0]));
             var clangFiles = new ClangResources(parser).getClangFiles(LibcMode.SYSTEM);
             Files.writeString(Path.of(args[1]), clangFiles.clangExecutable().getAbsolutePath());
+        }
+    }
+
+    public static final class MaintenanceLockHolderProcess {
+
+        private MaintenanceLockHolderProcess() {
+        }
+
+        public static void main(String[] args) {
+            CacheFiles.withMaintenanceLock(Path.of(args[0]), () -> {
+                System.out.println("READY");
+                System.out.flush();
+                try {
+                    System.in.read();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            System.out.println("DONE");
+            System.out.flush();
+        }
+    }
+
+    public static final class MaintenanceLockProbeProcess {
+
+        private MaintenanceLockProbeProcess() {
+        }
+
+        public static void main(String[] args) {
+            var lockPath = Path.of(args[0], ".maintenance.lock");
+            try (var channel = FileChannel.open(lockPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
+                var lock = channel.tryLock();
+                if (lock != null) {
+                    try (lock) {
+                        System.out.println("ACQUIRED");
+                        System.out.flush();
+                    }
+                    return;
+                }
+
+                System.out.println("BLOCKED");
+                System.out.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            try {
+                System.in.read();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            CacheFiles.withMaintenanceLock(Path.of(args[0]), () -> {
+                System.out.println("ENTERED");
+                System.out.flush();
+            });
+            System.out.println("DONE");
+            System.out.flush();
         }
     }
 }
