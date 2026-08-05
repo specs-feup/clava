@@ -25,6 +25,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystemException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.FileTime;
@@ -123,6 +124,11 @@ final class CacheFiles {
     }
 
     static void deleteStaleDirectories(Path parent, Instant cutoff, Path excluded) {
+        deleteStaleDirectories(parent, cutoff, excluded, () -> {});
+    }
+
+    static void deleteStaleDirectories(Path parent, Instant cutoff, Path excluded,
+                                       Runnable beforeRevalidation) {
         if (!Files.isDirectory(parent)) {
             return;
         }
@@ -137,7 +143,7 @@ final class CacheFiles {
                     continue;
                 }
 
-                if (Files.getLastModifiedTime(child).toInstant().isBefore(cutoff)) {
+                if (isStaleAndUnchanged(child, cutoff, beforeRevalidation)) {
                     delete(child);
                 }
             }
@@ -158,13 +164,30 @@ final class CacheFiles {
                     continue;
                 }
 
-                if (Files.getLastModifiedTime(child).toInstant().isBefore(cutoff)) {
+                if (isStaleAndUnchanged(child, cutoff, () -> {})) {
                     delete(child);
                 }
             }
         } catch (IOException e) {
             throw new UncheckedIOException("Could not clean stale cache staging directories below '" + parent + "'",
                     e);
+        }
+    }
+
+    private static boolean isStaleAndUnchanged(Path path, Instant cutoff, Runnable beforeRevalidation) {
+        try {
+            var initialMtime = Files.getLastModifiedTime(path);
+            if (!initialMtime.toInstant().isBefore(cutoff)) {
+                return false;
+            }
+
+            beforeRevalidation.run();
+            var currentMtime = Files.getLastModifiedTime(path);
+            return initialMtime.equals(currentMtime);
+        } catch (NoSuchFileException e) {
+            return false;
+        } catch (IOException e) {
+            throw new UncheckedIOException("Could not inspect cache path '" + path + "'", e);
         }
     }
 

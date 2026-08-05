@@ -26,18 +26,24 @@ import pt.up.fe.specs.util.providers.FileResourceProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.FileTime;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -138,17 +144,58 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void sharedIncludesAreAddressedOnlyBySha() throws IOException {
-        var sha = "a".repeat(64);
-        var sharedFolder = ClangResources.getSharedIncludesFolder(tempFolder.toFile(), sha);
-        Files.createDirectories(sharedFolder.toPath().resolve("builtin"));
-        Files.writeString(sharedFolder.toPath().resolve("entrypoints.txt"), "builtin\n");
+    public void releasesWithTheSameIncludesShaShareOneExtraction() throws Exception {
+        var archive = createIncludesArchive();
+        var sha = sha256(archive);
+        var firstAsset = new ClangDumperManifestAsset("v1-includes.zip", "includes", "linux", "x64", 18, sha);
+        var secondAsset = new ClangDumperManifestAsset("v2-includes.zip", "includes", "linux", "x64", 18, sha);
+        var firstManifest = new ClangDumperManifest(1, List.of(firstAsset));
+        var secondManifest = new ClangDumperManifest(1, List.of(secondAsset));
+        var firstRelease = Files.createDirectories(tempFolder.resolve("releases/v1"));
+        var secondRelease = Files.createDirectories(tempFolder.resolve("releases/v2"));
+        var firstWrites = new AtomicInteger();
+        var secondWrites = new AtomicInteger();
 
-        var firstRelease = tempFolder.resolve("releases/v1").toFile();
-        var secondRelease = tempFolder.resolve("releases/v2").toFile();
+        firstManifest.validate();
+        secondManifest.validate();
         assertNotEquals(firstRelease, secondRelease);
-        assertEquals(sharedFolder, ClangResources.getSharedIncludesFolder(tempFolder.toFile(), sha));
-        assertTrue(ClangResources.isIncludesCacheValid(sharedFolder));
+
+        var firstIncludes = ClangResources.resolveIncludes(tempFolder.toFile(), firstAsset,
+                copyingResource(archive, firstWrites));
+        var secondIncludes = ClangResources.resolveIncludes(tempFolder.toFile(), secondAsset,
+                copyingResource(archive, secondWrites));
+
+        assertEquals(firstAsset, firstManifest.getAsset("linux", "x64", "includes"));
+        assertEquals(secondAsset, secondManifest.getAsset("linux", "x64", "includes"));
+        assertEquals(firstIncludes, secondIncludes);
+        assertEquals(1, firstWrites.get());
+        assertEquals(0, secondWrites.get());
+        assertTrue(ClangResources.isIncludesCacheValid(firstIncludes));
+        try (var children = Files.list(tempFolder.resolve("includes"))) {
+            assertEquals(1, children.filter(Files::isDirectory).count());
+        }
+    }
+
+    @Test
+    public void invalidPublishedIncludesFailWithoutRepair() throws IOException {
+        var sha = "a".repeat(64);
+        var invalidFolder = ClangResources.getSharedIncludesFolder(tempFolder.toFile(), sha);
+        Files.createDirectories(invalidFolder.toPath());
+        Files.writeString(invalidFolder.toPath().resolve("entrypoints.txt"), "missing\n");
+        var writes = new AtomicInteger();
+        var unusedArchive = tempFolder.resolve("unused.zip");
+
+        var error = assertThrows(RuntimeException.class,
+                () -> ClangResources.resolveIncludes(tempFolder.toFile(),
+                        new ClangDumperManifestAsset("includes.zip", "includes", "linux", "x64", 18, sha),
+                        copyingResource(unusedArchive, writes)));
+
+        assertTrue(error.getMessage().contains(invalidFolder.getAbsolutePath()));
+        assertTrue(error.getMessage().contains(sha));
+        assertTrue(error.getMessage().contains("delete this directory manually to regenerate"));
+        assertTrue(invalidFolder.isDirectory());
+        assertEquals("missing\n", Files.readString(invalidFolder.toPath().resolve("entrypoints.txt")));
+        assertEquals(0, writes.get());
     }
 
     @Test
@@ -182,29 +229,37 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void concurrentPublicationLeavesOneValidIncludesTree() throws Exception {
-        var includesRoot = Files.createDirectories(tempFolder.resolve("includes"));
-        var sha = "b".repeat(64);
-        var finalFolder = includesRoot.resolve(sha);
+    public void concurrentInitializationLeavesOneValidIncludesTree() throws Exception {
+        var archive = createIncludesArchive();
+        var sha = sha256(archive);
+        var asset = new ClangDumperManifestAsset("includes.zip", "includes", "linux", "x64", 18, sha);
+        var writes = new AtomicInteger();
         var executor = Executors.newFixedThreadPool(4);
         var futures = new ArrayList<Future<Path>>();
 
         try {
             for (int i = 0; i < 4; i++) {
-                futures.add(executor.submit(() -> publishTestIncludes(includesRoot, finalFolder, sha)));
+                futures.add(executor.submit(() -> ClangResources.resolveIncludes(tempFolder.toFile(), asset,
+                        copyingResource(archive, writes)).toPath()));
             }
 
             for (var future : futures) {
-                assertEquals(finalFolder, future.get(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS));
+                assertEquals(ClangResources.getSharedIncludesFolder(tempFolder.toFile(), sha).toPath(),
+                        future.get(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS));
             }
         } finally {
             executor.shutdownNow();
             executor.awaitTermination(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
         }
 
-        assertTrue(ClangResources.isIncludesCacheValid(finalFolder.toFile()));
-        try (var children = Files.list(includesRoot)) {
-            assertTrue(children.noneMatch(path -> path.getFileName().toString().startsWith("." + sha + ".tmp-")));
+        var finalFolder = ClangResources.getSharedIncludesFolder(tempFolder.toFile(), sha);
+        assertTrue(ClangResources.isIncludesCacheValid(finalFolder));
+        assertTrue(writes.get() >= 1);
+        try (var children = Files.list(finalFolder.toPath().getParent())) {
+            var childPaths = children.toList();
+            assertEquals(1, childPaths.stream().filter(Files::isDirectory).count());
+            assertTrue(childPaths.stream()
+                    .noneMatch(path -> path.getFileName().toString().startsWith("." + sha + ".tmp-")));
         }
     }
 
@@ -242,13 +297,17 @@ public class ClangResourcesTest {
 
     @Test
     public void usingSharedIncludesRefreshesItsLastUsedTime() throws IOException {
-        var shared = Files.createDirectories(
-                ClangResources.getSharedIncludesFolder(tempFolder.toFile(), "d".repeat(64)).toPath());
+        var sha = "d".repeat(64);
+        var shared = Files.createDirectories(ClangResources.getSharedIncludesFolder(tempFolder.toFile(), sha).toPath());
         Files.createDirectories(shared.resolve("builtin"));
         Files.writeString(shared.resolve("entrypoints.txt"), "builtin\n");
         Files.setLastModifiedTime(shared, FileTime.from(Instant.now().minus(Duration.ofDays(61))));
-
-        CacheFiles.touch(shared);
+        var writes = new AtomicInteger();
+        var unusedArchive = tempFolder.resolve("unused.zip");
+        var asset = new ClangDumperManifestAsset("includes.zip", "includes", "linux", "x64", 18, sha);
+        assertEquals(shared.toFile(), ClangResources.resolveIncludes(tempFolder.toFile(), asset,
+                copyingResource(unusedArchive, writes)));
+        assertEquals(0, writes.get());
 
         var parser = CodeParser.newInstance();
         parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
@@ -256,6 +315,18 @@ public class ClangResourcesTest {
                 Files.createDirectories(tempFolder.resolve("releases/current")).toFile());
 
         assertTrue(Files.exists(shared));
+    }
+
+    @Test
+    public void cleanupRevalidationKeepsAnEntryTouchedDuringDeletionCheck() throws IOException {
+        var releases = Files.createDirectories(tempFolder.resolve("releases"));
+        var stale = Files.createDirectories(releases.resolve("stale"));
+        Files.setLastModifiedTime(stale, FileTime.from(Instant.now().minus(Duration.ofDays(61))));
+
+        CacheFiles.deleteStaleDirectories(releases, Instant.now().minus(Duration.ofDays(60)), null,
+                () -> CacheFiles.touch(stale));
+
+        assertTrue(Files.exists(stale));
     }
 
     @Test
@@ -396,19 +467,28 @@ public class ClangResourcesTest {
         };
     }
 
-    private static Path publishTestIncludes(Path includesRoot, Path finalFolder, String sha) {
-        Path staging = CacheFiles.createStagingDirectory(includesRoot, "." + sha + ".tmp-");
-        try {
-            try {
-                Files.createDirectories(staging.resolve("builtin"));
-                Files.writeString(staging.resolve("entrypoints.txt"), "builtin\n");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+    private Path createIncludesArchive() throws IOException {
+        var archive = tempFolder.resolve("includes.zip");
+        try (var zip = new ZipOutputStream(Files.newOutputStream(archive))) {
+            zip.putNextEntry(new ZipEntry("builtin/"));
+            zip.closeEntry();
+            zip.putNextEntry(new ZipEntry("entrypoints.txt"));
+            zip.write("builtin\n".getBytes(StandardCharsets.UTF_8));
+            zip.closeEntry();
+            zip.putNextEntry(new ZipEntry("builtin/header.h"));
+            zip.write("header\n".getBytes(StandardCharsets.UTF_8));
+            zip.closeEntry();
+        }
 
-            return CacheFiles.publish(staging, finalFolder);
-        } finally {
-            CacheFiles.delete(staging);
+        return archive;
+    }
+
+    private static String sha256(Path file) throws IOException {
+        try {
+            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+                    .digest(Files.readAllBytes(file)));
+        } catch (NoSuchAlgorithmException e) {
+            throw new AssertionError(e);
         }
     }
 
