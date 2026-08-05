@@ -459,7 +459,7 @@ public class ClangResources {
                     currentVersionFolder.toPath());
             CacheFiles.deleteStaleDirectories(cacheRoot, getIncludesRoot().toPath(), cutoff,
                     currentIncludesFolder == null ? null : currentIncludesFolder.toPath());
-            CacheFiles.deleteUnlockedStagingLocks(cacheRoot, getReleasesFolder().toPath());
+            CacheFiles.deleteUnlockedStagingLocks(cacheRoot, currentVersionFolder.toPath());
             CacheFiles.deleteUnlockedStagingLocks(cacheRoot, getIncludesRoot().toPath());
         } catch (RuntimeException e) {
             SpecsLogs.warn("Could not clean stale clang-dumper cache resources", e);
