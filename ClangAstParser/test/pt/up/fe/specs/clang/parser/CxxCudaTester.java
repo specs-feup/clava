@@ -16,7 +16,7 @@ package pt.up.fe.specs.clang.parser;
 import java.util.Arrays;
 import java.util.List;
 
-import pt.up.fe.specs.lang.SpecsPlatforms;
+import pt.up.fe.specs.clang.ClangResources;
 
 public class CxxCudaTester extends AClangAstTester {
 
@@ -28,8 +28,7 @@ public class CxxCudaTester extends AClangAstTester {
         // super("cxx/cuda", files, Arrays.asList("-std=cuda"));
         super("cxx/cuda", files);
 
-        // Windows currently not supported
-        if (SpecsPlatforms.isWindows()) {
+        if (!ClangResources.isBuiltinCudaSupported()) {
             doNotRun();
         }
 
