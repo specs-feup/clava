@@ -67,12 +67,16 @@ public class ClangResources {
     public ClangFiles getClangFiles(LibcMode libcMode) {
 
         var source = ClangAstWebResource.getDumperSource();
+        var useBuiltinCuda = options.get(CodeParser.CUDA_PATH).equalsIgnoreCase(CodeParser.getBuiltinOption());
 
         if (source instanceof LocalBuild localBuild) {
-            return new ClangFiles(getLocalExecutable(localBuild.folder()), List.of());
+            var clangExecutable = getLocalExecutable(localBuild.folder());
+            var systemResourceDir = libcMode == LibcMode.SYSTEM && useBuiltinCuda
+                    ? findSystemClangResourceDir(null)
+                    : null;
+            return new ClangFiles(clangExecutable, List.of(), systemResourceDir);
         }
 
-        var useBuiltinCuda = options.get(CodeParser.CUDA_PATH).equalsIgnoreCase(CodeParser.getBuiltinOption());
         var resourceFolder = getClangResourceFolder();
         var key = libcMode.name() + "_" + useBuiltinCuda + "_" + source + "_"
                 + resourceFolder.getAbsolutePath();
@@ -89,6 +93,9 @@ public class ClangResources {
         var manifest = ClangAstWebResource.getManifest(resourceFolder);
         File clangExecutable = prepareResources(manifest, resourceFolder);
         var includes = prepareIncludes(manifest, clangExecutable, libcMode);
+        var systemResourceDir = libcMode == LibcMode.SYSTEM && useBuiltinCuda
+                ? prepareSystemClangResourceDir(manifest)
+                : null;
 
         if (useBuiltinCuda) {
             getBuiltinCudaLib();
@@ -97,7 +104,7 @@ public class ClangResources {
         touchUse(resourceFolder, includes.extractedFolder());
         updateLastUsedAndCleanupStaleVersions(resourceFolder, includes.extractedFolder());
 
-        var newFiles = new CachedClangFiles(new ClangFiles(clangExecutable, includes.folders()),
+        var newFiles = new CachedClangFiles(new ClangFiles(clangExecutable, includes.folders(), systemResourceDir),
                 includes.extractedFolder());
         var existingFiles = CLANG_FILES_CACHE.putIfAbsent(key, newFiles);
         var selectedFiles = existingFiles == null ? newFiles : existingFiles;
@@ -113,6 +120,11 @@ public class ClangResources {
 
         return CacheFiles.withMaintenanceLock(getClangCacheRoot().toPath(), () -> {
             if (!cached.files().clangExecutable().isFile()) {
+                return false;
+            }
+
+            if (cached.files().systemResourceDir() != null
+                    && !cached.files().systemResourceDir().isDirectory()) {
                 return false;
             }
 
@@ -292,9 +304,8 @@ public class ClangResources {
     private PreparedIncludes prepareIncludes(ClangDumperManifest manifest, File clangExecutable,
                                              LibcMode libcMode) {
         var useBuiltinLibc = useBuiltinLibc(clangExecutable, libcMode);
-        var useBuiltinCuda = options.get(CodeParser.CUDA_PATH).equalsIgnoreCase(CodeParser.getBuiltinOption());
 
-        if (!useBuiltinLibc && !useBuiltinCuda) {
+        if (!useBuiltinLibc) {
             return new PreparedIncludes(List.of(), null);
         }
 
@@ -303,6 +314,58 @@ public class ClangResources {
         SpecsLogs.debug(() -> "Includes folders: " + includeFolders);
 
         return new PreparedIncludes(includeFolders.stream().map(File::getAbsolutePath).toList(), extractedFolder);
+    }
+
+    private File prepareSystemClangResourceDir(ClangDumperManifest manifest) {
+        var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
+        var llvmMajor = getCurrentAsset(manifest, executableKind).llvm_major();
+        return findSystemClangResourceDir(llvmMajor);
+    }
+
+    private File findSystemClangResourceDir(Integer llvmMajor) {
+        var commandNames = getSystemClangCommandNames(llvmMajor);
+        for (var commandName : commandNames) {
+            final ProcessOutputAsString output;
+            try {
+                output = SpecsSystem.runProcess(List.of(commandName, "-print-resource-dir"), true, false);
+            } catch (RuntimeException e) {
+                continue;
+            }
+
+            if (output.getReturnValue() != 0 || output.getStdOut() == null) {
+                continue;
+            }
+
+            var resourceDir = new File(output.getStdOut().trim());
+            if (isSystemClangResourceDir(resourceDir, llvmMajor)) {
+                SpecsLogs.debug(() -> "Using system Clang resource directory '"
+                        + resourceDir.getAbsolutePath() + "'");
+                return resourceDir;
+            }
+        }
+
+        var expectedVersion = llvmMajor == null ? "the local clang-dumper build's version"
+                : "LLVM " + llvmMajor;
+        throw new RuntimeException("Could not find a system Clang resource directory for SYSTEM mode with built-in CUDA"
+                + " on host '" + SupportedPlatform.getCurrentPlatform() + "' (expected " + expectedVersion
+                + "). Tried: " + commandNames);
+    }
+
+    private static List<String> getSystemClangCommandNames(Integer llvmMajor) {
+        var suffix = SupportedPlatform.getCurrentPlatform().isWindows() ? ".exe" : "";
+        if (llvmMajor == null) {
+            return List.of("clang++" + suffix);
+        }
+
+        return List.of("clang++-" + llvmMajor + suffix, "clang++" + suffix);
+    }
+
+    private static boolean isSystemClangResourceDir(File resourceDir, Integer llvmMajor) {
+        if (!resourceDir.isDirectory() || !new File(resourceDir, "include").isDirectory()) {
+            return false;
+        }
+
+        return llvmMajor == null || resourceDir.getName().equals(Integer.toString(llvmMajor));
     }
 
     private File prepareIncludesFolder(ClangDumperManifest manifest) {

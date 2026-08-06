@@ -52,7 +52,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CudaResourcesTest {
 
-    private static final String PLATFORM = CudaResources.LINUX_X86_64_PLATFORM;
+    private static final String PLATFORM = "linux-x86_64";
     private static final String RELEASE = "12.3.2";
     private static final Duration TEST_TIMEOUT = Duration.ofSeconds(10);
 
@@ -109,20 +109,39 @@ public class CudaResourcesTest {
     }
 
     @Test
-    public void manifestPlatformMatchesNvidiaKeysAndRejectsUnavailablePlatforms() {
-        assertEquals(CudaResources.LINUX_X86_64_PLATFORM,
-                CudaResources.getManifestPlatform(SupportedPlatform.LINUX, "amd64"));
-        assertEquals(CudaResources.LINUX_PPC64LE_PLATFORM,
-                CudaResources.getManifestPlatform(SupportedPlatform.LINUX, "ppc64le"));
-        assertEquals(CudaResources.LINUX_SBSA_PLATFORM,
-                CudaResources.getManifestPlatform(SupportedPlatform.LINUX, "aarch64"));
-        assertEquals(CudaResources.WINDOWS_X86_64_PLATFORM,
-                CudaResources.getManifestPlatform(SupportedPlatform.WINDOWS, "x86_64"));
+    public void manifestAcceptsHostWhenAllRequiredComponentsExposeACompatiblePlatform() {
+        var manifest = CudaResources.parseManifest(manifestJson());
 
-        assertThrows(RuntimeException.class,
-                () -> CudaResources.getManifestPlatform(SupportedPlatform.MAC_OS, "aarch64"));
-        assertThrows(RuntimeException.class,
-                () -> CudaResources.getManifestPlatform(SupportedPlatform.WINDOWS, "aarch64"));
+        assertEquals(PLATFORM,
+                CudaResources.getManifestPlatform(manifest, SupportedPlatform.LINUX, "amd64"));
+    }
+
+    @Test
+    public void manifestRejectsHostWhenARequiredComponentLacksThePlatform() {
+        var manifest = CudaResources.parseManifest(manifestJson());
+        var missingPlatformComponent = manifest.components().get("cuda_cccl");
+        var archives = new LinkedHashMap<>(missingPlatformComponent.archives());
+        archives.remove(PLATFORM);
+        var components = new LinkedHashMap<>(manifest.components());
+        components.put("cuda_cccl", new CudaResources.NvidiaCudaComponent(
+                missingPlatformComponent.name(), missingPlatformComponent.version(), archives));
+        var incompleteManifest = new CudaResources.NvidiaCudaManifest(manifest.releaseDate(), manifest.releaseLabel(),
+                manifest.releaseProduct(), components);
+
+        var error = assertThrows(RuntimeException.class,
+                () -> CudaResources.getManifestPlatform(incompleteManifest, SupportedPlatform.LINUX, "amd64"));
+        assertTrue(error.getMessage().contains("linux (amd64)"));
+        assertTrue(error.getMessage().contains(PLATFORM));
+        assertTrue(error.getMessage().contains("cuda_cccl"));
+    }
+
+    @Test
+    public void additionalCompatibleManifestPlatformNeedsNoJavaSupportWhitelist() {
+        var additionalPlatform = "linux-riscv64";
+        var manifest = CudaResources.parseManifest(manifestJson(additionalPlatform));
+
+        assertEquals(additionalPlatform,
+                CudaResources.getManifestPlatform(manifest, SupportedPlatform.LINUX, "riscv64"));
     }
 
     @Test
@@ -441,8 +460,7 @@ public class CudaResourcesTest {
         for (var entry : manifest.components().entrySet()) {
             var selectedArchive = entry.getValue().archives().get(PLATFORM);
             var archives = new LinkedHashMap<>(entry.getValue().archives());
-            for (var unusedPlatform : List.of(CudaResources.LINUX_PPC64LE_PLATFORM,
-                    CudaResources.LINUX_SBSA_PLATFORM, CudaResources.WINDOWS_X86_64_PLATFORM)) {
+            for (var unusedPlatform : List.of("linux-riscv64", "windows-x86_64")) {
                 archives.put(unusedPlatform, new CudaResources.CudaArchive(
                         entry.getKey() + "/" + unusedPlatform + "/unused.tar.xz",
                         selectedArchive.sha256(), selectedArchive.size()));
@@ -499,7 +517,7 @@ public class CudaResourcesTest {
     }
 
     private static String hostPlatform() {
-        return CudaResources.getCurrentPlatform().manifestName();
+        return PLATFORM;
     }
 
     private static void writeTarXz(Path archive, Map<String, byte[]> files) throws IOException {
@@ -530,6 +548,10 @@ public class CudaResourcesTest {
     }
 
     private static String manifestJson() {
+        return manifestJson(PLATFORM);
+    }
+
+    private static String manifestJson(String platform) {
         return """
                 {
                   "release_date": "2024-01-02",
@@ -541,24 +563,24 @@ public class CudaResourcesTest {
                   "cuda_cccl": %s
                 }
                 """.formatted(
-                component("CUDA Runtime", "cuda_cudart/linux-x86_64/cuda_cudart.tar.xz"),
-                component("CUDA NVCC", "cuda_nvcc/linux-x86_64/cuda_nvcc.tar.xz"),
-                component("cuRAND", "libcurand/linux-x86_64/libcurand.tar.xz"),
-                component("CCCL", "cuda_cccl/linux-x86_64/cuda_cccl.tar.xz"));
+                component("CUDA Runtime", platform, "cuda_cudart/" + platform + "/cuda_cudart.tar.xz"),
+                component("CUDA NVCC", platform, "cuda_nvcc/" + platform + "/cuda_nvcc.tar.xz"),
+                component("cuRAND", platform, "libcurand/" + platform + "/libcurand.tar.xz"),
+                component("CCCL", platform, "cuda_cccl/" + platform + "/cuda_cccl.tar.xz"));
     }
 
-    private static String component(String name, String relativePath) {
+    private static String component(String name, String platform, String relativePath) {
         return """
                 {
                   "name": "%s",
                   "version": "12.3.101",
-                  "linux-x86_64": {
+                  "%s": {
                     "relative_path": "%s",
                     "sha256": "%s",
                     "size": "1"
                   }
                 }
-                """.formatted(name, relativePath, SHA256);
+                """.formatted(name, platform, relativePath, SHA256);
     }
 
     private static byte[] bytes(String value) {
