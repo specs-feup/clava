@@ -55,6 +55,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -486,10 +487,10 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void sameJvmInstancesReuseReleaseFilesAndRefreshSharedIncludes() throws Exception {
-        var firstParser = newParser(CodeParser.getBuiltinOption());
-        var secondParser = newParser(CodeParser.getBuiltinOption());
-        var thirdParser = newParser(CodeParser.getBuiltinOption());
+    public void sameJvmInstancesReuseReleaseFilesAndPrepareIncludesOnlyForBuiltinLibc() throws Exception {
+        var firstParser = newParser("");
+        var secondParser = newParser("");
+        var thirdParser = newParser("");
         var firstResources = new ClangResources(firstParser);
         var secondResources = new ClangResources(secondParser);
         var thirdResources = new ClangResources(thirdParser);
@@ -507,14 +508,16 @@ public class ClangResourcesTest {
             assertEquals(firstFiles, secondFiles);
             assertEquals(firstFiles.clangExecutable().getAbsoluteFile(), thirdFiles.clangExecutable().getAbsoluteFile());
             assertTrue(firstFiles.clangExecutable().isFile());
+            assertTrue(firstFiles.builtinIncludes().isEmpty());
+            assertTrue(secondFiles.builtinIncludes().isEmpty());
+            assertFalse(thirdFiles.builtinIncludes().isEmpty());
 
-            assumeTrue(!firstFiles.builtinIncludes().isEmpty());
-            var shared = new File(firstFiles.builtinIncludes().get(0)).toPath();
+            var shared = new File(thirdFiles.builtinIncludes().get(0)).toPath();
             while (!Files.isRegularFile(shared.resolve("entrypoints.txt"))) {
                 shared = shared.getParent();
             }
             Files.setLastModifiedTime(shared, FileTime.from(Instant.now().minus(Duration.ofDays(61))));
-            firstResources.getClangFiles(LibcMode.SYSTEM);
+            thirdResources.getClangFiles(LibcMode.BUILTIN_AND_LIBC);
             assertTrue(Files.getLastModifiedTime(shared).toInstant().isAfter(Instant.now().minus(Duration.ofDays(1))));
         } finally {
             executor.shutdownNow();
@@ -523,14 +526,14 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void builtinCudaIncludesAreAvailableWithSystemLibc() {
+    public void builtinCudaUsesSystemClangResourceWithSystemLibc() {
         var parser = newParser(CodeParser.getBuiltinOption());
         var clangFiles = new ClangResources(parser).getClangFiles(LibcMode.SYSTEM);
-        var hasCudaWrapper = clangFiles.builtinIncludes().stream()
-                .map(folder -> new File(folder, "__clang_cuda_runtime_wrapper.h"))
-                .anyMatch(File::isFile);
 
-        assertTrue(hasCudaWrapper, "Built-in CUDA must provide Clang's CUDA runtime wrapper independently of libc");
+        assertTrue(clangFiles.builtinIncludes().isEmpty());
+        assertNotNull(clangFiles.systemResourceDir());
+        assertTrue(clangFiles.systemResourceDir().isDirectory());
+        assertFalse(Files.exists(clangCacheRoot().resolve("includes")));
     }
 
     @Test
@@ -538,7 +541,7 @@ public class ClangResourcesTest {
         var parser = newParser(CodeParser.getBuiltinOption());
         var cudaFolder = new ClangResources(parser).getBuiltinCudaLib();
 
-        var cudaPlatform = CudaResources.getCurrentPlatform().manifestName();
+        var cudaPlatform = cudaFolder.getParentFile().getName();
         assertEquals(tempFolder.resolve("cuda").resolve(ClangAstWebResource.getCudaReleaseTag())
                 .resolve(cudaPlatform).resolve("cudalib").toFile().getAbsolutePath(), cudaFolder.getAbsolutePath());
         assertTrue(new File(cudaFolder, "include/cuda.h").isFile());

@@ -42,6 +42,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -60,10 +61,6 @@ import java.util.regex.Pattern;
 final class CudaResources {
 
     static final String NVIDIA_REDIST_ROOT = "https://developer.download.nvidia.com/compute/cuda/redist/";
-    static final String LINUX_X86_64_PLATFORM = "linux-x86_64";
-    static final String LINUX_PPC64LE_PLATFORM = "linux-ppc64le";
-    static final String LINUX_SBSA_PLATFORM = "linux-sbsa";
-    static final String WINDOWS_X86_64_PLATFORM = "windows-x86_64";
     static final List<String> REQUIRED_COMPONENTS = List.of("cuda_cudart", "cuda_nvcc", "libcurand", "cuda_cccl");
     static final String PLATFORM_FILENAME = ".platform";
 
@@ -89,7 +86,10 @@ final class CudaResources {
 
     static File getBuiltinCudaLib(Path cacheRoot) {
         var releaseTag = ClangAstWebResource.getCudaReleaseTag();
-        var platform = requireSupportedPlatform();
+        var releaseFolder = getReleaseFolder(cacheRoot, releaseTag);
+        claimReleaseInUse(cacheRoot, releaseFolder);
+        var manifest = getManifest(cacheRoot, releaseFolder);
+        var platform = requireSupportedPlatform(manifest);
         var platformFolder = getPlatformFolder(cacheRoot, releaseTag, platform);
         var installationFolder = getInstallationFolder(platformFolder);
 
@@ -100,8 +100,19 @@ final class CudaResources {
         }
 
         claimInUse(cacheRoot, platformFolder);
-        var manifest = getManifest(cacheRoot, platformFolder);
         return install(cacheRoot, platformFolder, releaseTag, platform, manifest, CudaResources::getArchiveResource);
+    }
+
+    private static void claimReleaseInUse(Path cacheRoot, File releaseFolder) {
+        CacheFiles.withMaintenanceLock(cacheRoot, () -> {
+            try {
+                Files.createDirectories(releaseFolder.toPath());
+            } catch (IOException e) {
+                throw new UncheckedIOException("Could not create CUDA release folder '" + releaseFolder + "'", e);
+            }
+
+            CacheFiles.touch(releaseFolder.toPath());
+        });
     }
 
     static void claimInUse(Path cacheRoot, File platformFolder) {
@@ -128,9 +139,17 @@ final class CudaResources {
         return getCurrentPlatform();
     }
 
+    static CudaPlatform requireSupportedPlatform(NvidiaCudaManifest manifest) {
+        return getCurrentPlatform(manifest);
+    }
+
     static boolean isSupportedPlatform() {
+        return isSupportedPlatform(ClangResources.getDefaultTempFolder().toPath());
+    }
+
+    static boolean isSupportedPlatform(Path cacheRoot) {
         try {
-            getCurrentPlatform();
+            getCurrentPlatform(cacheRoot);
             return true;
         } catch (RuntimeException e) {
             return false;
@@ -138,42 +157,114 @@ final class CudaResources {
     }
 
     static CudaPlatform getCurrentPlatform() {
-        return new CudaPlatform(getManifestPlatform(SupportedPlatform.getCurrentPlatform(), System.getProperty("os.arch")));
+        return getCurrentPlatform(ClangResources.getDefaultTempFolder().toPath());
     }
 
-    static String getManifestPlatform(SupportedPlatform platform, String architecture) {
+    static CudaPlatform getCurrentPlatform(Path cacheRoot) {
+        var releaseTag = ClangAstWebResource.getCudaReleaseTag();
+        var releaseFolder = getReleaseFolder(cacheRoot, releaseTag);
+        claimReleaseInUse(cacheRoot, releaseFolder);
+        return getCurrentPlatform(getManifest(cacheRoot, releaseFolder));
+    }
+
+    static CudaPlatform getCurrentPlatform(NvidiaCudaManifest manifest) {
+        return new CudaPlatform(getManifestPlatform(manifest, SupportedPlatform.getCurrentPlatform(),
+                System.getProperty("os.arch")));
+    }
+
+    static String getManifestPlatform(NvidiaCudaManifest manifest, SupportedPlatform platform, String architecture) {
+        Objects.requireNonNull(manifest, "manifest");
         Objects.requireNonNull(platform, "platform");
         Objects.requireNonNull(architecture, "architecture");
-        var normalizedArchitecture = architecture.toLowerCase(Locale.ROOT);
 
-        if (platform.isWindows() && isX86_64(normalizedArchitecture)) {
-            return WINDOWS_X86_64_PLATFORM;
+        var commonPlatforms = new LinkedHashSet<String>();
+        var missingComponents = new ArrayList<String>();
+        var firstComponent = true;
+        for (var componentName : REQUIRED_COMPONENTS) {
+            var component = manifest.components().get(componentName);
+            if (component == null) {
+                missingComponents.add(componentName);
+                continue;
+            }
+
+            if (firstComponent) {
+                commonPlatforms.addAll(component.archives().keySet());
+                firstComponent = false;
+            } else {
+                commonPlatforms.retainAll(component.archives().keySet());
+            }
         }
 
-        if (platform.isLinux()) {
-            if (isX86_64(normalizedArchitecture)) {
-                return LINUX_X86_64_PLATFORM;
-            }
-
-            if (normalizedArchitecture.equals("ppc64le")) {
-                return LINUX_PPC64LE_PLATFORM;
-            }
-
-            if (normalizedArchitecture.equals("aarch64") || normalizedArchitecture.equals("arm64")) {
-                return LINUX_SBSA_PLATFORM;
-            }
+        var selectedPlatform = commonPlatforms.stream()
+                .filter(candidate -> isCompatiblePlatform(candidate, platform, architecture))
+                .findFirst();
+        if (missingComponents.isEmpty() && selectedPlatform.isPresent()) {
+            return selectedPlatform.get();
         }
 
-        throw new RuntimeException("The CUDA manifest does not provide a supported package for platform '"
-                + platform + "' and architecture '" + architecture + "'");
+        var reason = missingComponents.isEmpty()
+                ? "no platform key is present in all required components and is compatible with this host"
+                : "the manifest is missing required components " + missingComponents;
+        throw new RuntimeException("Built-in CUDA is unsupported for host '" + platform + " (" + architecture
+                + ")': " + reason + ". Available manifest platform keys: "
+                + getAvailablePlatformKeys(manifest));
     }
 
-    private static boolean isX86_64(String architecture) {
-        return architecture.equals("amd64") || architecture.equals("x86_64");
+    private static boolean isCompatiblePlatform(String manifestPlatform, SupportedPlatform hostPlatform,
+                                                String hostArchitecture) {
+        var separator = manifestPlatform.indexOf('-');
+        if (separator <= 0 || separator == manifestPlatform.length() - 1) {
+            return false;
+        }
+
+        var manifestOs = normalizeOs(manifestPlatform.substring(0, separator));
+        var manifestArchitecture = normalizeArchitecture(manifestPlatform.substring(separator + 1));
+        return manifestOs.equals(normalizeOs(hostPlatform))
+                && manifestArchitecture.equals(normalizeArchitecture(hostArchitecture));
+    }
+
+    private static String normalizeOs(SupportedPlatform platform) {
+        return switch (platform) {
+            case WINDOWS -> "windows";
+            case LINUX -> "linux";
+            case MAC_OS -> "macos";
+        };
+    }
+
+    private static String normalizeOs(String os) {
+        var normalized = os.toLowerCase(Locale.ROOT).replace("_", "").replace("-", "");
+        return switch (normalized) {
+            case "darwin", "mac" -> "macos";
+            default -> normalized;
+        };
+    }
+
+    private static String normalizeArchitecture(String architecture) {
+        var normalized = architecture.toLowerCase(Locale.ROOT).replace("_", "").replace("-", "");
+        return switch (normalized) {
+            case "amd64", "x8664", "x64" -> "x8664";
+            case "aarch64", "arm64", "armv8", "armv8l", "sbsa" -> "arm64";
+            default -> normalized;
+        };
+    }
+
+    private static Map<String, List<String>> getAvailablePlatformKeys(NvidiaCudaManifest manifest) {
+        var available = new LinkedHashMap<String, List<String>>();
+        for (var componentName : REQUIRED_COMPONENTS) {
+            var component = manifest.components().get(componentName);
+            var platforms = component == null ? List.<String>of() : component.archives().keySet().stream().sorted().toList();
+            available.put(componentName, platforms);
+        }
+
+        return available;
+    }
+
+    private static File getReleaseFolder(Path cacheRoot, String releaseTag) {
+        return cacheRoot.resolve(CUDA_FOLDERNAME).resolve(releaseTag).toFile();
     }
 
     static File getPlatformFolder(Path cacheRoot, String releaseTag, CudaPlatform platform) {
-        return cacheRoot.resolve(CUDA_FOLDERNAME).resolve(releaseTag).resolve(platform.manifestName()).toFile();
+        return getReleaseFolder(cacheRoot, releaseTag).toPath().resolve(platform.manifestName()).toFile();
     }
 
     static File getInstallationFolder(File platformFolder) {
