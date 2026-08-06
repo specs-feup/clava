@@ -43,6 +43,7 @@ public class ClangResources {
 
     private static final Map<String, CachedClangFiles> CLANG_FILES_CACHE = new ConcurrentHashMap<>();
     private static final String CLANG_FOLDERNAME = "clang_ast_exe";
+    private static final String CLANG_CACHE_FOLDERNAME = "clang-dumper";
     private static final String RELEASES_FOLDERNAME = "releases";
     private static final String INCLUDES_FOLDERNAME = "includes";
     private static final Duration STALE_CACHE_MAX_AGE = Duration.ofDays(60);
@@ -55,21 +56,12 @@ public class ClangResources {
         this.options = options;
     }
 
-    public File getBuiltinCudaLib() {
-        var cudaResourceFolder = SpecsIo.mkdir(options.get(CodeParser.DUMPER_FOLDER), "cuda");
-        var cudaFolder = SpecsIo.mkdir(cudaResourceFolder, "cudalib");
-        var zipFile = ClangAstWebResource.CUDA_LIB.writeVersioned(cudaResourceFolder, ClangResources.class);
-
-        if (zipFile.isNewFile() || !isCudaInstallation(cudaFolder)) {
-            SpecsIo.deleteFolderContents(cudaFolder);
-            SpecsIo.extractZip(zipFile.getFile(), cudaFolder);
-        }
-
-        return cudaFolder;
+    public static boolean isBuiltinCudaSupported() {
+        return CudaResources.isSupportedPlatform();
     }
 
-    private static boolean isCudaInstallation(File folder) {
-        return folder.isDirectory() && new File(folder, "include/cuda_runtime.h").isFile();
+    public File getBuiltinCudaLib() {
+        return CudaResources.getBuiltinCudaLib(options.get(CodeParser.DUMPER_FOLDER).toPath());
     }
 
     public ClangFiles getClangFiles(LibcMode libcMode) {
@@ -119,7 +111,7 @@ public class ClangResources {
             return false;
         }
 
-        return CacheFiles.withMaintenanceLock(options.get(CodeParser.DUMPER_FOLDER).toPath(), () -> {
+        return CacheFiles.withMaintenanceLock(getClangCacheRoot().toPath(), () -> {
             if (!cached.files().clangExecutable().isFile()) {
                 return false;
             }
@@ -143,7 +135,7 @@ public class ClangResources {
     }
 
     private void touchUse(File resourceFolder, File includesFolder) {
-        CacheFiles.withMaintenanceLock(options.get(CodeParser.DUMPER_FOLDER).toPath(), () -> {
+        CacheFiles.withMaintenanceLock(getClangCacheRoot().toPath(), () -> {
             CacheFiles.touch(resourceFolder.toPath());
             if (includesFolder != null) {
                 CacheFiles.touch(includesFolder.toPath());
@@ -178,7 +170,7 @@ public class ClangResources {
 
         var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
         var asset = getCurrentAsset(manifest, executableKind);
-        File executable = CacheFiles.installFile(options.get(CodeParser.DUMPER_FOLDER).toPath(),
+        File executable = CacheFiles.installFile(getClangCacheRoot().toPath(),
                 new File(resourceFolder, asset.filename()),
                 ClangAstWebResource.getAssetResource(asset), asset.sha256(),
                 "clang-dumper asset '" + asset.filename() + "'");
@@ -214,7 +206,7 @@ public class ClangResources {
     }
 
     public File getClangResourceFolder() {
-        var cacheFolder = options.get(CodeParser.DUMPER_FOLDER);
+        var cacheFolder = getClangCacheRoot();
         return CacheFiles.withMaintenanceLock(cacheFolder.toPath(), () -> {
             var releaseFolder = SpecsIo.mkdir(getReleasesFolder(), ClangAstWebResource.getReleaseTag());
             CacheFiles.touch(releaseFolder.toPath());
@@ -227,11 +219,15 @@ public class ClangResources {
     }
 
     private File getReleasesFolder() {
-        return SpecsIo.mkdir(options.get(CodeParser.DUMPER_FOLDER), RELEASES_FOLDERNAME);
+        return SpecsIo.mkdir(getClangCacheRoot(), RELEASES_FOLDERNAME);
     }
 
     private File getIncludesRoot() {
-        return new File(options.get(CodeParser.DUMPER_FOLDER), INCLUDES_FOLDERNAME);
+        return new File(getClangCacheRoot(), INCLUDES_FOLDERNAME);
+    }
+
+    private File getClangCacheRoot() {
+        return new File(options.get(CodeParser.DUMPER_FOLDER), CLANG_CACHE_FOLDERNAME);
     }
 
     static File getSharedIncludesFolder(File cacheFolder, String sha256) {
@@ -311,7 +307,7 @@ public class ClangResources {
 
     private File prepareIncludesFolder(ClangDumperManifest manifest) {
         var includesAsset = getCurrentAsset(manifest, "includes");
-        return resolveIncludes(options.get(CodeParser.DUMPER_FOLDER), includesAsset,
+        return resolveIncludes(getClangCacheRoot(), includesAsset,
                 ClangAstWebResource.getAssetResource(includesAsset));
     }
 
@@ -453,7 +449,7 @@ public class ClangResources {
 
     private void deleteStaleVersions(Instant now, File currentVersionFolder, File currentIncludesFolder) {
         var cutoff = now.minus(STALE_CACHE_MAX_AGE);
-        var cacheRoot = options.get(CodeParser.DUMPER_FOLDER).toPath();
+        var cacheRoot = getClangCacheRoot().toPath();
         try {
             CacheFiles.deleteStaleDirectories(cacheRoot, getReleasesFolder().toPath(), cutoff,
                     currentVersionFolder.toPath());
