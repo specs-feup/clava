@@ -99,8 +99,29 @@ final class CudaResources {
             return useExistingInstallation(cacheRoot, platformFolder, platform, installationFolder);
         }
 
+        claimInUse(cacheRoot, platformFolder);
         var manifest = getManifest(cacheRoot, platformFolder);
         return install(cacheRoot, platformFolder, releaseTag, platform, manifest, CudaResources::getArchiveResource);
+    }
+
+    static void claimInUse(Path cacheRoot, File platformFolder) {
+        CacheFiles.withMaintenanceLock(cacheRoot, () -> {
+            var platformPath = platformFolder.toPath();
+            var releasePath = platformPath.getParent();
+            if (releasePath == null) {
+                throw new RuntimeException("CUDA platform folder is not below a release folder: '"
+                        + platformFolder + "'");
+            }
+
+            try {
+                Files.createDirectories(platformPath);
+            } catch (IOException e) {
+                throw new UncheckedIOException("Could not create CUDA platform folder '" + platformPath + "'", e);
+            }
+
+            CacheFiles.touch(releasePath);
+            CacheFiles.touch(platformPath);
+        });
     }
 
     static CudaPlatform requireSupportedPlatform() {

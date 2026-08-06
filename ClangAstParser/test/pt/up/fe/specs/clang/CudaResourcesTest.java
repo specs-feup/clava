@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -263,6 +264,49 @@ public class CudaResourcesTest {
         assertTrue(error.getMessage().contains(installation.getAbsolutePath()));
         assertTrue(error.getMessage().contains("delete this directory manually to regenerate"));
         assertEquals("do not repair", Files.readString(installation.toPath().resolve("sentinel")));
+    }
+
+    @Test
+    public void oldPartialReleaseIsProtectedWhileInitializationContinues() throws Exception {
+        var platformFolder = CudaResources.getPlatformFolder(tempFolder, RELEASE,
+                new CudaResources.CudaPlatform(PLATFORM));
+        var releaseFolder = platformFolder.toPath().getParent();
+        Files.createDirectories(platformFolder.toPath().resolve("partial"));
+        Files.writeString(platformFolder.toPath().resolve("partial/manifest-download"), "in progress");
+        var old = FileTime.from(Instant.now().minus(Duration.ofDays(61)));
+        Files.setLastModifiedTime(releaseFolder, old);
+        Files.setLastModifiedTime(platformFolder.toPath(), old);
+
+        var claimed = new CountDownLatch(1);
+        var allowInitializationToFinish = new CountDownLatch(1);
+        var executor = Executors.newFixedThreadPool(2);
+
+        try {
+            var initialization = executor.submit(() -> {
+                CudaResources.claimInUse(tempFolder, platformFolder);
+                claimed.countDown();
+                awaitLatch(allowInitializationToFinish);
+            });
+            assertTrue(claimed.await(TEST_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS));
+
+            var cleanup = executor.submit(() -> CacheFiles.deleteStaleDirectories(tempFolder,
+                    tempFolder.resolve("cuda"), Instant.now().minus(Duration.ofDays(60)), null));
+            cleanup.get(TEST_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+
+            assertTrue(Files.isDirectory(releaseFolder));
+            assertTrue(Files.isDirectory(platformFolder.toPath()));
+            assertTrue(Files.getLastModifiedTime(releaseFolder).toInstant()
+                    .isAfter(Instant.now().minus(Duration.ofDays(1))));
+            assertTrue(Files.getLastModifiedTime(platformFolder.toPath()).toInstant()
+                    .isAfter(Instant.now().minus(Duration.ofDays(1))));
+
+            allowInitializationToFinish.countDown();
+            initialization.get(TEST_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+        } finally {
+            allowInitializationToFinish.countDown();
+            executor.shutdownNow();
+            executor.awaitTermination(TEST_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+        }
     }
 
     @Test
@@ -531,6 +575,17 @@ public class CudaResourcesTest {
     }
 
     private static final String SHA256 = "0".repeat(64);
+
+    private static void awaitLatch(CountDownLatch latch) {
+        try {
+            if (!latch.await(TEST_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS)) {
+                throw new AssertionError("Timed out waiting for CUDA initialization test coordination");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+    }
 
     private record ArchiveSet(CudaResources.NvidiaCudaManifest manifest, Map<String, Path> files) {
     }
