@@ -86,6 +86,7 @@ public class ClangAstDumper {
     private File baseFolder;
     private File clangExecutable;
     private List<String> builtinIncludes;
+    private File systemResourceDir;
     private int systemIncludesThreshold;
     private final ClangResources clangResources;
 
@@ -99,15 +100,18 @@ public class ClangAstDumper {
      * @param streamConsoleOutput
      * @param clangExecutable
      * @param builtinIncludes
+     * @param systemResourceDir
      * @param parserConfig
      */
     public ClangAstDumper(boolean streamConsoleOutput,
-                          File clangExecutable, List<String> builtinIncludes, CodeParser parserConfig) {
+                          File clangExecutable, List<String> builtinIncludes, File systemResourceDir,
+                          CodeParser parserConfig) {
 
         this.streamConsoleOutput = streamConsoleOutput;
 
         this.clangExecutable = clangExecutable;
         this.builtinIncludes = builtinIncludes;
+        this.systemResourceDir = systemResourceDir;
 
         this.workingFolders = new ArrayList<>();
         this.lastWorkingFolder = null;
@@ -250,6 +254,10 @@ public class ClangAstDumper {
         else if (SourceType.isHeader(sourceFile)) {
             arguments.add("-x");
             arguments.add(standard.isCxx() ? "c++" : "c");
+        }
+
+        if (systemResourceDir != null) {
+            arguments.add("-resource-dir=" + systemResourceDir.getAbsolutePath());
         }
 
         // If it was determined that built-in includes will be used, disable system includes
