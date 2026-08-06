@@ -313,11 +313,13 @@ public class ClangResourcesTest {
 
     @Test
     public void staleReleaseAndSharedIncludesAreRemovedAfterSixtyDays() throws IOException {
-        var releases = Files.createDirectories(tempFolder.resolve("releases"));
+        var clangCacheRoot = clangCacheRoot();
+        var releases = Files.createDirectories(clangCacheRoot.resolve("releases"));
         var current = Files.createDirectories(releases.resolve("current"));
         var staleRelease = Files.createDirectories(releases.resolve("stale"));
         var staleIncludes = Files.createDirectories(
-                ClangResources.getSharedIncludesFolder(tempFolder.toFile(), "c".repeat(64)).toPath().resolve("builtin"));
+                ClangResources.getSharedIncludesFolder(clangCacheRoot.toFile(), "c".repeat(64)).toPath()
+                        .resolve("builtin"));
         Files.writeString(staleIncludes.getParent().resolve("entrypoints.txt"), "builtin\n");
         var old = FileTime.from(Instant.now().minus(Duration.ofDays(61)));
         Files.setLastModifiedTime(staleRelease, old);
@@ -335,21 +337,23 @@ public class ClangResourcesTest {
     @Test
     public void usingSharedIncludesRefreshesItsLastUsedTime() throws IOException {
         var sha = "d".repeat(64);
-        var shared = Files.createDirectories(ClangResources.getSharedIncludesFolder(tempFolder.toFile(), sha).toPath());
+        var clangCacheRoot = clangCacheRoot();
+        var shared = Files.createDirectories(
+                ClangResources.getSharedIncludesFolder(clangCacheRoot.toFile(), sha).toPath());
         Files.createDirectories(shared.resolve("builtin"));
         Files.writeString(shared.resolve("entrypoints.txt"), "builtin\n");
         Files.setLastModifiedTime(shared, FileTime.from(Instant.now().minus(Duration.ofDays(61))));
         var writes = new AtomicInteger();
         var unusedArchive = tempFolder.resolve("unused.zip");
         var asset = new ClangDumperManifestAsset("includes.zip", "includes", "linux", "x64", 18, sha);
-        assertEquals(shared.toFile(), ClangResources.resolveIncludes(tempFolder.toFile(), asset,
+        assertEquals(shared.toFile(), ClangResources.resolveIncludes(clangCacheRoot.toFile(), asset,
                 copyingResource(unusedArchive, writes)));
         assertEquals(0, writes.get());
 
         var parser = CodeParser.newInstance();
         parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
         new ClangResources(parser).deleteStaleVersions(Instant.now(),
-                Files.createDirectories(tempFolder.resolve("releases/current")).toFile());
+                Files.createDirectories(clangCacheRoot.resolve("releases/current")).toFile());
 
         assertTrue(Files.exists(shared));
     }
@@ -433,7 +437,8 @@ public class ClangResourcesTest {
         var secondExecutable = new File(Files.readString(secondDone).trim());
         assertEquals(firstExecutable.getAbsoluteFile(), secondExecutable.getAbsoluteFile());
         assertTrue(firstExecutable.isFile());
-        assertTrue(cacheFolder.toPath().resolve("releases").resolve(ClangAstWebResource.getReleaseTag()).toFile().isDirectory());
+        assertTrue(cacheFolder.toPath().resolve("clang-dumper").resolve("releases")
+                .resolve(ClangAstWebResource.getReleaseTag()).toFile().isDirectory());
     }
 
     @Test
@@ -533,7 +538,9 @@ public class ClangResourcesTest {
         var parser = newParser(CodeParser.getBuiltinOption());
         var cudaFolder = new ClangResources(parser).getBuiltinCudaLib();
 
-        assertEquals(tempFolder.resolve("cuda/cudalib").toFile().getAbsolutePath(), cudaFolder.getAbsolutePath());
+        var cudaPlatform = CudaResources.getCurrentPlatform().manifestName();
+        assertEquals(tempFolder.resolve("cuda").resolve(ClangAstWebResource.getCudaReleaseTag())
+                .resolve(cudaPlatform).resolve("cudalib").toFile().getAbsolutePath(), cudaFolder.getAbsolutePath());
         assertTrue(new File(cudaFolder, "include/cuda.h").isFile());
         assertTrue(new File(cudaFolder, "include/cuda_runtime.h").isFile());
         assertTrue(new File(cudaFolder, "nvvm/libdevice/libdevice.10.bc").isFile());
@@ -561,6 +568,10 @@ public class ClangResourcesTest {
         parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
         parser.set(CodeParser.CUDA_PATH, cudaPath);
         return parser;
+    }
+
+    private Path clangCacheRoot() {
+        return tempFolder.resolve("clang-dumper");
     }
 
     private static ClangDumperManifestAsset asset(String filename, String kind, String platform, String arch) {

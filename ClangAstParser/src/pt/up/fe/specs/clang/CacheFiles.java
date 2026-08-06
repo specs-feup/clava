@@ -154,6 +154,11 @@ final class CacheFiles {
 
     static File installFile(Path cacheRoot, File destination, FileResourceProvider resource, String expectedSha256,
                             String description) {
+        return installFile(cacheRoot, destination, resource, expectedSha256, -1, description);
+    }
+
+    static File installFile(Path cacheRoot, File destination, FileResourceProvider resource, String expectedSha256,
+                            long expectedSize, String description) {
         if (destination.isFile()) {
             return destination;
         }
@@ -164,6 +169,11 @@ final class CacheFiles {
             File stagedFile = resource.write(stagingDirectory.path().toFile());
             if (stagedFile == null || !stagedFile.isFile()) {
                 throw new RuntimeException("Could not download " + description);
+            }
+
+            if (expectedSize >= 0 && stagedFile.length() != expectedSize) {
+                throw new RuntimeException("Downloaded " + description + " does not match expected size '"
+                        + expectedSize + "' (actual: " + stagedFile.length() + ")");
             }
 
             if (expectedSha256 != null && !hasExpectedSha256(stagedFile, expectedSha256)) {
