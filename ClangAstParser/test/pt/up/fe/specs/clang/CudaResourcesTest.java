@@ -136,6 +136,35 @@ public class CudaResourcesTest {
     }
 
     @Test
+    public void supportDetectionReturnsFalseOnlyForAValidatedUnsupportedHost() throws IOException {
+        var unsupportedPlatform = SupportedPlatform.getCurrentPlatform().isWindows()
+                ? "linux-riscv64"
+                : "windows-x86_64";
+        writeCachedManifest(manifestJson(unsupportedPlatform));
+
+        assertFalse(CudaResources.isSupportedPlatform(tempFolder));
+    }
+
+    @Test
+    public void supportDetectionPropagatesManifestAndCacheFailures() throws IOException {
+        writeCachedManifest("not-json");
+        assertThrows(RuntimeException.class, () -> CudaResources.isSupportedPlatform(tempFolder));
+
+        var invalidManifestRoot = Files.createDirectory(tempFolder.resolve("invalid")).toAbsolutePath();
+        writeCachedManifest(invalidManifestRoot, manifestJson()
+                .replace("\"release_product\": \"cuda\"", "\"release_product\": \"other\""));
+        assertThrows(RuntimeException.class, () -> CudaResources.isSupportedPlatform(invalidManifestRoot));
+
+        var missingComponentRoot = Files.createDirectory(tempFolder.resolve("missing")).toAbsolutePath();
+        writeCachedManifest(missingComponentRoot, manifestJson().replace("\"cuda_cccl\":", "\"missing\":"));
+        assertThrows(RuntimeException.class, () -> CudaResources.isSupportedPlatform(missingComponentRoot));
+
+        var cacheFile = tempFolder.resolve("cache-file");
+        Files.writeString(cacheFile, "not-a-directory");
+        assertThrows(RuntimeException.class, () -> CudaResources.isSupportedPlatform(cacheFile));
+    }
+
+    @Test
     public void additionalCompatibleManifestPlatformNeedsNoJavaSupportWhitelist() {
         var additionalPlatform = "linux-riscv64";
         var manifest = CudaResources.parseManifest(manifestJson(additionalPlatform));
@@ -518,6 +547,16 @@ public class CudaResourcesTest {
 
     private static String hostPlatform() {
         return PLATFORM;
+    }
+
+    private void writeCachedManifest(String json) throws IOException {
+        writeCachedManifest(tempFolder, json);
+    }
+
+    private void writeCachedManifest(Path cacheRoot, String json) throws IOException {
+        var releaseFolder = cacheRoot.resolve("cuda").resolve(ClangAstWebResource.getCudaReleaseTag());
+        Files.createDirectories(releaseFolder);
+        Files.writeString(releaseFolder.resolve(CudaResources.getManifestFilename(RELEASE)), json);
     }
 
     private static void writeTarXz(Path archive, Map<String, byte[]> files) throws IOException {

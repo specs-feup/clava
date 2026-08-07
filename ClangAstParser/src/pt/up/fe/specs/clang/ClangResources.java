@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -64,22 +65,26 @@ public class ClangResources {
         return CudaResources.getBuiltinCudaLib(options.get(CodeParser.DUMPER_FOLDER).toPath());
     }
 
-    public ClangFiles getClangFiles(LibcMode libcMode) {
+    public ClangFiles getClangFiles(LibcMode requestedLibcMode) {
 
         var source = ClangAstWebResource.getDumperSource();
         var useBuiltinCuda = options.get(CodeParser.CUDA_PATH).equalsIgnoreCase(CodeParser.getBuiltinOption());
+        var forceSystemLibc = source instanceof LocalBuild || ClangAstDumper.usePlugin();
 
         if (source instanceof LocalBuild localBuild) {
             var clangExecutable = getLocalExecutable(localBuild.folder());
+            var libcMode = resolveLibcMode(clangExecutable, requestedLibcMode, forceSystemLibc);
             var systemResourceDir = libcMode == LibcMode.SYSTEM && useBuiltinCuda
                     ? findSystemClangResourceDir(null)
                     : null;
-            return new ClangFiles(clangExecutable, List.of(), systemResourceDir);
+            return new ClangFiles(clangExecutable, List.of(), systemResourceDir, libcMode);
         }
 
         var resourceFolder = getClangResourceFolder();
-        var key = libcMode.name() + "_" + useBuiltinCuda + "_" + source + "_"
-                + resourceFolder.getAbsolutePath();
+        var manifest = ClangAstWebResource.getManifest(resourceFolder);
+        File clangExecutable = prepareResources(manifest, resourceFolder);
+        var libcMode = resolveLibcMode(clangExecutable, requestedLibcMode, forceSystemLibc);
+        var key = libcMode.name() + "_" + useBuiltinCuda + "_" + source + "_" + resourceFolder.getAbsolutePath();
         var cached = CLANG_FILES_CACHE.get(key);
         if (isUsable(cached)) {
             SpecsLogs.debug(() -> "Using cached version of Clang files: " + cached.files());
@@ -90,9 +95,7 @@ public class ClangResources {
             CLANG_FILES_CACHE.remove(key, cached);
         }
 
-        var manifest = ClangAstWebResource.getManifest(resourceFolder);
-        File clangExecutable = prepareResources(manifest, resourceFolder);
-        var includes = prepareIncludes(manifest, clangExecutable, libcMode);
+        var includes = prepareIncludes(manifest, libcMode);
         var systemResourceDir = libcMode == LibcMode.SYSTEM && useBuiltinCuda
                 ? prepareSystemClangResourceDir(manifest)
                 : null;
@@ -104,13 +107,30 @@ public class ClangResources {
         touchUse(resourceFolder, includes.extractedFolder());
         updateLastUsedAndCleanupStaleVersions(resourceFolder, includes.extractedFolder());
 
-        var newFiles = new CachedClangFiles(new ClangFiles(clangExecutable, includes.folders(), systemResourceDir),
+        var newFiles = new CachedClangFiles(new ClangFiles(clangExecutable, includes.folders(), systemResourceDir,
+                libcMode),
                 includes.extractedFolder());
         var existingFiles = CLANG_FILES_CACHE.putIfAbsent(key, newFiles);
         var selectedFiles = existingFiles == null ? newFiles : existingFiles;
         touchUse(resourceFolder, selectedFiles.includesFolder());
         SpecsLogs.debug(() -> "Using downloaded version of Clang files: " + selectedFiles.files());
         return selectedFiles.files();
+    }
+
+    static LibcMode resolveLibcMode(File clangExecutable, LibcMode requestedLibcMode, boolean forceSystem) {
+        Objects.requireNonNull(clangExecutable, "clangExecutable");
+        Objects.requireNonNull(requestedLibcMode, "requestedLibcMode");
+
+        if (forceSystem) {
+            return LibcMode.SYSTEM;
+        }
+
+        return switch (requestedLibcMode) {
+            case AUTO -> useBuiltinLibc(clangExecutable, requestedLibcMode)
+                    ? LibcMode.BUILTIN_AND_LIBC
+                    : LibcMode.SYSTEM;
+            case BUILTIN_AND_LIBC, SYSTEM -> requestedLibcMode;
+        };
     }
 
     private boolean isUsable(CachedClangFiles cached) {
@@ -301,11 +321,8 @@ public class ClangResources {
         return SpecsSystem.runProcess(arguments, true, false);
     }
 
-    private PreparedIncludes prepareIncludes(ClangDumperManifest manifest, File clangExecutable,
-                                             LibcMode libcMode) {
-        var useBuiltinLibc = useBuiltinLibc(clangExecutable, libcMode);
-
-        if (!useBuiltinLibc) {
+    private PreparedIncludes prepareIncludes(ClangDumperManifest manifest, LibcMode libcMode) {
+        if (libcMode == LibcMode.SYSTEM) {
             return new PreparedIncludes(List.of(), null);
         }
 
