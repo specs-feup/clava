@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -140,7 +141,10 @@ final class CudaResources {
     }
 
     static CudaPlatform requireSupportedPlatform(NvidiaCudaManifest manifest) {
-        return getCurrentPlatform(manifest);
+        var platform = SupportedPlatform.getCurrentPlatform();
+        var architecture = System.getProperty("os.arch");
+        return findSupportedPlatform(manifest)
+                .orElseThrow(() -> unsupportedPlatform(manifest, platform, architecture));
     }
 
     static boolean isSupportedPlatform() {
@@ -148,12 +152,7 @@ final class CudaResources {
     }
 
     static boolean isSupportedPlatform(Path cacheRoot) {
-        try {
-            getCurrentPlatform(cacheRoot);
-            return true;
-        } catch (RuntimeException e) {
-            return false;
-        }
+        return findSupportedPlatform(getCurrentManifest(cacheRoot)).isPresent();
     }
 
     static CudaPlatform getCurrentPlatform() {
@@ -161,18 +160,25 @@ final class CudaResources {
     }
 
     static CudaPlatform getCurrentPlatform(Path cacheRoot) {
-        var releaseTag = ClangAstWebResource.getCudaReleaseTag();
-        var releaseFolder = getReleaseFolder(cacheRoot, releaseTag);
-        claimReleaseInUse(cacheRoot, releaseFolder);
-        return getCurrentPlatform(getManifest(cacheRoot, releaseFolder));
+        return requireSupportedPlatform(getCurrentManifest(cacheRoot));
     }
 
     static CudaPlatform getCurrentPlatform(NvidiaCudaManifest manifest) {
-        return new CudaPlatform(getManifestPlatform(manifest, SupportedPlatform.getCurrentPlatform(),
-                System.getProperty("os.arch")));
+        return requireSupportedPlatform(manifest);
     }
 
     static String getManifestPlatform(NvidiaCudaManifest manifest, SupportedPlatform platform, String architecture) {
+        return findManifestPlatform(manifest, platform, architecture)
+                .orElseThrow(() -> unsupportedPlatform(manifest, platform, architecture));
+    }
+
+    private static Optional<CudaPlatform> findSupportedPlatform(NvidiaCudaManifest manifest) {
+        return findManifestPlatform(manifest, SupportedPlatform.getCurrentPlatform(),
+                System.getProperty("os.arch")).map(CudaPlatform::new);
+    }
+
+    private static Optional<String> findManifestPlatform(NvidiaCudaManifest manifest, SupportedPlatform platform,
+                                                         String architecture) {
         Objects.requireNonNull(manifest, "manifest");
         Objects.requireNonNull(platform, "platform");
         Objects.requireNonNull(architecture, "architecture");
@@ -195,19 +201,28 @@ final class CudaResources {
             }
         }
 
-        var selectedPlatform = commonPlatforms.stream()
-                .filter(candidate -> isCompatiblePlatform(candidate, platform, architecture))
-                .findFirst();
-        if (missingComponents.isEmpty() && selectedPlatform.isPresent()) {
-            return selectedPlatform.get();
+        if (!missingComponents.isEmpty()) {
+            throw new RuntimeException("NVIDIA CUDA manifest is missing required components " + missingComponents
+                    + ". Available manifest platform keys: " + getAvailablePlatformKeys(manifest));
         }
 
-        var reason = missingComponents.isEmpty()
-                ? "no platform key is present in all required components and is compatible with this host"
-                : "the manifest is missing required components " + missingComponents;
-        throw new RuntimeException("Built-in CUDA is unsupported for host '" + platform + " (" + architecture
-                + ")': " + reason + ". Available manifest platform keys: "
-                + getAvailablePlatformKeys(manifest));
+        return commonPlatforms.stream()
+                .filter(candidate -> isCompatiblePlatform(candidate, platform, architecture))
+                .findFirst();
+    }
+
+    private static RuntimeException unsupportedPlatform(NvidiaCudaManifest manifest, SupportedPlatform platform,
+                                                        String architecture) {
+        return new RuntimeException("Built-in CUDA is unsupported for host '" + platform + " (" + architecture
+                + ")': no platform key is present in all required components and is compatible with this host"
+                + ". Available manifest platform keys: " + getAvailablePlatformKeys(manifest));
+    }
+
+    private static NvidiaCudaManifest getCurrentManifest(Path cacheRoot) {
+        var releaseTag = ClangAstWebResource.getCudaReleaseTag();
+        var releaseFolder = getReleaseFolder(cacheRoot, releaseTag);
+        claimReleaseInUse(cacheRoot, releaseFolder);
+        return getManifest(cacheRoot, releaseFolder);
     }
 
     private static boolean isCompatiblePlatform(String manifestPlatform, SupportedPlatform hostPlatform,

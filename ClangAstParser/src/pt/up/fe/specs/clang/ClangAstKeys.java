@@ -16,7 +16,6 @@ package pt.up.fe.specs.clang;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
@@ -98,10 +97,6 @@ public interface ClangAstKeys {
         }
 
         config.add(ClavaOptions.FLAGS_LIST, parsedFlags);
-
-        if (ClangAstWebResource.getDumperSource() instanceof LocalBuild) {
-            config.set(ClangAstKeys.LIBC_CXX_MODE, LibcMode.SYSTEM);
-        }
 
         return config;
     }
