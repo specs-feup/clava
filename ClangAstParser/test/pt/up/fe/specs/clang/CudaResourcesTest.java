@@ -20,7 +20,6 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 
 import java.io.File;
@@ -38,7 +37,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -86,8 +84,7 @@ public class CudaResourcesTest {
         var wrongRelease = CudaResources.parseManifest(manifestJson()
                 .replace("\"release_label\": \"12.3.2\"", "\"release_label\": \"12.3.1\""));
         var releaseError = assertThrows(RuntimeException.class, () -> CudaResources.install(
-                tempFolder, tempFolder.resolve("wrong-release").toFile(), RELEASE,
-                new CudaResources.CudaPlatform(PLATFORM), wrongRelease, ignored -> {
+                tempFolder, RELEASE, manifestResource(manifestJson(wrongRelease, wrongRelease.releaseLabel())), ignored -> {
                     throw new AssertionError("Archive downloads must not start for an invalid manifest");
                 }));
         assertTrue(releaseError.getMessage().contains("release label"));
@@ -95,8 +92,7 @@ public class CudaResourcesTest {
         var wrongProduct = CudaResources.parseManifest(manifestJson()
                 .replace("\"release_product\": \"cuda\"", "\"release_product\": \"other\""));
         var productError = assertThrows(RuntimeException.class, () -> CudaResources.install(
-                tempFolder, tempFolder.resolve("wrong-product").toFile(), RELEASE,
-                new CudaResources.CudaPlatform(PLATFORM), wrongProduct, ignored -> {
+                tempFolder, RELEASE, manifestResource(manifestJson(wrongProduct, RELEASE)), ignored -> {
                     throw new AssertionError("Archive downloads must not start for an invalid manifest");
                 }));
         assertTrue(productError.getMessage().contains("not a CUDA manifest"));
@@ -140,28 +136,32 @@ public class CudaResourcesTest {
         var unsupportedPlatform = SupportedPlatform.getCurrentPlatform().isWindows()
                 ? "linux-riscv64"
                 : "windows-x86_64";
-        writeCachedManifest(manifestJson(unsupportedPlatform));
+        var manifestResource = manifestResource(manifestJson(unsupportedPlatform));
 
-        assertFalse(CudaResources.isSupportedPlatform(tempFolder));
+        assertFalse(CudaResources.isSupportedPlatform(tempFolder, manifestResource));
+        assertFalse(Files.exists(tempFolder.resolve("cuda").resolve(RELEASE)));
+        assertNoCudaStaging();
     }
 
     @Test
     public void supportDetectionPropagatesManifestAndCacheFailures() throws IOException {
-        writeCachedManifest("not-json");
-        assertThrows(RuntimeException.class, () -> CudaResources.isSupportedPlatform(tempFolder));
+        assertThrows(RuntimeException.class,
+                () -> CudaResources.isSupportedPlatform(tempFolder, manifestResource("not-json")));
+        assertNoCudaStaging();
 
         var invalidManifestRoot = Files.createDirectory(tempFolder.resolve("invalid")).toAbsolutePath();
-        writeCachedManifest(invalidManifestRoot, manifestJson()
-                .replace("\"release_product\": \"cuda\"", "\"release_product\": \"other\""));
-        assertThrows(RuntimeException.class, () -> CudaResources.isSupportedPlatform(invalidManifestRoot));
+        assertThrows(RuntimeException.class, () -> CudaResources.isSupportedPlatform(invalidManifestRoot,
+                manifestResource(manifestJson()
+                        .replace("\"release_product\": \"cuda\"", "\"release_product\": \"other\""))));
 
         var missingComponentRoot = Files.createDirectory(tempFolder.resolve("missing")).toAbsolutePath();
-        writeCachedManifest(missingComponentRoot, manifestJson().replace("\"cuda_cccl\":", "\"missing\":"));
-        assertThrows(RuntimeException.class, () -> CudaResources.isSupportedPlatform(missingComponentRoot));
+        assertThrows(RuntimeException.class, () -> CudaResources.isSupportedPlatform(missingComponentRoot,
+                manifestResource(manifestJson().replace("\"cuda_cccl\":", "\"missing\":"))));
 
         var cacheFile = tempFolder.resolve("cache-file");
         Files.writeString(cacheFile, "not-a-directory");
-        assertThrows(RuntimeException.class, () -> CudaResources.isSupportedPlatform(cacheFile));
+        assertThrows(RuntimeException.class, () -> CudaResources.isSupportedPlatform(cacheFile,
+                manifestResource(manifestJson())));
     }
 
     @Test
@@ -177,19 +177,27 @@ public class CudaResourcesTest {
     public void installationFetchesOnlyTheSelectedPlatformArchives() throws IOException {
         var archives = createArchives();
         var manifest = addUnusedPlatforms(archives.manifest());
-        var platform = new CudaResources.CudaPlatform(PLATFORM);
-        var platformFolder = CudaResources.getPlatformFolder(tempFolder, RELEASE, platform);
         var writes = new AtomicInteger();
 
-        var installation = CudaResources.install(tempFolder, platformFolder, RELEASE, platform, manifest,
+        var installation = CudaResources.install(tempFolder, RELEASE, manifestResource(manifestJson(manifest, RELEASE)),
                 cudaPackage -> {
                     assertTrue(cudaPackage.archive().relativePath().contains("/" + PLATFORM + "/"));
                     var source = archives.files().get(cudaPackage.component());
                     return copyingResource(source, source.getFileName().toString(), writes);
                 });
 
-        assertTrue(CudaResources.isCudaInstallation(installation, PLATFORM));
+        assertEquals(tempFolder.resolve("cuda").resolve(RELEASE).toFile().getAbsoluteFile(), installation.getAbsoluteFile());
+        assertTrue(CudaResources.isCudaInstallation(installation, RELEASE, PLATFORM));
         assertEquals(CudaResources.REQUIRED_COMPONENTS.size(), writes.get());
+        assertTrue(Files.isRegularFile(installation.toPath().resolve(CudaResources.getManifestFilename(RELEASE))));
+        assertTrue(Files.isRegularFile(installation.toPath().resolve(CudaResources.PLATFORM_FILENAME)));
+        assertTrue(Files.isDirectory(installation.toPath().resolve("bin")));
+        assertTrue(Files.isDirectory(installation.toPath().resolve("include")));
+        assertTrue(Files.isDirectory(installation.toPath().resolve("nvvm")));
+        assertFalse(Files.exists(installation.toPath().resolve("archives")));
+        assertFalse(Files.exists(installation.toPath().resolve("cudalib")));
+        assertFalse(Files.exists(installation.toPath().resolve(PLATFORM)));
+        assertNoCudaStaging();
     }
 
     @Test
@@ -197,25 +205,46 @@ public class CudaResourcesTest {
         var source = Files.writeString(tempFolder.resolve("cuda_cudart.tar.xz"), "archive");
         var actualSize = Files.size(source);
         var actualSha = sha256(source);
-        var platformFolder = CudaResources.getPlatformFolder(tempFolder, RELEASE, new CudaResources.CudaPlatform(PLATFORM));
 
         var wrongSize = manifestForSingleArchive(source, actualSha, actualSize + 1);
         var sizeError = assertThrows(RuntimeException.class,
-                () -> install(wrongSize, platformFolder, source, new AtomicInteger()));
+                () -> install(wrongSize, RELEASE, source, new AtomicInteger()));
         assertTrue(sizeError.getMessage().contains("expected size"));
-        assertFalse(CudaResources.getArchiveFile(platformFolder,
-                wrongSize.getRequiredPackages(PLATFORM).get(0)).isFile());
+        assertFalse(Files.exists(tempFolder.resolve("cuda").resolve(RELEASE)));
+        assertNoCudaStaging();
 
         var wrongSha = manifestForSingleArchive(source, "0".repeat(64), actualSize);
         var shaError = assertThrows(RuntimeException.class,
-                () -> install(wrongSha, platformFolder, source, new AtomicInteger()));
+                () -> install(wrongSha, RELEASE, source, new AtomicInteger()));
         assertTrue(shaError.getMessage().contains("expected SHA-256"));
+        assertFalse(Files.exists(tempFolder.resolve("cuda").resolve(RELEASE)));
+        assertNoCudaStaging();
+    }
+
+    @Test
+    public void failedInstallationRemovesStagingAndDoesNotPublish() throws Exception {
+        var archives = createArchives();
+        var error = assertThrows(RuntimeException.class, () -> CudaResources.install(
+                tempFolder, RELEASE, manifestResource(manifestJson(archives.manifest(), RELEASE)), cudaPackage -> {
+                    if (cudaPackage.component().equals("libcurand")) {
+                        throw new RuntimeException("download failed");
+                    }
+
+                    var source = archives.files().get(cudaPackage.component());
+                    return copyingResource(source, source.getFileName().toString(), new AtomicInteger());
+                }));
+
+        assertEquals("download failed", error.getMessage());
+        assertFalse(Files.exists(tempFolder.resolve("cuda").resolve(RELEASE)));
+        assertNoCudaStaging();
     }
 
     @Test
     public void assembleSupportsTarXzAndZipPackages() throws IOException {
         var archives = createArchives();
-        var stagingFolder = Files.createDirectory(tempFolder.resolve("cudalib"));
+        var stagingFolder = Files.createDirectory(tempFolder.resolve("cuda-staging"));
+        Files.writeString(stagingFolder.resolve(CudaResources.getManifestFilename(RELEASE)),
+                manifestJson(archives.manifest(), RELEASE));
 
         CudaResources.assemble(stagingFolder.toFile(), new CudaResources.CudaPlatform(PLATFORM),
                 downloadedPackages(archives));
@@ -231,7 +260,7 @@ public class CudaResourcesTest {
         assertEquals("libdevice", Files.readString(stagingFolder.resolve("nvvm/libdevice/libdevice.10.bc")));
         assertFalse(Files.exists(stagingFolder.resolve("bin/discarded")));
         assertFalse(Files.exists(stagingFolder.resolve("bin/discarded.exe")));
-        assertTrue(CudaResources.isCudaInstallation(stagingFolder.toFile(), PLATFORM));
+        assertTrue(CudaResources.isCudaInstallation(stagingFolder.toFile(), RELEASE, PLATFORM));
     }
 
     @Test
@@ -263,116 +292,79 @@ public class CudaResourcesTest {
     @Test
     public void requiredComponentsAreStoredPerReleaseWithoutDeduplication() throws IOException {
         var archives = createArchives();
-        var firstRelease = CudaResources.getPlatformFolder(tempFolder, RELEASE,
-                new CudaResources.CudaPlatform(PLATFORM));
-        var secondRelease = CudaResources.getPlatformFolder(tempFolder, "13.3.1",
-                new CudaResources.CudaPlatform(PLATFORM));
+        var firstRelease = tempFolder.resolve("cuda").resolve(RELEASE);
+        var secondRelease = tempFolder.resolve("cuda").resolve("13.3.1");
 
-        var first = install(archives, firstRelease, new AtomicInteger());
-        var second = install(archives, secondRelease, new AtomicInteger());
+        var first = install(archives, RELEASE, new AtomicInteger());
+        var second = install(archives, "13.3.1", new AtomicInteger());
 
-        assertTrue(CudaResources.isCudaInstallation(first, PLATFORM));
-        assertTrue(CudaResources.isCudaInstallation(second, PLATFORM));
-        assertNotEquals(CudaResources.getArchiveFile(firstRelease,
-                        archives.manifest().getRequiredPackages(PLATFORM).get(0)).toPath(),
-                CudaResources.getArchiveFile(secondRelease,
-                        archives.manifest().getRequiredPackages(PLATFORM).get(0)).toPath());
+        assertEquals(firstRelease.toFile().getAbsoluteFile(), first.getAbsoluteFile());
+        assertEquals(secondRelease.toFile().getAbsoluteFile(), second.getAbsoluteFile());
+        assertNotEquals(first.getAbsoluteFile(), second.getAbsoluteFile());
+        assertTrue(CudaResources.isCudaInstallation(first, RELEASE, PLATFORM));
+        assertTrue(CudaResources.isCudaInstallation(second, "13.3.1", PLATFORM));
+        assertFalse(Files.exists(first.toPath().resolve("archives")));
+        assertFalse(Files.exists(second.toPath().resolve("archives")));
     }
 
     @Test
     public void existingValidInstallationIsReusedAndUsageIsRefreshed() throws IOException {
-        var platform = new CudaResources.CudaPlatform(hostPlatform());
-        var platformFolder = CudaResources.getPlatformFolder(tempFolder, RELEASE, platform);
-        var installation = CudaResources.getInstallationFolder(platformFolder);
-        writeValidInstallation(installation.toPath(), PLATFORM);
+        var releaseFolder = tempFolder.resolve("cuda").resolve(RELEASE);
+        writeValidInstallation(releaseFolder, PLATFORM);
         var old = FileTime.from(Instant.now().minus(Duration.ofDays(61)));
-        Files.setLastModifiedTime(platformFolder.toPath().getParent(), old);
+        Files.setLastModifiedTime(releaseFolder, old);
 
-        var parser = CodeParser.newInstance();
-        parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
-        var result = new ClangResources(parser).getBuiltinCudaLib();
+        var result = CudaResources.getBuiltinCudaLib(tempFolder);
 
-        assertEquals(installation.getAbsoluteFile(), result.getAbsoluteFile());
-        assertTrue(Files.getLastModifiedTime(platformFolder.toPath().getParent()).toInstant()
+        assertEquals(releaseFolder.toFile().getAbsoluteFile(), result.getAbsoluteFile());
+        assertTrue(Files.getLastModifiedTime(releaseFolder).toInstant()
                 .isAfter(Instant.now().minus(Duration.ofDays(1))));
     }
 
     @Test
     public void invalidPublishedInstallationFailsWithoutRepair() throws IOException {
-        var platform = new CudaResources.CudaPlatform(hostPlatform());
-        var platformFolder = CudaResources.getPlatformFolder(tempFolder, RELEASE, platform);
-        var installation = CudaResources.getInstallationFolder(platformFolder);
-        Files.createDirectories(installation.toPath());
-        Files.writeString(installation.toPath().resolve("sentinel"), "do not repair");
+        var releaseFolder = tempFolder.resolve("cuda").resolve(RELEASE);
+        Files.createDirectories(releaseFolder);
+        Files.writeString(releaseFolder.resolve(CudaResources.getManifestFilename(RELEASE)), manifestJson());
+        Files.writeString(releaseFolder.resolve("sentinel"), "do not repair");
 
-        var parser = CodeParser.newInstance();
-        parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
-        var error = assertThrows(RuntimeException.class, () -> new ClangResources(parser).getBuiltinCudaLib());
+        var error = assertThrows(RuntimeException.class, () -> CudaResources.getBuiltinCudaLib(tempFolder));
 
-        assertTrue(error.getMessage().contains(installation.getAbsolutePath()));
+        assertTrue(error.getMessage().contains(releaseFolder.toAbsolutePath().toString()));
         assertTrue(error.getMessage().contains("delete this directory manually to regenerate"));
-        assertEquals("do not repair", Files.readString(installation.toPath().resolve("sentinel")));
+        assertEquals("do not repair", Files.readString(releaseFolder.resolve("sentinel")));
     }
 
     @Test
-    public void oldPartialReleaseIsProtectedWhileInitializationContinues() throws Exception {
-        var platformFolder = CudaResources.getPlatformFolder(tempFolder, RELEASE,
-                new CudaResources.CudaPlatform(PLATFORM));
-        var releaseFolder = platformFolder.toPath().getParent();
-        Files.createDirectories(platformFolder.toPath().resolve("partial"));
-        Files.writeString(platformFolder.toPath().resolve("partial/manifest-download"), "in progress");
-        var old = FileTime.from(Instant.now().minus(Duration.ofDays(61)));
-        Files.setLastModifiedTime(releaseFolder, old);
-        Files.setLastModifiedTime(platformFolder.toPath(), old);
+    public void abandonedStagingDirectoriesAreReclaimable() throws Exception {
+        var cudaRoot = Files.createDirectories(tempFolder.resolve("cuda"));
+        var staging = CacheFiles.createStagingDirectory(tempFolder, cudaRoot, "." + RELEASE + ".tmp-");
+        var stagingPath = staging.path();
+        var lockPath = staging.lockPath();
+        Files.writeString(stagingPath.resolve("partial"), "in progress");
+        staging.close();
+        Files.createFile(lockPath);
 
-        var claimed = new CountDownLatch(1);
-        var allowInitializationToFinish = new CountDownLatch(1);
-        var executor = Executors.newFixedThreadPool(2);
+        CacheFiles.deleteUnlockedStagingLocks(tempFolder, cudaRoot);
 
-        try {
-            var initialization = executor.submit(() -> {
-                CudaResources.claimInUse(tempFolder, platformFolder);
-                claimed.countDown();
-                awaitLatch(allowInitializationToFinish);
-            });
-            assertTrue(claimed.await(TEST_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS));
-
-            var cleanup = executor.submit(() -> CacheFiles.deleteStaleDirectories(tempFolder,
-                    tempFolder.resolve("cuda"), Instant.now().minus(Duration.ofDays(60)), null));
-            cleanup.get(TEST_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
-
-            assertTrue(Files.isDirectory(releaseFolder));
-            assertTrue(Files.isDirectory(platformFolder.toPath()));
-            assertTrue(Files.getLastModifiedTime(releaseFolder).toInstant()
-                    .isAfter(Instant.now().minus(Duration.ofDays(1))));
-            assertTrue(Files.getLastModifiedTime(platformFolder.toPath()).toInstant()
-                    .isAfter(Instant.now().minus(Duration.ofDays(1))));
-
-            allowInitializationToFinish.countDown();
-            initialization.get(TEST_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
-        } finally {
-            allowInitializationToFinish.countDown();
-            executor.shutdownNow();
-            executor.awaitTermination(TEST_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
-        }
+        assertFalse(Files.exists(stagingPath));
+        assertFalse(Files.exists(lockPath));
     }
 
     @Test
     public void concurrentPublicationLeavesOneValidInstallation() throws Exception {
         var archives = createArchives();
-        var platform = new CudaResources.CudaPlatform(PLATFORM);
-        var platformFolder = CudaResources.getPlatformFolder(tempFolder, RELEASE, platform);
         var writes = new AtomicInteger();
         var executor = Executors.newFixedThreadPool(4);
         var futures = new ArrayList<Future<File>>();
 
         try {
             for (int i = 0; i < 4; i++) {
-                futures.add(executor.submit(() -> install(archives, platformFolder, writes)));
+                futures.add(executor.submit(() -> install(archives, RELEASE, writes)));
             }
 
             for (var future : futures) {
-                assertEquals(CudaResources.getInstallationFolder(platformFolder).getAbsoluteFile(),
+                assertEquals(tempFolder.resolve("cuda").resolve(RELEASE).toFile().getAbsoluteFile(),
                         future.get(TEST_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS).getAbsoluteFile());
             }
         } finally {
@@ -380,47 +372,36 @@ public class CudaResourcesTest {
             executor.awaitTermination(TEST_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
         }
 
-        assertTrue(CudaResources.isCudaInstallation(CudaResources.getInstallationFolder(platformFolder), PLATFORM));
-        try (var children = Files.list(platformFolder.toPath())) {
-            assertTrue(children.noneMatch(path -> path.getFileName().toString().startsWith(".cudalib.tmp-")));
-        }
-        try (var children = Files.list(platformFolder.toPath().resolve("archives/cuda_cudart"))) {
-            assertTrue(children.noneMatch(path -> path.getFileName().toString().startsWith(".cuda_cudart")));
-        }
+        var releaseFolder = tempFolder.resolve("cuda").resolve(RELEASE);
+        assertTrue(CudaResources.isCudaInstallation(releaseFolder.toFile(), RELEASE, PLATFORM));
+        assertNoCudaStaging();
         assertTrue(writes.get() >= 4);
     }
 
     @Test
     public void staleCudaReleasesAreRemovedAfterSixtyDays() throws IOException {
-        var platform = new CudaResources.CudaPlatform(hostPlatform());
-        var currentFolder = CudaResources.getPlatformFolder(tempFolder, RELEASE, platform);
-        var currentInstallation = CudaResources.getInstallationFolder(currentFolder);
-        writeValidInstallation(currentInstallation.toPath(), PLATFORM);
+        var currentFolder = tempFolder.resolve("cuda").resolve(RELEASE);
+        writeValidInstallation(currentFolder, PLATFORM);
 
-        var staleFolder = CudaResources.getPlatformFolder(tempFolder, "11.8.0", platform);
-        Files.createDirectories(staleFolder.toPath());
-        Files.setLastModifiedTime(staleFolder.toPath().getParent(),
+        var staleFolder = tempFolder.resolve("cuda").resolve("11.8.0");
+        Files.createDirectories(staleFolder);
+        Files.setLastModifiedTime(staleFolder,
                 FileTime.from(Instant.now().minus(Duration.ofDays(61))));
 
-        var parser = CodeParser.newInstance();
-        parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
-        new ClangResources(parser).getBuiltinCudaLib();
+        CudaResources.getBuiltinCudaLib(tempFolder);
 
-        assertTrue(currentInstallation.isDirectory());
-        assertFalse(staleFolder.getParentFile().exists());
+        assertTrue(Files.isDirectory(currentFolder));
+        assertFalse(Files.exists(staleFolder));
     }
 
-    private File install(CudaResources.NvidiaCudaManifest manifest, File platformFolder, Path source,
-                         AtomicInteger writes) {
-        return CudaResources.install(tempFolder, platformFolder, RELEASE,
-                new CudaResources.CudaPlatform(PLATFORM), manifest,
-                cudaPackage -> copyingResource(source,
-                        source.getFileName().toString(), writes));
+    private File install(CudaResources.NvidiaCudaManifest manifest, String releaseTag, Path source,
+                         AtomicInteger writes) throws IOException {
+        return CudaResources.install(tempFolder, releaseTag, manifestResource(manifestJson(manifest, releaseTag)),
+                cudaPackage -> copyingResource(source, source.getFileName().toString(), writes));
     }
 
-    private File install(ArchiveSet archives, File platformFolder, AtomicInteger writes) {
-        return CudaResources.install(tempFolder, platformFolder, RELEASE,
-                new CudaResources.CudaPlatform(PLATFORM), archives.manifest(),
+    private File install(ArchiveSet archives, String releaseTag, AtomicInteger writes) throws IOException {
+        return CudaResources.install(tempFolder, releaseTag, manifestResource(manifestJson(archives.manifest(), releaseTag)),
                 cudaPackage -> {
                     var source = archives.files().get(cudaPackage.component());
                     return copyingResource(source, source.getFileName().toString(), writes);
@@ -504,6 +485,7 @@ public class CudaResourcesTest {
 
     private void writeValidInstallation(Path installation, String platform) throws IOException {
         Files.createDirectories(installation.resolve("bin"));
+        Files.writeString(installation.resolve(CudaResources.getManifestFilename(RELEASE)), manifestJson());
         Files.writeString(installation.resolve(CudaResources.PLATFORM_FILENAME), platform);
         for (var requiredFile : List.of(
                 "include/cuda.h",
@@ -516,6 +498,27 @@ public class CudaResourcesTest {
             var file = installation.resolve(requiredFile);
             Files.createDirectories(file.getParent());
             Files.writeString(file, requiredFile);
+        }
+    }
+
+    private FileResourceProvider manifestResource(String json) {
+        try {
+            var source = Files.createTempFile(tempFolder, "manifest-", ".json");
+            Files.writeString(source, json);
+            return copyingResource(source, source.getFileName().toString(), new AtomicInteger());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void assertNoCudaStaging() throws IOException {
+        var cudaRoot = tempFolder.resolve("cuda");
+        if (!Files.isDirectory(cudaRoot)) {
+            return;
+        }
+
+        try (var children = Files.list(cudaRoot)) {
+            assertTrue(children.noneMatch(path -> path.getFileName().toString().contains(".tmp-")));
         }
     }
 
@@ -545,20 +548,6 @@ public class CudaResourcesTest {
         };
     }
 
-    private static String hostPlatform() {
-        return PLATFORM;
-    }
-
-    private void writeCachedManifest(String json) throws IOException {
-        writeCachedManifest(tempFolder, json);
-    }
-
-    private void writeCachedManifest(Path cacheRoot, String json) throws IOException {
-        var releaseFolder = cacheRoot.resolve("cuda").resolve(ClangAstWebResource.getCudaReleaseTag());
-        Files.createDirectories(releaseFolder);
-        Files.writeString(releaseFolder.resolve(CudaResources.getManifestFilename(RELEASE)), json);
-    }
-
     private static void writeTarXz(Path archive, Map<String, byte[]> files) throws IOException {
         try (OutputStream output = Files.newOutputStream(archive);
                 var xzOutput = new XZCompressorOutputStream(output);
@@ -584,6 +573,37 @@ public class CudaResourcesTest {
                 zipOutput.closeArchiveEntry();
             }
         }
+    }
+
+    private static String manifestJson(CudaResources.NvidiaCudaManifest manifest, String releaseTag) {
+        return """
+                {
+                  "release_date": "%s",
+                  "release_label": "%s",
+                  "release_product": "%s",
+                  "cuda_cudart": %s,
+                  "cuda_nvcc": %s,
+                  "libcurand": %s,
+                  "cuda_cccl": %s
+                }
+                """.formatted(
+                manifest.releaseDate(), releaseTag, manifest.releaseProduct(),
+                componentJson(manifest.components().get("cuda_cudart")),
+                componentJson(manifest.components().get("cuda_nvcc")),
+                componentJson(manifest.components().get("libcurand")),
+                componentJson(manifest.components().get("cuda_cccl")));
+    }
+
+    private static String componentJson(CudaResources.NvidiaCudaComponent component) {
+        var platforms = new ArrayList<String>();
+        for (var entry : component.archives().entrySet()) {
+            var archive = entry.getValue();
+            platforms.add("\"%s\": {\"relative_path\": \"%s\", \"sha256\": \"%s\", \"size\": \"%d\"}"
+                    .formatted(entry.getKey(), archive.relativePath(), archive.sha256(), archive.size()));
+        }
+
+        return "{\"name\": \"%s\", \"version\": \"%s\", %s}"
+                .formatted(component.name(), component.version(), String.join(", ", platforms));
     }
 
     private static String manifestJson() {
@@ -636,17 +656,6 @@ public class CudaResourcesTest {
     }
 
     private static final String SHA256 = "0".repeat(64);
-
-    private static void awaitLatch(CountDownLatch latch) {
-        try {
-            if (!latch.await(TEST_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS)) {
-                throw new AssertionError("Timed out waiting for CUDA initialization test coordination");
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
-        }
-    }
 
     private record ArchiveSet(CudaResources.NvidiaCudaManifest manifest, Map<String, Path> files) {
     }
