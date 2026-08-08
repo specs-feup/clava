@@ -542,13 +542,18 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void builtinCudaArchiveHasCanonicalInstallationLayout() {
+    public void builtinCudaInstallationHasCanonicalLayout() {
         var parser = newParser(CodeParser.getBuiltinOption());
         var cudaFolder = new ClangResources(parser).getBuiltinCudaLib();
 
-        var cudaPlatform = cudaFolder.getParentFile().getName();
         assertEquals(tempFolder.resolve("cuda").resolve(ClangAstWebResource.getCudaReleaseTag())
-                .resolve(cudaPlatform).resolve("cudalib").toFile().getAbsolutePath(), cudaFolder.getAbsolutePath());
+                .toFile().getAbsolutePath(), cudaFolder.getAbsolutePath());
+        assertTrue(new File(cudaFolder, CudaResources.getManifestFilename(ClangAstWebResource.getCudaReleaseTag()))
+                .isFile());
+        assertTrue(new File(cudaFolder, CudaResources.PLATFORM_FILENAME).isFile());
+        assertFalse(new File(cudaFolder, "archives").exists());
+        assertFalse(new File(cudaFolder, "cudalib").exists());
+        assertFalse(new File(cudaFolder, "linux-x86_64").exists());
         assertTrue(new File(cudaFolder, "include/cuda.h").isFile());
         assertTrue(new File(cudaFolder, "include/cuda_runtime.h").isFile());
         assertTrue(new File(cudaFolder, "nvvm/libdevice/libdevice.10.bc").isFile());
