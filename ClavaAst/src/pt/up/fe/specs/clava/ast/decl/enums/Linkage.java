@@ -15,7 +15,7 @@ package pt.up.fe.specs.clava.ast.decl.enums;
 
 /**
  * Describes the different kinds of linkage (C++ [basic.link], C99 6.2.2) that an entity may have.
- *
+ * <p>
  * (from Clang documentation)
  *
  * @author JoaoBispo
@@ -24,6 +24,8 @@ package pt.up.fe.specs.clava.ast.decl.enums;
 public enum Linkage {
 
     None,
+
+    External,
 
     /**
      * The entity is unique and can only be referred to from within its scope.
