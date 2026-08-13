@@ -6,11 +6,19 @@
 name: nightly
 
 on:
-  push:
+  pull_request:
+    branches:
+      - master
+      - staging
 
-  # Daily at midnight
+  push:
+    branches:
+      - master
+      - staging
+
+  # Weekly on Mondays early morning
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '23 3 * * 1'
 
 permissions:
   checks: write
