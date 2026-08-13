@@ -41,7 +41,7 @@ public interface ClangAstWebResource {
     WebResourceProvider WIN_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM-16.dll");
     WebResourceProvider WIN_CLANG_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libclang-cpp.dll");
 
-    WebResourceProvider LINUX_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_linux", "v16.0.5");
+    WebResourceProvider LINUX_EXE = WebResourceProvider.newInstance(ROOT_16_0_5, "clang_ast_linux", "v16.0.5_1");
     WebResourceProvider LINUX_PLUGIN = WebResourceProvider.newInstance(ROOT_16_0_5, "clang-plugin.so", "v16.0.5");
     WebResourceProvider LINUX_LLVM_DLL = WebResourceProvider.newInstance(ROOT_16_0_5, "libLLVM-16.so.1", "v16.0.5");
 

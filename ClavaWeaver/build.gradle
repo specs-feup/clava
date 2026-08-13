@@ -46,6 +46,9 @@ sourceSets {
         java {
             srcDir 'src'
         }
+        resources {
+            srcDir 'resources'
+        }
     }
 }
 
@@ -56,13 +59,13 @@ tasks.register('generateWeaver', JavaExec) {
     classpath = configurations.weaverGeneratorRuntime
     mainClass = 'org.lara.interpreter.weaver.generator.commandline.WeaverGenerator'
     args = [
-        "-w", "CxxWeaver",
-        "-x", "./resources/clava/weaverspecs",
-        "-o", "./src",
-        "-p", "pt.up.fe.specs.clava.weaver",
-        "-n", "pt.up.fe.specs.clava.ClavaNode",
-        "-e",
-        "-j"
+            "-w", "CxxWeaver",
+            "-x", "./resources/clava/weaverspecs",
+            "-o", "./src",
+            "-p", "pt.up.fe.specs.clava.weaver",
+            "-n", "pt.up.fe.specs.clava.ClavaNode",
+            "-e",
+            "-j"
     ]
 }
 

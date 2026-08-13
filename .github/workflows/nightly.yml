@@ -6,11 +6,19 @@
 name: nightly
 
 on:
-  push:
+  pull_request:
+    branches:
+      - master
+      - staging
 
-  # Daily at midnight
+  push:
+    branches:
+      - master
+      - staging
+
+  # Weekly on Mondays early morning
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '23 3 * * 1'
 
 permissions:
   checks: write
@@ -28,7 +36,8 @@ env:
 jobs:
   build-java:
     name: Build Java
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-26.04
+    runs-on: windows-2022    
 
     outputs:
       branch-exists-lara-framework: ${{ steps.Branch-lara-framework.outputs.value }}
@@ -120,8 +129,10 @@ jobs:
       fail-fast: false
       matrix:
         #node-version: ['latest', '22.x', '20.x']
-        node-version: ['22.x', '20.x']
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: ['22.x']
+        # For some reason, Clava is not working on Linux on a runner. 
+        # This has been solved in Lara 4.0, disabling until then
+        os: [windows-2022, macos-latest]
 
     runs-on: ${{ matrix.os }}
 
