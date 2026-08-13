@@ -132,7 +132,7 @@ jobs:
         node-version: ['22.x']
         # For some reason, Clava is not working on Linux on a runner. 
         # This has been solved in Lara 4.0, disabling until then
-        os: [windows-2022, macos-latest]
+        os: [windows-2022, macos-latest, ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
 
