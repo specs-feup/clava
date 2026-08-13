@@ -36,7 +36,8 @@ env:
 jobs:
   build-java:
     name: Build Java
-    runs-on: ubuntu-26.04
+    #runs-on: ubuntu-26.04
+    runs-on: windows-2022    
 
     outputs:
       branch-exists-lara-framework: ${{ steps.Branch-lara-framework.outputs.value }}
@@ -129,8 +130,9 @@ jobs:
       matrix:
         #node-version: ['latest', '22.x', '20.x']
         node-version: ['22.x']
-        # Change to ubuntu-latest when it goes from 24.04 to 26.04
-        os: [ubuntu-26.04, windows-2022, macos-latest]
+        # For some reason, Clava is not working on Linux on a runner. 
+        # This has been solved in Lara 4.0, disabling until then
+        os: [windows-2022, macos-latest]
 
     runs-on: ${{ matrix.os }}
 
