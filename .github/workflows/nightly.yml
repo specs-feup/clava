@@ -36,8 +36,7 @@ env:
 jobs:
   build-java:
     name: Build Java
-    #runs-on: ubuntu-latest
-    runs-on: windows-2022    
+    runs-on: ubuntu-26.04
 
     outputs:
       branch-exists-lara-framework: ${{ steps.Branch-lara-framework.outputs.value }}
@@ -129,8 +128,9 @@ jobs:
       fail-fast: false
       matrix:
         #node-version: ['latest', '22.x', '20.x']
-        node-version: ['22.x', '20.x']
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: ['22.x']
+        # Change to ubuntu-latest when it goes from 24.04 to 26.04
+        os: [ubuntu-26.04, windows-2022, macos-latest]
 
     runs-on: ${{ matrix.os }}
 
