@@ -27,6 +27,8 @@ public enum Linkage {
 
     External,
 
+    Internal,
+
     /**
      * The entity is unique and can only be referred to from within its scope.
      */
