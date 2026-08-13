@@ -23,12 +23,6 @@ package pt.up.fe.specs.clava.ast.decl.enums;
  */
 public enum Linkage {
 
-    None,
-
-    External,
-
-    Internal,
-
     /**
      * The entity is unique and can only be referred to from within its scope.
      */
