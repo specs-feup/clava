@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CXXThisExpr;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APointerType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AThis;
@@ -25,8 +26,8 @@ public class CxxThis extends AThis {
 
     private final CXXThisExpr thisExpr;
 
-    public CxxThis(CXXThisExpr thisExpr) {
-        super(new CxxExpression(thisExpr));
+    public CxxThis(CXXThisExpr thisExpr, CxxWeaver weaver) {
+        super(new CxxExpression(thisExpr, weaver), weaver);
         this.thisExpr = thisExpr;
     }
 
@@ -56,6 +57,6 @@ public class CxxThis extends AThis {
 
         var typeDecl = thisType.get(TagType.DECL);
 
-        return CxxJoinpoints.create(typeDecl, ADecl.class);
+        return CxxJoinpoints.create(typeDecl, getWeaverEngine(), ADecl.class);
     }
 }

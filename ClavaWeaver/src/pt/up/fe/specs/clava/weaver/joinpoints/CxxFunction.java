@@ -45,8 +45,8 @@ import java.util.stream.Collectors;
 public class CxxFunction extends AFunction {
     private final FunctionDecl function;
 
-    public CxxFunction(FunctionDecl function) {
-        super(new CxxDeclarator(function));
+    public CxxFunction(FunctionDecl function, CxxWeaver weaver) {
+        super(new CxxDeclarator(function, weaver), weaver);
         this.function = function;
     }
 
@@ -57,17 +57,17 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AType getTypeImpl() {
-        return CxxJoinpoints.create(function.getReturnType(), AType.class);
+        return CxxJoinpoints.create(function.getReturnType(), getWeaverEngine(), AType.class);
     }
 
     @Override
     public AFunctionType getFunctionTypeImpl() {
-        return CxxJoinpoints.create(function.getFunctionType(), AFunctionType.class);
+        return CxxJoinpoints.create(function.getFunctionType(), getWeaverEngine(), AFunctionType.class);
     }
 
     @Override
     public ACall newCallImpl(AJoinPoint[] args) {
-        return AstFactory.callFromFunction(this, SpecsCollections.asListT(AJoinPoint.class, (Object[]) args));
+        return AstFactory.callFromFunction(getWeaverEngine(), this, SpecsCollections.asListT(AJoinPoint.class, (Object[]) args));
     }
 
     @Override
@@ -91,7 +91,7 @@ public class CxxFunction extends AFunction {
         var clavaNode = node.getNode();
 
         if (clavaNode instanceof VarDecl || clavaNode instanceof Expr) {
-            return CxxJoinpoints.create(ClavaNodes.toStmt(clavaNode));
+            return CxxJoinpoints.create(ClavaNodes.toStmt(clavaNode), getWeaverEngine());
         }
 
         // Otherwise, do nothing
@@ -101,7 +101,7 @@ public class CxxFunction extends AFunction {
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
         // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
-        Stmt literalStmt = CxxWeaver.getSnippetParser().parseStmt(code);
+        Stmt literalStmt = getWeaverEngine().getSnippetParser().parseStmt(code);
         return insertStmt(literalStmt, position);
     }
 
@@ -113,7 +113,8 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return insertAfterImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
+        return insertAfterImpl(CxxJoinpoints.create(getWeaverEngine().getSnippetParser().parseStmt(code),
+                getWeaverEngine()));
     }
 
     @Override
@@ -124,7 +125,8 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AJoinPoint insertBeforeImpl(String code) {
-        return insertBeforeImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
+        return insertBeforeImpl(CxxJoinpoints.create(getWeaverEngine().getSnippetParser().parseStmt(code),
+                getWeaverEngine()));
     }
 
     @Override
@@ -146,7 +148,7 @@ public class CxxFunction extends AFunction {
             case "around":
             case "replace":
                 NodeInsertUtils.replace(function, newNode);
-                return new AJoinPoint[]{CxxJoinpoints.create(newNode)};
+                return new AJoinPoint[]{CxxJoinpoints.create(newNode, getWeaverEngine())};
             default:
                 throw new RuntimeException("Case not defined:" + position);
         }
@@ -163,7 +165,7 @@ public class CxxFunction extends AFunction {
             return null;
         }
 
-        return (ABody) CxxJoinpoints.create(function.getBody().get());
+        return CxxJoinpoints.create(function.getBody().get(), getWeaverEngine(), ABody.class);
     }
 
     @Override
@@ -184,7 +186,7 @@ public class CxxFunction extends AFunction {
                     "The node (" + reference + ") needs to be either a FuncDecl or a TranslationUnit.");
         }
 
-        return CxxJoinpoints.create(newFunc, AFunction.class);
+        return CxxJoinpoints.create(newFunc, getWeaverEngine(), AFunction.class);
     }
 
     @Override
@@ -208,14 +210,14 @@ public class CxxFunction extends AFunction {
                 .findFirst();
 
         if (existingFile.isPresent()) {
-            return cloneOnFileImpl(newName, new CxxFile(existingFile.get()));
+            return cloneOnFileImpl(newName, new CxxFile(existingFile.get(), getWeaverEngine()));
         }
 
         // Extract relative path
         var relativePath = currentFile.getParentFile() != null ? currentFile.getParent() : null;
 
         // Create a new file
-        var newFile = AstFactory.file(fileName, relativePath);
+        var newFile = AstFactory.file(getWeaverEngine(), fileName, relativePath);
 
         // Set same source foldername
         var originalFile = function.getAncestorTry(TranslationUnit.class).orElse(null);
@@ -321,14 +323,16 @@ public class CxxFunction extends AFunction {
     public AParam[] getParamsArrayImpl() {
         return function.getParameters()
                 .stream()
-                .map(param -> CxxJoinpoints.create(param, AParam.class))
+                .map(param -> CxxJoinpoints.create(param,
+                        getWeaverEngine(), AParam.class))
                 .collect(Collectors.toList())
                 .toArray(new AParam[0]);
     }
 
     @Override
     public AJoinPoint insertReturnImpl(String code) {
-        return insertReturnImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
+        return insertReturnImpl(CxxJoinpoints.create(getWeaverEngine().getSnippetParser().parseStmt(code),
+                getWeaverEngine()));
     }
 
     @Override
@@ -342,7 +346,7 @@ public class CxxFunction extends AFunction {
             return null;
         }
 
-        return CxxActions.insertReturn(getBodyImpl(), code);
+        return CxxActions.insertReturn(getBodyImpl(), code, getWeaverEngine());
 
         //
         // List<Stmt> bodyStmts = function.getBody().get().toStatements();
@@ -391,7 +395,7 @@ public class CxxFunction extends AFunction {
     @Override
     public AFunction[] getDeclarationJpsArrayImpl() {
         return function.getPrototypes().stream()
-                .map(node -> CxxJoinpoints.create(node, AFunction.class))
+                .map(node -> CxxJoinpoints.create(node, getWeaverEngine(), AFunction.class))
                 .toArray(size -> new AFunction[size]);
     }
 
@@ -414,7 +418,7 @@ public class CxxFunction extends AFunction {
     @Override
     public AFunction getDefinitionJpImpl() {
         return function.getImplementation()
-                .map(node -> CxxJoinpoints.create(node, AFunction.class))
+                .map(node -> CxxJoinpoints.create(node, getWeaverEngine(), AFunction.class))
                 .orElse(null);
     }
 
@@ -480,7 +484,7 @@ public class CxxFunction extends AFunction {
     @Override
     public ACall[] getCallsArrayImpl() {
         return function.getCalls().stream()
-                .map(call -> CxxJoinpoints.create(call, ACall.class))
+                .map(call -> CxxJoinpoints.create(call, getWeaverEngine(), ACall.class))
                 .toArray(ACall[]::new);
     }
 
@@ -504,7 +508,7 @@ public class CxxFunction extends AFunction {
 
             var parmVarDecl = ClavaNodes.toParam(typeVarname, function);
 
-            newParams[i] = CxxJoinpoints.create(parmVarDecl, AParam.class);
+            newParams[i] = CxxJoinpoints.create(parmVarDecl, getWeaverEngine(), AParam.class);
         }
 
         setParamsImpl(newParams);
@@ -527,7 +531,7 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AType getReturnTypeImpl() {
-        return CxxJoinpoints.create(function.getReturnType(), AType.class);
+        return CxxJoinpoints.create(function.getReturnType(), getWeaverEngine(), AType.class);
     }
 
     @Override
@@ -558,7 +562,7 @@ public class CxxFunction extends AFunction {
         } else {
             paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
         }
-        addParamImpl(CxxJoinpoints.create(paramNode, AParam.class));
+        addParamImpl(CxxJoinpoints.create(paramNode, getWeaverEngine(), AParam.class));
     }
 
     @Override
@@ -586,7 +590,7 @@ public class CxxFunction extends AFunction {
             paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
         }
 
-        setParamImpl(index, CxxJoinpoints.create(paramNode, AParam.class));
+        setParamImpl(index, CxxJoinpoints.create(paramNode, getWeaverEngine(), AParam.class));
     }
 
     @Override
@@ -599,7 +603,7 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AFunction getCanonicalImpl() {
-        return CxxJoinpoints.create(function.canonical(), AFunction.class);
+        return CxxJoinpoints.create(function.canonical(), getWeaverEngine(), AFunction.class);
     }
 
     @Override

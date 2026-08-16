@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints.types;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
@@ -23,8 +24,8 @@ public class CxxFunctionType extends AFunctionType {
 
     private final FunctionType type;
 
-    public CxxFunctionType(FunctionType type) {
-        super(new CxxType(type));
+    public CxxFunctionType(FunctionType type, CxxWeaver weaver) {
+        super(new CxxType(type, weaver), weaver);
         this.type = type;
     }
 
@@ -35,14 +36,14 @@ public class CxxFunctionType extends AFunctionType {
 
     @Override
     public AType getReturnTypeImpl() {
-        return CxxJoinpoints.create(type.getReturnType(), AType.class);
+        return CxxJoinpoints.create(type.getReturnType(), getWeaverEngine(), AType.class);
     }
 
     @Override
     public AType[] getParamTypesArrayImpl() {
 
         return type.getParamTypes().stream()
-                .map(paramType -> CxxJoinpoints.create(paramType))
+                .map(paramType -> CxxJoinpoints.create(paramType, getWeaverEngine()))
                 .toArray(size -> new AType[size]);
 
     }

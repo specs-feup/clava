@@ -10,6 +10,7 @@ import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import * as Joinpoints from "../Joinpoints.js";
 import Clava from "./Clava.js";
 import ClavaJavaTypes from "./ClavaJavaTypes.js";
+import Weaver from "@specs-feup/lara/api/weaver/Weaver.js";
 
 /**
  * Utility methods related with the creation of new join points.
@@ -17,7 +18,7 @@ import ClavaJavaTypes from "./ClavaJavaTypes.js";
  */
 export default class ClavaJoinPoints {
   static toJoinPoint(node: any): Joinpoints.Joinpoint {
-    return wrapJoinPoint(ClavaJavaTypes.CxxJoinPoints.createFromLara(node));
+    return wrapJoinPoint(ClavaJavaTypes.CxxJoinPoints.createFromLara(node, Weaver.getWeaverEngine()));
   }
 
   /**
@@ -30,18 +31,18 @@ export default class ClavaJoinPoints {
   }
 
   static builtinType(code: string): Joinpoints.BuiltinType {
-    return wrapJoinPoint(ClavaJavaTypes.AstFactory.builtinType(code));
+    return wrapJoinPoint(ClavaJavaTypes.AstFactory.builtinType(Weaver.getWeaverEngine(), code));
   }
 
   static pointerFromBuiltin(code: string): Joinpoints.PointerType {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.pointerTypeFromBuiltin(code)
+      ClavaJavaTypes.AstFactory.pointerTypeFromBuiltin(Weaver.getWeaverEngine(), code)
     );
   }
 
   static pointer($type: Joinpoints.Type): Joinpoints.PointerType {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.pointerType(unwrapJoinPoint($type))
+      ClavaJavaTypes.AstFactory.pointerType(Weaver.getWeaverEngine(), unwrapJoinPoint($type))
     );
   }
 
@@ -62,6 +63,7 @@ export default class ClavaJoinPoints {
     if (typeof type === "string") {
       return wrapJoinPoint(
         ClavaJavaTypes.AstFactory.constArrayType(
+          Weaver.getWeaverEngine(),
           type,
           Clava.getStandard(),
           dims
@@ -70,6 +72,7 @@ export default class ClavaJoinPoints {
     } else if (type instanceof Joinpoints.Type) {
       return wrapJoinPoint(
         ClavaJavaTypes.AstFactory.constArrayType(
+          Weaver.getWeaverEngine(),
           type.node,
           Clava.getStandard(),
           dims
@@ -86,6 +89,7 @@ export default class ClavaJoinPoints {
   ): Joinpoints.VariableArrayType {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.variableArrayType(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint($type),
         unwrapJoinPoint($sizeExpr)
       )
@@ -97,6 +101,7 @@ export default class ClavaJoinPoints {
   ): Joinpoints.IncompleteArrayType {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.incompleteArrayType(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint($type)
       )
     );
@@ -112,7 +117,9 @@ export default class ClavaJoinPoints {
     type?: Joinpoints.Type | string
   ): Joinpoints.Expression {
     if (type === undefined) {
-      return wrapJoinPoint(ClavaJavaTypes.AstFactory.exprLiteral(code));
+      return wrapJoinPoint(
+        ClavaJavaTypes.AstFactory.exprLiteral(Weaver.getWeaverEngine(), code)
+      );
     }
 
     if (typeof type === "string") {
@@ -120,7 +127,11 @@ export default class ClavaJoinPoints {
     }
 
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.exprLiteral(code, unwrapJoinPoint(type))
+      ClavaJavaTypes.AstFactory.exprLiteral(
+        Weaver.getWeaverEngine(),
+        code,
+        unwrapJoinPoint(type)
+      )
     );
   }
 
@@ -142,6 +153,7 @@ export default class ClavaJoinPoints {
     });
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.cxxConstructExpr(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint(type),
         unwrapJoinPoint(processedArguments)
       )
@@ -153,7 +165,11 @@ export default class ClavaJoinPoints {
     init: Joinpoints.Joinpoint
   ): Joinpoints.Vardecl {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.varDecl(varName, unwrapJoinPoint(init))
+      ClavaJavaTypes.AstFactory.varDecl(
+        Weaver.getWeaverEngine(),
+        varName,
+        unwrapJoinPoint(init)
+      )
     );
   }
 
@@ -162,7 +178,11 @@ export default class ClavaJoinPoints {
     type: Joinpoints.Type
   ): Joinpoints.Vardecl {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.varDeclNoInit(varName, unwrapJoinPoint(type))
+      ClavaJavaTypes.AstFactory.varDeclNoInit(
+        Weaver.getWeaverEngine(),
+        varName,
+        unwrapJoinPoint(type)
+      )
     );
   }
 
@@ -172,7 +192,12 @@ export default class ClavaJoinPoints {
    * @param typeString - The literal code of the type
    */
   static typeLiteral(typeString: string): Joinpoints.Type {
-    return wrapJoinPoint(ClavaJavaTypes.AstFactory.typeLiteral(typeString));
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.typeLiteral(
+        Weaver.getWeaverEngine(),
+        typeString
+      )
+    );
   }
 
   /**
@@ -186,7 +211,11 @@ export default class ClavaJoinPoints {
     path = ""
   ): Joinpoints.FileJp {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.file(unwrapJoinPoint(filename), path)
+      ClavaJavaTypes.AstFactory.file(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint(filename),
+        path
+      )
     );
   }
 
@@ -201,7 +230,12 @@ export default class ClavaJoinPoints {
     path = ""
   ): Joinpoints.FileJp {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.file(filename, source, path)
+      ClavaJavaTypes.AstFactory.file(
+        Weaver.getWeaverEngine(),
+        filename,
+        source,
+        path
+      )
     );
   }
 
@@ -211,11 +245,18 @@ export default class ClavaJoinPoints {
    * @param stmtString - The literal code of the statement.
    */
   static stmtLiteral(stmtString: string): Joinpoints.Statement {
-    return wrapJoinPoint(ClavaJavaTypes.AstFactory.stmtLiteral(stmtString));
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.stmtLiteral(
+        Weaver.getWeaverEngine(),
+        stmtString
+      )
+    );
   }
 
   static emptyStmt(): Joinpoints.Statement {
-    return wrapJoinPoint(ClavaJavaTypes.AstFactory.emptyStmt());
+    return wrapJoinPoint(
+        ClavaJavaTypes.AstFactory.emptyStmt(Weaver.getWeaverEngine())
+    );
   }
 
   /**
@@ -230,6 +271,7 @@ export default class ClavaJoinPoints {
   ): Joinpoints.Call {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.callFromFunction(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint($function),
         unwrapJoinPoint(flattenArgsArray(callArgs))
       )
@@ -250,6 +292,7 @@ export default class ClavaJoinPoints {
   ): Joinpoints.Call {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.call(
+        Weaver.getWeaverEngine(),
         functionName,
         unwrapJoinPoint($returnType),
         flattenArgsArray(callArgs).map(unwrapJoinPoint)
@@ -267,6 +310,7 @@ export default class ClavaJoinPoints {
   ): Joinpoints.Switch {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.switchStmt(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint($conditionExpr),
         unwrapJoinPoint(flattenArgsArray(cases))
       )
@@ -274,13 +318,17 @@ export default class ClavaJoinPoints {
   }
 
   static omp(directiveName: string): Joinpoints.Omp {
-    return wrapJoinPoint(ClavaJavaTypes.AstFactory.omp(directiveName));
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.omp(Weaver.getWeaverEngine(), directiveName)
+    );
   }
 
   static scope(...$jps: Joinpoints.Joinpoint[]): Joinpoints.Scope {
     $jps = flattenArgsArray($jps);
     if ($jps.length === 0) {
-      return wrapJoinPoint(ClavaJavaTypes.AstFactory.scope());
+      return wrapJoinPoint(
+        ClavaJavaTypes.AstFactory.scope(Weaver.getWeaverEngine())
+      );
     }
 
     const $stmts = $jps.map(($stmt) => {
@@ -296,7 +344,10 @@ export default class ClavaJoinPoints {
     });
 
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.scope(unwrapJoinPoint($stmts))
+      ClavaJavaTypes.AstFactory.scope(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint($stmts)
+      )
     );
   }
 
@@ -316,12 +367,19 @@ export default class ClavaJoinPoints {
   ): Joinpoints.Varref {
     if (typeof decl === "string") {
       return wrapJoinPoint(
-        ClavaJavaTypes.AstFactory.varref(decl, unwrapJoinPoint($type))
+        ClavaJavaTypes.AstFactory.varref(
+          Weaver.getWeaverEngine(),
+          decl,
+          unwrapJoinPoint($type)
+        )
       );
     }
 
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.varref(unwrapJoinPoint(decl))
+      ClavaJavaTypes.AstFactory.varref(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint(decl)
+      )
     );
   }
 
@@ -338,11 +396,16 @@ export default class ClavaJoinPoints {
    */
   static returnStmt($expr?: Joinpoints.Expression): Joinpoints.ReturnStmt {
     if ($expr === undefined) {
-      return wrapJoinPoint(ClavaJavaTypes.AstFactory.returnStmt());
+      return wrapJoinPoint(
+        ClavaJavaTypes.AstFactory.returnStmt(Weaver.getWeaverEngine())
+      );
     }
 
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.returnStmt(unwrapJoinPoint($expr))
+      ClavaJavaTypes.AstFactory.returnStmt(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint($expr)
+      )
     );
   }
 
@@ -358,6 +421,7 @@ export default class ClavaJoinPoints {
   ): Joinpoints.FunctionType {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.functionType(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint($returnType),
         unwrapJoinPoint(flattenArgsArray(argTypes))
       )
@@ -376,6 +440,7 @@ export default class ClavaJoinPoints {
   ): Joinpoints.FunctionJp {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.functionDeclFromType(
+        Weaver.getWeaverEngine(),
         functionName,
         unwrapJoinPoint($functionType)
       )
@@ -399,6 +464,7 @@ export default class ClavaJoinPoints {
 
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.functionDecl(
+        Weaver.getWeaverEngine(),
         functionName,
         unwrapJoinPoint($returnType),
         unwrapJoinPoint($paramVarDecls)
@@ -412,6 +478,7 @@ export default class ClavaJoinPoints {
   ): Joinpoints.BinaryOp {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.assignment(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint($leftHand),
         unwrapJoinPoint($rightHand)
       )
@@ -425,6 +492,7 @@ export default class ClavaJoinPoints {
   ): Joinpoints.BinaryOp {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.compoundAssignment(
+        Weaver.getWeaverEngine(),
         op,
         unwrapJoinPoint($leftHand),
         unwrapJoinPoint($rightHand)
@@ -451,6 +519,7 @@ export default class ClavaJoinPoints {
 
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.ifStmt(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint($condition),
         unwrapJoinPoint($then),
         unwrapJoinPoint($else)
@@ -484,6 +553,7 @@ export default class ClavaJoinPoints {
 
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.binaryOp(
+        Weaver.getWeaverEngine(),
         op,
         unwrapJoinPoint($left),
         unwrapJoinPoint($right),
@@ -530,6 +600,7 @@ export default class ClavaJoinPoints {
 
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.unaryOp(
+        Weaver.getWeaverEngine(),
         op,
         unwrapJoinPoint($expr),
         unwrapJoinPoint($type)
@@ -567,6 +638,7 @@ export default class ClavaJoinPoints {
 
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.ternaryOp(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint($cond),
         unwrapJoinPoint($trueExpr),
         unwrapJoinPoint($falseExpr),
@@ -588,7 +660,10 @@ export default class ClavaJoinPoints {
     }
 
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.parenthesis(unwrapJoinPoint($expr))
+      ClavaJavaTypes.AstFactory.parenthesis(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint($expr)
+      )
     );
   }
 
@@ -597,7 +672,10 @@ export default class ClavaJoinPoints {
    */
   static doubleLiteral(doubleLiteral: number | string): Joinpoints.Expression {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.doubleLiteral(doubleLiteral)
+      ClavaJavaTypes.AstFactory.doubleLiteral(
+        Weaver.getWeaverEngine(),
+        doubleLiteral
+      )
     );
   }
 
@@ -608,7 +686,10 @@ export default class ClavaJoinPoints {
     integerLiteral: number | string
   ): Joinpoints.Expression {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.integerLiteral(integerLiteral)
+      ClavaJavaTypes.AstFactory.integerLiteral(
+        Weaver.getWeaverEngine(),
+        integerLiteral
+      )
     );
   }
 
@@ -619,7 +700,10 @@ export default class ClavaJoinPoints {
     $typedefDecl: Joinpoints.TypedefDecl
   ): Joinpoints.TypedefType {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.typedefType(unwrapJoinPoint($typedefDecl))
+      ClavaJavaTypes.AstFactory.typedefType(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint($typedefDecl)
+      )
     );
   }
 
@@ -633,6 +717,7 @@ export default class ClavaJoinPoints {
   ): Joinpoints.TypedefDecl {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.typedefDecl(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint($underlyingType),
         identifier
       )
@@ -645,7 +730,10 @@ export default class ClavaJoinPoints {
    */
   static structType($struct: Joinpoints.Struct): Joinpoints.ElaboratedType {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.structType(unwrapJoinPoint($struct))
+      ClavaJavaTypes.AstFactory.structType(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint($struct)
+      )
     );
   }
 
@@ -659,6 +747,7 @@ export default class ClavaJoinPoints {
   ): Joinpoints.Cast {
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.cStyleCast(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint($type),
         unwrapJoinPoint($expr)
       )
@@ -676,6 +765,7 @@ export default class ClavaJoinPoints {
     const flattenedFields = flattenArgsArray(fields);
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.classDecl(
+        Weaver.getWeaverEngine(),
         className,
         unwrapJoinPoint(flattenedFields)
       )
@@ -697,6 +787,7 @@ export default class ClavaJoinPoints {
     const flattenedSubscripts = flattenArgsArray(subscripts);
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.arrayAccess(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint(base),
         unwrapJoinPoint(flattenedSubscripts)
       )
@@ -712,7 +803,10 @@ export default class ClavaJoinPoints {
   static initList(...values: Joinpoints.Expression[]): Joinpoints.InitList {
     const flattenedValues = flattenArgsArray(values);
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.initList(unwrapJoinPoint(flattenedValues))
+      ClavaJavaTypes.AstFactory.initList(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint(flattenedValues)
+      )
     );
   }
 
@@ -725,7 +819,11 @@ export default class ClavaJoinPoints {
     $fieldType: Joinpoints.Type
   ): Joinpoints.Field {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.field(fieldName, unwrapJoinPoint($fieldType))
+      ClavaJavaTypes.AstFactory.field(
+        Weaver.getWeaverEngine(),
+        fieldName,
+        unwrapJoinPoint($fieldType)
+      )
     );
   }
 
@@ -737,7 +835,10 @@ export default class ClavaJoinPoints {
   static accessSpecifier(accessSpecifier: string): Joinpoints.AccessSpecifier {
     // TODO: Make this an enum
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.accessSpecifier(accessSpecifier)
+      ClavaJavaTypes.AstFactory.accessSpecifier(
+        Weaver.getWeaverEngine(),
+        accessSpecifier
+      )
     );
   }
 
@@ -771,6 +872,7 @@ export default class ClavaJoinPoints {
 
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.forStmt(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint($init),
         unwrapJoinPoint($condition),
         unwrapJoinPoint($inc),
@@ -792,6 +894,7 @@ export default class ClavaJoinPoints {
 
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.whileStmt(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint($condition),
         unwrapJoinPoint($body)
       )
@@ -800,7 +903,11 @@ export default class ClavaJoinPoints {
 
   static param(name: string, $type: Joinpoints.Type): Joinpoints.Param {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.param(name, unwrapJoinPoint($type))
+      ClavaJavaTypes.AstFactory.param(
+        Weaver.getWeaverEngine(),
+        name,
+        unwrapJoinPoint($type)
+      )
     );
   }
 
@@ -845,7 +952,10 @@ export default class ClavaJoinPoints {
 
   static exprStmt($expr: Joinpoints.Expression): Joinpoints.ExprStmt {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.exprStmt(unwrapJoinPoint($expr))
+      ClavaJavaTypes.AstFactory.exprStmt(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint($expr)
+      )
     );
   }
 
@@ -856,7 +966,10 @@ export default class ClavaJoinPoints {
   static declStmt(...decls: Joinpoints.Decl[]): Joinpoints.DeclStmt {
     const flattenedDecls = flattenArgsArray(decls);
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.declStmt(unwrapJoinPoint(flattenedDecls))
+      ClavaJavaTypes.AstFactory.declStmt(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint(flattenedDecls)
+      )
     );
   }
 
@@ -868,33 +981,47 @@ export default class ClavaJoinPoints {
    *
    */
   static comment(text: string): Joinpoints.Comment {
-    return wrapJoinPoint(ClavaJavaTypes.AstFactory.comment(text));
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.comment(Weaver.getWeaverEngine(), text)
+    );
   }
 
   static labelDecl(name: string): Joinpoints.LabelDecl {
-    return wrapJoinPoint(ClavaJavaTypes.AstFactory.labelDecl(name));
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.labelDecl(Weaver.getWeaverEngine(), name)
+    );
   }
 
   static labelStmt(
     nameOrDecl: Joinpoints.LabelDecl | string
   ): Joinpoints.LabelStmt {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.labelStmt(unwrapJoinPoint(nameOrDecl))
+      ClavaJavaTypes.AstFactory.labelStmt(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint(nameOrDecl)
+      )
     );
   }
 
   static gotoStmt(labelDecl: Joinpoints.LabelDecl): Joinpoints.GotoStmt {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.gotoStmt(unwrapJoinPoint(labelDecl))
+      ClavaJavaTypes.AstFactory.gotoStmt(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint(labelDecl)
+      )
     );
   }
 
   static breakStmt(): Joinpoints.Break {
-    return wrapJoinPoint(ClavaJavaTypes.AstFactory.breakStmt());
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.breakStmt(Weaver.getWeaverEngine())
+    );
   }
 
   static defaultStmt(): Joinpoints.Default {
-    return wrapJoinPoint(ClavaJavaTypes.AstFactory.defaultStmt());
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.defaultStmt(Weaver.getWeaverEngine())
+    );
   }
 
   /**
@@ -903,7 +1030,12 @@ export default class ClavaJoinPoints {
    * @param declString - The literal code of the decl.
    */
   static declLiteral(declString: string): Joinpoints.Decl {
-    return wrapJoinPoint(ClavaJavaTypes.AstFactory.declLiteral(declString));
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.declLiteral(
+        Weaver.getWeaverEngine(),
+        declString
+      )
+    );
   }
 
   /**
@@ -912,7 +1044,9 @@ export default class ClavaJoinPoints {
    * @param declString - The literal code of the decl.
    */
   static program(): Joinpoints.Program {
-    return wrapJoinPoint(ClavaJavaTypes.AstFactory.program());
+    return wrapJoinPoint(
+      ClavaJavaTypes.AstFactory.program(Weaver.getWeaverEngine())
+    );
   }
 
   /**
@@ -945,6 +1079,7 @@ export default class ClavaJoinPoints {
     if (typeof field === "string") {
       return wrapJoinPoint(
         ClavaJavaTypes.AstFactory.memberAccess(
+          Weaver.getWeaverEngine(),
           unwrapJoinPoint(baseExpr),
           unwrapJoinPoint(field),
           unwrapJoinPoint(fieldType)
@@ -954,6 +1089,7 @@ export default class ClavaJoinPoints {
 
     return wrapJoinPoint(
       ClavaJavaTypes.AstFactory.memberAccess(
+        Weaver.getWeaverEngine(),
         unwrapJoinPoint(baseExpr),
         unwrapJoinPoint(field)
       )
@@ -976,7 +1112,10 @@ export default class ClavaJoinPoints {
     argument: Joinpoints.Expression | Joinpoints.Type
   ): Joinpoints.UnaryExprOrType {
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.sizeof(unwrapJoinPoint(argument))
+      ClavaJavaTypes.AstFactory.sizeof(
+        Weaver.getWeaverEngine(),
+        unwrapJoinPoint(argument)
+      )
     );
   }
 }

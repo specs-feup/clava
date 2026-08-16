@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AInclude;
 
 public class CxxInclude extends AInclude {
 
     private final IncludeDecl include;
 
-    public CxxInclude(IncludeDecl include) {
-        super(new CxxDecl(include));
+    public CxxInclude(IncludeDecl include, CxxWeaver weaver) {
+        super(new CxxDecl(include, weaver), weaver);
         this.include = include;
     }
 

@@ -19,6 +19,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ARecord;
@@ -27,8 +28,8 @@ public class CxxRecord extends ARecord {
 
     private final RecordDecl recordDecl;
 
-    public CxxRecord(RecordDecl recordDecl) {
-        super(new CxxNamedDecl(recordDecl));
+    public CxxRecord(RecordDecl recordDecl, CxxWeaver weaver) {
+        super(new CxxNamedDecl(recordDecl, weaver), weaver);
         this.recordDecl = recordDecl;
     }
 
@@ -40,7 +41,8 @@ public class CxxRecord extends ARecord {
     @Override
     public AField[] getFieldsArrayImpl() {
         return recordDecl.getFields().stream()
-                .map(field -> CxxJoinpoints.create(field, AField.class))
+                .map(field -> CxxJoinpoints.create(field,
+                        getWeaverEngine(), AField.class))
                 .collect(Collectors.toList()).toArray(new AField[0]);
     }
 
@@ -57,7 +59,7 @@ public class CxxRecord extends ARecord {
     @Override
     public AFunction[] getFunctionsArrayImpl() {
         return recordDecl.getFunctions().stream()
-                .map(function -> (AFunction) CxxJoinpoints.create(function))
+                .map(function -> CxxJoinpoints.create(function, getWeaverEngine(), AFunction.class))
                 .toArray(size -> new AFunction[size]);
     }
 

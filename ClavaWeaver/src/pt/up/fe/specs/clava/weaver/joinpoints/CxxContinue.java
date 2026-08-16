@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.ContinueStmt;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AContinue;
 
 public class CxxContinue extends AContinue {
 
     private final ContinueStmt continueStmt;
 
-    public CxxContinue(ContinueStmt continueStmt) {
-        super(new CxxStatement(continueStmt));
+    public CxxContinue(ContinueStmt continueStmt, CxxWeaver weaver) {
+        super(new CxxStatement(continueStmt, weaver), weaver);
 
         this.continueStmt = continueStmt;
     }

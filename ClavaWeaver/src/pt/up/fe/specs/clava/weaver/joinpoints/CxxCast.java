@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
@@ -27,8 +28,8 @@ public class CxxCast extends ACast {
 
     private final CastExpr cast;
 
-    public CxxCast(CastExpr cast) {
-        super(new CxxExpression(cast));
+    public CxxCast(CastExpr cast, CxxWeaver weaver) {
+        super(new CxxExpression(cast, weaver), weaver);
 
         this.cast = cast;
     }
@@ -47,17 +48,17 @@ public class CxxCast extends ACast {
     public AType getFromTypeImpl() {
         Type fromType = cast.getSubExpr().getType();
 
-        return CxxJoinpoints.create(fromType, AType.class);
+        return CxxJoinpoints.create(fromType, getWeaverEngine(), AType.class);
     }
 
     @Override
     public AType getToTypeImpl() {
-        return CxxJoinpoints.create(cast.getCastType(), AType.class);
+        return CxxJoinpoints.create(cast.getCastType(), getWeaverEngine(), AType.class);
     }
 
     @Override
     public AVardecl getVardeclImpl() {
-        return ((AExpression) CxxJoinpoints.create(cast.getSubExpr())).getVardeclImpl();
+        return CxxJoinpoints.create(cast.getSubExpr(), getWeaverEngine(), AExpression.class).getVardeclImpl();
     }
 
     @Override
@@ -67,7 +68,7 @@ public class CxxCast extends ACast {
 
     @Override
     public AExpression getSubExprImpl() {
-        return (AExpression) CxxJoinpoints.create(cast.getSubExpr());
+        return CxxJoinpoints.create(cast.getSubExpr(), getWeaverEngine(), AExpression.class);
 
     }
 }

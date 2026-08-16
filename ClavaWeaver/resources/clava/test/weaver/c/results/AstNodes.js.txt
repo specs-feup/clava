@@ -5,7 +5,3 @@ numChildren  = 2
 children = Joinpoint 'binaryOp',Joinpoint 'body'
 child(0) = Joinpoint 'binaryOp'
 astAncestor("Decl") = testNodes
-
-Ast API:
-astNumChildren  = 2
-astChildren = BinaryOperator,CompoundStmt

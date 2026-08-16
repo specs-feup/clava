@@ -2,14 +2,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.DefaultStmt;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADefault;
 
 public class CxxDefault extends ADefault {
 
     private final DefaultStmt defaultStmt;
 
-    public CxxDefault(DefaultStmt defaultStmt) {
-        super(new CxxSwitchCase(defaultStmt));
+    public CxxDefault(DefaultStmt defaultStmt, CxxWeaver weaver) {
+        super(new CxxSwitchCase(defaultStmt, weaver), weaver);
         this.defaultStmt = defaultStmt;
     }
     

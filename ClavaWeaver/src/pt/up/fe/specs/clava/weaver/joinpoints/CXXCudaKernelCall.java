@@ -6,6 +6,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CUDAKernelCallExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACudaKernelCall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
@@ -15,8 +16,8 @@ public class CXXCudaKernelCall extends ACudaKernelCall {
 
     private final CUDAKernelCallExpr kernelCall;
 
-    public CXXCudaKernelCall(CUDAKernelCallExpr kernelCall) {
-        super(new CxxCall(kernelCall));
+    public CXXCudaKernelCall(CUDAKernelCallExpr kernelCall, CxxWeaver weaver) {
+        super(new CxxCall(kernelCall, weaver), weaver);
 
         this.kernelCall = kernelCall;
     }
@@ -28,7 +29,7 @@ public class CXXCudaKernelCall extends ACudaKernelCall {
 
     @Override
     public AExpression[] getConfigArrayImpl() {
-        return CxxJoinpoints.create(kernelCall.getConfiguration(), AExpression.class);
+        return CxxJoinpoints.create(kernelCall.getConfiguration(), getWeaverEngine(), AExpression.class);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class CXXCudaKernelCall extends ACudaKernelCall {
     @Override
     public void setConfigFromStringsImpl(String[] args) {
         var exprArray = Arrays.stream(args)
-                .map(AstFactory::exprLiteral)
+                .map(arg -> AstFactory.exprLiteral(getWeaverEngine(), arg))
                 .toArray(size -> new AExpression[size]);
 
         setConfigImpl(exprArray);

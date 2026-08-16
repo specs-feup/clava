@@ -32,13 +32,15 @@ import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
 public class CxxType extends AType {
 
     private final Type type;
 
-    public CxxType(Type type) {
+    public CxxType(Type type, CxxWeaver weaver) {
+        super(weaver);
         this.type = type;
     }
 
@@ -100,12 +102,12 @@ public class CxxType extends AType {
 
     @Override
     public AType getDesugarImpl() {
-        return CxxJoinpoints.create(type.desugar(), AType.class);
+        return CxxJoinpoints.create(type.desugar(), getWeaverEngine(), AType.class);
     }
 
     @Override
     public AType getDesugarAllImpl() {
-        return CxxJoinpoints.create(type.desugarAll(), AType.class);
+        return CxxJoinpoints.create(type.desugarAll(), getWeaverEngine(), AType.class);
     }
 
     @Override
@@ -142,7 +144,7 @@ public class CxxType extends AType {
             return null;
         }
 
-        return (AType) CxxJoinpoints.create(unwrappedType);
+        return CxxJoinpoints.create(unwrappedType, getWeaverEngine(), AType.class);
     }
 
     @Override
@@ -154,7 +156,7 @@ public class CxxType extends AType {
     @Override
     public AType[] getTemplateArgsTypesArrayImpl() {
         return type.getTemplateArgumentTypes().stream()
-                .map(argType -> (AType) CxxJoinpoints.create(argType))
+                .map(argType -> CxxJoinpoints.create(argType, getWeaverEngine(), AType.class))
                 .toArray(size -> new AType[size]);
 
     }
@@ -176,7 +178,7 @@ public class CxxType extends AType {
 
     @Override
     public AType getNormalizeImpl() {
-        return CxxJoinpoints.create(type.normalize(), AType.class);
+        return CxxJoinpoints.create(type.normalize(), getWeaverEngine(), AType.class);
     }
 
     @Override
@@ -202,7 +204,7 @@ public class CxxType extends AType {
                 continue;
             }
 
-            typeFields.put(key.getName(), CxxJoinpoints.create(values.get(0), AType.class));
+            typeFields.put(key.getName(), CxxJoinpoints.create(values.get(0), getWeaverEngine(), AType.class));
         }
 
         return typeFields;
@@ -275,7 +277,7 @@ public class CxxType extends AType {
     @Override
     public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
         return CxxJoinpoints.create(type.setUnderlyingType((Type) oldValue.getNode(), (Type) newValue.getNode()),
-                AType.class);
+                getWeaverEngine(), AType.class);
     }
 
     @Override
@@ -285,6 +287,6 @@ public class CxxType extends AType {
 
     @Override
     public AType asConstImpl() {
-        return CxxJoinpoints.create(type.asConst(), AType.class);
+        return CxxJoinpoints.create(type.asConst(), getWeaverEngine(), AType.class);
     }
 }
