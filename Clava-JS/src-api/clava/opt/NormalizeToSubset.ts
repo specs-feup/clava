@@ -1,6 +1,6 @@
-import { LaraJoinPoint } from "@specs-feup/lara/api/LaraJoinPoint.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
-import { BinaryOp, Joinpoint } from "../../Joinpoints.js";
+import type { Joinpoint } from "../../Joinpoints.js";
+import { BinaryOp } from "../../Joinpoints.js";
 import SimplifyAssignment from "../code/SimplifyAssignment.js";
 import StatementDecomposer from "../code/StatementDecomposer.js";
 import DecomposeDeclStmt from "../pass/DecomposeDeclStmt.js";
@@ -11,22 +11,31 @@ import SimplifyReturnStmts from "../pass/SimplifyReturnStmts.js";
 import SimplifySelectionStmts from "../pass/SimplifySelectionStmts.js";
 
 /**
- *
- * @param $startJp -
- * @param options - Object with options. See default value for supported options.
+ * Normalizes code to a simpler subset of C/C++.
+ * 
+ * @param $startJp - Starting join point for normalization
+ * @param options - Configuration options for normalization
  */
 export default function NormalizeToSubset(
   $startJp: Joinpoint,
-  options = { simplifyLoops: { forToWhile: true } }
+  options: { simplifyLoops?: { forToWhile: boolean }, useGlobalIds?: boolean } = {}
 ) {
-  const _options = options;
+  const _options = {
+    simplifyLoops: { forToWhile: true },
+    useGlobalIds: false,
+    ...options
+  };
 
   const declStmt = new DecomposeDeclStmt();
   const varDecls = new DecomposeVarDeclarations();
-  const statementDecomposer = new StatementDecomposer();
+  const statementDecomposer = new StatementDecomposer(
+    "decomp_", 
+    0, 
+    _options.useGlobalIds
+  );
   const simplifyLoops = new SimplifyLoops(
     statementDecomposer,
-    _options["simplifyLoops"]
+    _options.simplifyLoops
   );
   const simplifyIfs = new SimplifySelectionStmts(statementDecomposer);
   const simplifyReturns = new SimplifyReturnStmts(statementDecomposer);
