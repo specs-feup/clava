@@ -1,8 +1,8 @@
-import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.ts";
+import { ClavaLegacyTester } from "../vitest/ClavaLegacyTester.ts";
 import ClavaJavaTypes from "./clava/ClavaJavaTypes.ts";
 import path from "path";
 
-/* eslint-disable jest/expect-expect */
+/* oxlint-disable vitest/expect-expect */
 describe("IssuesTest", () => {
     function newTester() {
         return new ClavaLegacyTester(

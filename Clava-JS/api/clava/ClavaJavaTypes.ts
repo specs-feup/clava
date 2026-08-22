@@ -2,9 +2,9 @@ import JavaTypes, {
   type JavaClasses,
 } from "@specs-feup/lara/api/lara/util/JavaTypes.ts";
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
+// oxlint-disable-next-line typescript/no-namespace
 export namespace ClavaJavaClasses {
-  /* eslint-disable @typescript-eslint/no-empty-object-type */
+  /* oxlint-disable typescript/no-empty-object-type */
   export interface ClavaNodes extends JavaClasses.JavaClass {}
   export interface ClavaNode extends JavaClasses.JavaClass {}
   export interface CxxJoinpoints extends JavaClasses.JavaClass {}
@@ -19,7 +19,7 @@ export namespace ClavaJavaClasses {
   export interface CxxWeaverOption extends JavaClasses.JavaClass {}
   export interface ClavaOptions extends JavaClasses.JavaClass {}
   export interface CodeParser extends JavaClasses.JavaClass {}
-  /* eslint-enable @typescript-eslint/no-empty-object-type */
+  /* oxlint-enable typescript/no-empty-object-type */
 }
 
 /**

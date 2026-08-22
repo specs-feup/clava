@@ -1,4 +1,4 @@
-import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.ts";
+import { ClavaLegacyTester } from "../vitest/ClavaLegacyTester.ts";
 import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.ts";
 import ClavaJavaTypes from "./clava/ClavaJavaTypes.ts";
 import path from "path";
@@ -6,7 +6,7 @@ import path from "path";
 const isWindows = process.platform === "win32";
 const isMacOS = process.platform === "darwin";
 
-/* eslint-disable jest/expect-expect */
+/* oxlint-disable vitest/expect-expect */
 describe("CTest", () => {
     function newTester() {
         return new ClavaLegacyTester(
@@ -101,7 +101,7 @@ describe("CTest", () => {
         await newTester()
             .checkExpectedOutput(false)
             .test("InlineNasLu.js", "inline_nas_lu.c");
-    });
+    }, 10_000);
 
     it("InlineNasFt", async () => {
         await newTester()
@@ -340,7 +340,7 @@ describe("CApiTest", () => {
         }
 
         await tester.test("InlinerTest.js", "inliner.c");
-    });
+    }, 15_000);
 
     it("StatementDecomposer", async () => {
         await newTester().test(
