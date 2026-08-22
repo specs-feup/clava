@@ -7,6 +7,7 @@ name: nightly
 
 on:
   push:
+  pull_request:
 
   # Daily at midnight
   schedule:
@@ -46,62 +47,31 @@ jobs:
         uses: actions/checkout@v6
         with:
           path: clava
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Test dependency ref resolver
+        run: bash clava/.github/scripts/test-resolve-dependency-refs.sh
 
       - name: Determine repository refs
         id: repo-refs
         shell: bash
         env:
-          BRANCH_NAME: ${{ env.BRANCH_NAME }}
-          BASE_BRANCH: ${{ github.base_ref }}
+          SOURCE_BRANCH: ${{ env.BRANCH_NAME }}
         run: |
-          set -euo pipefail
-
-          # For each dependency repository, determine which branch to checkout.
-          # Priority order:
-          # 1. A branch with the same name as the current branch
-          # 2. If this is a PR, the target branch (base_ref)
-          # 3. The default branch of the repository
-
-          determine_ref() {
-            local prefix=$1
-            local repo=$2
-            local url="https://github.com/${repo}.git"
-
-            # Get the default branch
-            local default_branch
-            default_branch=$(git ls-remote --symref "$url" HEAD | awk '/^ref:/ {print $2}' | sed 's@refs/heads/@@')
-            echo "${prefix}_default=${default_branch}" >> "$GITHUB_OUTPUT"
-            echo "Default branch for ${repo} is '${default_branch}'"
-
-            local ref_to_use=""
-            
-            # Priority 1: Same branch name
-            if [ -n "$(git ls-remote --heads "$url" "refs/heads/${BRANCH_NAME}")" ]; then
-              ref_to_use="${BRANCH_NAME}"
-              echo "Using matching branch '${BRANCH_NAME}' in ${repo}"
-            # Priority 2: PR target branch (if this is a PR)
-            elif [ -n "${BASE_BRANCH}" ] && [ -n "$(git ls-remote --heads "$url" "refs/heads/${BASE_BRANCH}")" ]; then
-              ref_to_use="${BASE_BRANCH}"
-              echo "Using PR target branch '${BASE_BRANCH}' in ${repo}"
-            # Priority 3: Default branch
-            else
-              ref_to_use="${default_branch}"
-              echo "Using default branch '${default_branch}' for ${repo}"
-            fi
-            
-            echo "${prefix}_ref=${ref_to_use}" >> "$GITHUB_OUTPUT"
-          }
-
-          determine_ref "lara" "specs-feup/lara-framework"
-          determine_ref "specs" "specs-feup/specs-java-libs"
+          bash clava/.github/scripts/resolve-dependency-refs.sh \
+            clava \
+            lara specs-feup/lara-framework \
+            specs specs-feup/specs-java-libs
 
       - name: Echo checks
         run: |
           echo "Weaver branch: ${{ env.BRANCH_NAME }}"
-          echo "PR target branch (if any): ${{ github.base_ref }}"
-          echo "Lara framework ref: ${{ steps.repo-refs.outputs.lara_ref }}"
+          echo "Lara framework branch: ${{ steps.repo-refs.outputs.lara_branch }}"
+          echo "Lara framework commit: ${{ steps.repo-refs.outputs.lara_ref }}"
           echo "Lara framework default: ${{ steps.repo-refs.outputs.lara_default }}"
-          echo "Specs-java-libs ref: ${{ steps.repo-refs.outputs.specs_ref }}"
+          echo "Specs-java-libs branch: ${{ steps.repo-refs.outputs.specs_branch }}"
+          echo "Specs-java-libs commit: ${{ steps.repo-refs.outputs.specs_ref }}"
           echo "Specs-java-libs default: ${{ steps.repo-refs.outputs.specs_default }}"
 
       - name: Checkout lara-framework

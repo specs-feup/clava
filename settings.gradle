@@ -1,0 +1,8 @@
+rootProject.name = 'clava'
+
+includeBuild('AntarexClavaApi')
+includeBuild('ClangAstParser')
+includeBuild('ClavaAst')
+includeBuild('ClavaLaraApi')
+includeBuild('ClavaOptionsManager')
+includeBuild('ClavaWeaver')

@@ -1,0 +1,155 @@
+import groovy.json.JsonOutput
+
+plugins {
+    id 'base'
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = '0.8.13'
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    jacocoRuntimeAgent
+}
+
+dependencies {
+    jacocoRuntimeAgent("org.jacoco:org.jacoco.agent:${jacoco.toolVersion}") {
+        artifact {
+            classifier = 'runtime'
+            extension = 'jar'
+        }
+        transitive = false
+    }
+}
+
+def workspaceRoot = layout.projectDirectory.dir('..')
+def clavaJsJacocoExec = layout.buildDirectory.file('jacoco/clava-js.exec')
+
+def clavaJavaBuilds = [
+    'AntarexClavaApi',
+    'ClangAstParser',
+    'ClavaAst',
+    'ClavaLaraApi',
+    'ClavaOptionsManager',
+    'ClavaWeaver'
+]
+
+def clavaCoverageProjects = [
+    [name: 'AntarexClavaApi', sourceDirs: ['src-java']],
+    [name: 'ClangAstParser', sourceDirs: ['src']],
+    [name: 'ClavaAst', sourceDirs: ['src']],
+    [name: 'ClavaLaraApi', sourceDirs: ['src-java']],
+    [name: 'ClavaOptionsManager', sourceDirs: ['src']],
+    [name: 'ClavaWeaver', sourceDirs: ['src', 'src-spec']]
+]
+
+tasks.register('clavaJavaAssemble') {
+    group = 'build'
+    description = 'Assembles all Clava Java projects through the aggregate build.'
+    dependsOn clavaJavaBuilds.collect { gradle.includedBuild(it).task(':assemble') }
+}
+
+tasks.register('clavaJavaTest') {
+    group = 'verification'
+    description = 'Runs the Java test tasks for all Clava Java projects.'
+    dependsOn clavaJavaBuilds.collect { gradle.includedBuild(it).task(':test') }
+    finalizedBy 'clavaMergedJacocoReport'
+}
+
+tasks.register('installClavaWeaver') {
+    group = 'distribution'
+    description = 'Installs ClavaWeaver and synchronizes the distribution used by Clava-JS.'
+    dependsOn gradle.includedBuild('ClavaWeaver').task(':syncClavaJsJavaBinaries')
+}
+
+tasks.register('npmInstall', Exec) {
+    group = 'build setup'
+    description = 'Installs npm workspace dependencies when node_modules is missing.'
+    workingDir = workspaceRoot.asFile
+    commandLine 'npm', 'install'
+    onlyIf {
+        !workspaceRoot.dir('node_modules').asFile.isDirectory()
+    }
+}
+
+tasks.register('laraJsBuild', Exec) {
+    group = 'build'
+    description = 'Builds Lara-JS through the npm workspace.'
+    dependsOn 'npmInstall'
+    workingDir = workspaceRoot.asFile
+    commandLine 'npm', 'run', 'build', '-w', 'lara-framework/Lara-JS'
+}
+
+tasks.register('clavaJsBuild', Exec) {
+    group = 'build'
+    description = 'Builds Clava-JS after synchronizing its Java distribution.'
+    dependsOn 'installClavaWeaver', 'laraJsBuild'
+    workingDir = workspaceRoot.asFile
+    commandLine 'npm', 'run', 'build', '-w', 'clava/Clava-JS'
+}
+
+tasks.register('clavaJsTest', Exec) {
+    group = 'verification'
+    description = 'Runs Clava-JS tests with JaCoCo attached to the embedded JVM.'
+    dependsOn 'clavaJsBuild'
+    finalizedBy 'clavaMergedJacocoReport'
+    workingDir = workspaceRoot.asFile
+    commandLine 'npm', 'run', 'test', '-w', 'clava/Clava-JS'
+
+    doFirst {
+        def execFile = clavaJsJacocoExec.get().asFile
+        execFile.parentFile.mkdirs()
+        if (execFile.isFile()) {
+            execFile.delete()
+        }
+
+        def agentFile = configurations.jacocoRuntimeAgent.singleFile
+        def includes = 'pt.up.fe.specs.*:org.lara.*:org.suikasoft.*:larai.*'
+        def agentOption = "-javaagent:${agentFile.absolutePath}=destfile=${execFile.absolutePath},append=false,dumponexit=true,jmx=true,includes=${includes}"
+        environment 'CLAVA_JS_JAVA_OPTIONS', JsonOutput.toJson([agentOption])
+    }
+}
+
+tasks.register('clavaMergedJacocoReport', JacocoReport) {
+    group = 'verification'
+    description = 'Generates a merged Java coverage report from Gradle tests and Clava-JS tests.'
+
+    executionData.from(
+        fileTree(layout.projectDirectory.asFile) {
+            include '*/build/jacoco/*.exec'
+            include '*/build/jacoco/**/*.exec'
+        },
+        clavaJsJacocoExec
+    )
+
+    sourceDirectories.from(clavaCoverageProjects.collectMany { projectInfo ->
+        projectInfo.sourceDirs.collect { layout.projectDirectory.dir("${projectInfo.name}/${it}") }
+    })
+
+    classDirectories.from(clavaCoverageProjects.collect { projectInfo ->
+        layout.projectDirectory.dir("${projectInfo.name}/build/classes/java")
+    })
+
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+
+    onlyIf {
+        executionData.files.any { it.isFile() }
+    }
+}
+
+tasks.named('assemble') {
+    dependsOn 'clavaJavaAssemble', 'clavaJsBuild'
+}
+
+tasks.named('check') {
+    dependsOn 'clavaJavaTest', 'clavaJsTest'
+}
