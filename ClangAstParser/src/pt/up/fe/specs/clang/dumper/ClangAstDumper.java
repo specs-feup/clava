@@ -39,10 +39,13 @@ import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
 import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -622,23 +625,65 @@ public class ClangAstDumper {
      * Clang's dependency graph does not record files probed by __has_include when the probe is negative. Such a dump
      * is therefore unsafe to publish: creating the previously absent header could otherwise leave a stale hit. Keep
      * this conservative and lexical; comments and strings are acceptable false positives here.
+     *
+     * <p>Scans raw bytes instead of decoded text: sources and headers may legitimately use encodings like ISO-8859-1,
+     * which must not turn a parseable translation unit into a cache or parse failure. "__has_include_next" contains
+     * "__has_include" as a prefix, so a single needle covers both forms.
      */
     private boolean containsIncludeProbe(Path source, Collection<Path> dependencies) {
+        byte[] needle = "__has_include".getBytes(StandardCharsets.US_ASCII);
+
         Set<Path> paths = new HashSet<>(dependencies);
         paths.add(source);
 
         for (Path path : paths) {
-            try (var lines = java.nio.file.Files.lines(path)) {
-                if (lines.anyMatch(line -> line.contains("__has_include") || line.contains("__has_include_next"))) {
-                    return true;
-                }
-            } catch (IOException e) {
-                // A dependency that cannot be inspected cannot safely participate in publication.
+            if (containsAsciiSequence(path, needle)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Returns true if the file contains the given ASCII sequence, using a sliding window so that encodings with bytes
+     * outside US-ASCII are handled as ordinary content. A file that cannot be read is reported as containing the
+     * sequence, since it cannot be proven safe for publication.
+     */
+    private static boolean containsAsciiSequence(Path path, byte[] sequence) {
+        byte[] window = new byte[sequence.length];
+        int windowSize = 0;
+        try (InputStream input = new BufferedInputStream(Files.newInputStream(path))) {
+            int next;
+            while ((next = input.read()) != -1) {
+                if (windowSize < window.length) {
+                    window[windowSize++] = (byte) next;
+                } else {
+                    System.arraycopy(window, 1, window, 0, window.length - 1);
+                    window[window.length - 1] = (byte) next;
+                }
+
+                if (windowSize < sequence.length) {
+                    continue;
+                }
+
+                boolean matches = true;
+                for (int index = 0; index < sequence.length; index++) {
+                    if (window[index] != sequence[index]) {
+                        matches = false;
+                        break;
+                    }
+                }
+
+                if (matches) {
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (IOException e) {
+            return true;
+        }
     }
 
     /** Copies stderr bytes as they are consumed, without buffering the complete dumper output. */

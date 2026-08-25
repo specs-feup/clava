@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -146,6 +147,32 @@ class ClangAstDumperCacheIntegrationTest {
         assertNotNull(thirdDumper.getLastWorkingFolder(), "probe-sensitive input must remain a cache miss");
         assertEquals("2", third.get(ClangAstData.TRANSLATION_UNIT).getDescendants(IntegerLiteral.class)
                 .stream().findFirst().orElseThrow().getCode());
+    }
+
+    @Test
+    void nonUtf8DependenciesAreScannedAsBytesAndStillCached() throws IOException {
+        SpecsSystem.programStandardInit();
+
+        // ISO-8859-1 comment bytes are valid C content but not valid UTF-8.
+        File header = tempFolder.resolve("latin1.h").toFile();
+        Files.write(header.toPath(),
+                "/* coment\341rio com acentua\347\343o */\n#define VALUE 1\n".getBytes(Charset.forName("ISO-8859-1")));
+        File source = Files.writeString(tempFolder.resolve("source_latin.cpp"),
+                "#include \"latin1.h\"\nint value = VALUE;\n").toFile();
+        CodeParser parserConfig = parserConfig();
+        ClangFiles clangFiles = new ClangResources(parserConfig).getClangFiles(LibcMode.BUILTIN_AND_LIBC);
+        File workingFolder = tempFolder.resolve("working").toFile();
+
+        ClangAstDumper missDumper = newDumper(parserConfig, clangFiles, workingFolder);
+        ClangAstData miss = missDumper.parse(source, "1", Standard.CXX17, config());
+        assertNotNull(missDumper.getLastWorkingFolder(),
+                "a translation unit with non-UTF-8 dependencies must still be published");
+        assertEquals("1", miss.get(ClangAstData.TRANSLATION_UNIT).getDescendants(IntegerLiteral.class)
+                .stream().findFirst().orElseThrow().getCode());
+
+        ClangAstDumper hitDumper = newDumper(parserConfig, clangFiles, workingFolder);
+        hitDumper.parse(source, "1", Standard.CXX17, config());
+        assertNull(hitDumper.getLastWorkingFolder(), "a non-UTF-8 dependency must not prevent a cache hit");
     }
 
     private CodeParser parserConfig() {
