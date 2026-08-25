@@ -52,6 +52,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -70,6 +71,7 @@ public class ClangAstDumper {
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
+    private static final String DEPENDENCY_DOT_FILENAME = "clangDependencies.dot";
 
     private static final List<String> CLANG_AST_DUMPER_TEMP_FILES = List.of("includes.txt", CLANG_DUMP_FILENAME,
             // "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt", "template_args.txt",
@@ -188,7 +190,8 @@ public class ClangAstDumper {
 
             parsedDump = cache.capture(cacheOutput -> runDumper(arguments, sourceFile, id, config, cacheOutput),
                     this::getDependencies,
-                    result -> !result.data().get(ClangAstData.HAS_ERRORS) && !result.parserHadExceptions());
+                    result -> !result.data().get(ClangAstData.HAS_ERRORS) && !result.parserHadExceptions()
+                            && result.dependenciesAvailable());
         } else {
             // clangDump.txt is a side effect of the process and has no cache representation. In particular, do not
             // publish a cache entry that would make a subsequent SHOW_CLANG_DUMP parse silently lose that output.
@@ -331,6 +334,16 @@ public class ClangAstDumper {
 
         arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
 
+        // ClangTool does not accept the driver's -MMD/-MF options. Its frontend dependency-dot option is accepted
+        // through -Xclang and emits the complete transitive include graph in the per-invocation working directory.
+        // Keep the filename stable: the working folder is intentionally not part of the cache key.
+        arguments.add("-Xclang");
+        arguments.add("-dependency-dot");
+        arguments.add("-Xclang");
+        arguments.add(DEPENDENCY_DOT_FILENAME);
+        arguments.add("-Xclang");
+        arguments.add("-sys-header-deps");
+
         return arguments;
     }
 
@@ -361,6 +374,8 @@ public class ClangAstDumper {
             ParsedDump parsedDump = Objects.requireNonNull(output.getStdErr(),
                     () -> "Did not expect error output to be null");
             parsedDump.data().set(ClangAstData.HAS_ERRORS, output.isError());
+            DependencyDot dependencyDot = readDependencyDot(lastWorkingFolder);
+            parsedDump = parsedDump.withDependencies(dependencyDot.paths(), dependencyDot.available());
 
             // If console output streaming is disabled, show output only at the end
             if (!streamConsoleOutput) {
@@ -389,7 +404,7 @@ public class ClangAstDumper {
     }
 
     private Collection<Path> getDependencies(ParsedDump parsedDump) {
-        Set<Path> dependencies = new HashSet<>();
+        Set<Path> dependencies = new HashSet<>(parsedDump.dependencies());
         dependencies.add(clangExecutable.toPath());
 
         Map<String, String> idToFilename = parsedDump.data().get(ClangAstData.ID_TO_FILENAME_MAP);
@@ -468,14 +483,139 @@ public class ClangAstDumper {
             data.set(ClangAstData.LINES_NOT_PARSED, linesNotParsed);
 
             // Return data and retain parser exceptions for the cache publication decision.
-            return new ParsedDump(data, lineStreamParser.hasExceptions());
+            return new ParsedDump(data, lineStreamParser.hasExceptions(), Set.of(), true);
         } catch (Exception e) {
             throw new RuntimeException("Error while parsing output of Clang AST dumper", e);
         }
 
     }
 
-    private record ParsedDump(ClangAstData data, boolean parserHadExceptions) {
+    private record ParsedDump(ClangAstData data, boolean parserHadExceptions, Collection<Path> dependencies,
+                              boolean dependenciesAvailable) {
+
+        private ParsedDump withDependencies(Collection<Path> dependencies, boolean dependenciesAvailable) {
+            return new ParsedDump(data, parserHadExceptions, dependencies, dependenciesAvailable);
+        }
+    }
+
+    private record DependencyDot(Collection<Path> paths, boolean available) {
+    }
+
+    private DependencyDot readDependencyDot(File workingFolder) {
+        Path dependencyDot = workingFolder.toPath().resolve(DEPENDENCY_DOT_FILENAME);
+        if (!java.nio.file.Files.isRegularFile(dependencyDot)) {
+            SpecsLogs.debug(() -> "Clang dumper did not produce dependency file '" + dependencyDot + "'");
+            return new DependencyDot(Set.of(), false);
+        }
+
+        try {
+            Set<Path> dependencies = new HashSet<>();
+            int labels = 0;
+            for (String line : java.nio.file.Files.readAllLines(dependencyDot)) {
+                Optional<String> label = parseDependencyDotLabel(line);
+                if (label.isEmpty()) {
+                    continue;
+                }
+
+                labels++;
+                Optional<Path> path = resolveDependencyPath(label.get(), workingFolder);
+                if (path.isEmpty()) {
+                    SpecsLogs.debug(() -> "Could not resolve dependency from Clang dependency file line '" + line
+                            + "'");
+                    return new DependencyDot(Set.of(), false);
+                }
+
+                dependencies.add(path.get());
+            }
+
+            return new DependencyDot(dependencies, labels > 0);
+        } catch (IOException | InvalidPathException e) {
+            SpecsLogs.debug(() -> "Could not read Clang dependency file '" + dependencyDot + "': " + e.getMessage());
+            return new DependencyDot(Set.of(), false);
+        }
+    }
+
+    private Optional<String> parseDependencyDotLabel(String line) {
+        int start = line.indexOf("label=\"");
+        if (start < 0) {
+            return Optional.empty();
+        }
+
+        StringBuilder escaped = new StringBuilder();
+        boolean isEscaped = false;
+        for (int i = start + "label=\"".length(); i < line.length(); i++) {
+            char current = line.charAt(i);
+            if (isEscaped) {
+                escaped.append('\\').append(current);
+                isEscaped = false;
+            } else if (current == '\\') {
+                isEscaped = true;
+            } else if (current == '"') {
+                return Optional.of(decodeDependencyDotLabel(escaped.toString()));
+            } else {
+                escaped.append(current);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    private String decodeDependencyDotLabel(String escaped) {
+        StringBuilder decoded = new StringBuilder(escaped.length());
+        boolean isEscaped = false;
+        for (int i = 0; i < escaped.length(); i++) {
+            char current = escaped.charAt(i);
+            if (!isEscaped) {
+                if (current == '\\') {
+                    isEscaped = true;
+                } else {
+                    decoded.append(current);
+                }
+                continue;
+            }
+
+            decoded.append(switch (current) {
+                case 'n' -> '\n';
+                case 'r' -> '\r';
+                case 't' -> '\t';
+                default -> current;
+            });
+            isEscaped = false;
+        }
+
+        if (isEscaped) {
+            decoded.append('\\');
+        }
+
+        return decoded.toString();
+    }
+
+    private Optional<Path> resolveDependencyPath(String dependency, File workingFolder) {
+        Path path = Path.of(dependency);
+        List<Path> candidates = new ArrayList<>();
+        if (path.isAbsolute()) {
+            candidates.add(path);
+        } else {
+            candidates.add(workingFolder.toPath().resolve(path));
+            // Clang's dependency-dot output strips the leading slash from absolute POSIX paths.
+            if (File.separatorChar == '/') {
+                candidates.add(Path.of(File.separator).resolve(path));
+            }
+            candidates.add(path);
+        }
+
+        for (Path candidate : candidates) {
+            try {
+                Path canonical = candidate.toRealPath();
+                if (java.nio.file.Files.isRegularFile(canonical)) {
+                    return Optional.of(canonical);
+                }
+            } catch (IOException ignored) {
+                // The compiler can report pseudo-paths or files that disappear between parsing and manifest build.
+            }
+        }
+
+        return Optional.empty();
     }
 
     /** Copies stderr bytes as they are consumed, without buffering the complete dumper output. */

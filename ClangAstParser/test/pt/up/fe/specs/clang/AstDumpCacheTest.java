@@ -165,6 +165,8 @@ public class AstDumpCacheTest {
         }
 
         assertEquals(1, entryDirectories().size());
+        assertTrue(entryChildren().stream()
+                .noneMatch(path -> path.getFileName().toString().startsWith(".")));
         String dump = first.load(this::readUtf8).orElseThrow();
         assertTrue(dump.equals("first") || dump.equals("second"));
     }
@@ -226,15 +228,20 @@ public class AstDumpCacheTest {
     }
 
     private List<Path> entryDirectories() throws IOException {
+        return entryChildren().stream()
+                .filter(Files::isDirectory)
+                .filter(path -> !path.getFileName().toString().startsWith("."))
+                .toList();
+    }
+
+    private List<Path> entryChildren() throws IOException {
         Path entries = tempFolder.resolve("cache/ast-dumps/v1/entries");
         if (!Files.isDirectory(entries)) {
             return List.of();
         }
 
         try (Stream<Path> paths = Files.list(entries)) {
-            return paths.filter(Files::isDirectory)
-                    .filter(path -> !path.getFileName().toString().startsWith("."))
-                    .toList();
+            return paths.toList();
         }
     }
 

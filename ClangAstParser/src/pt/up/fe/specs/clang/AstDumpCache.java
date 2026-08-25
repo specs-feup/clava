@@ -217,8 +217,10 @@ public final class AstDumpCache {
             CacheFiles.publish(staging.path(), entry);
         } catch (RuntimeException | IOException e) {
             reportCacheFailure("Could not publish AST dump cache entry '" + entry + "'", e);
-            CacheFiles.deleteQuietly(staging.path());
         } finally {
+            // publish() can report an existing destination without moving this writer's staging directory. Always
+            // remove it before releasing the lock, including the losing-writer case.
+            CacheFiles.deleteQuietly(staging.path());
             closeStagingQuietly(staging);
         }
 
@@ -370,8 +372,9 @@ public final class AstDumpCache {
     }
 
     private boolean claimValidEntry(Path entry) {
+        boolean claimed;
         try {
-            return CacheFiles.withMaintenanceLock(cacheRoot, () -> {
+            claimed = CacheFiles.withMaintenanceLock(cacheRoot, () -> {
                 try {
                     Files.createDirectories(entriesRoot);
                 } catch (IOException e) {
@@ -390,24 +393,35 @@ public final class AstDumpCache {
                 if (!Files.isDirectory(entry)) {
                     return false;
                 }
-
-                try {
-                    if (!isManifestValid(entry)) {
-                        CacheFiles.deleteQuietly(entry);
-                        return false;
-                    }
-                } catch (RuntimeException e) {
-                    CacheFiles.deleteQuietly(entry);
-                    throw e;
-                }
-
-                CacheFiles.touch(entry);
                 return true;
             });
         } catch (RuntimeException e) {
             reportCacheFailure("Could not validate AST dump cache entry '" + entry + "'", e);
             return false;
         }
+
+        if (!claimed) {
+            return false;
+        }
+
+        // Hashing dependency files can be expensive. The entry was touched and excluded from cleanup above, so the
+        // full manifest validation can safely run without holding the process-wide maintenance lock.
+        boolean valid;
+        try {
+            valid = isManifestValid(entry);
+        } catch (RuntimeException e) {
+            reportCacheFailure("Could not validate AST dump cache entry '" + entry + "'", e);
+            valid = false;
+        }
+
+        if (!valid) {
+            // Reacquire the maintenance lock before deleting. This keeps invalid-entry removal ordered with cleanup
+            // and with another reader claiming the same entry.
+            deleteEntryQuietly(entry);
+            return false;
+        }
+
+        return true;
     }
 
     private void prepareEntriesDirectory(Path currentEntry) {

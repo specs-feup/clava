@@ -34,6 +34,7 @@ import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -47,7 +48,9 @@ class ClangAstDumperCacheIntegrationTest {
     void cacheHitAvoidsProcessAndMaterializesEquivalentTranslationUnit() throws IOException {
         SpecsSystem.programStandardInit();
 
-        File source = Files.writeString(tempFolder.resolve("source.cpp"), "int value = 1;\n").toFile();
+        File header = Files.writeString(tempFolder.resolve("header.h"), "#define VALUE 1\n").toFile();
+        File source = Files.writeString(tempFolder.resolve("source.cpp"),
+                "#include \"header.h\"\nint value = VALUE;\n").toFile();
         CodeParser parserConfig = parserConfig();
         ClangFiles clangFiles = new ClangResources(parserConfig).getClangFiles(LibcMode.BUILTIN_AND_LIBC);
         File workingFolder = tempFolder.resolve("working").toFile();
@@ -61,6 +64,13 @@ class ClangAstDumperCacheIntegrationTest {
         assertEquals(miss.get(ClangAstData.TRANSLATION_UNIT).getCode(),
                 hit.get(ClangAstData.TRANSLATION_UNIT).getCode());
         assertEquals(miss.get(ClangAstData.ID_TO_FILENAME_MAP), hit.get(ClangAstData.ID_TO_FILENAME_MAP));
+
+        Files.writeString(header.toPath(), "#define VALUE 2\n");
+        ClangAstDumper changedHeaderDumper = newDumper(parserConfig, clangFiles, workingFolder);
+        ClangAstData changedHeader = changedHeaderDumper.parse(source, "1", Standard.CXX17, config());
+        assertNotNull(changedHeaderDumper.getLastWorkingFolder(), "a transitive header change must miss the cache");
+        assertEquals("2", changedHeader.get(ClangAstData.TRANSLATION_UNIT).getDescendants(IntegerLiteral.class)
+                .stream().findFirst().orElseThrow().getCode());
     }
 
     @Test
