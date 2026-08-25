@@ -62,6 +62,11 @@ public final class AstDumpCache {
     private static final String DUMP_FILENAME = "dump.gz";
     private static final Duration STALE_ENTRY_AGE = Duration.ofDays(60);
     private static final Gson GSON = new Gson();
+    private static final byte[][] VOLATILE_MACROS = {
+            "__TIME__".getBytes(StandardCharsets.US_ASCII),
+            "__DATE__".getBytes(StandardCharsets.US_ASCII),
+            "__TIMESTAMP__".getBytes(StandardCharsets.US_ASCII)
+    };
 
     private final Path cacheRoot;
     private final Path entriesRoot;
@@ -511,6 +516,11 @@ public final class AstDumpCache {
 
         var entries = new ArrayList<Dependency>();
         for (Map.Entry<String, Path> dependency : dependencies.entrySet()) {
+            if (containsVolatileMacro(dependency.getValue())) {
+                throw new RuntimeException("AST dump depends on volatile preprocessor macro in '"
+                        + dependency.getKey() + "'");
+            }
+
             entries.add(new Dependency(dependency.getKey(), CacheFiles.calculateSha256(dependency.getValue())));
         }
 
@@ -541,6 +551,56 @@ public final class AstDumpCache {
         } catch (IOException e) {
             // Headers can disappear between the dumper's report and manifest creation. Such a path simply cannot
             // participate in invalidation and is intentionally omitted.
+        }
+    }
+
+    private static boolean containsVolatileMacro(Path path) {
+        int maximumMacroLength = 0;
+        for (byte[] macro : VOLATILE_MACROS) {
+            maximumMacroLength = Math.max(maximumMacroLength, macro.length);
+        }
+
+        byte[] window = new byte[maximumMacroLength];
+        int windowSize = 0;
+        boolean macroFound = false;
+        boolean binaryFound = false;
+        try (InputStream input = Files.newInputStream(path)) {
+            int next;
+            while ((next = input.read()) != -1) {
+                if (next == 0) {
+                    binaryFound = true;
+                }
+
+                if (windowSize < window.length) {
+                    window[windowSize++] = (byte) next;
+                } else {
+                    System.arraycopy(window, 1, window, 0, window.length - 1);
+                    window[window.length - 1] = (byte) next;
+                }
+
+                for (byte[] macro : VOLATILE_MACROS) {
+                    if (windowSize < macro.length) {
+                        continue;
+                    }
+
+                    int start = windowSize - macro.length;
+                    boolean matches = true;
+                    for (int index = 0; index < macro.length; index++) {
+                        if (window[start + index] != macro[index]) {
+                            matches = false;
+                            break;
+                        }
+                    }
+
+                    if (matches) {
+                        macroFound = true;
+                    }
+                }
+            }
+
+            return macroFound && !binaryFound;
+        } catch (IOException e) {
+            throw new UncheckedIOException("Could not scan AST dump dependency '" + path + "'", e);
         }
     }
 

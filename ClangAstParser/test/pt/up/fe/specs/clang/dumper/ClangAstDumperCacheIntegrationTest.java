@@ -114,6 +114,40 @@ class ClangAstDumperCacheIntegrationTest {
         assertNotNull(secondDumper.getLastWorkingFolder(), "failed output must not be loaded from the cache");
     }
 
+    @Test
+    void includeProbeResultsAreNeverCachedAcrossHeaderCreation() throws IOException {
+        SpecsSystem.programStandardInit();
+
+        File source = Files.writeString(tempFolder.resolve("probe.cpp"), """
+                #if __has_include("optional.h")
+                #include "optional.h"
+                int selected = OPTIONAL_VALUE;
+                #else
+                int selected = 1;
+                #endif
+                """).toFile();
+        CodeParser parserConfig = parserConfig();
+        ClangFiles clangFiles = new ClangResources(parserConfig).getClangFiles(LibcMode.BUILTIN_AND_LIBC);
+        File workingFolder = tempFolder.resolve("working").toFile();
+
+        ClangAstDumper firstDumper = newDumper(parserConfig, clangFiles, workingFolder);
+        ClangAstData first = firstDumper.parse(source, "1", Standard.CXX17, config());
+        assertNotNull(firstDumper.getLastWorkingFolder());
+        assertEquals("1", first.get(ClangAstData.TRANSLATION_UNIT).getDescendants(IntegerLiteral.class)
+                .stream().findFirst().orElseThrow().getCode());
+
+        ClangAstDumper secondDumper = newDumper(parserConfig, clangFiles, workingFolder);
+        ClangAstData second = secondDumper.parse(source, "1", Standard.CXX17, config());
+        assertNotNull(secondDumper.getLastWorkingFolder(), "a negative include probe must not be cached");
+
+        Files.writeString(tempFolder.resolve("optional.h"), "#define OPTIONAL_VALUE 2\n");
+        ClangAstDumper thirdDumper = newDumper(parserConfig, clangFiles, workingFolder);
+        ClangAstData third = thirdDumper.parse(source, "1", Standard.CXX17, config());
+        assertNotNull(thirdDumper.getLastWorkingFolder(), "probe-sensitive input must remain a cache miss");
+        assertEquals("2", third.get(ClangAstData.TRANSLATION_UNIT).getDescendants(IntegerLiteral.class)
+                .stream().findFirst().orElseThrow().getCode());
+    }
+
     private CodeParser parserConfig() {
         CodeParser parserConfig = CodeParser.newInstance();
         parserConfig.set(CodeParser.DUMPER_FOLDER, tempFolder.resolve("cache").toFile());

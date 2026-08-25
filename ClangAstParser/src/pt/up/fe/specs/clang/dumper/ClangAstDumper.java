@@ -341,8 +341,6 @@ public class ClangAstDumper {
         arguments.add("-dependency-dot");
         arguments.add("-Xclang");
         arguments.add(DEPENDENCY_DOT_FILENAME);
-        arguments.add("-Xclang");
-        arguments.add("-sys-header-deps");
 
         return arguments;
     }
@@ -375,7 +373,9 @@ public class ClangAstDumper {
                     () -> "Did not expect error output to be null");
             parsedDump.data().set(ClangAstData.HAS_ERRORS, output.isError());
             DependencyDot dependencyDot = readDependencyDot(lastWorkingFolder);
-            parsedDump = parsedDump.withDependencies(dependencyDot.paths(), dependencyDot.available());
+            boolean dependenciesAvailable = dependencyDot.available()
+                    && !containsIncludeProbe(sourceFile.toPath(), dependencyDot.paths());
+            parsedDump = parsedDump.withDependencies(dependencyDot.paths(), dependenciesAvailable);
 
             // If console output streaming is disabled, show output only at the end
             if (!streamConsoleOutput) {
@@ -616,6 +616,29 @@ public class ClangAstDumper {
         }
 
         return Optional.empty();
+    }
+
+    /**
+     * Clang's dependency graph does not record files probed by __has_include when the probe is negative. Such a dump
+     * is therefore unsafe to publish: creating the previously absent header could otherwise leave a stale hit. Keep
+     * this conservative and lexical; comments and strings are acceptable false positives here.
+     */
+    private boolean containsIncludeProbe(Path source, Collection<Path> dependencies) {
+        Set<Path> paths = new HashSet<>(dependencies);
+        paths.add(source);
+
+        for (Path path : paths) {
+            try (var lines = java.nio.file.Files.lines(path)) {
+                if (lines.anyMatch(line -> line.contains("__has_include") || line.contains("__has_include_next"))) {
+                    return true;
+                }
+            } catch (IOException e) {
+                // A dependency that cannot be inspected cannot safely participate in publication.
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /** Copies stderr bytes as they are consumed, without buffering the complete dumper output. */

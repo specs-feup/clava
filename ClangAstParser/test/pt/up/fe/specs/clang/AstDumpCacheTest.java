@@ -142,6 +142,57 @@ public class AstDumpCacheTest {
     }
 
     @Test
+    public void timeMacroInSourceReturnsResultWithoutPublishing() throws IOException {
+        assertVolatileSourceDoesNotPublish("__TIME__");
+    }
+
+    @Test
+    public void dateMacroInSourceReturnsResultWithoutPublishing() throws IOException {
+        assertVolatileSourceDoesNotPublish("__DATE__");
+    }
+
+    @Test
+    public void timestampMacroInSourceReturnsResultWithoutPublishing() throws IOException {
+        assertVolatileSourceDoesNotPublish("__TIMESTAMP__");
+    }
+
+    @Test
+    public void volatileMacroInHeaderReturnsResultWithoutPublishing() throws IOException {
+        Path source = source("source.cpp", "#include \"header.h\"\n");
+        Path header = source("header.h", "const char *build_date = __DATE__;\n");
+        AstDumpCache cache = cache(source, "clang", source.toString());
+
+        String result = cache.capture(output -> {
+            output.write("header dump".getBytes(StandardCharsets.UTF_8));
+            return "parsed";
+        }, ignored -> List.of(source, header), ignored -> true);
+
+        assertEquals("parsed", result);
+        assertEquals(List.of(), entryDirectories());
+    }
+
+    @Test
+    public void binaryDependencyWithMacroSpellingIsStillPublished() throws IOException {
+        Path source = source("source.cpp", "int value;\n");
+        Path executable = tempFolder.resolve("clang");
+        byte[] macro = "__TIME__".getBytes(StandardCharsets.US_ASCII);
+        byte[] binary = new byte[macro.length + 1];
+        System.arraycopy(macro, 0, binary, 1, macro.length);
+        binary[0] = 0;
+        Files.write(executable, binary);
+        AstDumpCache cache = cache(source, "clang", source.toString());
+
+        String result = cache.capture(output -> {
+            output.write("binary dependency dump".getBytes(StandardCharsets.UTF_8));
+            return "parsed";
+        }, ignored -> List.of(source, executable), ignored -> true);
+
+        assertEquals("parsed", result);
+        assertEquals(1, entryDirectories().size());
+        assertEquals("binary dependency dump", cache.load(this::readUtf8).orElseThrow());
+    }
+
+    @Test
     public void concurrentWritersPublishOneCompleteEntry() throws Exception {
         Path source = source("source.cpp", "int value;\n");
         AstDumpCache first = cache(source, "clang", source.toString());
@@ -207,6 +258,19 @@ public class AstDumpCacheTest {
             output.write(dump.getBytes(StandardCharsets.UTF_8));
             return dump;
         }, ignored -> dependencies, ignored -> true);
+    }
+
+    private void assertVolatileSourceDoesNotPublish(String macro) throws IOException {
+        Path source = source("source.cpp", "const char *build = " + macro + ";\n");
+        AstDumpCache cache = cache(source, "clang", source.toString());
+
+        String result = cache.capture(output -> {
+            output.write("volatile dump".getBytes(StandardCharsets.UTF_8));
+            return "parsed";
+        }, ignored -> List.of(source), ignored -> true);
+
+        assertEquals("parsed", result);
+        assertEquals(List.of(), entryDirectories());
     }
 
     private AstDumpCache cache(Path source, String... command) {
