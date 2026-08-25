@@ -16,6 +16,7 @@ package pt.up.fe.specs.clang.dumper;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
+import pt.up.fe.specs.clang.AstDumpCache;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.LibcMode;
@@ -39,11 +40,19 @@ import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
@@ -150,10 +159,47 @@ public class ClangAstDumper {
 
     private ClangAstData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
         ClavaLog.debug(() -> "Data store config for single file parser: " + config);
+        // A cache hit does not create a working folder. Do not expose the folder from a previous parse as the result
+        // of this one.
+        lastWorkingFolder = null;
 
         DataStore localData = JOptionsUtils.loadDataStore(LocalOptionsKeys.getLocalOptionsFilename(), getClass(),
                 LocalOptionsKeys.getProvider().getStoreDefinition());
 
+        // Keep this phase free of side effects. The cache key must describe the exact invocation that would be
+        // launched, including all defaults and resource paths resolved below.
+        List<String> arguments = buildArguments(sourceFile, id, standard, config, localData);
+
+        ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments);
+
+        ParsedDump parsedDump;
+        boolean showClangDump = config.get(CodeParser.SHOW_CLANG_DUMP);
+        if (!showClangDump) {
+            AstDumpCache cache = new AstDumpCache(parserConfig.get(CodeParser.DUMPER_FOLDER).toPath(),
+                    sourceFile.toPath(), arguments);
+
+            var cachedDump = cache.load(input -> processStdErr(input, config.get(ClavaNode.CONTEXT),
+                    OutputStream.nullOutputStream(), false));
+            if (cachedDump.isPresent()) {
+                parsedDump = cachedDump.get();
+                parsedDump.data().set(ClangAstData.HAS_ERRORS, false);
+                return materializeTranslationUnit(parsedDump, sourceFile, config);
+            }
+
+            parsedDump = cache.capture(cacheOutput -> runDumper(arguments, sourceFile, id, config, cacheOutput),
+                    this::getDependencies,
+                    result -> !result.data().get(ClangAstData.HAS_ERRORS) && !result.parserHadExceptions());
+        } else {
+            // clangDump.txt is a side effect of the process and has no cache representation. In particular, do not
+            // publish a cache entry that would make a subsequent SHOW_CLANG_DUMP parse silently lose that output.
+            parsedDump = runDumper(arguments, sourceFile, id, config, OutputStream.nullOutputStream());
+        }
+
+        return materializeTranslationUnit(parsedDump, sourceFile, config);
+    }
+
+    private List<String> buildArguments(File sourceFile, String id, Standard standard, DataStore config,
+                                         DataStore localData) {
         List<String> arguments = new ArrayList<>();
         if (USE_PLUGIN && SpecsPlatforms.isLinux()) {
             arguments.add("clang-16");
@@ -285,19 +331,13 @@ public class ClangAstDumper {
 
         arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
 
-        ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments);
+        return arguments;
+    }
 
-        ClangAstData parsedData = null;
-        ProcessOutput<String, ClangAstData> output = null;
-
-        try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2
-                .newInstance(config.get(ClavaNode.CONTEXT))) {
-
-            if (SpecsSystem.isDebug()) {
-                lineStreamParser.getData().set(ClangAstData.DEBUG, true);
-            }
-
-            // Create temporary working folder, in order to support running several dumps in parallel
+    private ParsedDump runDumper(List<String> arguments, File sourceFile, String id, DataStore config,
+                                 OutputStream cacheOutput) {
+        try {
+            // Create temporary working folder only after the cache lookup has missed. A hit has no working folder.
             lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
 
             // Ensure folder is empty
@@ -305,9 +345,9 @@ public class ClangAstDumper {
 
             workingFolders.add(lastWorkingFolder);
 
-            output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
+            ProcessOutput<String, ParsedDump> output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
                     this::processOutput,
-                    inputStream -> this.processStdErr(inputStream, config.get(ClavaNode.CONTEXT)));
+                    inputStream -> this.processStdErr(inputStream, config.get(ClavaNode.CONTEXT), cacheOutput, true));
 
             if (output.isError()) {
                 ClavaLog.debug("Dumper returned an error value: '" + output.getReturnValue() + "'");
@@ -318,22 +358,27 @@ public class ClangAstDumper {
                 throw new RuntimeException("Exception while processing the output streams", exception);
             });
 
-            parsedData = output.getStdErr();
-            Objects.requireNonNull(parsedData, () -> "Did not expect error output to be null");
-            parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
+            ParsedDump parsedDump = Objects.requireNonNull(output.getStdErr(),
+                    () -> "Did not expect error output to be null");
+            parsedDump.data().set(ClangAstData.HAS_ERRORS, output.isError());
 
             // If console output streaming is disabled, show output only at the end
             if (!streamConsoleOutput) {
                 ClavaLog.info(output.getStdOut());
             }
 
-            if (lineStreamParser.hasExceptions()) {
+            if (parsedDump.parserHadExceptions()) {
                 SpecsLogs.warn("Exceptions happened while parsing the file '" + sourceFile.getAbsolutePath() + "'");
             }
+
+            return parsedDump;
         } catch (Exception e) {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }
+    }
 
+    private ClangAstData materializeTranslationUnit(ParsedDump parsedDump, File sourceFile, DataStore config) {
+        ClangAstData parsedData = parsedDump.data();
         ClangAstParser clangStreamParser = new ClangAstParser(parsedData, SpecsSystem.isDebug(), config);
 
         TranslationUnit tUnit = clangStreamParser.parseTu(sourceFile);
@@ -341,6 +386,28 @@ public class ClangAstDumper {
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
 
         return parsedData;
+    }
+
+    private Collection<Path> getDependencies(ParsedDump parsedDump) {
+        Set<Path> dependencies = new HashSet<>();
+        dependencies.add(clangExecutable.toPath());
+
+        Map<String, String> idToFilename = parsedDump.data().get(ClangAstData.ID_TO_FILENAME_MAP);
+        if (idToFilename != null) {
+            for (String filename : idToFilename.values()) {
+                if (filename == null) {
+                    continue;
+                }
+
+                try {
+                    dependencies.add(Path.of(filename));
+                } catch (InvalidPathException ignored) {
+                    // Pseudo-paths from the dumper are not file dependencies.
+                }
+            }
+        }
+
+        return dependencies;
     }
 
     private void addCudaPathArgument(List<String> arguments, String cudaPath) {
@@ -379,7 +446,8 @@ public class ClangAstDumper {
         return output.toString();
     }
 
-    private ClangAstData processStdErr(InputStream inputStream, ClavaContext context) {
+    private ParsedDump processStdErr(InputStream inputStream, ClavaContext context, OutputStream cacheOutput,
+                                     boolean closeInputStream) {
         // Create LineStreamParser
         try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2.newInstance(context)) {
 
@@ -392,18 +460,60 @@ public class ClangAstDumper {
             File dumpfile = SpecsSystem.isDebug() ? new File(STDERR_DUMP_FILENAME) : null;
 
             // Parse input stream
-            String linesNotParsed = lineStreamParser.parse(inputStream, dumpfile);
+            String linesNotParsed = lineStreamParser.parse(
+                    new TeeInputStream(inputStream, cacheOutput, closeInputStream), dumpfile);
 
             // Add lines not parsed to DataStore
             ClangAstData data = lineStreamParser.getData();
             data.set(ClangAstData.LINES_NOT_PARSED, linesNotParsed);
 
-            // Return data
-            return data;
+            // Return data and retain parser exceptions for the cache publication decision.
+            return new ParsedDump(data, lineStreamParser.hasExceptions());
         } catch (Exception e) {
             throw new RuntimeException("Error while parsing output of Clang AST dumper", e);
         }
 
+    }
+
+    private record ParsedDump(ClangAstData data, boolean parserHadExceptions) {
+    }
+
+    /** Copies stderr bytes as they are consumed, without buffering the complete dumper output. */
+    private static final class TeeInputStream extends InputStream {
+        private final InputStream delegate;
+        private final OutputStream copy;
+        private final boolean closeDelegate;
+
+        private TeeInputStream(InputStream delegate, OutputStream copy, boolean closeDelegate) {
+            this.delegate = delegate;
+            this.copy = copy;
+            this.closeDelegate = closeDelegate;
+        }
+
+        @Override
+        public int read() throws IOException {
+            int value = delegate.read();
+            if (value != -1) {
+                copy.write(value);
+            }
+            return value;
+        }
+
+        @Override
+        public int read(byte[] bytes, int offset, int length) throws IOException {
+            int count = delegate.read(bytes, offset, length);
+            if (count > 0) {
+                copy.write(bytes, offset, count);
+            }
+            return count;
+        }
+
+        @Override
+        public void close() throws IOException {
+            if (closeDelegate) {
+                delegate.close();
+            }
+        }
     }
 
     /**

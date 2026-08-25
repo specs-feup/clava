@@ -241,6 +241,10 @@ final class CacheFiles {
     }
 
     static void deleteStaleDirectories(Path cacheRoot, Path parent, Instant cutoff, Path excluded) {
+        withMaintenanceLock(cacheRoot, () -> deleteStaleDirectoriesLocked(parent, cutoff, excluded));
+    }
+
+    static void deleteStaleDirectoriesLocked(Path parent, Instant cutoff, Path excluded) {
         if (!Files.isDirectory(parent)) {
             return;
         }
@@ -255,7 +259,7 @@ final class CacheFiles {
                     continue;
                 }
 
-                withMaintenanceLock(cacheRoot, () -> deleteIfStale(child, cutoff));
+                deleteIfStale(child, cutoff);
             }
         } catch (IOException e) {
             throw new UncheckedIOException("Could not clean stale cache directories below '" + parent + "'", e);
@@ -274,13 +278,17 @@ final class CacheFiles {
     }
 
     static void deleteUnlockedStagingLocks(Path cacheRoot, Path parent) {
+        withMaintenanceLock(cacheRoot, () -> deleteUnlockedStagingLocksLocked(parent));
+    }
+
+    static void deleteUnlockedStagingLocksLocked(Path parent) {
         if (!Files.isDirectory(parent)) {
             return;
         }
 
         try (DirectoryStream<Path> locks = Files.newDirectoryStream(parent, ".*.tmp-*.lock")) {
             for (Path lock : locks) {
-                withMaintenanceLock(cacheRoot, () -> deleteIfUnlockedStagingLock(lock));
+                deleteIfUnlockedStagingLock(lock);
             }
         } catch (IOException e) {
             throw new UncheckedIOException("Could not clean cache staging directories below '" + parent + "'",
@@ -327,7 +335,7 @@ final class CacheFiles {
         }
     }
 
-    private static void deleteQuietly(Path path) {
+    static void deleteQuietly(Path path) {
         try {
             delete(path);
         } catch (RuntimeException ignored) {
@@ -346,5 +354,9 @@ final class CacheFiles {
         } catch (IOException | NoSuchAlgorithmException e) {
             throw new RuntimeException("Could not calculate SHA-256 for file '" + file + "'", e);
         }
+    }
+
+    static String calculateSha256(Path path) {
+        return calculateSha256(path.toFile());
     }
 }

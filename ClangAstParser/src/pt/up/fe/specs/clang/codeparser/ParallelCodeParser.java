@@ -388,12 +388,8 @@ public class ParallelCodeParser extends CodeParser {
         }
 
         if (get(CLEAN)) {
-            // if (clangParser.getLastWorkingFolder() == null) {
-            // workingFolders.add(clangParser.getLastWorkingFolder());
-            // }
-            if (clangParser.getLastWorkingFolder() == null) {
-                SpecsLogs.msgInfo("No working folder found for source file '" + sourceFile + "'");
-            } else {
+            // Cache hits intentionally do not create a working folder.
+            if (clangParser.getLastWorkingFolder() != null) {
                 SpecsIo.deleteFolder(clangParser.getLastWorkingFolder());
             }
 
