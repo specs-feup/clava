@@ -16,6 +16,7 @@ package pt.up.fe.specs.clang;
 import com.google.gson.Gson;
 import pt.up.fe.specs.util.SpecsLogs;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -564,7 +565,7 @@ public final class AstDumpCache {
         int windowSize = 0;
         boolean macroFound = false;
         boolean binaryFound = false;
-        try (InputStream input = Files.newInputStream(path)) {
+        try (InputStream input = new BufferedInputStream(Files.newInputStream(path))) {
             int next;
             while ((next = input.read()) != -1) {
                 if (next == 0) {
