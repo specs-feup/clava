@@ -134,8 +134,8 @@ public class ParallelCodeParser extends CodeParser {
 
         List<Future<ClangAstData>> futureTUnits = new ArrayList<>();
         for (int i = 0; i < sources.size(); i++) {
-            String id = Integer.toString(i + 1);
             File source = sources.get(i);
+            String id = ClangAstDumper.getStableFileId(source);
 
             Future<ClangAstData> tUnit = executor
                     .submit(() -> parseSource(source, id, standard, options, clangDump,

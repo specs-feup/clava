@@ -87,6 +87,22 @@ public class ClangAstDumper {
     }
 
     /**
+     * Returns a per-file id that is stable across executions, to be passed as the '-id' dumper option.
+     *
+     * <p>The dumper parses '-id' as an int and embeds it in every node id of the dump, so the id must not depend on
+     * the number or order of the parsed files: a positional id would change the dumped bytes whenever a file is added
+     * or removed, invalidating the cache entry of every subsequent file. Ids are only interpreted inside a single dump,
+     * and each file is dumped by its own process, so two files receiving the same id are harmless.
+     *
+     * @param sourceFile source file that will be dumped
+     * @return a non-negative int-compatible id, stable for the same path spelling across JVMs
+     */
+    public static String getStableFileId(File sourceFile) {
+        // String.hashCode is specified, so the value does not change between runs or JVM implementations.
+        return Integer.toString(sourceFile.getAbsolutePath().hashCode() & 0x7fffffff);
+    }
+
+    /**
      * TODO: Not implemented yet
      * <p>
      * If true, displays the output of the dumper while it executes. If false, stores the output and only shows it after
