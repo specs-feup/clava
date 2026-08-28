@@ -60,6 +60,7 @@ import pt.up.fe.specs.clava.ast.expr.data.designator.ArrayRangeDesignator;
 import pt.up.fe.specs.clava.ast.expr.data.designator.Designator;
 import pt.up.fe.specs.clava.ast.expr.data.designator.FieldDesignator;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfArray;
+import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfBase;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponent;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponentKind;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfField;
@@ -458,6 +459,9 @@ public class ClavaDataParsers {
             break;
         case IDENTIFIER:
             component.set(OffsetOfIdentifier.FIELD_NAME, lines.nextLine());
+            break;
+        case BASE:
+            parserData.getClavaNodes().queueSetNode(component, OffsetOfBase.TYPE, lines.nextLine());
             break;
         default:
             throw new NotImplementedException(kind);
