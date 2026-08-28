@@ -362,7 +362,7 @@ public class ClavaDataParsers {
             parserData.getClavaNodes().queueSetNode(template, UsingTemplate.USING_SHADOW_DECL, lines.nextLine());
             break;
         case DependentTemplate:
-            template.set(DependentTemplate.QUALIFIER, nestedNameSpecifier(lines, parserData));
+            template.set(DependentTemplate.QUALIFIER, lines.nextLine());
             template.set(DependentTemplate.NAME, lines.nextLine());
             break;
         default:

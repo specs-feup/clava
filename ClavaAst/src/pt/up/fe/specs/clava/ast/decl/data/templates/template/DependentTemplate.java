@@ -17,7 +17,6 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.data.nestedname.NestedNameSpecifier;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentTemplate;
 import pt.up.fe.specs.clava.ast.type.enums.TemplateNameKind;
 
@@ -25,8 +24,7 @@ public class DependentTemplate extends TemplateArgumentTemplate {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<NestedNameSpecifier> QUALIFIER = KeyFactory.object("qualifier",
-            NestedNameSpecifier.class);
+    public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
 
     public final static DataKey<String> NAME = KeyFactory.string("name");
 
@@ -38,6 +36,8 @@ public class DependentTemplate extends TemplateArgumentTemplate {
 
     @Override
     public String getCode(ClavaNode node) {
-        return get(QUALIFIER).getQualifier() + get(NAME);
+        String qualifier = get(QUALIFIER);
+        String templateKeyword = qualifier.isEmpty() ? "" : "template ";
+        return qualifier + templateKeyword + get(NAME);
     }
 }
