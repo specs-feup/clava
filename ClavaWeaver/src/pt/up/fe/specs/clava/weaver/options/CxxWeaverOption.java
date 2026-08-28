@@ -37,9 +37,6 @@ public interface CxxWeaverOption {
     DataKey<Boolean> CHECK_SYNTAX = KeyFactory.bool("Check C/CXX Syntax")
             .setLabel("Check C/C++ syntax (performs additional parsing step)");
 
-    DataKey<Boolean> CLEAN_INTERMEDIATE_FILES = KeyFactory.bool("Clean intermediate files")
-            .setDefault(() -> true);
-
     DataKey<FileList> HEADER_INCLUDES = LaraIKeyFactory.folderList("header includes")
             .setLabel("Normal Includes")
             .setDefault(FileList::newInstance);
@@ -85,7 +82,7 @@ public interface CxxWeaverOption {
 
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("C/C++ Weaver")
             .addKeys(ClavaOptions.STORE_DEFINITION.getKeys())
-            .addKeys(WOVEN_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
+            .addKeys(WOVEN_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX,
                     HEADER_INCLUDES,
                     // SKIP_HEADER_INCLUDES_PARSING,
                     PARSE_INCLUDES,

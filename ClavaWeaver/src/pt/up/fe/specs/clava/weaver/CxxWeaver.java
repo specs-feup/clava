@@ -12,7 +12,6 @@ import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
-import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -797,13 +796,6 @@ public class CxxWeaver extends ACxxWeaver {
         SpecsIo.deleteFolder(new File(TEMP_SRC_FOLDER));
 
         if (this.dataStore != null) {
-            // Delete intermediary files
-            if (this.dataStore.get(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES)) {
-                for (String tempFile : ClangAstDumper.getTempFiles()) {
-                    new File(tempFile).delete();
-                }
-            }
-
             // Re-enable output
             if (this.dataStore.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
                 SpecsLogs.getSpecsLogger().setLevelAll(null);
