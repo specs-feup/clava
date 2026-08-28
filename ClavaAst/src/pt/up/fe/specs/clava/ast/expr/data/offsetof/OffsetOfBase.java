@@ -28,7 +28,8 @@ public class OffsetOfBase extends OffsetOfComponent {
 
     @Override
     public String getCode() {
-        return get(TYPE).getCode();
+        // Clang adds the base to the semantic path, but it is not part of the source designator.
+        return "";
     }
 
     @Override
