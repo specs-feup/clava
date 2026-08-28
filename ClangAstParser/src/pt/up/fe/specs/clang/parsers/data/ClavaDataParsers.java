@@ -38,11 +38,15 @@ import pt.up.fe.specs.clava.ast.decl.data.nestedname.SuperSpecifier;
 import pt.up.fe.specs.clava.ast.decl.data.nestedname.TypeSpecSpecifier;
 import pt.up.fe.specs.clava.ast.decl.data.nestedname.TypeSpecWithTemplateSpecifier;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentDeclaration;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentIntegral;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentKind;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentNullPtr;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentPack;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentStructuralValue;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentTemplate;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentTemplateExpansion;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.QualifiedTemplate;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.SubstTemplateTemplateParm;
@@ -257,6 +261,14 @@ public class ClavaDataParsers {
         TemplateArgumentKind kind = LineStreamParsers.enumFromName(TemplateArgumentKind.class, lines);
 
         switch (kind) {
+        case Declaration:
+            TemplateArgumentDeclaration declaration = new TemplateArgumentDeclaration();
+            parserData.getClavaNodes().queueSetNode(declaration, TemplateArgumentDeclaration.DECL, lines.nextLine());
+            return declaration;
+        case NullPtr:
+            TemplateArgumentNullPtr nullPtr = new TemplateArgumentNullPtr();
+            parserData.getClavaNodes().queueSetNode(nullPtr, TemplateArgumentNullPtr.TYPE, lines.nextLine());
+            return nullPtr;
         case Type:
             TemplateArgumentType type = new TemplateArgumentType();
             parserData.getClavaNodes().queueSetNode(type, TemplateArgumentType.TYPE, lines.nextLine());
@@ -282,6 +294,19 @@ public class ClavaDataParsers {
             return integral;
         case Template:
             return templateArgumentTemplate(lines, parserData);
+        case TemplateExpansion:
+            TemplateArgumentTemplateExpansion expansion = new TemplateArgumentTemplateExpansion();
+            String numExpansions = lines.nextLine();
+            expansion.set(TemplateArgumentTemplateExpansion.NUM_EXPANSIONS,
+                    numExpansions.isEmpty() ? Optional.empty() : Optional.of(Integer.parseInt(numExpansions)));
+            expansion.set(TemplateArgumentTemplateExpansion.TEMPLATE,
+                    templateArgumentTemplate(lines, parserData));
+            return expansion;
+        case StructuralValue:
+            TemplateArgumentStructuralValue structuralValue = new TemplateArgumentStructuralValue();
+            parserData.getClavaNodes().queueSetNode(structuralValue, TemplateArgumentStructuralValue.TYPE,
+                    lines.nextLine());
+            return structuralValue;
         /*
         // TemplateArgumentTemplate template = new TemplateArgumentTemplate();
         TemplateNameKind nameKind = LineStreamParsers.enumFromName(TemplateNameKind.class, lines);
