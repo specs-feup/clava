@@ -1,1 +1,1 @@
-v18.1.8_4
+/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ccache/build

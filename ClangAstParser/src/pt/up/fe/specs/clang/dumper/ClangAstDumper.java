@@ -27,7 +27,6 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.lang.SpecsPlatforms;
@@ -40,9 +39,10 @@ import pt.up.fe.specs.util.utilities.LineStream;
 
 import java.io.File;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
@@ -295,15 +295,13 @@ public class ClangAstDumper {
 
         arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
 
-        ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments);
-
         if (validationOnly) {
             lastValidationError = validateSyntax(arguments, sourceFile, id);
             return null;
         }
 
         ClangAstData parsedData = null;
-        ProcessOutput<String, ClangAstData> output = null;
+        ProcessOutput<String, String> output = null;
 
         try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2
                 .newInstance(config.get(ClavaNode.CONTEXT))) {
@@ -320,9 +318,30 @@ public class ClangAstDumper {
 
             workingFolders.add(lastWorkingFolder);
 
-            output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
-                    this::processOutput,
-                    inputStream -> this.processStdErr(inputStream, config.get(ClavaNode.CONTEXT)));
+            File dumpFile = new File(lastWorkingFolder, CLANG_DUMP_FILENAME);
+            int separatorIndex = arguments.indexOf("--");
+            if (separatorIndex >= 0) {
+                arguments.add(separatorIndex, "-ast-dump-output=" + dumpFile.getAbsolutePath());
+            } else {
+                arguments.add("-ast-dump-output=" + dumpFile.getAbsolutePath());
+            }
+
+            List<String> command = arguments;
+            ClangCcacheAdapter.Invocation ccache = null;
+            if (SpecsPlatforms.isLinux() && !USE_PLUGIN && ClangCcacheAdapter.isEnabled()) {
+                ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), clangExecutable);
+                command = ClangCcacheAdapter.command(ccache, arguments, sourceFile, dumpFile);
+            }
+
+            ClavaLog.debug("Calling Clang AST Dumper: " + command);
+
+            var processBuilder = new ProcessBuilder(command);
+            processBuilder.directory(lastWorkingFolder);
+            if (ccache != null) {
+                ccache.configureEnvironment(processBuilder.environment(), sourceFile);
+            }
+
+            output = SpecsSystem.runProcess(processBuilder, SpecsIo::read, SpecsIo::read);
 
             if (output.isError()) {
                 ClavaLog.debug("Dumper returned an error value: '" + output.getReturnValue() + "'");
@@ -333,14 +352,30 @@ public class ClangAstDumper {
                 throw new RuntimeException("Exception while processing the output streams", exception);
             });
 
-            parsedData = output.getStdErr();
-            Objects.requireNonNull(parsedData, () -> "Did not expect error output to be null");
-            parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
-
             // If console output streaming is disabled, show output only at the end
-            if (!streamConsoleOutput) {
+            if (!output.getStdOut().isBlank()) {
                 ClavaLog.info(output.getStdOut());
             }
+
+            if (!output.getStdErr().isBlank()) {
+                ClavaLog.info("Clang AST dumper diagnostics:\n" + output.getStdErr());
+            }
+
+            if (!dumpFile.isFile()) {
+                throw new RuntimeException("Clang AST dumper did not produce '" + dumpFile
+                        + "'\nDiagnostics:\n" + output.getStdErr());
+            }
+
+            String linesNotParsed;
+            try (var dumpInput = Files.newInputStream(dumpFile.toPath())) {
+                File unparsedDumpFile = SpecsSystem.isDebug()
+                        ? new File(lastWorkingFolder, STDERR_DUMP_FILENAME) : null;
+                linesNotParsed = lineStreamParser.parse(dumpInput, unparsedDumpFile);
+            }
+
+            parsedData = lineStreamParser.getData();
+            parsedData.set(ClangAstData.LINES_NOT_PARSED, linesNotParsed);
+            parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
 
             if (lineStreamParser.hasExceptions()) {
                 SpecsLogs.warn("Exceptions happened while parsing the file '" + sourceFile.getAbsolutePath() + "'");
@@ -356,23 +391,6 @@ public class ClangAstDumper {
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
 
         return parsedData;
-    }
-
-    private void addCudaPathArgument(List<String> arguments, String cudaPath) {
-        var useBuiltinCudaLib = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption());
-
-        if (useBuiltinCudaLib) {
-            File cudaFolder = clangResources.getBuiltinCudaLib();
-
-            ClavaLog.debug("Setting --cuda-path to built-in CUDA folder '"
-                    + cudaFolder.getAbsolutePath() + "'");
-            arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
-        } else if (!cudaPath.isBlank()) {
-            File cudaFolder = SpecsIo.existingFolder(cudaPath);
-
-            ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
-            arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
-        }
     }
 
     private String validateSyntax(List<String> arguments, File sourceFile, String id) {
@@ -422,31 +440,21 @@ public class ClangAstDumper {
         return output.toString();
     }
 
-    private ClangAstData processStdErr(InputStream inputStream, ClavaContext context) {
-        // Create LineStreamParser
-        try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2.newInstance(context)) {
+    private void addCudaPathArgument(List<String> arguments, String cudaPath) {
+        var useBuiltinCudaLib = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption());
 
-            // Set debug
-            if (SpecsSystem.isDebug()) {
-                lineStreamParser.getData().set(ClangAstData.DEBUG, true);
-            }
+        if (useBuiltinCudaLib) {
+            File cudaFolder = clangResources.getBuiltinCudaLib();
 
-            // Dump file
-            File dumpfile = SpecsSystem.isDebug() ? new File(STDERR_DUMP_FILENAME) : null;
+            ClavaLog.debug("Setting --cuda-path to built-in CUDA folder '"
+                    + cudaFolder.getAbsolutePath() + "'");
+            arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
+        } else if (!cudaPath.isBlank()) {
+            File cudaFolder = SpecsIo.existingFolder(cudaPath);
 
-            // Parse input stream
-            String linesNotParsed = lineStreamParser.parse(inputStream, dumpfile);
-
-            // Add lines not parsed to DataStore
-            ClangAstData data = lineStreamParser.getData();
-            data.set(ClangAstData.LINES_NOT_PARSED, linesNotParsed);
-
-            // Return data
-            return data;
-        } catch (Exception e) {
-            throw new RuntimeException("Error while parsing output of Clang AST dumper", e);
+            ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
+            arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
         }
-
     }
 
     /**
