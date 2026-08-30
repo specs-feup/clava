@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -138,41 +139,30 @@ public class ClangResources {
             return false;
         }
 
-        return CacheFiles.withMaintenanceLock(getClangCacheRoot().toPath(), () -> {
-            if (!cached.files().clangExecutable().isFile()) {
-                return false;
-            }
+        if (!cached.files().clangExecutable().isFile()) {
+            return false;
+        }
 
-            if (cached.files().systemResourceDir() != null
-                    && !cached.files().systemResourceDir().isDirectory()) {
-                return false;
-            }
+        if (cached.files().systemResourceDir() != null
+                && !cached.files().systemResourceDir().isDirectory()) {
+            return false;
+        }
 
-            var includesFolder = cached.includesFolder();
-            if (includesFolder == null) {
-                return true;
-            }
-
-            if (!includesFolder.exists()) {
-                return false;
-            }
-
-            CacheFiles.touch(includesFolder.toPath());
-            if (!isIncludesCacheValid(includesFolder)) {
-                throw invalidIncludesCache(includesFolder, includesFolder.getName());
-            }
-
+        var includesFolder = cached.includesFolder();
+        if (includesFolder == null) {
             return true;
-        });
+        }
+
+        return useExistingIncludes(getClangCacheRoot(), includesFolder, includesFolder.getName()) != null;
     }
 
     private void touchUse(File resourceFolder, File includesFolder) {
-        CacheFiles.withMaintenanceLock(getClangCacheRoot().toPath(), () -> {
-            CacheFiles.touch(resourceFolder.toPath());
-            if (includesFolder != null) {
-                CacheFiles.touch(includesFolder.toPath());
-            }
-        });
+        if (includesFolder == null) {
+            CacheFiles.touch(getClangCacheRoot().toPath(), resourceFolder.toPath());
+            return;
+        }
+
+        CacheFiles.touch(getClangCacheRoot().toPath(), resourceFolder.toPath(), includesFolder.toPath());
     }
 
     static File getLocalExecutable(File buildFolder) {
@@ -239,11 +229,9 @@ public class ClangResources {
 
     public File getClangResourceFolder() {
         var cacheFolder = getClangCacheRoot();
-        return CacheFiles.withMaintenanceLock(cacheFolder.toPath(), () -> {
-            var releaseFolder = SpecsIo.mkdir(getReleasesFolder(), ClangAstWebResource.getReleaseTag());
-            CacheFiles.touch(releaseFolder.toPath());
-            return releaseFolder;
-        });
+        var releaseFolder = SpecsIo.mkdir(getReleasesFolder(), ClangAstWebResource.getReleaseTag());
+        CacheFiles.touch(cacheFolder.toPath(), releaseFolder.toPath());
+        return releaseFolder;
     }
 
     public static File getDefaultTempFolder() {
@@ -400,10 +388,8 @@ public class ClangResources {
         }
 
         var includesRoot = extractedFolder.getParentFile().toPath();
-        CacheFiles.deleteUnlockedStagingLocks(cacheFolder.toPath(), includesRoot);
-        var stagingFolder = CacheFiles.createStagingDirectory(cacheFolder.toPath(), includesRoot,
-                "." + includesAsset.sha256() + ".tmp-");
-        try {
+        try (var stagingFolder = CacheFiles.createStagingDirectory(cacheFolder.toPath(), includesRoot,
+                "." + includesAsset.sha256() + ".tmp-")) {
             var downloadFolder = CacheFiles.createTemporaryDirectory(stagingFolder.path(), ".download-");
             try {
                 var archive = archiveResource.write(downloadFolder.toFile());
@@ -439,32 +425,17 @@ public class ClangResources {
             }
 
             return existingFolder;
-        } finally {
-            try {
-                CacheFiles.delete(stagingFolder.path());
-            } finally {
-                stagingFolder.close();
-            }
         }
     }
 
     private static File useExistingIncludes(File cacheFolder, File includesFolder, String sha256) {
-        if (!includesFolder.exists()) {
-            return null;
-        }
-
-        return CacheFiles.withMaintenanceLock(cacheFolder.toPath(), () -> {
-            if (!includesFolder.exists()) {
-                return null;
-            }
-
-            CacheFiles.touch(includesFolder.toPath());
+        return CacheFiles.useDirectory(cacheFolder.toPath(), includesFolder.toPath(), path -> {
             if (!isIncludesCacheValid(includesFolder)) {
                 throw invalidIncludesCache(includesFolder, sha256);
             }
 
-            return includesFolder;
-        });
+            return Optional.of(includesFolder);
+        }).orElse(null);
     }
 
     private static RuntimeException invalidIncludesCache(File includesFolder, String sha256) {
@@ -531,12 +502,11 @@ public class ClangResources {
         var cutoff = now.minus(STALE_CACHE_MAX_AGE);
         var cacheRoot = getClangCacheRoot().toPath();
         try {
-            CacheFiles.deleteStaleDirectories(cacheRoot, getReleasesFolder().toPath(), cutoff,
+            CacheFiles.cleanupDirectories(cacheRoot, getReleasesFolder().toPath(), cutoff,
                     currentVersionFolder.toPath());
-            CacheFiles.deleteStaleDirectories(cacheRoot, getIncludesRoot().toPath(), cutoff,
+            CacheFiles.cleanupDirectories(cacheRoot, getIncludesRoot().toPath(), cutoff,
                     currentIncludesFolder == null ? null : currentIncludesFolder.toPath());
-            CacheFiles.deleteUnlockedStagingLocks(cacheRoot, currentVersionFolder.toPath());
-            CacheFiles.deleteUnlockedStagingLocks(cacheRoot, getIncludesRoot().toPath());
+            CacheFiles.cleanupStagingDirectories(cacheRoot, currentVersionFolder.toPath());
         } catch (RuntimeException e) {
             SpecsLogs.warn("Could not clean stale clang-dumper cache resources", e);
         }

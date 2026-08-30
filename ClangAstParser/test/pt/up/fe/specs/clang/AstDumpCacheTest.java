@@ -223,7 +223,7 @@ public class AstDumpCacheTest {
     }
 
     @Test
-    public void staleCleanupPreservesCurrentEntryAndRemovesOtherEntry() throws IOException {
+    public void cleanupRemovesStaleEntriesBeforeAParserRun() throws IOException {
         Path currentSource = source("current.cpp", "int current;\n");
         Path staleSource = source("stale.cpp", "int stale;\n");
         AstDumpCache current = cache(currentSource, "clang", currentSource.toString());
@@ -234,8 +234,9 @@ public class AstDumpCacheTest {
         Path currentEntry = entryForSource("current");
         Path staleEntry = entryForSource("stale");
         Instant old = Instant.now().minus(Duration.ofDays(61));
-        Files.setLastModifiedTime(currentEntry, FileTime.from(old));
         Files.setLastModifiedTime(staleEntry, FileTime.from(old));
+
+        AstDumpCache.cleanup(tempFolder.resolve("cache"));
 
         assertEquals(Optional.of("current"), current.load(this::readUtf8));
         assertTrue(Files.exists(currentEntry));

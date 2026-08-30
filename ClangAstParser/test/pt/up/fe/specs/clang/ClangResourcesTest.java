@@ -42,6 +42,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
@@ -274,28 +275,28 @@ public class ClangResourcesTest {
     @Test
     public void activelyLockedStagingDirectoriesArePreserved() throws Exception {
         var includesRoot = Files.createDirectories(tempFolder.resolve("includes"));
-        var staging = CacheFiles.createStagingDirectory(tempFolder, includesRoot, ".sha.tmp-");
-        try {
-            CacheFiles.deleteUnlockedStagingLocks(tempFolder, includesRoot);
-            assertTrue(Files.exists(staging.path()));
-            assertTrue(Files.exists(staging.lockPath()));
-        } finally {
-            staging.close();
-            CacheFiles.delete(staging.path());
+        Path stagingPath;
+        Path lockPath;
+        try (var staging = CacheFiles.createStagingDirectory(tempFolder, includesRoot, ".sha.tmp-")) {
+            stagingPath = staging.path();
+            lockPath = staging.lockPath();
+            CacheFiles.cleanupDirectories(tempFolder, includesRoot, Instant.EPOCH, null);
+            assertTrue(Files.exists(stagingPath));
         }
+
+        assertFalse(Files.exists(stagingPath));
+        assertFalse(Files.exists(lockPath));
     }
 
     @Test
     public void unlockedStagingDirectoriesAreCleaned() throws Exception {
         var includesRoot = Files.createDirectories(tempFolder.resolve("includes"));
-        var staging = CacheFiles.createStagingDirectory(tempFolder, includesRoot, ".sha.tmp-");
-        var stagingPath = staging.path();
-        var lockPath = staging.lockPath();
-        staging.close();
+        var stagingPath = Files.createDirectory(includesRoot.resolve(".sha.tmp-123"));
+        var lockPath = includesRoot.resolve(".sha.tmp-123.lock");
         Files.createFile(lockPath);
 
         assertTrue(Files.exists(lockPath));
-        CacheFiles.deleteUnlockedStagingLocks(tempFolder, includesRoot);
+        CacheFiles.cleanupStagingDirectories(tempFolder, includesRoot);
 
         assertFalse(Files.exists(stagingPath));
         assertFalse(Files.exists(lockPath));
@@ -307,7 +308,7 @@ public class ClangResourcesTest {
         var lockPath = includesRoot.resolve(".orphan.tmp-123.lock");
         Files.createFile(lockPath);
 
-        CacheFiles.deleteUnlockedStagingLocks(tempFolder, includesRoot);
+        CacheFiles.cleanupDirectories(tempFolder, includesRoot, Instant.EPOCH, null);
 
         assertFalse(Files.exists(lockPath));
     }
@@ -360,7 +361,7 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void maintenanceLockMakesUsageWinOverContendingCleanup() throws Exception {
+    public void claimedDirectoryRemainsUsableDuringContendingCleanup() throws Exception {
         var releases = Files.createDirectories(tempFolder.resolve("releases"));
         var stale = Files.createDirectories(releases.resolve("stale"));
         Files.setLastModifiedTime(stale, FileTime.from(Instant.now().minus(Duration.ofDays(61))));
@@ -370,24 +371,23 @@ public class ClangResourcesTest {
         var executor = Executors.newFixedThreadPool(2);
 
         try {
-            var usage = executor.submit(() -> CacheFiles.withMaintenanceLock(tempFolder, () -> {
-                CacheFiles.touch(stale);
+            var usage = executor.submit(() -> CacheFiles.useDirectory(tempFolder, stale, path -> {
                 usageStarted.countDown();
                 awaitLatch(allowUsageToFinish);
+                return Optional.of(path);
             }));
             assertTrue(usageStarted.await(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS));
 
             var cleanup = executor.submit(() -> {
                 cleanupStarted.countDown();
-                CacheFiles.deleteStaleDirectories(tempFolder, releases,
+                CacheFiles.cleanupDirectories(tempFolder, releases,
                         Instant.now().minus(Duration.ofDays(60)), null);
             });
             assertTrue(cleanupStarted.await(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS));
-            assertFalse(cleanup.isDone());
+            cleanup.get(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
 
             allowUsageToFinish.countDown();
             usage.get(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
-            cleanup.get(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
             assertTrue(Files.exists(stale));
         } finally {
             allowUsageToFinish.countDown();
@@ -406,7 +406,7 @@ public class ClangResourcesTest {
         Files.writeString(shared.toPath().resolve("entrypoints.txt"), "builtin\n");
         Files.setLastModifiedTime(shared.toPath(), FileTime.from(Instant.now().minus(Duration.ofDays(61))));
 
-        CacheFiles.deleteStaleDirectories(tempFolder, shared.toPath().getParent(),
+        CacheFiles.cleanupDirectories(tempFolder, shared.toPath().getParent(),
                 Instant.now().minus(Duration.ofDays(60)), null);
         assertFalse(shared.exists());
 
@@ -746,15 +746,18 @@ public class ClangResourcesTest {
         }
 
         public static void main(String[] args) {
-            CacheFiles.withMaintenanceLock(Path.of(args[0]), () -> {
-                System.out.println("READY");
-                System.out.flush();
-                try {
+            var lockPath = Path.of(args[0], ".maintenance.lock");
+            try {
+                Files.createDirectories(lockPath.getParent());
+                try (var channel = FileChannel.open(lockPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+                        var ignored = channel.lock()) {
+                    System.out.println("READY");
+                    System.out.flush();
                     System.in.read();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
-            });
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             System.out.println("DONE");
             System.out.flush();
         }
@@ -788,10 +791,10 @@ public class ClangResourcesTest {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            CacheFiles.withMaintenanceLock(Path.of(args[0]), () -> {
-                System.out.println("ENTERED");
-                System.out.flush();
-            });
+            var cacheRoot = Path.of(args[0]);
+            CacheFiles.touch(cacheRoot, cacheRoot);
+            System.out.println("ENTERED");
+            System.out.flush();
             System.out.println("DONE");
             System.out.flush();
         }

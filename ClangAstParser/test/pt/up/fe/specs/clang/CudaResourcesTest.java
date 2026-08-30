@@ -338,14 +338,12 @@ public class CudaResourcesTest {
     @Test
     public void abandonedStagingDirectoriesAreReclaimable() throws Exception {
         var cudaRoot = Files.createDirectories(tempFolder.resolve("cuda"));
-        var staging = CacheFiles.createStagingDirectory(tempFolder, cudaRoot, "." + RELEASE + ".tmp-");
-        var stagingPath = staging.path();
-        var lockPath = staging.lockPath();
+        var stagingPath = Files.createDirectory(cudaRoot.resolve("." + RELEASE + ".tmp-123"));
+        var lockPath = cudaRoot.resolve("." + RELEASE + ".tmp-123.lock");
         Files.writeString(stagingPath.resolve("partial"), "in progress");
-        staging.close();
         Files.createFile(lockPath);
 
-        CacheFiles.deleteUnlockedStagingLocks(tempFolder, cudaRoot);
+        CacheFiles.cleanupDirectories(tempFolder, cudaRoot, Instant.EPOCH, null);
 
         assertFalse(Files.exists(stagingPath));
         assertFalse(Files.exists(lockPath));

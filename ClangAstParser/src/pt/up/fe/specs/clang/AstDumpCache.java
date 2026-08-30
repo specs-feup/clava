@@ -114,26 +114,41 @@ public final class AstDumpCache {
         }
 
         Path entry = entriesRoot.resolve(key);
-        if (!claimValidEntry(entry)) {
+        try {
+            return CacheFiles.useDirectory(cacheRoot, entry, claimedEntry -> {
+                try {
+                    if (!isManifestValid(claimedEntry)) {
+                        return Optional.empty();
+                    }
+
+                    try (InputStream compressed = Files.newInputStream(claimedEntry.resolve(DUMP_FILENAME));
+                        InputStream input = new GZIPInputStream(compressed)) {
+                        T result = parser.parse(input);
+
+                        // Force the gzip stream to EOF so a truncated stream or invalid trailer cannot be accepted merely
+                        // because a parser stopped after the first record.
+                        input.transferTo(OutputStream.nullOutputStream());
+                        return Optional.ofNullable(result);
+                    }
+                } catch (Exception e) {
+                    reportCacheFailure("Could not read cached AST dump entry '" + claimedEntry + "'", e);
+                    return Optional.empty();
+                }
+            });
+        } catch (RuntimeException e) {
+            reportCacheFailure("Could not use cached AST dump entry '" + entry + "'", e);
             return Optional.empty();
         }
+    }
 
-        try (InputStream compressed = Files.newInputStream(entry.resolve(DUMP_FILENAME));
-                InputStream input = new GZIPInputStream(compressed)) {
-            T result = parser.parse(input);
-
-            // Force the gzip stream to EOF so a truncated stream or invalid trailer cannot be accepted merely because
-            // a parser stopped after the first record.
-            input.transferTo(OutputStream.nullOutputStream());
-            if (result == null) {
-                throw new RuntimeException("AST dump parser returned null");
-            }
-
-            return Optional.of(result);
-        } catch (Exception e) {
-            reportCacheFailure("Could not read cached AST dump entry '" + entry + "'", e);
-            deleteEntryQuietly(entry);
-            return Optional.empty();
+    /** Performs opportunistic cleanup once before a group of translation units is parsed. */
+    public static void cleanup(Path cacheRoot) {
+        Path normalizedRoot = cacheRoot.toAbsolutePath().normalize();
+        Path entries = normalizedRoot.resolve("ast-dumps").resolve(FORMAT_VERSION).resolve("entries");
+        try {
+            CacheFiles.cleanupDirectories(normalizedRoot, entries, Instant.now().minus(STALE_ENTRY_AGE), null);
+        } catch (RuntimeException e) {
+            reportCacheFailure("Could not clean AST dump cache", e);
         }
     }
 
@@ -161,13 +176,6 @@ public final class AstDumpCache {
         }
 
         Path entry = entriesRoot.resolve(key);
-        try {
-            prepareEntriesDirectory(entry);
-        } catch (RuntimeException e) {
-            reportCacheFailure("Could not prepare AST dump cache", e);
-            return runWithoutCache(producer);
-        }
-
         CacheFiles.StagingDirectory staging;
         try {
             staging = CacheFiles.createStagingDirectory(cacheRoot, entriesRoot, "." + key + ".tmp-");
@@ -176,10 +184,10 @@ public final class AstDumpCache {
             return runWithoutCache(producer);
         }
 
-        T result = null;
-        boolean producerStarted = false;
-        boolean outputUsable = true;
-        try {
+        try (staging) {
+            T result = null;
+            boolean producerStarted = false;
+            boolean outputUsable;
             Path stagedDump = staging.path().resolve(DUMP_FILENAME);
             try (OutputStream fileOutput = Files.newOutputStream(stagedDump, StandardOpenOption.CREATE_NEW,
                     StandardOpenOption.WRITE)) {
@@ -191,46 +199,29 @@ public final class AstDumpCache {
                 outputUsable = !bestEffortOutput.failed();
             } catch (IOException e) {
                 // A failed cache stream must not turn a successful dumper run into a parse failure. The producer has
-                // not necessarily run if opening the cache stream itself failed, so fall back to the producer with a
-                // null sink in that case.
-                outputUsable = false;
+                // not necessarily run if opening the cache stream itself failed, so fall back in that case.
                 reportCacheFailure("Could not write cached AST dump", e);
-                discardStagingQuietly(staging);
                 return producerStarted ? result : runWithoutCache(producer);
             }
-        } catch (RuntimeException e) {
-            discardStagingQuietly(staging);
-            throw e;
-        }
 
-        if (!outputUsable) {
-            discardStagingQuietly(staging);
+            if (!outputUsable || !shouldPublish(result, publishDecision)) {
+                return result;
+            }
+
+            try {
+                Manifest manifest = buildManifest(dependencyPaths.apply(result));
+                Path stagedManifest = staging.path().resolve(MANIFEST_FILENAME);
+                Files.writeString(stagedManifest, GSON.toJson(manifest), StandardCharsets.UTF_8,
+                        StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+
+                // The directory move is the publication point; readers cannot observe a partial entry.
+                CacheFiles.publish(staging.path(), entry);
+            } catch (RuntimeException | IOException e) {
+                reportCacheFailure("Could not publish AST dump cache entry '" + entry + "'", e);
+            }
+
             return result;
         }
-
-        if (!shouldPublish(result, publishDecision)) {
-            discardStagingQuietly(staging);
-            return result;
-        }
-
-        try {
-            Manifest manifest = buildManifest(dependencyPaths.apply(result));
-            Path stagedManifest = staging.path().resolve(MANIFEST_FILENAME);
-            Files.writeString(stagedManifest, GSON.toJson(manifest), StandardCharsets.UTF_8,
-                    StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
-
-            // The directory move is the publication point; readers cannot observe only one of dump.gz/manifest.json.
-            CacheFiles.publish(staging.path(), entry);
-        } catch (RuntimeException | IOException e) {
-            reportCacheFailure("Could not publish AST dump cache entry '" + entry + "'", e);
-        } finally {
-            // publish() can report an existing destination without moving this writer's staging directory. Always
-            // remove it before releasing the lock, including the losing-writer case.
-            CacheFiles.deleteQuietly(staging.path());
-            closeStagingQuietly(staging);
-        }
-
-        return result;
     }
 
     /** Parses a cached gzip stream. */
@@ -375,72 +366,6 @@ public final class AstDumpCache {
         for (int shift = Long.SIZE - Byte.SIZE; shift >= 0; shift -= Byte.SIZE) {
             digest.update((byte) (value >>> shift));
         }
-    }
-
-    private boolean claimValidEntry(Path entry) {
-        boolean claimed;
-        try {
-            claimed = CacheFiles.withMaintenanceLock(cacheRoot, () -> {
-                try {
-                    Files.createDirectories(entriesRoot);
-                } catch (IOException e) {
-                    throw new UncheckedIOException("Could not create AST dump cache entries directory", e);
-                }
-
-                // Claim the entry before cleanup. A concurrent cleanup therefore cannot remove an entry that this
-                // reader is about to validate and use.
-                if (Files.isDirectory(entry)) {
-                    CacheFiles.touch(entry);
-                }
-
-                CacheFiles.deleteStaleDirectoriesLocked(entriesRoot, Instant.now().minus(STALE_ENTRY_AGE), entry);
-                CacheFiles.deleteUnlockedStagingLocksLocked(entriesRoot);
-
-                if (!Files.isDirectory(entry)) {
-                    return false;
-                }
-                return true;
-            });
-        } catch (RuntimeException e) {
-            reportCacheFailure("Could not validate AST dump cache entry '" + entry + "'", e);
-            return false;
-        }
-
-        if (!claimed) {
-            return false;
-        }
-
-        // Hashing dependency files can be expensive. The entry was touched and excluded from cleanup above, so the
-        // full manifest validation can safely run without holding the process-wide maintenance lock.
-        boolean valid;
-        try {
-            valid = isManifestValid(entry);
-        } catch (RuntimeException e) {
-            reportCacheFailure("Could not validate AST dump cache entry '" + entry + "'", e);
-            valid = false;
-        }
-
-        if (!valid) {
-            // Reacquire the maintenance lock before deleting. This keeps invalid-entry removal ordered with cleanup
-            // and with another reader claiming the same entry.
-            deleteEntryQuietly(entry);
-            return false;
-        }
-
-        return true;
-    }
-
-    private void prepareEntriesDirectory(Path currentEntry) {
-        CacheFiles.withMaintenanceLock(cacheRoot, () -> {
-            try {
-                Files.createDirectories(entriesRoot);
-            } catch (IOException e) {
-                throw new UncheckedIOException("Could not create AST dump cache entries directory", e);
-            }
-
-            CacheFiles.deleteStaleDirectoriesLocked(entriesRoot, Instant.now().minus(STALE_ENTRY_AGE), currentEntry);
-            CacheFiles.deleteUnlockedStagingLocksLocked(entriesRoot);
-        });
     }
 
     private boolean isManifestValid(Path entry) {
@@ -625,27 +550,6 @@ public final class AstDumpCache {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException("AST dumper producer failed", e);
-        }
-    }
-
-    private static void closeStagingQuietly(CacheFiles.StagingDirectory staging) {
-        try {
-            staging.close();
-        } catch (RuntimeException e) {
-            reportCacheFailure("Could not close AST dump cache staging lock", e);
-        }
-    }
-
-    private static void discardStagingQuietly(CacheFiles.StagingDirectory staging) {
-        CacheFiles.deleteQuietly(staging.path());
-        closeStagingQuietly(staging);
-    }
-
-    private void deleteEntryQuietly(Path entry) {
-        try {
-            CacheFiles.withMaintenanceLock(cacheRoot, () -> CacheFiles.deleteQuietly(entry));
-        } catch (RuntimeException e) {
-            reportCacheFailure("Could not remove invalid AST dump cache entry '" + entry + "'", e);
         }
     }
 

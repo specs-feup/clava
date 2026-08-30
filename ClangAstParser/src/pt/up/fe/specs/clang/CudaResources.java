@@ -89,8 +89,9 @@ final class CudaResources {
 
         // A published installation is immutable. A malformed one is an operator error, not an invitation to repair it
         // in place, because doing so could race with a reader that already selected this release.
-        if (Files.exists(releaseFolder.toPath(), LinkOption.NOFOLLOW_LINKS)) {
-            return useExistingInstallation(cacheRoot, releaseFolder, releaseTag);
+        var existing = useExistingInstallation(cacheRoot, releaseFolder, releaseTag);
+        if (existing != null) {
+            return existing;
         }
 
         return install(cacheRoot, releaseTag, getManifestResource(releaseTag), CudaResources::getArchiveResource);
@@ -196,16 +197,9 @@ final class CudaResources {
     private static NvidiaCudaManifest getCurrentManifest(Path cacheRoot, String releaseTag,
                                                           FileResourceProvider manifestResource) {
         var cudaRoot = cacheRoot.resolve(CUDA_FOLDERNAME);
-        CacheFiles.deleteUnlockedStagingLocks(cacheRoot, cudaRoot);
-        var stagingDirectory = CacheFiles.createStagingDirectory(cacheRoot, cudaRoot, "." + releaseTag + ".tmp-");
-        try {
+        try (var stagingDirectory = CacheFiles.createStagingDirectory(cacheRoot, cudaRoot,
+                "." + releaseTag + ".tmp-")) {
             return downloadManifest(cacheRoot, stagingDirectory.path(), releaseTag, manifestResource);
-        } finally {
-            try {
-                CacheFiles.delete(stagingDirectory.path());
-            } finally {
-                stagingDirectory.close();
-            }
         }
     }
 
@@ -348,9 +342,8 @@ final class CudaResources {
 
         var cudaRoot = cacheRoot.resolve(CUDA_FOLDERNAME);
         var releaseFolder = getReleaseFolder(cacheRoot, releaseTag);
-        CacheFiles.deleteUnlockedStagingLocks(cacheRoot, cudaRoot);
-        var stagingDirectory = CacheFiles.createStagingDirectory(cacheRoot, cudaRoot, "." + releaseTag + ".tmp-");
-        try {
+        try (var stagingDirectory = CacheFiles.createStagingDirectory(cacheRoot, cudaRoot,
+                "." + releaseTag + ".tmp-")) {
             var manifest = downloadManifest(cacheRoot, stagingDirectory.path(), releaseTag, manifestResource);
             var platform = requireSupportedPlatform(manifest);
 
@@ -371,12 +364,6 @@ final class CudaResources {
 
             CacheFiles.publish(stagingDirectory.path(), releaseFolder.toPath());
             return useExistingInstallation(cacheRoot, releaseFolder, releaseTag);
-        } finally {
-            try {
-                CacheFiles.delete(stagingDirectory.path());
-            } finally {
-                stagingDirectory.close();
-            }
         }
     }
 
@@ -415,15 +402,18 @@ final class CudaResources {
     }
 
     private static File useExistingInstallation(Path cacheRoot, File releaseFolder, String releaseTag) {
-        var validInstallation = CacheFiles.withMaintenanceLock(cacheRoot, () -> {
+        var validInstallation = CacheFiles.useDirectory(cacheRoot, releaseFolder.toPath(), path -> {
             var platform = requireSupportedPlatform(readPublishedManifest(releaseFolder, releaseTag));
             if (!isCudaInstallation(releaseFolder, releaseTag, platform.manifestName())) {
                 throw invalidInstallation(releaseFolder, platform.manifestName());
             }
 
-            CacheFiles.touch(releaseFolder.toPath());
-            return releaseFolder;
-        });
+            return Optional.of(releaseFolder);
+        }).orElse(null);
+
+        if (validInstallation == null) {
+            return null;
+        }
 
         cleanup(cacheRoot, releaseFolder.toPath());
         SpecsLogs.debug(() -> "Using cached CUDA resources: " + validInstallation);
@@ -434,8 +424,7 @@ final class CudaResources {
         var cudaRoot = cacheRoot.resolve(CUDA_FOLDERNAME);
         var cutoff = Instant.now().minus(Duration.ofDays(60));
         try {
-            CacheFiles.deleteStaleDirectories(cacheRoot, cudaRoot, cutoff, releaseFolder);
-            CacheFiles.deleteUnlockedStagingLocks(cacheRoot, cudaRoot);
+            CacheFiles.cleanupDirectories(cacheRoot, cudaRoot, cutoff, releaseFolder);
         } catch (RuntimeException e) {
             SpecsLogs.warn("Could not clean stale CUDA cache resources", e);
         }

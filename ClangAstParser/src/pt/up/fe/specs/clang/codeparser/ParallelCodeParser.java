@@ -16,6 +16,7 @@ package pt.up.fe.specs.clang.codeparser;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import pt.up.fe.specs.clang.AstDumpCache;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.dumper.ClangAstData;
@@ -115,6 +116,9 @@ public class ParallelCodeParser extends CodeParser {
         // get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         ClavaLog.info("Found " + sources.size() + " source files");
+        if (!get(SHOW_CLANG_DUMP)) {
+            AstDumpCache.cleanup(get(DUMPER_FOLDER).toPath());
+        }
         // ClavaLog.debug(() -> "[ParallelCodeParser] Files to parse:" + sources);
 
         File parsingFolder = SpecsIo.getTempFolder("clava_parsing_" + UUID.randomUUID().toString());

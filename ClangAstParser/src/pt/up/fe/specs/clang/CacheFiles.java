@@ -38,6 +38,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.HexFormat;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 final class CacheFiles {
@@ -49,7 +51,7 @@ final class CacheFiles {
     private CacheFiles() {
     }
 
-    static <T> T withMaintenanceLock(Path cacheRoot, Supplier<T> action) {
+    private static <T> T withMaintenanceLock(Path cacheRoot, Supplier<T> action) {
         var lockPath = cacheRoot.resolve(MAINTENANCE_LOCK_FILENAME);
         synchronized (MAINTENANCE_MONITOR) {
             try {
@@ -64,10 +66,50 @@ final class CacheFiles {
         }
     }
 
-    static void withMaintenanceLock(Path cacheRoot, Runnable action) {
+    private static void withMaintenanceLock(Path cacheRoot, Runnable action) {
         withMaintenanceLock(cacheRoot, () -> {
             action.run();
             return null;
+        });
+    }
+
+    /**
+     * Claims a published directory, refreshes its use time, and uses it outside the maintenance lock.
+     *
+     * <p>An empty result means the directory was invalid and removes it before returning. Exceptions leave the
+     * directory untouched so callers can report malformed published resources instead of silently repairing them.</p>
+     */
+    static <T> Optional<T> useDirectory(Path cacheRoot, Path directory,
+                                        Function<Path, Optional<T>> use) {
+        boolean claimed = withMaintenanceLock(cacheRoot, () -> {
+            if (!Files.isDirectory(directory)) {
+                return false;
+            }
+
+            touchLocked(directory);
+            return true;
+        });
+
+        if (!claimed) {
+            return Optional.empty();
+        }
+
+        var result = use.apply(directory);
+        if (result.isEmpty()) {
+            withMaintenanceLock(cacheRoot, () -> deleteQuietly(directory));
+        }
+
+        return result;
+    }
+
+    /** Refreshes existing cache paths as one maintenance operation. */
+    static void touch(Path cacheRoot, Path... paths) {
+        withMaintenanceLock(cacheRoot, () -> {
+            for (var path : paths) {
+                if (Files.exists(path)) {
+                    touchLocked(path);
+                }
+            }
         });
     }
 
@@ -138,16 +180,13 @@ final class CacheFiles {
 
         @Override
         public void close() {
-            try {
-                channel.close();
-            } catch (IOException e) {
-                throw new UncheckedIOException("Could not close cache staging lock '" + lockPath + "'", e);
-            }
+            deleteQuietly(path);
 
             try {
+                channel.close();
                 Files.deleteIfExists(lockPath);
-            } catch (IOException e) {
-                throw new UncheckedIOException("Could not close cache staging lock '" + lockPath + "'", e);
+            } catch (IOException ignored) {
+                // Staging cleanup is best-effort. A remaining lock lets a later cache cleanup safely retry.
             }
         }
     }
@@ -163,9 +202,8 @@ final class CacheFiles {
             return destination;
         }
 
-        var stagingDirectory = createStagingDirectory(cacheRoot, destination.getParentFile().toPath(),
-                "." + destination.getName() + ".tmp-");
-        try {
+        try (var stagingDirectory = createStagingDirectory(cacheRoot, destination.getParentFile().toPath(),
+                "." + destination.getName() + ".tmp-")) {
             File stagedFile = resource.write(stagingDirectory.path().toFile());
             if (stagedFile == null || !stagedFile.isFile()) {
                 throw new RuntimeException("Could not download " + description);
@@ -182,12 +220,6 @@ final class CacheFiles {
             }
 
             return publish(stagedFile.toPath(), destination.toPath()).toFile();
-        } finally {
-            try {
-                deleteQuietly(stagingDirectory.path());
-            } finally {
-                stagingDirectory.close();
-            }
         }
     }
 
@@ -232,7 +264,7 @@ final class CacheFiles {
         return expectedSha256.equalsIgnoreCase(calculateSha256(file));
     }
 
-    static void touch(Path path) {
+    private static void touchLocked(Path path) {
         try {
             Files.setLastModifiedTime(path, FileTime.from(Instant.now()));
         } catch (IOException e) {
@@ -240,11 +272,20 @@ final class CacheFiles {
         }
     }
 
-    static void deleteStaleDirectories(Path cacheRoot, Path parent, Instant cutoff, Path excluded) {
-        withMaintenanceLock(cacheRoot, () -> deleteStaleDirectoriesLocked(parent, cutoff, excluded));
+    /** Removes stale published directories and abandoned staging directories in one locked pass. */
+    static void cleanupDirectories(Path cacheRoot, Path parent, Instant cutoff, Path excluded) {
+        withMaintenanceLock(cacheRoot, () -> {
+            deleteStaleDirectories(parent, cutoff, excluded);
+            deleteUnlockedStagingDirectories(parent);
+        });
     }
 
-    static void deleteStaleDirectoriesLocked(Path parent, Instant cutoff, Path excluded) {
+    /** Removes abandoned staging directories without treating other child directories as cache entries. */
+    static void cleanupStagingDirectories(Path cacheRoot, Path parent) {
+        withMaintenanceLock(cacheRoot, () -> deleteUnlockedStagingDirectories(parent));
+    }
+
+    private static void deleteStaleDirectories(Path parent, Instant cutoff, Path excluded) {
         if (!Files.isDirectory(parent)) {
             return;
         }
@@ -277,11 +318,7 @@ final class CacheFiles {
         }
     }
 
-    static void deleteUnlockedStagingLocks(Path cacheRoot, Path parent) {
-        withMaintenanceLock(cacheRoot, () -> deleteUnlockedStagingLocksLocked(parent));
-    }
-
-    static void deleteUnlockedStagingLocksLocked(Path parent) {
+    private static void deleteUnlockedStagingDirectories(Path parent) {
         if (!Files.isDirectory(parent)) {
             return;
         }
@@ -335,7 +372,7 @@ final class CacheFiles {
         }
     }
 
-    static void deleteQuietly(Path path) {
+    private static void deleteQuietly(Path path) {
         try {
             delete(path);
         } catch (RuntimeException ignored) {
