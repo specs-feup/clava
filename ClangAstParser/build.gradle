@@ -24,6 +24,7 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.12.1'
     implementation 'com.google.guava:guava:33.4.0-jre'
+    implementation 'com.github.luben:zstd-jni:1.5.7-16'
     implementation 'org.apache.commons:commons-compress:1.27.1'
     implementation 'org.tukaani:xz:1.9'
 

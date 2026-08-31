@@ -117,9 +117,6 @@ public class ParallelCodeParser extends CodeParser {
         ClavaLog.info("Found " + sources.size() + " source files");
         // ClavaLog.debug(() -> "[ParallelCodeParser] Files to parse:" + sources);
 
-        File parsingFolder = SpecsIo.getTempFolder("clava_parsing_" + UUID.randomUUID().toString());
-        ClavaLog.debug(() -> "Parsing using folder '" + parsingFolder + "'");
-
         // AtomicInteger currentSourceFileIndex = new AtomicInteger(0);
         ParallelProgressCounter counter = new ParallelProgressCounter(sources.size());
 
@@ -139,7 +136,7 @@ public class ParallelCodeParser extends CodeParser {
 
             Future<ClangAstData> tUnit = executor
                     .submit(() -> parseSource(source, id, standard, options, clangDump,
-                            counter, parsingFolder, clangFiles.clangExecutable(), clangFiles.builtinIncludes(),
+                            counter, clangFiles.clangExecutable(), clangFiles.builtinIncludes(),
                             clangFiles.systemResourceDir()));
 
             futureTUnits.add(tUnit);
@@ -173,9 +170,6 @@ public class ParallelCodeParser extends CodeParser {
         // for (var data : clangParserResults) {
         // System.out.println("CLANG PARSER NODES:\n" + data.get(ClangParserData.CLAVA_NODES).getNodes());
         // }
-
-        // Delete temporary folder
-        SpecsIo.deleteFolder(parsingFolder);
 
         // List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
         // .map(sourceFile -> parseSource(new File(sourceFile), standard, options, clangDump,
@@ -358,7 +352,7 @@ public class ParallelCodeParser extends CodeParser {
     }
 
     private ClangAstData parseSource(File sourceFile, String id, Standard standard, DataStore options,
-                                     ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
+                                     ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter,
                                      File clangExecutable, List<String> builtinIncludes, File systemResourceDir) {
 
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
@@ -372,7 +366,6 @@ public class ParallelCodeParser extends CodeParser {
 
         ClangAstDumper clangParser = new ClangAstDumper(streamConsoleOutput, clangExecutable, builtinIncludes,
                 systemResourceDir, this)
-                .setBaseFolder(parsingFolder)
                 .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
 
         // .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
