@@ -48,6 +48,10 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
             .setLabel("The base cache folder for Clava's downloaded resources. Clava stores each clang-dumper and CUDA release in a versioned subfolder and downloads it if not found. If not set, a temporary folder will be used.")
             .setDefault(ClangResources::getDefaultTempFolder);
 
+    public static final DataKey<Boolean> AST_DUMP_CACHE = KeyFactory.bool("astDumpCache")
+            .setLabel("Cache per-file AST dumps, so that unmodified files are loaded from cache instead of being parsed again")
+            .setDefault(() -> true);
+
     /**
      * Execution information, such as execution time and memory used.
      */

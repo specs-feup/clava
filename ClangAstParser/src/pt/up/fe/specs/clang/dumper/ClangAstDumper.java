@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clang.dumper;
 
+import com.github.luben.zstd.ZstdInputStream;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
@@ -38,7 +39,9 @@ import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +62,7 @@ public class ClangAstDumper {
     }
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
+    private final static String COMPRESSED_CLANG_DUMP_FILENAME = "clangDump.txt.zst";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
 
     /**
@@ -71,9 +75,7 @@ public class ClangAstDumper {
      */
     private final boolean streamConsoleOutput;
 
-    private final List<File> workingFolders;
     private File lastWorkingFolder;
-    private File baseFolder;
     private File clangExecutable;
     private List<String> builtinIncludes;
     private File systemResourceDir;
@@ -105,9 +107,7 @@ public class ClangAstDumper {
         this.builtinIncludes = builtinIncludes;
         this.systemResourceDir = systemResourceDir;
 
-        this.workingFolders = new ArrayList<>();
         this.lastWorkingFolder = null;
-        this.baseFolder = null;
         this.systemIncludesThreshold = ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD.getDefault().get();
         this.parserConfig = parserConfig;
         this.clangResources = new ClangResources(parserConfig);
@@ -115,11 +115,6 @@ public class ClangAstDumper {
 
     public File getLastWorkingFolder() {
         return lastWorkingFolder;
-    }
-
-    public ClangAstDumper setBaseFolder(File baseFolder) {
-        this.baseFolder = baseFolder;
-        return this;
     }
 
     public ClangAstDumper setSystemIncludesThreshold(int systemIncludesThreshold) {
@@ -188,6 +183,7 @@ public class ClangAstDumper {
         } else {
             arguments.add(clangExecutable.getAbsolutePath());
 
+            arguments.add("-c");
             arguments.add(sourceFile.getAbsolutePath());
 
             arguments.add("-id=" + id);
@@ -310,35 +306,41 @@ public class ClangAstDumper {
                 lineStreamParser.getData().set(ClangAstData.DEBUG, true);
             }
 
-            // Create temporary working folder, in order to support running several dumps in parallel
-            lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
+            // Each invocation needs unique output paths, but clang-dumper no longer
+            // creates side files or needs a dedicated process working directory.
+            lastWorkingFolder = Files.createTempDirectory("clava_ast_").toFile();
 
-            // Ensure folder is empty
-            SpecsIo.deleteFolderContents(lastWorkingFolder);
-
-            workingFolders.add(lastWorkingFolder);
-
-            File dumpFile = new File(lastWorkingFolder, CLANG_DUMP_FILENAME);
+            boolean useAstDumpCache = SpecsPlatforms.isLinux() && !USE_PLUGIN
+                    && parserConfig.get(CodeParser.AST_DUMP_CACHE)
+                    && !parserConfig.get(CodeParser.SHOW_CLANG_DUMP)
+                    && ClangCcacheAdapter.isAvailable();
+            File dumpFile = new File(lastWorkingFolder,
+                    useAstDumpCache ? COMPRESSED_CLANG_DUMP_FILENAME : CLANG_DUMP_FILENAME);
+            File dependencyFile = new File(lastWorkingFolder, "clangDump.d");
             int separatorIndex = arguments.indexOf("--");
             if (separatorIndex >= 0) {
-                arguments.add(separatorIndex, "-ast-dump-output=" + dumpFile.getAbsolutePath());
+                arguments.add(separatorIndex, "-o");
+                arguments.add(separatorIndex + 1, dumpFile.getAbsolutePath());
+                if (useAstDumpCache) {
+                    arguments.add(separatorIndex + 2, "-ast-dump-compression=zstd");
+                }
             } else {
-                arguments.add("-ast-dump-output=" + dumpFile.getAbsolutePath());
+                arguments.add("-o");
+                arguments.add(dumpFile.getAbsolutePath());
             }
 
             List<String> command = arguments;
             ClangCcacheAdapter.Invocation ccache = null;
-            if (SpecsPlatforms.isLinux() && !USE_PLUGIN && ClangCcacheAdapter.isEnabled()) {
-                ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), clangExecutable);
-                command = ClangCcacheAdapter.command(ccache, arguments, sourceFile, dumpFile);
+            if (useAstDumpCache) {
+                ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER));
+                command = ClangCcacheAdapter.command(arguments, dependencyFile);
             }
 
             ClavaLog.debug("Calling Clang AST Dumper: " + command);
 
             var processBuilder = new ProcessBuilder(command);
-            processBuilder.directory(lastWorkingFolder);
             if (ccache != null) {
-                ccache.configureEnvironment(processBuilder.environment(), sourceFile);
+                ccache.configureEnvironment(processBuilder.environment());
             }
 
             output = SpecsSystem.runProcess(processBuilder, SpecsIo::read, SpecsIo::read);
@@ -367,7 +369,8 @@ public class ClangAstDumper {
             }
 
             String linesNotParsed;
-            try (var dumpInput = Files.newInputStream(dumpFile.toPath())) {
+            try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
+                    InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {
                 File unparsedDumpFile = SpecsSystem.isDebug()
                         ? new File(lastWorkingFolder, STDERR_DUMP_FILENAME) : null;
                 linesNotParsed = lineStreamParser.parse(dumpInput, unparsedDumpFile);
@@ -394,7 +397,11 @@ public class ClangAstDumper {
     }
 
     private String validateSyntax(List<String> arguments, File sourceFile, String id) {
-        lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
+        try {
+            lastWorkingFolder = Files.createTempDirectory("clava_ast_").toFile();
+        } catch (IOException e) {
+            throw new UncheckedIOException("Could not create syntax validation working folder", e);
+        }
 
         var output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
                 this::discardOutput,
@@ -461,26 +468,18 @@ public class ClangAstDumper {
      * TODO: Current implementation only shows the last file, show all files
      */
     public String getClangDump() {
-        if (workingFolders.isEmpty()) {
+        if (lastWorkingFolder == null) {
             SpecsLogs.msgInfo("No working folders found, returning empty clang dump");
             return "";
         }
 
-        StringBuilder clangDump = new StringBuilder();
-
-        for (File workingFolder : workingFolders) {
-            File clangDumpFile = new File(workingFolder, CLANG_DUMP_FILENAME);
-
-            if (!clangDumpFile.isFile()) {
-                SpecsLogs.msgInfo("Clang dump file no found: '" + clangDumpFile + "'");
-                continue;
-            }
-
-            clangDump.append("ClangDump for '" + workingFolder.getName() + "':\n");
-            clangDump.append(SpecsIo.read(clangDumpFile));
+        File clangDumpFile = new File(lastWorkingFolder, CLANG_DUMP_FILENAME);
+        if (!clangDumpFile.isFile()) {
+            SpecsLogs.msgInfo("Clang dump file not found: '" + clangDumpFile + "'");
+            return "";
         }
 
-        return clangDump.toString();
+        return "ClangDump for '" + lastWorkingFolder.getName() + "':\n" + SpecsIo.read(clangDumpFile);
     }
 
 }
