@@ -9,13 +9,9 @@ on:
   push:
     paths:
       - .github/workflows/copilot-setup-steps.yml
-      - .github/scripts/resolve-dependency-refs.sh
-      - .github/scripts/test-resolve-dependency-refs.sh
   pull_request:
     paths:
       - .github/workflows/copilot-setup-steps.yml
-      - .github/scripts/resolve-dependency-refs.sh
-      - .github/scripts/test-resolve-dependency-refs.sh
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
@@ -53,43 +49,37 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
-      - name: Test dependency ref resolver
-        run: bash clava/.github/scripts/test-resolve-dependency-refs.sh
-
       - name: Determine repository refs
-        id: repo-refs
-        shell: bash
-        env:
-          SOURCE_BRANCH: ${{ env.BRANCH_NAME }}
-        run: |
-          bash clava/.github/scripts/resolve-dependency-refs.sh \
-            clava \
-            lara specs-feup/lara-framework \
+        uses: specs-feup/branch-resolver@v1
+        with:
+          source-directory: clava
+          dependencies: |
+            lara specs-feup/lara-framework
             specs specs-feup/specs-java-libs
 
       - name: Echo checks
         run: |
           echo "Weaver branch: ${{ env.BRANCH_NAME }}"
-          echo "Lara framework branch: ${{ steps.repo-refs.outputs.lara_branch }}"
-          echo "Lara framework commit: ${{ steps.repo-refs.outputs.lara_ref }}"
-          echo "Lara framework default: ${{ steps.repo-refs.outputs.lara_default }}"
-          echo "Specs-java-libs branch: ${{ steps.repo-refs.outputs.specs_branch }}"
-          echo "Specs-java-libs commit: ${{ steps.repo-refs.outputs.specs_ref }}"
-          echo "Specs-java-libs default: ${{ steps.repo-refs.outputs.specs_default }}"
+          echo "Lara framework branch: ${{ env.lara_branch }}"
+          echo "Lara framework commit: ${{ env.lara_ref }}"
+          echo "Lara framework default: ${{ env.lara_default }}"
+          echo "Specs-java-libs branch: ${{ env.specs_branch }}"
+          echo "Specs-java-libs commit: ${{ env.specs_ref }}"
+          echo "Specs-java-libs default: ${{ env.specs_default }}"
 
       - name: Checkout lara-framework
         uses: actions/checkout@v6
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          ref: ${{ steps.repo-refs.outputs.lara_ref }}
+          ref: ${{ env.lara_ref }}
 
       - name: Checkout specs-java-libs
         uses: actions/checkout@v6
         with:
           repository: specs-feup/specs-java-libs
           path: specs-java-libs
-          ref: ${{ steps.repo-refs.outputs.specs_ref }}
+          ref: ${{ env.specs_ref }}
 
       - name: Build Weaver
         run: |
