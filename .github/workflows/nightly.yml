@@ -7,6 +7,10 @@ name: nightly
 
 on:
   push:
+    # Feature branches are covered by pull_request; push only builds the
+    # long-lived branches to avoid duplicate runs when a PR is open.
+    branches: [master, staging]
+  pull_request:
 
   # Daily at midnight
   schedule:
@@ -26,8 +30,8 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      lara_ref: ${{ steps.repo-refs.outputs.lara_ref }}
-      specs_ref: ${{ steps.repo-refs.outputs.specs_ref }}
+      lara_ref: ${{ env.lara_ref }}
+      specs_ref: ${{ env.specs_ref }}
 
     steps:
       - name: Setup Java
@@ -46,77 +50,40 @@ jobs:
         uses: actions/checkout@v6
         with:
           path: clava
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Determine repository refs
-        id: repo-refs
-        shell: bash
-        env:
-          BRANCH_NAME: ${{ env.BRANCH_NAME }}
-          BASE_BRANCH: ${{ github.base_ref }}
-        run: |
-          set -euo pipefail
-
-          # For each dependency repository, determine which branch to checkout.
-          # Priority order:
-          # 1. A branch with the same name as the current branch
-          # 2. If this is a PR, the target branch (base_ref)
-          # 3. The default branch of the repository
-
-          determine_ref() {
-            local prefix=$1
-            local repo=$2
-            local url="https://github.com/${repo}.git"
-
-            # Get the default branch
-            local default_branch
-            default_branch=$(git ls-remote --symref "$url" HEAD | awk '/^ref:/ {print $2}' | sed 's@refs/heads/@@')
-            echo "${prefix}_default=${default_branch}" >> "$GITHUB_OUTPUT"
-            echo "Default branch for ${repo} is '${default_branch}'"
-
-            local ref_to_use=""
-            
-            # Priority 1: Same branch name
-            if [ -n "$(git ls-remote --heads "$url" "refs/heads/${BRANCH_NAME}")" ]; then
-              ref_to_use="${BRANCH_NAME}"
-              echo "Using matching branch '${BRANCH_NAME}' in ${repo}"
-            # Priority 2: PR target branch (if this is a PR)
-            elif [ -n "${BASE_BRANCH}" ] && [ -n "$(git ls-remote --heads "$url" "refs/heads/${BASE_BRANCH}")" ]; then
-              ref_to_use="${BASE_BRANCH}"
-              echo "Using PR target branch '${BASE_BRANCH}' in ${repo}"
-            # Priority 3: Default branch
-            else
-              ref_to_use="${default_branch}"
-              echo "Using default branch '${default_branch}' for ${repo}"
-            fi
-            
-            echo "${prefix}_ref=${ref_to_use}" >> "$GITHUB_OUTPUT"
-          }
-
-          determine_ref "lara" "specs-feup/lara-framework"
-          determine_ref "specs" "specs-feup/specs-java-libs"
+        uses: specs-feup/branch-resolver@v1
+        with:
+          source-directory: clava
+          dependencies: |
+            lara specs-feup/lara-framework
+            specs specs-feup/specs-java-libs
 
       - name: Echo checks
         run: |
           echo "Weaver branch: ${{ env.BRANCH_NAME }}"
-          echo "PR target branch (if any): ${{ github.base_ref }}"
-          echo "Lara framework ref: ${{ steps.repo-refs.outputs.lara_ref }}"
-          echo "Lara framework default: ${{ steps.repo-refs.outputs.lara_default }}"
-          echo "Specs-java-libs ref: ${{ steps.repo-refs.outputs.specs_ref }}"
-          echo "Specs-java-libs default: ${{ steps.repo-refs.outputs.specs_default }}"
+          echo "Lara framework branch: ${{ env.lara_branch }}"
+          echo "Lara framework commit: ${{ env.lara_ref }}"
+          echo "Lara framework default: ${{ env.lara_default }}"
+          echo "Specs-java-libs branch: ${{ env.specs_branch }}"
+          echo "Specs-java-libs commit: ${{ env.specs_ref }}"
+          echo "Specs-java-libs default: ${{ env.specs_default }}"
 
       - name: Checkout lara-framework
         uses: actions/checkout@v6
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          ref: ${{ steps.repo-refs.outputs.lara_ref }}
+          ref: ${{ env.lara_ref }}
 
       - name: Checkout specs-java-libs
         uses: actions/checkout@v6
         with:
           repository: specs-feup/specs-java-libs
           path: specs-java-libs
-          ref: ${{ steps.repo-refs.outputs.specs_ref }}
+          ref: ${{ env.specs_ref }}
 
       - name: Build with Gradle
         run: |
@@ -156,7 +123,7 @@ jobs:
       fail-fast: false
       matrix:
         #node-version: ['latest', '22.x', '20.x']
-        node-version: ['22.x', '20.x']
+        node-version: ['25.x', '24.x']
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     runs-on: ${{ matrix.os }}
@@ -187,6 +154,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           path: clava
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Checkout lara-framework
         uses: actions/checkout@v6
@@ -197,7 +165,7 @@ jobs:
 
       - name: Setup js workspace
         run: |
-          echo '{ "name": "SPeCS Workspace", "type": "module", "workspaces": [ "clava/Clava-JS", "lara-framework/Lara-JS" ] }' > package.json
+          echo '{ "name": "SPeCS Workspace", "type": "module", "workspaces": [ "clava/Clava-JS", "lara-framework/Lara-JS" ], "overrides": { "node-gyp": "^12.1.0" } }' > package.json
           npm install
 
       - name: Build Lara-JS
@@ -223,25 +191,14 @@ jobs:
 
       # Only on ubuntu-latest
       - name: Publish JS
-        if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/staging' && matrix.os == 'ubuntu-latest' && matrix.node-version == '25.x'
         run: | 
             cd clava/Clava-JS
             npm whoami
             echo "Attempt to publish while running on ${{ matrix.os }} and Node.js ${{matrix.node-version}}"
-            if [[ "${{ github.event_name }}" == "push" ]]; then
-                if [ "${{ github.ref }}" == "refs/heads/staging" ]; then
-                    echo "Publishing from staging, creating timestamped prerelease and updating tag 'staging'"
-                    TIMESTAMP=$(date +"%Y%m%d%H%M")
-                    npm version prerelease --preid="$TIMESTAMP"
-                    npm publish --tag staging --access public
-                elif [ "${{ github.ref }}" == "refs/heads/master" ]; then
-                    echo "Publishing from main, assumes version was changed before publishing"
-                    npm publish
-                else
-                    echo "Not master or staging branches, not publishing even if it is a push event"
-                fi
-            else
-                echo "Not a push event, skipping publish."
-            fi
+            echo "Publishing from staging, creating timestamped prerelease and updating tag 'staging'"
+            TIMESTAMP=$(date +"%Y%m%d%H%M")
+            npm version prerelease --preid="$TIMESTAMP"
+            npm publish --tag staging --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
