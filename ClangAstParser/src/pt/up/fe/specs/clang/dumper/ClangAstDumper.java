@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -156,6 +157,10 @@ public class ClangAstDumper {
     private ClangAstData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
         ClavaLog.debug(() -> "Data store config for single file parser: " + config);
 
+        File generatedParseRoot = parserConfig.hasValue(CodeParser.GENERATED_PARSE_ROOT)
+                ? parserConfig.get(CodeParser.GENERATED_PARSE_ROOT).getAbsoluteFile()
+                : null;
+
         DataStore localData = JOptionsUtils.loadDataStore(LocalOptionsKeys.getLocalOptionsFilename(), getClass(),
                 LocalOptionsKeys.getProvider().getStoreDefinition());
 
@@ -184,7 +189,7 @@ public class ClangAstDumper {
             arguments.add(clangExecutable.getAbsolutePath());
 
             arguments.add("-c");
-            arguments.add(sourceFile.getAbsolutePath());
+            arguments.add(pathForCompiler(sourceFile, generatedParseRoot));
 
             arguments.add("-id=" + id);
 
@@ -291,6 +296,10 @@ public class ClangAstDumper {
 
         arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
 
+        if (generatedParseRoot != null) {
+            relativizeGeneratedPathArguments(arguments, generatedParseRoot);
+        }
+
         if (validationOnly) {
             lastValidationError = validateSyntax(arguments, sourceFile, id);
             return null;
@@ -305,6 +314,9 @@ public class ClangAstDumper {
             if (SpecsSystem.isDebug()) {
                 lineStreamParser.getData().set(ClangAstData.DEBUG, true);
             }
+            if (generatedParseRoot != null) {
+                lineStreamParser.getData().set(ClangAstData.PARSE_ROOT, generatedParseRoot);
+            }
 
             // Each invocation needs unique output paths, but clang-dumper no longer
             // creates side files or needs a dedicated process working directory.
@@ -313,6 +325,8 @@ public class ClangAstDumper {
             boolean useAstDumpCache = SpecsPlatforms.isLinux() && !USE_PLUGIN
                     && parserConfig.get(CodeParser.AST_DUMP_CACHE)
                     && !parserConfig.get(CodeParser.SHOW_CLANG_DUMP)
+                    && !isOpenCL
+                    && !SourceType.isHeader(sourceFile)
                     && ClangCcacheAdapter.isAvailable();
             File dumpFile = new File(lastWorkingFolder,
                     useAstDumpCache ? COMPRESSED_CLANG_DUMP_FILENAME : CLANG_DUMP_FILENAME);
@@ -332,13 +346,16 @@ public class ClangAstDumper {
             List<String> command = arguments;
             ClangCcacheAdapter.Invocation ccache = null;
             if (useAstDumpCache) {
-                ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER));
+                ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), generatedParseRoot);
                 command = ClangCcacheAdapter.command(arguments, dependencyFile);
             }
 
             ClavaLog.debug("Calling Clang AST Dumper: " + command);
 
             var processBuilder = new ProcessBuilder(command);
+            if (generatedParseRoot != null) {
+                processBuilder.directory(generatedParseRoot);
+            }
             if (ccache != null) {
                 ccache.configureEnvironment(processBuilder.environment());
             }
@@ -445,6 +462,54 @@ public class ClangAstDumper {
         }
 
         return output.toString();
+    }
+
+    private static String pathForCompiler(File sourceFile, File generatedParseRoot) {
+        if (generatedParseRoot == null) {
+            return sourceFile.getAbsolutePath();
+        }
+
+        String relativePath = relativizeIfInside(sourceFile, generatedParseRoot);
+        return relativePath == null ? sourceFile.getAbsolutePath() : relativePath;
+    }
+
+    private static void relativizeGeneratedPathArguments(List<String> arguments, File generatedParseRoot) {
+        for (int i = 0; i < arguments.size(); i++) {
+            String argument = arguments.get(i);
+            if (argument.equals("-I") || argument.equals("-isystem")) {
+                if (i + 1 < arguments.size()) {
+                    arguments.set(i + 1, relativizePath(arguments.get(i + 1), generatedParseRoot));
+                    i++;
+                }
+                continue;
+            }
+
+            if (argument.startsWith("-I") && argument.length() > 2) {
+                arguments.set(i, "-I" + relativizePath(argument.substring(2), generatedParseRoot));
+            } else if (argument.startsWith("-isystem=") && argument.length() > "-isystem=".length()) {
+                arguments.set(i, "-isystem=" + relativizePath(argument.substring("-isystem=".length()),
+                        generatedParseRoot));
+            } else if (argument.startsWith("--cuda-path=") && argument.length() > "--cuda-path=".length()) {
+                arguments.set(i, "--cuda-path=" + relativizePath(argument.substring("--cuda-path=".length()),
+                        generatedParseRoot));
+            }
+        }
+    }
+
+    private static String relativizePath(String path, File generatedParseRoot) {
+        String relativePath = relativizeIfInside(new File(path), generatedParseRoot);
+        return relativePath == null ? path : relativePath;
+    }
+
+    private static String relativizeIfInside(File file, File generatedParseRoot) {
+        Path root = generatedParseRoot.toPath().toAbsolutePath().normalize();
+        Path absolutePath = file.toPath().toAbsolutePath().normalize();
+        if (!absolutePath.startsWith(root)) {
+            return null;
+        }
+
+        String relativePath = root.relativize(absolutePath).toString();
+        return relativePath.isEmpty() ? "." : relativePath;
     }
 
     private void addCudaPathArgument(List<String> arguments, String cudaPath) {

@@ -68,6 +68,12 @@ public class ClangAstData extends ADataClass<ClangAstData> {
             "clang_parser_stream_id_to_filename_map",
             new HashMap<String, String>());
 
+    /**
+     * Root used to resolve relative paths emitted by a generated-source dump.
+     * Null means that the dump uses the normal process working directory.
+     */
+    public final static DataKey<File> PARSE_ROOT = KeyFactory.folder("parseRoot");
+
     public final static DataKey<List<Include>> INCLUDES = KeyFactory.generic("clang_parser_stream_includes",
             new ArrayList<>());
 

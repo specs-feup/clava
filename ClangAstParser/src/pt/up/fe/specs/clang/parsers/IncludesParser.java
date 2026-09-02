@@ -28,9 +28,9 @@ public class IncludesParser implements LineStreamWorker<ClangAstData> {
 
     private static final String PARSER_ID = "<Includes>";
 
-    private static void parseInclude(LineStream lineStream, List<Include> includes) {
+    private static void parseInclude(LineStream lineStream, List<Include> includes, ClangAstData data) {
 
-        File sourceFile = new File(lineStream.nextLine());
+        File sourceFile = ClangAstPathResolver.resolveFile(lineStream.nextLine(), data);
         String include = lineStream.nextLine();
         int line = LineStreamParsers.integer(lineStream);
         boolean isAngled = LineStreamParsers.oneOrZero(lineStream);
@@ -51,6 +51,6 @@ public class IncludesParser implements LineStreamWorker<ClangAstData> {
     @Override
     public void apply(LineStream lineStream, ClangAstData data) {
         List<Include> includes = data.get(ClangAstData.INCLUDES);
-        parseInclude(lineStream, includes);
+        parseInclude(lineStream, includes, data);
     }
 }

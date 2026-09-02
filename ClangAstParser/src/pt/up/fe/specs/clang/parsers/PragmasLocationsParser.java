@@ -26,8 +26,8 @@ public class PragmasLocationsParser implements LineStreamWorker<ClangAstData> {
 
     private static final String PARSER_ID = "<Pragma>";
 
-    private static void parsePragmasLocations(LineStream lineStream, PragmasLocations locations) {
-        File sourceFile = new File(lineStream.nextLine());
+    private static void parsePragmasLocations(LineStream lineStream, PragmasLocations locations, ClangAstData data) {
+        File sourceFile = ClangAstPathResolver.resolveFile(lineStream.nextLine(), data);
         int line = LineStreamParsers.integer(lineStream);
         int column = LineStreamParsers.integer(lineStream);
 
@@ -51,6 +51,6 @@ public class PragmasLocationsParser implements LineStreamWorker<ClangAstData> {
     @Override
     public void apply(LineStream lineStream, ClangAstData data) {
         PragmasLocations locations = data.get(ClangAstData.PRAGMAS_LOCATIONS);
-        parsePragmasLocations(lineStream, locations);
+        parsePragmasLocations(lineStream, locations, data);
     }
 }

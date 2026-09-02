@@ -22,6 +22,7 @@ import java.util.function.BiFunction;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.dumper.ClangAstData;
+import pt.up.fe.specs.clang.parsers.ClangAstPathResolver;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
@@ -106,7 +107,8 @@ public class ClavaDataParsers {
         }
 
         // Filepaths will be shared between most nodes, cache them
-        String startFilepath = dataStore.get(ClangAstData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS).get(firstPart);
+        String startFilepath = dataStore.get(ClangAstData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS)
+                .get(ClangAstPathResolver.resolve(firstPart, dataStore));
 
         // String startFilepath = firstPart.intern();
         // String startFilepath = firstPart;
@@ -130,7 +132,8 @@ public class ClavaDataParsers {
         }
 
         // Parser end location
-        String endFilepath = dataStore.get(ClangAstData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS).get(secondPart);
+        String endFilepath = dataStore.get(ClangAstData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS)
+                .get(ClangAstPathResolver.resolve(secondPart, dataStore));
         // String endFilepath = secondPart.intern();
         // String endFilepath = secondPart;
 
