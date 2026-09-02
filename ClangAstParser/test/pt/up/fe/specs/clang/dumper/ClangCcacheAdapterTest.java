@@ -42,4 +42,14 @@ public class ClangCcacheAdapterTest {
         assertEquals("true", environment.get("CCACHE_DEPEND"));
         assertEquals("true", environment.get("CCACHE_NOCOMPRESS"));
     }
+
+    @Test
+    public void environmentUsesGeneratedParseRootAsCcacheBaseDirectory() {
+        var invocation = new ClangCcacheAdapter.Invocation(new File("/cache"), new File("/generated"));
+        var environment = new HashMap<String, String>();
+
+        invocation.configureEnvironment(environment);
+
+        assertEquals(new File("/generated").getAbsolutePath(), environment.get("CCACHE_BASEDIR"));
+    }
 }

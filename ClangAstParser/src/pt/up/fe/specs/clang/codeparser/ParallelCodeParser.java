@@ -371,28 +371,19 @@ public class ParallelCodeParser extends CodeParser {
         // .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         counter.print(sourceFile);
-        // ClavaLog.info("Parsing '" + sourceFile.getAbsolutePath() + "'");
-        ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
+        try {
+            ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
 
-        if (get(SHOW_CLANG_DUMP)) {
-            // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
-            // SpecsLogs.msgInfo(clangParser.getClangDump());
-            clangDump.add(clangParser.getClangDump());
-        }
-
-        if (get(CLEAN)) {
-            // if (clangParser.getLastWorkingFolder() == null) {
-            // workingFolders.add(clangParser.getLastWorkingFolder());
-            // }
-            if (clangParser.getLastWorkingFolder() == null) {
-                SpecsLogs.msgInfo("No working folder found for source file '" + sourceFile + "'");
-            } else {
-                SpecsIo.deleteFolder(clangParser.getLastWorkingFolder());
+            if (get(SHOW_CLANG_DUMP)) {
+                clangDump.add(clangParser.getClangDump());
             }
 
+            return clangParserData;
+        } finally {
+            if (get(CLEAN) && clangParser.getLastWorkingFolder() != null) {
+                SpecsIo.deleteFolder(clangParser.getLastWorkingFolder());
+            }
         }
-
-        return clangParserData;
     }
 
     /*

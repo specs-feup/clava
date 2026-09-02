@@ -40,6 +40,7 @@ public class IdToFilenameParser implements LineStreamWorker<ClangAstData> {
     public void apply(LineStream lineStream, ClangAstData data) {
         Map<String, String> map = data.get(ClangAstData.ID_TO_FILENAME_MAP);
         LineStreamParsers.stringMap(PARSER_ID, lineStream, map);
+        map.replaceAll((id, path) -> ClangAstPathResolver.resolve(path, data));
     }
 
 }

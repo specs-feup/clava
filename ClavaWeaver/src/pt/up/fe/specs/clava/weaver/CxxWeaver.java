@@ -572,6 +572,11 @@ public class CxxWeaver extends ACxxWeaver {
      * @return
      */
     public App createApp(List<File> sources, List<String> parserOptions, List<String> extraOptions) {
+        return createApp(sources, parserOptions, extraOptions, null);
+    }
+
+    private App createApp(List<File> sources, List<String> parserOptions, List<String> extraOptions,
+            File generatedParseRoot) {
         ClavaLog.debug(() -> "Creating App from the following sources: " + sources);
         ClavaLog.debug(() -> "Creating App using the following options: " + parserOptions);
         ClavaLog.debug(() -> "Creating App using the following extra options: " + extraOptions);
@@ -607,6 +612,9 @@ public class CxxWeaver extends ACxxWeaver {
         codeParser.set(ClangAstKeys.LIBC_CXX_MODE, this.dataStore.get(ClangAstKeys.LIBC_CXX_MODE));
         codeParser.set(CodeParser.DUMPER_FOLDER, this.dataStore.get(CodeParser.DUMPER_FOLDER));
         codeParser.set(CodeParser.AST_DUMP_CACHE, this.dataStore.get(CodeParser.AST_DUMP_CACHE));
+        if (generatedParseRoot != null) {
+            codeParser.set(CodeParser.GENERATED_PARSE_ROOT, generatedParseRoot);
+        }
 
         List<String> allParserOptions = new ArrayList<>(parserOptions.size() + adaptedExtraOptions.size());
         allParserOptions.addAll(parserOptions);
@@ -1063,7 +1071,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Write the other translation units and add folder as includes, in case they
         // are needed
-        File currentCodeFolder = newTemporaryWeavingFolder();
+        File currentCodeFolder = new File(tempFolder, "current-code");
         SpecsIo.deleteFolderContents(currentCodeFolder, true);
 
         // Add include
@@ -1082,7 +1090,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // App rebuiltApp = createApp(srcFolders, rebuildOptions);
 
-        App rebuiltApp = createApp(Arrays.asList(destinationFile), rebuildOptions);
+        App rebuiltApp = createApp(Arrays.asList(destinationFile), rebuildOptions, Collections.emptyList(), tempFolder);
 
         // Remove app from context stack
         context.popApp();
@@ -1234,7 +1242,7 @@ public class CxxWeaver extends ACxxWeaver {
                 .forEach(writtenFile -> rebuildBases.put(SpecsIo.getCanonicalFile(writtenFile), tempFolder));
 
         currentBases = rebuildBases;
-        App rebuiltApp = createApp(writtenFiles, rebuildOptions, extraOptions);
+        App rebuiltApp = createApp(writtenFiles, rebuildOptions, extraOptions, tempFolder);
 
         // Restore current bases
         currentBases = previousBases;
@@ -1451,7 +1459,10 @@ public class CxxWeaver extends ACxxWeaver {
      */
     private Set<File> getSourceIncludeFolders(File weavingFolder, boolean onlyHeaders) {
         Set<File> includeFolders = new LinkedHashSet<>();
-        includeFolders.addAll(SpecsIo.getFolders(weavingFolder));
+        List<File> generatedFolders = new ArrayList<>(SpecsIo.getFolders(weavingFolder));
+        generatedFolders.sort(Comparator.comparing(folder ->
+                SpecsIo.normalizePath(SpecsIo.getRelativePath(folder, weavingFolder))));
+        includeFolders.addAll(generatedFolders);
         includeFolders.add(weavingFolder);
 
         return includeFolders;

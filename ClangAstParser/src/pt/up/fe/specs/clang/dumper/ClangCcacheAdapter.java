@@ -43,6 +43,10 @@ final class ClangCcacheAdapter {
     }
 
     static Invocation prepare(File dumperFolder) {
+        return prepare(dumperFolder, null);
+    }
+
+    static Invocation prepare(File dumperFolder, File baseDir) {
         var cacheFolder = new File(dumperFolder, CACHE_FOLDER_NAME);
         try {
             Files.createDirectories(cacheFolder.toPath());
@@ -50,7 +54,7 @@ final class ClangCcacheAdapter {
             throw new RuntimeException("Could not prepare clang-dumper ccache folder '" + cacheFolder + "'", e);
         }
 
-        return new Invocation(cacheFolder);
+        return new Invocation(cacheFolder, baseDir);
     }
 
     static List<String> command(List<String> dumperCommand, File dependencyFile) {
@@ -69,13 +73,20 @@ final class ClangCcacheAdapter {
         return command;
     }
 
-    record Invocation(File cacheFolder) {
+    record Invocation(File cacheFolder, File baseDir) {
+
+        Invocation(File cacheFolder) {
+            this(cacheFolder, null);
+        }
 
         void configureEnvironment(Map<String, String> environment) {
             environment.put("CCACHE_DIR", cacheFolder.getAbsolutePath());
             environment.put("CCACHE_COMPILERTYPE", "clang");
             environment.put("CCACHE_DEPEND", "true");
             environment.put("CCACHE_NOHASHDIR", "true");
+            if (baseDir != null) {
+                environment.put("CCACHE_BASEDIR", baseDir.getAbsolutePath());
+            }
             // clang-dumper already streams a compressed Zstandard frame. Recompressing
             // it inside ccache roughly doubles miss latency without changing semantics.
             environment.put("CCACHE_NOCOMPRESS", "true");

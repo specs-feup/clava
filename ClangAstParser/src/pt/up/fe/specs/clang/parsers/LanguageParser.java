@@ -43,7 +43,7 @@ public class LanguageParser implements LineStreamWorker<ClangAstData> {
     public void apply(LineStream lineStream, ClangAstData data) {
         Map<File, Language> map = data.get(ClangAstData.FILE_LANGUAGE_DATA);
 
-        File file = new File(lineStream.nextLine());
+        File file = ClangAstPathResolver.resolveFile(lineStream.nextLine(), data);
         Language language = new Language()
                 .set(Language.LINE_COMMENT, LineStreamParsers.oneOrZero(lineStream))
                 .set(Language.GNU_INLINE, LineStreamParsers.oneOrZero(lineStream))
