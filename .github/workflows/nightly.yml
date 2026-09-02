@@ -7,6 +7,9 @@ name: nightly
 
 on:
   push:
+    # Feature branches are covered by pull_request; push only builds the
+    # long-lived branches to avoid duplicate runs when a PR is open.
+    branches: [master, staging]
   pull_request:
 
   # Daily at midnight
