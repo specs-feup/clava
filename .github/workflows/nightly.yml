@@ -151,6 +151,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           path: clava
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Checkout lara-framework
         uses: actions/checkout@v6
