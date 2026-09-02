@@ -1,6 +1,6 @@
 {
   "name": "@specs-feup/clava",
-  "version": "3.5.1",
+  "version": "4.0.0",
   "description": "A C/C++ source-to-source compiler written in Typescript",
   "type": "module",
   "bin": {
@@ -18,19 +18,6 @@
     "./code/*": "./code/*.ts",
     "./code/*.ts": "./code/*.ts"
   },
-  "files": [
-    "api",
-    "code",
-    "java-binaries",
-    ".gitignore",
-    "oxlint.config.ts",
-    "vitest.config.ts",
-    "LICENSE",
-    "package.json",
-    "README.md",
-    "tsconfig.json",
-    "typedoc.config.js"
-  ],
   "scripts": {
     "run": "node ./code/index.ts",
     "build": "tsc",
@@ -65,19 +52,20 @@
   },
   "homepage": "https://github.com/specs-feup/clava#readme",
   "dependencies": {
-    "@specs-feup/lara": "~3.5.0",
+    "@specs-feup/lara": "^4.0.0",
     "cytoscape": "^3.33.1"
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",
     "@types/java": "^0.9.6",
-    "@types/node": "^25.0.0",
+    "@types/node": "^24.0.0",
     "@types/yargs": "^17.0.35",
     "@vitest/coverage-v8": "^4.1.10",
     "eslint-plugin-tsdoc": "^0.5.0",
     "oxfmt": "^0.59.0",
     "oxlint": "^1.74.0",
     "typescript": "^7.0.2",
+    "oxlint-tsgolint": "^7.0.2001",
     "vitest": "^4.1.10"
   }
 }

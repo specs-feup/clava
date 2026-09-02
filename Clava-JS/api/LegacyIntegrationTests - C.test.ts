@@ -1,7 +1,9 @@
-import { ClavaLegacyTester } from "../vitest/ClavaLegacyTester.ts";
+import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
 import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.ts";
-import ClavaJavaTypes from "./clava/ClavaJavaTypes.ts";
+import PrintOnce from "@specs-feup/lara/api/lara/util/PrintOnce.js";
 import path from "path";
+import { ClavaLegacyTester } from "../vitest/ClavaLegacyTester.ts";
+import ClavaJavaTypes from "./clava/ClavaJavaTypes.ts";
 
 const isWindows = process.platform === "win32";
 const isMacOS = process.platform === "darwin";
@@ -16,6 +18,11 @@ describe("CTest", () => {
             .setResultPackage("c/results")
             .setSrcPackage("c/src");
     }
+
+    afterEach(() => {
+        PrintOnce.messagesSet.clear();
+        IdGenerator.idCounter.clear();
+    });
 
     // TODO: Temporarily disabled, Jenkins fails with "Cannot inherit from final class"
     it("Loop", async () => {

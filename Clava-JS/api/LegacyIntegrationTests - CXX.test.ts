@@ -1,7 +1,9 @@
+import JavaInterop from "@specs-feup/lara/api/lara/JavaInterop.ts";
+import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
+import PrintOnce from "@specs-feup/lara/api/lara/util/PrintOnce.js";
+import path from "path";
 import { ClavaLegacyTester } from "../vitest/ClavaLegacyTester.ts";
 import ClavaJavaTypes from "./clava/ClavaJavaTypes.ts";
-import JavaInterop from "@specs-feup/lara/api/lara/JavaInterop.ts";
-import path from "path";
 
 const isWindows = process.platform === "win32";
 const isMacOS = process.platform === "darwin";
@@ -16,6 +18,11 @@ describe("CxxTest", () => {
             .setResultPackage("cpp/results")
             .setSrcPackage("cpp/src");
     }
+
+    afterEach(() => {
+        PrintOnce.messagesSet.clear();
+        IdGenerator.idCounter.clear();
+    });
 
     it("Statement", async () => {
         await newTester().test("Statement.js", "statement.cpp");
