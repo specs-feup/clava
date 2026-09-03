@@ -24,6 +24,8 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.12.1'
     implementation 'com.google.guava:guava:33.4.0-jre'
+    implementation 'org.apache.commons:commons-compress:1.27.1'
+    implementation 'org.tukaani:xz:1.9'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.0'
@@ -52,6 +54,7 @@ sourceSets {
 
 processResources {
     from('clang-dumper-release.tag')
+    from('cuda-release.tag')
 }
 
 // Test coverage configuration

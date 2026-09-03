@@ -28,12 +28,8 @@ import java.util.Optional;
 public final class ClangAstWebResource {
 
     private static final String RELEASE_ROOT = "https://github.com/specs-feup/clang-dumper/releases/download/";
-    private static final String CUDA_RELEASE_ROOT =
-            "https://github.com/specs-feup/clava/releases/download/clang_ast_dumper_v12.0.7.1/";
-    public static final String CUDA_LIB_FILENAME = "cudalib.zip";
-    static final WebResourceProvider CUDA_LIB =
-            WebResourceProvider.newInstance(CUDA_RELEASE_ROOT, CUDA_LIB_FILENAME, "v11.3.0");
     private static final String RELEASE_TAG_RESOURCE = "clang-dumper-release.tag";
+    private static final String CUDA_RELEASE_TAG_RESOURCE = "cuda-release.tag";
     public static final String MANIFEST_FILENAME = "clang-dumper-release-manifest.json";
 
     private static final Gson GSON = new Gson();
@@ -47,24 +43,28 @@ public final class ClangAstWebResource {
     }
 
     private static DumperSource readDumperSource() {
-        var inputStream = ClangAstWebResource.class.getClassLoader().getResourceAsStream(RELEASE_TAG_RESOURCE);
+        return parseDumperSource(readReleaseTag(RELEASE_TAG_RESOURCE));
+    }
+
+    private static String readReleaseTag(String resourceName) {
+        var inputStream = ClangAstWebResource.class.getClassLoader().getResourceAsStream(resourceName);
 
         if (inputStream == null) {
-            throw new RuntimeException("Could not find resource '" + RELEASE_TAG_RESOURCE + "'");
+            throw new RuntimeException("Could not find resource '" + resourceName + "'");
         }
 
         String value;
         try (inputStream) {
             value = SpecsIo.read(inputStream).trim();
         } catch (IOException e) {
-            throw new UncheckedIOException("Could not read resource '" + RELEASE_TAG_RESOURCE + "'", e);
+            throw new UncheckedIOException("Could not read resource '" + resourceName + "'", e);
         }
 
         if (value.isBlank()) {
-            throw new RuntimeException("Resource '" + RELEASE_TAG_RESOURCE + "' is empty");
+            throw new RuntimeException("Resource '" + resourceName + "' is empty");
         }
 
-        return parseDumperSource(value);
+        return value;
     }
 
     static DumperSource parseDumperSource(String value) {
@@ -88,6 +88,17 @@ public final class ClangAstWebResource {
         }
 
         throw new IllegalStateException("The clang-dumper resource points to a local build");
+    }
+
+    public static String getCudaReleaseTag() {
+        var releaseTag = readReleaseTag(CUDA_RELEASE_TAG_RESOURCE);
+        if (releaseTag.equals(".") || releaseTag.equals("..")
+                || releaseTag.contains("/") || releaseTag.contains("\\")) {
+            throw new RuntimeException("Release resource '" + CUDA_RELEASE_TAG_RESOURCE
+                    + "' must contain a single path component: '" + releaseTag + "'");
+        }
+
+        return releaseTag;
     }
 
     public static ClangDumperManifest getManifest(File resourceFolder) {

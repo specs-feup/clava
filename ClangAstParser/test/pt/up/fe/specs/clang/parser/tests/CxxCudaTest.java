@@ -19,11 +19,13 @@ import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.parser.CxxCudaTester;
 
-/** Verifies built-in CUDA parsing through Clava's historical cudalib archive. */
+/** Verifies built-in CUDA parsing through the pinned NVIDIA redistribution packages. */
 public class CxxCudaTest {
     @Test
-    public void testAtomicAdd() {
-        new CxxCudaTester("atomicAdd.cu").test();
+    public void testAtomicAddWithBuiltinLibc() {
+        new CxxCudaTester("atomicAdd.cu")
+                .set(ClangAstKeys.LIBC_CXX_MODE, LibcMode.BUILTIN_AND_LIBC)
+                .test();
     }
 
     @Test
