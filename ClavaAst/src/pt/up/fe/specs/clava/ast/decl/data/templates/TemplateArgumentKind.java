@@ -39,5 +39,9 @@ public enum TemplateArgumentKind {
     /**
      * A parameter pack.
      */
-    Pack
+    Pack,
+    /**
+     * A structural value for a non-type template parameter.
+     */
+    StructuralValue
 }
