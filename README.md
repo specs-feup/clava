@@ -13,11 +13,11 @@ There are three distributions of Clava:
 
 ### NPM distribution (recommended)
 
-Clava is currently distributed as an [NPM package](https://www.npmjs.com/package/@specs-feup/clava). It requires Node.js 20 or 22, and Java 17 or higher. Different OSses have different ways of installing these dependencies, but on Ubuntu you can run this:
+Clava is currently distributed as an [NPM package](https://www.npmjs.com/package/@specs-feup/clava). It requires Node.js 24 or higher, and Java 17 or higher. Different OSses have different ways of installing these dependencies, but on Ubuntu you can run this:
 
 ```bash
 apt-get update && apt-get install -y curl openjdk-17-jdk
-curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && apt-get install -y nodejs
+curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && apt-get install -y nodejs
 ```
 
 Now, you have two options:
@@ -80,16 +80,16 @@ This is a non-exhaustive list of Clava documentation, usage examples and feature
   * [CMake integration](https://github.com/specs-feup/clava/tree/master/CMake) - Allows Clava to be used in CMake-centered compilation flows
   * Code transformations:
     * [Automatic insertion of OpenMP pragmas](https://github.com/specs-feup/clava/blob/master/ClavaLaraApi/src-lara-clava/clava/clava/autopar/Parallelize.lara)
-    * [Function inlining](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/opt/Inlining.ts)
-    * [Normalizing code](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/opt/NormalizeToSubset.ts) to a subset of the language, including:
-      * [Decomposition of complex statements into several, simpler statements](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/StatementDecomposer.ts)
-      * [Converting static local variables to static global variables](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/pass/LocalStaticToGlobal.ts)
-      * [Conversion of switch statements to ifs](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/pass/TransformSwitchToIf.ts)
-      * Loop conversion ([for to while](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/ForToWhileStmt.ts), [do to while](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/DoToWhileStmt.ts))
-      * [Ensure there is a single return in a function](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/pass/SingleReturnFunction.ts)
-      * [Remove variable shadowing](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/RemoveShadowing.ts)
-      * [Simplify ternary operator](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/SimplifyTernaryOp.ts)
-      * [Simplify compound assignments](https://github.com/specs-feup/clava/blob/master/Clava-JS/src-api/clava/code/SimplifyAssignment.ts)
+    * [Function inlining](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/opt/Inlining.ts)
+    * [Normalizing code](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/opt/NormalizeToSubset.ts) to a subset of the language, including:
+      * [Decomposition of complex statements into several, simpler statements](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/code/StatementDecomposer.ts)
+      * [Converting static local variables to static global variables](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/pass/LocalStaticToGlobal.ts)
+      * [Conversion of switch statements to ifs](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/pass/TransformSwitchToIf.ts)
+      * Loop conversion ([for to while](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/code/ForToWhileStmt.ts), [do to while](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/code/DoToWhileStmt.ts))
+      * [Ensure there is a single return in a function](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/pass/SingleReturnFunction.ts)
+      * [Remove variable shadowing](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/code/RemoveShadowing.ts)
+      * [Simplify ternary operator](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/code/SimplifyTernaryOp.ts)
+      * [Simplify compound assignments](https://github.com/specs-feup/clava/blob/master/Clava-JS/api/clava/code/SimplifyAssignment.ts)
 * Clava [NPM libraries](https://www.npmjs.com/org/specs-feup) (not supported by the JAR file legacy distribution):
 
 Library | Description | Installation

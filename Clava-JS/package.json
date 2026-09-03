@@ -3,38 +3,43 @@
   "version": "3.5.1",
   "description": "A C/C++ source-to-source compiler written in Typescript",
   "type": "module",
+  "bin": {
+    "clava": "./code/index.ts"
+  },
+  "exports": {
+    "./api/*.test.ts": null,
+    "./api/*.config.ts": null,
+    "./api/*": "./api/*.ts",
+    "./api/*.ts": "./api/*.ts",
+    "./code/*.test.ts": null,
+    "./code/*.config.ts": null,
+    "./code/*": "./code/*.ts",
+    "./code/*.ts": "./code/*.ts"
+  },
   "files": [
     "api",
     "code",
-    "src-api",
-    "src-code",
     "java-binaries",
     ".gitignore",
-    "eslint.config.js",
-    "jest.config.js",
+    "eslint.config.ts",
+    "jest.config.ts",
     "LICENSE",
     "package.json",
     "README.md",
-    "tsconfig.jest.json",
     "tsconfig.json",
     "typedoc.config.js"
   ],
-  "bin": {
-    "clava": "./code/index.js"
-  },
   "scripts": {
-    "run": "node ./code/index.js",
-    "build": "tsc -b src-api src-code",
-    "build:api": "tsc -b src-api",
-    "build:code": "tsc -b src-code",
+    "run": "node ./code/index.ts",
+    "build": "tsc",
     "build:watch": "npm run build -- --watch",
-    "lint": "eslint .",
+    "lint": "eslint --flag unstable_native_nodejs_ts_config .",
     "test": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --detectOpenHandles --forceExit",
-    "test:api": "npm run test -- src-api",
-    "test:code": "npm run test -- src-code",
+    "test:api": "npm run test -- api",
+    "test:code": "npm run test -- code",
     "test:cov": "npm run test -- --coverage",
     "test:watch": "npm run test -- --watch",
-    "build-interfaces": "npx lara-build-interfaces --input ../ClavaWeaver/src/pt/up/fe/specs/clava/weaver/CxxWeaver.json --lara @specs-feup/lara/LaraJoinPointSpecification.json --output src-api/Joinpoints.ts"
+    "build-interfaces": "lara-build-interfaces --input ../ClavaWeaver/src/pt/up/fe/specs/clava/weaver/CxxWeaver.json --lara @specs-feup/lara/LaraJoinPointSpecification.json --output api/Joinpoints.ts"
   },
   "repository": {
     "type": "git",
@@ -63,17 +68,17 @@
     "@types/debug": "^4.1.12",
     "@types/java": "^0.9.6",
     "@types/jest": "^30.0.0",
-    "@types/node": "^20.14.10",
+    "@types/node": "^25.0.0",
     "@types/yargs": "^17.0.35",
     "cross-env": "^10.1.0",
-    "eslint": "^9.32.2",
+    "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jest": "^29.12.1",
     "eslint-plugin-tsdoc": "^0.5.0",
     "jest": "^30.2.0",
     "node-notifier": "^10.0.1",
     "ts-jest": "^29.4.6",
-    "typescript": "^5.9.3",
+    "typescript": "^7.0.2",
     "typescript-eslint": "^8.52.0"
   }
 }

@@ -1,0 +1,29 @@
+import ToolUtils from "@specs-feup/lara/api/lara/tool/ToolUtils.ts";
+import CMakeCompiler from "./compilers/CMakeCompiler.ts";
+import GenericCMakeCompiler from "./compilers/GenericCMakeCompiler.ts";
+
+export default class CMakerUtils extends ToolUtils {
+  private static compilerTable = {
+    gcc: function () {
+      return new GenericCMakeCompiler("gcc", "g++");
+    },
+    clang: function () {
+      return new GenericCMakeCompiler("clang", "clang++");
+    },
+    icc: function () {
+      return new GenericCMakeCompiler("icc", "icpc");
+    },
+  };
+
+  /**
+   * Creates a CMakerCompiler object based on a string with the name.
+   *
+   * @param compilerName - Name of the compiler. Currently supported names:  'gcc', 'clang', 'icc'.
+   *
+   */
+  static getCompiler(
+    compilerName: keyof typeof this.compilerTable
+  ): CMakeCompiler {
+    return CMakerUtils.compilerTable[compilerName]();
+  }
+}
