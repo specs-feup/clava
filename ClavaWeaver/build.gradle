@@ -73,3 +73,36 @@ tasks.register('generateWeaver', JavaExec) {
 }
 
 compileJava.dependsOn generateWeaver
+
+def clavaWeaverInstallDir = layout.buildDirectory.dir('install/ClavaWeaver')
+def clavaJsJavaBinaries = layout.projectDirectory.dir('../Clava-JS/java-binaries')
+
+def syncClavaJsJavaBinaries = tasks.register('syncClavaJsJavaBinaries', Sync) {
+    group = 'distribution'
+    description = 'Synchronizes the ClavaWeaver installDist output used by Clava-JS.'
+    dependsOn tasks.named('installDist')
+    from clavaWeaverInstallDir
+    into clavaJsJavaBinaries
+
+    // The destination is also used by npm packaging and must not retain files
+    // that are no longer part of installDist.
+    outputs.upToDateWhen { false }
+
+    doFirst {
+        def installLib = clavaWeaverInstallDir.get().dir('lib').asFile
+        if (!installLib.isDirectory()) {
+            throw new GradleException("ClavaWeaver installDist output is missing: ${installLib}")
+        }
+
+        def destination = clavaJsJavaBinaries.asFile.toPath()
+        if (java.nio.file.Files.isSymbolicLink(destination)) {
+            java.nio.file.Files.delete(destination)
+        } else if (java.nio.file.Files.exists(destination) && !java.nio.file.Files.isDirectory(destination)) {
+            throw new GradleException("Clava-JS java-binaries is not a directory: ${destination}")
+        }
+    }
+}
+
+tasks.named('installDist') {
+    finalizedBy syncClavaJsJavaBinaries
+}

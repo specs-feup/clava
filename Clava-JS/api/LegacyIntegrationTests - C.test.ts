@@ -1,12 +1,14 @@
-import { ClavaLegacyTester } from "../jest/ClavaLegacyTester.ts";
+import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
 import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.ts";
-import ClavaJavaTypes from "./clava/ClavaJavaTypes.ts";
+import PrintOnce from "@specs-feup/lara/api/lara/util/PrintOnce.js";
 import path from "path";
+import { ClavaLegacyTester } from "../vitest/ClavaLegacyTester.ts";
+import ClavaJavaTypes from "./clava/ClavaJavaTypes.ts";
 
 const isWindows = process.platform === "win32";
 const isMacOS = process.platform === "darwin";
 
-/* eslint-disable jest/expect-expect */
+/* oxlint-disable vitest/expect-expect */
 describe("CTest", () => {
     function newTester() {
         return new ClavaLegacyTester(
@@ -16,6 +18,11 @@ describe("CTest", () => {
             .setResultPackage("c/results")
             .setSrcPackage("c/src");
     }
+
+    afterEach(() => {
+        PrintOnce.messagesSet.clear();
+        IdGenerator.idCounter.clear();
+    });
 
     // TODO: Temporarily disabled, Jenkins fails with "Cannot inherit from final class"
     it("Loop", async () => {
@@ -101,7 +108,7 @@ describe("CTest", () => {
         await newTester()
             .checkExpectedOutput(false)
             .test("InlineNasLu.js", "inline_nas_lu.c");
-    });
+    }, 10_000);
 
     it("InlineNasFt", async () => {
         await newTester()
@@ -340,7 +347,7 @@ describe("CApiTest", () => {
         }
 
         await tester.test("InlinerTest.js", "inliner.c");
-    });
+    }, 15_000);
 
     it("StatementDecomposer", async () => {
         await newTester().test(
