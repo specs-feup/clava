@@ -18,7 +18,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
-import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clang.dumper.ClangAstParser;
@@ -89,7 +88,6 @@ public class ParallelCodeParser extends CodeParser {
         ConcurrentLinkedQueue<String> clangDump = new ConcurrentLinkedQueue<>();
 
         DataStore options = ClangAstKeys.toDataStore(compilerOptions);
-        options.set(ClangAstKeys.LIBC_CXX_MODE, get(ClangAstKeys.LIBC_CXX_MODE));
 
         // Add context to config
         // ClavaContext context = new ClavaContext();
@@ -110,13 +108,8 @@ public class ParallelCodeParser extends CodeParser {
         // ClangResources clangResources = new ClangResources(get(SHOW_CLANG_DUMP));
         ClangResources clangResources = new ClangResources(this);
 
-
-        if (ClangAstDumper.usePlugin()) {
-            set(ClangAstKeys.LIBC_CXX_MODE, LibcMode.SYSTEM);
-            ClavaLog.debug(() -> "In Linux, ClangAstDumper is a plugin. LIBC_CXX_MODE is reset to SYSTEM.");
-        }
-
         var clangFiles = clangResources.getClangFiles(get(ClangAstKeys.LIBC_CXX_MODE));
+        options.set(ClangAstKeys.LIBC_CXX_MODE, clangFiles.libcMode());
         // File clangExecutable = clangResources.prepareResources(version);
         // List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,
         // get(ClangAstKeys.USE_PLATFORM_INCLUDES));
@@ -246,7 +239,9 @@ public class ParallelCodeParser extends CodeParser {
         app.getContext().pushApp(app);
 
         app.setSourcesFromStrings(allSources);
-        app.addConfig(ClangAstKeys.toDataStore(compilerOptions));
+        DataStore appConfig = ClangAstKeys.toDataStore(compilerOptions);
+        appConfig.set(ClangAstKeys.LIBC_CXX_MODE, clangFiles.libcMode());
+        app.addConfig(appConfig);
 
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree

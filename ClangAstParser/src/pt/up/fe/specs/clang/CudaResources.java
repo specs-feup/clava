@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -55,8 +56,8 @@ import java.util.regex.Pattern;
  * Downloads the NVIDIA redistribution packages required by Clang and assembles them into the CUDA root expected by
  * the bundled dumper.
  *
- * <p>CUDA resources are release-addressed. Archives from different CUDA releases therefore never share a cache
- * destination, even when NVIDIA publishes identical bytes for both releases.</p>
+ * <p>CUDA resources are release-addressed. The published release directory is the complete CUDA installation;
+ * manifests and downloaded archives used to build it live in staging until that directory is published.</p>
  */
 final class CudaResources {
 
@@ -65,8 +66,6 @@ final class CudaResources {
     static final String PLATFORM_FILENAME = ".platform";
 
     private static final String CUDA_FOLDERNAME = "cuda";
-    private static final String CUDA_LIB_FOLDERNAME = "cudalib";
-    private static final String ARCHIVES_FOLDERNAME = "archives";
     private static final String MANIFEST_FILENAME_PREFIX = "redistrib_";
     private static final String MANIFEST_FILENAME_SUFFIX = ".json";
     private static final Set<String> MANIFEST_FIELDS = Set.of("release_date", "release_label", "release_product");
@@ -87,52 +86,14 @@ final class CudaResources {
     static File getBuiltinCudaLib(Path cacheRoot) {
         var releaseTag = ClangAstWebResource.getCudaReleaseTag();
         var releaseFolder = getReleaseFolder(cacheRoot, releaseTag);
-        claimReleaseInUse(cacheRoot, releaseFolder);
-        var manifest = getManifest(cacheRoot, releaseFolder);
-        var platform = requireSupportedPlatform(manifest);
-        var platformFolder = getPlatformFolder(cacheRoot, releaseTag, platform);
-        var installationFolder = getInstallationFolder(platformFolder);
 
         // A published installation is immutable. A malformed one is an operator error, not an invitation to repair it
         // in place, because doing so could race with a reader that already selected this release.
-        if (Files.exists(installationFolder.toPath(), LinkOption.NOFOLLOW_LINKS)) {
-            return useExistingInstallation(cacheRoot, platformFolder, platform, installationFolder);
+        if (Files.exists(releaseFolder.toPath(), LinkOption.NOFOLLOW_LINKS)) {
+            return useExistingInstallation(cacheRoot, releaseFolder, releaseTag);
         }
 
-        claimInUse(cacheRoot, platformFolder);
-        return install(cacheRoot, platformFolder, releaseTag, platform, manifest, CudaResources::getArchiveResource);
-    }
-
-    private static void claimReleaseInUse(Path cacheRoot, File releaseFolder) {
-        CacheFiles.withMaintenanceLock(cacheRoot, () -> {
-            try {
-                Files.createDirectories(releaseFolder.toPath());
-            } catch (IOException e) {
-                throw new UncheckedIOException("Could not create CUDA release folder '" + releaseFolder + "'", e);
-            }
-
-            CacheFiles.touch(releaseFolder.toPath());
-        });
-    }
-
-    static void claimInUse(Path cacheRoot, File platformFolder) {
-        CacheFiles.withMaintenanceLock(cacheRoot, () -> {
-            var platformPath = platformFolder.toPath();
-            var releasePath = platformPath.getParent();
-            if (releasePath == null) {
-                throw new RuntimeException("CUDA platform folder is not below a release folder: '"
-                        + platformFolder + "'");
-            }
-
-            try {
-                Files.createDirectories(platformPath);
-            } catch (IOException e) {
-                throw new UncheckedIOException("Could not create CUDA platform folder '" + platformPath + "'", e);
-            }
-
-            CacheFiles.touch(releasePath);
-            CacheFiles.touch(platformPath);
-        });
+        return install(cacheRoot, releaseTag, getManifestResource(releaseTag), CudaResources::getArchiveResource);
     }
 
     static CudaPlatform requireSupportedPlatform() {
@@ -140,20 +101,23 @@ final class CudaResources {
     }
 
     static CudaPlatform requireSupportedPlatform(NvidiaCudaManifest manifest) {
-        return getCurrentPlatform(manifest);
+        var platform = SupportedPlatform.getCurrentPlatform();
+        var architecture = System.getProperty("os.arch");
+        return findSupportedPlatform(manifest)
+                .orElseThrow(() -> unsupportedPlatform(manifest, platform, architecture));
     }
 
     static boolean isSupportedPlatform() {
-        return isSupportedPlatform(ClangResources.getDefaultTempFolder().toPath());
+        return isSupportedPlatform(ClangResources.getDefaultTempFolder().toPath(),
+                getManifestResource(ClangAstWebResource.getCudaReleaseTag()));
     }
 
     static boolean isSupportedPlatform(Path cacheRoot) {
-        try {
-            getCurrentPlatform(cacheRoot);
-            return true;
-        } catch (RuntimeException e) {
-            return false;
-        }
+        return isSupportedPlatform(cacheRoot, getManifestResource(ClangAstWebResource.getCudaReleaseTag()));
+    }
+
+    static boolean isSupportedPlatform(Path cacheRoot, FileResourceProvider manifestResource) {
+        return findSupportedPlatform(getCurrentManifest(cacheRoot, manifestResource)).isPresent();
     }
 
     static CudaPlatform getCurrentPlatform() {
@@ -161,18 +125,25 @@ final class CudaResources {
     }
 
     static CudaPlatform getCurrentPlatform(Path cacheRoot) {
-        var releaseTag = ClangAstWebResource.getCudaReleaseTag();
-        var releaseFolder = getReleaseFolder(cacheRoot, releaseTag);
-        claimReleaseInUse(cacheRoot, releaseFolder);
-        return getCurrentPlatform(getManifest(cacheRoot, releaseFolder));
+        return requireSupportedPlatform(getCurrentManifest(cacheRoot));
     }
 
     static CudaPlatform getCurrentPlatform(NvidiaCudaManifest manifest) {
-        return new CudaPlatform(getManifestPlatform(manifest, SupportedPlatform.getCurrentPlatform(),
-                System.getProperty("os.arch")));
+        return requireSupportedPlatform(manifest);
     }
 
     static String getManifestPlatform(NvidiaCudaManifest manifest, SupportedPlatform platform, String architecture) {
+        return findManifestPlatform(manifest, platform, architecture)
+                .orElseThrow(() -> unsupportedPlatform(manifest, platform, architecture));
+    }
+
+    private static Optional<CudaPlatform> findSupportedPlatform(NvidiaCudaManifest manifest) {
+        return findManifestPlatform(manifest, SupportedPlatform.getCurrentPlatform(),
+                System.getProperty("os.arch")).map(CudaPlatform::new);
+    }
+
+    private static Optional<String> findManifestPlatform(NvidiaCudaManifest manifest, SupportedPlatform platform,
+                                                         String architecture) {
         Objects.requireNonNull(manifest, "manifest");
         Objects.requireNonNull(platform, "platform");
         Objects.requireNonNull(architecture, "architecture");
@@ -195,19 +166,47 @@ final class CudaResources {
             }
         }
 
-        var selectedPlatform = commonPlatforms.stream()
-                .filter(candidate -> isCompatiblePlatform(candidate, platform, architecture))
-                .findFirst();
-        if (missingComponents.isEmpty() && selectedPlatform.isPresent()) {
-            return selectedPlatform.get();
+        if (!missingComponents.isEmpty()) {
+            throw new RuntimeException("NVIDIA CUDA manifest is missing required components " + missingComponents
+                    + ". Available manifest platform keys: " + getAvailablePlatformKeys(manifest));
         }
 
-        var reason = missingComponents.isEmpty()
-                ? "no platform key is present in all required components and is compatible with this host"
-                : "the manifest is missing required components " + missingComponents;
-        throw new RuntimeException("Built-in CUDA is unsupported for host '" + platform + " (" + architecture
-                + ")': " + reason + ". Available manifest platform keys: "
-                + getAvailablePlatformKeys(manifest));
+        return commonPlatforms.stream()
+                .filter(candidate -> isCompatiblePlatform(candidate, platform, architecture))
+                .findFirst();
+    }
+
+    private static RuntimeException unsupportedPlatform(NvidiaCudaManifest manifest, SupportedPlatform platform,
+                                                        String architecture) {
+        return new RuntimeException("Built-in CUDA is unsupported for host '" + platform + " (" + architecture
+                + ")': no platform key is present in all required components and is compatible with this host"
+                + ". Available manifest platform keys: " + getAvailablePlatformKeys(manifest));
+    }
+
+    private static NvidiaCudaManifest getCurrentManifest(Path cacheRoot) {
+        var releaseTag = ClangAstWebResource.getCudaReleaseTag();
+        return getCurrentManifest(cacheRoot, releaseTag, getManifestResource(releaseTag));
+    }
+
+    private static NvidiaCudaManifest getCurrentManifest(Path cacheRoot, FileResourceProvider manifestResource) {
+        var releaseTag = ClangAstWebResource.getCudaReleaseTag();
+        return getCurrentManifest(cacheRoot, releaseTag, manifestResource);
+    }
+
+    private static NvidiaCudaManifest getCurrentManifest(Path cacheRoot, String releaseTag,
+                                                          FileResourceProvider manifestResource) {
+        var cudaRoot = cacheRoot.resolve(CUDA_FOLDERNAME);
+        CacheFiles.deleteUnlockedStagingLocks(cacheRoot, cudaRoot);
+        var stagingDirectory = CacheFiles.createStagingDirectory(cacheRoot, cudaRoot, "." + releaseTag + ".tmp-");
+        try {
+            return downloadManifest(cacheRoot, stagingDirectory.path(), releaseTag, manifestResource);
+        } finally {
+            try {
+                CacheFiles.delete(stagingDirectory.path());
+            } finally {
+                stagingDirectory.close();
+            }
+        }
     }
 
     private static boolean isCompatiblePlatform(String manifestPlatform, SupportedPlatform hostPlatform,
@@ -263,45 +262,36 @@ final class CudaResources {
         return cacheRoot.resolve(CUDA_FOLDERNAME).resolve(releaseTag).toFile();
     }
 
-    static File getPlatformFolder(Path cacheRoot, String releaseTag, CudaPlatform platform) {
-        return getReleaseFolder(cacheRoot, releaseTag).toPath().resolve(platform.manifestName()).toFile();
-    }
-
-    static File getInstallationFolder(File platformFolder) {
-        return new File(platformFolder, CUDA_LIB_FOLDERNAME);
-    }
-
-    static File getArchiveFile(File platformFolder, CudaPackage cudaPackage) {
-        var relativePath = cudaPackage.archive().relativePath();
-        var archiveName = relativePath.substring(relativePath.lastIndexOf('/') + 1);
-        return new File(new File(new File(platformFolder, ARCHIVES_FOLDERNAME), cudaPackage.component()), archiveName);
-    }
-
-    static NvidiaCudaManifest getManifest(File resourceFolder) {
-        return getManifest(getCacheRoot(resourceFolder), resourceFolder);
-    }
-
-    static NvidiaCudaManifest getManifest(Path cacheRoot, File resourceFolder) {
-        var releaseTag = ClangAstWebResource.getCudaReleaseTag();
+    private static FileResourceProvider getManifestResource(String releaseTag) {
         var manifestFilename = getManifestFilename(releaseTag);
-        var resource = WebResourceProvider.newInstance(NVIDIA_REDIST_ROOT, manifestFilename, releaseTag);
-        var manifestFile = CacheFiles.installFile(cacheRoot, new File(resourceFolder, manifestFilename), resource, null,
+        return WebResourceProvider.newInstance(NVIDIA_REDIST_ROOT, manifestFilename, releaseTag);
+    }
+
+    private static NvidiaCudaManifest downloadManifest(Path cacheRoot, Path stagingRoot, String releaseTag,
+                                                        FileResourceProvider resource) {
+        var manifestFilename = getManifestFilename(releaseTag);
+        var manifestFile = CacheFiles.installFile(cacheRoot, stagingRoot.resolve(manifestFilename).toFile(), resource, null,
                 "NVIDIA CUDA redistribution manifest");
         var manifest = parseManifest(SpecsIo.read(manifestFile));
         validateManifest(manifest, releaseTag);
         return manifest;
     }
 
-    private static Path getCacheRoot(File resourceFolder) {
-        var cacheRoot = resourceFolder.toPath();
-        for (int i = 0; i < 3; i++) {
-            cacheRoot = cacheRoot.getParent();
-            if (cacheRoot == null) {
-                throw new RuntimeException("CUDA resource folder is not below a cache root: '" + resourceFolder + "'");
-            }
+    private static NvidiaCudaManifest readPublishedManifest(File releaseFolder, String releaseTag) {
+        var manifestPath = releaseFolder.toPath().resolve(getManifestFilename(releaseTag));
+        if (!Files.isRegularFile(manifestPath, LinkOption.NOFOLLOW_LINKS)) {
+            throw invalidInstallation(releaseFolder, "published manifest");
         }
 
-        return cacheRoot;
+        try {
+            var manifest = parseManifest(SpecsIo.read(manifestPath.toFile()));
+            validateManifest(manifest, releaseTag);
+            return manifest;
+        } catch (RuntimeException e) {
+            var invalid = invalidInstallation(releaseFolder, "published manifest");
+            invalid.initCause(e);
+            throw invalid;
+        }
     }
 
     static String getManifestFilename(String releaseTag) {
@@ -351,38 +341,36 @@ final class CudaResources {
         return new NvidiaCudaManifest(releaseDate, releaseLabel, releaseProduct, components);
     }
 
-    static File install(Path cacheRoot, File resourceFolder, String releaseTag, CudaPlatform platform,
-                        NvidiaCudaManifest manifest,
+    static File install(Path cacheRoot, String releaseTag, FileResourceProvider manifestResource,
                         Function<CudaPackage, FileResourceProvider> archiveResourceFactory) {
-        validateManifest(manifest, releaseTag);
+        Objects.requireNonNull(manifestResource, "manifestResource");
         Objects.requireNonNull(archiveResourceFactory, "archiveResourceFactory");
 
-        var installationFolder = getInstallationFolder(resourceFolder);
-        if (Files.exists(installationFolder.toPath(), LinkOption.NOFOLLOW_LINKS)) {
-            return useExistingInstallation(cacheRoot, resourceFolder, platform, installationFolder);
-        }
-
-        var downloadedPackages = manifest.getRequiredPackages(platform.manifestName()).stream()
-                .map(cudaPackage -> downloadPackage(cacheRoot, resourceFolder, cudaPackage, archiveResourceFactory))
-                .toList();
-
-        CacheFiles.deleteUnlockedStagingLocks(cacheRoot, resourceFolder.toPath());
-        var stagingDirectory = CacheFiles.createStagingDirectory(cacheRoot, resourceFolder.toPath(), ".cudalib.tmp-");
+        var cudaRoot = cacheRoot.resolve(CUDA_FOLDERNAME);
+        var releaseFolder = getReleaseFolder(cacheRoot, releaseTag);
+        CacheFiles.deleteUnlockedStagingLocks(cacheRoot, cudaRoot);
+        var stagingDirectory = CacheFiles.createStagingDirectory(cacheRoot, cudaRoot, "." + releaseTag + ".tmp-");
         try {
+            var manifest = downloadManifest(cacheRoot, stagingDirectory.path(), releaseTag, manifestResource);
+            var platform = requireSupportedPlatform(manifest);
+
             try {
-                assemble(stagingDirectory.path().toFile(), platform, downloadedPackages);
+                prepareInstallation(stagingDirectory.path(), platform);
+                for (var cudaPackage : manifest.getRequiredPackages(platform.manifestName())) {
+                    downloadAndAssemble(stagingDirectory.path(), cudaPackage, archiveResourceFactory);
+                }
             } catch (IOException e) {
                 throw new UncheckedIOException("Could not assemble CUDA resources in '"
                         + stagingDirectory.path() + "'", e);
             }
 
-            if (!isCudaInstallation(stagingDirectory.path().toFile(), platform.manifestName())) {
+            if (!isCudaInstallation(stagingDirectory.path().toFile(), releaseTag, platform.manifestName())) {
                 throw new RuntimeException("Assembled CUDA resources failed structural validation in '"
                         + stagingDirectory.path() + "'");
             }
 
-            var publishedFolder = CacheFiles.publish(stagingDirectory.path(), installationFolder.toPath()).toFile();
-            return useExistingInstallation(cacheRoot, resourceFolder, platform, publishedFolder);
+            CacheFiles.publish(stagingDirectory.path(), releaseFolder.toPath());
+            return useExistingInstallation(cacheRoot, releaseFolder, releaseTag);
         } finally {
             try {
                 CacheFiles.delete(stagingDirectory.path());
@@ -392,56 +380,78 @@ final class CudaResources {
         }
     }
 
-    private static CudaResources.DownloadedPackage downloadPackage(Path cacheRoot, File resourceFolder,
-                                                                     CudaPackage cudaPackage,
-                                                                     Function<CudaPackage, FileResourceProvider> factory) {
-        var destination = getArchiveFile(resourceFolder, cudaPackage);
-        var archiveParent = destination.getParentFile().toPath();
-        CacheFiles.deleteUnlockedStagingLocks(cacheRoot, archiveParent);
-        var archive = CacheFiles.installFile(cacheRoot, destination, factory.apply(cudaPackage),
-                cudaPackage.archive().sha256(), cudaPackage.archive().size(),
-                "NVIDIA CUDA archive '" + destination.getName() + "'");
-        return new DownloadedPackage(cudaPackage, archive);
-    }
-
-    private static File useExistingInstallation(Path cacheRoot, File resourceFolder, CudaPlatform platform,
-                                                File installationFolder) {
-        var validInstallation = CacheFiles.withMaintenanceLock(cacheRoot, () -> {
-            if (!isCudaInstallation(installationFolder, platform.manifestName())) {
-                throw invalidInstallation(installationFolder, platform.manifestName());
+    private static void downloadAndAssemble(Path stagingRoot, CudaPackage cudaPackage,
+                                             Function<CudaPackage, FileResourceProvider> factory) throws IOException {
+        var downloadFolder = CacheFiles.createTemporaryDirectory(stagingRoot, ".download-");
+        try {
+            var archive = factory.apply(cudaPackage).write(downloadFolder.toFile());
+            var archiveName = getArchiveName(cudaPackage);
+            if (archive == null || !archive.isFile()) {
+                throw new RuntimeException("Could not download NVIDIA CUDA archive '" + archiveName + "'");
             }
 
-            CacheFiles.touch(resourceFolder.toPath());
-            CacheFiles.touch(resourceFolder.getParentFile().toPath());
-            return installationFolder;
+            var expectedSize = cudaPackage.archive().size();
+            if (Files.size(archive.toPath()) != expectedSize) {
+                throw new RuntimeException("Downloaded NVIDIA CUDA archive '" + archiveName
+                        + "' does not match expected size '" + expectedSize + "' (actual: "
+                        + Files.size(archive.toPath()) + ")");
+            }
+
+            var expectedSha256 = cudaPackage.archive().sha256();
+            if (!CacheFiles.hasExpectedSha256(archive, expectedSha256)) {
+                throw new RuntimeException("Downloaded NVIDIA CUDA archive '" + archiveName
+                        + "' does not match expected SHA-256 '" + expectedSha256 + "'");
+            }
+
+            assemblePackage(stagingRoot.toFile(), cudaPackage, archive);
+        } finally {
+            CacheFiles.delete(downloadFolder);
+        }
+    }
+
+    private static String getArchiveName(CudaPackage cudaPackage) {
+        var relativePath = cudaPackage.archive().relativePath();
+        return relativePath.substring(relativePath.lastIndexOf('/') + 1);
+    }
+
+    private static File useExistingInstallation(Path cacheRoot, File releaseFolder, String releaseTag) {
+        var validInstallation = CacheFiles.withMaintenanceLock(cacheRoot, () -> {
+            var platform = requireSupportedPlatform(readPublishedManifest(releaseFolder, releaseTag));
+            if (!isCudaInstallation(releaseFolder, releaseTag, platform.manifestName())) {
+                throw invalidInstallation(releaseFolder, platform.manifestName());
+            }
+
+            CacheFiles.touch(releaseFolder.toPath());
+            return releaseFolder;
         });
 
-        cleanup(cacheRoot, resourceFolder);
+        cleanup(cacheRoot, releaseFolder.toPath());
         SpecsLogs.debug(() -> "Using cached CUDA resources: " + validInstallation);
         return validInstallation;
     }
 
-    private static void cleanup(Path cacheRoot, File resourceFolder) {
+    private static void cleanup(Path cacheRoot, Path releaseFolder) {
         var cudaRoot = cacheRoot.resolve(CUDA_FOLDERNAME);
-        var releaseFolder = resourceFolder.toPath().getParent();
         var cutoff = Instant.now().minus(Duration.ofDays(60));
         try {
             CacheFiles.deleteStaleDirectories(cacheRoot, cudaRoot, cutoff, releaseFolder);
-            CacheFiles.deleteUnlockedStagingLocks(cacheRoot, releaseFolder);
-            CacheFiles.deleteUnlockedStagingLocks(cacheRoot, resourceFolder.toPath());
-            for (var component : REQUIRED_COMPONENTS) {
-                CacheFiles.deleteUnlockedStagingLocks(cacheRoot,
-                        resourceFolder.toPath().resolve(ARCHIVES_FOLDERNAME).resolve(component));
-            }
+            CacheFiles.deleteUnlockedStagingLocks(cacheRoot, cudaRoot);
         } catch (RuntimeException e) {
             SpecsLogs.warn("Could not clean stale CUDA cache resources", e);
         }
     }
 
-    static boolean isCudaInstallation(File folder, String platform) {
+    static boolean isCudaInstallation(File folder, String releaseTag, String platform) {
         Path root = folder.toPath().toAbsolutePath().normalize();
         if (!Files.isDirectory(root, LinkOption.NOFOLLOW_LINKS)
-                || !Files.isDirectory(root.resolve("bin"), LinkOption.NOFOLLOW_LINKS)) {
+                || !Files.isDirectory(root.resolve("bin"), LinkOption.NOFOLLOW_LINKS)
+                || !Files.isDirectory(root.resolve("include"), LinkOption.NOFOLLOW_LINKS)
+                || !Files.isDirectory(root.resolve("nvvm"), LinkOption.NOFOLLOW_LINKS)) {
+            return false;
+        }
+
+        var manifestFilename = getManifestFilename(releaseTag);
+        if (!Files.isRegularFile(root.resolve(manifestFilename), LinkOption.NOFOLLOW_LINKS)) {
             return false;
         }
 
@@ -457,7 +467,14 @@ final class CudaResources {
         }
 
         try {
-            return platform.equals(Files.readString(platformFile).trim());
+            if (!platform.equals(Files.readString(platformFile).trim())) {
+                return false;
+            }
+
+            var expectedEntries = Set.of("bin", "include", "nvvm", PLATFORM_FILENAME, manifestFilename);
+            try (var entries = Files.list(root)) {
+                return entries.allMatch(entry -> expectedEntries.contains(entry.getFileName().toString()));
+            }
         } catch (IOException e) {
             return false;
         }
@@ -568,20 +585,28 @@ final class CudaResources {
         }
     }
 
+    private static void prepareInstallation(Path stagingFolder, CudaPlatform platform) throws IOException {
+        Files.writeString(stagingFolder.resolve(PLATFORM_FILENAME), platform.manifestName());
+        Files.createDirectories(stagingFolder.resolve("bin"));
+    }
+
     static void assemble(File stagingFolder, CudaPlatform platform, List<DownloadedPackage> packages) throws IOException {
-        Files.writeString(new File(stagingFolder, PLATFORM_FILENAME).toPath(), platform.manifestName());
-        Files.createDirectories(new File(stagingFolder, "bin").toPath());
+        prepareInstallation(stagingFolder.toPath(), platform);
 
         for (var downloadedPackage : packages) {
-            var component = downloadedPackage.cudaPackage().component();
-            var sourceRoots = switch (component) {
-                case "cuda_cudart", "libcurand", "cuda_cccl" -> List.of("include");
-                case "cuda_nvcc" -> List.of("include/crt", "nvvm/libdevice/libdevice.10.bc");
-                default -> throw new RuntimeException("Unsupported NVIDIA CUDA component '" + component + "'");
-            };
-
-            extractArchive(downloadedPackage.archiveFile(), stagingFolder, sourceRoots);
+            assemblePackage(stagingFolder, downloadedPackage.cudaPackage(), downloadedPackage.archiveFile());
         }
+    }
+
+    private static void assemblePackage(File stagingFolder, CudaPackage cudaPackage, File archive) throws IOException {
+        var sourceRoots = switch (cudaPackage.component()) {
+            case "cuda_cudart", "libcurand", "cuda_cccl" -> List.of("include");
+            case "cuda_nvcc" -> List.of("include/crt", "nvvm/libdevice/libdevice.10.bc");
+            default -> throw new RuntimeException("Unsupported NVIDIA CUDA component '"
+                    + cudaPackage.component() + "'");
+        };
+
+        extractArchive(archive, stagingFolder, sourceRoots);
     }
 
     private static void extractArchive(File archive, File destination, List<String> sourceRoots) throws IOException {

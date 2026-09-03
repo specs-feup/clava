@@ -526,24 +526,34 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void builtinCudaUsesSystemClangResourceWithSystemLibc() {
+    public void builtinCudaAutoSystemLibcUsesSameResourcePathAsExplicitSystem() {
         var parser = newParser(CodeParser.getBuiltinOption());
-        var clangFiles = new ClangResources(parser).getClangFiles(LibcMode.SYSTEM);
+        var resources = new ClangResources(parser);
+        var autoFiles = resources.getClangFiles(LibcMode.AUTO);
+        var systemFiles = resources.getClangFiles(LibcMode.SYSTEM);
 
-        assertTrue(clangFiles.builtinIncludes().isEmpty());
-        assertNotNull(clangFiles.systemResourceDir());
-        assertTrue(clangFiles.systemResourceDir().isDirectory());
+        assertEquals(LibcMode.SYSTEM, autoFiles.libcMode());
+        assertEquals(LibcMode.SYSTEM, systemFiles.libcMode());
+        assertTrue(autoFiles.builtinIncludes().isEmpty());
+        assertEquals(systemFiles.systemResourceDir(), autoFiles.systemResourceDir());
+        assertNotNull(autoFiles.systemResourceDir());
+        assertTrue(autoFiles.systemResourceDir().isDirectory());
         assertFalse(Files.exists(clangCacheRoot().resolve("includes")));
     }
 
     @Test
-    public void builtinCudaArchiveHasCanonicalInstallationLayout() {
+    public void builtinCudaInstallationHasCanonicalLayout() {
         var parser = newParser(CodeParser.getBuiltinOption());
         var cudaFolder = new ClangResources(parser).getBuiltinCudaLib();
 
-        var cudaPlatform = cudaFolder.getParentFile().getName();
         assertEquals(tempFolder.resolve("cuda").resolve(ClangAstWebResource.getCudaReleaseTag())
-                .resolve(cudaPlatform).resolve("cudalib").toFile().getAbsolutePath(), cudaFolder.getAbsolutePath());
+                .toFile().getAbsolutePath(), cudaFolder.getAbsolutePath());
+        assertTrue(new File(cudaFolder, CudaResources.getManifestFilename(ClangAstWebResource.getCudaReleaseTag()))
+                .isFile());
+        assertTrue(new File(cudaFolder, CudaResources.PLATFORM_FILENAME).isFile());
+        assertFalse(new File(cudaFolder, "archives").exists());
+        assertFalse(new File(cudaFolder, "cudalib").exists());
+        assertFalse(new File(cudaFolder, "linux-x86_64").exists());
         assertTrue(new File(cudaFolder, "include/cuda.h").isFile());
         assertTrue(new File(cudaFolder, "include/cuda_runtime.h").isFile());
         assertTrue(new File(cudaFolder, "nvvm/libdevice/libdevice.10.bc").isFile());
@@ -562,8 +572,30 @@ public class ClangResourcesTest {
         Files.writeString(builtinLibcDumper, "#!/bin/sh\nexit 1\n");
         assertTrue(builtinLibcDumper.toFile().setExecutable(true));
 
-        assertFalse(ClangResources.useBuiltinLibc(systemLibcDumper.toFile(), LibcMode.AUTO));
-        assertTrue(ClangResources.useBuiltinLibc(builtinLibcDumper.toFile(), LibcMode.AUTO));
+        assertEquals(LibcMode.SYSTEM,
+                ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.AUTO, false));
+        assertEquals(LibcMode.BUILTIN_AND_LIBC,
+                ClangResources.resolveLibcMode(builtinLibcDumper.toFile(), LibcMode.AUTO, false));
+        assertEquals(LibcMode.SYSTEM,
+                ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.SYSTEM, false));
+        assertEquals(LibcMode.BUILTIN_AND_LIBC,
+                ClangResources.resolveLibcMode(builtinLibcDumper.toFile(), LibcMode.BUILTIN_AND_LIBC, false));
+    }
+
+    @Test
+    public void forcedBuildAndPluginModesResolveToSystemWithoutAutoState() throws IOException {
+        assumeTrue(!SupportedPlatform.getCurrentPlatform().isWindows(), "Shell fixtures require a Unix executable");
+
+        var dumper = tempFolder.resolve("dumper");
+        Files.writeString(dumper, "#!/bin/sh\nexit 1\n");
+        assertTrue(dumper.toFile().setExecutable(true));
+
+        assertEquals(LibcMode.SYSTEM,
+                ClangResources.resolveLibcMode(dumper.toFile(), LibcMode.BUILTIN_AND_LIBC, true));
+        assertEquals(LibcMode.SYSTEM,
+                ClangResources.resolveLibcMode(dumper.toFile(), LibcMode.AUTO, true));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ClangFiles(dumper.toFile(), List.of(), null, LibcMode.AUTO));
     }
 
     private CodeParser newParser(String cudaPath) {

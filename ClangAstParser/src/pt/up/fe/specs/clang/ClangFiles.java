@@ -15,7 +15,15 @@ package pt.up.fe.specs.clang;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
-public record ClangFiles(File clangExecutable, List<String> builtinIncludes, File systemResourceDir) {
+public record ClangFiles(File clangExecutable, List<String> builtinIncludes, File systemResourceDir,
+                         LibcMode libcMode) {
 
+    public ClangFiles {
+        Objects.requireNonNull(libcMode, "libcMode");
+        if (libcMode == LibcMode.AUTO) {
+            throw new IllegalArgumentException("Clang files must use a concrete libc mode");
+        }
+    }
 }
