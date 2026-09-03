@@ -48,9 +48,11 @@ import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentStructuralVa
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentTemplate;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentTemplateExpansion;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
+import pt.up.fe.specs.clava.ast.decl.data.templates.template.DependentTemplate;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.QualifiedTemplate;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.SubstTemplateTemplateParm;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.Template;
+import pt.up.fe.specs.clava.ast.decl.data.templates.template.UsingTemplate;
 import pt.up.fe.specs.clava.ast.decl.enums.ExplicitSpecKind;
 import pt.up.fe.specs.clava.ast.decl.enums.NestedNameSpecifierKind;
 import pt.up.fe.specs.clava.ast.expr.data.designator.ArrayDesignator;
@@ -355,6 +357,13 @@ public class ClavaDataParsers {
         case SubstTemplateTemplateParm:
             parserData.getClavaNodes().queueSetNode(template, SubstTemplateTemplateParm.PARAMETER, lines.nextLine());
             template.set(SubstTemplateTemplateParm.REPLACEMENT, templateArgumentTemplate(lines, parserData));
+            break;
+        case UsingTemplate:
+            parserData.getClavaNodes().queueSetNode(template, UsingTemplate.USING_SHADOW_DECL, lines.nextLine());
+            break;
+        case DependentTemplate:
+            template.set(DependentTemplate.QUALIFIER, lines.nextLine());
+            template.set(DependentTemplate.NAME, lines.nextLine());
             break;
         default:
             throw new RuntimeException("Case not implemented: " + nameKind);
