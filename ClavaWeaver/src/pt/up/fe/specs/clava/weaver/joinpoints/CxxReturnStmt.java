@@ -13,44 +13,27 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AReturnStmt;
 
-public class CxxReturnStmt extends AReturnStmt {
-
-    private final ReturnStmt returnStmt;
+public class CxxReturnStmt<Self extends CxxReturnStmt<Self>> extends AReturnStmt<Self> {
 
     public CxxReturnStmt(ReturnStmt returnStmt, CxxWeaver weaver) {
-        super(new CxxStatement(returnStmt, weaver), weaver);
-        this.returnStmt = returnStmt;
+        super(returnStmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return returnStmt;
+    public ReturnStmt getNodeImpl() {
+        return (ReturnStmt) super.getNodeImpl();
     }
 
     @Override
-    public AExpression getReturnExprImpl() {
-        return returnStmt.getRetValue().map(retValue -> CxxJoinpoints.create(retValue,
+    public AExpression<?> getReturnExprImpl() {
+        return this.getNodeImpl().getRetValue().map(retValue -> CxxJoinpoints.create(retValue,
                 getWeaverEngine(), AExpression.class)).orElse(null);
     }
 
-    /*
-    @Override
-    public void defReturnExprImpl(AExpression value) {
-    
-        // TODO Auto-generated method stub
-        super.defReturnExprImpl(value);
-    }
-    
-    @Override
-    public void setReturnExprImpl(AExpression returnExpr) {
-        defReturnExprImpl(returnExpr);
-    }
-    */
 }

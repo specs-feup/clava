@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -21,28 +20,25 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATagType;
 
-public class CxxTagType extends ATagType {
-    private final TagType tagType;
+public class CxxTagType<Self extends CxxTagType<Self>> extends ATagType<Self> {
 
     public CxxTagType(TagType tagType, CxxWeaver weaver) {
-        super(new CxxType(tagType, weaver), weaver);
-
-        this.tagType = tagType;
+        super(tagType, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return tagType;
+    public TagType getNodeImpl() {
+        return (TagType) super.getNodeImpl();
     }
 
     @Override
     public String getNameImpl() {
-        return tagType.get(TagType.DECL).get(TagDecl.DECL_NAME);
+        return this.getNodeImpl().get(TagType.DECL).get(TagDecl.DECL_NAME);
     }
 
     @Override
-    public ADecl getDeclImpl() {
-        return CxxJoinpoints.create(tagType.getDecl(), getWeaverEngine(), ADecl.class);
+    public ADecl<?> getDeclImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getDecl(), getWeaverEngine(), ADecl.class);
     }
 
 }

@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -21,28 +20,25 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALabelDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALabelStmt;
 
-public class CxxLabelStmt extends ALabelStmt {
-
-    private final LabelStmt labelStmt;
+public class CxxLabelStmt<Self extends CxxLabelStmt<Self>> extends ALabelStmt<Self> {
 
     public CxxLabelStmt(LabelStmt labelStmt, CxxWeaver weaver) {
-        super(new CxxStatement(labelStmt, weaver), weaver);
-        this.labelStmt = labelStmt;
+        super(labelStmt, weaver);
     }
 
     @Override
-    public ALabelDecl getDeclImpl() {
-        return CxxJoinpoints.create(labelStmt.getLabelDecl(), getWeaverEngine(), ALabelDecl.class);
+    public LabelStmt getNodeImpl() {
+        return (LabelStmt) super.getNodeImpl();
     }
 
     @Override
-    public void setDeclImpl(ALabelDecl label) {
-        labelStmt.setLabelDecl((LabelDecl) label.getNode());
+    public ALabelDecl<?> getDeclImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getLabelDecl(), getWeaverEngine(), ALabelDecl.class);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return labelStmt;
+    public void setDeclImpl(ALabelDecl<?> label) {
+        this.getNodeImpl().setLabelDecl((LabelDecl) label.getNodeImpl());
     }
 
 }

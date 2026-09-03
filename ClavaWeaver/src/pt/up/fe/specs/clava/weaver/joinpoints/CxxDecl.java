@@ -13,31 +13,27 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AAttribute;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 
-public class CxxDecl extends ADecl {
-
-    private final Decl decl;
+public class CxxDecl<Self extends CxxDecl<Self>> extends ADecl<Self> {
 
     public CxxDecl(Decl decl, CxxWeaver weaver) {
-        super(weaver);
-        this.decl = decl;
+        super(decl, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return decl;
+    public Decl getNodeImpl() {
+        return (Decl) super.getNodeImpl();
     }
 
     @Override
-    public AAttribute[] getAttrsArrayImpl() {
-        return decl.get(Decl.ATTRIBUTES).stream()
-                .map(attr -> new CxxAttribute(attr, getWeaverEngine()))
-                .toArray(size -> new AAttribute[size]);
+    public AAttribute<?>[] getAttrsImpl() {
+        return this.getNodeImpl().get(Decl.ATTRIBUTES).stream()
+                .map(attr -> new CxxAttribute<>(attr, getWeaverEngine()))
+                .toArray(AAttribute<?>[]::new);
     }
 
 }

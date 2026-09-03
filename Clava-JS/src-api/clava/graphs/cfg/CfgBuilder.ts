@@ -9,6 +9,7 @@ import {
   LabelDecl,
   LabelStmt,
   Loop,
+  LoopKind,
   Scope,
   Statement,
   Switch,
@@ -335,13 +336,13 @@ export default class CfgBuilder {
     let afterStmt = undefined;
 
     switch ($loop.kind) {
-      case "for":
+      case LoopKind.for:
         afterStmt = $loop.init;
         break;
-      case "while":
+      case LoopKind.while:
         afterStmt = $loop.cond;
         break;
-      case "dowhile":
+      case LoopKind.dowhile:
         afterStmt = $loop.body;
         break;
       default:
@@ -420,7 +421,7 @@ export default class CfgBuilder {
       throw new Error("Loop is undefined");
     }
 
-    const $afterStmt = $loop.kind === "for" ? $loop.step : $loop.cond;
+    const $afterStmt = $loop.kind === LoopKind.for ? $loop.step : $loop.cond;
     const afterNode = this.nodes.get($afterStmt.astId) ?? this.endNode;
 
     this.addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
@@ -526,7 +527,7 @@ export default class CfgBuilder {
       throw new Error("$loop is not an instance of Loop");
     }
 
-    if ($loop.kind !== "for") {
+    if ($loop.kind !== LoopKind.for) {
       throw new Error("Not implemented for loops of kind " + $loop.kind);
     }
 
@@ -563,7 +564,7 @@ export default class CfgBuilder {
       throw new Error("$loop is not an instance of Loop");
     }
 
-    if ($loop.kind !== "for") {
+    if ($loop.kind !== LoopKind.for) {
       throw new Error("Not implemented for loops of kind " + $loop.kind);
     }
 

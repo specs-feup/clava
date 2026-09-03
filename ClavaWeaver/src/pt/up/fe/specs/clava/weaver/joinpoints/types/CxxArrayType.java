@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -21,29 +20,25 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AArrayType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
-public class CxxArrayType extends AArrayType {
-
-    private final ArrayType arrayType;
+public class CxxArrayType<Self extends CxxArrayType<Self>> extends AArrayType<Self> {
 
     public CxxArrayType(ArrayType arrayType, CxxWeaver weaver) {
-        super(new CxxType(arrayType, weaver), weaver);
-
-        this.arrayType = arrayType;
+        super(arrayType, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return arrayType;
+    public ArrayType getNodeImpl() {
+        return (ArrayType) super.getNodeImpl();
     }
 
     @Override
-    public AType getElementTypeImpl() {
-        return CxxJoinpoints.create(arrayType.getElementType(), getWeaverEngine(), AType.class);
+    public AType<?> getElementTypeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getElementType(), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public void setElementTypeImpl(AType arrayElementType) {
-        arrayType.setElementType((Type) arrayElementType.getNode());
+    public void setElementTypeImpl(AType<?> arrayElementType) {
+        this.getNodeImpl().setElementType((Type) arrayElementType.getNodeImpl());
     }
 
 }

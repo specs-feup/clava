@@ -8,6 +8,7 @@ import {
   Joinpoint,
   Scope,
 } from "../../Joinpoints.js";
+import { InsertPosition } from "@specs-feup/lara/api/LaraJoinPoint.js";
 
 export default class Logger extends LoggerBase<Joinpoint> {
   private _useSpecsLogger: boolean;
@@ -280,7 +281,7 @@ export default class Logger extends LoggerBase<Joinpoint> {
   }
 
   _insertCode($jp: Joinpoint, insertBefore: boolean, code: string) {
-    const insertBeforeString = insertBefore ? "before" : "after";
+    const insertBeforeString = insertBefore ? InsertPosition.before : InsertPosition.after;
 
     if (insertBefore) {
       $jp.insert(insertBeforeString, code);

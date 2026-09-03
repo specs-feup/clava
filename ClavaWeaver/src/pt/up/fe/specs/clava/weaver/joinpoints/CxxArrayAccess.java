@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.utils.Nameable;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -24,70 +23,66 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 
-public class CxxArrayAccess extends AArrayAccess {
-
-    private final ArraySubscriptExpr arraySub;
+public class CxxArrayAccess<Self extends CxxArrayAccess<Self>> extends AArrayAccess<Self> {
 
     public CxxArrayAccess(ArraySubscriptExpr arraySub, CxxWeaver weaver) {
-        super(new CxxExpression(arraySub, weaver), weaver);
-        this.arraySub = arraySub;
+        super(arraySub, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return arraySub;
+    public ArraySubscriptExpr getNodeImpl() {
+        return (ArraySubscriptExpr) super.getNodeImpl();
     }
 
     @Override
-    public AExpression getArrayVarImpl() {
-        return CxxJoinpoints.create(arraySub.getArrayExpr(), getWeaverEngine(), AExpression.class);
+    public AExpression<?> getArrayVarImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getArrayExpr(), getWeaverEngine(), AExpression.class);
     }
 
     @Override
-    public AExpression[] getSubscriptArrayImpl() {
-        return arraySub.getSubscripts().stream()
+    public AExpression<?>[] getSubscriptImpl() {
+        return this.getNodeImpl().getSubscripts().stream()
                 .map(expr -> CxxJoinpoints.create(expr, getWeaverEngine(), AExpression.class))
-                .toArray(length -> new AExpression[length]);
+                .toArray(AExpression<?>[]::new);
     }
 
     @Override
-    public AVardecl getVardeclImpl() {
-        AExpression arrayVar = getArrayVarImpl();
+    public AVardecl<?> getVardeclImpl() {
+        AExpression<?> arrayVar = getArrayVarImpl();
 
-        if (!(arrayVar instanceof AVarref)) {
-            return null;
+        if (arrayVar instanceof AVarref varref) {
+            return varref.getVardeclImpl();
         }
 
-        return ((AVarref) arrayVar).getVardeclImpl();
-
+        return null;
     }
 
     @Override
-    public ADecl getDeclImpl() {
+    public ADecl<?> getDeclImpl() {
         return getVardeclImpl();
     }
 
     @Override
-    public AArrayAccess getParentAccessImpl() {
-        return arraySub.getParentAccess()
+    public AArrayAccess<?> getParentAccessImpl() {
+        return this.getNodeImpl().getParentAccess()
                 .map(parentAccess -> CxxJoinpoints.create(parentAccess, getWeaverEngine(), AArrayAccess.class))
                 .orElse(null);
     }
 
     @Override
-    public Integer getNumSubscriptsImpl() {
-        return arraySub.getSubscripts().size();
+    public int getNumSubscriptsImpl() {
+        return this.getNodeImpl().getSubscripts().size();
     }
 
     @Override
     public String getNameImpl() {
-        var arrayVar = getArrayVarImpl().getNode();
+        var arrayVar = getArrayVarImpl().getNodeImpl();
 
-        if (!(arrayVar instanceof Nameable)) {
-            return null;
+        if (arrayVar instanceof Nameable nameable) {
+            return nameable.getName();
         }
 
-        return ((Nameable) arrayVar).getName();
+        return null;
     }
 
 }

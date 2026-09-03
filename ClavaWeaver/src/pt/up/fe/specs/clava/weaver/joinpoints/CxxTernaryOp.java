@@ -13,40 +13,35 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATernaryOp;
 
-public class CxxTernaryOp extends ATernaryOp {
-
-    private final ConditionalOperator op;
+public class CxxTernaryOp<Self extends CxxTernaryOp<Self>> extends ATernaryOp<Self> {
 
     public CxxTernaryOp(ConditionalOperator op, CxxWeaver weaver) {
-        super(new CxxOp(op, weaver), weaver);
-
-        this.op = op;
+        super(op, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return op;
+    public ConditionalOperator getNodeImpl() {
+        return (ConditionalOperator) super.getNodeImpl();
     }
 
     @Override
-    public AExpression getCondImpl() {
-        return CxxJoinpoints.create(op.getCondition(), getWeaverEngine(), AExpression.class);
+    public AExpression<?> getCondImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getCondition(), getWeaverEngine(), AExpression.class);
     }
 
     @Override
-    public AExpression getTrueExprImpl() {
-        return CxxJoinpoints.create(op.getTrueExpr(), getWeaverEngine(), AExpression.class);
+    public AExpression<?> getTrueExprImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getTrueExpr(), getWeaverEngine(), AExpression.class);
     }
 
     @Override
-    public AExpression getFalseExprImpl() {
-        return CxxJoinpoints.create(op.getFalseExpr(), getWeaverEngine(), AExpression.class);
+    public AExpression<?> getFalseExprImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getFalseExpr(), getWeaverEngine(), AExpression.class);
     }
 }

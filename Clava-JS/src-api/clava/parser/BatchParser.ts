@@ -6,7 +6,7 @@ import Clava from "../Clava.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import { debug } from "@specs-feup/lara/api/lara/core/LaraCore.js";
-import { ClavaException, FileJp } from "../../Joinpoints.js";
+import { FileJp } from "../../Joinpoints.js";
 
 /**
  * Parses C/C++ files.
@@ -71,27 +71,24 @@ export default class BatchParser {
   private rebuildFile($literalFile: FileJp) {
     let parsing: boolean | undefined = true;
     while (parsing) {
-      const $parsedFile = $literalFile.rebuildTry() as FileJp | ClavaException;
-
-      // Check if it is a file
-      if ($parsedFile instanceof FileJp) {
-        return $parsedFile;
+      try {
+        return $literalFile.rebuild();
+      } catch (e) {
+        // It is an exception
+        parsing = this.solveRebuildFile(e as Error, $literalFile);
       }
-
-      // It is an exception
-      parsing = this.solveRebuildFile($parsedFile, $literalFile);
     }
 
     return undefined;
   }
 
-  private solveRebuildFile($exception: ClavaException, $literalFile: FileJp) {
+  private solveRebuildFile($exception: Error, $literalFile: FileJp) {
     // Get error message
     const message = $exception.message;
 
     // Check if correct type
-    if ($exception.exceptionType !== "ClavaParserException") {
-      throw $exception.exception;
+    if ($exception.name !== "ClavaParserException") {
+      throw $exception;
     }
 
     const lines = Strings.asLines(message);

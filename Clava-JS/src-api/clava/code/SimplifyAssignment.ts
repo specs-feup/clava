@@ -1,4 +1,4 @@
-import { BinaryOp, Expression } from "../../Joinpoints.js";
+import { BinaryOp, Expression, OpKind } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 
 /**
@@ -7,7 +7,7 @@ import ClavaJoinPoints from "../ClavaJoinPoints.js";
  */
 export default function SimplifyAssignment($complexAssignment: BinaryOp): void {
   // early return if current node is not suitable for this transform
-  if (!ops.has($complexAssignment.operator)) {
+  if (!ops.has($complexAssignment.kind)) {
     return;
   }
 
@@ -15,7 +15,7 @@ export default function SimplifyAssignment($complexAssignment: BinaryOp): void {
   const $rValue = $complexAssignment.right;
 
   const $binaryOp = ClavaJoinPoints.binaryOp(
-    ops.get($complexAssignment.operator)!,
+    ops.get($complexAssignment.kind)!,
     $lValue.copy() as Expression,
     $rValue,
     $complexAssignment.type
@@ -27,14 +27,14 @@ export default function SimplifyAssignment($complexAssignment: BinaryOp): void {
  * Non-assignment counterparts of complex assignment operators (lookup table)
  */
 const ops = new Map([
-  ["*=", "*"],
-  ["/=", "/"],
-  ["%=", "%"],
-  ["+=", "+"],
-  ["-=", "-"],
-  ["<<=", "<<"],
-  [">>=", ">>"],
-  ["&=", "&"],
-  ["^=", "^"],
-  ["|=", "|"],
+  [OpKind.mul_assign, OpKind.mul],
+  [OpKind.div_assign, OpKind.div],
+  [OpKind.rem_assign, OpKind.rem],
+  [OpKind.add_assign, OpKind.add],
+  [OpKind.sub_assign, OpKind.sub],
+  [OpKind.shl_assign, OpKind.shl],
+  [OpKind.shr_assign, OpKind.shr],
+  [OpKind.and_assign, OpKind.and],
+  [OpKind.xor_assign, OpKind.xor],
+  [OpKind.or_assign, OpKind.or],
 ]);

@@ -13,23 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.TypedefNameDecl;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefNameDecl;
 
-public class CxxTypedefNameDecl extends ATypedefNameDecl {
-
-    private final TypedefNameDecl typedefNameDecl;
+public class CxxTypedefNameDecl<Self extends CxxTypedefNameDecl<Self>> extends ATypedefNameDecl<Self> {
 
     public CxxTypedefNameDecl(TypedefNameDecl typedefNameDecl, CxxWeaver weaver) {
-        super(new CxxNamedDecl(typedefNameDecl, weaver), weaver);
-        this.typedefNameDecl = typedefNameDecl;
+        super(typedefNameDecl, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return typedefNameDecl;
+    public TypedefNameDecl getNodeImpl() {
+        return (TypedefNameDecl) super.getNodeImpl();
     }
 
 }
