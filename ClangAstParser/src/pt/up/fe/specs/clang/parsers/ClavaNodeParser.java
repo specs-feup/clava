@@ -171,10 +171,6 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
         if (nodeData == null) {
             throw new RuntimeException("No ClavaData/DataStore for node '" + nodeId + "' (classname: " + classname
                     + "), data dumper is not being called (linestream index '" + lineStream.getLastLineIndex() + "')");
-            // if (debug)
-            // SpecsLogs.msgInfo("No ClavaData for node '" + nodeId + "' (classname: " + classname
-            // + "), data dumper is not being called");
-            // return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
         }
 
         // Get corresponding ClavaNode class
@@ -240,8 +236,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
                 int index = i;
                 Objects.requireNonNull(child,
                         () -> "Did not find ClavaNode for child with index '" + index + "' and id '" + childId
-                                + "' when parsing "
-                                + clavaNodeClass.getSimpleName() + " -> " + nodeData);
+                                + "' when parsing " + clavaNodeClass.getSimpleName() + " -> " + nodeData);
 
                 child = processChild(child, clavaNodeClass, data);
 

@@ -15,19 +15,23 @@ package pt.up.fe.specs.clang.parser.tests;
 
 import org.junit.jupiter.api.Test;
 
+import pt.up.fe.specs.clang.ClangAstKeys;
+import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.parser.CxxCudaTester;
 
-/**
- * Disabled tests, they are failing in the CI server. Even when passing the --cuda-path built-in library, the parser
- * fails to find the CUDA library.
- * 
- * @author JBispo
- *
- */
+/** Verifies built-in CUDA parsing through Clava's historical cudalib archive. */
 public class CxxCudaTest {
     @Test
     public void testAtomicAdd() {
         new CxxCudaTester("atomicAdd.cu").test();
+    }
+
+    @Test
+    public void testAtomicAddWithSystemLibc() {
+        new CxxCudaTester("atomicAdd.cu")
+                .set(ClangAstKeys.LIBC_CXX_MODE, LibcMode.SYSTEM)
+                .onePass()
+                .test();
     }
 
     @Test

@@ -147,7 +147,6 @@ public class ClangAstParser {
             }
             ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelTypeId);
             Objects.requireNonNull(parsedNode, () -> "No node for type '" + topLevelTypeId + "'");
-
         }
 
         // Parse top-level attributes

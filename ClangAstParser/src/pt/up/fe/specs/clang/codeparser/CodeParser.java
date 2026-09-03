@@ -45,7 +45,7 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
             .setLabel("CUDA Path (empty: uses system installed; <builtin>: uses builtin version)")
             .setDefaultString("");
     public static final DataKey<File> DUMPER_FOLDER = KeyFactory.folder("dumperFolder")
-            .setLabel("The work folder for the clang-dumper. Clava will look for it in this folder, and if not found, will download it. If not set, a temporary folder will be used.")
+            .setLabel("The base cache folder for the clang-dumper. Clava stores each dumper release in a versioned subfolder and downloads it if not found. If not set, a temporary folder will be used.")
             .setDefault(ClangResources::getDefaultTempFolder);
 
     /**

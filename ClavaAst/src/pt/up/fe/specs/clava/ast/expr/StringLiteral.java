@@ -55,6 +55,12 @@ public class StringLiteral extends Literal {
 
     @Override
     public String getLiteral() {
+        // Unevaluated strings can contain source-level details, such as adjacent tokens separated by a line break, that
+        // are lost when using the evaluated byte payload. Keep Clang's validated source spelling.
+        if (get(STRING_KIND) == StringKind.UNEVALUATED) {
+            return super.getLiteral();
+        }
+
         // Update: Unfortunately it is not possible to blindly use the source code literal
         // For instance, if directives and macros appear in the middle of the literal, they will also appear in the
         // generated source code
@@ -90,7 +96,7 @@ public class StringLiteral extends Literal {
             return SpecsStrings.escapeJson(new String(bytes, kind.getCharset()));
         }
 
-        // If ASCII, convert each byte directly
+        // Ordinary strings use one-byte characters; convert each byte directly.
         if (kind == StringKind.ORDINARY) {
             var literal = new StringBuilder();
 

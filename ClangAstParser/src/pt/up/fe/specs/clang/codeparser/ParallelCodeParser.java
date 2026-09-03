@@ -104,8 +104,6 @@ public class ParallelCodeParser extends CodeParser {
         // Standard standard = getStandard(allUserSources.values(), options);
         // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
 
-        // Get version for the executable
-        String version = options.get(ClangAstKeys.CLANGAST_VERSION);
         // System.out.println("PARALLEL OPTIONS: " + options);
         // Prepare resources before execution
         // ClangResources clangResources = new ClangResources(get(SHOW_CLANG_DUMP));
@@ -117,7 +115,7 @@ public class ParallelCodeParser extends CodeParser {
             ClavaLog.debug(() -> "In Linux, ClangAstDumper is a plugin. LIBC_CXX_MODE is reset to SYSTEM.");
         }
 
-        var clangFiles = clangResources.getClangFiles(version, get(ClangAstKeys.LIBC_CXX_MODE));
+        var clangFiles = clangResources.getClangFiles(get(ClangAstKeys.LIBC_CXX_MODE));
         // File clangExecutable = clangResources.prepareResources(version);
         // List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,
         // get(ClangAstKeys.USE_PLATFORM_INCLUDES));
@@ -375,8 +373,7 @@ public class ParallelCodeParser extends CodeParser {
         // Only show output of console after parsing is done, when using parallel parsing
         boolean streamConsoleOutput = !get(PARALLEL_PARSING);
 
-        ClangAstDumper clangParser = new ClangAstDumper(streamConsoleOutput, clangExecutable, builtinIncludes,
-                this)
+        ClangAstDumper clangParser = new ClangAstDumper(streamConsoleOutput, clangExecutable, builtinIncludes, this)
                 .setBaseFolder(parsingFolder)
                 .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
 

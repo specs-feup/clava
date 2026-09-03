@@ -52,6 +52,7 @@ import java.util.Objects;
 public class ClangAstDumper {
 
     private final static boolean USE_PLUGIN = false;
+    private final static String SYSTEM_HEADER_THRESHOLD_OPTION = "-system-header-threshold=";
 
     public static boolean usePlugin() {
         return USE_PLUGIN;
@@ -60,7 +61,7 @@ public class ClangAstDumper {
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
 
-    private static final List<String> CLANG_AST_DUMPER_TEMP_FILES = Arrays.asList("includes.txt", CLANG_DUMP_FILENAME,
+    private static final List<String> CLANG_AST_DUMPER_TEMP_FILES = List.of("includes.txt", CLANG_DUMP_FILENAME,
             // "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt", "template_args.txt",
             "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt",
             "omp.txt", "invalid_source.txt", "enum_integer_type.txt", "consumer_order.txt",
@@ -86,7 +87,7 @@ public class ClangAstDumper {
     private File clangExecutable;
     private List<String> builtinIncludes;
     private int systemIncludesThreshold;
-    private ClangResources clangResources;
+    private final ClangResources clangResources;
 
     private final CodeParser parserConfig;
 
@@ -168,7 +169,7 @@ public class ClangAstDumper {
             arguments.add("-Xclang");
             arguments.add("-plugin-arg-DumpAst");
             arguments.add("-Xclang");
-            arguments.add("-system-threshold=" + systemIncludesThreshold);
+            arguments.add(SYSTEM_HEADER_THRESHOLD_OPTION + systemIncludesThreshold);
         } else {
             arguments.add(clangExecutable.getAbsolutePath());
 
@@ -176,7 +177,7 @@ public class ClangAstDumper {
 
             arguments.add("-id=" + id);
 
-            arguments.add("-system-header-threshold=" + systemIncludesThreshold);
+            arguments.add(SYSTEM_HEADER_THRESHOLD_OPTION + systemIncludesThreshold);
 
             arguments.add("--");
         }
@@ -193,8 +194,10 @@ public class ClangAstDumper {
             arguments.add("-std=cl2.0");
         }
         // Set standard to CUDA
-        else if (isCuda && !standard.isCuda()) {
-            arguments.add("-std=cuda");
+        else if (isCuda) {
+            // The LLVM 18 driver bundled with clang-dumper rejects '-std=cuda'. The .cu extension already
+            // selects CUDA mode, so use a C++ standard for host-side parsing.
+            arguments.add(standard.isCxx() ? standard.getFlag() : Standard.CXX17.getFlag());
         } else {
             arguments.add(standard.getFlag());
         }
@@ -223,24 +226,19 @@ public class ClangAstDumper {
         }
         // If CUDA, add corresponding flags
         else if (isCuda) {
-            if (SpecsPlatforms.isWindows()) {
-                ClavaLog.info("CUDA parsing is not supported in Windows, run at your own risk");
-                arguments.addAll(Arrays.asList("-fms-compatibility", "-D_MSC_VER", "-D_LIBCPP_MSVCRT"));
+            if (!SpecsPlatforms.isLinux()) {
+                ClavaLog.info("We only officially support CUDA parsing in Linux, run at your own risk");
+                arguments.add("-fms-compatibility");
+                if (SpecsPlatforms.isWindows()) {
+                    arguments.add("-D_MSC_VER");
+                    arguments.add("-D_LIBCPP_MSVCRT");
+                }
             }
 
             arguments.add("--cuda-gpu-arch=" + parserConfig.get(CodeParser.CUDA_GPU_ARCH));
 
             var cudaPath = parserConfig.get(CodeParser.CUDA_PATH);
-            if (!cudaPath.isBlank()) {
-
-                // Check if should use built-in CUDA lib
-                File cudaFolder = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption())
-                        ? clangResources.getBuiltinCudaLib()
-                        : SpecsIo.existingFolder(cudaPath);
-
-                ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
-                arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
-            }
+            addCudaPathArgument(arguments, cudaPath);
 
             // Since we only need parsing, enable host-only
             // Can help with errors such as "__float128 is not supported on this target"
@@ -299,7 +297,7 @@ public class ClangAstDumper {
             workingFolders.add(lastWorkingFolder);
 
             output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
-                    inputStream -> this.processOutput(sourceFile, inputStream),
+                    this::processOutput,
                     inputStream -> this.processStdErr(inputStream, config.get(ClavaNode.CONTEXT)));
 
             if (output.isError()) {
@@ -336,7 +334,24 @@ public class ClangAstDumper {
         return parsedData;
     }
 
-    private String processOutput(File sourceFile, InputStream inputStream) {
+    private void addCudaPathArgument(List<String> arguments, String cudaPath) {
+        var useBuiltinCudaLib = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption());
+
+        if (useBuiltinCudaLib) {
+            File cudaFolder = clangResources.getBuiltinCudaLib();
+
+            ClavaLog.debug("Setting --cuda-path to built-in CUDA folder '"
+                    + cudaFolder.getAbsolutePath() + "'");
+            arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
+        } else if (!cudaPath.isBlank()) {
+            File cudaFolder = SpecsIo.existingFolder(cudaPath);
+
+            ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
+            arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
+        }
+    }
+
+    private String processOutput(InputStream inputStream) {
         StringBuilder output = new StringBuilder();
         try (LineStream lines = LineStream.newInstance(inputStream, null)) {
 

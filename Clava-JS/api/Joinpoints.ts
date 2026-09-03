@@ -2811,12 +2811,12 @@ export class TypedefType extends Type {
  * This and the "type" declaration below.
  */
 export const StorageClass = {
-  NONE: "none",
-  AUTO: "auto",
-  EXTERN: "extern",
-  PRIVATE_EXTERN: "private_extern",
-  REGISTER: "register",
-  STATIC: "static",
+  NONE: "NONE",
+  AUTO: "AUTO",
+  EXTERN: "EXTERN",
+  PRIVATE_EXTERN: "PRIVATE_EXTERN",
+  REGISTER: "REGISTER",
+  STATIC: "STATIC",
 } as const;
 export type StorageClass = typeof StorageClass[keyof typeof StorageClass];
 
@@ -2826,12 +2826,12 @@ export type StorageClass = typeof StorageClass[keyof typeof StorageClass];
  * This and the "type" declaration below.
  */
 export const Relation = {
-  LE: "le",
-  LT: "lt",
-  GE: "ge",
-  GT: "gt",
-  EQ: "eq",
-  NE: "ne",
+  LE: "LE",
+  LT: "LT",
+  GE: "GE",
+  GT: "GT",
+  EQ: "EQ",
+  NE: "NE",
 } as const;
 export type Relation = typeof Relation[keyof typeof Relation];
 

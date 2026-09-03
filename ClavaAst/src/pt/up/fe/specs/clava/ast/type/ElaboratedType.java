@@ -63,7 +63,6 @@ public class ElaboratedType extends TypeWithKeyword {
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
-
         String code = getKeyword().getCode();
         if (!code.isEmpty()) {
             code += " ";

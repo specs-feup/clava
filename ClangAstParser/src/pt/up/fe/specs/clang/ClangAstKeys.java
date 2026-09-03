@@ -16,6 +16,7 @@ package pt.up.fe.specs.clang;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
@@ -26,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface ClangAstKeys {
-
-    DataKey<String> CLANGAST_VERSION = KeyFactory.string("clangast_version", "");
 
     /**
      * What libc/libcxx mode should be used.
@@ -55,7 +54,6 @@ public interface ClangAstKeys {
     static DataStore toDataStore(List<String> flags) {
         DataStore config = DataStore.newInstance(ClavaOptions.STORE_DEFINITION, false);
         final String stdPrefix = "-std=";
-        final String clangAstDumperPrefix = "-clang-dumper=";
         final String cilkFlag = "-fcilkplus";
 
         // Search options
@@ -75,13 +73,6 @@ public interface ClangAstKeys {
 
                 config.set(ClavaOptions.STANDARD, standard);
 
-                continue;
-            }
-
-            // If ClangAstDumper version, parse option
-            if (flag.startsWith(clangAstDumperPrefix)) {
-                String version = flag.substring(clangAstDumperPrefix.length());
-                config.set(ClangAstKeys.CLANGAST_VERSION, version);
                 continue;
             }
 
@@ -107,6 +98,10 @@ public interface ClangAstKeys {
         }
 
         config.add(ClavaOptions.FLAGS_LIST, parsedFlags);
+
+        if (ClangAstWebResource.getDumperSource() instanceof LocalBuild) {
+            config.set(ClangAstKeys.LIBC_CXX_MODE, LibcMode.SYSTEM);
+        }
 
         return config;
     }
