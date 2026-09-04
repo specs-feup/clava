@@ -124,7 +124,6 @@ public class CxxActions {
                 base.addChild(node);
                 return null;
 
-            case "around":
             case "replace":
                 removeChildren(base, weaver);
                 // // Clear use fields
@@ -359,7 +358,6 @@ public class CxxActions {
                 NodeInsertUtils.insertAfter(baseJp.getNodeImpl(), newJp.getNodeImpl());
                 break;
 
-            case "around":
             case "replace":
                 weaver.clearUserField(baseJp.getNodeImpl());
                 NodeInsertUtils.replace(baseJp.getNodeImpl(), newJp.getNodeImpl());
