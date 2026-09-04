@@ -1232,8 +1232,9 @@ public class CxxWeaver extends ACxxWeaver {
 
         currentBases = rebuildBases;
         if (!update) {
-            newCodeParser().validateSyntax(writtenFiles,
-                    addSourceIncludes(writtenFiles, rebuildOptions, extraOptions), context);
+            CodeParser codeParser = newCodeParser();
+            codeParser.set(ParallelCodeParser.SYNTAX_ONLY, true);
+            codeParser.parse(writtenFiles, addSourceIncludes(writtenFiles, rebuildOptions, extraOptions), context);
             currentBases = previousBases;
             return true;
         }

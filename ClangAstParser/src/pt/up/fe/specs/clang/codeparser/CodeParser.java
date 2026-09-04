@@ -64,11 +64,6 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     public abstract App parse(List<File> sources, List<String> compilerOptions, ClavaContext context);
 
     /**
-     * Runs the configured compiler/dumper pipeline without decoding its AST output.
-     */
-    public abstract void validateSyntax(List<File> sources, List<String> compilerOptions, ClavaContext context);
-
-    /**
      *
      * @param sources
      * @param compilerOptions flags compatible with C/C++ compilers such as Clang or GCC
