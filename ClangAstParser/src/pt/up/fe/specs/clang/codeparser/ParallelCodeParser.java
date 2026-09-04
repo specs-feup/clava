@@ -321,7 +321,8 @@ public class ParallelCodeParser extends CodeParser {
                 File source = sources.get(i);
                 String id = Integer.toString(i + 1);
                 validationResults.add(executor.submit(() -> validateSource(source, id, standard, options,
-                        validationFolder, clangFiles.clangExecutable(), clangFiles.builtinIncludes())));
+                        validationFolder, clangFiles.clangExecutable(), clangFiles.builtinIncludes(),
+                        clangFiles.systemResourceDir())));
             }
             executor.shutdown();
 
@@ -341,9 +342,9 @@ public class ParallelCodeParser extends CodeParser {
     }
 
     private String validateSource(File source, String id, Standard standard, DataStore options, File validationFolder,
-                                  File clangExecutable, List<String> builtinIncludes) {
+                                  File clangExecutable, List<String> builtinIncludes, File systemResourceDir) {
 
-        var dumper = new ClangAstDumper(false, clangExecutable, builtinIncludes, this)
+        var dumper = new ClangAstDumper(false, clangExecutable, builtinIncludes, systemResourceDir, this)
                 .setBaseFolder(validationFolder)
                 .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
         return dumper.validateSyntax(source, id, standard, options) ? null : dumper.getLastValidationError();
