@@ -17,6 +17,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clang.ClangAstKeys;
+import pt.up.fe.specs.clang.ClangFiles;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
@@ -70,6 +71,9 @@ public class ParallelCodeParser extends CodeParser {
     public static final DataKey<Boolean> CONTINUE_ON_PARSING_ERRORS = KeyFactory.bool("continueOnParsingErrors")
             .setLabel("Ignores parsing errors in C/C++ source code");
 
+    public static final DataKey<Boolean> SYNTAX_ONLY = KeyFactory.bool("syntaxOnly")
+            .setLabel("Runs the compiler/dumper pipeline only to validate syntax, without decoding the AST");
+
     // public static final DataKey<Integer> SYSTEM_INCLUDES_THRESHOLD = KeyFactory.integer("systemIncludesThreshold", 1)
     // .setLabel("Number of threads to use for parallel parsing");
 
@@ -86,6 +90,9 @@ public class ParallelCodeParser extends CodeParser {
         Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
 
         ConcurrentLinkedQueue<String> clangDump = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<String> syntaxErrors = new ConcurrentLinkedQueue<>();
+
+        boolean syntaxOnly = get(SYNTAX_ONLY);
 
         DataStore options = ClangAstKeys.toDataStore(compilerOptions);
 
@@ -117,7 +124,8 @@ public class ParallelCodeParser extends CodeParser {
         ClavaLog.info("Found " + sources.size() + " source files");
         // ClavaLog.debug(() -> "[ParallelCodeParser] Files to parse:" + sources);
 
-        File parsingFolder = SpecsIo.getTempFolder("clava_parsing_" + UUID.randomUUID().toString());
+        File parsingFolder = SpecsIo
+                .getTempFolder((syntaxOnly ? "clava_syntax_validation" : "clava_parsing") + "_" + UUID.randomUUID());
         ClavaLog.debug(() -> "Parsing using folder '" + parsingFolder + "'");
 
         // AtomicInteger currentSourceFileIndex = new AtomicInteger(0);
@@ -139,8 +147,7 @@ public class ParallelCodeParser extends CodeParser {
 
             Future<ClangAstData> tUnit = executor
                     .submit(() -> parseSource(source, id, standard, options, clangDump,
-                            counter, parsingFolder, clangFiles.clangExecutable(), clangFiles.builtinIncludes(),
-                            clangFiles.systemResourceDir()));
+                            counter, parsingFolder, clangFiles, syntaxErrors));
 
             futureTUnits.add(tUnit);
 
@@ -159,6 +166,10 @@ public class ParallelCodeParser extends CodeParser {
                 var parserData = SpecsSystem.get(future);
                 clangParserResults.add(parserData);
             } catch (Exception e) {
+                if (syntaxOnly) {
+                    throw new RuntimeException("Error while validating syntax of file '" + sources.get(i) + "'", e);
+                }
+
                 SpecsLogs.warn("Could not parse file '" + sources.get(i) + "', will be ignored", e);
                 ignoredFiles.add(sources.get(i));
                 continue;
@@ -176,6 +187,16 @@ public class ParallelCodeParser extends CodeParser {
 
         // Delete temporary folder
         SpecsIo.deleteFolder(parsingFolder);
+
+        // No AST was decoded, just report syntax validation errors
+        if (syntaxOnly) {
+            List<String> validationErrors = new ArrayList<>(syntaxErrors);
+            if (!validationErrors.isEmpty() && !get(CONTINUE_ON_PARSING_ERRORS)) {
+                throw new ClavaParserException(validationErrors, clangFiles);
+            }
+
+            return null;
+        }
 
         // List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
         // .map(sourceFile -> parseSource(new File(sourceFile), standard, options, clangDump,
@@ -293,63 +314,6 @@ public class ParallelCodeParser extends CodeParser {
 
     }
 
-    @Override
-    public void validateSyntax(List<File> inputSources, List<String> compilerOptions, ClavaContext context) {
-        DataStore options = ClangAstKeys.toDataStore(compilerOptions);
-        options.add(ClavaNode.CONTEXT, context);
-
-        List<File> sources = SpecsIo.getFileMap(inputSources, SourceType.getPermittedExtensions()).keySet().stream()
-                .map(File::new)
-                .sorted()
-                .collect(Collectors.toList());
-
-        Standard standard = getStandard(sources, options);
-        ClangResources clangResources = new ClangResources(this);
-        var clangFiles = clangResources.getClangFiles(get(ClangAstKeys.LIBC_CXX_MODE));
-        File validationFolder = SpecsIo.getTempFolder("clava_syntax_validation_" + UUID.randomUUID());
-        List<String> errors = new ArrayList<>();
-
-        try {
-            int numThreads = get(PARALLEL_PARSING) ? get(PARSING_NUM_THREADS) : 1;
-            if (numThreads <= 0) {
-                numThreads = Runtime.getRuntime().availableProcessors();
-            }
-
-            ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-            List<Future<String>> validationResults = new ArrayList<>();
-            for (int i = 0; i < sources.size(); i++) {
-                File source = sources.get(i);
-                String id = Integer.toString(i + 1);
-                validationResults.add(executor.submit(() -> validateSource(source, id, standard, options,
-                        validationFolder, clangFiles.clangExecutable(), clangFiles.builtinIncludes(),
-                        clangFiles.systemResourceDir())));
-            }
-            executor.shutdown();
-
-            for (var validationResult : validationResults) {
-                String error = SpecsSystem.get(validationResult);
-                if (error != null) {
-                    errors.add(error);
-                }
-            }
-        } finally {
-            SpecsIo.deleteFolder(validationFolder);
-        }
-
-        if (!errors.isEmpty() && !get(CONTINUE_ON_PARSING_ERRORS)) {
-            throw new ClavaParserException(errors, clangFiles);
-        }
-    }
-
-    private String validateSource(File source, String id, Standard standard, DataStore options, File validationFolder,
-                                  File clangExecutable, List<String> builtinIncludes, File systemResourceDir) {
-
-        var dumper = new ClangAstDumper(false, clangExecutable, builtinIncludes, systemResourceDir, this)
-                .setBaseFolder(validationFolder)
-                .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
-        return dumper.validateSyntax(source, id, standard, options) ? null : dumper.getLastValidationError();
-    }
-
     // private ClangParserData getParserData(Future<ClangParserData> future) {
     // try {
     // return SpecsSystem.get(future);
@@ -416,7 +380,7 @@ public class ParallelCodeParser extends CodeParser {
 
     private ClangAstData parseSource(File sourceFile, String id, Standard standard, DataStore options,
                                      ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
-                                     File clangExecutable, List<String> builtinIncludes, File systemResourceDir) {
+                                     ClangFiles clangFiles, ConcurrentLinkedQueue<String> syntaxErrors) {
 
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
 
@@ -427,15 +391,25 @@ public class ParallelCodeParser extends CodeParser {
         // Only show output of console after parsing is done, when using parallel parsing
         boolean streamConsoleOutput = !get(PARALLEL_PARSING);
 
-        ClangAstDumper clangParser = new ClangAstDumper(streamConsoleOutput, clangExecutable, builtinIncludes,
-                systemResourceDir, this)
+        ClangAstDumper clangParser = new ClangAstDumper(streamConsoleOutput, clangFiles.clangExecutable(),
+                clangFiles.builtinIncludes(), clangFiles.systemResourceDir(), this)
                 .setBaseFolder(parsingFolder)
                 .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
 
         // .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         counter.print(sourceFile);
-        // ClavaLog.info("Parsing '" + sourceFile.getAbsolutePath() + "'");
+
+        // Run the same clang invocation, discard dumper output
+        if (get(SYNTAX_ONLY)) {
+            String error = clangParser.validateSyntax(sourceFile, id, standard, options);
+            if (error != null) {
+                syntaxErrors.add(error);
+            }
+
+            return null;
+        }
+
         ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
 
         if (get(SHOW_CLANG_DUMP)) {

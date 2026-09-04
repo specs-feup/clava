@@ -141,8 +141,10 @@ public class ClangAstDumper {
 
     /**
      * Invokes Clang with the same arguments as parsing, while discarding dumper output.
+     *
+     * @return null if the syntax is valid, otherwise an error message
      */
-    public boolean validateSyntax(File sourceFile, String id, Standard standard, DataStore config) {
+    public String validateSyntax(File sourceFile, String id, Standard standard, DataStore config) {
         if (config.get(ClangAstKeys.USES_CILK)) {
             sourceFile = new CilkParser().prepareCilkFile(sourceFile);
         }
@@ -150,14 +152,10 @@ public class ClangAstDumper {
         validationOnly = true;
         try {
             parsePrivate(sourceFile, id, standard, config);
-            return lastValidationError == null;
+            return lastValidationError;
         } finally {
             validationOnly = false;
         }
-    }
-
-    public String getLastValidationError() {
-        return lastValidationError;
     }
 
     private ClangAstData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
@@ -379,8 +377,6 @@ public class ClangAstDumper {
 
     private String validateSyntax(List<String> arguments, File sourceFile, String id) {
         lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
-        SpecsIo.deleteFolderContents(lastWorkingFolder);
-        workingFolders.add(lastWorkingFolder);
 
         var output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
                 this::discardOutput,
