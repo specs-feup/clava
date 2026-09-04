@@ -124,8 +124,7 @@ public class ParallelCodeParser extends CodeParser {
         ClavaLog.info("Found " + sources.size() + " source files");
         // ClavaLog.debug(() -> "[ParallelCodeParser] Files to parse:" + sources);
 
-        File parsingFolder = SpecsIo
-                .getTempFolder((syntaxOnly ? "clava_syntax_validation" : "clava_parsing") + "_" + UUID.randomUUID());
+        File parsingFolder = SpecsIo.getTempFolder("clava_parsing_" + UUID.randomUUID().toString());
         ClavaLog.debug(() -> "Parsing using folder '" + parsingFolder + "'");
 
         // AtomicInteger currentSourceFileIndex = new AtomicInteger(0);
