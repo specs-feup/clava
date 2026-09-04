@@ -132,6 +132,18 @@ new Inliner().inlineFunctionTree(
 
 console.log(Query.search("function", "callsFunctionWithLabels").first().code);
 
+// Fresh Inliner instance per call site: label numbering must not collide with
+// labels already inserted by previous instances in the same function.
+const $freshCaller = Query.search("function", "callsFunctionWithLabelsFresh")
+  .first();
+
+for (const $call of [...Query.searchFrom($freshCaller, "call")]) {
+  const inliner = new Inliner();
+  inliner.inline($call.getAncestor("exprStmt"));
+}
+
+console.log($freshCaller.code);
+
 //console.log(Query.search("function", "functionWithStatic").first().ast);
 
 /*
