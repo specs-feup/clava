@@ -381,18 +381,18 @@ export default class Inliner {
     this.updateVarDecls($newNodes, newVariableMap);
     this.updateVarrefs($newNodes, newVariableMap, $call);
     this.updateVarrefsInTypes($newNodes, newVariableMap, $call);
-    this.renameLabels();
+    this.renameLabels($newNodes);
   }
 
   /**
    * Labels need to be renamed, to avoid duplicated labels.
    */
-  private renameLabels(): void {
+  private renameLabels($newNodes: Scope): void {
     // Maps label names to new LabelDecl
     const newLabels: Record<string, LabelDecl> = {};
 
     // Visit all gotoStmt and labelStmt
-    for (const jp of Query.search(Joinpoint, {
+    for (const jp of Query.searchFrom($newNodes, Joinpoint, {
       self: ($jp: LaraJoinPoint) =>
         $jp instanceof GotoStmt || $jp instanceof LabelStmt,
     })) {
@@ -417,7 +417,7 @@ export default class Inliner {
     }
 
     // If there are any label decls, rename them
-    for (const $labelDecl of Query.search(LabelDecl)) {
+    for (const $labelDecl of Query.searchFrom($newNodes, LabelDecl)) {
       const $newLabelDecl = newLabels[$labelDecl.name];
       $labelDecl.replaceWith($newLabelDecl);
     }
