@@ -235,7 +235,7 @@ export default class Outliner {
       const retVal = ret.children[0];
       retVal.detach();
       const op1 = ClavaJoinPoints.binaryOp(
-        OpKind.eq,
+        OpKind.assign,
         derefResVarParam,
         retVal as any,
         resVarParam.type
@@ -247,7 +247,7 @@ export default class Outliner {
       const derefBoolVarParam = ClavaJoinPoints.unaryOp(OpKind.deref, newVarref);
       const trueVal = ClavaJoinPoints.integerLiteral(1);
       const op2 = ClavaJoinPoints.binaryOp(
-        OpKind.eq,
+        OpKind.assign,
         derefBoolVarParam,
         trueVal,
         boolVarParam.type
