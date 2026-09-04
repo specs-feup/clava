@@ -293,6 +293,63 @@ public class ParallelCodeParser extends CodeParser {
 
     }
 
+    @Override
+    public void validateSyntax(List<File> inputSources, List<String> compilerOptions, ClavaContext context) {
+        DataStore options = ClangAstKeys.toDataStore(compilerOptions);
+        options.add(ClavaNode.CONTEXT, context);
+
+        List<File> sources = SpecsIo.getFileMap(inputSources, SourceType.getPermittedExtensions()).keySet().stream()
+                .map(File::new)
+                .sorted()
+                .collect(Collectors.toList());
+
+        Standard standard = getStandard(sources, options);
+        ClangResources clangResources = new ClangResources(this);
+        var clangFiles = clangResources.getClangFiles(get(ClangAstKeys.LIBC_CXX_MODE));
+        File validationFolder = SpecsIo.getTempFolder("clava_syntax_validation_" + UUID.randomUUID());
+        List<String> errors = new ArrayList<>();
+
+        try {
+            int numThreads = get(PARALLEL_PARSING) ? get(PARSING_NUM_THREADS) : 1;
+            if (numThreads <= 0) {
+                numThreads = Runtime.getRuntime().availableProcessors();
+            }
+
+            ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+            List<Future<String>> validationResults = new ArrayList<>();
+            for (int i = 0; i < sources.size(); i++) {
+                File source = sources.get(i);
+                String id = Integer.toString(i + 1);
+                validationResults.add(executor.submit(() -> validateSource(source, id, standard, options,
+                        validationFolder, clangFiles.clangExecutable(), clangFiles.builtinIncludes(),
+                        clangFiles.systemResourceDir())));
+            }
+            executor.shutdown();
+
+            for (var validationResult : validationResults) {
+                String error = SpecsSystem.get(validationResult);
+                if (error != null) {
+                    errors.add(error);
+                }
+            }
+        } finally {
+            SpecsIo.deleteFolder(validationFolder);
+        }
+
+        if (!errors.isEmpty() && !get(CONTINUE_ON_PARSING_ERRORS)) {
+            throw new ClavaParserException(errors, clangFiles);
+        }
+    }
+
+    private String validateSource(File source, String id, Standard standard, DataStore options, File validationFolder,
+                                  File clangExecutable, List<String> builtinIncludes, File systemResourceDir) {
+
+        var dumper = new ClangAstDumper(false, clangExecutable, builtinIncludes, systemResourceDir, this)
+                .setBaseFolder(validationFolder)
+                .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
+        return dumper.validateSyntax(source, id, standard, options) ? null : dumper.getLastValidationError();
+    }
+
     // private ClangParserData getParserData(Future<ClangParserData> future) {
     // try {
     // return SpecsSystem.get(future);
