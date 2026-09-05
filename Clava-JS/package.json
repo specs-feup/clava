@@ -9,10 +9,12 @@
   "exports": {
     "./api/*.test.ts": null,
     "./api/*.config.ts": null,
+    "./api/*.js": "./api/*.ts",
     "./api/*": "./api/*.ts",
     "./api/*.ts": "./api/*.ts",
     "./code/*.test.ts": null,
     "./code/*.config.ts": null,
+    "./code/*.js": "./code/*.ts",
     "./code/*": "./code/*.ts",
     "./code/*.ts": "./code/*.ts"
   },
