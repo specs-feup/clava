@@ -18,6 +18,19 @@
     "./code/*": "./code/*.ts",
     "./code/*.ts": "./code/*.ts"
   },
+  "files": [
+    "api",
+    "code",
+    "java-binaries",
+    ".gitignore",
+    "LICENSE",
+    "oxlint.config.ts",
+    "package.json",
+    "README.md",
+    "tsconfig.json",
+    "typedoc.config.js",
+    "vitest.config.ts"
+  ],
   "scripts": {
     "run": "node ./code/index.ts",
     "build": "tsc",
