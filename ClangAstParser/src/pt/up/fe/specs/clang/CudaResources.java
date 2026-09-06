@@ -57,7 +57,8 @@ import java.util.regex.Pattern;
  * the bundled dumper.
  *
  * <p>CUDA resources are release-addressed. The published release directory is the complete CUDA installation;
- * manifests and downloaded archives used to build it live in staging until that directory is published.</p>
+ * manifests and downloaded archives used to build it live in staging until that directory is published. The
+ * redistribution manifest itself is cached at {@code <cache>/cuda/redistrib_<release>.json} and reused across calls.</p>
  */
 final class CudaResources {
 
@@ -117,7 +118,8 @@ final class CudaResources {
     }
 
     static boolean isSupportedPlatform(Path cacheRoot, FileResourceProvider manifestResource) {
-        return findSupportedPlatform(getCurrentManifest(cacheRoot, manifestResource)).isPresent();
+        return findSupportedPlatform(readManifest(cacheRoot, ClangAstWebResource.getCudaReleaseTag(),
+                manifestResource)).isPresent();
     }
 
     static CudaPlatform getCurrentPlatform() {
@@ -125,7 +127,8 @@ final class CudaResources {
     }
 
     static CudaPlatform getCurrentPlatform(Path cacheRoot) {
-        return requireSupportedPlatform(getCurrentManifest(cacheRoot));
+        var releaseTag = ClangAstWebResource.getCudaReleaseTag();
+        return requireSupportedPlatform(readManifest(cacheRoot, releaseTag, getManifestResource(releaseTag)));
     }
 
     static CudaPlatform getCurrentPlatform(NvidiaCudaManifest manifest) {
@@ -183,30 +186,17 @@ final class CudaResources {
                 + ". Available manifest platform keys: " + getAvailablePlatformKeys(manifest));
     }
 
-    private static NvidiaCudaManifest getCurrentManifest(Path cacheRoot) {
-        var releaseTag = ClangAstWebResource.getCudaReleaseTag();
-        return getCurrentManifest(cacheRoot, releaseTag, getManifestResource(releaseTag));
-    }
-
-    private static NvidiaCudaManifest getCurrentManifest(Path cacheRoot, FileResourceProvider manifestResource) {
-        var releaseTag = ClangAstWebResource.getCudaReleaseTag();
-        return getCurrentManifest(cacheRoot, releaseTag, manifestResource);
-    }
-
-    private static NvidiaCudaManifest getCurrentManifest(Path cacheRoot, String releaseTag,
-                                                          FileResourceProvider manifestResource) {
-        var cudaRoot = cacheRoot.resolve(CUDA_FOLDERNAME);
-        CacheFiles.deleteUnlockedStagingLocks(cacheRoot, cudaRoot);
-        var stagingDirectory = CacheFiles.createStagingDirectory(cacheRoot, cudaRoot, "." + releaseTag + ".tmp-");
-        try {
-            return downloadManifest(cacheRoot, stagingDirectory.path(), releaseTag, manifestResource);
-        } finally {
-            try {
-                CacheFiles.delete(stagingDirectory.path());
-            } finally {
-                stagingDirectory.close();
-            }
-        }
+    // The manifest is installed to a stable cache path and reused across calls, so platform checks and the like do
+    // not re-download it on every invocation. Mirrors how ClangAstWebResource.getManifest caches the clang-dumper
+    // release manifest.
+    private static NvidiaCudaManifest readManifest(Path cacheRoot, String releaseTag,
+                                                    FileResourceProvider manifestResource) {
+        var manifestFile = CacheFiles.installFile(cacheRoot,
+                cacheRoot.resolve(CUDA_FOLDERNAME).resolve(getManifestFilename(releaseTag)).toFile(),
+                manifestResource, null, "NVIDIA CUDA redistribution manifest");
+        var manifest = parseManifest(SpecsIo.read(manifestFile));
+        validateManifest(manifest, releaseTag);
+        return manifest;
     }
 
     private static boolean isCompatiblePlatform(String manifestPlatform, SupportedPlatform hostPlatform,
