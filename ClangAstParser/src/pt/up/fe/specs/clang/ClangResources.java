@@ -363,9 +363,14 @@ public class ClangResources {
 
         var expectedVersion = llvmMajor == null ? "the local clang-dumper build's version"
                 : "LLVM " + llvmMajor;
+        var installHint = llvmMajor == null ? "clang++" : "clang++-" + llvmMajor;
         throw new RuntimeException("Could not find a system Clang resource directory for SYSTEM mode with built-in CUDA"
                 + " on host '" + SupportedPlatform.getCurrentPlatform() + "' (expected " + expectedVersion
-                + "). Tried: " + commandNames);
+                + "). Tried: " + commandNames
+                + ". SYSTEM mode does not bundle Clang's CUDA wrapper headers, so a matching system Clang"
+                + " installation is required: install '" + installHint + "' (e.g. 'apt install " + installHint
+                + "' or 'brew install llvm'), or set the libc mode to 'builtin' to use the bundled includes"
+                + " instead of the system libc");
     }
 
     private static List<String> getSystemClangCommandNames(Integer llvmMajor) {
