@@ -239,7 +239,6 @@ public class ClangAstParser {
         // To solve this, use the location of the node to remove repetitions,
         // and create a map between repeated ids and normalized ids
 
-        // NormalizedNodes normalizedNodes = NormalizedNodes.newInstance(topLevelDecls);
         for (ClavaNode clavaNode : topLevelDecls) {
 
             // Normalize node source path
