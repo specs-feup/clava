@@ -41,10 +41,6 @@ public interface CxxWeaverOption {
             .setLabel("Normal Includes")
             .setDefault(FileList::newInstance);
 
-    // DataKey<Boolean> SKIP_HEADER_INCLUDES_PARSING = KeyFactory.bool("skipHeaderIncludesParsing")
-    // .setLabel("Skip parsing of header files");
-    // .setDefault(() -> true);
-
     DataKey<Boolean> PARSE_INCLUDES = KeyFactory.bool("parseIncludes")
             .setLabel("Parses header files")
             .setDefault(() -> true);
@@ -52,10 +48,6 @@ public interface CxxWeaverOption {
     DataKey<FileList> SYSTEM_INCLUDES = LaraIKeyFactory.folderList("library includes")
             .setLabel("System Includes")
             .setDefault(() -> FileList.newInstance());
-
-    // DataKey<Integer> SYSTEM_INCLUDES_THRESHOLD = KeyFactory.integer("systemIncludesThreshold")
-    // .setLabel("System Includes parsing threshold (0 parses all system include headers found)")
-    // .setDefault(() -> 1);
 
     DataKey<Boolean> DISABLE_WEAVING = KeyFactory.bool("Disable Weaving")
             .setLabel("Disable parsing (does not parse C/C++ code before executing the LARA code)");
@@ -72,11 +64,6 @@ public interface CxxWeaverOption {
     DataKey<Boolean> FLAT_OUTPUT_FOLDER = KeyFactory.bool("flatOutputFolder")
             .setLabel("Puts sources directly in the output folder, ignoring original base folders");
 
-    // DataKey<Boolean> FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE = KeyFactory.bool("Flatten woven code folder structure");
-
-    DataKey<Boolean> UNIT_TESTING_MODE = KeyFactory.bool("Unit Testing Mode")
-            .setLabel("Runs the Clava Unit-Tester");
-
     DataKey<Boolean> COPY_FILES_IN_SOURCES = KeyFactory.bool("Copy files in sources")
             .setLabel("Copies to output folder all files defined in sources");
 
@@ -84,17 +71,12 @@ public interface CxxWeaverOption {
             .addKeys(ClavaOptions.STORE_DEFINITION.getKeys())
             .addKeys(WOVEN_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX,
                     HEADER_INCLUDES,
-                    // SKIP_HEADER_INCLUDES_PARSING,
                     PARSE_INCLUDES,
                     SYSTEM_INCLUDES,
                     ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD,
                     DISABLE_WEAVING, DISABLE_CODE_GENERATION,
-                    // GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES)
                     GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES,
-                    // FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE,
                     COPY_FILES_IN_SOURCES, FLAT_OUTPUT_FOLDER)
-            // GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, UNIT_TESTING_MODE)
-            // .addKey(ClangAstKeys.USE_PLATFORM_INCLUDES)
             .addKey(ClangAstKeys.LIBC_CXX_MODE)
             .addKey(ClangAstKeys.IGNORE_HEADER_INCLUDES)
             .startSection("Parsing Options")
