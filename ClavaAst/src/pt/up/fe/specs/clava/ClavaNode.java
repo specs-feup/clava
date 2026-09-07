@@ -328,10 +328,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         // return super.copy();
 
         // TODO: Remove after legacy nodes are replaced
-        // If copyPrivate() is overriden, this means it is a legacy node, and needs to call
-        // the method version without arguments
-        boolean overridesCopyPrivate = isCopyPrivateOverriden();
-        ClavaNode newToken = overridesCopyPrivate ? copyPrivate() : copyPrivate(keepId);
+        ClavaNode newToken = copyPrivate(keepId);
 
         // Set origin
         newToken.set(ORIGIN, this);
@@ -355,24 +352,12 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return newToken;
     }
 
-    private boolean isCopyPrivateOverriden() {
-        try {
-            Class<?> copyPrivateNoArgsClass = this.getClass().getDeclaredMethod("copyPrivate").getDeclaringClass();
-            // System.out.println("COPY PRIVATE DECLARING CLASS:" + copyPrivateNoArgsClass);
-            return !copyPrivateNoArgsClass.equals(ClavaNode.class);
-        } catch (NoSuchMethodException e) {
-            return false;
-        } catch (Exception e) {
-            throw new RuntimeException("Could not obtain copyPrivate() method through reflection", e);
-        }
-    }
-
     /**
-     * By default, copying a node creates an new, unique id for the new copy.
+     * By default, copying a node creates an new, unique id for the copy.
+     * Implements the no-arg copyPrivate of ATreeNode.
      */
     @Override
     protected ClavaNode copyPrivate() {
-        // return newInstance(getClass(), Collections.emptyList());
         return copyPrivate(false);
     }
 
@@ -1043,7 +1028,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
                 return;
             }
 
-            setInPlace(optionalKey, Optional.of(newValue.get(0)));
+            set(optionalKey, Optional.of(newValue.get(0)));
             // System.out.println("SETTING OPTIONAL");
             // ClavaNode copy = node.copy();
             // set(optionalKey, Optional.of(copy));
@@ -1054,17 +1039,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
         // ClavaLog.info("Case not supported yet:" + keyWithNode);
 
-    }
-
-    /**
-     * @deprecated
-     * @param key
-     * @param value
-     * @return
-     */
-    @Deprecated
-    public <T, E extends T> ClavaNode setInPlace(DataKey<T> key, E value) {
-        return set(key, value);
     }
 
     /**
