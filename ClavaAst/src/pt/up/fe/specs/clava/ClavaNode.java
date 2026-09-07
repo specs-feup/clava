@@ -27,13 +27,11 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.DataStore.DataClass;
-import org.suikasoft.jOptions.DataStore.GenericDataClass;
 import org.suikasoft.jOptions.DataStore.ListDataStore;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.storedefinition.StoreDefinition;
+import org.suikasoft.jOptions.treenode.DataNode;
 
 import com.google.common.base.Preconditions;
 
@@ -56,12 +54,9 @@ import pt.up.fe.specs.util.classmap.ClassSet;
 import pt.up.fe.specs.util.collections.SpecsList;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.providers.StringProvider;
-import pt.up.fe.specs.util.system.Copyable;
-import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
-public abstract class ClavaNode extends ATreeNode<ClavaNode>
-        implements DataClass<ClavaNode>, Copyable<ClavaNode>, StringProvider {
+public abstract class ClavaNode extends DataNode<ClavaNode> implements StringProvider {
 
     // public static boolean SKIP_EXCEPTION = false;
 
@@ -129,24 +124,24 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return nodes.stream().map(ClavaNode::toTree).collect(Collectors.joining("\n"));
     }
 
-    private final DataStore dataI;
-    private final DataClass<ClavaNode> dataClass;
     private boolean disableModification;
 
     public ClavaNode(DataStore dataI, Collection<? extends ClavaNode> children) {
-        super(children);
+        super(dataI, children);
 
         SpecsCheck.checkArgument(dataI instanceof ListDataStore,
                 () -> "Expected ListDataStore, found  " + dataI.getClass());
 
-        this.dataI = dataI;
         disableModification = false;
+    }
 
-        // Set definition of DataStore
-        // this.dataI.setDefinition(getClass());
-
-        // To avoid implementing methods again in ClavaNode
-        this.dataClass = new GenericDataClass<>(this.dataI);
+    /**
+     *
+     * @return the base class of the ClavaNode tree
+     */
+    @Override
+    public Class<ClavaNode> getBaseClass() {
+        return ClavaNode.class;
     }
 
     protected void setDisableModification(boolean disableModification) {
@@ -157,23 +152,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return "   ";
     }
 
-    @Override
-    public String getDataClassName() {
-        return dataI.getName();
-    }
-
     public String indentCode(String code) {
         return ClavaNodes.indentCode(getTab(), code);
-    }
-
-    @Override
-    public String toContentString() {
-        return getData().toInlinedString();
-    }
-
-    @Override
-    public Optional<StoreDefinition> getStoreDefinitionTry() {
-        return this.dataI.getStoreDefinitionTry();
     }
 
     protected static String toContentString(String previousContentString, String suffix) {
@@ -436,29 +416,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return Optional.empty();
     }
 
-    /**
-     * Returns the DataStore associated with this node.
-     * 
-     * <p>
-     * Generically, it is not recommended that this method is used outside of ClavaNode classes. <br>
-     * Instead, the method .get() / specific setters should be used. <br>
-     * However, there might be situations where access to this object is needed (e.g., library operations).
-     * 
-     * 
-     * @return the underlying DataStore of this node
-     */
-    protected DataStore getData() {
-        return dataI;
-    }
-
-    // public void setData(DataStore data) {
-    // this.dataI.addAll(data);
-    // }
-
-    // public boolean hasDataI() {
-    // return dataI != null;
-    // }
-
     public Optional<String> getIdSuffix() {
         if (!getExtendedId().isPresent()) {
             return Optional.empty();
@@ -497,7 +454,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      * @return a ClavaFactory where the builders will use the data of this node as the base for new nodes.
      */
     public ClavaFactory getFactoryWithNode() {
-        return new ClavaFactory(get(CONTEXT), dataI);
+        return new ClavaFactory(get(CONTEXT), getData());
     }
 
     public ClavaFactory getFactory() {
@@ -513,7 +470,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     @Override
     public <T> T get(DataKey<T> key) {
         try {
-            T value = dataI.get(key);
+            T value = getData().get(key);
 
             // // Ignore ImplicitCasts
             // if (value instanceof ImplicitCastExpr) {
@@ -530,24 +487,24 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * Tries to return a value from the DataStore.
-     * 
+     *
      * <p>
      * Does not use default values. If the key is not in the map, or there is no value mapped to the given key, returns
      * an empty Optional.
-     * 
+     *
      * @param key
      * @return
      */
     public <T> Optional<T> getTry(DataKey<T> key) {
-        return dataI.getTry(key);
+        return getData().getTry(key);
     }
 
     /**
      * Generic method for setting values.
-     * 
+     *
      * <p>
      * If null is passed as value, removes current value associated with given key.
-     * 
+     *
      * @param key
      * @param value
      */
@@ -560,36 +517,16 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
         // If value is null, remove value, if present
         if (value == null) {
-            if (dataI.hasValue(key)) {
-                dataI.remove(key);
+            if (getData().hasValue(key)) {
+                getData().remove(key);
             }
 
             return this;
         }
 
-        dataI.put(key, value);
+        getData().put(key, value);
 
         return this;
-    }
-
-    @Override
-    public ClavaNode set(ClavaNode instance) {
-        return dataClass.set(instance);
-    }
-
-    /**
-     * 
-     * @param key
-     * @return true, if it contains a non-null value for the given key, not considering default values
-     */
-    @Override
-    public <T> boolean hasValue(DataKey<T> key) {
-        return dataI.hasValue(key);
-    }
-
-    @Override
-    public Collection<DataKey<?>> getDataKeysWithValues() {
-        return dataClass.getDataKeysWithValues();
     }
 
     public ClavaContext getContext() {
@@ -627,7 +564,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         // TODO: CHECK IF CANNOT SIMPLY COPY DATA! NEEDS TO AT LEAST SPECIFY DEFINITION OF NEW CLASS
         // SpecsCheck.checkArgument(nodeClass.isInstance(this), () -> "Expected class to be of same instance");
         // Use the same data store
-        DataStore newDataStore = shareData ? dataI : dataI.copy();
+        DataStore newDataStore = shareData ? getData() : getData().copy();
         // DataStore newDataStore = newDataStore(shareData, nodeClass);
 
         // Set id
