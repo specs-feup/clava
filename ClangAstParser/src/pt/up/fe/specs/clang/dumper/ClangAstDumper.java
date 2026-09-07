@@ -211,8 +211,9 @@ public class ClangAstDumper {
         // Set standard to CUDA
         else if (isCuda) {
             // The LLVM 18 driver bundled with clang-dumper rejects '-std=cuda'. The .cu extension already
-            // selects CUDA mode, so use a C++ standard for host-side parsing.
-            arguments.add(standard.isCxx() ? standard.getFlag() : Standard.CXX17.getFlag());
+            // selects CUDA mode, so use a C++ standard for host-side parsing. Standard.CUDA reports
+            // isCxx() == true, so exclude it explicitly, otherwise the flag would go back to '-std=cuda'.
+            arguments.add(standard.isCxx() && !standard.isCuda() ? standard.getFlag() : Standard.CXX17.getFlag());
         } else {
             arguments.add(standard.getFlag());
         }
@@ -243,10 +244,26 @@ public class ClangAstDumper {
         else if (isCuda) {
             if (!SpecsPlatforms.isLinux()) {
                 ClavaLog.info("We only officially support CUDA parsing in Linux, run at your own risk");
-                arguments.add("-fms-compatibility");
                 if (SpecsPlatforms.isWindows()) {
-                    arguments.add("-D_MSC_VER");
-                    arguments.add("-D_LIBCPP_MSVCRT");
+                    // The bundled clang-dumper ships MinGW/libc++ headers. CUDA's headers select their
+                    // implementations from _MSC_VER: without a version >= 1800 they use legacy paths
+                    // (int-returning isinf/isnan, glibc-style __signbitl) that conflict with clang's
+                    // own __DEVICE__ declarations. A real MSVC version selects the modern paths.
+                    arguments.add("-D_MSC_VER=1930");
+
+                    // _MSC_VER alone makes clang's builtin __stddef_wchar_t.h typedef wchar_t, which is
+                    // invalid in C++; this macro (predefined by real MSVC) keeps the header silent.
+                    arguments.add("-D_NATIVE_WCHAR_T_DEFINED");
+
+                    // Clang's CUDA host pass defines __ELF__ even on Windows targets, so libc++
+                    // misses _LIBCPP_OBJECT_FORMAT_COFF and emits an aligned_storage<..., 16384>
+                    // specialization that exceeds clang's 8192-byte alignment cap on Windows.
+                    arguments.add("-D_LIBCPP_OBJECT_FORMAT_COFF");
+
+                    // CUDA's crt/host_defines.h hard-errors on libc++ + x86-64 unless this is defined.
+                    arguments.add("-D_ALLOW_UNSUPPORTED_LIBCPP");
+                } else {
+                    arguments.add("-fms-compatibility");
                 }
             }
 

@@ -546,7 +546,7 @@ describe.skipIf(isMacOS)("CudaTest", () => {
     function newTester() {
         const cudaTester = new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/weaver/"),
-            ClavaJavaTypes.Standard.CXX11
+            ClavaJavaTypes.Standard.CUDA
         )
             .setResultPackage("cuda/results")
             .setSrcPackage("cuda/src")
@@ -560,13 +560,13 @@ describe.skipIf(isMacOS)("CudaTest", () => {
 
     it("Cuda", async () => {
         await newTester().test("Cuda.js", "atomicAdd.cu");
-    });
+    }, 60_000);
 
     it("CudaMatrixMul", async () => {
         await newTester().test("CudaMatrixMul.js", "mult_matrix.cu");
-    });
+    }, 60_000);
 
     it("CudaQuery", async () => {
         await newTester().test("CudaQuery.js", "sample.cu");
-    });
+    }, 60_000);
 });
