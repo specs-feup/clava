@@ -221,11 +221,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return "->";
     }
 
-    @Override
-    public ClavaNodeIterator getChildrenIterator() {
-        return new ClavaNodeIterator(this);
-    }
-
     public App getApp() {
         return getAppTry()
                 .orElseThrow(() -> new RuntimeException("App has not been set in ClavaContext: " + this));

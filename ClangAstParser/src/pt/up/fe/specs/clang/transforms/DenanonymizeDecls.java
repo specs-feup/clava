@@ -16,7 +16,7 @@ package pt.up.fe.specs.clang.transforms;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeIterator;
+import pt.up.fe.specs.util.treenode.ChildrenIterator;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
@@ -52,7 +52,7 @@ public class DenanonymizeDecls implements SimplePostClavaRule {
             return;
         }
 
-        ClavaNodeIterator iterator = node.getChildrenIterator();
+        ChildrenIterator<ClavaNode> iterator = node.getChildrenIterator();
 
         RecordDecl lastRecordDecl = null;
         while (iterator.hasNext()) {
