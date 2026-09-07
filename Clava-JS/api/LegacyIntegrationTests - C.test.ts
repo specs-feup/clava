@@ -104,7 +104,7 @@ describe("CTest", () => {
         await newTester().test("Detach.js", "detach.c");
     });
 
-    (isWindows ? it.skip : it)("InlineNasLu", async () => {
+    it.skipIf(isWindows)("InlineNasLu", async () => {
         await newTester()
             .checkExpectedOutput(false)
             .test("InlineNasLu.js", "inline_nas_lu.c");

@@ -136,7 +136,7 @@ describe("CxxTest", () => {
             .test("ParamType.js", "param_type.cpp");
     });
 
-    (isWindows ? it.skip : it)("Wrap", async () => {
+    it.skipIf(isWindows)("Wrap", async () => {
         const tester = newTester().set(
             ClavaJavaTypes.CxxWeaverOption.PARSE_INCLUDES
         );
@@ -216,6 +216,10 @@ describe("CxxTest", () => {
 
         if (isMacOS) {
             tester.setResultsFile("Setters.js.macos.txt");
+        }
+
+        if (isWindows) {
+            tester.setResultsFile("Setters.js.windows.txt");
         }
 
         await tester.test("Setters.js", "setters.cpp");
@@ -538,7 +542,7 @@ describe("CxxApiTest", () => {
     });
 });
 
-(isWindows ? describe.skip : describe)("CudaTest", () => {
+describe.skipIf(isMacOS)("CudaTest", () => {
     function newTester() {
         const cudaTester = new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/weaver/"),
