@@ -88,20 +88,7 @@ public class DeclDataParser {
         data.add(Decl.IS_MODULE_PRIVATE, LineStreamParsers.oneOrZero(lines));
 
         dataStore.getClavaNodes().queueSetNodeList(data, Decl.ATTRIBUTES, LineStreamParsers.stringList(lines));
-        // dataStore.getClavaNodes().queueSetOptionalNode(data, Decl.DECL_CONTEXT, lines.nextLine());
-        // dataStore.getClavaNodes().queueSetNodeList(data, Decl.DECL_CONTEXT, LineStreamParsers.stringList(lines));
-        // data.add(Decl.DECL_CONTEXT_IDS, LineStreamParsers.stringList(lines));
-        // if (!data.get(Decl.DECL_CONTEXT_IDS).isEmpty()) {
-        // System.out.println("DECL IDS: " + data.get(Decl.DECL_CONTEXT_IDS));
-        // }
 
-        /*
-        List<Attribute> attributes = LineStreamParsers.stringList(lines).stream()
-                .map(attrId -> dataStore.getClavaNodes().getAttr(attrId))
-                .collect(Collectors.toList());
-        
-        data.add(Decl.ATTRIBUTES, attributes);
-        */
         return data;
     }
 
@@ -110,7 +97,6 @@ public class DeclDataParser {
         // Parse Decl data
         DataStore data = parseDeclData(lines, dataStore);
 
-        // data.add(NamedDecl.QUALIFIED_NAME, lines.nextLine());
         data.add(NamedDecl.QUALIFIED_PREFIX, lines.nextLine());
         data.add(NamedDecl.DECL_NAME, lines.nextLine());
 
@@ -122,8 +108,6 @@ public class DeclDataParser {
         data.add(NamedDecl.LINKAGE, LineStreamParsers.enumFromName(Linkage.class, lines));
         data.add(NamedDecl.VISIBILITY, LineStreamParsers.enumFromName(Visibility.class, lines));
 
-        // data.add(NamedDecl.UNDERLYING_DECL, ClavaNodes.getDecl(dataStore, lines.nextLine()));
-
         return data;
     }
 
@@ -131,13 +115,8 @@ public class DeclDataParser {
         // Parse NamedDecl data
         DataStore data = parseNamedDeclData(lines, dataStore);
 
-        // data.add(TypeDecl.TYPE_FOR_DECL, dataStore.getClavaNodes().getType(lines.nextLine()));
         dataStore.getClavaNodes().queueSetOptionalNode(data, TypeDecl.TYPE_FOR_DECL, lines.nextLine());
 
-        // String typeId = lines.nextLine();
-        // System.out.println("TYPE_FOR_DECL ID:" + typeId);
-        // dataStore.getClavaNodes().queueSetNode(data, TypeDecl.TYPE_FOR_DECL, typeId);
-        // ClavaLog.debug("TYPE DECL ID");
         return data;
     }
 
@@ -154,12 +133,6 @@ public class DeclDataParser {
     public static DataStore parseTagDeclData(LineStream lines, ClangAstData dataStore) {
         // Parse TypeDecl data
         DataStore data = parseTypeDeclData(lines, dataStore);
-
-        // If TagDecl has no name, give it a name
-        // if (data.get(NamedDecl.DECL_NAME).isEmpty()) {
-        // String anonName = ClavaDataParsers.createAnonName(data.get(ClavaNode.LOCATION));
-        // data.set(NamedDecl.DECL_NAME, anonName);
-        // }
 
         data.add(TagDecl.TAG_KIND, LineStreamParsers.enumFromName(TagKind.getHelper(), lines));
         data.add(TagDecl.IS_COMPLETE_DEFINITION, LineStreamParsers.oneOrZero(lines));
@@ -184,26 +157,6 @@ public class DeclDataParser {
         // This does not catch all cases where RecordDecls might not have a name
         data.add(RecordDecl.IS_ANONYMOUS, LineStreamParsers.oneOrZero(lines));
 
-        /*
-        // If RecordDecl has no name, give it a name
-        if (data.get(NamedDecl.DECL_NAME).isEmpty()) {
-            String anonName = ClavaDataParsers.createAnonName(data.get(ClavaNode.LOCATION));
-            data.set(NamedDecl.DECL_NAME, anonName);
-            // data.set(NamedDecl.QUALIFIED_NAME, anonName);
-        
-            // After all nodes are parsed, also set the name of the corresponding decl type
-            // dataStore.getClavaNodes()
-            // .queueAction(
-            // () -> {
-            // data.get(RecordDecl.TYPE_FOR_DECL).setInPlace(Type.TYPE_AS_STRING, anonName);
-            // });
-        
-            // dataStore.getClavaNodes()
-            // .queueAction(() -> System.out.println("TYPE FOR DECL:" + data.get(RecordDecl.TYPE_FOR_DECL)));
-        
-        }
-        */
-
         return data;
     }
 
@@ -214,13 +167,6 @@ public class DeclDataParser {
         data.add(CXXRecordDecl.RECORD_BASES, ClavaDataParsers.list(lines, dataStore, ClavaDataParsers::baseSpecifier));
 
         dataStore.getClavaNodes().queueSetOptionalNode(data, CXXRecordDecl.RECORD_DEFINITION, lines.nextLine());
-        // SpecsLogs.debug("RECORD BASES:" + data.get(CXXRecordDecl.RECORD_BASES));
-        // data.add(CXXRecordDecl.RECORD_DEFINITION_ID, lines.nextLine());
-
-        // String definitionId = lines.nextLine();
-        // if (!data.get(ClavaNode.ID).equals(definitionId)) {
-        // dataStore.getClavaNodes().queueSetOptionalNode(data, CXXRecordDecl.RECORD_DEFINITION, definitionId);
-        // }
 
         return data;
     }
@@ -241,20 +187,17 @@ public class DeclDataParser {
         // /**
         // * The template that this specialization specializes.
         // */
-        // public static final DataKey<ClassTemplateDecl> SPECIALIZED_TEMPLATE =
         // KeyFactory.object("specializedTemplate",
         // ClassTemplateDecl.class);
         //
         // /**
         // * The kind of specialization that this declaration represents.
         // */
-        // public static final DataKey<TemplateSpecializationKind> SPECIALIZATION_KIND = KeyFactory.enumeration(
         // "specializationKind", TemplateSpecializationKind.class);
         //
         // /**
         // * The template arguments of the class template specialization.
         // */
-        // public static final DataKey<List<TemplateArgument>> TEMPLATE_ARGS = KeyFactory.list("templateArgs",
         // TemplateArgument.class);
 
         return data;
@@ -271,7 +214,6 @@ public class DeclDataParser {
         // Parse NamedDecl data
         DataStore data = parseNamedDeclData(lines, dataStore);
 
-        // data.add(ValueDecl.TYPE, dataStore.getClavaNodes().getType(lines.nextLine()));
         dataStore.getClavaNodes().queueSetNode(data, ValueDecl.TYPE, lines.nextLine());
         data.add(ValueDecl.IS_WEAK, LineStreamParsers.oneOrZero(lines));
 
@@ -306,12 +248,6 @@ public class DeclDataParser {
         dataStore.getClavaNodes().queueSetOptionalNode(data, FunctionDecl.PRIMARY_TEMPLATE_DECL, lines.nextLine());
 
         data.add(FunctionDecl.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, dataStore));
-
-        // data.add(FunctionDecl.STORAGE_CLASS, StorageClass.getHelper().fromValue(lines.nextLine()));
-
-        // if (data.get(FunctionDecl.STORAGE_CLASS) != StorageClass.NONE) {
-        // throw new RuntimeException("STOP:" + data.get(FunctionDecl.STORAGE_CLASS));
-        // }
 
         return data;
     }
@@ -367,11 +303,6 @@ public class DeclDataParser {
         data.add(CXXConstructorDecl.IS_EXPLICIT, LineStreamParsers.oneOrZero(lines));
         data.add(CXXConstructorDecl.EXPLICIT_SPECIFIER, ClavaDataParsers.explicitSpecifier(lines, dataStore));
 
-        // System.out.println("SPECIFIER: " + data.get(CXXConstructorDecl.EXPLICIT_SPECIFIER));
-        // List<CXXCtor>
-        // dataStore.getClavaNodes().queueSetNode(data, CXXConstructorDecl.INI, data.get(CXXMethodDecl.RECORD_ID));
-
-        // data.add(CXXMethodDecl.RECORD_ID, lines.nextLine());
         // dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.RECORD, data.get(CXXMethodDecl.RECORD_ID));
 
         return data;
@@ -393,19 +324,6 @@ public class DeclDataParser {
         return data;
     }
 
-    /*
-    void clava::ClavaDataDumper::DumpCXXConversionDeclData(const CXXConversionDecl *D) {
-    // Hierarchy
-    DumpCXXMethodDeclData(D);
-    
-    clava::dump(D->isExplicit());
-    clava::dump(D->isLambdaToBlockPointerConversion());
-    
-    clava::dump(D->getConversionType(), id);
-    clava::dump(clava::getId(D->getCanonicalDecl(), id));
-    }
-    */
-
     public static DataStore parseVarDeclData(LineStream lines, ClangAstData dataStore) {
 
         // Parse NamedDecl data
@@ -413,7 +331,6 @@ public class DeclDataParser {
 
         data.add(VarDecl.STORAGE_CLASS, LineStreamParsers.enumFromName(StorageClass.class, lines));
         data.add(VarDecl.TLS_KIND, LineStreamParsers.enumFromName(TLSKind.class, lines));
-        // data.add(VarDecl.IS_MODULE_PRIVATE, LineStreamParsers.oneOrZero(lines)); // Moved to Decl
         data.add(VarDecl.IS_NRVO_VARIABLE, LineStreamParsers.oneOrZero(lines));
         data.add(VarDecl.INIT_STYLE, LineStreamParsers.enumFromName(InitializationStyle.class, lines));
 
@@ -448,7 +365,6 @@ public class DeclDataParser {
     public static DataStore parseTypedefNameDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseTypeDeclData(lines, dataStore);
-        // ClavaLog.debug("TYPEDEF NAME DECL ID:" + data.get(ClavaNode.ID));
 
         dataStore.getClavaNodes().queueSetNode(data, TypedefNameDecl.UNDERLYING_TYPE, lines.nextLine());
 
@@ -477,7 +393,6 @@ public class DeclDataParser {
         // Hierarchy
         DataStore data = parseNamedDeclData(lines, dataStore);
 
-        // data.add(UsingDirectiveDecl.QUALIFIER, lines.nextLine());
         data.add(UsingDirectiveDecl.QUALIFIER, ClavaDataParsers.literalSource(lines));
         dataStore.getClavaNodes().queueSetNode(data, UsingDirectiveDecl.NAMESPACE, lines.nextLine());
         dataStore.getClavaNodes().queueSetNode(data, UsingDirectiveDecl.NAMESPACE_AS_WRITTEN, lines.nextLine());
@@ -525,7 +440,6 @@ public class DeclDataParser {
         DataStore data = parseDeclData(lines, dataStore);
 
         // dataStore.getClavaNodes().queueSetNode(data, StaticAssertDecl.ASSERT_EXPR, lines.nextLine());
-        // data.add(StaticAssertDecl.MESSAGE, lines.nextLine());
         data.add(StaticAssertDecl.IS_FAILED, LineStreamParsers.oneOrZero(lines));
 
         return data;
