@@ -546,7 +546,7 @@ describe.skipIf(isMacOS)("CudaTest", () => {
     function newTester() {
         const cudaTester = new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/weaver/"),
-            ClavaJavaTypes.Standard.CUDA
+            ClavaJavaTypes.Standard.CXX11
         )
             .setResultPackage("cuda/results")
             .setSrcPackage("cuda/src")
