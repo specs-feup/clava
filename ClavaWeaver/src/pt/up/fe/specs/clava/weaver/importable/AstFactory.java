@@ -106,12 +106,6 @@ public class AstFactory {
 
             String autoCode = "auto";
 
-            // Check if reference type
-            //
-            // if (returnType instanceof ReferenceType) {
-            // autoCode = autoCode + "&";
-            // }
-
             return weaver.getFactory().literalType(autoCode);
         }
 

@@ -44,25 +44,6 @@ public class CxxAttributes {
      */
     public static boolean isInsideLoopHeader(ClavaNode node) {
         return isInsideHeader(node, LOOP_HEADER);
-        /*
-        ClavaNode currentNode = node;
-        while (currentNode != null) {
-            // If we find a LoopStmt, is inside a loop
-            if (currentNode instanceof LoopStmt) {
-                return true;
-            }
-        
-            // If we find a CompoundStmt before the loop, is not in a loop header
-            if (currentNode instanceof CompoundStmt) {
-                return false;
-            }
-        
-            currentNode = currentNode.getParent();
-        }
-        
-        // Did not find a loop header
-        return false;
-        */
     }
 
     public static boolean isInsideCHeader(ClavaNode node) {
@@ -129,9 +110,6 @@ public class CxxAttributes {
                 currentNode = currentNode.getParent();
             }
 
-            // if (currentNode != null) {
-            // return Optional.of(currentNode);
-            // }
             return Optional.of(currentNode);
         }
 
@@ -172,18 +150,10 @@ public class CxxAttributes {
         // If already at top region, return empty
         if (TOP_REGION.isInstance(currentRegion)) {
             return Optional.empty();
-            // return Optional.of(currentRegion);
-            // return CxxJoinpoints.create(currentRegion, this);
         }
-        // System.out.println("CURRENT REGION:" + currentRegion.getNodeName() + ", " + currentRegion.getLocation());
-        // System.out.println(
-        // "PARENT:" + currentRegion.getParent().getNodeName() + ", " + currentRegion.getParent().getLocation());
-        // System.out.println("PARENT REGION" + getCurrentRegion(currentRegion.getParent()).getNodeName() + ", "
-        // + getCurrentRegion(currentRegion.getParent()).getLocation());
         // Go up one node, and return the current region
 
         return getCurrentRegion(currentRegion.getParent());
-        // return CxxJoinpoints.create(getCurrentRegion(currentRegion.getParent()), this);
     }
 
     public static ExpressionUse convertUse(ExprUse use) {

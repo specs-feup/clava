@@ -126,22 +126,12 @@ public class CxxActions {
 
             case "replace":
                 removeChildren(base, weaver);
-                // // Clear use fields
-                // for (ClavaNode child : base.getChildren()) {
-                // weaver.clearUserField(child);
-                // }
-                // // Remove all children
-                // base.removeChildren(0, base.getNumChildren());
                 base.addChild(node);
                 return new AJoinpoint[]{CxxJoinpoints.create(node, weaver)};
             default:
                 throw new RuntimeException("Case not defined:" + position);
         }
     }
-
-    // public static void replace(ClavaNode newNode, ClavaNode target, String position) {
-    //
-    // }
 
     public static ClavaNode replace(ClavaNode target, ClavaNode newNode, CxxWeaver weaver) {
         weaver.clearUserField(target);
@@ -159,30 +149,12 @@ public class CxxActions {
 
     public static AJoinpoint<?> insertBefore(AJoinpoint<?> baseJp, AJoinpoint<?> newJp, CxxWeaver weaver) {
         return insert(baseJp, newJp, Insert.BEFORE, (base, node) -> NodeInsertUtils.insertBefore(base, node), weaver);
-        // Stmt newStmt = ClavaNodes.toStmt(newJp.getNodeImpl());
-        // Stmt baseStmt = getValidStatement(baseJp.getNodeImpl(), Insert.BEFORE);
-        // if (baseStmt == null) {
-        // return null;
-        // }
-        // NodeInsertUtils.insertBefore(baseStmt, newStmt);
-        //
-        // return CxxJoinpoints.create(newStmt);
     }
 
     public static AJoinpoint<?> insertAfter(AJoinpoint<?> baseJp, AJoinpoint<?> newJp, CxxWeaver weaver) {
         checkInsertAfterReturn(baseJp.getNodeImpl(), newJp.getNodeImpl());
 
         return insert(baseJp, newJp, Insert.AFTER, (base, node) -> NodeInsertUtils.insertAfter(base, node), weaver);
-        // // If inside a scope, treat nodes at the statement level
-        // // if
-        // Stmt newStmt = ClavaNodes.toStmt(newJp.getNodeImpl());
-        // Stmt baseStmt = getValidStatement(baseJp.getNodeImpl(), Insert.AFTER);
-        // if (baseStmt == null) {
-        // return null;
-        // }
-        // NodeInsertUtils.insertAfter(baseStmt, newStmt);
-        //
-        // return CxxJoinpoints.create(newStmt);
     }
 
     public static AJoinpoint<?> insert(AJoinpoint<?> baseJp, 
@@ -193,7 +165,6 @@ public class CxxActions {
         var newNode = newJp.getNodeImpl();
         var target = baseJp.getNodeImpl();
         newNode.setOrigin(target);
-
 
         // Special case: if this node is a statement in a loop header, insert using a special function.
         if (baseJp.getIsInsideLoopHeaderImpl() && (position != Insert.REPLACE && position != Insert.AROUND)
@@ -206,7 +177,6 @@ public class CxxActions {
         // Check if base is inside a scope
         boolean isInsideScope = baseJp.getNodeImpl().getAncestorTry(CompoundStmt.class).isPresent();
 
-        // Optional<Stmt> targetStmt = ClavaNodes.getStatement(baseJp.getNodeImpl());
         ClavaNode adaptedBase = isInsideScope ? ClavaNodes.getValidStatement(baseJp.getNodeImpl(), position.toPosition())
                 : baseJp.getNodeImpl();
 
@@ -244,14 +214,11 @@ public class CxxActions {
             throw new RuntimeException("Insertion position not supported: " + position);
         }
 
-        // System.out.println("#ASDASDSAD");
         var baseNode = baseJp.getNodeImpl();
         var newNode = newJp.getNodeImpl();
-        // System.out.println("BASE NODE: " + baseNode.getClass());
         // If DeclStmt, insert as new initialization
         if (baseNode instanceof DeclStmt) {
             SpecsCheck.checkClass(newNode, VarDecl.class);
-            // System.out.println("INSERTING " + newNode.getCode());
 
             // Turn of semicolon
             baseNode.set(DeclStmt.FORCE_SINGLE_LINE, true);
@@ -292,29 +259,6 @@ public class CxxActions {
      * @param node
      * @return
      */
-    // public static Stmt getValidStatement(ClavaNode node, Insert position) {
-    // Stmt target = getValidStatement(node);
-    //
-    // // Check: if inserting before or after, check if target is valid
-    // if (!isTargetValid(target, position)) {
-    // ClavaLog.info("Could not insert code " + position.getString() + " location " + target.getLocation());
-    // return null;
-    // // return Optional.empty();
-    // }
-    //
-    // // return Optional.of(target);
-    // return target;
-    // }
-
-    // public static Stmt getValidStatement(ClavaNode node) {
-    // Optional<Stmt> stmt = ClavaNodes.getStatement(node);
-    //
-    // if (!stmt.isPresent()) {
-    // throw new RuntimeException("Node does not have a statement ancestor:\n" + node);
-    // }
-    //
-    // return stmt.get();
-    // }
 
     /**
      *

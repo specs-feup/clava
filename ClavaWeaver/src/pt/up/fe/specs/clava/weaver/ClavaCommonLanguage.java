@@ -60,9 +60,6 @@ public class ClavaCommonLanguage {
 		JOINPOINT_MAPPER.put(CXXThrowExpr.class, node -> "ThrowJp");
 		JOINPOINT_MAPPER.put(CXXCatchStmt.class, node -> "CatchJp");
 		JOINPOINT_MAPPER.put(CXXTryStmt.class, node -> "TryJp");
-		// JOINPOINT_MAPPER.put(ForStmt.class, node -> "ForJp");
-		// JOINPOINT_MAPPER.put(DoStmt.class, node -> "DoJp");
-		// JOINPOINT_MAPPER.put(WhileStmt.class, node -> "WhileJp");
 		JOINPOINT_MAPPER.put(BinaryOperator.class, node -> "BinaryJp");
 		JOINPOINT_MAPPER.put(ConditionalOperator.class, node -> "TernaryJp");
 		JOINPOINT_MAPPER.put(LoopStmt.class, node -> "LoopJp");
@@ -115,13 +112,6 @@ public class ClavaCommonLanguage {
 
 		if (node.getMemberDecl() instanceof FieldDecl)
 			return "FieldRefJp";
-		/*
-		 * if (node.getMemberDecl() instanceof VarDecl) return "JoinPoint";
-		 * 
-		 * if (node.getMemberDecl() instanceof CXXMethodDecl) return "JoinPoint";
-		 * 
-		 * if (node.getMemberDecl() instanceof EnumConstantDecl) return "JoinPoint";
-		 */
 
 		return "JoinPoint";
 

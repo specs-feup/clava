@@ -29,7 +29,6 @@ import java.util.Map.Entry;
 public class ClavaWeaverData {
 
     // Parsed program state
-    // private final Deque<App> apps;
     private final Deque<Map<ClavaNode, Map<String, Object>>> userValuesStack;
     private final Set<File> manuallyWrittenFiles;
     private Collection<File> generatedFiles;
@@ -39,9 +38,7 @@ public class ClavaWeaverData {
     public ClavaWeaverData(CxxWeaver weaver) {
         this.weaver = weaver;
 
-        // this.apps = new ArrayDeque<>();
         this.userValuesStack = new ArrayDeque<>();
-        // this.manuallyWrittenFiles = new LinkedHashSet<>();
         this.manuallyWrittenFiles = new HashSet<>();
         this.generatedFiles = Collections.emptySet();
         this.context = null;
@@ -57,9 +54,6 @@ public class ClavaWeaverData {
 
     public Optional<App> getAst() {
 
-        // App app = apps.peek();
-
-        // if (app == null) {
         if (context == null) {
             SpecsLogs.warn("No parsed tree available");
             return Optional.empty();
@@ -72,7 +66,6 @@ public class ClavaWeaverData {
 
         return Optional.of(context.getApp());
 
-        // return Optional.of(app);
     }
 
     public void pushAst(App app) {
@@ -89,16 +82,11 @@ public class ClavaWeaverData {
             previousApp = context.pushApp(app);
         }
 
-        // App previousApp = apps.peek();
-        // apps.push(app);
-
         // Preserve previous user values
         Map<ClavaNode, Map<String, Object>> userValuesCopy = getUserValuesCopy(app, previousApp.orElse(null),
                 userValuesStack.peek());
 
         userValuesStack.push(userValuesCopy);
-
-        // userValuesStack.push(new HashMap<>());
 
         // Apply AST processing
         // Executing here since execution might depend on code that consults the current App (e.g., for ClavaContext,
@@ -163,12 +151,6 @@ public class ClavaWeaverData {
         userValuesStack.pop();
 
         App topApp = context.popApp();
-        // App topApp = apps.pop();
-
-        // topApp.getContext().popApp();
-        // topApp.popAst();
-        // Pop top-most App in ClavaContext
-        // topApp.get(App.CONTEXT).popApp();
 
         return topApp;
     }
