@@ -328,12 +328,6 @@ public class DFGUtils {
         return nodes;
     }
 
-    @Deprecated
-    public static HashMap<String, ArrayList<DataFlowNode>> mergeSubgraphs(ArrayList<DataFlowNode> subs) {
-        HashMap<String, ArrayList<DataFlowNode>> toMerge = new HashMap<>();
-        return toMerge;
-    }
-
     /**
      * Finds all variables used in the function
      * 
@@ -351,16 +345,4 @@ public class DFGUtils {
         }
         return vars;
     }
-
-    /*
-    @Deprecated
-    public static ArrayList<DataFlowNode> getAllReferences(DataFlowGraph dfg, String label) {
-        ArrayList<DataFlowNode> refs = new ArrayList<>();
-        for (FlowNode n : dfg.getNodes()) {
-    //            DataFlowNode node = (DataFlowNode) n;
-            // if (node.)
-        }
-        return refs;
-    }
-    */
 }

@@ -54,16 +54,6 @@ public class PseudoObjectExpr extends Expr {
     @Override
     public String getCode() {
     	return getSyntaticForm().getCode();
-//    	System.out.println("Syntactic form: " + getSyntaticForm().getCode());
-//    	System.out.println("Result expr: " + getResultExpr().map(n -> n.getCode()).orElse("<nothing>"));    	
-//    	System.out.println("JAVA PSEUDO: " + getId());
-//    	for(int i=0; i<getNumChildren(); i++) {
-//        	System.out.println("CHILD "+i+": " + getChild(i).getCode());
-//    	}
-//    	
-//    	System.out.println("INDEX: " + get(RESULT_EXPR_INDEX));
-//
-//    	return super.getCode();
     }
 
 }

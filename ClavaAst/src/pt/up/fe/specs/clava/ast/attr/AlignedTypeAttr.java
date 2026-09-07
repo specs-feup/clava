@@ -32,15 +32,6 @@ public class AlignedTypeAttr extends AlignedAttr {
         super(data, children);
     }
 
-    // public AlignedTypeAttr(AlignedTypeAttrData data, Collection<? extends ClavaNode> children) {
-    // super(data, children);
-    // }
-    //
-    // @Override
-    // public AlignedTypeAttrData getData() {
-    // return (AlignedTypeAttrData) super.getData();
-    // }
-
     @Override
     protected Optional<String> getValueCode() {
         return Optional.of(getData().get(TYPE).getCode(this, null));

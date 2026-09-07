@@ -107,20 +107,6 @@ public abstract class Expr extends ClavaNode implements Typable {
     // return DataStoreToLegacy.getExpr(getData());
     // }
 
-    /*
-    @Override
-    public String toContentString() {
-        if (hasDataI()) {
-            return super.toContentString();
-        }
-    
-        return ClavaNode.toContentString(super.toContentString(), "exprData: [" + exprData + "]");
-        // return ClavaNode.toContentString(super.toContentString(), "types:" + getExprType().getCode() + ", valueKind:"
-        // + getValueKind() + ", exprData: [" + exprData + "]");
-        // return super.toContentString() + "types:" + getExprType().getCode() + ", valueKind:" + getValueKind();
-    }
-    */
-
     /**
      * 
      * @return 'read' if the value in the expression is read, 'write' if the value the expression represents is written,

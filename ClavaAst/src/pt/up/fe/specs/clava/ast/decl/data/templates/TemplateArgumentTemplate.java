@@ -31,20 +31,13 @@ public abstract class TemplateArgumentTemplate extends TemplateArgument {
     public final static DataKey<TemplateNameKind> TEMPLATE_NAME_KIND = KeyFactory.enumeration("templateNameKind",
             TemplateNameKind.class);
 
-    // public final static DataKey<Optional<TemplateDecl>> TEMPLATE_DECL = KeyFactory.optional("templateDecl");
-
     /// DATAKEYS END
 
     public TemplateArgumentTemplate(TemplateNameKind templateNameKind) {
-        // this();
         super(TemplateArgumentKind.Template);
 
         set(TEMPLATE_NAME_KIND, templateNameKind);
     }
-
-    // public TemplateArgumentTemplate() {
-    // super(TemplateArgumentKind.Template);
-    // }
 
     public static TemplateArgumentTemplate newInstance(TemplateNameKind nameKind) {
         switch (nameKind) {
@@ -62,23 +55,4 @@ public abstract class TemplateArgumentTemplate extends TemplateArgument {
             throw new NotImplementedException(nameKind);
         }
     }
-
-    // @Override
-    // public String getCode(ClavaNode node) {
-    // switch (get(TEMPLATE_NAME_KIND)) {
-    //
-    // case Template:
-    // TemplateDecl templateDecl = get(TEMPLATE_DECL).get();
-    // Decl decl = templateDecl.getTemplateDecl();
-    // Objects.requireNonNull(decl instanceof NamedDecl, () -> "Check if this should always be a NamedDecl");
-    // return ((NamedDecl) decl).getDeclName();
-    // default:
-    // throw new RuntimeException("Case not implemented: " + get(TEMPLATE_NAME_KIND));
-    // }
-    // // System.out.println("NAME KIND: " + get(TEMPLATE_NAME_KIND));
-    // // System.out.println("TEMPALTE DECL: " + get(TEMPLATE_DECL).get().getTemplateDecl());
-    // // System.out.println("TEMPALTE DECL CODE: " + get(TEMPLATE_DECL).get().getTemplateDecl().getCode());
-    // // throw new RuntimeException("STOP");
-    // // return get(INTEGRAL).toString();
-    // }
 }

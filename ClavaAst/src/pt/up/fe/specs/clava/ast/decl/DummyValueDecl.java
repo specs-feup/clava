@@ -47,16 +47,4 @@ public class DummyValueDecl extends ValueDecl implements DummyNode {
         return ClavaNodes.toCode(getNodeCode(), this);
     }
 
-    /*
-    @Override
-    public String toContentString() {
-        return "CONTENT STRING";
-        // return toStringHelper();
-    }
-    
-    @Override
-    public String toString() {
-        return "TO STRING";
-    }
-    */
 }

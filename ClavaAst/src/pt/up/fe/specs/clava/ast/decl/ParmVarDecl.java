@@ -55,11 +55,4 @@ public class ParmVarDecl extends VarDecl {
         return super.getCode();
     }
 
-    /*
-    @Override
-    public String getDeclName() {
-        // ParmVarDecl can have a null name
-        return getDeclNameInternal();
-    }
-    */
 }

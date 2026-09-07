@@ -58,15 +58,4 @@ public interface Typable {
     //
     // <VT> boolean hasValue(DataKey<VT> key);
 
-    // default Optional<AdjustedType> getAdjustedType() {
-    // if (!hasValue(ADJUSTED_TYPE)) {
-    // return Optional.empty();
-    // }
-    // return get(ADJUSTED_TYPE);
-    // }
-    //
-    // default void setAdjustedType(AdjustedType type) {
-    // set(ADJUSTED_TYPE, Optional.of(type));
-    // }
-
 }

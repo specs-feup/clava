@@ -232,12 +232,6 @@ public class CXXMethodDecl extends FunctionDecl {
         // namespace = namespace + getRecordDecl().getDeclName() + "::";
 
         String signature = namespace + baseSignature;
-        // System.out.println("CXX METHOD DECL:" + this);
-        // System.out.println("RECORD TYPE:" + getRecordDecl().getType());
-        // System.out.println("METHOD TYPE:" + getType().getId());
-        // System.out.println("FUNCTION TYPE:" + getFunctionType().getId());
-        // System.out.println("IS CONST:" + getFunctionType().isConst());
-        // Check qualifiers
         if (getFunctionType().isConst()) {
             signature = signature + " const";
         }
@@ -268,16 +262,6 @@ public class CXXMethodDecl extends FunctionDecl {
         if (currentRecordDecl instanceof NullDecl) {
             return;
         }
-
-        // var currentRecordName = ((NamedDecl) currentRecordDecl).getDeclName();
-        // var currentQualifiedPrefix = get(QUALIFIED_PREFIX);
-        //
-        // SpecsCheck.checkArgument(currentQualifiedPrefix.endsWith(currentRecordName),
-        // () -> "Expected current qualified prefix (" + currentQualifiedPrefix
-        // + ") to end with the name of the current record (" + currentRecordName + ")");
-        //
-        // var endIndex = currentQualifiedPrefix.length() - currentRecordName.length();
-        // var newQualifiedPrefix = currentQualifiedPrefix.substring(0, endIndex);
 
         var newQualifiedPrefix = getQualifiedPrefixWithoutRecord();
 

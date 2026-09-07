@@ -89,12 +89,6 @@ public class ClassesService {
         clavaNodeClass = discoverClass(classname);
         autoClassMap.put(classname, clavaNodeClass);
         return clavaNodeClass;
-        // if (clavaNodeClass != null) {
-        // autoClassMap.put(classname, clavaNodeClass);
-        // return clavaNodeClass;
-        // }
-        //
-        // throw new RuntimeException("Could not determine class for the name '" + classname + "'");
     }
 
     // private Optional<Class<? extends ClavaNode>> discoverClass(String clangClassname) {
@@ -117,15 +111,6 @@ public class ClassesService {
             return aClass.asSubclass(ClavaNode.class);
 
         } catch (ClassNotFoundException e) {
-            // Before throwing exception, try some cases
-            // if (clangClassname.endsWith("Attr") && !WARNED_CLASSES.contains(clangClassname)) {
-            // WARNED_CLASSES.add(clangClassname);
-            //
-            // ClavaLog.info("No parser defined for attribute '" + clangClassname
-            // + "', using generic attribute parser with no arguments");
-            //
-            // return Attribute.class;
-            // }
 
             if (clangClassname.endsWith("Attr")) {
                 if (!WARNED_CLASSES.contains(clangClassname)) {

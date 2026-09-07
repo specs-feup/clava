@@ -81,18 +81,6 @@ public class CallInliner {
                 .map(Stmt::copy)
                 .collect(Collectors.toList());
 
-        // String stmtsCode = functionStmts.stream().map(Stmt::getCode).collect(Collectors.joining("\n"));
-        // if (copiedStmts.size() == 1 && copiedStmts.get(0).getCode().contains("return a + a;")) {
-        // System.out.println("ORIGINAL STMT:" + functionStmts.get(0).getCode());
-        // System.out.println("COPY STMT:" + copiedStmts.get(0).getCode());
-        // System.out.println("TREE:" + copiedStmts.get(0).toTree());
-        //
-        // copiedStmts.get(0).getDescendants(DeclRefExpr.class).get(0).set(DeclRefExpr.DECL_NAME, "newName");
-        // System.out.println("ORIGINAL STMT AFTER:" + functionStmts.get(0).getCode());
-        // System.out.println("COPY STMT AFTER:" + copiedStmts.get(0).getCode());
-        //
-        // }
-
         // Inline calls inside the statements (function extractor guarantees that has no recursive calls)
         // TODO
 
@@ -144,25 +132,6 @@ public class CallInliner {
         // Replace call
         NodeInsertUtils.replace(call, callReplacement);
         return true;
-        /*        
-        System.out.println("CALL PARENT:" + call.getParent());
-        Expr callReplacement = inlineRenamer.getCallReplacement().orElse(null);
-        if (callReplacement != null) {
-        
-            return true;
-        }
-        
-        // If there is a replacement node, use it instead of call; otherwise, just remove it
-        
-        Stmt callParent = call.getAncestor(Stmt.class);
-        // If no replacement node, call must be inside a ExprStmt
-        Preconditions.checkArgument(callParent instanceof ExprStmt,
-                "Expected parent statement of call to be an ExprStmt, it is a " + callParent.getNodeName());
-        
-        // NodeInsertUtils.delete(callParent);
-        
-        return true;
-        */
     }
 
     private Set<String> getUsedNames(CallExpr call) {

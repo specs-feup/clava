@@ -127,14 +127,6 @@ public enum SourceType {
 
         return Optional.ofNullable(sourceType);
 
-        // if (IMPLEMENTATION.getExtensions().contains(extension)) {
-        // return Optional.of(IMPLEMENTATION);
-        // }
-        //
-        // if (HEADER.getExtensions().contains(extension)) {
-        // return Optional.of(HEADER);
-        // }
-
         // return Optional.empty();
     }
 

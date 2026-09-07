@@ -157,20 +157,7 @@ public class DataFlowGraph extends FlowGraph {
             });
         }
 
-        // TODO: This code segment was doing nothing, DFGUtils.mergeSubgraphs returned an empty map
         // Then merge between same-level subgraphs
-        /*
-        ArrayList<DataFlowNode> nodes = DFGUtils.getAllNodesOfType(this, DataFlowNodeType.LOOP);
-        for (DataFlowNode loop : nodes) {
-        
-            ArrayList<DataFlowNode> subs = DFGUtils.getSubgraphsOfLoop(loop);
-            HashMap<String, ArrayList<DataFlowNode>> map = DFGUtils.mergeSubgraphs(subs);
-            map.forEach((key, value) -> {
-                mergeNodes(value);
-            });
-            
-        }
-        */
     }
 
     /**

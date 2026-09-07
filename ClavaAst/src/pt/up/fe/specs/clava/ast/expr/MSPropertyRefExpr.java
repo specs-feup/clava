@@ -71,37 +71,6 @@ public class MSPropertyRefExpr extends Expr {
 
         // Found assignment, check on which side of the assignment is this node
         return ((BinaryOperator) parent).getLhs() == this;
-        /*
-        ClavaNode currentNode = this;
-        
-        // Go back until a statement is found, or there is no parent
-        while (!(currentNode instanceof Stmt)) {
-            var previousNode = currentNode;
-            currentNode = previousNode.getParent();
-        
-            // If current node is null, could not find assignment, assume false
-            if (currentNode == null) {
-                return false;
-            }
-        
-            // If not a BinaryOperator, ignore
-            if (!(currentNode instanceof BinaryOperator)) {
-                continue;
-            }
-        
-            var op = currentNode.get(BinaryOperator.OP);
-        
-            // Ignore ops that are not assignment
-            if (op != BinaryOperatorKind.Assign) {
-                continue;
-            }
-        
-            // Found assignment, check on which side of the assignment is the previous node
-            return ((BinaryOperator) currentNode).getLhs() == previousNode;
-        }
-        
-        return false;
-        */
     }
 
     public String getProperty() {
@@ -160,27 +129,6 @@ public class MSPropertyRefExpr extends Expr {
         var separator = get(IS_ARROW) ? "->" : ".";
 
         return getBase().getCode() + separator + processedProperty;
-        // System.out.println("JAVA MSPROP: " + getId());
-        // for(int i=0; i<getNumChildren(); i++) {
-        // System.out.println("CHILD "+i+": " + getChild(i).getId());
-        // System.out.println("Child class: " + getChild(i).getClass());
-        // System.out.println("Child code: " + getChild(i).getCode());
-        // }
-        //
-        // return super.getCode();
     }
-
-    // private String processProperty(String prop) {
-    // var isCudaFile = getAncestor(TranslationUnit.class).isCUDAFile();
-    //
-    // if (isCudaFile) {
-    // // Process built-ins
-    // if (prop.startsWith("__fetch_builtin_")) {
-    // prop = prop.substring("__fetch_builtin_".length());
-    // }
-    // }
-    //
-    // return prop;
-    // }
 
 }

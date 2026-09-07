@@ -43,13 +43,6 @@ public class UnevaluatedExceptionSpecification extends ExceptionSpecification {
     @Override
     public String getCode(FunctionProtoType type) {
 
-        // Decl sourceDecl = getSourceDecl(type);
-        // System.out.println("SOURCE DECL:" + sourceDecl);
-        // FunctionType sourceDeclType = sourceDecl.getFunctionType();
-        //
-        // System.out.println("EXCEPTION TYPE:" + type.getId());
-        // System.out.println("SOURCE DECL TYPE:" + sourceDeclType.getId());
-
         return "noexcept";
         // type.getApp().getNode(id)
         // System.out.println("UNEVAL SOURCE DECL:" + get(SOURCE_DECL_ID));
@@ -58,11 +51,5 @@ public class UnevaluatedExceptionSpecification extends ExceptionSpecification {
 
     public Decl getSourceDecl(FunctionProtoType type) {
         return get(SOURCE_DECL);
-        // ClavaNode clavaNode = type.getContext().get(ClavaContext.APP).getNode(get(SOURCE_DECL_ID));
-        //
-        // SpecsCheck.checkArgument(clavaNode instanceof FunctionDecl,
-        // () -> "Expected SourceDecl to be a FunctionDecl, is '" + clavaNode.getClass() + "'");
-        //
-        // return (FunctionDecl) clavaNode;
     }
 }

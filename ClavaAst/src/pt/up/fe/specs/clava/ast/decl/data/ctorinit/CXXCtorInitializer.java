@@ -71,25 +71,5 @@ public abstract class CXXCtorInitializer extends ADataClass<CXXCtorInitializer> 
     }
 
     public abstract String getCode(CXXConstructorDecl sourceNode);
-    /*
-    public String getCode(CXXConstructorDecl sourceNode) {
-    
-        Expr initExpr = getInitExpr();
-    
-        switch (kind) {
-        case DELEGATING_INITIALIZER:
-            // return initExpr.getCode();
-            return getConstructor().getDeclName() + "(" + initExpr.getCode() + ")";
-        case ANY_MEMBER_INITIALIZER:
-            return anyMemberData.getDeclName() + "(" + initExpr.getCode() + ")";
-        case BASE_INITIALIZER:
-            return initType.getCode(this) + "()";
-        default:
-            throw new RuntimeException("Case not implemented: " + kind + " (loc:" + getParent().getLocation() + ")");
-    
-        }
-    
-    }
-    */
 
 }

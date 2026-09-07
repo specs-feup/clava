@@ -222,32 +222,6 @@ public class OmpClauseParsers {
         return clause;
     }
 
-    /*
-    private static int findCloseParIndex(String string) {
-        int openParIndex = string.indexOf('(');
-    
-        int innerOpenPars = 0;
-        for (int i = openParIndex + 1; i < string.length(); i++) {
-            if (string.charAt(i) == ')') {
-                if (innerOpenPars == 0) {
-                    return i;
-                } else {
-                    innerOpenPars--;
-                }
-    
-                continue;
-            }
-    
-            if (string.charAt(i) == '(') {
-                innerOpenPars++;
-                continue;
-            }
-        }
-    
-        throw new RuntimeException("Could not find closing parenthesis for the OpenMP pragma portion '" + string + "'");
-    }
-    */
-
     private static boolean hasParameters(StringSlice currentString, String clauseKindName) {
         int openParIndex = currentString.indexOf('(');
 
@@ -267,16 +241,6 @@ public class OmpClauseParsers {
      * @return
      */
     public static OmpScheduleClause parseSchedule(StringParser clauses) {
-        /*
-        int closeParIndex = clauses.getCurrentString().indexOf(')');
-        Preconditions.checkArgument(closeParIndex != -1);
-        
-        String scheduleClauseString = clauses.substring(closeParIndex + 1);
-        StringParser clause = new StringParser(scheduleClauseString);
-        
-        clause.apply(ClangGenericParsers::checkStringStarts, "schedule(");
-        clause.apply(ClangGenericParsers::checkStringEnds, ")");
-        */
         StringParser clause = parseClauseName(OmpClauseKind.SCHEDULE, clauses);
 
         String args = clause.toString();
@@ -343,18 +307,6 @@ public class OmpClauseParsers {
 
         return new OmpReductionClause(reductionKind, variables);
     }
-
-    /*
-    private static OmpNumThreadsClause parseNumThreads(StringParser clauses) {
-    
-        StringParser clause = parseClauseName(NUM_THREADS, clauses);
-    
-        // String expression = clause.apply(StringParsers::parseWord);
-        String expression = clause.toString();
-    
-        return new OmpNumThreadsClause(expression);
-    }
-    */
 
     private static OmpIntegerExpressionClause parseInteger(StringParser clauses, OmpClauseKind kind,
             boolean isOptional, boolean isConstantPositive) {

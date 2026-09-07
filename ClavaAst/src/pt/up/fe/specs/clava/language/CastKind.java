@@ -92,16 +92,6 @@ public enum CastKind implements StringProvider {
         return ENUM_HELPER.get();
     }
 
-    // private final String string;
-    //
-    // private CastKind(String string) {
-    // this.string = string;
-    // }
-    //
-    // private CastKind() {
-    // this.string = SpecsStrings.toCamelCase(name(), "_", true);
-    // }
-
     @Override
     public String getString() {
         // return string;

@@ -40,11 +40,4 @@ public class FormatAttr extends InheritableAttr {
         return get(TYPE) + ", " + get(FORMAT_INDEX) + ", " + get(FIRST_ARG);
     }
 
-    // @Override
-    // public String getCode() {
-    // // System.out.println("TYPE:" + get(TYPE));
-    // // return getAttributeCode("__format__(__" + get(TYPE) + "__, " + get(FORMAT_INDEX) + ", " + get(FIRST_ARG) +
-    // // ")");
-    // return getAttributeCode("__format__(" + get(TYPE) + ", " + get(FORMAT_INDEX) + ", " + get(FIRST_ARG) + ")");
-    // }
 }

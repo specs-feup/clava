@@ -89,50 +89,7 @@ public class Types {
     public static FunctionType getFunctionType(Type type) {
         // System.out.println("TYPE:" + type);
         return TO_FUNCTION_TYPE.apply(type);
-        /*
-        if (type instanceof FunctionType) {
-        return (FunctionType) type;
-        }
-        
-        if (type instanceof AttributedType) {
-        return getFunctionType(((AttributedType) type).getModifiedType());
-        }
-        
-        if (type instanceof NullType) {
-        return null;
-        }
-        
-        throw new RuntimeException("Could not convert type to FunctionType:" + type.getClass().getSimpleName());
-        */
     }
-
-    // public static boolean isPointer(Type type) {
-    // if (type instanceof PointerType) {
-    // return true;
-    // }
-    //
-    // if (type instanceof QualType) {
-    // return isPointer(type.get(QualType.UNQUALIFIED_TYPE));
-    // }
-    //
-    // return false;
-    // }
-
-    // public static Type getPointeeType(Type type) {
-    // if (type instanceof PointerType) {
-    // return ((PointerType) type).getPointeeType();
-    // }
-    //
-    // throw new RuntimeException("Not implemented for type '" + type.getClass().getSimpleName() + "'");
-    // }
-
-    // public static Type normalize(Type type) {
-    // if (type instanceof AdjustedType) {
-    // return normalize(((AdjustedType) type).getAdjustedType());
-    // }
-    //
-    // return type;
-    // }
 
     /**
      * Number pointer levels of type (including array dimensions)
@@ -151,21 +108,6 @@ public class Types {
         return elementType == null ? typeArity : typeArity + getPointerArity(elementType);
 
         // return typeArity + getArity(getSingleElement(type));
-        /*        
-        if (type instanceof AdjustedType) {
-            return 0 + getArity(getSingleElement(type));
-        }
-        
-        if (type instanceof PointerType) {
-            return 1 + getArity(((PointerType) type).getPointeeType());
-        }
-        
-        if (type instanceof ArrayType) {
-            return 1 + getArity(((ArrayType) type).getElementType());
-        }
-        
-        return 0;
-        */
     }
 
     public static Type getElement(Type type) {

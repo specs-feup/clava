@@ -443,23 +443,6 @@ public class TranslationUnit extends ClavaNode {
 
         NodeInsertUtils.insertAfter(includes.get(includes.size() - 1), stmt);
 
-        /*
-        // Find insertion point. Insert before first function declaration
-        Optional<ClavaNode> firstFunction = getChildrenStream()
-                .filter(child -> child instanceof FunctionDecl)
-                .findFirst();
-        
-        DeclStmt stmt = getFactory().declStmt(namedDecl);
-        
-        if (firstFunction.isPresent()) {
-            NodeInsertUtils.insertBefore(firstFunction.get(), stmt);
-            return;
-        }
-        
-        
-        // Add at the end of the translation unit
-        addChild(getNumChildren(), stmt);
-        */
     }
 
     public File write(File destinationFolder) {
