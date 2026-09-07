@@ -32,6 +32,8 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.treenode.DataNode;
+import org.suikasoft.jOptions.treenode.PropertyWithNodeManager;
+import org.suikasoft.jOptions.treenode.PropertyWithNodeType;
 
 import com.google.common.base.Preconditions;
 
@@ -65,6 +67,11 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
      * instances.
      */
     private static final Map<Class<? extends ClavaNode>, List<DataKey<?>>> KEYS_WITH_NODES = new ConcurrentHashMap<>();
+
+    /**
+     * Generic manager for properties that can hold nodes.
+     */
+    private static final PropertyWithNodeManager NODE_FIELD_MANAGER = new PropertyWithNodeManager();
 
     /// DATAKEYS BEGIN
 
@@ -635,13 +642,21 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
 
     /**
      * All keys that can potentially have ClavaNodes.
-     * 
+     *
      * @return
      */
     public List<DataKey<?>> getAllKeysWithNodes() {
         List<DataKey<?>> keys = KEYS_WITH_NODES.get(getClass());
         if (keys == null) {
-            keys = addKeysWithNodes(this);
+            keys = new ArrayList<>();
+
+            for (DataKey<?> key : getStoreDefinition().getKeys()) {
+                if (PropertyWithNodeType.getKeyType(this, key) != PropertyWithNodeType.NOT_FOUND) {
+                    keys.add(key);
+                }
+            }
+
+            KEYS_WITH_NODES.put(getClass(), keys);
         }
 
         return keys;
@@ -720,38 +735,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
         }
 
         return Collections.emptyList();
-    }
-
-    private static List<DataKey<?>> addKeysWithNodes(ClavaNode node) {
-        List<DataKey<?>> keysWithNodes = new ArrayList<>();
-
-        // Get all the keys that map to a ClavaNode
-        for (DataKey<?> key : node.getStoreDefinition().getKeys()) {
-
-            // ClavaNode keys
-            if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
-                keysWithNodes.add(key);
-                continue;
-            }
-
-            // Optional nodes
-            if (Optional.class.isAssignableFrom(key.getValueClass())) {
-                keysWithNodes.add(key);
-                continue;
-            }
-
-            // List of nodes
-            if (List.class.isAssignableFrom(key.getValueClass())) {
-                keysWithNodes.add(key);
-                continue;
-            }
-
-        }
-
-        // Add to map
-        KEYS_WITH_NODES.put(node.getClass(), keysWithNodes);
-
-        return keysWithNodes;
     }
 
     public <T extends ClavaNode> List<T> getDescendantsAndFields(Class<T> aClass) {
@@ -975,68 +958,11 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
 
     /**
      * Keys that currently have nodes assigned.
-     * 
+     *
      * @return
      */
-    @SuppressWarnings("unchecked")
     public List<DataKey<?>> getKeysWithNodes() {
-
-        List<DataKey<?>> keys = new ArrayList<>();
-
-        for (DataKey<?> key : getAllKeysWithNodes()) {
-
-            if (!hasValue(key)) {
-                continue;
-            }
-
-            // ClavaNode keys
-            if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
-                keys.add(key);
-                continue;
-            }
-
-            // Optional nodes
-            if (Optional.class.isAssignableFrom(key.getValueClass())) {
-                DataKey<Optional<?>> optionalKey = (DataKey<Optional<?>>) key;
-                Optional<?> value = get(optionalKey);
-                if (!value.isPresent()) {
-                    continue;
-                }
-
-                Object possibleNode = value.get();
-
-                if (!(possibleNode instanceof ClavaNode)) {
-                    continue;
-                }
-
-                keys.add(key);
-                continue;
-            }
-
-            if (List.class.isAssignableFrom(key.getValueClass())) {
-                DataKey<List<?>> listKey = (DataKey<List<?>>) key;
-                List<?> list = get(listKey);
-                if (list.isEmpty()) {
-                    continue;
-                }
-
-                // Check if elements of the list are ClavaNodes
-                boolean clavaNodeList = list.stream()
-                        .filter(elem -> elem instanceof ClavaNode)
-                        .count() == list.size();
-
-                if (!clavaNodeList) {
-                    continue;
-                }
-
-                keys.add(key);
-                continue;
-            }
-        }
-
-        return keys;
-        // ClavaLog.info("Case not supported yet:" + keyWithNode);
-
+        return NODE_FIELD_MANAGER.getKeysWithNodes(this);
     }
 
     // @SuppressWarnings("unchecked")
