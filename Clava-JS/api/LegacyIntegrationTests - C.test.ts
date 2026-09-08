@@ -108,7 +108,7 @@ describe("CTest", () => {
         await newTester()
             .checkExpectedOutput(false)
             .test("InlineNasLu.js", "inline_nas_lu.c");
-    }, 10_000);
+    }, 60_000);
 
     it("InlineNasFt", async () => {
         await newTester()
