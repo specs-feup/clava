@@ -1,0 +1,8 @@
+nas consumer {'eager': 583.389, 'lazy': 591.606, 'text': 648.043}
+nas endtoend {'eager-cold': 700.416, 'eager-warm': 601.995, 'lazy-cold': 698.359, 'lazy-warm': 599.976, 'packed-cold': 722.816, 'packed-warm': 600.384, 'text-cold': 760.077, 'text-warm': 653.141}
+wrap consumer {'eager': 4.549, 'lazy': 4.301, 'text': 4.405}
+wrap endtoend {'eager-cold': 18.937, 'eager-warm': 6.999, 'lazy-cold': 18.98, 'lazy-warm': 6.999, 'packed-cold': 19.032, 'packed-warm': 7.093, 'text-cold': 18.619, 'text-warm': 6.972}
+templates consumer {'eager': 32.0, 'lazy': 30.876, 'text': 32.763}
+templates endtoend {'eager-cold': 340.902, 'eager-warm': 32.409, 'lazy-cold': 339.399, 'lazy-warm': 31.846, 'packed-cold': 342.111, 'packed-warm': 31.084, 'text-cold': 345.502, 'text-warm': 33.332}
+nas_lu consumer {'eager': 605.352, 'lazy': 592.274, 'text': 653.633}
+nas_lu endtoend {'eager-cold': 711.084, 'eager-warm': 612.15, 'lazy-cold': 708.003, 'lazy-warm': 608.472, 'packed-cold': 716.135, 'packed-warm': 612.08, 'text-cold': 751.195, 'text-warm': 649.862}

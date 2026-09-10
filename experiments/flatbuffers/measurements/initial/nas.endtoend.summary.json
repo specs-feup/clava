@@ -1,0 +1,466 @@
+{
+  "eager-cold": {
+    "n": 12,
+    "total_ms": {
+      "median": 700.4155000000001,
+      "min": 684.411,
+      "max": 748.297
+    },
+    "native_ms": {
+      "median": 121.59100000000001,
+      "min": 118.691,
+      "max": 132.562
+    },
+    "parse_ms": {
+      "median": 406.9715,
+      "min": 398.113,
+      "max": 426.027
+    },
+    "tu_ms": {
+      "median": 73.259,
+      "min": 60.28,
+      "max": 102.659
+    },
+    "query_ms": {
+      "median": 82.08500000000001,
+      "min": 71.466,
+      "max": 95.65
+    },
+    "codegen_ms": {
+      "median": 10.549,
+      "min": 9.809,
+      "max": 19.094
+    },
+    "bytes": {
+      "median": 13490616.0,
+      "min": 13490616.0,
+      "max": 13490616.0
+    },
+    "typed": {
+      "median": 35845.0,
+      "min": 35845.0,
+      "max": 35845.0
+    },
+    "materialized": {
+      "median": 233101.0,
+      "min": 233101.0,
+      "max": 233101.0
+    },
+    "deferred": {
+      "median": 233101.0,
+      "min": 233101.0,
+      "max": 233101.0
+    },
+    "native_rss_kib": {
+      "median": 44966.0,
+      "min": 44344.0,
+      "max": 45276.0
+    }
+  },
+  "eager-warm": {
+    "n": 12,
+    "total_ms": {
+      "median": 601.9945,
+      "min": 562.768,
+      "max": 637.425
+    },
+    "native_ms": {
+      "median": 17.198999999999998,
+      "min": 16.937,
+      "max": 42.921
+    },
+    "parse_ms": {
+      "median": 402.1685,
+      "min": 396.184,
+      "max": 412.938
+    },
+    "tu_ms": {
+      "median": 87.9995,
+      "min": 52.824,
+      "max": 107.435
+    },
+    "query_ms": {
+      "median": 79.486,
+      "min": 69.057,
+      "max": 87.873
+    },
+    "codegen_ms": {
+      "median": 10.088000000000001,
+      "min": 9.742,
+      "max": 19.355
+    },
+    "bytes": {
+      "median": 13490616.0,
+      "min": 13490616.0,
+      "max": 13490616.0
+    },
+    "typed": {
+      "median": 35845.0,
+      "min": 35845.0,
+      "max": 35845.0
+    },
+    "materialized": {
+      "median": 233101.0,
+      "min": 233101.0,
+      "max": 233101.0
+    },
+    "deferred": {
+      "median": 233101.0,
+      "min": 233101.0,
+      "max": 233101.0
+    },
+    "native_rss_kib": {
+      "median": 35066.0,
+      "min": 35024.0,
+      "max": 35188.0
+    }
+  },
+  "lazy-cold": {
+    "n": 12,
+    "total_ms": {
+      "median": 698.3585,
+      "min": 679.531,
+      "max": 724.026
+    },
+    "native_ms": {
+      "median": 120.9425,
+      "min": 118.413,
+      "max": 122.438
+    },
+    "parse_ms": {
+      "median": 203.864,
+      "min": 195.282,
+      "max": 213.559
+    },
+    "tu_ms": {
+      "median": 262.12,
+      "min": 250.162,
+      "max": 292.767
+    },
+    "query_ms": {
+      "median": 90.429,
+      "min": 82.239,
+      "max": 111.979
+    },
+    "codegen_ms": {
+      "median": 13.133,
+      "min": 12.049,
+      "max": 22.451
+    },
+    "bytes": {
+      "median": 13490616.0,
+      "min": 13490616.0,
+      "max": 13490616.0
+    },
+    "typed": {
+      "median": 35845.0,
+      "min": 35845.0,
+      "max": 35845.0
+    },
+    "materialized": {
+      "median": 47380.0,
+      "min": 47380.0,
+      "max": 47380.0
+    },
+    "deferred": {
+      "median": 233101.0,
+      "min": 233101.0,
+      "max": 233101.0
+    },
+    "native_rss_kib": {
+      "median": 44816.0,
+      "min": 44384.0,
+      "max": 45184.0
+    }
+  },
+  "lazy-warm": {
+    "n": 12,
+    "total_ms": {
+      "median": 599.976,
+      "min": 559.372,
+      "max": 613.924
+    },
+    "native_ms": {
+      "median": 17.1625,
+      "min": 16.672,
+      "max": 19.019
+    },
+    "parse_ms": {
+      "median": 203.7095,
+      "min": 197.033,
+      "max": 215.529
+    },
+    "tu_ms": {
+      "median": 261.879,
+      "min": 251.615,
+      "max": 290.758
+    },
+    "query_ms": {
+      "median": 90.5505,
+      "min": 79.115,
+      "max": 104.07
+    },
+    "codegen_ms": {
+      "median": 12.532,
+      "min": 11.677,
+      "max": 22.804
+    },
+    "bytes": {
+      "median": 13490616.0,
+      "min": 13490616.0,
+      "max": 13490616.0
+    },
+    "typed": {
+      "median": 35845.0,
+      "min": 35845.0,
+      "max": 35845.0
+    },
+    "materialized": {
+      "median": 47380.0,
+      "min": 47380.0,
+      "max": 47380.0
+    },
+    "deferred": {
+      "median": 233101.0,
+      "min": 233101.0,
+      "max": 233101.0
+    },
+    "native_rss_kib": {
+      "median": 35078.0,
+      "min": 34996.0,
+      "max": 35156.0
+    }
+  },
+  "packed-cold": {
+    "n": 12,
+    "total_ms": {
+      "median": 722.816,
+      "min": 701.964,
+      "max": 747.952
+    },
+    "native_ms": {
+      "median": 143.0205,
+      "min": 141.258,
+      "max": 149.178
+    },
+    "parse_ms": {
+      "median": 205.3165,
+      "min": 195.413,
+      "max": 219.221
+    },
+    "tu_ms": {
+      "median": 260.863,
+      "min": 243.781,
+      "max": 286.823
+    },
+    "query_ms": {
+      "median": 95.49549999999999,
+      "min": 79.883,
+      "max": 105.385
+    },
+    "codegen_ms": {
+      "median": 13.097999999999999,
+      "min": 11.917,
+      "max": 24.181
+    },
+    "bytes": {
+      "median": 13490616.0,
+      "min": 13490616.0,
+      "max": 13490616.0
+    },
+    "typed": {
+      "median": 35845.0,
+      "min": 35845.0,
+      "max": 35845.0
+    },
+    "materialized": {
+      "median": 47380.0,
+      "min": 47380.0,
+      "max": 47380.0
+    },
+    "deferred": {
+      "median": 233101.0,
+      "min": 233101.0,
+      "max": 233101.0
+    },
+    "native_rss_kib": {
+      "median": 61810.0,
+      "min": 61720.0,
+      "max": 61876.0
+    }
+  },
+  "packed-warm": {
+    "n": 12,
+    "total_ms": {
+      "median": 600.384,
+      "min": 579.734,
+      "max": 653.968
+    },
+    "native_ms": {
+      "median": 15.8035,
+      "min": 15.543,
+      "max": 24.528
+    },
+    "parse_ms": {
+      "median": 202.67399999999998,
+      "min": 196.377,
+      "max": 216.289
+    },
+    "tu_ms": {
+      "median": 271.8515,
+      "min": 250.705,
+      "max": 300.617
+    },
+    "query_ms": {
+      "median": 96.089,
+      "min": 84.287,
+      "max": 119.457
+    },
+    "codegen_ms": {
+      "median": 12.785,
+      "min": 12.35,
+      "max": 22.178
+    },
+    "bytes": {
+      "median": 13490616.0,
+      "min": 13490616.0,
+      "max": 13490616.0
+    },
+    "typed": {
+      "median": 35845.0,
+      "min": 35845.0,
+      "max": 35845.0
+    },
+    "materialized": {
+      "median": 47380.0,
+      "min": 47380.0,
+      "max": 47380.0
+    },
+    "deferred": {
+      "median": 233101.0,
+      "min": 233101.0,
+      "max": 233101.0
+    },
+    "native_rss_kib": {
+      "median": 23042.0,
+      "min": 22804.0,
+      "max": 23144.0
+    }
+  },
+  "text-cold": {
+    "n": 12,
+    "total_ms": {
+      "median": 760.0765,
+      "min": 751.268,
+      "max": 803.483
+    },
+    "native_ms": {
+      "median": 116.032,
+      "min": 112.795,
+      "max": 126.249
+    },
+    "parse_ms": {
+      "median": 452.25,
+      "min": 443.447,
+      "max": 479.804
+    },
+    "tu_ms": {
+      "median": 100.417,
+      "min": 79.703,
+      "max": 110.621
+    },
+    "query_ms": {
+      "median": 83.033,
+      "min": 74.716,
+      "max": 92.555
+    },
+    "codegen_ms": {
+      "median": 10.312000000000001,
+      "min": 9.891,
+      "max": 21.463
+    },
+    "bytes": {
+      "median": 1670809.0,
+      "min": 1665467.0,
+      "max": 1675335.0
+    },
+    "typed": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "materialized": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "deferred": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "native_rss_kib": {
+      "median": 43958.0,
+      "min": 43760.0,
+      "max": 44116.0
+    }
+  },
+  "text-warm": {
+    "n": 12,
+    "total_ms": {
+      "median": 653.141,
+      "min": 625.147,
+      "max": 682.791
+    },
+    "native_ms": {
+      "median": 5.2330000000000005,
+      "min": 5.072,
+      "max": 5.574
+    },
+    "parse_ms": {
+      "median": 455.12850000000003,
+      "min": 439.421,
+      "max": 467.6
+    },
+    "tu_ms": {
+      "median": 85.668,
+      "min": 79.169,
+      "max": 131.766
+    },
+    "query_ms": {
+      "median": 83.1845,
+      "min": 71.336,
+      "max": 93.845
+    },
+    "codegen_ms": {
+      "median": 11.317,
+      "min": 9.635,
+      "max": 22.455
+    },
+    "bytes": {
+      "median": 1673683.0,
+      "min": 1673683.0,
+      "max": 1673683.0
+    },
+    "typed": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "materialized": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "deferred": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "native_rss_kib": {
+      "median": 11900.0,
+      "min": 11824.0,
+      "max": 12016.0
+    }
+  }
+}

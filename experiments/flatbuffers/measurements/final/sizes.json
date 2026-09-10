@@ -1,0 +1,38 @@
+{
+  "nas": {
+    "text": 17289433,
+    "dense": 14108489,
+    "zstd": 1671868,
+    "flat": 13490616
+  },
+  "wrap": {
+    "text": 33608,
+    "dense": 27107,
+    "zstd": 5135,
+    "flat": 26276
+  },
+  "templates": {
+    "text": 992978,
+    "dense": 812947,
+    "zstd": 132698,
+    "flat": 807632
+  },
+  "fidelity_c": {
+    "text": 20468,
+    "dense": 16707,
+    "zstd": 3238,
+    "flat": 15772
+  },
+  "fidelity_cpp": {
+    "text": 41382,
+    "dense": 33756,
+    "zstd": 6257,
+    "flat": 31940
+  },
+  "nas_lu": {
+    "text": 15756788,
+    "dense": 13033325,
+    "zstd": 1471457,
+    "flat": 11765640
+  }
+}

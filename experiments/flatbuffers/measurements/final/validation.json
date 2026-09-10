@@ -1,0 +1,44 @@
+[
+  {
+    "fixture": "nas",
+    "wire_bytes": 15248703,
+    "wire_equal": true,
+    "graph_equal": true,
+    "code_equal": true
+  },
+  {
+    "fixture": "wrap",
+    "wire_bytes": 29056,
+    "wire_equal": true,
+    "graph_equal": true,
+    "code_equal": true
+  },
+  {
+    "fixture": "templates",
+    "wire_bytes": 875666,
+    "wire_equal": true,
+    "graph_equal": true,
+    "code_equal": true
+  },
+  {
+    "fixture": "fidelity_c",
+    "wire_bytes": 17846,
+    "wire_equal": true,
+    "graph_equal": true,
+    "code_equal": true
+  },
+  {
+    "fixture": "fidelity_cpp",
+    "wire_bytes": 36059,
+    "wire_equal": true,
+    "graph_equal": true,
+    "code_equal": true
+  },
+  {
+    "fixture": "nas_lu",
+    "wire_bytes": 14009802,
+    "wire_equal": true,
+    "graph_equal": true,
+    "code_equal": true
+  }
+]

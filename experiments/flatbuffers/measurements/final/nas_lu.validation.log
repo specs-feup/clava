@@ -1,0 +1,19 @@
+records=61238 nodes=30616 raw_bytes=6245508 files=3
+reconstructed_typed=30616
+normalized_wire_equal bytes=14009802
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::loadLibrary has been called by com.github.luben.zstd.util.Native$1 in an unnamed module (file:/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/Clava-JS/java-binaries/lib/zstd-jni-1.5.7-16.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+Sep 10, 2026 8:19:03 PM pt.up.fe.specs.util.logging.TagLogger log
+INFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments
+
+Sep 10, 2026 8:19:04 PM pt.up.fe.specs.util.logging.TagLogger log
+INFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments
+
+graph_equal=true,all_fields_equal=true,code_equal=true,mutation_before_read_copy=true
+mode,nodes,names,operators,types,payload_mutation,query_sha256,all_graph_sha256,code_sha256
+text,42281,551,5255,38337,true,54bd34235970226464922d8841628c0e011776d5af43f70fbd7ea8ff06065fa8,e6c2e836754cae5b4a333211c2398fe0a2dcffcf201cc80e7d2497f6cf4d8359,4d9611288d44888882c7397d54cab712556a8cad234b841683984082f586d6b5
+eager,42281,551,5255,38337,true,54bd34235970226464922d8841628c0e011776d5af43f70fbd7ea8ff06065fa8,e6c2e836754cae5b4a333211c2398fe0a2dcffcf201cc80e7d2497f6cf4d8359,4d9611288d44888882c7397d54cab712556a8cad234b841683984082f586d6b5
+lazy,42281,551,5255,38337,true,54bd34235970226464922d8841628c0e011776d5af43f70fbd7ea8ff06065fa8,e6c2e836754cae5b4a333211c2398fe0a2dcffcf201cc80e7d2497f6cf4d8359,4d9611288d44888882c7397d54cab712556a8cad234b841683984082f586d6b5

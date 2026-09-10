@@ -1,0 +1,1226 @@
+[
+  {
+    "fixture": "nas",
+    "mode": "lazy",
+    "trial": 0,
+    "rss_kib": 350616,
+    "phases": {
+      "graph": {
+        "heap": 37131952,
+        "decoded": 1817,
+        "deferred": 233101
+      },
+      "ready": {
+        "heap": 37900568,
+        "decoded": 35605,
+        "deferred": 233101
+      },
+      "query": {
+        "heap": 38139600,
+        "decoded": 41199,
+        "deferred": 233101
+      },
+      "codegen": {
+        "heap": 38566080,
+        "decoded": 47380,
+        "deferred": 233101
+      },
+      "detached": {
+        "heap": 8601536,
+        "decoded": 47380,
+        "deferred": 233101
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas",
+    "mode": "eager",
+    "trial": 0,
+    "rss_kib": 244012,
+    "phases": {
+      "graph": {
+        "heap": 42861184,
+        "decoded": 233101,
+        "deferred": 233101
+      },
+      "ready": {
+        "heap": 35662600,
+        "decoded": 233101,
+        "deferred": 233101
+      },
+      "query": {
+        "heap": 35898128,
+        "decoded": 233101,
+        "deferred": 233101
+      },
+      "codegen": {
+        "heap": 36043064,
+        "decoded": 233101,
+        "deferred": 233101
+      },
+      "detached": {
+        "heap": 8627960,
+        "decoded": 233101,
+        "deferred": 233101
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas",
+    "mode": "text",
+    "trial": 0,
+    "rss_kib": 318388,
+    "phases": {
+      "graph": {
+        "heap": 56280096,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "ready": {
+        "heap": 36335640,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "query": {
+        "heap": 36350776,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "codegen": {
+        "heap": 36503128,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "detached": {
+        "heap": 8521168,
+        "decoded": 0,
+        "deferred": 0
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas",
+    "mode": "lazy",
+    "trial": 1,
+    "rss_kib": 332000,
+    "phases": {
+      "graph": {
+        "heap": 37098040,
+        "decoded": 1817,
+        "deferred": 233101
+      },
+      "ready": {
+        "heap": 37938600,
+        "decoded": 35605,
+        "deferred": 233101
+      },
+      "query": {
+        "heap": 38177232,
+        "decoded": 41199,
+        "deferred": 233101
+      },
+      "codegen": {
+        "heap": 38604216,
+        "decoded": 47380,
+        "deferred": 233101
+      },
+      "detached": {
+        "heap": 8605352,
+        "decoded": 47380,
+        "deferred": 233101
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas",
+    "mode": "eager",
+    "trial": 1,
+    "rss_kib": 242448,
+    "phases": {
+      "graph": {
+        "heap": 42889176,
+        "decoded": 233101,
+        "deferred": 233101
+      },
+      "ready": {
+        "heap": 35781560,
+        "decoded": 233101,
+        "deferred": 233101
+      },
+      "query": {
+        "heap": 36020080,
+        "decoded": 233101,
+        "deferred": 233101
+      },
+      "codegen": {
+        "heap": 36164840,
+        "decoded": 233101,
+        "deferred": 233101
+      },
+      "detached": {
+        "heap": 8615000,
+        "decoded": 233101,
+        "deferred": 233101
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas",
+    "mode": "text",
+    "trial": 1,
+    "rss_kib": 319792,
+    "phases": {
+      "graph": {
+        "heap": 56285568,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "ready": {
+        "heap": 36392760,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "query": {
+        "heap": 36407704,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "codegen": {
+        "heap": 36559600,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "detached": {
+        "heap": 8542336,
+        "decoded": 0,
+        "deferred": 0
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas",
+    "mode": "eager",
+    "trial": 2,
+    "rss_kib": 316888,
+    "phases": {
+      "graph": {
+        "heap": 42903400,
+        "decoded": 233101,
+        "deferred": 233101
+      },
+      "ready": {
+        "heap": 35726488,
+        "decoded": 233101,
+        "deferred": 233101
+      },
+      "query": {
+        "heap": 35963984,
+        "decoded": 233101,
+        "deferred": 233101
+      },
+      "codegen": {
+        "heap": 36110128,
+        "decoded": 233101,
+        "deferred": 233101
+      },
+      "detached": {
+        "heap": 8651040,
+        "decoded": 233101,
+        "deferred": 233101
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas",
+    "mode": "lazy",
+    "trial": 2,
+    "rss_kib": 329468,
+    "phases": {
+      "graph": {
+        "heap": 37085744,
+        "decoded": 1817,
+        "deferred": 233101
+      },
+      "ready": {
+        "heap": 37890312,
+        "decoded": 35605,
+        "deferred": 233101
+      },
+      "query": {
+        "heap": 38130056,
+        "decoded": 41199,
+        "deferred": 233101
+      },
+      "codegen": {
+        "heap": 38555424,
+        "decoded": 47380,
+        "deferred": 233101
+      },
+      "detached": {
+        "heap": 8616392,
+        "decoded": 47380,
+        "deferred": 233101
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas",
+    "mode": "text",
+    "trial": 2,
+    "rss_kib": 316936,
+    "phases": {
+      "graph": {
+        "heap": 56265408,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "ready": {
+        "heap": 36346512,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "query": {
+        "heap": 36360224,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "codegen": {
+        "heap": 36513400,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "detached": {
+        "heap": 8544976,
+        "decoded": 0,
+        "deferred": 0
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "wrap",
+    "mode": "lazy",
+    "trial": 0,
+    "rss_kib": 95940,
+    "phases": {
+      "graph": {
+        "heap": 6705656,
+        "decoded": 2,
+        "deferred": 228
+      },
+      "ready": {
+        "heap": 6899752,
+        "decoded": 34,
+        "deferred": 228
+      },
+      "query": {
+        "heap": 7146136,
+        "decoded": 42,
+        "deferred": 228
+      },
+      "codegen": {
+        "heap": 7201568,
+        "decoded": 53,
+        "deferred": 228
+      },
+      "detached": {
+        "heap": 7147112,
+        "decoded": 53,
+        "deferred": 228
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "wrap",
+    "mode": "eager",
+    "trial": 0,
+    "rss_kib": 95964,
+    "phases": {
+      "graph": {
+        "heap": 6711336,
+        "decoded": 228,
+        "deferred": 228
+      },
+      "ready": {
+        "heap": 6897368,
+        "decoded": 228,
+        "deferred": 228
+      },
+      "query": {
+        "heap": 7141912,
+        "decoded": 228,
+        "deferred": 228
+      },
+      "codegen": {
+        "heap": 7197104,
+        "decoded": 228,
+        "deferred": 228
+      },
+      "detached": {
+        "heap": 7146600,
+        "decoded": 228,
+        "deferred": 228
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "wrap",
+    "mode": "text",
+    "trial": 0,
+    "rss_kib": 94708,
+    "phases": {
+      "graph": {
+        "heap": 7021584,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "ready": {
+        "heap": 7070992,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "query": {
+        "heap": 7076728,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "codegen": {
+        "heap": 7133624,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "detached": {
+        "heap": 7047480,
+        "decoded": 0,
+        "deferred": 0
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "wrap",
+    "mode": "lazy",
+    "trial": 1,
+    "rss_kib": 95684,
+    "phases": {
+      "graph": {
+        "heap": 6705656,
+        "decoded": 2,
+        "deferred": 228
+      },
+      "ready": {
+        "heap": 6899752,
+        "decoded": 34,
+        "deferred": 228
+      },
+      "query": {
+        "heap": 7146136,
+        "decoded": 42,
+        "deferred": 228
+      },
+      "codegen": {
+        "heap": 7201568,
+        "decoded": 53,
+        "deferred": 228
+      },
+      "detached": {
+        "heap": 7147112,
+        "decoded": 53,
+        "deferred": 228
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "wrap",
+    "mode": "eager",
+    "trial": 1,
+    "rss_kib": 96076,
+    "phases": {
+      "graph": {
+        "heap": 6711336,
+        "decoded": 228,
+        "deferred": 228
+      },
+      "ready": {
+        "heap": 6897120,
+        "decoded": 228,
+        "deferred": 228
+      },
+      "query": {
+        "heap": 7141664,
+        "decoded": 228,
+        "deferred": 228
+      },
+      "codegen": {
+        "heap": 7196856,
+        "decoded": 228,
+        "deferred": 228
+      },
+      "detached": {
+        "heap": 7146352,
+        "decoded": 228,
+        "deferred": 228
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "wrap",
+    "mode": "text",
+    "trial": 1,
+    "rss_kib": 95040,
+    "phases": {
+      "graph": {
+        "heap": 7021584,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "ready": {
+        "heap": 7070992,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "query": {
+        "heap": 7076728,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "codegen": {
+        "heap": 7133624,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "detached": {
+        "heap": 7047480,
+        "decoded": 0,
+        "deferred": 0
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "wrap",
+    "mode": "eager",
+    "trial": 2,
+    "rss_kib": 95428,
+    "phases": {
+      "graph": {
+        "heap": 6711336,
+        "decoded": 228,
+        "deferred": 228
+      },
+      "ready": {
+        "heap": 6897120,
+        "decoded": 228,
+        "deferred": 228
+      },
+      "query": {
+        "heap": 7141664,
+        "decoded": 228,
+        "deferred": 228
+      },
+      "codegen": {
+        "heap": 7196856,
+        "decoded": 228,
+        "deferred": 228
+      },
+      "detached": {
+        "heap": 7146352,
+        "decoded": 228,
+        "deferred": 228
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "wrap",
+    "mode": "lazy",
+    "trial": 2,
+    "rss_kib": 96680,
+    "phases": {
+      "graph": {
+        "heap": 6705656,
+        "decoded": 2,
+        "deferred": 228
+      },
+      "ready": {
+        "heap": 6899504,
+        "decoded": 34,
+        "deferred": 228
+      },
+      "query": {
+        "heap": 7145888,
+        "decoded": 42,
+        "deferred": 228
+      },
+      "codegen": {
+        "heap": 7201320,
+        "decoded": 53,
+        "deferred": 228
+      },
+      "detached": {
+        "heap": 7146864,
+        "decoded": 53,
+        "deferred": 228
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "wrap",
+    "mode": "text",
+    "trial": 2,
+    "rss_kib": 95176,
+    "phases": {
+      "graph": {
+        "heap": 7021584,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "ready": {
+        "heap": 7070992,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "query": {
+        "heap": 7076728,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "codegen": {
+        "heap": 7133624,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "detached": {
+        "heap": 7047480,
+        "decoded": 0,
+        "deferred": 0
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "templates",
+    "mode": "lazy",
+    "trial": 0,
+    "rss_kib": 126004,
+    "phases": {
+      "graph": {
+        "heap": 9611728,
+        "decoded": 28,
+        "deferred": 2125
+      },
+      "ready": {
+        "heap": 7969864,
+        "decoded": 179,
+        "deferred": 2125
+      },
+      "query": {
+        "heap": 8222536,
+        "decoded": 217,
+        "deferred": 2125
+      },
+      "codegen": {
+        "heap": 8289728,
+        "decoded": 246,
+        "deferred": 2125
+      },
+      "detached": {
+        "heap": 7562560,
+        "decoded": 246,
+        "deferred": 2125
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "templates",
+    "mode": "eager",
+    "trial": 0,
+    "rss_kib": 131864,
+    "phases": {
+      "graph": {
+        "heap": 9659256,
+        "decoded": 2125,
+        "deferred": 2125
+      },
+      "ready": {
+        "heap": 7959768,
+        "decoded": 2125,
+        "deferred": 2125
+      },
+      "query": {
+        "heap": 8210472,
+        "decoded": 2125,
+        "deferred": 2125
+      },
+      "codegen": {
+        "heap": 8276512,
+        "decoded": 2125,
+        "deferred": 2125
+      },
+      "detached": {
+        "heap": 7562992,
+        "decoded": 2125,
+        "deferred": 2125
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "templates",
+    "mode": "text",
+    "trial": 0,
+    "rss_kib": 129252,
+    "phases": {
+      "graph": {
+        "heap": 10610656,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "ready": {
+        "heap": 8130560,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "query": {
+        "heap": 8144792,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "codegen": {
+        "heap": 8212584,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "detached": {
+        "heap": 7484904,
+        "decoded": 0,
+        "deferred": 0
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "templates",
+    "mode": "lazy",
+    "trial": 1,
+    "rss_kib": 135972,
+    "phases": {
+      "graph": {
+        "heap": 9612152,
+        "decoded": 28,
+        "deferred": 2125
+      },
+      "ready": {
+        "heap": 7981632,
+        "decoded": 179,
+        "deferred": 2125
+      },
+      "query": {
+        "heap": 8235408,
+        "decoded": 217,
+        "deferred": 2125
+      },
+      "codegen": {
+        "heap": 8302792,
+        "decoded": 246,
+        "deferred": 2125
+      },
+      "detached": {
+        "heap": 7602480,
+        "decoded": 246,
+        "deferred": 2125
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "templates",
+    "mode": "eager",
+    "trial": 1,
+    "rss_kib": 131868,
+    "phases": {
+      "graph": {
+        "heap": 9659168,
+        "decoded": 2125,
+        "deferred": 2125
+      },
+      "ready": {
+        "heap": 7960400,
+        "decoded": 2125,
+        "deferred": 2125
+      },
+      "query": {
+        "heap": 8210384,
+        "decoded": 2125,
+        "deferred": 2125
+      },
+      "codegen": {
+        "heap": 8276632,
+        "decoded": 2125,
+        "deferred": 2125
+      },
+      "detached": {
+        "heap": 7565888,
+        "decoded": 2125,
+        "deferred": 2125
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "templates",
+    "mode": "text",
+    "trial": 1,
+    "rss_kib": 128972,
+    "phases": {
+      "graph": {
+        "heap": 10611664,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "ready": {
+        "heap": 8131568,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "query": {
+        "heap": 8147144,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "codegen": {
+        "heap": 8214936,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "detached": {
+        "heap": 7487968,
+        "decoded": 0,
+        "deferred": 0
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "templates",
+    "mode": "eager",
+    "trial": 2,
+    "rss_kib": 126196,
+    "phases": {
+      "graph": {
+        "heap": 9659184,
+        "decoded": 2125,
+        "deferred": 2125
+      },
+      "ready": {
+        "heap": 7960416,
+        "decoded": 2125,
+        "deferred": 2125
+      },
+      "query": {
+        "heap": 8210400,
+        "decoded": 2125,
+        "deferred": 2125
+      },
+      "codegen": {
+        "heap": 8276440,
+        "decoded": 2125,
+        "deferred": 2125
+      },
+      "detached": {
+        "heap": 7562752,
+        "decoded": 2125,
+        "deferred": 2125
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "templates",
+    "mode": "lazy",
+    "trial": 2,
+    "rss_kib": 134968,
+    "phases": {
+      "graph": {
+        "heap": 9611728,
+        "decoded": 28,
+        "deferred": 2125
+      },
+      "ready": {
+        "heap": 7969864,
+        "decoded": 179,
+        "deferred": 2125
+      },
+      "query": {
+        "heap": 8222536,
+        "decoded": 217,
+        "deferred": 2125
+      },
+      "codegen": {
+        "heap": 8289728,
+        "decoded": 246,
+        "deferred": 2125
+      },
+      "detached": {
+        "heap": 7562560,
+        "decoded": 246,
+        "deferred": 2125
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "templates",
+    "mode": "text",
+    "trial": 2,
+    "rss_kib": 129896,
+    "phases": {
+      "graph": {
+        "heap": 10611832,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "ready": {
+        "heap": 8131736,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "query": {
+        "heap": 8145968,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "codegen": {
+        "heap": 8213760,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "detached": {
+        "heap": 7486080,
+        "decoded": 0,
+        "deferred": 0
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "lazy",
+    "trial": 0,
+    "rss_kib": 245432,
+    "phases": {
+      "graph": {
+        "heap": 33336616,
+        "decoded": 1435,
+        "deferred": 195903
+      },
+      "ready": {
+        "heap": 34828008,
+        "decoded": 30104,
+        "deferred": 195903
+      },
+      "query": {
+        "heap": 35070040,
+        "decoded": 35359,
+        "deferred": 195903
+      },
+      "codegen": {
+        "heap": 35348280,
+        "decoded": 38820,
+        "deferred": 195903
+      },
+      "detached": {
+        "heap": 8580704,
+        "decoded": 38820,
+        "deferred": 195903
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "eager",
+    "trial": 0,
+    "rss_kib": 230704,
+    "phases": {
+      "graph": {
+        "heap": 38977048,
+        "decoded": 195903,
+        "deferred": 195903
+      },
+      "ready": {
+        "heap": 32853040,
+        "decoded": 195903,
+        "deferred": 195903
+      },
+      "query": {
+        "heap": 33091984,
+        "decoded": 195903,
+        "deferred": 195903
+      },
+      "codegen": {
+        "heap": 33222368,
+        "decoded": 195903,
+        "deferred": 195903
+      },
+      "detached": {
+        "heap": 8622608,
+        "decoded": 195903,
+        "deferred": 195903
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "text",
+    "trial": 0,
+    "rss_kib": 299448,
+    "phases": {
+      "graph": {
+        "heap": 50600904,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "ready": {
+        "heap": 33477928,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "query": {
+        "heap": 33493608,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "codegen": {
+        "heap": 33630352,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "detached": {
+        "heap": 8553232,
+        "decoded": 0,
+        "deferred": 0
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "lazy",
+    "trial": 1,
+    "rss_kib": 239636,
+    "phases": {
+      "graph": {
+        "heap": 33368040,
+        "decoded": 1435,
+        "deferred": 195903
+      },
+      "ready": {
+        "heap": 34869080,
+        "decoded": 30104,
+        "deferred": 195903
+      },
+      "query": {
+        "heap": 35110880,
+        "decoded": 35359,
+        "deferred": 195903
+      },
+      "codegen": {
+        "heap": 35389136,
+        "decoded": 38820,
+        "deferred": 195903
+      },
+      "detached": {
+        "heap": 8615424,
+        "decoded": 38820,
+        "deferred": 195903
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "eager",
+    "trial": 1,
+    "rss_kib": 234144,
+    "phases": {
+      "graph": {
+        "heap": 38978976,
+        "decoded": 195903,
+        "deferred": 195903
+      },
+      "ready": {
+        "heap": 32910808,
+        "decoded": 195903,
+        "deferred": 195903
+      },
+      "query": {
+        "heap": 33146824,
+        "decoded": 195903,
+        "deferred": 195903
+      },
+      "codegen": {
+        "heap": 33277192,
+        "decoded": 195903,
+        "deferred": 195903
+      },
+      "detached": {
+        "heap": 8628712,
+        "decoded": 195903,
+        "deferred": 195903
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "text",
+    "trial": 1,
+    "rss_kib": 298700,
+    "phases": {
+      "graph": {
+        "heap": 50614008,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "ready": {
+        "heap": 33512352,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "query": {
+        "heap": 33528240,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "codegen": {
+        "heap": 33665008,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "detached": {
+        "heap": 8587672,
+        "decoded": 0,
+        "deferred": 0
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "eager",
+    "trial": 2,
+    "rss_kib": 231712,
+    "phases": {
+      "graph": {
+        "heap": 38960488,
+        "decoded": 195903,
+        "deferred": 195903
+      },
+      "ready": {
+        "heap": 32822792,
+        "decoded": 195903,
+        "deferred": 195903
+      },
+      "query": {
+        "heap": 33057280,
+        "decoded": 195903,
+        "deferred": 195903
+      },
+      "codegen": {
+        "heap": 33187776,
+        "decoded": 195903,
+        "deferred": 195903
+      },
+      "detached": {
+        "heap": 8591232,
+        "decoded": 195903,
+        "deferred": 195903
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "lazy",
+    "trial": 2,
+    "rss_kib": 246588,
+    "phases": {
+      "graph": {
+        "heap": 33340808,
+        "decoded": 1435,
+        "deferred": 195903
+      },
+      "ready": {
+        "heap": 34839712,
+        "decoded": 30104,
+        "deferred": 195903
+      },
+      "query": {
+        "heap": 35081744,
+        "decoded": 35359,
+        "deferred": 195903
+      },
+      "codegen": {
+        "heap": 35359768,
+        "decoded": 38820,
+        "deferred": 195903
+      },
+      "detached": {
+        "heap": 8618640,
+        "decoded": 38820,
+        "deferred": 195903
+      }
+    },
+    "tu_collected": true
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "text",
+    "trial": 2,
+    "rss_kib": 297992,
+    "phases": {
+      "graph": {
+        "heap": 50625432,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "ready": {
+        "heap": 33444056,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "query": {
+        "heap": 33459864,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "codegen": {
+        "heap": 33596760,
+        "decoded": 0,
+        "deferred": 0
+      },
+      "detached": {
+        "heap": 8519376,
+        "decoded": 0,
+        "deferred": 0
+      }
+    },
+    "tu_collected": true
+  }
+]
