@@ -293,6 +293,7 @@ public class ClavaDataParsers {
                 packArgs.add(templateArgument(lines, parserData));
             }
 
+            pack.set(TemplateArgumentPack.PACK, packArgs);
             return pack;
         case Integral:
             TemplateArgumentIntegral integral = new TemplateArgumentIntegral();
