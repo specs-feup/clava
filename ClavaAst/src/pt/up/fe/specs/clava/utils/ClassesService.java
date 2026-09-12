@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava.utils;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +44,7 @@ public class ClassesService {
 
     public ClassesService(CustomClassnameMapper customClassMap) {
         this.customClassMap = customClassMap;
-        this.autoClassMap = new HashMap<>();
+        this.autoClassMap = new ConcurrentHashMap<>();
         // this.warnedClassnames = new HashSet<>();
         // this.warnedClassnames = new ConcurrentHashMap<>();
     }
