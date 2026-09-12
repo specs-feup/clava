@@ -1,0 +1,45 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.6.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :GuiHelper:processResources NO-SOURCE
+> Task :processResources NO-SOURCE
+> Task :XStreamPlus:processResources NO-SOURCE
+> Task :processTestResources NO-SOURCE
+> Task :SpecsUtils:compileJava UP-TO-DATE
+> Task :SpecsUtils:processResources UP-TO-DATE
+> Task :SpecsUtils:classes UP-TO-DATE
+> Task :SpecsUtils:jar UP-TO-DATE
+> Task :XStreamPlus:compileJava UP-TO-DATE
+> Task :XStreamPlus:classes UP-TO-DATE
+> Task :XStreamPlus:jar UP-TO-DATE
+> Task :GuiHelper:compileJava UP-TO-DATE
+> Task :GuiHelper:classes UP-TO-DATE
+> Task :GuiHelper:jar UP-TO-DATE
+
+> Task :compileJava
+Note: /home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/specs-java-libs/jOptions/src/org/suikasoft/jOptions/JOptionsUtils.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :classes
+> Task :compileTestJava UP-TO-DATE
+> Task :testClasses UP-TO-DATE
+
+> Task :test FAILED
+
+AStoreDefinitionConcurrencyTest > concurrentFirstReadersAndStoreCreationSeeCompleteDefinitions() FAILED
+    org.opentest4j.AssertionFailedError at AStoreDefinitionConcurrencyTest.java:64
+
+1 test completed, 1 failed
+
+[Incubating] Problems report is available at: file:///home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/specs-java-libs/jOptions/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':test'.
+> There were failing tests. See the report at: file:///home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/specs-java-libs/jOptions/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 6s
+10 actionable tasks: 2 executed, 8 up-to-date

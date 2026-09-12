@@ -1,0 +1,23 @@
+Sep 12, 2026 10:17:04 AM pt.up.fe.specs.util.logging.TagLogger log
+INFO: No parser defined for attribute 'DeprecatedAttr', using generic attribute parser with no arguments
+
+Sep 12, 2026 10:17:04 AM pt.up.fe.specs.util.logging.TagLogger log
+INFO: No parser defined for attribute 'OwnerAttr', using generic attribute parser with no arguments
+
+Sep 12, 2026 10:17:04 AM pt.up.fe.specs.util.logging.TagLogger log
+INFO: No parser defined for attribute 'PointerAttr', using generic attribute parser with no arguments
+
+Sep 12, 2026 10:17:04 AM pt.up.fe.specs.util.logging.TagLogger log
+INFO: No parser defined for attribute 'WarnUnusedResultAttr', using generic attribute parser with no arguments
+
+Sep 12, 2026 10:17:04 AM pt.up.fe.specs.util.logging.TagLogger log
+INFO: No parser defined for attribute 'NoInlineAttr', using generic attribute parser with no arguments
+
+Sep 12, 2026 10:17:04 AM pt.up.fe.specs.util.logging.TagLogger log
+INFO: No parser defined for attribute 'ColdAttr', using generic attribute parser with no arguments
+
+graph_equal=true,all_fields_equal=true,code_equal=true,mutation_before_read_copy=true
+mode,nodes,names,operators,types,payload_mutation,query_sha256,all_graph_sha256,code_sha256
+text,1065,332,38,483,true,6af9469397b5f88aa9c47e26267a21b95171b70643574df06814a1179acc30f4,7d12d07515b19359615b9095baa2da6b04d0e692dfb68bfa47efcac0b051b94b,8b72b4be8ec059f14e74b5cad6e3804b25be81fc59ccbee156b8b693092a2c6a
+eager,1065,332,38,483,true,6af9469397b5f88aa9c47e26267a21b95171b70643574df06814a1179acc30f4,7d12d07515b19359615b9095baa2da6b04d0e692dfb68bfa47efcac0b051b94b,8b72b4be8ec059f14e74b5cad6e3804b25be81fc59ccbee156b8b693092a2c6a
+lazy,1065,332,38,483,true,6af9469397b5f88aa9c47e26267a21b95171b70643574df06814a1179acc30f4,7d12d07515b19359615b9095baa2da6b04d0e692dfb68bfa47efcac0b051b94b,8b72b4be8ec059f14e74b5cad6e3804b25be81fc59ccbee156b8b693092a2c6a

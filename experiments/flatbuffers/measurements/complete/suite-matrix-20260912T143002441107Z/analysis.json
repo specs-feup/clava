@@ -1,0 +1,250 @@
+{
+  "matrix": "matrix-20260912T143002441107Z",
+  "cell_count": 27,
+  "groups": {
+    "flat-eager/bypass": {
+      "repeats": [
+        1,
+        2,
+        3
+      ],
+      "wall_s_median": 55.28467607218772,
+      "max_rss_mib_median": 1353.44140625,
+      "ccache_median": {
+        "cacheable_calls": 0.0,
+        "direct_hits": 0.0,
+        "misses": 0.0,
+        "uncacheable_calls": 0.0
+      },
+      "parse_count_median": 207.0,
+      "parse_aggregate_ms_median": {
+        "native": 7413.896152,
+        "import_read": 2030.983125,
+        "tu": 145.117612
+      },
+      "parse_tu_medians_ms_median": {
+        "native_ms": 12.802594,
+        "read_ms": 1.596255,
+        "tu_ms": 0.344838
+      }
+    },
+    "flat-eager/cold": {
+      "repeats": [
+        1,
+        2,
+        3
+      ],
+      "wall_s_median": 55.625298323109746,
+      "max_rss_mib_median": 1343.51953125,
+      "ccache_median": {
+        "cacheable_calls": 167.0,
+        "direct_hits": 16.0,
+        "misses": 151.0,
+        "uncacheable_calls": 3.0
+      },
+      "parse_count_median": 207.0,
+      "parse_aggregate_ms_median": {
+        "native": 7692.882955,
+        "import_read": 2016.85916,
+        "tu": 147.354682
+      },
+      "parse_tu_medians_ms_median": {
+        "native_ms": 14.178258,
+        "read_ms": 1.602657,
+        "tu_ms": 0.361481
+      }
+    },
+    "flat-eager/warm": {
+      "repeats": [
+        1,
+        2,
+        3
+      ],
+      "wall_s_median": 44.07377603184432,
+      "max_rss_mib_median": 1272.8671875,
+      "ccache_median": {
+        "cacheable_calls": 167.0,
+        "direct_hits": 162.0,
+        "misses": 5.0,
+        "uncacheable_calls": 3.0
+      },
+      "parse_count_median": 207.0,
+      "parse_aggregate_ms_median": {
+        "native": 3698.199367,
+        "import_read": 2017.791895,
+        "tu": 154.465269
+      },
+      "parse_tu_medians_ms_median": {
+        "native_ms": 7.917692,
+        "read_ms": 1.626326,
+        "tu_ms": 0.358735
+      }
+    },
+    "flat-lazy/bypass": {
+      "repeats": [
+        1,
+        2,
+        3
+      ],
+      "wall_s_median": 61.37174587789923,
+      "max_rss_mib_median": 1372.27734375,
+      "ccache_median": {
+        "cacheable_calls": 0.0,
+        "direct_hits": 0.0,
+        "misses": 0.0,
+        "uncacheable_calls": 0.0
+      },
+      "parse_count_median": 207.0,
+      "parse_aggregate_ms_median": {
+        "native": 7404.504517,
+        "import_read": 1007.160922,
+        "tu": 821.486908
+      },
+      "parse_tu_medians_ms_median": {
+        "native_ms": 12.84123,
+        "read_ms": 0.921035,
+        "tu_ms": 0.700239
+      }
+    },
+    "flat-lazy/cold": {
+      "repeats": [
+        1,
+        2,
+        3
+      ],
+      "wall_s_median": 54.920888249762356,
+      "max_rss_mib_median": 1359.30859375,
+      "ccache_median": {
+        "cacheable_calls": 167.0,
+        "direct_hits": 16.0,
+        "misses": 151.0,
+        "uncacheable_calls": 3.0
+      },
+      "parse_count_median": 207.0,
+      "parse_aggregate_ms_median": {
+        "native": 7709.7313779999995,
+        "import_read": 1002.48466,
+        "tu": 828.650122
+      },
+      "parse_tu_medians_ms_median": {
+        "native_ms": 14.136233,
+        "read_ms": 0.908219,
+        "tu_ms": 0.724732
+      }
+    },
+    "flat-lazy/warm": {
+      "repeats": [
+        1,
+        2,
+        3
+      ],
+      "wall_s_median": 44.23297404218465,
+      "max_rss_mib_median": 1325.46484375,
+      "ccache_median": {
+        "cacheable_calls": 167.0,
+        "direct_hits": 162.0,
+        "misses": 5.0,
+        "uncacheable_calls": 3.0
+      },
+      "parse_count_median": 207.0,
+      "parse_aggregate_ms_median": {
+        "native": 3691.100692,
+        "import_read": 1014.924376,
+        "tu": 825.197166
+      },
+      "parse_tu_medians_ms_median": {
+        "native_ms": 7.9939,
+        "read_ms": 0.908849,
+        "tu_ms": 0.709245
+      }
+    },
+    "text/bypass": {
+      "repeats": [
+        1,
+        2,
+        3
+      ],
+      "wall_s_median": 54.81130351126194,
+      "max_rss_mib_median": 1469.87109375,
+      "ccache_median": {
+        "cacheable_calls": 0.0,
+        "direct_hits": 0.0,
+        "misses": 0.0,
+        "uncacheable_calls": 0.0
+      },
+      "parse_count_median": 207.0,
+      "parse_aggregate_ms_median": {
+        "native": 7351.615914,
+        "import_read": 1561.2756689999999,
+        "tu": 139.53725
+      },
+      "parse_tu_medians_ms_median": {
+        "native_ms": 12.752201,
+        "read_ms": 1.153267,
+        "tu_ms": 0.340849
+      }
+    },
+    "text/cold": {
+      "repeats": [
+        1,
+        2,
+        3
+      ],
+      "wall_s_median": 54.6936998674646,
+      "max_rss_mib_median": 1470.45703125,
+      "ccache_median": {
+        "cacheable_calls": 167.0,
+        "direct_hits": 16.0,
+        "misses": 151.0,
+        "uncacheable_calls": 3.0
+      },
+      "parse_count_median": 207.0,
+      "parse_aggregate_ms_median": {
+        "native": 7645.681683,
+        "import_read": 1523.0704090000002,
+        "tu": 137.111446
+      },
+      "parse_tu_medians_ms_median": {
+        "native_ms": 13.923013,
+        "read_ms": 1.173907,
+        "tu_ms": 0.350513
+      }
+    },
+    "text/warm": {
+      "repeats": [
+        1,
+        2,
+        3
+      ],
+      "wall_s_median": 43.7041529212147,
+      "max_rss_mib_median": 1366.12890625,
+      "ccache_median": {
+        "cacheable_calls": 167.0,
+        "direct_hits": 162.0,
+        "misses": 5.0,
+        "uncacheable_calls": 3.0
+      },
+      "parse_count_median": 207.0,
+      "parse_aggregate_ms_median": {
+        "native": 3631.503005,
+        "import_read": 1559.24889,
+        "tu": 143.812787
+      },
+      "parse_tu_medians_ms_median": {
+        "native_ms": 7.848102,
+        "read_ms": 1.179292,
+        "tu_ms": 0.348827
+      }
+    }
+  },
+  "cache_comparability": {
+    "historical_warm_direct_hits": 167,
+    "current_warm_direct_hits": [
+      162
+    ],
+    "current_warm_misses": [
+      5
+    ],
+    "interpretation": "Unique run_dir/tmp paths appear in generated temporary compiler inputs and produce five warm ccache misses per cell; the test counts and parse metrics remain valid."
+  }
+}

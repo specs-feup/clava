@@ -8,11 +8,11 @@ Do not mix its timings with the complete-schema measurements.
 
 ## Architecture
 
-The native schema covers all 112 current dumper payload handlers, including generic
-family handlers. This describes current dumper support, not every Clang AST class. Its 173 tables describe both node fields and compound values. Both
+The native schema declares 112 node payload alternatives. Dispatch also includes aliases
+and generic binary family defaults. This describes current dumper support, not every Clang AST class. Its 173 tables describe both node fields and compound values. Both
 sides use generated FlatBuffers accessors; official schema reflection also generates
 Clava DataKey bindings and presence checks. Native Clang getters and compound-value
-adapters remain handwritten. There is no raw-text fallback.
+adapters remain handwritten. Complete mode has no raw-text serialization fallback.
 
 The native writer emits size-prefixed blocks at a 64 KiB target. Java maps windows,
 builds the graph and resolves every node reference eagerly. This includes references
@@ -27,7 +27,8 @@ replaces it. Copies preserve Clava's normal copy policies. This avoids a Lazy ob
 supplier per field. New nodes use ordinary in-memory storage. Detached nodes can be
 collected if no other AST or context references retain them.
 
-Immutable mapped files remain until JVM exit. Binary files are uncompressed locally;
+Immutable mapped files remain available through execution. Normal cleanup schedules
+their deletion at JVM exit. Binary files are uncompressed locally;
 ccache compresses their persistent entries. Text keeps its native zstd compression.
 The file/cache path waits for the native process before import, so incremental mapping
 does not restore native/Java overlap.
@@ -56,8 +57,10 @@ Normal Clava defaults to text. Select the integrated experiment with a JVM prope
 
 `-Dclava.astWireMetrics=true` emits per-TU native/read/construction timings and sizes.
 The dumper format argument is part of ccache invocation identity. The native executable
-must be the matching experimental build; the suite runner stages it into an isolated
-release cache. Schema hash mismatch fails explicitly. Downloading the schema through a
+must be the matching experimental build; the suite runner patches its isolated Java distribution to select that local build. For normal Clava runs outside that runner, the existing local-build
+override is an absolute directory path in `ClangAstParser/clang-dumper-release.tag`.
+Point it at the native `build` directory containing `tool`, then run `installDist`
+again. That local override uses system C/C++ headers rather than release-bundled ones. Schema hash mismatch fails explicitly. Downloading the schema through a
 release manifest remains release engineering work, not part of this prototype.
 
 ## Validate and measure
@@ -74,14 +77,14 @@ python3 experiments/flatbuffers/suite/run_matrix.py \
 The eleven fixtures compare normalized graph references, all reachable field values,
 generated code and mutation/copy behavior across text, eager and lazy readers. Mapping
 checks include a sparse file above 2 GiB, a record above 64 MiB, malformed framing and
-required scalar/table/union presence. Memory probes run in separate JVMs with explicit
+required scalar/reference presence and optional scalar absence. Memory probes run in separate JVMs with explicit
 GC, outside timing trials. These probes are single-TU tests and are not a GCC-scale
 memory guarantee or an original/weave/reparse dump-identity proof.
 
 The matrix runs all Clava-JS tests, with three repeats of each format and cache state.
 Cold/warm pairs share a fresh isolated ccache. Cold means an empty AST cache, not dropped
 OS pages; repeated inputs within that cold suite can already hit. Bypass disables ccache
-but still uses the file path. Runtime resources are prepared before timing. Do not run
+but still uses the file path. The Java distribution is staged before timing; the local native build uses system headers. Do not run
 builds or other experiments concurrently with the matrix.
 
 Per-TU timers sum to aggregate occupancy across potentially parallel work. They cannot

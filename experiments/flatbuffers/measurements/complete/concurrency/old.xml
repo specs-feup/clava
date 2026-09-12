@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.suikasoft.jOptions.storedefinition.AStoreDefinitionConcurrencyTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2026-09-12T09:13:18.410Z" hostname="specs-A3" time="0.155">
+  <properties/>
+  <testcase name="concurrentFirstReadersAndStoreCreationSeeCompleteDefinitions()" classname="org.suikasoft.jOptions.storedefinition.AStoreDefinitionConcurrencyTest" time="0.139">
+    <failure message="org.opentest4j.AssertionFailedError: &#10;expected: 2048&#10; but was: 1344" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: 
+expected: 2048
+ but was: 1344
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at org.suikasoft.jOptions.storedefinition.AStoreDefinitionConcurrencyTest.concurrentFirstReadersAndStoreCreationSeeCompleteDefinitions(AStoreDefinitionConcurrencyTest.java:64)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

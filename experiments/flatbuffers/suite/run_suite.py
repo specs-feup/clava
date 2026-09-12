@@ -239,6 +239,37 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def filesystem_metadata(path: Path) -> dict[str, Any]:
+    """Record the mounted filesystem containing a run-owned temporary path."""
+
+    completed = subprocess.run(
+        ["df", "-P", str(path)], text=True, capture_output=True, check=False
+    )
+    lines = completed.stdout.splitlines()
+    if completed.returncode != 0 or len(lines) < 2:
+        return {"path": str(path), "df_return_code": completed.returncode, "df_output": lines}
+    fields = lines[-1].split()
+    if len(fields) < 6:
+        return {"path": str(path), "df_return_code": completed.returncode, "df_output": lines}
+    return {
+        "device": fields[0],
+        "blocks_kb": int(fields[1]),
+        "used_kb": int(fields[2]),
+        "available_kb": int(fields[3]),
+        "use_percent": fields[4],
+        "mount": " ".join(fields[5:]),
+    }
+
+
+def prepare_temp_environment(path: Path) -> None:
+    """Make Python staging and all descendants use the run-owned temp path."""
+
+    path.mkdir(parents=True, exist_ok=True)
+    value = str(path.resolve())
+    os.environ.update({"TMPDIR": value, "TMP": value, "TEMP": value})
+    tempfile.tempdir = value
+
+
 def runtime_jar_manifest(root: Path) -> dict[str, Any]:
     """Hash packaged runtime jars using a canonical, order-independent manifest."""
 
@@ -304,6 +335,9 @@ def main() -> int:
     run_name = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%S%fZ") + f"-{args.mode}"
     run_dir = output_root / run_name
     run_dir.mkdir()
+    temp_root = run_dir / "tmp"
+    prepare_temp_environment(temp_root)
+    temp_metadata = filesystem_metadata(temp_root)
 
     if args.cache_root is None:
         xdg_root = Path(tempfile.mkdtemp(prefix="xdg-", dir=output_root))
@@ -342,7 +376,7 @@ def main() -> int:
         "--reporter=json", "--outputFile", str(report_path), *args.vitest_arg,
     ]
     environment = os.environ.copy()
-    environment["JAVA_TOOL_OPTIONS"] = environment.get("JAVA_TOOL_OPTIONS", "") + " -Dclava.astWire=" + args.format + " -Dclava.astWireMetrics=true"
+    environment["JAVA_TOOL_OPTIONS"] = environment.get("JAVA_TOOL_OPTIONS", "") + " -Djava.io.tmpdir=" + str(temp_root) + " -Dclava.astWire=" + args.format + " -Dclava.astWireMetrics=true"
     environment["XDG_CACHE_HOME"] = str(xdg_root)
     environment["CLAVA_SUITE_JAR_PATH"] = str(runtime_root)
     environment.pop("AST_WIRE_FLAT", None)
@@ -388,6 +422,8 @@ def main() -> int:
         "clang_dumper_revision": git_revision(args.dumper_repo),
         "dumper_repo": str(args.dumper_repo.resolve()),
         "runtime_jar_manifest": runtime_manifest,
+        "temp_root": str(temp_root),
+        "temp_filesystem": temp_metadata,
         "git": {"clava": clava_git, "clang_dumper": dumper_git},
         "vitest_success": report.get("success"),
         "vitest_total_test_suites": report.get("numTotalTestSuites"),
@@ -400,7 +436,7 @@ def main() -> int:
         "command": command,
         "environment": {
             key: environment[key]
-            for key in ("XDG_CACHE_HOME", "CLAVA_SUITE_JAR_PATH", "CCACHE_DISABLE", "JAVA_TOOL_OPTIONS")
+            for key in ("TMPDIR", "TMP", "TEMP", "XDG_CACHE_HOME", "CLAVA_SUITE_JAR_PATH", "CCACHE_DISABLE", "JAVA_TOOL_OPTIONS")
             if key in environment
         },
     }

@@ -1,0 +1,12 @@
+{
+  "old_test_failure": "expected 2048 keys, observed 1344",
+  "focused_test_passed": true,
+  "full_suite": {
+    "tests": 1745,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "source": "Luna run result; full XML replaced by subsequent focused test"
+  },
+  "specs_commit": "26022a8f"
+}

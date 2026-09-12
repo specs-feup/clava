@@ -1,0 +1,744 @@
+Picked up JAVA_TOOL_OPTIONS:  -Dclava.astWire=flat-eager -Dclava.astWireMetrics=true
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.thoughtworks.xstream.converters.reflection.SunUnsafeReflectionProvider (file:/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/20260912T092443383932Z-warm/java-binaries/lib/xstream-1.4.21.jar)
+WARNING: Please consider reporting this to the maintainers of class com.thoughtworks.xstream.converters.reflection.SunUnsafeReflectionProvider
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/statement.cpp","native_ms":13.564523,"read_ms":244.918558,"tu_ms":7.953672,"dump_bytes":8680,"nodes":26,"deferred":220,"materialized_at_tu":220}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/loop.cpp","native_ms":7.973098,"read_ms":30.8271,"tu_ms":3.104456,"dump_bytes":101448,"nodes":346,"deferred":2643,"materialized_at_tu":2643}
+Code: int newVar1 = 10
+Equal index: 12
+Decl end index: 12
+Decl: int newVar1
+TYPE: int
+DECLNAME: newVar1
+Code: int newVar2 = 20
+Equal index: 12
+Decl end index: 12
+Decl: int newVar2
+TYPE: int
+DECLNAME: newVar2
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/ReplaceCallWithStmt.cpp","native_ms":9.822793,"read_ms":70.313022,"tu_ms":1.920253,"dump_bytes":299376,"nodes":894,"deferred":11910,"materialized_at_tu":11910}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/inserts.cpp","native_ms":8.2582,"read_ms":6.389539,"tu_ms":0.854329,"dump_bytes":36696,"nodes":113,"deferred":1202,"materialized_at_tu":1202}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/inserts.cpp","native_ms":9.099127,"read_ms":5.494646,"tu_ms":0.872772,"dump_bytes":36696,"nodes":113,"deferred":1202,"materialized_at_tu":1202}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/pragma.cpp","native_ms":7.447414,"read_ms":1.431989,"tu_ms":5.816837,"dump_bytes":8280,"nodes":22,"deferred":191,"materialized_at_tu":191}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/pragma2.cpp","native_ms":7.568727,"read_ms":1.457904,"tu_ms":0.696446,"dump_bytes":9256,"nodes":25,"deferred":306,"materialized_at_tu":306}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/actions.cpp","native_ms":7.432366,"read_ms":1.065044,"tu_ms":0.33659,"dump_bytes":4864,"nodes":13,"deferred":139,"materialized_at_tu":139}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/array_access.h","native_ms":11.137333,"read_ms":1.155414,"tu_ms":0.328606,"dump_bytes":5464,"nodes":15,"deferred":161,"materialized_at_tu":161}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/array_access.cpp","native_ms":18.708344,"read_ms":10.84559,"tu_ms":0.623882,"dump_bytes":75288,"nodes":247,"deferred":2059,"materialized_at_tu":2059}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/attribute_use.cpp","native_ms":7.658476,"read_ms":3.45795,"tu_ms":0.414778,"dump_bytes":26208,"nodes":84,"deferred":644,"materialized_at_tu":644}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/hdf5types.cpp","native_ms":7.723252,"read_ms":3.816122,"tu_ms":0.47494,"dump_bytes":28224,"nodes":90,"deferred":1031,"materialized_at_tu":1031}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/omp_threads_explore.cpp","native_ms":7.54193,"read_ms":3.627082,"tu_ms":4.736808,"dump_bytes":13952,"nodes":42,"deferred":373,"materialized_at_tu":373}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/clone_on_file.h","native_ms":13.967619,"read_ms":0.620246,"tu_ms":0.315101,"dump_bytes":2016,"nodes":3,"deferred":48,"materialized_at_tu":48}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/file_rebuild.h","native_ms":13.725714,"read_ms":0.668317,"tu_ms":0.287136,"dump_bytes":2800,"nodes":4,"deferred":72,"materialized_at_tu":72}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/clone.h","native_ms":13.979741,"read_ms":0.852863,"tu_ms":0.230729,"dump_bytes":3784,"nodes":8,"deferred":125,"materialized_at_tu":125}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/field.hpp","native_ms":14.141968,"read_ms":0.91322,"tu_ms":0.229906,"dump_bytes":4192,"nodes":10,"deferred":128,"materialized_at_tu":128}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/array_access.h","native_ms":16.51146,"read_ms":0.846635,"tu_ms":0.33908,"dump_bytes":5464,"nodes":15,"deferred":161,"materialized_at_tu":161}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/class_manipulation.h","native_ms":17.171801,"read_ms":1.696429,"tu_ms":0.417688,"dump_bytes":11864,"nodes":35,"deferred":479,"materialized_at_tu":479}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/classA.h","native_ms":18.407317,"read_ms":1.173337,"tu_ms":0.288628,"dump_bytes":5336,"nodes":13,"deferred":206,"materialized_at_tu":206}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/skip_parsing_headers.h","native_ms":15.77866,"read_ms":0.437197,"tu_ms":0.366539,"dump_bytes":2016,"nodes":3,"deferred":39,"materialized_at_tu":39}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/file_rebuild_2.h","native_ms":15.751043,"read_ms":0.436876,"tu_ms":0.414192,"dump_bytes":2000,"nodes":3,"deferred":48,"materialized_at_tu":48}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/function.h","native_ms":19.587936,"read_ms":0.645464,"tu_ms":0.328009,"dump_bytes":3144,"nodes":7,"deferred":94,"materialized_at_tu":94}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/wrap.h","native_ms":18.822176,"read_ms":0.57387,"tu_ms":0.370372,"dump_bytes":4048,"nodes":9,"deferred":151,"materialized_at_tu":151}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/dijkstra.cpp","native_ms":18.099929,"read_ms":31.695797,"tu_ms":1.552878,"dump_bytes":225728,"nodes":725,"deferred":6476,"materialized_at_tu":6476}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/multiFile.h","native_ms":91.628418,"read_ms":3.617202,"tu_ms":0.465109,"dump_bytes":36304,"nodes":116,"deferred":1373,"materialized_at_tu":1373}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/clone.h","native_ms":11.59056,"read_ms":0.62571,"tu_ms":0.393799,"dump_bytes":3784,"nodes":8,"deferred":125,"materialized_at_tu":125}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/clone.cpp","native_ms":9.619794,"read_ms":20.056234,"tu_ms":0.583335,"dump_bytes":182848,"nodes":568,"deferred":7079,"materialized_at_tu":7079}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/add_global_2.cpp","native_ms":8.042806,"read_ms":0.675655,"tu_ms":0.300046,"dump_bytes":2336,"nodes":4,"deferred":63,"materialized_at_tu":63}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/add_global_1.cpp","native_ms":8.866819,"read_ms":11.560891,"tu_ms":0.425394,"dump_bytes":149456,"nodes":464,"deferred":5826,"materialized_at_tu":5826}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/omp.cpp","native_ms":7.990973,"read_ms":2.202295,"tu_ms":1.88369,"dump_bytes":18264,"nodes":57,"deferred":465,"materialized_at_tu":465}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/omp_attributes.cpp","native_ms":7.680119,"read_ms":1.801079,"tu_ms":1.752818,"dump_bytes":11312,"nodes":34,"deferred":294,"materialized_at_tu":294}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/omp_set_attributes.cpp","native_ms":7.533758,"read_ms":2.004131,"tu_ms":0.93997,"dump_bytes":18008,"nodes":56,"deferred":447,"materialized_at_tu":447}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/classA.h","native_ms":10.759532,"read_ms":0.661826,"tu_ms":0.378023,"dump_bytes":5336,"nodes":13,"deferred":206,"materialized_at_tu":206}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/expressions.cpp","native_ms":8.001074,"read_ms":7.999835,"tu_ms":0.539581,"dump_bytes":54672,"nodes":176,"deferred":1764,"materialized_at_tu":1764}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/parent_region.cpp","native_ms":7.494474,"read_ms":2.143644,"tu_ms":0.373232,"dump_bytes":19312,"nodes":62,"deferred":538,"materialized_at_tu":538}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/vardecl.cpp","native_ms":7.741422,"read_ms":1.829749,"tu_ms":0.43348,"dump_bytes":16648,"nodes":49,"deferred":503,"materialized_at_tu":503}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/param_type.cpp","native_ms":7.476407,"read_ms":1.92999,"tu_ms":0.343786,"dump_bytes":13376,"nodes":42,"deferred":350,"materialized_at_tu":350}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/wrap.h","native_ms":10.637498,"read_ms":0.464753,"tu_ms":0.339742,"dump_bytes":4048,"nodes":9,"deferred":151,"materialized_at_tu":151}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/wrap.cpp","native_ms":8.254593,"read_ms":3.490744,"tu_ms":0.466056,"dump_bytes":28040,"nodes":85,"deferred":912,"materialized_at_tu":912}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/select_vardecl.cpp","native_ms":7.926924,"read_ms":1.095172,"tu_ms":0.361246,"dump_bytes":6344,"nodes":17,"deferred":184,"materialized_at_tu":184}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/macros.cpp","native_ms":7.497848,"read_ms":1.306045,"tu_ms":0.335508,"dump_bytes":10416,"nodes":28,"deferred":271,"materialized_at_tu":271}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/call.cpp","native_ms":7.740667,"read_ms":4.475975,"tu_ms":0.498627,"dump_bytes":36696,"nodes":114,"deferred":1189,"materialized_at_tu":1189}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/type_template.cpp","native_ms":9.476543,"read_ms":47.068809,"tu_ms":0.694854,"dump_bytes":667056,"nodes":2036,"deferred":26287,"materialized_at_tu":26287}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/function.h","native_ms":11.259627,"read_ms":0.449194,"tu_ms":0.316164,"dump_bytes":3144,"nodes":7,"deferred":94,"materialized_at_tu":94}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/function.cpp","native_ms":8.428403,"read_ms":3.240211,"tu_ms":0.448559,"dump_bytes":24856,"nodes":75,"deferred":799,"materialized_at_tu":799}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/ast_attributes.cpp","native_ms":8.475117,"read_ms":19.000775,"tu_ms":0.470814,"dump_bytes":261672,"nodes":797,"deferred":10923,"materialized_at_tu":10923}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/pragma_data_2.cpp","native_ms":8.031531,"read_ms":1.340896,"tu_ms":0.345802,"dump_bytes":9088,"nodes":27,"deferred":245,"materialized_at_tu":245}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/pragma_data.cpp","native_ms":8.030996,"read_ms":3.792267,"tu_ms":1.001612,"dump_bytes":39520,"nodes":125,"deferred":1115,"materialized_at_tu":1115}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/global_attributes.cpp","native_ms":8.190621,"read_ms":2.059674,"tu_ms":0.349005,"dump_bytes":15216,"nodes":49,"deferred":415,"materialized_at_tu":415}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/set_type.cpp","native_ms":8.010007,"read_ms":2.332081,"tu_ms":0.372221,"dump_bytes":10416,"nodes":31,"deferred":332,"materialized_at_tu":332}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/multiFile.cpp","native_ms":11.877951,"read_ms":35.51451,"tu_ms":0.725956,"dump_bytes":499520,"nodes":1517,"deferred":20971,"materialized_at_tu":20971}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/multiFile.h","native_ms":91.856809,"read_ms":2.690617,"tu_ms":0.380776,"dump_bytes":36304,"nodes":116,"deferred":1373,"materialized_at_tu":1373}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/field.hpp","native_ms":11.103639,"read_ms":0.720079,"tu_ms":0.284355,"dump_bytes":4192,"nodes":10,"deferred":128,"materialized_at_tu":128}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/file_rebuild.cpp","native_ms":8.827172,"read_ms":1.554938,"tu_ms":0.403439,"dump_bytes":11128,"nodes":30,"deferred":335,"materialized_at_tu":335}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/file_rebuild_2.h","native_ms":12.445021,"read_ms":0.288486,"tu_ms":0.193362,"dump_bytes":2000,"nodes":3,"deferred":48,"materialized_at_tu":48}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/file_rebuild.h","native_ms":12.347129,"read_ms":0.332164,"tu_ms":0.219249,"dump_bytes":2800,"nodes":4,"deferred":72,"materialized_at_tu":72}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_e138474c-4da8-4b8a-a12c-30996297b22b_lmsousa/file_rebuild.h","native_ms":10.64961,"read_ms":0.676261,"tu_ms":0.249168,"dump_bytes":2760,"nodes":5,"deferred":96,"materialized_at_tu":96}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/setters.cpp","native_ms":8.326775,"read_ms":6.89298,"tu_ms":0.39404,"dump_bytes":79536,"nodes":250,"deferred":2711,"materialized_at_tu":2711}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/skip_parsing_headers.cpp","native_ms":7.659034,"read_ms":0.821698,"tu_ms":0.326417,"dump_bytes":4464,"nodes":9,"deferred":118,"materialized_at_tu":118}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_6c411e62-7ced-4df9-8e1a-ccb5cf064ce8_lmsousa/skip_parsing_headers.cpp","native_ms":7.549707,"read_ms":0.821046,"tu_ms":0.270061,"dump_bytes":3984,"nodes":9,"deferred":118,"materialized_at_tu":118}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_0a1cb1b7-e6fd-4f6d-8c46-dcb6f81b8618_lmsousa/skip_parsing_headers.cpp","native_ms":7.497565,"read_ms":0.775314,"tu_ms":0.270573,"dump_bytes":3984,"nodes":9,"deferred":118,"materialized_at_tu":118}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_6c411e62-7ced-4df9-8e1a-ccb5cf064ce8_lmsousa/skip_parsing_headers.cpp","native_ms":7.519901,"read_ms":0.780656,"tu_ms":0.278584,"dump_bytes":3984,"nodes":9,"deferred":118,"materialized_at_tu":118}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/vardeclv2_2.cpp","native_ms":8.514237,"read_ms":1.038038,"tu_ms":0.292673,"dump_bytes":5120,"nodes":13,"deferred":119,"materialized_at_tu":119}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/vardeclv2.cpp","native_ms":8.514087,"read_ms":1.869844,"tu_ms":0.279989,"dump_bytes":14160,"nodes":43,"deferred":422,"materialized_at_tu":422}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/file.cpp","native_ms":8.070533,"read_ms":0.702856,"tu_ms":0.344663,"dump_bytes":2792,"nodes":6,"deferred":62,"materialized_at_tu":62}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/dataclass.cpp","native_ms":7.86576,"read_ms":1.499643,"tu_ms":0.324944,"dump_bytes":9240,"nodes":27,"deferred":311,"materialized_at_tu":311}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/class_manipulation.cpp","native_ms":8.003263,"read_ms":1.822496,"tu_ms":0.415824,"dump_bytes":14840,"nodes":43,"deferred":571,"materialized_at_tu":571}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/class_manipulation.h","native_ms":10.694121,"read_ms":0.967494,"tu_ms":0.231066,"dump_bytes":11864,"nodes":35,"deferred":479,"materialized_at_tu":479}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/this.cpp","native_ms":8.751868,"read_ms":12.985023,"tu_ms":0.510333,"dump_bytes":203848,"nodes":635,"deferred":7717,"materialized_at_tu":7717}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/member.cpp","native_ms":7.776911,"read_ms":2.288395,"tu_ms":0.36218,"dump_bytes":12608,"nodes":37,"deferred":388,"materialized_at_tu":388}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/fieldRef.cpp","native_ms":7.542385,"read_ms":1.50947,"tu_ms":0.305903,"dump_bytes":11808,"nodes":35,"deferred":348,"materialized_at_tu":348}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/expressionDecls.cpp","native_ms":8.728909,"read_ms":9.386462,"tu_ms":0.413858,"dump_bytes":157088,"nodes":488,"deferred":6215,"materialized_at_tu":6215}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/template_specialization_type.cpp","native_ms":7.785407,"read_ms":1.15566,"tu_ms":0.280168,"dump_bytes":5512,"nodes":14,"deferred":165,"materialized_at_tu":165}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/reverse_iterator.cpp","native_ms":8.816958,"read_ms":1.197642,"tu_ms":0.320859,"dump_bytes":13288,"nodes":39,"deferred":393,"materialized_at_tu":393}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/function2.cpp","native_ms":7.419735,"read_ms":1.088466,"tu_ms":0.30757,"dump_bytes":7464,"nodes":20,"deferred":295,"materialized_at_tu":295}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/clone_on_file.cpp","native_ms":8.162649,"read_ms":0.763248,"tu_ms":0.348436,"dump_bytes":3632,"nodes":7,"deferred":86,"materialized_at_tu":86}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/clone_on_file.h","native_ms":10.586742,"read_ms":0.284564,"tu_ms":0.180037,"dump_bytes":2016,"nodes":3,"deferred":48,"materialized_at_tu":48}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/empty_stmt.cpp","native_ms":7.356091,"read_ms":0.949189,"tu_ms":0.301727,"dump_bytes":5856,"nodes":19,"deferred":115,"materialized_at_tu":115}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/class.cpp","native_ms":7.606211,"read_ms":2.131366,"tu_ms":0.360445,"dump_bytes":16800,"nodes":48,"deferred":803,"materialized_at_tu":803}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/canonical.cpp","native_ms":8.017547,"read_ms":0.804936,"tu_ms":0.325234,"dump_bytes":3984,"nodes":8,"deferred":147,"materialized_at_tu":147}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/break.cpp","native_ms":7.897039,"read_ms":3.829564,"tu_ms":0.365158,"dump_bytes":15808,"nodes":56,"deferred":323,"materialized_at_tu":323}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/cpp/src/loic_ex1.cpp","native_ms":8.459606,"read_ms":4.973904,"tu_ms":0.509277,"dump_bytes":46264,"nodes":147,"deferred":1469,"materialized_at_tu":1469}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/cpp/src/loic_ex2.cpp","native_ms":9.29301,"read_ms":37.367168,"tu_ms":0.719616,"dump_bytes":590240,"nodes":1779,"deferred":23411,"materialized_at_tu":23411}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/cpp/src/loic_ex3.cpp","native_ms":8.920196,"read_ms":5.123526,"tu_ms":0.509272,"dump_bytes":45800,"nodes":144,"deferred":1508,"materialized_at_tu":1508}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/cpp/src/ls_issue2.cpp","native_ms":8.653286,"read_ms":1.007471,"tu_ms":0.489243,"dump_bytes":5336,"nodes":12,"deferred":126,"materialized_at_tu":126}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/cpp/src/cb_multios.cpp","native_ms":7.797538,"read_ms":1.341932,"tu_ms":0.347488,"dump_bytes":11272,"nodes":34,"deferred":257,"materialized_at_tu":257}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/logger_test.cpp","native_ms":7.52261,"read_ms":2.181916,"tu_ms":0.431622,"dump_bytes":20560,"nodes":66,"deferred":648,"materialized_at_tu":648}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/logger_test.cpp","native_ms":7.752058,"read_ms":2.243256,"tu_ms":0.387959,"dump_bytes":20560,"nodes":66,"deferred":648,"materialized_at_tu":648}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/energy_test.cpp","native_ms":7.921767,"read_ms":1.680469,"tu_ms":0.364595,"dump_bytes":12864,"nodes":40,"deferred":345,"materialized_at_tu":345}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/timer_test.cpp","native_ms":7.774897,"read_ms":1.878994,"tu_ms":0.362905,"dump_bytes":17104,"nodes":54,"deferred":459,"materialized_at_tu":459}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/clava_find_jptest.cpp","native_ms":8.148085,"read_ms":1.556999,"tu_ms":0.40113,"dump_bytes":13720,"nodes":43,"deferred":363,"materialized_at_tu":363}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/math_extra_test.cpp","native_ms":7.428389,"read_ms":1.475109,"tu_ms":0.320701,"dump_bytes":12880,"nodes":40,"deferred":345,"materialized_at_tu":345}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/clava_data_store_test.cpp","native_ms":7.654068,"read_ms":1.575387,"tu_ms":0.33905,"dump_bytes":12888,"nodes":40,"deferred":345,"materialized_at_tu":345}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/user_values.cpp","native_ms":7.414297,"read_ms":0.619254,"tu_ms":0.288551,"dump_bytes":2808,"nodes":6,"deferred":62,"materialized_at_tu":62}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/clava_code.cpp","native_ms":7.73814,"read_ms":7.047003,"tu_ms":0.7843,"dump_bytes":79624,"nodes":257,"deferred":2006,"materialized_at_tu":2006}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/clava_join_points.cpp","native_ms":7.402997,"read_ms":1.122521,"tu_ms":0.307851,"dump_bytes":7352,"nodes":22,"deferred":222,"materialized_at_tu":222}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/jp_filter.hpp","native_ms":10.897845,"read_ms":1.730346,"tu_ms":0.35985,"dump_bytes":15728,"nodes":46,"deferred":656,"materialized_at_tu":656}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/rebuild.cpp","native_ms":7.508691,"read_ms":1.182871,"tu_ms":0.321487,"dump_bytes":8504,"nodes":25,"deferred":264,"materialized_at_tu":264}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_2b25a1a7-9c00-4ed4-afde-e971450fa166_lmsousa/rebuild.cpp","native_ms":8.09918,"read_ms":1.054561,"tu_ms":0.242621,"dump_bytes":8176,"nodes":25,"deferred":264,"materialized_at_tu":264}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_2b25a1a7-9c00-4ed4-afde-e971450fa166_lmsousa/rebuild.h","native_ms":10.695424,"read_ms":0.135396,"tu_ms":0.114386,"dump_bytes":424,"nodes":0,"deferred":0,"materialized_at_tu":0}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_862c3b4d-fc77-475e-ab1c-910818352a94_lmsousa/rebuild.cpp","native_ms":8.26904,"read_ms":1.088659,"tu_ms":0.25307,"dump_bytes":8176,"nodes":25,"deferred":264,"materialized_at_tu":264}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_862c3b4d-fc77-475e-ab1c-910818352a94_lmsousa/rebuild.h","native_ms":11.006234,"read_ms":0.146572,"tu_ms":0.103387,"dump_bytes":424,"nodes":0,"deferred":0,"materialized_at_tu":0}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_2b25a1a7-9c00-4ed4-afde-e971450fa166_lmsousa/rebuild.cpp","native_ms":8.308068,"read_ms":1.548556,"tu_ms":0.261074,"dump_bytes":8176,"nodes":25,"deferred":264,"materialized_at_tu":264}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_2b25a1a7-9c00-4ed4-afde-e971450fa166_lmsousa/rebuild.h","native_ms":10.958804,"read_ms":0.154458,"tu_ms":0.101519,"dump_bytes":424,"nodes":0,"deferred":0,"materialized_at_tu":0}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/file_iterator_1.cpp","native_ms":7.799434,"read_ms":0.700166,"tu_ms":0.325041,"dump_bytes":2816,"nodes":6,"deferred":62,"materialized_at_tu":62}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/file_iterator_2.cpp","native_ms":7.799511,"read_ms":0.700016,"tu_ms":0.325319,"dump_bytes":2816,"nodes":6,"deferred":62,"materialized_at_tu":62}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_ccce2a1a-f3c7-4d51-8847-3f98de70fd47_lmsousa/file_iterator_1.cpp","native_ms":7.564137,"read_ms":0.625463,"tu_ms":0.224675,"dump_bytes":2496,"nodes":6,"deferred":62,"materialized_at_tu":62}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_2fc68847-1678-4bdd-9d8c-f9fe2512051b_lmsousa/file_iterator_2.cpp","native_ms":7.636326,"read_ms":0.603683,"tu_ms":0.226076,"dump_bytes":2496,"nodes":6,"deferred":62,"materialized_at_tu":62}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_ccce2a1a-f3c7-4d51-8847-3f98de70fd47_lmsousa/file_iterator_1.cpp","native_ms":7.487252,"read_ms":0.566205,"tu_ms":0.223748,"dump_bytes":2496,"nodes":6,"deferred":62,"materialized_at_tu":62}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_2fc68847-1678-4bdd-9d8c-f9fe2512051b_lmsousa/file_iterator_2.cpp","native_ms":7.387442,"read_ms":0.579814,"tu_ms":0.220813,"dump_bytes":2496,"nodes":6,"deferred":62,"materialized_at_tu":62}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_ccce2a1a-f3c7-4d51-8847-3f98de70fd47_lmsousa/file_iterator_1.cpp","native_ms":7.566582,"read_ms":0.588555,"tu_ms":0.235003,"dump_bytes":2496,"nodes":6,"deferred":62,"materialized_at_tu":62}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/add_header_file.cpp","native_ms":7.505842,"read_ms":0.665854,"tu_ms":0.283735,"dump_bytes":2816,"nodes":6,"deferred":62,"materialized_at_tu":62}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/clava.cpp","native_ms":7.893438,"read_ms":0.678604,"tu_ms":0.281469,"dump_bytes":2784,"nodes":6,"deferred":62,"materialized_at_tu":62}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_dd68c57d-03f7-4ef3-9d1d-29322cc8d764_lmsousa/addedFile.cpp","native_ms":7.678581,"read_ms":0.59105,"tu_ms":0.223972,"dump_bytes":2480,"nodes":6,"deferred":62,"materialized_at_tu":62}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/query.cpp","native_ms":7.861449,"read_ms":2.678835,"tu_ms":0.373549,"dump_bytes":25936,"nodes":86,"deferred":709,"materialized_at_tu":709}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/stmt_decomposer.cpp","native_ms":7.914114,"read_ms":1.354488,"tu_ms":0.306808,"dump_bytes":11328,"nodes":33,"deferred":317,"materialized_at_tu":317}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/pass_simplify_var_declarations.cpp","native_ms":7.605509,"read_ms":1.077545,"tu_ms":0.283005,"dump_bytes":6312,"nodes":17,"deferred":217,"materialized_at_tu":217}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/pass_single_return.cpp","native_ms":8.70677,"read_ms":11.071837,"tu_ms":0.476036,"dump_bytes":185032,"nodes":580,"deferred":6831,"materialized_at_tu":6831}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_0df506d6-a760-4cb7-a162-37a3a3a0057b_lmsousa/pass_single_return.cpp","native_ms":8.713961,"read_ms":11.729356,"tu_ms":0.401358,"dump_bytes":191960,"nodes":606,"deferred":7033,"materialized_at_tu":7033}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/code_simplify_assignment.cpp","native_ms":8.166251,"read_ms":4.037764,"tu_ms":0.387948,"dump_bytes":40368,"nodes":128,"deferred":1084,"materialized_at_tu":1084}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_cf396010-0205-4d14-b0b6-7e5528d178de_lmsousa/code_simplify_assignment.cpp","native_ms":7.881098,"read_ms":2.810895,"tu_ms":0.344205,"dump_bytes":53536,"nodes":173,"deferred":1388,"materialized_at_tu":1388}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/code_simplify_ternary_op.cpp","native_ms":7.475593,"read_ms":1.479535,"tu_ms":0.29113,"dump_bytes":12296,"nodes":37,"deferred":333,"materialized_at_tu":333}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/tmp/__clava_woven_8eb129c9-d8d8-4424-b7ef-88aab5c3a841_lmsousa/code_simplify_ternary_op.cpp","native_ms":7.44934,"read_ms":1.194314,"tu_ms":0.277266,"dump_bytes":13912,"nodes":45,"deferred":367,"materialized_at_tu":367}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/pass_simplify_loops.cpp","native_ms":8.712997,"read_ms":11.556405,"tu_ms":0.497273,"dump_bytes":179928,"nodes":569,"deferred":6551,"materialized_at_tu":6551}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/mpi_scatter_gather.cpp","native_ms":7.734015,"read_ms":1.344427,"tu_ms":0.444896,"dump_bytes":10480,"nodes":30,"deferred":287,"materialized_at_tu":287}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/subset.cpp","native_ms":9.223552,"read_ms":22.429463,"tu_ms":0.632498,"dump_bytes":380200,"nodes":1173,"deferred":15184,"materialized_at_tu":15184}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cuda/src/atomicAdd.cu","native_ms":525.780354,"read_ms":19.886067,"tu_ms":0.521601,"dump_bytes":157936,"nodes":458,"deferred":6044,"materialized_at_tu":6044}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cuda/src/mult_matrix.cu","native_ms":524.488443,"read_ms":27.04421,"tu_ms":0.924345,"dump_bytes":351248,"nodes":1076,"deferred":11233,"materialized_at_tu":11233}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cuda/src/sample.cu","native_ms":526.949898,"read_ms":16.030077,"tu_ms":0.469367,"dump_bytes":202272,"nodes":603,"deferred":7270,"materialized_at_tu":7270}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/loop.c","native_ms":8.525144,"read_ms":9.839372,"tu_ms":0.641557,"dump_bytes":101048,"nodes":345,"deferred":2628,"materialized_at_tu":2628}
+Code: int newVar1 = 10
+Equal index: 12
+Decl end index: 12
+Decl: int newVar1
+TYPE: int
+DECLNAME: newVar1
+Code: int newVar2 = 20
+Equal index: 12
+Decl end index: 12
+Decl: int newVar2
+TYPE: int
+DECLNAME: newVar2
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/ReplaceCallWithStmt.c","native_ms":8.580723,"read_ms":1.869778,"tu_ms":0.380479,"dump_bytes":13184,"nodes":42,"deferred":379,"materialized_at_tu":379}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inserts.c","native_ms":7.958488,"read_ms":2.497575,"tu_ms":0.482032,"dump_bytes":21680,"nodes":65,"deferred":763,"materialized_at_tu":763}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inserts.c","native_ms":8.321779,"read_ms":2.31077,"tu_ms":0.497672,"dump_bytes":21680,"nodes":65,"deferred":763,"materialized_at_tu":763}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/clone.c","native_ms":8.006076,"read_ms":1.383867,"tu_ms":0.402098,"dump_bytes":10216,"nodes":29,"deferred":344,"materialized_at_tu":344}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/add_global_2.c","native_ms":9.179025,"read_ms":0.559815,"tu_ms":0.288895,"dump_bytes":2336,"nodes":4,"deferred":63,"materialized_at_tu":63}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/add_global_1.c","native_ms":9.179039,"read_ms":1.197496,"tu_ms":0.318658,"dump_bytes":9432,"nodes":28,"deferred":280,"materialized_at_tu":280}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/expressions.c","native_ms":8.059607,"read_ms":3.693243,"tu_ms":0.38193,"dump_bytes":26400,"nodes":83,"deferred":786,"materialized_at_tu":786}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/wrap.h","native_ms":11.195801,"read_ms":0.352376,"tu_ms":0.305312,"dump_bytes":4048,"nodes":9,"deferred":151,"materialized_at_tu":151}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/wrap.c","native_ms":8.821017,"read_ms":2.723074,"tu_ms":0.463523,"dump_bytes":29328,"nodes":90,"deferred":961,"materialized_at_tu":961}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/varref_in_while.c","native_ms":7.801114,"read_ms":1.214132,"tu_ms":0.285059,"dump_bytes":7400,"nodes":22,"deferred":200,"materialized_at_tu":200}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inline_utils.h","native_ms":11.414489,"read_ms":2.601745,"tu_ms":0.450712,"dump_bytes":26128,"nodes":78,"deferred":1111,"materialized_at_tu":1111}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inline.c","native_ms":8.403353,"read_ms":7.990485,"tu_ms":0.458847,"dump_bytes":74376,"nodes":239,"deferred":2377,"materialized_at_tu":2377}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inline_utils.c","native_ms":8.403441,"read_ms":10.308355,"tu_ms":0.628352,"dump_bytes":109648,"nodes":348,"deferred":3403,"materialized_at_tu":3403}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/set_type.c","native_ms":7.373797,"read_ms":2.067888,"tu_ms":0.33297,"dump_bytes":15256,"nodes":44,"deferred":603,"materialized_at_tu":603}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/detach.c","native_ms":7.353313,"read_ms":1.917231,"tu_ms":0.332268,"dump_bytes":17208,"nodes":55,"deferred":447,"materialized_at_tu":447}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inline_nas_lu.c","native_ms":25.802335,"read_ms":701.51609,"tu_ms":29.601552,"dump_bytes":12135832,"nodes":39495,"deferred":268141,"materialized_at_tu":268141}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inline_nas_ft.c","native_ms":10.727853,"read_ms":121.219545,"tu_ms":4.713995,"dump_bytes":1986480,"nodes":6234,"deferred":48788,"materialized_at_tu":48788}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/null_nodes.c","native_ms":7.510706,"read_ms":1.419793,"tu_ms":0.318845,"dump_bytes":11776,"nodes":37,"deferred":287,"materialized_at_tu":287}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/type_renamer.c","native_ms":7.328402,"read_ms":1.775875,"tu_ms":0.313824,"dump_bytes":18072,"nodes":58,"deferred":494,"materialized_at_tu":494}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/ast_nodes.c","native_ms":7.400008,"read_ms":1.553487,"tu_ms":0.339102,"dump_bytes":12616,"nodes":39,"deferred":375,"materialized_at_tu":375}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include.c","native_ms":8.929323,"read_ms":0.693596,"tu_ms":0.358648,"dump_bytes":3096,"nodes":6,"deferred":58,"materialized_at_tu":58}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include_1.h","native_ms":11.69747,"read_ms":0.119543,"tu_ms":0.155821,"dump_bytes":656,"nodes":0,"deferred":0,"materialized_at_tu":0}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include_2.h","native_ms":11.689526,"read_ms":0.119231,"tu_ms":0.158127,"dump_bytes":656,"nodes":0,"deferred":0,"materialized_at_tu":0}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include_0.h","native_ms":11.710378,"read_ms":0.120236,"tu_ms":0.157388,"dump_bytes":656,"nodes":0,"deferred":0,"materialized_at_tu":0}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include.c","native_ms":9.336133,"read_ms":0.608349,"tu_ms":0.4154,"dump_bytes":3096,"nodes":6,"deferred":58,"materialized_at_tu":58}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include_0.h","native_ms":13.390996,"read_ms":0.147427,"tu_ms":0.184964,"dump_bytes":656,"nodes":0,"deferred":0,"materialized_at_tu":0}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include_1.h","native_ms":13.376841,"read_ms":0.147219,"tu_ms":0.185205,"dump_bytes":656,"nodes":0,"deferred":0,"materialized_at_tu":0}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include_2.h","native_ms":13.384812,"read_ms":0.147326,"tu_ms":0.18519,"dump_bytes":656,"nodes":0,"deferred":0,"materialized_at_tu":0}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/dynamic_call_graph.c","native_ms":8.019936,"read_ms":2.530992,"tu_ms":0.405786,"dump_bytes":19728,"nodes":64,"deferred":481,"materialized_at_tu":481}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/selects.c","native_ms":7.775327,"read_ms":0.862353,"tu_ms":0.314625,"dump_bytes":4000,"nodes":10,"deferred":98,"materialized_at_tu":98}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/scope.c","native_ms":7.444616,"read_ms":1.387971,"tu_ms":0.384062,"dump_bytes":11096,"nodes":34,"deferred":286,"materialized_at_tu":286}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/array_test.c","native_ms":7.46404,"read_ms":0.990853,"tu_ms":0.271114,"dump_bytes":7568,"nodes":23,"deferred":231,"materialized_at_tu":231}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/cilk.clava_cilk.c","native_ms":7.769988,"read_ms":1.897823,"tu_ms":0.437977,"dump_bytes":16464,"nodes":50,"deferred":422,"materialized_at_tu":422}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/tag_decl.c","native_ms":7.38621,"read_ms":1.094009,"tu_ms":0.356733,"dump_bytes":5448,"nodes":15,"deferred":182,"materialized_at_tu":182}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/file.c","native_ms":7.538857,"read_ms":0.630065,"tu_ms":0.299983,"dump_bytes":2688,"nodes":6,"deferred":58,"materialized_at_tu":58}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/switch.c","native_ms":7.680532,"read_ms":2.159101,"tu_ms":0.310728,"dump_bytes":13112,"nodes":42,"deferred":317,"materialized_at_tu":317}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/add_param.c","native_ms":7.694847,"read_ms":0.956689,"tu_ms":0.347863,"dump_bytes":5088,"nodes":14,"deferred":150,"materialized_at_tu":150}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/add_arg.c","native_ms":7.422466,"read_ms":1.528007,"tu_ms":0.351801,"dump_bytes":11216,"nodes":33,"deferred":358,"materialized_at_tu":358}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/cfg.c","native_ms":7.706144,"read_ms":8.58213,"tu_ms":0.825936,"dump_bytes":139112,"nodes":455,"deferred":3800,"materialized_at_tu":3800}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/expr_stmt.c","native_ms":7.316787,"read_ms":1.370426,"tu_ms":0.282805,"dump_bytes":11120,"nodes":35,"deferred":271,"materialized_at_tu":271}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/traversal.c","native_ms":7.303781,"read_ms":0.80355,"tu_ms":0.259924,"dump_bytes":5160,"nodes":14,"deferred":133,"materialized_at_tu":133}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/if.c","native_ms":7.519042,"read_ms":1.053322,"tu_ms":0.289069,"dump_bytes":7552,"nodes":24,"deferred":183,"materialized_at_tu":183}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/c/src/hamid_region.c","native_ms":8.154361,"read_ms":1.218101,"tu_ms":0.299606,"dump_bytes":7936,"nodes":23,"deferred":233,"materialized_at_tu":233}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/c/src/hamid_region.h","native_ms":10.875503,"read_ms":0.265458,"tu_ms":0.165895,"dump_bytes":2160,"nodes":4,"deferred":47,"materialized_at_tu":47}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/c/src/dsp_matmul.c","native_ms":7.842981,"read_ms":4.983222,"tu_ms":0.369518,"dump_bytes":80136,"nodes":256,"deferred":1904,"materialized_at_tu":1904}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/c/src/ls_issue1.c","native_ms":7.507812,"read_ms":2.831343,"tu_ms":0.352053,"dump_bytes":38976,"nodes":127,"deferred":1021,"materialized_at_tu":1021}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/logger_test.c","native_ms":7.410074,"read_ms":1.866763,"tu_ms":0.328972,"dump_bytes":20144,"nodes":65,"deferred":629,"materialized_at_tu":629}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/timer_test.c","native_ms":7.461205,"read_ms":1.681533,"tu_ms":0.339222,"dump_bytes":16736,"nodes":53,"deferred":444,"materialized_at_tu":444}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/timer_test.c","native_ms":7.544682,"read_ms":1.670009,"tu_ms":0.318769,"dump_bytes":16736,"nodes":53,"deferred":444,"materialized_at_tu":444}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/energy_test.c","native_ms":7.529794,"read_ms":1.4198,"tu_ms":0.354205,"dump_bytes":12504,"nodes":39,"deferred":330,"materialized_at_tu":330}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/code_inserter.c","native_ms":7.698869,"read_ms":2.903981,"tu_ms":0.471689,"dump_bytes":35296,"nodes":114,"deferred":965,"materialized_at_tu":965}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/qr.c","native_ms":9.87342,"read_ms":108.278507,"tu_ms":3.485217,"dump_bytes":1637664,"nodes":5176,"deferred":40882,"materialized_at_tu":40882}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/selector_test.c","native_ms":7.668068,"read_ms":1.659264,"tu_ms":0.329759,"dump_bytes":17136,"nodes":55,"deferred":457,"materialized_at_tu":457}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/strcpy.c","native_ms":7.669767,"read_ms":2.234732,"tu_ms":0.364551,"dump_bytes":29560,"nodes":93,"deferred":941,"materialized_at_tu":941}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/static_call_graph.c","native_ms":7.326866,"read_ms":1.219116,"tu_ms":0.327899,"dump_bytes":13360,"nodes":40,"deferred":356,"materialized_at_tu":356}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/pass_composition.c","native_ms":7.54281,"read_ms":1.077662,"tu_ms":0.356818,"dump_bytes":8752,"nodes":24,"deferred":231,"materialized_at_tu":231}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/cfg_api.c","native_ms":7.641193,"read_ms":11.798543,"tu_ms":0.579676,"dump_bytes":170760,"nodes":592,"deferred":5530,"materialized_at_tu":5530}
+CLAVA_AST_METRIC {"format":"flat-eager","source":"/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/inliner.c","native_ms":8.254166,"read_ms":15.58177,"tu_ms":1.032597,"dump_bytes":250352,"nodes":820,"deferred":7103,"materialized_at_tu":7103}
+Problems when accessing file '/tmp/__clava_woven_1a00c355-68cf-4976-8481-d3fa930a0887_lmsousa/inliner.c'. Check if folder exists before writing the file. -> pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:468)
+
+Exception message: [IOException] Disk quota exceeded
+
+Stack Trace:
+--------------
+java.base/java.io.FileOutputStream.writeBytes(Native Method)
+java.base/java.io.FileOutputStream.write(FileOutputStream.java:352)
+java.base/sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:220)
+java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:340)
+java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:159)
+java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:253)
+java.base/java.io.BufferedWriter.close(BufferedWriter.java:318)
+pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:467)
+pt.up.fe.specs.util.SpecsIo.write(SpecsIo.java:389)
+pt.up.fe.specs.clava.ast.extra.App.write(App.java:162)
+pt.up.fe.specs.clava.weaver.CxxWeaver.rebuildAst(CxxWeaver.java:1204)
+pt.up.fe.specs.clava.weaver.CxxWeaver.lambda$close$0(CxxWeaver.java:781)
+java.base/java.util.Optional.ifPresent(Optional.java:182)
+pt.up.fe.specs.clava.weaver.CxxWeaver.close(CxxWeaver.java:777)
+org.lara.interpreter.weaver.LaraWeaverEngine.end(LaraWeaverEngine.java:97)
+java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+java.base/java.lang.reflect.Method.invoke(Method.java:565)
+node.MethodCallBaton.invokeMethod9(MethodCallBaton.java:25)
+--------------
+
+Could not parse file '/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/stmt_decomposer.c', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Could not parse file '/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/to_single_file_1.c', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Could not parse file '/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/to_single_file_2.c', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Could not parse file '/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/liveness_analysis.c', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Could not parse file '/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/switch_to_if.c', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Problems when accessing file '/tmp/tmp_lmsousa/dummyFile.cpp'. Check if folder exists before writing the file. -> pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:468)
+
+Exception message: [IOException] Disk quota exceeded
+
+Stack Trace:
+--------------
+java.base/java.io.FileOutputStream.writeBytes(Native Method)
+java.base/java.io.FileOutputStream.write(FileOutputStream.java:352)
+java.base/sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:220)
+java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:340)
+java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:159)
+java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:253)
+java.base/java.io.BufferedWriter.close(BufferedWriter.java:318)
+pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:467)
+pt.up.fe.specs.util.SpecsIo.write(SpecsIo.java:389)
+org.lara.interpreter.weaver.LaraWeaverEngine.run(LaraWeaverEngine.java:63)
+java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+java.base/java.lang.reflect.Method.invoke(Method.java:565)
+node.MethodCallBaton.invokeMethod9(MethodCallBaton.java:25)
+--------------
+
+Could not parse file '/tmp/tmp_lmsousa/dummyFile.cpp', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Problems when accessing file '/tmp/tmp_lmsousa/dummyFile.cpp'. Check if folder exists before writing the file. -> pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:468)
+
+Exception message: [IOException] Disk quota exceeded
+
+Stack Trace:
+--------------
+java.base/java.io.FileOutputStream.writeBytes(Native Method)
+java.base/java.io.FileOutputStream.write(FileOutputStream.java:352)
+java.base/sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:220)
+java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:340)
+java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:159)
+java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:253)
+java.base/java.io.BufferedWriter.close(BufferedWriter.java:318)
+pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:467)
+pt.up.fe.specs.util.SpecsIo.write(SpecsIo.java:389)
+org.lara.interpreter.weaver.LaraWeaverEngine.run(LaraWeaverEngine.java:63)
+java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+java.base/java.lang.reflect.Method.invoke(Method.java:565)
+node.MethodCallBaton.invokeMethod9(MethodCallBaton.java:25)
+--------------
+
+Could not parse file '/tmp/tmp_lmsousa/dummyFile.cpp', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Problems when accessing file '/tmp/tmp_lmsousa/dummyFile.cpp'. Check if folder exists before writing the file. -> pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:468)
+
+Exception message: [IOException] Disk quota exceeded
+
+Stack Trace:
+--------------
+java.base/java.io.FileOutputStream.writeBytes(Native Method)
+java.base/java.io.FileOutputStream.write(FileOutputStream.java:352)
+java.base/sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:220)
+java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:340)
+java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:159)
+java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:253)
+java.base/java.io.BufferedWriter.close(BufferedWriter.java:318)
+pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:467)
+pt.up.fe.specs.util.SpecsIo.write(SpecsIo.java:389)
+org.lara.interpreter.weaver.LaraWeaverEngine.run(LaraWeaverEngine.java:63)
+java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+java.base/java.lang.reflect.Method.invoke(Method.java:565)
+node.MethodCallBaton.invokeMethod9(MethodCallBaton.java:25)
+--------------
+
+Could not parse file '/tmp/tmp_lmsousa/dummyFile.cpp', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Problems when accessing file '/tmp/tmp_lmsousa/dummyFile.cpp'. Check if folder exists before writing the file. -> pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:468)
+
+Exception message: [IOException] Disk quota exceeded
+
+Stack Trace:
+--------------
+java.base/java.io.FileOutputStream.writeBytes(Native Method)
+java.base/java.io.FileOutputStream.write(FileOutputStream.java:352)
+java.base/sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:220)
+java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:340)
+java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:159)
+java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:253)
+java.base/java.io.BufferedWriter.close(BufferedWriter.java:318)
+pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:467)
+pt.up.fe.specs.util.SpecsIo.write(SpecsIo.java:389)
+org.lara.interpreter.weaver.LaraWeaverEngine.run(LaraWeaverEngine.java:63)
+java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+java.base/java.lang.reflect.Method.invoke(Method.java:565)
+node.MethodCallBaton.invokeMethod9(MethodCallBaton.java:25)
+--------------
+
+Could not parse file '/tmp/tmp_lmsousa/dummyFile.cpp', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Problems when accessing file '/tmp/tmp_lmsousa/dummyFile.cpp'. Check if folder exists before writing the file. -> pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:468)
+
+Exception message: [IOException] Disk quota exceeded
+
+Stack Trace:
+--------------
+java.base/java.io.FileOutputStream.writeBytes(Native Method)
+java.base/java.io.FileOutputStream.write(FileOutputStream.java:352)
+java.base/sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:220)
+java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:340)
+java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:159)
+java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:253)
+java.base/java.io.BufferedWriter.close(BufferedWriter.java:318)
+pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:467)
+pt.up.fe.specs.util.SpecsIo.write(SpecsIo.java:389)
+org.lara.interpreter.weaver.LaraWeaverEngine.run(LaraWeaverEngine.java:63)
+java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+java.base/java.lang.reflect.Method.invoke(Method.java:565)
+node.MethodCallBaton.invokeMethod9(MethodCallBaton.java:25)
+--------------
+
+Could not parse file '/tmp/tmp_lmsousa/dummyFile.cpp', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Problems when accessing file '/tmp/tmp_lmsousa/dummyFile.cpp'. Check if folder exists before writing the file. -> pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:468)
+
+Exception message: [IOException] Disk quota exceeded
+
+Stack Trace:
+--------------
+java.base/java.io.FileOutputStream.writeBytes(Native Method)
+java.base/java.io.FileOutputStream.write(FileOutputStream.java:352)
+java.base/sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:220)
+java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:340)
+java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:159)
+java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:253)
+java.base/java.io.BufferedWriter.close(BufferedWriter.java:318)
+pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:467)
+pt.up.fe.specs.util.SpecsIo.write(SpecsIo.java:389)
+org.lara.interpreter.weaver.LaraWeaverEngine.run(LaraWeaverEngine.java:63)
+java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+java.base/java.lang.reflect.Method.invoke(Method.java:565)
+node.MethodCallBaton.invokeMethod9(MethodCallBaton.java:25)
+--------------
+
+Could not parse file '/tmp/tmp_lmsousa/dummyFile.cpp', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Problems when accessing file '/tmp/tmp_lmsousa/dummyFile.cpp'. Check if folder exists before writing the file. -> pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:468)
+
+Exception message: [IOException] Disk quota exceeded
+
+Stack Trace:
+--------------
+java.base/java.io.FileOutputStream.writeBytes(Native Method)
+java.base/java.io.FileOutputStream.write(FileOutputStream.java:352)
+java.base/sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:220)
+java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:340)
+java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:159)
+java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:253)
+java.base/java.io.BufferedWriter.close(BufferedWriter.java:318)
+pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:467)
+pt.up.fe.specs.util.SpecsIo.write(SpecsIo.java:389)
+org.lara.interpreter.weaver.LaraWeaverEngine.run(LaraWeaverEngine.java:63)
+java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+java.base/java.lang.reflect.Method.invoke(Method.java:565)
+node.MethodCallBaton.invokeMethod9(MethodCallBaton.java:25)
+--------------
+
+Could not parse file '/tmp/tmp_lmsousa/dummyFile.cpp', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Problems when accessing file '/tmp/tmp_lmsousa/file1.c'. Check if folder exists before writing the file. -> pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:468)
+
+Exception message: [IOException] Disk quota exceeded
+
+Stack Trace:
+--------------
+java.base/java.io.FileOutputStream.writeBytes(Native Method)
+java.base/java.io.FileOutputStream.write(FileOutputStream.java:352)
+java.base/sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:220)
+java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:340)
+java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:159)
+java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:253)
+java.base/java.io.BufferedWriter.close(BufferedWriter.java:318)
+pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:467)
+pt.up.fe.specs.util.SpecsIo.write(SpecsIo.java:389)
+org.lara.interpreter.weaver.LaraWeaverEngine.run(LaraWeaverEngine.java:63)
+java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+java.base/java.lang.reflect.Method.invoke(Method.java:565)
+node.MethodCallBaton.invokeMethod9(MethodCallBaton.java:25)
+--------------
+
+Problems when accessing file '/tmp/tmp_lmsousa/file2.c'. Check if folder exists before writing the file. -> pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:468)
+
+Exception message: [IOException] Disk quota exceeded
+
+Stack Trace:
+--------------
+java.base/java.io.FileOutputStream.writeBytes(Native Method)
+java.base/java.io.FileOutputStream.write(FileOutputStream.java:352)
+java.base/sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:220)
+java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:340)
+java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:159)
+java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:253)
+java.base/java.io.BufferedWriter.close(BufferedWriter.java:318)
+pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:467)
+pt.up.fe.specs.util.SpecsIo.write(SpecsIo.java:389)
+org.lara.interpreter.weaver.LaraWeaverEngine.run(LaraWeaverEngine.java:63)
+java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+java.base/java.lang.reflect.Method.invoke(Method.java:565)
+node.MethodCallBaton.invokeMethod9(MethodCallBaton.java:25)
+--------------
+
+Could not parse file '/tmp/tmp_lmsousa/file1.c', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Could not parse file '/tmp/tmp_lmsousa/file2.c', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Could not parse file '/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/issues/c/src/issue_168.c', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Could not parse file '/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/issues/c/src/issue_aiq_1.c', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+Problems when accessing file '/tmp/tmp_lmsousa/dummyFile.cpp'. Check if folder exists before writing the file. -> pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:468)
+
+Exception message: [IOException] Disk quota exceeded
+
+Stack Trace:
+--------------
+java.base/java.io.FileOutputStream.writeBytes(Native Method)
+java.base/java.io.FileOutputStream.write(FileOutputStream.java:352)
+java.base/sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:220)
+java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:340)
+java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:159)
+java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:253)
+java.base/java.io.BufferedWriter.close(BufferedWriter.java:318)
+pt.up.fe.specs.util.SpecsIo.writeAppendHelper(SpecsIo.java:467)
+pt.up.fe.specs.util.SpecsIo.write(SpecsIo.java:389)
+org.lara.interpreter.weaver.LaraWeaverEngine.run(LaraWeaverEngine.java:63)
+java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+java.base/java.lang.reflect.Method.invoke(Method.java:565)
+node.MethodCallBaton.invokeMethod9(MethodCallBaton.java:25)
+--------------
+
+Could not parse file '/tmp/tmp_lmsousa/dummyFile.cpp', will be ignored -> pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parse(ParallelCodeParser.java:169)
+
+Exception message: [EOFException] Missing v2 Header record
+
+Stack Trace:
+--------------
+pt.up.fe.specs.clang.wire.CompleteReader.read(CompleteReader.java:123)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parsePrivate(ClangAstDumper.java:398)
+pt.up.fe.specs.clang.dumper.ClangAstDumper.parse(ClangAstDumper.java:135)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.parseSource(ParallelCodeParser.java:410)
+pt.up.fe.specs.clang.codeparser.ParallelCodeParser.lambda$parse$0(ParallelCodeParser.java:145)
+java.base/java.util.concurrent.FutureTask.run(FutureTask.java:330)
+java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+java.base/java.lang.Thread.run(Thread.java:1516)
+--------------
+
+JSON report written to /home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/20260912T092443383932Z-warm/vitest.json

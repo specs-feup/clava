@@ -1,0 +1,1838 @@
+[
+  {
+    "index": 1,
+    "format": "text",
+    "mode": "cold",
+    "repeat": 1,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143002613283Z-cold",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143002613283Z-cold/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 63.47905292455107,
+    "elapsed_s": 63.47,
+    "user_s": 78.48,
+    "sys_s": 8.11,
+    "max_rss_kb": 1482884,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 16,
+      "misses": 151,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7645.681683,
+      "read_ms": 1519.576589,
+      "tu_ms": 146.255271,
+      "dump_bytes": 3534515,
+      "nodes": 77457,
+      "deferred": 0,
+      "materialized_at_tu": 0
+    },
+    "parse_medians": {
+      "native_ms": 13.862271,
+      "read_ms": 1.155808,
+      "tu_ms": 0.34697,
+      "dump_bytes": 2785.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143002613283Z-cold/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 235861980,
+      "available_kb": 672578608,
+      "use_percent": "26%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-01.json"
+  },
+  {
+    "index": 2,
+    "format": "text",
+    "mode": "warm",
+    "repeat": 1,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143106565457Z-warm",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143106565457Z-warm/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 43.7041529212147,
+    "elapsed_s": 43.7,
+    "user_s": 68.16,
+    "sys_s": 7.1,
+    "max_rss_kb": 1426548,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 162,
+      "misses": 5,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": 167,
+    "warm_cache_comparable": false,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 3576.260192,
+      "read_ms": 1549.799748,
+      "tu_ms": 143.822612,
+      "dump_bytes": 3533903,
+      "nodes": 77457,
+      "deferred": 0,
+      "materialized_at_tu": 0
+    },
+    "parse_medians": {
+      "native_ms": 7.758154,
+      "read_ms": 1.179292,
+      "tu_ms": 0.348827,
+      "dump_bytes": 2785.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143106565457Z-warm/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 235959860,
+      "available_kb": 672480728,
+      "use_percent": "26%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-02.json"
+  },
+  {
+    "index": 3,
+    "format": "text",
+    "mode": "bypass",
+    "repeat": 1,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143150745921Z-bypass",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143150745921Z-bypass/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 54.81130351126194,
+    "elapsed_s": 54.81,
+    "user_s": 80.01,
+    "sys_s": 8.19,
+    "max_rss_kb": 1504812,
+    "ccache": {
+      "cacheable_calls": 0,
+      "direct_hits": 0,
+      "misses": 0,
+      "uncacheable_calls": 0
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7336.30782,
+      "read_ms": 1544.127576,
+      "tu_ms": 134.174045,
+      "dump_bytes": 3529550,
+      "nodes": 77457,
+      "deferred": 0,
+      "materialized_at_tu": 0
+    },
+    "parse_medians": {
+      "native_ms": 12.661527,
+      "read_ms": 1.153267,
+      "tu_ms": 0.338687,
+      "dump_bytes": 2812.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143150745921Z-bypass/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 236023336,
+      "available_kb": 672417252,
+      "use_percent": "26%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-03.json"
+  },
+  {
+    "index": 4,
+    "format": "flat-eager",
+    "mode": "cold",
+    "repeat": 1,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143246026225Z-cold",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143246026225Z-cold/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 55.625298323109746,
+    "elapsed_s": 55.62,
+    "user_s": 84.71,
+    "sys_s": 8.14,
+    "max_rss_kb": 1384440,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 16,
+      "misses": 151,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7698.031203,
+      "read_ms": 1983.021582,
+      "tu_ms": 151.58974,
+      "dump_bytes": 24328600,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 652919
+    },
+    "parse_medians": {
+      "native_ms": 13.922015,
+      "read_ms": 1.626693,
+      "tu_ms": 0.352922,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143246026225Z-cold/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 236113996,
+      "available_kb": 672326592,
+      "use_percent": "26%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-04.json"
+  },
+  {
+    "index": 5,
+    "format": "flat-eager",
+    "mode": "warm",
+    "repeat": 1,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143342121919Z-warm",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143342121919Z-warm/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 44.07377603184432,
+    "elapsed_s": 44.07,
+    "user_s": 73.03,
+    "sys_s": 7.16,
+    "max_rss_kb": 1303416,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 162,
+      "misses": 5,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": 167,
+    "warm_cache_comparable": false,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 3698.199367,
+      "read_ms": 2017.791895,
+      "tu_ms": 144.931308,
+      "dump_bytes": 24328600,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 652919
+    },
+    "parse_medians": {
+      "native_ms": 7.908195,
+      "read_ms": 1.626326,
+      "tu_ms": 0.353879,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143342121919Z-warm/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 236210960,
+      "available_kb": 672229628,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-05.json"
+  },
+  {
+    "index": 6,
+    "format": "flat-eager",
+    "mode": "bypass",
+    "repeat": 1,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143426686249Z-bypass",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143426686249Z-bypass/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 54.89648787956685,
+    "elapsed_s": 54.89,
+    "user_s": 84.72,
+    "sys_s": 8.24,
+    "max_rss_kb": 1359344,
+    "ccache": {
+      "cacheable_calls": 0,
+      "direct_hits": 0,
+      "misses": 0,
+      "uncacheable_calls": 0
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7397.721732,
+      "read_ms": 2030.983125,
+      "tu_ms": 144.320773,
+      "dump_bytes": 24328344,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 652919
+    },
+    "parse_medians": {
+      "native_ms": 12.746177,
+      "read_ms": 1.565502,
+      "tu_ms": 0.359348,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143426686249Z-bypass/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 236275236,
+      "available_kb": 672165352,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-06.json"
+  },
+  {
+    "index": 7,
+    "format": "flat-lazy",
+    "mode": "cold",
+    "repeat": 1,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143522051086Z-cold",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143522051086Z-cold/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 54.920888249762356,
+    "elapsed_s": 54.92,
+    "user_s": 83.58,
+    "sys_s": 8.34,
+    "max_rss_kb": 1393448,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 16,
+      "misses": 151,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7703.506451,
+      "read_ms": 1002.48466,
+      "tu_ms": 837.079721,
+      "dump_bytes": 24328600,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 60820
+    },
+    "parse_medians": {
+      "native_ms": 14.136233,
+      "read_ms": 0.902741,
+      "tu_ms": 0.706618,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143522051086Z-cold/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 236365804,
+      "available_kb": 672074784,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-07.json"
+  },
+  {
+    "index": 8,
+    "format": "flat-lazy",
+    "mode": "warm",
+    "repeat": 1,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143617444499Z-warm",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143617444499Z-warm/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 44.23297404218465,
+    "elapsed_s": 44.23,
+    "user_s": 74.38,
+    "sys_s": 7.48,
+    "max_rss_kb": 1418320,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 162,
+      "misses": 5,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": 167,
+    "warm_cache_comparable": false,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 3709.8239949999997,
+      "read_ms": 1020.495156,
+      "tu_ms": 836.775129,
+      "dump_bytes": 24328600,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 60820
+    },
+    "parse_medians": {
+      "native_ms": 7.9939,
+      "read_ms": 0.908849,
+      "tu_ms": 0.709245,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143617444499Z-warm/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 236463388,
+      "available_kb": 671977200,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-08.json"
+  },
+  {
+    "index": 9,
+    "format": "flat-lazy",
+    "mode": "bypass",
+    "repeat": 1,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143702150145Z-bypass",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143702150145Z-bypass/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 61.37174587789923,
+    "elapsed_s": 61.37,
+    "user_s": 84.22,
+    "sys_s": 8.17,
+    "max_rss_kb": 1405212,
+    "ccache": {
+      "cacheable_calls": 0,
+      "direct_hits": 0,
+      "misses": 0,
+      "uncacheable_calls": 0
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7448.93559,
+      "read_ms": 1000.285923,
+      "tu_ms": 827.820042,
+      "dump_bytes": 24328344,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 60820
+    },
+    "parse_medians": {
+      "native_ms": 12.957083,
+      "read_ms": 0.922265,
+      "tu_ms": 0.70571,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143702150145Z-bypass/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 236526768,
+      "available_kb": 671913820,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-09.json"
+  },
+  {
+    "index": 10,
+    "format": "flat-eager",
+    "mode": "cold",
+    "repeat": 2,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143803991095Z-cold",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143803991095Z-cold/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 54.806327727623284,
+    "elapsed_s": 54.8,
+    "user_s": 84.37,
+    "sys_s": 8.43,
+    "max_rss_kb": 1360100,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 16,
+      "misses": 151,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7673.238068,
+      "read_ms": 2016.85916,
+      "tu_ms": 144.729448,
+      "dump_bytes": 24328600,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 652919
+    },
+    "parse_medians": {
+      "native_ms": 14.178258,
+      "read_ms": 1.602657,
+      "tu_ms": 0.361481,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143803991095Z-cold/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 236617348,
+      "available_kb": 671823240,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-10.json"
+  },
+  {
+    "index": 11,
+    "format": "flat-eager",
+    "mode": "warm",
+    "repeat": 2,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143859269037Z-warm",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143859269037Z-warm/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 44.04563564248383,
+    "elapsed_s": 44.04,
+    "user_s": 72.72,
+    "sys_s": 7.19,
+    "max_rss_kb": 1298752,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 162,
+      "misses": 5,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": 167,
+    "warm_cache_comparable": false,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 3671.876633,
+      "read_ms": 2016.204687,
+      "tu_ms": 154.962998,
+      "dump_bytes": 24328600,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 652919
+    },
+    "parse_medians": {
+      "native_ms": 7.917692,
+      "read_ms": 1.646298,
+      "tu_ms": 0.358735,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143859269037Z-warm/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 236713892,
+      "available_kb": 671726696,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-11.json"
+  },
+  {
+    "index": 12,
+    "format": "flat-eager",
+    "mode": "bypass",
+    "repeat": 2,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143943803572Z-bypass",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143943803572Z-bypass/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 55.50885639153421,
+    "elapsed_s": 55.5,
+    "user_s": 84.36,
+    "sys_s": 8.05,
+    "max_rss_kb": 1385924,
+    "ccache": {
+      "cacheable_calls": 0,
+      "direct_hits": 0,
+      "misses": 0,
+      "uncacheable_calls": 0
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7413.896152,
+      "read_ms": 1999.224191,
+      "tu_ms": 150.959055,
+      "dump_bytes": 24328344,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 652919
+    },
+    "parse_medians": {
+      "native_ms": 12.802594,
+      "read_ms": 1.596255,
+      "tu_ms": 0.344838,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143943803572Z-bypass/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 236777144,
+      "available_kb": 671663444,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-12.json"
+  },
+  {
+    "index": 13,
+    "format": "flat-lazy",
+    "mode": "cold",
+    "repeat": 2,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144039782688Z-cold",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144039782688Z-cold/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 55.19094679877162,
+    "elapsed_s": 55.19,
+    "user_s": 84.53,
+    "sys_s": 8.27,
+    "max_rss_kb": 1382168,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 16,
+      "misses": 151,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7709.7313779999995,
+      "read_ms": 995.62018,
+      "tu_ms": 828.650122,
+      "dump_bytes": 24328600,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 60820
+    },
+    "parse_medians": {
+      "native_ms": 14.117873,
+      "read_ms": 0.908219,
+      "tu_ms": 0.724732,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144039782688Z-cold/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 236867628,
+      "available_kb": 671572960,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-13.json"
+  },
+  {
+    "index": 14,
+    "format": "flat-lazy",
+    "mode": "warm",
+    "repeat": 2,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144135446663Z-warm",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144135446663Z-warm/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 44.24565159715712,
+    "elapsed_s": 44.24,
+    "user_s": 72.52,
+    "sys_s": 7.24,
+    "max_rss_kb": 1357276,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 162,
+      "misses": 5,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": 167,
+    "warm_cache_comparable": false,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 3655.348966,
+      "read_ms": 1014.924376,
+      "tu_ms": 825.197166,
+      "dump_bytes": 24328600,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 60820
+    },
+    "parse_medians": {
+      "native_ms": 7.929833,
+      "read_ms": 0.916804,
+      "tu_ms": 0.705467,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144135446663Z-warm/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 236964172,
+      "available_kb": 671476416,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-14.json"
+  },
+  {
+    "index": 15,
+    "format": "flat-lazy",
+    "mode": "bypass",
+    "repeat": 2,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144220168421Z-bypass",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144220168421Z-bypass/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 54.87761164829135,
+    "elapsed_s": 54.87,
+    "user_s": 84.69,
+    "sys_s": 8.37,
+    "max_rss_kb": 1389016,
+    "ccache": {
+      "cacheable_calls": 0,
+      "direct_hits": 0,
+      "misses": 0,
+      "uncacheable_calls": 0
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7377.137059,
+      "read_ms": 1015.09858,
+      "tu_ms": 821.486908,
+      "dump_bytes": 24328344,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 60820
+    },
+    "parse_medians": {
+      "native_ms": 12.695548,
+      "read_ms": 0.921035,
+      "tu_ms": 0.700239,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144220168421Z-bypass/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 237027436,
+      "available_kb": 671413152,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-15.json"
+  },
+  {
+    "index": 16,
+    "format": "text",
+    "mode": "cold",
+    "repeat": 2,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 54.330985927954316,
+    "elapsed_s": 54.33,
+    "user_s": 79.19,
+    "sys_s": 8.24,
+    "max_rss_kb": 1505748,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 16,
+      "misses": 151,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7584.717648,
+      "read_ms": 1523.0704090000002,
+      "tu_ms": 133.132981,
+      "dump_bytes": 3532791,
+      "nodes": 77457,
+      "deferred": 0,
+      "materialized_at_tu": 0
+    },
+    "parse_medians": {
+      "native_ms": 13.923013,
+      "read_ms": 1.180371,
+      "tu_ms": 0.351863,
+      "dump_bytes": 2774.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 237117948,
+      "available_kb": 671322640,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-16.json"
+  },
+  {
+    "index": 17,
+    "format": "text",
+    "mode": "warm",
+    "repeat": 2,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144410323631Z-warm",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144410323631Z-warm/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 43.50694323889911,
+    "elapsed_s": 43.5,
+    "user_s": 68.78,
+    "sys_s": 7.3,
+    "max_rss_kb": 1385956,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 162,
+      "misses": 5,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": 167,
+    "warm_cache_comparable": false,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 3635.251143,
+      "read_ms": 1564.242962,
+      "tu_ms": 143.533267,
+      "dump_bytes": 3533761,
+      "nodes": 77457,
+      "deferred": 0,
+      "materialized_at_tu": 0
+    },
+    "parse_medians": {
+      "native_ms": 7.883387,
+      "read_ms": 1.189194,
+      "tu_ms": 0.342695,
+      "dump_bytes": 2774.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144410323631Z-warm/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 237213100,
+      "available_kb": 671227488,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-17.json"
+  },
+  {
+    "index": 18,
+    "format": "text",
+    "mode": "bypass",
+    "repeat": 2,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144454309860Z-bypass",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144454309860Z-bypass/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 54.11406305525452,
+    "elapsed_s": 54.11,
+    "user_s": 79.99,
+    "sys_s": 8.03,
+    "max_rss_kb": 1522956,
+    "ccache": {
+      "cacheable_calls": 0,
+      "direct_hits": 0,
+      "misses": 0,
+      "uncacheable_calls": 0
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7351.615914,
+      "read_ms": 1561.2756689999999,
+      "tu_ms": 143.749266,
+      "dump_bytes": 3534352,
+      "nodes": 77457,
+      "deferred": 0,
+      "materialized_at_tu": 0
+    },
+    "parse_medians": {
+      "native_ms": 12.797373,
+      "read_ms": 1.125419,
+      "tu_ms": 0.340849,
+      "dump_bytes": 2775.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144454309860Z-bypass/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 237276484,
+      "available_kb": 671164104,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-18.json"
+  },
+  {
+    "index": 19,
+    "format": "flat-lazy",
+    "mode": "cold",
+    "repeat": 3,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144548896422Z-cold",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144548896422Z-cold/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 54.517271409742534,
+    "elapsed_s": 54.51,
+    "user_s": 84.7,
+    "sys_s": 8.21,
+    "max_rss_kb": 1391932,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 16,
+      "misses": 151,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7775.463173,
+      "read_ms": 1013.7992449999999,
+      "tu_ms": 827.026882,
+      "dump_bytes": 24328600,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 60820
+    },
+    "parse_medians": {
+      "native_ms": 14.355641,
+      "read_ms": 0.932459,
+      "tu_ms": 0.728179,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144548896422Z-cold/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 237366924,
+      "available_kb": 671073664,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-19.json"
+  },
+  {
+    "index": 20,
+    "format": "flat-lazy",
+    "mode": "warm",
+    "repeat": 3,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144643885059Z-warm",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144643885059Z-warm/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 43.97313909418881,
+    "elapsed_s": 43.97,
+    "user_s": 71.99,
+    "sys_s": 7.29,
+    "max_rss_kb": 1348316,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 162,
+      "misses": 5,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": 167,
+    "warm_cache_comparable": false,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 3691.100692,
+      "read_ms": 996.135862,
+      "tu_ms": 824.165933,
+      "dump_bytes": 24328600,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 60820
+    },
+    "parse_medians": {
+      "native_ms": 7.99757,
+      "read_ms": 0.898346,
+      "tu_ms": 0.711151,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144643885059Z-warm/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 237463388,
+      "available_kb": 670977200,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-20.json"
+  },
+  {
+    "index": 21,
+    "format": "flat-lazy",
+    "mode": "bypass",
+    "repeat": 3,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144728332567Z-bypass",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144728332567Z-bypass/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 62.084987686015666,
+    "elapsed_s": 62.08,
+    "user_s": 84.12,
+    "sys_s": 8.1,
+    "max_rss_kb": 1434708,
+    "ccache": {
+      "cacheable_calls": 0,
+      "direct_hits": 0,
+      "misses": 0,
+      "uncacheable_calls": 0
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7404.504517,
+      "read_ms": 1007.160922,
+      "tu_ms": 817.377449,
+      "dump_bytes": 24328344,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 60820
+    },
+    "parse_medians": {
+      "native_ms": 12.84123,
+      "read_ms": 0.909152,
+      "tu_ms": 0.695385,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144728332567Z-bypass/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 237526648,
+      "available_kb": 670913940,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-21.json"
+  },
+  {
+    "index": 22,
+    "format": "text",
+    "mode": "cold",
+    "repeat": 3,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144830890103Z-cold",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144830890103Z-cold/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 54.6936998674646,
+    "elapsed_s": 54.69,
+    "user_s": 80.43,
+    "sys_s": 8.42,
+    "max_rss_kb": 1551096,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 16,
+      "misses": 151,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7656.887912,
+      "read_ms": 1547.855708,
+      "tu_ms": 137.111446,
+      "dump_bytes": 3531640,
+      "nodes": 77457,
+      "deferred": 0,
+      "materialized_at_tu": 0
+    },
+    "parse_medians": {
+      "native_ms": 14.041491,
+      "read_ms": 1.173907,
+      "tu_ms": 0.350513,
+      "dump_bytes": 2785.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144830890103Z-cold/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 237617236,
+      "available_kb": 670823352,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-22.json"
+  },
+  {
+    "index": 23,
+    "format": "text",
+    "mode": "warm",
+    "repeat": 3,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144926059689Z-warm",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144926059689Z-warm/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 44.23947820905596,
+    "elapsed_s": 44.23,
+    "user_s": 69.13,
+    "sys_s": 7.18,
+    "max_rss_kb": 1398916,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 162,
+      "misses": 5,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": 167,
+    "warm_cache_comparable": false,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 3631.503005,
+      "read_ms": 1559.24889,
+      "tu_ms": 143.812787,
+      "dump_bytes": 3531123,
+      "nodes": 77457,
+      "deferred": 0,
+      "materialized_at_tu": 0
+    },
+    "parse_medians": {
+      "native_ms": 7.848102,
+      "read_ms": 1.17746,
+      "tu_ms": 0.350176,
+      "dump_bytes": 2785.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144926059689Z-warm/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 237712388,
+      "available_kb": 670728200,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-23.json"
+  },
+  {
+    "index": 24,
+    "format": "text",
+    "mode": "bypass",
+    "repeat": 3,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T145010777956Z-bypass",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T145010777956Z-bypass/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 63.20719114597887,
+    "elapsed_s": 63.2,
+    "user_s": 80.74,
+    "sys_s": 8.2,
+    "max_rss_kb": 1505148,
+    "ccache": {
+      "cacheable_calls": 0,
+      "direct_hits": 0,
+      "misses": 0,
+      "uncacheable_calls": 0
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7387.213965,
+      "read_ms": 1563.9439,
+      "tu_ms": 139.53725,
+      "dump_bytes": 3536100,
+      "nodes": 77457,
+      "deferred": 0,
+      "materialized_at_tu": 0
+    },
+    "parse_medians": {
+      "native_ms": 12.752201,
+      "read_ms": 1.174442,
+      "tu_ms": 0.343278,
+      "dump_bytes": 2834.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T145010777956Z-bypass/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 237775668,
+      "available_kb": 670664920,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-24.json"
+  },
+  {
+    "index": 25,
+    "format": "flat-eager",
+    "mode": "cold",
+    "repeat": 3,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T145114466244Z-cold",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T145114466244Z-cold/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 55.872861304320395,
+    "elapsed_s": 55.87,
+    "user_s": 85.23,
+    "sys_s": 8.36,
+    "max_rss_kb": 1375764,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 16,
+      "misses": 151,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7692.882955,
+      "read_ms": 2026.687465,
+      "tu_ms": 147.354682,
+      "dump_bytes": 24328600,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 652919
+    },
+    "parse_medians": {
+      "native_ms": 14.179116,
+      "read_ms": 1.589153,
+      "tu_ms": 0.362177,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T145114466244Z-cold/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 237866208,
+      "available_kb": 670574380,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-25.json"
+  },
+  {
+    "index": 26,
+    "format": "flat-eager",
+    "mode": "warm",
+    "repeat": 3,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T145210818257Z-warm",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T145210818257Z-warm/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 44.66462829243392,
+    "elapsed_s": 44.66,
+    "user_s": 73.58,
+    "sys_s": 7.2,
+    "max_rss_kb": 1371956,
+    "ccache": {
+      "cacheable_calls": 167,
+      "direct_hits": 162,
+      "misses": 5,
+      "uncacheable_calls": 3
+    },
+    "warm_cache_expected_direct_hits": 167,
+    "warm_cache_comparable": false,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 3749.334779,
+      "read_ms": 2030.351239,
+      "tu_ms": 154.465269,
+      "dump_bytes": 24328600,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 652919
+    },
+    "parse_medians": {
+      "native_ms": 8.011361,
+      "read_ms": 1.567278,
+      "tu_ms": 0.363297,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T145210818257Z-warm/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 237962800,
+      "available_kb": 670477788,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-26.json"
+  },
+  {
+    "index": 27,
+    "format": "flat-eager",
+    "mode": "bypass",
+    "repeat": 3,
+    "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T145255963087Z-bypass",
+    "summary_path": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T145255963087Z-bypass/summary.json",
+    "driver_return_code": 1,
+    "validation_errors": [],
+    "test_counts": {
+      "total_tests": 164,
+      "passed_tests": 158,
+      "failed_tests": 4,
+      "pending_tests": 2
+    },
+    "failed_tests": [
+      "CxxTest OmpThreadsExplore",
+      "CudaTest Cuda",
+      "CudaTest CudaMatrixMul",
+      "CudaTest CudaQuery"
+    ],
+    "wall_s": 55.28467607218772,
+    "elapsed_s": 55.28,
+    "user_s": 84.69,
+    "sys_s": 8.22,
+    "max_rss_kb": 1393188,
+    "ccache": {
+      "cacheable_calls": 0,
+      "direct_hits": 0,
+      "misses": 0,
+      "uncacheable_calls": 0
+    },
+    "warm_cache_expected_direct_hits": null,
+    "warm_cache_comparable": true,
+    "parse_count": 207,
+    "parse_aggregate": {
+      "native_ms": 7442.814035,
+      "read_ms": 2037.455003,
+      "tu_ms": 145.117612,
+      "dump_bytes": 24328344,
+      "nodes": 77457,
+      "deferred": 652919,
+      "materialized_at_tu": 652919
+    },
+    "parse_medians": {
+      "native_ms": 13.017678,
+      "read_ms": 1.627735,
+      "tu_ms": 0.342392,
+      "dump_bytes": 12296.0,
+      "nodes": 37.0
+    },
+    "temporary_source_metric_count": 30,
+    "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T145255963087Z-bypass/tmp",
+    "temp_filesystem": {
+      "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+      "blocks_kb": 957134040,
+      "used_kb": 238026476,
+      "available_kb": 670414112,
+      "use_percent": "27%",
+      "mount": "/"
+    },
+    "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+    "clava_revision": "122a79244e335cdc2f3e36d55e4825ceb39609d4",
+    "clang_dumper_revision": "e69a77f2838581bcfdbe7d025f389d3ed9e85b0b",
+    "runtime_jar_count": 89,
+    "runtime_jar_manifest_sha256": "1376413a13e370cb882dfb4e674f832aef323e4f8a46cbf473067659cc87f79c",
+    "raw_evidence": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z/cell-27.json"
+  }
+]

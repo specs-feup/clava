@@ -1,0 +1,1865 @@
+[
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/statement.cpp",
+    "native_ms": 16.196604,
+    "read_ms": 45.185611,
+    "tu_ms": 8.697665,
+    "dump_bytes": 1746,
+    "nodes": 26
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/loop.cpp",
+    "native_ms": 14.783652,
+    "read_ms": 23.604465,
+    "tu_ms": 3.11737,
+    "dump_bytes": 14779,
+    "nodes": 346
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/ReplaceCallWithStmt.cpp",
+    "native_ms": 156.481489,
+    "read_ms": 67.401778,
+    "tu_ms": 1.851526,
+    "dump_bytes": 46623,
+    "nodes": 894
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/inserts.cpp",
+    "native_ms": 73.689852,
+    "read_ms": 4.89115,
+    "tu_ms": 0.793875,
+    "dump_bytes": 6908,
+    "nodes": 113
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/inserts.cpp",
+    "native_ms": 7.836902,
+    "read_ms": 3.713247,
+    "tu_ms": 0.663401,
+    "dump_bytes": 6908,
+    "nodes": 113
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/pragma.cpp",
+    "native_ms": 13.614447,
+    "read_ms": 1.063979,
+    "tu_ms": 6.150554,
+    "dump_bytes": 1753,
+    "nodes": 22
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/pragma2.cpp",
+    "native_ms": 13.734137,
+    "read_ms": 1.142832,
+    "tu_ms": 0.588465,
+    "dump_bytes": 1855,
+    "nodes": 25
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/actions.cpp",
+    "native_ms": 13.89706,
+    "read_ms": 0.7324,
+    "tu_ms": 0.355658,
+    "dump_bytes": 1334,
+    "nodes": 13
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/array_access.h",
+    "native_ms": 13.719444,
+    "read_ms": 0.746725,
+    "tu_ms": 0.309549,
+    "dump_bytes": 5737,
+    "nodes": 15
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/array_access.cpp",
+    "native_ms": 21.184022,
+    "read_ms": 7.630006,
+    "tu_ms": 0.509982,
+    "dump_bytes": 12013,
+    "nodes": 247
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/attribute_use.cpp",
+    "native_ms": 14.040708,
+    "read_ms": 3.280587,
+    "tu_ms": 0.371701,
+    "dump_bytes": 4590,
+    "nodes": 84
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/hdf5types.cpp",
+    "native_ms": 16.214184,
+    "read_ms": 2.478421,
+    "tu_ms": 0.472389,
+    "dump_bytes": 5274,
+    "nodes": 90
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/omp_threads_explore.cpp",
+    "native_ms": 13.670151,
+    "read_ms": 3.033338,
+    "tu_ms": 4.736692,
+    "dump_bytes": 2626,
+    "nodes": 42
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/clone.h",
+    "native_ms": 15.421867,
+    "read_ms": 0.728189,
+    "tu_ms": 0.406776,
+    "dump_bytes": 3421,
+    "nodes": 8
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/field.hpp",
+    "native_ms": 15.342866,
+    "read_ms": 0.766003,
+    "tu_ms": 0.36908,
+    "dump_bytes": 4160,
+    "nodes": 10
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/clone_on_file.h",
+    "native_ms": 18.707762,
+    "read_ms": 0.307845,
+    "tu_ms": 0.298329,
+    "dump_bytes": 1351,
+    "nodes": 3
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/class_manipulation.h",
+    "native_ms": 18.004758,
+    "read_ms": 1.11098,
+    "tu_ms": 0.282168,
+    "dump_bytes": 13550,
+    "nodes": 35
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/file_rebuild.h",
+    "native_ms": 21.490235,
+    "read_ms": 0.421235,
+    "tu_ms": 0.395081,
+    "dump_bytes": 2104,
+    "nodes": 4
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/array_access.h",
+    "native_ms": 22.872041,
+    "read_ms": 0.710396,
+    "tu_ms": 0.31376,
+    "dump_bytes": 5737,
+    "nodes": 15
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/classA.h",
+    "native_ms": 28.979858,
+    "read_ms": 0.75958,
+    "tu_ms": 0.900049,
+    "dump_bytes": 5268,
+    "nodes": 13
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/skip_parsing_headers.h",
+    "native_ms": 15.734207,
+    "read_ms": 0.31972,
+    "tu_ms": 0.376106,
+    "dump_bytes": 1939,
+    "nodes": 3
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/file_rebuild_2.h",
+    "native_ms": 14.075806,
+    "read_ms": 0.210236,
+    "tu_ms": 0.297746,
+    "dump_bytes": 1363,
+    "nodes": 3
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/wrap.h",
+    "native_ms": 13.566832,
+    "read_ms": 0.473144,
+    "tu_ms": 0.294101,
+    "dump_bytes": 3588,
+    "nodes": 9
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/function.h",
+    "native_ms": 19.60634,
+    "read_ms": 0.395292,
+    "tu_ms": 0.350049,
+    "dump_bytes": 2714,
+    "nodes": 7
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/dijkstra.cpp",
+    "native_ms": 48.757258,
+    "read_ms": 21.767199,
+    "tu_ms": 1.250445,
+    "dump_bytes": 36041,
+    "nodes": 725
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/multiFile.h",
+    "native_ms": 92.120729,
+    "read_ms": 2.913916,
+    "tu_ms": 0.448849,
+    "dump_bytes": 39799,
+    "nodes": 116
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/clone.h",
+    "native_ms": 11.35357,
+    "read_ms": 0.62374,
+    "tu_ms": 0.308949,
+    "dump_bytes": 3421,
+    "nodes": 8
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/clone.cpp",
+    "native_ms": 202.26854,
+    "read_ms": 12.774543,
+    "tu_ms": 0.555344,
+    "dump_bytes": 30483,
+    "nodes": 568
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/add_global_2.cpp",
+    "native_ms": 14.420136,
+    "read_ms": 0.498643,
+    "tu_ms": 0.303496,
+    "dump_bytes": 868,
+    "nodes": 4
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/add_global_1.cpp",
+    "native_ms": 194.679518,
+    "read_ms": 7.498199,
+    "tu_ms": 0.380477,
+    "dump_bytes": 24052,
+    "nodes": 464
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/omp.cpp",
+    "native_ms": 21.033329,
+    "read_ms": 1.688103,
+    "tu_ms": 1.81941,
+    "dump_bytes": 3335,
+    "nodes": 57
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/omp_attributes.cpp",
+    "native_ms": 14.388201,
+    "read_ms": 1.506275,
+    "tu_ms": 1.813265,
+    "dump_bytes": 2344,
+    "nodes": 34
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/omp_set_attributes.cpp",
+    "native_ms": 13.973901,
+    "read_ms": 1.581666,
+    "tu_ms": 0.920364,
+    "dump_bytes": 3338,
+    "nodes": 56
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/classA.h",
+    "native_ms": 11.97058,
+    "read_ms": 0.622665,
+    "tu_ms": 0.323036,
+    "dump_bytes": 5268,
+    "nodes": 13
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/expressions.cpp",
+    "native_ms": 14.993895,
+    "read_ms": 7.25507,
+    "tu_ms": 0.477545,
+    "dump_bytes": 9445,
+    "nodes": 176
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/parent_region.cpp",
+    "native_ms": 13.745722,
+    "read_ms": 1.739352,
+    "tu_ms": 0.421845,
+    "dump_bytes": 3747,
+    "nodes": 62
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/vardecl.cpp",
+    "native_ms": 14.211663,
+    "read_ms": 1.479912,
+    "tu_ms": 0.41826,
+    "dump_bytes": 3091,
+    "nodes": 49
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/param_type.cpp",
+    "native_ms": 13.456738,
+    "read_ms": 2.221786,
+    "tu_ms": 0.346754,
+    "dump_bytes": 2763,
+    "nodes": 42
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/wrap.h",
+    "native_ms": 11.190047,
+    "read_ms": 0.570128,
+    "tu_ms": 0.355685,
+    "dump_bytes": 3541,
+    "nodes": 9
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/wrap.cpp",
+    "native_ms": 18.705721,
+    "read_ms": 2.733637,
+    "tu_ms": 0.487187,
+    "dump_bytes": 5220,
+    "nodes": 85
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/select_vardecl.cpp",
+    "native_ms": 13.767123,
+    "read_ms": 0.825883,
+    "tu_ms": 0.360212,
+    "dump_bytes": 1538,
+    "nodes": 17
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/macros.cpp",
+    "native_ms": 13.553965,
+    "read_ms": 1.226548,
+    "tu_ms": 0.325192,
+    "dump_bytes": 2021,
+    "nodes": 28
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/call.cpp",
+    "native_ms": 18.313551,
+    "read_ms": 4.464056,
+    "tu_ms": 0.483667,
+    "dump_bytes": 7129,
+    "nodes": 114
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/type_template.cpp",
+    "native_ms": 165.039959,
+    "read_ms": 33.581043,
+    "tu_ms": 0.695914,
+    "dump_bytes": 104179,
+    "nodes": 2036
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/function.h",
+    "native_ms": 12.279227,
+    "read_ms": 0.673021,
+    "tu_ms": 0.254866,
+    "dump_bytes": 2678,
+    "nodes": 7
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/function.cpp",
+    "native_ms": 14.319191,
+    "read_ms": 1.808199,
+    "tu_ms": 0.442402,
+    "dump_bytes": 4533,
+    "nodes": 75
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/ast_attributes.cpp",
+    "native_ms": 92.611399,
+    "read_ms": 10.752534,
+    "tu_ms": 0.48006,
+    "dump_bytes": 41341,
+    "nodes": 797
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/pragma_data_2.cpp",
+    "native_ms": 14.442882,
+    "read_ms": 1.016382,
+    "tu_ms": 0.300979,
+    "dump_bytes": 2034,
+    "nodes": 27
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/pragma_data.cpp",
+    "native_ms": 14.434433,
+    "read_ms": 2.855833,
+    "tu_ms": 0.934535,
+    "dump_bytes": 6222,
+    "nodes": 125
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/global_attributes.cpp",
+    "native_ms": 14.141383,
+    "read_ms": 1.410907,
+    "tu_ms": 0.333374,
+    "dump_bytes": 2868,
+    "nodes": 49
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/set_type.cpp",
+    "native_ms": 13.577323,
+    "read_ms": 1.976994,
+    "tu_ms": 0.32419,
+    "dump_bytes": 2411,
+    "nodes": 31
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/multiFile.h",
+    "native_ms": 85.554175,
+    "read_ms": 1.891635,
+    "tu_ms": 0.445516,
+    "dump_bytes": 39227,
+    "nodes": 116
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/multiFile.cpp",
+    "native_ms": 96.377873,
+    "read_ms": 18.590678,
+    "tu_ms": 0.527877,
+    "dump_bytes": 73611,
+    "nodes": 1517
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/field.hpp",
+    "native_ms": 10.888664,
+    "read_ms": 0.52001,
+    "tu_ms": 0.26997,
+    "dump_bytes": 4160,
+    "nodes": 10
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/file_rebuild_2.h",
+    "native_ms": 12.450163,
+    "read_ms": 0.404018,
+    "tu_ms": 0.285156,
+    "dump_bytes": 1363,
+    "nodes": 3
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/file_rebuild.h",
+    "native_ms": 12.4251,
+    "read_ms": 0.409779,
+    "tu_ms": 0.282504,
+    "dump_bytes": 2104,
+    "nodes": 4
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/file_rebuild.cpp",
+    "native_ms": 18.905535,
+    "read_ms": 0.763113,
+    "tu_ms": 0.351863,
+    "dump_bytes": 2527,
+    "nodes": 30
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_548721e0-b513-41af-b85d-77ffb86f98e8_lmsousa/file_rebuild.h",
+    "native_ms": 11.067039,
+    "read_ms": 0.613534,
+    "tu_ms": 0.348715,
+    "dump_bytes": 1739,
+    "nodes": 5
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/setters.cpp",
+    "native_ms": 55.915101,
+    "read_ms": 4.062335,
+    "tu_ms": 0.377278,
+    "dump_bytes": 14658,
+    "nodes": 250
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/skip_parsing_headers.cpp",
+    "native_ms": 13.923013,
+    "read_ms": 0.566699,
+    "tu_ms": 0.328342,
+    "dump_bytes": 1244,
+    "nodes": 9
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_a008c05d-4ab6-4b19-9b7f-dd27dc21d2e0_lmsousa/skip_parsing_headers.cpp",
+    "native_ms": 13.341388,
+    "read_ms": 0.765191,
+    "tu_ms": 0.37074,
+    "dump_bytes": 1203,
+    "nodes": 9
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_dd509df8-e1d7-4ac2-a3ca-d8d80abc0f6c_lmsousa/skip_parsing_headers.cpp",
+    "native_ms": 7.435178,
+    "read_ms": 0.708264,
+    "tu_ms": 0.369047,
+    "dump_bytes": 1203,
+    "nodes": 9
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_a008c05d-4ab6-4b19-9b7f-dd27dc21d2e0_lmsousa/skip_parsing_headers.cpp",
+    "native_ms": 7.388846,
+    "read_ms": 0.728336,
+    "tu_ms": 0.366566,
+    "dump_bytes": 1203,
+    "nodes": 9
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/vardeclv2_2.cpp",
+    "native_ms": 15.33617,
+    "read_ms": 0.831194,
+    "tu_ms": 0.280929,
+    "dump_bytes": 1378,
+    "nodes": 13
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/vardeclv2.cpp",
+    "native_ms": 25.659622,
+    "read_ms": 1.233675,
+    "tu_ms": 0.374952,
+    "dump_bytes": 2772,
+    "nodes": 43
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/file.cpp",
+    "native_ms": 14.791485,
+    "read_ms": 0.465576,
+    "tu_ms": 0.344725,
+    "dump_bytes": 877,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/dataclass.cpp",
+    "native_ms": 14.305335,
+    "read_ms": 0.817323,
+    "tu_ms": 0.352213,
+    "dump_bytes": 2093,
+    "nodes": 27
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/class_manipulation.h",
+    "native_ms": 12.437489,
+    "read_ms": 0.970436,
+    "tu_ms": 0.402589,
+    "dump_bytes": 13550,
+    "nodes": 35
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/class_manipulation.cpp",
+    "native_ms": 14.511913,
+    "read_ms": 0.997313,
+    "tu_ms": 0.375902,
+    "dump_bytes": 3030,
+    "nodes": 43
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/this.cpp",
+    "native_ms": 194.262852,
+    "read_ms": 8.570848,
+    "tu_ms": 0.49065,
+    "dump_bytes": 33735,
+    "nodes": 635
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/member.cpp",
+    "native_ms": 14.519523,
+    "read_ms": 1.687012,
+    "tu_ms": 0.410435,
+    "dump_bytes": 2895,
+    "nodes": 37
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/fieldRef.cpp",
+    "native_ms": 13.752952,
+    "read_ms": 1.05578,
+    "tu_ms": 0.300133,
+    "dump_bytes": 2375,
+    "nodes": 35
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/expressionDecls.cpp",
+    "native_ms": 202.735097,
+    "read_ms": 6.007205,
+    "tu_ms": 0.412268,
+    "dump_bytes": 26451,
+    "nodes": 488
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/template_specialization_type.cpp",
+    "native_ms": 13.335341,
+    "read_ms": 0.93174,
+    "tu_ms": 0.275422,
+    "dump_bytes": 1355,
+    "nodes": 14
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/reverse_iterator.cpp",
+    "native_ms": 152.471678,
+    "read_ms": 0.848751,
+    "tu_ms": 0.368041,
+    "dump_bytes": 2774,
+    "nodes": 39
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/function2.cpp",
+    "native_ms": 14.307567,
+    "read_ms": 1.217236,
+    "tu_ms": 0.301898,
+    "dump_bytes": 1618,
+    "nodes": 20
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/clone_on_file.h",
+    "native_ms": 11.250103,
+    "read_ms": 0.332509,
+    "tu_ms": 0.259305,
+    "dump_bytes": 1351,
+    "nodes": 3
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/clone_on_file.cpp",
+    "native_ms": 13.302959,
+    "read_ms": 0.307476,
+    "tu_ms": 0.249163,
+    "dump_bytes": 1016,
+    "nodes": 7
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/empty_stmt.cpp",
+    "native_ms": 13.50321,
+    "read_ms": 0.703594,
+    "tu_ms": 0.353883,
+    "dump_bytes": 1441,
+    "nodes": 19
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/class.cpp",
+    "native_ms": 13.842585,
+    "read_ms": 1.447871,
+    "tu_ms": 0.357025,
+    "dump_bytes": 3586,
+    "nodes": 48
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/canonical.cpp",
+    "native_ms": 13.479164,
+    "read_ms": 0.536494,
+    "tu_ms": 0.329454,
+    "dump_bytes": 904,
+    "nodes": 8
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/break.cpp",
+    "native_ms": 14.043583,
+    "read_ms": 3.417621,
+    "tu_ms": 0.373833,
+    "dump_bytes": 2898,
+    "nodes": 56
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/cpp/src/loic_ex1.cpp",
+    "native_ms": 119.28168,
+    "read_ms": 2.923036,
+    "tu_ms": 0.454108,
+    "dump_bytes": 9005,
+    "nodes": 147
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/cpp/src/loic_ex2.cpp",
+    "native_ms": 200.727155,
+    "read_ms": 24.696562,
+    "tu_ms": 0.663739,
+    "dump_bytes": 89102,
+    "nodes": 1779
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/cpp/src/loic_ex3.cpp",
+    "native_ms": 117.052056,
+    "read_ms": 3.058032,
+    "tu_ms": 0.51769,
+    "dump_bytes": 9175,
+    "nodes": 144
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/cpp/src/ls_issue2.cpp",
+    "native_ms": 116.444715,
+    "read_ms": 0.588886,
+    "tu_ms": 0.430858,
+    "dump_bytes": 1289,
+    "nodes": 12
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/cpp/src/cb_multios.cpp",
+    "native_ms": 22.657333,
+    "read_ms": 1.020468,
+    "tu_ms": 0.329543,
+    "dump_bytes": 2330,
+    "nodes": 34
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/logger_test.cpp",
+    "native_ms": 13.630545,
+    "read_ms": 1.662396,
+    "tu_ms": 0.382169,
+    "dump_bytes": 3780,
+    "nodes": 66
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/logger_test.cpp",
+    "native_ms": 7.641823,
+    "read_ms": 1.683295,
+    "tu_ms": 0.343728,
+    "dump_bytes": 3780,
+    "nodes": 66
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/energy_test.cpp",
+    "native_ms": 13.71176,
+    "read_ms": 1.170841,
+    "tu_ms": 0.355548,
+    "dump_bytes": 2635,
+    "nodes": 40
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/timer_test.cpp",
+    "native_ms": 14.099813,
+    "read_ms": 1.647702,
+    "tu_ms": 0.349223,
+    "dump_bytes": 3184,
+    "nodes": 54
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/clava_find_jptest.cpp",
+    "native_ms": 13.912355,
+    "read_ms": 1.259055,
+    "tu_ms": 0.360348,
+    "dump_bytes": 2765,
+    "nodes": 43
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/math_extra_test.cpp",
+    "native_ms": 13.607699,
+    "read_ms": 1.117008,
+    "tu_ms": 0.319064,
+    "dump_bytes": 2556,
+    "nodes": 40
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/clava_data_store_test.cpp",
+    "native_ms": 13.87255,
+    "read_ms": 1.191071,
+    "tu_ms": 0.323058,
+    "dump_bytes": 2646,
+    "nodes": 40
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/user_values.cpp",
+    "native_ms": 13.560731,
+    "read_ms": 0.452806,
+    "tu_ms": 0.29278,
+    "dump_bytes": 865,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/clava_code.cpp",
+    "native_ms": 18.552618,
+    "read_ms": 4.854504,
+    "tu_ms": 0.749927,
+    "dump_bytes": 11634,
+    "nodes": 257
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/clava_join_points.cpp",
+    "native_ms": 13.503656,
+    "read_ms": 0.769323,
+    "tu_ms": 0.298601,
+    "dump_bytes": 1743,
+    "nodes": 22
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/jp_filter.hpp",
+    "native_ms": 11.071874,
+    "read_ms": 1.193157,
+    "tu_ms": 0.35224,
+    "dump_bytes": 18124,
+    "nodes": 46
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/rebuild.cpp",
+    "native_ms": 13.561355,
+    "read_ms": 0.848324,
+    "tu_ms": 0.316022,
+    "dump_bytes": 1922,
+    "nodes": 25
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_19aa18ec-bb10-4e05-95c9-21182dc0cb88_lmsousa/rebuild.h",
+    "native_ms": 11.202947,
+    "read_ms": 0.221803,
+    "tu_ms": 0.282051,
+    "dump_bytes": 129,
+    "nodes": 0
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_19aa18ec-bb10-4e05-95c9-21182dc0cb88_lmsousa/rebuild.cpp",
+    "native_ms": 13.181775,
+    "read_ms": 1.280275,
+    "tu_ms": 0.290836,
+    "dump_bytes": 1657,
+    "nodes": 25
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_f33ffd03-01e9-40e2-8316-173e90645dab_lmsousa/rebuild.h",
+    "native_ms": 11.578156,
+    "read_ms": 0.20885,
+    "tu_ms": 0.263742,
+    "dump_bytes": 129,
+    "nodes": 0
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_f33ffd03-01e9-40e2-8316-173e90645dab_lmsousa/rebuild.cpp",
+    "native_ms": 13.484558,
+    "read_ms": 1.272944,
+    "tu_ms": 0.268832,
+    "dump_bytes": 1643,
+    "nodes": 25
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_19aa18ec-bb10-4e05-95c9-21182dc0cb88_lmsousa/rebuild.cpp",
+    "native_ms": 7.825617,
+    "read_ms": 1.874826,
+    "tu_ms": 0.371451,
+    "dump_bytes": 1643,
+    "nodes": 25
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_19aa18ec-bb10-4e05-95c9-21182dc0cb88_lmsousa/rebuild.h",
+    "native_ms": 10.502931,
+    "read_ms": 0.145846,
+    "tu_ms": 0.181609,
+    "dump_bytes": 129,
+    "nodes": 0
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/file_iterator_1.cpp",
+    "native_ms": 14.353312,
+    "read_ms": 0.510166,
+    "tu_ms": 0.308397,
+    "dump_bytes": 869,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/file_iterator_2.cpp",
+    "native_ms": 40.249747,
+    "read_ms": 0.341446,
+    "tu_ms": 0.225917,
+    "dump_bytes": 894,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_f5ce5006-d53c-41cb-9e89-91d15d1b9dcc_lmsousa/file_iterator_1.cpp",
+    "native_ms": 13.395824,
+    "read_ms": 0.520071,
+    "tu_ms": 0.296064,
+    "dump_bytes": 728,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_9c2e8818-d47e-41ce-8970-b40c21d6f411_lmsousa/file_iterator_2.cpp",
+    "native_ms": 14.166342,
+    "read_ms": 0.519572,
+    "tu_ms": 0.344221,
+    "dump_bytes": 757,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_f5ce5006-d53c-41cb-9e89-91d15d1b9dcc_lmsousa/file_iterator_1.cpp",
+    "native_ms": 8.08118,
+    "read_ms": 0.534753,
+    "tu_ms": 0.305988,
+    "dump_bytes": 728,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_9c2e8818-d47e-41ce-8970-b40c21d6f411_lmsousa/file_iterator_2.cpp",
+    "native_ms": 7.54753,
+    "read_ms": 0.528013,
+    "tu_ms": 0.308587,
+    "dump_bytes": 757,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_f5ce5006-d53c-41cb-9e89-91d15d1b9dcc_lmsousa/file_iterator_1.cpp",
+    "native_ms": 7.544401,
+    "read_ms": 0.518767,
+    "tu_ms": 0.300406,
+    "dump_bytes": 728,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/add_header_file.cpp",
+    "native_ms": 13.67549,
+    "read_ms": 0.459347,
+    "tu_ms": 0.333431,
+    "dump_bytes": 884,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/clava.cpp",
+    "native_ms": 13.46435,
+    "read_ms": 0.468923,
+    "tu_ms": 0.282235,
+    "dump_bytes": 909,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_94d85be9-9c40-4848-bdb2-7f0c1fbe627f_lmsousa/addedFile.cpp",
+    "native_ms": 13.366384,
+    "read_ms": 0.541908,
+    "tu_ms": 0.309327,
+    "dump_bytes": 744,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/query.cpp",
+    "native_ms": 14.304614,
+    "read_ms": 2.073078,
+    "tu_ms": 0.365813,
+    "dump_bytes": 4180,
+    "nodes": 86
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/stmt_decomposer.cpp",
+    "native_ms": 13.439202,
+    "read_ms": 1.149995,
+    "tu_ms": 0.292079,
+    "dump_bytes": 2167,
+    "nodes": 33
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/pass_simplify_var_declarations.cpp",
+    "native_ms": 20.05236,
+    "read_ms": 0.709917,
+    "tu_ms": 0.289245,
+    "dump_bytes": 1487,
+    "nodes": 17
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/pass_single_return.cpp",
+    "native_ms": 192.607821,
+    "read_ms": 7.325717,
+    "tu_ms": 0.444957,
+    "dump_bytes": 30864,
+    "nodes": 580
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_908254d1-017b-4e8c-a583-e69f895c0e9d_lmsousa/pass_single_return.cpp",
+    "native_ms": 191.451383,
+    "read_ms": 9.889259,
+    "tu_ms": 0.578809,
+    "dump_bytes": 30450,
+    "nodes": 606
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/code_simplify_assignment.cpp",
+    "native_ms": 23.302379,
+    "read_ms": 2.639114,
+    "tu_ms": 0.382533,
+    "dump_bytes": 7224,
+    "nodes": 128
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_8c0aa7d3-2d83-4f34-80a0-381d126fea2f_lmsousa/code_simplify_assignment.cpp",
+    "native_ms": 22.814878,
+    "read_ms": 4.85083,
+    "tu_ms": 0.465561,
+    "dump_bytes": 8674,
+    "nodes": 173
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/code_simplify_ternary_op.cpp",
+    "native_ms": 13.682809,
+    "read_ms": 1.060161,
+    "tu_ms": 0.307562,
+    "dump_bytes": 2499,
+    "nodes": 37
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_e5a2eec9-1b53-41f4-b294-d60aa8d7a16e_lmsousa/code_simplify_ternary_op.cpp",
+    "native_ms": 13.502475,
+    "read_ms": 1.710872,
+    "tu_ms": 0.348849,
+    "dump_bytes": 2640,
+    "nodes": 45
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/pass_simplify_loops.cpp",
+    "native_ms": 192.995094,
+    "read_ms": 7.493622,
+    "tu_ms": 0.462176,
+    "dump_bytes": 29760,
+    "nodes": 569
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/mpi_scatter_gather.cpp",
+    "native_ms": 14.562862,
+    "read_ms": 1.065143,
+    "tu_ms": 0.430259,
+    "dump_bytes": 2221,
+    "nodes": 30
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/cpp/src/subset.cpp",
+    "native_ms": 236.656166,
+    "read_ms": 13.785216,
+    "tu_ms": 0.540177,
+    "dump_bytes": 62246,
+    "nodes": 1173
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cuda/src/atomicAdd.cu",
+    "native_ms": 524.119858,
+    "read_ms": 15.167371,
+    "tu_ms": 0.573168,
+    "dump_bytes": 26233,
+    "nodes": 458
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cuda/src/mult_matrix.cu",
+    "native_ms": 523.273683,
+    "read_ms": 22.096665,
+    "tu_ms": 0.813635,
+    "dump_bytes": 54377,
+    "nodes": 1076
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cuda/src/sample.cu",
+    "native_ms": 533.317007,
+    "read_ms": 12.144514,
+    "tu_ms": 0.44448,
+    "dump_bytes": 32828,
+    "nodes": 603
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/loop.c",
+    "native_ms": 14.494611,
+    "read_ms": 7.853041,
+    "tu_ms": 0.584931,
+    "dump_bytes": 14199,
+    "nodes": 345
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/ReplaceCallWithStmt.c",
+    "native_ms": 13.982045,
+    "read_ms": 1.112269,
+    "tu_ms": 0.364783,
+    "dump_bytes": 2658,
+    "nodes": 42
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inserts.c",
+    "native_ms": 21.790445,
+    "read_ms": 1.557291,
+    "tu_ms": 0.460665,
+    "dump_bytes": 3889,
+    "nodes": 65
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inserts.c",
+    "native_ms": 7.468947,
+    "read_ms": 1.556589,
+    "tu_ms": 0.442549,
+    "dump_bytes": 3889,
+    "nodes": 65
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/clone.c",
+    "native_ms": 13.568463,
+    "read_ms": 0.874182,
+    "tu_ms": 0.330232,
+    "dump_bytes": 2089,
+    "nodes": 29
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/add_global_2.c",
+    "native_ms": 14.356871,
+    "read_ms": 0.405415,
+    "tu_ms": 0.278295,
+    "dump_bytes": 702,
+    "nodes": 4
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/add_global_1.c",
+    "native_ms": 16.711483,
+    "read_ms": 0.54268,
+    "tu_ms": 0.298067,
+    "dump_bytes": 2185,
+    "nodes": 28
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/expressions.c",
+    "native_ms": 13.577374,
+    "read_ms": 2.283835,
+    "tu_ms": 0.354598,
+    "dump_bytes": 4791,
+    "nodes": 83
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/wrap.h",
+    "native_ms": 11.63479,
+    "read_ms": 0.456019,
+    "tu_ms": 0.277211,
+    "dump_bytes": 3521,
+    "nodes": 9
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/wrap.c",
+    "native_ms": 17.507035,
+    "read_ms": 1.632243,
+    "tu_ms": 0.394172,
+    "dump_bytes": 5250,
+    "nodes": 90
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/varref_in_while.c",
+    "native_ms": 13.760557,
+    "read_ms": 0.750779,
+    "tu_ms": 0.277864,
+    "dump_bytes": 1700,
+    "nodes": 22
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inline_utils.h",
+    "native_ms": 11.903802,
+    "read_ms": 2.579408,
+    "tu_ms": 0.37095,
+    "dump_bytes": 28983,
+    "nodes": 78
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inline.c",
+    "native_ms": 14.864831,
+    "read_ms": 4.321377,
+    "tu_ms": 0.432754,
+    "dump_bytes": 11719,
+    "nodes": 239
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inline_utils.c",
+    "native_ms": 14.864968,
+    "read_ms": 6.018205,
+    "tu_ms": 0.589908,
+    "dump_bytes": 16020,
+    "nodes": 348
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/set_type.c",
+    "native_ms": 13.965524,
+    "read_ms": 1.22927,
+    "tu_ms": 0.327096,
+    "dump_bytes": 2883,
+    "nodes": 44
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/detach.c",
+    "native_ms": 13.684837,
+    "read_ms": 1.383867,
+    "tu_ms": 0.315002,
+    "dump_bytes": 3089,
+    "nodes": 55
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inline_nas_lu.c",
+    "native_ms": 105.648462,
+    "read_ms": 627.583466,
+    "tu_ms": 20.905069,
+    "dump_bytes": 1481997,
+    "nodes": 39495
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/inline_nas_ft.c",
+    "native_ms": 43.708428,
+    "read_ms": 128.22148,
+    "tu_ms": 4.881676,
+    "dump_bytes": 262367,
+    "nodes": 6234
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/null_nodes.c",
+    "native_ms": 13.750845,
+    "read_ms": 1.016541,
+    "tu_ms": 0.294772,
+    "dump_bytes": 2272,
+    "nodes": 37
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/type_renamer.c",
+    "native_ms": 13.724083,
+    "read_ms": 1.208984,
+    "tu_ms": 0.297404,
+    "dump_bytes": 3255,
+    "nodes": 58
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/ast_nodes.c",
+    "native_ms": 16.263676,
+    "read_ms": 0.931071,
+    "tu_ms": 0.336446,
+    "dump_bytes": 2845,
+    "nodes": 39
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include_1.h",
+    "native_ms": 12.493164,
+    "read_ms": 0.157137,
+    "tu_ms": 0.238153,
+    "dump_bytes": 361,
+    "nodes": 0
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include_2.h",
+    "native_ms": 12.440779,
+    "read_ms": 0.157265,
+    "tu_ms": 0.238054,
+    "dump_bytes": 361,
+    "nodes": 0
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include_0.h",
+    "native_ms": 12.472848,
+    "read_ms": 0.157184,
+    "tu_ms": 0.23809,
+    "dump_bytes": 361,
+    "nodes": 0
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include.c",
+    "native_ms": 13.76206,
+    "read_ms": 0.363507,
+    "tu_ms": 0.267247,
+    "dump_bytes": 986,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include.c",
+    "native_ms": 9.033116,
+    "read_ms": 0.452563,
+    "tu_ms": 0.35583,
+    "dump_bytes": 986,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include_1.h",
+    "native_ms": 12.623298,
+    "read_ms": 0.087026,
+    "tu_ms": 0.161265,
+    "dump_bytes": 361,
+    "nodes": 0
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include_2.h",
+    "native_ms": 12.601504,
+    "read_ms": 0.086963,
+    "tu_ms": 0.161255,
+    "dump_bytes": 361,
+    "nodes": 0
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/remove_include_0.h",
+    "native_ms": 12.573766,
+    "read_ms": 0.086884,
+    "tu_ms": 0.161415,
+    "dump_bytes": 361,
+    "nodes": 0
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/dynamic_call_graph.c",
+    "native_ms": 13.585549,
+    "read_ms": 1.967018,
+    "tu_ms": 0.388211,
+    "dump_bytes": 3438,
+    "nodes": 64
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/selects.c",
+    "native_ms": 13.113393,
+    "read_ms": 0.483497,
+    "tu_ms": 0.25714,
+    "dump_bytes": 1021,
+    "nodes": 10
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/scope.c",
+    "native_ms": 13.516624,
+    "read_ms": 0.988412,
+    "tu_ms": 0.4403,
+    "dump_bytes": 2303,
+    "nodes": 34
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/array_test.c",
+    "native_ms": 13.5583,
+    "read_ms": 0.627558,
+    "tu_ms": 0.266899,
+    "dump_bytes": 1554,
+    "nodes": 23
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/cilk.clava_cilk.c",
+    "native_ms": 13.457227,
+    "read_ms": 1.255325,
+    "tu_ms": 0.429201,
+    "dump_bytes": 3140,
+    "nodes": 50
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/tag_decl.c",
+    "native_ms": 13.301362,
+    "read_ms": 0.69657,
+    "tu_ms": 0.310214,
+    "dump_bytes": 1379,
+    "nodes": 15
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/file.c",
+    "native_ms": 13.171177,
+    "read_ms": 0.488488,
+    "tu_ms": 0.366048,
+    "dump_bytes": 765,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/switch.c",
+    "native_ms": 13.810178,
+    "read_ms": 1.180371,
+    "tu_ms": 0.298487,
+    "dump_bytes": 2337,
+    "nodes": 42
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/add_param.c",
+    "native_ms": 13.49659,
+    "read_ms": 0.599117,
+    "tu_ms": 0.340885,
+    "dump_bytes": 1220,
+    "nodes": 14
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/add_arg.c",
+    "native_ms": 13.416297,
+    "read_ms": 0.917937,
+    "tu_ms": 0.328475,
+    "dump_bytes": 2381,
+    "nodes": 33
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/cfg.c",
+    "native_ms": 25.502431,
+    "read_ms": 7.547129,
+    "tu_ms": 0.805307,
+    "dump_bytes": 20553,
+    "nodes": 455
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/expr_stmt.c",
+    "native_ms": 13.354511,
+    "read_ms": 0.976179,
+    "tu_ms": 0.37463,
+    "dump_bytes": 2279,
+    "nodes": 35
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/traversal.c",
+    "native_ms": 13.301133,
+    "read_ms": 0.546332,
+    "tu_ms": 0.262434,
+    "dump_bytes": 1236,
+    "nodes": 14
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/c/src/if.c",
+    "native_ms": 13.406971,
+    "read_ms": 0.753468,
+    "tu_ms": 0.272527,
+    "dump_bytes": 1570,
+    "nodes": 24
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/c/src/hamid_region.h",
+    "native_ms": 11.24243,
+    "read_ms": 0.317466,
+    "tu_ms": 0.279962,
+    "dump_bytes": 1647,
+    "nodes": 4
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/c/src/hamid_region.c",
+    "native_ms": 13.269456,
+    "read_ms": 0.59131,
+    "tu_ms": 0.196627,
+    "dump_bytes": 1826,
+    "nodes": 23
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/c/src/dsp_matmul.c",
+    "native_ms": 13.996365,
+    "read_ms": 4.765369,
+    "tu_ms": 0.4005,
+    "dump_bytes": 11180,
+    "nodes": 256
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/bench/c/src/ls_issue1.c",
+    "native_ms": 13.463486,
+    "read_ms": 2.271543,
+    "tu_ms": 0.319332,
+    "dump_bytes": 5887,
+    "nodes": 127
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/logger_test.c",
+    "native_ms": 13.688307,
+    "read_ms": 1.515754,
+    "tu_ms": 0.322121,
+    "dump_bytes": 3640,
+    "nodes": 65
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/timer_test.c",
+    "native_ms": 13.511807,
+    "read_ms": 1.228704,
+    "tu_ms": 0.322723,
+    "dump_bytes": 2989,
+    "nodes": 53
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/timer_test.c",
+    "native_ms": 7.916948,
+    "read_ms": 1.281176,
+    "tu_ms": 0.368872,
+    "dump_bytes": 2989,
+    "nodes": 53
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/energy_test.c",
+    "native_ms": 14.924498,
+    "read_ms": 1.080653,
+    "tu_ms": 0.30674,
+    "dump_bytes": 2497,
+    "nodes": 39
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/code_inserter.c",
+    "native_ms": 17.503987,
+    "read_ms": 2.193944,
+    "tu_ms": 0.538789,
+    "dump_bytes": 6164,
+    "nodes": 114
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/qr.c",
+    "native_ms": 36.919834,
+    "read_ms": 97.404348,
+    "tu_ms": 3.65472,
+    "dump_bytes": 191796,
+    "nodes": 5176
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/selector_test.c",
+    "native_ms": 13.854165,
+    "read_ms": 1.295372,
+    "tu_ms": 0.281022,
+    "dump_bytes": 3023,
+    "nodes": 55
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/strcpy.c",
+    "native_ms": 17.118993,
+    "read_ms": 1.474503,
+    "tu_ms": 0.375266,
+    "dump_bytes": 5806,
+    "nodes": 93
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/static_call_graph.c",
+    "native_ms": 13.540072,
+    "read_ms": 0.939843,
+    "tu_ms": 0.330089,
+    "dump_bytes": 2321,
+    "nodes": 40
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/pass_composition.c",
+    "native_ms": 24.047622,
+    "read_ms": 0.778827,
+    "tu_ms": 0.366307,
+    "dump_bytes": 1809,
+    "nodes": 24
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/cfg_api.c",
+    "native_ms": 15.231174,
+    "read_ms": 10.996549,
+    "tu_ms": 0.598189,
+    "dump_bytes": 24150,
+    "nodes": 592
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/inliner.c",
+    "native_ms": 19.280529,
+    "read_ms": 12.735507,
+    "tu_ms": 0.996803,
+    "dump_bytes": 36279,
+    "nodes": 820
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/stmt_decomposer.c",
+    "native_ms": 14.296052,
+    "read_ms": 1.726174,
+    "tu_ms": 0.340959,
+    "dump_bytes": 4130,
+    "nodes": 78
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/to_single_file_2.c",
+    "native_ms": 14.037429,
+    "read_ms": 3.033346,
+    "tu_ms": 0.306377,
+    "dump_bytes": 1182,
+    "nodes": 14
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/to_single_file_1.c",
+    "native_ms": 49.02991,
+    "read_ms": 0.424566,
+    "tu_ms": 0.21337,
+    "dump_bytes": 784,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/liveness_analysis.c",
+    "native_ms": 13.590427,
+    "read_ms": 1.695838,
+    "tu_ms": 0.336948,
+    "dump_bytes": 3809,
+    "nodes": 74
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/switch_to_if.c",
+    "native_ms": 14.256546,
+    "read_ms": 5.647395,
+    "tu_ms": 0.404228,
+    "dump_bytes": 12031,
+    "nodes": 282
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/__clava_woven_ed05ab76-f4a7-4e28-84f7-2326ba1dd0de_lmsousa/switch_to_if.c",
+    "native_ms": 14.1112,
+    "read_ms": 11.554892,
+    "tu_ms": 0.583695,
+    "dump_bytes": 14217,
+    "nodes": 352
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/tmp_lmsousa/dummyFile.cpp",
+    "native_ms": 21.931371,
+    "read_ms": 2.053153,
+    "tu_ms": 0.337082,
+    "dump_bytes": 4198,
+    "nodes": 86
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/tmp_lmsousa/dummyFile.cpp",
+    "native_ms": 7.324724,
+    "read_ms": 1.965605,
+    "tu_ms": 0.334528,
+    "dump_bytes": 4198,
+    "nodes": 86
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/tmp_lmsousa/dummyFile.cpp",
+    "native_ms": 7.5002,
+    "read_ms": 1.969472,
+    "tu_ms": 0.330227,
+    "dump_bytes": 4198,
+    "nodes": 86
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/tmp_lmsousa/dummyFile.cpp",
+    "native_ms": 7.458334,
+    "read_ms": 1.970969,
+    "tu_ms": 0.329432,
+    "dump_bytes": 4198,
+    "nodes": 86
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/tmp_lmsousa/dummyFile.cpp",
+    "native_ms": 7.514375,
+    "read_ms": 1.980761,
+    "tu_ms": 0.348955,
+    "dump_bytes": 4198,
+    "nodes": 86
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/tmp_lmsousa/dummyFile.cpp",
+    "native_ms": 7.300267,
+    "read_ms": 1.950739,
+    "tu_ms": 0.334286,
+    "dump_bytes": 4198,
+    "nodes": 86
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/issues/c/src/issue_168.c",
+    "native_ms": 18.481211,
+    "read_ms": 3.176458,
+    "tu_ms": 0.38594,
+    "dump_bytes": 8106,
+    "nodes": 175
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/issues/c/src/issue_aiq_1.c",
+    "native_ms": 19.258782,
+    "read_ms": 2.114567,
+    "tu_ms": 0.383472,
+    "dump_bytes": 6282,
+    "nodes": 113
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/tmp_lmsousa/dummyFile.cpp",
+    "native_ms": 13.459085,
+    "read_ms": 0.56642,
+    "tu_ms": 0.291569,
+    "dump_bytes": 1047,
+    "nodes": 9
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/tmp_lmsousa/file2.c",
+    "native_ms": 13.975641,
+    "read_ms": 0.425684,
+    "tu_ms": 0.292198,
+    "dump_bytes": 846,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/tmp_lmsousa/file1.c",
+    "native_ms": 50.114114,
+    "read_ms": 0.276023,
+    "tu_ms": 0.207606,
+    "dump_bytes": 842,
+    "nodes": 6
+  },
+  {
+    "format": "text",
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T144315519064Z-cold/tmp/tmp_lmsousa/dummyFile.cpp",
+    "native_ms": 13.615188,
+    "read_ms": 0.751448,
+    "tu_ms": 0.281725,
+    "dump_bytes": 1602,
+    "nodes": 21
+  }
+]

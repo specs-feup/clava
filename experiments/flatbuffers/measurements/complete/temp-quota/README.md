@@ -1,0 +1,1 @@
+This stopped matrix is excluded from all final timing comparisons. The fixed runtime reached the known 158/4/2 baseline in its first four cells, then Java file writes failed with `Disk quota exceeded` under `/tmp`. The final matrix routes Java, Node and Python scratch to run-owned directories on the workspace filesystem for every format. No unrelated temporary files were removed.

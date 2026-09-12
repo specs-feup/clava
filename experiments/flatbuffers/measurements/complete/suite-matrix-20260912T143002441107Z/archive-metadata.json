@@ -1,0 +1,37 @@
+{
+  "matrix": "matrix-20260912T143002441107Z",
+  "matrix_results": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/matrix-results.json",
+  "matrix_plan": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/matrix-plan.json",
+  "cell_count": 27,
+  "expected_counts": {
+    "total_tests": 164,
+    "passed_tests": 158,
+    "failed_tests": 4,
+    "pending_tests": 2
+  },
+  "expected_failures": [
+    "CxxTest OmpThreadsExplore",
+    "CudaTest Cuda",
+    "CudaTest CudaMatrixMul",
+    "CudaTest CudaQuery"
+  ],
+  "warm_cache_reference": {
+    "historical_direct_hits": 167,
+    "historical_misses": 0
+  },
+  "current_warm_cells": {
+    "count": 9,
+    "direct_hits": [
+      162
+    ],
+    "misses": [
+      5
+    ]
+  },
+  "cache_mismatch_evidence": "ccache-path-diagnostic.log.gz contains the separate diagnostic trace; per-cell raw evidence is in cell-NN directories. Compressed Vitest logs/JSON retain the exact source bytes.",
+  "excluded_from_archive": [
+    "caches/",
+    "java-binaries/"
+  ],
+  "raw_evidence_dir": "experiments/flatbuffers/measurements/complete/suite-matrix-20260912T143002441107Z"
+}

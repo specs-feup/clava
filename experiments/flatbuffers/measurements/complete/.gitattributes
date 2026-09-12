@@ -1,0 +1,4 @@
+# Preserve generated evidence byte-for-byte, including CRLF and tool whitespace.
+*.log -whitespace
+*.csv -whitespace
+*.xml -whitespace

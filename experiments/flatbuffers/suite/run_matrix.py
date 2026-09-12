@@ -31,6 +31,18 @@ DEFAULT_DUMPER_REPO = Path(
 FORMATS = ("text", "flat-eager", "flat-lazy")
 MODES = ("cold", "warm", "bypass")
 EXPECTED_STATUSES = {"passed", "pass", "skipped", "pending", "todo"}
+EXPECTED_COUNTS = {
+    "total_tests": 164,
+    "passed_tests": 158,
+    "failed_tests": 4,
+    "pending_tests": 2,
+}
+KNOWN_FAILURES = {
+    "CxxTest OmpThreadsExplore",
+    "CudaTest Cuda",
+    "CudaTest CudaMatrixMul",
+    "CudaTest CudaQuery",
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -84,6 +96,24 @@ def find_new_summary(output_root: Path, before: set[Path]) -> Path | None:
     if len(candidates) != 1:
         return sorted(candidates)[-1] if candidates else None
     return candidates.pop()
+
+
+def validate_cell(summary_path: Path) -> list[str]:
+    summary = json.loads(summary_path.read_text())
+    errors = [
+        f"{key}={summary.get(key)!r}, expected {expected}"
+        for key, expected in EXPECTED_COUNTS.items()
+        if summary.get(key) != expected
+    ]
+    observed_failures = set(failed_tests(summary_path))
+    if observed_failures != KNOWN_FAILURES:
+        errors.append(
+            "failed tests="
+            + repr(sorted(observed_failures))
+            + ", expected="
+            + repr(sorted(KNOWN_FAILURES))
+        )
+    return errors
 
 
 def main() -> int:
@@ -188,11 +218,23 @@ def main() -> int:
             "summary": str(summary_path) if summary_path else None,
             "failed_tests": failed_tests(summary_path) if summary_path else [],
         }
+        if summary_path is None:
+            result["validation_errors"] = ["runner did not produce summary.json"]
+        else:
+            result["validation_errors"] = validate_cell(summary_path)
         results.append(result)
         (output_root / "matrix-progress.json").write_text(
             json.dumps({**plan_metadata, "completed": results}, indent=2) + "\n"
         )
         print(json.dumps(result, sort_keys=True), flush=True)
+        if result["validation_errors"]:
+            print(
+                f"Stopping matrix after unexpected result in cell {index}: "
+                + "; ".join(result["validation_errors"]),
+                file=sys.stderr,
+                flush=True,
+            )
+            return 1
 
     final = {**plan_metadata, "completed": results, "complete": True}
     (output_root / "matrix-results.json").write_text(json.dumps(final, indent=2) + "\n")

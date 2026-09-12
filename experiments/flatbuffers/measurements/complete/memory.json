@@ -1,0 +1,146 @@
+[
+  {
+    "fixture": "nas",
+    "mode": "text",
+    "trial": 0,
+    "returncode": 0,
+    "max_rss_kib": 307896,
+    "log": "Sep 12, 2026 10:17:42 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:17:42 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=56275840,decoded=0,deferred=0\nready,heap=36278936,decoded=0,deferred=0\nquery,heap=36513320,decoded=0,deferred=0\ncode_chars=137104\ncodegen,heap=36673824,decoded=0,deferred=0\ndetached,heap=8593208,decoded=0,deferred=0\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas",
+    "mode": "text",
+    "trial": 1,
+    "returncode": 0,
+    "max_rss_kib": 305924,
+    "log": "Sep 12, 2026 10:17:44 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:17:44 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=56063336,decoded=0,deferred=0\nready,heap=36181792,decoded=0,deferred=0\nquery,heap=36416048,decoded=0,deferred=0\ncode_chars=137104\ncodegen,heap=36576384,decoded=0,deferred=0\ndetached,heap=8594360,decoded=0,deferred=0\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas",
+    "mode": "text",
+    "trial": 2,
+    "returncode": 0,
+    "max_rss_kib": 306952,
+    "log": "Sep 12, 2026 10:17:46 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:17:46 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=56006336,decoded=0,deferred=0\nready,heap=36103592,decoded=0,deferred=0\nquery,heap=36337736,decoded=0,deferred=0\ncode_chars=137104\ncodegen,heap=36498632,decoded=0,deferred=0\ndetached,heap=8511680,decoded=0,deferred=0\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas",
+    "mode": "eager",
+    "trial": 0,
+    "returncode": 0,
+    "max_rss_kib": 357448,
+    "log": "Sep 12, 2026 10:17:48 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:17:48 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=55455448,decoded=314508,deferred=314508\nready,heap=36896104,decoded=314508,deferred=314508\nquery,heap=37145752,decoded=314508,deferred=314508\ncode_chars=137104\ncodegen,heap=37310464,decoded=314508,deferred=314508\ndetached,heap=9546600,decoded=314508,deferred=314508\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas",
+    "mode": "eager",
+    "trial": 1,
+    "returncode": 0,
+    "max_rss_kib": 356512,
+    "log": "Sep 12, 2026 10:17:50 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:17:50 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=55489464,decoded=314508,deferred=314508\nready,heap=36868464,decoded=314508,deferred=314508\nquery,heap=37119496,decoded=314508,deferred=314508\ncode_chars=137104\ncodegen,heap=37292432,decoded=314508,deferred=314508\ndetached,heap=9604000,decoded=314508,deferred=314508\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas",
+    "mode": "eager",
+    "trial": 2,
+    "returncode": 0,
+    "max_rss_kib": 315684,
+    "log": "Sep 12, 2026 10:17:52 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:17:52 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=55610392,decoded=314508,deferred=314508\nready,heap=36873208,decoded=314508,deferred=314508\nquery,heap=37123944,decoded=314508,deferred=314508\ncode_chars=137104\ncodegen,heap=37296784,decoded=314508,deferred=314508\ndetached,heap=9646848,decoded=314508,deferred=314508\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas",
+    "mode": "lazy",
+    "trial": 0,
+    "returncode": 0,
+    "max_rss_kib": 363136,
+    "log": "Sep 12, 2026 10:17:54 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:17:54 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=47070736,decoded=1989,deferred=314508\nready,heap=39573552,decoded=49276,deferred=314508\nquery,heap=39862576,decoded=55313,deferred=314508\ncode_chars=137104\ncodegen,heap=40574336,decoded=72308,deferred=314508\ndetached,heap=9657064,decoded=72308,deferred=314508\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas",
+    "mode": "lazy",
+    "trial": 1,
+    "returncode": 0,
+    "max_rss_kib": 347208,
+    "log": "Sep 12, 2026 10:17:56 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:17:56 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=46903464,decoded=1989,deferred=314508\nready,heap=39634216,decoded=49276,deferred=314508\nquery,heap=39922512,decoded=55313,deferred=314508\ncode_chars=137104\ncodegen,heap=40634592,decoded=72308,deferred=314508\ndetached,heap=9633744,decoded=72308,deferred=314508\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas",
+    "mode": "lazy",
+    "trial": 2,
+    "returncode": 0,
+    "max_rss_kib": 331468,
+    "log": "Sep 12, 2026 10:17:58 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:17:58 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=46844000,decoded=1989,deferred=314508\nready,heap=39612960,decoded=49276,deferred=314508\nquery,heap=39901160,decoded=55313,deferred=314508\ncode_chars=137104\ncodegen,heap=40612672,decoded=72308,deferred=314508\ndetached,heap=9614744,decoded=72308,deferred=314508\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "text",
+    "trial": 0,
+    "returncode": 0,
+    "max_rss_kib": 274572,
+    "log": "Sep 12, 2026 10:18:00 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:18:00 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=50388072,decoded=0,deferred=0\nready,heap=33428176,decoded=0,deferred=0\nquery,heap=33662848,decoded=0,deferred=0\ncode_chars=117826\ncodegen,heap=33798512,decoded=0,deferred=0\ndetached,heap=8585752,decoded=0,deferred=0\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "text",
+    "trial": 1,
+    "returncode": 0,
+    "max_rss_kib": 279692,
+    "log": "Sep 12, 2026 10:18:01 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:18:02 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=50369336,decoded=0,deferred=0\nready,heap=33233176,decoded=0,deferred=0\nquery,heap=33468456,decoded=0,deferred=0\ncode_chars=117826\ncodegen,heap=33612624,decoded=0,deferred=0\ndetached,heap=8535480,decoded=0,deferred=0\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "text",
+    "trial": 2,
+    "returncode": 0,
+    "max_rss_kib": 275688,
+    "log": "Sep 12, 2026 10:18:03 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:18:03 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=50284848,decoded=0,deferred=0\nready,heap=33293256,decoded=0,deferred=0\nquery,heap=33527928,decoded=0,deferred=0\ncode_chars=117826\ncodegen,heap=33675032,decoded=0,deferred=0\ndetached,heap=8585944,decoded=0,deferred=0\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "eager",
+    "trial": 0,
+    "returncode": 0,
+    "max_rss_kib": 282468,
+    "log": "Sep 12, 2026 10:18:05 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:18:05 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=49887856,decoded=268141,deferred=268141\nready,heap=33996720,decoded=268141,deferred=268141\nquery,heap=34248640,decoded=268141,deferred=268141\ncode_chars=117826\ncodegen,heap=34405608,decoded=268141,deferred=268141\ndetached,heap=9627064,decoded=268141,deferred=268141\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "eager",
+    "trial": 1,
+    "returncode": 0,
+    "max_rss_kib": 294388,
+    "log": "Sep 12, 2026 10:18:07 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:18:07 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=49942384,decoded=268141,deferred=268141\nready,heap=34061800,decoded=268141,deferred=268141\nquery,heap=34314176,decoded=268141,deferred=268141\ncode_chars=117826\ncodegen,heap=34470640,decoded=268141,deferred=268141\ndetached,heap=9602832,decoded=268141,deferred=268141\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "eager",
+    "trial": 2,
+    "returncode": 0,
+    "max_rss_kib": 288992,
+    "log": "Sep 12, 2026 10:18:09 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:18:09 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=49957832,decoded=268141,deferred=268141\nready,heap=33935144,decoded=268141,deferred=268141\nquery,heap=34186408,decoded=268141,deferred=268141\ncode_chars=117826\ncodegen,heap=34342608,decoded=268141,deferred=268141\ndetached,heap=9540240,decoded=268141,deferred=268141\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "lazy",
+    "trial": 0,
+    "returncode": 0,
+    "max_rss_kib": 326800,
+    "log": "Sep 12, 2026 10:18:11 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:18:11 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=41454088,decoded=1583,deferred=268141\nready,heap=36424600,decoded=41027,deferred=268141\nquery,heap=36715288,decoded=46801,deferred=268141\ncode_chars=117826\ncodegen,heap=37284856,decoded=61180,deferred=268141\ndetached,heap=9552216,decoded=61180,deferred=268141\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "lazy",
+    "trial": 1,
+    "returncode": 0,
+    "max_rss_kib": 327836,
+    "log": "Sep 12, 2026 10:18:13 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:18:13 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=41738840,decoded=1583,deferred=268141\nready,heap=36430160,decoded=41027,deferred=268141\nquery,heap=36721184,decoded=46801,deferred=268141\ncode_chars=117826\ncodegen,heap=37283208,decoded=61180,deferred=268141\ndetached,heap=9628024,decoded=61180,deferred=268141\ntu_collected=true\n"
+  },
+  {
+    "fixture": "nas_lu",
+    "mode": "lazy",
+    "trial": 2,
+    "returncode": 0,
+    "max_rss_kib": 328832,
+    "log": "Sep 12, 2026 10:18:15 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'BuiltinAttr', using generic attribute parser with no arguments\n\nSep 12, 2026 10:18:15 AM pt.up.fe.specs.util.logging.TagLogger log\nINFO: No parser defined for attribute 'AsmLabelAttr', using generic attribute parser with no arguments\n\ngraph,heap=41508872,decoded=1583,deferred=268141\nready,heap=36367448,decoded=41027,deferred=268141\nquery,heap=36659600,decoded=46801,deferred=268141\ncode_chars=117826\ncodegen,heap=37228240,decoded=61180,deferred=268141\ndetached,heap=9681072,decoded=61180,deferred=268141\ntu_collected=true\n"
+  }
+]

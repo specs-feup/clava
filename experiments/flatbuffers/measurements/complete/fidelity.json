@@ -1,0 +1,464 @@
+{
+  "nas": {
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/test/inputs/nas_bt.c",
+    "standard": "c11",
+    "formats": {
+      "text": {
+        "returncode": 0,
+        "seconds": 0.12161639146506786,
+        "bytes": 17289433,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/test/inputs/nas_bt.c",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/nas.text",
+          "--",
+          "-std=c11",
+          "-Wno-unknown-pragmas"
+        ]
+      },
+      "flat": {
+        "returncode": 0,
+        "seconds": 0.1304371440783143,
+        "bytes": 14249080,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/test/inputs/nas_bt.c",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/nas.flat",
+          "-ast-dump-format=flatbuffers-v2",
+          "--",
+          "-std=c11",
+          "-Wno-unknown-pragmas"
+        ]
+      }
+    },
+    "check_returncode": 0
+  },
+  "wrap": {
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/wrap.cpp",
+    "standard": "c++17",
+    "formats": {
+      "text": {
+        "returncode": 0,
+        "seconds": 0.010090485215187073,
+        "bytes": 33608,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/wrap.cpp",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/wrap.text",
+          "--",
+          "-std=c++17",
+          "-Wno-unknown-pragmas"
+        ]
+      },
+      "flat": {
+        "returncode": 0,
+        "seconds": 0.00976030807942152,
+        "bytes": 28040,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/weaver/cpp/src/wrap.cpp",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/wrap.flat",
+          "-ast-dump-format=flatbuffers-v2",
+          "--",
+          "-std=c++17",
+          "-Wno-unknown-pragmas"
+        ]
+      }
+    },
+    "check_returncode": 0
+  },
+  "templates": {
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/test/inputs/templates.cpp",
+    "standard": "c++17",
+    "formats": {
+      "text": {
+        "returncode": 0,
+        "seconds": 0.31052565202116966,
+        "bytes": 992978,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/test/inputs/templates.cpp",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/templates.text",
+          "--",
+          "-std=c++17",
+          "-Wno-unknown-pragmas"
+        ]
+      },
+      "flat": {
+        "returncode": 0,
+        "seconds": 0.3053905665874481,
+        "bytes": 911032,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/test/inputs/templates.cpp",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/templates.flat",
+          "-ast-dump-format=flatbuffers-v2",
+          "--",
+          "-std=c++17",
+          "-Wno-unknown-pragmas"
+        ]
+      }
+    },
+    "check_returncode": 0
+  },
+  "fidelity_c": {
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/fixtures/fidelity.c",
+    "standard": "c11",
+    "formats": {
+      "text": {
+        "returncode": 0,
+        "seconds": 0.0057300059124827385,
+        "bytes": 20468,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/fixtures/fidelity.c",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/fidelity_c.text",
+          "--",
+          "-std=c11",
+          "-Wno-unknown-pragmas"
+        ]
+      },
+      "flat": {
+        "returncode": 0,
+        "seconds": 0.005660374648869038,
+        "bytes": 16416,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/fixtures/fidelity.c",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/fidelity_c.flat",
+          "-ast-dump-format=flatbuffers-v2",
+          "--",
+          "-std=c11",
+          "-Wno-unknown-pragmas"
+        ]
+      }
+    },
+    "check_returncode": 0
+  },
+  "fidelity_cpp": {
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/fixtures/fidelity.cpp",
+    "standard": "c++17",
+    "formats": {
+      "text": {
+        "returncode": 0,
+        "seconds": 0.006509622558951378,
+        "bytes": 41382,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/fixtures/fidelity.cpp",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/fidelity_cpp.text",
+          "--",
+          "-std=c++17",
+          "-Wno-unknown-pragmas"
+        ]
+      },
+      "flat": {
+        "returncode": 0,
+        "seconds": 0.006321876309812069,
+        "bytes": 32880,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/fixtures/fidelity.cpp",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/fidelity_cpp.flat",
+          "-ast-dump-format=flatbuffers-v2",
+          "--",
+          "-std=c++17",
+          "-Wno-unknown-pragmas"
+        ]
+      }
+    },
+    "check_returncode": 0
+  },
+  "nas_lu": {
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClangAstParser/test-resources/c/bench/nas_lu.c",
+    "standard": "c11",
+    "formats": {
+      "text": {
+        "returncode": 0,
+        "seconds": 0.09672943409532309,
+        "bytes": 15756788,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClangAstParser/test-resources/c/bench/nas_lu.c",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/nas_lu.text",
+          "--",
+          "-std=c11",
+          "-Wno-unknown-pragmas"
+        ]
+      },
+      "flat": {
+        "returncode": 0,
+        "seconds": 0.11324599664658308,
+        "bytes": 12135704,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClangAstParser/test-resources/c/bench/nas_lu.c",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/nas_lu.flat",
+          "-ast-dump-format=flatbuffers-v2",
+          "--",
+          "-std=c11",
+          "-Wno-unknown-pragmas"
+        ]
+      }
+    },
+    "check_returncode": 0
+  },
+  "sizeof_qr": {
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/qr.c",
+    "standard": "c11",
+    "formats": {
+      "text": {
+        "returncode": 0,
+        "seconds": 0.027626228518784046,
+        "bytes": 2250109,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/qr.c",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/sizeof_qr.text",
+          "--",
+          "-std=c11",
+          "-Wno-unknown-pragmas"
+        ]
+      },
+      "flat": {
+        "returncode": 0,
+        "seconds": 0.029188012704253197,
+        "bytes": 1637664,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/qr.c",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/sizeof_qr.flat",
+          "-ast-dump-format=flatbuffers-v2",
+          "--",
+          "-std=c11",
+          "-Wno-unknown-pragmas"
+        ]
+      }
+    },
+    "check_returncode": 0
+  },
+  "sizeof_strcpy": {
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/strcpy.c",
+    "standard": "c11",
+    "formats": {
+      "text": {
+        "returncode": 0,
+        "seconds": 0.00925324484705925,
+        "bytes": 30567,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/strcpy.c",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/sizeof_strcpy.text",
+          "--",
+          "-std=c11",
+          "-Wno-unknown-pragmas"
+        ]
+      },
+      "flat": {
+        "returncode": 0,
+        "seconds": 0.008846437558531761,
+        "bytes": 29560,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/ClavaWeaver/resources/clava/test/api/c/src/strcpy.c",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/sizeof_strcpy.flat",
+          "-ast-dump-format=flatbuffers-v2",
+          "--",
+          "-std=c11",
+          "-Wno-unknown-pragmas"
+        ]
+      }
+    },
+    "check_returncode": 0
+  },
+  "sizeof_pack": {
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/fixtures/sizeof_pack.cpp",
+    "standard": "c++11",
+    "formats": {
+      "text": {
+        "returncode": 0,
+        "seconds": 0.005888188257813454,
+        "bytes": 15568,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/fixtures/sizeof_pack.cpp",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/sizeof_pack.text",
+          "--",
+          "-std=c++11",
+          "-Wno-unknown-pragmas"
+        ]
+      },
+      "flat": {
+        "returncode": 0,
+        "seconds": 0.005675330758094788,
+        "bytes": 12616,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/fixtures/sizeof_pack.cpp",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/sizeof_pack.flat",
+          "-ast-dump-format=flatbuffers-v2",
+          "--",
+          "-std=c++11",
+          "-Wno-unknown-pragmas"
+        ]
+      }
+    },
+    "check_returncode": 0
+  },
+  "anonymous_designator": {
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/fixtures/anonymous_designator.c",
+    "standard": "c11",
+    "formats": {
+      "text": {
+        "returncode": 0,
+        "seconds": 0.0056427251547575,
+        "bytes": 16325,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/fixtures/anonymous_designator.c",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/anonymous_designator.text",
+          "--",
+          "-std=c11",
+          "-Wno-unknown-pragmas"
+        ]
+      },
+      "flat": {
+        "returncode": 0,
+        "seconds": 0.005672021768987179,
+        "bytes": 13152,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/fixtures/anonymous_designator.c",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/anonymous_designator.flat",
+          "-ast-dump-format=flatbuffers-v2",
+          "--",
+          "-std=c11",
+          "-Wno-unknown-pragmas"
+        ]
+      }
+    },
+    "check_returncode": 0
+  },
+  "using_namespace": {
+    "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/fixtures/using_namespace.cpp",
+    "standard": "c++11",
+    "formats": {
+      "text": {
+        "returncode": 0,
+        "seconds": 0.005758154205977917,
+        "bytes": 12567,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/fixtures/using_namespace.cpp",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/using_namespace.text",
+          "--",
+          "-std=c++11",
+          "-Wno-unknown-pragmas"
+        ]
+      },
+      "flat": {
+        "returncode": 0,
+        "seconds": 0.005736767314374447,
+        "bytes": 10392,
+        "command": [
+          "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+          "-c",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/fixtures/using_namespace.cpp",
+          "-id=1",
+          "-system-header-threshold=1",
+          "-o",
+          "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/complete-check/results/using_namespace.flat",
+          "-ast-dump-format=flatbuffers-v2",
+          "--",
+          "-std=c++11",
+          "-Wno-unknown-pragmas"
+        ]
+      }
+    },
+    "check_returncode": 0
+  }
+}

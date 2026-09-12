@@ -1,0 +1,63 @@
+{
+  "index": 3,
+  "format": "text",
+  "mode": "bypass",
+  "repeat": 1,
+  "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143150745921Z-bypass",
+  "test_counts": {
+    "total_tests": 164,
+    "passed_tests": 158,
+    "failed_tests": 4,
+    "pending_tests": 2
+  },
+  "failed_tests": [
+    "CxxTest OmpThreadsExplore",
+    "CudaTest Cuda",
+    "CudaTest CudaMatrixMul",
+    "CudaTest CudaQuery"
+  ],
+  "wall_s": 54.81130351126194,
+  "max_rss_kb": 1504812,
+  "ccache": {
+    "cacheable_calls": 0,
+    "direct_hits": 0,
+    "misses": 0,
+    "uncacheable_calls": 0
+  },
+  "parse_count": 207,
+  "parse_aggregate": {
+    "native_ms": 7336.30782,
+    "read_ms": 1544.127576,
+    "tu_ms": 134.174045,
+    "dump_bytes": 3529550,
+    "nodes": 77457,
+    "deferred": 0,
+    "materialized_at_tu": 0
+  },
+  "parse_medians": {
+    "native_ms": 12.661527,
+    "read_ms": 1.153267,
+    "tu_ms": 0.338687,
+    "dump_bytes": 2812.0,
+    "nodes": 37.0
+  },
+  "temporary_source_metric_count": 30,
+  "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143150745921Z-bypass/tmp",
+  "temp_filesystem": {
+    "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+    "blocks_kb": 957134040,
+    "used_kb": 236023336,
+    "available_kb": 672417252,
+    "use_percent": "26%",
+    "mount": "/"
+  },
+  "raw_paths": {
+    "summary": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143150745921Z-bypass/summary.json",
+    "time": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143150745921Z-bypass/time.txt",
+    "ccache_stats": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143150745921Z-bypass/ccache.stats",
+    "ccache_stats_before": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143150745921Z-bypass/ccache.stats.before",
+    "parse_metrics": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143150745921Z-bypass/parse-metrics.json",
+    "per_test_timings": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143150745921Z-bypass/per_test_timings.csv",
+    "vitest_log": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143150745921Z-bypass/vitest.log"
+  }
+}

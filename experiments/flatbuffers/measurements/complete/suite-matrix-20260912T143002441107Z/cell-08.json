@@ -1,0 +1,63 @@
+{
+  "index": 8,
+  "format": "flat-lazy",
+  "mode": "warm",
+  "repeat": 1,
+  "run_dir": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143617444499Z-warm",
+  "test_counts": {
+    "total_tests": 164,
+    "passed_tests": 158,
+    "failed_tests": 4,
+    "pending_tests": 2
+  },
+  "failed_tests": [
+    "CxxTest OmpThreadsExplore",
+    "CudaTest Cuda",
+    "CudaTest CudaMatrixMul",
+    "CudaTest CudaQuery"
+  ],
+  "wall_s": 44.23297404218465,
+  "max_rss_kb": 1418320,
+  "ccache": {
+    "cacheable_calls": 167,
+    "direct_hits": 162,
+    "misses": 5,
+    "uncacheable_calls": 3
+  },
+  "parse_count": 207,
+  "parse_aggregate": {
+    "native_ms": 3709.8239949999997,
+    "read_ms": 1020.495156,
+    "tu_ms": 836.775129,
+    "dump_bytes": 24328600,
+    "nodes": 77457,
+    "deferred": 652919,
+    "materialized_at_tu": 60820
+  },
+  "parse_medians": {
+    "native_ms": 7.9939,
+    "read_ms": 0.908849,
+    "tu_ms": 0.709245,
+    "dump_bytes": 12296.0,
+    "nodes": 37.0
+  },
+  "temporary_source_metric_count": 30,
+  "temp_root": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143617444499Z-warm/tmp",
+  "temp_filesystem": {
+    "device": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+    "blocks_kb": 957134040,
+    "used_kb": 236463388,
+    "available_kb": 671977200,
+    "use_percent": "27%",
+    "mount": "/"
+  },
+  "raw_paths": {
+    "summary": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143617444499Z-warm/summary.json",
+    "time": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143617444499Z-warm/time.txt",
+    "ccache_stats": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143617444499Z-warm/ccache.stats",
+    "ccache_stats_before": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143617444499Z-warm/ccache.stats.before",
+    "parse_metrics": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143617444499Z-warm/parse-metrics.json",
+    "per_test_timings": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143617444499Z-warm/per_test_timings.csv",
+    "vitest_log": "experiments/flatbuffers/suite/results/matrix-20260912T143002441107Z/20260912T143617444499Z-warm/vitest.log"
+  }
+}

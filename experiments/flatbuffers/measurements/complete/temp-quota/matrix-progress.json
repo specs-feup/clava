@@ -1,0 +1,437 @@
+{
+  "output_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z",
+  "dumper": "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+  "dumper_sha256": "1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16",
+  "dumper_repo": "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers",
+  "repeat_count": 3,
+  "formats": [
+    "text",
+    "flat-eager",
+    "flat-lazy"
+  ],
+  "modes": [
+    "cold",
+    "warm",
+    "bypass"
+  ],
+  "sequential": true,
+  "runner": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/run_suite.py",
+  "vitest_args": [],
+  "cells": [
+    {
+      "index": 1,
+      "format": "text",
+      "mode": "cold",
+      "repeat": 1,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/text-repeat-1-cold"
+    },
+    {
+      "index": 2,
+      "format": "text",
+      "mode": "warm",
+      "repeat": 1,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/text-repeat-1-cold"
+    },
+    {
+      "index": 3,
+      "format": "text",
+      "mode": "bypass",
+      "repeat": 1,
+      "cache_root": null
+    },
+    {
+      "index": 4,
+      "format": "flat-eager",
+      "mode": "cold",
+      "repeat": 1,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-eager-repeat-1-cold"
+    },
+    {
+      "index": 5,
+      "format": "flat-eager",
+      "mode": "warm",
+      "repeat": 1,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-eager-repeat-1-cold"
+    },
+    {
+      "index": 6,
+      "format": "flat-eager",
+      "mode": "bypass",
+      "repeat": 1,
+      "cache_root": null
+    },
+    {
+      "index": 7,
+      "format": "flat-lazy",
+      "mode": "cold",
+      "repeat": 1,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-lazy-repeat-1-cold"
+    },
+    {
+      "index": 8,
+      "format": "flat-lazy",
+      "mode": "warm",
+      "repeat": 1,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-lazy-repeat-1-cold"
+    },
+    {
+      "index": 9,
+      "format": "flat-lazy",
+      "mode": "bypass",
+      "repeat": 1,
+      "cache_root": null
+    },
+    {
+      "index": 10,
+      "format": "flat-eager",
+      "mode": "cold",
+      "repeat": 2,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-eager-repeat-2-cold"
+    },
+    {
+      "index": 11,
+      "format": "flat-eager",
+      "mode": "warm",
+      "repeat": 2,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-eager-repeat-2-cold"
+    },
+    {
+      "index": 12,
+      "format": "flat-eager",
+      "mode": "bypass",
+      "repeat": 2,
+      "cache_root": null
+    },
+    {
+      "index": 13,
+      "format": "flat-lazy",
+      "mode": "cold",
+      "repeat": 2,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-lazy-repeat-2-cold"
+    },
+    {
+      "index": 14,
+      "format": "flat-lazy",
+      "mode": "warm",
+      "repeat": 2,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-lazy-repeat-2-cold"
+    },
+    {
+      "index": 15,
+      "format": "flat-lazy",
+      "mode": "bypass",
+      "repeat": 2,
+      "cache_root": null
+    },
+    {
+      "index": 16,
+      "format": "text",
+      "mode": "cold",
+      "repeat": 2,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/text-repeat-2-cold"
+    },
+    {
+      "index": 17,
+      "format": "text",
+      "mode": "warm",
+      "repeat": 2,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/text-repeat-2-cold"
+    },
+    {
+      "index": 18,
+      "format": "text",
+      "mode": "bypass",
+      "repeat": 2,
+      "cache_root": null
+    },
+    {
+      "index": 19,
+      "format": "flat-lazy",
+      "mode": "cold",
+      "repeat": 3,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-lazy-repeat-3-cold"
+    },
+    {
+      "index": 20,
+      "format": "flat-lazy",
+      "mode": "warm",
+      "repeat": 3,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-lazy-repeat-3-cold"
+    },
+    {
+      "index": 21,
+      "format": "flat-lazy",
+      "mode": "bypass",
+      "repeat": 3,
+      "cache_root": null
+    },
+    {
+      "index": 22,
+      "format": "text",
+      "mode": "cold",
+      "repeat": 3,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/text-repeat-3-cold"
+    },
+    {
+      "index": 23,
+      "format": "text",
+      "mode": "warm",
+      "repeat": 3,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/text-repeat-3-cold"
+    },
+    {
+      "index": 24,
+      "format": "text",
+      "mode": "bypass",
+      "repeat": 3,
+      "cache_root": null
+    },
+    {
+      "index": 25,
+      "format": "flat-eager",
+      "mode": "cold",
+      "repeat": 3,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-eager-repeat-3-cold"
+    },
+    {
+      "index": 26,
+      "format": "flat-eager",
+      "mode": "warm",
+      "repeat": 3,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-eager-repeat-3-cold"
+    },
+    {
+      "index": 27,
+      "format": "flat-eager",
+      "mode": "bypass",
+      "repeat": 3,
+      "cache_root": null
+    }
+  ],
+  "completed": [
+    {
+      "index": 1,
+      "format": "text",
+      "mode": "cold",
+      "repeat": 1,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/text-repeat-1-cold",
+      "command": [
+        "/usr/bin/python3",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/run_suite.py",
+        "--mode",
+        "cold",
+        "--format",
+        "text",
+        "--dumper",
+        "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+        "--dumper-repo",
+        "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers",
+        "--output-root",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z",
+        "--cache-root",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/text-repeat-1-cold"
+      ],
+      "driver_log": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/driver-logs/01-text-repeat-1-cold.log",
+      "driver_return_code": 1,
+      "driver_elapsed_s": 64.18710577394813,
+      "summary": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/20260912T092100051311Z-cold/summary.json",
+      "failed_tests": [
+        "CxxTest OmpThreadsExplore",
+        "CudaTest Cuda",
+        "CudaTest CudaMatrixMul",
+        "CudaTest CudaQuery"
+      ]
+    },
+    {
+      "index": 2,
+      "format": "text",
+      "mode": "warm",
+      "repeat": 1,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/text-repeat-1-cold",
+      "command": [
+        "/usr/bin/python3",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/run_suite.py",
+        "--mode",
+        "warm",
+        "--format",
+        "text",
+        "--dumper",
+        "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+        "--dumper-repo",
+        "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers",
+        "--output-root",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z",
+        "--cache-root",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/text-repeat-1-cold"
+      ],
+      "driver_log": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/driver-logs/02-text-repeat-1-warm.log",
+      "driver_return_code": 1,
+      "driver_elapsed_s": 43.487468710169196,
+      "summary": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/20260912T092204235411Z-warm/summary.json",
+      "failed_tests": [
+        "CxxTest OmpThreadsExplore",
+        "CudaTest Cuda",
+        "CudaTest CudaMatrixMul",
+        "CudaTest CudaQuery"
+      ]
+    },
+    {
+      "index": 3,
+      "format": "text",
+      "mode": "bypass",
+      "repeat": 1,
+      "cache_root": null,
+      "command": [
+        "/usr/bin/python3",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/run_suite.py",
+        "--mode",
+        "bypass",
+        "--format",
+        "text",
+        "--dumper",
+        "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+        "--dumper-repo",
+        "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers",
+        "--output-root",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z"
+      ],
+      "driver_log": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/driver-logs/03-text-repeat-1-bypass.log",
+      "driver_return_code": 1,
+      "driver_elapsed_s": 54.06118990108371,
+      "summary": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/20260912T092247725121Z-bypass/summary.json",
+      "failed_tests": [
+        "CxxTest OmpThreadsExplore",
+        "CudaTest Cuda",
+        "CudaTest CudaMatrixMul",
+        "CudaTest CudaQuery"
+      ]
+    },
+    {
+      "index": 4,
+      "format": "flat-eager",
+      "mode": "cold",
+      "repeat": 1,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-eager-repeat-1-cold",
+      "command": [
+        "/usr/bin/python3",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/run_suite.py",
+        "--mode",
+        "cold",
+        "--format",
+        "flat-eager",
+        "--dumper",
+        "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+        "--dumper-repo",
+        "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers",
+        "--output-root",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z",
+        "--cache-root",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-eager-repeat-1-cold"
+      ],
+      "driver_log": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/driver-logs/04-flat-eager-repeat-1-cold.log",
+      "driver_return_code": 1,
+      "driver_elapsed_s": 61.595891694538295,
+      "summary": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/20260912T092341786396Z-cold/summary.json",
+      "failed_tests": [
+        "CxxTest OmpThreadsExplore",
+        "CudaTest Cuda",
+        "CudaTest CudaMatrixMul",
+        "CudaTest CudaQuery"
+      ]
+    },
+    {
+      "index": 5,
+      "format": "flat-eager",
+      "mode": "warm",
+      "repeat": 1,
+      "cache_root": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-eager-repeat-1-cold",
+      "command": [
+        "/usr/bin/python3",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/run_suite.py",
+        "--mode",
+        "warm",
+        "--format",
+        "flat-eager",
+        "--dumper",
+        "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+        "--dumper-repo",
+        "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers",
+        "--output-root",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z",
+        "--cache-root",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/caches/flat-eager-repeat-1-cold"
+      ],
+      "driver_log": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/driver-logs/05-flat-eager-repeat-1-warm.log",
+      "driver_return_code": 1,
+      "driver_elapsed_s": 44.42756404262036,
+      "summary": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/20260912T092443383932Z-warm/summary.json",
+      "failed_tests": [
+        "issue187 should return a valid definition",
+        "issue190 the right function should be renamed",
+        "CApiTest Inliner",
+        "CApiTest StatementDecomposer",
+        "CApiTest ToSingleFile",
+        "CApiTest LivenessAnalysis",
+        "CApiTest SwitchToIf",
+        "CxxTest OmpThreadsExplore",
+        "CudaTest Cuda",
+        "CudaTest CudaMatrixMul",
+        "CudaTest CudaQuery",
+        "IssuesTest Issue168",
+        "IssuesTest Issue-AIQ-1",
+        "Query should be able to search for a function",
+        "Query should be able to search for a function2",
+        "Query should be able to search for a function3",
+        "Query should be able to search for a function4",
+        "Query should be able to search for a function5",
+        "Query should be able to search for a function6",
+        "ClavaJoinPoints Creates a new Scope from ExpressionStatements"
+      ]
+    },
+    {
+      "index": 6,
+      "format": "flat-eager",
+      "mode": "bypass",
+      "repeat": 1,
+      "cache_root": null,
+      "command": [
+        "/usr/bin/python3",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/run_suite.py",
+        "--mode",
+        "bypass",
+        "--format",
+        "flat-eager",
+        "--dumper",
+        "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool",
+        "--dumper-repo",
+        "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers",
+        "--output-root",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z"
+      ],
+      "driver_log": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/driver-logs/06-flat-eager-repeat-1-bypass.log",
+      "driver_return_code": 1,
+      "driver_elapsed_s": 55.73579063266516,
+      "summary": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/matrix-fixed-20260912T092055Z/20260912T092527812297Z-bypass/summary.json",
+      "failed_tests": [
+        "issue187 should return a valid definition",
+        "issue190 the right function should be renamed",
+        "CxxTest OmpThreadsExplore",
+        "CxxApiTest SimplifyLoops",
+        "CxxApiTest MpiScatterGather",
+        "CxxApiTest Subset",
+        "CudaTest Cuda",
+        "CudaTest CudaMatrixMul",
+        "CudaTest CudaQuery",
+        "IssuesTest Issue168",
+        "IssuesTest Issue-AIQ-1",
+        "Query should be able to search for a function",
+        "Query should be able to search for a function2",
+        "Query should be able to search for a function3",
+        "Query should be able to search for a function4",
+        "Query should be able to search for a function5",
+        "Query should be able to search for a function6",
+        "ClavaJoinPoints Creates a new Scope from ExpressionStatements"
+      ]
+    }
+  ]
+}

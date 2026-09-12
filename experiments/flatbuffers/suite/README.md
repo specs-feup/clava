@@ -30,17 +30,23 @@ python3 experiments/flatbuffers/suite/run_suite.py --mode bypass \
   --dumper "$DUMPER"
 ```
 
-The preserved snapshot currently has SHA-256
-`201e32dbbceb17ccf6cf347004ce60df584902f3112a9aa1e5c4254f0b6685be`.
-The first cold observation used the live executable before this snapshot was
-created; its recorded hash is identical. Warm and bypass observations use the
-snapshot explicitly.
+The snapshot above belongs to the earlier pilot. The complete v2 matrix uses the
+companion build explicitly, with SHA-256
+`1e8b3e7efc6c0392241ef73da4b66d73928a42541a71b8c47cb184cfec3a3b16`.
+Do not mix the pilot and complete-schema timings.
 
 Each run writes its Vitest JSON/log, flattened `per_test_timings.csv`, GNU
 `time` metrics, ccache counters and `summary.json` below ignored `results/`.
 `suite-observations.svg` is a dependency-free grouped bar chart generated from
 the summaries. Additional Vitest filters can be passed with repeated
 `--vitest-arg`, for example `--vitest-arg 'api/Issues.test.ts'`.
+
+Every run creates `results/<run>/tmp` before staging the Java runtime. The
+runner sets `TMPDIR`, `TMP` and `TEMP` for Python, Node and native children, and
+adds `-Djava.io.tmpdir=<run>/tmp` for Java. The summary records the path and
+`df -P` filesystem metadata so a run can be checked without relying on the
+machine's `/tmp` quota. This is required for the full matrix because `/tmp`
+may be a small separate tmpfs while the experiment checkout is on `/home`.
 
 `bypass` intentionally reports zero ccache calls because it sets
 `CCACHE_DISABLE=true`; use the cold and warm summaries for hit and miss
@@ -66,6 +72,13 @@ python3 experiments/flatbuffers/suite/run_matrix.py \
 The driver creates a timestamped `results/matrix-*` directory, records the
 matrix plan and progress, and preserves every normal runner result directory.
 Each run records a canonical SHA-256 manifest of the source runtime jars and
-the porcelain status of both the Clava and clang-dumper checkouts. A Vitest
-failure is retained in the raw result and does not stop later matrix cells;
-the driver only fails when a cell does not produce its `summary.json`.
+the porcelain status of both the Clava and clang-dumper checkouts. The driver
+stops on the first unexpected cell: every completed cell must contain 164 tests
+with 158 passed, 4 failed and 2 pending, and its four failures must be
+`OmpThreadsExplore`, `Cuda`, `CudaMatrixMul` and `CudaQuery`.
+
+The final 27-cell matrix is archived under `../measurements/complete/`.
+All formats had 16/167 cold direct hits and 162/167 warm direct hits. The five
+warm misses come from generated sources whose run-owned temporary paths change.
+This keeps the formats comparable to each other, but not to older 167/167-hit
+runs that used a shared temporary path.

@@ -1,0 +1,6 @@
+Command exited with non-zero status 1
+elapsed_s=61.37
+user_s=84.22
+sys_s=8.17
+max_rss_kb=1405212
+exit_status=1

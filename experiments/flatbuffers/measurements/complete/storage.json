@@ -1,0 +1,57 @@
+{
+  "nas": {
+    "text_bytes": 17289433,
+    "flat_bytes": 14249080,
+    "zstd_text_bytes": 923801
+  },
+  "wrap": {
+    "text_bytes": 33608,
+    "flat_bytes": 28040,
+    "zstd_text_bytes": 3015
+  },
+  "templates": {
+    "text_bytes": 992978,
+    "flat_bytes": 911032,
+    "zstd_text_bytes": 75880
+  },
+  "fidelity_c": {
+    "text_bytes": 20468,
+    "flat_bytes": 16416,
+    "zstd_text_bytes": 2059
+  },
+  "fidelity_cpp": {
+    "text_bytes": 41382,
+    "flat_bytes": 32880,
+    "zstd_text_bytes": 3847
+  },
+  "nas_lu": {
+    "text_bytes": 15756788,
+    "flat_bytes": 12135704,
+    "zstd_text_bytes": 812323
+  },
+  "sizeof_qr": {
+    "text_bytes": 2250109,
+    "flat_bytes": 1637664,
+    "zstd_text_bytes": 100412
+  },
+  "sizeof_strcpy": {
+    "text_bytes": 30567,
+    "flat_bytes": 29560,
+    "zstd_text_bytes": 3522
+  },
+  "sizeof_pack": {
+    "text_bytes": 15568,
+    "flat_bytes": 12616,
+    "zstd_text_bytes": 1648
+  },
+  "anonymous_designator": {
+    "text_bytes": 16325,
+    "flat_bytes": 13152,
+    "zstd_text_bytes": 1642
+  },
+  "using_namespace": {
+    "text_bytes": 12567,
+    "flat_bytes": 10392,
+    "zstd_text_bytes": 1623
+  }
+}
