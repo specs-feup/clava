@@ -305,16 +305,19 @@ public class ClangAstDumper {
             return null;
         }
 
+        boolean flatWire = pt.up.fe.specs.clang.wire.WireMode.enabled();
+        long nativeNanos = 0, readStart = 0, dumpBytes = 0;
+        pt.up.fe.specs.clang.wire.CompleteReader.Result flatResult = null;
         ClangAstData parsedData = null;
         ProcessOutput<String, String> output = null;
 
-        try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2
+        try (LineStreamParser<ClangAstData> lineStreamParser = flatWire ? null : ClangStreamParserV2
                 .newInstance(config.get(ClavaNode.CONTEXT))) {
 
-            if (SpecsSystem.isDebug()) {
+            if (!flatWire && SpecsSystem.isDebug()) {
                 lineStreamParser.getData().set(ClangAstData.DEBUG, true);
             }
-            if (generatedParseRoot != null) {
+            if (!flatWire && generatedParseRoot != null) {
                 lineStreamParser.getData().set(ClangAstData.PARSE_ROOT, generatedParseRoot);
             }
 
@@ -329,13 +332,15 @@ public class ClangAstDumper {
                     && !SourceType.isHeader(sourceFile)
                     && ClangCcacheAdapter.isAvailable();
             File dumpFile = new File(lastWorkingFolder,
-                    useAstDumpCache ? COMPRESSED_CLANG_DUMP_FILENAME : CLANG_DUMP_FILENAME);
+                    useAstDumpCache && !flatWire ? COMPRESSED_CLANG_DUMP_FILENAME : CLANG_DUMP_FILENAME);
             File dependencyFile = new File(lastWorkingFolder, "clangDump.d");
             int separatorIndex = arguments.indexOf("--");
             if (separatorIndex >= 0) {
                 arguments.add(separatorIndex, "-o");
                 arguments.add(separatorIndex + 1, dumpFile.getAbsolutePath());
-                if (useAstDumpCache) {
+                if (flatWire) {
+                    arguments.add(separatorIndex + 2, "-ast-dump-format=flatbuffers-v2");
+                } else if (useAstDumpCache) {
                     arguments.add(separatorIndex + 2, "-ast-dump-compression=zstd");
                 }
             } else {
@@ -360,7 +365,9 @@ public class ClangAstDumper {
                 ccache.configureEnvironment(processBuilder.environment());
             }
 
+            long nativeStart = System.nanoTime();
             output = SpecsSystem.runProcess(processBuilder, SpecsIo::read, SpecsIo::read);
+            nativeNanos = System.nanoTime() - nativeStart;
 
             if (output.isError()) {
                 ClavaLog.debug("Dumper returned an error value: '" + output.getReturnValue() + "'");
@@ -385,30 +392,58 @@ public class ClangAstDumper {
                         + "'\nDiagnostics:\n" + output.getStdErr());
             }
 
-            String linesNotParsed;
-            try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
-                    InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {
-                File unparsedDumpFile = SpecsSystem.isDebug()
-                        ? new File(lastWorkingFolder, STDERR_DUMP_FILENAME) : null;
-                linesNotParsed = lineStreamParser.parse(dumpInput, unparsedDumpFile);
-            }
+            dumpBytes = dumpFile.length();
+            readStart = System.nanoTime();
+            if (flatWire) {
+                flatResult = pt.up.fe.specs.clang.wire.CompleteReader.read(dumpFile.toPath(),
+                        config.get(ClavaNode.CONTEXT), generatedParseRoot, id,
+                        pt.up.fe.specs.clang.wire.WireMode.lazy());
+                parsedData = flatResult.data();
+                parsedData.set(ClangAstData.LINES_NOT_PARSED, output.getStdErr());
+                parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
+            } else {
+                String linesNotParsed;
+                try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
+                        InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {
+                    File unparsedDumpFile = SpecsSystem.isDebug()
+                            ? new File(lastWorkingFolder, STDERR_DUMP_FILENAME) : null;
+                    linesNotParsed = lineStreamParser.parse(dumpInput, unparsedDumpFile);
+                }
 
-            parsedData = lineStreamParser.getData();
-            parsedData.set(ClangAstData.LINES_NOT_PARSED, linesNotParsed);
-            parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
+                parsedData = lineStreamParser.getData();
+                parsedData.set(ClangAstData.LINES_NOT_PARSED, linesNotParsed);
+                parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
 
-            if (lineStreamParser.hasExceptions()) {
-                SpecsLogs.warn("Exceptions happened while parsing the file '" + sourceFile.getAbsolutePath() + "'");
+                if (lineStreamParser.hasExceptions()) {
+                    SpecsLogs.warn("Exceptions happened while parsing the file '" + sourceFile.getAbsolutePath() + "'");
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }
 
+        long readNanos = System.nanoTime() - readStart;
+        long tuStart = System.nanoTime();
         ClangAstParser clangStreamParser = new ClangAstParser(parsedData, SpecsSystem.isDebug(), config);
 
         TranslationUnit tUnit = clangStreamParser.parseTu(sourceFile);
 
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
+        if (Boolean.getBoolean("clava.astWireMetrics")) {
+            var metric = new java.util.LinkedHashMap<String, Object>();
+            metric.put("format", pt.up.fe.specs.clang.wire.WireMode.mode());
+            metric.put("source", sourceFile.getPath());
+            metric.put("native_ms", nativeNanos / 1e6);
+            metric.put("read_ms", readNanos / 1e6);
+            metric.put("tu_ms", (System.nanoTime() - tuStart) / 1e6);
+            metric.put("dump_bytes", dumpBytes);
+            metric.put("nodes", parsedData.getClavaNodes().getNodes().size());
+            if (flatResult != null) {
+                metric.put("deferred", flatResult.stats().deferred);
+                metric.put("materialized_at_tu", flatResult.stats().materialized);
+            }
+            System.err.println("CLAVA_AST_METRIC " + new com.google.gson.Gson().toJson(metric));
+        }
 
         return parsedData;
     }

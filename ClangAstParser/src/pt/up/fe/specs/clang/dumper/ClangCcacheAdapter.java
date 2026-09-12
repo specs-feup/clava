@@ -89,7 +89,12 @@ final class ClangCcacheAdapter {
             }
             // clang-dumper already streams a compressed Zstandard frame. Recompressing
             // it inside ccache roughly doubles miss latency without changing semantics.
-            environment.put("CCACHE_NOCOMPRESS", "true");
+            if (pt.up.fe.specs.clang.wire.WireMode.enabled()) {
+                environment.remove("CCACHE_NOCOMPRESS");
+                environment.put("CCACHE_COMPRESS", "true");
+            } else {
+                environment.put("CCACHE_NOCOMPRESS", "true");
+            }
         }
     }
 }

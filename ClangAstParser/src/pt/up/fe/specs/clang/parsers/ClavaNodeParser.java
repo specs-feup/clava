@@ -99,6 +99,11 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
 
         String classname = lineStream.nextLine();
         // System.out.println("CLASS NAMES:" + classname);
+        applyRecord(nodeId, classname, data);
+    }
+
+    /** Builds a node from already decoded identity and data, shared by wire formats. */
+    public void applyRecord(String nodeId, String classname, ClangAstData data) {
         Map<String, ClavaNode> parsedNodes = data.get(ClangAstData.CLAVA_NODES).getNodes();
 
         // Check if node was already parsed
@@ -106,7 +111,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
             return;
         }
 
-        ClavaNode node = parseNode(nodeId, classname, data, lineStream);
+        ClavaNode node = parseNode(nodeId, classname, data);
 
         // If UnsupportedNode, transform to DummyNode
         // node = transformUnsupportedNode(node);
@@ -155,7 +160,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
         throw new RuntimeException("ClavaData class not supported:" + data.getClass());
     }
     */
-    private ClavaNode parseNode(String nodeId, String classname, ClangAstData data, LineStream lineStream) {
+    private ClavaNode parseNode(String nodeId, String classname, ClangAstData data) {
         boolean debug = data.get(ClangAstData.DEBUG);
 
         if (classname == null) {
@@ -170,7 +175,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
 
         if (nodeData == null) {
             throw new RuntimeException("No ClavaData/DataStore for node '" + nodeId + "' (classname: " + classname
-                    + "), data dumper is not being called (linestream index '" + lineStream.getLastLineIndex() + "')");
+                    + "), data dumper was not called");
         }
 
         // Get corresponding ClavaNode class

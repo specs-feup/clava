@@ -87,3 +87,22 @@ test {
 
     finalizedBy jacocoTestReport
 }
+
+// The experiment uses the matching native worktree's schema at build time.
+def wireNative = file(System.getenv('FLAT_NATIVE') ?: '../../../clang-dumper-ast-flatbuffers')
+def wireSdk = file(System.getenv('FLATBUFFERS_ROOT') ?: "${System.getProperty('user.home')}/.cache/ast-flatbuffers-planning/flatbuffers")
+def wireGenerated = layout.buildDirectory.dir('generated/sources/wire')
+tasks.register('generateCompleteWire', Exec) {
+    inputs.files(fileTree(new File(wireNative, 'wire/v2')) { include '*.fbs' })
+    inputs.file(new File(wireNative, 'scripts/generate_complete_wire.py'))
+    outputs.dir(wireGenerated)
+    commandLine 'python3', new File(wireNative, 'scripts/generate_complete_wire.py'),
+        '--flatc', new File(wireSdk, 'build-make/flatc'), '--sdk', wireSdk,
+        '--out', layout.buildDirectory.dir('wire-reflection').get().asFile,
+        '--java-out', wireGenerated.get().asFile
+}
+sourceSets.main.java.srcDir(wireGenerated)
+compileJava.dependsOn('generateCompleteWire')
+
+// Compile the Java runtime from the same pinned SDK as flatc.
+sourceSets.main.java.srcDir(new File(wireSdk, 'java/src/main/java'))

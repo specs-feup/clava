@@ -262,6 +262,9 @@ public class ParallelCodeParser extends CodeParser {
         // original clang tree
         // new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
         new TreeTransformer(ClangAstParser.getPostParsingRules()).transform(app);
+        if (pt.up.fe.specs.clang.wire.WireMode.enabled()) {
+            clangParserResults.forEach(pt.up.fe.specs.clang.wire.CompleteReader::releaseLookup);
+        }
 
         // Add text elements (comments, pragmas) to the tree
         new TextParser(app.getContext()).addElements(app);
@@ -413,7 +416,11 @@ public class ParallelCodeParser extends CodeParser {
             return clangParserData;
         } finally {
             if (get(CLEAN) && clangParser.getLastWorkingFolder() != null) {
-                SpecsIo.deleteFolder(clangParser.getLastWorkingFolder());
+                if (pt.up.fe.specs.clang.wire.WireMode.enabled()) {
+                    pt.up.fe.specs.clang.wire.WireMode.retainUntilExit(clangParser.getLastWorkingFolder());
+                } else {
+                    SpecsIo.deleteFolder(clangParser.getLastWorkingFolder());
+                }
             }
         }
     }
