@@ -113,7 +113,7 @@ class GeneratedParseRootTest {
     private String ccacheStats(File cacheFolder) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("ccache", "--show-stats");
         processBuilder.environment().put("CCACHE_DIR",
-                new File(cacheFolder, "clang-dumper-ccache").getAbsolutePath());
+                new File(cacheFolder, "clang-dumper-protobuf-ccache-v1").getAbsolutePath());
         Process process = processBuilder.start();
         String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         assertTrue(process.waitFor() == 0, output);
