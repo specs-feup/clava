@@ -8,15 +8,18 @@ package pt.up.fe.specs.clang.wire;
 
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
+import com.google.protobuf.Descriptors.OneofDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.ProtocolMessageEnum;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.LongFunction;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -142,7 +145,23 @@ final class ProtoNodeDataReader {
      * optional scalar from silently turning into Java's default value.
      */
     private static void validatePresence(Message message, String nodeClass) {
+        Set<OneofDescriptor> checkedOneofs = new HashSet<>();
         for (FieldDescriptor field : message.getDescriptorForType().getFields()) {
+            OneofDescriptor oneof = field.getContainingOneof();
+            if (oneof != null) {
+                if (!checkedOneofs.add(oneof)) {
+                    continue;
+                }
+                if (!message.hasOneof(oneof)) {
+                    throw new IllegalArgumentException("Missing required protobuf alternative '" + oneof.getName()
+                            + "' in " + nodeClass);
+                }
+                FieldDescriptor selected = message.getOneofFieldDescriptor(oneof);
+                if (selected.getJavaType() == JavaType.MESSAGE) {
+                    validatePresence((Message) message.getField(selected), nodeClass);
+                }
+                continue;
+            }
             if (field.isRepeated()) {
                 if (field.getJavaType() == JavaType.MESSAGE) {
                     for (Object value : (List<?>) message.getField(field)) {
@@ -407,6 +426,7 @@ final class ProtoNodeDataReader {
             case "is_inline_specified" -> definition.getKeyMap().get("isInline");
             case "has_trailing_returns" -> definition.getKeyMap().get("hasTrailingReturn");
             case "underlying_expr" -> definition.getKeyMap().get("underlingExpr");
+            case "templated_decl" -> definition.getKeyMap().get("templateDecl");
             default -> null;
         };
         if (alias != null) {

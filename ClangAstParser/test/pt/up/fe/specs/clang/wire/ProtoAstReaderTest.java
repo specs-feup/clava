@@ -109,6 +109,36 @@ class ProtoAstReaderTest {
         assertEquals(true, error.getMessage().contains("raw_bytes"));
     }
 
+    @Test
+    void acceptsRepeatedTopLevelRecordsWithSetSemantics() throws IOException {
+        var header = Envelope.newBuilder().setHeader(header()).build();
+        var node = Envelope.newBuilder().setRecord(Record.newBuilder().setNode(Node.newBuilder()
+                .setId(1)
+                .setClassName("BuiltinType")
+                .setBuiltinTypeData(BuiltinTypeData.newBuilder()
+                        .setBase(TypeData.newBuilder()
+                                .setTypeAsString("int")
+                                .setTypeDependency(TypeDependency.TYPEDEPENDENCY_NONE)
+                                .setIsVariablyModified(false)
+                                .setContainsUnexpandedParameterPack(false)
+                                .setIsFromAst(false)
+                                .setUnqualifiedDesugaredType(-1))
+                        .setKind(BuiltinKind.BUILTINKIND_INT)
+                        .setKindLiteral("int")))).build();
+        var nodeClass = Envelope.newBuilder().setRecord(Record.newBuilder().setNodeClass(NodeClass.newBuilder()
+                .setNode(1).setClassName("BuiltinType"))).build();
+        var topLevel = Envelope.newBuilder().setRecord(Record.newBuilder().setTopLevel(TopLevel.newBuilder()
+                .setKind(TopLevelKind.TOPLEVELKIND_TYPE).setNode(1))).build();
+        var end = Envelope.newBuilder().setEnd(End.newBuilder()
+                .setRecords(6).setNodes(1).setRawBytes(rawBytesBeforeEnd(header, node, nodeClass, topLevel, topLevel))
+                .setFiles(0).setIds(1)).build();
+
+        var result = ProtoAstReader.read(new ByteArrayInputStream(stream(header, node, nodeClass, topLevel, topLevel, end)),
+                new ClavaContext(), null, "unit");
+
+        assertEquals(1, result.data().get(ClangAstData.TOP_LEVEL_TYPE_IDS).size());
+    }
+
     private static Header header() {
         return Header.newBuilder()
                 .setProtocolMajor(1)

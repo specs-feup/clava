@@ -362,9 +362,10 @@ public final class ProtoAstReader {
     }
 
     private static void addTopLevel(Set<String> ids, String id) {
-        if (!ids.add(id)) {
-            throw new ProtocolException("Duplicated top-level node " + id);
-        }
+        // The historical parser stores top-level records in sets. The native
+        // producer may repeat a node when it is reachable through more than
+        // one declaration path, so preserve that set semantics on the wire.
+        ids.add(id);
     }
 
     private static void readInclude(pt.up.fe.specs.clang.wire.Include include, ClangAstData data) {
