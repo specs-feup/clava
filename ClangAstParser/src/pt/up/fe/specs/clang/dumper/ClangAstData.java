@@ -27,7 +27,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
-import pt.up.fe.specs.clang.parsers.VisitingChildrenCheck;
 import pt.up.fe.specs.clang.parsers.util.PragmasLocations;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -98,19 +97,6 @@ public class ClangAstData extends ADataClass<ClangAstData> {
 
     public final static DataKey<String> LINES_NOT_PARSED = KeyFactory.string("clang_dumper_parser_warnings");
 
-    public final static DataKey<Set<String>> NODES_CURRENTLY_BEING_PARSED = KeyFactory
-            .generic("nodesCurrentlyBeingParsed", (Set<String>) new HashSet<String>());
-
-    public final static DataKey<List<String>> CURRENT_NODE_VISIT_CHAIN = KeyFactory
-            .generic("currentNodeVisitChain", (List<String>) new ArrayList<String>());
-
-    public final static DataKey<VisitingChildrenCheck> VISITING_CHILDREN = KeyFactory
-            .object("visitingChildren", VisitingChildrenCheck.class);
-
-    public final static DataKey<Map<String, String>> SKIPPED_NODES_MAP = KeyFactory.generic(
-            "skippedNodesMap",
-            new HashMap<>());
-
     public final static DataKey<PragmasLocations> PRAGMAS_LOCATIONS = KeyFactory.object("pragmasLocations",
             PragmasLocations.class);
 
@@ -130,16 +116,28 @@ public class ClangAstData extends ADataClass<ClangAstData> {
      */
     public final static DataKey<Boolean> HAS_ERRORS = KeyFactory.bool("hasErrors");
 
+    /** Native process time for a cache-bypass dump, in nanoseconds. */
+    public final static DataKey<Long> NATIVE_EXECUTION_NANOS = KeyFactory.generic(
+            "clang_dumper_native_execution_nanos", 0L);
+
+    /** ccache process/output restoration time when AST dump caching is enabled. */
+    public final static DataKey<Long> CACHE_RESTORATION_NANOS = KeyFactory.generic(
+            "clang_dumper_cache_restoration_nanos", 0L);
+
+    /** Metrics from the eager protobuf decoder and existing AST data construction. */
+    public final static DataKey<pt.up.fe.specs.clang.wire.ProtoAstReader.Metrics> PROTOBUF_METRICS = KeyFactory.object(
+            "clang_dumper_protobuf_metrics", pt.up.fe.specs.clang.wire.ProtoAstReader.Metrics.class);
+
+    /** Time spent by the existing Clava AST builder after protobuf records are decoded. */
+    public final static DataKey<Long> AST_CONSTRUCTION_NANOS = KeyFactory.generic(
+            "clang_dumper_ast_construction_nanos", 0L);
+
     /**
      * The errors output
      */
     // public final static DataKey<String> ERROR_OUTPUT = KeyFactory.string("errorOutput");
 
     /// DATAKEYS END
-
-    // public ClangParserData() {
-    // set(NODES_CURRENTLY_BEING_PARSED, new HashSet<>());
-    // }
 
     /**
      * Helper method.

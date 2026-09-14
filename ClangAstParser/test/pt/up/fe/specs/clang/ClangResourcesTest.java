@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.ClangAstWebResource.Release;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
-import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 
 import java.io.BufferedReader;
@@ -564,8 +563,7 @@ public class ClangResourcesTest {
         assumeTrue(!SupportedPlatform.getCurrentPlatform().isWindows(), "Shell fixtures require a Unix executable");
 
         var systemLibcDumper = tempFolder.resolve("system-libc-dumper");
-        Files.writeString(systemLibcDumper,
-                "#!/bin/sh\nprintf '%s\\n' '" + TopLevelNodesParser.getTopLevelNodesHeader() + "'\n");
+        Files.writeString(systemLibcDumper, "#!/bin/sh\nexit 0\n");
         assertTrue(systemLibcDumper.toFile().setExecutable(true));
 
         var builtinLibcDumper = tempFolder.resolve("builtin-libc-dumper");

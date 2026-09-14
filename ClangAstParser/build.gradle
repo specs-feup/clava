@@ -23,6 +23,25 @@ if (!wireSchema.isFile()) {
 // native CMake pin and record the revision in the release manifest.
 def protobufVersion = '4.28.3'
 def protocVersion = '4.28.3'
+def protoSchemaHashDir = file("$buildDir/generated/source/proto-schema/main")
+
+tasks.register('generateProtoSchemaHash') {
+    inputs.file wireSchema
+    outputs.file new File(protoSchemaHashDir, 'pt/up/fe/specs/clang/wire/ProtoSchemaHash.java')
+    doLast {
+        def digest = java.security.MessageDigest.getInstance('SHA-256').digest(wireSchema.bytes)
+        def hash = digest.collect { String.format('%02x', it & 0xff) }.join()
+        def output = new File(protoSchemaHashDir, 'pt/up/fe/specs/clang/wire/ProtoSchemaHash.java')
+        output.parentFile.mkdirs()
+        output.text = """/** Generated from clang-dumper/wire/clava_ast_wire.proto. */
+package pt.up.fe.specs.clang.wire;
+final class ProtoSchemaHash {
+    static final String VALUE = \"${hash}\";
+    private ProtoSchemaHash() { }
+}
+"""
+    }
+}
 
 protobuf {
     protoc {
@@ -76,6 +95,7 @@ sourceSets {
         }
         java {
             srcDir 'src'
+            srcDir protoSchemaHashDir
         }
         resources {
             srcDir 'resources'
@@ -90,6 +110,10 @@ sourceSets {
             srcDir 'test-resources'
         }
     }
+}
+
+tasks.named('compileJava') {
+    dependsOn tasks.named('generateProtoSchemaHash')
 }
 
 processResources {

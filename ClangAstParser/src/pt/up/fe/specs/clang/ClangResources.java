@@ -18,7 +18,6 @@ import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
 import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
-import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -297,11 +296,6 @@ public class ClangResources {
                     break;
                 }
 
-                if (testFile.getName().endsWith(".cpp")
-                        && !output.getOutput().contains(TopLevelNodesParser.getTopLevelNodesHeader())) {
-                    needsLib = true;
-                    break;
-                }
             }
 
             if (needsLib) {

@@ -16,14 +16,13 @@ package pt.up.fe.specs.clang.dumper;
 import com.github.luben.zstd.ZstdInputStream;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.JOptionsUtils;
-import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.cilk.CilkParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
-import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
+import pt.up.fe.specs.clang.wire.ProtoAstReader;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -62,8 +61,8 @@ public class ClangAstDumper {
         return USE_PLUGIN;
     }
 
-    private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
-    private final static String COMPRESSED_CLANG_DUMP_FILENAME = "clangDump.txt.zst";
+    private final static String CLANG_DUMP_FILENAME = "clangDump.pb";
+    private final static String COMPRESSED_CLANG_DUMP_FILENAME = "clangDump.pb.zst";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
 
     /**
@@ -308,15 +307,7 @@ public class ClangAstDumper {
         ClangAstData parsedData = null;
         ProcessOutput<String, String> output = null;
 
-        try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2
-                .newInstance(config.get(ClavaNode.CONTEXT))) {
-
-            if (SpecsSystem.isDebug()) {
-                lineStreamParser.getData().set(ClangAstData.DEBUG, true);
-            }
-            if (generatedParseRoot != null) {
-                lineStreamParser.getData().set(ClangAstData.PARSE_ROOT, generatedParseRoot);
-            }
+        try {
 
             // Each invocation needs unique output paths, but clang-dumper no longer
             // creates side files or needs a dedicated process working directory.
@@ -360,7 +351,9 @@ public class ClangAstDumper {
                 ccache.configureEnvironment(processBuilder.environment());
             }
 
+            long transportStart = System.nanoTime();
             output = SpecsSystem.runProcess(processBuilder, SpecsIo::read, SpecsIo::read);
+            long transportNanos = System.nanoTime() - transportStart;
 
             if (output.isError()) {
                 ClavaLog.debug("Dumper returned an error value: '" + output.getReturnValue() + "'");
@@ -385,28 +378,37 @@ public class ClangAstDumper {
                         + "'\nDiagnostics:\n" + output.getStdErr());
             }
 
-            String linesNotParsed;
+            String linesNotParsed = "";
+            ProtoAstReader.Result wireResult;
             try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
                     InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {
-                File unparsedDumpFile = SpecsSystem.isDebug()
-                        ? new File(lastWorkingFolder, STDERR_DUMP_FILENAME) : null;
-                linesNotParsed = lineStreamParser.parse(dumpInput, unparsedDumpFile);
+                wireResult = ProtoAstReader.read(dumpInput, config.get(ClavaNode.CONTEXT), generatedParseRoot, id);
             }
 
-            parsedData = lineStreamParser.getData();
+            parsedData = wireResult.data();
+            // These are mutually exclusive transport boundaries. In bypass mode
+            // the process time is native execution; with ccache enabled it is
+            // the ccache invocation and cached-output restoration boundary.
+            parsedData.set(ClangAstData.NATIVE_EXECUTION_NANOS, useAstDumpCache ? 0L : transportNanos);
+            parsedData.set(ClangAstData.CACHE_RESTORATION_NANOS, useAstDumpCache ? transportNanos : 0L);
+            parsedData.set(ClangAstData.PROTOBUF_METRICS, wireResult.metrics());
+            if (SpecsSystem.isDebug()) {
+                SpecsIo.write(new File(lastWorkingFolder, STDERR_DUMP_FILENAME),
+                        "protobuf frames=" + wireResult.metrics().frames() + " bytes="
+                                + wireResult.metrics().encodedBytes() + "\n");
+                parsedData.set(ClangAstData.DEBUG, true);
+            }
             parsedData.set(ClangAstData.LINES_NOT_PARSED, linesNotParsed);
             parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
-
-            if (lineStreamParser.hasExceptions()) {
-                SpecsLogs.warn("Exceptions happened while parsing the file '" + sourceFile.getAbsolutePath() + "'");
-            }
         } catch (Exception e) {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }
 
         ClangAstParser clangStreamParser = new ClangAstParser(parsedData, SpecsSystem.isDebug(), config);
 
+        long astConstructionStart = System.nanoTime();
         TranslationUnit tUnit = clangStreamParser.parseTu(sourceFile);
+        parsedData.set(ClangAstData.AST_CONSTRUCTION_NANOS, System.nanoTime() - astConstructionStart);
 
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
 
@@ -540,11 +542,15 @@ public class ClangAstDumper {
 
         File clangDumpFile = new File(lastWorkingFolder, CLANG_DUMP_FILENAME);
         if (!clangDumpFile.isFile()) {
+            clangDumpFile = new File(lastWorkingFolder, COMPRESSED_CLANG_DUMP_FILENAME);
+        }
+        if (!clangDumpFile.isFile()) {
             SpecsLogs.msgInfo("Clang dump file not found: '" + clangDumpFile + "'");
             return "";
         }
 
-        return "ClangDump for '" + lastWorkingFolder.getName() + "':\n" + SpecsIo.read(clangDumpFile);
+        return "Clang protobuf dump for '" + lastWorkingFolder.getName() + "' ("
+                + clangDumpFile.length() + " bytes)";
     }
 
 }

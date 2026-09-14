@@ -48,7 +48,7 @@ public final class FramedProtobufReader {
      *
      * @return number of frames consumed
      */
-    public long read(MessageParser parser, Consumer<Object> consumer) throws IOException {
+    public <M> long read(MessageParser<M> parser, Consumer<? super M> consumer) throws IOException {
         Objects.requireNonNull(parser, "parser");
         Objects.requireNonNull(consumer, "consumer");
 
@@ -71,7 +71,7 @@ public final class FramedProtobufReader {
             }
             encodedBytes += encoded.length;
 
-            Object message;
+            M message;
             try {
                 message = parser.parse(encoded);
             } catch (InvalidProtocolBufferException e) {
@@ -126,7 +126,7 @@ public final class FramedProtobufReader {
     }
 
     @FunctionalInterface
-    public interface MessageParser {
-        Object parse(byte[] encoded) throws InvalidProtocolBufferException;
+    public interface MessageParser<M> {
+        M parse(byte[] encoded) throws InvalidProtocolBufferException;
     }
 }
