@@ -133,7 +133,6 @@ final class ProtoNodeDataReader {
         ProtoNodeDataReader reader = new ProtoNodeDataReader(data, id, files);
         validatePresence(payload, wireNode.getClassName());
         reader.setSourceMetadata(payload, store, wireNode.getClassName());
-        reader.initializeRepeatedFields(payload, store, definition);
         reader.visit(payload, store, definition);
         return store;
     }
@@ -247,6 +246,7 @@ final class ProtoNodeDataReader {
     }
 
     private void visit(Message message, DataStore store, StoreDefinition definition) {
+        initializeRepeatedFields(message, store, definition);
         Boolean alignedExpression = null;
         Long alignment = null;
         for (Map.Entry<FieldDescriptor, Object> entry : message.getAllFields().entrySet()) {
