@@ -133,6 +133,7 @@ final class ProtoNodeDataReader {
         ProtoNodeDataReader reader = new ProtoNodeDataReader(data, id, files);
         validatePresence(payload, wireNode.getClassName());
         reader.setSourceMetadata(payload, store, wireNode.getClassName());
+        reader.initializeRepeatedFields(payload, store, definition);
         reader.visit(payload, store, definition);
         return store;
     }
@@ -189,8 +190,17 @@ final class ProtoNodeDataReader {
     }
 
     private static boolean isOptionalMessageField(Message message, FieldDescriptor field) {
-        return message.getDescriptorForType().getName().equals("SourceInfo")
-                && (field.getName().equals("expansion") || field.getName().equals("spelling"));
+        String messageName = message.getDescriptorForType().getName();
+        String fieldName = field.getName();
+        // These fields wrap nullable pointers in the native record model.
+        // Other message fields (in particular every inheritance `base`) are
+        // required and must not silently turn into an empty data store.
+        return messageName.equals("SourceInfo")
+                && (fieldName.equals("expansion") || fieldName.equals("spelling"))
+                || messageName.equals("TemplateExpansion") && fieldName.equals("template_name")
+                || messageName.equals("SubstitutedTemplateName") && fieldName.equals("replacement")
+                || messageName.equals("UsingDeclData") && fieldName.equals("nested_name_specifier")
+                || messageName.equals("TemplateTemplateParmDeclData") && fieldName.equals("default_argument");
     }
 
     private static Class<? extends ClavaNode> getClavaClass(String className, Message payload) {
@@ -299,7 +309,11 @@ final class ProtoNodeDataReader {
             }
 
             if (field.getJavaType() == JavaType.MESSAGE) {
-                set(key, store, convertCompound((Message) raw, key));
+                Object converted = convertCompound((Message) raw, key);
+                if (Optional.class.isAssignableFrom(key.getValueClass())) {
+                    converted = Optional.of(converted);
+                }
+                set(key, store, converted);
             } else if (field.getJavaType() == JavaType.LONG && isReference(field, key)) {
                 queueReference(store, key, reference((Long) raw, field, key), field);
             } else {
@@ -323,6 +337,25 @@ final class ProtoNodeDataReader {
                 queue((org.suikasoft.jOptions.DataStore.DataClass<?>) store, "alignment", alignment,
                         pt.up.fe.specs.clava.ast.attr.AlignedTypeAttr.TYPE);
             }
+        }
+    }
+
+    private void initializeRepeatedFields(Message message, DataStore store, StoreDefinition definition) {
+        for (FieldDescriptor field : message.getDescriptorForType().getFields()) {
+            if (!field.isRepeated()) {
+                continue;
+            }
+
+            DataKey<?> key = findKey(definition, field.getName());
+            if (key == null) {
+                throw new IllegalArgumentException("No Clava DataKey for protobuf field '" + field.getName()
+                        + "' in " + message.getDescriptorForType().getName());
+            }
+
+            // Repeated protobuf fields have an empty-list default. Materialize
+            // that value in the existing store too, otherwise classes such as
+            // CXXRecordDecl observe null instead of the baseline empty list.
+            set(key, store, new ArrayList<>());
         }
     }
 
@@ -406,6 +439,16 @@ final class ProtoNodeDataReader {
     }
 
     private DataKey<?> findKey(StoreDefinition definition, String protoName) {
+        // Keep the historical DataKey spelling ahead of the normalized lookup:
+        // `templated_decl` and `templateDecl` normalize to the same token, but
+        // only the latter is the existing Optional<NamedDecl> key.
+        if (protoName.equals("templated_decl")) {
+            DataKey<?> templateDecl = definition.getKeyMap().get("templateDecl");
+            if (templateDecl != null) {
+                return templateDecl;
+            }
+        }
+
         String camel = camel(protoName);
         DataKey<?> direct = definition.getKeyMap().get(camel);
         if (direct != null) {
@@ -417,6 +460,22 @@ final class ProtoNodeDataReader {
                 return key;
             }
         }
+        if (protoName.equals("kind")) {
+            DataKey<?> attributeKind = definition.getKeyMap().get("attributeKind");
+            if (attributeKind != null) {
+                return attributeKind;
+            }
+        }
+        if (protoName.equals("is_global")) {
+            DataKey<?> isGlobalNew = definition.getKeyMap().get("isGlobalNew");
+            if (isGlobalNew != null) {
+                return isGlobalNew;
+            }
+            DataKey<?> isGlobal = definition.getKeyMap().get("isGlobal");
+            if (isGlobal != null) {
+                return isGlobal;
+            }
+        }
         // These names reflect established Clava DataKey spellings rather than
         // the more descriptive schema spelling.
         DataKey<?> alias = switch (protoName) {
@@ -426,7 +485,8 @@ final class ProtoNodeDataReader {
             case "is_inline_specified" -> definition.getKeyMap().get("isInline");
             case "has_trailing_returns" -> definition.getKeyMap().get("hasTrailingReturn");
             case "underlying_expr" -> definition.getKeyMap().get("underlingExpr");
-            case "templated_decl" -> definition.getKeyMap().get("templateDecl");
+            case "is_std_list_initialization" -> definition.getKeyMap().get("isStdInitListInitialization");
+            case "is_type_operand" -> definition.getKeyMap().get("typeOperand");
             default -> null;
         };
         if (alias != null) {
@@ -562,7 +622,7 @@ final class ProtoNodeDataReader {
             case DIRECT_TEMPLATE_NAME -> {
                 var result = new Template();
                 result.set(TemplateArgumentTemplate.TEMPLATE_NAME_KIND, TemplateNameKind.Template);
-                queue(result, "template_decl", value.getDirectTemplateName().getTemplateDecl(), Template.TEMPLATE_DECL);
+                queueOptional(result, value.getDirectTemplateName().getTemplateDecl(), Template.TEMPLATE_DECL);
                 yield result;
             }
             case QUALIFIED_TEMPLATE_NAME -> {
