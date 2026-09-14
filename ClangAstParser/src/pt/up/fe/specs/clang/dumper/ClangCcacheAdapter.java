@@ -20,7 +20,12 @@ import pt.up.fe.specs.util.SpecsLogs;
 /** Configures ccache to invoke clang-dumper directly in depend mode. */
 final class ClangCcacheAdapter {
 
-    private static final String CACHE_FOLDER_NAME = "clang-dumper-ccache";
+    /**
+     * AST dumps are serialized data, not compiler objects. Keep this cache
+     * namespace distinct from the legacy text protocol (and from any future
+     * protocol) so an old entry can never be restored as a protobuf frame.
+     */
+    private static final String CACHE_FOLDER_NAME = "clang-dumper-protobuf-ccache-v1";
     private static final AtomicBoolean MISSING_CCACHE_REPORTED = new AtomicBoolean();
 
     private ClangCcacheAdapter() {

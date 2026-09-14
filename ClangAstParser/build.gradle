@@ -2,6 +2,40 @@ plugins {
     id 'distribution'
     id 'java'
     id 'jacoco'
+    id 'com.google.protobuf' version '0.9.4'
+}
+
+// Keep the wire schema in the clang-dumper checkout. A normal checkout uses
+// the repository-relative sibling; CI or a packaged source tree can override
+// this with -PclangDumperRoot=/path/to/clang-dumper. The override is
+// intentionally explicit so generated sources never depend on a developer's
+// absolute worktree path.
+def clangDumperRoot = file(providers.gradleProperty('clangDumperRoot').orElse('../../clang-dumper').get())
+def wireSchemaDir = new File(clangDumperRoot, 'wire')
+def wireSchema = new File(wireSchemaDir, 'clava_ast_wire.proto')
+if (!wireSchema.isFile()) {
+    throw new GradleException("Could not find the protobuf schema at '${wireSchema}'. "
+            + "Use -PclangDumperRoot=/path/to/clang-dumper for an external checkout.")
+}
+
+// The native clang-dumper and Java runtime must use the same compiler/runtime
+// release.  Keep both values pinned here; update them together with the
+// native CMake pin and record the revision in the release manifest.
+def protobufVersion = '4.28.3'
+def protocVersion = '4.28.3'
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protocVersion}"
+    }
+
+    generateProtoTasks {
+        all().configureEach { task ->
+            task.builtins {
+                java {}
+            }
+        }
+    }
 }
 
 java {
@@ -22,6 +56,8 @@ dependencies {
     implementation ":jOptions"
     implementation ":SpecsUtils"
 
+    implementation "com.google.protobuf:protobuf-java:${protobufVersion}"
+
     implementation 'com.google.code.gson:gson:2.12.1'
     implementation 'com.google.guava:guava:33.4.0-jre'
     implementation 'com.github.luben:zstd-jni:1.5.7-16'
@@ -35,6 +71,9 @@ dependencies {
 // Project sources
 sourceSets {
     main {
+        proto {
+            srcDir wireSchemaDir
+        }
         java {
             srcDir 'src'
         }
