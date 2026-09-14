@@ -21,6 +21,8 @@ import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.ClangAstWebResource.Release;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
+import pt.up.fe.specs.clang.wire.Envelope;
+import pt.up.fe.specs.clang.wire.ProtoAstReader;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 
 import java.io.BufferedReader;
@@ -39,6 +41,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -417,6 +420,9 @@ public class ClangResourcesTest {
 
     @Test
     public void releaseResourcesCanBeInitializedBySeparateJvms() throws Exception {
+        assumeTrue(ClangAstWebResource.getDumperSource() instanceof Release,
+                "release cache test requires a published dumper resource");
+
         var cacheFolder = Files.createDirectory(tempFolder.resolve("cache")).toFile();
         var firstDone = tempFolder.resolve("first.done");
         var secondDone = tempFolder.resolve("second.done");
@@ -487,6 +493,9 @@ public class ClangResourcesTest {
 
     @Test
     public void sameJvmInstancesReuseReleaseFilesAndPrepareIncludesOnlyForBuiltinLibc() throws Exception {
+        assumeTrue(ClangAstWebResource.getDumperSource() instanceof Release,
+                "release cache test requires a published dumper resource");
+
         var firstParser = newParser("");
         var secondParser = newParser("");
         var thirdParser = newParser("");
@@ -563,7 +572,9 @@ public class ClangResourcesTest {
         assumeTrue(!SupportedPlatform.getCurrentPlatform().isWindows(), "Shell fixtures require a Unix executable");
 
         var systemLibcDumper = tempFolder.resolve("system-libc-dumper");
-        Files.writeString(systemLibcDumper, "#!/bin/sh\nexit 0\n");
+        String header = validHeaderStreamBase64();
+        Files.writeString(systemLibcDumper,
+                "#!/bin/sh\nprintf '%s' '" + header + "' | base64 -d > \"$3\"\nexit 0\n");
         assertTrue(systemLibcDumper.toFile().setExecutable(true));
 
         var builtinLibcDumper = tempFolder.resolve("builtin-libc-dumper");
@@ -605,6 +616,28 @@ public class ClangResourcesTest {
 
     private Path clangCacheRoot() {
         return tempFolder.resolve("clang-dumper");
+    }
+
+    private static String validHeaderStreamBase64() {
+        var header = Envelope.newBuilder().setHeader(pt.up.fe.specs.clang.wire.Header.newBuilder()
+                .setProtocolMajor(1)
+                .setProtocolMinor(0)
+                .setSchemaId("clava-ast-wire")
+                .setProducerVersion("test")
+                .setLlvmMajor(18)
+                .setSchemaSha256(com.google.protobuf.ByteString.copyFromUtf8(ProtoAstReader.schemaHash())))
+                .build()
+                .toByteArray();
+        var framed = new java.io.ByteArrayOutputStream();
+        framed.writeBytes(new byte[] { 'C', 'L', 'A', 'V', 'A', 'P', 'B', '1' });
+        int length = header.length;
+        while ((length & ~0x7f) != 0) {
+            framed.write((length & 0x7f) | 0x80);
+            length >>>= 7;
+        }
+        framed.write(length);
+        framed.writeBytes(header);
+        return Base64.getEncoder().encodeToString(framed.toByteArray());
     }
 
     private static ClangDumperManifestAsset asset(String filename, String kind, String platform, String arch) {

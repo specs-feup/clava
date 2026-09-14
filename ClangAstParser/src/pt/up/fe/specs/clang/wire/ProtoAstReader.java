@@ -52,6 +52,11 @@ public final class ProtoAstReader {
     public record Result(ClangAstData data, Metrics metrics) {
     }
 
+    /** Returns the generated schema fingerprint used in the stream header. */
+    public static String schemaHash() {
+        return ProtoSchemaHash.VALUE;
+    }
+
     /** File table and id conversion shared by node and auxiliary records. */
     static final class Files {
         private final String scope;
@@ -252,6 +257,18 @@ public final class ProtoAstReader {
     private static void readHeader(Header header, boolean alreadySeen) {
         if (alreadySeen) {
             throw new ProtocolException("Header must occur exactly once and first");
+        }
+        validateHeader(header);
+    }
+
+    /**
+     * Validates the typed protocol header without constructing an AST. This is
+     * used by resource probing, where a dumper invocation must be checked as a
+     * protobuf producer before it is selected for a real parse.
+     */
+    public static void validateHeader(Header header) {
+        if (header == null) {
+            throw new ProtocolException("Protobuf Header is required");
         }
         if (!header.hasProtocolMajor() || !header.hasProtocolMinor() || !header.hasSchemaId()
                 || !header.hasProducerVersion() || !header.hasLlvmMajor() || !header.hasSchemaSha256()) {

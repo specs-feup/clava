@@ -18,6 +18,9 @@ import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
 import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
+import pt.up.fe.specs.clang.wire.Envelope;
+import pt.up.fe.specs.clang.wire.FramedProtobufReader;
+import pt.up.fe.specs.clang.wire.ProtoAstReader;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -26,6 +29,7 @@ import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.system.ProcessOutputAsString;
 
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -288,10 +292,17 @@ public class ClangResources {
 
             boolean needsLib = false;
             for (var testFile : testFiles) {
-                var output = runClangAstDumper(clangExecutable, testFile);
+                File dumpFile = new File(clangTest, testFile.getName() + ".pb");
+                var output = runClangAstDumper(clangExecutable, testFile, dumpFile);
 
                 if (output.getReturnValue() != 0) {
                     ClavaLog.info("Problems while running dumper to test if libc/libcxx is needed");
+                    needsLib = true;
+                    break;
+                }
+
+                if (!isValidProtobufDump(dumpFile)) {
+                    ClavaLog.info("Dumper did not produce a valid protobuf AST while testing libc/libcxx");
                     needsLib = true;
                     break;
                 }
@@ -310,9 +321,43 @@ public class ClangResources {
         }
     }
 
-    private static ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile) {
-        List<String> arguments = List.of(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
+    private static ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile, File dumpFile) {
+        List<String> arguments = List.of(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "-o",
+                dumpFile.getAbsolutePath(), "--");
         return SpecsSystem.runProcess(arguments, true, false);
+    }
+
+    /**
+     * Parse enough of the typed stream to prove that this resource is the
+     * expected protocol producer. The complete AST is deliberately not built
+     * during libc detection; normal parsing remains the only consumer path.
+     */
+    static boolean isValidProtobufDump(File dumpFile) {
+        if (!dumpFile.isFile()) {
+            return false;
+        }
+
+        try (InputStream input = Files.newInputStream(dumpFile.toPath())) {
+            byte[] magic = input.readNBytes(8);
+            if (magic.length != 8 || magic[0] != 'C' || magic[1] != 'L' || magic[2] != 'A'
+                    || magic[3] != 'V' || magic[4] != 'A' || magic[5] != 'P' || magic[6] != 'B'
+                    || magic[7] != '1') {
+                return false;
+            }
+
+            final boolean[] headerSeen = { false };
+            new FramedProtobufReader(input).read(Envelope::parseFrom, envelope -> {
+                if (headerSeen[0] || envelope.getPayloadCase() != Envelope.PayloadCase.HEADER) {
+                    throw new IllegalArgumentException("protobuf Header must be the first frame");
+                }
+                ProtoAstReader.validateHeader(envelope.getHeader());
+                headerSeen[0] = true;
+            });
+            return headerSeen[0];
+        } catch (Exception e) {
+            ClavaLog.debug(() -> "Invalid protobuf dumper probe: " + e.getMessage());
+            return false;
+        }
     }
 
     private PreparedIncludes prepareIncludes(ClangDumperManifest manifest, LibcMode libcMode) {
