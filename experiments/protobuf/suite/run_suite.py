@@ -280,7 +280,10 @@ def main() -> int:
     # SpecsIo.getTempFolder("clang_ast_exe") appends the Java user name on
     # Linux. Keep this in sync so ccache counters are captured before the JVM
     # creates the folder rather than accidentally inspecting a different cache.
-    cache = temp_root / f"clang_ast_exe_{getpass.getuser()}" / "clang-dumper-ccache"
+    cache_folder = ("clang-dumper-protobuf-ccache-v1"
+                    if args.implementation == "protobuf"
+                    else "clang-dumper-ccache")
+    cache = temp_root / f"clang_ast_exe_{getpass.getuser()}" / cache_folder
     if args.mode == "warm" and not cache.is_dir():
         raise SystemExit(f"warm ccache directory does not exist: {cache}")
     if args.mode == "cold":

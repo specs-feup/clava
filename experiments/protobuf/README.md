@@ -45,7 +45,8 @@ protobuf cold, protobuf warm, protobuf bypass
 
 On the next repetition the implementation order rotates. Cold and warm share
 the same owned Java temporary root and therefore the same ccache below
-`clang_ast_exe_<user>/clang-dumper-ccache`; bypass receives a new temporary root and
+`clang_ast_exe_<user>/clang-dumper-ccache` for the baseline or
+`clang_ast_exe_<user>/clang-dumper-protobuf-ccache-v1` for protobuf. Bypass receives a new temporary root and
 sets `CCACHE_DISABLE=true`. A cold run requires an empty root. A warm run must
 find the populated paired root. The matrix writes a plan, progress manifest,
 per-cell driver log, Vitest JSON/log, flattened per-test timings, GNU `time`
