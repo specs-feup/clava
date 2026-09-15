@@ -346,14 +346,40 @@ public class ClangResources {
             }
 
             final boolean[] headerSeen = { false };
+            final boolean[] endSeen = { false };
             new FramedProtobufReader(input).read(Envelope::parseFrom, envelope -> {
-                if (headerSeen[0] || envelope.getPayloadCase() != Envelope.PayloadCase.HEADER) {
-                    throw new IllegalArgumentException("protobuf Header must be the first frame");
+                if (endSeen[0]) {
+                    throw new IllegalArgumentException("protobuf End must be the final frame");
                 }
-                ProtoAstReader.validateHeader(envelope.getHeader());
-                headerSeen[0] = true;
+
+                switch (envelope.getPayloadCase()) {
+                    case HEADER -> {
+                        if (headerSeen[0]) {
+                            throw new IllegalArgumentException("protobuf Header must occur exactly once");
+                        }
+                        ProtoAstReader.validateHeader(envelope.getHeader());
+                        headerSeen[0] = true;
+                    }
+                    case RECORD -> {
+                        if (!headerSeen[0]) {
+                            throw new IllegalArgumentException("protobuf Header must be the first frame");
+                        }
+                    }
+                    case END -> {
+                        if (!headerSeen[0]) {
+                            throw new IllegalArgumentException("protobuf Header must be the first frame");
+                        }
+                        var end = envelope.getEnd();
+                        if (!end.hasRecords() || !end.hasNodes() || !end.hasRawBytes()
+                                || !end.hasFiles() || !end.hasIds()) {
+                            throw new IllegalArgumentException("protobuf End is missing a required counter");
+                        }
+                        endSeen[0] = true;
+                    }
+                    case PAYLOAD_NOT_SET -> throw new IllegalArgumentException("protobuf frame has no payload");
+                }
             });
-            return headerSeen[0];
+            return headerSeen[0] && endSeen[0];
         } catch (Exception e) {
             ClavaLog.debug(() -> "Invalid protobuf dumper probe: " + e.getMessage());
             return false;

@@ -40,8 +40,11 @@ import pt.up.fe.specs.util.utilities.CachedItems;
 public final class ProtoAstReader {
 
     private static final byte[] MAGIC = new byte[] { 'C', 'L', 'A', 'V', 'A', 'P', 'B', '1' };
-    private static final int PROTOCOL_MAJOR = 1;
-    private static final int PROTOCOL_MINOR = 0;
+    public static final String PROTOCOL_ID = "clava-ast-wire";
+    public static final int PROTOCOL_MAJOR = 1;
+    public static final int PROTOCOL_MINOR = 0;
+    public static final String PRODUCER_VERSION = "clang-dumper-18";
+    public static final int LLVM_MAJOR = 18;
 
     private ProtoAstReader() {
     }
@@ -63,6 +66,7 @@ public final class ProtoAstReader {
     static final class Files {
         private final String scope;
         private final List<String> paths = new ArrayList<>(List.of(""));
+        private final Set<Long> referencedDenseIds = new HashSet<>();
         private long maxDenseId;
 
         Files(String scope) {
@@ -71,6 +75,7 @@ public final class ProtoAstReader {
 
         String id(long value) {
             if (value > 0) {
+                referencedDenseIds.add(value);
                 maxDenseId = Math.max(maxDenseId, value);
                 return "@" + value + "_" + scope;
             }
@@ -85,10 +90,18 @@ public final class ProtoAstReader {
             };
         }
 
-        void validateDenseIds(long count) {
-            if (count < maxDenseId) {
-                throw new ProtocolException("End.ids is smaller than the largest dense reference: " + count + " < "
-                        + maxDenseId);
+        void validateDenseIds(long count, Set<Long> definedDenseIds) {
+            if (count < 0 || count != maxDenseId || count != definedDenseIds.size()) {
+                throw new ProtocolException("End.ids does not describe the exact dense id set: " + count
+                        + " (largest=" + maxDenseId + ", defined=" + definedDenseIds.size() + ")");
+            }
+            if (!referencedDenseIds.equals(definedDenseIds)) {
+                Set<Long> missing = new HashSet<>(referencedDenseIds);
+                missing.removeAll(definedDenseIds);
+                Set<Long> unreferenced = new HashSet<>(definedDenseIds);
+                unreferenced.removeAll(referencedDenseIds);
+                throw new ProtocolException("Dense references do not match Node definitions: missing=" + missing
+                        + ", unreferenced=" + unreferenced);
             }
         }
 
@@ -150,9 +163,11 @@ public final class ProtoAstReader {
         nodeParser.init(data);
         Files files = new Files(scope);
         Map<String, String> pendingClasses = new LinkedHashMap<>();
+        Map<String, String> nodeClasses = new HashMap<>();
         Set<String> classesSeen = new HashSet<>();
         Set<String> childrenSeen = new HashSet<>();
         Set<String> nodeIdsSeen = new HashSet<>();
+        Set<Long> denseNodeIds = new HashSet<>();
         MetricsAccumulator metrics = new MetricsAccumulator();
         boolean[] headerSeen = { false };
         boolean[] endSeen = { false };
@@ -184,8 +199,8 @@ public final class ProtoAstReader {
                         if (!headerSeen[0]) {
                             throw new ProtocolException("Header must be the first Envelope");
                         }
-                        readRecord(envelope.getRecord(), data, files, nodeParser, pendingClasses, classesSeen,
-                                childrenSeen, nodeIdsSeen, nodes);
+                        readRecord(envelope.getRecord(), data, files, nodeParser, pendingClasses, nodeClasses,
+                                classesSeen, childrenSeen, nodeIdsSeen, denseNodeIds, nodes);
                     }
                     case END -> {
                         if (!headerSeen[0]) {
@@ -228,8 +243,24 @@ public final class ProtoAstReader {
             throw new IOException("End.raw_bytes mismatch: " + endRecord[0].getRawBytes() + "/" + expectedRawBytes);
         }
         try {
-            files.validateDenseIds(endRecord[0].getIds());
             validateTopLevelReferences(data);
+            files.validateDenseIds(endRecord[0].getIds(), denseNodeIds);
+            if (!classesSeen.equals(nodeIdsSeen)) {
+                Set<String> missing = new HashSet<>(nodeIdsSeen);
+                missing.removeAll(classesSeen);
+                Set<String> orphan = new HashSet<>(classesSeen);
+                orphan.removeAll(nodeIdsSeen);
+                throw new ProtocolException("NodeClass coverage does not match Nodes: missing=" + missing
+                        + ", orphan=" + orphan);
+            }
+            if (!childrenSeen.equals(nodeIdsSeen)) {
+                Set<String> missing = new HashSet<>(nodeIdsSeen);
+                missing.removeAll(childrenSeen);
+                Set<String> orphan = new HashSet<>(childrenSeen);
+                orphan.removeAll(nodeIdsSeen);
+                throw new ProtocolException("Children coverage does not match Nodes: missing=" + missing
+                        + ", orphan=" + orphan);
+            }
         } catch (ProtocolException e) {
             throw new IOException("Invalid protobuf AST references: " + e.getMessage(), e);
         }
@@ -284,8 +315,14 @@ public final class ProtoAstReader {
             throw new ProtocolException("Unsupported protobuf protocol version " + header.getProtocolMajor() + "."
                     + header.getProtocolMinor());
         }
-        if (!"clava-ast-wire".equals(header.getSchemaId())) {
+        if (!PROTOCOL_ID.equals(header.getSchemaId())) {
             throw new ProtocolException("Unexpected protobuf schema id '" + header.getSchemaId() + "'");
+        }
+        if (!PRODUCER_VERSION.equals(header.getProducerVersion())) {
+            throw new ProtocolException("Unexpected protobuf producer '" + header.getProducerVersion() + "'");
+        }
+        if (header.getLlvmMajor() != LLVM_MAJOR) {
+            throw new ProtocolException("Unexpected LLVM major " + header.getLlvmMajor());
         }
         if (!ProtoSchemaHash.VALUE.equals(header.getSchemaSha256().toStringUtf8())) {
             throw new ProtocolException("Protobuf schema hash does not match the generated binding");
@@ -293,16 +330,28 @@ public final class ProtoAstReader {
     }
 
     private static void readRecord(Record record, ClangAstData data, Files files, ClavaNodeParser nodeParser,
-            Map<String, String> pendingClasses, Set<String> classesSeen, Set<String> childrenSeen,
-            Set<String> nodeIdsSeen, long[] nodes) {
+            Map<String, String> pendingClasses, Map<String, String> nodeClasses, Set<String> classesSeen,
+            Set<String> childrenSeen, Set<String> nodeIdsSeen, Set<Long> denseNodeIds, long[] nodes) {
         switch (record.getRecordCase()) {
             case FILE -> readFile(record.getFile(), data, files);
             case NODE -> {
-                String id = files.id(record.getNode().getId());
+                Node node = record.getNode();
+                if (!node.hasId() || node.getId() <= 0) {
+                    throw new ProtocolException("Node.id must be a positive dense id");
+                }
+                if (!node.hasClassName() || node.getClassName().isBlank()) {
+                    throw new ProtocolException("Node.class_name is required for id " + node.getId());
+                }
+                validateNodePayload(node);
+                String id = files.id(node.getId());
                 if (!nodeIdsSeen.add(id)) {
                     throw new ProtocolException("Duplicated Node " + id);
                 }
-                DataStore nodeData = ProtoNodeDataReader.read(record.getNode(), data, files::id, files);
+                if (!denseNodeIds.add(node.getId())) {
+                    throw new ProtocolException("Duplicated Node dense id " + node.getId());
+                }
+                checkNodeClass(id, node.getClassName(), nodeClasses);
+                DataStore nodeData = ProtoNodeDataReader.read(node, data, files::id, files);
                 data.get(ClangAstData.NODE_DATA).put(id, nodeData);
                 nodes[0]++;
                 flushClass(id, pendingClasses, nodeParser, data);
@@ -328,6 +377,7 @@ public final class ProtoAstReader {
                 if (classesSeen.add(id) == false) {
                     throw new ProtocolException("Duplicated NodeClass " + id);
                 }
+                checkNodeClass(id, nodeClass.getClassName(), nodeClasses);
                 pendingClasses.put(id, nodeClass.getClassName());
                 flushClass(id, pendingClasses, nodeParser, data);
             }
@@ -359,6 +409,68 @@ public final class ProtoAstReader {
             nodeParser.applyRecord(id, className, data);
             pendingClasses.remove(id);
         }
+    }
+
+    private static void checkNodeClass(String id, String className, Map<String, String> nodeClasses) {
+        String previous = nodeClasses.putIfAbsent(id, className);
+        if (previous != null && !previous.equals(className)) {
+            throw new ProtocolException("NodeClass does not match Node for " + id + ": '" + previous + "'/'"
+                    + className + "'");
+        }
+    }
+
+    private static void validateNodePayload(Node node) {
+        String className = node.getClassName();
+        Node.NodeCase payload = node.getNodeCase();
+        Node.NodeCase alias = switch (className) {
+            case "CXXDestructorDecl" -> Node.NodeCase.C_X_X_METHOD_DECL_DATA;
+            case "ObjCImplementationDecl", "UsingShadowDecl", "LabelDecl" -> Node.NodeCase.NAMED_DECL_DATA;
+            case "ClassTemplateDecl", "FunctionTemplateDecl", "TypeAliasTemplateDecl", "VarTemplateDecl" ->
+                    Node.NodeCase.TEMPLATE_DECL_DATA;
+            case "EnumConstantDecl" -> Node.NodeCase.VALUE_DECL_DATA;
+            case "TypeAliasDecl", "TypedefDecl" -> Node.NodeCase.TYPEDEF_NAME_DECL_DATA;
+            case "VarTemplateSpecializationDecl" -> Node.NodeCase.VAR_DECL_DATA;
+            case "CXXFunctionalCastExpr" -> Node.NodeCase.CAST_EXPR_DATA;
+            case "CStyleCastExpr" -> Node.NodeCase.EXPLICIT_CAST_EXPR_DATA;
+            case "CXXAddrspaceCastExpr", "CXXConstCastExpr", "CXXDynamicCastExpr", "CXXReinterpretCastExpr",
+                    "CXXStaticCastExpr" -> Node.NodeCase.C_X_X_NAMED_CAST_EXPR_DATA;
+            case "CXXOperatorCallExpr", "UserDefinedLiteral" -> Node.NodeCase.CALL_EXPR_DATA;
+            case "CompoundAssignOperator" -> Node.NodeCase.BINARY_OPERATOR_DATA;
+            case "FunctionNoProtoType" -> Node.NodeCase.FUNCTION_TYPE_DATA;
+            case "IncompleteArrayType" -> Node.NodeCase.ARRAY_TYPE_DATA;
+            case "RecordType", "EnumType" -> Node.NodeCase.TAG_TYPE_DATA;
+            case "LValueReferenceType", "RValueReferenceType" -> Node.NodeCase.REFERENCE_TYPE_DATA;
+            default -> null;
+        };
+        if (alias != null) {
+            if (payload != alias) {
+                throw new ProtocolException("Node payload " + payload + " does not match " + className);
+            }
+            return;
+        }
+
+        String expected = normalize(className + "Data");
+        String actual = normalize(payload.name());
+        if (expected.equals(actual)) {
+            return;
+        }
+
+        boolean familyMatches = (className.endsWith("Decl") && payload.name().endsWith("_DECL_DATA"))
+                || (className.endsWith("Type") && payload.name().endsWith("_TYPE_DATA"))
+                || (className.endsWith("Expr") && payload.name().endsWith("_EXPR_DATA"))
+                || (className.endsWith("Stmt") && payload.name().endsWith("_STMT_DATA"))
+                || (className.endsWith("Attr") && (payload.name().endsWith("_ATTR_DATA")
+                        || payload == Node.NodeCase.ATTRIBUTE_DATA));
+        boolean genericBase = payload == Node.NodeCase.DECL_DATA || payload == Node.NodeCase.TYPE_DATA
+                || payload == Node.NodeCase.EXPR_DATA || payload == Node.NodeCase.STMT_DATA
+                || payload == Node.NodeCase.ATTRIBUTE_DATA;
+        if (!familyMatches || !genericBase) {
+            throw new ProtocolException("Node payload " + payload + " does not match " + className);
+        }
+    }
+
+    private static String normalize(String value) {
+        return value.replace("_", "").toLowerCase(java.util.Locale.ROOT);
     }
 
     private static void readFile(File file, ClangAstData data, Files files) {
@@ -422,8 +534,17 @@ public final class ProtoAstReader {
     }
 
     private static void readLanguage(Language value, ClangAstData data) {
-        if (!value.hasFile()) {
-            throw new ProtocolException("Language.file is required");
+        var missing = new ArrayList<String>();
+        for (var field : value.getDescriptorForType().getFields()) {
+            if (!value.hasField(field)) {
+                missing.add(field.getName());
+            }
+        }
+        if (!missing.isEmpty()) {
+            throw new ProtocolException("Language is missing required fields: " + missing);
+        }
+        if (value.getFile().isBlank()) {
+            throw new ProtocolException("Language.file must not be blank");
         }
         var language = new pt.up.fe.specs.clava.ast.extra.data.Language()
                 .set(pt.up.fe.specs.clava.ast.extra.data.Language.LINE_COMMENT, value.getLineComment())

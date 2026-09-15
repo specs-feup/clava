@@ -88,12 +88,14 @@ class ProtoAstReaderTest {
                         .setPointeeType(-1)))).build();
         var nodeClass = Envelope.newBuilder().setRecord(Record.newBuilder().setNodeClass(NodeClass.newBuilder()
                 .setNode(1).setClassName("PointerType"))).build();
+        var children = Envelope.newBuilder().setRecord(Record.newBuilder().setChildren(Children.newBuilder()
+                .setNode(1))).build();
         var end = Envelope.newBuilder().setEnd(End.newBuilder()
-                .setRecords(4).setNodes(1).setRawBytes(rawBytesBeforeEnd(header, node, nodeClass)).setFiles(0)
+                .setRecords(5).setNodes(1).setRawBytes(rawBytesBeforeEnd(header, node, nodeClass, children)).setFiles(0)
                 .setIds(1)).build();
 
         IOException error = assertThrows(IOException.class,
-                () -> ProtoAstReader.read(new ByteArrayInputStream(stream(header, node, nodeClass, end)),
+                () -> ProtoAstReader.read(new ByteArrayInputStream(stream(header, node, nodeClass, children, end)),
                         new ClavaContext(), null, "unit"));
         assertEquals(true, error.getMessage().contains("resolve protobuf AST references"));
     }
@@ -129,14 +131,142 @@ class ProtoAstReaderTest {
                 .setNode(1).setClassName("BuiltinType"))).build();
         var topLevel = Envelope.newBuilder().setRecord(Record.newBuilder().setTopLevel(TopLevel.newBuilder()
                 .setKind(TopLevelKind.TOPLEVELKIND_TYPE).setNode(1))).build();
+        var children = Envelope.newBuilder().setRecord(Record.newBuilder().setChildren(Children.newBuilder()
+                .setNode(1))).build();
         var end = Envelope.newBuilder().setEnd(End.newBuilder()
-                .setRecords(6).setNodes(1).setRawBytes(rawBytesBeforeEnd(header, node, nodeClass, topLevel, topLevel))
+                .setRecords(7).setNodes(1).setRawBytes(rawBytesBeforeEnd(header, node, nodeClass, topLevel, topLevel,
+                        children))
                 .setFiles(0).setIds(1)).build();
 
-        var result = ProtoAstReader.read(new ByteArrayInputStream(stream(header, node, nodeClass, topLevel, topLevel, end)),
+        var result = ProtoAstReader.read(
+                new ByteArrayInputStream(stream(header, node, nodeClass, topLevel, topLevel, children, end)),
                 new ClavaContext(), null, "unit");
 
         assertEquals(1, result.data().get(ClangAstData.TOP_LEVEL_TYPE_IDS).size());
+    }
+
+    @Test
+    void rejectsMissingChildrenCoverage() {
+        var header = Envelope.newBuilder().setHeader(header()).build();
+        var node = builtinNode("BuiltinType");
+        var nodeClass = nodeClass(1, "BuiltinType");
+        var end = Envelope.newBuilder().setEnd(End.newBuilder()
+                .setRecords(4).setNodes(1).setRawBytes(rawBytesBeforeEnd(header, node, nodeClass)).setFiles(0)
+                .setIds(1)).build();
+
+        IOException error = assertThrows(IOException.class,
+                () -> ProtoAstReader.read(new ByteArrayInputStream(stream(header, node, nodeClass, end)),
+                        new ClavaContext(), null, "unit"));
+        assertEquals(true, error.getMessage().contains("Children coverage"));
+    }
+
+    @Test
+    void rejectsAnOrphanChildrenRecord() {
+        var header = Envelope.newBuilder().setHeader(header()).build();
+        var node = builtinNode("BuiltinType");
+        var nodeClass = nodeClass(1, "BuiltinType");
+        var children = children(2);
+        var end = Envelope.newBuilder().setEnd(End.newBuilder()
+                .setRecords(5).setNodes(1).setRawBytes(rawBytesBeforeEnd(header, node, nodeClass, children)).setFiles(0)
+                .setIds(2)).build();
+
+        assertThrows(IOException.class,
+                () -> ProtoAstReader.read(new ByteArrayInputStream(stream(header, node, nodeClass, children, end)),
+                        new ClavaContext(), null, "unit"));
+    }
+
+    @Test
+    void rejectsMismatchedNodeClass() {
+        var header = Envelope.newBuilder().setHeader(header()).build();
+        var node = builtinNode("BuiltinType");
+        var nodeClass = nodeClass(1, "PointerType");
+
+        IOException error = assertThrows(IOException.class,
+                () -> ProtoAstReader.read(new ByteArrayInputStream(stream(header, node, nodeClass)),
+                        new ClavaContext(), null, "unit"));
+        assertEquals(true, error.getMessage().contains("does not match"));
+    }
+
+    @Test
+    void rejectsMismatchedNodePayload() {
+        var header = Envelope.newBuilder().setHeader(header()).build();
+        var node = pointerNode("BuiltinType");
+
+        IOException error = assertThrows(IOException.class,
+                () -> ProtoAstReader.read(new ByteArrayInputStream(stream(header, node)),
+                        new ClavaContext(), null, "unit"));
+        assertEquals(true, error.getMessage().contains("payload"));
+    }
+
+    @Test
+    void rejectsAnEndIdCountThatIsNotExact() {
+        var header = Envelope.newBuilder().setHeader(header()).build();
+        var node = builtinNode("BuiltinType");
+        var nodeClass = nodeClass(1, "BuiltinType");
+        var children = children(1);
+        var end = Envelope.newBuilder().setEnd(End.newBuilder()
+                .setRecords(5).setNodes(1).setRawBytes(rawBytesBeforeEnd(header, node, nodeClass, children)).setFiles(0)
+                .setIds(2)).build();
+
+        assertThrows(IOException.class,
+                () -> ProtoAstReader.read(new ByteArrayInputStream(stream(header, node, nodeClass, children, end)),
+                        new ClavaContext(), null, "unit"));
+    }
+
+    @Test
+    void rejectsIncompleteLanguageRecord() {
+        var header = Envelope.newBuilder().setHeader(header()).build();
+        var language = Envelope.newBuilder().setRecord(Record.newBuilder().setLanguage(Language.newBuilder()
+                .setFile("unit.cpp"))).build();
+        var end = Envelope.newBuilder().setEnd(End.newBuilder()
+                .setRecords(3).setNodes(0).setRawBytes(rawBytesBeforeEnd(header, language)).setFiles(0)
+                .setIds(0)).build();
+
+        IOException error = assertThrows(IOException.class,
+                () -> ProtoAstReader.read(new ByteArrayInputStream(stream(header, language, end)),
+                        new ClavaContext(), null, "unit"));
+        assertEquals(true, error.getMessage().contains("Language is missing required fields"));
+    }
+
+    private static Envelope builtinNode(String className) {
+        return Envelope.newBuilder().setRecord(Record.newBuilder().setNode(Node.newBuilder()
+                .setId(1)
+                .setClassName(className)
+                .setBuiltinTypeData(BuiltinTypeData.newBuilder()
+                        .setBase(TypeData.newBuilder()
+                                .setTypeAsString("int")
+                                .setTypeDependency(TypeDependency.TYPEDEPENDENCY_NONE)
+                                .setIsVariablyModified(false)
+                                .setContainsUnexpandedParameterPack(false)
+                                .setIsFromAst(false)
+                                .setUnqualifiedDesugaredType(-1))
+                        .setKind(BuiltinKind.BUILTINKIND_INT)
+                        .setKindLiteral("int")))).build();
+    }
+
+    private static Envelope pointerNode(String className) {
+        return Envelope.newBuilder().setRecord(Record.newBuilder().setNode(Node.newBuilder()
+                .setId(1)
+                .setClassName(className)
+                .setPointerTypeData(PointerTypeData.newBuilder()
+                        .setBase(TypeData.newBuilder()
+                                .setTypeAsString("int *")
+                                .setTypeDependency(TypeDependency.TYPEDEPENDENCY_NONE)
+                                .setIsVariablyModified(false)
+                                .setContainsUnexpandedParameterPack(false)
+                                .setIsFromAst(false)
+                                .setUnqualifiedDesugaredType(-1))
+                        .setPointeeType(-1)))).build();
+    }
+
+    private static Envelope nodeClass(long node, String className) {
+        return Envelope.newBuilder().setRecord(Record.newBuilder().setNodeClass(NodeClass.newBuilder()
+                .setNode(node).setClassName(className))).build();
+    }
+
+    private static Envelope children(long node) {
+        return Envelope.newBuilder().setRecord(Record.newBuilder().setChildren(Children.newBuilder()
+                .setNode(node))).build();
     }
 
     private static Header header() {
@@ -144,7 +274,7 @@ class ProtoAstReaderTest {
                 .setProtocolMajor(1)
                 .setProtocolMinor(0)
                 .setSchemaId("clava-ast-wire")
-                .setProducerVersion("test")
+                .setProducerVersion(ProtoAstReader.PRODUCER_VERSION)
                 .setLlvmMajor(18)
                 .setSchemaSha256(com.google.protobuf.ByteString.copyFromUtf8(ProtoSchemaHash.VALUE))
                 .build();

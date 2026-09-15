@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifest;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
+import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestProtocol;
 import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.ClangAstWebResource.Release;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
@@ -120,6 +121,22 @@ public class ClangResourcesTest {
         assertThrows(RuntimeException.class, () -> manifest.getAsset("windows", "x64", "tool"));
         assertThrows(RuntimeException.class, () -> new ClangDumperManifest(2, List.of(tool)).validate());
         assertThrows(RuntimeException.class, () -> new ClangDumperManifest(1, List.of()).validate());
+    }
+
+    @Test
+    public void manifestRejectsMissingOrIncompatibleProtocolMetadata() {
+        var tool = asset("tool", "tool", "linux", "x64");
+        var valid = new ClangDumperManifest(1, List.of(tool));
+        var metadata = valid.protocol();
+        var incompatible = new ClangDumperManifestProtocol("wrong-protocol", metadata.major(), metadata.minor(),
+                metadata.framing(), metadata.max_record_bytes(), metadata.schema_sha256(), metadata.descriptor_sha256(),
+                metadata.producer_version(), metadata.llvm_major());
+
+        assertThrows(RuntimeException.class, () -> new ClangDumperManifest(1, null, List.of(tool)).validate());
+        assertThrows(RuntimeException.class, () -> new ClangDumperManifest(1, incompatible, List.of(tool)).validate());
+        assertThrows(RuntimeException.class, () -> new ClangDumperManifest(1,
+                valid.protocol(), List.of(new ClangDumperManifestAsset("tool", "tool", "linux", "x64", 19,
+                        HELLO_SHA256))).validate());
     }
 
     @Test
@@ -592,6 +609,14 @@ public class ClangResourcesTest {
     }
 
     @Test
+    public void libcProbeRequiresAnEndRecord() throws IOException {
+        var dump = tempFolder.resolve("header-only.pb");
+        Files.write(dump, Base64.getDecoder().decode(headerOnlyStreamBase64()));
+
+        assertFalse(ClangResources.isValidProtobufDump(dump.toFile()));
+    }
+
+    @Test
     public void forcedBuildAndPluginModesResolveToSystemWithoutAutoState() throws IOException {
         assumeTrue(!SupportedPlatform.getCurrentPlatform().isWindows(), "Shell fixtures require a Unix executable");
 
@@ -623,11 +648,42 @@ public class ClangResourcesTest {
                 .setProtocolMajor(1)
                 .setProtocolMinor(0)
                 .setSchemaId("clava-ast-wire")
-                .setProducerVersion("test")
+                .setProducerVersion(ProtoAstReader.PRODUCER_VERSION)
                 .setLlvmMajor(18)
                 .setSchemaSha256(com.google.protobuf.ByteString.copyFromUtf8(ProtoAstReader.schemaHash())))
                 .build()
                 .toByteArray();
+        var framed = new java.io.ByteArrayOutputStream();
+        framed.writeBytes(new byte[] { 'C', 'L', 'A', 'V', 'A', 'P', 'B', '1' });
+        int length = header.length;
+        while ((length & ~0x7f) != 0) {
+            framed.write((length & 0x7f) | 0x80);
+            length >>>= 7;
+        }
+        framed.write(length);
+        framed.writeBytes(header);
+
+        var end = Envelope.newBuilder().setEnd(pt.up.fe.specs.clang.wire.End.newBuilder()
+                .setRecords(2).setNodes(0).setRawBytes(framed.size()).setFiles(0).setIds(0)).build().toByteArray();
+        length = end.length;
+        while ((length & ~0x7f) != 0) {
+            framed.write((length & 0x7f) | 0x80);
+            length >>>= 7;
+        }
+        framed.write(length);
+        framed.writeBytes(end);
+        return Base64.getEncoder().encodeToString(framed.toByteArray());
+    }
+
+    private static String headerOnlyStreamBase64() {
+        var header = Envelope.newBuilder().setHeader(pt.up.fe.specs.clang.wire.Header.newBuilder()
+                .setProtocolMajor(1)
+                .setProtocolMinor(0)
+                .setSchemaId("clava-ast-wire")
+                .setProducerVersion(ProtoAstReader.PRODUCER_VERSION)
+                .setLlvmMajor(18)
+                .setSchemaSha256(com.google.protobuf.ByteString.copyFromUtf8(ProtoAstReader.schemaHash())))
+                .build().toByteArray();
         var framed = new java.io.ByteArrayOutputStream();
         framed.writeBytes(new byte[] { 'C', 'L', 'A', 'V', 'A', 'P', 'B', '1' });
         int length = header.length;

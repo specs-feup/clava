@@ -14,6 +14,8 @@
 package pt.up.fe.specs.clang;
 
 import com.google.gson.Gson;
+import pt.up.fe.specs.clang.wire.FramedProtobufReader;
+import pt.up.fe.specs.clang.wire.ProtoAstReader;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.providers.WebResourceProvider;
 
@@ -137,15 +139,32 @@ public final class ClangAstWebResource {
     public record LocalBuild(File folder) implements DumperSource {
     }
 
-    public record ClangDumperManifest(int schema_version, List<ClangDumperManifestAsset> assets) {
+    public record ClangDumperManifest(int schema_version, ClangDumperManifestProtocol protocol,
+                                      List<ClangDumperManifestAsset> assets) {
+
+        /** Compatibility constructor for in-process callers that construct test manifests. */
+        public ClangDumperManifest(int schema_version, List<ClangDumperManifestAsset> assets) {
+            this(schema_version, ClangDumperManifestProtocol.defaults(), assets);
+        }
 
         public void validate() {
             if (schema_version != 1) {
                 throw new RuntimeException("Unsupported clang-dumper manifest schema version: " + schema_version);
             }
 
+            if (protocol == null) {
+                throw new RuntimeException("Clang-dumper manifest does not contain protocol metadata");
+            }
+            protocol.validate();
+
             if (assets == null || assets.isEmpty()) {
                 throw new RuntimeException("Clang-dumper manifest does not contain assets");
+            }
+
+            for (var asset : assets) {
+                if (asset == null || asset.llvm_major() != ProtoAstReader.LLVM_MAJOR) {
+                    throw new RuntimeException("Clang-dumper manifest contains an incompatible LLVM asset");
+                }
             }
         }
 
@@ -160,6 +179,32 @@ public final class ClangAstWebResource {
 
             return asset.orElseThrow(() -> new RuntimeException("Could not find clang-dumper asset for platform '"
                     + platform + "', architecture '" + arch + "' and kind '" + kind + "'"));
+        }
+    }
+
+    public record ClangDumperManifestProtocol(String id, int major, int minor, String framing,
+                                               int max_record_bytes, String schema_sha256,
+                                               String descriptor_sha256, String producer_version, int llvm_major) {
+
+        private static final String FRAMING = "CLAVAPB1 plus protobuf varint-delimited Envelope";
+
+        static ClangDumperManifestProtocol defaults() {
+            return new ClangDumperManifestProtocol(ProtoAstReader.PROTOCOL_ID, ProtoAstReader.PROTOCOL_MAJOR,
+                    ProtoAstReader.PROTOCOL_MINOR, FRAMING, FramedProtobufReader.DEFAULT_MAX_FRAME_BYTES,
+                    ProtoAstReader.schemaHash(), "", ProtoAstReader.PRODUCER_VERSION, ProtoAstReader.LLVM_MAJOR);
+        }
+
+        void validate() {
+            if (!ProtoAstReader.PROTOCOL_ID.equals(id)
+                    || major != ProtoAstReader.PROTOCOL_MAJOR
+                    || minor != ProtoAstReader.PROTOCOL_MINOR
+                    || !FRAMING.equals(framing)
+                    || max_record_bytes != FramedProtobufReader.DEFAULT_MAX_FRAME_BYTES
+                    || !ProtoAstReader.schemaHash().equals(schema_sha256)
+                    || !ProtoAstReader.PRODUCER_VERSION.equals(producer_version)
+                    || llvm_major != ProtoAstReader.LLVM_MAJOR) {
+                throw new RuntimeException("Clang-dumper manifest protocol metadata is incompatible");
+            }
         }
     }
 
