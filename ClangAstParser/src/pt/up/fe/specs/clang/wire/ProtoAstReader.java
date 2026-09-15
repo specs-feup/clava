@@ -46,7 +46,9 @@ public final class ProtoAstReader {
     private ProtoAstReader() {
     }
 
-    public record Metrics(long frames, long encodedBytes, long protobufDecodeNanos, long astConstructionNanos) {
+    public record Metrics(long frames, long encodedBytes, long protobufDecodeNanos,
+            long astConstructionNanos, long recordConstructionNanos,
+            long referenceResolutionNanos, long records, long nodes, long files) {
     }
 
     public record Result(ClangAstData data, Metrics metrics) {
@@ -199,7 +201,9 @@ public final class ProtoAstReader {
                 if (envelope.getPayloadCase() == Envelope.PayloadCase.HEADER) {
                     headerSeen[0] = true;
                 }
-                metrics.astConstructionNanos += System.nanoTime() - constructionStart;
+                long recordConstructionNanos = System.nanoTime() - constructionStart;
+                metrics.recordConstructionNanos += recordConstructionNanos;
+                metrics.astConstructionNanos += recordConstructionNanos;
             });
         } catch (ProtocolException e) {
             throw new IOException("Invalid protobuf AST stream: " + e.getMessage(), e);
@@ -233,13 +237,15 @@ public final class ProtoAstReader {
         try {
             long resolveStart = System.nanoTime();
             nodeParser.close(data);
-            metrics.astConstructionNanos += System.nanoTime() - resolveStart;
+            long referenceResolutionNanos = System.nanoTime() - resolveStart;
+            metrics.referenceResolutionNanos += referenceResolutionNanos;
+            metrics.astConstructionNanos += referenceResolutionNanos;
         } catch (RuntimeException e) {
             throw new IOException("Could not resolve protobuf AST references", e);
         }
         metrics.frames = frames.frameIndex();
         metrics.encodedBytes = frames.encodedBytes();
-        return new Result(data, metrics.toMetrics());
+        return new Result(data, metrics.toMetrics(records[0], nodes[0], files.paths.size() - 1));
     }
 
     private static void readMagic(InputStream input) throws IOException {
@@ -520,9 +526,12 @@ public final class ProtoAstReader {
         long encodedBytes;
         long protobufDecodeNanos;
         long astConstructionNanos;
+        long recordConstructionNanos;
+        long referenceResolutionNanos;
 
-        Metrics toMetrics() {
-            return new Metrics(frames, encodedBytes, protobufDecodeNanos, astConstructionNanos);
+        Metrics toMetrics(long records, long nodes, long files) {
+            return new Metrics(frames, encodedBytes, protobufDecodeNanos, astConstructionNanos,
+                    recordConstructionNanos, referenceResolutionNanos, records, nodes, files);
         }
     }
 

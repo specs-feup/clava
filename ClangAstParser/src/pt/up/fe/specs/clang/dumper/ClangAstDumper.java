@@ -46,6 +46,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
@@ -306,6 +307,10 @@ public class ClangAstDumper {
 
         ClangAstData parsedData = null;
         ProcessOutput<String, String> output = null;
+        File dumpFile = null;
+        boolean useAstDumpCache = false;
+        long transportNanos = 0L;
+        ProtoAstReader.Result wireResult = null;
 
         try {
 
@@ -313,13 +318,13 @@ public class ClangAstDumper {
             // creates side files or needs a dedicated process working directory.
             lastWorkingFolder = Files.createTempDirectory("clava_ast_").toFile();
 
-            boolean useAstDumpCache = SpecsPlatforms.isLinux() && !USE_PLUGIN
+            useAstDumpCache = SpecsPlatforms.isLinux() && !USE_PLUGIN
                     && parserConfig.get(CodeParser.AST_DUMP_CACHE)
                     && !parserConfig.get(CodeParser.SHOW_CLANG_DUMP)
                     && !isOpenCL
                     && !SourceType.isHeader(sourceFile)
                     && ClangCcacheAdapter.isAvailable();
-            File dumpFile = new File(lastWorkingFolder,
+            dumpFile = new File(lastWorkingFolder,
                     useAstDumpCache ? COMPRESSED_CLANG_DUMP_FILENAME : CLANG_DUMP_FILENAME);
             File dependencyFile = new File(lastWorkingFolder, "clangDump.d");
             int separatorIndex = arguments.indexOf("--");
@@ -353,7 +358,7 @@ public class ClangAstDumper {
 
             long transportStart = System.nanoTime();
             output = SpecsSystem.runProcess(processBuilder, SpecsIo::read, SpecsIo::read);
-            long transportNanos = System.nanoTime() - transportStart;
+            transportNanos = System.nanoTime() - transportStart;
 
             if (output.isError()) {
                 ClavaLog.debug("Dumper returned an error value: '" + output.getReturnValue() + "'");
@@ -379,7 +384,6 @@ public class ClangAstDumper {
             }
 
             String linesNotParsed = "";
-            ProtoAstReader.Result wireResult;
             try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
                     InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {
                 wireResult = ProtoAstReader.read(dumpInput, config.get(ClavaNode.CONTEXT), generatedParseRoot, id);
@@ -389,8 +393,9 @@ public class ClangAstDumper {
             // These are mutually exclusive transport boundaries. In bypass mode
             // the process time is native execution; with ccache enabled it is
             // the ccache invocation and cached-output restoration boundary.
-            parsedData.set(ClangAstData.NATIVE_EXECUTION_NANOS, useAstDumpCache ? 0L : transportNanos);
-            parsedData.set(ClangAstData.CACHE_RESTORATION_NANOS, useAstDumpCache ? transportNanos : 0L);
+            boolean cacheRestored = useAstDumpCache && !isCcacheDisabled();
+            parsedData.set(ClangAstData.NATIVE_EXECUTION_NANOS, cacheRestored ? 0L : transportNanos);
+            parsedData.set(ClangAstData.CACHE_RESTORATION_NANOS, cacheRestored ? transportNanos : 0L);
             parsedData.set(ClangAstData.PROTOBUF_METRICS, wireResult.metrics());
             if (SpecsSystem.isDebug()) {
                 SpecsIo.write(new File(lastWorkingFolder, STDERR_DUMP_FILENAME),
@@ -408,11 +413,65 @@ public class ClangAstDumper {
 
         long astConstructionStart = System.nanoTime();
         TranslationUnit tUnit = clangStreamParser.parseTu(sourceFile);
-        parsedData.set(ClangAstData.AST_CONSTRUCTION_NANOS, System.nanoTime() - astConstructionStart);
+        long astConstructionNanos = System.nanoTime() - astConstructionStart;
+        parsedData.set(ClangAstData.AST_CONSTRUCTION_NANOS, astConstructionNanos);
+        boolean cacheRestored = useAstDumpCache && !isCcacheDisabled();
+        reportProtobufMetrics(dumpFile, useAstDumpCache, cacheRestored, transportNanos, wireResult.metrics(),
+                astConstructionNanos);
 
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
 
         return parsedData;
+    }
+
+    /**
+     * Emits one machine-readable line per parsed translation unit when the
+     * experiment explicitly asks for metrics. The default path does no JSON
+     * formatting, heap probing, or clock reads beyond the existing timings.
+     */
+    private void reportProtobufMetrics(File dumpFile, boolean compressed, boolean cacheRestored, long transportNanos,
+            ProtoAstReader.Metrics wireMetrics, long astConstructionNanos) {
+        if (!Boolean.getBoolean("clava.astWireMetrics")) {
+            return;
+        }
+
+        double transportMillis = transportNanos / 1_000_000.0;
+        double nativeMillis = cacheRestored ? 0.0 : transportMillis;
+        double cacheMillis = cacheRestored ? transportMillis : 0.0;
+
+        String json = String.format(Locale.ROOT,
+                "{\"format\":\"protobuf\",\"native_ms\":%.3f,"
+                        + "\"cache_restore_ms\":%.3f,\"decode_ms\":%.3f,"
+                        + "\"record_ms\":%.3f,\"reference_ms\":%.3f,"
+                        + "\"ast_ms\":%.3f,\"frames\":%d,\"records\":%d,"
+                        + "\"nodes\":%d,\"files\":%d,\"encoded_bytes\":%d,"
+                        + "\"dump_bytes\":%d,\"compressed\":%s,\"cached\":%s,"
+                        + "\"ccache_disabled\":%s}",
+                nativeMillis, cacheMillis,
+                nanosToMillis(wireMetrics.protobufDecodeNanos()),
+                nanosToMillis(wireMetrics.recordConstructionNanos()),
+                nanosToMillis(wireMetrics.referenceResolutionNanos()),
+                nanosToMillis(astConstructionNanos), wireMetrics.frames(), wireMetrics.records(),
+                wireMetrics.nodes(), wireMetrics.files(), wireMetrics.encodedBytes(), dumpFile.length(),
+                compressed, cacheRestored, isCcacheDisabled());
+
+        ClavaLog.metrics("PROTOBUF_METRIC " + json);
+    }
+
+    private static double nanosToMillis(long nanos) {
+        return nanos / 1_000_000.0;
+    }
+
+    private static boolean isCcacheDisabled() {
+        String value = System.getenv("CCACHE_DISABLE");
+        if (value == null) {
+            return false;
+        }
+
+        return switch (value.trim().toLowerCase(Locale.ROOT)) {
+            case "1", "true", "yes", "on" -> true;
+            default -> false;
+        };
     }
 
     private String validateSyntax(List<String> arguments, File sourceFile, String id) {
