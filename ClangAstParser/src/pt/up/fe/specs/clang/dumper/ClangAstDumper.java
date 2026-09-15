@@ -455,7 +455,10 @@ public class ClangAstDumper {
                 wireMetrics.nodes(), wireMetrics.files(), wireMetrics.encodedBytes(), dumpFile.length(),
                 compressed, cacheRestored, isCcacheDisabled());
 
-        ClavaLog.metrics("PROTOBUF_METRIC " + json);
+        // The normal Clava-JS test runner deliberately disables informational
+        // logging. Keep this opt-in measurement independent from that policy,
+        // while leaving the default production path silent.
+        System.err.println("PROTOBUF_METRIC " + json);
     }
 
     private static double nanosToMillis(long nanos) {
