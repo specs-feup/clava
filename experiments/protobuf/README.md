@@ -167,6 +167,75 @@ Both generated trees are hashed by relative path and exact bytes. This catches
 identity drift after a no-op parse/generate/reparse cycle and does not pretend
 compiler equivalence is source fidelity.
 
+## Production heap and identity probe
+
+`validation/ProtobufMemoryIdentityProbe.java` is an experiment-only entry
+point. It calls the installed `CodeParser` and `App` classes directly. The
+heap mode parses one source, reports the live heap after graph construction,
+queries and detached-copy transformation, writes generated code, and then
+reports the heap after the parsing method has returned. Each report follows
+the `PROTOBUF_HEAP` contract used by `run_heap_probe.py`.
+
+Compile it against a built distribution. The helper does not belong in a
+production jar:
+
+```sh
+CLAVA=/path/to/ast-protobuf/clava
+DIST="$CLAVA/ClavaWeaver/build/install/ClavaWeaver"
+PROBE_CLASSES="$(mktemp -d)"
+javac --release 17 -cp "$DIST/lib/*" \
+  -d "$PROBE_CLASSES" \
+  "$CLAVA/experiments/protobuf/validation/ProtobufMemoryIdentityProbe.java"
+PROBE_CP="$PROBE_CLASSES:$DIST/lib/*"
+```
+
+Run the three-repeat NAS LU probe with GNU time supplied by the existing
+wrapper:
+
+```sh
+python3 "$CLAVA/experiments/protobuf/validation/run_heap_probe.py" \
+  --source "$CLAVA/ClangAstParser/test-resources/c/bench/nas_lu.c" \
+  --command "java -Xmx4g -cp $PROBE_CP ProtobufMemoryIdentityProbe --source {source} --work {work}" \
+  --output-root /tmp/protobuf-memory-$(date -u +%Y%m%dT%H%M%SZ) \
+  --repeats 3
+```
+
+The probe also accepts `--identity --first DIR --second DIR`. That path keeps
+the first `App` unchanged, exercises a query plus copy/mutation and a
+`TreeTransformer` on a detached copy, writes the first source tree, reparses
+it, and writes the second tree. Pass the same command template to
+`run_identity.py` for a separate baseline runtime. The wrapper compares both
+trees by relative path and exact bytes.
+
+On the local protobuf distribution, NAS LU produced 28,218 tree nodes, 49
+functions, 158 calls, and 42,280 nodes reachable through fields. The helper
+reported these values over three runs:
+
+| checkpoint | repeat 1 | repeat 2 | repeat 3 | median |
+| --- | ---: | ---: | ---: | ---: |
+| graph-ready heap (bytes) | 42,822,232 | 42,685,168 | 42,745,008 | 42,745,008 |
+| post-query heap (bytes) | 42,826,776 | 42,687,728 | 42,749,168 | 42,749,168 |
+| post-codegen heap (bytes) | 43,000,008 | 42,861,208 | 42,922,512 | 42,922,512 |
+| detached heap (bytes) | 18,253,936 | 18,260,048 | 18,278,360 | 18,260,048 |
+| GNU time peak RSS (KB) | 573,020 | 555,608 | 537,284 | 555,608 |
+
+GNU time elapsed was 4.15, 4.26, and 4.12 seconds, with a 4.15 second
+median. The generated file was 117,774 bytes. `copy_isolated=1` and
+`transform_visited=1` in all three runs. Heap numbers are JVM live-heap
+readings after an explicit GC request, not a retained-object graph; detached
+heap still includes runtime statics and caches. Peak RSS includes the JVM,
+native dumper, and loaded libraries. The three-repeat output is retained by
+`run_heap_probe.py` under its selected results directory.
+
+For the separate baseline comparison, the NAS LU identity run used the
+baseline runtime from the independent text checkout and the protobuf runtime
+from this checkout. Both produced one file and passed exact parse/generate/
+reparse comparison with SHA-256
+`8ebdb29ca3c907a31bb3b424d8b30873adc4e2ef12c7693ec0af0cb2891a79d8` for both
+passes. Other default fixtures still expose existing non-idempotent or
+unsupported generated-code cases; those remain failures in
+`identity.json` instead of being hidden by this probe.
+
 ## Required-field and malformed-record checks
 
 Required-field presence, truncated framing, invalid references, and incompatible
