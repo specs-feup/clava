@@ -190,7 +190,10 @@ class ProtoAstReaderTest {
     @Test
     void rejectsMismatchedNodePayload() {
         var header = Envelope.newBuilder().setHeader(header()).build();
-        var node = pointerNode("BuiltinType");
+        var node = Envelope.newBuilder().setRecord(Record.newBuilder().setNode(Node.newBuilder()
+                .setId(1)
+                .setClassName("BuiltinType")
+                .setDeclData(DeclData.newBuilder()))).build();
 
         IOException error = assertThrows(IOException.class,
                 () -> ProtoAstReader.read(new ByteArrayInputStream(stream(header, node)),
@@ -242,21 +245,6 @@ class ProtoAstReaderTest {
                                 .setUnqualifiedDesugaredType(-1))
                         .setKind(BuiltinKind.BUILTINKIND_INT)
                         .setKindLiteral("int")))).build();
-    }
-
-    private static Envelope pointerNode(String className) {
-        return Envelope.newBuilder().setRecord(Record.newBuilder().setNode(Node.newBuilder()
-                .setId(1)
-                .setClassName(className)
-                .setPointerTypeData(PointerTypeData.newBuilder()
-                        .setBase(TypeData.newBuilder()
-                                .setTypeAsString("int *")
-                                .setTypeDependency(TypeDependency.TYPEDEPENDENCY_NONE)
-                                .setIsVariablyModified(false)
-                                .setContainsUnexpandedParameterPack(false)
-                                .setIsFromAst(false)
-                                .setUnqualifiedDesugaredType(-1))
-                        .setPointeeType(-1)))).build();
     }
 
     private static Envelope nodeClass(long node, String className) {

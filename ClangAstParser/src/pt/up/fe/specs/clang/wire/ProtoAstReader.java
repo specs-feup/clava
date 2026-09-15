@@ -46,6 +46,22 @@ public final class ProtoAstReader {
     public static final String PRODUCER_VERSION = "clang-dumper-18";
     public static final int LLVM_MAJOR = 18;
 
+    /*
+     * Clang's Stmt hierarchy contains several concrete classes whose names do
+     * not end in either "Stmt" or "Expr" (for example BinaryOperator and
+     * ConditionalOperator).  The native dispatcher intentionally serializes
+     * these through the generic statement/expression families, so suffix
+     * matching alone would reject valid producer output.  Keep this small list
+     * in sync with the non-suffixed entries in LLVM 18's StmtNodes.inc; OMP
+     * directive/loop nodes follow the same statement-family convention.
+     */
+    private static final Set<String> STATEMENT_EXPRESSION_CLASSES = Set.of(
+            "AbstractConditionalOperator", "BinaryConditionalOperator", "BinaryOperator",
+            "CXXRewrittenBinaryOperator", "CharacterLiteral", "CompoundAssignOperator",
+            "ConditionalOperator", "ExprWithCleanups", "FixedPointLiteral", "FloatingLiteral",
+            "ImaginaryLiteral", "IntegerLiteral", "ObjCArrayLiteral", "ObjCDictionaryLiteral",
+            "ObjCStringLiteral", "StringLiteral", "SwitchCase", "UnaryOperator", "UserDefinedLiteral");
+
     private ProtoAstReader() {
     }
 
@@ -455,18 +471,32 @@ public final class ProtoAstReader {
             return;
         }
 
-        boolean familyMatches = (className.endsWith("Decl") && payload.name().endsWith("_DECL_DATA"))
-                || (className.endsWith("Type") && payload.name().endsWith("_TYPE_DATA"))
-                || (className.endsWith("Expr") && payload.name().endsWith("_EXPR_DATA"))
-                || (className.endsWith("Stmt") && payload.name().endsWith("_STMT_DATA"))
-                || (className.endsWith("Attr") && (payload.name().endsWith("_ATTR_DATA")
-                        || payload == Node.NodeCase.ATTRIBUTE_DATA));
-        boolean genericBase = payload == Node.NodeCase.DECL_DATA || payload == Node.NodeCase.TYPE_DATA
-                || payload == Node.NodeCase.EXPR_DATA || payload == Node.NodeCase.STMT_DATA
-                || payload == Node.NodeCase.ATTRIBUTE_DATA;
-        if (!familyMatches || !genericBase) {
+        if (!isFamilyPayload(className, payload)) {
             throw new ProtocolException("Node payload " + payload + " does not match " + className);
         }
+    }
+
+    private static boolean isFamilyPayload(String className, Node.NodeCase payload) {
+        if (className.endsWith("Decl")) {
+            return payload == Node.NodeCase.DECL_DATA || payload.name().endsWith("_DECL_DATA");
+        }
+        if (className.endsWith("Type")) {
+            return payload == Node.NodeCase.TYPE_DATA || payload.name().endsWith("_TYPE_DATA");
+        }
+        if (className.endsWith("Attr")) {
+            return payload == Node.NodeCase.ATTRIBUTE_DATA || payload.name().endsWith("_ATTR_DATA");
+        }
+        if (isStatementOrExpressionClass(className)) {
+            return payload == Node.NodeCase.STMT_DATA || payload == Node.NodeCase.EXPR_DATA
+                    || payload.name().endsWith("_STMT_DATA") || payload.name().endsWith("_EXPR_DATA");
+        }
+        return false;
+    }
+
+    private static boolean isStatementOrExpressionClass(String className) {
+        return className.endsWith("Stmt") || className.endsWith("Expr")
+                || STATEMENT_EXPRESSION_CLASSES.contains(className)
+                || className.startsWith("OMP");
     }
 
     private static String normalize(String value) {
