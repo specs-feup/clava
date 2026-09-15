@@ -57,6 +57,7 @@ public class ClangAstDumper {
 
     private final static boolean USE_PLUGIN = false;
     private final static String SYSTEM_HEADER_THRESHOLD_OPTION = "-system-header-threshold=";
+    private final static String SYNTAX_CHECK_ONLY_OPTION = "-syntax-check-only";
 
     public static boolean usePlugin() {
         return USE_PLUGIN;
@@ -484,7 +485,18 @@ public class ClangAstDumper {
             throw new UncheckedIOException("Could not create syntax validation working folder", e);
         }
 
-        var output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
+        // Syntax validation must use a protocol-free native mode. Keeping the
+        // option on the tool side avoids sending protobuf bytes to either
+        // stdout or stderr while retaining Clang diagnostics on stderr.
+        List<String> syntaxArguments = new ArrayList<>(arguments);
+        int separatorIndex = syntaxArguments.indexOf("--");
+        if (separatorIndex >= 0) {
+            syntaxArguments.add(separatorIndex, SYNTAX_CHECK_ONLY_OPTION);
+        } else {
+            syntaxArguments.add(SYNTAX_CHECK_ONLY_OPTION);
+        }
+
+        var output = SpecsSystem.runProcess(syntaxArguments, lastWorkingFolder,
                 this::discardOutput,
                 inputStream -> processOutput(inputStream));
 
