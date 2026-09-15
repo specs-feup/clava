@@ -11,7 +11,6 @@ from __future__ import annotations
 import argparse
 import csv
 import datetime as dt
-import getpass
 import hashlib
 import json
 import os
@@ -283,7 +282,10 @@ def main() -> int:
     cache_folder = ("clang-dumper-protobuf-ccache-v1"
                     if args.implementation == "protobuf"
                     else "clang-dumper-ccache")
-    cache = temp_root / f"clang_ast_exe_{getpass.getuser()}" / cache_folder
+    # Clava-JS sets CodeParser.DUMPER_FOLDER below XDG_CACHE_HOME, following
+    # Linux cache conventions.  java.io.tmpdir controls transient parse files,
+    # but does not isolate the AST dump cache.
+    cache = temp_root / "@specs-feup" / "clava" / cache_folder
     if args.mode == "warm" and not cache.is_dir():
         raise SystemExit(f"warm ccache directory does not exist: {cache}")
     if args.mode == "cold":
@@ -303,7 +305,11 @@ def main() -> int:
     if args.wire_property:
         java_options += f" -D{args.wire_property}={wire_value}"
     environment = os.environ.copy()
-    environment.update({"JAVA_TOOL_OPTIONS": java_options, "CLAVA_SUITE_JAR_PATH": str(runtime_root)})
+    environment.update({
+        "JAVA_TOOL_OPTIONS": java_options,
+        "CLAVA_SUITE_JAR_PATH": str(runtime_root),
+        "XDG_CACHE_HOME": str(temp_root),
+    })
     if args.mode == "bypass":
         environment["CCACHE_DISABLE"] = "true"
     else:
@@ -365,7 +371,7 @@ def main() -> int:
         "runtime_git": git_status(args.runtime_repo),
         "temporary_filesystem": filesystem_metadata(temp_root),
         "command": command,
-        "environment": {key: environment[key] for key in ("TMPDIR", "TMP", "TEMP", "CLAVA_SUITE_JAR_PATH", "CCACHE_DISABLE", "JAVA_TOOL_OPTIONS") if key in environment},
+        "environment": {key: environment[key] for key in ("TMPDIR", "TMP", "TEMP", "XDG_CACHE_HOME", "CLAVA_SUITE_JAR_PATH", "CCACHE_DISABLE", "JAVA_TOOL_OPTIONS") if key in environment},
         "vitest_success": report.get("success"),
         "raw_files": {"vitest": str(report_path), "log": str(log_path), "time": str(time_path), "ccache": str(run_dir / "ccache.stats")},
     }

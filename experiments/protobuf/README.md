@@ -44,9 +44,11 @@ protobuf cold, protobuf warm, protobuf bypass
 ```
 
 On the next repetition the implementation order rotates. Cold and warm share
-the same owned Java temporary root and therefore the same ccache below
-`clang_ast_exe_<user>/clang-dumper-ccache` for the baseline or
-`clang_ast_exe_<user>/clang-dumper-protobuf-ccache-v1` for protobuf. Bypass receives a new temporary root and
+the same owned Java temporary root. The runner sets `XDG_CACHE_HOME` to that
+root because Clava-JS uses the Linux cache convention for `DUMPER_FOLDER`.
+The ccache is therefore below `@specs-feup/clava/clang-dumper-ccache` for the
+baseline or `@specs-feup/clava/clang-dumper-protobuf-ccache-v1` for protobuf.
+Bypass receives a new temporary root and
 sets `CCACHE_DISABLE=true`. A cold run requires an empty root. A warm run must
 find the populated paired root. The matrix writes a plan, progress manifest,
 per-cell driver log, Vitest JSON/log, flattened per-test timings, GNU `time`
@@ -94,7 +96,9 @@ are not wall-time components. Wall time is the outer `/usr/bin/time` process
 span around Vitest; peak RSS is GNU time's process high-water mark. Dump/cache
 bytes are measured independently from the run-owned temporary tree and ccache.
 
-Supply a JSON list of known failures when desired:
+Supply a JSON list of known failures when desired. The checked-in
+`suite/known-environment-failures.json` records the four failures observed in
+both builds on the measurement host:
 
 ```json
 ["CxxTest OmpThreadsExplore", "CudaTest Cuda"]
