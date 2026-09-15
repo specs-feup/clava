@@ -32,6 +32,8 @@ import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedTypeAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
 import pt.up.fe.specs.clava.ast.attr.enums.AlignedAttrKind;
+import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -109,6 +111,12 @@ public class ClavaNodeParser {
         List<ClavaNode> children = Collections.emptyList();
 
         ClavaNode clavaNode = buildChildlessNode(nodeId, children, classname, debug, nodeData, clavaNodeClass);
+
+        if (clavaNode instanceof CXXConversionDecl) {
+            // The conversion type is queued before this action and is therefore
+            // resolved when the legacy parser rebuilds the operator name.
+            data.getClavaNodes().queueSetAction(nodeData, NamedDecl.DECL_NAME, CXXConversionDecl::buildDeclName);
+        }
 
         // Queue setting the children
         data.getClavaNodes().queueAction(() -> {
@@ -225,7 +233,6 @@ public class ClavaNodeParser {
     public void close(ClangAstData data) {
         data.get(ClangAstData.CLAVA_NODES).getQueuedActions().stream()
                 .forEach(Runnable::run);
-
     }
 
 }
