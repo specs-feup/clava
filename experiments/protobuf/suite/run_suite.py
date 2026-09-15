@@ -32,7 +32,8 @@ CLAVA_JS_ROOT = CLAVA_ROOT / "Clava-JS"
 RESULTS_ROOT = EXPERIMENT_ROOT / "suite" / "results"
 KNOWN_METRIC_NAMES = {
     "native_ms", "read_ms", "decode_ms", "ast_ms", "tu_ms", "construction_ms",
-    "dump_bytes", "cache_bytes", "nodes", "references", "deferred", "records",
+    "record_ms", "reference_ms", "cache_restore_ms", "dump_bytes", "encoded_bytes",
+    "cache_bytes", "nodes", "references", "deferred", "records", "frames", "files",
 }
 
 
@@ -304,6 +305,8 @@ def main() -> int:
     java_options = os.environ.get("JAVA_TOOL_OPTIONS", "") + f" -Djava.io.tmpdir={temp_root}"
     if args.wire_property:
         java_options += f" -D{args.wire_property}={wire_value}"
+    if args.implementation == "protobuf":
+        java_options += " -Dclava.astWireMetrics=true"
     environment = os.environ.copy()
     environment.update({
         "JAVA_TOOL_OPTIONS": java_options,
