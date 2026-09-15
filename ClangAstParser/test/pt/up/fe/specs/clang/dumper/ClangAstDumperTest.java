@@ -19,10 +19,12 @@ import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.language.Standard;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -63,6 +65,26 @@ class ClangAstDumperTest {
         assertTrue(error.contains("Syntax validation failed"));
         assertTrue(error.contains("error:"));
         assertFalse(error.contains("CLAVAPB1"));
+    }
+
+    @Test
+    void cxxMethodPreservesRecordReferenceAndLegacyRecordId() throws Exception {
+        File tool = nativeTool();
+        assumeTrue(tool.isFile(), "clang-dumper build/tool is required for this integration test");
+        Path source = Files.writeString(tempFolder.resolve("record.cpp"),
+                "struct Record { int declaration(); int definition() { return 0; } };\n");
+
+        var data = newDumper(tool).parse(source.toFile(), "42", Standard.CXX17, config());
+        var methods = data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream()
+                .filter(CXXMethodDecl.class::isInstance)
+                .map(CXXMethodDecl.class::cast)
+                .toList();
+
+        assertFalse(methods.isEmpty());
+        for (var method : methods) {
+            var record = method.getRecordDecl().orElseThrow();
+            assertEquals(record.getId(), method.get(CXXMethodDecl.RECORD_ID));
+        }
     }
 
     private static ClangAstDumper newDumper(File tool) {

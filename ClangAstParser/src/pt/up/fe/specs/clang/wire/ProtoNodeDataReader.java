@@ -30,6 +30,7 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
 import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.data.CXXBaseSpecifier;
+import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.data.ExplicitSpecifier;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.AnyMemberInit;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.BaseInit;
@@ -315,7 +316,14 @@ final class ProtoNodeDataReader {
                 }
                 set(key, store, converted);
             } else if (field.getJavaType() == JavaType.LONG && isReference(field, key)) {
-                queueReference(store, key, reference((Long) raw, field, key), field);
+                String reference = reference((Long) raw, field, key);
+                // The text parser retained this legacy scalar alongside the
+                // resolved RECORD pointer. Keep both values in sync when
+                // decoding the same CXXMethodDeclData record.
+                if (field.getName().equals("record")) {
+                    set(CXXMethodDecl.RECORD_ID, store, reference);
+                }
+                queueReference(store, key, reference, field);
             } else {
                 set(key, store, scalarValue(key, raw));
             }
