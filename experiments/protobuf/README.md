@@ -354,3 +354,31 @@ protobuf regressions.
 The FlatBuffers report remains separate and unchanged:
 
 https://draftlink.lmsousa.workers.dev/d/dnyeY92urT89
+
+## Final full-suite matrix
+
+The final production runtime built from Clava `a5b3b1a6d2f50a2f739caca2378842e34b1de520`
+and clang-dumper `da00ef63495dcc0c2f51c7cc49d8fce7d8a99d0f` was measured against the
+separate text baseline in
+`experiments/protobuf/suite/results/matrix-final-20260915T-final-head`.
+All 18 cells completed. Each ran 164 tests with 158 passes, the same four
+expected failures, two skips, no unexpected failures, and no excluded trial.
+
+| state | text wall median | protobuf wall median | delta | text peak RSS | protobuf peak RSS | delta |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| cold | 55.53 s | 57.42 s | +3.40% | 1,489,084 KiB | 1,629,480 KiB | +9.43% |
+| warm | 44.36 s | 46.46 s | +4.72% | 1,460,572 KiB | 1,539,948 KiB | +5.43% |
+| bypass | 55.24 s | 57.06 s | +3.29% | 1,488,252 KiB | 1,589,936 KiB | +6.83% |
+
+Cold cache contained 167 cacheable calls, 16 direct hits, and 151 misses in
+both implementations. Warm cache contained 167 direct hits and no misses.
+Median ccache storage was 3,897,934 bytes for text and 3,334,590 bytes for
+protobuf, a 14.45% protobuf reduction.
+
+Across the 207 protobuf parse events in each cell, median warm aggregate
+occupancy was 684.841 ms native execution, 2,926.053 ms completed-file cache
+restoration, 638.412 ms protobuf decoding, 3,385.215 ms record mapping,
+87.714 ms reference resolution, and 144.868 ms translation-unit AST
+construction. These are overlapping sums across parallel jobs, not additive
+wall-time components. Production still consumes completed files and does not
+overlap native writing with Java reading.
