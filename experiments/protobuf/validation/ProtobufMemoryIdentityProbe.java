@@ -6,22 +6,31 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
@@ -38,6 +47,8 @@ import pt.up.fe.specs.util.treenode.transform.TransformQueue;
  * parse/generate/reparse wrapper.</p>
  */
 public final class ProtobufMemoryIdentityProbe {
+
+    private static int graphTraceSequence;
 
     private ProtobufMemoryIdentityProbe() {
     }
@@ -67,7 +78,7 @@ public final class ProtobufMemoryIdentityProbe {
         Path cache = options.work.resolve("dumper-cache");
         Path parseRoot = options.work.resolve("parse-root");
 
-        App app = parse(options.source, parseRoot, cache, options.standard);
+        App app = parse(options.source, parseRoot, cache, options.standard, options.source.getParent());
         long nodes = app.getDescendantsAndSelfStream().count();
         emitHeap("graph_ready", mapOf(
                 "nodes", nodes,
@@ -98,7 +109,7 @@ public final class ProtobufMemoryIdentityProbe {
         Files.createDirectories(options.second);
 
         App first = parse(options.source, options.work.resolve("first-parse-root"),
-                options.work.resolve("first-dumper-cache"), options.standard);
+                options.work.resolve("first-dumper-cache"), options.standard, options.source.getParent());
         QueryStats queryStats = query(first);
         QueryStats copyStats = exerciseCopyMutationAndTransform(first);
         List<File> firstFiles = first.write(options.first.toFile());
@@ -108,7 +119,7 @@ public final class ProtobufMemoryIdentityProbe {
 
         File reparsedSource = firstFiles.get(0);
         App second = parse(reparsedSource.toPath(), options.work.resolve("second-parse-root"),
-                options.work.resolve("second-dumper-cache"), options.standard);
+                options.work.resolve("second-dumper-cache"), options.standard, options.source.getParent());
         List<File> secondFiles = second.write(options.second.toFile());
 
         Map<String, Object> result = new HashMap<>();
@@ -121,10 +132,13 @@ public final class ProtobufMemoryIdentityProbe {
         result.put("first_calls", queryStats.calls);
         result.put("copy_isolated", copyStats.copyIsolated);
         result.put("transform_visited", copyStats.transformVisited);
+        result.put("first_graph_sha256", graphDigest(first));
+        result.put("second_graph_sha256", graphDigest(second));
         System.out.println("PROTOBUF_IDENTITY " + json(result));
     }
 
-    private static App parse(Path source, Path parseRoot, Path dumperFolder, String standard) throws IOException {
+    private static App parse(Path source, Path parseRoot, Path dumperFolder, String standard,
+            Path includeRoot) throws IOException {
         if (!Files.isRegularFile(source)) {
             throw new IOException("Source file does not exist: " + source);
         }
@@ -141,7 +155,12 @@ public final class ProtobufMemoryIdentityProbe {
         setOption(parser, CodeParser.class, "AST_DUMP_CACHE", false);
         setOption(parser, CodeParser.class, "GENERATED_PARSE_ROOT", parseRoot.toFile());
         setOption(parser, ParallelCodeParser.class, "PARALLEL_PARSING", false);
-        return parser.parse(List.of(source.toFile()), List.of("-std=" + standard));
+        List<String> compilerOptions = new ArrayList<>();
+        compilerOptions.add("-std=" + standard);
+        if (includeRoot != null) {
+            compilerOptions.add("-I" + includeRoot);
+        }
+        return parser.parse(List.of(source.toFile()), compilerOptions);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -188,6 +207,355 @@ public final class ProtobufMemoryIdentityProbe {
 
         boolean copyIsolated = originalId.equals(original.getId()) && !originalId.equals(copy.getId());
         return new QueryStats(0, 0, 0, 0, copyIsolated, visited.get() ? 1 : 0);
+    }
+
+    /**
+     * Hashes the complete Clava graph using the same value walk as the
+     * FlatBuffers complete-check benchmark. Node IDs and node-valued pointers
+     * are replaced by encounter-order ordinals. Runtime wiring is excluded;
+     * every other populated DataKey, child order, and nested compound value is
+     * part of the digest.
+     */
+    private static String graphDigest(App app) {
+        List<ClavaNode> nodes = new ArrayList<>();
+        nodes.add(app);
+        nodes.addAll(app.getDescendantsAndFields());
+
+        IdentityHashMap<ClavaNode, Integer> ordinals = new IdentityHashMap<>();
+        for (int index = 0; index < nodes.size(); index++) {
+            ordinals.put(nodes.get(index), index);
+        }
+
+        IdentityHashMap<Object, Boolean> seen = new IdentityHashMap<>();
+        for (int index = 0; index < nodes.size(); index++) {
+            ClavaNode node = nodes.get(index);
+            for (DataKey<?> key : sortedKeys(node)) {
+                if (!isRuntimeKey(key)) {
+                    collectReferences(node.get(key), nodes, ordinals, seen);
+                }
+            }
+        }
+
+        Hasher hash = new Hasher();
+        hash.add("clava-graph-v1");
+        hash.add(nodes.size());
+        String tracePath = System.getProperty("protobuf.graphTrace");
+        StringBuilder trace = tracePath == null ? null : new StringBuilder();
+        for (int index = 0; index < nodes.size(); index++) {
+            ClavaNode node = nodes.get(index);
+            hash.add("node");
+            hash.add(index);
+            hash.add(node.getClass().getName());
+
+            hash.add("children");
+            hash.add(node.getChildren().size());
+            if (trace != null) {
+                trace.append(index).append('|').append(node.getClass().getName()).append("|children=");
+            }
+            for (ClavaNode child : node.getChildren()) {
+                int childOrdinal = ordinal(child, ordinals);
+                hash.add(childOrdinal);
+                if (trace != null) {
+                    trace.append(childOrdinal).append(',');
+                }
+            }
+
+            hash.add("fields");
+            hash.add(node.getNodeFields().size());
+            if (trace != null) {
+                trace.append("|fields=");
+            }
+            for (ClavaNode field : node.getNodeFields()) {
+                int fieldOrdinal = ordinal(field, ordinals);
+                hash.add(fieldOrdinal);
+                if (trace != null) {
+                    trace.append(fieldOrdinal).append(',');
+                }
+            }
+
+            hash.add("data");
+            if (trace != null) {
+                trace.append("|data=");
+            }
+            for (DataKey<?> key : sortedKeys(node)) {
+                if (isRuntimeKey(key)) {
+                    continue;
+                }
+                hash.add(key.getName());
+                appendDataKeyValue(hash, node, key, ordinals);
+                if (trace != null) {
+                    trace.append(key.getName()).append('=')
+                            .append(canonicalDataKeyValue(node, key, ordinals)).append(';');
+                }
+            }
+            if (trace != null) {
+                trace.append('\n');
+            }
+        }
+        if (trace != null) {
+            try {
+                graphTraceSequence++;
+                Path traceFile = Path.of(tracePath + "." + graphTraceSequence);
+                if (traceFile.getParent() != null) {
+                    Files.createDirectories(traceFile.getParent());
+                }
+                Files.writeString(traceFile, trace.toString());
+            } catch (IOException exception) {
+                throw new java.io.UncheckedIOException(exception);
+            }
+        }
+        return hash.finish();
+    }
+
+    private static List<DataKey<?>> sortedKeys(DataClass<?> data) {
+        List<DataKey<?>> keys = new ArrayList<>(data.getDataKeysWithValues());
+        keys.sort((left, right) -> left.getName().compareTo(right.getName()));
+        return keys;
+    }
+
+    private static boolean isRuntimeKey(DataKey<?> key) {
+        return key == ClavaNode.CONTEXT || key == ClavaNode.ORIGIN || key == ClavaNode.PREVIOUS_ID;
+    }
+
+    private static int ordinal(ClavaNode node, IdentityHashMap<ClavaNode, Integer> ordinals) {
+        Integer ordinal = ordinals.get(node);
+        if (ordinal == null) {
+            throw new IllegalStateException("Graph reference points outside the traversed Clava graph: "
+                    + node.getClass().getName());
+        }
+        return ordinal;
+    }
+
+    private static void appendDataKeyValue(Hasher hash, ClavaNode node, DataKey<?> key,
+            IdentityHashMap<ClavaNode, Integer> ordinals) {
+        if (key == ClavaNode.ID) {
+            hash.add("normalized-id");
+            hash.add(ordinals.get(node));
+            return;
+        }
+
+        // Clava keeps this legacy scalar alongside the resolved node-valued
+        // RECORD field. Treat it as the same pointer for cross-runtime checks.
+        if (key == CXXMethodDecl.RECORD_ID) {
+            ClavaNode target = node.get(CXXMethodDecl.RECORD);
+            if (!String.valueOf(node.get(key)).equals(target.getId())) {
+                throw new IllegalStateException("CXXMethodDecl.RECORD_ID disagrees with RECORD");
+            }
+            hash.add("node");
+            hash.add(ordinal(target, ordinals));
+            return;
+        }
+
+        appendValue(hash, node.get(key), ordinals);
+    }
+
+    private static String canonicalDataKeyValue(ClavaNode node, DataKey<?> key,
+            IdentityHashMap<ClavaNode, Integer> ordinals) {
+        if (key == ClavaNode.ID) {
+            return "normalized-id#" + ordinals.get(node);
+        }
+        if (key == CXXMethodDecl.RECORD_ID) {
+            ClavaNode target = node.get(CXXMethodDecl.RECORD);
+            return "node#" + ordinal(target, ordinals);
+        }
+        return canonicalValue(node.get(key), ordinals);
+    }
+
+    private static void collectReferences(Object value, List<ClavaNode> nodes,
+            IdentityHashMap<ClavaNode, Integer> ordinals, IdentityHashMap<Object, Boolean> seen) {
+        if (value == null || seen.put(value, true) != null) {
+            return;
+        }
+        if (value instanceof ClavaNode node) {
+            if (!ordinals.containsKey(node)) {
+                ordinals.put(node, nodes.size());
+                nodes.add(node);
+            }
+            return;
+        }
+        if (value instanceof DataClass<?> data) {
+            for (DataKey<?> key : sortedKeys(data)) {
+                if (!isRuntimeKey(key)) {
+                    collectReferences(data.get(key), nodes, ordinals, seen);
+                }
+            }
+            return;
+        }
+        if (value instanceof Optional<?> optional) {
+            optional.ifPresent(item -> collectReferences(item, nodes, ordinals, seen));
+            return;
+        }
+        if (value instanceof Map<?, ?> map) {
+            List<Map.Entry<?, ?>> entries = new ArrayList<>(map.entrySet());
+            entries.sort((left, right) -> canonicalValue(left.getKey(), ordinals)
+                    .concat("=").concat(canonicalValue(left.getValue(), ordinals))
+                    .compareTo(canonicalValue(right.getKey(), ordinals)
+                            .concat("=").concat(canonicalValue(right.getValue(), ordinals))));
+            for (Map.Entry<?, ?> entry : entries) {
+                collectReferences(entry.getKey(), nodes, ordinals, seen);
+                collectReferences(entry.getValue(), nodes, ordinals, seen);
+            }
+            return;
+        }
+        if (value instanceof Set<?> set) {
+            List<Object> values = new ArrayList<>(set);
+            values.sort((left, right) -> canonicalValue(left, ordinals).compareTo(canonicalValue(right, ordinals)));
+            for (Object item : values) {
+                collectReferences(item, nodes, ordinals, seen);
+            }
+            return;
+        }
+        if (value instanceof Iterable<?> iterable) {
+            for (Object item : iterable) {
+                collectReferences(item, nodes, ordinals, seen);
+            }
+            return;
+        }
+        if (value.getClass().isArray()) {
+            for (int index = 0; index < Array.getLength(value); index++) {
+                collectReferences(Array.get(value, index), nodes, ordinals, seen);
+            }
+        }
+    }
+
+    private static void appendValue(Hasher hash, Object value, IdentityHashMap<ClavaNode, Integer> ordinals) {
+        if (value == null) {
+            hash.add("null");
+        } else if (value instanceof ClavaNode node) {
+            hash.add("node");
+            hash.add(ordinal(node, ordinals));
+        } else if (value instanceof DataClass<?> data) {
+            hash.add("data-class");
+            hash.add(value.getClass().getName());
+            for (DataKey<?> key : sortedKeys(data)) {
+                if (!isRuntimeKey(key)) {
+                    hash.add(key.getName());
+                    appendValue(hash, data.get(key), ordinals);
+                }
+            }
+        } else if (value instanceof Optional<?> optional) {
+            hash.add("optional");
+            if (optional.isPresent()) {
+                hash.add("present");
+                appendValue(hash, optional.get(), ordinals);
+            } else {
+                hash.add("empty");
+            }
+        } else if (value instanceof Map<?, ?> map) {
+            hash.add("map");
+            List<String> entries = new ArrayList<>();
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                entries.add(canonicalValue(entry.getKey(), ordinals) + "="
+                        + canonicalValue(entry.getValue(), ordinals));
+            }
+            Collections.sort(entries);
+            entries.forEach(hash::add);
+            hash.add("end-map");
+        } else if (value instanceof Set<?> set) {
+            hash.add("set");
+            List<String> values = new ArrayList<>();
+            for (Object item : set) {
+                values.add(canonicalValue(item, ordinals));
+            }
+            Collections.sort(values);
+            values.forEach(hash::add);
+            hash.add("end-set");
+        } else if (value instanceof Iterable<?> iterable) {
+            hash.add("iterable");
+            for (Object item : iterable) {
+                appendValue(hash, item, ordinals);
+            }
+            hash.add("end-iterable");
+        } else if (value.getClass().isArray()) {
+            hash.add("array");
+            for (int index = 0; index < Array.getLength(value); index++) {
+                appendValue(hash, Array.get(value, index), ordinals);
+            }
+            hash.add("end-array");
+        } else {
+            hash.add(value.getClass().getName());
+            hash.add(value);
+        }
+    }
+
+    private static String canonicalValue(Object value, IdentityHashMap<ClavaNode, Integer> ordinals) {
+        if (value == null) {
+            return "null";
+        }
+        if (value instanceof ClavaNode node) {
+            return "node#" + ordinal(node, ordinals);
+        }
+        if (value instanceof DataClass<?> data) {
+            List<String> fields = new ArrayList<>();
+            for (DataKey<?> key : sortedKeys(data)) {
+                if (!isRuntimeKey(key)) {
+                    fields.add(key.getName() + "=" + canonicalValue(data.get(key), ordinals));
+                }
+            }
+            return "data#" + value.getClass().getName() + fields;
+        }
+        if (value instanceof Optional<?> optional) {
+            return optional.map(item -> "some(" + canonicalValue(item, ordinals) + ")")
+                    .orElse("empty");
+        }
+        if (value instanceof Map<?, ?> map) {
+            List<String> entries = new ArrayList<>();
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                entries.add(canonicalValue(entry.getKey(), ordinals) + "="
+                        + canonicalValue(entry.getValue(), ordinals));
+            }
+            Collections.sort(entries);
+            return "map" + entries;
+        }
+        if (value instanceof Set<?> set) {
+            List<String> values = new ArrayList<>();
+            for (Object item : set) {
+                values.add(canonicalValue(item, ordinals));
+            }
+            Collections.sort(values);
+            return "set" + values;
+        }
+        if (value instanceof Iterable<?> iterable) {
+            List<String> values = new ArrayList<>();
+            for (Object item : iterable) {
+                values.add(canonicalValue(item, ordinals));
+            }
+            return "iterable" + values;
+        }
+        if (value.getClass().isArray()) {
+            List<String> values = new ArrayList<>();
+            for (int index = 0; index < Array.getLength(value); index++) {
+                values.add(canonicalValue(Array.get(value, index), ordinals));
+            }
+            return "array" + values;
+        }
+        return value.getClass().getName() + ":" + String.valueOf(value);
+    }
+
+    private static final class Hasher {
+        private final MessageDigest digest;
+
+        private Hasher() {
+            try {
+                digest = MessageDigest.getInstance("SHA-256");
+            } catch (NoSuchAlgorithmException exception) {
+                throw new AssertionError(exception);
+            }
+        }
+
+        private void add(Object value) {
+            digest.update(String.valueOf(value).getBytes(StandardCharsets.UTF_8));
+            digest.update((byte) 0);
+        }
+
+        private String finish() {
+            byte[] bytes = digest.digest();
+            StringBuilder result = new StringBuilder(bytes.length * 2);
+            for (byte value : bytes) {
+                result.append(String.format(Locale.ROOT, "%02x", value & 0xff));
+            }
+            return result.toString();
+        }
     }
 
     private static long fileSize(File file) {
