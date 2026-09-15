@@ -204,7 +204,7 @@ directories. The pinned runtimes were protobuf Clava
 | `literals` | `dd420c28...` | `6da75473...` | `7f0da538...` | `a796d978...` | equal / equal |
 | `source_locations` | `3d3e9aa2...` | `3d3e9aa2...` | `0079e245...` | `0079e245...` | equal / equal |
 
-The full values are in `graph-comparison.json`; every baseline/protobuf helper
+The full values are in `identity.json`; every baseline/protobuf helper
 command returned zero (the runner returns one because it reports the two
 non-idempotent source fixtures, `comment` and `literals`).
 The exact generated-source hashes were, by fixture and pass: NAS LU
