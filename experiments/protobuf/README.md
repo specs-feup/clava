@@ -189,25 +189,25 @@ For the direct comparison below, baseline and protobuf were run sequentially
 with the same absolute generated `first` and `second` directories. This keeps
 the `sourceFile` value comparable while retaining separate parser work/cache
 directories. The pinned runtimes were protobuf Clava
-`3fb2b9350cfbf4eaa79773f7d801d94bc23d7cf2`, protobuf clang-dumper
+`a5b3b1a6d2f50a2f739caca2378842e34b1de520`, protobuf clang-dumper
 `da00ef63495dcc0c2f51c7cc49d8fce7d8a99d0f`, baseline Clava
 `603997af2fb1a7f9cdd1b418b15772f892494aca`, and baseline clang-dumper
 `bc498f5cedb88239062eef21a9669bc9bddb0ff7`. Results are retained at
-`/tmp/protobuf-final-identity-graph-wrapper.BSQhF0/results`:
+`/tmp/protobuf-final-combined-identity.dlRrEn/results`:
 
-| fixture | baseline first graph | protobuf first graph | baseline second graph | protobuf second graph | generated source (first / second) |
-| --- | --- | --- | --- | --- | --- |
-| `nas_lu` | `cf289dee...` | `cf289dee...` | `ffbb3dde...` | `ffbb3dde...` | equal / equal |
-| `comment` | `17259f34...` | `f586929b...` | `d11ef561...` | `667378d3...` | equal / equal |
-| `pragmas` | `2b671e34...` | `2b671e34...` | `6c402b25...` | `6c402b25...` | equal / equal |
-| `macro` | `6f650628...` | `6f650628...` | `f1b24cf1...` | `f1b24cf1...` | equal / equal |
-| `literals` | `dd420c28...` | `6da75473...` | `7f0da538...` | `a796d978...` | equal / equal |
-| `source_locations` | `3d3e9aa2...` | `3d3e9aa2...` | `0079e245...` | `0079e245...` | equal / equal |
+| fixture | first graph SHA (baseline = protobuf) | second graph SHA (baseline = protobuf) | generated source baseline = protobuf (first / second) |
+| --- | --- | --- | --- |
+| `nas_lu` | `cf289dee6e9ba0388ca652ce9fefba25ad10330cdb6ff05786bd7d8c1d46e758` | `d0b3488e001e27f4b547802866aa4c26de63b1a53b7be9d017619f356c1eab35` | yes / yes |
+| `comment` | `17259f34a56a333ca8d16cc85e1132c78075703da161cd14781b56c310d24961` | `70a4554714dcaf1b19fcb8fd50e9510eb4ff7075ca5d842e2390ee27db201e51` | yes / yes |
+| `pragmas` | `2b671e341d4bfdae759bd8d2accd96857e24a877a20c7498a067688ea529da43` | `18607a2fe63a8747e212cc0fd15c0ddb044d90dc56a4b71a393b664a68686668` | yes / yes |
+| `macro` | `6f6506286845e77ee1704ce479a258488c226cabd26950d0d58492c6755bd11e` | `8b0743acc44b278b9a1a05b3aa4ea2c9f98a6d31053324f7aad8c850b7466f4c` | yes / yes |
+| `literals` | `dd420c28ab00fcddd55963ff39f1f8ac9ee3fdbb269c80c3fa0422296b70a6cd` | `20715fae9a533462b7e2172dfab4027330ea017e52ca6d1f1488f69246c50942` | yes / yes |
+| `source_locations` | `3d3e9aa20a7f7df032f22fe52650ec21b2cc56e00724dd175476db336caec87c` | `619f6942ac7af0763b915accbfdc6f2d3d1281a5674cbd3f46c82520dca650a7` | yes / yes |
 
-The full values are in `identity.json`; every baseline/protobuf helper
-command returned zero (the runner returns one because it reports the two
-non-idempotent source fixtures, `comment` and `literals`).
-The exact generated-source hashes were, by fixture and pass: NAS LU
+The full values are in `identity.json`; all 12 baseline/protobuf helper
+commands returned zero. The runner returns one only because it retains the two
+known within-runtime non-idempotent source fixtures, `comment` and `literals`.
+The exact cross-runtime generated-source hashes were, by fixture and pass: NAS LU
 `8ebdb29ca3c907a31bb3b424d8b30873adc4e2ef12c7693ec0af0cb2891a79d8` /
 `8ebdb29ca3c907a31bb3b424d8b30873adc4e2ef12c7693ec0af0cb2891a79d8`, comment
 `393bc958fecbc1f1c5397bfe9b05a9443f5cb05839295866c59cde1ff9d82289` /
@@ -220,22 +220,12 @@ The exact generated-source hashes were, by fixture and pass: NAS LU
 `b1d225aec80d3eb524a364d0a0ba120b0c476445777cbef694eef12ec27af709`, and
 source locations `e31972995af6dc12e8678dfb1f0109e699cfdd678b5265d7a0d89385ed2bfd0f` /
 `e31972995af6dc12e8678dfb1f0109e699cfdd678b5265d7a0d89385ed2bfd0f`; each
-hash was identical between runtimes.
-
-The demonstrated graph mismatches are limited to populated data that the
-all-field check intentionally does not normalize away. On `comment.cpp`, the
-baseline has `recordId=node#102` on 201 `CXXMethodDecl` records and
-`recordId=node#97` on 10 records, while protobuf omits `recordId`; on the
-reparse the corresponding baseline ordinals are `node#101` (201) and
-`node#96` (10). The same trace also shows the system-header
-`CXXConversionDecl` at node 558 (`operator __sv_type` baseline versus
-`operator basic_string_view` protobuf; node 557 after reparse). On
-`literals.cpp`, baseline has `recordId` on 38 records (`node#49` 36 times,
-`node#131` once, and `node#192` once) while protobuf omits it. NAS LU,
-pragmas, macro, and source-locations match at both graph checkpoints. The
-comment and literals source trees are byte-identical between runtimes but are
-not idempotent within either runtime (`first` and `second` source hashes
-differ), which is reported separately from the graph comparison.
+hash was identical between runtimes. The final all-field comparison reports
+`graph_mismatches=[]` and `graph_reparse_mismatches=[]`: every fixture matches
+at both graph checkpoints. `comment` and `literals` remain byte-identical
+between runtimes but are not idempotent within either runtime (`first` and
+`second` source hashes differ); this is retained separately in `failed` and
+does not affect the baseline/protobuf equality result.
 
 ## Production heap and identity probe
 
