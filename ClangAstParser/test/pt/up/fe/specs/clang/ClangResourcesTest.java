@@ -664,7 +664,7 @@ public class ClangResourcesTest {
         framed.writeBytes(header);
 
         var end = Envelope.newBuilder().setEnd(pt.up.fe.specs.clang.wire.End.newBuilder()
-                .setRecords(2).setNodes(0).setRawBytes(framed.size()).setFiles(0).setIds(0)).build().toByteArray();
+                .setRecords(0).setNodes(0).setRawBytes(framed.size()).setFiles(0).setIds(0)).build().toByteArray();
         length = end.length;
         while ((length & ~0x7f) != 0) {
             framed.write((length & 0x7f) | 0x80);

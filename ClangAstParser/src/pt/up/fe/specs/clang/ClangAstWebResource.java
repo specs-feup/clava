@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang;
 
 import com.google.gson.Gson;
 import pt.up.fe.specs.clang.wire.FramedProtobufReader;
+import pt.up.fe.specs.clang.wire.ProtoDescriptorHash;
 import pt.up.fe.specs.clang.wire.ProtoAstReader;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.providers.WebResourceProvider;
@@ -186,12 +187,13 @@ public final class ClangAstWebResource {
                                                int max_record_bytes, String schema_sha256,
                                                String descriptor_sha256, String producer_version, int llvm_major) {
 
-        private static final String FRAMING = "CLAVAPB1 plus protobuf varint-delimited Envelope";
+        private static final String FRAMING = "CLAVAPB1 plus protobuf varint-delimited Envelope(Chunk)";
 
         static ClangDumperManifestProtocol defaults() {
             return new ClangDumperManifestProtocol(ProtoAstReader.PROTOCOL_ID, ProtoAstReader.PROTOCOL_MAJOR,
                     ProtoAstReader.PROTOCOL_MINOR, FRAMING, FramedProtobufReader.DEFAULT_MAX_FRAME_BYTES,
-                    ProtoAstReader.schemaHash(), "", ProtoAstReader.PRODUCER_VERSION, ProtoAstReader.LLVM_MAJOR);
+                    ProtoAstReader.schemaHash(), ProtoDescriptorHash.VALUE,
+                    ProtoAstReader.PRODUCER_VERSION, ProtoAstReader.LLVM_MAJOR);
         }
 
         void validate() {
@@ -201,6 +203,7 @@ public final class ClangAstWebResource {
                     || !FRAMING.equals(framing)
                     || max_record_bytes != FramedProtobufReader.DEFAULT_MAX_FRAME_BYTES
                     || !ProtoAstReader.schemaHash().equals(schema_sha256)
+                    || !ProtoDescriptorHash.VALUE.equals(descriptor_sha256)
                     || !ProtoAstReader.PRODUCER_VERSION.equals(producer_version)
                     || llvm_major != ProtoAstReader.LLVM_MAJOR) {
                 throw new RuntimeException("Clang-dumper manifest protocol metadata is incompatible");

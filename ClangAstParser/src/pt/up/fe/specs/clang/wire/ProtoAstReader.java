@@ -205,18 +205,23 @@ public final class ProtoAstReader {
                 }
             }, envelope -> {
                 long constructionStart = System.nanoTime();
-                records[0]++;
                 if (endSeen[0]) {
                     throw new ProtocolException("Record found after End");
                 }
                 switch (envelope.getPayloadCase()) {
                     case HEADER -> readHeader(envelope.getHeader(), headerSeen[0]);
-                    case RECORD -> {
+                    case CHUNK -> {
                         if (!headerSeen[0]) {
                             throw new ProtocolException("Header must be the first Envelope");
                         }
-                        readRecord(envelope.getRecord(), data, files, nodeParser, pendingClasses, nodeClasses,
-                                classesSeen, childrenSeen, nodeIdsSeen, denseNodeIds, nodes);
+                        if (envelope.getChunk().getRecordsCount() == 0) {
+                            throw new ProtocolException("Chunk must contain at least one Record");
+                        }
+                        for (Record record : envelope.getChunk().getRecordsList()) {
+                            readRecord(record, data, files, nodeParser, pendingClasses, nodeClasses,
+                                    classesSeen, childrenSeen, nodeIdsSeen, denseNodeIds, nodes);
+                            records[0]++;
+                        }
                     }
                     case END -> {
                         if (!headerSeen[0]) {

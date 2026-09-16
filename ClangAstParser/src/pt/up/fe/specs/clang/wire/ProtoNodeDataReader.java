@@ -13,7 +13,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.LongFunction;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -89,6 +91,13 @@ import pt.up.fe.specs.clava.utils.ClassesService;
  */
 final class ProtoNodeDataReader {
 
+    private static final Map<Class<? extends ClavaNode>, StoreDefinition> STORE_DEFINITIONS =
+            new ConcurrentHashMap<>();
+    private static final Map<EnumMapping, Enum<?>> ENUM_VALUES = new ConcurrentHashMap<>();
+
+    private record EnumMapping(Class<?> target, Object protobufValue) {
+    }
+
     private final ClangAstData data;
     private final LongFunction<String> id;
     private final ProtoAstReader.Files files;
@@ -113,7 +122,7 @@ final class ProtoNodeDataReader {
         Message payload = ProtoGeneratedBindings.payload(wireNode);
 
         Class<? extends ClavaNode> clavaClass = getClavaClass(wireNode.getClassName(), payload);
-        StoreDefinition definition = StoreDefinitions.fromInterface(clavaClass);
+        StoreDefinition definition = STORE_DEFINITIONS.computeIfAbsent(clavaClass, StoreDefinitions::fromInterface);
         DataStore store = DataStore.newInstance(definition, true);
         String wireId = id.apply(wireNode.getId());
         store.set(ClavaNode.CONTEXT, data.get(ClangAstData.CONTEXT));
@@ -594,28 +603,33 @@ final class ProtoNodeDataReader {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private static <T extends Enum<T>> T enumValue(Class<?> target, Object protoValue) {
+        return (T) ENUM_VALUES.computeIfAbsent(new EnumMapping(target, protoValue),
+                mapping -> findEnumValue(mapping.target(), mapping.protobufValue()));
+    }
+
+    private static Enum<?> findEnumValue(Class<?> target, Object protoValue) {
         if (!(target.isEnum())) {
             throw new IllegalArgumentException("Expected enum target, got " + target);
         }
         String protoName = protoValue instanceof ProtocolMessageEnum enumValue
                 ? enumValue.getValueDescriptor().getName()
                 : protoValue.toString();
-        Object best = null;
+        String normalizedProto = protoName.replace("_", "").toLowerCase(Locale.ROOT);
+        Enum<?> best = null;
         int bestLength = -1;
         for (Object constant : target.getEnumConstants()) {
             String name = ((Enum<?>) constant).name();
-            String normalizedProto = protoName.replace("_", "").toLowerCase(Locale.ROOT);
             String normalizedTarget = name.replace("_", "").toLowerCase(Locale.ROOT);
             if (protoName.equals(name) || protoName.endsWith("_" + name)
                     || normalizedProto.endsWith(normalizedTarget)) {
                 if (normalizedTarget.length() > bestLength) {
-                    best = constant;
+                    best = (Enum<?>) constant;
                     bestLength = normalizedTarget.length();
                 }
             }
         }
         if (best != null) {
-            return (T) best;
+            return best;
         }
         throw new IllegalArgumentException("Unsupported " + target.getSimpleName() + " value '" + protoName + "'");
     }

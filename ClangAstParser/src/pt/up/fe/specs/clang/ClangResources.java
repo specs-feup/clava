@@ -347,6 +347,7 @@ public class ClangResources {
 
             final boolean[] headerSeen = { false };
             final boolean[] endSeen = { false };
+            final long[] records = { 0 };
             new FramedProtobufReader(input).read(Envelope::parseFrom, envelope -> {
                 if (endSeen[0]) {
                     throw new IllegalArgumentException("protobuf End must be the final frame");
@@ -360,10 +361,14 @@ public class ClangResources {
                         ProtoAstReader.validateHeader(envelope.getHeader());
                         headerSeen[0] = true;
                     }
-                    case RECORD -> {
+                    case CHUNK -> {
                         if (!headerSeen[0]) {
                             throw new IllegalArgumentException("protobuf Header must be the first frame");
                         }
+                        if (envelope.getChunk().getRecordsCount() == 0) {
+                            throw new IllegalArgumentException("protobuf Chunk must contain at least one Record");
+                        }
+                        records[0] += envelope.getChunk().getRecordsCount();
                     }
                     case END -> {
                         if (!headerSeen[0]) {
@@ -373,6 +378,9 @@ public class ClangResources {
                         if (!end.hasRecords() || !end.hasNodes() || !end.hasRawBytes()
                                 || !end.hasFiles() || !end.hasIds()) {
                             throw new IllegalArgumentException("protobuf End is missing a required counter");
+                        }
+                        if (end.getRecords() != records[0]) {
+                            throw new IllegalArgumentException("protobuf End record count does not match the stream");
                         }
                         endSeen[0] = true;
                     }
