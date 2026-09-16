@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -31,7 +32,22 @@ final class ClangCcacheAdapter {
     private ClangCcacheAdapter() {
     }
 
+    static boolean isDisabled(String value) {
+        if (value == null) {
+            return false;
+        }
+
+        return switch (value.trim().toLowerCase(Locale.ROOT)) {
+            case "1", "true", "yes", "on" -> true;
+            default -> false;
+        };
+    }
+
     static boolean isAvailable() {
+        if (isDisabled(System.getenv("CCACHE_DISABLE"))) {
+            return false;
+        }
+
         var path = System.getenv("PATH");
         if (path != null) {
             for (var folder : path.split(File.pathSeparator)) {
