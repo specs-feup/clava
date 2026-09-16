@@ -267,25 +267,26 @@ it, and writes the second tree. Pass the same command template to
 `run_identity.py` for a separate baseline runtime. The wrapper compares both
 trees by relative path and exact bytes.
 
-On the local protobuf distribution, NAS LU produced 28,218 tree nodes, 49
-functions, 158 calls, and 42,280 nodes reachable through fields. The helper
-reported these values over three runs:
+On the optimized local distributions, NAS LU produced 28,218 tree nodes, 49
+functions, 158 calls, and 42,280 nodes reachable through fields in both
+implementations. The three-repeat medians were:
 
-| checkpoint | repeat 1 | repeat 2 | repeat 3 | median |
-| --- | ---: | ---: | ---: | ---: |
-| graph-ready heap (bytes) | 42,822,232 | 42,685,168 | 42,745,008 | 42,745,008 |
-| post-query heap (bytes) | 42,826,776 | 42,687,728 | 42,749,168 | 42,749,168 |
-| post-codegen heap (bytes) | 43,000,008 | 42,861,208 | 42,922,512 | 42,922,512 |
-| detached heap (bytes) | 18,253,936 | 18,260,048 | 18,278,360 | 18,260,048 |
-| GNU time peak RSS (KB) | 573,020 | 555,608 | 537,284 | 555,608 |
+| checkpoint | text baseline | protobuf | delta |
+| --- | ---: | ---: | ---: |
+| graph-ready heap (bytes) | 39,471,824 | 40,837,992 | +3.46% |
+| post-query heap (bytes) | 39,474,896 | 40,838,120 | +3.45% |
+| post-codegen heap (bytes) | 39,621,424 | 40,986,312 | +3.45% |
+| GNU time peak RSS (KiB) | 587,548 | 781,272 | +32.97% |
+| elapsed time (seconds) | 2.63 | 3.04 | +15.74% |
 
-GNU time elapsed was 4.15, 4.26, and 4.12 seconds, with a 4.15 second
-median. The generated file was 117,774 bytes. `copy_isolated=1` and
-`transform_visited=1` in all three runs. Heap numbers are JVM live-heap
-readings after an explicit GC request, not a retained-object graph; detached
-heap still includes runtime statics and caches. Peak RSS includes the JVM,
-native dumper, and loaded libraries. The three-repeat output is retained by
-`run_heap_probe.py` under its selected results directory.
+The generated file was 117,774 bytes. `copy_isolated=1` and
+`transform_visited=1` in all six runs. Heap numbers are JVM live-heap readings
+after an explicit GC request, not a dominator-tree retained-size calculation.
+Peak RSS includes the JVM, the native dumper, protobuf's transient generated
+messages, and loaded libraries. The live graph penalty is small, but the JVM
+does not return transient allocation peaks to the operating system during this
+short probe. That explains why peak RSS remains the clearest cost after the
+generated binding optimization.
 
 For the separate baseline comparison, the NAS LU identity run used the
 baseline runtime from the independent text checkout and the protobuf runtime
@@ -355,33 +356,59 @@ The FlatBuffers report remains separate and unchanged:
 
 https://draftlink.lmsousa.workers.dev/d/dnyeY92urT89
 
-## Final full-suite matrix
+## Final full-suite matrix after generated binding work
 
-The final production runtime built from Clava `a5b3b1a6d2f50a2f739caca2378842e34b1de520`
-and clang-dumper `da00ef63495dcc0c2f51c7cc49d8fce7d8a99d0f` was measured against the
-separate text baseline in
-`experiments/protobuf/suite/results/matrix-final-20260915T-final-head`.
-All 18 cells completed. Each ran 164 tests with 158 passes, the same four
-expected failures, two skips, no unexpected failures, and no excluded trial.
+The final runtime used Clava `166b6607b152ba4fb3e48cfd997f28fb8cb0d89b`
+and clang-dumper `ab9d0238bd9c27eb9f156fd19967d16025137a37`.
+The separate text baseline remained Clava
+`603997af2fb1a7f9cdd1b418b15772f892494aca` and clang-dumper
+`bc498f5cedb88239062eef21a9669bc9bddb0ff7`. Results are under
+`experiments/protobuf/suite/results/matrix-optimized-linear-20260916T141236Z`.
+
+The Java build now runs protoc 4.28.3 and consumes its descriptor set to
+generate a typed Clava adapter. The generated code uses direct protobuf
+getters, `has*()` presence checks, static DataKey references, and the existing
+deferred-reference queues. It does not traverse descriptors, normalize field
+names, or look up DataKeys for each record at runtime. A four-entry alias table
+records the existing Clava names that cannot be inferred from the schema. A
+missing or ambiguous binding fails generation or Java compilation.
+
+The native writer groups records into bounded chunks near 64 KiB. This reduced
+the suite from about 296,000 protobuf envelopes to 730 without buffering a
+translation unit. The first chunk implementation called `ByteSizeLong()` over
+the growing chunk for every record. That made chunk construction quadratic and
+caused 70 to 79 second development trials. The final writer tracks the exact
+encoded size incrementally.
+
+Seventeen of the planned 18 cells completed with only the same four expected
+environment failures and two skips. Protobuf warm repeat 2 produced 49
+unexpected failures after `VariableArrayType.getExpr()` returned null. It also
+had 29 native cache misses instead of 167 direct hits. The trial remains in the
+results but is excluded from medians. Repeating the warm run against the exact
+same cache and temporary root passed with only the four expected failures in
+43.13 seconds. The failure did not reproduce, so it is recorded as a transient
+existing AST or cache-path problem rather than claimed as fixed.
 
 | state | text wall median | protobuf wall median | delta | text peak RSS | protobuf peak RSS | delta |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| cold | 55.53 s | 57.42 s | +3.40% | 1,489,084 KiB | 1,629,480 KiB | +9.43% |
-| warm | 44.36 s | 46.46 s | +4.72% | 1,460,572 KiB | 1,539,948 KiB | +5.43% |
-| bypass | 55.24 s | 57.06 s | +3.29% | 1,488,252 KiB | 1,589,936 KiB | +6.83% |
+| cold | 56.74 s | 57.46 s | +1.26% | 1,557,824 KiB | 1,564,628 KiB | +0.44% |
+| warm | 45.19 s | 44.41 s | -1.71% | 1,463,232 KiB | 1,634,006 KiB | +11.67% |
+| bypass | 57.12 s | 56.20 s | -1.62% | 1,560,876 KiB | 1,535,644 KiB | -1.62% |
 
-Cold cache contained 167 cacheable calls, 16 direct hits, and 151 misses in
-both implementations. Warm cache contained 167 direct hits and no misses.
-Median ccache storage was 3,897,934 bytes for text and 3,334,590 bytes for
-protobuf, a 14.45% protobuf reduction.
+The warm protobuf median has two valid planned trials after the exclusion. The
+43.13 second reproduction is evidence about the excluded trial, not a third
+planned repetition. The bypass wall comparison is not a clean transport A/B:
+the frozen text baseline still invokes ccache in pass-through mode, while the
+protobuf build now treats `CCACHE_DISABLE=true` as ccache being unavailable.
 
-Across the 207 protobuf parse events in each cell, median warm aggregate
-occupancy was 684.841 ms native execution, 2,926.053 ms completed-file cache
-restoration, 638.412 ms protobuf decoding, 3,385.215 ms record mapping,
-87.714 ms reference resolution, and 144.868 ms translation-unit AST
-construction. These are overlapping sums across parallel jobs, not additive
-wall-time components. Production still consumes completed files and does not
-overlap native writing with Java reading.
+Cold and warm cache storage medians were 3,905,806 bytes for text and
+3,352,618 bytes for protobuf, a 14.16% reduction. Median valid warm protobuf
+aggregate occupancy was 737.235 ms native execution, 2,962.026 ms
+completed-file cache restoration, 458.178 ms protobuf decoding, 1,898.537 ms
+record mapping, 86.928 ms reference resolution, and 149.652 ms
+translation-unit AST construction. These sums span parallel jobs. They overlap
+and are not wall-time components. Production still opens completed dump files;
+there is no overlap between native writing and Java reading.
 
 ## Follow-up: cache bypass and FlatBuffers overhead
 
@@ -392,15 +419,18 @@ in disabled pass-through mode, added `-MD/-MF`, selected zstd output, and
 created the cache namespace. The fixed path invokes clang-dumper directly,
 omits dependency generation and zstd, and creates no cache directory. A
 focused Clava-JS comparison matched the transport behavior observed when
-ccache was absent from `PATH`. The final matrix above predates this correction,
-so its bypass row describes the old ccache pass-through path. Cold and warm
-results are unaffected.
+ccache was absent from `PATH`. The final protobuf build includes this fix, but
+the frozen text baseline does not. Its bypass row still describes the old
+ccache pass-through path, so the cross-build bypass delta is not a clean
+transport comparison. Cold and warm results are unaffected.
 
 The complete eager FlatBuffers experiment measured a 0.846% warm penalty
-against its own text baseline, compared with protobuf's 4.719% on the final
-matrix. These are controlled within-experiment percentages from different
-revisions, not a direct cross-revision A/B test. The absolute median penalties
-were 0.370 seconds for FlatBuffers and 2.093 seconds for protobuf.
+against its own text baseline. The original protobuf runtime measured 4.719%.
+Those numbers came from separate revisions and were not a direct A/B test. The
+generated adapter and chunked framing removed that protobuf penalty in this
+matrix. The valid planned warm trials now yield a 1.71% reduction, although the
+two-trial protobuf median and 11.67% peak-RSS increase make that result too
+small to sell as a speedup.
 
 The difference is in Java import work, not cache hits or protobuf binary
 decoding. Protobuf spent a median 638 ms decoding 296,581 frames and 3,385 ms
@@ -421,7 +451,13 @@ generated object graph or repeat name-based descriptor work for every node.
 Lazy loading is not the explanation: FlatBuffers lazy warm time was 1.210%
 above text, slightly worse than eager.
 
-The most useful protobuf optimization would be generated typed Clava binding
-adapters or, as a cheaper first step, cached descriptor-to-DataKey and
-presence-validation metadata. Compression tuning and cache changes do not
-address the measured warm bottleneck.
+The missing optimization was the generated consumer. Protoc had generated the
+wire DTOs, but the first Java importer treated them as generic messages and
+rebuilt schema-to-Clava knowledge at runtime. That defeated much of the point
+of choosing a schema. The final build generates both the standard Java DTOs
+and the typed Clava adapter during Gradle builds. Compression tuning and cache
+changes were not responsible for the warm improvement.
+
+The change keeps protocol 1.0, magic `CLAVAPB1`, and the existing protobuf
+cache namespace. This experiment has never shipped, so there is no released
+compatibility boundary to version around.
