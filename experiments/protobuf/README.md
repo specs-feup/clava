@@ -382,3 +382,46 @@ restoration, 638.412 ms protobuf decoding, 3,385.215 ms record mapping,
 construction. These are overlapping sums across parallel jobs, not additive
 wall-time components. Production still consumes completed files and does not
 overlap native writing with Java reading.
+
+## Follow-up: cache bypass and FlatBuffers overhead
+
+Clava `6714ac0bca193ac1d763c5e43d8d91d7fe65ed24` makes
+`ClangCcacheAdapter.isAvailable()` return false when `CCACHE_DISABLE` is one
+of `1`, `true`, `yes`, or `on`. Before this fix, bypass still invoked ccache
+in disabled pass-through mode, added `-MD/-MF`, selected zstd output, and
+created the cache namespace. The fixed path invokes clang-dumper directly,
+omits dependency generation and zstd, and creates no cache directory. A
+focused Clava-JS comparison matched the transport behavior observed when
+ccache was absent from `PATH`. The final matrix above predates this correction,
+so its bypass row describes the old ccache pass-through path. Cold and warm
+results are unaffected.
+
+The complete eager FlatBuffers experiment measured a 0.846% warm penalty
+against its own text baseline, compared with protobuf's 4.719% on the final
+matrix. These are controlled within-experiment percentages from different
+revisions, not a direct cross-revision A/B test. The absolute median penalties
+were 0.370 seconds for FlatBuffers and 2.093 seconds for protobuf.
+
+The difference is in Java import work, not cache hits or protobuf binary
+decoding. Protobuf spent a median 638 ms decoding 296,581 frames and 3,385 ms
+mapping their records into Clava DataStores. Its reader allocates a byte array
+and generated message graph for every frame, recursively traverses protobuf
+descriptors to validate presence, calls reflective field accessors, resolves
+DataKeys by normalized names, and initializes temporary collections. A NAS LU
+JFR recording at `/tmp/ast-protobuf-jfr-nas-headless.jfr` attributes the
+largest allocation sites to byte-array copies, `HashMap` growth, string
+normalization, generated protobuf builders, reflective field access, and
+`CodedInputStream` setup. It recorded 331 ms of GC pauses during the four-second
+probe.
+
+FlatBuffers eager import maps size-prefixed blocks and reads generated table
+offsets directly. Its generated binding descriptors already contain the
+target DataKeys and typed readers, so it does not build an intermediate
+generated object graph or repeat name-based descriptor work for every node.
+Lazy loading is not the explanation: FlatBuffers lazy warm time was 1.210%
+above text, slightly worse than eager.
+
+The most useful protobuf optimization would be generated typed Clava binding
+adapters or, as a cheaper first step, cached descriptor-to-DataKey and
+presence-validation metadata. Compression tuning and cache changes do not
+address the measured warm bottleneck.
