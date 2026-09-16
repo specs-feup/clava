@@ -6,20 +6,14 @@
 
 package pt.up.fe.specs.clang.wire;
 
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
-import com.google.protobuf.Descriptors.OneofDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.ProtocolMessageEnum;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.LongFunction;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -95,8 +89,6 @@ import pt.up.fe.specs.clava.utils.ClassesService;
  */
 final class ProtoNodeDataReader {
 
-    private static final String BASE = "base";
-
     private final ClangAstData data;
     private final LongFunction<String> id;
     private final ProtoAstReader.Files files;
@@ -118,11 +110,7 @@ final class ProtoNodeDataReader {
             throw new IllegalArgumentException("Node payload is required for " + wireNode.getClassName());
         }
 
-        Message payload = (Message) wireNode.getField(wireNode.getDescriptorForType()
-                .findFieldByNumber(wireNode.getNodeCase().getNumber()));
-        if (payload == null) {
-            throw new IllegalArgumentException("Node payload is missing for " + wireNode.getClassName());
-        }
+        Message payload = ProtoGeneratedBindings.payload(wireNode);
 
         Class<? extends ClavaNode> clavaClass = getClavaClass(wireNode.getClassName(), payload);
         StoreDefinition definition = StoreDefinitions.fromInterface(clavaClass);
@@ -132,75 +120,10 @@ final class ProtoNodeDataReader {
         store.set(ClavaNode.ID, wireId);
 
         ProtoNodeDataReader reader = new ProtoNodeDataReader(data, id, files);
-        validatePresence(payload, wireNode.getClassName());
-        reader.setSourceMetadata(payload, store, wireNode.getClassName());
-        reader.visit(payload, store, definition);
+        ProtoGeneratedBindings.validate(payload, wireNode.getClassName());
+        reader.setSourceMetadata(ProtoGeneratedBindings.source(payload), store, wireNode.getClassName());
+        ProtoGeneratedBindings.visit(payload, reader, store, wireNode.getClassName());
         return store;
-    }
-
-    /**
-     * The native encoder writes every scalar value explicitly, including a
-     * meaningful false/zero value.  Enforce that contract while retaining
-     * message presence for genuinely optional nested alternatives (for
-     * example a macro spelling range). This prevents a missing proto3
-     * optional scalar from silently turning into Java's default value.
-     */
-    private static void validatePresence(Message message, String nodeClass) {
-        Set<OneofDescriptor> checkedOneofs = new HashSet<>();
-        for (FieldDescriptor field : message.getDescriptorForType().getFields()) {
-            OneofDescriptor oneof = field.getContainingOneof();
-            if (oneof != null) {
-                if (!checkedOneofs.add(oneof)) {
-                    continue;
-                }
-                if (!message.hasOneof(oneof)) {
-                    throw new IllegalArgumentException("Missing required protobuf alternative '" + oneof.getName()
-                            + "' in " + nodeClass);
-                }
-                FieldDescriptor selected = message.getOneofFieldDescriptor(oneof);
-                if (selected.getJavaType() == JavaType.MESSAGE) {
-                    validatePresence((Message) message.getField(selected), nodeClass);
-                }
-                continue;
-            }
-            if (field.isRepeated()) {
-                if (field.getJavaType() == JavaType.MESSAGE) {
-                    for (Object value : (List<?>) message.getField(field)) {
-                        validatePresence((Message) value, nodeClass);
-                    }
-                }
-                continue;
-            }
-            if (field.getJavaType() == JavaType.MESSAGE) {
-                if (!message.hasField(field)) {
-                    if (isOptionalMessageField(message, field)) {
-                        continue;
-                    }
-                    throw new IllegalArgumentException("Missing required protobuf field '" + field.getName()
-                            + "' in " + nodeClass);
-                }
-                validatePresence((Message) message.getField(field), nodeClass);
-                continue;
-            }
-            if (!message.hasField(field)) {
-                throw new IllegalArgumentException("Missing required protobuf field '" + field.getName() + "' in "
-                        + nodeClass);
-            }
-        }
-    }
-
-    private static boolean isOptionalMessageField(Message message, FieldDescriptor field) {
-        String messageName = message.getDescriptorForType().getName();
-        String fieldName = field.getName();
-        // These fields wrap nullable pointers in the native record model.
-        // Other message fields (in particular every inheritance `base`) are
-        // required and must not silently turn into an empty data store.
-        return messageName.equals("SourceInfo")
-                && (fieldName.equals("expansion") || fieldName.equals("spelling"))
-                || messageName.equals("TemplateExpansion") && fieldName.equals("template_name")
-                || messageName.equals("SubstitutedTemplateName") && fieldName.equals("replacement")
-                || messageName.equals("UsingDeclData") && fieldName.equals("nested_name_specifier")
-                || messageName.equals("TemplateTemplateParmDeclData") && fieldName.equals("default_argument");
     }
 
     private static Class<? extends ClavaNode> getClavaClass(String className, Message payload) {
@@ -217,161 +140,106 @@ final class ProtoNodeDataReader {
         return ClassesService.getClavaClass(className);
     }
 
-    private void setSourceMetadata(Message payload, DataStore store, String className) {
-        Message sourceInfo = findMessage(payload, "source");
-        boolean hasLocation = sourceInfo != null && sourceInfo.getAllFields().containsKey(
-                sourceInfo.getDescriptorForType().findFieldByName("expansion"));
+    private void setSourceMetadata(SourceInfo sourceInfo, DataStore store, String className) {
+        boolean hasLocation = sourceInfo != null && sourceInfo.hasExpansion();
         boolean isType = className.endsWith("Type") || className.equals("QualType");
         if (!isType && sourceInfo == null) {
             throw new IllegalArgumentException("Missing source information for " + className);
         }
         if (hasLocation) {
-            Message expansion = (Message) sourceInfo.getField(sourceInfo.getDescriptorForType().findFieldByName("expansion"));
-            SourceRange range = files.range(expansion);
+            SourceRange range = files.range(sourceInfo.getExpansion());
             if (range.isValid()) {
                 store.set(ClavaNode.LOCATION, range);
             }
         }
-        FieldDescriptor macroField = sourceInfo == null ? null : sourceInfo.getDescriptorForType().findFieldByName("is_macro");
-        FieldDescriptor systemField = sourceInfo == null ? null : sourceInfo.getDescriptorForType().findFieldByName("system_header");
-        store.set(ClavaNode.IS_MACRO, macroField != null && sourceInfo.hasField(macroField) && (Boolean) sourceInfo.getField(macroField));
+        store.set(ClavaNode.IS_MACRO, sourceInfo != null && sourceInfo.hasIsMacro() && sourceInfo.getIsMacro());
         store.set(ClavaNode.IS_IN_SYSTEM_HEADER,
-                systemField != null && sourceInfo.hasField(systemField) && (Boolean) sourceInfo.getField(systemField));
+                sourceInfo != null && sourceInfo.hasSystemHeader() && sourceInfo.getSystemHeader());
 
         // Spelling ranges are intentionally walked and checked by Files.range,
         // even though Clava's current data model has no spelling-location key.
-        FieldDescriptor spelling = sourceInfo == null ? null : sourceInfo.getDescriptorForType().findFieldByName("spelling");
-        if (spelling != null && sourceInfo.hasField(spelling)) {
-            files.range((Message) sourceInfo.getField(spelling));
+        if (sourceInfo != null && sourceInfo.hasSpelling()) {
+            files.range(sourceInfo.getSpelling());
         }
     }
 
-    private void visit(Message message, DataStore store, StoreDefinition definition) {
-        initializeRepeatedFields(message, store, definition);
-        Boolean alignedExpression = null;
-        Long alignment = null;
-        for (Map.Entry<FieldDescriptor, Object> entry : message.getAllFields().entrySet()) {
-            FieldDescriptor field = entry.getKey();
-            Object raw = entry.getValue();
-            if (BASE.equals(field.getName())) {
-                visit((Message) raw, store, definition);
-                continue;
-            }
-            if (field.getName().equals("source")) {
-                continue;
-            }
-            if (field.getName().equals("is_expression")) {
-                alignedExpression = (Boolean) raw;
-                continue;
-            }
-            if (field.getName().equals("alignment")) {
-                alignment = (Long) raw;
-                continue;
-            }
+    void putScalar(DataStore store, DataKey<?> key, Object value) {
+        set(key, store, scalarValue(key, value));
+    }
 
-            DataKey<?> key = findKey(definition, field.getName());
-            if (key == null) {
-                throw new IllegalArgumentException("No Clava DataKey for protobuf field '" + field.getName()
-                        + "' in " + message.getDescriptorForType().getName());
-            }
+    void putCompound(DataStore store, DataKey<?> key, Message value) {
+        Object converted = convertCompound(value, key);
+        if (Optional.class.isAssignableFrom(key.getValueClass())) {
+            converted = Optional.of(converted);
+        }
+        set(key, store, converted);
+    }
 
-            if (field.isRepeated()) {
-                List<?> values = (List<?>) raw;
-                if (field.getJavaType() == JavaType.MESSAGE) {
-                    List<Object> converted = new ArrayList<>(values.size());
-                    for (Object value : values) {
-                        converted.add(convertCompound((Message) value, key));
-                    }
-                    set(key, store, converted);
-                } else if (field.getJavaType() == JavaType.ENUM) {
-                    List<Object> converted = new ArrayList<>(values.size());
-                    for (Object value : values) {
-                        converted.add(enumValue(elementEnum(field.getName()), value));
-                    }
-                    set(key, store, converted);
-                } else if (field.getJavaType() == JavaType.LONG) {
-                    List<String> ids = new ArrayList<>(values.size());
-                    for (Object value : values) {
-                        ids.add(reference((Long) value, field, key));
-                    }
-                    data.getClavaNodes().queueSetNodeList(store, rawKey(key), ids);
-                } else {
-                    List<Object> converted = new ArrayList<>(values.size());
-                    for (Object value : values) {
-                        // Protobuf uint32 is represented as Integer, while
-                        // Clava retains string literal bytes as signed Byte.
-                        converted.add(field.getName().equals("string_bytes")
-                                ? ((Number) value).byteValue()
-                                : scalarValue(key, value));
-                    }
-                    set(key, store, converted);
-                }
-                continue;
-            }
-
-            if (field.getJavaType() == JavaType.MESSAGE) {
-                Object converted = convertCompound((Message) raw, key);
-                if (Optional.class.isAssignableFrom(key.getValueClass())) {
-                    converted = Optional.of(converted);
-                }
-                set(key, store, converted);
-            } else if (field.getJavaType() == JavaType.LONG && isReference(field, key)) {
-                String reference = reference((Long) raw, field, key);
-                // The text parser retained this legacy scalar alongside the
-                // resolved RECORD pointer. Keep both values in sync when
-                // decoding the same CXXMethodDeclData record.
-                if (field.getName().equals("record")) {
-                    set(CXXMethodDecl.RECORD_ID, store, reference);
-                }
-                queueReference(store, key, reference, field);
+    void putRepeated(DataStore store, DataKey<?> key, List<?> values, boolean stringBytes) {
+        List<Object> converted = new ArrayList<>(values.size());
+        for (Object value : values) {
+            if (value instanceof Message message) {
+                converted.add(convertCompound(message, key));
+            } else if (stringBytes) {
+                // Protobuf uint32 is represented as Integer, while Clava
+                // retains string literal bytes as signed Byte.
+                converted.add(((Number) value).byteValue());
             } else {
-                set(key, store, scalarValue(key, raw));
+                converted.add(scalarValue(key, value));
             }
         }
+        set(key, store, converted);
+    }
 
-        if (alignment != null) {
-            if (alignedExpression == null) {
-                throw new IllegalArgumentException("AlignedAttr.alignment requires is_expression");
-            }
-            if (!(store instanceof org.suikasoft.jOptions.DataStore.DataClass<?>)) {
-                throw new IllegalArgumentException("AlignedAttr payload has no data class");
-            }
-            if (alignedExpression) {
-                set(AlignedAttr.ALIGNED_ATTR_KIND, store, AlignedAttrKind.EXPR);
-                queueOptional((org.suikasoft.jOptions.DataStore.DataClass<?>) store, alignment,
-                        pt.up.fe.specs.clava.ast.attr.AlignedExprAttr.EXPR);
-            } else {
-                set(AlignedAttr.ALIGNED_ATTR_KIND, store, AlignedAttrKind.TYPE);
-                queue((org.suikasoft.jOptions.DataStore.DataClass<?>) store, "alignment", alignment,
-                        pt.up.fe.specs.clava.ast.attr.AlignedTypeAttr.TYPE);
-            }
+    void putRepeatedEnums(DataStore store, DataKey<?> key, List<?> values, Class<?> enumClass) {
+        List<Object> converted = new ArrayList<>(values.size());
+        for (Object value : values) {
+            converted.add(enumValue(enumClass, value));
+        }
+        set(key, store, converted);
+    }
+
+    void putRepeatedReferences(DataStore store, DataKey<?> key, List<Long> values) {
+        List<String> ids = new ArrayList<>(values.size());
+        for (long value : values) {
+            ids.add(id.apply(value));
+        }
+        data.getClavaNodes().queueSetNodeList(store, rawKey(key), ids);
+    }
+
+    void putReference(DataStore store, DataKey<?> key, long value, boolean nullable, boolean record) {
+        String reference = id.apply(value);
+        // The text parser retained this legacy scalar alongside the resolved
+        // RECORD pointer. Keep both values in sync for CXXMethodDecl.
+        if (record) {
+            set(CXXMethodDecl.RECORD_ID, store, reference);
+        }
+        queueReference(store, key, reference, nullable);
+    }
+
+    void applyAlignment(DataStore store, Boolean alignedExpression, long alignment) {
+        if (alignedExpression == null) {
+            throw new IllegalArgumentException("AlignedAttr.alignment requires is_expression");
+        }
+        if (!(store instanceof org.suikasoft.jOptions.DataStore.DataClass<?>)) {
+            throw new IllegalArgumentException("AlignedAttr payload has no data class");
+        }
+        org.suikasoft.jOptions.DataStore.DataClass<?> dataClass =
+                (org.suikasoft.jOptions.DataStore.DataClass<?>) store;
+        if (alignedExpression) {
+            set(AlignedAttr.ALIGNED_ATTR_KIND, store, AlignedAttrKind.EXPR);
+            queueOptional(dataClass, alignment, AlignedExprAttr.EXPR);
+        } else {
+            set(AlignedAttr.ALIGNED_ATTR_KIND, store, AlignedAttrKind.TYPE);
+            queue(dataClass, "alignment", alignment, AlignedTypeAttr.TYPE);
         }
     }
 
-    private void initializeRepeatedFields(Message message, DataStore store, StoreDefinition definition) {
-        for (FieldDescriptor field : message.getDescriptorForType().getFields()) {
-            if (!field.isRepeated()) {
-                continue;
-            }
-
-            DataKey<?> key = findKey(definition, field.getName());
-            if (key == null) {
-                throw new IllegalArgumentException("No Clava DataKey for protobuf field '" + field.getName()
-                        + "' in " + message.getDescriptorForType().getName());
-            }
-
-            // Repeated protobuf fields have an empty-list default. Materialize
-            // that value in the existing store too, otherwise classes such as
-            // CXXRecordDecl observe null instead of the baseline empty list.
-            set(key, store, new ArrayList<>());
-        }
-    }
-
-    private void queueReference(DataStore store, DataKey<?> key, String value, FieldDescriptor field) {
+    private void queueReference(DataStore store, DataKey<?> key, String value, boolean nullable) {
         if (Optional.class.isAssignableFrom(key.getValueClass())) {
             data.getClavaNodes().queueSetOptionalNode(store, rawKey(key), value);
         } else if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
-            if (ClavaNodes.isNullId(value) && field.getName().equals("size_expr")) {
+            if (ClavaNodes.isNullId(value) && nullable) {
                 data.getClavaNodes().queueSetNullableNode(store, rawKey(key), value);
             } else {
                 data.getClavaNodes().queueSetNode(store, rawKey(key), value);
@@ -380,28 +248,6 @@ final class ProtoNodeDataReader {
             throw new IllegalArgumentException("Reference field '" + key.getName() + "' has unsupported type "
                     + key.getValueClass().getName());
         }
-    }
-
-    private String reference(long value, FieldDescriptor field, DataKey<?> key) {
-        if (!isReference(field, key)) {
-            throw new IllegalArgumentException("Field '" + field.getName() + "' is not a node reference");
-        }
-        return id.apply(value);
-    }
-
-    private static boolean isReference(FieldDescriptor field, DataKey<?> key) {
-        if (field.getJavaType() != JavaType.LONG) {
-            return false;
-        }
-        if (ClavaNode.class.isAssignableFrom(key.getValueClass()) || Optional.class.isAssignableFrom(key.getValueClass())) {
-            return true;
-        }
-        // These are the only signed 64-bit scalar values in the schema; all
-        // other sint64 values are dense references.
-        return !switch (field.getName()) {
-            case "address_space", "value", "length", "reg_parm", "alignment" -> true;
-            default -> false;
-        };
     }
 
     private Object scalarValue(DataKey<?> key, Object value) {
@@ -446,93 +292,6 @@ final class ProtoNodeDataReader {
         return key;
     }
 
-    private DataKey<?> findKey(StoreDefinition definition, String protoName) {
-        // Keep the historical DataKey spelling ahead of the normalized lookup:
-        // `templated_decl` and `templateDecl` normalize to the same token, but
-        // only the latter is the existing Optional<NamedDecl> key.
-        if (protoName.equals("templated_decl")) {
-            DataKey<?> templateDecl = definition.getKeyMap().get("templateDecl");
-            if (templateDecl != null) {
-                return templateDecl;
-            }
-        }
-
-        String camel = camel(protoName);
-        DataKey<?> direct = definition.getKeyMap().get(camel);
-        if (direct != null) {
-            return direct;
-        }
-        String normalized = normalize(camel);
-        for (DataKey<?> key : definition.getKeys()) {
-            if (normalize(key.getName()).equals(normalized)) {
-                return key;
-            }
-        }
-        if (protoName.equals("kind")) {
-            DataKey<?> attributeKind = definition.getKeyMap().get("attributeKind");
-            if (attributeKind != null) {
-                return attributeKind;
-            }
-        }
-        if (protoName.equals("is_global")) {
-            DataKey<?> isGlobalNew = definition.getKeyMap().get("isGlobalNew");
-            if (isGlobalNew != null) {
-                return isGlobalNew;
-            }
-            DataKey<?> isGlobal = definition.getKeyMap().get("isGlobal");
-            if (isGlobal != null) {
-                return isGlobal;
-            }
-        }
-        // These names reflect established Clava DataKey spellings rather than
-        // the more descriptive schema spelling.
-        DataKey<?> alias = switch (protoName) {
-            case "this_object_type" -> definition.getKeyMap().get("thisOjbectType");
-            case "initialization_present" -> definition.getKeyMap().get("hasInitializer");
-            case "uses_reg_parm" -> definition.getKeyMap().get("hasRegParm");
-            case "is_inline_specified" -> definition.getKeyMap().get("isInline");
-            case "has_trailing_returns" -> definition.getKeyMap().get("hasTrailingReturn");
-            case "underlying_expr" -> definition.getKeyMap().get("underlingExpr");
-            case "is_std_list_initialization" -> definition.getKeyMap().get("isStdInitListInitialization");
-            case "is_type_operand" -> definition.getKeyMap().get("typeOperand");
-            default -> null;
-        };
-        if (alias != null) {
-            return alias;
-        }
-        // A few historical keys carry the node family in their name (for
-        // example BuiltinType.kind -> builtinKind). Resolve that convention
-        // only when it is unambiguous in the concrete store definition.
-        DataKey<?> suffix = null;
-        for (DataKey<?> key : definition.getKeys()) {
-            if (normalize(key.getName()).endsWith(normalized)) {
-                if (suffix != null) {
-                    return null;
-                }
-                suffix = key;
-            }
-        }
-        return suffix;
-    }
-
-    private static String camel(String name) {
-        StringBuilder result = new StringBuilder();
-        boolean upper = false;
-        for (char c : name.toCharArray()) {
-            if (c == '_') {
-                upper = true;
-            } else {
-                result.append(upper ? Character.toUpperCase(c) : c);
-                upper = false;
-            }
-        }
-        return result.toString();
-    }
-
-    private static String normalize(String name) {
-        return name.replace("_", "").toLowerCase(Locale.ROOT);
-    }
-
     private Object convertCompound(Message value, DataKey<?> key) {
         if (value instanceof pt.up.fe.specs.clang.wire.TemplateArgument argument) {
             return templateArgument(argument);
@@ -567,7 +326,7 @@ final class ProtoNodeDataReader {
         if (value instanceof pt.up.fe.specs.clang.wire.AsmOutput output) {
             return asmOutput(output);
         }
-        throw new IllegalArgumentException("Unsupported protobuf compound " + value.getDescriptorForType().getName()
+        throw new IllegalArgumentException("Unsupported protobuf compound " + value.getClass().getSimpleName()
                 + " for key " + key.getName());
     }
 
@@ -831,33 +590,6 @@ final class ProtoNodeDataReader {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private void queueOptional(org.suikasoft.jOptions.DataStore.DataClass<?> target, long value, DataKey key) {
         data.getClavaNodes().queueSetOptionalNode(target, key, id.apply(value));
-    }
-
-    private static Message findMessage(Message root, String name) {
-        Message current = root;
-        while (current != null) {
-            for (Map.Entry<FieldDescriptor, Object> entry : current.getAllFields().entrySet()) {
-                if (entry.getKey().getName().equals(name)) {
-                    return (Message) entry.getValue();
-                }
-                if (entry.getKey().getName().equals(BASE) && entry.getValue() instanceof Message) {
-                    Message found = findMessage((Message) entry.getValue(), name);
-                    if (found != null) {
-                        return found;
-                    }
-                }
-            }
-            break;
-        }
-        return null;
-    }
-
-    private static Class<? extends Enum<?>> elementEnum(String fieldName) {
-        return switch (fieldName) {
-            case "c99_qualifiers", "index_type_qualifiers" -> pt.up.fe.specs.clava.ast.type.enums.C99Qualifier.class;
-            case "capture_kinds" -> pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureKind.class;
-            default -> throw new IllegalArgumentException("No enum element type for repeated field " + fieldName);
-        };
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

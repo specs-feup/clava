@@ -24,6 +24,8 @@ if (!wireSchema.isFile()) {
 def protobufVersion = '4.28.3'
 def protocVersion = '4.28.3'
 def protoSchemaHashDir = file("$buildDir/generated/source/proto-schema/main")
+def protoDescriptor = file("$buildDir/generated/proto/main/clava_ast_wire.pb")
+def protoBindingsDir = file("$buildDir/generated/source/proto-bindings/main")
 
 tasks.register('generateProtoSchemaHash') {
     inputs.file wireSchema
@@ -55,6 +57,25 @@ protobuf {
             }
         }
     }
+}
+
+// Generate the Clava adapter from protoc's descriptor set. The adapter is
+// intentionally a build artifact: generated protobuf getters and has*()
+// checks are kept in lockstep with the schema and are never hand-maintained.
+tasks.named('generateProto') {
+    generateDescriptorSet = true
+    descriptorSetOptions.path = protoDescriptor.absolutePath
+}
+
+tasks.register('generateProtoJavaBindings', Exec) {
+    dependsOn tasks.named('generateProto')
+    inputs.file protoDescriptor
+    inputs.file file('tools/generate_proto_java_bindings.py')
+    outputs.file new File(protoBindingsDir, 'pt/up/fe/specs/clang/wire/ProtoGeneratedBindings.java')
+    commandLine 'python3', file('tools/generate_proto_java_bindings.py').absolutePath,
+            '--descriptor', protoDescriptor.absolutePath,
+            '--output', new File(protoBindingsDir,
+                    'pt/up/fe/specs/clang/wire/ProtoGeneratedBindings.java').absolutePath
 }
 
 java {
@@ -96,6 +117,7 @@ sourceSets {
         java {
             srcDir 'src'
             srcDir protoSchemaHashDir
+            srcDir protoBindingsDir
         }
         resources {
             srcDir 'resources'
@@ -114,6 +136,7 @@ sourceSets {
 
 tasks.named('compileJava') {
     dependsOn tasks.named('generateProtoSchemaHash')
+    dependsOn tasks.named('generateProtoJavaBindings')
 }
 
 processResources {
