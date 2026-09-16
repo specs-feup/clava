@@ -13,8 +13,21 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClangCcacheAdapterTest {
+
+    @Test
+    public void recognizesTruthyCcacheDisableValues() {
+        assertTrue(ClangCcacheAdapter.isDisabled("1"));
+        assertTrue(ClangCcacheAdapter.isDisabled(" true "));
+        assertTrue(ClangCcacheAdapter.isDisabled("YES"));
+        assertTrue(ClangCcacheAdapter.isDisabled("on"));
+        assertFalse(ClangCcacheAdapter.isDisabled(null));
+        assertFalse(ClangCcacheAdapter.isDisabled("0"));
+        assertFalse(ClangCcacheAdapter.isDisabled("false"));
+    }
 
     @Test
     public void commandUsesDumpAsThePrimaryOutput() {
