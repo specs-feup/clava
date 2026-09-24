@@ -261,9 +261,9 @@ def plan_data(clava_root: Path, native_tool: Path, js_workspace: Path, repeat_co
 def command_plan(clava_root: Path, native_tool: Path, js_workspace: Path, output_root: Path) -> dict[str, Any]:
     common = ["gradle", "--no-daemon", "--offline", f"-PclangDumperRoot={native_tool.parent.parent}"]
     return {
-        "build_runtime": [*common, "-p", str(clava_root), ":ClavaWeaver:syncClavaJsJavaBinaries"],
-        "fidelity_test": [*common, "-p", str(clava_root), "--rerun-tasks", "test", "--tests", FIDELITY_TEST],
-        "java_smoke": [*common, "-p", str(clava_root), "--rerun-tasks", "test", "--tests", JAVA_SMOKE_TEST],
+        "build_runtime": [*common, "-p", str(clava_root / "ClavaWeaver"), "syncClavaJsJavaBinaries"],
+        "fidelity_test": [*common, "-p", str(clava_root / "ClangAstParser"), "--rerun-tasks", "test", "--tests", FIDELITY_TEST],
+        "java_smoke": [*common, "-p", str(clava_root / "ClangAstParser"), "--rerun-tasks", "test", "--tests", JAVA_SMOKE_TEST],
         "clava_js_workspace": str(js_workspace.resolve()),
         "benchmark_suites": ["clava-js", "java"],
         "ccache_probe": "PATH wrapper records invocation; CCACHE_DISABLE=true must leave it untouched",
@@ -378,7 +378,7 @@ def stage_one_runtime(clava_root: Path, native_tool: Path, output_root: Path) ->
     build_dir.mkdir()
     command = [
         "gradle", "--no-daemon", "--offline", f"-PclangDumperRoot={native_tool.parent.parent}",
-        "-p", str(clava_root), ":ClavaWeaver:syncClavaJsJavaBinaries",
+        "-p", str(clava_root / "ClavaWeaver"), "syncClavaJsJavaBinaries",
     ]
     log_path = build_dir / "run.log"
     with log_path.open("w") as log:
@@ -404,7 +404,7 @@ def gradle_test_command(clava_root: Path, native_tool: Path, test_class: str,
                         extra_args: list[str] | None = None) -> list[str]:
     return [
         "gradle", "--no-daemon", "--offline", f"-PclangDumperRoot={native_tool.parent.parent}",
-        "-p", str(clava_root), "--rerun-tasks", "test", "--tests", test_class, *(extra_args or []),
+        "-p", str(clava_root / "ClangAstParser"), "--rerun-tasks", "test", "--tests", test_class, *(extra_args or []),
     ]
 
 
@@ -665,7 +665,7 @@ def run_timing(stage: dict[str, Any], suite: str, clava_root: Path, native_tool:
         command = [
             "/usr/bin/time", "-f", base.TIME_FORMAT, "-o", str(time_path), "--",
             "gradle", "--no-daemon", "--offline", f"-PclangDumperRoot={native_tool.parent.parent}",
-            "-p", str(clava_root), "--init-script", str(SCRIPT_ROOT / "java-suite.init.gradle"),
+            "-p", str(clava_root / "ClangAstParser"), "--init-script", str(SCRIPT_ROOT / "java-suite.init.gradle"),
             "test",
         ]
         started = time.perf_counter()
