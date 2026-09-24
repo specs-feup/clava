@@ -190,6 +190,22 @@ def source_metadata(clava_root: Path, native_tool: Path, js_workspace: Path) -> 
     }
 
 
+def source_identity_matches(key: str, current: dict[str, Any], recorded: dict[str, Any]) -> bool:
+    if key != "clava_js":
+        return current == recorded
+    # Clava-JS lives in a subtree of a larger repository. Commits outside that
+    # subtree change the enclosing revision without changing benchmark inputs.
+    fields = ("workspace", "repo", "tree", "status", "tree_manifest")
+    return all(current.get(field) == recorded.get(field) for field in fields)
+
+
+def source_metadata_matches(current: dict[str, Any], recorded: dict[str, Any]) -> bool:
+    return all(
+        source_identity_matches(key, current.get(key, {}), recorded.get(key, {}))
+        for key in ("clava", "native", "clava_js", "java_build_dependencies")
+    )
+
+
 def validate_inputs(clava_root: Path, native_tool: Path, js_workspace: Path,
                     dependency_roots: dict[str, Path], require_native: bool) -> None:
     if git_output(clava_root, "rev-parse", "--show-toplevel") != str(clava_root.resolve()):
@@ -341,17 +357,8 @@ def java_environment(stage: dict[str, Any], temp_root: Path, native_tool: Path,
     return environment, marker
 
 
-def java_metrics(log_path: Path, junit_root: Path | None = None) -> list[dict[str, Any]]:
+def metric_events_from_blocks(text_blocks: list[str]) -> list[dict[str, Any]]:
     events: list[dict[str, Any]] = []
-    text_blocks = [log_path.read_text(errors="replace")]
-    if junit_root is not None and junit_root.is_dir():
-        for result_xml in junit_root.glob("*.xml"):
-            try:
-                root = ET.parse(result_xml).getroot()
-            except ET.ParseError:
-                continue
-            for tag in ("system-out", "system-err"):
-                text_blocks.extend((node.text or "") for node in root.findall(tag))
     for block in text_blocks:
         for line in block.splitlines():
             match = re.search(r"(?:PROTOBUF_METRIC|CLAVA_AST_METRIC)\s+(\{.*\})", line)
@@ -363,6 +370,22 @@ def java_metrics(log_path: Path, junit_root: Path | None = None) -> list[dict[st
                 if isinstance(value, dict):
                     events.append(value)
     return events
+
+
+def java_metrics(log_path: Path, junit_root: Path | None = None) -> list[dict[str, Any]]:
+    junit_blocks: list[str] = []
+    if junit_root is not None and junit_root.is_dir():
+        for result_xml in junit_root.glob("*.xml"):
+            try:
+                root = ET.parse(result_xml).getroot()
+            except ET.ParseError:
+                continue
+            for tag in ("system-out", "system-err"):
+                junit_blocks.extend((node.text or "") for node in root.iter(tag))
+    junit_events = metric_events_from_blocks(junit_blocks)
+    if junit_events:
+        return junit_events
+    return metric_events_from_blocks([log_path.read_text(errors="replace")])
 
 
 def metric_aggregate(events: list[dict[str, Any]]) -> dict[str, Any]:
@@ -387,7 +410,8 @@ def metric_aggregate(events: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def metric_validation(events: list[dict[str, Any]], stage: dict[str, Any], suite: str,
-                      marker: Path, ccache_dir: Path) -> dict[str, Any]:
+                      marker: Path, ccache_dir: Path,
+                      enforce_event_count_reference: bool = False) -> dict[str, Any]:
     stats = base.read_ccache_stats(ccache_dir) or {}
     observed_formats = sorted({str(event.get("format", "unknown")) for event in events})
     compressed_values = sorted({event.get("compressed") for event in events}, key=str)
@@ -406,12 +430,14 @@ def metric_validation(events: list[dict[str, Any]], stage: dict[str, Any], suite
         and int(stats.get("hits", 0)) == 0
         and int(stats.get("misses", 0)) == 0
         and "stats_error" not in stats
+        and (not enforce_event_count_reference or event_count_reference_match)
     )
     return {
         "passed": valid,
         "event_count": len(events),
         "expected_event_count_reference": expected_events,
         "event_count_matches_reference": event_count_reference_match,
+        "event_count_reference_enforced": enforce_event_count_reference,
         "format_values": observed_formats,
         "compressed_values": compressed_values,
         "ccache_disabled_values": disabled_values,
@@ -687,8 +713,8 @@ def validate_preflight(preflight_root: Path, current_sources: dict[str, Any], na
     preflight_plan_path = preflight_root / "plan.json"
     preflight_plan = json.loads(preflight_plan_path.read_text())
     sources = preflight_plan["sources"]
-    for key in ("clava", "native", "clava_js"):
-        if current_sources.get(key) != sources.get(key):
+    for key in ("clava", "native", "clava_js", "java_build_dependencies"):
+        if not source_identity_matches(key, current_sources.get(key, {}), sources.get(key, {})):
             raise SystemExit(f"source identity changed since preflight for {key}; rerun --preflight-only")
     if base.sha256_file(native_tool) != gate.get("native_tool_sha256"):
         raise SystemExit("native executable changed since preflight; rerun --preflight-only")
@@ -727,7 +753,10 @@ def run_timing(stage: dict[str, Any], suite: str, clava_root: Path, native_tool:
         elapsed = time.perf_counter() - started
         counts = base.java_counts(result_dir)
         events = java_metrics(log_path, result_dir)
-        validation = metric_validation(events, stage, "java", marker, temp_root / "ccache")
+        validation = metric_validation(
+            events, stage, "java", marker, temp_root / "ccache",
+            enforce_event_count_reference=True,
+        )
         expected_counts = EXPECTED_SUITE_COUNTS["java"]
         counts_match = all(counts.get(key) == value for key, value in expected_counts.items())
         valid = process.returncode == 0 and validation["passed"] and counts_match
@@ -763,7 +792,10 @@ def run_timing(stage: dict[str, Any], suite: str, clava_root: Path, native_tool:
         report = json.loads(report_path.read_text()) if report_path.is_file() else {}
         counts = base.js_counts(report)
         events = java_metrics(log_path)
-        validation = metric_validation(events, stage, "clava-js", marker, temp_root / "ccache")
+        validation = metric_validation(
+            events, stage, "clava-js", marker, temp_root / "ccache",
+            enforce_event_count_reference=True,
+        )
         expected_counts = EXPECTED_SUITE_COUNTS["clava-js"]
         counts_match = all(counts.get(key) == value for key, value in expected_counts.items())
         valid = process.returncode == 0 and validation["passed"] and counts_match
@@ -938,7 +970,7 @@ def main() -> int:
             mismatches = mark_pair_count_mismatches([row for row in results if row["suite"] == suite])
             write_results(output_root, plan, results, mismatches, gate)
     mismatches = mark_pair_count_mismatches(results)
-    if source_metadata(clava_root, native_tool, js_workspace) != current_sources:
+    if not source_metadata_matches(source_metadata(clava_root, native_tool, js_workspace), current_sources):
         for row in results:
             row["valid"] = False
         mismatches.append({"reason": "source or native tool identity changed during timing"})

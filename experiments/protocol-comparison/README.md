@@ -60,6 +60,7 @@ Start with a no-test plan check:
 
 ```sh
 python3 experiments/protocol-comparison/run_dual_ab.py --dry-run
+python3 -B -m unittest discover -s experiments/protocol-comparison -p 'test_run_dual_ab.py'
 ```
 
 Run the fidelity and smoke gate, then inspect `fidelity/gate.json`:
@@ -86,11 +87,14 @@ python3 experiments/protocol-comparison/run_dual_ab.py \
 
 Use `--js-workspace`, `--fixture-c`, or `--fixture-cxx` to point at the exact
 Clava-JS test checkout and supported fidelity fixtures. The plan records the
-Java and native revisions and hashes, the JavaScript subtree revision and tree
-hash, and the staged parser JAR hash. Every timing row checks that the Java
+Clava and native revisions and hashes, composite build dependency revisions
+and worktree state, the Clava-JS enclosing revision plus subtree identity, and
+the staged parser JAR hash. Every timing row checks that the Java
 worker selected the requested format, emitted metrics, reported
 `ccache_disabled=true`, and made no ccache calls. It records the actual
 `compressed` metric rather than treating ccache bypass as a compression mode.
-Text and Protobuf event counts must match within each paired run; a mismatch
-marks both rows invalid. The fidelity snapshot's `data_class` normalization is
-documented in [analysis/README.md](analysis/README.md).
+Full-suite timing rows must also match their 191-event Clava-JS or 247-event
+Java reference total. Smaller fidelity and smoke checks are exempt from those
+full-suite totals. Text and Protobuf event counts must match within each paired
+run; a mismatch marks both rows invalid. The fidelity snapshot's `data_class`
+normalization is documented in [analysis/README.md](analysis/README.md).
