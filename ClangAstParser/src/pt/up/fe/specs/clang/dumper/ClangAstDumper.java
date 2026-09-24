@@ -408,6 +408,9 @@ public class ClangAstDumper {
                 if (textWire) {
                     try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2
                             .newInstance(config.get(ClavaNode.CONTEXT))) {
+                        if (generatedParseRoot != null) {
+                            lineStreamParser.getData().set(ClangAstData.PARSE_ROOT, generatedParseRoot);
+                        }
                         File unparsedDumpFile = SpecsSystem.isDebug()
                                 ? new File(lastWorkingFolder, STDERR_DUMP_FILENAME) : null;
                         linesNotParsed = lineStreamParser.parse(dumpInput, unparsedDumpFile);
