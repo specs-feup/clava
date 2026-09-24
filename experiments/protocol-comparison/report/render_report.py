@@ -26,6 +26,10 @@ STAGES = {
     "flatbuffers": ("FlatBuffers eager", "#d97706"),
 }
 STAGE_ORDER = tuple(STAGES)
+AB_STAGES = {
+    "ab-text": ("Text", "#059669"),
+    "ab-protobuf": ("Protobuf", "#7c3aed"),
+}
 SUITES = {
     "clava-js": {
         "title": "Clava-JS",
@@ -163,6 +167,179 @@ def fmt_seconds(value: float) -> str:
     if value < 100:
         return f"{value:.1f}s"
     return f"{value:.0f}s"
+
+
+def load_ab_result(path: Path) -> dict[str, Any]:
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(manifest, dict) or not isinstance(manifest.get("results"), list):
+        raise ValueError(f"{path} is not a dual-format A/B results manifest")
+    gate = manifest.get("fidelity_gate")
+    if manifest.get("valid") is not True or not isinstance(gate, dict) or gate.get("passed") is not True:
+        raise ValueError(f"{path} has not passed its full A/B and fidelity gates")
+    rows = manifest["results"]
+    expected = int(manifest.get("repeat_count", 0))
+    if expected < 2:
+        raise ValueError(f"{path} needs at least two measured repeats per format")
+    for suite in SUITES:
+        for stage in AB_STAGES:
+            selected = [row for row in rows if isinstance(row, dict) and row.get("suite") == suite
+                        and row.get("stage") == stage and row.get("measured") is True]
+            repeats = {row.get("repeat") for row in selected}
+            if len(selected) != expected or repeats != set(range(1, expected + 1)):
+                raise ValueError(f"{path} has incomplete {suite}/{stage} measured repeats")
+            if any(not is_valid_run(row, suite) or row.get("mode") != "direct" for row in selected):
+                raise ValueError(f"{path} has invalid {suite}/{stage} measured runs")
+            if any(row.get("compressed") is not False or row.get("ccache_disabled") is not True
+                   for row in selected):
+                raise ValueError(f"{path} is not a matched, uncompressed ccache-bypass A/B")
+    return manifest
+
+
+def ab_values(manifest: dict[str, Any], suite: str, stage: str) -> list[tuple[float, dict[str, Any]]]:
+    return sorted(
+        [(value, row) for row in manifest["results"]
+         if isinstance(row, dict) and row.get("suite") == suite and row.get("stage") == stage
+         and row.get("measured") is True and (value := time_value(row)) is not None],
+        key=lambda item: int(item[1]["repeat"]),
+    )
+
+
+def ab_delta(manifest: dict[str, Any], suite: str) -> tuple[float, float, float]:
+    text_values = [value for value, _ in ab_values(manifest, suite, "ab-text")]
+    proto_values = [value for value, _ in ab_values(manifest, suite, "ab-protobuf")]
+    text_median = statistics.median(text_values)
+    proto_median = statistics.median(proto_values)
+    return text_median, proto_median, (proto_median / text_median - 1) * 100
+
+
+def ab_candle_svg(manifest: dict[str, Any], suite: str) -> str:
+    groups = {stage: ab_values(manifest, suite, stage) for stage in AB_STAGES}
+    observed = [value for group in groups.values() for value, _ in group]
+    low, high = min(observed), max(observed)
+    padding = max((high - low) * 0.15, 0.25)
+    low, high = max(0.0, low - padding), high + padding
+    width, height, left, right = 1010, 230, 220, 725
+
+    def x(value: float) -> float:
+        return left + (right - left) * (value - low) / (high - low)
+
+    bits = [
+        f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{esc(SUITES[suite]["title"])} same-revision text and Protobuf wall-time candles" class="candle-chart">',
+        f'<title>{esc(SUITES[suite]["title"])} same-revision A/B wall time</title>',
+        '<desc>Two modes of one native binary and Java runtime. Whiskers show minimum and maximum, boxes the interquartile range, center marks the median, and dots individual paired-repeat results.</desc>',
+    ]
+    for index in range(5):
+        tick = low + (high - low) * index / 4
+        tx = x(tick)
+        bits.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="24" y2="204" class="grid-line"/>')
+        bits.append(f'<text x="{tx:.2f}" y="18" text-anchor="middle" class="axis-text">{esc(axis_label(tick))}</text>')
+    for index, (stage, (label, color)) in enumerate(AB_STAGES.items()):
+        group = groups[stage]
+        values = [value for value, _ in group]
+        y = 82 + index * 84
+        q1, median, q3 = quantile(values, .25), statistics.median(values), quantile(values, .75)
+        bits.append(f'<text x="14" y="{y + 5}" class="stage-text">{esc(label)}</text>')
+        bits.append(f'<line x1="{x(min(values)):.2f}" x2="{x(max(values)):.2f}" y1="{y}" y2="{y}" stroke="{color}" stroke-width="2"/>')
+        for endpoint in (min(values), max(values)):
+            bits.append(f'<line x1="{x(endpoint):.2f}" x2="{x(endpoint):.2f}" y1="{y - 9}" y2="{y + 9}" stroke="{color}" stroke-width="2"/>')
+        bits.append(f'<rect x="{x(q1):.2f}" y="{y - 15}" width="{max(3, x(q3) - x(q1)):.2f}" height="30" rx="4" fill="{color}" fill-opacity=".23" stroke="{color}" stroke-width="1.6"><title>Q1 {esc(fmt_seconds(q1))} to Q3 {esc(fmt_seconds(q3))}</title></rect>')
+        bits.append(f'<line x1="{x(median):.2f}" x2="{x(median):.2f}" y1="{y - 16}" y2="{y + 16}" stroke="{color}" stroke-width="4"/>')
+        for value, row in group:
+            offset = (int(row["repeat"]) % 5 - 2) * 4
+            bits.append(f'<circle cx="{x(value):.2f}" cy="{y + offset}" r="4" fill="{color}" stroke="var(--surface)" stroke-width="1.4"><title>Repeat {esc(row["repeat"])}: {esc(fmt_seconds(value))}</title></circle>')
+        bits.append(f'<text x="755" y="{y + 5}" class="median-label">median {esc(fmt_seconds(median))} · n={len(values)}</text>')
+    bits.append('</svg>')
+    return "".join(bits)
+
+
+def ab_paired_svg(manifest: dict[str, Any]) -> str:
+    pairs: dict[str, list[tuple[int, float]]] = {}
+    for suite in SUITES:
+        text_by_repeat = {int(row["repeat"]): value for value, row in ab_values(manifest, suite, "ab-text")}
+        pairs[suite] = [(int(row["repeat"]), (value / text_by_repeat[int(row["repeat"])] - 1) * 100)
+                        for value, row in ab_values(manifest, suite, "ab-protobuf")]
+    bound = max(5.0, max(abs(delta) for group in pairs.values() for _, delta in group) * 1.15)
+    width, height, left, right = 1010, 240, 230, 790
+
+    def x(value: float) -> float:
+        return left + (right - left) * (value + bound) / (2 * bound)
+
+    bits = [
+        f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="Paired Protobuf versus text wall-time percentage difference for both suites" class="candle-chart">',
+        '<title>Paired wall-time difference for each repeat</title>',
+        '<desc>Each dot is Protobuf wall time minus text wall time in the same rotation pair, divided by text wall time. Left is faster for Protobuf; right is slower. The thick line marks the median paired difference.</desc>',
+    ]
+    for tick in (-bound, -bound / 2, 0, bound / 2, bound):
+        tx = x(tick)
+        bits.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="23" y2="215" class="grid-line"/>')
+        bits.append(f'<text x="{tx:.2f}" y="17" text-anchor="middle" class="axis-text">{tick:+.1f}%</text>')
+    for index, suite in enumerate(SUITES):
+        group = pairs[suite]
+        y = 82 + index * 82
+        median = statistics.median(delta for _, delta in group)
+        color = "#059669" if median < 0 else "#7c3aed"
+        bits.append(f'<text x="12" y="{y + 5}" class="stage-text">{esc(SUITES[suite]["title"])}</text>')
+        for repeat, delta in group:
+            offset = (repeat % 5 - 2) * 7
+            bits.append(f'<circle cx="{x(delta):.2f}" cy="{y + offset}" r="5" fill="{color}" stroke="var(--surface)" stroke-width="1.5"><title>Pair {repeat}: {delta:+.2f}%</title></circle>')
+        bits.append(f'<line x1="{x(median):.2f}" x2="{x(median):.2f}" y1="{y - 26}" y2="{y + 26}" stroke="{color}" stroke-width="4"><title>Median paired change {median:+.2f}%</title></line>')
+        bits.append(f'<text x="810" y="{y + 5}" class="median-label">median pair {median:+.1f}%</text>')
+    bits.append('</svg>')
+    return "".join(bits)
+
+
+def ab_phase_html(manifest: dict[str, Any], suite: str) -> str:
+    fields = (("native_ms", "Native dump process"), ("read_ms", "Read and parse dump"),
+              ("ast_ms", "Build Clava AST"))
+    cards = []
+    for field, title in fields:
+        medians = {}
+        for stage in AB_STAGES:
+            values = [number(row.get("metrics", {}).get(field)) for _, row in ab_values(manifest, suite, stage)]
+            if any(value is None for value in values):
+                raise ValueError(f"A/B phase {field} is missing for {suite}/{stage}")
+            medians[stage] = statistics.median(value for value in values if value is not None)
+        maximum = max(medians.values(), default=1) or 1
+        bars = []
+        for stage, (label, color) in AB_STAGES.items():
+            value = medians[stage]
+            display = f"{value / 1000:.2f}s" if value >= 1000 else f"{value:.0f}ms"
+            bars.append(f'<div class="phase-row"><span>{esc(label)}</span><div class="phase-track"><i style="width:{value / maximum * 100:.1f}%;background:{color}"></i></div><strong>{esc(display)}</strong></div>')
+        cards.append(f'<div class="phase-card"><h4>{esc(title)}</h4>{"".join(bars)}</div>')
+    return "".join(cards)
+
+
+def ab_section(manifest: dict[str, Any]) -> str:
+    comparisons = []
+    candles = []
+    phase_cards = []
+    for suite in SUITES:
+        text_median, proto_median, percent = ab_delta(manifest, suite)
+        comparisons.append(f'{SUITES[suite]["title"]} median: Text {fmt_seconds(text_median)}, Protobuf {fmt_seconds(proto_median)} ({percent:+.1f}%)')
+        candles.append(f'<figure class="chart-card"><figcaption><h3>{esc(SUITES[suite]["title"])}</h3></figcaption>{ab_candle_svg(manifest, suite)}</figure>')
+        phase_cards.append(f'<div class="phase-suite"><h3>{esc(SUITES[suite]["title"])}</h3><div class="phase-grid">{ab_phase_html(manifest, suite)}</div></div>')
+    sources = manifest.get("sources", {})
+    clava_revision = sources.get("clava", {}).get("revision", "not recorded")
+    native_revision = sources.get("native", {}).get("revision", "not recorded")
+    native_hash = sources.get("native", {}).get("tool_sha256", "not recorded")
+    jar_hash = manifest.get("runtime_parser_jar_sha256", "not recorded")
+    repeats = int(manifest["repeat_count"])
+    return f'''<section aria-labelledby="ab-title" class="ab-section">
+    <p class="eyebrow">Controlled follow-up</p><h2 id="ab-title">What changes when the transport path changes?</h2>
+    <p class="takeaway">{esc(" · ".join(comparisons))}. Lower is faster. One Clava revision, one native binary, and one Java runtime select either the text writer and reader or the Protobuf writer and reader.</p>
+    <div class="chart-grid">{"".join(candles)}</div>
+    <figure class="chart-card ab-paired"><figcaption><h3>Within-pair change</h3><p>Protobuf relative to Text · left is faster</p></figcaption>{ab_paired_svg(manifest)}</figure>
+    <p class="small">Each candle summarizes {repeats} valid measured repeats. The paired chart compares the two formats in each rotated repeat. Whiskers are min/max, boxes Q1–Q3, the center mark is the median, and dots are measured runs.</p>
+    <h3 class="phase-title">Where parser work moves</h3>
+    {"".join(phase_cards)}
+    <p class="small">Each bar is the median of per-run time summed across parser calls. Each phase pair has its own scale; bars are not shares of whole-suite wall time. Protobuf decode, record construction, and reference resolution are inside its read phase, so they are not added again.</p>
+    <details class="details-card"><summary>Controlled A/B validation and limits</summary>
+      <p>{repeats} measured repeats per format and suite, plus uncharted warm-ups. Direct mode disables ccache and uses uncompressed completed files. A C and a C++ fixture passed normalized AST graph equality before timing, and both formats passed suite smoke tests. The two modes use the same source revisions and artifact hashes.</p>
+      <p>Graph normalization excludes wire-local IDs, process context, edit-origin references, object identity, and the DataStore dispatch label. Concrete node classes, ordered children, source ranges, references, and populated semantic fields remain compared. The full measured suite tests passed in both modes.</p>
+      <p class="small">Clava commit: <code>{esc(clava_revision)}</code><br>Native commit: <code>{esc(native_revision)}</code><br>Native binary SHA-256: <code>{esc(native_hash)}</code><br>Staged parser JAR SHA-256: <code>{esc(jar_hash)}</code></p>
+      <p>{repeats} repeats on one workstation show workload-specific behavior, not universal format performance. The earlier branch comparison also includes changes beyond the transport path.</p>
+    </details>
+  </section>'''
 
 
 def suite_domain(rows: list[dict[str, Any]], suite: str) -> tuple[float, float]:
@@ -640,6 +817,7 @@ def report_html(
     provenance: dict[str, dict[str, Any]],
     provenance_warnings: list[str] | None = None,
     smoke_note: str | None = None,
+    ab_manifest: dict[str, Any] | None = None,
 ) -> str:
     rows = flatten_results(manifests)
     modes_present = sorted({str(row.get("mode")) for row in rows if row.get("mode") in MODE_ORDER}, key=MODE_ORDER.index)
@@ -647,6 +825,9 @@ def report_html(
     invalid_count = total_runs - valid_runs
     domains = {suite: suite_domain(rows, suite) for suite in SUITES}
     dates = sorted(str(manifest.get("created_at")) for manifest in manifests if manifest.get("created_at"))
+    if ab_manifest is not None and ab_manifest.get("created_at"):
+        dates.append(str(ab_manifest["created_at"]))
+        dates.sort()
     date_text = f"Input runs created {dates[0]}" if dates else "Creation time not recorded in the input manifests"
     if len(dates) > 1:
         date_text += f" through {dates[-1]}"
@@ -699,6 +880,7 @@ def report_html(
     )
     validity = f"{valid_runs:,}/{total_runs:,} valid invocations · {measured_count:,} measured · {warmup_count:,} warm-ups · {invalid_count:,} invalid"
     worktree_notes = provenance_worktree_note(provenance)
+    controlled_ab = ab_section(ab_manifest) if ab_manifest is not None else ""
 
     return f'''<!doctype html>
 <html lang="en">
@@ -757,6 +939,16 @@ def report_html(
     .branch-labels .sub-label {{ fill:var(--muted); font-size:12px; font-weight:500; }}
     .cache-grid {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:14px 0 28px; }}
     .cache-card {{ padding:16px; }} .cache-card p:last-child {{ margin-bottom:0; }}
+    .ab-section {{ margin:44px 0; }} .ab-section>.chart-grid {{ margin:16px 0; }}
+    .ab-paired {{ margin:16px 0; }} .phase-title {{ margin:22px 0 12px; }}
+    .phase-suite {{ margin:14px 0; }} .phase-suite>h3 {{ margin:0 0 10px; }}
+    .phase-grid {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }}
+    .phase-card {{ min-width:0; padding:16px; border:1px solid var(--line); border-radius:14px; background:var(--surface); }}
+    .phase-card h4 {{ margin:0 0 12px; font-size:.95rem; }}
+    .phase-row {{ display:grid; grid-template-columns:66px minmax(30px,1fr) 60px; gap:7px; align-items:center; margin:8px 0; font-size:.78rem; }}
+    .phase-row strong {{ text-align:right; font-size:.78rem; }}
+    .phase-track {{ height:12px; border-radius:7px; background:var(--grid); overflow:hidden; }}
+    .phase-track i {{ display:block; min-width:2px; height:100%; border-radius:7px; }}
     details {{ margin:14px 0; }} summary {{ cursor:pointer; font-weight:700; }}
     .details-card {{ padding:18px 20px; }} .details-card summary {{ margin:-18px -20px; padding:18px 20px; }}
     .details-card[open] summary {{ margin-bottom:14px; border-bottom:1px solid var(--line); }}
@@ -767,7 +959,7 @@ def report_html(
     .legend {{ display:flex; flex-wrap:wrap; gap:10px 18px; color:var(--muted); font-size:.84rem; }}
     .legend span {{ display:inline-flex; align-items:center; gap:7px; }} .swatch {{ width:12px; height:12px; border-radius:3px; }}
     .footer-note {{ margin-top:28px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:.85rem; }}
-    @media(max-width:800px) {{ .trend-grid,.cache-grid {{ grid-template-columns:1fr; }} .section-heading {{ display:block; }} .section-heading>p {{ text-align:left; margin-top:8px; }} }}
+    @media(max-width:800px) {{ .trend-grid,.cache-grid,.phase-grid {{ grid-template-columns:1fr; }} .section-heading {{ display:block; }} .section-heading>p {{ text-align:left; margin-top:8px; }} }}
     @media(max-width:650px) {{ main {{ width:min(100% - 20px,1180px); margin-top:18px; }} .hero {{ padding:22px 18px; }} .chart-card {{ padding:14px 8px 10px; }} .chart-card figcaption {{ display:block; }} .chart-card figcaption p {{ text-align:left; margin-bottom:0; }} .candle-chart {{ min-width:760px; }} .chart-card,.trend-card {{ overflow-x:auto; }} .trend-chart {{ min-width:480px; }} .branch-chart {{ min-width:700px; }} .branch-card {{ overflow-x:auto; }} }}
   </style>
 </head>
@@ -789,6 +981,7 @@ def report_html(
     <div class="trend-grid">{trend_charts}</div>
     <p class="small">Lower is faster. Colored lines show text + ccache, protobuf, and eager FlatBuffers. The dashed line repeats the Direct pre-cache median as a reference with no cache state.</p>
   </section>
+  {controlled_ab}
   <section aria-labelledby="charts-title">
     <p class="eyebrow">Run distributions</p><h2 id="charts-title">Six candle charts show the spread</h2>
     <p class="small">Every cache-state panel uses the same padded, nonzero time scale within its suite. The Direct pre-cache candle is repeated in Cold and Warm as a reference, not as a measurement in those states. One dot is one valid measured repeat.</p>
@@ -832,10 +1025,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, action="append", required=True, help="results.json manifest; repeat once per cache state")
     parser.add_argument("--output", type=Path, required=True, help="HTML output path, or '-' for stdout")
+    parser.add_argument("--ab-results", type=Path, help="passed same-revision text/Protobuf A/B results.json")
     args = parser.parse_args()
     try:
         manifests, provenance, warnings = load_inputs(args.input)
-        rendered = report_html(manifests, provenance, warnings)
+        ab_manifest = load_ab_result(args.ab_results) if args.ab_results else None
+        rendered = report_html(manifests, provenance, warnings, ab_manifest=ab_manifest)
     except (OSError, json.JSONDecodeError, ValueError) as error:
         print(f"render_report.py: {error}", file=sys.stderr)
         return 2
