@@ -311,6 +311,7 @@ public class ClangAstDumper {
         File dumpFile = null;
         boolean useAstDumpCache = false;
         long transportNanos = 0L;
+        long readNanos = 0L;
         ProtoAstReader.Result wireResult = null;
 
         try {
@@ -385,9 +386,13 @@ public class ClangAstDumper {
             }
 
             String linesNotParsed = "";
+            long readStart = Boolean.getBoolean("clava.astWireMetrics") ? System.nanoTime() : 0L;
             try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
                     InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {
                 wireResult = ProtoAstReader.read(dumpInput, config.get(ClavaNode.CONTEXT), generatedParseRoot, id);
+            }
+            if (readStart != 0L) {
+                readNanos = System.nanoTime() - readStart;
             }
 
             parsedData = wireResult.data();
@@ -417,7 +422,7 @@ public class ClangAstDumper {
         long astConstructionNanos = System.nanoTime() - astConstructionStart;
         parsedData.set(ClangAstData.AST_CONSTRUCTION_NANOS, astConstructionNanos);
         boolean cacheRestored = useAstDumpCache && !isCcacheDisabled();
-        reportProtobufMetrics(dumpFile, useAstDumpCache, cacheRestored, transportNanos, wireResult.metrics(),
+        reportProtobufMetrics(dumpFile, useAstDumpCache, cacheRestored, transportNanos, readNanos, wireResult.metrics(),
                 astConstructionNanos);
 
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
@@ -431,7 +436,7 @@ public class ClangAstDumper {
      * formatting, heap probing, or clock reads beyond the existing timings.
      */
     private void reportProtobufMetrics(File dumpFile, boolean compressed, boolean cacheRestored, long transportNanos,
-            ProtoAstReader.Metrics wireMetrics, long astConstructionNanos) {
+            long readNanos, ProtoAstReader.Metrics wireMetrics, long astConstructionNanos) {
         if (!Boolean.getBoolean("clava.astWireMetrics")) {
             return;
         }
@@ -442,13 +447,13 @@ public class ClangAstDumper {
 
         String json = String.format(Locale.ROOT,
                 "{\"format\":\"protobuf\",\"native_ms\":%.3f,"
-                        + "\"cache_restore_ms\":%.3f,\"decode_ms\":%.3f,"
+                        + "\"cache_restore_ms\":%.3f,\"read_ms\":%.3f,\"decode_ms\":%.3f,"
                         + "\"record_ms\":%.3f,\"reference_ms\":%.3f,"
                         + "\"ast_ms\":%.3f,\"frames\":%d,\"records\":%d,"
                         + "\"nodes\":%d,\"files\":%d,\"encoded_bytes\":%d,"
                         + "\"dump_bytes\":%d,\"compressed\":%s,\"cached\":%s,"
                         + "\"ccache_disabled\":%s}",
-                nativeMillis, cacheMillis,
+                nativeMillis, cacheMillis, nanosToMillis(readNanos),
                 nanosToMillis(wireMetrics.protobufDecodeNanos()),
                 nanosToMillis(wireMetrics.recordConstructionNanos()),
                 nanosToMillis(wireMetrics.referenceResolutionNanos()),
