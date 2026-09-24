@@ -27,7 +27,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.ClangAstPathResolver;
-import pt.up.fe.specs.clang.parsers.ClavaNodeParser;
+import pt.up.fe.specs.clang.parsers.ProtoClavaNodeParser;
 import pt.up.fe.specs.clang.parsers.util.PragmasLocations;
 import pt.up.fe.specs.clang.version.Clang_3_8;
 import pt.up.fe.specs.clava.Include;
@@ -175,7 +175,7 @@ public final class ProtoAstReader {
         }
         initialize(data);
 
-        var nodeParser = new ClavaNodeParser(Clang_3_8.getClassesService());
+        var nodeParser = new ProtoClavaNodeParser(Clang_3_8.getClassesService());
         nodeParser.init(data);
         Files files = new Files(scope);
         Map<String, String> pendingClasses = new LinkedHashMap<>();
@@ -350,7 +350,7 @@ public final class ProtoAstReader {
         }
     }
 
-    private static void readRecord(Record record, ClangAstData data, Files files, ClavaNodeParser nodeParser,
+    private static void readRecord(Record record, ClangAstData data, Files files, ProtoClavaNodeParser nodeParser,
             Map<String, String> pendingClasses, Map<String, String> nodeClasses, Set<String> classesSeen,
             Set<String> childrenSeen, Set<String> nodeIdsSeen, Set<Long> denseNodeIds, long[] nodes) {
         switch (record.getRecordCase()) {
@@ -423,7 +423,7 @@ public final class ProtoAstReader {
         return value;
     }
 
-    private static void flushClass(String id, Map<String, String> pendingClasses, ClavaNodeParser nodeParser,
+    private static void flushClass(String id, Map<String, String> pendingClasses, ProtoClavaNodeParser nodeParser,
             ClangAstData data) {
         String className = pendingClasses.get(id);
         if (className != null && data.get(ClangAstData.NODE_DATA).containsKey(id)) {

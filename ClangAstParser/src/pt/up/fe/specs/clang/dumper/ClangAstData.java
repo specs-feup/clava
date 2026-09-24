@@ -27,6 +27,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
+import pt.up.fe.specs.clang.parsers.VisitingChildrenCheck;
 import pt.up.fe.specs.clang.parsers.util.PragmasLocations;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -96,6 +97,19 @@ public class ClangAstData extends ADataClass<ClangAstData> {
     // (Map<String, ClangNode>) new HashMap<String, ClangNode>());
 
     public final static DataKey<String> LINES_NOT_PARSED = KeyFactory.string("clang_dumper_parser_warnings");
+
+    // Retained only in the isolated dual-format experiment for the legacy text reader.
+    public final static DataKey<Set<String>> NODES_CURRENTLY_BEING_PARSED = KeyFactory
+            .generic("nodesCurrentlyBeingParsed", (Set<String>) new HashSet<String>());
+
+    public final static DataKey<List<String>> CURRENT_NODE_VISIT_CHAIN = KeyFactory
+            .generic("currentNodeVisitChain", (List<String>) new ArrayList<String>());
+
+    public final static DataKey<VisitingChildrenCheck> VISITING_CHILDREN = KeyFactory
+            .object("visitingChildren", VisitingChildrenCheck.class);
+
+    public final static DataKey<Map<String, String>> SKIPPED_NODES_MAP = KeyFactory.generic(
+            "skippedNodesMap", new HashMap<>());
 
     public final static DataKey<PragmasLocations> PRAGMAS_LOCATIONS = KeyFactory.object("pragmasLocations",
             PragmasLocations.class);
