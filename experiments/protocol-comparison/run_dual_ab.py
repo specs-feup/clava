@@ -23,6 +23,7 @@ import subprocess
 import sys
 import time
 from typing import Any
+import xml.etree.ElementTree as ET
 
 sys.dont_write_bytecode = True
 
@@ -298,8 +299,10 @@ def command_plan(clava_root: Path, native_tool: Path, js_workspace: Path, output
     common = ["gradle", "--no-daemon", "--offline", f"-PclangDumperRoot={native_tool.parent.parent}"]
     return {
         "build_runtime": [*common, "-p", str(clava_root / "ClavaWeaver"), "syncClavaJsJavaBinaries"],
-        "fidelity_test": [*common, "-p", str(clava_root / "ClangAstParser"), "--rerun-tasks", "test", "--tests", FIDELITY_TEST],
-        "java_smoke": [*common, "-p", str(clava_root / "ClangAstParser"), "--rerun-tasks", "test", "--tests", JAVA_SMOKE_TEST],
+        "fidelity_test": [*common, "-p", str(clava_root / "ClangAstParser"), "--rerun-tasks", "test", "--tests", FIDELITY_TEST,
+                           "-x", "jacocoTestReport", "-x", "jacocoTestCoverageVerification"],
+        "java_smoke": [*common, "-p", str(clava_root / "ClangAstParser"), "--rerun-tasks", "test", "--tests", JAVA_SMOKE_TEST,
+                       "-x", "jacocoTestReport", "-x", "jacocoTestCoverageVerification"],
         "clava_js_workspace": str(js_workspace.resolve()),
         "benchmark_suites": ["clava-js", "java"],
         "ccache_probe": "PATH wrapper records invocation; CCACHE_DISABLE=true must leave it untouched",
@@ -338,17 +341,27 @@ def java_environment(stage: dict[str, Any], temp_root: Path, native_tool: Path,
     return environment, marker
 
 
-def java_metrics(log_path: Path) -> list[dict[str, Any]]:
+def java_metrics(log_path: Path, junit_root: Path | None = None) -> list[dict[str, Any]]:
     events: list[dict[str, Any]] = []
-    for line in log_path.read_text(errors="replace").splitlines():
-        match = re.search(r"(?:PROTOBUF_METRIC|CLAVA_AST_METRIC)\s+(\{.*\})", line)
-        if match:
+    text_blocks = [log_path.read_text(errors="replace")]
+    if junit_root is not None and junit_root.is_dir():
+        for result_xml in junit_root.glob("*.xml"):
             try:
-                value = json.loads(match.group(1))
-            except json.JSONDecodeError:
+                root = ET.parse(result_xml).getroot()
+            except ET.ParseError:
                 continue
-            if isinstance(value, dict):
-                events.append(value)
+            for tag in ("system-out", "system-err"):
+                text_blocks.extend((node.text or "") for node in root.findall(tag))
+    for block in text_blocks:
+        for line in block.splitlines():
+            match = re.search(r"(?:PROTOBUF_METRIC|CLAVA_AST_METRIC)\s+(\{.*\})", line)
+            if match:
+                try:
+                    value = json.loads(match.group(1))
+                except json.JSONDecodeError:
+                    continue
+                if isinstance(value, dict):
+                    events.append(value)
     return events
 
 
@@ -440,7 +453,8 @@ def gradle_test_command(clava_root: Path, native_tool: Path, test_class: str,
                         extra_args: list[str] | None = None) -> list[str]:
     return [
         "gradle", "--no-daemon", "--offline", f"-PclangDumperRoot={native_tool.parent.parent}",
-        "-p", str(clava_root / "ClangAstParser"), "--rerun-tasks", "test", "--tests", test_class, *(extra_args or []),
+        "-p", str(clava_root / "ClangAstParser"), "--rerun-tasks", "test", "--tests", test_class,
+        "-x", "jacocoTestReport", "-x", "jacocoTestCoverageVerification", *(extra_args or []),
     ]
 
 
@@ -467,7 +481,8 @@ def run_java_test(stage: dict[str, Any], clava_root: Path, native_tool: Path,
         process = subprocess.run(command, cwd=clava_root, env=env, stdout=log, stderr=subprocess.STDOUT, check=False)
     wall = time.perf_counter() - started
     counts = base.java_counts(result_dir)
-    events = java_metrics(log_path)
+    expected_tests = 1 if test_class == FIDELITY_TEST else 3 if test_class == JAVA_SMOKE_TEST else None
+    events = java_metrics(log_path, result_dir)
     metric_result = metric_validation(events, stage, "java", marker, temp_root / "ccache")
     result = {
         "suite": "java", "stage": stage["key"], "wire": stage["wire"], "label": label,
@@ -476,7 +491,9 @@ def run_java_test(stage: dict[str, Any], clava_root: Path, native_tool: Path,
         "metric_validation": metric_result, "metric_event_count": len(events),
         "metrics": metric_aggregate(events), "runtime_parser_jar_sha256": None,
         **base.parse_time(time_path), **counts,
-        "valid": process.returncode == 0 and metric_result["passed"] and counts["failed_tests"] == 0,
+        "valid": process.returncode == 0 and metric_result["passed"]
+        and counts["failed_tests"] == 0 and counts["skipped_tests"] == 0
+        and (expected_tests is None or (counts["total_tests"] == expected_tests and counts["passed_tests"] == expected_tests)),
         "command": command, "run_dir": str(run_dir),
     }
     save_json(run_dir / "summary.json", result)
@@ -709,7 +726,7 @@ def run_timing(stage: dict[str, Any], suite: str, clava_root: Path, native_tool:
             process = subprocess.run(command, cwd=clava_root, env=env, stdout=log, stderr=subprocess.STDOUT, check=False)
         elapsed = time.perf_counter() - started
         counts = base.java_counts(result_dir)
-        events = java_metrics(log_path)
+        events = java_metrics(log_path, result_dir)
         validation = metric_validation(events, stage, "java", marker, temp_root / "ccache")
         expected_counts = EXPECTED_SUITE_COUNTS["java"]
         counts_match = all(counts.get(key) == value for key, value in expected_counts.items())
@@ -888,7 +905,7 @@ def main() -> int:
                                  fixture_c, fixture_cxx, output_root)
         gate["staged_runtime"] = str(runtime)
         save_json(output_root / "fidelity" / "gate.json", gate)
-        print(json.dumps({"preflight_passed": gate["passed"], "gate": str(output_root / "fidelity/gate.json")}, flush=True))
+        print(json.dumps({"preflight_passed": gate["passed"], "gate": str(output_root / "fidelity/gate.json")}), flush=True)
         return 0 if gate["passed"] else 1
 
     current_sources = source_metadata(clava_root, native_tool, js_workspace)
