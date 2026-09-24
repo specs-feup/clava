@@ -122,6 +122,22 @@ def directory_hash(root: Path, excluded_names: set[str]) -> dict[str, Any]:
     }
 
 
+def configure_gradle_dependency_roots(js_workspace: Path) -> dict[str, Path]:
+    project_root = js_workspace.parents[1]
+    defaults = {
+        "SPECS_JAVA_LIBS_HOME": project_root / "specs-java-libs",
+        "LARA_FRAMEWORK_HOME": project_root / "lara-framework",
+    }
+    roots: dict[str, Path] = {}
+    for variable, default in defaults.items():
+        root = Path(os.environ.get(variable, default)).resolve()
+        if not root.is_dir():
+            raise SystemExit(f"Gradle composite dependency path is missing ({variable}): {root}")
+        os.environ[variable] = str(root)
+        roots[variable] = root
+    return roots
+
+
 def source_metadata(clava_root: Path, native_tool: Path, js_workspace: Path) -> dict[str, Any]:
     native_root = native_tool.parent.parent
     js_repo = Path(git_output(js_workspace, "rev-parse", "--show-toplevel"))
@@ -135,6 +151,17 @@ def source_metadata(clava_root: Path, native_tool: Path, js_workspace: Path) -> 
         ["git", "-C", str(js_repo), "status", "--porcelain=v1", "--untracked-files=all", "--", js_relative],
         text=True, capture_output=True, check=False,
     ) if js_relative != "unknown" else None
+    dependency_repos = {
+        variable: {
+            "root": value,
+            "revision": git_output(Path(value), "rev-parse", "HEAD"),
+            "dirty": git_dirty_fingerprint(Path(value)),
+        }
+        for variable, value in (
+            ("SPECS_JAVA_LIBS_HOME", os.environ.get("SPECS_JAVA_LIBS_HOME")),
+            ("LARA_FRAMEWORK_HOME", os.environ.get("LARA_FRAMEWORK_HOME")),
+        ) if value
+    }
     return {
         "clava": {
             "root": str(clava_root.resolve()),
@@ -158,10 +185,12 @@ def source_metadata(clava_root: Path, native_tool: Path, js_workspace: Path) -> 
             "status": js_status.stdout.splitlines() if js_status else [],
             "tree_manifest": directory_hash(js_workspace, {".git", "node_modules", "java-binaries"}),
         },
+        "java_build_dependencies": dependency_repos,
     }
 
 
-def validate_inputs(clava_root: Path, native_tool: Path, js_workspace: Path, require_native: bool) -> None:
+def validate_inputs(clava_root: Path, native_tool: Path, js_workspace: Path,
+                    dependency_roots: dict[str, Path], require_native: bool) -> None:
     if git_output(clava_root, "rev-parse", "--show-toplevel") != str(clava_root.resolve()):
         raise SystemExit(f"--clava-root must be the scratch Clava Git root: {clava_root}")
     if not (clava_root / "ClangAstParser" / "build.gradle").is_file():
@@ -180,6 +209,13 @@ def validate_inputs(clava_root: Path, native_tool: Path, js_workspace: Path, req
     helper = js_workspace.parents[1] / "node_modules" / "@specs-feup" / "lara" / "vitest" / "weaverVitestConfig.ts"
     if not helper.is_file():
         raise SystemExit(f"missing Clava-JS Vitest helper: {helper}")
+    required_build_files = {
+        "SPECS_JAVA_LIBS_HOME": "jOptions/settings.gradle",
+        "LARA_FRAMEWORK_HOME": "LangSpec2/settings.gradle",
+    }
+    for variable, root in dependency_roots.items():
+        if not (root / required_build_files[variable]).is_file():
+            raise SystemExit(f"Gradle composite dependency is incomplete ({variable}): {root}")
     if base.git_value(native_tool.parent.parent, "rev-parse", "--show-toplevel") == "unknown":
         raise SystemExit(f"native tool parent is not a Git checkout: {native_tool.parent.parent}")
 
@@ -817,9 +853,11 @@ def main() -> int:
     clava_root = args.clava_root.resolve()
     native_tool = args.native_tool.resolve()
     js_workspace = args.js_workspace.resolve()
+    dependency_roots = configure_gradle_dependency_roots(js_workspace)
     fixture_c = args.fixture_c.resolve()
     fixture_cxx = args.fixture_cxx.resolve()
-    validate_inputs(clava_root, native_tool, js_workspace, require_native=not args.dry_run)
+    validate_inputs(clava_root, native_tool, js_workspace, dependency_roots,
+                    require_native=not args.dry_run)
     if not args.dry_run:
         for fixture in (fixture_c, fixture_cxx):
             if not fixture.is_file():
