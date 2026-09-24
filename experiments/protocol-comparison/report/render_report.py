@@ -165,11 +165,67 @@ def fmt_seconds(value: float) -> str:
     return f"{value:.0f}s"
 
 
+def suite_domain(rows: list[dict[str, Any]], suite: str) -> tuple[float, float]:
+    values = [
+        value for row in rows
+        if row.get("suite") == suite and row.get("stage") in STAGES
+        and row.get("mode") in MODE_ORDER and is_measured(row) and is_valid_run(row, suite)
+        if (value := time_value(row)) is not None
+    ]
+    if not values:
+        return 0.01, 1.0
+    # Keep all three cache-state panels on one useful scale without allowing an
+    # isolated extreme run to flatten every quartile box. Values beyond the
+    # padded Tukey fence remain in the data and are marked at the chart edge.
+    q1 = quantile(values, 0.25)
+    q3 = quantile(values, 0.75)
+    iqr = q3 - q1
+    low = min(values)
+    raw_high = max(values)
+    upper_fence = q3 + 1.5 * iqr
+    # Zoom only when the largest observation is clearly separated from the
+    # ordinary range; modest high runs remain inside the full padded scale.
+    if raw_high > upper_fence * 1.10:
+        high = max(value for value in values if value <= upper_fence)
+    else:
+        high = raw_high
+    padding = max((high - low) * 0.12, high * 0.025, 0.25)
+    return max(0.01, low - padding), high + padding
+
+
+def chart_zoom_notes(rows: list[dict[str, Any]], domains: dict[str, tuple[float, float]]) -> str:
+    notes = []
+    for suite, (low, high) in domains.items():
+        clipped = [
+            row for row in rows
+            if row.get("suite") == suite and row.get("stage") in STAGES
+            and row.get("mode") in MODE_ORDER and is_measured(row) and is_valid_run(row, suite)
+            and (value := time_value(row)) is not None and (value < low or value > high)
+        ]
+        if not clipped:
+            continue
+        labels = [
+            f'{MODES[row["mode"]].split(" ")[0]} {stage_title(str(row["stage"]))} {time_value(row):.2f}s'
+            for row in sorted(clipped, key=lambda item: time_value(item) or 0)
+        ]
+        notes.append(
+            f'<p class="zoom-note">{esc(SUITES[suite]["title"])} charts share a zoomed scale from '
+            f'{esc(axis_label(low))} to {esc(axis_label(high))}. Edge triangles mark clipped values: '
+            f'{esc("; ".join(labels))}. Full measurements remain available in each marker tooltip.</p>'
+        )
+    return "".join(notes)
+
+
+def axis_label(value: float) -> str:
+    return f"{value:.0f}s" if value >= 10 else f"{value:.1f}s"
+
+
 def chart_svg(
     suite: str,
     mode: str,
     rows: list[dict[str, Any]],
     provenance: dict[str, dict[str, Any]],
+    domain: tuple[float, float],
 ) -> str:
     points: dict[str, list[tuple[float, dict[str, Any]]]] = {key: [] for key in STAGE_ORDER}
     excluded: dict[str, int] = {key: 0 for key in STAGE_ORDER}
@@ -202,12 +258,13 @@ def chart_svg(
     top = 45
     lane = 68
     height = top + lane * len(STAGE_ORDER) + 28
-    max_value = max(all_values) * 1.08
-    if max_value <= 0:
-        max_value = 1.0
+    domain_low, domain_high = domain
 
     def x(value: float) -> float:
-        return left + (right - left) * value / max_value
+        return left + (right - left) * (value - domain_low) / (domain_high - domain_low)
+
+    def clipped_x(value: float) -> float:
+        return min(right, max(left, x(value)))
 
     bits = [
         f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{esc(SUITES[suite]["title"])} wall time distribution in {esc(MODES[mode])}" class="candle-chart">',
@@ -216,10 +273,10 @@ def chart_svg(
     ]
     tick_count = 4
     for index in range(tick_count + 1):
-        tick = max_value * index / tick_count
+        tick = domain_low + (domain_high - domain_low) * index / tick_count
         tx = x(tick)
         bits.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="22" y2="{height - 22}" class="grid-line"/>')
-        bits.append(f'<text x="{tx:.2f}" y="17" text-anchor="middle" class="axis-text">{esc(fmt_seconds(tick))}</text>')
+        bits.append(f'<text x="{tx:.2f}" y="17" text-anchor="middle" class="axis-text">{esc(axis_label(tick))}</text>')
 
     for index, key in enumerate(STAGE_ORDER):
         y = top + index * lane + lane / 2
@@ -241,21 +298,38 @@ def chart_svg(
         q1 = quantile(values, 0.25)
         median = statistics.median(values)
         q3 = quantile(values, 0.75)
-        xlow, xhigh, xq1, xq3, xmed = (x(v) for v in (low, high, q1, q3, median))
+        xlow, xhigh = clipped_x(low), clipped_x(high)
+        xq1, xq3, xmed = (clipped_x(v) for v in (q1, q3, median))
         box_width = max(3, xq3 - xq1)
         bits.append(f'<line x1="{xlow:.2f}" x2="{xhigh:.2f}" y1="{y:.2f}" y2="{y:.2f}" stroke="{color}" stroke-width="2"/>')
         bits.append(f'<line x1="{xlow:.2f}" x2="{xlow:.2f}" y1="{y - 8:.2f}" y2="{y + 8:.2f}" stroke="{color}" stroke-width="2"/>')
         bits.append(f'<line x1="{xhigh:.2f}" x2="{xhigh:.2f}" y1="{y - 8:.2f}" y2="{y + 8:.2f}" stroke="{color}" stroke-width="2"/>')
-        bits.append(f'<rect x="{xq1:.2f}" y="{y - 14:.2f}" width="{box_width:.2f}" height="28" rx="4" fill="{color}" fill-opacity=".22" stroke="{color}" stroke-width="1.6"/>')
+        bits.append(
+            f'<rect x="{xq1:.2f}" y="{y - 14:.2f}" width="{box_width:.2f}" height="28" rx="4" fill="{color}" fill-opacity=".22" stroke="{color}" stroke-width="1.6">'
+            f'<title>Q1 {esc(fmt_seconds(q1))} to Q3 {esc(fmt_seconds(q3))}</title></rect>'
+        )
         bits.append(f'<line x1="{xmed:.2f}" x2="{xmed:.2f}" y1="{y - 15:.2f}" y2="{y + 15:.2f}" stroke="{color}" stroke-width="4"/>')
         for run_index, (value, row) in enumerate(points[key]):
             jitter = ((run_index % 5) - 2) * 4
             repeat = row.get("repeat")
-            bits.append(
-                f'<circle cx="{x(value):.2f}" cy="{y + jitter:.2f}" r="4" fill="{color}" stroke="var(--surface)" stroke-width="1.4">'
-                f'<title>{esc(label)} · repeat {esc(repeat if repeat is not None else run_index + 1)}: {esc(fmt_seconds(value))}, valid run'
-                f'{", from Direct mode" if is_reference else ""}</title></circle>'
+            title = (
+                f'{esc(label)} · repeat {esc(repeat if repeat is not None else run_index + 1)}: '
+                f'{esc(fmt_seconds(value))}, valid run{", from Direct mode" if is_reference else ""}'
             )
+            if value < domain_low or value > domain_high:
+                edge_x = clipped_x(value)
+                direction = "left" if value < domain_low else "right"
+                points_to = (
+                    f'M {edge_x + 7:.2f} {y + jitter - 5:.2f} L {edge_x - 1:.2f} {y + jitter:.2f} L {edge_x + 7:.2f} {y + jitter + 5:.2f} Z'
+                    if direction == "left" else
+                    f'M {edge_x - 7:.2f} {y + jitter - 5:.2f} L {edge_x + 1:.2f} {y + jitter:.2f} L {edge_x - 7:.2f} {y + jitter + 5:.2f} Z'
+                )
+                bits.append(f'<path d="{points_to}" fill="{color}" stroke="var(--surface)" stroke-width="1.4"><title>{title}; clipped at {direction} axis edge</title></path>')
+            else:
+                bits.append(
+                    f'<circle cx="{clipped_x(value):.2f}" cy="{y + jitter:.2f}" r="4" fill="{color}" stroke="var(--surface)" stroke-width="1.4">'
+                    f'<title>{title}</title></circle>'
+                )
         count = len(values)
         detail = f"median {fmt_seconds(median)} · n={count}"
         if excluded[key]:
@@ -276,6 +350,55 @@ def median_for(rows: list[dict[str, Any]], suite: str, mode: str, stage: str) ->
     return statistics.median(clean) if clean else None
 
 
+def median_trend_svg(suite: str, rows: list[dict[str, Any]], domain: tuple[float, float]) -> str:
+    width, height = 520, 285
+    left, right, top, bottom = 62, 506, 35, 232
+    domain_low, domain_high = domain
+    x_positions = [left + (right - left) * index / 2 for index in range(3)]
+
+    def y(value: float) -> float:
+        bounded = min(domain_high, max(domain_low, value))
+        return bottom - (bottom - top) * (bounded - domain_low) / (domain_high - domain_low)
+
+    bits = [
+        f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{esc(SUITES[suite]["title"])} median wall time across Direct, Cold, and Warm" class="trend-chart">',
+        f'<title>{esc(SUITES[suite]["title"])} median trend</title>',
+        '<desc>Three colored lines compare text with ccache, protobuf, and eager FlatBuffers. A dashed gray horizontal line repeats the Direct pre-cache median as a reference with no cache state.</desc>',
+    ]
+    for index in range(5):
+        tick = domain_low + (domain_high - domain_low) * index / 4
+        ty = y(tick)
+        bits.append(f'<line x1="{left}" x2="{right}" y1="{ty:.2f}" y2="{ty:.2f}" class="grid-line"/>')
+        bits.append(f'<text x="{left - 8}" y="{ty + 4:.2f}" text-anchor="end" class="axis-text">{esc(axis_label(tick))}</text>')
+    for index, mode in enumerate(MODE_ORDER):
+        tx = x_positions[index]
+        bits.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="{top}" y2="{bottom}" class="grid-line"/>')
+        bits.append(f'<text x="{tx:.2f}" y="{bottom + 22}" text-anchor="middle" class="axis-text">{esc(MODES[mode].replace(" (no ccache)", ""))}</text>')
+
+    baseline = median_for(rows, suite, "direct", "before-cache")
+    if baseline is not None:
+        baseline_y = y(baseline)
+        bits.append(f'<line x1="{left}" x2="{right}" y1="{baseline_y:.2f}" y2="{baseline_y:.2f}" stroke="#64748b" stroke-width="2" stroke-dasharray="6 5"/>')
+        bits.append(f'<text x="{right - 2}" y="{baseline_y - 5:.2f}" text-anchor="end" class="reference-label">Pre-cache Direct reference {esc(fmt_seconds(baseline))}</text>')
+
+    for stage in ("ccache-text", "protobuf", "flatbuffers"):
+        color = STAGES[stage][1]
+        values = [median_for(rows, suite, mode, stage) for mode in MODE_ORDER]
+        existing = [(x_positions[index], value, MODE_ORDER[index]) for index, value in enumerate(values) if value is not None]
+        if len(existing) > 1:
+            path = " ".join(("M" if index == 0 else "L") + f" {x_pos:.2f} {y(value):.2f}" for index, (x_pos, value, _) in enumerate(existing))
+            bits.append(f'<path d="{path}" fill="none" stroke="{color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>')
+        for x_pos, value, mode in existing:
+            cy = y(value)
+            bits.append(
+                f'<circle cx="{x_pos:.2f}" cy="{cy:.2f}" r="5" fill="{color}" stroke="var(--surface)" stroke-width="2">'
+                f'<title>{esc(stage_title(stage))}, {esc(MODES[mode])}: median {esc(fmt_seconds(value))}</title></circle>'
+            )
+    bits.append(f'<text x="14" y="{(top + bottom) / 2:.2f}" transform="rotate(-90 14 {(top + bottom) / 2:.2f})" class="axis-text">Median elapsed time</text>')
+    bits.append('</svg>')
+    return "".join(bits)
+
+
 def pct_change(value: float, reference: float) -> str:
     delta = (value / reference - 1) * 100
     if abs(delta) < 0.05:
@@ -284,45 +407,65 @@ def pct_change(value: float, reference: float) -> str:
     return f"{abs(delta):.1f}% {direction} by median"
 
 
-def takeaway_cards(rows: list[dict[str, Any]]) -> str:
-    cards: list[str] = []
+def median_deltas(rows: list[dict[str, Any]], suite: str, branch: str, reference: str) -> list[float]:
+    deltas: list[float] = []
     for mode in MODE_ORDER:
-        if not any(row.get("mode") == mode and is_measured(row) for row in rows):
-            cards.append(
-                f'<article class="takeaway-card"><p class="eyebrow">{esc(MODES[mode])}</p>'
-                '<p>No manifest supplied for this cache state.</p></article>'
-            )
-            continue
-        statements: list[str] = []
-        for suite, spec in SUITES.items():
-            medians = {
-                key: median_for(rows, suite, mode, key)
-                for key in STAGE_ORDER
-            }
-            available = [(key, value) for key, value in medians.items() if value is not None]
-            if not available:
-                statements.append(f"{spec['title']}: no valid measured runs.")
-                continue
-            fastest_key, fastest_value = min(available, key=lambda item: item[1])
-            pb = medians.get("protobuf")
-            fb = medians.get("flatbuffers")
-            branch_note = ""
-            if pb is not None and fb is not None:
-                if fb < pb:
-                    branch_note = f" FlatBuffers was {pct_change(fb, pb)} than Protobuf."
-                elif pb < fb:
-                    branch_note = f" Protobuf was {pct_change(pb, fb)} than FlatBuffers."
-                else:
-                    branch_note = " Protobuf and FlatBuffers had the same median."
-            statements.append(
-                f"{spec['title']}: {stage_title(fastest_key)} had the lowest observed median "
-                f"({fmt_seconds(fastest_value)}).{branch_note}"
-            )
-        cards.append(
-            f'<article class="takeaway-card"><p class="eyebrow">{esc(MODES[mode])}</p>'
-            f'<p>{esc(" ".join(statements))}</p></article>'
-        )
-    return "".join(cards)
+        value = median_for(rows, suite, mode, branch)
+        baseline = median_for(rows, suite, mode, reference)
+        if value is not None and baseline not in (None, 0):
+            deltas.append((value / baseline - 1) * 100)
+    return deltas
+
+
+def delta_range(values: list[float]) -> str:
+    if not values:
+        return "could not be calculated from these inputs"
+    low, high = min(values), max(values)
+    if high <= 0:
+        smallest, largest = abs(high), abs(low)
+        amount = f"{smallest:.1f}%" if math.isclose(smallest, largest, abs_tol=0.05) else f"{smallest:.1f}% to {largest:.1f}%"
+        return f"{amount} lower"
+    if low >= 0:
+        amount = f"{low:.1f}%" if math.isclose(low, high, abs_tol=0.05) else f"{low:.1f}% to {high:.1f}%"
+        return f"{amount} higher"
+    return f"{abs(low):.1f}% lower to {high:.1f}% higher"
+
+
+def seconds_delta_range(values: list[float]) -> str:
+    if not values:
+        return "could not be calculated"
+    low, high = min(values), max(values)
+    if low >= 0:
+        return f"{fmt_seconds(low)} to {fmt_seconds(high)} slower"
+    if high <= 0:
+        return f"{fmt_seconds(abs(high))} to {fmt_seconds(abs(low))} faster"
+    return f"{fmt_seconds(abs(low))} faster to {fmt_seconds(high)} slower"
+
+
+def concise_takeaway(rows: list[dict[str, Any]]) -> str:
+    js_proto = median_deltas(rows, "clava-js", "protobuf", "ccache-text")
+    js_flat = median_deltas(rows, "clava-js", "flatbuffers", "ccache-text")
+    java_proto = median_deltas(rows, "java", "protobuf", "ccache-text")
+    java_flat = median_deltas(rows, "java", "flatbuffers", "ccache-text")
+    savings = []
+    cold_direct = []
+    for stage in ("ccache-text", "protobuf", "flatbuffers"):
+        direct = median_for(rows, "java", "direct", stage)
+        cold = median_for(rows, "java", "cold", stage)
+        warm = median_for(rows, "java", "warm", stage)
+        if cold not in (None, 0) and warm is not None:
+            savings.append((cold - warm) / cold * 100)
+        if direct is not None and cold is not None:
+            cold_direct.append(cold - direct)
+    warm_saving = f"{statistics.median(savings):.0f}%" if savings else "not available"
+    flat_java_distance = max((abs(value) for value in java_flat), default=0)
+    cold_direct_change = seconds_delta_range(cold_direct)
+    return (
+        f"Clava-JS medians were {delta_range(js_proto)} for Protobuf and {delta_range(js_flat)} for FlatBuffers "
+        f"versus the text branch. Java Protobuf was {delta_range(java_proto)}; FlatBuffers stayed within "
+        f"{flat_java_distance:.1f}% of text. On Java, Cold was {cold_direct_change} than Direct, then Warm "
+        f"cut median time by about {warm_saving} versus Cold. These are branch outcomes, not a format-only comparison."
+    )
 
 
 def cache_count_value(value: Any) -> float | None:
@@ -385,48 +528,37 @@ def cache_counters(row: dict[str, Any]) -> dict[str, float]:
 
 
 def cache_summary(rows: list[dict[str, Any]], provenance: dict[str, dict[str, Any]]) -> str:
-    cards: list[str] = []
-    cache_stages = [key for key in STAGE_ORDER if any(
+    cache_stages = {key for key in STAGE_ORDER if any(
         bool(meta.get("cache")) for meta in provenance.get(key, {}).values() if isinstance(meta, dict)
-    )]
+    )}
     if not cache_stages:
-        cache_stages = ["ccache-text", "protobuf", "flatbuffers"]
+        cache_stages = {"ccache-text", "protobuf", "flatbuffers"}
 
+    cards: list[str] = []
     for mode in MODE_ORDER:
-        parts: list[str] = []
-        found_counters = False
-        for stage in cache_stages:
-            measured = [
-                row for row in rows if row.get("mode") == mode and row.get("stage") == stage
-                and row.get("suite") in SUITES and is_measured(row) and is_valid_run(row, row.get("suite", ""))
-            ]
-            if not measured:
-                continue
-            counters = [cache_counters(row) for row in measured]
-            available = [item for item in counters if item]
-            if not available:
-                continue
-            found_counters = True
-            hit_values = [item.get("direct_hits", 0) + item.get("preprocessed_hits", 0) + item.get("hits", 0) for item in available]
-            miss_values = [item.get("misses", 0) for item in available if "misses" in item]
-            hit_runs = sum(value > 0 for value in hit_values)
-            total_hits = sum(hit_values)
-            validations = [row.get("cache_validation") for row in measured if isinstance(row.get("cache_validation"), dict)]
-            checks_passed = sum(item.get("passed") is True for item in validations)
-            text = f"{stage_title(stage)}: cache check passed {checks_passed}/{len(validations)} runs; hits in {hit_runs}/{len(available)} measured runs ({total_hits:.0f} recorded)"
-            if miss_values:
-                text += f", {sum(miss_values):.0f} misses"
-            parts.append(text)
+        measured = [
+            row for row in rows if row.get("mode") == mode and row.get("stage") in cache_stages
+            and row.get("suite") in SUITES and is_measured(row) and is_valid_run(row, row.get("suite", ""))
+        ]
+        counters = [cache_counters(row) for row in measured]
+        has_counters = bool(counters) and all(bool(item) for item in counters)
+        hits = sum(item.get("direct_hits", 0) + item.get("preprocessed_hits", 0) + item.get("hits", 0) for item in counters)
+        misses = sum(item.get("misses", 0) for item in counters)
+        validations = [row.get("cache_validation") for row in measured if isinstance(row.get("cache_validation"), dict)]
+        checks_passed = sum(item.get("passed") is True for item in validations)
         if mode == "direct":
-            heading = "Direct mode should produce no cache hits."
+            expected = "No ccache calls, hits, or misses."
         elif mode == "cold":
-            heading = "Cold runs should start with an empty stage-owned cache."
+            expected = "Fresh-cache misses are required; hits within a run are allowed."
         else:
-            heading = "Warm runs should show hits after the first population."
-        detail = " ".join(parts) if found_counters else "The input manifests contain no readable per-run cache counters."
+            expected = "Every measured run must restore at least one cached dump."
+        if has_counters:
+            detail = f"Checks passed {checks_passed}/{len(validations)} runs. {hits:,.0f} hits and {misses:,.0f} misses across all cached branches."
+        else:
+            detail = "Per-run cache counters are missing from the input."
         cards.append(
             f'<article class="cache-card"><p class="eyebrow">{esc(MODES[mode])}</p>'
-            f'<p>{esc(heading)} {esc(detail)}</p></article>'
+            f'<p>{esc(expected)} {esc(detail)}</p></article>'
         )
     return "".join(cards)
 
@@ -441,7 +573,35 @@ def branch_svg() -> str:
     </svg>'''
 
 
-def provenance_table(provenance: dict[str, dict[str, Any]]) -> str:
+def worktree_label(status: Any) -> str:
+    if not isinstance(status, list):
+        return "not recorded"
+    if not status:
+        return "clean"
+    if any(str(line).strip().endswith("clang-dumper-release.tag") for line in status):
+        return "release selector modified"
+    return f"{len(status)} local change(s)"
+
+
+def provenance_worktree_note(provenance: dict[str, dict[str, Any]]) -> str:
+    states = {key: next(iter(items.values()), {}) for key, items in provenance.items()}
+    notes = []
+    for key, label in (("ccache-text", "Text"), ("protobuf", "Protobuf"), ("flatbuffers", "FlatBuffers")):
+        meta = states.get(key, {})
+        notes.append(f"{label}: {worktree_label(meta.get('clava_status') if isinstance(meta, dict) else None)}")
+    native_states = [
+        worktree_label(meta.get("dumper_status"))
+        for key, meta in states.items()
+        if key in {"ccache-text", "protobuf", "flatbuffers"} and isinstance(meta, dict)
+    ]
+    if native_states and all(state == "clean" for state in native_states):
+        notes.append("native dumper worktrees: clean")
+    if any("release selector modified" in note for note in notes):
+        notes.append("the selector points to each branch's measured executable")
+    return "; ".join(notes)
+
+
+def provenance_table(provenance: dict[str, dict[str, Any]], rows: list[dict[str, Any]]) -> str:
     table_rows: list[str] = []
     for stage in STAGE_ORDER + tuple(key for key in provenance if key not in STAGES):
         states = provenance.get(stage, {})
@@ -453,28 +613,26 @@ def provenance_table(provenance: dict[str, dict[str, Any]]) -> str:
             dumper_hash = str(meta.get("dumper_sha256") or "not recorded")
             runtime = meta.get("runtime_manifest") if isinstance(meta.get("runtime_manifest"), dict) else {}
             runtime_hash = str(runtime.get("sha256") or "not recorded")
-            jar_count = runtime.get("jar_count")
-            status = meta.get("clava_status")
-            dirty_count = len(status) if isinstance(status, list) else None
-            dirty = "clean" if dirty_count == 0 else (f"{dirty_count} local change(s)" if dirty_count is not None else "not recorded")
-            dumper_status = meta.get("dumper_status")
-            if meta.get("native_root") is None:
-                dumper_dirty = "not applicable"
-            elif isinstance(dumper_status, list):
-                dumper_dirty = "clean" if not dumper_status else f"{len(dumper_status)} local change(s)"
-            else:
-                dumper_dirty = "not recorded"
+            jar_hashes = sorted({
+                str(row.get("runtime_parser_jar_sha256")) for row in rows
+                if row.get("stage") == stage and row.get("mode") == mode
+                and row.get("runtime_parser_jar_sha256")
+            })
+            jar_hash = jar_hashes[0] if len(jar_hashes) == 1 else (f"varies across {len(jar_hashes)} hashes" if jar_hashes else "not recorded")
+            dirty = worktree_label(meta.get("clava_status"))
+            dumper_dirty = "not applicable" if meta.get("native_root") is None else worktree_label(meta.get("dumper_status"))
             state = MODES.get(mode, "all inputs")
-            cells = [stage_title(stage, meta), state, clava, dumper_rev, dumper_hash, runtime_hash, dirty, dumper_dirty]
+            cells = [stage_title(stage, meta), state, clava, dumper_rev, dumper_hash, runtime_hash, jar_hash, dirty, dumper_dirty]
             table_rows.append("<tr>" + "".join(f'<td>{esc(cell)}</td>' for cell in cells) + "</tr>")
-    header = "".join(f"<th>{esc(item)}</th>" for item in ("Tested state", "Cache state", "Clava commit", "Dumper revision", "Dumper SHA-256", "Java runtime SHA-256", "Clava worktree", "Dumper worktree"))
+    header = "".join(f"<th>{esc(item)}</th>" for item in ("Tested state", "Cache state", "Clava commit", "Native dumper commit", "Dumper executable SHA-256", "Source Java runtime SHA-256", "Staged parser JAR SHA-256", "Clava worktree", "Dumper worktree"))
     return f'<div class="table-scroll"><table><thead><tr>{header}</tr></thead><tbody>{"".join(table_rows)}</tbody></table></div>'
 
 
-def measurement_summary(rows: list[dict[str, Any]]) -> tuple[int, int, int]:
-    measured = [row for row in rows if row.get("suite") in SUITES and is_measured(row)]
-    valid = [row for row in measured if is_valid_run(row, row.get("suite", ""))]
-    return len(measured), len(valid), len(measured) - len(valid)
+def invocation_summary(rows: list[dict[str, Any]]) -> tuple[int, int, int, int]:
+    invocations = [row for row in rows if row.get("suite") in SUITES]
+    valid = [row for row in invocations if is_valid_run(row, row.get("suite", ""))]
+    measured = [row for row in invocations if is_measured(row)]
+    return len(invocations), len(valid), len(measured), len(invocations) - len(measured)
 
 
 def report_html(
@@ -485,7 +643,9 @@ def report_html(
 ) -> str:
     rows = flatten_results(manifests)
     modes_present = sorted({str(row.get("mode")) for row in rows if row.get("mode") in MODE_ORDER}, key=MODE_ORDER.index)
-    measured_count, valid_count, excluded_count = measurement_summary(rows)
+    total_runs, valid_runs, measured_count, warmup_count = invocation_summary(rows)
+    invalid_count = total_runs - valid_runs
+    domains = {suite: suite_domain(rows, suite) for suite in SUITES}
     dates = sorted(str(manifest.get("created_at")) for manifest in manifests if manifest.get("created_at"))
     date_text = f"Input runs created {dates[0]}" if dates else "Creation time not recorded in the input manifests"
     if len(dates) > 1:
@@ -495,11 +655,11 @@ def report_html(
     for mode in MODE_ORDER:
         charts = []
         for suite, spec in SUITES.items():
-            svg = chart_svg(suite, mode, rows, provenance)
+            svg = chart_svg(suite, mode, rows, provenance, domains[suite])
             charts.append(
                 f'<figure class="chart-card"><figcaption><h3>{esc(spec["title"])}</h3>'
                 f'<p>{esc(spec["description"])}</p></figcaption>{svg}'
-                '<p class="chart-key">Whiskers: min/max · box: Q1–Q3 · center mark: median · dots: individual valid runs. Lower is faster.</p></figure>'
+                '<p class="chart-key">Whiskers: min/max · box: Q1 to Q3 · center mark: median · dots: individual valid runs. Lower is faster.</p></figure>'
             )
         declared_repeats = [
             int(number(value.get("repeat_count"))) for value in manifests
@@ -532,9 +692,13 @@ def report_html(
         'Their chart panels are intentionally empty until new manifests are supplied.</aside>'
         if missing_modes else ""
     )
-    all_valid = f"{valid_count:,} valid measured runs"
-    if excluded_count:
-        all_valid += f" · {excluded_count:,} invalid or incomplete measured runs excluded"
+    trend_charts = "".join(
+        f'<figure class="trend-card"><figcaption><h3>{esc(spec["title"])}</h3></figcaption>'
+        f'{median_trend_svg(suite, rows, domains[suite])}</figure>'
+        for suite, spec in SUITES.items()
+    )
+    validity = f"{valid_runs:,}/{total_runs:,} valid invocations · {measured_count:,} measured · {warmup_count:,} warm-ups · {invalid_count:,} invalid"
+    worktree_notes = provenance_worktree_note(provenance)
 
     return f'''<!doctype html>
 <html lang="en">
@@ -558,18 +722,23 @@ def report_html(
     .lede {{ max-width:820px; color:var(--muted); font-size:1.12rem; }}
     .meta-line,.small {{ color:var(--muted); font-size:.88rem; }}
     .eyebrow {{ margin-bottom:4px; color:var(--muted); font-size:.75rem; font-weight:750; text-transform:uppercase; letter-spacing:.1em; }}
-    .hero,.takeaway-card,.chart-card,.cache-card,.branch-card,.details-card {{ background:var(--surface); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); }}
+    .hero,.takeaway-card,.chart-card,.trend-card,.cache-card,.branch-card,.details-card {{ background:var(--surface); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); }}
     .hero {{ padding:28px clamp(18px,4vw,42px); margin:24px 0 18px; }}
     .hero-stat {{ display:flex; flex-wrap:wrap; gap:8px 22px; margin-top:16px; padding-top:14px; border-top:1px solid var(--line); color:var(--muted); font-size:.9rem; }}
     .hero-stat strong {{ color:var(--ink); }}
     .notice {{ margin:16px 0; padding:14px 18px; border-radius:12px; border:1px solid var(--line); background:var(--notice); }}
     .notice.warning {{ background:var(--warn); }} .notice p:last-child {{ margin-bottom:0; }} .notice ul {{ margin:.5rem 0; }}
     .notice.smoke {{ border:2px solid #d97706; background:var(--warn); }}
-    .decision-grid {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin:18px 0 38px; }}
-    .takeaway-card {{ padding:18px; }} .takeaway-card p:last-child {{ margin-bottom:0; }}
+    .takeaway {{ margin:16px 0 10px; padding:16px 18px; border-left:4px solid #2563eb; border-radius:8px; background:var(--surface); font-size:1.02rem; }}
+    .validity {{ margin:12px 0 0; color:var(--muted); font-size:.88rem; font-weight:650; }}
     .section-heading {{ display:flex; align-items:end; justify-content:space-between; gap:18px; margin:42px 0 15px; }}
     .section-heading>p {{ max-width:490px; margin:0; color:var(--muted); text-align:right; }}
     .chart-grid {{ display:grid; grid-template-columns:1fr; gap:16px; }}
+    .trend-grid {{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:14px 0 34px; }}
+    .trend-card {{ min-width:0; margin:0; padding:14px; overflow-x:auto; }}
+    .trend-card figcaption {{ margin:0 4px; }}
+    .trend-chart {{ display:block; width:100%; height:auto; color:var(--ink); }}
+    .reference-label {{ fill:var(--muted); font-size:11px; font-weight:650; }}
     .chart-card {{ min-width:0; margin:0; padding:18px 18px 12px; }}
     .chart-card figcaption {{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin:0 4px; }}
     .chart-card figcaption p {{ color:var(--muted); font-size:.85rem; text-align:right; }}
@@ -578,6 +747,7 @@ def report_html(
     .stage-text {{ fill:var(--ink); font-size:14px; font-weight:700; }} .empty-lane {{ fill:var(--muted); font-size:13px; }}
     .median-label {{ fill:var(--ink); font-size:13px; font-weight:650; }}
     .chart-key {{ margin:8px 4px 0; color:var(--muted); font-size:.8rem; }}
+    .zoom-note {{ margin:12px 0; padding:10px 13px; border-left:3px solid #d97706; border-radius:6px; background:var(--warn); color:var(--ink); font-size:.88rem; }}
     .empty-chart {{ padding:35px 16px; color:var(--muted); text-align:center; border:1px dashed var(--line); border-radius:10px; }}
     .mode-section {{ margin-bottom:44px; }}
     .branch-card {{ padding:20px; margin:12px 0 28px; }}
@@ -597,44 +767,45 @@ def report_html(
     .legend {{ display:flex; flex-wrap:wrap; gap:10px 18px; color:var(--muted); font-size:.84rem; }}
     .legend span {{ display:inline-flex; align-items:center; gap:7px; }} .swatch {{ width:12px; height:12px; border-radius:3px; }}
     .footer-note {{ margin-top:28px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:.85rem; }}
-    @media(max-width:800px) {{ .decision-grid,.cache-grid {{ grid-template-columns:1fr; }} .section-heading {{ display:block; }} .section-heading>p {{ text-align:left; margin-top:8px; }} }}
-    @media(max-width:650px) {{ main {{ width:min(100% - 20px,1180px); margin-top:18px; }} .hero {{ padding:22px 18px; }} .chart-card {{ padding:14px 8px 10px; }} .chart-card figcaption {{ display:block; }} .chart-card figcaption p {{ text-align:left; margin-bottom:0; }} .candle-chart {{ min-width:760px; }} .chart-card {{ overflow-x:auto; }} .branch-chart {{ min-width:700px; }} .branch-card {{ overflow-x:auto; }} }}
+    @media(max-width:800px) {{ .trend-grid,.cache-grid {{ grid-template-columns:1fr; }} .section-heading {{ display:block; }} .section-heading>p {{ text-align:left; margin-top:8px; }} }}
+    @media(max-width:650px) {{ main {{ width:min(100% - 20px,1180px); margin-top:18px; }} .hero {{ padding:22px 18px; }} .chart-card {{ padding:14px 8px 10px; }} .chart-card figcaption {{ display:block; }} .chart-card figcaption p {{ text-align:left; margin-bottom:0; }} .candle-chart {{ min-width:760px; }} .chart-card,.trend-card {{ overflow-x:auto; }} .trend-chart {{ min-width:480px; }} .branch-chart {{ min-width:700px; }} .branch-card {{ overflow-x:auto; }} }}
   </style>
 </head>
 <body>
 <main>
   <header>
     <p class="eyebrow">Clava · performance comparison</p>
-    <h1>Which AST transport state is fastest?</h1>
-    <p class="lede">Two real Clava workloads measured across four pinned repository states and three cache conditions. The charts show the observed run-to-run spread, with correctness-gated runs only.</p>
+    <h1>AST transport performance</h1>
+    <p class="lede">An abstract syntax tree (AST) is Clang's structured view of source code. Clava uses it to analyze and transform C/C++ programs; this report compares how the AST reaches Clava.</p>
     <p class="meta-line">{esc(date_text)}</p>
   </header>
   {smoke_box}
   {coverage_note}
   {warning_box}
-  <section class="hero" aria-labelledby="decision-title">
-    <p class="eyebrow">Decision view</p>
-    <h2 id="decision-title">Observed medians by cache state</h2>
-    <p>Each summary names the lowest median and compares the two binary branches. These are outcomes for the tested repository states. The branch comparison does not isolate the wire format from every other code change.</p>
-    <div class="hero-stat"><span><strong>{esc(all_valid)}</strong></span><span>{measured_count:,} measured runs across both suites</span><span>Lower elapsed time is better</span></div>
-  </section>
-  <div class="decision-grid">{takeaway_cards(rows)}</div>
-  <section aria-labelledby="topology-title">
-    <p class="eyebrow">What was compared</p><h2 id="topology-title">Two protocol branches from one text + cache head</h2>
-    <div class="branch-card">{branch_svg()}<p class="small">The protobuf and eager FlatBuffers states are siblings, not successive protocol steps. The chart labels are the pinned repository states in the experiment plan. In Direct mode, the pre-cache state streams text from stdout into the parser. Post-cache states consume completed files after the dumper exits. Text and protobuf use zstd files; FlatBuffers uses a raw binary file. These transport differences are part of the branch outcomes.</p></div>
-  </section>
-  <section aria-labelledby="cache-check-title">
-    <p class="eyebrow">Cache-state verification</p><h2 id="cache-check-title">Did each cache state behave as intended?</h2>
-    <div class="cache-grid">{cache_summary(rows, provenance)}</div>
-    <p class="small">The harness checks direct mode with a ccache wrapper probe, cold mode with fresh-cache misses, and warm mode with cache hits. The cards summarize those per-run checks and recorded counters for valid measured repeats.</p>
+  <section aria-labelledby="trend-title">
+    <p class="eyebrow">At a glance</p><h2 id="trend-title">Median wall time by suite and cache state</h2>
+    <p class="takeaway">{esc(concise_takeaway(rows))}</p>
+    <p class="validity">{esc(validity)}</p>
+    <div class="trend-grid">{trend_charts}</div>
+    <p class="small">Lower is faster. Colored lines show text + ccache, protobuf, and eager FlatBuffers. The dashed line repeats the Direct pre-cache median as a reference with no cache state.</p>
   </section>
   <section aria-labelledby="charts-title">
-    <p class="eyebrow">Run distributions</p><h2 id="charts-title">Wall time across both workloads</h2>
-    <p class="small">Each panel uses its own scale. Within a panel all four states share the same axis. Cold and Warm panels repeat the exact Direct pre-cache distribution as a reference candle. It is labeled as having no cache state, not as a Cold or Warm run. Warm-up runs do not appear in the distributions.</p>
+    <p class="eyebrow">Run distributions</p><h2 id="charts-title">Six candle charts show the spread</h2>
+    <p class="small">Every cache-state panel uses the same padded, nonzero time scale within its suite. The Direct pre-cache candle is repeated in Cold and Warm as a reference, not as a measurement in those states. One dot is one valid measured repeat.</p>
+    {chart_zoom_notes(rows, domains)}
     {''.join(mode_sections)}
   </section>
+  <section aria-labelledby="topology-title">
+    <p class="eyebrow">Branch layout</p><h2 id="topology-title">Protobuf and FlatBuffers are sibling branches</h2>
+    <div class="branch-card">{branch_svg()}<p class="small">The protobuf and eager FlatBuffers checkouts branch from the same cache-integrated text state. Before-cache streams text from stdout into the parser. Direct post-cache Text and Protobuf use uncompressed files. Cold and Warm Text and Protobuf use Zstd-compressed files. FlatBuffers uses a raw binary file in each mode. The pre-cache row is context, not an isolated cache comparison, because it uses a different checkout and stdout transport.</p></div>
+  </section>
+  <section aria-labelledby="cache-check-title">
+    <p class="eyebrow">Cache checks</p><h2 id="cache-check-title">Counters confirm the requested state</h2>
+    <div class="cache-grid">{cache_summary(rows, provenance)}</div>
+    <p class="small">Direct uses a ccache wrapper probe. Cold requires fresh-cache misses, while allowing hits within a run. Warm requires a cached dump hit on every measured invocation.</p>
+  </section>
   <section aria-labelledby="legend-title">
-    <p class="eyebrow">Reading the charts</p><h2 id="legend-title">One candle represents repeated runs</h2>
+    <p class="eyebrow">Reading the candles</p><h2 id="legend-title">Each candle summarizes six runs</h2>
     <div class="branch-card"><div class="legend">{''.join(f'<span><i class="swatch" style="background:{STAGES[key][1]}"></i>{esc(STAGES[key][0])}</span>' for key in STAGE_ORDER)}</div><p class="small" style="margin-top:12px">Whiskers mark minimum and maximum. The colored box spans the first to third quartile. The bold mark is the median. Each dot is one valid measured repeat. Six repeats describe the observed spread; they do not establish statistical significance.</p></div>
   </section>
   <details class="details-card">
@@ -643,12 +814,13 @@ def report_html(
     <p><strong>Java parser.</strong> {esc(SUITES['java']['description'])} A run is eligible only with 116 passes, no skips or failures, and a successful process exit.</p>
     <p><strong>Cache modes.</strong> Direct disables ccache. Cold clears the stage-owned cache before each measured run. Warm reuses the stage-owned cache. One uncharted resource warm-up precedes each stage and suite.</p>
     <p><strong>Metric.</strong> Candles use elapsed wall time recorded by <code>/usr/bin/time</code>. The renderer excludes a run if the manifest has no wall-time field.</p>
-    <p><strong>Limits.</strong> The suite samples cover two workloads on one host. These results describe the pinned branch outcomes; they do not establish behavior for other projects, platforms, or compiler versions. No result is presented as a format-only causal effect.</p>
+    <p><strong>Workstation.</strong> One Linux machine with an Intel Core i7-9700 (8 cores), OpenJDK 26, Node 26, and ccache 4.12.3 ran the suites.</p>
+    <p><strong>Limits.</strong> These two workloads describe the tested branches on one workstation. They do not establish behavior on other projects, platforms, or compiler versions.</p>
   </details>
   <details class="details-card">
     <summary>Exact revisions and artifact fingerprints</summary>
-    <p class="small">Absolute local paths are omitted. Full commit IDs and recorded hashes are retained so each tested state can be matched to its artifacts.</p>
-    {provenance_table(provenance)}
+    <p class="small">Absolute local paths are omitted. Full commits and hashes identify the sources and artifacts used for each cache state. {esc(worktree_notes)}.</p>
+    {provenance_table(provenance, rows)}
   </details>
   <p class="footer-note">Generated from the supplied protocol-comparison JSON manifests. Invalid runs, warm-ups, and runs without a valid wall-time metric are excluded from candles and medians.</p>
 </main>
