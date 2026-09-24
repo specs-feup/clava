@@ -47,6 +47,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
@@ -155,6 +156,7 @@ public class ClangAstDumper {
     }
 
     private ClangAstData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
+        boolean reportMetrics = Boolean.getBoolean("clava.astWireMetrics");
         ClavaLog.debug(() -> "Data store config for single file parser: " + config);
 
         File generatedParseRoot = parserConfig.hasValue(CodeParser.GENERATED_PARSE_ROOT)
@@ -307,6 +309,10 @@ public class ClangAstDumper {
 
         ClangAstData parsedData = null;
         ProcessOutput<String, String> output = null;
+        long transportNanos = 0L;
+        long readNanos = 0L;
+        File dumpFile = null;
+        boolean useAstDumpCache = false;
 
         try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2
                 .newInstance(config.get(ClavaNode.CONTEXT))) {
@@ -322,13 +328,13 @@ public class ClangAstDumper {
             // creates side files or needs a dedicated process working directory.
             lastWorkingFolder = Files.createTempDirectory("clava_ast_").toFile();
 
-            boolean useAstDumpCache = SpecsPlatforms.isLinux() && !USE_PLUGIN
+            useAstDumpCache = SpecsPlatforms.isLinux() && !USE_PLUGIN
                     && parserConfig.get(CodeParser.AST_DUMP_CACHE)
                     && !parserConfig.get(CodeParser.SHOW_CLANG_DUMP)
                     && !isOpenCL
                     && !SourceType.isHeader(sourceFile)
                     && ClangCcacheAdapter.isAvailable();
-            File dumpFile = new File(lastWorkingFolder,
+            dumpFile = new File(lastWorkingFolder,
                     useAstDumpCache ? COMPRESSED_CLANG_DUMP_FILENAME : CLANG_DUMP_FILENAME);
             File dependencyFile = new File(lastWorkingFolder, "clangDump.d");
             int separatorIndex = arguments.indexOf("--");
@@ -360,7 +366,11 @@ public class ClangAstDumper {
                 ccache.configureEnvironment(processBuilder.environment());
             }
 
+            long transportStart = reportMetrics ? System.nanoTime() : 0L;
             output = SpecsSystem.runProcess(processBuilder, SpecsIo::read, SpecsIo::read);
+            if (reportMetrics) {
+                transportNanos = System.nanoTime() - transportStart;
+            }
 
             if (output.isError()) {
                 ClavaLog.debug("Dumper returned an error value: '" + output.getReturnValue() + "'");
@@ -386,11 +396,15 @@ public class ClangAstDumper {
             }
 
             String linesNotParsed;
+            long readStart = reportMetrics ? System.nanoTime() : 0L;
             try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
                     InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {
                 File unparsedDumpFile = SpecsSystem.isDebug()
                         ? new File(lastWorkingFolder, STDERR_DUMP_FILENAME) : null;
                 linesNotParsed = lineStreamParser.parse(dumpInput, unparsedDumpFile);
+            }
+            if (reportMetrics) {
+                readNanos = System.nanoTime() - readStart;
             }
 
             parsedData = lineStreamParser.getData();
@@ -406,11 +420,52 @@ public class ClangAstDumper {
 
         ClangAstParser clangStreamParser = new ClangAstParser(parsedData, SpecsSystem.isDebug(), config);
 
+        long astConstructionStart = reportMetrics ? System.nanoTime() : 0L;
         TranslationUnit tUnit = clangStreamParser.parseTu(sourceFile);
+        if (reportMetrics) {
+            long astConstructionNanos = System.nanoTime() - astConstructionStart;
+            boolean cacheRestored = useAstDumpCache && !isCcacheDisabled();
+            reportTextMetrics(dumpFile, useAstDumpCache, cacheRestored, transportNanos, readNanos,
+                    astConstructionNanos);
+        }
 
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
 
         return parsedData;
+    }
+
+    /** Emits one machine-readable line per parsed translation unit when explicitly enabled. */
+    private void reportTextMetrics(File dumpFile, boolean compressed, boolean cacheRestored, long transportNanos,
+            long readNanos, long astConstructionNanos) {
+        double transportMillis = transportNanos / 1_000_000.0;
+        double nativeMillis = cacheRestored ? 0.0 : transportMillis;
+        double cacheMillis = cacheRestored ? transportMillis : 0.0;
+
+        String json = String.format(Locale.ROOT,
+                "{\"format\":\"text\",\"native_ms\":%.3f,\"cache_restore_ms\":%.3f,"
+                        + "\"read_ms\":%.3f,\"ast_ms\":%.3f,\"dump_bytes\":%d,"
+                        + "\"compressed\":%s,\"cached\":%s,\"ccache_disabled\":%s}",
+                nativeMillis, cacheMillis, readNanos / 1_000_000.0, astConstructionNanos / 1_000_000.0,
+                dumpFile.length(), compressed, cacheRestored, isCcacheDisabled());
+
+        System.err.println("CLAVA_AST_METRIC " + json);
+    }
+
+    private static boolean isCcacheDisabled() {
+        String value = System.getenv("CCACHE_DISABLE");
+        if (value == null) {
+            return false;
+        }
+
+        switch (value.trim().toLowerCase(Locale.ROOT)) {
+        case "1":
+        case "true":
+        case "yes":
+        case "on":
+            return true;
+        default:
+            return false;
+        }
     }
 
     private String validateSyntax(List<String> arguments, File sourceFile, String id) {
