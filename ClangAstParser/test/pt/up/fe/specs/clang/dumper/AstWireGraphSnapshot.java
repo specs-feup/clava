@@ -56,6 +56,7 @@ final class AstWireGraphSnapshot {
         values.add("ClavaNode.PREVIOUS_ID: historical identifier");
         values.add("ClavaNode.CONTEXT: process-owned parser context");
         values.add("ClavaNode.ORIGIN: edit-provenance reference");
+        values.add("DataStore definition name: wire dispatch label; concrete Clava class and populated fields are compared");
         values.add("object identity and JVM identity hash codes: never serialized");
         values.add("timings and transport metrics: not part of the AST graph");
         return values;
@@ -153,7 +154,6 @@ final class AstWireGraphSnapshot {
             JsonObject result = new JsonObject();
             result.addProperty("index", index);
             result.addProperty("class", node.getClass().getName());
-            result.addProperty("data_class", node.getDataClassName());
 
             JsonArray children = new JsonArray();
             for (ClavaNode child : node.getChildren()) {
