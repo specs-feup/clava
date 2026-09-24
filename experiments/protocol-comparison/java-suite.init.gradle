@@ -12,6 +12,8 @@ gradle.afterProject { project ->
                 // measured population identical to the shared 116-test base.
                 excludeTestsMatching 'pt.up.fe.specs.clang.dumper.CXXConversionDeclTest'
                 excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangAstDumperTest'
+                // Scratch-only fidelity gate; it runs separately before timing.
+                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.AstWireFidelitySnapshotTest'
                 excludeTestsMatching 'pt.up.fe.specs.clang.wire.*'
             }
         }

@@ -47,3 +47,50 @@ Every invocation gets a unique timestamped output directory under the ignored
 `results/` directory. The runner refuses to reuse an existing output directory
 and writes raw logs, timing files, per-run summaries, a CSV, and a JSON manifest;
 existing results are left in place.
+
+## Same-revision text/Protobuf A/B
+
+`run_dual_ab.py` compares both readers in one scratch Clava checkout and uses
+one scratch `clang-dumper/build/tool` binary and one staged Java runtime for both
+modes. Its preflight parses representative C and C++ files with each reader,
+compares normalized AST graphs, then runs targeted Java and Clava-JS smoke
+tests. Timing needs the directory from a passing preflight.
+
+Start with a no-test plan check:
+
+```sh
+python3 experiments/protocol-comparison/run_dual_ab.py --dry-run
+```
+
+Run the fidelity and smoke gate, then inspect `fidelity/gate.json`:
+
+```sh
+python3 experiments/protocol-comparison/run_dual_ab.py --preflight-only
+```
+
+For a one-repeat check of both original suites, use that preflight directory:
+
+```sh
+python3 experiments/protocol-comparison/run_dual_ab.py \
+  --preflight-result experiments/protocol-comparison/results/<preflight-run> \
+  --repeat-count 1
+```
+
+Run the six-repeat A/B after the one-repeat results look sound:
+
+```sh
+python3 experiments/protocol-comparison/run_dual_ab.py \
+  --preflight-result experiments/protocol-comparison/results/<preflight-run> \
+  --repeat-count 6
+```
+
+Use `--js-workspace`, `--fixture-c`, or `--fixture-cxx` to point at the exact
+Clava-JS test checkout and supported fidelity fixtures. The plan records the
+Java and native revisions and hashes, the JavaScript subtree revision and tree
+hash, and the staged parser JAR hash. Every timing row checks that the Java
+worker selected the requested format, emitted metrics, reported
+`ccache_disabled=true`, and made no ccache calls. It records the actual
+`compressed` metric rather than treating ccache bypass as a compression mode.
+Text and Protobuf event counts must match within each paired run; a mismatch
+marks both rows invalid. The fidelity snapshot's `data_class` normalization is
+documented in [analysis/README.md](analysis/README.md).
