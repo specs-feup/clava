@@ -162,11 +162,42 @@ def quantile(values: list[float], fraction: float) -> float:
 
 
 def fmt_seconds(value: float) -> str:
-    if value < 10:
-        return f"{value:.2f}s"
-    if value < 100:
-        return f"{value:.1f}s"
-    return f"{value:.0f}s"
+    return f"{value:.2f}s"
+
+
+def time_axis_ticks(low: float, high: float) -> list[tuple[float, str]]:
+    """Place time ticks at regular, readable values inside the plotted domain."""
+    if not math.isfinite(low) or not math.isfinite(high) or low >= high:
+        raise ValueError("A time axis needs a finite, increasing range")
+
+    rough_step = (high - low) / 4
+    exponent = math.floor(math.log10(rough_step))
+    candidates = {
+        factor * 10 ** power
+        for power in range(exponent - 2, exponent + 2)
+        for factor in (1, 2, 2.5, 5, 10)
+    }
+
+    def positions(step: float) -> list[float]:
+        first = math.ceil(low / step - 1e-9)
+        last = math.floor(high / step + 1e-9)
+        return [index * step for index in range(first, last + 1)]
+
+    step = min(
+        candidates,
+        key=lambda candidate: (
+            0 if 3 <= len(positions(candidate)) <= 7 else 1,
+            abs(len(positions(candidate)) - 5),
+            abs(math.log(candidate / rough_step)),
+        ),
+    )
+    ticks = positions(step)
+    for decimals in range(10):
+        rounded = [round(tick, decimals) for tick in ticks]
+        if len(set(rounded)) == len(rounded) and all(
+                abs(value - tick) <= step * 1e-6 for value, tick in zip(rounded, ticks)):
+            return [(tick, f"{value:.{decimals}f}s") for tick, value in zip(ticks, rounded)]
+    raise ValueError("Time-axis ticks are too close to label distinctly")
 
 
 def load_ab_result(path: Path) -> dict[str, Any]:
@@ -233,11 +264,10 @@ def ab_candle_svg(manifest: dict[str, Any], suite: str) -> str:
         f'<title>{esc(SUITES[suite]["title"])} same-revision A/B wall time</title>',
         '<desc>Two modes of one native binary and Java runtime. Whiskers show minimum and maximum, boxes the interquartile range, center marks the median, and dots individual paired-repeat results.</desc>',
     ]
-    for index in range(5):
-        tick = low + (high - low) * index / 4
+    for tick, label in time_axis_ticks(low, high):
         tx = x(tick)
         bits.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="24" y2="204" class="grid-line"/>')
-        bits.append(f'<text x="{tx:.2f}" y="18" text-anchor="middle" class="axis-text">{esc(axis_label(tick))}</text>')
+        bits.append(f'<text x="{tx:.2f}" y="18" text-anchor="middle" class="axis-text">{esc(label)}</text>')
     for index, (stage, (label, color)) in enumerate(AB_STAGES.items()):
         group = groups[stage]
         values = [value for value, _ in group]
@@ -418,7 +448,7 @@ def chart_zoom_notes(rows: list[dict[str, Any]], domains: dict[str, tuple[float,
 
 
 def axis_label(value: float) -> str:
-    return f"{value:.0f}s" if value >= 10 else f"{value:.1f}s"
+    return f"{value:.1f}s"
 
 
 def chart_svg(
@@ -472,12 +502,10 @@ def chart_svg(
         f'<title>{esc(SUITES[suite]["title"])} wall time, {esc(MODES[mode])}</title>',
         '<desc>Each row is a tested repository state. Whiskers show the minimum and maximum, the box shows the first and third quartiles, the thick mark is the median, and dots are individual valid runs. Lower time is better.</desc>',
     ]
-    tick_count = 4
-    for index in range(tick_count + 1):
-        tick = domain_low + (domain_high - domain_low) * index / tick_count
+    for tick, label in time_axis_ticks(domain_low, domain_high):
         tx = x(tick)
         bits.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="22" y2="{height - 22}" class="grid-line"/>')
-        bits.append(f'<text x="{tx:.2f}" y="17" text-anchor="middle" class="axis-text">{esc(axis_label(tick))}</text>')
+        bits.append(f'<text x="{tx:.2f}" y="17" text-anchor="middle" class="axis-text">{esc(label)}</text>')
 
     for index, key in enumerate(STAGE_ORDER):
         y = top + index * lane + lane / 2
@@ -553,7 +581,7 @@ def median_for(rows: list[dict[str, Any]], suite: str, mode: str, stage: str) ->
 
 def median_trend_svg(suite: str, rows: list[dict[str, Any]], domain: tuple[float, float]) -> str:
     width, height = 520, 285
-    left, right, top, bottom = 62, 506, 35, 232
+    left, right, top, bottom = 62, 470, 35, 232
     domain_low, domain_high = domain
     x_positions = [left + (right - left) * index / 2 for index in range(3)]
 
@@ -566,11 +594,10 @@ def median_trend_svg(suite: str, rows: list[dict[str, Any]], domain: tuple[float
         f'<title>{esc(SUITES[suite]["title"])} median trend</title>',
         '<desc>Three colored lines compare text with ccache, protobuf, and eager FlatBuffers. A dashed gray horizontal line repeats the Direct pre-cache median as a reference with no cache state.</desc>',
     ]
-    for index in range(5):
-        tick = domain_low + (domain_high - domain_low) * index / 4
+    for tick, label in time_axis_ticks(domain_low, domain_high):
         ty = y(tick)
         bits.append(f'<line x1="{left}" x2="{right}" y1="{ty:.2f}" y2="{ty:.2f}" class="grid-line"/>')
-        bits.append(f'<text x="{left - 8}" y="{ty + 4:.2f}" text-anchor="end" class="axis-text">{esc(axis_label(tick))}</text>')
+        bits.append(f'<text x="{left - 8}" y="{ty + 4:.2f}" text-anchor="end" class="axis-text">{esc(label)}</text>')
     for index, mode in enumerate(MODE_ORDER):
         tx = x_positions[index]
         bits.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="{top}" y2="{bottom}" class="grid-line"/>')
@@ -932,6 +959,7 @@ def report_html(
     code {{ overflow-wrap:anywhere; font: .88em ui-monospace,SFMono-Regular,Consolas,monospace; }}
     .lede {{ max-width:820px; color:var(--muted); font-size:1.12rem; }}
     .meta-line,.small {{ color:var(--muted); font-size:.88rem; }}
+    .mobile-hint {{ display:none; color:var(--muted); font-size:.88rem; }}
     .eyebrow {{ margin-bottom:4px; color:var(--muted); font-size:.75rem; font-weight:750; text-transform:uppercase; letter-spacing:.1em; }}
     .hero,.takeaway-card,.chart-card,.trend-card,.cache-card,.branch-card,.details-card {{ background:var(--surface); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); }}
     .hero {{ padding:28px clamp(18px,4vw,42px); margin:24px 0 18px; }}
@@ -994,7 +1022,7 @@ def report_html(
     @media(max-width:1000px) {{ .phase-grid {{ grid-template-columns:repeat(2,minmax(0,1fr)); }} }}
     @media(max-width:800px) {{ .trend-grid,.cache-grid,.ab-paths {{ grid-template-columns:1fr; }} .section-heading {{ display:block; }} .section-heading>p {{ text-align:left; margin-top:8px; }} }}
     @media(max-width:650px) {{ .phase-grid {{ grid-template-columns:1fr; }} }}
-    @media(max-width:650px) {{ main {{ width:min(100% - 20px,1180px); margin-top:18px; }} .hero {{ padding:22px 18px; }} .chart-card {{ padding:14px 8px 10px; }} .chart-card figcaption {{ display:block; }} .chart-card figcaption p {{ text-align:left; margin-bottom:0; }} .candle-chart {{ min-width:760px; }} .chart-card,.trend-card {{ overflow-x:auto; }} .trend-chart {{ min-width:480px; }} .branch-chart {{ min-width:700px; }} .branch-card {{ overflow-x:auto; }} }}
+    @media(max-width:650px) {{ main {{ width:min(100% - 20px,1180px); margin-top:18px; }} .hero {{ padding:22px 18px; }} .mobile-hint {{ display:block; }} .chart-card {{ padding:14px 8px 10px; }} .chart-card figcaption {{ display:block; }} .chart-card figcaption p {{ text-align:left; margin-bottom:0; }} .candle-chart {{ min-width:760px; }} .chart-card,.trend-card {{ overflow-x:auto; }} .trend-chart {{ min-width:480px; }} .branch-chart {{ min-width:700px; }} .branch-card {{ overflow-x:auto; }} }}
   </style>
 </head>
 <body>
@@ -1005,6 +1033,7 @@ def report_html(
     <p class="lede">An abstract syntax tree (AST) is Clang's structured view of source code. Clava uses it to analyze and transform C/C++ programs; this report compares how the AST reaches Clava.</p>
     {comparison_guide}
     <p class="meta-line">{esc(date_text)}</p>
+    <p class="mobile-hint">Swipe charts sideways to see the full scale.</p>
   </header>
   {smoke_box}
   {coverage_note}
