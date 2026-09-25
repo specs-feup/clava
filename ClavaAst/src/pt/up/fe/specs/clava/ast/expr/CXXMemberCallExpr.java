@@ -26,7 +26,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.exceptions.UnexpectedChildExpection;
 import pt.up.fe.specs.util.collections.SpecsList;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
@@ -88,7 +87,9 @@ public class CXXMemberCallExpr extends CallExpr {
         ClavaNode callee = getCallee();
 
         if (!(callee instanceof MemberExpr)) {
-            throw new UnexpectedChildExpection(CXXMemberCallExpr.class, callee);
+            throw new RuntimeException("Expected a child of type '" + MemberExpr.class.getSimpleName()
+                    + "' in parent '" + callee.getParent().getClass().getSimpleName() + "', found '"
+                    + callee.getClass().getSimpleName() + "'");
         }
 
         ((MemberExpr) callee).setMemberName(name);

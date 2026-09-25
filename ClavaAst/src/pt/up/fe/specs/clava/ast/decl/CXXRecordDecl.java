@@ -64,16 +64,6 @@ public class CXXRecordDecl extends RecordDecl {
         return super.getCode(get(RECORD_BASES));
     }
 
-    // private String getBasesCode() {
-    // // String bases = getRecordBases().stream()
-    // String bases = get(RECORD_BASES).stream()
-    // .map(recordBase -> recordBase.getCode(this))
-    // .collect(Collectors.joining(", "));
-    //
-    // bases = bases.isEmpty() ? bases : " : " + bases;
-    // return bases;
-    // }
-
     public List<CXXMethodDecl> getMethods() {
         return getChildrenOf(CXXMethodDecl.class);
     }
@@ -277,22 +267,6 @@ public class CXXRecordDecl extends RecordDecl {
 
     }
 
-    /*
-    private void addMethods(List<CXXMethodDecl> methods, Map<String, CXXMethodDecl> allMethods) {
-        for (var method : methods) {
-            var signature = method.getSignature();
-    
-            if (allMethods.containsKey(signature)) {
-                SpecsLogs.debug(() -> "CXXRecordDecl.addMethods: skipping method, signature '" + signature
-                        + "' already present");
-                continue;
-            }
-    
-            allMethods.put(signature, method);
-        }
-    
-    }
-    */
     /**
      * 
      * 
@@ -330,24 +304,6 @@ public class CXXRecordDecl extends RecordDecl {
 
         return true;
 
-        // // If at least one non-pure, return false
-        // boolean hasNonPure = getAllMethods(false).stream()
-        // .filter(method -> !method.get(FunctionDecl.IS_PURE))
-        // .findFirst()
-        // .isPresent();
-        //
-        // return !hasNonPure;
     }
-
-    // private static void getAllMethods(CXXRecordDecl aClass, Set<CXXMethodDecl> currentMethods) {
-    // // Add all methods from this class
-    // currentMethods.addAll(aClass.getMethods());
-    //
-    // // Add all methods from the bases
-    // for (var base : aClass.getBases()) {
-    // var cxxRecord = base;
-    // getAllMethods(cxxRecord, currentMethods);
-    // }
-    // }
 
 }

@@ -57,28 +57,6 @@ public abstract class TemplateDecl extends NamedDecl {
 
     public List<NamedDecl> getTemplateParameters() {
         return get(TEMPLATE_PARAMETERS);
-        /*        
-        // return SpecsCollections.peek(getChildren(), TemplateTypeParmDecl.class);
-        List<NamedDecl> templateParameters = new ArrayList<>();
-        
-        // Number of template parameters
-        int numTemplateParameters = 0;
-        for (ClavaNode child : getChildren()) {
-            if (child instanceof TemplateParameter) {
-                numTemplateParameters++;
-            }
-        }
-        
-        // Verify they are in sequence, and NamedDecls
-        for (int i = 0; i < numTemplateParameters; i++) {
-            NamedDecl templateParam = getChild(NamedDecl.class, i);
-            SpecsCheck.checkArgument(templateParam instanceof TemplateParameter,
-                    () -> "Expected node to be a " + TemplateParameter.class + ": " + templateParam.getClass());
-            templateParameters.add(templateParam);
-        }
-        
-        return templateParameters;
-        */
     }
 
     public int getNumTemplateParameters() {
@@ -91,16 +69,6 @@ public abstract class TemplateDecl extends NamedDecl {
 
     public Decl getTemplateDecl() {
         return get(TEMPLATE_DECL).map(decl -> (Decl) decl).orElse(getFactory().nullDecl());
-        /*
-        int index = getNumTemplateParameters();
-        
-        if (index >= getChildren().size()) {
-            SpecsLogs.warn("No template decl");
-            return null;
-        }
-        
-        return (Decl) SpecsCollections.subList(getChildren(), index).get(0);
-        */
     }
 
     // Get template parameters

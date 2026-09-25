@@ -51,8 +51,6 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class NodeDataParser {
 
-    // public final static AtomicInteger INVALID_COUNTER = new AtomicInteger(0);
-
     private static final Map<String, BiFunction<LineStream, ClangAstData, DataStore>> STATIC_DATA_PARSERS;
     static {
         STATIC_DATA_PARSERS = new HashMap<>();
@@ -72,62 +70,6 @@ public class NodeDataParser {
         // ATTRIBUTES
         addDataParserClass(STATIC_DATA_PARSERS, AttrDataParser.class);
 
-        /*
-        // DECLS
-        STATIC_DATA_PARSERS.put("<DeclData>", DeclDataParser::parseDeclData);
-        STATIC_DATA_PARSERS.put("<NamedDeclData>", DeclDataParser::parseNamedDeclData);
-        STATIC_DATA_PARSERS.put("<TypeDeclData>", DeclDataParser::parseTypeDeclData);
-        STATIC_DATA_PARSERS.put("<TagDeclData>", DeclDataParser::parseTagDeclData);
-        STATIC_DATA_PARSERS.put("<RecordDeclData>", DeclDataParser::parseRecordDeclData);
-        STATIC_DATA_PARSERS.put("<CXXRecordDeclData>", DeclDataParser::parseCXXRecordDeclData);
-        STATIC_DATA_PARSERS.put("<ValueDeclData>", DeclDataParser::parseValueDeclData);
-        STATIC_DATA_PARSERS.put("<FunctionDeclData>", DeclDataParser::parseFunctionDeclData);
-        STATIC_DATA_PARSERS.put("<CXXMethodDeclData>", DeclDataParser::parseCXXMethodDeclData);
-        STATIC_DATA_PARSERS.put("<VarDeclData>", DeclDataParser::parseVarDeclData);
-        STATIC_DATA_PARSERS.put("<ParmVarDeclData>", DeclDataParser::parseParmVarDeclData);
-        */
-
-        /*
-        // STMTS
-        STATIC_DATA_PARSERS.put("<StmtData>", StmtDataParser::parseStmtData);
-        */
-
-        /*
-        // EXPRS
-        STATIC_DATA_PARSERS.put("<ExprData>", ExprDataParser::parseExprData);
-        STATIC_DATA_PARSERS.put("<CastExprData>", ExprDataParser::parseCastExprData);
-        STATIC_DATA_PARSERS.put("<FloatingLiteralData>", ExprDataParser::parseFloatingLiteralData);
-        STATIC_DATA_PARSERS.put("<CharacterLiteralData>", ExprDataParser::parseCharacterLiteralData);
-        STATIC_DATA_PARSERS.put("<IntegerLiteralData>", ExprDataParser::parseIntegerLiteralData);
-        STATIC_DATA_PARSERS.put("<CXXBoolLiteralExprData>", ExprDataParser::parseCXXBoolLiteralExprData);
-        STATIC_DATA_PARSERS.put("<CompoundLiteralExprData>", ExprDataParser::parseCompoundlLiteralExprData);
-        STATIC_DATA_PARSERS.put("<InitListExprData>", ExprDataParser::parseInitListExprData);
-        STATIC_DATA_PARSERS.put("<StringLiteralData>", ExprDataParser::parseStringLiteralData);
-        STATIC_DATA_PARSERS.put("<DeclRefExprData>", ExprDataParser::parseDeclRefExprData);
-        STATIC_DATA_PARSERS.put("<OverloadExprData>", ExprDataParser::parseOverloadExprData);
-        */
-
-        /*
-        // TYPES
-        STATIC_DATA_PARSERS.put("<TypeData>", TypeDataParser::parseTypeData);
-        STATIC_DATA_PARSERS.put("<BuiltinTypeData>", TypeDataParser::parseBuiltinTypeData);
-        STATIC_DATA_PARSERS.put("<PointerTypeData>", TypeDataParser::parsePointerTypeData);
-        STATIC_DATA_PARSERS.put("<QualTypeData>", TypeDataParser::parseQualTypeData);
-        STATIC_DATA_PARSERS.put("<FunctionTypeData>", TypeDataParser::parseFunctionTypeData);
-        STATIC_DATA_PARSERS.put("<FunctionProtoTypeData>", TypeDataParser::parseFunctionProtoTypeData);
-        STATIC_DATA_PARSERS.put("<ArrayTypeData>", TypeDataParser::parseArrayTypeData);
-        STATIC_DATA_PARSERS.put("<ConstantArrayTypeData>", TypeDataParser::parseConstantArrayTypeData);
-        STATIC_DATA_PARSERS.put("<VariableArrayTypeData>", TypeDataParser::parseVariableArrayTypeData);
-        STATIC_DATA_PARSERS.put("<TagTypeData>", TypeDataParser::parseTagTypeData);
-        STATIC_DATA_PARSERS.put("<TypeWithKeywordData>", TypeDataParser::parseTypeWithKeywordData);
-        STATIC_DATA_PARSERS.put("<TemplateTypeParmTypeData>", TypeDataParser::parseTemplateTypeParmTypeData);
-        */
-
-        /*
-        // ATTRIBUTES
-        STATIC_DATA_PARSERS.put("<AttributeData>", AttrDataParser::parseAttributeData);
-        STATIC_DATA_PARSERS.put("<AlignedAttrData>", AttrDataParser::parseAlignedAttrData);
-        */
     }
 
     public static Collection<LineStreamWorker<ClangAstData>> getWorkers() {
@@ -200,14 +142,12 @@ public class NodeDataParser {
 
             dataParsers.put(key, parser);
 
-            // System.out.println("DECL KEY:" + key);
             // STATIC_DATA_PARSERS.put("<DeclData>", DeclDataParser::parseDeclData);
 
             // dataParsers.put(key, parser);
             // (lines, clangParser) -> method.
         }
 
-        // String simpleName = classWithParsers.getSimpleName();
         // simpleName.endsWith("DataParser");
 
     }
@@ -236,13 +176,8 @@ public class NodeDataParser {
     private static void parseNodeDataTop(BiFunction<LineStream, ClangAstData, DataStore> dataParser,
             LineStream lines, ClangAstData data) {
 
-        // if (lines.getLastLineIndex() == 4153) {
-        // System.out.println("HELLOOOOOOOOASOD:");
-        // }
-        // System.out.println("LINE DATA:" + lines.getLastLineIndex());
         DataStore clavaData = dataParser.apply(lines, data);
 
-        // SpecsCheck.checkArgument(clavaData instanceof ListDataStore,
         // () -> "Expected a ListDataStore, foud " + clavaData.getClass() + ". DataParser: " + dataParser);
 
         DataStore previousValue = data.get(ClangAstData.NODE_DATA).put(clavaData.get(ClavaNode.ID), clavaData);
@@ -306,15 +241,9 @@ public class NodeDataParser {
 
         // TODO: Consider switching when dumper is updated
         data.add(ClavaNode.IS_MACRO, isMacro);
-        // data.add(ClavaNode.IS_MACRO, location.isMacro());
-
-        // if (spellingLocation.isValid()) {
-        // data.add(ClavaNode.SPELLING_LOCATION, spellingLocation);
-        // }
 
         data.add(ClavaNode.IS_IN_SYSTEM_HEADER, isInSystemHeader);
 
-        // SpecsCheck.checkArgument(data instanceof ListDataStore,
         // () -> "Expected a ListDataStore, foud " + data.getClass());
 
         return data;

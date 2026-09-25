@@ -108,8 +108,6 @@ public class ClavaDataParsers {
         // Filepaths will be shared between most nodes, cache them
         String startFilepath = dataStore.get(ClangAstData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS).get(firstPart);
 
-        // String startFilepath = firstPart.intern();
-        // String startFilepath = firstPart;
         int startLine = Integer.parseInt(lines.nextLine());
         int startColumn = Integer.parseInt(lines.nextLine());
         // boolean startIsMacro = LineStreamParsers.oneOrZero(lines);
@@ -120,19 +118,12 @@ public class ClavaDataParsers {
         // Check if start is the same as the end
         String secondPart = lines.nextLine();
 
-        // if (startFilepath.equals("<built-in>")) {
-        // Preconditions.checkArgument(secondPart.equals("<end>"));
-        // return SourceRange.invalidRange();
-        // }
-
         if (secondPart.equals("<end>")) {
             return new SourceRange(startLocation);
         }
 
         // Parser end location
         String endFilepath = dataStore.get(ClangAstData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS).get(secondPart);
-        // String endFilepath = secondPart.intern();
-        // String endFilepath = secondPart;
 
         int endLine = Integer.parseInt(lines.nextLine());
         int endColumn = Integer.parseInt(lines.nextLine());
@@ -159,9 +150,6 @@ public class ClavaDataParsers {
         StringBuilder builder = new StringBuilder();
         String currentLine = null;
         while (!(currentLine = lines.nextLine()).equals("%CLAVA_SOURCE_END%")) {
-            // while (!"%CLAVA_SOURCE_END%".equals(currentLine = lines.nextLine())) {
-            // System.out.println("CURRENT LINE:" + currentLine);
-            // Only append new line if not the first line
             if (builder.length() != 0) {
                 builder.append("\n");
             }
@@ -186,60 +174,34 @@ public class ClavaDataParsers {
         for (int i = 0; i < numTypes; i++) {
             exceptionTypeIds.add(lines.nextLine());
         }
-        // parserData.getClavaNodes().setTypes(exceptionSpecification, ExceptionSpecification.EXCEPTION_TYPES,
         // exceptionTypeIds);
         clavaNodes.queueSetNodeList(exceptionSpecification, ExceptionSpecification.EXCEPTION_TYPES, exceptionTypeIds);
 
-        // List<Type> exceptionTypes = new ArrayList<>(numTypes);
-        // for (int i = 0; i < numTypes; i++) {
-        // // exceptionTypes.add(ClavaNodes.getType(parserData, lines.nextLine()));
-        // exceptionTypes.add(clavaNodes.getType(lines.nextLine()));
-        // }
-        // exceptionSpecification.set(ExceptionSpecification.EXCEPTION_TYPES, exceptionTypes);
-
         switch (exceptionSpecificationType) {
 
-        // case ComputedNoexcept:
         case DependentNoexcept:
             clavaNodes.queueSetNode(exceptionSpecification, ComputedNoexcept.NOEXCEPT_EXPR, lines.nextLine());
 
             return exceptionSpecification;
-        // return exceptionSpecification
-        // .set(ComputedNoexcept.NOEXCEPT_EXPR, clavaNodes.getExpr(lines.nextLine()));
 
         case Unevaluated:
-            // At parsing time, the node might be halfway-built
-            // node, key, nodeId
-            // parserData.getClavaNodes().setNodeDelayed(exceptionSpecification,
-            // UnevaluatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
             clavaNodes.queueSetNode(exceptionSpecification, UnevaluatedExceptionSpecification.SOURCE_DECL,
                     lines.nextLine());
 
             return exceptionSpecification;
-        // return exceptionSpecification
-        // .set(UnevaluatedExceptionSpecification.SOURCE_DECL_ID, lines.nextLine());
-        // .set(UnevaluatedExceptionSpecification.SOURCE_DECL,
-        // (FunctionDecl) ClavaNodes.getDecl(parserData, lines.nextLine()));
 
         case Uninstantiated:
             // setNode(parserData, exceptionSpecification, UninstantiatedExceptionSpecification.SOURCE_DECL,
             // lines.nextLine());
             clavaNodes.queueSetNode(exceptionSpecification, UninstantiatedExceptionSpecification.SOURCE_DECL,
                     lines.nextLine());
-            // parserData.getClavaNodes().setNodeDelayed(exceptionSpecification,
             // UninstantiatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
 
             clavaNodes.queueSetNode(exceptionSpecification, UninstantiatedExceptionSpecification.SOURCE_TEMPLATE,
                     lines.nextLine());
-            // parserData.getClavaNodes().setNodeDelayed(exceptionSpecification,
             // UninstantiatedExceptionSpecification.SOURCE_TEMPLATE, lines.nextLine());
 
             return exceptionSpecification;
-        // .set(UninstantiatedExceptionSpecification.SOURCE_DECL_ID, lines.nextLine())
-        // .set(UninstantiatedExceptionSpecification.SOURCE_TEMPLATE_ID, lines.nextLine());
-        // (FunctionDecl) ClavaNodes.getDecl(parserData, lines.nextLine()));
-        // .set(UninstantiatedExceptionSpecification.SOURCE_TEMPLATE,
-        // (FunctionDecl) ClavaNodes.getDecl(parserData, lines.nextLine()));
         default:
             // Nothing more to do
             return exceptionSpecification;
@@ -310,30 +272,6 @@ public class ClavaDataParsers {
             parserData.getClavaNodes().queueSetNode(structuralValue, TemplateArgumentStructuralValue.TYPE,
                     lines.nextLine());
             return structuralValue;
-        /*
-        // TemplateArgumentTemplate template = new TemplateArgumentTemplate();
-        TemplateNameKind nameKind = LineStreamParsers.enumFromName(TemplateNameKind.class, lines);
-        var template = TemplateArgumentTemplate.newInstance(nameKind);
-        template.set(TemplateArgumentTemplate.TEMPLATE_NAME_KIND, nameKind);
-        
-        switch (nameKind) {
-        case Template:
-            // parserData.getClavaNodes().queueSetOptionalNode(template, TemplateArgumentTemplate.TEMPLATE_DECL,
-            parserData.getClavaNodes().queueSetOptionalNode(template, Template.TEMPLATE_DECL, lines.nextLine());
-            break;
-        case QualifiedTemplate:
-            template.set(QualifiedTemplate.QUALIFIER, lines.nextLine());
-            template.set(QualifiedTemplate.HAS_TEMPLATE_KEYWORD, LineStreamParsers.oneOrZero(lines));
-            parserData.getClavaNodes().queueSetNode(template, QualifiedTemplate.TEMPLATE_DECL, lines.nextLine());
-            break;
-        case SubstTemplateTemplateParm:
-            break;
-        default:
-            throw new RuntimeException("Case not implemented: " + nameKind);
-        }
-        
-        return template;
-        */
         default:
             throw new NotImplementedException(kind);
         }
@@ -347,7 +285,6 @@ public class ClavaDataParsers {
 
         switch (nameKind) {
         case Template:
-            // parserData.getClavaNodes().queueSetOptionalNode(template, TemplateArgumentTemplate.TEMPLATE_DECL,
             parserData.getClavaNodes().queueSetOptionalNode(template, Template.TEMPLATE_DECL, lines.nextLine());
             break;
         case QualifiedTemplate:
@@ -401,12 +338,6 @@ public class ClavaDataParsers {
 
         return base;
     }
-
-    // public static void setNode(ClangParserData parserData, DataClass<?> dataClass, DataKey<? extends ClavaNode> key,
-    // String valueNodeId) {
-    //
-    // parserData.get(ClangParserData.CLAVA_NODES).setNodeDelayed(dataClass, key, valueNodeId);
-    // }
 
     public static String createAnonName(SourceRange location) {
         if (!location.isValid()) {
@@ -544,7 +475,6 @@ public class ClavaDataParsers {
         return nestedNameSpecifier;
 
         //
-        // data.add(NestedNameSpecifier., LineStreamParsers.enumFromName(Linkage.class, lines));
     }
 
 }

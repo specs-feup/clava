@@ -88,10 +88,5 @@ public class FloatingLiteral extends Literal {
     /**
      * @return
      */
-    /*
-    public FloatKind getFloatKind() {
-        return floatKind;
-    }
-    */
 
 }

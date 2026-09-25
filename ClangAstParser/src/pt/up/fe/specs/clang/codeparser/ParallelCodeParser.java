@@ -53,7 +53,6 @@ import java.util.stream.Collectors;
  *
  * @author JoaoBispo
  */
-// public class ParallelCodeParser extends ACodeParser<ParallelCodeParser> {
 public class ParallelCodeParser extends CodeParser {
 
     /// DATAKEY BEGIN
@@ -73,9 +72,6 @@ public class ParallelCodeParser extends CodeParser {
 
     public static final DataKey<Boolean> SYNTAX_ONLY = KeyFactory.bool("syntaxOnly")
             .setLabel("Runs the compiler/dumper pipeline only to validate syntax, without decoding the AST");
-
-    // public static final DataKey<Integer> SYSTEM_INCLUDES_THRESHOLD = KeyFactory.integer("systemIncludesThreshold", 1)
-    // .setLabel("Number of threads to use for parallel parsing");
 
     /// DATAKEY END
 
@@ -107,27 +103,17 @@ public class ParallelCodeParser extends CodeParser {
                 .collect(Collectors.toList());
 
         Standard standard = getStandard(sources, options);
-        // Standard standard = getStandard(allUserSources.values(), options);
-        // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
 
-        // System.out.println("PARALLEL OPTIONS: " + options);
-        // Prepare resources before execution
-        // ClangResources clangResources = new ClangResources(get(SHOW_CLANG_DUMP));
         ClangResources clangResources = new ClangResources(this);
 
         var clangFiles = clangResources.getClangFiles(get(ClangAstKeys.LIBC_CXX_MODE));
         options.set(ClangAstKeys.LIBC_CXX_MODE, clangFiles.libcMode());
-        // File clangExecutable = clangResources.prepareResources(version);
-        // List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,
-        // get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         ClavaLog.info("Found " + sources.size() + " source files");
-        // ClavaLog.debug(() -> "[ParallelCodeParser] Files to parse:" + sources);
 
         File parsingFolder = SpecsIo.getTempFolder("clava_parsing_" + UUID.randomUUID().toString());
         ClavaLog.debug(() -> "Parsing using folder '" + parsingFolder + "'");
 
-        // AtomicInteger currentSourceFileIndex = new AtomicInteger(0);
         ParallelProgressCounter counter = new ParallelProgressCounter(sources.size());
 
         long tic = System.nanoTime();
@@ -161,7 +147,6 @@ public class ParallelCodeParser extends CodeParser {
         for (int i = 0; i < sources.size(); i++) {
             var future = futureTUnits.get(i);
             try {
-                // var parserData = getParserData(future);
                 var parserData = SpecsSystem.get(future);
                 clangParserResults.add(parserData);
             } catch (Exception e) {
@@ -176,14 +161,6 @@ public class ParallelCodeParser extends CodeParser {
 
         }
 
-        // List<ClangParserData> clangParserResults = futureTUnits.stream()
-        // .map(future -> getParserData(future))
-        // .filter(parser -> parser != null)
-        // .collect(Collectors.toList());
-        // for (var data : clangParserResults) {
-        // System.out.println("CLANG PARSER NODES:\n" + data.get(ClangParserData.CLAVA_NODES).getNodes());
-        // }
-
         // Delete temporary folder
         SpecsIo.deleteFolder(parsingFolder);
 
@@ -197,25 +174,12 @@ public class ParallelCodeParser extends CodeParser {
             return null;
         }
 
-        // List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
-        // .map(sourceFile -> parseSource(new File(sourceFile), standard, options, clangDump,
-        // counter, parsingFolder))
-        // .collect(Collectors.toList());
-        // List<TranslationUnit> tUnits = SpecsCollections.getStream(sources, get(PARALLEL_PARSING))
-        // .map(sourceFile -> parseSource(sourceFile, standard, options, clangDump,
-        // counter, parsingFolder, clangExecutable, builtinIncludes))
-        // .collect(Collectors.toList());
-
         // // Sort translation units
-        // Collections.sort(tUnits, (tunit1, tunit2) -> tunit1.getFile().compareTo(tunit2.getFile()));
 
-        // System.out.println(
         // "TUNITS:" + tUnits.stream().map(tunit -> tunit.getFile().toString()).collect(Collectors.joining(", ")));
 
         if (get(SHOW_EXEC_INFO)) {
             ClavaLog.metrics(SpecsStrings.takeTime("Code to AST", tic));
-            // ClavaLog.metrics("Current memory used (Java):" +
-            // SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
         }
 
         if (get(SHOW_CLANG_DUMP)) {
@@ -255,7 +219,6 @@ public class ParallelCodeParser extends CodeParser {
         app.set(App.IGNORED_FILES, ignoredFiles);
 
         // Add App to context
-        // app.getContext().set(ClavaContext.APP, app);
         app.getContext().pushApp(app);
 
         app.setSourcesFromStrings(allSources);
@@ -265,7 +228,6 @@ public class ParallelCodeParser extends CodeParser {
 
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree
-        // new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
         new TreeTransformer(ClangAstParser.getPostParsingRules()).transform(app);
 
         // Add text elements (comments, pragmas) to the tree
@@ -280,56 +242,24 @@ public class ParallelCodeParser extends CodeParser {
             ClavaLog.metrics("Current memory used (Java):" + usedSize);
         }
 
-        // Cached filepaths metrics
-        // ClavaLog.metrics(
-        // "Cached filepaths analytics:\n" + app.getContext().get(ClavaContext.CACHED_FILEPATHS).getAnalytics());
-
         // Perform second pass over types
         // processTypesSecondPass();
-
-        // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
-        // original clang tree
-        // if (sourceTree) {
-        // processSourceTree(app);
-        // }
 
         if (get(SHOW_CLAVA_AST)) {
             SpecsLogs.msgInfo("CLAVA AST:\n" + app.toTree());
         }
 
-        // if (showCode) {
         if (get(SHOW_CODE)) {
             SpecsLogs.msgInfo("Code:\n" + app.getCode());
         }
 
         SpecsLogs.msgInfo("--- AST parsing report ---");
-        // checkUndefinedNodes(app);
-        //
-        // if (true) {
-        // throw new RuntimeException("STOP");
-        // }
 
         return app;
 
     }
 
-    // private ClangParserData getParserData(Future<ClangParserData> future) {
-    // try {
-    // return SpecsSystem.get(future);
-    // } catch (Exception e) {
-    // ClavaLog.info(e.getMessage());
-    // return null;
-    // }
-    // }
-
     //
-    // private <T> Stream<T> getSourceFileStream(Collection<T> sourceFiles) {
-    // if (get(PARALLEL_PARSING)) {
-    // return sourceFiles.parallelStream();
-    // }
-    //
-    // return sourceFiles.stream();
-    // }
 
     private Standard getStandard(Collection<File> sources, DataStore options) {
         // If standard has been defined, return it
@@ -359,7 +289,6 @@ public class ParallelCodeParser extends CodeParser {
 
             // Use C99 as standard, possible only .h files
             return Standard.C99;
-            // throw new RuntimeException(
             // "Could not determine a default standard from this list of source files: " + sources);
         }
 
@@ -370,11 +299,7 @@ public class ParallelCodeParser extends CodeParser {
         throw new RuntimeException("Found more than one possible standard (" + possibleStandards
                 + ") from this list of source files: " + sources);
 
-        // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
-        // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
-
         // TODO Auto-generated method stub
-        // return null;
     }
 
     private ClangAstData parseSource(File sourceFile, String id, Standard standard, DataStore options,
@@ -384,7 +309,6 @@ public class ParallelCodeParser extends CodeParser {
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
 
         // Adapt compiler options according to the file
-        // adaptOptions(options, sourceFile);
 
         // Disable streaming of console output if parsing is to be done in parallel
         // Only show output of console after parsing is done, when using parallel parsing
@@ -394,8 +318,6 @@ public class ParallelCodeParser extends CodeParser {
                 clangFiles.builtinIncludes(), clangFiles.systemResourceDir(), this)
                 .setBaseFolder(parsingFolder)
                 .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
-
-        // .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         counter.print(sourceFile);
 
@@ -412,15 +334,10 @@ public class ParallelCodeParser extends CodeParser {
         ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
 
         if (get(SHOW_CLANG_DUMP)) {
-            // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
-            // SpecsLogs.msgInfo(clangParser.getClangDump());
             clangDump.add(clangParser.getClangDump());
         }
 
         if (get(CLEAN)) {
-            // if (clangParser.getLastWorkingFolder() == null) {
-            // workingFolders.add(clangParser.getLastWorkingFolder());
-            // }
             if (clangParser.getLastWorkingFolder() == null) {
                 SpecsLogs.msgInfo("No working folder found for source file '" + sourceFile + "'");
             } else {
@@ -431,35 +348,6 @@ public class ParallelCodeParser extends CodeParser {
 
         return clangParserData;
     }
-
-    /*
-    private void adaptOptions(DataStore options, File source) {
-        // If OpenCL file, remove standard flag and add '-x cl'
-        if (SpecsIo.getExtension(source).toLowerCase().equals("cl")) {
-            if (options.hasValue(ClavaOptions.STANDARD)) {
-                options.remove(ClavaOptions.STANDARD);
-            }
-    
-            String currentFlags = options.get(ClavaOptions.FLAGS);
-            String adaptedFlags = currentFlags + " -x cl";
-            options.set(ClavaOptions.FLAGS, adaptedFlags);
-        }
-    
-        // Check if the standard is compatible with the file type
-        // Standard standard = options.getTry(ClavaOptions.STANDARD).orElse(null);
-        // System.out.println("OPTIONS BEFORE:" + options);
-        // Remove standard if extensions do not match
-        // if (standard != null) {
-        // if ((SourceType.isCExtension(SpecsIo.getExtension(source)) && standard.isCxx())
-        // || SourceType.isCxxExtension(SpecsIo.getExtension(source)) && !standard.isCxx()) {
-        //
-        // options.remove(ClavaOptions.STANDARD);
-        // }
-        // }
-        // System.out.println("OPTIONS AFTER:" + options);
-    
-    }
-    */
 
     /**
      * Collects all source folders, taking into account given sources to compile, and include folders in flags.
@@ -515,11 +403,6 @@ public class ParallelCodeParser extends CodeParser {
 
                 continue;
             }
-            // if (parserOption.startsWith("-I")) {
-            // sourceFolders
-            // .add(SpecsIo.getCanonicalFile(SpecsIo.existingFolder(parserOption.substring("-I".length()))));
-            // continue;
-            // }
         }
 
         // Reorder source folders, shortest to longest

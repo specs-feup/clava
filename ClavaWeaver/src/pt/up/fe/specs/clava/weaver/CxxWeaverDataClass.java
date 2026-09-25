@@ -48,14 +48,6 @@ public class CxxWeaverDataClass extends DataClassWrapper<CxxWeaverDataClass> {
 
         // Adapt value
         return CxxAttributes.toLara(value, this.weaver);
-
-        // // Special case
-        //
-        // if (value instanceof ClavaNode) {
-        // return CxxJoinpoints.create((ClavaNode) value);
-        // }
-        //
-        // return value;
     }
 
     // @Override

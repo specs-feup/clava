@@ -80,16 +80,5 @@ public class TypeRenamerFilter {
         currentNodes.addAll(node.getDescendants(DeclRefExpr.class));
         // System.out.println("RENAME CANDIDATE:" + node);
 
-        // if (node instanceof ImplicitCastExpr) {
-        // renameCandidate(((ImplicitCastExpr) node).getSubExpr(), currentNodes);
-        // return;
-        // }
-        //
-        // if (node instanceof DeclRefExpr) {
-        // // This is a candidate for renaming
-        // currentNodes.add(node);
-        // return;
-        // }
-
     }
 }

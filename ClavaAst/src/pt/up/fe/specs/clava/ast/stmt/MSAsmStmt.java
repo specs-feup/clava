@@ -40,40 +40,9 @@ public class MSAsmStmt extends AsmStmt {
         var code = new StringBuilder();
 
         code.append("__asm");
-        /*
-        if (get(IS_VOLATILE)) {
-            code.append(" __volatile__");
-        }
-        */
         code.append("{\n");
         code.append(get(ASM_STRING));
         code.append("\n}");
-        /*
-        // Outputs
-        var outputs = get(OUTPUTS).stream().map(output -> output.getCode())
-                .collect(Collectors.joining(", "));
-        
-        if (!outputs.isEmpty()) {
-            code.append("\n   :").append(outputs);
-        }
-        
-        // Inputs
-        var inputs = get(INPUTS).stream().map(input -> input.getCode())
-                .collect(Collectors.joining(", "));
-        
-        if (!inputs.isEmpty()) {
-            code.append("\n   :").append(inputs);
-        }
-        
-        // Cobblers
-        var cobblers = get(CLOBBERS).stream().collect(Collectors.joining(", "));
-        
-        if (!cobblers.isEmpty()) {
-            code.append("\n   :").append(cobblers);
-        }
-        
-        code.append(");");
-        */
         return code.toString();
     }
 }

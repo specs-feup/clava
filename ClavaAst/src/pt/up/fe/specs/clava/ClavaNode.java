@@ -27,13 +27,13 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.DataStore.DataClass;
-import org.suikasoft.jOptions.DataStore.GenericDataClass;
 import org.suikasoft.jOptions.DataStore.ListDataStore;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.storedefinition.StoreDefinition;
+import org.suikasoft.jOptions.treenode.DataNode;
+import org.suikasoft.jOptions.treenode.PropertyWithNodeManager;
+import org.suikasoft.jOptions.treenode.PropertyWithNodeType;
 
 import com.google.common.base.Preconditions;
 
@@ -56,12 +56,9 @@ import pt.up.fe.specs.util.classmap.ClassSet;
 import pt.up.fe.specs.util.collections.SpecsList;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.providers.StringProvider;
-import pt.up.fe.specs.util.system.Copyable;
-import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
-public abstract class ClavaNode extends ATreeNode<ClavaNode>
-        implements DataClass<ClavaNode>, Copyable<ClavaNode>, StringProvider {
+public abstract class ClavaNode extends DataNode<ClavaNode> implements StringProvider {
 
     // public static boolean SKIP_EXCEPTION = false;
 
@@ -70,6 +67,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      * instances.
      */
     private static final Map<Class<? extends ClavaNode>, List<DataKey<?>>> KEYS_WITH_NODES = new ConcurrentHashMap<>();
+
+    /**
+     * Generic manager for properties that can hold nodes.
+     */
+    private static final PropertyWithNodeManager NODE_FIELD_MANAGER = new PropertyWithNodeManager();
 
     /// DATAKEYS BEGIN
 
@@ -129,24 +131,24 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return nodes.stream().map(ClavaNode::toTree).collect(Collectors.joining("\n"));
     }
 
-    private final DataStore dataI;
-    private final DataClass<ClavaNode> dataClass;
     private boolean disableModification;
 
     public ClavaNode(DataStore dataI, Collection<? extends ClavaNode> children) {
-        super(children);
+        super(dataI, children);
 
         SpecsCheck.checkArgument(dataI instanceof ListDataStore,
                 () -> "Expected ListDataStore, found  " + dataI.getClass());
 
-        this.dataI = dataI;
         disableModification = false;
+    }
 
-        // Set definition of DataStore
-        // this.dataI.setDefinition(getClass());
-
-        // To avoid implementing methods again in ClavaNode
-        this.dataClass = new GenericDataClass<>(this.dataI);
+    /**
+     *
+     * @return the base class of the ClavaNode tree
+     */
+    @Override
+    public Class<ClavaNode> getBaseClass() {
+        return ClavaNode.class;
     }
 
     protected void setDisableModification(boolean disableModification) {
@@ -157,23 +159,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return "   ";
     }
 
-    @Override
-    public String getDataClassName() {
-        return dataI.getName();
-    }
-
     public String indentCode(String code) {
         return ClavaNodes.indentCode(getTab(), code);
-    }
-
-    @Override
-    public String toContentString() {
-        return getData().toInlinedString();
-    }
-
-    @Override
-    public Optional<StoreDefinition> getStoreDefinitionTry() {
-        return this.dataI.getStoreDefinitionTry();
     }
 
     protected static String toContentString(String previousContentString, String suffix) {
@@ -221,11 +208,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return "->";
     }
 
-    @Override
-    public ClavaNodeIterator getChildrenIterator() {
-        return new ClavaNodeIterator(this);
-    }
-
     public App getApp() {
         return getAppTry()
                 .orElseThrow(() -> new RuntimeException("App has not been set in ClavaContext: " + this));
@@ -239,16 +221,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         // return Optional.of(get(CONTEXT).get(ClavaContext.APP));
         return Optional.of(get(CONTEXT).getApp());
 
-        // ClavaNode root = this;
-        // while (root.hasParent()) {
-        // root = root.getParent();
-        // }
-        //
-        // if (!(root instanceof App)) {
-        // return Optional.empty();
-        // }
-        //
-        // return Optional.of((App) root);
     }
 
     /**
@@ -338,10 +310,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         // return super.copy();
 
         // TODO: Remove after legacy nodes are replaced
-        // If copyPrivate() is overriden, this means it is a legacy node, and needs to call
-        // the method version without arguments
-        boolean overridesCopyPrivate = isCopyPrivateOverriden();
-        ClavaNode newToken = overridesCopyPrivate ? copyPrivate() : copyPrivate(keepId);
+        ClavaNode newToken = copyPrivate(keepId);
 
         // Set origin
         newToken.set(ORIGIN, this);
@@ -365,24 +334,12 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return newToken;
     }
 
-    private boolean isCopyPrivateOverriden() {
-        try {
-            Class<?> copyPrivateNoArgsClass = this.getClass().getDeclaredMethod("copyPrivate").getDeclaringClass();
-            // System.out.println("COPY PRIVATE DECLARING CLASS:" + copyPrivateNoArgsClass);
-            return !copyPrivateNoArgsClass.equals(ClavaNode.class);
-        } catch (NoSuchMethodException e) {
-            return false;
-        } catch (Exception e) {
-            throw new RuntimeException("Could not obtain copyPrivate() method through reflection", e);
-        }
-    }
-
     /**
-     * By default, copying a node creates an new, unique id for the new copy.
+     * By default, copying a node creates an new, unique id for the copy.
+     * Implements the no-arg copyPrivate of ATreeNode.
      */
     @Override
     protected ClavaNode copyPrivate() {
-        // return newInstance(getClass(), Collections.emptyList());
         return copyPrivate(false);
     }
 
@@ -466,29 +423,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return Optional.empty();
     }
 
-    /**
-     * Returns the DataStore associated with this node.
-     * 
-     * <p>
-     * Generically, it is not recommended that this method is used outside of ClavaNode classes. <br>
-     * Instead, the method .get() / specific setters should be used. <br>
-     * However, there might be situations where access to this object is needed (e.g., library operations).
-     * 
-     * 
-     * @return the underlying DataStore of this node
-     */
-    protected DataStore getData() {
-        return dataI;
-    }
-
-    // public void setData(DataStore data) {
-    // this.dataI.addAll(data);
-    // }
-
-    // public boolean hasDataI() {
-    // return dataI != null;
-    // }
-
     public Optional<String> getIdSuffix() {
         if (!getExtendedId().isPresent()) {
             return Optional.empty();
@@ -527,7 +461,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      * @return a ClavaFactory where the builders will use the data of this node as the base for new nodes.
      */
     public ClavaFactory getFactoryWithNode() {
-        return new ClavaFactory(get(CONTEXT), dataI);
+        return new ClavaFactory(get(CONTEXT), getData());
     }
 
     public ClavaFactory getFactory() {
@@ -543,7 +477,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     @Override
     public <T> T get(DataKey<T> key) {
         try {
-            T value = dataI.get(key);
+            T value = getData().get(key);
 
             // // Ignore ImplicitCasts
             // if (value instanceof ImplicitCastExpr) {
@@ -560,24 +494,24 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * Tries to return a value from the DataStore.
-     * 
+     *
      * <p>
      * Does not use default values. If the key is not in the map, or there is no value mapped to the given key, returns
      * an empty Optional.
-     * 
+     *
      * @param key
      * @return
      */
     public <T> Optional<T> getTry(DataKey<T> key) {
-        return dataI.getTry(key);
+        return getData().getTry(key);
     }
 
     /**
      * Generic method for setting values.
-     * 
+     *
      * <p>
      * If null is passed as value, removes current value associated with given key.
-     * 
+     *
      * @param key
      * @param value
      */
@@ -590,36 +524,16 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
         // If value is null, remove value, if present
         if (value == null) {
-            if (dataI.hasValue(key)) {
-                dataI.remove(key);
+            if (getData().hasValue(key)) {
+                getData().remove(key);
             }
 
             return this;
         }
 
-        dataI.put(key, value);
+        getData().put(key, value);
 
         return this;
-    }
-
-    @Override
-    public ClavaNode set(ClavaNode instance) {
-        return dataClass.set(instance);
-    }
-
-    /**
-     * 
-     * @param key
-     * @return true, if it contains a non-null value for the given key, not considering default values
-     */
-    @Override
-    public <T> boolean hasValue(DataKey<T> key) {
-        return dataI.hasValue(key);
-    }
-
-    @Override
-    public Collection<DataKey<?>> getDataKeysWithValues() {
-        return dataClass.getDataKeysWithValues();
     }
 
     public ClavaContext getContext() {
@@ -657,7 +571,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         // TODO: CHECK IF CANNOT SIMPLY COPY DATA! NEEDS TO AT LEAST SPECIFY DEFINITION OF NEW CLASS
         // SpecsCheck.checkArgument(nodeClass.isInstance(this), () -> "Expected class to be of same instance");
         // Use the same data store
-        DataStore newDataStore = shareData ? dataI : dataI.copy();
+        DataStore newDataStore = shareData ? getData() : getData().copy();
         // DataStore newDataStore = newDataStore(shareData, nodeClass);
 
         // Set id
@@ -697,19 +611,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         }
     }
 
-    // private <T extends ClavaNode> DataStore newDataStore(boolean shareData, Class<T> nodeClass) {
-    //
-    // if (shareData) {
-    // return dataI;
-    // }
-    //
-    // if (!nodeClass.isInstance(this)) {
-    // return DataStore.newInstance(StoreDefinitions.fromInterface(nodeClass), true);
-    // }
-    //
-    // return dataI.copy();
-    // }
-
     // /**
     // * Legacy support.
     // *
@@ -741,13 +642,21 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /**
      * All keys that can potentially have ClavaNodes.
-     * 
+     *
      * @return
      */
     public List<DataKey<?>> getAllKeysWithNodes() {
         List<DataKey<?>> keys = KEYS_WITH_NODES.get(getClass());
         if (keys == null) {
-            keys = addKeysWithNodes(this);
+            keys = new ArrayList<>();
+
+            for (DataKey<?> key : getStoreDefinition().getKeys()) {
+                if (PropertyWithNodeType.getKeyType(this, key) != PropertyWithNodeType.NOT_FOUND) {
+                    keys.add(key);
+                }
+            }
+
+            KEYS_WITH_NODES.put(getClass(), keys);
         }
 
         return keys;
@@ -828,38 +737,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return Collections.emptyList();
     }
 
-    private static List<DataKey<?>> addKeysWithNodes(ClavaNode node) {
-        List<DataKey<?>> keysWithNodes = new ArrayList<>();
-
-        // Get all the keys that map to a ClavaNode
-        for (DataKey<?> key : node.getStoreDefinition().getKeys()) {
-
-            // ClavaNode keys
-            if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
-                keysWithNodes.add(key);
-                continue;
-            }
-
-            // Optional nodes
-            if (Optional.class.isAssignableFrom(key.getValueClass())) {
-                keysWithNodes.add(key);
-                continue;
-            }
-
-            // List of nodes
-            if (List.class.isAssignableFrom(key.getValueClass())) {
-                keysWithNodes.add(key);
-                continue;
-            }
-
-        }
-
-        // Add to map
-        KEYS_WITH_NODES.put(node.getClass(), keysWithNodes);
-
-        return keysWithNodes;
-    }
-
     public <T extends ClavaNode> List<T> getDescendantsAndFields(Class<T> aClass) {
         return getDescendantsAndFields().stream()
                 .filter(aClass::isInstance)
@@ -899,25 +776,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
             child.getDescendantsAndFields(nodes, seenNodes);
         }
-
-        // // Descendants
-        // for (ClavaNode descendant : getDescendants()) {
-        // // Add descendant
-        // if (!seenNodes.contains(descendant.getId())) {
-        // seenNodes.add(descendant.getId());
-        // nodes.add(descendant);
-        // }
-        //
-        // // Add descendant fields
-        // for (ClavaNode descendantField : descendant.getNodeFieldsRecursive()) {
-        // // Add descendant
-        // if (!seenNodes.contains(descendantField.getId())) {
-        // seenNodes.add(descendantField.getId());
-        // nodes.add(descendantField);
-        // }
-        // }
-        //
-        // }
 
         return nodes;
     }
@@ -1041,121 +899,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return copy;
 
     }
-    /*
-    @SuppressWarnings("unchecked")
-    private ClavaNode deepCopy(boolean keepId, Set<String> seenNodes) {
-        // return copy(keepId);
-    
-        // Copy node itself
-        // ClavaNode copy = copy(keepId, true);
-    
-        // Copies the node, without children
-        ClavaNode copy = copyPrivate(keepId);
-    
-        for (ClavaNode child : getChildren()) {
-            // Copy children of token
-            // ClavaNode newChildToken = deepCopy ? child.deepCopy(keepId, new HashSet<>()) : child.copy(keepId);
-            ClavaNode newChildToken = child.deepCopy(keepId, seenNodes);
-            copy.addChild(newChildToken);
-        }
-    
-        // System.out.println("DEEP COPYING " + this);
-        // if (this instanceof VariableArrayType) {
-        // System.out.println("EXPR:" + get(VariableArrayType.SIZE_EXPR));
-        // }
-        // Copy fields
-        for (DataKey<?> keyWithNode : getAllKeysWithNodes()) {
-            if (!hasValue(keyWithNode)) {
-                continue;
-            }
-    
-            // ClavaNode keys
-            if (ClavaNode.class.isAssignableFrom(keyWithNode.getValueClass())) {
-                DataKey<ClavaNode> clavaNodeKey = (DataKey<ClavaNode>) keyWithNode;
-                ClavaNode value = get(clavaNodeKey);
-                if (!seenNodes.contains(value.getId())) {
-                    seenNodes.add(value.getId());
-                    set(clavaNodeKey, value.deepCopy(keepId, seenNodes));
-                }
-    
-                continue;
-            }
-    
-            // Optional nodes
-            if (Optional.class.isAssignableFrom(keyWithNode.getValueClass())) {
-                // Since this came from getKeysWithNodes(), it is guaranteed that is an Optional of ClavaNode
-                DataKey<Optional<?>> optionalKey = (DataKey<Optional<?>>) keyWithNode;
-                Optional<?> value = get(optionalKey);
-                if (!value.isPresent()) {
-                    continue;
-                }
-    
-                Object possibleNode = value.get();
-    
-                if (!(possibleNode instanceof ClavaNode)) {
-                    continue;
-                }
-    
-                ClavaNode node = (ClavaNode) possibleNode;
-                seenNodes.add(node.getId());
-    
-                set(optionalKey, Optional.of(node.deepCopy(keepId, seenNodes)));
-                continue;
-            }
-    
-            // ClavaLog.info("Case not supported yet:" + keyWithNode);
-        }
-    
-        // if (copy.hasSugar()) {
-        // set(UNQUALIFIED_DESUGARED_TYPE, Optional.of(copy.desugar().copyDeep()));
-        // }
-    
-        return copy;
-    
-    }
-    */
-    //
-    // @SuppressWarnings("unchecked")
-    // public List<ClavaNode> copyNodeField(DataKey<?> keyWithNode) {
-    //
-    // if (!hasValue(keyWithNode)) {
-    // return Collections.emptyList();
-    // }
-    //
-    // // ClavaNode keys
-    // if (ClavaNode.class.isAssignableFrom(keyWithNode.getValueClass())) {
-    // DataKey<ClavaNode> clavaNodeKey = (DataKey<ClavaNode>) keyWithNode;
-    // ClavaNode value = get(clavaNodeKey);
-    // ClavaNode copy = value.copy();
-    // set(clavaNodeKey, copy);
-    // return Arrays.asList(copy);
-    // }
-    //
-    // // Optional nodes
-    // if (Optional.class.isAssignableFrom(keyWithNode.getValueClass())) {
-    // DataKey<Optional<?>> optionalKey = (DataKey<Optional<?>>) keyWithNode;
-    // Optional<?> value = get(optionalKey);
-    // if (!value.isPresent()) {
-    // return Collections.emptyList();
-    // }
-    //
-    // Object possibleNode = value.get();
-    //
-    // if (!(possibleNode instanceof ClavaNode)) {
-    // return Collections.emptyList();
-    // }
-    //
-    // ClavaNode node = (ClavaNode) possibleNode;
-    // ClavaNode copy = node.copy();
-    // set(optionalKey, Optional.of(copy));
-    // return Arrays.asList(copy);
-    // }
-    //
-    // return Collections.emptyList();
-    //
-    // // ClavaLog.info("Case not supported yet:" + keyWithNode);
-    //
-    // }
 
     /**
      * Deep copy node if it is a Type node, simple copy otherwise.
@@ -1181,12 +924,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         if (ClavaNode.class.isAssignableFrom(keyWithNode.getValueClass())) {
             DataKey<ClavaNode> clavaNodeKey = (DataKey<ClavaNode>) keyWithNode;
             set(clavaNodeKey, newValue.get(0));
-            // System.out.println("SETTING NEW VALUE:" + newValue.get(0).getCode());
-            // ClavaNode value = get(clavaNodeKey);
-            // ClavaNode copy = value.copy();
-            // set(clavaNodeKey, copy);
-            //
-            // return Arrays.asList(copy);
         }
 
         // Optional nodes
@@ -1206,7 +943,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
                 return;
             }
 
-            setInPlace(optionalKey, Optional.of(newValue.get(0)));
+            set(optionalKey, Optional.of(newValue.get(0)));
             // System.out.println("SETTING OPTIONAL");
             // ClavaNode copy = node.copy();
             // set(optionalKey, Optional.of(copy));
@@ -1220,80 +957,12 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     * @deprecated
-     * @param key
-     * @param value
-     * @return
-     */
-    @Deprecated
-    public <T, E extends T> ClavaNode setInPlace(DataKey<T> key, E value) {
-        return set(key, value);
-    }
-
-    /**
      * Keys that currently have nodes assigned.
-     * 
+     *
      * @return
      */
-    @SuppressWarnings("unchecked")
     public List<DataKey<?>> getKeysWithNodes() {
-
-        List<DataKey<?>> keys = new ArrayList<>();
-
-        for (DataKey<?> key : getAllKeysWithNodes()) {
-
-            if (!hasValue(key)) {
-                continue;
-            }
-
-            // ClavaNode keys
-            if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
-                keys.add(key);
-                continue;
-            }
-
-            // Optional nodes
-            if (Optional.class.isAssignableFrom(key.getValueClass())) {
-                DataKey<Optional<?>> optionalKey = (DataKey<Optional<?>>) key;
-                Optional<?> value = get(optionalKey);
-                if (!value.isPresent()) {
-                    continue;
-                }
-
-                Object possibleNode = value.get();
-
-                if (!(possibleNode instanceof ClavaNode)) {
-                    continue;
-                }
-
-                keys.add(key);
-                continue;
-            }
-
-            if (List.class.isAssignableFrom(key.getValueClass())) {
-                DataKey<List<?>> listKey = (DataKey<List<?>>) key;
-                List<?> list = get(listKey);
-                if (list.isEmpty()) {
-                    continue;
-                }
-
-                // Check if elements of the list are ClavaNodes
-                boolean clavaNodeList = list.stream()
-                        .filter(elem -> elem instanceof ClavaNode)
-                        .count() == list.size();
-
-                if (!clavaNodeList) {
-                    continue;
-                }
-
-                keys.add(key);
-                continue;
-            }
-        }
-
-        return keys;
-        // ClavaLog.info("Case not supported yet:" + keyWithNode);
-
+        return NODE_FIELD_MANAGER.getKeysWithNodes(this);
     }
 
     // @SuppressWarnings("unchecked")
@@ -1538,6 +1207,5 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     public ClavaNode getOrigin() {
         return hasValue(ClavaNode.ORIGIN) ? get(ClavaNode.ORIGIN) : this;
     }
-
 
 }

@@ -54,12 +54,6 @@ public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
             typeCode = "bool";
         }
 
-        // String typeCode = getTypeCode();
-        // System.out.println("SUB EXPR TYPE:" + getSubExpr().toTree());
-        // System.out.println("VALUE DECL TYPE:" + ((DeclRefExpr) getSubExpr()).getValueDeclType());
-        // System.out.println("TYPE CODE:" + typeCode);
-        // System.out.println("TYPE AS WRITTEN:" + cxxNamedCastExprdata.getTypeAsWritten());
-        // code.append(cxxNamedCastExprdata.getCastName());
         code.append(get(CAST_NAME));
 
         // code.append("<").append(cxxNamedCastExprdata.getTypeAsWritten()).append(">");

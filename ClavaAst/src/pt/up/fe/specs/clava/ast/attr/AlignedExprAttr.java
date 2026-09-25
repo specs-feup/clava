@@ -33,15 +33,6 @@ public class AlignedExprAttr extends AlignedAttr {
         super(data, children);
     }
 
-    // public AlignedExprAttr(AlignedExprAttrData data, Collection<? extends ClavaNode> children) {
-    // super(data, children);
-    // }
-    //
-    // @Override
-    // public AlignedExprAttrData getData() {
-    // return (AlignedExprAttrData) super.getData();
-    // }
-
     @Override
     protected Optional<String> getValueCode() {
         // return getData().get(EXPR).map(Expr::getCode);

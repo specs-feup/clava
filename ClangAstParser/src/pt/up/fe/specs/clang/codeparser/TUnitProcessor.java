@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 public class TUnitProcessor {
 
     private final static boolean ERROR_ON_AMBIGUOUS_SIGNATURE = false;
-    // private final static Set<Class<? extends ClavaNode>> IGNORE_CLASSES = new HashSet<>(
     // Arrays.asList(ImplicitCastExpr.class));
 
     private final List<ClangAstData> parsingData;
@@ -65,47 +64,19 @@ public class TUnitProcessor {
                 .map(data -> data.get(ClangAstData.TRANSLATION_UNIT))
                 .collect(Collectors.toList());
 
-        // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
-        // original clang tree
-        // new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
-        // TreeTransformer transformer = new TreeTransformer(ClangStreamParser.getPostParsingRules());
-        // for (TranslationUnit tUnit : tUnits) {
-        // transformer.transform(tUnit);
-        // }
-
         if (!normalize) {
             return tUnits;
         }
 
-        // Build node locations map
-        // Map<String, ClavaNode> locationToNodeMap = new HashMap<>();
-        // long allNodes = 0;
-        // long nodesWithValidLoc = 0;
         for (TranslationUnit tUnit : tUnits) {
             tUnit.getDescendantsStream()
-                    // Only consider nodes with complete locations
-                    // .filter(node -> node.getLocation().isComplete())
-                    // Only consider nodes with valid locations, nodes with invalid locations in the AST at this point
-                    // where most likely introduced by Clava (e.g., Includes, Null nodes, etc)
                     .filter(node -> node.getLocation().isValid())
                     // Ignore certain nodes that might have the same location, such as ImplicitCastExpr
-                    // .filter(node -> !IGNORE_CLASSES.contains(node.getClass()))
                     .forEach(node -> addNode(node));
 
-            // allNodes += tUnit.getDescendantsStream().count();
-            // nodesWithValidLoc += tUnit.getDescendantsStream()
-            // .filter(node -> node.getLocation().isValid())
-            // .count();
         }
 
-        // System.out.println("ALL NODES: " + allNodes);
-        // System.out.println("NODES WITH VALID LOCS: " + nodesWithValidLoc);
-
         // Iterate over all ClavaNodes and replace fields that have ClavaNodes
-
-        // parsingData.stream()
-        // .flatMap(data -> data.get(ClangParserData.CLAVA_NODES).getNodes().values().stream())
-        // .forEach(node -> System.out.println("NODE: " + node.getClass()));
 
         parsingData.stream()
                 .flatMap(data -> data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream())
@@ -141,15 +112,6 @@ public class TUnitProcessor {
                     node.set((DataKey<Object>) key, normalizedNode);
                     replacedNodes++;
                 });
-                // ClavaNode normalizedNode = locationToNodeMap.get(value.getNodeSignature());
-                // if (normalizedNode == null) {
-                // continue;
-                // }
-                //
-                // node.set((DataKey<Object>) key, normalizedNode);
-                // replacedNodes++;
-
-                // System.out.println("NODE " + normalizedNode.getClass());
 
                 continue;
             }
@@ -163,14 +125,6 @@ public class TUnitProcessor {
                     replacedNodes++;
                 });
 
-                // ClavaNode normalizedNode = locationToNodeMap.get(value.getNodeSignature());
-                // if (normalizedNode == null) {
-                // continue;
-                // }
-                //
-                // node.set((DataKey<Object>) key, Optional.of(normalizedNode));
-                // replacedNodes++;
-                // System.out.println("OPTIONAL OF " + normalizedNode.getClass());
                 continue;
             }
 
@@ -188,13 +142,6 @@ public class TUnitProcessor {
                         replacedNodes++;
                     }
 
-                    // ClavaNode normalizedNode = locationToNodeMap.get(oldNode.getNodeSignature());
-                    // if (normalizedNode == null) {
-                    // newClavaNodes.add(oldNode);
-                    // } else {
-                    // newClavaNodes.add(normalizedNode);
-                    // replacedNodes++;
-                    // }
                 }
 
                 node.set((DataKey<Object>) key, newClavaNodes);
@@ -229,7 +176,6 @@ public class TUnitProcessor {
             ClavaLog.debug(() -> "Signature collision: " + signature);
             ClavaLog.debug(() -> "Signature keys:" + node.getSignatureKeys());
             ClavaLog.debug(() -> "Node:" + node);
-            // System.out.println("PREVIOUS NODE:" + previousNode);
             ambiguousHits++;
             ignoredNodesClasses.add(node.getClass());
 
@@ -264,33 +210,7 @@ public class TUnitProcessor {
                     .append("\nNEW NODE: ")
                     .append(node).append("\n");
         }
-        /*
-        // If previous node is not null, node signature might not have been able to distinguish between nodes
-        if (previousNode != null) {
-            // System.out.println("SIGNATURE COLLISION: " + id);
-            // System.out.println("SIGNATURE KEYS:" + node.getSignatureKeys());
-            //
-            // System.out.println("PREVIOUS NODE:" + previousNode);
-            // System.out.println("CURRENT NODE:" + node);
-        
-            sameLocationPairs++;
-            ignoredNodesClasses.add(node.getClass());
-            // SpecsCheck.checkArgument(previousNode.equals(node),
-            SpecsCheck.checkArgument(previousNode.getClass().equals(node.getClass()),
-                    () -> "Found repeated location '" + id + "' where nodes have different classes.\nOriginal node: "
-                            + previousNode
-                            + "\nNew node:" + node);
-        }
-        */
 
-        // SpecsCheck.checkArgument(previousNode == null,
-        // () -> "Found repeated location '" + id + "'.\nOriginal node: " + previousNode
-        // + "\nNew node:" + node);
     }
-
-    // private String getLocationId(ClavaNode node) {
-    // // return node.getClass().getSimpleName() + "_" + node.getCode();
-    // return node.getClass().getSimpleName() + "_" + node.getLocation();
-    // }
 
 }

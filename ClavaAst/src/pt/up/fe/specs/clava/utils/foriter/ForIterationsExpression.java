@@ -144,15 +144,6 @@ public class ForIterationsExpression {
     }
 
     public static Optional<ForIterationsExpression> newInstance(ForStmt forStmt) {
-        // Get init variable
-        // var iterVar = forStmt.getInitVar().orElse(null);
-        //
-        // if (iterVar == null) {
-        // ClavaLog.debug("ForIterationsExpression: could not determine iteration variable of 'for' at "
-        // + forStmt.getLocation());
-        // return Optional.empty();
-        // }
-
         var iterVarNode = forStmt.getIterationVarNode().orElse(null);
 
         if (iterVarNode == null) {

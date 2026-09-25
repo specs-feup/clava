@@ -101,12 +101,6 @@ public class OmpClauses {
                 .orElseThrow(() -> new RuntimeException(
                         "'" + kindString + "' is not a valid reduction. Available reductions: "
                                 + ReductionKind.getHelper().getAvailableValues()));
-        // ReductionKind kind = ReductionKind.getHelper().valueOfTry(kindString.toLowerCase()).orElse(null);
-        // if (kind == null) {
-        // SpecsLogs.msgInfo("String '" + kindString + "' is not a valid reduction. Available reductions: "
-        // + ReductionKind.getHelper().getAvailableOptions());
-        // return Collections.emptyList();
-        // }
 
         return getReduction(kind);
     }
@@ -265,14 +259,6 @@ public class OmpClauses {
 
     // public List<OmpListClause> getListClause(OmpClauseKind kind) {
     // return SpecsCollections.cast(ompPragma.getClause(kind), OmpListClause.class);
-    // }
-
-    // private static <K> Optional<K> returnFirst(List<K> list) {
-    // if (list.isEmpty()) {
-    // return Optional.empty();
-    // }
-    //
-    // return Optional.of(list.get(0));
     // }
 
 }

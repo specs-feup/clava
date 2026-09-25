@@ -692,22 +692,6 @@ public class ClavaNodes {
     }
 
     public static ParmVarDecl toParam(String typeVarname, ClavaNode hint) {
-        /*
-        typeVarname = typeVarname.trim();
-        int indexOfSpace = typeVarname.lastIndexOf(' ');
-        if (indexOfSpace == -1) {
-            throw new RuntimeException("Expected parameter to be a type - varName pair, separated by a space");
-        }
-        
-        // Check if there are * or &
-        int indexOfStar = typeVarname.lastIndexOf('*');
-        int indexOfAmpersand = typeVarname.lastIndexOf('&');
-        
-        var cutIndex = Math.max(indexOfSpace, Math.max(indexOfStar, indexOfAmpersand));
-        
-        String type = typeVarname.substring(0, cutIndex + 1).trim();
-        String varName = typeVarname.substring(cutIndex + 1).trim();
-        */
 
         var typeName = splitTypeName(typeVarname);
         // If hint is also a VarDecl, use the same attributes

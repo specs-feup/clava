@@ -335,14 +335,10 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
         // Special case: if this node is a statement in a loop header, insert as an expression
         if (this instanceof AStatement && getIsInsideLoopHeaderImpl()) {
             if (getNodeImpl() instanceof DeclStmt) {
-                System.out.println("Code: " + code);
                 // Convert to VarDecl
                 var equalIndex = code.indexOf('=');
-                System.out.println("Equal index: " + equalIndex);
                 var declarationEndIndex = equalIndex != -1 ? equalIndex : code.length();
-                System.out.println("Decl end index: " + declarationEndIndex);
                 var declaration = code.substring(0, declarationEndIndex).strip();
-                System.out.println("Decl: " + declaration);
                 // Separate name from type
                 var separationIndex = declaration.lastIndexOf(' ');
 
@@ -356,8 +352,6 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
                 var declName = declaration.substring(separationIndex + 1, declaration.length()).strip();
 
                 var typeJp = AstFactory.typeLiteral(getWeaverEngine(), type);
-                System.out.println("TYPE: " + type);
-                System.out.println("DECLNAME: " + declName);
                 // if no index, assume no initialization
                 if (equalIndex == -1) {
                     return AstFactory.varDeclNoInit(getWeaverEngine(), declName, typeJp);
@@ -792,8 +786,6 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
                 .map(pragma -> CxxJoinpoints.create(pragma, getWeaverEngine()))
                 .toArray(APragma<?>[]::new);
     }
-
-    static int jsNameCounter = 0;
 
     @Override
     public Object getDataImpl() {

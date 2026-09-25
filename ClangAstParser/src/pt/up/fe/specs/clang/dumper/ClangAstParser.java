@@ -132,7 +132,6 @@ public class ClangAstParser {
 
         List<ClavaNode> topLevelDeclNodes = new ArrayList<>();
 
-        // for (String topLevelDeclId : topLevelDecls.flatValues()) {
         for (String topLevelDeclId : topLevelDecls) {
             ClavaNode parsedNode = data.get(ClangAstData.CLAVA_NODES).get(topLevelDeclId);
             Objects.requireNonNull(parsedNode, () -> "No node for decl '" + topLevelDeclId + "'");
@@ -165,7 +164,6 @@ public class ClangAstParser {
     }
 
     private void addPragmas(TranslationUnit tUnit) {
-        // System.out.println("PRAGMA LOCATIONS: " + data.get(ClangParserData.PRAGMAS_LOCATIONS));
         Map<Integer, Integer> pragmasLocations = data.get(ClangAstData.PRAGMAS_LOCATIONS)
                 .getPragmaLocations(tUnit.getFile());
 
@@ -182,7 +180,6 @@ public class ClangAstParser {
             SnippetParser snippetParser = new SnippetParser(data.get(ClavaNode.CONTEXT));
 
             for (Integer line : lines) {
-                // System.out.println("LOOKING FOR LINE: " + line);
                 int previousIndex = line - 1;
                 while (previousIndex != sourceFile.getLastLineIndex()) {
                     sourceFile.nextLine();
@@ -196,13 +193,8 @@ public class ClangAstParser {
 
                 // Find pragma end
                 while (pragma.endsWith("\\")) {
-                    // int backSlashIndex = pragma.lastIndexOf('\\');
-                    // String currentPragma = pragma;
-                    // SpecsCheck.checkArgument(backSlashIndex != -1,
-                    // () -> "Expected a backslash at the end of the string: " + currentPragma);
 
                     currentLine = sourceFile.nextLine();
-                    // pragma = pragma.substring(0, backSlashIndex) + currentLine.strip();
                     pragma = pragma + "\n" + currentLine.strip();
 
                     // Update end location
@@ -223,9 +215,6 @@ public class ClangAstParser {
 
                 pragmaNodes.add(pragmaNode);
 
-                // System.out.println("PRAGMA: " + pragmaNode.getCode());
-                // System.out.println("END LINE: " + endLine);
-                // System.out.println("END COL: " + endCol);
             }
 
         }
@@ -250,8 +239,6 @@ public class ClangAstParser {
         // To solve this, use the location of the node to remove repetitions,
         // and create a map between repeated ids and normalized ids
 
-        // NormalizedNodes normalizedNodes = NormalizedNodes.newInstance(topLevelDecls);
-        // for (ClavaNode clavaNode : normalizedNodes.getUniqueNodes()) {
         for (ClavaNode clavaNode : topLevelDecls) {
 
             // Normalize node source path
@@ -283,20 +270,6 @@ public class ClangAstParser {
                 .filter(this::filterInclude)
                 .forEach(include -> includesMap.put(SpecsIo.getCanonicalPath(include.getSourceFile()), include));
 
-        // For each enty in MultiMap, create a Translation Unit
-        // if (declarations.size() > 1) {
-        // // Just to check, for now
-        // throw new RuntimeException("Declarations size is not one, check:" + declarations.keySet());
-        // // ClavaLog.warning("DECLA");
-        // }
-
-        // System.out.println("DECLARATION KEYS:");
-        // System.out.println(declarations.keySet());
-        //
-        // System.out.println("DECLARATIONS:");
-        // System.out.println(declarations);
-        // System.out.println("DECLARATIONS KEYS:" + declarations.keySet());
-
         String path = sourceFile.getAbsolutePath();
 
         ClavaLog.debug(() -> "File '" + path + "' has top-level declarations with the following paths: "
@@ -307,7 +280,6 @@ public class ClangAstParser {
             // Just to check, for now
             ClavaLog.debug(() -> "ClangStreamParser.createTu(): expeted declarations to have key '" + path + ": "
                     + declarations.keySet());
-            // throw new RuntimeException("Expeted declarations to have key '" + path + "':" + declarations);
         }
 
         // Declaration nodes of the translation unit
@@ -317,10 +289,8 @@ public class ClangAstParser {
         List<Decl> decls = new ArrayList<>();
 
         // Build filename
-        // File sourcePath = new File(path);
 
         // Declaration nodes of the translation unit
-        // List<Decl> declNodes = declarations.get(path);
 
         // Remove ParmVarDecl nodes
         declNodes = declNodes.stream()
@@ -339,15 +309,6 @@ public class ClangAstParser {
         // Add declarations
         decls.addAll(declNodes);
 
-        // for (Decl decl : decls) {
-        // if (decl.hasParent()) {
-        // System.out.println("DECL '" + decl.getId() + "' HAS PARENT: " + decl.getParent().toTree());
-        // }
-        //
-        // }
-
-        // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
-        // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(sourcePath, decls);
         TranslationUnit tUnit = getFactory().translationUnit(sourceFile, decls);
 
         // Language language = data.get(ClangParserKeys.FILE_LANGUAGE_DATA).get(new File(filenamePath, filename));
@@ -361,11 +322,8 @@ public class ClangAstParser {
 
         addIncludes(uniqueIncludes, tUnit, path);
 
-
         // Clean translation unit
         // ClavaPostProcessing.applyPostPasses(tUnit);
-
-        // tUnits.add(tUnit);
 
         return tUnit;
     }
@@ -380,7 +338,6 @@ public class ClangAstParser {
                 .map(include -> getFactory().includeDecl(include, path))
                 .toList();
 
-
         // Use iterator to find the next insertion point
         // Create a new list to allow modifications to the tree while iterating
         var unitIterator = new ArrayList<>(tUnit.getChildren()).iterator();
@@ -392,7 +349,6 @@ public class ClangAstParser {
             tUnit.addChildren(includeDecls);
             return;
         }
-
 
         boolean insertBefore = true;
 
@@ -509,9 +465,6 @@ public class ClangAstParser {
                 .findFirst()
                 .orElse(false);
 
-        // var isValidInclude = SourceType.isHeader(new File(include.getInclude()));
-
-        // if (!isValidInclude) {
         if (excludeInclude) {
             ClavaLog.debug(
                     () -> "ClangIncludes: filtering out #include '\"" + include.getInclude() + "\"' in source file "
@@ -521,13 +474,7 @@ public class ClangAstParser {
         }
 
         return true;
-        // return isValidInclude;
-        // System.out.println("INCLUDE: " + include.getInclude());
-        // System.out.println("IS HEADER? " + isHeader);
-        // return isHeader;
-        // var isHeader = SourceType.isHeader(include.getSourceFile());
 
         //
-        // return isHeader;
     }
 }

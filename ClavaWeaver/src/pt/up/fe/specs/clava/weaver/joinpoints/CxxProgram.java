@@ -65,12 +65,6 @@ public class CxxProgram<Self extends CxxProgram<Self>> extends AProgram<Self> {
     }
 
     @Override
-    public void rebuildFuzzyImpl() {
-        SpecsLogs.msgInfo("Fuzzy rebuilding tree...");
-        getWeaverEngine().rebuildAstFuzzy();
-    }
-
-    @Override
     public AJoinpoint<?> addFileImpl(AFile<?> file) {
         TranslationUnit tu = (TranslationUnit) file.getNodeImpl();
         TranslationUnit trueTu = this.getNodeImpl().addFile(tu);

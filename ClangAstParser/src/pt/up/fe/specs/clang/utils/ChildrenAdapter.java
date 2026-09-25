@@ -53,10 +53,6 @@ public class ChildrenAdapter {
         this.context = context;
     }
 
-    // private ClavaFactory getFactory() {
-    // return context.get(ClavaContext.FACTORY);
-    // }
-
     private final static ClassMap<ClavaNode, BiFunction<List<ClavaNode>, ClavaContext, List<ClavaNode>>> CHILDREN_ADAPTERS;
     static {
         CHILDREN_ADAPTERS = new ClassMap<>((list, context) -> list);
@@ -74,27 +70,11 @@ public class ChildrenAdapter {
         // CHILDREN_ADAPTERS.put(GotoStmt.class, ChildrenAdapter.adapt(AdaptationType.STMT));
     }
 
-    // private final static ClassMap<ClavaNode, NullNodeAdapter> NULL_NODE_MAPPER;
-    // static {
-    // NULL_NODE_MAPPER = new ClassMap<>(NullNodeAdapter.newEmpty());
-    // NULL_NODE_MAPPER.put(IfStmt.class,
-    // NullNodeAdapter.newInstance(NullNodeType.DECL, null, NullNodeType.STMT, NullNodeType.STMT));
-    // NULL_NODE_MAPPER.put(WhileStmt.class,
-    // NullNodeAdapter.newInstance(NullNodeType.DECL, NullNodeType.STMT, NullNodeType.STMT));
-    // NULL_NODE_MAPPER.put(CXXCatchStmt.class,
-    // NullNodeAdapter.newInstance(NullNodeType.DECL, NullNodeType.STMT));
-    // }
-
     public List<ClavaNode> adaptChildren(ClavaNode node, List<ClavaNode> children) {
         // If no children, just return list
         if (children.isEmpty()) {
             return children;
         }
-
-        // List<ClavaNode> adaptedChildren = children;
-        //
-        // // Apply normalization steps to children
-        // adaptedChildren = CHILDREN_ADAPTERS.get(node.getClass()).apply(adaptedChildren, context);
 
         // Apply normalization steps to children
         List<ClavaNode> adaptedChildren = CHILDREN_ADAPTERS.get(node.getClass()).apply(children, context);
@@ -144,10 +124,6 @@ public class ChildrenAdapter {
     }
 
     private static List<ClavaNode> adaptForStmt(List<ClavaNode> children, ClavaContext context) {
-        // Check body is a compound statements
-        // if (children.get(3) instanceof CompoundStmt) {
-        // return children;
-        // }
 
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
@@ -213,9 +189,6 @@ public class ChildrenAdapter {
             }
 
             if (child instanceof Expr) {
-                // if (child.hasParent()) {
-                // child.detach();
-                // }
                 adaptedChildren.add(context.get(ClavaContext.FACTORY).exprStmt((Expr) child));
                 continue;
             }
@@ -237,12 +210,8 @@ public class ChildrenAdapter {
 
     private static List<ClavaNode> adaptCXXTryStmt(List<ClavaNode> children, ClavaContext context) {
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
-        // System.out.println("CHILDREN:"
         // + children.stream().map(child -> child.get(ClavaNode.ID)).collect(Collectors.joining(", ")));
 
-        // if (children.get(0) instanceof Decl) {
-        // System.out.println("FOUND DECL " + children.get(0).get(ClavaNode.ID) + " IN TRY:" + children.get(0));
-        // }
         adaptedChildren.add(toCompoundStmt(check(children.get(0), CompoundStmt.class), context));
         adaptedChildren.addAll(children.subList(1, children.size()));
 
@@ -258,22 +227,6 @@ public class ChildrenAdapter {
 
         return adaptedChildren;
     }
-
-    // private static List<ClavaNode> adaptDefaultStmt(List<ClavaNode> children, ClavaContext context) {
-    // List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
-    //
-    // adaptedChildren.add(toStmt(children.get(0), context));
-    //
-    // return adaptedChildren;
-    // }
-
-    // private static List<ClavaNode> adaptLabelStmt(List<ClavaNode> children, ClavaContext context) {
-    // List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
-    //
-    // adaptedChildren.add(toStmt(children.get(0), context));
-    //
-    // return adaptedChildren;
-    // }
 
     private static BiFunction<List<ClavaNode>, ClavaContext, List<ClavaNode>> adapt(AdaptationType... adaptations) {
         return adapt(Arrays.asList(adaptations));
@@ -294,13 +247,6 @@ public class ChildrenAdapter {
         };
 
     }
-    // private static List<ClavaNode> adapt(List<ClavaNode> children, ClavaContext context) {
-    // List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
-    //
-    // adaptedChildren.add(toStmt(children.get(0), context));
-    //
-    // return adaptedChildren;
-    // }
 
     static ClavaNode toCompoundStmt(ClavaNode clavaNode, ClavaContext context) {
         return toCompoundStmt(clavaNode, true, context);
@@ -326,15 +272,8 @@ public class ChildrenAdapter {
 
         // Wrap Expr around Stmt
         if (clavaNode instanceof Expr) {
-            // if (clavaNode.hasParent()) {
-            // clavaNode.detach();
-            // }
             return toCompoundStmt(context.get(ClavaContext.FACTORY).exprStmt((Expr) clavaNode), isOptional, context);
         }
-
-        // if (clavaNode instanceof Decl) {
-        // return toCompoundStmt(context.get(ClavaContext.FACTORY).declStmt((Decl) clavaNode), isOptional, context);
-        // }
 
         if (!(clavaNode instanceof Stmt)) {
             throw new RuntimeException(

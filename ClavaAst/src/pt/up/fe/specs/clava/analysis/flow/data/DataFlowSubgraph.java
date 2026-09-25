@@ -49,22 +49,6 @@ public class DataFlowSubgraph {
         return nodes;
     }
 
-    /*
-    @Deprecated
-    private ArrayList<DataFlowNode> findNodesRecursively(DataFlowNode node) {
-    ArrayList<DataFlowNode> nodes = new ArrayList<>();
-    if (!node.isExplored()) {
-        nodes.add(node);
-        node.setExplored(true);
-        for (FlowNode n : node.getInNodes()) {
-    	DataFlowNode ascendant = (DataFlowNode) n;
-    	nodes.addAll(findNodes(ascendant));
-        }
-    }
-    return nodes;
-    }
-    */
-
     /**
      * Finds all nodes of the subgraph given the root
      * 

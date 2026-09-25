@@ -80,9 +80,6 @@ public class CxxWeaverOptions {
                 "dir1[;dir2]*",
                 "Include folders for C/C++ headers. Include files that are used in C/C++ files are processed by Clava and appear in the AST.");
 
-        // addBooleanOption(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING, "sih", "skip-includes-headers-parsing",
-        // "Skips parsing of the headers inside the specified include folders.");
-
         addBooleanOption(CxxWeaverOption.PARSE_INCLUDES, "pi", "parse-includes",
                 "Parses headers inside the specified include folders.");
 
@@ -99,19 +96,12 @@ public class CxxWeaverOptions {
                 "Sets the name of the woven code folder (default value: '" + CxxWeaver.getWovenCodeFoldername()
                         + "')");
 
-        // addBooleanOption(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, "ff", "flatten-woven-folders",
-        // "Flattens woven code folder structure. Otherwise, attempts to maintain original structure specified in input
-        // sources.");
-
         addBooleanOption(ClavaOptions.CUSTOM_RESOURCES, "cr", "custom-resources",
                 "Enables custom resource files (e.g., clang_ast.resources)");
 
         // addBooleanOption(ClavaOptions.DISABLE_CLAVA_DATA_NODES, "dnp", "disable-new-parsing",
         // "Disables new method for parsing nodes (only uses 'legacy' nodes)");
 
-        // addBooleanOption(CxxWeaverOption.UNIT_TESTING_MODE, getUnitTestFlag(), "unit-test",
-        // "Starts Clava in unit-testing mode");
-        //
         addBooleanOption(ParallelCodeParser.PARALLEL_PARSING, "par", "parallel-parsing",
                 "Enables parallel parsing of source files");
 

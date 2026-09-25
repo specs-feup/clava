@@ -51,10 +51,4 @@ public enum DataFlowEdgeType {
         return type == REPEATING;
     }
 
-    /*
-    @Deprecated
-    private static boolean isDirected(DataFlowEdgeType type) {
-    return type == DATAFLOW || type == DATAFLOW_INDEX || type == REPEATING;
-    }
-    */
 }

@@ -50,14 +50,6 @@ public enum CallingConvention implements StringProvider {
 
     // private final String attribute;
 
-    // private CallingConvention(String attribute) {
-    // this.attribute = attribute;
-    // }
-    //
-    // public String getAttribute() {
-    // return attribute;
-    // }
-
     public String getAttributeCode() {
         switch (this) {
         case C:

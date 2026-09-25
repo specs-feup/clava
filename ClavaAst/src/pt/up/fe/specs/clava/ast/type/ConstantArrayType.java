@@ -59,25 +59,6 @@ public class ConstantArrayType extends ArrayType {
         return (int) SpecsMath.multiply(getArrayDims());
     }
 
-    // public List<Integer> getArrayDims() {
-    //
-    // List<Integer> dims = new ArrayList<>();
-    // getArrayDims(dims);
-    // return dims;
-    // }
-    //
-    // private void getArrayDims(List<Integer> dims) {
-    // dims.add(getConstant());
-    //
-    // var elementType = getElementType();
-    //
-    // if (!(elementType instanceof ConstantArrayType)) {
-    // return;
-    // }
-    //
-    // ((ConstantArrayType) elementType).getArrayDims(dims);
-    // }
-
     @Override
     protected String getArrayCode() {
         return get(ARRAY_SIZE).toString();

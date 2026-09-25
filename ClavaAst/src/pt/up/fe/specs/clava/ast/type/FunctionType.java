@@ -78,12 +78,6 @@ public abstract class FunctionType extends Type {
                 () -> "Just to confirm if this can be null. It if can, change to Optional");
 
         return returnType;
-        // int indexReturnType = getIndexReturnType();
-        // if (indexReturnType < 0) {
-        // return null;
-        // }
-        //
-        // return getChild(Type.class, indexReturnType);
     }
 
     @Override
@@ -135,20 +129,6 @@ public abstract class FunctionType extends Type {
     // }
 
     public abstract List<Type> getParamTypes();
-    // public List<Type> getParamTypes() {
-    //
-    // return getChildren().subList(getIndexParamStart(), getIndexParamEnd()).stream()
-    // .map(child -> (Type) child)
-    // .collect(Collectors.toList());
-    //
-    // /*
-    // if (getNumChildren() == 1) {
-    // Collections.emptyList();
-    // }
-    //
-    // return getChildren(Type.class, 1);
-    // */
-    // }
 
     /**
      * 
@@ -173,43 +153,6 @@ public abstract class FunctionType extends Type {
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
-        // Special case: if function type contains a VLA parameter which refers to a DeclRefExpr
-        // whose decl is a ParmVarDecl, this means the VLA might depend on having the names of the
-        // parameters
-        // ValueDecl vlaParameter = getParamTypes().stream()
-        // // Get nodes inside types
-        // .flatMap(param -> param.getNodeFieldsRecursive().stream())
-        // // Look for a VLA
-        // .filter(VariableArrayType.class::isInstance)
-        // .map(VariableArrayType.class::cast)
-        // // Get DeclRefExprs inside VLAs size expression
-        // .flatMap(vla -> vla.get(VariableArrayType.SIZE_EXPR).getDescendants(DeclRefExpr.class).stream())
-        // // Get declarations
-        // .map(declRefExpr -> declRefExpr.get(DeclRefExpr.DECL))
-        // // But only ParmVarDecls
-        // .filter(ParmVarDecl.class::isInstance)
-        // // Only one should be enough
-        // .findFirst()
-        // .orElse(null);
-        //
-        // if (vlaParameter != null) {
-        //
-        // vlaParameter.get(Decl.DECL_CONTEXT)
-        // .ifPresent(declC -> System.out.println("CONTEXT: " + declC));
-        // }
-
-        // get(SIZE_EXPR).getDescendants(DeclRefExpr.class).stream()
-        // .forEach(declRef -> System.out.println("DECL: " + declRef.get(DeclRefExpr.DECL)));
-
-        // .anyMatch(VariableArrayType.class::isInstance))
-
-        // A name (*) means that it has been called from PointerType with null name
-        // if (name != null && !name.isEmpty() && !name.equals("(*)")) {
-        // SpecsLogs.warn(
-        // ".getCode() for FunctionType using name, check if ok since we do not have information about parameters
-        // names");
-        // }
-
         StringBuilder code = new StringBuilder();
 
         code.append(getReturnType().getCode(sourceNode, name));

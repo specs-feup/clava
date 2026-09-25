@@ -140,26 +140,7 @@ public class CXXBaseSpecifier extends ADataClass<CXXBaseSpecifier> implements Ty
                     .orElseThrow(() -> new RuntimeException("Could not find a declaration for the class with name '"
                             + classType.get(TemplateSpecializationType.TEMPLATE_NAME) + "'"));
 
-            // SpecsCheck.checkArgument(templateClass instanceof ClassTemplateDecl,
-            // () -> "Expected class to be '" + ClassTemplateDecl.class + "', found '" + templateClass.getClass()
-            // + "'");
-
             return templateClass.getTemplateDecl();
-            // var className = classType.get(TemplateSpecializationType.TEMPLATE_NAME);
-            // System.out.println("TEMPLATE DECL: " + classType.get(TemplateSpecializationType.TEMPLATE_DECL));
-            // var decls = sourceNode.getApp().getDescendantsStream()
-            // .filter(node -> node instanceof CXXRecordDecl)
-            // .map(record -> (CXXRecordDecl) record)
-            // .filter(record -> record.getDeclName().equals(className))
-            // .collect(Collectors.toList());
-            //
-            // SpecsCheck.checkArgument(!decls.isEmpty(),
-            // () -> "Could not find a declaration for the class with name '" + className + "'");
-            //
-            // // Prioritize definition
-            // return decls.stream()
-            // .filter(record -> record.isCompleteDefinition())
-            // .findFirst().orElse(decls.get(0));
         }
 
         // TemplateTypeParmType has decl directly available

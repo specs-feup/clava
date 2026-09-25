@@ -83,43 +83,6 @@ public interface DummyNode {
      * @return
      */
     @Deprecated
-    /*
-    static ClavaNode newInstance(Class<? extends ClavaNode> clavaNodeClass, ClavaData data,
-            Collection<? extends ClavaNode> children) {
-    
-        // Determine DummyNode type based on ClavaNode class
-        String classname = clavaNodeClass.getName();
-    
-        if (Type.class.isAssignableFrom(clavaNodeClass)) {
-            DummyTypeData dummyData = new DummyTypeData(classname, (TypeDataV2) data);
-            return new DummyType(dummyData, children);
-        }
-    
-        if (Decl.class.isAssignableFrom(clavaNodeClass)) {
-            DummyDeclData dummyData = new DummyDeclData(classname, (DeclDataV2) data);
-            return new DummyDecl(dummyData, children);
-        }
-    
-        if (Expr.class.isAssignableFrom(clavaNodeClass)) {
-            DummyExprData dummyData = new DummyExprData(classname, (ExprDataV2) data);
-            return new DummyExpr(dummyData, children);
-        }
-    
-        if (Stmt.class.isAssignableFrom(clavaNodeClass)) {
-            DummyStmtData dummyData = new DummyStmtData(classname, (StmtData) data);
-            return new DummyStmt(dummyData, children);
-        }
-    
-        if (Attribute.class.isAssignableFrom(clavaNodeClass)) {
-    
-            DummyAttributeData dummyData = new DummyAttributeData(classname, (AttributeData) data);
-            // data.getData().
-            return new DummyAttr(data.getData(), children);
-        }
-    
-        throw new RuntimeException("ClavaNode class not supported:" + clavaNodeClass);
-    }
-    */
 
     /**
      * 
