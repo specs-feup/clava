@@ -294,8 +294,8 @@ def ab_paired_svg(manifest: dict[str, Any]) -> str:
 
 
 def ab_phase_html(manifest: dict[str, Any], suite: str) -> str:
-    fields = (("native_ms", "Native dump process"), ("read_ms", "Read and parse dump"),
-              ("ast_ms", "Build Clava AST"), ("dump_bytes", "Uncompressed dumps"))
+    fields = (("native_ms", "Run Clang dumper"), ("read_ms", "Read AST file"),
+              ("ast_ms", "Build Clava AST"), ("dump_bytes", "AST file size"))
     cards = []
     for field, title in fields:
         medians = {}
@@ -316,12 +316,9 @@ def ab_phase_html(manifest: dict[str, Any], suite: str) -> str:
 
 
 def ab_section(manifest: dict[str, Any]) -> str:
-    comparisons = []
     candles = []
     phase_cards = []
     for suite in SUITES:
-        text_median, proto_median, percent = ab_delta(manifest, suite)
-        comparisons.append(f'{SUITES[suite]["title"]} median: Text {fmt_seconds(text_median)}, Protobuf {fmt_seconds(proto_median)} ({percent:+.1f}%)')
         candles.append(f'<figure class="chart-card"><figcaption><h3>{esc(SUITES[suite]["title"])}</h3></figcaption>{ab_candle_svg(manifest, suite)}</figure>')
         phase_cards.append(f'<div class="phase-suite"><h3>{esc(SUITES[suite]["title"])}</h3><div class="phase-grid">{ab_phase_html(manifest, suite)}</div></div>')
     sources = manifest.get("sources", {})
@@ -330,8 +327,8 @@ def ab_section(manifest: dict[str, Any]) -> str:
     native_hash = sources.get("native", {}).get("tool_sha256", "not recorded")
     jar_hash = manifest.get("runtime_parser_jar_sha256", "not recorded")
     repeats = int(manifest["repeat_count"])
-    js_change = ab_delta(manifest, "clava-js")[2]
-    java_change = ab_delta(manifest, "java")[2]
+    js_text, js_proto, _ = ab_delta(manifest, "clava-js")
+    java_text, java_proto, java_change = ab_delta(manifest, "java")
     java_read = {
         stage: statistics.median(row["metrics"]["read_ms"]
                                  for _, row in ab_values(manifest, "java", stage))
@@ -345,17 +342,21 @@ def ab_section(manifest: dict[str, Any]) -> str:
             ab_values(manifest, "java", "ab-text"))
     )
     return f'''<section aria-labelledby="ab-title" class="ab-section">
-    <p class="eyebrow">Controlled follow-up</p><h2 id="ab-title">What changes when the transport path changes?</h2>
-    <p class="takeaway">{esc(" · ".join(comparisons))}. Lower is faster. One Clava revision, one native binary, and one Java runtime select either the text writer and reader or the Protobuf writer and reader.</p>
+    <p class="eyebrow">Isolating the file format</p><h2 id="ab-title">Same code, two ways to send the AST to Clava</h2>
+    <p>The earlier charts compare different code branches. Those branches changed more than the AST file format. Here we used one build of the Clang AST dumper and Clava, then switched only how the intermediate AST file was written and read:</p>
+    <div class="ab-paths"><div><strong>Text mode</strong><span>The dumper writes a text AST file → Clava reads text</span></div><div><strong>Protobuf mode</strong><span>The dumper writes a Protobuf AST file → Clava reads Protobuf</span></div></div>
+    <p class="small">For each mode, we ran the complete Clava-JS and Java test suites {repeats} times, alternating which mode went first. We turned off the AST cache, so every test run made new dumps. The candles measure the time for the entire test command, including test setup and work beyond AST parsing.</p>
+    <p class="takeaway">Clava-JS took {fmt_seconds(js_text)} with Text and {fmt_seconds(js_proto)} with Protobuf, effectively a tie. Java took {fmt_seconds(java_text)} with Text and {fmt_seconds(java_proto)} with Protobuf. Protobuf was {java_change:.1f}% slower on Java and slower in {java_pairs_slower} of {repeats} runs. Lower is faster.</p>
     <div class="chart-grid">{"".join(candles)}</div>
-    <figure class="chart-card ab-paired"><figcaption><h3>Within-pair change</h3><p>Protobuf relative to Text · left is faster</p></figcaption>{ab_paired_svg(manifest)}</figure>
-    <p class="small">Each candle summarizes {repeats} valid measured repeats. The paired chart compares the two formats in each rotated repeat. Whiskers are min/max, boxes Q1–Q3, the center mark is the median, and dots are measured runs.</p>
-    <h3 class="phase-title">Parser phases and dump size</h3>
+    <figure class="chart-card ab-paired"><figcaption><h3>Did Protobuf win each run?</h3><p>Left of zero: faster · right of zero: slower</p></figcaption>{ab_paired_svg(manifest)}</figure>
+    <p class="small">Each candle shows {repeats} full-suite runs. The dots in the last chart compare the Text and Protobuf runs with the same repeat number. Candle whiskers show the fastest and slowest runs; the box covers the middle half.</p>
+    <h3 class="phase-title">Dumper time, reader time, and file size</h3>
+    <p class="small">The bars below count work recorded while each suite ran. Several source files can be processed at once, so the time bars do not add up to the whole-suite times above.</p>
     {"".join(phase_cards)}
-    <p class="notice">On the same revision, Clava-JS changes by {js_change:+.1f}% in median wall time, so the branch-level lead does not carry over as a clear transport-only gain. Java changes by {java_change:+.1f}% and Protobuf is slower in {java_pairs_slower}/{repeats} pairs. Yet Java's measured read/parse work is {abs(java_read_change):.2f}s {java_read_direction} per run. These overlapping phase totals do not isolate the source of the Java wall-time gap.</p>
-    <p class="small">Time bars show the median of per-run work summed across parser calls; size bars show the median total uncompressed bytes written. Each pair has its own scale. The time bars are not shares of whole-suite wall time. Protobuf decode, record construction, and reference resolution are inside its read phase, so they are not added again.</p>
-    <details class="details-card"><summary>Controlled A/B validation and limits</summary>
-      <p>{repeats} measured repeats per format and suite, plus uncharted warm-ups. Direct mode disables ccache and uses uncompressed completed files. A C and a C++ fixture passed normalized AST graph equality before timing, and both formats passed suite smoke tests. The two modes use the same source revisions and artifact hashes.</p>
+    <p class="notice">Smaller Protobuf files did not speed up Clava-JS on the same code. Java was slower overall, even though its measured AST file-reading work was {abs(java_read_change):.2f}s {java_read_direction} with Protobuf. These counters do not yet tell us where Java spent the extra time.</p>
+    <p class="small">Each bar is the median of work summed across parser calls, or the median total size of the uncompressed AST files. Each Text/Protobuf bar pair has its own scale. Protobuf decoding and node creation are already counted inside its reader time.</p>
+    <details class="details-card"><summary>Exactly how we checked this</summary>
+      <p>{repeats} measured repeats per format and suite, plus uncharted warm-ups. Both formats used the same source revisions, native executable, and Java runtime. We disabled ccache and compression. A C and a C++ example produced matching normalized ASTs in both formats before timing, and both formats passed suite smoke tests.</p>
       <p>Graph normalization excludes wire-local IDs, process context, edit-origin references, object identity, and the DataStore dispatch label. Concrete node classes, ordered children, source ranges, references, and populated semantic fields remain compared. The full measured suite tests passed in both modes.</p>
       <p>The Java suite's two-input PairHash fixture uses one parser worker in both modes; all other tests retain their configured concurrency.</p>
       <p>In a separate, unpaired Java diagnostic run, 108 of 116 individual test durations were higher with Protobuf; the largest single increase was 0.34s. This suggests many small contributions rather than one runaway test, but one extra run cannot establish their cause and is excluded from the six-pair estimate.</p>
@@ -905,8 +906,8 @@ def report_html(
     worktree_notes = provenance_worktree_note(provenance)
     controlled_ab = ab_section(ab_manifest) if ab_manifest is not None else ""
     comparison_guide = (
-        '<p class="small">The first charts compare branch outcomes across cache states. '
-        'The controlled Text/Protobuf A/B below isolates the transport change on one revision.</p>'
+        '<p class="small">The first charts compare different code branches and cache states. '
+        'The next section runs Text and Protobuf through the same build to check what the file format itself changes.</p>'
         if ab_manifest is not None else ""
     )
 
@@ -968,6 +969,9 @@ def report_html(
     .cache-grid {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:14px 0 28px; }}
     .cache-card {{ padding:16px; }} .cache-card p:last-child {{ margin-bottom:0; }}
     .ab-section {{ margin:44px 0; }} .ab-section>.chart-grid {{ margin:16px 0; }}
+    .ab-paths {{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }}
+    .ab-paths>div {{ display:flex; flex-wrap:wrap; gap:6px 16px; padding:14px 16px; border:1px solid var(--line); border-radius:12px; background:var(--surface); }}
+    .ab-paths strong {{ color:var(--ink); }} .ab-paths span {{ color:var(--muted); }}
     .ab-paired {{ margin:16px 0; }} .phase-title {{ margin:22px 0 12px; }}
     .phase-suite {{ margin:14px 0; }} .phase-suite>h3 {{ margin:0 0 10px; }}
     .phase-grid {{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }}
@@ -988,7 +992,7 @@ def report_html(
     .legend span {{ display:inline-flex; align-items:center; gap:7px; }} .swatch {{ width:12px; height:12px; border-radius:3px; }}
     .footer-note {{ margin-top:28px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:.85rem; }}
     @media(max-width:1000px) {{ .phase-grid {{ grid-template-columns:repeat(2,minmax(0,1fr)); }} }}
-    @media(max-width:800px) {{ .trend-grid,.cache-grid {{ grid-template-columns:1fr; }} .section-heading {{ display:block; }} .section-heading>p {{ text-align:left; margin-top:8px; }} }}
+    @media(max-width:800px) {{ .trend-grid,.cache-grid,.ab-paths {{ grid-template-columns:1fr; }} .section-heading {{ display:block; }} .section-heading>p {{ text-align:left; margin-top:8px; }} }}
     @media(max-width:650px) {{ .phase-grid {{ grid-template-columns:1fr; }} }}
     @media(max-width:650px) {{ main {{ width:min(100% - 20px,1180px); margin-top:18px; }} .hero {{ padding:22px 18px; }} .chart-card {{ padding:14px 8px 10px; }} .chart-card figcaption {{ display:block; }} .chart-card figcaption p {{ text-align:left; margin-bottom:0; }} .candle-chart {{ min-width:760px; }} .chart-card,.trend-card {{ overflow-x:auto; }} .trend-chart {{ min-width:480px; }} .branch-chart {{ min-width:700px; }} .branch-card {{ overflow-x:auto; }} }}
   </style>
