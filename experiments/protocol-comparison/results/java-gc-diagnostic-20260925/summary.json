@@ -1,0 +1,71 @@
+{
+  "kind": "same-revision-java-gc-diagnostic",
+  "date": "2026-09-25",
+  "clava_revision": "a1a8d73c9f0f0e1f4d2d58fabc786cc2d9318ea0",
+  "native_revision": "16e97e1ee1f14b8f5751f48143b953b1c89a9a1a",
+  "suite": "ClangAstParser 116-test Java parser suite",
+  "conditions": {
+    "normal": "Normal test-worker JVM; execution-info logging calls SpecsSystem.getUsedMemory(true), which invokes System.gc() twice after each parse.",
+    "explicit_gc_disabled": "Same test command and JFR settings, with -XX:+DisableExplicitGC on the Gradle test-worker JVM only. This is a diagnostic control, not the original benchmark configuration."
+  },
+  "jfr_settings": "profile",
+  "runs": [
+    {
+      "condition": "normal",
+      "wire": "text",
+      "wall_s": 39.78,
+      "user_s": 82.63,
+      "sys_s": 6.87,
+      "gc_pause_s": 8.49,
+      "gc_pause_count": 830,
+      "system_gc_count": 432,
+      "system_gc_pause_s": 7.845,
+      "jfr_file": "normal-text.jfr",
+      "jfr_sha256": "bb578d753b4e01769d59daf49786b6a0effd1be80fb64be5ee75d7d8f412d56a"
+    },
+    {
+      "condition": "normal",
+      "wire": "protobuf",
+      "wall_s": 45.07,
+      "user_s": 89.95,
+      "sys_s": 5.39,
+      "gc_pause_s": 12.70,
+      "gc_pause_count": 501,
+      "system_gc_count": 432,
+      "system_gc_pause_s": 12.341,
+      "jfr_file": "normal-protobuf.jfr",
+      "jfr_sha256": "967382fc05c21960d0d15a9e4cdb4451cd496a9df29fa793163e551d2f5ed2f3"
+    },
+    {
+      "condition": "explicit_gc_disabled",
+      "wire": "text",
+      "wall_s": 31.32,
+      "user_s": 54.52,
+      "sys_s": 5.52,
+      "gc_pause_s": 0.346,
+      "gc_pause_count": 72,
+      "system_gc_count": 0,
+      "system_gc_pause_s": 0,
+      "jfr_file": "no-explicit-gc-text.jfr",
+      "jfr_sha256": "55398c9bad697dd8f282dbdf71ef8ed24e92f13a94e35c226aa1f0c47f1e0676"
+    },
+    {
+      "condition": "explicit_gc_disabled",
+      "wire": "protobuf",
+      "wall_s": 31.51,
+      "user_s": 64.86,
+      "sys_s": 4.77,
+      "gc_pause_s": 0.388,
+      "gc_pause_count": 70,
+      "system_gc_count": 0,
+      "system_gc_pause_s": 0,
+      "jfr_file": "no-explicit-gc-protobuf.jfr",
+      "jfr_sha256": "868f581cb01fae8675fd0ed9f627096053449b5ddb63b52769caec84906752f1"
+    }
+  ],
+  "original_ab_java_median_used_heap_mib_after_logging": {
+    "text": 18,
+    "protobuf": 20
+  },
+  "limitations": "One exploratory JFR-instrumented Text/Protobuf pair per JVM condition, run sequentially after the six-pair A/B. The original six-pair wall times remain the performance estimate. GC pause time belongs only to the worker JVM and must not be added to whole-command wall time."
+}

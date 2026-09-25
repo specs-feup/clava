@@ -345,7 +345,67 @@ def ab_phase_html(manifest: dict[str, Any], suite: str) -> str:
     return "".join(cards)
 
 
-def ab_section(manifest: dict[str, Any]) -> str:
+def load_gc_result(path: Path, ab_manifest: dict[str, Any]) -> dict[str, Any]:
+    profile = json.loads(path.read_text(encoding="utf-8"))
+    if profile.get("kind") != "same-revision-java-gc-diagnostic":
+        raise ValueError(f"{path}: unrecognized Java GC diagnostic")
+    for name, source in (("clava", "clava_revision"), ("native", "native_revision")):
+        if profile.get(source) != ab_manifest.get("sources", {}).get(name, {}).get("revision"):
+            raise ValueError(f"{path}: {name} revision differs from same-revision A/B")
+    rows = profile.get("runs", [])
+    if len(rows) != 4 or {(row.get("condition"), row.get("wire")) for row in rows} != {
+            (condition, wire) for condition in ("normal", "explicit_gc_disabled")
+            for wire in ("text", "protobuf")}:
+        raise ValueError(f"{path}: expected one profile of each format in each JVM condition")
+    for row in rows:
+        for field in ("wall_s", "gc_pause_s", "system_gc_count", "system_gc_pause_s"):
+            if number(row.get(field)) is None or number(row[field]) < 0:
+                raise ValueError(f"{path}: invalid {field} in Java GC diagnostic")
+    by_condition = {(row["condition"], row["wire"]): row for row in rows}
+    normal_counts = {by_condition["normal", wire]["system_gc_count"] for wire in ("text", "protobuf")}
+    if len(normal_counts) != 1 or next(iter(normal_counts)) <= 0 or any(
+            by_condition["explicit_gc_disabled", wire]["system_gc_count"] != 0
+            for wire in ("text", "protobuf")):
+        raise ValueError(f"{path}: explicit-GC control does not match the report claim")
+    memory = profile.get("original_ab_java_median_used_heap_mib_after_logging", {})
+    if any(number(memory.get(wire)) is None for wire in ("text", "protobuf")):
+        raise ValueError(f"{path}: missing Java used-heap medians")
+    return profile
+
+
+def gc_diagnostic_html(profile: dict[str, Any]) -> str:
+    rows = {(row["condition"], row["wire"]): row for row in profile["runs"]}
+
+    def bars(field: str, title: str, maximum: int, ticks: tuple[int, ...]) -> str:
+        tracks = []
+        for condition, prefix in (("normal", "Normal"), ("explicit_gc_disabled", "GC off")):
+            for wire, color in (("text", AB_STAGES["ab-text"][1]),
+                                ("protobuf", AB_STAGES["ab-protobuf"][1])):
+                value = rows[condition, wire][field]
+                tracks.append(
+                    f'<div class="gc-row"><span>{esc(prefix)} · {esc(wire.title())}</span>'
+                    f'<div class="gc-track"><i style="width:{value / maximum * 100:.2f}%;background:{color}"></i></div>'
+                    f'<strong>{value:.2f}s</strong></div>')
+        labels = "".join(f'<span>{tick}s</span>' for tick in ticks)
+        return (f'<div class="gc-card"><h4>{esc(title)}</h4>{"".join(tracks)}'
+                f'<div class="gc-axis"><span></span><div>{labels}</div><span></span></div></div>')
+
+    normal_text, normal_proto = rows["normal", "text"], rows["normal", "protobuf"]
+    off_text, off_proto = rows["explicit_gc_disabled", "text"], rows["explicit_gc_disabled", "protobuf"]
+    used_heap = profile["original_ab_java_median_used_heap_mib_after_logging"]
+    wall_gap = normal_proto["wall_s"] - normal_text["wall_s"]
+    off_gap = off_proto["wall_s"] - off_text["wall_s"]
+    forced_pause_gap = normal_proto["system_gc_pause_s"] - normal_text["system_gc_pause_s"]
+    return f'''<section class="gc-section" aria-labelledby="gc-title">
+      <p class="eyebrow">Why Java slowed down</p><h3 id="gc-title">Forced garbage collection dominates the Java gap</h3>
+      <p>The Java parser suite logs used heap after each parse. That logging calls <code>System.gc()</code> twice. In the profiled pair, both formats triggered {normal_text['system_gc_count']} full collections. Protobuf spent {forced_pause_gap:.2f}s more paused for those collections, close to its {wall_gap:.2f}s longer whole-suite run.</p>
+      <div class="gc-grid">{bars('wall_s', 'Whole Java test command', 50, (0, 25, 50))}{bars('gc_pause_s', 'Test-worker GC pauses', 15, (0, 5, 10, 15))}</div>
+      <p class="takeaway">When the test worker ignored explicit GC requests, Protobuf was only {off_gap:.2f}s slower ({off_text['wall_s']:.2f}s vs {off_proto['wall_s']:.2f}s), and GC pauses fell below 0.4s in both modes. This identifies repeated full GC in the Java test path as the main source of its measured gap. It does not show a 4-second Protobuf reader penalty.</p>
+      <p class="small">These are one exploratory, JFR-profiled pair per JVM condition, not new six-run medians. The original six-pair comparison above remains the measured result. Protobuf reported about {used_heap['protobuf']} MiB of used Java heap after logging versus {used_heap['text']} MiB for Text in the original runs; the profile does not isolate which live objects made each collection slower. Turning off explicit GC is a diagnostic control, not a claim that the Java test configuration should silently change.</p>
+    </section>'''
+
+
+def ab_section(manifest: dict[str, Any], gc_profile: dict[str, Any] | None = None) -> str:
     candles = []
     phase_cards = []
     for suite in SUITES:
@@ -371,6 +431,9 @@ def ab_section(manifest: dict[str, Any]) -> str:
             ab_values(manifest, "java", "ab-protobuf"),
             ab_values(manifest, "java", "ab-text"))
     )
+    gc_html = gc_diagnostic_html(gc_profile) if gc_profile is not None else ""
+    phase_notice = ("The phase bars do not include Java's repeated full-GC pauses; the diagnostic below measures them separately."
+                    if gc_profile is not None else "These counters do not yet tell us where Java spent the extra time.")
     return f'''<section aria-labelledby="ab-title" class="ab-section">
     <p class="eyebrow">Isolating the file format</p><h2 id="ab-title">Same code, two ways to send the AST to Clava</h2>
     <p>The earlier charts compare different code branches. Those branches changed more than the AST file format. Here we used one build of the Clang AST dumper and Clava, then switched only how the intermediate AST file was written and read:</p>
@@ -383,13 +446,15 @@ def ab_section(manifest: dict[str, Any]) -> str:
     <h3 class="phase-title">Dumper time, reader time, and file size</h3>
     <p class="small">The bars below count work recorded while each suite ran. Several source files can be processed at once, so the time bars do not add up to the whole-suite times above.</p>
     {"".join(phase_cards)}
-    <p class="notice">Smaller Protobuf files did not speed up Clava-JS on the same code. Java was slower overall, even though its measured AST file-reading work was {abs(java_read_change):.2f}s {java_read_direction} with Protobuf. These counters do not yet tell us where Java spent the extra time.</p>
+    <p class="notice">Smaller Protobuf files did not speed up Clava-JS on the same code. Java was slower overall, even though its measured AST file-reading work was {abs(java_read_change):.2f}s {java_read_direction} with Protobuf. {esc(phase_notice)}</p>
     <p class="small">Each bar is the median of work summed across parser calls, or the median total size of the uncompressed AST files. Each Text/Protobuf bar pair has its own scale. Protobuf decoding and node creation are already counted inside its reader time.</p>
+    {gc_html}
     <details class="details-card"><summary>Exactly how we checked this</summary>
       <p>{repeats} measured repeats per format and suite, plus uncharted warm-ups. Both formats used the same source revisions, native executable, and Java runtime. We disabled ccache and compression. A C and a C++ example produced matching normalized ASTs in both formats before timing, and both formats passed suite smoke tests.</p>
       <p>Graph normalization excludes wire-local IDs, process context, edit-origin references, object identity, and the DataStore dispatch label. Concrete node classes, ordered children, source ranges, references, and populated semantic fields remain compared. The full measured suite tests passed in both modes.</p>
       <p>The Java suite's two-input PairHash fixture uses one parser worker in both modes; all other tests retain their configured concurrency.</p>
-      <p>In a separate, unpaired Java diagnostic run, 108 of 116 individual test durations were higher with Protobuf; the largest single increase was 0.34s. This suggests many small contributions rather than one runaway test, but one extra run cannot establish their cause and is excluded from the six-pair estimate.</p>
+      {'<p>The Java GC diagnostic used the same Clava and native revisions. Java Flight Recorder captured one full-suite Text and one Protobuf run with normal JVM behavior, then one of each with <code>-XX:+DisableExplicitGC</code> on the test worker. <code>ParallelCodeParser</code> calls <code>SpecsSystem.getUsedMemory(true)</code> when reporting execution information; that method calls <code>System.gc()</code> twice. The diagnostic keeps JFR enabled in both JVM conditions.</p>' if gc_profile is not None else ''}
+      {'<p>In a separate, unpaired Java diagnostic run, 108 of 116 individual test durations were higher with Protobuf; the largest single increase was 0.34s. This suggests many small contributions rather than one runaway test, but one extra run cannot establish their cause and is excluded from the six-pair estimate.</p>' if gc_profile is None else ''}
       <p class="small">Clava commit: <code>{esc(clava_revision)}</code><br>Native commit: <code>{esc(native_revision)}</code><br>Native binary SHA-256: <code>{esc(native_hash)}</code><br>Staged parser JAR SHA-256: <code>{esc(jar_hash)}</code></p>
       <p>{repeats} repeats on one workstation show workload-specific behavior, not universal format performance. The earlier branch comparison also includes changes beyond the transport path.</p>
     </details>
@@ -869,6 +934,7 @@ def report_html(
     provenance_warnings: list[str] | None = None,
     smoke_note: str | None = None,
     ab_manifest: dict[str, Any] | None = None,
+    gc_profile: dict[str, Any] | None = None,
 ) -> str:
     rows = flatten_results(manifests)
     modes_present = sorted({str(row.get("mode")) for row in rows if row.get("mode") in MODE_ORDER}, key=MODE_ORDER.index)
@@ -931,7 +997,7 @@ def report_html(
     )
     validity = f"{valid_runs:,}/{total_runs:,} valid invocations · {measured_count:,} measured · {warmup_count:,} warm-ups · {invalid_count:,} invalid"
     worktree_notes = provenance_worktree_note(provenance)
-    controlled_ab = ab_section(ab_manifest) if ab_manifest is not None else ""
+    controlled_ab = ab_section(ab_manifest, gc_profile) if ab_manifest is not None else ""
     comparison_guide = (
         '<p class="small">The first charts compare different code branches and cache states. '
         'The next section runs Text and Protobuf through the same build to check what the file format itself changes.</p>'
@@ -1009,6 +1075,15 @@ def report_html(
     .phase-row strong {{ text-align:right; font-size:.78rem; }}
     .phase-track {{ height:12px; border-radius:7px; background:var(--grid); overflow:hidden; }}
     .phase-track i {{ display:block; min-width:2px; height:100%; border-radius:7px; }}
+    .gc-section {{ margin:26px 0; }} .gc-section>h3 {{ font-size:1.45rem; }}
+    .gc-grid {{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:16px 0; }}
+    .gc-card {{ min-width:0; padding:16px; border:1px solid var(--line); border-radius:14px; background:var(--surface); }}
+    .gc-card h4 {{ margin:0 0 14px; font-size:1rem; }}
+    .gc-row,.gc-axis {{ display:grid; grid-template-columns:132px minmax(0,1fr) 48px; gap:8px; align-items:center; font-size:.79rem; }}
+    .gc-row {{ margin:8px 0; }} .gc-row strong {{ text-align:right; }}
+    .gc-track {{ height:14px; background:var(--grid); border-radius:7px; overflow:hidden; }}
+    .gc-track i {{ display:block; height:100%; border-radius:7px; }}
+    .gc-axis>div {{ display:flex; justify-content:space-between; color:var(--muted); font-size:.72rem; }}
     details {{ margin:14px 0; }} summary {{ cursor:pointer; font-weight:700; }}
     .details-card {{ padding:18px 20px; }} .details-card summary {{ margin:-18px -20px; padding:18px 20px; }}
     .details-card[open] summary {{ margin-bottom:14px; border-bottom:1px solid var(--line); }}
@@ -1020,7 +1095,7 @@ def report_html(
     .legend span {{ display:inline-flex; align-items:center; gap:7px; }} .swatch {{ width:12px; height:12px; border-radius:3px; }}
     .footer-note {{ margin-top:28px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:.85rem; }}
     @media(max-width:1000px) {{ .phase-grid {{ grid-template-columns:repeat(2,minmax(0,1fr)); }} }}
-    @media(max-width:800px) {{ .trend-grid,.cache-grid,.ab-paths {{ grid-template-columns:1fr; }} .section-heading {{ display:block; }} .section-heading>p {{ text-align:left; margin-top:8px; }} }}
+    @media(max-width:800px) {{ .trend-grid,.cache-grid,.ab-paths,.gc-grid {{ grid-template-columns:1fr; }} .section-heading {{ display:block; }} .section-heading>p {{ text-align:left; margin-top:8px; }} }}
     @media(max-width:650px) {{ .phase-grid {{ grid-template-columns:1fr; }} }}
     @media(max-width:650px) {{ main {{ width:min(100% - 20px,1180px); margin-top:18px; }} .hero {{ padding:22px 18px; }} .mobile-hint {{ display:block; }} .chart-card {{ padding:14px 8px 10px; }} .chart-card figcaption {{ display:block; }} .chart-card figcaption p {{ text-align:left; margin-bottom:0; }} .candle-chart {{ min-width:760px; }} .chart-card,.trend-card {{ overflow-x:auto; }} .trend-chart {{ min-width:480px; }} .branch-chart {{ min-width:700px; }} .branch-card {{ overflow-x:auto; }} }}
   </style>
@@ -1041,6 +1116,7 @@ def report_html(
   <section aria-labelledby="trend-title">
     <p class="eyebrow">At a glance</p><h2 id="trend-title">Median wall time by suite and cache state</h2>
     <p class="takeaway">{esc(concise_takeaway(rows))}</p>
+    {'<p class="notice">The matched-format Java slowdown is largely from full garbage collections forced by memory logging in that test path. With those requests ignored, Text and Protobuf nearly tied in a diagnostic pair. See the Java GC chart below.</p>' if gc_profile is not None else ''}
     <p class="validity">{esc(validity)}</p>
     <div class="trend-grid">{trend_charts}</div>
     <p class="small">Lower is faster. Colored lines show text + ccache, protobuf, and eager FlatBuffers. The dashed line repeats the Direct pre-cache median as a reference with no cache state.</p>
@@ -1090,11 +1166,16 @@ def main() -> int:
     parser.add_argument("--input", type=Path, action="append", required=True, help="results.json manifest; repeat once per cache state")
     parser.add_argument("--output", type=Path, required=True, help="HTML output path, or '-' for stdout")
     parser.add_argument("--ab-results", type=Path, help="passed same-revision text/Protobuf A/B results.json")
+    parser.add_argument("--java-gc-profile", type=Path, help="same-revision Java JVM/GC diagnostic summary.json; requires --ab-results")
     args = parser.parse_args()
     try:
         manifests, provenance, warnings = load_inputs(args.input)
         ab_manifest = load_ab_result(args.ab_results) if args.ab_results else None
-        rendered = report_html(manifests, provenance, warnings, ab_manifest=ab_manifest)
+        if args.java_gc_profile and ab_manifest is None:
+            raise ValueError("--java-gc-profile requires --ab-results")
+        gc_profile = load_gc_result(args.java_gc_profile, ab_manifest) if args.java_gc_profile else None
+        rendered = report_html(manifests, provenance, warnings, ab_manifest=ab_manifest,
+                               gc_profile=gc_profile)
     except (OSError, json.JSONDecodeError, ValueError) as error:
         print(f"render_report.py: {error}", file=sys.stderr)
         return 2
