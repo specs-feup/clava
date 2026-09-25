@@ -61,7 +61,14 @@ public class ClangStreamParserV2 {
     public static LineStreamParser<ClangAstData> newInstance(ClavaContext context) {
         ClangAstData clangParserData = new ClangAstData();
         clangParserData.set(ClangAstData.CONTEXT, context);
-        LineStreamParser<ClangAstData> streamParser = LineStreamParser.newInstance(clangParserData, WORKERS);
+
+        // ClavaNodeParser holds mutable parse state (including its ChildrenAdapter),
+        // so concurrent streams must not share the static worker instance.
+        Map<String, LineStreamWorker<ClangAstData>> workers = new HashMap<>(WORKERS);
+        ClavaNodeParser nodeParser = new ClavaNodeParser(Clang_3_8.getClassesService());
+        workers.put(nodeParser.getId(), nodeParser);
+
+        LineStreamParser<ClangAstData> streamParser = LineStreamParser.newInstance(clangParserData, workers);
         streamParser.setLineIgnore(ClangStreamParserV2::ignoreLine);
         // Create ClavaContext
         // streamParser.getData().add(ClavaNode.CONTEXT, new ClavaContext(arguments));

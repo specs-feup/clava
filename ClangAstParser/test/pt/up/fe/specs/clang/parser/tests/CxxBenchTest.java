@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.parser.tests;
 
 import org.junit.jupiter.api.Test;
 
+import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clang.parser.CxxTester;
 import pt.up.fe.specs.lang.SpecsPlatforms;
 
@@ -51,7 +52,11 @@ public class CxxBenchTest {
 
     @Test
     public void testPairHash() {
-        new CxxTester("bench/pair_hash.cpp", "bench/pair_hash.h").test();
+        // This test parses the header and implementation as separate inputs.
+        // Keep their shared ClavaContext on one parser thread for a stable AST.
+        new CxxTester("bench/pair_hash.cpp", "bench/pair_hash.h")
+                .set(ParallelCodeParser.PARSING_NUM_THREADS, 1)
+                .test();
     }
 
     @Test
