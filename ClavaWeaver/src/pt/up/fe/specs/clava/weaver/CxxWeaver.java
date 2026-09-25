@@ -35,7 +35,6 @@ import pt.up.fe.specs.clava.weaver.utils.ClavaAstMethods;
 import pt.up.fe.specs.util.*;
 import pt.up.fe.specs.util.collections.AccumulatorMap;
 import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.utilities.Buffer;
 import pt.up.fe.specs.util.utilities.LineStream;
 import pt.up.fe.specs.util.utilities.StringLines;
 
@@ -76,11 +75,7 @@ public class CxxWeaver extends ACxxWeaver {
             "https://github.com/specs-feup/clava-benchmarks.git?folder=Rosetta");
 
     private static final String TEMP_WEAVING_FOLDER = "__clava_woven";
-    private static final String TEMP_SRC_FOLDER = "__clava_src";
     private static final String WOVEN_CODE_FOLDERNAME = "woven_code";
-
-    private static final ThreadLocal<Buffer<File>> REBUILD_WEAVING_FOLDERS = ThreadLocal
-            .withInitial(() -> new Buffer<>(2, CxxWeaver::newTemporaryWeavingFolder));
 
     private static final Set<String> LANGUAGES = Collections
             .unmodifiableSet(new HashSet<>(Arrays.asList("c", "cxx", "opencl")));
@@ -143,6 +138,12 @@ public class CxxWeaver extends ACxxWeaver {
     private ModifiedFilesGear modifiedFilesGear = null;
     private CacheHandlerGear cacheHandlerGear = null;
 
+    // Rebuild folders are owned by this weaver instance: at most two, alternating,
+    // created on demand and deleted when the weaver closes. Instances never share
+    // folders, even when running on the same thread.
+    private List<File> rebuildWeavingFolders;
+    private int rebuildFolderCounter;
+
     // Parsed program state
     private List<File> currentSources = null;
     private Map<File, File> currentBases = null;
@@ -183,6 +184,10 @@ public class CxxWeaver extends ACxxWeaver {
         accMap = null;
 
         weaverData = null;
+
+        // Rebuild folder ownership is per weaver instance
+        rebuildWeavingFolders = new ArrayList<>();
+        rebuildFolderCounter = 0;
     }
 
     public ClavaWeaverData getWeaverData() {
@@ -741,11 +746,15 @@ public class CxxWeaver extends ACxxWeaver {
 
         /// Clean-up phase
 
-        // Delete temporary weaving folder, if exists
-        SpecsIo.deleteFolder(new File(TEMP_WEAVING_FOLDER));
+        // Delete the rebuild folders owned by this weaver instance
+        for (File rebuildFolder : rebuildWeavingFolders) {
+            if (SpecsSystem.isDebug()) {
+                SpecsLogs.info("Debug mode: kept rebuild folder '" + rebuildFolder + "' for inspection");
+                continue;
+            }
 
-        // Delete temporary source folder, if exists
-        SpecsIo.deleteFolder(new File(TEMP_SRC_FOLDER));
+            SpecsIo.deleteFolder(rebuildFolder);
+        }
 
         if (this.dataStore != null) {
             // Re-enable output
@@ -959,8 +968,8 @@ public class CxxWeaver extends ACxxWeaver {
         var nodes = tUnit.getDescendantsAndSelfStream().collect(Collectors.toList());
         ClavaData.clearAllCaches(nodes);
 
-        // Write current tree to a temporary folder
-        File tempFolder = REBUILD_WEAVING_FOLDERS.get().next();
+        // Write current tree to a temporary folder owned by this weaver instance
+        File tempFolder = nextRebuildWeavingFolder();
 
         File destinationFile = tUnit.getDestinationFile(tempFolder);
         String code = tUnit.getCode();
@@ -988,33 +997,35 @@ public class CxxWeaver extends ACxxWeaver {
             rebuildOptions.add(0, CxxWeaver.buildIncludeArg(extraInclude.getAbsolutePath()));
         }
 
-        // Write the other translation units and add folder as includes, in case they
-        // are needed
-        String currentCodeFoldername = TEMP_WEAVING_FOLDER + "_for_file_rebuild";
-        File currentCodeFolder = SpecsIo.mkdir(currentCodeFoldername).getAbsoluteFile();
-        SpecsIo.deleteFolderContents(currentCodeFolder, true);
+        // Write the other translation units in a temporary folder owned by this
+        // invocation, in case they are needed as includes
+        File currentCodeFolder = SpecsIo.createTempDirectory(TEMP_WEAVING_FOLDER + "_for_file_rebuild_");
+        App rebuiltApp;
+        try {
+            // Add include
+            rebuildOptions.add(0, CxxWeaver.buildIncludeArg(currentCodeFolder.getAbsolutePath()));
 
-        // Add include
-        rebuildOptions.add(0, CxxWeaver.buildIncludeArg(currentCodeFolder.getAbsolutePath()));
+            for (TranslationUnit otherTUnit : tUnit.getApp().getTranslationUnits()) {
 
-        for (TranslationUnit otherTUnit : tUnit.getApp().getTranslationUnits()) {
+                // Skip self
+                if (otherTUnit == tUnit) {
+                    continue;
+                }
 
-            // Skip self
-            if (otherTUnit == tUnit) {
-                continue;
+                otherTUnit.write(currentCodeFolder);
             }
 
-            otherTUnit.write(currentCodeFolder);
+            rebuiltApp = createApp(Arrays.asList(destinationFile), rebuildOptions);
+        } finally {
+            if (SpecsSystem.isDebug()) {
+                SpecsLogs.info("Debug mode: kept file rebuild folder '" + currentCodeFolder + "' for inspection");
+            } else {
+                SpecsIo.deleteFolder(currentCodeFolder);
+            }
         }
-
-
-        App rebuiltApp = createApp(Arrays.asList(destinationFile), rebuildOptions);
 
         // Remove app from context stack
         context.popApp();
-
-        // Delete current code folder
-        SpecsIo.deleteFolder(currentCodeFolder);
 
         // After rebuilding, clear current app cache
         getApp().clearCache();
@@ -1040,8 +1051,8 @@ public class CxxWeaver extends ACxxWeaver {
     public boolean rebuildAst(boolean update) {
         // Check if inside apply
 
-        // Write current tree to a temporary folder
-        File tempFolder = REBUILD_WEAVING_FOLDERS.get().next();
+        // Write current tree to a temporary folder owned by this weaver instance
+        File tempFolder = nextRebuildWeavingFolder();
 
         // Ensure folder is empty
         SpecsIo.deleteFolderContents(tempFolder);
@@ -1150,23 +1161,27 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     /**
-     * Creates a new temporary folder for weaving.
+     * Returns one of the rebuild folders owned by this weaver instance, cycling
+     * between two, so that a rebuild never empties the folder a previous rebuild
+     * may still be based on.
      *
      * <p>
-     * The folder will be deleted when the JVM exits.
+     * Folders are created on demand and deleted when the weaver closes.
      *
      * @return
      */
-    private static File newTemporaryWeavingFolder() {
+    private File nextRebuildWeavingFolder() {
 
-        File tempFolder = SpecsIo.getTempFolder(TEMP_WEAVING_FOLDER + "_" + UUID.randomUUID().toString());
+        while (rebuildWeavingFolders.size() < 2) {
+            File tempFolder = SpecsIo.createTempDirectory(TEMP_WEAVING_FOLDER + "_");
+            SpecsIo.deleteFolderContents(tempFolder, true);
+            rebuildWeavingFolders.add(tempFolder);
+        }
 
-        SpecsIo.deleteFolderContents(tempFolder, true);
+        File tempFolder = rebuildWeavingFolders.get(rebuildFolderCounter % 2);
+        rebuildFolderCounter++;
 
-        // Register temporary folder and its contents for deletion
-        SpecsIo.deleteOnExit(tempFolder);
-
-        return tempFolder.getAbsoluteFile();
+        return tempFolder;
     }
 
     public Object getUserField(ClavaNode node, String fieldName) {

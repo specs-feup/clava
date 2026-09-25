@@ -111,9 +111,6 @@ public class ParallelCodeParser extends CodeParser {
 
         ClavaLog.info("Found " + sources.size() + " source files");
 
-        File parsingFolder = SpecsIo.getTempFolder("clava_parsing_" + UUID.randomUUID().toString());
-        ClavaLog.debug(() -> "Parsing using folder '" + parsingFolder + "'");
-
         ParallelProgressCounter counter = new ParallelProgressCounter(sources.size());
 
         long tic = System.nanoTime();
@@ -132,7 +129,7 @@ public class ParallelCodeParser extends CodeParser {
 
             Future<ClangAstData> tUnit = executor
                     .submit(() -> parseSource(source, id, standard, options, clangDump,
-                            counter, parsingFolder, clangFiles, syntaxErrors));
+                            counter, clangFiles, syntaxErrors));
 
             futureTUnits.add(tUnit);
 
@@ -160,9 +157,6 @@ public class ParallelCodeParser extends CodeParser {
             }
 
         }
-
-        // Delete temporary folder
-        SpecsIo.deleteFolder(parsingFolder);
 
         // No AST was decoded, just report syntax validation errors
         if (syntaxOnly) {
@@ -303,12 +297,8 @@ public class ParallelCodeParser extends CodeParser {
     }
 
     private ClangAstData parseSource(File sourceFile, String id, Standard standard, DataStore options,
-                                     ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
+                                     ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter,
                                      ClangFiles clangFiles, ConcurrentLinkedQueue<String> syntaxErrors) {
-
-        // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
-
-        // Adapt compiler options according to the file
 
         // Disable streaming of console output if parsing is to be done in parallel
         // Only show output of console after parsing is done, when using parallel parsing
@@ -316,37 +306,40 @@ public class ParallelCodeParser extends CodeParser {
 
         ClangAstDumper clangParser = new ClangAstDumper(streamConsoleOutput, clangFiles.clangExecutable(),
                 clangFiles.builtinIncludes(), clangFiles.systemResourceDir(), this)
-                .setBaseFolder(parsingFolder)
                 .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
 
         counter.print(sourceFile);
 
-        // Run the same clang invocation, discard dumper output
-        if (get(SYNTAX_ONLY)) {
-            String error = clangParser.validateSyntax(sourceFile, id, standard, options);
-            if (error != null) {
-                syntaxErrors.add(error);
+        try {
+            // Run the same clang invocation, discard dumper output
+            if (get(SYNTAX_ONLY)) {
+                String error = clangParser.validateSyntax(sourceFile, id, standard, options);
+                if (error != null) {
+                    syntaxErrors.add(error);
+                }
+
+                return null;
             }
 
-            return null;
-        }
+            ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
 
-        ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
-
-        if (get(SHOW_CLANG_DUMP)) {
-            clangDump.add(clangParser.getClangDump());
-        }
-
-        if (get(CLEAN)) {
-            if (clangParser.getLastWorkingFolder() == null) {
-                SpecsLogs.msgInfo("No working folder found for source file '" + sourceFile + "'");
-            } else {
-                SpecsIo.deleteFolder(clangParser.getLastWorkingFolder());
+            if (get(SHOW_CLANG_DUMP)) {
+                clangDump.add(clangParser.getClangDump());
             }
 
+            return clangParserData;
+        } finally {
+            // The dumper owns a unique working folder per invocation, deleted here, after
+            // any dump content has been consumed
+            File workingFolder = clangParser.getLastWorkingFolder();
+            if (workingFolder != null) {
+                if (SpecsSystem.isDebug()) {
+                    SpecsLogs.info("Debug mode: kept dumper working folder '" + workingFolder + "' for inspection");
+                } else {
+                    SpecsIo.deleteFolder(workingFolder);
+                }
+            }
         }
-
-        return clangParserData;
     }
 
     /**

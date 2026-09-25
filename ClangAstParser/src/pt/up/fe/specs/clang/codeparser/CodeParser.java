@@ -37,7 +37,6 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     public static final DataKey<Boolean> SHOW_CLAVA_AST = KeyFactory.bool("showClavaAst");
     public static final DataKey<Boolean> SHOW_CODE = KeyFactory.bool("showCode");
     public static final DataKey<Boolean> USE_CUSTOM_RESOURCES = KeyFactory.bool("useCustomResources");
-    public static final DataKey<Boolean> CLEAN = KeyFactory.bool("clean").setDefault(() -> true);
     public static final DataKey<String> CUDA_GPU_ARCH = KeyFactory.string("cudaGpuArch")
             .setLabel("CUDA GPU Arch (default: sm_52)")
             .setDefaultString("sm_52");
@@ -45,8 +44,8 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
             .setLabel("CUDA Path (empty: uses system installed; <builtin>: uses builtin version)")
             .setDefaultString("");
     public static final DataKey<File> DUMPER_FOLDER = KeyFactory.folder("dumperFolder")
-            .setLabel("The base cache folder for Clava's downloaded resources. Clava stores each clang-dumper and CUDA release in a versioned subfolder and downloads it if not found. If not set, a temporary folder will be used.")
-            .setDefault(ClangResources::getDefaultTempFolder);
+            .setLabel("The base cache folder for Clava's downloaded resources. Clava stores each clang-dumper and CUDA release in a versioned subfolder and downloads it if not found. If not set, the OS user cache folder will be used.")
+            .setDefault(ClangResources::getDefaultCacheFolder);
 
     /**
      * Execution information, such as execution time and memory used.
