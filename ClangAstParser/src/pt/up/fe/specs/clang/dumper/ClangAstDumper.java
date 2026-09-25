@@ -73,7 +73,6 @@ public class ClangAstDumper {
 
     private final List<File> workingFolders;
     private File lastWorkingFolder;
-    private File baseFolder;
     private File clangExecutable;
     private List<String> builtinIncludes;
     private File systemResourceDir;
@@ -107,7 +106,6 @@ public class ClangAstDumper {
 
         this.workingFolders = new ArrayList<>();
         this.lastWorkingFolder = null;
-        this.baseFolder = null;
         this.systemIncludesThreshold = ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD.getDefault().get();
         this.parserConfig = parserConfig;
         this.clangResources = new ClangResources(parserConfig);
@@ -115,11 +113,6 @@ public class ClangAstDumper {
 
     public File getLastWorkingFolder() {
         return lastWorkingFolder;
-    }
-
-    public ClangAstDumper setBaseFolder(File baseFolder) {
-        this.baseFolder = baseFolder;
-        return this;
     }
 
     public ClangAstDumper setSystemIncludesThreshold(int systemIncludesThreshold) {
@@ -329,12 +322,9 @@ public class ClangAstDumper {
                 lineStreamParser.getData().set(ClangAstData.DEBUG, true);
             }
 
-            // Create temporary working folder, in order to support running several dumps in parallel
-            lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
-
-            // Ensure folder is empty
-            SpecsIo.deleteFolderContents(lastWorkingFolder);
-
+            // Each invocation owns a unique working folder, allocated by the OS, in order
+            // to support running several dumps in parallel
+            lastWorkingFolder = SpecsIo.createTempDirectory("clang-dumper-");
             workingFolders.add(lastWorkingFolder);
 
             output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
@@ -393,7 +383,7 @@ public class ClangAstDumper {
     }
 
     private String validateSyntax(List<String> arguments, File sourceFile, String id) {
-        lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
+        lastWorkingFolder = SpecsIo.createTempDirectory("clang-dumper-");
 
         var output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
                 this::discardOutput,
