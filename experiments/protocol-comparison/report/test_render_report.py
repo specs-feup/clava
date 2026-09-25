@@ -52,6 +52,9 @@ class AxisTickLabelsTest(unittest.TestCase):
         self.assertIn("432 full collections", html)
         self.assertIn("31.32s vs 31.51s", html)
         self.assertIn("12.70s", html)
+        self.assertIn("Why each Protobuf collection took longer", html)
+        self.assertIn("No JIT, 256 MiB heap", html)
+        self.assertIn("6.8 ms", html)
         self.assertNotIn("do not yet tell us", html)
 
         ab["sources"]["native"]["revision"] = "wrong"

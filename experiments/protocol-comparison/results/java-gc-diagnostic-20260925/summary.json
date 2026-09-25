@@ -67,5 +67,27 @@
     "text": 18,
     "protobuf": 20
   },
+  "gc_mechanism": {
+    "measure": "Median duration of the 432 System.gc()-caused full collections in one passing 116-test Java suite run per format and JVM condition; these are diagnostic runs, not wall-time benchmark repeats.",
+    "fixed_heap": "-Xms256m -Xmx256m on the Gradle test worker",
+    "no_proto_jit": "-XX:CompileCommand=exclude,com/google/protobuf/*.* and -XX:CompileCommand=exclude,pt/up/fe/specs/clang/wire/*.* on the Gradle test worker",
+    "interpreter": "-Xint -Xms256m -Xmx256m on the Gradle test worker; this changes parsing cost and is not a protocol benchmark",
+    "runs": [
+      {"condition": "normal", "wire": "text", "median_pause_ms": 18.076, "pause_total_s": 7.845, "after_gc_mib": 19.879, "committed_mib": 74, "compiled_methods": 7140, "jfr_sha256": "bb578d753b4e01769d59daf49786b6a0effd1be80fb64be5ee75d7d8f412d56a"},
+      {"condition": "normal", "wire": "protobuf", "median_pause_ms": 28.547, "pause_total_s": 12.341, "after_gc_mib": 21.941, "committed_mib": 70, "compiled_methods": 9309, "jfr_sha256": "967382fc05c21960d0d15a9e4cdb4451cd496a9df29fa793163e551d2f5ed2f3"},
+      {"condition": "no_proto_jit", "wire": "text", "median_pause_ms": 18.105, "pause_total_s": 8.050, "after_gc_mib": 19.987, "committed_mib": 74, "compiled_methods": 7126, "jfr_sha256": "924a2783cea64820809792d88316be4328451c15277fb58af2874c2d74b662f1"},
+      {"condition": "no_proto_jit", "wire": "protobuf", "median_pause_ms": 24.519, "pause_total_s": 10.745, "after_gc_mib": 21.881, "committed_mib": 70, "compiled_methods": 7102, "jfr_sha256": "e22fe05f1de774f50bc601109e7c8ae806a3a13bc1c0ab0cbaf68a288a6df720"},
+      {"condition": "fixed_heap", "wire": "text", "median_pause_ms": 16.658, "pause_total_s": 7.472, "after_gc_mib": 18.991, "committed_mib": 256, "compiled_methods": 7185, "jfr_sha256": "222423771fac3d9340973b1f7553163b911c43ceed78ccc48cada25f4903cd3e"},
+      {"condition": "fixed_heap", "wire": "protobuf", "median_pause_ms": 20.977, "pause_total_s": 9.218, "after_gc_mib": 21.009, "committed_mib": 256, "compiled_methods": 9319, "jfr_sha256": "88e473a9bcf7d2b4fd8d81d0ffadac9fd88ab303666accb34425100d4678fb3d"},
+      {"condition": "both", "wire": "text", "median_pause_ms": 17.457, "pause_total_s": 7.821, "after_gc_mib": 19.065, "committed_mib": 256, "compiled_methods": 7177, "jfr_sha256": "d883e940af16309a7d6eb4487d8cb1777ed8da4bf22d55e0ab262e839d1c3aef"},
+      {"condition": "both", "wire": "protobuf", "median_pause_ms": 16.612, "pause_total_s": 7.486, "after_gc_mib": 21.108, "committed_mib": 256, "compiled_methods": 7096, "jfr_sha256": "16a483dffdcd02a745c923b29f21bfecdb4dd5b55f6e67445e8f1e4bb6698311"},
+      {"condition": "interpreter", "wire": "text", "median_pause_ms": 6.787, "pause_total_s": 3.173, "after_gc_mib": 18.843, "committed_mib": 256, "compiled_methods": 2, "jfr_sha256": "84867d1ad7bac71a155ed6f187ac381e062e2f769f7ff977a7ba60f9f766de9b"},
+      {"condition": "interpreter", "wire": "protobuf", "median_pause_ms": 7.831, "pause_total_s": 3.709, "after_gc_mib": 20.956, "committed_mib": 256, "compiled_methods": 2, "jfr_sha256": "ed0229d33f2d7fda57327830d8f77a398edca65dc5edb6a10040e6edc460019d"}
+    ],
+    "system_gc_count_per_run": 432,
+    "tests_passed_per_run": 116,
+    "preloaded_classes_control": "Text preloaded all 810 Protobuf-package classes in the same application class loader; its median forced-GC pause remained 19.18 ms despite about 22.0 MiB retained heap at the parser checkpoint. Static schema objects alone do not explain the Protobuf slowdown.",
+    "heap_snapshot": "At a matched parser checkpoint, no Protobuf envelope, record, or node messages survived collection. Runtime class and descriptor metadata did; the Protobuf run had more live heap and compiled code."
+  },
   "limitations": "One exploratory JFR-instrumented Text/Protobuf pair per JVM condition, run sequentially after the six-pair A/B. The original six-pair wall times remain the performance estimate. GC pause time belongs only to the worker JVM and must not be added to whole-command wall time."
 }

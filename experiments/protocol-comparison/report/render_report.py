@@ -370,7 +370,50 @@ def load_gc_result(path: Path, ab_manifest: dict[str, Any]) -> dict[str, Any]:
     memory = profile.get("original_ab_java_median_used_heap_mib_after_logging", {})
     if any(number(memory.get(wire)) is None for wire in ("text", "protobuf")):
         raise ValueError(f"{path}: missing Java used-heap medians")
+    mechanism = profile.get("gc_mechanism")
+    if mechanism is not None:
+        controls = mechanism.get("runs", [])
+        expected = {(condition, wire) for condition in ("normal", "no_proto_jit", "fixed_heap", "both", "interpreter")
+                    for wire in ("text", "protobuf")}
+        if len(controls) != 10 or {(row.get("condition"), row.get("wire")) for row in controls} != expected:
+            raise ValueError(f"{path}: expected both formats in all five GC-mechanism conditions")
+        for row in controls:
+            for field in ("median_pause_ms", "pause_total_s", "after_gc_mib", "committed_mib", "compiled_methods"):
+                if number(row.get(field)) is None or number(row[field]) < 0:
+                    raise ValueError(f"{path}: invalid {field} in GC-mechanism control")
+        if mechanism.get("system_gc_count_per_run") != 432 or mechanism.get("tests_passed_per_run") != 116:
+            raise ValueError(f"{path}: GC-mechanism controls do not match the Java suite")
     return profile
+
+
+def gc_mechanism_html(mechanism: dict[str, Any]) -> str:
+    rows = {(row["condition"], row["wire"]): row for row in mechanism["runs"]}
+    labels = (("normal", "Default JVM"), ("no_proto_jit", "Protobuf JIT off"),
+              ("fixed_heap", "256 MiB heap"), ("both", "Both controls"),
+              ("interpreter", "No JIT, 256 MiB heap"))
+    groups = []
+    for condition, label in labels:
+        text_row, proto_row = rows[condition, "text"], rows[condition, "protobuf"]
+        tracks = []
+        for wire, row in (("text", text_row), ("protobuf", proto_row)):
+            color = AB_STAGES[f"ab-{wire}"][1]
+            tracks.append(
+                f'<div class="gc-mech-track-row"><span>{esc(wire.title())}</span>'
+                f'<div class="gc-mech-track"><i style="width:{row["median_pause_ms"] / 32 * 100:.1f}%;'
+                f'background:{color}"></i></div><strong>{row["median_pause_ms"]:.1f} ms</strong></div>')
+        gap = proto_row["median_pause_ms"] - text_row["median_pause_ms"]
+        gap_label = f'Protobuf +{gap:.1f} ms' if gap >= 0 else f'Protobuf {gap:.1f} ms'
+        groups.append(f'<div class="gc-mech-group"><div class="gc-mech-heading"><strong>{esc(label)}</strong>'
+                      f'<span>{esc(gap_label)}</span></div>{"".join(tracks)}</div>')
+    ticks = "".join(f"<span>{tick}</span>" for tick in (0, 8, 16, 24, 32))
+    return f'''<div class="gc-mech">
+      <h4>Why each Protobuf collection took longer</h4>
+      <p>Protobuf leaves about 2 MiB more Java heap live and exercises more compiled methods. The test then forces 432 full collections. Changing the heap bounds and compilation policy shows why those collections take longer in this workload.</p>
+      <div class="gc-mech-legend"><i></i>Text <i></i>Protobuf <span>Median full-GC pause, milliseconds</span></div>
+      <div class="gc-mech-chart">{"".join(groups)}<div class="gc-mech-axis">{ticks}</div></div>
+      <p class="takeaway">With a 256 MiB heap and Protobuf compilation excluded, the original 10.5 ms per-collection gap disappears: Protobuf {rows['both', 'protobuf']['median_pause_ms']:.1f} ms, Text {rows['both', 'text']['median_pause_ms']:.1f} ms. With all Java compilation off, both fall below 8 ms but Protobuf remains about 1 ms slower. The interpreter makes parsing much slower, so these are GC diagnostics, not protocol benchmarks.</p>
+      <p class="small">Under the default JVM, Protobuf held {rows['normal', 'protobuf']['after_gc_mib']:.1f} MiB in {rows['normal', 'protobuf']['committed_mib']:.0f} MiB committed heap and ended with {rows['normal', 'protobuf']['compiled_methods']:,} compiled methods. Text held {rows['normal', 'text']['after_gc_mib']:.1f} MiB in {rows['normal', 'text']['committed_mib']:.0f} MiB and had {rows['normal', 'text']['compiled_methods']:,} compiled methods. Loading all generated classes into Text without parsing through Protobuf did not reproduce the slowdown. The heap snapshot found no retained Protobuf messages at the measurement point. Each condition is one passing 116-test run per format, with the same 432 explicit collections. Heap bounds and compilation change several JVM behaviors, so the bars establish the combined explanation without assigning exact milliseconds to one low-level GC operation.</p>
+    </div>'''
 
 
 def gc_diagnostic_html(profile: dict[str, Any]) -> str:
@@ -401,7 +444,8 @@ def gc_diagnostic_html(profile: dict[str, Any]) -> str:
       <p>The Java parser suite logs used heap after each parse. That logging calls <code>System.gc()</code> twice. In the profiled pair, both formats triggered {normal_text['system_gc_count']} full collections. Protobuf spent {forced_pause_gap:.2f}s more paused for those collections, close to its {wall_gap:.2f}s longer whole-suite run.</p>
       <div class="gc-grid">{bars('wall_s', 'Whole Java test command', 50, (0, 25, 50))}{bars('gc_pause_s', 'Test-worker GC pauses', 15, (0, 5, 10, 15))}</div>
       <p class="takeaway">When the test worker ignored explicit GC requests, Protobuf was only {off_gap:.2f}s slower ({off_text['wall_s']:.2f}s vs {off_proto['wall_s']:.2f}s), and GC pauses fell below 0.4s in both modes. This identifies repeated full GC in the Java test path as the main source of its measured gap. It does not show a 4-second Protobuf reader penalty.</p>
-      <p class="small">These are one exploratory, JFR-profiled pair per JVM condition, not new six-run medians. The original six-pair comparison above remains the measured result. Protobuf reported about {used_heap['protobuf']} MiB of used Java heap after logging versus {used_heap['text']} MiB for Text in the original runs; the profile does not isolate which live objects made each collection slower. Turning off explicit GC is a diagnostic control, not a claim that the Java test configuration should silently change.</p>
+      {gc_mechanism_html(profile['gc_mechanism']) if profile.get('gc_mechanism') else ''}
+      <p class="small">These are exploratory JFR-profiled runs, not new six-run medians. The original six-pair comparison above remains the measured result. Protobuf reported about {used_heap['protobuf']} MiB of used Java heap after logging versus {used_heap['text']} MiB for Text in the original runs. Turning off explicit GC is a diagnostic control, not a claim that the Java test configuration should silently change.</p>
     </section>'''
 
 
@@ -1084,6 +1128,20 @@ def report_html(
     .gc-track {{ height:14px; background:var(--grid); border-radius:7px; overflow:hidden; }}
     .gc-track i {{ display:block; height:100%; border-radius:7px; }}
     .gc-axis>div {{ display:flex; justify-content:space-between; color:var(--muted); font-size:.72rem; }}
+    .gc-mech {{ margin:20px 0; padding:18px; border:1px solid var(--line); border-radius:14px; background:var(--surface); }}
+    .gc-mech h4 {{ margin:0 0 8px; font-size:1.1rem; }} .gc-mech>p {{ margin:9px 0; }}
+    .gc-mech-legend {{ display:flex; gap:6px; align-items:center; flex-wrap:wrap; color:var(--muted); font-size:.78rem; margin:14px 0 8px; }}
+    .gc-mech-legend i {{ display:inline-block; width:11px; height:11px; border-radius:3px; background:{AB_STAGES['ab-text'][1]}; }}
+    .gc-mech-legend i:nth-of-type(2) {{ margin-left:10px; background:{AB_STAGES['ab-protobuf'][1]}; }}
+    .gc-mech-legend span {{ margin-left:auto; }}
+    .gc-mech-group {{ padding:10px 0; border-top:1px solid var(--line); }}
+    .gc-mech-heading {{ display:flex; justify-content:space-between; gap:12px; margin-bottom:8px; font-size:.88rem; }}
+    .gc-mech-heading span {{ color:var(--muted); }}
+    .gc-mech-track-row {{ display:grid; grid-template-columns:76px minmax(0,1fr) 62px; gap:8px; align-items:center; margin:5px 0; font-size:.79rem; }}
+    .gc-mech-track-row strong {{ text-align:right; white-space:nowrap; }}
+    .gc-mech-track {{ height:13px; border-radius:7px; background:var(--grid); overflow:hidden; }}
+    .gc-mech-track i {{ display:block; height:100%; border-radius:7px; }}
+    .gc-mech-axis {{ display:flex; justify-content:space-between; margin:2px 70px 0 84px; color:var(--muted); font-size:.72rem; }}
     details {{ margin:14px 0; }} summary {{ cursor:pointer; font-weight:700; }}
     .details-card {{ padding:18px 20px; }} .details-card summary {{ margin:-18px -20px; padding:18px 20px; }}
     .details-card[open] summary {{ margin-bottom:14px; border-bottom:1px solid var(--line); }}
