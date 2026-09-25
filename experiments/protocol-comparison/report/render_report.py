@@ -177,8 +177,8 @@ def load_ab_result(path: Path) -> dict[str, Any]:
     if manifest.get("valid") is not True or not isinstance(gate, dict) or gate.get("passed") is not True:
         raise ValueError(f"{path} has not passed its full A/B and fidelity gates")
     rows = manifest["results"]
-    expected = int(manifest.get("repeat_count", 0))
-    if expected < 2:
+    expected = manifest.get("repeat_count")
+    if type(expected) is not int or expected < 2:
         raise ValueError(f"{path} needs at least two measured repeats per format")
     for suite in SUITES:
         for stage in AB_STAGES:
@@ -192,6 +192,11 @@ def load_ab_result(path: Path) -> dict[str, Any]:
             if any(row.get("compressed") is not False or row.get("ccache_disabled") is not True
                    for row in selected):
                 raise ValueError(f"{path} is not a matched, uncompressed ccache-bypass A/B")
+            if any(not isinstance(row.get("metrics"), dict) or any(
+                    number(row["metrics"].get(field)) is None
+                    for field in ("native_ms", "read_ms", "ast_ms", "dump_bytes"))
+                   for row in selected):
+                raise ValueError(f"{path} has incomplete {suite}/{stage} phase or size metrics")
     return manifest
 
 
@@ -290,7 +295,7 @@ def ab_paired_svg(manifest: dict[str, Any]) -> str:
 
 def ab_phase_html(manifest: dict[str, Any], suite: str) -> str:
     fields = (("native_ms", "Native dump process"), ("read_ms", "Read and parse dump"),
-              ("ast_ms", "Build Clava AST"))
+              ("ast_ms", "Build Clava AST"), ("dump_bytes", "Uncompressed dumps"))
     cards = []
     for field, title in fields:
         medians = {}
@@ -303,7 +308,8 @@ def ab_phase_html(manifest: dict[str, Any], suite: str) -> str:
         bars = []
         for stage, (label, color) in AB_STAGES.items():
             value = medians[stage]
-            display = f"{value / 1000:.2f}s" if value >= 1000 else f"{value:.0f}ms"
+            display = (f"{value / (1024 * 1024):.1f} MiB" if field == "dump_bytes" else
+                       f"{value / 1000:.2f}s" if value >= 1000 else f"{value:.0f}ms")
             bars.append(f'<div class="phase-row"><span>{esc(label)}</span><div class="phase-track"><i style="width:{value / maximum * 100:.1f}%;background:{color}"></i></div><strong>{esc(display)}</strong></div>')
         cards.append(f'<div class="phase-card"><h4>{esc(title)}</h4>{"".join(bars)}</div>')
     return "".join(cards)
@@ -324,18 +330,35 @@ def ab_section(manifest: dict[str, Any]) -> str:
     native_hash = sources.get("native", {}).get("tool_sha256", "not recorded")
     jar_hash = manifest.get("runtime_parser_jar_sha256", "not recorded")
     repeats = int(manifest["repeat_count"])
+    js_change = ab_delta(manifest, "clava-js")[2]
+    java_change = ab_delta(manifest, "java")[2]
+    java_read = {
+        stage: statistics.median(row["metrics"]["read_ms"]
+                                 for _, row in ab_values(manifest, "java", stage))
+        for stage in AB_STAGES
+    }
+    java_read_change = (java_read["ab-protobuf"] - java_read["ab-text"]) / 1000
+    java_read_direction = "lower" if java_read_change < 0 else "higher"
+    java_pairs_slower = sum(
+        proto > text for (proto, _), (text, _) in zip(
+            ab_values(manifest, "java", "ab-protobuf"),
+            ab_values(manifest, "java", "ab-text"))
+    )
     return f'''<section aria-labelledby="ab-title" class="ab-section">
     <p class="eyebrow">Controlled follow-up</p><h2 id="ab-title">What changes when the transport path changes?</h2>
     <p class="takeaway">{esc(" · ".join(comparisons))}. Lower is faster. One Clava revision, one native binary, and one Java runtime select either the text writer and reader or the Protobuf writer and reader.</p>
     <div class="chart-grid">{"".join(candles)}</div>
     <figure class="chart-card ab-paired"><figcaption><h3>Within-pair change</h3><p>Protobuf relative to Text · left is faster</p></figcaption>{ab_paired_svg(manifest)}</figure>
     <p class="small">Each candle summarizes {repeats} valid measured repeats. The paired chart compares the two formats in each rotated repeat. Whiskers are min/max, boxes Q1–Q3, the center mark is the median, and dots are measured runs.</p>
-    <h3 class="phase-title">Where parser work moves</h3>
+    <h3 class="phase-title">Parser phases and dump size</h3>
     {"".join(phase_cards)}
-    <p class="small">Each bar is the median of per-run time summed across parser calls. Each phase pair has its own scale; bars are not shares of whole-suite wall time. Protobuf decode, record construction, and reference resolution are inside its read phase, so they are not added again.</p>
+    <p class="notice">On the same revision, Clava-JS changes by {js_change:+.1f}% in median wall time, so the branch-level lead does not carry over as a clear transport-only gain. Java changes by {java_change:+.1f}% and Protobuf is slower in {java_pairs_slower}/{repeats} pairs. Yet Java's measured read/parse work is {abs(java_read_change):.2f}s {java_read_direction} per run. These overlapping phase totals do not isolate the source of the Java wall-time gap.</p>
+    <p class="small">Time bars show the median of per-run work summed across parser calls; size bars show the median total uncompressed bytes written. Each pair has its own scale. The time bars are not shares of whole-suite wall time. Protobuf decode, record construction, and reference resolution are inside its read phase, so they are not added again.</p>
     <details class="details-card"><summary>Controlled A/B validation and limits</summary>
       <p>{repeats} measured repeats per format and suite, plus uncharted warm-ups. Direct mode disables ccache and uses uncompressed completed files. A C and a C++ fixture passed normalized AST graph equality before timing, and both formats passed suite smoke tests. The two modes use the same source revisions and artifact hashes.</p>
       <p>Graph normalization excludes wire-local IDs, process context, edit-origin references, object identity, and the DataStore dispatch label. Concrete node classes, ordered children, source ranges, references, and populated semantic fields remain compared. The full measured suite tests passed in both modes.</p>
+      <p>The Java suite's two-input PairHash fixture uses one parser worker in both modes; all other tests retain their configured concurrency.</p>
+      <p>In a separate, unpaired Java diagnostic run, 108 of 116 individual test durations were higher with Protobuf; the largest single increase was 0.34s. This suggests many small contributions rather than one runaway test, but one extra run cannot establish their cause and is excluded from the six-pair estimate.</p>
       <p class="small">Clava commit: <code>{esc(clava_revision)}</code><br>Native commit: <code>{esc(native_revision)}</code><br>Native binary SHA-256: <code>{esc(native_hash)}</code><br>Staged parser JAR SHA-256: <code>{esc(jar_hash)}</code></p>
       <p>{repeats} repeats on one workstation show workload-specific behavior, not universal format performance. The earlier branch comparison also includes changes beyond the transport path.</p>
     </details>
@@ -881,6 +904,11 @@ def report_html(
     validity = f"{valid_runs:,}/{total_runs:,} valid invocations · {measured_count:,} measured · {warmup_count:,} warm-ups · {invalid_count:,} invalid"
     worktree_notes = provenance_worktree_note(provenance)
     controlled_ab = ab_section(ab_manifest) if ab_manifest is not None else ""
+    comparison_guide = (
+        '<p class="small">The first charts compare branch outcomes across cache states. '
+        'The controlled Text/Protobuf A/B below isolates the transport change on one revision.</p>'
+        if ab_manifest is not None else ""
+    )
 
     return f'''<!doctype html>
 <html lang="en">
@@ -942,7 +970,7 @@ def report_html(
     .ab-section {{ margin:44px 0; }} .ab-section>.chart-grid {{ margin:16px 0; }}
     .ab-paired {{ margin:16px 0; }} .phase-title {{ margin:22px 0 12px; }}
     .phase-suite {{ margin:14px 0; }} .phase-suite>h3 {{ margin:0 0 10px; }}
-    .phase-grid {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }}
+    .phase-grid {{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }}
     .phase-card {{ min-width:0; padding:16px; border:1px solid var(--line); border-radius:14px; background:var(--surface); }}
     .phase-card h4 {{ margin:0 0 12px; font-size:.95rem; }}
     .phase-row {{ display:grid; grid-template-columns:66px minmax(30px,1fr) 60px; gap:7px; align-items:center; margin:8px 0; font-size:.78rem; }}
@@ -959,7 +987,9 @@ def report_html(
     .legend {{ display:flex; flex-wrap:wrap; gap:10px 18px; color:var(--muted); font-size:.84rem; }}
     .legend span {{ display:inline-flex; align-items:center; gap:7px; }} .swatch {{ width:12px; height:12px; border-radius:3px; }}
     .footer-note {{ margin-top:28px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:.85rem; }}
-    @media(max-width:800px) {{ .trend-grid,.cache-grid,.phase-grid {{ grid-template-columns:1fr; }} .section-heading {{ display:block; }} .section-heading>p {{ text-align:left; margin-top:8px; }} }}
+    @media(max-width:1000px) {{ .phase-grid {{ grid-template-columns:repeat(2,minmax(0,1fr)); }} }}
+    @media(max-width:800px) {{ .trend-grid,.cache-grid {{ grid-template-columns:1fr; }} .section-heading {{ display:block; }} .section-heading>p {{ text-align:left; margin-top:8px; }} }}
+    @media(max-width:650px) {{ .phase-grid {{ grid-template-columns:1fr; }} }}
     @media(max-width:650px) {{ main {{ width:min(100% - 20px,1180px); margin-top:18px; }} .hero {{ padding:22px 18px; }} .chart-card {{ padding:14px 8px 10px; }} .chart-card figcaption {{ display:block; }} .chart-card figcaption p {{ text-align:left; margin-bottom:0; }} .candle-chart {{ min-width:760px; }} .chart-card,.trend-card {{ overflow-x:auto; }} .trend-chart {{ min-width:480px; }} .branch-chart {{ min-width:700px; }} .branch-card {{ overflow-x:auto; }} }}
   </style>
 </head>
@@ -969,6 +999,7 @@ def report_html(
     <p class="eyebrow">Clava · performance comparison</p>
     <h1>AST transport performance</h1>
     <p class="lede">An abstract syntax tree (AST) is Clang's structured view of source code. Clava uses it to analyze and transform C/C++ programs; this report compares how the AST reaches Clava.</p>
+    {comparison_guide}
     <p class="meta-line">{esc(date_text)}</p>
   </header>
   {smoke_box}
