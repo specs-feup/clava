@@ -760,6 +760,11 @@ def run_timing(stage: dict[str, Any], suite: str, clava_root: Path, native_tool:
         expected_counts = EXPECTED_SUITE_COUNTS["java"]
         counts_match = all(counts.get(key) == value for key, value in expected_counts.items())
         valid = process.returncode == 0 and validation["passed"] and counts_match
+        junit_archive = None
+        if not valid and result_dir.is_dir():
+            archive = run_dir / "junit-results"
+            shutil.copytree(result_dir, archive)
+            junit_archive = str(archive)
         result = {
             "suite": suite, "stage": stage["key"], "wire": stage["wire"], "mode": "direct",
             "measured": measured, "repeat": repeat, "return_code": process.returncode,
@@ -767,6 +772,7 @@ def run_timing(stage: dict[str, Any], suite: str, clava_root: Path, native_tool:
             "metric_validation": validation, "metric_event_count": len(events), "metrics": metric_aggregate(events),
             "runtime_parser_jar_sha256": base.sha256_file(runtime / "lib" / "ClangAstParser.jar"),
             **base.parse_time(time_path), **counts, "valid": valid,
+            "junit_archive": junit_archive,
             "command": command, "run_dir": str(run_dir),
         }
     else:
