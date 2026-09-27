@@ -480,7 +480,7 @@ def ab_section(manifest: dict[str, Any], gc_profile: dict[str, Any] | None = Non
                     if gc_profile is not None else "These counters do not yet tell us where Java spent the extra time.")
     return f'''<section aria-labelledby="ab-title" class="ab-section">
     <p class="eyebrow">Historical same-revision A/B · before the GC fix</p><h2 id="ab-title">Archived Text and Protobuf measurements</h2>
-    <p class="notice warning">This September 25 result is preserved as historical evidence, not used in the corrected charts. The post-fix rerun above found an invalid Protobuf Java attempt and therefore does not pass the full-suite correctness gate.</p>
+    <p class="notice warning">This September 25 result predates the Java heap-logging GC fix. It is preserved as historical diagnostic evidence, not used in the corrected charts or the post-fix A/B result.</p>
     <p>The earlier charts compare different code branches. Those branches changed more than the AST file format. Here we used one build of the Clang AST dumper and Clava, then switched only how the intermediate AST file was written and read:</p>
     <div class="ab-paths"><div><strong>Text mode</strong><span>The dumper writes a text AST file → Clava reads text</span></div><div><strong>Protobuf mode</strong><span>The dumper writes a Protobuf AST file → Clava reads Protobuf</span></div></div>
     <p class="small">For each mode, we ran the complete Clava-JS and Java test suites {repeats} times, alternating which mode went first. We turned off the AST cache, so every test run made new dumps. The candles measure the time for the entire test command, including test setup and work beyond AST parsing.</p>
@@ -515,50 +515,12 @@ def suite_domain(rows: list[dict[str, Any]], suite: str) -> tuple[float, float]:
     ]
     if not values:
         return 0.01, 1.0
-    # Keep all three cache-state panels on one useful scale without allowing an
-    # isolated extreme run to flatten every quartile box. Values beyond the
-    # padded Tukey fence remain in the data and are marked at the chart edge.
-    q1 = quantile(values, 0.25)
-    q3 = quantile(values, 0.75)
-    iqr = q3 - q1
     low = min(values)
-    raw_high = max(values)
-    upper_fence = q3 + 1.5 * iqr
-    # Zoom only when the largest observation is clearly separated from the
-    # ordinary range; modest high runs remain inside the full padded scale.
-    if raw_high > upper_fence * 1.10:
-        high = max(value for value in values if value <= upper_fence)
-    else:
-        high = raw_high
-    padding = max((high - low) * 0.12, high * 0.025, 0.25)
+    high = max(values)
+    # One honest scale for Direct, Cold, and Warm within the suite, with only
+    # enough margin to keep the endpoint whiskers off the chart border.
+    padding = max((high - low) * 0.02, 0.25)
     return max(0.01, low - padding), high + padding
-
-
-def chart_zoom_notes(rows: list[dict[str, Any]], domains: dict[str, tuple[float, float]]) -> str:
-    notes = []
-    for suite, (low, high) in domains.items():
-        clipped = [
-            row for row in rows
-            if row.get("suite") == suite and row.get("stage") in STAGES
-            and row.get("mode") in MODE_ORDER and is_measured(row) and is_valid_run(row, suite)
-            and (value := time_value(row)) is not None and (value < low or value > high)
-        ]
-        if not clipped:
-            continue
-        labels = [
-            f'{MODES[row["mode"]].split(" ")[0]} {stage_title(str(row["stage"]))} {time_value(row):.2f}s'
-            for row in sorted(clipped, key=lambda item: time_value(item) or 0)
-        ]
-        notes.append(
-            f'<p class="zoom-note">{esc(SUITES[suite]["title"])} charts share a zoomed scale from '
-            f'{esc(axis_label(low))} to {esc(axis_label(high))}. Edge triangles mark clipped values: '
-            f'{esc("; ".join(labels))}. Full measurements remain available in each marker tooltip.</p>'
-        )
-    return "".join(notes)
-
-
-def axis_label(value: float) -> str:
-    return f"{value:.1f}s"
 
 
 def chart_svg(
@@ -568,16 +530,14 @@ def chart_svg(
     provenance: dict[str, dict[str, Any]],
     domain: tuple[float, float],
 ) -> str:
-    points: dict[str, list[tuple[float, dict[str, Any]]]] = {key: [] for key in STAGE_ORDER}
-    excluded: dict[str, int] = {key: 0 for key in STAGE_ORDER}
+    stage_order = STAGE_ORDER if mode == "direct" else tuple(key for key in STAGE_ORDER if key != "before-cache")
+    points: dict[str, list[tuple[float, dict[str, Any]]]] = {key: [] for key in stage_order}
+    excluded: dict[str, int] = {key: 0 for key in stage_order}
     for row in rows:
         if row.get("suite") != suite or row.get("stage") not in points or not is_measured(row):
             continue
         key = str(row["stage"])
-        # The pre-cache checkout has no cache-state variants. Reuse its exact Direct
-        # distribution as a neutral reference in the Cold and Warm panels.
-        source_mode = "direct" if key == "before-cache" and mode in {"cold", "warm"} else mode
-        if row.get("mode") != source_mode:
+        if row.get("mode") != mode:
             continue
         if not is_valid_run(row, suite):
             excluded[key] += 1
@@ -598,7 +558,7 @@ def chart_svg(
     right = 748
     top = 45
     lane = 68
-    height = top + lane * len(STAGE_ORDER) + 28
+    height = top + lane * len(stage_order) + 28
     domain_low, domain_high = domain
 
     def x(value: float) -> float:
@@ -617,18 +577,14 @@ def chart_svg(
         bits.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="22" y2="{height - 22}" class="grid-line"/>')
         bits.append(f'<text x="{tx:.2f}" y="17" text-anchor="middle" class="axis-text">{esc(label)}</text>')
 
-    for index, key in enumerate(STAGE_ORDER):
+    for index, key in enumerate(stage_order):
         y = top + index * lane + lane / 2
-        is_reference = key == "before-cache" and mode in {"cold", "warm"}
-        label = "Pre-cache reference, no cache state" if is_reference else stage_title(key, provenance.get(key, {}).get("all"))
-        color = "#64748b" if is_reference else STAGES[key][1]
+        label = stage_title(key, provenance.get(key, {}).get("all"))
+        color = STAGES[key][1]
         bits.append(f'<text x="12" y="{y - 3:.2f}" class="stage-text">{esc(label)}</text>')
         values = [value for value, _ in points[key]]
         if not values:
-            if key == "before-cache" and mode in {"cold", "warm"}:
-                note = "No Direct pre-cache reference supplied"
-            else:
-                note = f"No valid runs; {excluded[key]} excluded" if excluded[key] else "No measured runs"
+            note = f"No valid runs; {excluded[key]} excluded" if excluded[key] else "No measured runs"
             bits.append(f'<text x="{left}" y="{y + 5:.2f}" class="empty-lane">{esc(note)}</text>')
             continue
 
@@ -653,7 +609,7 @@ def chart_svg(
             repeat = row.get("repeat")
             title = (
                 f'{esc(label)} · repeat {esc(repeat if repeat is not None else run_index + 1)}: '
-                f'{esc(fmt_seconds(value))}, valid run{", from Direct mode" if is_reference else ""}'
+                f'{esc(fmt_seconds(value))}, valid run'
             )
             if value < domain_low or value > domain_high:
                 edge_x = clipped_x(value)
@@ -1021,20 +977,11 @@ def before_after_table(historical_rows: list[dict[str, Any]], corrected_rows: li
                 if old_median is not None and new_median is not None and old_median > 0:
                     percent = (new_median / old_median - 1) * 100
                     delta = f"{abs(percent):.1f}% {'slower' if percent > 0 else 'faster'}" if abs(percent) >= .05 else "about even"
-                note = ""
-                if stage == "protobuf" and suite == "java":
-                    failed = sum(row.get("suite") == suite and row.get("stage") == stage
-                                 and row.get("measured") is True and row.get("valid") is False
-                                 for row in corrected_rows if row.get("mode") == mode)
-                    if failed:
-                        note = f'<br><span class="small">conditional: {failed} failed attempt(s) also logged</span>'
-                    else:
-                        note = '<br><span class="small">conditional: same stage failed in other cache states</span>'
                 source = sample_links(new_samples)
                 cells = (
                     stage_title(stage), MODES[mode], SUITES[suite]["title"],
                     f'{fmt_seconds(old_median)} · n={len(old_times)}' if old_median is not None else "not available",
-                    f'{fmt_seconds(new_median)} · n={len(new_times)}{note}' if new_median is not None else "not available",
+                    f'{fmt_seconds(new_median)} · n={len(new_times)}' if new_median is not None else "not available",
                     delta, source,
                 )
                 body.append("<tr>" + "".join(f"<td>{cell if index in (4, 6) else esc(cell)}</td>"
@@ -1075,13 +1022,28 @@ def post_gc_notice(manifests: list[dict[str, Any]]) -> str:
         f"Across the selected matrix plus recovery/audit attempts, {valid_total}/{total} invocations passed; "
         f"{invalid_measured} measured attempts and {invalid_warmups} warm-up failed and remain in the audit."
     )
-    reliability = (
-        f"Protobuf Java is conditional, not decision-grade: {failed_java_proto} of 20 measured attempts failed "
-        "13/116 tests in the Direct and Cold cells. Both attempts had the same 13 failing test names; the cause "
-        "is unresolved. Their timing rows are excluded and one valid recovery sample replaces each in the six-run median."
+    clean_reruns = all(
+        any(isinstance(stage, dict) and stage.get("key") == "protobuf"
+            and isinstance(stage.get("java_rerun_stage"), dict)
+            for stage in manifest.get("stages", []))
+        for manifest in manifests if manifest.get("mode") in ("direct", "cold")
     )
+    if clean_reruns:
+        reliability = (
+            "The Direct and Cold Protobuf Java cells were rerun in full after earlier runs each failed the same "
+            "13 tests. Each replacement cell passed its warm-up and all six measured 116-test runs; the old cells "
+            "and recovery attempts remain in the audit and contribute no timing sample here. An alternating "
+            "old-versus-fixed SpecsUtils check also passed 8/8 full Java runs per variant. The earlier failures "
+            "remain unexplained; these checks do not establish that the GC fix caused them."
+        )
+    else:
+        reliability = (
+            f"Protobuf Java is conditional, not decision-grade: {failed_java_proto} measured attempts failed "
+            "13/116 tests in the Direct and Cold cells. Their timing rows are excluded and one valid recovery "
+            "sample replaces each in the six-run median."
+        )
     return (
-        '<aside class="notice warning" id="correctness-warning"><strong>Post-fix timing is corrected; Protobuf Java correctness is not yet stable.</strong>'
+        '<aside class="notice warning" id="correctness-warning"><strong>Correctness checks and excluded attempts</strong>'
         f'<p>{esc(detail)}</p><p>{esc(reliability)}</p>'
         '<p>The first Direct/before-cache Java warm-up also failed 83/116 while its native cache was bootstrapping. '
         'That entire cell was rerun after a clean recovery warm-up; the recovered six-run cell is used for the chart, '
@@ -1199,6 +1161,48 @@ def load_post_fix_ab(path: Path, result_root: Path) -> dict[str, Any]:
     return manifest
 
 
+def merge_post_fix_ab(js_manifest: dict[str, Any], java_manifest: dict[str, Any]) -> dict[str, Any]:
+    """Keep the valid JS suite and its later, independently rerun Java counterpart."""
+    for key in ("clava", "native"):
+        old = js_manifest.get("sources", {}).get(key, {}).get("revision")
+        new = java_manifest.get("sources", {}).get(key, {}).get("revision")
+        if not old or old != new:
+            raise ValueError(f"post-fix A/B {key} revision differs between suite runs")
+    for key in ("runtime_parser_jar_sha256",):
+        if js_manifest.get(key) != java_manifest.get(key):
+            raise ValueError(f"post-fix A/B {key} differs between suite runs")
+    old_sources, new_sources = js_manifest.get("sources", {}), java_manifest.get("sources", {})
+    for path, label in (
+        (("native", "tool_sha256"), "native binary"),
+        (("clava_js", "tree"), "Clava-JS source tree"),
+    ):
+        old = old_sources.get(path[0], {}).get(path[1])
+        new = new_sources.get(path[0], {}).get(path[1])
+        if old is not None or new is not None:
+            if not old or old != new:
+                raise ValueError(f"post-fix A/B {label} differs between suite runs")
+    old_deps = old_sources.get("java_build_dependencies", {}).get("SPECS_JAVA_LIBS_HOME", {})
+    new_deps = new_sources.get("java_build_dependencies", {}).get("SPECS_JAVA_LIBS_HOME", {})
+    if old_deps.get("revision") or new_deps.get("revision"):
+        if not old_deps.get("revision") or old_deps.get("revision") != new_deps.get("revision"):
+            raise ValueError("post-fix A/B SpecsUtils revision differs between suite runs")
+    for manifest, suite in ((js_manifest, "clava-js"), (java_manifest, "java")):
+        rows = [row for row in manifest["results"] if row.get("suite") == suite and row.get("measured")]
+        for stage in AB_STAGES:
+            stage_rows = [row for row in rows if row.get("stage") == stage]
+            if len(stage_rows) != 6 or {row.get("repeat") for row in stage_rows} != set(range(1, 7)):
+                raise ValueError(f"post-fix A/B lacks six {suite}/{stage} measured repeats")
+            if not all(row.get("valid") is True for row in stage_rows):
+                raise ValueError(f"post-fix A/B has invalid {suite}/{stage} measured repeats")
+    combined = dict(js_manifest)
+    combined["results"] = ([row for row in js_manifest["results"] if row.get("suite") == "clava-js"]
+                           + [row for row in java_manifest["results"] if row.get("suite") == "java"])
+    combined["suite_runs_created_at"] = {"clava-js": js_manifest.get("created_at"),
+                                          "java": java_manifest.get("created_at")}
+    combined["java_recheck_audit"] = [row for row in js_manifest["results"] if row.get("suite") == "java"]
+    return combined
+
+
 def post_fix_ab_section(manifest: dict[str, Any]) -> str:
     measured = [row for row in manifest["results"] if row.get("measured") is True]
     summaries: list[str] = []
@@ -1238,17 +1242,50 @@ def post_fix_ab_section(manifest: dict[str, Any]) -> str:
                 f'<th>Metric events</th><th>Failure names</th><th>Run record</th><th>JUnit XML</th></tr></thead>'
                 f'<tbody>{"".join(body)}</tbody></table></div>'
             )
-    return (
-        '<section class="notice warning" aria-labelledby="post-ab-title">'
-        '<p class="eyebrow">Post-fix same-revision validation</p><h2 id="post-ab-title">A/B timings are not decision-grade</h2>'
-        '<p>The AST graph fidelity preflight passed, but the full-suite gate did not. All six Clava-JS pairs passed. '
-        'In Java, Protobuf repeat 2 failed 2 of 116 tests (<code>CxxBenchTest#testFastStack</code> and '
-        '<code>CxxTest#testDecl</code>); its Text counterpart passed the tests but was excluded because its metric '
-        'event count (247) did not match Protobuf (245). Thus only 5/6 complete Java pairs are valid. The cause remains '
-        'unresolved; no paired speedup is promoted as a result.</p>'
-        '<details><summary>All six same-revision Java and Clava-JS attempts</summary>' + "".join(summaries) + '</details>'
-        '</section>'
+    if "suite_runs_created_at" not in manifest:
+        return ('<section class="notice warning" aria-labelledby="post-ab-title">'
+                '<p class="eyebrow">Post-fix same-revision validation</p><h2 id="post-ab-title">A/B correctness gate incomplete</h2>'
+                '<p>The original post-fix Java A/B had one invalid Protobuf pair. Its timings are retained for audit, not used as a complete six-pair result.</p>'
+                '<details><summary>Original post-fix A/B attempts</summary>' + "".join(summaries) + '</details></section>')
+    js_text, js_proto, js_change = ab_delta(manifest, "clava-js")
+    java_text, java_proto, java_change = ab_delta(manifest, "java")
+    paired = []
+    for suite in SUITES:
+        text_by_repeat = {row["repeat"]: value for value, row in ab_values(manifest, suite, "ab-text")}
+        proto_by_repeat = {row["repeat"]: value for value, row in ab_values(manifest, suite, "ab-protobuf")}
+        paired.append((suite, sum(proto_by_repeat[index] > text_by_repeat[index] for index in range(1, 7))))
+    candles = "".join(
+        f'<figure class="chart-card"><figcaption><h3>{esc(SUITES[suite]["title"])}</h3></figcaption>'
+        f'{ab_candle_svg(manifest, suite)}</figure>' for suite in SUITES
     )
+    audit = manifest.get("java_recheck_audit", [])
+    invalid_audit = [row for row in audit if row.get("measured") is True and row.get("valid") is False]
+    audit_notice = (
+        '<p class="small">An earlier Java A/B attempt failed two tests in one Protobuf run. It is excluded from these '
+        'candles and retained in the audit. The failure has not been attributed to the GC change.</p>'
+        if invalid_audit else ""
+    )
+    audit_detail = ''.join(
+        f'<li>Protobuf repeat {esc(row.get("repeat"))}: {esc(row.get("passed_tests"))}/116 passed; '
+        f'test XML: <code>{esc(row.get("junit_ref") or "not retained")}</code></li>'
+        for row in invalid_audit
+    )
+    return f'''<section class="ab-section" aria-labelledby="post-ab-title">
+      <p class="eyebrow">Post-fix same-revision A/B</p><h2 id="post-ab-title">Text versus Protobuf on the same build</h2>
+      <p>Only the AST wire format changes within each paired suite run; the AST cache is bypassed. All 12 Clava-JS and 12 Java measured commands passed their suite gate. The Java suite was rerun independently after an earlier invalid attempt. Both suite runs use the same Clava and native revisions and parser JAR; they were measured on different dates and are not paired across suites.</p>
+      <p class="takeaway">Clava-JS: Text {fmt_seconds(js_text)}, Protobuf {fmt_seconds(js_proto)} ({js_change:+.1f}%). Java: Text {fmt_seconds(java_text)}, Protobuf {fmt_seconds(java_proto)} ({java_change:+.1f}%). Protobuf was slower in {paired[0][1]}/6 Clava-JS pairs and {paired[1][1]}/6 Java pairs. Lower is faster.</p>
+      <div class="chart-grid">{candles}</div>
+      <figure class="chart-card ab-paired"><figcaption><h3>Paired change in wall time</h3><p>Left: Protobuf faster · right: Protobuf slower</p></figcaption>{ab_paired_svg(manifest)}</figure>
+      <p class="small">Candles show six valid full-suite commands per format. Each dot in the paired chart compares runs with the same repeat number within one suite. The percentages are whole-command wall times, not isolated reader times.</p>
+      <details><summary>Native work, AST reading, AST construction, and file size</summary>
+        <p class="small">These counters sum parser work across a suite. Concurrent tasks can overlap, so their bars must not be added to the whole-command wall time.</p>
+        <div class="phase-suite"><h3>Clava-JS</h3><div class="phase-grid">{ab_phase_html(manifest, 'clava-js')}</div></div>
+        <div class="phase-suite"><h3>Java parser</h3><div class="phase-grid">{ab_phase_html(manifest, 'java')}</div></div>
+      </details>
+      {audit_notice}
+      {'<details><summary>Excluded earlier Java A/B attempt</summary><ul>' + audit_detail + '</ul></details>' if invalid_audit else ''}
+      <details><summary>Run-by-run correctness and evidence</summary>{"".join(summaries)}</details>
+    </section>'''
 
 
 def gc_fix_evidence_html(evidence: dict[str, Any]) -> str:
@@ -1327,33 +1364,36 @@ def report_html(
     if post_gc_ab is not None and post_gc_ab.get("created_at"):
         dates.append(str(post_gc_ab["created_at"]))
         dates = sorted(set(dates))
+    if post_gc_ab is not None:
+        dates.extend(str(value) for value in post_gc_ab.get("suite_runs_created_at", {}).values() if value)
+        dates = sorted(set(dates))
     date_text = f"Input runs created {dates[0]}" if dates else "Creation time not recorded in the input manifests"
     if len(dates) > 1:
         date_text += f" through {dates[-1]}"
 
-    mode_sections: list[str] = []
-    for mode in MODE_ORDER:
-        charts = []
-        for suite, spec in SUITES.items():
-            svg = chart_svg(suite, mode, rows, provenance, domains[suite])
-            charts.append(
-                f'<figure class="chart-card"><figcaption><h3>{esc(spec["title"])}</h3>'
-                f'<p>{esc(spec["description"])}</p></figcaption>{svg}'
-                '<p class="chart-key">Whiskers: min/max · box: Q1 to Q3 · center mark: median · dots: individual valid runs. Lower is faster.</p></figure>'
+    suite_figures: list[str] = []
+    for suite, spec in SUITES.items():
+        facets = []
+        for index, mode in enumerate(MODE_ORDER):
+            declared_repeats = [
+                int(number(value.get("repeat_count"))) for value in manifests
+                if value.get("mode") == mode and number(value.get("repeat_count")) is not None
+            ]
+            repeats_text = (
+                f"Up to {max(declared_repeats)} measured repeats per stage."
+                if declared_repeats else "Measured repeats are shown per stage when available."
             )
-        declared_repeats = [
-            int(number(value.get("repeat_count"))) for value in manifests
-            if value.get("mode") == mode and number(value.get("repeat_count")) is not None
-        ]
-        repeats_text = (
-            f"Up to {max(declared_repeats)} measured repeats per stage."
-            if declared_repeats else "Measured repeats are shown per stage when available."
-        )
-        mode_sections.append(
-            f'<section class="mode-section" id="{esc(mode)}"><div class="section-heading"><div>'
-            f'<p class="eyebrow">Cache state</p><h2>{esc(MODES[mode])}</h2></div>'
-            f'<p>{esc(repeats_text)}</p></div>'
-            f'<div class="chart-grid">{"".join(charts)}</div></section>'
+            svg = chart_svg(suite, mode, rows, provenance, domains[suite])
+            divider = '<hr class="mode-divider"/>' if index else ''
+            facets.append(
+                f'{divider}<div class="mode-facet" id="{esc(suite)}-{esc(mode)}">'
+                f'<div class="mode-facet-heading"><h4>{esc(MODES[mode])}</h4>'
+                f'<span>{esc(repeats_text)}</span></div>{svg}</div>'
+            )
+        suite_figures.append(
+            f'<figure class="chart-card suite-chart"><figcaption><h3>{esc(spec["title"])}</h3>'
+            f'<p>{esc(spec["description"])}</p></figcaption>{"".join(facets)}'
+            '<p class="chart-key">Whiskers: min/max · box: Q1 to Q3 · center mark: median · dots: individual valid runs. Lower is faster.</p></figure>'
         )
 
     warnings = "".join(f'<li>{esc(warning)}</li>' for warning in (provenance_warnings or []))
@@ -1403,7 +1443,8 @@ def report_html(
             '<p>Pre-fix medians are the archived September 23 measurements. Post-fix medians use the selected six '
             'valid runs per cell after the SpecsUtils fix. These are not a fully matched before/after experiment: '
             'branch revisions and build artifacts differ, so the observed differences are context, not a causal '
-            'estimate of the GC change. Post-fix Protobuf Java rows are conditional on the correctness caveat above.</p>'
+            'estimate of the GC change. The Direct and Cold Protobuf Java cells were rerun after earlier failures; '
+            'the old attempts are retained in the audit, not these medians.</p>'
             f'{before_after_table(historical_rows, rows)}</section>'
         )
         evidence_section = run_evidence_html(manifests)
@@ -1417,7 +1458,7 @@ def report_html(
     )
     comparison_guide = (
         '<p class="small">The main charts show the corrected post-fix rerun. The comparison table retains the '
-        'older pre-fix medians for context; a separate same-revision A/B records the current correctness outcome.</p>'
+        'older pre-fix medians for context; a separate same-revision A/B isolates the format change.</p>'
         if post_gc_manifests else
         '<p class="small">The first charts compare different code branches and cache states. '
         'The next section runs Text and Protobuf through the same build to check what the file format itself changes.</p>'
@@ -1472,6 +1513,12 @@ def report_html(
     .stage-text {{ fill:var(--ink); font-size:14px; font-weight:700; }} .empty-lane {{ fill:var(--muted); font-size:13px; }}
     .median-label {{ fill:var(--ink); font-size:13px; font-weight:650; }}
     .chart-key {{ margin:8px 4px 0; color:var(--muted); font-size:.8rem; }}
+    .suite-chart {{ margin-bottom:18px; }}
+    .mode-facet {{ padding-top:15px; }}
+    .mode-facet-heading {{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:0 4px 8px; }}
+    .mode-facet-heading h4 {{ margin:0; font-size:1.05rem; }}
+    .mode-facet-heading span {{ color:var(--muted); font-size:.82rem; }}
+    .mode-divider {{ height:1px; margin:20px 4px 0; border:0; background:var(--line); }}
     .zoom-note {{ margin:12px 0; padding:10px 13px; border-left:3px solid #d97706; border-radius:6px; background:var(--warn); color:var(--ink); font-size:.88rem; }}
     .empty-chart {{ padding:35px 16px; color:var(--muted); text-align:center; border:1px dashed var(--line); border-radius:10px; }}
     .mode-section {{ margin-bottom:44px; }}
@@ -1558,10 +1605,9 @@ def report_html(
     <p class="small">Lower is faster. Colored lines show text + ccache, protobuf, and eager FlatBuffers. The dashed line repeats the Direct pre-cache median as a reference with no cache state.</p>
   </section>
   <section aria-labelledby="charts-title">
-    <p class="eyebrow">Run distributions</p><h2 id="charts-title">Six candle charts show the spread</h2>
-    <p class="small">Every cache-state panel uses the same padded, nonzero time scale within its suite. The Direct pre-cache candle is repeated in Cold and Warm as a reference, not as a measurement in those states. One dot is one valid measured repeat.</p>
-    {chart_zoom_notes(rows, domains)}
-    {''.join(mode_sections)}
+    <p class="eyebrow">Run distributions</p><h2 id="charts-title">One candle chart per test suite</h2>
+    <p class="small">Each suite chart groups Direct, Cold, and Warm, separated by a rule. All three sections use the same time scale within that suite. Before-cache has no Cold or Warm state and appears only in Direct. One dot is one valid measured repeat.</p>
+    {''.join(suite_figures)}
   </section>
   {current_ab_section}
   {archived_details}
@@ -1606,6 +1652,8 @@ def main() -> int:
     parser.add_argument("--ab-results", type=Path, help="passed same-revision text/Protobuf A/B results.json")
     parser.add_argument("--java-gc-profile", type=Path, help="same-revision Java JVM/GC diagnostic summary.json; requires --ab-results")
     parser.add_argument("--post-gc-ab-results", type=Path, help="post-fix A/B results; accepts correctness-invalid runs for audit display only")
+    parser.add_argument("--post-gc-ab-java-results", type=Path, help="complete six-pair Java rerun replacing only the original post-fix Java A/B rows")
+    parser.add_argument("--post-gc-evidence-root", type=Path, help="shared root for post-fix A/B run-record paths")
     parser.add_argument("--gc-fix-evidence", type=Path, help="pre/post-fix explicit-GC JFR summary JSON")
     args = parser.parse_args()
     try:
@@ -1619,7 +1667,13 @@ def main() -> int:
         if args.java_gc_profile and ab_manifest is None:
             raise ValueError("--java-gc-profile requires --ab-results")
         gc_profile = load_gc_result(args.java_gc_profile, ab_manifest) if args.java_gc_profile else None
-        post_gc_ab = load_post_fix_ab(args.post_gc_ab_results, args.post_gc_ab_results.parent.parent) if args.post_gc_ab_results else None
+        if args.post_gc_ab_java_results and (not args.post_gc_ab_results or not args.post_gc_evidence_root):
+            raise ValueError("--post-gc-ab-java-results requires --post-gc-ab-results and --post-gc-evidence-root")
+        ab_root = args.post_gc_evidence_root or (args.post_gc_ab_results.parent.parent if args.post_gc_ab_results else None)
+        post_gc_ab = load_post_fix_ab(args.post_gc_ab_results, ab_root) if args.post_gc_ab_results else None
+        if args.post_gc_ab_java_results:
+            java_ab = load_post_fix_ab(args.post_gc_ab_java_results, ab_root)
+            post_gc_ab = merge_post_fix_ab(post_gc_ab, java_ab)
         gc_fix_evidence = json.loads(args.gc_fix_evidence.read_text(encoding="utf-8")) if args.gc_fix_evidence else None
         rendered = report_html(manifests, provenance, warnings, ab_manifest=ab_manifest,
                                gc_profile=gc_profile, post_gc_manifests=post_gc_manifests,

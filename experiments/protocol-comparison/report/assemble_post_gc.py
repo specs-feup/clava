@@ -188,6 +188,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--results-root", type=Path, required=True)
     parser.add_argument("--output-root", type=Path, required=True)
+    parser.add_argument("--protobuf-java-reruns", action="store_true",
+                        help="select complete passing Direct/Cold Java Protobuf rerun cells from investigation/")
     parser.add_argument("--pre-fix-jfr-text", type=Path)
     parser.add_argument("--pre-fix-jfr-protobuf", type=Path)
     parser.add_argument("--post-fix-jfr-text", type=Path)
@@ -213,6 +215,25 @@ def main() -> int:
                 stage_metadata.update(before_cache_dumper_evidence(root))
             stages_by_mode[mode][stage] = stage_metadata
 
+            rerun_rows: list[dict[str, Any]] | None = None
+            if args.protobuf_java_reruns and stage == "protobuf" and mode in ("direct", "cold"):
+                rerun_path = root / "investigation" / f"protobuf-java-{mode}-recheck" / "results.json"
+                rerun_manifest = read_json(rerun_path)
+                rerun_rows = [dict(row) for row in rerun_manifest.get("results", [])
+                              if isinstance(row, dict) and row.get("suite") == "java"]
+                rerun_stage = next((item for item in rerun_manifest.get("stages", [])
+                                    if isinstance(item, dict) and item.get("key") == stage), None)
+                if not rerun_stage:
+                    raise ValueError(f"missing rerun provenance: {rerun_path}")
+                for field in ("dumper_revision", "dumper_sha256"):
+                    if rerun_stage.get(field) != stage_metadata.get(field):
+                        raise ValueError(f"Java Protobuf rerun differs in {field}: {rerun_path}")
+                original_jar = stage_metadata.get("runtime_specsutils", {}).get("jar_sha256")
+                rerun_jar = rerun_stage.get("runtime_specsutils", {}).get("jar_sha256")
+                if original_jar != rerun_jar:
+                    raise ValueError(f"Java Protobuf rerun differs in SpecsUtils JAR: {rerun_path}")
+                stage_metadata["java_rerun_stage"] = rerun_stage
+
             cell_rows = [row for row in rows if row.get("stage") == stage]
             recovery_rows: list[dict[str, Any]] = []
             recovery_relative = RECOVERY.get((mode, stage))
@@ -220,11 +241,26 @@ def main() -> int:
                 recovery_manifest, recovery_rows = load_rows(root, recovery_relative)
                 recovery_stage = next((item for item in recovery_manifest.get("stages", [])
                                        if isinstance(item, dict) and item.get("key") == stage), None)
-                if recovery_stage != stage_metadata:
+                original_stage = {key: value for key, value in stage_metadata.items()
+                                  if key != "java_rerun_stage"}
+                if recovery_stage != original_stage:
                     raise ValueError(f"recovery provenance differs for {mode}/{stage}")
 
             selected_by_suite: dict[str, list[dict[str, Any]]] = {}
             for suite in EXPECTED_SUITES:
+                if rerun_rows is not None and suite == "java":
+                    original_rows = [row for row in cell_rows if row.get("suite") == suite]
+                    for row in [*original_rows, *[item for item in recovery_rows if item.get("suite") == suite]]:
+                        audit[mode].append(attach_evidence(row, root, "superseded-java-cell"))
+                    suite_rows = rerun_rows
+                    warmups = [row for row in suite_rows if row.get("measured") is False]
+                    measured = [row for row in suite_rows if row.get("measured") is True]
+                    if len(warmups) != 1 or len(measured) != EXPECTED_REPEATS or not all(
+                        row.get("valid") is True for row in suite_rows
+                    ):
+                        raise ValueError(f"Java Protobuf rerun cell is not fully passing: {mode}")
+                    selected_by_suite[suite] = [warmups[0], *sorted(measured, key=lambda row: int(row["repeat"]))]
+                    continue
                 suite_rows = [row for row in cell_rows if row.get("suite") == suite]
                 warmups = [row for row in suite_rows if row.get("measured") is False]
                 measured = [row for row in suite_rows if row.get("measured") is True]
@@ -306,10 +342,12 @@ def main() -> int:
             "specsutils_fix_revision": "cea5be9123be8508805c03be381a26af796ae7ff",
             "repeat_count": EXPECTED_REPEATS,
             "selection_policy": (
-                "Use exactly six valid measured samples per suite/stage/mode. A single invalid measured "
-                "Protobuf Java attempt is retained under audit_attempts and replaced by one valid same-cell "
-                "recovery sample; warm-ups are never timed. The original failed attempt still counts in the "
-                "correctness failure rate."
+                "Use exactly six valid measured samples per suite/stage/mode. Select complete passing "
+                "Direct/Cold Java Protobuf rerun cells; retain all earlier cell and recovery attempts in "
+                "audit_attempts. Warm-ups are never timed."
+                if args.protobuf_java_reruns else
+                "Use exactly six valid measured samples per suite/stage/mode. Exclude invalid attempts, "
+                "select one valid same-cell recovery sample where needed, and retain failures in audit_attempts."
             ),
             "stages": list(stages_by_mode[mode].values()),
             "results": primary[mode],

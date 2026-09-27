@@ -8,6 +8,34 @@ import render_report
 
 
 class AxisTickLabelsTest(unittest.TestCase):
+    def test_candle_panels_share_a_tight_suite_scale(self):
+        rows = []
+        for mode, stages in {
+            "direct": {"before-cache": 35.1, "ccache-text": 40.0, "protobuf": 42.2,
+                       "flatbuffers": 39.3},
+            "cold": {"ccache-text": 40.5, "protobuf": 43.0, "flatbuffers": 40.4},
+            "warm": {"ccache-text": 29.7, "protobuf": 31.4, "flatbuffers": 29.2},
+        }.items():
+            for stage, elapsed in stages.items():
+                rows.append({"suite": "java", "mode": mode, "stage": stage,
+                             "measured": True, "repeat": 1, "valid": True,
+                             "return_code": 0, "total_tests": 116,
+                             "passed_tests": 116, "failed_tests": 0,
+                             "skipped_tests": 0, "elapsed_s": elapsed})
+
+        low, high = render_report.suite_domain(rows, "java")
+        self.assertLess(low, 29.2)
+        self.assertGreater(high, 43.0)
+        self.assertLess(high - low, 15)
+        cold_chart = render_report.chart_svg("java", "cold", rows, {}, (low, high))
+        warm_chart = render_report.chart_svg("java", "warm", rows, {}, (low, high))
+        self.assertNotIn("Pre-cache reference", cold_chart)
+        self.assertNotIn("Before cache", cold_chart)
+        def ticks(svg_text):
+            return [node.text for node in ET.fromstring(svg_text).findall(".//text[@class='axis-text']")]
+        self.assertEqual(ticks(cold_chart), ticks(warm_chart))
+        self.assertIn("30.0s", ticks(cold_chart))
+
     def test_zoomed_axis_uses_regular_fractional_seconds(self):
         ticks = render_report.time_axis_ticks(43.1, 46.0)
         labels = [label for _, label in ticks]
@@ -63,6 +91,33 @@ class AxisTickLabelsTest(unittest.TestCase):
 
 
 class PostFixReportEvidenceTest(unittest.TestCase):
+    def test_merge_post_fix_ab_keeps_separate_valid_suite_reruns(self):
+        def manifest(suite):
+            return {
+                "sources": {"clava": {"revision": "same-clava"},
+                            "native": {"revision": "same-native"}},
+                "runtime_parser_jar_sha256": "same-jar",
+                "created_at": suite,
+                "results": [{"suite": suite, "stage": stage, "repeat": repeat,
+                             "measured": True, "valid": True, "elapsed_s": 40 + repeat,
+                             "passed_tests": 116 if suite == "java" else 158,
+                             "total_tests": 116 if suite == "java" else 164,
+                             "failed_tests": 0, "metric_event_count": 247,
+                             "metrics": {"native_ms": 100, "read_ms": 20,
+                                         "ast_ms": 10, "dump_bytes": 1000},
+                             "evidence_id": f"{suite}-{stage}-{repeat}",
+                             "evidence_ref": f"{suite}/{stage}/{repeat}/summary.json"}
+                            for stage in render_report.AB_STAGES for repeat in range(1, 7)],
+            }
+
+        original = manifest("clava-js")
+        original["results"].append({"suite": "java", "stage": "ab-protobuf",
+                                    "repeat": 2, "measured": True, "valid": False})
+        combined = render_report.merge_post_fix_ab(original, manifest("java"))
+        self.assertEqual(len([row for row in combined["results"] if row["suite"] == "java"]), 12)
+        self.assertEqual(len(combined["java_recheck_audit"]), 1)
+        self.assertIn("same build", render_report.post_fix_ab_section(combined))
+
     def test_post_fix_ab_run_links_have_retained_targets(self):
         rows = []
         for suite, passed, total in (("clava-js", 158, 164), ("java", 116, 116)):
