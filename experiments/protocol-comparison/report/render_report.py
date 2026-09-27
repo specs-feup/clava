@@ -441,7 +441,7 @@ def gc_diagnostic_html(profile: dict[str, Any]) -> str:
     forced_pause_gap = normal_proto["system_gc_pause_s"] - normal_text["system_gc_pause_s"]
     return f'''<section class="gc-section" aria-labelledby="gc-title">
       <p class="eyebrow">Why Java slowed down</p><h3 id="gc-title">Forced garbage collection dominates the Java gap</h3>
-      <p>The Java parser suite logs used heap after each parse. That logging calls <code>System.gc()</code> twice. In the profiled pair, both formats triggered {normal_text['system_gc_count']} full collections. Protobuf spent {forced_pause_gap:.2f}s more paused for those collections, close to its {wall_gap:.2f}s longer whole-suite run.</p>
+      <p>In the pre-fix source, Java's used-heap logging requested <code>System.gc()</code> twice per parse: once for the flag and once unconditionally. In the profiled pair, both formats recorded {normal_text['system_gc_count']} explicit-GC-caused full collections. Protobuf spent {forced_pause_gap:.2f}s more paused for those collections, close to its {wall_gap:.2f}s longer whole-suite run.</p>
       <div class="gc-grid">{bars('wall_s', 'Whole Java test command', 50, (0, 25, 50))}{bars('gc_pause_s', 'Test-worker GC pauses', 15, (0, 5, 10, 15))}</div>
       <p class="takeaway">When the test worker ignored explicit GC requests, Protobuf was only {off_gap:.2f}s slower ({off_text['wall_s']:.2f}s vs {off_proto['wall_s']:.2f}s), and GC pauses fell below 0.4s in both modes. This identifies repeated full GC in the Java test path as the main source of its measured gap. It does not show a 4-second Protobuf reader penalty.</p>
       {gc_mechanism_html(profile['gc_mechanism']) if profile.get('gc_mechanism') else ''}
@@ -479,7 +479,8 @@ def ab_section(manifest: dict[str, Any], gc_profile: dict[str, Any] | None = Non
     phase_notice = ("The phase bars do not include Java's repeated full-GC pauses; the diagnostic below measures them separately."
                     if gc_profile is not None else "These counters do not yet tell us where Java spent the extra time.")
     return f'''<section aria-labelledby="ab-title" class="ab-section">
-    <p class="eyebrow">Isolating the file format</p><h2 id="ab-title">Same code, two ways to send the AST to Clava</h2>
+    <p class="eyebrow">Historical same-revision A/B · before the GC fix</p><h2 id="ab-title">Archived Text and Protobuf measurements</h2>
+    <p class="notice warning">This September 25 result is preserved as historical evidence, not used in the corrected charts. The post-fix rerun above found an invalid Protobuf Java attempt and therefore does not pass the full-suite correctness gate.</p>
     <p>The earlier charts compare different code branches. Those branches changed more than the AST file format. Here we used one build of the Clang AST dumper and Clava, then switched only how the intermediate AST file was written and read:</p>
     <div class="ab-paths"><div><strong>Text mode</strong><span>The dumper writes a text AST file → Clava reads text</span></div><div><strong>Protobuf mode</strong><span>The dumper writes a Protobuf AST file → Clava reads Protobuf</span></div></div>
     <p class="small">For each mode, we ran the complete Clava-JS and Java test suites {repeats} times, alternating which mode went first. We turned off the AST cache, so every test run made new dumps. The candles measure the time for the entire test command, including test setup and work beyond AST parsing.</p>
@@ -496,8 +497,8 @@ def ab_section(manifest: dict[str, Any], gc_profile: dict[str, Any] | None = Non
     <details class="details-card"><summary>Exactly how we checked this</summary>
       <p>{repeats} measured repeats per format and suite, plus uncharted warm-ups. Both formats used the same source revisions, native executable, and Java runtime. We disabled ccache and compression. A C and a C++ example produced matching normalized ASTs in both formats before timing, and both formats passed suite smoke tests.</p>
       <p>Graph normalization excludes wire-local IDs, process context, edit-origin references, object identity, and the DataStore dispatch label. Concrete node classes, ordered children, source ranges, references, and populated semantic fields remain compared. The full measured suite tests passed in both modes.</p>
-      <p>The Java suite's two-input PairHash fixture uses one parser worker in both modes; all other tests retain their configured concurrency.</p>
-      {'<p>The Java GC diagnostic used the same Clava and native revisions. Java Flight Recorder captured one full-suite Text and one Protobuf run with normal JVM behavior, then one of each with <code>-XX:+DisableExplicitGC</code> on the test worker. <code>ParallelCodeParser</code> calls <code>SpecsSystem.getUsedMemory(true)</code> when reporting execution information; that method calls <code>System.gc()</code> twice. The diagnostic keeps JFR enabled in both JVM conditions.</p>' if gc_profile is not None else ''}
+      <p>The Java suite's two-input PairHash fixture uses one parser worker in both modes; all other tests retain their configured concurrency. The then-current source called <code>getUsedMemory(true)</code>, and the pre-fix implementation issued a second unconditional GC request. The later fix removes only that extra request; one request remains because the caller still passes <code>true</code>.</p>
+      {'<p>The Java GC diagnostic used the same Clava and native revisions. Java Flight Recorder captured one full-suite Text and one Protobuf run with normal JVM behavior, then one of each with <code>-XX:+DisableExplicitGC</code> on the test worker. Before the fix, <code>ParallelCodeParser</code> called <code>SpecsSystem.getUsedMemory(true)</code>, whose implementation issued two explicit requests. The later fix removes the unconditional second request; the caller-controlled request remains.</p>' if gc_profile is not None else ''}
       {'<p>In a separate, unpaired Java diagnostic run, 108 of 116 individual test durations were higher with Protobuf; the largest single increase was 0.34s. This suggests many small contributions rather than one runaway test, but one extra run cannot establish their cause and is excluded from the six-pair estimate.</p>' if gc_profile is None else ''}
       <p class="small">Clava commit: <code>{esc(clava_revision)}</code><br>Native commit: <code>{esc(native_revision)}</code><br>Native binary SHA-256: <code>{esc(native_hash)}</code><br>Staged parser JAR SHA-256: <code>{esc(jar_hash)}</code></p>
       <p>{repeats} repeats on one workstation show workload-specific behavior, not universal format performance. The earlier branch comparison also includes changes beyond the transport path.</p>
@@ -948,8 +949,19 @@ def provenance_table(provenance: dict[str, dict[str, Any]], rows: list[dict[str,
             clava = str(meta.get("clava_revision") or "not recorded")
             dumper_rev = str(meta.get("dumper_revision") or "not recorded")
             dumper_hash = str(meta.get("dumper_sha256") or "not recorded")
+            dumper_artifact_ref = str(meta.get("dumper_artifact_ref") or "")
             runtime = meta.get("runtime_manifest") if isinstance(meta.get("runtime_manifest"), dict) else {}
             runtime_hash = str(runtime.get("sha256") or "not recorded")
+            build = meta.get("java_build_dependencies") if isinstance(meta.get("java_build_dependencies"), dict) else {}
+            specs = build.get("specs_java_libs") if isinstance(build.get("specs_java_libs"), dict) else {}
+            runtime_specs = meta.get("runtime_specsutils") if isinstance(meta.get("runtime_specsutils"), dict) else {}
+            specs_fix = str(build.get("fixed_revision") or "not recorded")
+            specs_source = str(specs.get("revision") or "not recorded")
+            specs_source_hash = str(specs.get("system_source_sha256") or "not recorded")
+            specs_jar_hash = str(specs.get("specsutils_jar_sha256") or "not recorded")
+            specs_class_hash = str(specs.get("specs_system_class_sha256") or "not recorded")
+            loaded_match = str(runtime_specs.get("matches_selected_build_input")
+                               if runtime_specs.get("matches_selected_build_input") is not None else "not recorded")
             jar_hashes = sorted({
                 str(row.get("runtime_parser_jar_sha256")) for row in rows
                 if row.get("stage") == stage and row.get("mode") == mode
@@ -959,10 +971,318 @@ def provenance_table(provenance: dict[str, dict[str, Any]], rows: list[dict[str,
             dirty = worktree_label(meta.get("clava_status"))
             dumper_dirty = "not applicable" if meta.get("native_root") is None else worktree_label(meta.get("dumper_status"))
             state = MODES.get(mode, "all inputs")
-            cells = [stage_title(stage, meta), state, clava, dumper_rev, dumper_hash, runtime_hash, jar_hash, dirty, dumper_dirty]
-            table_rows.append("<tr>" + "".join(f'<td>{esc(cell)}</td>' for cell in cells) + "</tr>")
-    header = "".join(f"<th>{esc(item)}</th>" for item in ("Tested state", "Cache state", "Clava commit", "Native dumper commit", "Dumper executable SHA-256", "Source Java runtime SHA-256", "Staged parser JAR SHA-256", "Clava worktree", "Dumper worktree"))
+            cells = [stage_title(stage, meta), state, clava, dumper_rev, dumper_hash,
+                     specs_fix, specs_source, specs_source_hash, specs_jar_hash, specs_class_hash,
+                     loaded_match, runtime_hash, jar_hash, dirty, dumper_dirty]
+            html_cells = [f'<td>{esc(cell)}</td>' for cell in cells]
+            if dumper_artifact_ref:
+                html_cells[4] = (
+                    f'<td>{esc(dumper_hash)}<br><span class="small">{esc(dumper_artifact_ref)}</span></td>'
+                )
+            table_rows.append("<tr>" + "".join(html_cells) + "</tr>")
+    header = "".join(f"<th>{esc(item)}</th>" for item in (
+        "Tested state", "Cache state", "Clava commit", "Native dumper commit",
+        "Dumper executable SHA-256", "SpecsUtils fix commit", "SpecsUtils source revision",
+        "SpecsSystem source SHA-256", "SpecsUtils JAR SHA-256", "SpecsSystem class SHA-256",
+        "Runtime uses selected SpecsUtils artifact", "Source Java runtime SHA-256",
+        "Staged parser JAR SHA-256", "Clava worktree", "Dumper worktree",
+    ))
     return f'<div class="table-scroll"><table><thead><tr>{header}</tr></thead><tbody>{"".join(table_rows)}</tbody></table></div>'
+
+
+def valid_cell_rows(rows: list[dict[str, Any]], suite: str, mode: str, stage: str) -> list[dict[str, Any]]:
+    return [row for row in rows if row.get("suite") == suite and row.get("mode") == mode
+            and row.get("stage") == stage and row.get("measured") is True
+            and is_valid_run(row, suite)]
+
+
+def sample_links(rows: list[dict[str, Any]]) -> str:
+    links = [f'<a href="#{esc(row["evidence_id"])}">r{esc(row.get("repeat"))}</a>'
+             for row in rows if row.get("evidence_id")]
+    return " · ".join(links) if links else "not linked"
+
+
+def before_after_table(historical_rows: list[dict[str, Any]], corrected_rows: list[dict[str, Any]]) -> str:
+    body: list[str] = []
+    for mode in MODE_ORDER:
+        stages = ("before-cache",) if mode == "direct" else ()
+        stages = (*stages, "ccache-text", "protobuf", "flatbuffers")
+        for stage in stages:
+            for suite in SUITES:
+                old_samples = valid_cell_rows(historical_rows, suite, mode, stage)
+                new_samples = valid_cell_rows(corrected_rows, suite, mode, stage)
+                old_times = [time_value(row) for row in old_samples]
+                new_times = [time_value(row) for row in new_samples]
+                old_times = [value for value in old_times if value is not None]
+                new_times = [value for value in new_times if value is not None]
+                old_median = statistics.median(old_times) if old_times else None
+                new_median = statistics.median(new_times) if new_times else None
+                delta = "not comparable"
+                if old_median is not None and new_median is not None and old_median > 0:
+                    percent = (new_median / old_median - 1) * 100
+                    delta = f"{abs(percent):.1f}% {'slower' if percent > 0 else 'faster'}" if abs(percent) >= .05 else "about even"
+                note = ""
+                if stage == "protobuf" and suite == "java":
+                    failed = sum(row.get("suite") == suite and row.get("stage") == stage
+                                 and row.get("measured") is True and row.get("valid") is False
+                                 for row in corrected_rows if row.get("mode") == mode)
+                    if failed:
+                        note = f'<br><span class="small">conditional: {failed} failed attempt(s) also logged</span>'
+                    else:
+                        note = '<br><span class="small">conditional: same stage failed in other cache states</span>'
+                source = sample_links(new_samples)
+                cells = (
+                    stage_title(stage), MODES[mode], SUITES[suite]["title"],
+                    f'{fmt_seconds(old_median)} · n={len(old_times)}' if old_median is not None else "not available",
+                    f'{fmt_seconds(new_median)} · n={len(new_times)}{note}' if new_median is not None else "not available",
+                    delta, source,
+                )
+                body.append("<tr>" + "".join(f"<td>{cell if index in (4, 6) else esc(cell)}</td>"
+                                                    for index, cell in enumerate(cells)) + "</tr>")
+    header = "".join(f"<th>{esc(item)}</th>" for item in (
+        "Stage", "Cache state", "Suite", "Pre-fix historical median", "Post-fix selected median",
+        "Observed change", "Post-fix run records",
+    ))
+    return f'<div class="table-scroll"><table><thead><tr>{header}</tr></thead><tbody>{"".join(body)}</tbody></table></div>'
+
+
+def post_gc_attempt_summary(manifests: list[dict[str, Any]]) -> tuple[int, int, int, int, list[dict[str, Any]]]:
+    selected_rows = flatten_results(manifests)
+    audit_rows = [dict(row) for manifest in manifests for row in manifest.get("audit_attempts", [])
+                  if isinstance(row, dict)]
+    all_rows = [*selected_rows, *audit_rows]
+    invalid_measured = sum(row.get("measured") is True and row.get("valid") is False for row in all_rows)
+    invalid_warmups = sum(row.get("measured") is not True and row.get("valid") is False for row in all_rows)
+    return len(selected_rows), len(all_rows), invalid_measured, invalid_warmups, audit_rows
+
+
+def post_gc_notice(manifests: list[dict[str, Any]]) -> str:
+    selected, total, invalid_measured, invalid_warmups, _ = post_gc_attempt_summary(manifests)
+    failed_java_proto = sum(
+        row.get("mode") in MODE_ORDER and row.get("stage") == "protobuf" and row.get("suite") == "java"
+        and row.get("measured") is True and row.get("valid") is False
+        for manifest in manifests for row in manifest.get("audit_attempts", []) if isinstance(row, dict)
+    )
+    selected_invalid = sum(
+        row.get("valid") is False for manifest in manifests for row in manifest.get("results", [])
+        if isinstance(row, dict)
+    )
+    observed_invalid = invalid_measured + invalid_warmups
+    valid_total = total - observed_invalid
+    detail = (
+        f"The selected headline matrix contains {selected - selected_invalid} valid invocations "
+        f"({selected - 20} measured samples and 20 warm-ups), with exactly six passing measured samples per cell. "
+        f"Across the selected matrix plus recovery/audit attempts, {valid_total}/{total} invocations passed; "
+        f"{invalid_measured} measured attempts and {invalid_warmups} warm-up failed and remain in the audit."
+    )
+    reliability = (
+        f"Protobuf Java is conditional, not decision-grade: {failed_java_proto} of 20 measured attempts failed "
+        "13/116 tests in the Direct and Cold cells. Both attempts had the same 13 failing test names; the cause "
+        "is unresolved. Their timing rows are excluded and one valid recovery sample replaces each in the six-run median."
+    )
+    return (
+        '<aside class="notice warning" id="correctness-warning"><strong>Post-fix timing is corrected; Protobuf Java correctness is not yet stable.</strong>'
+        f'<p>{esc(detail)}</p><p>{esc(reliability)}</p>'
+        '<p>The first Direct/before-cache Java warm-up also failed 83/116 while its native cache was bootstrapping. '
+        'That entire cell was rerun after a clean recovery warm-up; the recovered six-run cell is used for the chart, '
+        'and the original cell remains a separate audit series. The failed warm-up is not timed evidence.</p></aside>'
+    )
+
+
+def recovery_comparison_html(manifests: list[dict[str, Any]]) -> str:
+    audits = [dict(row) for manifest in manifests for row in manifest.get("audit_attempts", [])
+              if isinstance(row, dict)]
+    lines = []
+    for suite in SUITES:
+        initial = [row for row in audits if row.get("selection_role") == "superseded-initial-cell"
+                   and row.get("mode") == "direct" and row.get("stage") == "before-cache"
+                   and row.get("suite") == suite and row.get("measured") is True and is_valid_run(row, suite)]
+        recovered = valid_cell_rows(flatten_results(manifests), suite, "direct", "before-cache")
+        old_times = [time_value(row) for row in initial]
+        new_times = [time_value(row) for row in recovered]
+        old_times = [value for value in old_times if value is not None]
+        new_times = [value for value in new_times if value is not None]
+        if old_times and new_times:
+            old_median, new_median = statistics.median(old_times), statistics.median(new_times)
+            percent = (new_median / old_median - 1) * 100
+            direction = "slower" if percent > 0 else "faster"
+            if abs(percent) < .05:
+                delta = "about even"
+            else:
+                delta = f"{abs(percent):.1f}% {direction}"
+            lines.append(f'<li><strong>{esc(SUITES[suite]["title"])}</strong>: initial median '
+                         f'{fmt_seconds(old_median)} (n={len(old_times)}) vs recovered '
+                         f'{fmt_seconds(new_median)} (n={len(new_times)}), {esc(delta)}.</li>')
+    if not lines:
+        return ""
+    return ('<details class="details-card"><summary>Recovery check: original vs clean-warm-up Direct cell</summary>'
+            '<p>The initial timing set is retained as an audit comparison, but the charts use the cell rerun after '
+            'the invalid Java resource warm-up.</p><ul>' + "".join(lines) + '</ul></details>')
+
+
+def run_evidence_html(manifests: list[dict[str, Any]]) -> str:
+    records = [dict(row) for manifest in manifests for row in manifest.get("results", [])
+               if isinstance(row, dict)]
+    records.extend(dict(row) for manifest in manifests for row in manifest.get("audit_attempts", [])
+                    if isinstance(row, dict))
+    body: list[str] = []
+    for row in sorted(records, key=lambda item: (
+            MODE_ORDER.index(item.get("mode")) if item.get("mode") in MODE_ORDER else 99,
+            str(item.get("stage")), str(item.get("suite")),
+            int(item.get("repeat") or 0), str(item.get("selection_role")))):
+        evidence_id = row.get("evidence_id")
+        if not evidence_id:
+            continue
+        elapsed = time_value(row)
+        validity = "PASS" if is_valid_run(row, row.get("suite", "")) else "INVALID"
+        tests = f'{row.get("passed_tests", 0)}/{row.get("total_tests", 0)} pass, {row.get("failed_tests", 0)} fail'
+        cache = row.get("cache_validation") if isinstance(row.get("cache_validation"), dict) else {}
+        cache_text = (f'{cache.get("hits", row.get("cache_hits", "?"))} hit / '
+                      f'{cache.get("misses", row.get("cache_misses", "?"))} miss'
+                      if cache or "cache_hits" in row else "not applicable")
+        failure_names = row.get("failure_names") if isinstance(row.get("failure_names"), list) else []
+        failure_text = ", ".join(str(name).split(".")[-1].removesuffix("()") for name in failure_names)
+        failure_text = failure_text or ("none" if validity == "PASS" else "see preserved failure counts")
+        junit = row.get("junit_ref") or row.get("junit_status", "not archived")
+        role = row.get("selection_role", "selected")
+        sample = "warm-up" if row.get("measured") is not True else f'r{row.get("repeat")}'
+        run_id = f'<a id="{esc(evidence_id)}"></a><code>{esc(evidence_id)}</code>'
+        raw = f'<code>{esc(row.get("evidence_ref", "record unavailable"))}</code>'
+        xml = f'<code>{esc(junit)}</code>' if junit != "not required for a passing run" else "—"
+        row_html = (
+            f'<tr><td>{run_id}</td><td>{esc(row.get("mode"))}</td><td>{esc(stage_title(str(row.get("stage"))))}</td>'
+            f'<td>{esc(SUITES.get(row.get("suite"), {}).get("title", row.get("suite")))}</td>'
+            f'<td>{esc(sample)} · {esc(role)}</td><td>{esc(validity)} · {esc(tests)}</td>'
+            f'<td>{esc(fmt_seconds(elapsed) if elapsed is not None else "no timing")}</td>'
+            f'<td>{esc(cache_text)}</td><td>{esc(failure_text)}</td><td>{raw}</td><td>{xml}</td></tr>'
+        )
+        body.append(row_html)
+    header = "".join(f"<th>{esc(item)}</th>" for item in (
+        "Evidence ID", "Mode", "Stage", "Suite", "Sample", "Test validity", "Elapsed", "Cache counters",
+        "Failure names", "Run record", "JUnit record",
+    ))
+    return ('<details class="details-card"><summary>Run-level evidence and source records</summary>'
+            '<p>Run IDs linked from the comparison table open their self-contained evidence row here. Paths are relative '
+            'to the ignored local results bundle; failed attempts identify whether JUnit XML was archived.</p>'
+            f'<div class="table-scroll"><table><thead><tr>{header}</tr></thead><tbody>{"".join(body)}</tbody></table></div></details>')
+
+
+def load_post_fix_ab(path: Path, result_root: Path) -> dict[str, Any]:
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(manifest, dict) or not isinstance(manifest.get("results"), list):
+        raise ValueError(f"{path} is not a post-fix dual-format A/B result manifest")
+    if manifest.get("repeat_count") != 6:
+        raise ValueError(f"{path} is not the declared six-repeat A/B")
+    gate = manifest.get("fidelity_gate")
+    if not isinstance(gate, dict) or gate.get("passed") is not True:
+        raise ValueError(f"{path} did not pass the structural fidelity preflight")
+    rows = []
+    for raw in manifest["results"]:
+        if not isinstance(raw, dict):
+            continue
+        row = dict(raw)
+        run_dir = Path(str(row.get("run_dir", ""))).resolve()
+        try:
+            relative = run_dir.relative_to(result_root.resolve())
+        except ValueError as error:
+            raise ValueError(f"A/B run is outside its evidence root: {run_dir}") from error
+        row["evidence_id"] = f'ab-{row.get("suite")}-{row.get("stage")}-r{row.get("repeat", "warmup")} '
+        row["evidence_id"] = row["evidence_id"].replace(" ", "")
+        row["evidence_ref"] = (relative / "summary.json").as_posix()
+        junit_dir = run_dir / "junit-results"
+        row["junit_ref"] = (junit_dir.relative_to(result_root.resolve()).as_posix()
+                            if junit_dir.is_dir() else None)
+        row.pop("run_dir", None)
+        row.pop("command", None)
+        rows.append(row)
+    manifest["results"] = rows
+    return manifest
+
+
+def post_fix_ab_section(manifest: dict[str, Any]) -> str:
+    measured = [row for row in manifest["results"] if row.get("measured") is True]
+    summaries: list[str] = []
+    for suite in SUITES:
+        rows = [row for row in measured if row.get("suite") == suite]
+        by_repeat: dict[int, dict[str, dict[str, Any]]] = {}
+        for row in rows:
+            by_repeat.setdefault(int(row.get("repeat", 0)), {})[str(row.get("stage"))] = row
+        valid_pairs = [repeat for repeat, pair in by_repeat.items()
+                       if set(pair) == set(AB_STAGES)
+                       and all(pair[stage].get("valid") is True for stage in AB_STAGES)
+                       and pair["ab-text"].get("metric_event_count") == pair["ab-protobuf"].get("metric_event_count")]
+        for stage, label in AB_STAGES.items():
+            stage_rows = [row for row in rows if row.get("stage") == stage]
+            suite_spec = SUITES[suite]
+            test_passes = sum(row.get("passed_tests") == suite_spec["passed"]
+                              and row.get("failed_tests") == 0 for row in stage_rows)
+            body = []
+            for row in sorted(stage_rows, key=lambda item: int(item.get("repeat", 0))):
+                sample = f'r{row.get("repeat")}'
+                outcome = f'{row.get("passed_tests", 0)}/{row.get("total_tests", 0)} pass'
+                if row.get("failed_tests", 0):
+                    outcome += f', {row.get("failed_tests")} failed'
+                metric = row.get("metric_event_count", "not recorded")
+                reference = row.get("evidence_ref", "record unavailable")
+                junit = row.get("junit_ref") or "XML not retained"
+                link = f'<a href="#{esc(row["evidence_id"])}">{esc(sample)}</a>'
+                fail_names = row.get("failure_names") if isinstance(row.get("failure_names"), list) else []
+                failures = ", ".join(str(name).split(".")[-1].removesuffix("()") for name in fail_names) or "—"
+                body.append(f'<tr id="{esc(row["evidence_id"])}"><td>{link}</td><td>{esc(outcome)}</td><td>{esc(metric)}</td>'
+                            f'<td>{esc(failures)}</td><td><code>{esc(reference)}</code></td>'
+                            f'<td><code>{esc(junit)}</code></td></tr>')
+            summaries.append(
+                f'<h4>{esc(SUITES[suite]["title"])} · {esc(label[0])}</h4>'
+                f'<p>{test_passes}/6 test runs passed; {len(valid_pairs)}/6 complete pairs remain valid.</p>'
+                f'<div class="table-scroll"><table><thead><tr><th>Repeat</th><th>Test outcome</th>'
+                f'<th>Metric events</th><th>Failure names</th><th>Run record</th><th>JUnit XML</th></tr></thead>'
+                f'<tbody>{"".join(body)}</tbody></table></div>'
+            )
+    return (
+        '<section class="notice warning" aria-labelledby="post-ab-title">'
+        '<p class="eyebrow">Post-fix same-revision validation</p><h2 id="post-ab-title">A/B timings are not decision-grade</h2>'
+        '<p>The AST graph fidelity preflight passed, but the full-suite gate did not. All six Clava-JS pairs passed. '
+        'In Java, Protobuf repeat 2 failed 2 of 116 tests (<code>CxxBenchTest#testFastStack</code> and '
+        '<code>CxxTest#testDecl</code>); its Text counterpart passed the tests but was excluded because its metric '
+        'event count (247) did not match Protobuf (245). Thus only 5/6 complete Java pairs are valid. The cause remains '
+        'unresolved; no paired speedup is promoted as a result.</p>'
+        '<details><summary>All six same-revision Java and Clava-JS attempts</summary>' + "".join(summaries) + '</details>'
+        '</section>'
+    )
+
+
+def gc_fix_evidence_html(evidence: dict[str, Any]) -> str:
+    before = evidence["pre_fix"]["per_run_requests"]
+    after = evidence["post_fix"]["per_run_requests"]
+    profile_rows = []
+    for when in ("pre_fix", "post_fix"):
+        for profile in evidence[when]["profiles"]:
+            profile_rows.append(
+                f'<tr><td>{esc("Before fix" if when == "pre_fix" else "After fix")}</td>'
+                f'<td>{esc(profile["format"])}</td><td>{esc(profile["explicit_requests_from_used_memory"])}</td>'
+                f'<td><code>{esc(profile["sha256"])}</code></td><td><code>{esc(profile["source_ref"])}</code></td></tr>'
+            )
+    return (
+        '<section aria-labelledby="gc-fix-title"><p class="eyebrow">Measurement correction</p>'
+        '<h2 id="gc-fix-title">The fix halves explicit GC requests in the profiled Java suite</h2>'
+        f'<p class="takeaway">JFR saw {before} explicit <code>System.gc()</code> request events per profiled '
+        f'116-test run before the fix and {after} after it ({evidence["request_reduction_percent"]:.0f}% fewer). '
+        'Both Text and Protobuf profiles had the same count on each side.</p>'
+        '<details><summary>What the JFR count means and where the recordings came from</summary>'
+        '<p>These are JFR <code>jdk.SystemGC</code> events with the stack '
+        '<code>Runtime.gc → System.gc → SpecsSystem.getUsedMemory → ParallelCodeParser.parse</code>, '
+        'not completed-collection counts or total pause time. This is two profiled runs before and two after, '
+        'not an event count asserted for every timing invocation. The fix removes the second unconditional '
+        '<code>System.gc()</code>; <code>ParallelCodeParser</code> still calls <code>getUsedMemory(true)</code>, '
+        'so one conditional request per parse remains. The pre-fix recordings come from a separate historical '
+        'dual-wire A/B scratch worktree and are not bundled here; the post-fix recordings are in the current '
+        'results bundle.</p>'
+        '<h3>JFR event counts, hashes, and recording provenance</h3>'
+        f'<div class="table-scroll"><table><thead><tr><th>Condition</th><th>Format</th><th>Explicit requests</th>'
+        f'<th>JFR SHA-256</th><th>Source record</th></tr></thead><tbody>{"".join(profile_rows)}</tbody></table></div>'
+        '</details>'
+        '</section>'
+    )
 
 
 def invocation_summary(rows: list[dict[str, Any]]) -> tuple[int, int, int, int]:
@@ -979,16 +1299,34 @@ def report_html(
     smoke_note: str | None = None,
     ab_manifest: dict[str, Any] | None = None,
     gc_profile: dict[str, Any] | None = None,
+    post_gc_manifests: list[dict[str, Any]] | None = None,
+    post_gc_provenance: dict[str, dict[str, Any]] | None = None,
+    post_gc_warnings: list[str] | None = None,
+    post_gc_ab: dict[str, Any] | None = None,
+    gc_fix_evidence: dict[str, Any] | None = None,
 ) -> str:
+    historical_manifests = manifests
+    historical_rows = flatten_results(manifests)
+    if post_gc_manifests:
+        manifests = post_gc_manifests
+        provenance = post_gc_provenance or {}
+        provenance_warnings = post_gc_warnings or []
     rows = flatten_results(manifests)
     modes_present = sorted({str(row.get("mode")) for row in rows if row.get("mode") in MODE_ORDER}, key=MODE_ORDER.index)
     total_runs, valid_runs, measured_count, warmup_count = invocation_summary(rows)
     invalid_count = total_runs - valid_runs
     domains = {suite: suite_domain(rows, suite) for suite in SUITES}
-    dates = sorted(str(manifest.get("created_at")) for manifest in manifests if manifest.get("created_at"))
+    dates = [str(manifest.get("created_at")) for manifest in manifests if manifest.get("created_at")]
+    if post_gc_manifests:
+        dates.extend(str(manifest.get("created_at")) for manifest in historical_manifests
+                     if manifest.get("created_at"))
+        dates = sorted(set(dates))
     if ab_manifest is not None and ab_manifest.get("created_at"):
         dates.append(str(ab_manifest["created_at"]))
-        dates.sort()
+        dates = sorted(set(dates))
+    if post_gc_ab is not None and post_gc_ab.get("created_at"):
+        dates.append(str(post_gc_ab["created_at"]))
+        dates = sorted(set(dates))
     date_text = f"Input runs created {dates[0]}" if dates else "Creation time not recorded in the input manifests"
     if len(dates) > 1:
         date_text += f" through {dates[-1]}"
@@ -1039,10 +1377,48 @@ def report_html(
         f'{median_trend_svg(suite, rows, domains[suite])}</figure>'
         for suite, spec in SUITES.items()
     )
-    validity = f"{valid_runs:,}/{total_runs:,} valid invocations · {measured_count:,} measured · {warmup_count:,} warm-ups · {invalid_count:,} invalid"
+    if post_gc_manifests:
+        selected_count, observed_count, invalid_measured, invalid_warmups, _ = post_gc_attempt_summary(post_gc_manifests)
+        observed_valid = observed_count - invalid_measured - invalid_warmups
+        validity = (
+            f"Selected corrected matrix: {valid_runs:,}/{total_runs:,} valid · {measured_count:,} measured · "
+            f"{warmup_count:,} warm-ups. Including recovery and audit attempts: "
+            f"{observed_valid:,}/{observed_count:,} valid; {invalid_measured:,} measured and "
+            f"{invalid_warmups:,} warm-up failures retained."
+        )
+    else:
+        validity = f"{valid_runs:,}/{total_runs:,} valid invocations · {measured_count:,} measured · {warmup_count:,} warm-ups · {invalid_count:,} invalid"
     worktree_notes = provenance_worktree_note(provenance)
     controlled_ab = ab_section(ab_manifest, gc_profile) if ab_manifest is not None else ""
+    current_ab_section = post_fix_ab_section(post_gc_ab) if post_gc_ab is not None else ""
+    correction_section = gc_fix_evidence_html(gc_fix_evidence) if gc_fix_evidence is not None else ""
+    post_gc_warning = post_gc_notice(manifests) if post_gc_manifests else ""
+    comparison_section = ""
+    evidence_section = ""
+    recovery_section = ""
+    if post_gc_manifests:
+        comparison_section = (
+            '<section aria-labelledby="before-after-title"><p class="eyebrow">Historical and corrected results</p>'
+            '<h2 id="before-after-title">The old measurements are preserved, not mixed into the rerun</h2>'
+            '<p>Pre-fix medians are the archived September 23 measurements. Post-fix medians use the selected six '
+            'valid runs per cell after the SpecsUtils fix. These are not a fully matched before/after experiment: '
+            'branch revisions and build artifacts differ, so the observed differences are context, not a causal '
+            'estimate of the GC change. Post-fix Protobuf Java rows are conditional on the correctness caveat above.</p>'
+            f'{before_after_table(historical_rows, rows)}</section>'
+        )
+        evidence_section = run_evidence_html(manifests)
+        recovery_section = recovery_comparison_html(manifests)
+    archived_details = (
+        '<details class="details-card"><summary>Archived measurements, diagnostics, and run audit</summary>'
+        '<p>The following records preserve the pre-fix baseline and supporting diagnostic evidence. '
+        'They are not merged into the corrected post-fix timing distributions.</p>'
+        f'{comparison_section}{controlled_ab}{recovery_section}{evidence_section}</details>'
+        if post_gc_manifests else f'{comparison_section}{controlled_ab}{recovery_section}{evidence_section}'
+    )
     comparison_guide = (
+        '<p class="small">The main charts show the corrected post-fix rerun. The comparison table retains the '
+        'older pre-fix medians for context; a separate same-revision A/B records the current correctness outcome.</p>'
+        if post_gc_manifests else
         '<p class="small">The first charts compare different code branches and cache states. '
         'The next section runs Text and Protobuf through the same build to check what the file format itself changes.</p>'
         if ab_manifest is not None else ""
@@ -1171,21 +1547,24 @@ def report_html(
   {smoke_box}
   {coverage_note}
   {warning_box}
+  {post_gc_warning}
+  {correction_section}
   <section aria-labelledby="trend-title">
     <p class="eyebrow">At a glance</p><h2 id="trend-title">Median wall time by suite and cache state</h2>
     <p class="takeaway">{esc(concise_takeaway(rows))}</p>
-    {'<p class="notice">The matched-format Java slowdown is largely from full garbage collections forced by memory logging in that test path. With those requests ignored, Text and Protobuf nearly tied in a diagnostic pair. See the Java GC chart below.</p>' if gc_profile is not None else ''}
+    {'<p class="notice">This is the corrected post-fix matrix. Historical GC profiling below documents why the old Java timing was distorted; it is not a replacement for these corrected measurements.</p>' if post_gc_manifests and gc_profile is not None else '<p class="notice">The matched-format Java slowdown is largely from full garbage collections forced by memory logging in that test path. With those requests ignored, Text and Protobuf nearly tied in a diagnostic pair. See the Java GC chart below.</p>' if gc_profile is not None else ''}
     <p class="validity">{esc(validity)}</p>
     <div class="trend-grid">{trend_charts}</div>
     <p class="small">Lower is faster. Colored lines show text + ccache, protobuf, and eager FlatBuffers. The dashed line repeats the Direct pre-cache median as a reference with no cache state.</p>
   </section>
-  {controlled_ab}
   <section aria-labelledby="charts-title">
     <p class="eyebrow">Run distributions</p><h2 id="charts-title">Six candle charts show the spread</h2>
     <p class="small">Every cache-state panel uses the same padded, nonzero time scale within its suite. The Direct pre-cache candle is repeated in Cold and Warm as a reference, not as a measurement in those states. One dot is one valid measured repeat.</p>
     {chart_zoom_notes(rows, domains)}
     {''.join(mode_sections)}
   </section>
+  {current_ab_section}
+  {archived_details}
   <section aria-labelledby="topology-title">
     <p class="eyebrow">Branch layout</p><h2 id="topology-title">Protobuf and FlatBuffers are sibling branches</h2>
     <div class="branch-card">{branch_svg()}<p class="small">The protobuf and eager FlatBuffers checkouts branch from the same cache-integrated text state. Before-cache streams text from stdout into the parser. Direct post-cache Text and Protobuf use uncompressed files. Cold and Warm Text and Protobuf use Zstd-compressed files. FlatBuffers uses a raw binary file in each mode. The pre-cache row is context, not an isolated cache comparison, because it uses a different checkout and stdout transport.</p></div>
@@ -1196,7 +1575,7 @@ def report_html(
     <p class="small">Direct uses a ccache wrapper probe. Cold requires fresh-cache misses, while allowing hits within a run. Warm requires a cached dump hit on every measured invocation.</p>
   </section>
   <section aria-labelledby="legend-title">
-    <p class="eyebrow">Reading the candles</p><h2 id="legend-title">Each candle summarizes six runs</h2>
+    <p class="eyebrow">Reading the candles</p><h2 id="legend-title">Each candle summarizes six valid runs</h2>
     <div class="branch-card"><div class="legend">{''.join(f'<span><i class="swatch" style="background:{STAGES[key][1]}"></i>{esc(STAGES[key][0])}</span>' for key in STAGE_ORDER)}</div><p class="small" style="margin-top:12px">Whiskers mark minimum and maximum. The colored box spans the first to third quartile. The bold mark is the median. Each dot is one valid measured repeat. Six repeats describe the observed spread; they do not establish statistical significance.</p></div>
   </section>
   <details class="details-card">
@@ -1222,18 +1601,30 @@ def report_html(
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, action="append", required=True, help="results.json manifest; repeat once per cache state")
+    parser.add_argument("--post-gc-input", type=Path, action="append", help="selected post-fix six-valid-run manifest; repeat for direct/cold/warm")
     parser.add_argument("--output", type=Path, required=True, help="HTML output path, or '-' for stdout")
     parser.add_argument("--ab-results", type=Path, help="passed same-revision text/Protobuf A/B results.json")
     parser.add_argument("--java-gc-profile", type=Path, help="same-revision Java JVM/GC diagnostic summary.json; requires --ab-results")
+    parser.add_argument("--post-gc-ab-results", type=Path, help="post-fix A/B results; accepts correctness-invalid runs for audit display only")
+    parser.add_argument("--gc-fix-evidence", type=Path, help="pre/post-fix explicit-GC JFR summary JSON")
     args = parser.parse_args()
     try:
         manifests, provenance, warnings = load_inputs(args.input)
+        post_gc_manifests = post_gc_provenance = post_gc_warnings = None
+        if args.post_gc_input:
+            if len(args.post_gc_input) != 3:
+                raise ValueError("supply exactly three --post-gc-input manifests: direct, cold, and warm")
+            post_gc_manifests, post_gc_provenance, post_gc_warnings = load_inputs(args.post_gc_input)
         ab_manifest = load_ab_result(args.ab_results) if args.ab_results else None
         if args.java_gc_profile and ab_manifest is None:
             raise ValueError("--java-gc-profile requires --ab-results")
         gc_profile = load_gc_result(args.java_gc_profile, ab_manifest) if args.java_gc_profile else None
+        post_gc_ab = load_post_fix_ab(args.post_gc_ab_results, args.post_gc_ab_results.parent.parent) if args.post_gc_ab_results else None
+        gc_fix_evidence = json.loads(args.gc_fix_evidence.read_text(encoding="utf-8")) if args.gc_fix_evidence else None
         rendered = report_html(manifests, provenance, warnings, ab_manifest=ab_manifest,
-                               gc_profile=gc_profile)
+                               gc_profile=gc_profile, post_gc_manifests=post_gc_manifests,
+                               post_gc_provenance=post_gc_provenance, post_gc_warnings=post_gc_warnings,
+                               post_gc_ab=post_gc_ab, gc_fix_evidence=gc_fix_evidence)
     except (OSError, json.JSONDecodeError, ValueError) as error:
         print(f"render_report.py: {error}", file=sys.stderr)
         return 2

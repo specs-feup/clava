@@ -62,5 +62,45 @@ class AxisTickLabelsTest(unittest.TestCase):
             render_report.load_gc_result(path, ab)
 
 
+class PostFixReportEvidenceTest(unittest.TestCase):
+    def test_post_fix_ab_run_links_have_retained_targets(self):
+        rows = []
+        for suite, passed, total in (("clava-js", 158, 164), ("java", 116, 116)):
+            for stage in render_report.AB_STAGES:
+                rows.append({
+                    "suite": suite,
+                    "stage": stage,
+                    "repeat": 2,
+                    "measured": True,
+                    "valid": True,
+                    "passed_tests": passed,
+                    "total_tests": total,
+                    "failed_tests": 0,
+                    "metric_event_count": 247,
+                    "evidence_id": f"ab-{suite}-{stage}-r2",
+                    "evidence_ref": f"timing/{suite}/{stage}/summary.json",
+                    "junit_ref": None,
+                })
+        html = render_report.post_fix_ab_section({"results": rows})
+        self.assertIn('href="#ab-java-ab-protobuf-r2"', html)
+        self.assertIn('id="ab-java-ab-protobuf-r2"', html)
+
+    def test_gc_summary_explains_external_pre_fix_recordings(self):
+        profiles = [
+            {"format": mode, "explicit_requests_from_used_memory": count,
+             "sha256": f"{mode}-{when}", "source_ref": f"{when}/{mode}.jfr"}
+            for when, count in (("pre_fix", 432), ("post_fix", 216))
+            for mode in ("Text", "Protobuf")
+        ]
+        html = render_report.gc_fix_evidence_html({
+            "pre_fix": {"per_run_requests": 432, "profiles": profiles[:2]},
+            "post_fix": {"per_run_requests": 216, "profiles": profiles[2:]},
+            "request_reduction_percent": 50,
+        })
+        self.assertIn("not bundled here", html)
+        self.assertIn("JFR event counts, hashes, and recording provenance", html)
+        self.assertIn("not completed-collection counts or total pause time", html)
+
+
 if __name__ == "__main__":
     unittest.main()

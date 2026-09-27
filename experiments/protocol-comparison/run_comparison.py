@@ -32,6 +32,9 @@ import zipfile
 SCRIPT_ROOT = Path(__file__).resolve().parent
 DEFAULT_OUTPUT_ROOT = SCRIPT_ROOT / "results"
 TIME_FORMAT = "elapsed_s=%e\nuser_s=%U\nsys_s=%S\nmax_rss_kb=%M\nexit_status=%x"
+FIXED_SPECSUTILS_REVISION = "cea5be9123be8508805c03be381a26af796ae7ff"
+SPECS_SYSTEM_SOURCE = Path("SpecsUtils/src/pt/up/fe/specs/util/SpecsSystem.java")
+SPECS_SYSTEM_CLASS = "pt/up/fe/specs/util/SpecsSystem.class"
 JS_TEST_FILTER = (
     r"^(?!(?:CxxTest OmpThreadsExplore|CudaTest Cuda|CudaTest CudaMatrixMul|"
     r"CudaTest CudaQuery)$).*$"
@@ -245,6 +248,55 @@ def git_status(repo: Path) -> list[str]:
     return result.stdout.splitlines()
 
 
+def git_diff_sha256(repo: Path) -> str:
+    result = subprocess.run(
+        ["git", "-C", str(repo), "diff", "--binary", "HEAD"],
+        capture_output=True,
+        check=False,
+    )
+    return hashlib.sha256(result.stdout).hexdigest() if result.returncode == 0 else "unknown"
+
+
+def jar_entry_sha256(jar_path: Path, entry: str) -> str:
+    with zipfile.ZipFile(jar_path) as jar:
+        return hashlib.sha256(jar.read(entry)).hexdigest()
+
+
+def dependency_git_metadata(root: Path) -> dict[str, Any]:
+    return {
+        "root": str(root.resolve()),
+        "revision": git_value(root, "rev-parse", "HEAD"),
+        "branch": git_value(root, "branch", "--show-current"),
+        "status": git_status(root),
+        "diff_sha256": git_diff_sha256(root),
+    }
+
+
+def specsutils_build_inputs(stage_root: Path) -> dict[str, Any]:
+    specs_root = Path(os.environ.get("SPECS_JAVA_LIBS_HOME", stage_root / "specs-java-libs")).resolve()
+    lara_root = Path(os.environ.get("LARA_FRAMEWORK_HOME", stage_root / "lara-framework")).resolve()
+    source = specs_root / SPECS_SYSTEM_SOURCE
+    jar = specs_root / "SpecsUtils/build/libs/SpecsUtils.jar"
+    if not source.is_file() or not jar.is_file():
+        raise SystemExit(
+            "missing fixed SpecsUtils build input or artifact; set SPECS_JAVA_LIBS_HOME to the verified stage overlay: "
+            f"{specs_root}"
+        )
+    class_sha = jar_entry_sha256(jar, SPECS_SYSTEM_CLASS)
+    return {
+        "fixed_revision": FIXED_SPECSUTILS_REVISION,
+        "specs_java_libs": {
+            **dependency_git_metadata(specs_root),
+            "system_source": str(source.resolve()),
+            "system_source_sha256": sha256_file(source),
+            "specsutils_jar": str(jar.resolve()),
+            "specsutils_jar_sha256": sha256_file(jar),
+            "specs_system_class_sha256": class_sha,
+        },
+        "lara_framework": dependency_git_metadata(lara_root),
+    }
+
+
 def parse_time(path: Path) -> dict[str, float | int]:
     values: dict[str, float | int] = {}
     if not path.is_file():
@@ -384,6 +436,26 @@ def validate_stages(selected_keys: set[str]) -> list[dict[str, Any]]:
             stage["dumper_status"] = git_status(native_root)
         stage["clava_status"] = git_status(clava)
         stage["runtime_manifest"] = runtime_manifest(runtime)
+        dependency_inputs = specsutils_build_inputs(stage["root"])
+        runtime_specsutils = runtime / "lib/SpecsUtils.jar"
+        if not runtime_specsutils.is_file():
+            raise SystemExit(f"missing packaged SpecsUtils runtime jar for {stage['key']}: {runtime_specsutils}")
+        runtime_jar_sha = sha256_file(runtime_specsutils)
+        runtime_class_sha = jar_entry_sha256(runtime_specsutils, SPECS_SYSTEM_CLASS)
+        expected_jar_sha = dependency_inputs["specs_java_libs"]["specsutils_jar_sha256"]
+        expected_class_sha = dependency_inputs["specs_java_libs"]["specs_system_class_sha256"]
+        if runtime_jar_sha != expected_jar_sha or runtime_class_sha != expected_class_sha:
+            raise SystemExit(
+                f"SpecsUtils runtime does not match the selected build input for {stage['key']}; "
+                "refusing to benchmark a stale Java runtime"
+            )
+        stage["java_build_dependencies"] = dependency_inputs
+        stage["runtime_specsutils"] = {
+            "jar": str(runtime_specsutils.resolve()),
+            "jar_sha256": runtime_jar_sha,
+            "specs_system_class_sha256": runtime_class_sha,
+            "matches_selected_build_input": True,
+        }
         stage["dumper_sha256"] = sha256_file(dumper) if dumper is not None else None
         stage["root"] = str(stage["root"])
         stage["dumper"] = str(dumper) if dumper is not None else None
@@ -524,6 +596,12 @@ def run_java(stage: dict[str, Any], output_root: Path, ordinal: int, measured: b
         )
     driver_elapsed = time.perf_counter() - started
     counts = java_counts(test_results)
+    junit_archive = None
+    if process.returncode != 0 or counts["total_tests"] != 116 or counts["failed_tests"] != 0:
+        if test_results.is_dir():
+            archive = run_dir / "junit-results"
+            shutil.copytree(test_results, archive)
+            junit_archive = str(archive)
     cache_result = cache_validation(stage, mode, measured, ccache_dir, direct_probe_marker)
     result = {
         "suite": "java",
@@ -540,6 +618,7 @@ def run_java(stage: dict[str, Any], output_root: Path, ordinal: int, measured: b
         "cache_misses": cache_result["misses"],
         **parse_time(time_path),
         **counts,
+        "junit_archive": junit_archive,
         "valid": process.returncode == 0 and cache_result["passed"]
         and counts["total_tests"] == 116 and counts["passed_tests"] == 116
         and counts["failed_tests"] == 0 and counts["skipped_tests"] == 0,
