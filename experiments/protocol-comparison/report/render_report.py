@@ -1033,8 +1033,9 @@ def post_gc_notice(manifests: list[dict[str, Any]]) -> str:
             "The Direct and Cold Protobuf Java cells were rerun in full after earlier runs each failed the same "
             "13 tests. Each replacement cell passed its warm-up and all six measured 116-test runs; the old cells "
             "and recovery attempts remain in the audit and contribute no timing sample here. An alternating "
-            "old-versus-fixed SpecsUtils check also passed 8/8 full Java runs per variant. The earlier failures "
-            "remain unexplained; these checks do not establish that the GC fix caused them."
+            "old-versus-fixed SpecsUtils check also passed 8/8 full Java runs per variant. The later investigation "
+            "reproduced a jOptions schema-map race that silently drops AST fields, matching the missing qualifiers "
+            "and comments in those failed runs. The same failure pattern occurred with both GC settings."
         )
     else:
         reliability = (
@@ -1289,7 +1290,8 @@ def post_fix_ab_section(manifest: dict[str, Any]) -> str:
 
 
 def load_java_gc_ab(path: Path, evidence_root: Path, reference_ab: dict[str, Any],
-                    audit_path: Path | None = None) -> dict[str, Any]:
+                    audit_path: Path | None = None,
+                    expected_dependency_revision: str | None = None) -> dict[str, Any]:
     manifest = json.loads(path.read_text(encoding="utf-8"))
     if (not isinstance(manifest, dict) or manifest.get("complete") is not True
             or manifest.get("valid") is not True or manifest.get("repeat_count") != 6):
@@ -1298,17 +1300,19 @@ def load_java_gc_ab(path: Path, evidence_root: Path, reference_ab: dict[str, Any
         raise ValueError(f"{path} did not pass the AST fidelity preflight")
     if manifest.get("runtime_parser_jar_sha256") != reference_ab.get("runtime_parser_jar_sha256"):
         raise ValueError("Java GC A/B used a different parser JAR from the post-fix format A/B")
-    for key, field, label in (("native", "tool_sha256", "native binary"),
-                              ("java_build_dependencies", "SPECS_JAVA_LIBS_HOME", "SpecsUtils")):
-        source = manifest.get("sources", {}).get(key, {})
-        reference = reference_ab.get("sources", {}).get(key, {})
-        if key == "native":
-            old, new = reference.get(field), source.get(field)
-        else:
-            old = reference.get(field, {}).get("revision")
-            new = source.get(field, {}).get("revision")
-        if not old or old != new:
-            raise ValueError(f"Java GC A/B used a different {label} from the post-fix format A/B")
+    old_native = reference_ab.get("sources", {}).get("native", {}).get("tool_sha256")
+    new_native = manifest.get("sources", {}).get("native", {}).get("tool_sha256")
+    if not old_native or old_native != new_native:
+        raise ValueError("Java GC A/B used a different native binary from the post-fix format A/B")
+    old_dependency = (reference_ab.get("sources", {}).get("java_build_dependencies", {})
+                      .get("SPECS_JAVA_LIBS_HOME", {}).get("revision"))
+    new_dependency = (manifest.get("sources", {}).get("java_build_dependencies", {})
+                      .get("SPECS_JAVA_LIBS_HOME", {}).get("revision"))
+    required_dependency = expected_dependency_revision or old_dependency
+    if not old_dependency or not new_dependency or new_dependency != required_dependency:
+        raise ValueError("Java GC A/B used an unexpected SpecsUtils/jOptions revision")
+    manifest["reference_dependency_revision"] = old_dependency
+    manifest["dependency_revision_changed"] = new_dependency != old_dependency
     rows = manifest.get("results")
     if not isinstance(rows, list) or len(rows) != 28:
         raise ValueError(f"{path} must contain four warm-ups and 24 measured runs")
@@ -1321,6 +1325,9 @@ def load_java_gc_ab(path: Path, evidence_root: Path, reference_ab: dict[str, Any
                 or raw.get("ccache_disabled") is not True
                 or raw.get("worker_gc_policy_verified") is not True):
             raise ValueError(f"{path} contains a run outside the matched 116-test direct workload")
+        if not isinstance(raw.get("metrics"), dict) or any(
+                number(raw["metrics"].get(field)) is None for field in ("native_ms", "read_ms")):
+            raise ValueError(f"{path} lacks native or reader phase totals")
         run_dir = Path(str(raw.get("run_dir", ""))).resolve()
         try:
             relative = run_dir.relative_to(evidence_root.resolve())
@@ -1403,6 +1410,28 @@ def java_gc_factorial_section(manifest: dict[str, Any]) -> str:
     normal_gap = normal["median_paired_gap_s"]
     disabled_gap = disabled["median_paired_gap_s"]
     difference = normal_gap - disabled_gap
+    removed_percent = 100 * difference / normal_gap if normal_gap else 0
+    disabled_phase_gaps = {}
+    for field in ("native_ms", "read_ms"):
+        paired = []
+        for repeat in range(1, 7):
+            text_row = next(row for row in manifest["results"] if row.get("measured") is True
+                            and row.get("gc_policy") == "disabled" and row.get("repeat") == repeat
+                            and row.get("stage") == "ab-text")
+            protobuf_row = next(row for row in manifest["results"] if row.get("measured") is True
+                                and row.get("gc_policy") == "disabled" and row.get("repeat") == repeat
+                                and row.get("stage") == "ab-protobuf")
+            paired.append((protobuf_row["metrics"][field] - text_row["metrics"][field]) / 1000)
+        disabled_phase_gaps[field] = statistics.median(paired)
+    new_dependency = (manifest["sources"]["java_build_dependencies"]
+                      ["SPECS_JAVA_LIBS_HOME"]["revision"])
+    dependency_note = (
+        f'The control uses the concurrency-corrected jOptions dependency at <code>{esc(new_dependency[:12])}</code> '
+        f'in all four conditions. The earlier matrix used <code>{esc(manifest["reference_dependency_revision"][:12])}</code>; '
+        'compare Text with Protobuf within this control, not absolute times across the dependency change.'
+        if manifest.get("dependency_revision_changed") else
+        'All four conditions use the same Java dependency revision as the earlier format A/B.'
+    )
     audit_rows = manifest.get("superseded_attempts", [])
     audit_notice = (
         '<aside class="notice warning"><strong>Earlier attempt excluded.</strong> '
@@ -1412,8 +1441,8 @@ def java_gc_factorial_section(manifest: dict[str, Any]) -> str:
             f'run record: <code>{esc(row.get("evidence_ref"))}</code>.'
             for row in audit_rows
         )
-        + ' The full four-condition sequence was restarted. The same 13-test failure pattern also occurred '
-          'in an earlier normal-GC Protobuf run, so this does not establish a GC-policy correctness effect.</aside>'
+        + ' The full four-condition sequence was restarted after fixing concurrent schema-map initialization. '
+          'The same 13-test pattern also occurred with GC enabled, so the failures were not caused by the GC flag.</aside>'
         if audit_rows else ''
     )
     rows = ''.join(
@@ -1426,10 +1455,15 @@ def java_gc_factorial_section(manifest: dict[str, Any]) -> str:
     )
     return f'''<section class="ab-section" aria-labelledby="gc-ab-title">
       <p class="eyebrow">Java explicit-GC control</p><h2 id="gc-ab-title">Does the format gap survive with explicit GC off?</h2>
-      <p class="takeaway">The median paired Protobuf penalty was {normal_gap:+.2f}s with explicit GC allowed and {disabled_gap:+.2f}s with it blocked. Blocking explicit GC removed {difference:+.2f}s of the observed gap. The remaining gap is {disabled_gap:+.2f}s; it cannot be attributed to explicit GC.</p>
+      <p class="takeaway">The median paired Protobuf penalty was {normal_gap:+.2f}s with explicit GC allowed and {disabled_gap:+.2f}s with it blocked. Blocking explicit GC reduced the observed gap by {difference:.2f}s ({removed_percent:.0f}%), but Protobuf remained slower in all six GC-blocked pairs. The remaining {disabled_gap:.2f}s is not an explicit-GC artifact.</p>
       <figure class="chart-card"><figcaption><h3>Java parser suite, 116 tests</h3><p>One time scale for all four conditions</p></figcaption>{java_gc_factorial_svg(manifest)}</figure>
-      <p class="small">Six interleaved Text/Protobuf pairs per GC policy, after one untimed warm-up per condition. All 28 invocations passed 116/116 tests, recorded 247 AST metric events, and bypassed ccache. The Java test worker received <code>-XX:-DisableExplicitGC</code> or <code>-XX:+DisableExplicitGC</code>; the Gradle launcher was unchanged. Whole-command wall time is shown, not an isolated reader timer.</p>
-      {audit_notice}
+      <aside class="notice"><strong>Why 13 earlier tests failed.</strong> Concurrent parser threads could read a partially initialized jOptions key map. The setter then silently skipped fields such as <code>storageClass</code>, removing <code>static</code> and <code>extern</code> from generated code. A regression test reproduced a corrupted map with 50,003 entries for 50,000 defined keys; the fix passes. Failed runs contributed no timings.</aside>
+      <details><summary>Workload, phase checks, and revisions</summary>
+        <p>Six interleaved Text/Protobuf pairs per GC policy, after one untimed warm-up per condition. All 28 invocations passed 116/116 tests, recorded 247 AST metric events, and bypassed ccache. The Java test worker received <code>-XX:-DisableExplicitGC</code> or <code>-XX:+DisableExplicitGC</code>; the Gradle launcher was unchanged. Whole-command wall time is shown, not an isolated reader timer.</p>
+        <p>With explicit GC blocked, Protobuf's median paired native-process total was {disabled_phase_gaps["native_ms"]:+.2f}s and its reader total {disabled_phase_gaps["read_ms"]:+.2f}s versus Text. Native work is the stronger candidate for the remaining gap; these per-parse totals can overlap and must not be added to suite wall time.</p>
+        <p>{dependency_note}</p>
+        {audit_notice}
+      </details>
       <details><summary>All paired times and run records</summary><div class="table-scroll"><table><thead><tr><th>Worker GC</th><th>Pair</th><th>Text</th><th>Protobuf</th><th>Protobuf minus Text</th><th>Protobuf run record</th></tr></thead><tbody>{rows}</tbody></table></div></details>
     </section>'''
 
@@ -1642,6 +1676,14 @@ def report_html(
     if java_gc_ab is None and java_gc_ab_attempts:
         java_gc_ab_section = java_gc_ab_blocked_section(java_gc_ab_attempts)
     correction_section = gc_fix_evidence_html(gc_fix_evidence) if gc_fix_evidence is not None else ""
+    gc_control_summary = (
+        '<aside class="notice"><strong>Java result with explicit GC blocked:</strong> '
+        f'Protobuf remained {java_gc_ab["summary"]["conditions"]["disabled"]["median_paired_gap_s"]:.2f}s '
+        'slower than Text in the median paired full-suite run, and was slower in all six pairs. '
+        'Explicit GC explains part of the earlier gap, not all of it. The four-condition chart and '
+        'correctness evidence are below.</aside>'
+        if java_gc_ab is not None else ""
+    )
     post_gc_warning = post_gc_notice(manifests) if post_gc_manifests else ""
     comparison_section = ""
     evidence_section = ""
@@ -1806,6 +1848,7 @@ def report_html(
   {warning_box}
   {post_gc_warning}
   {correction_section}
+  {gc_control_summary}
   <section aria-labelledby="trend-title">
     <p class="eyebrow">At a glance</p><h2 id="trend-title">Median wall time by suite and cache state</h2>
     <p class="takeaway">{esc(concise_takeaway(rows))}</p>
@@ -1866,6 +1909,7 @@ def main() -> int:
     parser.add_argument("--post-gc-ab-java-results", type=Path, help="complete six-pair Java rerun replacing only the original post-fix Java A/B rows")
     parser.add_argument("--post-gc-evidence-root", type=Path, help="shared root for post-fix A/B run-record paths")
     parser.add_argument("--java-gc-ab-results", type=Path, help="complete interleaved Java Text/Protobuf A/B with explicit GC allowed and disabled")
+    parser.add_argument("--java-gc-ab-dependency-revision", help="explicitly accepted SpecsUtils/jOptions revision for a control after the concurrency fix")
     parser.add_argument("--java-gc-ab-audit-results", type=Path, help="superseded incomplete Java GC A/B attempt retained for correctness audit")
     parser.add_argument("--java-gc-ab-blocked-results", type=Path, action="append", help="incomplete GC-off attempt; repeat for each failed full-suite attempt")
     parser.add_argument("--gc-fix-evidence", type=Path, help="pre/post-fix explicit-GC JFR summary JSON")
@@ -1892,8 +1936,11 @@ def main() -> int:
             raise ValueError("--java-gc-ab-results requires the post-fix A/B and its evidence root")
         if args.java_gc_ab_audit_results and not args.java_gc_ab_results:
             raise ValueError("--java-gc-ab-audit-results requires --java-gc-ab-results")
+        if args.java_gc_ab_dependency_revision and not args.java_gc_ab_results:
+            raise ValueError("--java-gc-ab-dependency-revision requires --java-gc-ab-results")
         java_gc_ab = load_java_gc_ab(args.java_gc_ab_results, ab_root, post_gc_ab,
-                                    args.java_gc_ab_audit_results) if args.java_gc_ab_results else None
+                                    args.java_gc_ab_audit_results,
+                                    args.java_gc_ab_dependency_revision) if args.java_gc_ab_results else None
         if args.java_gc_ab_blocked_results and (post_gc_ab is None or ab_root is None):
             raise ValueError("--java-gc-ab-blocked-results requires the post-fix A/B and evidence root")
         java_gc_ab_attempts = load_java_gc_ab_attempts(args.java_gc_ab_blocked_results, ab_root, post_gc_ab) if args.java_gc_ab_blocked_results else None

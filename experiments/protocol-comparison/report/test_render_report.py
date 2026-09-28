@@ -131,6 +131,7 @@ class PostFixReportEvidenceTest(unittest.TestCase):
                             "valid": True, "total_tests": 116, "passed_tests": 116,
                             "failed_tests": 0, "skipped_tests": 0,
                             "metric_event_count": 247, "ccache_disabled": True,
+                            "metrics": {"native_ms": 1000, "read_ms": 500},
                             "worker_gc_policy_verified": True,
                             "elapsed_s": 40.0 if stage == "ab-text" else 42.0,
                             "run_dir": str(root / policy / stage / str(repeat)),
@@ -142,7 +143,8 @@ class PostFixReportEvidenceTest(unittest.TestCase):
                             "java_build_dependencies": {"SPECS_JAVA_LIBS_HOME": {"revision": "specs"}}},
                 "results": rows,
             }
-            reference = {"runtime_parser_jar_sha256": "parser", "sources": manifest["sources"]}
+            reference = {"runtime_parser_jar_sha256": "parser",
+                         "sources": json.loads(json.dumps(manifest["sources"]))}
             path = root / "results.json"
             path.write_text(json.dumps(manifest))
             loaded = render_report.load_java_gc_ab(path, root, reference)
@@ -155,6 +157,15 @@ class PostFixReportEvidenceTest(unittest.TestCase):
             path.write_text(json.dumps(manifest))
             with self.assertRaisesRegex(ValueError, "outside the matched 116-test"):
                 render_report.load_java_gc_ab(path, root, reference)
+
+            manifest["results"][1]["passed_tests"] = 116
+            manifest["sources"]["java_build_dependencies"]["SPECS_JAVA_LIBS_HOME"]["revision"] = "fixed"
+            path.write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, "unexpected SpecsUtils/jOptions revision"):
+                render_report.load_java_gc_ab(path, root, reference)
+            loaded = render_report.load_java_gc_ab(path, root, reference,
+                                                   expected_dependency_revision="fixed")
+            self.assertTrue(loaded["dependency_revision_changed"])
 
     def test_merge_post_fix_ab_keeps_separate_valid_suite_reruns(self):
         def manifest(suite):
