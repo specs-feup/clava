@@ -151,6 +151,9 @@ class PostFixReportEvidenceTest(unittest.TestCase):
             svg = ET.fromstring(render_report.java_gc_factorial_svg(loaded))
             self.assertEqual(len(svg.findall(".//text[@class='median-label']")), 4)
             self.assertEqual(len(svg.findall(".//circle")), 24)
+            gap_svg = ET.fromstring(render_report.java_gc_paired_gap_svg(loaded))
+            self.assertEqual(len(gap_svg.findall(".//circle")), 12)
+            self.assertEqual(len(gap_svg.findall(".//text[@class='median-label']")), 2)
             self.assertNotIn(str(root), loaded["results"][0]["evidence_ref"])
 
             manifest["results"][1]["passed_tests"] = 115

@@ -1404,6 +1404,52 @@ def java_gc_factorial_svg(manifest: dict[str, Any]) -> str:
     return ''.join(bits)
 
 
+def java_gc_paired_gap_svg(manifest: dict[str, Any]) -> str:
+    groups = []
+    for policy in ("normal", "disabled"):
+        values = []
+        for repeat in range(1, 7):
+            text_row = next(row for row in manifest["results"] if row.get("measured") is True
+                            and row.get("gc_policy") == policy and row.get("repeat") == repeat
+                            and row.get("stage") == "ab-text")
+            protobuf_row = next(row for row in manifest["results"] if row.get("measured") is True
+                                and row.get("gc_policy") == policy and row.get("repeat") == repeat
+                                and row.get("stage") == "ab-protobuf")
+            values.append(protobuf_row["elapsed_s"] - text_row["elapsed_s"])
+        groups.append((policy, values))
+    high = max(2.0, max(value for _, values in groups for value in values) * 1.08)
+    left, right = 240, 790
+
+    def x(value: float) -> float:
+        return left + (right - left) * value / high
+
+    bits = ['<svg viewBox="0 0 1020 175" role="img" '
+            'aria-label="Six paired Protobuf minus Text Java wall-time differences under each explicit-GC policy" '
+            'class="candle-chart">',
+            '<title>Paired Java full-suite format gap</title>',
+            '<desc>Each dot is one matched Protobuf minus Text repeat. Zero means equal wall time.</desc>']
+    for tick in (0, .5, 1, 1.5, 2):
+        if tick > high:
+            break
+        tx = x(tick)
+        bits.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="35" y2="155" class="grid-line"/>')
+        bits.append(f'<text x="{tx:.2f}" y="23" text-anchor="middle" class="axis-text">{tick:.1f}s</text>')
+    for index, (policy, values) in enumerate(groups):
+        y = 75 + index * 60
+        median = statistics.median(values)
+        label = "GC allowed" if policy == "normal" else "GC blocked"
+        bits.append(f'<text x="12" y="{y + 5}" class="stage-text">{label}</text>')
+        bits.append(f'<line x1="{x(min(values)):.2f}" x2="{x(max(values)):.2f}" y1="{y}" y2="{y}" class="grid-line"/>')
+        for repeat, value in enumerate(values, 1):
+            bits.append(f'<circle cx="{x(value):.2f}" cy="{y + (repeat % 3 - 1) * 5}" r="5" '
+                        f'fill="{AB_STAGES["ab-protobuf"][1]}"><title>Pair {repeat}: {value:+.2f}s</title></circle>')
+        bits.append(f'<line x1="{x(median):.2f}" x2="{x(median):.2f}" y1="{y - 15}" y2="{y + 15}" '
+                    f'stroke="{AB_STAGES["ab-protobuf"][1]}" stroke-width="4"/>')
+        bits.append(f'<text x="810" y="{y + 5}" class="median-label">paired median {median:+.2f}s</text>')
+    bits.append('</svg>')
+    return ''.join(bits)
+
+
 def java_gc_factorial_section(manifest: dict[str, Any]) -> str:
     normal = manifest["summary"]["conditions"]["normal"]
     disabled = manifest["summary"]["conditions"]["disabled"]
@@ -1457,6 +1503,8 @@ def java_gc_factorial_section(manifest: dict[str, Any]) -> str:
       <p class="eyebrow">Java explicit-GC control</p><h2 id="gc-ab-title">Does the format gap survive with explicit GC off?</h2>
       <p class="takeaway">The median paired Protobuf penalty was {normal_gap:+.2f}s with explicit GC allowed and {disabled_gap:+.2f}s with it blocked. Blocking explicit GC reduced the observed gap by {difference:.2f}s ({removed_percent:.0f}%), but Protobuf remained slower in all six GC-blocked pairs. The remaining {disabled_gap:.2f}s is not an explicit-GC artifact.</p>
       <figure class="chart-card"><figcaption><h3>Java parser suite, 116 tests</h3><p>One time scale for all four conditions</p></figcaption>{java_gc_factorial_svg(manifest)}</figure>
+      <figure class="chart-card"><figcaption><h3>Protobuf minus Text, matched runs</h3><p>Each dot is one pair; zero means equal time</p></figcaption>{java_gc_paired_gap_svg(manifest)}</figure>
+      <p class="small">The paired gap is the median of six per-repeat differences, so it need not equal the difference between the two medians in the candle chart.</p>
       <aside class="notice"><strong>Why 13 earlier tests failed.</strong> Concurrent parser threads could read a partially initialized jOptions key map. The setter then silently skipped fields such as <code>storageClass</code>, removing <code>static</code> and <code>extern</code> from generated code. A regression test reproduced a corrupted map with 50,003 entries for 50,000 defined keys; the fix passes. Failed runs contributed no timings.</aside>
       <details><summary>Workload, phase checks, and revisions</summary>
         <p>Six interleaved Text/Protobuf pairs per GC policy, after one untimed warm-up per condition. All 28 invocations passed 116/116 tests, recorded 247 AST metric events, and bypassed ccache. The Java test worker received <code>-XX:-DisableExplicitGC</code> or <code>-XX:+DisableExplicitGC</code>; the Gradle launcher was unchanged. Whole-command wall time is shown, not an isolated reader timer.</p>
