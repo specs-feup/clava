@@ -729,8 +729,13 @@ def validate_preflight(preflight_root: Path, current_sources: dict[str, Any], na
 
 def run_timing(stage: dict[str, Any], suite: str, clava_root: Path, native_tool: Path,
                js_workspace: Path, runtime: Path, output_root: Path,
-               ordinal: int, measured: bool, repeat: int | None) -> dict[str, Any]:
+               ordinal: int, measured: bool, repeat: int | None,
+               gc_policy: str | None = None) -> dict[str, Any]:
     label = f"{'measured' if measured else 'warmup'}-{repeat if repeat is not None else 'seed'}"
+    if gc_policy not in (None, "normal", "disabled"):
+        raise ValueError(f"unsupported Java test-worker GC policy: {gc_policy}")
+    if suite != "java" and gc_policy is not None:
+        raise ValueError("test-worker GC policy applies only to the Java suite")
     if suite == "java":
         run_dir = output_root / "timing" / suite / f"{ordinal:02d}-{stage['key']}"
         run_dir.mkdir(parents=True)
@@ -745,6 +750,7 @@ def run_timing(stage: dict[str, Any], suite: str, clava_root: Path, native_tool:
             "/usr/bin/time", "-f", base.TIME_FORMAT, "-o", str(time_path), "--",
             "gradle", "--no-daemon", "--offline", f"-PclangDumperRoot={native_tool.parent.parent}",
             "-p", str(clava_root / "ClangAstParser"), "--init-script", str(SCRIPT_ROOT / "java-suite.init.gradle"),
+            *([f"-PclavaAbGcPolicy={gc_policy}"] if gc_policy else []),
             "test",
         ]
         started = time.perf_counter()
@@ -759,7 +765,14 @@ def run_timing(stage: dict[str, Any], suite: str, clava_root: Path, native_tool:
         )
         expected_counts = EXPECTED_SUITE_COUNTS["java"]
         counts_match = all(counts.get(key) == value for key, value in expected_counts.items())
-        valid = process.returncode == 0 and validation["passed"] and counts_match
+        worker_gc_policy_verified = True
+        if gc_policy is not None:
+            log_text = log_path.read_text(encoding="utf-8", errors="replace")
+            worker_gc_policy_verified = (
+                f"CLAVA_AB_TEST_GC_POLICY={gc_policy} JVM_ARGS=" in log_text
+                and ("-XX:+DisableExplicitGC" if gc_policy == "disabled" else "-XX:-DisableExplicitGC") in log_text
+            )
+        valid = process.returncode == 0 and validation["passed"] and counts_match and worker_gc_policy_verified
         junit_archive = None
         if not valid and result_dir.is_dir():
             archive = run_dir / "junit-results"
@@ -772,6 +785,7 @@ def run_timing(stage: dict[str, Any], suite: str, clava_root: Path, native_tool:
             "metric_validation": validation, "metric_event_count": len(events), "metrics": metric_aggregate(events),
             "runtime_parser_jar_sha256": base.sha256_file(runtime / "lib" / "ClangAstParser.jar"),
             **base.parse_time(time_path), **counts, "valid": valid,
+            "gc_policy": gc_policy, "worker_gc_policy_verified": worker_gc_policy_verified,
             "junit_archive": junit_archive,
             "command": command, "run_dir": str(run_dir),
         }

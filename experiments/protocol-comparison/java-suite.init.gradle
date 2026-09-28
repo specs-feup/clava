@@ -2,6 +2,16 @@ gradle.afterProject { project ->
     if (project.name == 'ClangAstParser') {
         project.tasks.named('test') {
             outputs.upToDateWhen { false }
+            def gcPolicy = project.findProperty('clavaAbGcPolicy')
+            if (gcPolicy != null) {
+                if (!(gcPolicy in ['normal', 'disabled'])) {
+                    throw new GradleException("Unknown clavaAbGcPolicy: ${gcPolicy}")
+                }
+                jvmArgs(gcPolicy == 'disabled' ? '-XX:+DisableExplicitGC' : '-XX:-DisableExplicitGC')
+                doFirst {
+                    println "CLAVA_AB_TEST_GC_POLICY=${gcPolicy} JVM_ARGS=${jvmArgs}"
+                }
+            }
             filter {
                 excludeTestsMatching 'pt.up.fe.specs.clang.ClangResourcesTest'
                 excludeTestsMatching 'pt.up.fe.specs.clang.CudaResourcesTest'
