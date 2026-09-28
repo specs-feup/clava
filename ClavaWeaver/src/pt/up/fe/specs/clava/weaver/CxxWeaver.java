@@ -77,7 +77,7 @@ public class CxxWeaver extends ACxxWeaver {
             "Benchmark - Rosetta (import lara.benchmark.RosettaBenchmarkSet)",
             "https://github.com/specs-feup/clava-benchmarks.git?folder=Rosetta");
 
-    private static final String TEMP_WEAVING_FOLDER = "__clava_woven";
+    private static final String TEMP_WEAVING_FOLDER = "clava-";
     private static final String WOVEN_CODE_FOLDERNAME = "woven_code";
 
     private static final Set<String> LANGUAGES = Collections
@@ -1001,7 +1001,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Write the other translation units in a temporary folder owned by this
         // invocation, in case they are needed as includes
-        File currentCodeFolder = SpecsIo.createTempDirectory(TEMP_WEAVING_FOLDER + "_for_file_rebuild_");
+        File currentCodeFolder = SpecsIo.createTempDirectory(TEMP_WEAVING_FOLDER);
         App rebuiltApp;
         try {
             // Add include
@@ -1173,7 +1173,7 @@ public class CxxWeaver extends ACxxWeaver {
     private File nextRebuildWeavingFolder() {
 
         while (rebuildWeavingFolders.size() < 2) {
-            File tempFolder = SpecsIo.createTempDirectory(TEMP_WEAVING_FOLDER + "_");
+            File tempFolder = SpecsIo.createTempDirectory(TEMP_WEAVING_FOLDER);
             SpecsIo.deleteFolderContents(tempFolder, true);
             rebuildWeavingFolders.add(tempFolder);
         }
