@@ -109,7 +109,7 @@ final class CudaResources {
     }
 
     static boolean isSupportedPlatform() {
-        return isSupportedPlatform(ClangResources.getDefaultTempFolder().toPath(),
+        return isSupportedPlatform(ClangResources.getDefaultCacheFolder().toPath(),
                 getManifestResource(ClangAstWebResource.getCudaReleaseTag()));
     }
 
@@ -123,7 +123,7 @@ final class CudaResources {
     }
 
     static CudaPlatform getCurrentPlatform() {
-        return getCurrentPlatform(ClangResources.getDefaultTempFolder().toPath());
+        return getCurrentPlatform(ClangResources.getDefaultCacheFolder().toPath());
     }
 
     static CudaPlatform getCurrentPlatform(Path cacheRoot) {

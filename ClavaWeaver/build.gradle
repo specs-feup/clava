@@ -33,6 +33,11 @@ sourceSets {
             srcDir 'src'
         }
     }
+    test {
+        java {
+            srcDir 'test'
+        }
+    }
 }
 
 dependencies {
@@ -56,6 +61,13 @@ dependencies {
     // Spec source set: only needs LangSpec2 and WeaverInterface (for BaseJoinPointSpec)
     specImplementation ":LangSpec2"
     specImplementation ":WeaverInterface"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.0'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 // Generate weaver abstracts using WeaverGen2 (Java DSL-based)

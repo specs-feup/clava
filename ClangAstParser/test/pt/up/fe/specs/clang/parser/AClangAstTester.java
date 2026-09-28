@@ -39,9 +39,10 @@ public abstract class AClangAstTester {
 
     private static final boolean CLEAN_CLANG_FILES = !SpecsSystem.isDebug();
     private static final String OUTPUT_FOLDERNAME_PREFIX = "temp-clang-ast-";
-    
-    // Each test instance gets a unique output folder to avoid race conditions in parallel execution
-    private final String outputFoldername;
+
+    // Each test instance owns an OS-allocated output folder, so concurrent test
+    // instances (even across JVMs) never share directories
+    private final File outputFolder;
 
     private final Collection<ResourceProvider> resources;
     private List<String> compilerOptions;
@@ -87,9 +88,9 @@ public abstract class AClangAstTester {
     public AClangAstTester(Collection<ResourceProvider> resources, List<String> compilerOptions) {
         this.resources = resources;
         this.compilerOptions = new ArrayList<>(compilerOptions);
-        
-        // Create unique output folder for this test instance to avoid parallel test conflicts
-        this.outputFoldername = OUTPUT_FOLDERNAME_PREFIX + System.nanoTime() + "-" + Thread.currentThread().getId();
+
+        // Create unique output folder for this test instance, allocated by the OS
+        this.outputFolder = SpecsIo.createTempDirectory(OUTPUT_FOLDERNAME_PREFIX);
 
         codeParser = CodeParser.newInstance();
         // Set strict mode
@@ -159,7 +160,7 @@ public abstract class AClangAstTester {
             throw new RuntimeException(e);
         } finally {
             // Clean up this test instance's folder after test completes
-            // Safe even in parallel execution since each instance has a unique folder
+            // Safe even in parallel execution since each instance owns its folder
             try {
                 cleanupInstance();
             } catch (Exception e) {
@@ -174,7 +175,6 @@ public abstract class AClangAstTester {
         SpecsSystem.programStandardInit();
 
         // Copy resources under test to this test's unique output folder
-        File outputFolder = SpecsIo.mkdir(outputFoldername);
         for (ResourceProvider resource : resources) {
             File copiedFile = SpecsIo.resourceCopy(resource.getResource(), outputFolder, false, true);
             assertTrue(copiedFile.isFile(), "Could not copy resource '" + resource + "'");
@@ -188,8 +188,9 @@ public abstract class AClangAstTester {
      */
     public void cleanupInstance() throws Exception {
         if (CLEAN_CLANG_FILES) {
-            File outputFolder = new File(outputFoldername);
             SpecsIo.deleteFolder(outputFolder);
+        } else {
+            SpecsLogs.info("Debug mode: kept test output folder '" + outputFolder + "' for inspection");
         }
     }
 
@@ -198,12 +199,11 @@ public abstract class AClangAstTester {
         // Enable parallel parsing
         codeParser.set(ParallelCodeParser.PARALLEL_PARSING);
 
-        File workFolder = new File(outputFoldername);
-
         // Parse files
-        App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
+        App clavaAst = codeParser.parse(Arrays.asList(outputFolder), compilerOptions);
 
-        clavaAst.write(SpecsIo.mkdir(outputFoldername + "/outputFirst"));
+        File outputFirst = SpecsIo.mkdir(outputFolder, "outputFirst");
+        clavaAst.write(outputFirst);
         if (onePass) {
             return;
         }
@@ -215,19 +215,18 @@ public abstract class AClangAstTester {
 
 
         // Parse output again, check if files are the same
-        File firstOutputFolder = new File(outputFoldername + "/outputFirst");
+        App testClavaAst = testCodeParser.parse(Arrays.asList(outputFirst), compilerOptions);
 
-        App testClavaAst = testCodeParser.parse(Arrays.asList(firstOutputFolder), compilerOptions);
-
-        testClavaAst.write(SpecsIo.mkdir(outputFoldername + "/outputSecond"));
+        File outputSecond = SpecsIo.mkdir(outputFolder, "outputSecond");
+        testClavaAst.write(outputSecond);
         // System.out.println("STOREDEF CACHE:\n" + StoreDefinitions.getStoreDefinitionsCache().getAnalytics());
 
         // Test if files from first and second are the same
-        Map<String, File> outputFiles1 = SpecsIo.getFiles(new File(outputFoldername + "/outputFirst"))
+        Map<String, File> outputFiles1 = SpecsIo.getFiles(outputFirst)
                 .stream()
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
 
-        Map<String, File> outputFiles2 = SpecsIo.getFiles(new File(outputFoldername + "/outputSecond"))
+        Map<String, File> outputFiles2 = SpecsIo.getFiles(outputSecond)
                 .stream()
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
 

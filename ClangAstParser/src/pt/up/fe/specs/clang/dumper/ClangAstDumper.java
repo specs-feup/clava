@@ -60,7 +60,8 @@ public class ClangAstDumper {
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
-
+    
+    private final static String TEMP_DIRECTORY_NAME_PREFIX = "clang-dumper-";
     /**
      * TODO: Not implemented yet
      * <p>
@@ -73,7 +74,6 @@ public class ClangAstDumper {
 
     private final List<File> workingFolders;
     private File lastWorkingFolder;
-    private File baseFolder;
     private File clangExecutable;
     private List<String> builtinIncludes;
     private File systemResourceDir;
@@ -107,7 +107,6 @@ public class ClangAstDumper {
 
         this.workingFolders = new ArrayList<>();
         this.lastWorkingFolder = null;
-        this.baseFolder = null;
         this.systemIncludesThreshold = ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD.getDefault().get();
         this.parserConfig = parserConfig;
         this.clangResources = new ClangResources(parserConfig);
@@ -115,11 +114,6 @@ public class ClangAstDumper {
 
     public File getLastWorkingFolder() {
         return lastWorkingFolder;
-    }
-
-    public ClangAstDumper setBaseFolder(File baseFolder) {
-        this.baseFolder = baseFolder;
-        return this;
     }
 
     public ClangAstDumper setSystemIncludesThreshold(int systemIncludesThreshold) {
@@ -315,7 +309,7 @@ public class ClangAstDumper {
         ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments);
 
         if (validationOnly) {
-            lastValidationError = validateSyntax(arguments, sourceFile, id);
+            lastValidationError = validateSyntax(arguments, sourceFile);
             return null;
         }
 
@@ -329,12 +323,9 @@ public class ClangAstDumper {
                 lineStreamParser.getData().set(ClangAstData.DEBUG, true);
             }
 
-            // Create temporary working folder, in order to support running several dumps in parallel
-            lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
-
-            // Ensure folder is empty
-            SpecsIo.deleteFolderContents(lastWorkingFolder);
-
+            // Each invocation owns a unique working folder, allocated by the OS, in order
+            // to support running several dumps in parallel
+            lastWorkingFolder = SpecsIo.createTempDirectory(TEMP_DIRECTORY_NAME_PREFIX);
             workingFolders.add(lastWorkingFolder);
 
             output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
@@ -392,8 +383,8 @@ public class ClangAstDumper {
         }
     }
 
-    private String validateSyntax(List<String> arguments, File sourceFile, String id) {
-        lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
+    private String validateSyntax(List<String> arguments, File sourceFile) {
+        lastWorkingFolder = SpecsIo.createTempDirectory(TEMP_DIRECTORY_NAME_PREFIX);
 
         var output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
                 this::discardOutput,

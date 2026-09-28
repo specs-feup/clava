@@ -43,7 +43,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ClangResources {
 
     private static final Map<String, CachedClangFiles> CLANG_FILES_CACHE = new ConcurrentHashMap<>();
-    private static final String CLANG_FOLDERNAME = "clang_ast_exe";
     private static final String CLANG_CACHE_FOLDERNAME = "clang-dumper";
     private static final String RELEASES_FOLDERNAME = "releases";
     private static final String INCLUDES_FOLDERNAME = "includes";
@@ -246,8 +245,21 @@ public class ClangResources {
         });
     }
 
-    public static File getDefaultTempFolder() {
-        return SpecsIo.getTempFolder(CLANG_FOLDERNAME);
+    /**
+     * The shared cache root for Clava's downloaded resources, following the
+     * operating system's user cache conventions.
+     *
+     * <p>
+     * This is the default for {@link CodeParser.DUMPER_FOLDER} and is shared by
+     * every frontend (e.g., Java callers and Clava-JS), so downloaded clang-dumper
+     * releases, includes and CUDA resources are reused across entry points.
+     * Frontends must not override this root; separate resources add their own
+     * namespace below it (e.g., 'clang-dumper').
+     *
+     * @return the existing or newly created cache folder
+     */
+    public static File getDefaultCacheFolder() {
+        return SpecsIo.mkdir(new File(SpecsIo.getOsCacheFolder(), "@specs-feup/clava"));
     }
 
     private File getReleasesFolder() {
