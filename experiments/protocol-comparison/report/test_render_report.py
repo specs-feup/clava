@@ -3,6 +3,8 @@
 import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
+import json
+import tempfile
 
 import render_report
 
@@ -91,6 +93,69 @@ class AxisTickLabelsTest(unittest.TestCase):
 
 
 class PostFixReportEvidenceTest(unittest.TestCase):
+    def test_incomplete_gc_control_is_reported_without_timing_claim(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            reference = {"runtime_parser_jar_sha256": "parser", "sources": {
+                "native": {"tool_sha256": "native"},
+                "java_build_dependencies": {"SPECS_JAVA_LIBS_HOME": {"revision": "specs"}},
+            }}
+            paths = []
+            for attempt in (1, 2):
+                path = root / f"attempt-{attempt}" / "results.json"
+                path.parent.mkdir()
+                path.write_text(json.dumps({
+                    "complete": False, "fidelity_gate": {"passed": True},
+                    "runtime_parser_jar_sha256": "parser", "sources": reference["sources"],
+                    "results": [{"valid": False, "gc_policy": "disabled", "stage": "ab-protobuf",
+                                 "passed_tests": 103, "failed_tests": 13, "metric_event_count": 247,
+                                 "worker_gc_policy_verified": True, "run_dir": str(path.parent / "run")}
+                                ]}), encoding="utf-8")
+                paths.append(path)
+            attempts = render_report.load_java_gc_ab_attempts(paths, root, reference)
+            html = render_report.java_gc_ab_blocked_section(attempts)
+            self.assertIn("No complete six-pair GC-off sample exists", html)
+            self.assertEqual(html.count("103/116"), 2)
+            self.assertNotIn(str(root), html)
+
+    def test_java_gc_factorial_requires_complete_matching_runs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            rows = []
+            for policy in ("normal", "disabled"):
+                for stage in render_report.AB_STAGES:
+                    for repeat in (None, *range(1, 7)):
+                        rows.append({
+                            "suite": "java", "gc_policy": policy, "stage": stage,
+                            "repeat": repeat, "measured": repeat is not None,
+                            "valid": True, "total_tests": 116, "passed_tests": 116,
+                            "failed_tests": 0, "skipped_tests": 0,
+                            "metric_event_count": 247, "ccache_disabled": True,
+                            "worker_gc_policy_verified": True,
+                            "elapsed_s": 40.0 if stage == "ab-text" else 42.0,
+                            "run_dir": str(root / policy / stage / str(repeat)),
+                        })
+            manifest = {
+                "complete": True, "valid": True, "repeat_count": 6,
+                "fidelity_gate": {"passed": True}, "runtime_parser_jar_sha256": "parser",
+                "sources": {"native": {"tool_sha256": "native"},
+                            "java_build_dependencies": {"SPECS_JAVA_LIBS_HOME": {"revision": "specs"}}},
+                "results": rows,
+            }
+            reference = {"runtime_parser_jar_sha256": "parser", "sources": manifest["sources"]}
+            path = root / "results.json"
+            path.write_text(json.dumps(manifest))
+            loaded = render_report.load_java_gc_ab(path, root, reference)
+            svg = ET.fromstring(render_report.java_gc_factorial_svg(loaded))
+            self.assertEqual(len(svg.findall(".//text[@class='median-label']")), 4)
+            self.assertEqual(len(svg.findall(".//circle")), 24)
+            self.assertNotIn(str(root), loaded["results"][0]["evidence_ref"])
+
+            manifest["results"][1]["passed_tests"] = 115
+            path.write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, "outside the matched 116-test"):
+                render_report.load_java_gc_ab(path, root, reference)
+
     def test_merge_post_fix_ab_keeps_separate_valid_suite_reruns(self):
         def manifest(suite):
             return {

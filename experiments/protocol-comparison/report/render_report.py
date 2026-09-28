@@ -1288,6 +1288,208 @@ def post_fix_ab_section(manifest: dict[str, Any]) -> str:
     </section>'''
 
 
+def load_java_gc_ab(path: Path, evidence_root: Path, reference_ab: dict[str, Any],
+                    audit_path: Path | None = None) -> dict[str, Any]:
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    if (not isinstance(manifest, dict) or manifest.get("complete") is not True
+            or manifest.get("valid") is not True or manifest.get("repeat_count") != 6):
+        raise ValueError(f"{path} is not a completed, valid six-repeat Java GC A/B")
+    if manifest.get("fidelity_gate", {}).get("passed") is not True:
+        raise ValueError(f"{path} did not pass the AST fidelity preflight")
+    if manifest.get("runtime_parser_jar_sha256") != reference_ab.get("runtime_parser_jar_sha256"):
+        raise ValueError("Java GC A/B used a different parser JAR from the post-fix format A/B")
+    for key, field, label in (("native", "tool_sha256", "native binary"),
+                              ("java_build_dependencies", "SPECS_JAVA_LIBS_HOME", "SpecsUtils")):
+        source = manifest.get("sources", {}).get(key, {})
+        reference = reference_ab.get("sources", {}).get(key, {})
+        if key == "native":
+            old, new = reference.get(field), source.get(field)
+        else:
+            old = reference.get(field, {}).get("revision")
+            new = source.get(field, {}).get("revision")
+        if not old or old != new:
+            raise ValueError(f"Java GC A/B used a different {label} from the post-fix format A/B")
+    rows = manifest.get("results")
+    if not isinstance(rows, list) or len(rows) != 28:
+        raise ValueError(f"{path} must contain four warm-ups and 24 measured runs")
+    for raw in rows:
+        if not isinstance(raw, dict) or raw.get("valid") is not True:
+            raise ValueError(f"{path} contains an invalid Java GC A/B run")
+        if (raw.get("suite") != "java" or raw.get("total_tests") != 116
+                or raw.get("passed_tests") != 116 or raw.get("failed_tests") != 0
+                or raw.get("skipped_tests") != 0 or raw.get("metric_event_count") != 247
+                or raw.get("ccache_disabled") is not True
+                or raw.get("worker_gc_policy_verified") is not True):
+            raise ValueError(f"{path} contains a run outside the matched 116-test direct workload")
+        run_dir = Path(str(raw.get("run_dir", ""))).resolve()
+        try:
+            relative = run_dir.relative_to(evidence_root.resolve())
+        except ValueError as error:
+            raise ValueError(f"Java GC A/B run is outside the evidence root: {run_dir}") from error
+        raw["evidence_ref"] = (relative / "summary.json").as_posix()
+        raw.pop("run_dir", None)
+        raw.pop("command", None)
+    for policy in ("normal", "disabled"):
+        for stage in AB_STAGES:
+            selected = [row for row in rows if row.get("measured") is True
+                        and row.get("gc_policy") == policy and row.get("stage") == stage]
+            if len(selected) != 6 or {row.get("repeat") for row in selected} != set(range(1, 7)):
+                raise ValueError(f"{path} lacks six {policy}/{stage} measured runs")
+    if audit_path is not None:
+        audit = json.loads(audit_path.read_text(encoding="utf-8"))
+        if (audit.get("runtime_parser_jar_sha256") != manifest["runtime_parser_jar_sha256"]
+                or audit.get("sources", {}).get("native", {}).get("tool_sha256")
+                != manifest.get("sources", {}).get("native", {}).get("tool_sha256")):
+            raise ValueError("Java GC A/B audit used different parser or native binaries")
+        failed = [dict(row) for row in audit.get("results", [])
+                  if isinstance(row, dict) and row.get("measured") is True and row.get("valid") is False]
+        if not failed:
+            raise ValueError("Java GC A/B audit contains no failed measured run")
+        for row in failed:
+            run_dir = Path(str(row.get("run_dir", ""))).resolve()
+            try:
+                relative = run_dir.relative_to(evidence_root.resolve())
+            except ValueError as error:
+                raise ValueError(f"Java GC A/B audit run is outside the evidence root: {run_dir}") from error
+            row["evidence_ref"] = (relative / "summary.json").as_posix()
+            row.pop("run_dir", None)
+            row.pop("command", None)
+        manifest["superseded_attempts"] = failed
+    return manifest
+
+
+def java_gc_factorial_svg(manifest: dict[str, Any]) -> str:
+    groups = [(policy, stage, [row["elapsed_s"] for row in manifest["results"]
+                               if row.get("measured") is True and row.get("gc_policy") == policy
+                               and row.get("stage") == stage])
+              for policy in ("normal", "disabled") for stage in AB_STAGES]
+    observed = [value for _, _, values in groups for value in values]
+    low, high = min(observed), max(observed)
+    padding = max((high - low) * .04, .25)
+    low, high = low - padding, high + padding
+    left, right, width, height = 260, 770, 1020, 355
+
+    def x(value: float) -> float:
+        return left + (right - left) * (value - low) / (high - low)
+
+    bits = ['<svg viewBox="0 0 1020 355" role="img" aria-label="Java Text and Protobuf full-suite wall times with explicit GC allowed and disabled" class="candle-chart">',
+            '<title>Java suite: Text versus Protobuf under both explicit-GC policies</title>',
+            '<desc>One shared seconds scale. Whiskers show min and max, boxes the middle half, marks the median, and dots the six valid measured runs.</desc>']
+    for tick, label in time_axis_ticks(low, high):
+        tx = x(tick)
+        bits.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="30" y2="330" class="grid-line"/>')
+        bits.append(f'<text x="{tx:.2f}" y="21" text-anchor="middle" class="axis-text">{esc(label)}</text>')
+    for index, (policy, stage, values) in enumerate(groups):
+        y = 70 + index * 73
+        label = f'{"GC allowed" if policy == "normal" else "GC blocked"} · {AB_STAGES[stage][0]}'
+        color = AB_STAGES[stage][1]
+        q1, median, q3 = quantile(values, .25), statistics.median(values), quantile(values, .75)
+        bits.append(f'<text x="12" y="{y + 5}" class="stage-text">{esc(label)}</text>')
+        bits.append(f'<line x1="{x(min(values)):.2f}" x2="{x(max(values)):.2f}" y1="{y}" y2="{y}" stroke="{color}" stroke-width="2"/>')
+        bits.append(f'<rect x="{x(q1):.2f}" y="{y - 13}" width="{max(3, x(q3)-x(q1)):.2f}" height="26" rx="4" fill="{color}" fill-opacity=".23" stroke="{color}" stroke-width="1.6"/>')
+        bits.append(f'<line x1="{x(median):.2f}" x2="{x(median):.2f}" y1="{y - 15}" y2="{y + 15}" stroke="{color}" stroke-width="4"/>')
+        for repeat, value in enumerate(values, 1):
+            bits.append(f'<circle cx="{x(value):.2f}" cy="{y + ((repeat % 5)-2)*4}" r="4" fill="{color}" stroke="var(--surface)" stroke-width="1.3"><title>Repeat {repeat}: {fmt_seconds(value)}</title></circle>')
+        bits.append(f'<text x="790" y="{y + 5}" class="median-label">median {fmt_seconds(median)} · n=6</text>')
+        if index == 1:
+            bits.append('<line x1="12" x2="1000" y1="180" y2="180" class="grid-line"/>')
+    bits.append('</svg>')
+    return ''.join(bits)
+
+
+def java_gc_factorial_section(manifest: dict[str, Any]) -> str:
+    normal = manifest["summary"]["conditions"]["normal"]
+    disabled = manifest["summary"]["conditions"]["disabled"]
+    normal_gap = normal["median_paired_gap_s"]
+    disabled_gap = disabled["median_paired_gap_s"]
+    difference = normal_gap - disabled_gap
+    audit_rows = manifest.get("superseded_attempts", [])
+    audit_notice = (
+        '<aside class="notice warning"><strong>Earlier attempt excluded.</strong> '
+        + ' '.join(
+            f'{esc(row.get("gc_policy"))} {esc(row.get("stage"))} repeat {esc(row.get("repeat"))} '
+            f'passed {esc(row.get("passed_tests"))}/116 tests; '
+            f'run record: <code>{esc(row.get("evidence_ref"))}</code>.'
+            for row in audit_rows
+        )
+        + ' The full four-condition sequence was restarted. The same 13-test failure pattern also occurred '
+          'in an earlier normal-GC Protobuf run, so this does not establish a GC-policy correctness effect.</aside>'
+        if audit_rows else ''
+    )
+    rows = ''.join(
+        f'<tr><td>{esc("GC allowed" if policy == "normal" else "GC blocked")}</td>'
+        f'<td>r{pair["repeat"]}</td><td>{fmt_seconds(pair["text_s"])}</td>'
+        f'<td>{fmt_seconds(pair["protobuf_s"])}</td><td>{pair["gap_s"]:+.2f}s</td>'
+        f'<td><code>{esc(next(row["evidence_ref"] for row in manifest["results"] if row.get("measured") is True and row["gc_policy"] == policy and row["repeat"] == pair["repeat"] and row["stage"] == "ab-protobuf"))}</code></td></tr>'
+        for policy, condition in (("normal", normal), ("disabled", disabled))
+        for pair in condition["pairs"]
+    )
+    return f'''<section class="ab-section" aria-labelledby="gc-ab-title">
+      <p class="eyebrow">Java explicit-GC control</p><h2 id="gc-ab-title">Does the format gap survive with explicit GC off?</h2>
+      <p class="takeaway">The median paired Protobuf penalty was {normal_gap:+.2f}s with explicit GC allowed and {disabled_gap:+.2f}s with it blocked. Blocking explicit GC removed {difference:+.2f}s of the observed gap. The remaining gap is {disabled_gap:+.2f}s; it cannot be attributed to explicit GC.</p>
+      <figure class="chart-card"><figcaption><h3>Java parser suite, 116 tests</h3><p>One time scale for all four conditions</p></figcaption>{java_gc_factorial_svg(manifest)}</figure>
+      <p class="small">Six interleaved Text/Protobuf pairs per GC policy, after one untimed warm-up per condition. All 28 invocations passed 116/116 tests, recorded 247 AST metric events, and bypassed ccache. The Java test worker received <code>-XX:-DisableExplicitGC</code> or <code>-XX:+DisableExplicitGC</code>; the Gradle launcher was unchanged. Whole-command wall time is shown, not an isolated reader timer.</p>
+      {audit_notice}
+      <details><summary>All paired times and run records</summary><div class="table-scroll"><table><thead><tr><th>Worker GC</th><th>Pair</th><th>Text</th><th>Protobuf</th><th>Protobuf minus Text</th><th>Protobuf run record</th></tr></thead><tbody>{rows}</tbody></table></div></details>
+    </section>'''
+
+
+def load_java_gc_ab_attempts(paths: list[Path], evidence_root: Path,
+                             reference_ab: dict[str, Any]) -> list[dict[str, Any]]:
+    attempts = []
+    for path in paths:
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        if (manifest.get("complete") is not False
+                or manifest.get("runtime_parser_jar_sha256") != reference_ab.get("runtime_parser_jar_sha256")
+                or manifest.get("fidelity_gate", {}).get("passed") is not True):
+            raise ValueError(f"{path} is not a source-matched incomplete Java GC A/B attempt")
+        if (manifest.get("sources", {}).get("native", {}).get("tool_sha256")
+                != reference_ab.get("sources", {}).get("native", {}).get("tool_sha256")
+                or manifest.get("sources", {}).get("java_build_dependencies", {}).get("SPECS_JAVA_LIBS_HOME", {}).get("revision")
+                != reference_ab.get("sources", {}).get("java_build_dependencies", {}).get("SPECS_JAVA_LIBS_HOME", {}).get("revision")):
+            raise ValueError(f"{path} used different native or SpecsUtils code")
+        rows = manifest.get("results", [])
+        failed = [dict(row) for row in rows if isinstance(row, dict) and row.get("valid") is False]
+        if len(failed) != 1:
+            raise ValueError(f"{path} must have exactly one failed run that stopped the attempt")
+        if (failed[0].get("gc_policy") != "disabled" or failed[0].get("stage") != "ab-protobuf"
+                or failed[0].get("passed_tests") != 103 or failed[0].get("failed_tests") != 13
+                or failed[0].get("metric_event_count") != 247
+                or failed[0].get("worker_gc_policy_verified") is not True):
+            raise ValueError(f"{path} does not match the observed GC-blocked Protobuf failure")
+        for row in failed:
+            run_dir = Path(str(row.get("run_dir", ""))).resolve()
+            try:
+                relative = run_dir.relative_to(evidence_root.resolve())
+            except ValueError as error:
+                raise ValueError(f"Java GC A/B attempt is outside the evidence root: {run_dir}") from error
+            row["evidence_ref"] = (relative / "summary.json").as_posix()
+            row.pop("run_dir", None)
+            row.pop("command", None)
+        attempts.append({"created_at": manifest.get("created_at"), "runs": len(rows),
+                         "failed": failed, "passed": sum(row.get("valid") is True for row in rows
+                                                  if isinstance(row, dict))})
+    return attempts
+
+
+def java_gc_ab_blocked_section(attempts: list[dict[str, Any]]) -> str:
+    rows = ''.join(
+        f'<tr><td>{index}</td><td>{attempt["passed"]}/{attempt["runs"]} commands passed</td>'
+        f'<td>{esc(failed.get("gc_policy"))} · {esc(failed.get("stage"))} · '
+        f'{esc("warm-up" if failed.get("measured") is not True else "repeat " + str(failed.get("repeat")))}</td>'
+        f'<td>{esc(failed.get("passed_tests"))}/116</td>'
+        f'<td><code>{esc(failed.get("evidence_ref"))}</code></td></tr>'
+        for index, attempt in enumerate(attempts, 1)
+        for failed in attempt["failed"]
+    )
+    return f'''<section class="ab-section" aria-labelledby="gc-ab-title">
+      <p class="eyebrow">Java explicit-GC control</p><h2 id="gc-ab-title">GC-off full-suite A/B is correctness-blocked</h2>
+      <p class="takeaway">Two attempts stopped when the GC-blocked Protobuf worker failed the same 13 of 116 tests. No complete six-pair GC-off sample exists, so these runs cannot establish whether the measured format gap is entirely caused by explicit GC.</p>
+      <div class="table-scroll"><table><thead><tr><th>Attempt</th><th>Observed commands</th><th>Stopped at</th><th>Tests passed</th><th>Run record</th></tr></thead><tbody>{rows}</tbody></table></div>
+      <p class="small">Both attempts used the same parser JAR, native executable, 116-test selection, 247 AST events, and direct ccache bypass as the post-fix A/B. The Gradle test worker received <code>-XX:+DisableExplicitGC</code>. The failed runs are excluded from timing. The exact 13-test pattern also occurred in an earlier normal-GC Protobuf matrix run, so these observations do not prove that the flag caused the failures. Running a failing test class alone and running the suite with a fresh JVM per test class both passed; neither is the established single-worker timing workload.</p>
+    </section>'''
+
+
 def gc_fix_evidence_html(evidence: dict[str, Any]) -> str:
     before = evidence["pre_fix"]["per_run_requests"]
     after = evidence["post_fix"]["per_run_requests"]
@@ -1340,6 +1542,8 @@ def report_html(
     post_gc_provenance: dict[str, dict[str, Any]] | None = None,
     post_gc_warnings: list[str] | None = None,
     post_gc_ab: dict[str, Any] | None = None,
+    java_gc_ab: dict[str, Any] | None = None,
+    java_gc_ab_attempts: list[dict[str, Any]] | None = None,
     gc_fix_evidence: dict[str, Any] | None = None,
 ) -> str:
     historical_manifests = manifests
@@ -1366,6 +1570,9 @@ def report_html(
         dates = sorted(set(dates))
     if post_gc_ab is not None:
         dates.extend(str(value) for value in post_gc_ab.get("suite_runs_created_at", {}).values() if value)
+        dates = sorted(set(dates))
+    if java_gc_ab is not None and java_gc_ab.get("created_at"):
+        dates.append(str(java_gc_ab["created_at"]))
         dates = sorted(set(dates))
     date_text = f"Input runs created {dates[0]}" if dates else "Creation time not recorded in the input manifests"
     if len(dates) > 1:
@@ -1431,6 +1638,9 @@ def report_html(
     worktree_notes = provenance_worktree_note(provenance)
     controlled_ab = ab_section(ab_manifest, gc_profile) if ab_manifest is not None else ""
     current_ab_section = post_fix_ab_section(post_gc_ab) if post_gc_ab is not None else ""
+    java_gc_ab_section = java_gc_factorial_section(java_gc_ab) if java_gc_ab is not None else ""
+    if java_gc_ab is None and java_gc_ab_attempts:
+        java_gc_ab_section = java_gc_ab_blocked_section(java_gc_ab_attempts)
     correction_section = gc_fix_evidence_html(gc_fix_evidence) if gc_fix_evidence is not None else ""
     post_gc_warning = post_gc_notice(manifests) if post_gc_manifests else ""
     comparison_section = ""
@@ -1610,6 +1820,7 @@ def report_html(
     {''.join(suite_figures)}
   </section>
   {current_ab_section}
+  {java_gc_ab_section}
   {archived_details}
   <section aria-labelledby="topology-title">
     <p class="eyebrow">Branch layout</p><h2 id="topology-title">Protobuf and FlatBuffers are sibling branches</h2>
@@ -1654,6 +1865,9 @@ def main() -> int:
     parser.add_argument("--post-gc-ab-results", type=Path, help="post-fix A/B results; accepts correctness-invalid runs for audit display only")
     parser.add_argument("--post-gc-ab-java-results", type=Path, help="complete six-pair Java rerun replacing only the original post-fix Java A/B rows")
     parser.add_argument("--post-gc-evidence-root", type=Path, help="shared root for post-fix A/B run-record paths")
+    parser.add_argument("--java-gc-ab-results", type=Path, help="complete interleaved Java Text/Protobuf A/B with explicit GC allowed and disabled")
+    parser.add_argument("--java-gc-ab-audit-results", type=Path, help="superseded incomplete Java GC A/B attempt retained for correctness audit")
+    parser.add_argument("--java-gc-ab-blocked-results", type=Path, action="append", help="incomplete GC-off attempt; repeat for each failed full-suite attempt")
     parser.add_argument("--gc-fix-evidence", type=Path, help="pre/post-fix explicit-GC JFR summary JSON")
     args = parser.parse_args()
     try:
@@ -1674,11 +1888,22 @@ def main() -> int:
         if args.post_gc_ab_java_results:
             java_ab = load_post_fix_ab(args.post_gc_ab_java_results, ab_root)
             post_gc_ab = merge_post_fix_ab(post_gc_ab, java_ab)
+        if args.java_gc_ab_results and (post_gc_ab is None or ab_root is None):
+            raise ValueError("--java-gc-ab-results requires the post-fix A/B and its evidence root")
+        if args.java_gc_ab_audit_results and not args.java_gc_ab_results:
+            raise ValueError("--java-gc-ab-audit-results requires --java-gc-ab-results")
+        java_gc_ab = load_java_gc_ab(args.java_gc_ab_results, ab_root, post_gc_ab,
+                                    args.java_gc_ab_audit_results) if args.java_gc_ab_results else None
+        if args.java_gc_ab_blocked_results and (post_gc_ab is None or ab_root is None):
+            raise ValueError("--java-gc-ab-blocked-results requires the post-fix A/B and evidence root")
+        java_gc_ab_attempts = load_java_gc_ab_attempts(args.java_gc_ab_blocked_results, ab_root, post_gc_ab) if args.java_gc_ab_blocked_results else None
         gc_fix_evidence = json.loads(args.gc_fix_evidence.read_text(encoding="utf-8")) if args.gc_fix_evidence else None
         rendered = report_html(manifests, provenance, warnings, ab_manifest=ab_manifest,
                                gc_profile=gc_profile, post_gc_manifests=post_gc_manifests,
                                post_gc_provenance=post_gc_provenance, post_gc_warnings=post_gc_warnings,
-                               post_gc_ab=post_gc_ab, gc_fix_evidence=gc_fix_evidence)
+                               post_gc_ab=post_gc_ab, java_gc_ab=java_gc_ab,
+                               java_gc_ab_attempts=java_gc_ab_attempts,
+                               gc_fix_evidence=gc_fix_evidence)
     except (OSError, json.JSONDecodeError, ValueError) as error:
         print(f"render_report.py: {error}", file=sys.stderr)
         return 2
