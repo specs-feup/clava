@@ -23,23 +23,13 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 
 public class AlignedExprAttr extends AlignedAttr {
 
-    /// DATAKEYS BEGIN
-
-    // public final static DataKey<Optional<Expr>> EXPR = KeyFactory.optional("expr");
-
-    /// DATAKEYS END
-
     public AlignedExprAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     @Override
     protected Optional<String> getValueCode() {
-        // return getData().get(EXPR).map(Expr::getCode);
         return get(EXPR).map(Expr::getCode);
-        // Expr expr = getData().get(EXPR);
-        //
-        // return expr.isNullNode() ? Optional.empty() : Optional.of(expr.getCode());
     }
 
 }

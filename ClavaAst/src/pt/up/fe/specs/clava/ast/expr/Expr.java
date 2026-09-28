@@ -98,15 +98,6 @@ public abstract class Expr extends ClavaNode implements Typable {
         return get(VALUE_KIND);
     }
 
-    // /**
-    // * @deprecated
-    // * @return
-    // */
-    // @Deprecated
-    // public ExprData getExprData() {
-    // return DataStoreToLegacy.getExpr(getData());
-    // }
-
     /**
      * 
      * @return 'read' if the value in the expression is read, 'write' if the value the expression represents is written,

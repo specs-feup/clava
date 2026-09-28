@@ -141,15 +141,7 @@ public class NodeDataParser {
             };
 
             dataParsers.put(key, parser);
-
-            // STATIC_DATA_PARSERS.put("<DeclData>", DeclDataParser::parseDeclData);
-
-            // dataParsers.put(key, parser);
-            // (lines, clangParser) -> method.
         }
-
-        // simpleName.endsWith("DataParser");
-
     }
 
     public static Optional<DataStore> getNodeData(DataStore dataStore, String nodeId) {
@@ -178,8 +170,6 @@ public class NodeDataParser {
 
         DataStore clavaData = dataParser.apply(lines, data);
 
-        // () -> "Expected a ListDataStore, foud " + clavaData.getClass() + ". DataParser: " + dataParser);
-
         DataStore previousValue = data.get(ClangAstData.NODE_DATA).put(clavaData.get(ClavaNode.ID), clavaData);
 
         if (previousValue != null) {
@@ -199,9 +189,6 @@ public class NodeDataParser {
         String id = lines.nextLine();
         String className = lines.nextLine();
 
-        // Get ClavaNode class of this id
-        // dataStore.get(ClangParserData.CL)
-
         SourceRange location = hasLocation ? ClavaDataParsers.parseLocation(lines, dataStore)
                 : SourceRange.invalidRange();
 
@@ -214,12 +201,6 @@ public class NodeDataParser {
                 : SourceRange.invalidRange();
 
         boolean isInSystemHeader = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
-
-        // DataStore data = DataStore.newInstance("Data from Parser");
-
-        // Due to the number of Attributes, not every attribute that appears in the code
-        // has a corresponding node yet.
-        // boolean isClosed = nodeClass.equals(Attribute.class) ? false : true;
 
         Class<? extends ClavaNode> nodeClass = null;
         try {
@@ -244,9 +225,6 @@ public class NodeDataParser {
 
         data.add(ClavaNode.IS_IN_SYSTEM_HEADER, isInSystemHeader);
 
-        // () -> "Expected a ListDataStore, foud " + data.getClass());
-
         return data;
     }
-
 }

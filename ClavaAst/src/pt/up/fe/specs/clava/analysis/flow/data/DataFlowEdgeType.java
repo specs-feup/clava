@@ -50,5 +50,4 @@ public enum DataFlowEdgeType {
     public static boolean isControl(DataFlowEdgeType type) {
         return type == REPEATING;
     }
-
 }

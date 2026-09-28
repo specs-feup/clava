@@ -156,8 +156,6 @@ public class DataFlowGraph extends FlowGraph {
                 mergeNodes(value);
             });
         }
-
-        // Then merge between same-level subgraphs
     }
 
     /**

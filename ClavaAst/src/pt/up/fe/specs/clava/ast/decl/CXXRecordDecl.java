@@ -269,7 +269,6 @@ public class CXXRecordDecl extends RecordDecl {
 
     /**
      * 
-     * 
      * @return true, if contains at least a pure function.
      */
     public boolean isAbstract() {
@@ -305,5 +304,4 @@ public class CXXRecordDecl extends RecordDecl {
         return true;
 
     }
-
 }

@@ -114,18 +114,6 @@ public class MSPropertyRefExpr extends Expr {
     public String getCode() {
 
         var processedProperty = getProperty();
-
-        // var processedProperty = processProperty(propertyString.get());
-
-        // System.out.println("PROP: " + propertyString);
-        // System.out.println("PARENT: " + getParent());
-        // System.out.println("PARENT PARENT: " + getParent().getParent());
-        // System.out.println("PARENT PARENT PARENT: " + getParent().getParent().getParent().getParent());
-
-        // Not sure how to know if getter or setter should be use
-        // System.out.println("BASE EXPR: " + ((OpaqueValueExpr)get(BASE_EXPR)).getSourceExpr().getClass());
-        // property.get(MSPropertyDecl.)
-
         var separator = get(IS_ARROW) ? "->" : ".";
 
         return getBase().getCode() + separator + processedProperty;

@@ -151,8 +151,8 @@ public class CxxAttributes {
         if (TOP_REGION.isInstance(currentRegion)) {
             return Optional.empty();
         }
-        // Go up one node, and return the current region
 
+        // Go up one node, and return the current region
         return getCurrentRegion(currentRegion.getParent());
     }
 

@@ -41,21 +41,7 @@ public class CompoundLiteralExpr extends Literal {
 
     @Override
     public String getCode() {
-        // System.out.println("IS MACRO:" + get(ClavaNode.IS_MACRO));
-        // System.out.println("IS INITIALIZER MACRO:" + getInitializer().get(ClavaNode.IS_MACRO));
-        // System.out.println("CODE:" + getLiteral());
-
-        // if (get(ClavaNode.IS_MACRO)) {
-        // return "(" + getTypeCode() + ")" + getInitializer().getCode();
-        // }
-
         return "(" + getTypeCode() + ")" + getChild(0).getCode();
-
-        // System.out.println("TYPE:" + getTypeCode());
-        // System.out.println("COMPOUND AST:" + toTree());
-        // System.out.println("INIT LIST CODE:" + getChild(0).getCode());
-        // return getChild(0).getCode();
-
     }
 
 }

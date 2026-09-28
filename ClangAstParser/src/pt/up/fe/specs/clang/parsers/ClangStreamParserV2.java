@@ -41,9 +41,6 @@ public class ClangStreamParserV2 {
         addWorker(LanguageParser::new);
         TopLevelNodesParser.getWorkers().forEach(ClangStreamParserV2::addWorker);
         NodeDataParser.getWorkers().forEach(ClangStreamParserV2::addWorker);
-        // addWorker(SystemHeadersClangNodes::new);
-        // addWorker(VisitStartParser::new);
-        // addWorker(VisitEndParser::new);
         VisitingChildrenCheck.getWorkers().forEach(ClangStreamParserV2::addWorker);
     }
 
@@ -62,21 +59,8 @@ public class ClangStreamParserV2 {
         clangParserData.set(ClangAstData.CONTEXT, context);
         LineStreamParser<ClangAstData> streamParser = LineStreamParser.newInstance(clangParserData, WORKERS);
         streamParser.setLineIgnore(ClangStreamParserV2::ignoreLine);
-        // Create ClavaContext
-        // streamParser.getData().add(ClavaNode.CONTEXT, new ClavaContext(arguments));
-        // streamParser.getData().add(ClavaNode.CONTEXT, context);
 
         return streamParser;
-        // return LineStreamParserV2.newInstance(WORKERS);
-        // LineStreamParserV2 lineStreamParser = LineStreamParserV2.newInstance(WORKERS);
-        //
-        // // Initialize some keys
-        // DataStore data = lineStreamParser.getData();
-        // data.add(ClangParserKeys.CLAVA_NODES, new HashMap<>());
-        // data.add(ClangParserKeys.CLAVA_DATA, new HashMap<>());
-        // data.add(ClangParserKeys.VISITED_CHILDREN, new HashMap<>());
-        //
-        // return lineStreamParser;
     }
 
     private static boolean ignoreLine(String line) {
@@ -97,12 +81,6 @@ public class ClangStreamParserV2 {
         if (line.equals("#pragma once")) {
             return true;
         }
-
-        // System.out.println("LINE:" + line);
-        // if (line.equals("error: invalid argument '-std=c++11' not allowed with 'C/ObjC'")) {
-        // // System.out.println("IGNORING LINE");
-        // return true;
-        // }
 
         return false;
     }

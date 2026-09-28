@@ -39,5 +39,4 @@ public class FormatAttr extends InheritableAttr {
     public String getArgumentsCode() {
         return get(TYPE) + ", " + get(FORMAT_INDEX) + ", " + get(FIRST_ARG);
     }
-
 }

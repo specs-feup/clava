@@ -106,8 +106,6 @@ public class Types {
 
         // If the element is not the same node, continue building arity
         return elementType == null ? typeArity : typeArity + getPointerArity(elementType);
-
-        // return typeArity + getArity(getSingleElement(type));
     }
 
     public static Type getElement(Type type) {
@@ -165,23 +163,16 @@ public class Types {
      * @param sugaredType
      */
     public static void updateSugaredType(Type sugaredType) {
-        // System.out.println("UPDATING " + sugaredType);
-
         // No sugar, nothing to do
         if (!sugaredType.hasSugar()) {
             return;
         }
 
         Type underlyingType = sugaredType.desugar();
-        // System.out.println("UNDERLYING " + underlyingType);
 
         // If underlyingType type is a TypedefType, to reflect changes replace with the underlying type
         if (underlyingType instanceof TypedefType) {
             Type typeClass = ((TypedefType) underlyingType).getTypeClass();
-            // System.out.println("IS TYPEDEF TYPE, TYPE CLASS:" + typeClass);
-            // Optimization: detach to avoid copy
-            // typeClass.detach();
-
             sugaredType.setDesugar(typeClass);
         }
 
@@ -210,7 +201,6 @@ public class Types {
 
     private static Type toComparable(Type type) {
         if (type instanceof AutoType) {
-            // return toComparable(((AutoType) type).getDeducedType().orElse(null));
             return ((AutoType) type).getDeducedType().map(Types::toComparable).orElse(type);
         }
 

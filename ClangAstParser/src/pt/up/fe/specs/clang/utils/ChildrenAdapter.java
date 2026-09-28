@@ -67,7 +67,6 @@ public class ChildrenAdapter {
         CHILDREN_ADAPTERS.put(CaseStmt.class, ChildrenAdapter::adaptCaseStmt);
         CHILDREN_ADAPTERS.put(DefaultStmt.class, ChildrenAdapter.adapt(AdaptationType.STMT));
         CHILDREN_ADAPTERS.put(LabelStmt.class, ChildrenAdapter.adapt(AdaptationType.STMT));
-        // CHILDREN_ADAPTERS.put(GotoStmt.class, ChildrenAdapter.adapt(AdaptationType.STMT));
     }
 
     public List<ClavaNode> adaptChildren(ClavaNode node, List<ClavaNode> children) {
@@ -124,7 +123,6 @@ public class ChildrenAdapter {
     }
 
     private static List<ClavaNode> adaptForStmt(List<ClavaNode> children, ClavaContext context) {
-
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
         adaptedChildren.add(toStmt(check(children.get(0), STMT_OR_EXPR), context));
@@ -210,7 +208,6 @@ public class ChildrenAdapter {
 
     private static List<ClavaNode> adaptCXXTryStmt(List<ClavaNode> children, ClavaContext context) {
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
-        // + children.stream().map(child -> child.get(ClavaNode.ID)).collect(Collectors.joining(", ")));
 
         adaptedChildren.add(toCompoundStmt(check(children.get(0), CompoundStmt.class), context));
         adaptedChildren.addAll(children.subList(1, children.size()));

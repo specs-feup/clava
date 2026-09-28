@@ -99,35 +99,6 @@ public abstract class FunctionType extends Type {
         return typeCopy;
     }
 
-    /**
-     * Return type comes after desugared type, if present.
-     * 
-     * @return
-     */
-    // public int getIndexReturnType() {
-    // // return 0;
-    // return getIndexDesugar() + 1;
-    // }
-
-    /**
-     * Inclusive index.
-     * 
-     * @return
-     */
-    // public int getIndexParamStart() {
-    //
-    // return getIndexReturnType() + 1;
-    // }
-
-    /**
-     * Exclusive index.
-     * 
-     * @return
-     */
-    // public int getIndexParamEnd() {
-    // return getIndexParamStart() + getNumParams();
-    // }
-
     public abstract List<Type> getParamTypes();
 
     /**
@@ -135,16 +106,11 @@ public abstract class FunctionType extends Type {
      * @return the number of parameters of this function
      */
     abstract public int getNumParams();
-    // public int getNumParams() {
-    // // First child is the return type, remaining children are the param types
-    // return getNumChildren() - 1;
-    // }
 
     abstract public boolean isVariadic();
 
     public void setReturnType(Type returnType) {
         set(RETURN_TYPE, returnType);
-        // setChild(getIndexReturnType(), returnType);
     }
 
     public abstract void setParamType(int paramIndex, Type paramType);

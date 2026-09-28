@@ -224,12 +224,10 @@ public class CXXMethodDecl extends FunctionDecl {
         String baseSignature = super.getSignature();
 
         String namespace = getNamespace().map(str -> str + "::").orElse("");
-        // String namespace = getNamespace(getRecordName()).map(str -> str + "::").orElse("");
 
         var recordName = getRecordDecl().map(record -> record.getDeclName() + "::").orElse("");
 
         namespace = namespace + recordName;
-        // namespace = namespace + getRecordDecl().getDeclName() + "::";
 
         String signature = namespace + baseSignature;
         if (getFunctionType().isConst()) {
@@ -291,14 +289,8 @@ public class CXXMethodDecl extends FunctionDecl {
         // Update qualified prefix
         var newQualifiedPrefix = getQualifiedPrefixWithoutRecord() + cxxRecordDecl.getDeclName();
 
-        // System.out.println("CURRENT RECORD DECL: " + currentRecordDecl.getDeclName());
-        // System.out.println("NEW RECORD DECL: " + cxxRecordDecl.getDeclName());
-        // System.out.println("CURRENT QUAL NAME: " + currentQualifiedPrefix);
-        // System.out.println("NEW QUAL NAME: " + newQualifiedPrefix);
-
         set(QUALIFIED_PREFIX, newQualifiedPrefix);
         set(RECORD, cxxRecordDecl);
         set(RECORD_ID, cxxRecordDecl.getId());
-
     }
 }

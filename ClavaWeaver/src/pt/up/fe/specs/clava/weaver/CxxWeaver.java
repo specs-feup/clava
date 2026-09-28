@@ -66,6 +66,9 @@ public class CxxWeaver extends ACxxWeaver {
             "https://github.com/specs-feup/clava-benchmarks.git?folder=CHStone",
             "Benchmark - HiFlipVX (import lara.benchmark.HiFlipVXBenchmarkSet)",
             "https://github.com/specs-feup/clava-benchmarks.git?folder=HiFlipVX",
+            // TODO: Missing LsuBencharkSet
+            // "Benchmark - LSU (import lara.benchmark.LsuBenchmarkSet)",
+            // "https://github.com/specs-feup/clava-benchmarks.git?folder=LSU",
             "Benchmark - NAS (import lara.benchmark.NasBenchmarkSet)",
             "https://github.com/specs-feup/clava-benchmarks.git?folder=NAS",
             "Benchmark - Parboil (import lara.benchmark.ParboilBenchmarkSet)",
@@ -319,7 +322,6 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Add standard
         parserOptions.add(getStdFlag());
-
 
         // Add default flags
         parserOptions.addAll(DEFAULT_DUMPER_FLAGS);
@@ -1007,7 +1009,6 @@ public class CxxWeaver extends ACxxWeaver {
             otherTUnit.write(currentCodeFolder);
         }
 
-
         App rebuiltApp = createApp(Arrays.asList(destinationFile), rebuildOptions);
 
         // Remove app from context stack
@@ -1142,11 +1143,9 @@ public class CxxWeaver extends ACxxWeaver {
             }
 
             updateSources(writtenFilesToBase);
-
         }
 
         return rebuiltApp.get(App.IGNORED_FILES).size() == 0;
-
     }
 
     /**
@@ -1239,7 +1238,6 @@ public class CxxWeaver extends ACxxWeaver {
         Set<String> includeFolders = searchPaths.stream()
                 .map(path -> path.isFile() ? path.getParentFile().getAbsolutePath() : path.getAbsolutePath())
                 .collect(Collectors.toSet());
-
 
         List<Include> includes = new ArrayList<>();
 

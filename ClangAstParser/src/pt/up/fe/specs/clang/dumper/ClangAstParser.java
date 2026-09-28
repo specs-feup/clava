@@ -214,9 +214,7 @@ public class ClangAstParser {
                         () -> "Expected node created from '" + finalPragma + "' to be a WrapperStmt: " + pragmaNode);
 
                 pragmaNodes.add(pragmaNode);
-
             }
-
         }
 
         // Add pragmas to the translation unit
@@ -288,10 +286,6 @@ public class ClangAstParser {
         // Set<Decl> decls = new LinkedHashSet<>();
         List<Decl> decls = new ArrayList<>();
 
-        // Build filename
-
-        // Declaration nodes of the translation unit
-
         // Remove ParmVarDecl nodes
         declNodes = declNodes.stream()
                 .filter(decl -> !(decl instanceof ParmVarDecl))
@@ -321,9 +315,6 @@ public class ClangAstParser {
         List<Include> uniqueIncludes = SpecsCollections.filter(sourceIncludes, include -> include.toString());
 
         addIncludes(uniqueIncludes, tUnit, path);
-
-        // Clean translation unit
-        // ClavaPostProcessing.applyPostPasses(tUnit);
 
         return tUnit;
     }
@@ -474,7 +465,5 @@ public class ClangAstParser {
         }
 
         return true;
-
-        //
     }
 }

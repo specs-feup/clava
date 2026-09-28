@@ -174,10 +174,6 @@ public class ParallelCodeParser extends CodeParser {
             return null;
         }
 
-        // // Sort translation units
-
-        // "TUNITS:" + tUnits.stream().map(tunit -> tunit.getFile().toString()).collect(Collectors.joining(", ")));
-
         if (get(SHOW_EXEC_INFO)) {
             ClavaLog.metrics(SpecsStrings.takeTime("Code to AST", tic));
         }
@@ -242,9 +238,6 @@ public class ParallelCodeParser extends CodeParser {
             ClavaLog.metrics("Current memory used (Java):" + usedSize);
         }
 
-        // Perform second pass over types
-        // processTypesSecondPass();
-
         if (get(SHOW_CLAVA_AST)) {
             SpecsLogs.msgInfo("CLAVA AST:\n" + app.toTree());
         }
@@ -256,10 +249,7 @@ public class ParallelCodeParser extends CodeParser {
         SpecsLogs.msgInfo("--- AST parsing report ---");
 
         return app;
-
     }
-
-    //
 
     private Standard getStandard(Collection<File> sources, DataStore options) {
         // If standard has been defined, return it
@@ -283,13 +273,8 @@ public class ParallelCodeParser extends CodeParser {
         }
 
         if (possibleStandards.isEmpty()) {
-            if (isCl) {
-                return Standard.C99;
-            }
-
             // Use C99 as standard, possible only .h files
             return Standard.C99;
-            // "Could not determine a default standard from this list of source files: " + sources);
         }
 
         if (possibleStandards.size() == 1) {
@@ -298,17 +283,11 @@ public class ParallelCodeParser extends CodeParser {
 
         throw new RuntimeException("Found more than one possible standard (" + possibleStandards
                 + ") from this list of source files: " + sources);
-
-        // TODO Auto-generated method stub
     }
 
     private ClangAstData parseSource(File sourceFile, String id, Standard standard, DataStore options,
                                      ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
                                      ClangFiles clangFiles, ConcurrentLinkedQueue<String> syntaxErrors) {
-
-        // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
-
-        // Adapt compiler options according to the file
 
         // Disable streaming of console output if parsing is to be done in parallel
         // Only show output of console after parsing is done, when using parallel parsing

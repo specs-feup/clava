@@ -22,12 +22,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 
 public class AlignedTypeAttr extends AlignedAttr {
 
-    /// DATAKEYS BEGIN
-
-    // public final static DataKey<Type> TYPE = KeyFactory.object("type", Type.class);
-
-    /// DATAKEYS END
-
     public AlignedTypeAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }

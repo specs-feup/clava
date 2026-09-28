@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 public class TUnitProcessor {
 
     private final static boolean ERROR_ON_AMBIGUOUS_SIGNATURE = false;
-    // Arrays.asList(ImplicitCastExpr.class));
 
     private final List<ClangAstData> parsingData;
     private final boolean normalize;
@@ -70,14 +69,13 @@ public class TUnitProcessor {
 
         for (TranslationUnit tUnit : tUnits) {
             tUnit.getDescendantsStream()
+                    // Only consider nodes with valid locations, nodes with invalid locations in the AST at this point
+                    // where most likely introduced by Clava (e.g., Includes, Null nodes, etc)
                     .filter(node -> node.getLocation().isValid())
-                    // Ignore certain nodes that might have the same location, such as ImplicitCastExpr
                     .forEach(node -> addNode(node));
-
         }
 
         // Iterate over all ClavaNodes and replace fields that have ClavaNodes
-
         parsingData.stream()
                 .flatMap(data -> data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream())
                 .forEach(node -> replaceFields(node));
@@ -210,7 +208,5 @@ public class TUnitProcessor {
                     .append("\nNEW NODE: ")
                     .append(node).append("\n");
         }
-
     }
-
 }

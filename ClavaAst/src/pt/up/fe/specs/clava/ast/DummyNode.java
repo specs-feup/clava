@@ -76,15 +76,6 @@ public interface DummyNode {
     }
 
     /**
-     * @deprecated replaced by DataStore version.
-     * @param clavaNodeClass
-     * @param data
-     * @param children
-     * @return
-     */
-    @Deprecated
-
-    /**
      * 
      * @param clavaNodeClass
      * @param data
@@ -115,29 +106,22 @@ public interface DummyNode {
         ClavaNode dummyNode = null;
 
         if (Type.class.isAssignableFrom(clavaNodeClass)) {
-            // DummyTypeData dummyData = new DummyTypeData(classname, data);
             dummyNode = new DummyType(dummyData, children);
         }
 
         if (Decl.class.isAssignableFrom(clavaNodeClass)) {
-            // DummyDeclData dummyData = new DummyDeclData(classname, data);
             dummyNode = new DummyDecl(dummyData, children);
         }
 
         if (Expr.class.isAssignableFrom(clavaNodeClass)) {
-            // DummyExprData dummyData = new DummyExprData(classname, data);
             dummyNode = new DummyExpr(dummyData, children);
         }
 
         if (Stmt.class.isAssignableFrom(clavaNodeClass)) {
-            // DummyStmtData dummyData = new DummyStmtData(classname, data);
             dummyNode = new DummyStmt(dummyData, children);
         }
 
         if (Attribute.class.isAssignableFrom(clavaNodeClass)) {
-            // DummyAttributeData dummyData = new DummyAttributeData(classname, (AttributeData) data);
-            // DataStore dummyAttrData = data.copy().add(DummyNode.DUMMY_CONTENT, classname);
-
             dummyNode = new DummyAttr(data, children);
         }
 

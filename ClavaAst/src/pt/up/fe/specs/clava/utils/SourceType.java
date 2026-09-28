@@ -126,8 +126,6 @@ public enum SourceType {
         }
 
         return Optional.ofNullable(sourceType);
-
-        // return Optional.empty();
     }
 
     public boolean hasExtension(String extension) {

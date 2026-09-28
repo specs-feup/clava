@@ -76,9 +76,6 @@ public class TypeRenamerFilter {
     }
 
     private void renameCandidate(ClavaNode node, List<ClavaNode> currentNodes) {
-
         currentNodes.addAll(node.getDescendants(DeclRefExpr.class));
-        // System.out.println("RENAME CANDIDATE:" + node);
-
     }
 }

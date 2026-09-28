@@ -50,7 +50,6 @@ public class CxxWeaverDataClass extends DataClassWrapper<CxxWeaverDataClass> {
         return CxxAttributes.toLara(value, this.weaver);
     }
 
-    // @Override
     @Override
     public Object setValue(String key, Object value) {
         return super.setValue(key, CxxAttributes.fromLara(value));

@@ -63,15 +63,8 @@ public abstract class TemplateDecl extends NamedDecl {
         return getTemplateParameters().size();
     }
 
-    // public Decl getTemplateDecl() {
-    // return get(TEMPLATE_DECL);
-    // }
-
     public Decl getTemplateDecl() {
         return get(TEMPLATE_DECL).map(decl -> (Decl) decl).orElse(getFactory().nullDecl());
     }
 
-    // Get template parameters
-    // Decl getTemplateDecl
-    // getSpecializations
 }

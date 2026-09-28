@@ -174,39 +174,28 @@ public class ClavaDataParsers {
         for (int i = 0; i < numTypes; i++) {
             exceptionTypeIds.add(lines.nextLine());
         }
-        // exceptionTypeIds);
+
         clavaNodes.queueSetNodeList(exceptionSpecification, ExceptionSpecification.EXCEPTION_TYPES, exceptionTypeIds);
 
         switch (exceptionSpecificationType) {
 
-        case DependentNoexcept:
-            clavaNodes.queueSetNode(exceptionSpecification, ComputedNoexcept.NOEXCEPT_EXPR, lines.nextLine());
-
-            return exceptionSpecification;
-
-        case Unevaluated:
-            clavaNodes.queueSetNode(exceptionSpecification, UnevaluatedExceptionSpecification.SOURCE_DECL,
-                    lines.nextLine());
-
-            return exceptionSpecification;
-
-        case Uninstantiated:
-            // setNode(parserData, exceptionSpecification, UninstantiatedExceptionSpecification.SOURCE_DECL,
-            // lines.nextLine());
-            clavaNodes.queueSetNode(exceptionSpecification, UninstantiatedExceptionSpecification.SOURCE_DECL,
-                    lines.nextLine());
-            // UninstantiatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
-
-            clavaNodes.queueSetNode(exceptionSpecification, UninstantiatedExceptionSpecification.SOURCE_TEMPLATE,
-                    lines.nextLine());
-            // UninstantiatedExceptionSpecification.SOURCE_TEMPLATE, lines.nextLine());
-
-            return exceptionSpecification;
-        default:
-            // Nothing more to do
-            return exceptionSpecification;
+            case DependentNoexcept:
+                clavaNodes.queueSetNode(exceptionSpecification, ComputedNoexcept.NOEXCEPT_EXPR, lines.nextLine());
+                return exceptionSpecification;
+            case Unevaluated:
+                clavaNodes.queueSetNode(exceptionSpecification, UnevaluatedExceptionSpecification.SOURCE_DECL,
+                        lines.nextLine());
+                return exceptionSpecification;
+            case Uninstantiated:
+                clavaNodes.queueSetNode(exceptionSpecification, UninstantiatedExceptionSpecification.SOURCE_DECL,
+                        lines.nextLine());
+                clavaNodes.queueSetNode(exceptionSpecification, UninstantiatedExceptionSpecification.SOURCE_TEMPLATE,
+                        lines.nextLine());
+                return exceptionSpecification;
+            default:
+                // Nothing more to do
+                return exceptionSpecification;
         }
-
     }
 
     public static List<TemplateArgument> templateArguments(LineStream lines, ClangAstData parserData) {
@@ -226,54 +215,54 @@ public class ClavaDataParsers {
         TemplateArgumentKind kind = LineStreamParsers.enumFromName(TemplateArgumentKind.class, lines);
 
         switch (kind) {
-        case Declaration:
-            TemplateArgumentDeclaration declaration = new TemplateArgumentDeclaration();
-            parserData.getClavaNodes().queueSetNode(declaration, TemplateArgumentDeclaration.DECL, lines.nextLine());
-            return declaration;
-        case NullPtr:
-            TemplateArgumentNullPtr nullPtr = new TemplateArgumentNullPtr();
-            parserData.getClavaNodes().queueSetNode(nullPtr, TemplateArgumentNullPtr.TYPE, lines.nextLine());
-            return nullPtr;
-        case Type:
-            TemplateArgumentType type = new TemplateArgumentType();
-            parserData.getClavaNodes().queueSetNode(type, TemplateArgumentType.TYPE, lines.nextLine());
-            return type;
-        case Expression:
-            TemplateArgumentExpr expr = new TemplateArgumentExpr();
-            parserData.getClavaNodes().queueSetNode(expr, TemplateArgumentExpr.EXPR, lines.nextLine());
-            return expr;
-        case Pack:
-            TemplateArgumentPack pack = new TemplateArgumentPack();
+            case Declaration:
+                TemplateArgumentDeclaration declaration = new TemplateArgumentDeclaration();
+                parserData.getClavaNodes().queueSetNode(declaration, TemplateArgumentDeclaration.DECL, lines.nextLine());
+                return declaration;
+            case NullPtr:
+                TemplateArgumentNullPtr nullPtr = new TemplateArgumentNullPtr();
+                parserData.getClavaNodes().queueSetNode(nullPtr, TemplateArgumentNullPtr.TYPE, lines.nextLine());
+                return nullPtr;
+            case Type:
+                TemplateArgumentType type = new TemplateArgumentType();
+                parserData.getClavaNodes().queueSetNode(type, TemplateArgumentType.TYPE, lines.nextLine());
+                return type;
+            case Expression:
+                TemplateArgumentExpr expr = new TemplateArgumentExpr();
+                parserData.getClavaNodes().queueSetNode(expr, TemplateArgumentExpr.EXPR, lines.nextLine());
+                return expr;
+            case Pack:
+                TemplateArgumentPack pack = new TemplateArgumentPack();
 
-            // Number of template args
-            int numArgs = LineStreamParsers.integer(lines);
-            List<TemplateArgument> packArgs = new ArrayList<>(numArgs);
-            for (int i = 0; i < numArgs; i++) {
-                packArgs.add(templateArgument(lines, parserData));
-            }
+                // Number of template args
+                int numArgs = LineStreamParsers.integer(lines);
+                List<TemplateArgument> packArgs = new ArrayList<>(numArgs);
+                for (int i = 0; i < numArgs; i++) {
+                    packArgs.add(templateArgument(lines, parserData));
+                }
 
-            return pack;
-        case Integral:
-            TemplateArgumentIntegral integral = new TemplateArgumentIntegral();
-            integral.set(TemplateArgumentIntegral.INTEGRAL, LineStreamParsers.integer(lines));
-            return integral;
-        case Template:
-            return templateArgumentTemplate(lines, parserData);
-        case TemplateExpansion:
-            TemplateArgumentTemplateExpansion expansion = new TemplateArgumentTemplateExpansion();
-            String numExpansions = lines.nextLine();
-            expansion.set(TemplateArgumentTemplateExpansion.NUM_EXPANSIONS,
-                    numExpansions.isEmpty() ? Optional.empty() : Optional.of(Integer.parseInt(numExpansions)));
-            expansion.set(TemplateArgumentTemplateExpansion.TEMPLATE,
-                    templateArgumentTemplate(lines, parserData));
-            return expansion;
-        case StructuralValue:
-            TemplateArgumentStructuralValue structuralValue = new TemplateArgumentStructuralValue();
-            parserData.getClavaNodes().queueSetNode(structuralValue, TemplateArgumentStructuralValue.TYPE,
-                    lines.nextLine());
-            return structuralValue;
-        default:
-            throw new NotImplementedException(kind);
+                return pack;
+            case Integral:
+                TemplateArgumentIntegral integral = new TemplateArgumentIntegral();
+                integral.set(TemplateArgumentIntegral.INTEGRAL, LineStreamParsers.integer(lines));
+                return integral;
+            case Template:
+                return templateArgumentTemplate(lines, parserData);
+            case TemplateExpansion:
+                TemplateArgumentTemplateExpansion expansion = new TemplateArgumentTemplateExpansion();
+                String numExpansions = lines.nextLine();
+                expansion.set(TemplateArgumentTemplateExpansion.NUM_EXPANSIONS,
+                        numExpansions.isEmpty() ? Optional.empty() : Optional.of(Integer.parseInt(numExpansions)));
+                expansion.set(TemplateArgumentTemplateExpansion.TEMPLATE,
+                        templateArgumentTemplate(lines, parserData));
+                return expansion;
+            case StructuralValue:
+                TemplateArgumentStructuralValue structuralValue = new TemplateArgumentStructuralValue();
+                parserData.getClavaNodes().queueSetNode(structuralValue, TemplateArgumentStructuralValue.TYPE,
+                        lines.nextLine());
+                return structuralValue;
+            default:
+                throw new NotImplementedException(kind);
         }
 
     }
@@ -284,27 +273,27 @@ public class ClavaDataParsers {
         template.set(TemplateArgumentTemplate.TEMPLATE_NAME_KIND, nameKind);
 
         switch (nameKind) {
-        case Template:
-            parserData.getClavaNodes().queueSetOptionalNode(template, Template.TEMPLATE_DECL, lines.nextLine());
-            break;
-        case QualifiedTemplate:
-            template.set(QualifiedTemplate.QUALIFIER, lines.nextLine());
-            template.set(QualifiedTemplate.HAS_TEMPLATE_KEYWORD, LineStreamParsers.oneOrZero(lines));
-            parserData.getClavaNodes().queueSetNode(template, QualifiedTemplate.TEMPLATE_DECL, lines.nextLine());
-            break;
-        case SubstTemplateTemplateParm:
-            parserData.getClavaNodes().queueSetNode(template, SubstTemplateTemplateParm.PARAMETER, lines.nextLine());
-            template.set(SubstTemplateTemplateParm.REPLACEMENT, templateArgumentTemplate(lines, parserData));
-            break;
-        case UsingTemplate:
-            parserData.getClavaNodes().queueSetNode(template, UsingTemplate.USING_SHADOW_DECL, lines.nextLine());
-            break;
-        case DependentTemplate:
-            template.set(DependentTemplate.QUALIFIER, lines.nextLine());
-            template.set(DependentTemplate.NAME, lines.nextLine());
-            break;
-        default:
-            throw new RuntimeException("Case not implemented: " + nameKind);
+            case Template:
+                parserData.getClavaNodes().queueSetOptionalNode(template, Template.TEMPLATE_DECL, lines.nextLine());
+                break;
+            case QualifiedTemplate:
+                template.set(QualifiedTemplate.QUALIFIER, lines.nextLine());
+                template.set(QualifiedTemplate.HAS_TEMPLATE_KEYWORD, LineStreamParsers.oneOrZero(lines));
+                parserData.getClavaNodes().queueSetNode(template, QualifiedTemplate.TEMPLATE_DECL, lines.nextLine());
+                break;
+            case SubstTemplateTemplateParm:
+                parserData.getClavaNodes().queueSetNode(template, SubstTemplateTemplateParm.PARAMETER, lines.nextLine());
+                template.set(SubstTemplateTemplateParm.REPLACEMENT, templateArgumentTemplate(lines, parserData));
+                break;
+            case UsingTemplate:
+                parserData.getClavaNodes().queueSetNode(template, UsingTemplate.USING_SHADOW_DECL, lines.nextLine());
+                break;
+            case DependentTemplate:
+                template.set(DependentTemplate.QUALIFIER, lines.nextLine());
+                template.set(DependentTemplate.NAME, lines.nextLine());
+                break;
+            default:
+                throw new RuntimeException("Case not implemented: " + nameKind);
         }
 
         return template;
@@ -473,8 +462,6 @@ public class ClavaDataParsers {
         }
 
         return nestedNameSpecifier;
-
-        //
     }
 
 }

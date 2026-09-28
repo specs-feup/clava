@@ -218,9 +218,7 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
      * @return
      */
     public Optional<App> getAppTry() {
-        // return Optional.of(get(CONTEXT).get(ClavaContext.APP));
         return Optional.of(get(CONTEXT).getApp());
-
     }
 
     /**
@@ -305,9 +303,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
     }
 
     public ClavaNode copy(boolean keepId, boolean copyChildren) {
-
-        // Re-implements ATreeNode copy, in order to specify if IDs should change or not
-        // return super.copy();
 
         // TODO: Remove after legacy nodes are replaced
         ClavaNode newToken = copyPrivate(keepId);
@@ -477,14 +472,7 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
     @Override
     public <T> T get(DataKey<T> key) {
         try {
-            T value = getData().get(key);
-
-            // // Ignore ImplicitCasts
-            // if (value instanceof ImplicitCastExpr) {
-            // return (T) ((ImplicitCastExpr) value).getSubExpr();
-            // }
-
-            return value;
+            return getData().get(key);
         } catch (Exception e) {
             throw new RuntimeException(
                     "Problem while accessing attribute '" + key + "' in ClavaNode: " + this.getNodeName(), e);
@@ -562,12 +550,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
     public <T extends ClavaNode> T newInstance(boolean keepId, boolean shareData, Class<T> nodeClass,
             List<ClavaNode> children) {
 
-        // System.out.println("NODE CLASS: " + nodeClass);
-        // if (nodeClass.getSimpleName().equals("NullDecl")) {
-        // throw new RuntimeException("STOP");
-        // }
-        // DataStore newDataStore = dataI.copy();
-
         // TODO: CHECK IF CANNOT SIMPLY COPY DATA! NEEDS TO AT LEAST SPECIFY DEFINITION OF NEW CLASS
         // SpecsCheck.checkArgument(nodeClass.isInstance(this), () -> "Expected class to be of same instance");
         // Use the same data store
@@ -581,16 +563,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
 
             newDataStore.put(ID, newId);
             newDataStore.put(PREVIOUS_ID, previousId);
-
-            // if (!SKIP_EXCEPTION && newId.startsWith("from")) {
-            // throw new RuntimeException("Copying node:" + this);
-            // }
-
-            // if (newId.equals("fromVarDecl_1")) {
-            // throw new RuntimeException();
-            // // System.out.println("PREVIOUS DATA:::\n" + dataI);
-            // // System.out.println("DATA:::\n" + newDataStore);
-            // }
         }
 
         try {
@@ -610,25 +582,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
             throw new RuntimeException("Could not create constructor for ClavaNode", e);
         }
     }
-
-    // /**
-    // * Legacy support.
-    // *
-    // * When all types have DataStore, we can use node.getFactoryWithNode()
-    // *
-    // * @deprecated getFactoryWithNode()
-    // * @param node
-    // */
-    // @Deprecated
-    // public void setNodeData(ClavaNode node) {
-    // node.setId(getExtendedId().get());
-    // node.setLocation(getLocation());
-    // }
-
-    // public ClavaNode setIsLegacyNode(boolean isLegacyNode) {
-    // getData().set(IS_LEGACY_NODE, isLegacyNode);
-    // return this;
-    // }
 
     public <T extends ClavaNode> Optional<T> getOptionalChild(Class<T> nodeClass, int index) {
         ClavaNode child = getChild(index);
@@ -673,11 +626,7 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
             }
             List<ClavaNode> values = getClavaNode(key);
 
-            // if (values.size() != 0) {
-            // System.out.println("KEY '" + key + "' ADDING VALUES: " + values);
-            // }
             children.addAll(values);
-            // children.add(get(key));
         }
 
         return children;
@@ -749,9 +698,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
     }
 
     private List<ClavaNode> getDescendantsAndFields(List<ClavaNode> nodes, Set<String> seenNodes) {
-        // List<ClavaNode> nodes = new ArrayList<>();
-        //
-        // Set<String> seenNodes = new HashSet<>();
 
         // Fields of node
         for (ClavaNode node : getNodeFields()) {
@@ -789,7 +735,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
      * 
      * @return
      */
-
     public ClavaNode deepCopy() {
         return deepCopy(false);
     }
@@ -808,7 +753,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
         }
 
         // Simple copy of the node, without children
-        // copy = copyPrivate(keepId);
         copy = copy(keepId, false);
 
         // Add to replacement map
@@ -856,7 +800,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
 
                 ClavaNode node = (ClavaNode) possibleNode;
 
-                // copy.set(optionalKey, Optional.of(node.copy(keepId)));
                 copy.set(optionalKey, Optional.of(copyNodeValue(node, keepId, copiedNodes)));
                 continue;
             }
@@ -870,7 +813,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
                 List<?> list = get(listKey);
 
                 if (list.isEmpty()) {
-                    // copy.set(listKey, new ArrayList<>());
                     continue;
                 }
 
@@ -881,23 +823,15 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
                 List<ClavaNode> newList = new ArrayList<>(list.size());
 
                 for (Object listValue : list) {
-                    // newList.add(((ClavaNode) listValue).copy());
                     newList.add((copyNodeValue((ClavaNode) listValue, false, copiedNodes)));
                 }
 
                 copy.set(listKey, newList);
                 continue;
             }
-
-            // ClavaLog.info("Case not supported yet:" + keyWithNode);
         }
 
-        // if (copy.hasSugar()) {
-        // set(UNQUALIFIED_DESUGARED_TYPE, Optional.of(copy.desugar().copyDeep()));
-        // }
-
         return copy;
-
     }
 
     /**
@@ -916,7 +850,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
     public void replaceNodeField(DataKey<?> keyWithNode, List<ClavaNode> newValue) {
 
         if (!hasValue(keyWithNode)) {
-            // System.out.println("DOES NOT HAVE VALUE");
             return;
         }
 
@@ -928,32 +861,20 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
 
         // Optional nodes
         if (Optional.class.isAssignableFrom(keyWithNode.getValueClass())) {
-            // System.out.println("OPTIONAL KEY");
             DataKey<Optional<?>> optionalKey = (DataKey<Optional<?>>) keyWithNode;
             Optional<?> value = get(optionalKey);
             if (!value.isPresent()) {
-                // System.out.println("NO VALUE");
                 return;
             }
 
             Object possibleNode = value.get();
 
             if (!(possibleNode instanceof ClavaNode)) {
-                // System.out.println("NOT A CLAVANODE");
                 return;
             }
 
             set(optionalKey, Optional.of(newValue.get(0)));
-            // System.out.println("SETTING OPTIONAL");
-            // ClavaNode copy = node.copy();
-            // set(optionalKey, Optional.of(copy));
-            // return Arrays.asList(copy);
         }
-
-        // return Collections.emptyList();
-
-        // ClavaLog.info("Case not supported yet:" + keyWithNode);
-
     }
 
     /**
@@ -965,7 +886,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
         return NODE_FIELD_MANAGER.getKeysWithNodes(this);
     }
 
-    // @SuppressWarnings("unchecked")
     public List<ClavaNode> getNodes(DataKey<?> keyWithNodes) {
 
         List<ClavaNode> nodes = new ArrayList<>();
@@ -983,13 +903,9 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
                 nodes.add((ClavaNode) ((Optional<?>) value).get());
                 continue;
             }
-
-            // ClavaLog.info("Case not supported yet:" + keyWithNode);
-
         }
 
         return nodes;
-
     }
 
     /**
@@ -1004,17 +920,9 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
         signature.append(getClass().getSimpleName());
 
         for (DataKey<?> key : getSignatureKeys()) {
-            // if (getClass() == CXXConstructExpr.class) {
-            // System.out.println("CURRENT SIG:" + signature);
-            // System.out.println("CURRENT KEY:" + key);
-            // System.out.println("KEY VALUE:" + get(key).toString());
-            // }
             Object value = get(key);
             String valueSig = value instanceof StringProvider ? ((StringProvider) value).getString() : value.toString();
             signature.append("_").append(valueSig);
-            // if (getClass() == CXXConstructExpr.class) {
-            // System.out.println("SIG AFTER:" + signature);
-            // }
         }
 
         for (String customString : getSignatureCustomStrings()) {
@@ -1022,15 +930,10 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
         }
 
         return signature.toString();
-
-        // return getClass().getSimpleName() + "_" + getLocation();
     }
 
     public SpecsList<DataKey<?>> getSignatureKeys() {
         return SpecsList.convert(new ArrayList<DataKey<?>>()).andAdd(LOCATION).andAdd(PREVIOUS_ID);
-        // List<DataKey<?>> signatureKeys = new ArrayList<>();
-        // signatureKeys.add(LOCATION);
-        // return signatureKeys;
     }
 
     /**
@@ -1065,11 +968,6 @@ public abstract class ClavaNode extends DataNode<ClavaNode> implements StringPro
 
         return Optional.of((Stmt) node);
     }
-
-    // public <T> copyField(DataKey<T> key) {
-    // Type pointeeCopy = type.get(PointerType.POINTEE_TYPE).copy();
-    // type.set(PointerType.POINTEE_TYPE, pointeeCopy);
-    // }
 
     /**
      * 

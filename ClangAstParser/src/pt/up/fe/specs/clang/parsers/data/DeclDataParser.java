@@ -184,22 +184,6 @@ public class DeclDataParser {
         data.add(ClassTemplateSpecializationDecl.TEMPLATE_ARGUMENTS,
                 ClavaDataParsers.templateArguments(lines, dataStore));
 
-        // /**
-        // * The template that this specialization specializes.
-        // */
-        // KeyFactory.object("specializedTemplate",
-        // ClassTemplateDecl.class);
-        //
-        // /**
-        // * The kind of specialization that this declaration represents.
-        // */
-        // "specializationKind", TemplateSpecializationKind.class);
-        //
-        // /**
-        // * The template arguments of the class template specialization.
-        // */
-        // TemplateArgument.class);
-
         return data;
     }
 
@@ -302,8 +286,6 @@ public class DeclDataParser {
         data.add(CXXConstructorDecl.IS_DEFAULT_CONSTRUCTOR, LineStreamParsers.oneOrZero(lines));
         data.add(CXXConstructorDecl.IS_EXPLICIT, LineStreamParsers.oneOrZero(lines));
         data.add(CXXConstructorDecl.EXPLICIT_SPECIFIER, ClavaDataParsers.explicitSpecifier(lines, dataStore));
-
-        // dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.RECORD, data.get(CXXMethodDecl.RECORD_ID));
 
         return data;
     }
@@ -439,7 +421,6 @@ public class DeclDataParser {
         // Hierarchy
         DataStore data = parseDeclData(lines, dataStore);
 
-        // dataStore.getClavaNodes().queueSetNode(data, StaticAssertDecl.ASSERT_EXPR, lines.nextLine());
         data.add(StaticAssertDecl.IS_FAILED, LineStreamParsers.oneOrZero(lines));
 
         return data;

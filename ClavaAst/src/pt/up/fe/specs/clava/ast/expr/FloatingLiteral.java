@@ -76,17 +76,6 @@ public class FloatingLiteral extends Literal {
 
         // Return approximate value
         return Double.toString(approximateValue);
-
-        // System.out.println("LITERAL VALUE:" + getLiteral());
-        // System.out.println("APPROXIMATE VALUE:" + getData().getValue());
-        // System.out.println("DIFF:" + diff);
-        // System.out.println("ULP LITERAL:" + Math.ulp(parsedDouble));
-        // System.out.println("ULP APPROXIMATE:" + Math.ulp(getData().getValue()));
-
     }
-
-    /**
-     * @return
-     */
 
 }

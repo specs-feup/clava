@@ -257,8 +257,4 @@ public class OmpClauses {
         ompPragma.setClause(OmpClauseFactory.ordered(expression));
     }
 
-    // public List<OmpListClause> getListClause(OmpClauseKind kind) {
-    // return SpecsCollections.cast(ompPragma.getClause(kind), OmpListClause.class);
-    // }
-
 }

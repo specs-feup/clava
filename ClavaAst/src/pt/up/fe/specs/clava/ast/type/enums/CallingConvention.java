@@ -48,8 +48,6 @@ public enum CallingConvention implements StringProvider {
         return HELPER.get();
     }
 
-    // private final String attribute;
-
     public String getAttributeCode() {
         switch (this) {
         case C:
@@ -89,11 +87,6 @@ public enum CallingConvention implements StringProvider {
         default:
             throw new RuntimeException("Not implemented yet");
         }
-        // if (attribute == null) {
-        // return "";
-        // }
-        //
-        // return "__attribute__((" + attribute + "))";
     }
 
     private String toAttribute(String attribute) {

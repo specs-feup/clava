@@ -88,29 +88,10 @@ public class CallInliner {
         // TODO can be cached also?
         Set<String> usedNames = getUsedNames(call);
 
-        // if (stmtsCode.contains("(*vx)[x][5]")) {
-        // System.out.println("ORIGINAL STMTS:\n");
-        // System.out.println(functionStmts.stream().map(Stmt::toTree).collect(Collectors.joining("\n")));
-        // }
-
-        // if (stmtsCode.contains("(*vx)[x][5]")) {
-        // System.out.println("COPY STMTS:\n");
-        // System.out.println(copiedStmts.stream().map(Stmt::toTree).collect(Collectors.joining("\n")));
-        // }
-
         // Build rename map
         InlineRenamer inlineRenamer = new InlineRenamer(call, functionDecl, copiedStmts, usedNames);
-        // if (stmtsCode.contains("(*vx)[x][5]")) {
-        // System.out.println("ORIGINAL STMTS BEFORE:\n");
-        // System.out.println(functionStmts.stream().map(Stmt::getCode).collect(Collectors.joining("\n")));
-        // }
 
         List<Stmt> modifiedStmts = inlineRenamer.apply();
-
-        // if (stmtsCode.contains("(*vx)[x][5]")) {
-        // System.out.println("ORIGINAL STMTS AFTER:\n");
-        // System.out.println(functionStmts.stream().map(Stmt::getCode).collect(Collectors.joining("\n")));
-        // }
 
         // Insert all stmts before call
         Stmt callStmt = call.getAncestor(Stmt.class);

@@ -32,7 +32,6 @@ public class AnyMemberInit extends CXXCtorInitializer {
 
     @Override
     public String getCode(CXXConstructorDecl sourceNode) {
-
         return get(ANY_MEMBER_DECL).get(FieldDecl.DECL_NAME) + "(" + getArgsCode() + ")";
     }
 

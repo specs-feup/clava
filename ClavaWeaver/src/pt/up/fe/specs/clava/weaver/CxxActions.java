@@ -139,11 +139,6 @@ public class CxxActions {
         // Set origin point from target to newNode if locations are invalid and no origin point is set
         newNode.setOrigin(target);
 
-/*
-        newNode.getDescendantsAndSelfStream()
-                .filter(node -> !node.get(ClavaNode.LOCATION).isValid())
-                .forEach(node -> node.set(ClavaNode.INSERTION_POINT, Optional.of(target)));
-*/
         return NodeInsertUtils.replace(target, newNode);
     }
 
@@ -252,13 +247,6 @@ public class CxxActions {
 
         throw new RuntimeException("Inserting in loop header not supported for base statements of type " + baseJp);
     }
-
-    /**
-     * Returns the first valid statement where we can insert another node in the after/before inserts
-     *
-     * @param node
-     * @return
-     */
 
     /**
      *

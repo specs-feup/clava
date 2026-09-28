@@ -262,13 +262,6 @@ public class SourceRange {
         return true;
     }
 
-    /**
-     * Parses a partial location (file, line and col). Stores the results in the start portion of the Location object.
-     * 
-     * @param trim
-     * @return
-     */
-
     public Optional<String> getSource() {
         if (!isValid()) {
             return Optional.empty();

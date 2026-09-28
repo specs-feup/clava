@@ -182,9 +182,6 @@ public class ForIterationsExpression {
             return Optional.empty();
         }
 
-        // System.out.println("STEP DATA: " + stepData);
-        // System.out.println("COND DATA: " + conditionData);
-
         // Verify data
         var forIterations = new ForIterationsExpression(iterVarName, iterVarType, initExpr, stepData,
                 conditionData);

@@ -24,15 +24,6 @@ public class UnevaluatedExceptionSpecification extends ExceptionSpecification {
     /// DATAKEYS BEGIN
 
     /**
-     * The id of the FunctionDecl corresponding to this exception specification.
-     * 
-     * <p>
-     * An id is used instead of a reference to the node because at parsing time, the node might be in halfway built when
-     * it is needed.
-     */
-    // public final static DataKey<String> SOURCE_DECL_ID = KeyFactory.string("sourceDeclId");
-
-    /**
      * The FunctionDecl corresponding to this exception specification.
      * 
      */
@@ -42,11 +33,7 @@ public class UnevaluatedExceptionSpecification extends ExceptionSpecification {
 
     @Override
     public String getCode(FunctionProtoType type) {
-
         return "noexcept";
-        // type.getApp().getNode(id)
-        // System.out.println("UNEVAL SOURCE DECL:" + get(SOURCE_DECL_ID));
-        // return super.getCode();
     }
 
     public Decl getSourceDecl(FunctionProtoType type) {

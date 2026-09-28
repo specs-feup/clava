@@ -51,11 +51,4 @@ public interface Typable {
     Optional<AdjustedType> getAdjustedType();
 
     void setAdjustedType(AdjustedType type);
-
-    // <K> K get(DataKey<K> key);
-    //
-    // <K, E extends K, T extends DataClass<T>> T set(DataKey<K> key, E value);
-    //
-    // <VT> boolean hasValue(DataKey<VT> key);
-
 }

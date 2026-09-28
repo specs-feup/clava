@@ -39,10 +39,6 @@ import pt.up.fe.specs.util.utilities.LineStream;
 
 public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
 
-    /// DATAKEYS BEGIN
-
-    /// DATAKEYS END
-
     private static final String PARSER_ID = "<Id to Class Map>";
 
     private final ClassesService classesService;
@@ -87,9 +83,6 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
         }
 
         ClavaNode node = parseNode(nodeId, classname, data, lineStream);
-
-        // If UnsupportedNode, transform to DummyNode
-        // node = transformUnsupportedNode(node);
 
         // Store node
         parsedNodes.put(nodeId, node);
@@ -146,13 +139,9 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
                 child = processChild(child, clavaNodeClass, data);
 
                 newChildren.add(child);
-
             }
 
-            // clavaNode.setChildren(newChildren);
-            // ClavaNode.SKIP_EXCEPTION = true;
             clavaNode.setChildren(childrenAdapter.adaptChildren(clavaNode, newChildren));
-            // ClavaNode.SKIP_EXCEPTION = false;
         });
 
         return clavaNode;
@@ -211,7 +200,6 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
         }
 
         if (!missingConstructors.contains(classname)) {
-
             missingConstructors.add(classname);
             if (debug) {
                 SpecsLogs
@@ -228,7 +216,5 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
     public void close(ClangAstData data) {
         data.get(ClangAstData.CLAVA_NODES).getQueuedActions().stream()
                 .forEach(Runnable::run);
-
     }
-
 }
