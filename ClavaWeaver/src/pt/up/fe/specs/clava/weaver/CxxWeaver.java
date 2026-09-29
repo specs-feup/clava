@@ -141,11 +141,8 @@ public class CxxWeaver extends ACxxWeaver {
     private ModifiedFilesGear modifiedFilesGear = null;
     private CacheHandlerGear cacheHandlerGear = null;
 
-    // Rebuild folders are owned by this weaver instance: at most two, alternating,
-    // created on demand and deleted when the weaver closes. Instances never share
-    // folders, even when running on the same thread.
+    // Keep the two most recent rebuild folders for this weaver instance.
     private List<File> rebuildWeavingFolders;
-    private int rebuildFolderCounter;
 
     // Parsed program state
     private List<File> currentSources = null;
@@ -190,7 +187,6 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Rebuild folder ownership is per weaver instance
         rebuildWeavingFolders = new ArrayList<>();
-        rebuildFolderCounter = 0;
     }
 
     public ClavaWeaverData getWeaverData() {
@@ -749,14 +745,7 @@ public class CxxWeaver extends ACxxWeaver {
         /// Clean-up phase
 
         // Delete the rebuild folders owned by this weaver instance
-        for (File rebuildFolder : rebuildWeavingFolders) {
-            if (SpecsSystem.isDebug()) {
-                SpecsLogs.info("Debug mode: kept rebuild folder '" + rebuildFolder + "' for inspection");
-                continue;
-            }
-
-            SpecsIo.deleteFolder(rebuildFolder);
-        }
+        rebuildWeavingFolders.forEach(this::deleteRebuildWeavingFolder);
 
         if (this.dataStore != null) {
             // Re-enable output
@@ -1022,7 +1011,7 @@ public class CxxWeaver extends ACxxWeaver {
             if (SpecsSystem.isDebug()) {
                 SpecsLogs.info("Debug mode: kept file rebuild folder '" + currentCodeFolder + "' for inspection");
             } else {
-                SpecsIo.deleteFolder(currentCodeFolder);
+                SpecsIo.deleteTempDirectory(currentCodeFolder);
             }
         }
 
@@ -1055,9 +1044,6 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Write current tree to a temporary folder owned by this weaver instance
         File tempFolder = nextRebuildWeavingFolder();
-
-        // Ensure folder is empty
-        SpecsIo.deleteFolderContents(tempFolder);
 
         List<File> writtenFiles = getApp().write(tempFolder);
         ClavaLog.debug(() -> "Files written during rebuild: " + writtenFiles);
@@ -1160,28 +1146,25 @@ public class CxxWeaver extends ACxxWeaver {
         return rebuiltApp.get(App.IGNORED_FILES).size() == 0;
     }
 
-    /**
-     * Returns one of the rebuild folders owned by this weaver instance, cycling
-     * between two, so that a rebuild never empties the folder a previous rebuild
-     * may still be based on.
-     *
-     * <p>
-     * Folders are created on demand and deleted when the weaver closes.
-     *
-     * @return
-     */
+    /** Creates a new folder and retires the oldest after two rebuilds. */
     private File nextRebuildWeavingFolder() {
+        File tempFolder = SpecsIo.createTempDirectory(TEMP_WEAVING_FOLDER);
+        rebuildWeavingFolders.add(tempFolder);
 
-        while (rebuildWeavingFolders.size() < 2) {
-            File tempFolder = SpecsIo.createTempDirectory(TEMP_WEAVING_FOLDER);
-            SpecsIo.deleteFolderContents(tempFolder, true);
-            rebuildWeavingFolders.add(tempFolder);
+        if (rebuildWeavingFolders.size() > 2) {
+            File oldestFolder = rebuildWeavingFolders.get(0);
+            deleteRebuildWeavingFolder(oldestFolder);
+            rebuildWeavingFolders.remove(0);
         }
-
-        File tempFolder = rebuildWeavingFolders.get(rebuildFolderCounter % 2);
-        rebuildFolderCounter++;
-
         return tempFolder;
+    }
+
+    private void deleteRebuildWeavingFolder(File folder) {
+        if (SpecsSystem.isDebug()) {
+            SpecsLogs.info("Debug mode: kept rebuild folder '" + folder + "' for inspection");
+        } else {
+            SpecsIo.deleteTempDirectory(folder);
+        }
     }
 
     public Object getUserField(ClavaNode node, String fieldName) {
