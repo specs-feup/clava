@@ -720,32 +720,30 @@ public class CxxWeaver extends ACxxWeaver {
     @Override
     protected boolean close() {
 
-        getAppTry().ifPresent(app -> {
-            if (!app.getTranslationUnits().isEmpty()) {
-                if (this.dataStore.get(CxxWeaverOption.CHECK_SYNTAX)) {
-                    SpecsLogs.msgInfo("Checking woven code syntax...");
-                    rebuildAst(false);
+        try {
+            getAppTry().ifPresent(app -> {
+                if (!app.getTranslationUnits().isEmpty()) {
+                    if (this.dataStore.get(CxxWeaverOption.CHECK_SYNTAX)) {
+                        SpecsLogs.msgInfo("Checking woven code syntax...");
+                        rebuildAst(false);
+                    }
+
+                    // Terminate weaver execution with final steps required and writing output files
+
+                    // Write output files if code generation is not disabled
+                    if (!this.dataStore.get(CxxWeaverOption.DISABLE_CODE_GENERATION)) {
+                        writeCode(getWeavingFolder());
+                    }
+
+                    // Write CMake helper files
+                    if (this.dataStore.get(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES)) {
+                        generateCmakerHelperFiles();
+                    }
                 }
-
-                // Terminate weaver execution with final steps required and writing output files
-
-                // Write output files if code generation is not disabled
-                if (!this.dataStore.get(CxxWeaverOption.DISABLE_CODE_GENERATION)) {
-                    writeCode(getWeavingFolder());
-                }
-
-                // Write CMake helper files
-                if (this.dataStore.get(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES)) {
-                    generateCmakerHelperFiles();
-                }
-
-            }
-        });
-
-        /// Clean-up phase
-
-        // Delete the rebuild folders owned by this weaver instance
-        rebuildWeavingFolders.forEach(this::deleteRebuildWeavingFolder);
+            });
+        } finally {
+            rebuildWeavingFolders.forEach(this::deleteRebuildWeavingFolder);
+        }
 
         if (this.dataStore != null) {
             // Re-enable output

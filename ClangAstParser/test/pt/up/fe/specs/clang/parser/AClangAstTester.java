@@ -42,7 +42,7 @@ public abstract class AClangAstTester {
 
     // Each test instance owns an OS-allocated output folder, so concurrent test
     // instances (even across JVMs) never share directories
-    private final File outputFolder;
+    private File outputFolder;
 
     private final Collection<ResourceProvider> resources;
     private List<String> compilerOptions;
@@ -88,9 +88,6 @@ public abstract class AClangAstTester {
     public AClangAstTester(Collection<ResourceProvider> resources, List<String> compilerOptions) {
         this.resources = resources;
         this.compilerOptions = new ArrayList<>(compilerOptions);
-
-        // Create unique output folder for this test instance, allocated by the OS
-        this.outputFolder = SpecsIo.createTempDirectory(OUTPUT_FOLDERNAME_PREFIX);
 
         codeParser = CodeParser.newInstance();
         // Set strict mode
@@ -174,6 +171,10 @@ public abstract class AClangAstTester {
     public void setUp() throws Exception {
         SpecsSystem.programStandardInit();
 
+        if (outputFolder == null) {
+            outputFolder = SpecsIo.createTempDirectory(OUTPUT_FOLDERNAME_PREFIX);
+        }
+
         // Copy resources under test to this test's unique output folder
         for (ResourceProvider resource : resources) {
             File copiedFile = SpecsIo.resourceCopy(resource.getResource(), outputFolder, false, true);
@@ -187,6 +188,10 @@ public abstract class AClangAstTester {
      * Safe to call from @AfterEach even when tests run in parallel.
      */
     public void cleanupInstance() throws Exception {
+        if (outputFolder == null) {
+            return;
+        }
+
         if (CLEAN_CLANG_FILES) {
             SpecsIo.deleteFolder(outputFolder);
         } else {
