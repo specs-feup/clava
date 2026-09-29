@@ -22,6 +22,9 @@ gradle.afterProject { project ->
                 // measured population identical to the shared 116-test base.
                 excludeTestsMatching 'pt.up.fe.specs.clang.dumper.CXXConversionDeclTest'
                 excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangAstDumperTest'
+                // Harness-only fingerprint test; it is verified separately.
+                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangAstDumperArgumentsTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.wire.AstWireBenchmarkIdentityTest'
                 // Scratch-only fidelity gate; it runs separately before timing.
                 excludeTestsMatching 'pt.up.fe.specs.clang.dumper.AstWireFidelitySnapshotTest'
                 excludeTestsMatching 'pt.up.fe.specs.clang.wire.*'

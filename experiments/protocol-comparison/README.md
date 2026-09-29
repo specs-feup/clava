@@ -98,3 +98,65 @@ Java reference total. Smaller fidelity and smoke checks are exempt from those
 full-suite totals. Text and Protobuf event counts must match within each paired
 run; a mismatch marks both rows invalid. The fidelity snapshot's `data_class`
 normalization is documented in [analysis/README.md](analysis/README.md).
+
+## Per-parse warm-ccache A/B
+
+`run_per_parse_ab.py` measures the complete Clava-JS and Java parser suites with
+Text+ccache and Protobuf+ccache on the same scratch Clava checkout, native tool,
+and staged runtime. It crosses both protocols with the normal and explicit-GC-
+disabled Java policies. Each of the six measured repeats is paired by suite,
+policy, test invocation, parse pass, stable resource key, and parser ID. Source
+content and compiler-argument hashes are checked separately, so configuration
+mismatches fail with a clear reason instead of disappearing from the identity
+join. The argument hash normalizes only the exact run-specific Java temp-root
+prefix and retains the relative path and argument order. Java fixture copies
+get their original resource identity from the opt-in test registry. Exact
+duplicate parse keys remain as raw rows with `pair_available=false`; reports
+keep them in runtime-spread distributions and exclude them from row-wise paired
+deltas. Clava-JS-generated `__clava_woven_<UUID>_<owner>` roots and Java JUnit
+`junit<digits>` temporary roots are canonicalized only in the first path
+component after stripping the protocol-specific run root. Owner and all
+relative source path components remain part of identity. Compiler-argument
+hashes are not rewritten beyond the exact Java temp-root normalization, and
+are checked separately from source identity.
+
+First run a fresh fidelity/smoke preflight, then run the full matrix:
+
+```sh
+python3 -B experiments/protocol-comparison/run_dual_ab.py \
+  --preflight-only --output-root experiments/protocol-comparison/results/<preflight-run>
+
+python3 -B experiments/protocol-comparison/run_per_parse_ab.py \
+  --preflight-result experiments/protocol-comparison/results/<preflight-run> \
+  --repeat-count 6 \
+  --output-root experiments/protocol-comparison/results/<per-parse-run>
+```
+
+The primary `parses.csv` has one row per completed `parsePrivate` invocation.
+`parse_elapsed_ms` is measured from entry through `TranslationUnit`
+construction; it excludes caller-side heap-logging `System.gc()`. `runs.csv`
+records each complete suite command's monotonic wall time, which does include
+that caller-side work. It can be grouped by `pair_group_id` for the two-suite
+aggregate. Both CSVs include seed rows marked `phase=seed,measured=false`;
+reports should use only valid measured rows.
+
+Text payloads are uncompressed because the native dumper only supports Zstandard
+compression for Protobuf. Both protocols use ccache, each with an isolated
+`java.io.tmpdir`/`DUMPER_FOLDER`; parse events report the actual adapter cache
+directory. A seed must record misses. Each measured run must have a warm-cache
+hit rate of at least 90% among cacheable ccache calls. Events with
+`cache_enabled=false` are not ccache-eligible and have no cache directory; every
+eligible event must name the run's actual isolated directory, and the ccache
+counter total must equal the eligible-event count. A paired Text/Protobuf run must have equal
+cacheable-call, hit, miss, and uncacheable-call counters while using distinct
+cache paths. These are run-level ccache counters, not per-file hit attribution:
+the legacy event `cache_enabled` flag only means the adapter is enabled. Counter
+values and hit rates are repeated into parse rows with
+`ccache_observation_scope=whole-suite-run` so their scope is explicit.
+
+The runner rejects failed/missing suite tests, parse counts other than 191
+Clava-JS or 247 Java events, format or effective GC-policy mismatches, incomplete
+parse metrics, source/config digest mismatches, cache-state failures, and
+protocol-pair identity mismatches. It preserves per-run logs and writes
+`plan.json`, `parses.csv`, `runs.csv`, `results.json`, and `summary.json` under
+the chosen output directory. It refuses to reuse an existing path.

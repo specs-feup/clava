@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clang.dumper;
 
 import com.github.luben.zstd.ZstdInputStream;
+import com.sun.management.HotSpotDiagnosticMXBean;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
@@ -45,8 +46,12 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -70,6 +75,7 @@ public class ClangAstDumper {
     private final static String TEXT_DUMP_FILENAME = "clangDump.txt";
     private final static String COMPRESSED_TEXT_DUMP_FILENAME = "clangDump.txt.zst";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
+    private static volatile String explicitGcDisabledMetric;
 
     /**
      * TODO: Not implemented yet
@@ -129,6 +135,7 @@ public class ClangAstDumper {
     }
 
     public ClangAstData parse(File sourceFile, String id, Standard standard, DataStore config) {
+        AstWireBenchmarkIdentity.Identity benchmarkIdentity = AstWireBenchmarkIdentity.lookup(sourceFile, id);
 
         // Pre-processing before the parsing
         if (config.get(ClangAstKeys.USES_CILK)) {
@@ -137,7 +144,7 @@ public class ClangAstDumper {
             sourceFile = new CilkParser().prepareCilkFile(sourceFile);
         }
 
-        return parsePrivate(sourceFile, id, standard, config);
+        return parsePrivate(sourceFile, id, standard, config, benchmarkIdentity);
     }
 
     /**
@@ -146,20 +153,27 @@ public class ClangAstDumper {
      * @return null if the syntax is valid, otherwise an error message
      */
     public String validateSyntax(File sourceFile, String id, Standard standard, DataStore config) {
+        AstWireBenchmarkIdentity.Identity benchmarkIdentity = AstWireBenchmarkIdentity.lookup(sourceFile, id);
         if (config.get(ClangAstKeys.USES_CILK)) {
             sourceFile = new CilkParser().prepareCilkFile(sourceFile);
         }
 
         validationOnly = true;
         try {
-            parsePrivate(sourceFile, id, standard, config);
+            parsePrivate(sourceFile, id, standard, config, benchmarkIdentity);
             return lastValidationError;
         } finally {
             validationOnly = false;
         }
     }
 
-    private ClangAstData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
+    private ClangAstData parsePrivate(File sourceFile, String id, Standard standard, DataStore config,
+            AstWireBenchmarkIdentity.Identity benchmarkIdentity) {
+        // Opt-in end-to-end timing for one dumper parse through Clava
+        // TranslationUnit construction. Keep the default production path free
+        // of an additional clock read.
+        long parseStartNanos = Boolean.getBoolean("clava.astWireMetrics") ? System.nanoTime() : 0L;
+
         // Scratch-worktree experiment only: both readers live in the same Java build.
         String abWire = System.getProperty("clava.astAbWire", "protobuf");
         if (!abWire.equals("text") && !abWire.equals("protobuf")) {
@@ -311,6 +325,16 @@ public class ClangAstDumper {
             relativizeGeneratedPathArguments(arguments, generatedParseRoot);
         }
 
+        // Exclude protocol-specific output options added below and replace the
+        // unstable source path and per-invocation id before deriving a stable
+        // fingerprint of the compiler configuration.
+        List<String> parseArgsForDebug = parseStartNanos == 0L ? null
+                : stableParseArguments(arguments, pathForCompiler(sourceFile, generatedParseRoot), false);
+        List<String> normalizedParseArgs = parseStartNanos == 0L ? null
+                : stableParseArguments(arguments, pathForCompiler(sourceFile, generatedParseRoot), true);
+        String parseArgsOriginalSha256 = parseArgsForDebug == null ? null : parseArgumentsSha256(parseArgsForDebug);
+        String parseArgsSha256 = normalizedParseArgs == null ? null : parseArgumentsSha256(normalizedParseArgs);
+
         if (validationOnly) {
             lastValidationError = validateSyntax(arguments, sourceFile, id);
             return null;
@@ -319,7 +343,9 @@ public class ClangAstDumper {
         ClangAstData parsedData = null;
         ProcessOutput<String, String> output = null;
         File dumpFile = null;
+        String ccacheCacheDir = null;
         boolean useAstDumpCache = false;
+        boolean compressedDump = false;
         long transportNanos = 0L;
         long readNanos = 0L;
         ProtoAstReader.Result wireResult = null;
@@ -336,16 +362,19 @@ public class ClangAstDumper {
                     && !isOpenCL
                     && !SourceType.isHeader(sourceFile)
                     && ClangCcacheAdapter.isAvailable();
+            // The native dumper supports zstd compression only for Protobuf.
+            // Text remains ccache-backed, but its payload is stored and read raw.
+            compressedDump = useAstDumpCache && !textWire;
             dumpFile = new File(lastWorkingFolder,
                     textWire
-                            ? (useAstDumpCache ? COMPRESSED_TEXT_DUMP_FILENAME : TEXT_DUMP_FILENAME)
-                            : (useAstDumpCache ? COMPRESSED_CLANG_DUMP_FILENAME : CLANG_DUMP_FILENAME));
+                            ? (compressedDump ? COMPRESSED_TEXT_DUMP_FILENAME : TEXT_DUMP_FILENAME)
+                            : (compressedDump ? COMPRESSED_CLANG_DUMP_FILENAME : CLANG_DUMP_FILENAME));
             File dependencyFile = new File(lastWorkingFolder, "clangDump.d");
             int separatorIndex = arguments.indexOf("--");
             if (separatorIndex >= 0) {
                 arguments.add(separatorIndex, "-o");
                 arguments.add(separatorIndex + 1, dumpFile.getAbsolutePath());
-                if (useAstDumpCache) {
+                if (compressedDump) {
                     arguments.add(separatorIndex + 2, "-ast-dump-compression=zstd");
                 }
             } else {
@@ -361,6 +390,7 @@ public class ClangAstDumper {
             ClangCcacheAdapter.Invocation ccache = null;
             if (useAstDumpCache) {
                 ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), generatedParseRoot);
+                ccacheCacheDir = ccache.cacheFolder().toPath().toAbsolutePath().normalize().toString();
                 command = ClangCcacheAdapter.command(arguments, dependencyFile);
             }
 
@@ -404,7 +434,7 @@ public class ClangAstDumper {
             String linesNotParsed = "";
             long readStart = Boolean.getBoolean("clava.astWireMetrics") ? System.nanoTime() : 0L;
             try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
-                    InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {
+                    InputStream dumpInput = compressedDump ? new ZstdInputStream(fileInput) : fileInput) {
                 if (textWire) {
                     try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2
                             .newInstance(config.get(ClavaNode.CONTEXT))) {
@@ -457,15 +487,19 @@ public class ClangAstDumper {
         long astConstructionNanos = System.nanoTime() - astConstructionStart;
         parsedData.set(ClangAstData.AST_CONSTRUCTION_NANOS, astConstructionNanos);
         boolean cacheRestored = useAstDumpCache && !isCcacheDisabled();
-        if (textWire) {
-            reportTextMetrics(dumpFile, useAstDumpCache, cacheRestored, transportNanos, readNanos,
-                    astConstructionNanos);
-        } else {
-            reportProtobufMetrics(dumpFile, useAstDumpCache, cacheRestored, transportNanos, readNanos,
-                    wireResult.metrics(), astConstructionNanos);
-        }
-
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
+        long parseElapsedNanos = parseStartNanos == 0L ? 0L : System.nanoTime() - parseStartNanos;
+        if (textWire) {
+            reportTextMetrics(dumpFile, compressedDump, cacheRestored, transportNanos, readNanos,
+                    astConstructionNanos, sourceFile, id, parseArgsSha256, parseArgsOriginalSha256,
+                    parseArgsForDebug, parseElapsedNanos,
+                    ccacheCacheDir, benchmarkIdentity);
+        } else {
+            reportProtobufMetrics(dumpFile, compressedDump, cacheRestored, transportNanos, readNanos,
+                    wireResult.metrics(), astConstructionNanos, sourceFile, id, parseArgsSha256,
+                    parseArgsOriginalSha256, parseArgsForDebug, parseElapsedNanos,
+                    ccacheCacheDir, benchmarkIdentity);
+        }
 
         return parsedData;
     }
@@ -476,7 +510,10 @@ public class ClangAstDumper {
      * formatting, heap probing, or clock reads beyond the existing timings.
      */
     private void reportProtobufMetrics(File dumpFile, boolean compressed, boolean cacheRestored, long transportNanos,
-            long readNanos, ProtoAstReader.Metrics wireMetrics, long astConstructionNanos) {
+            long readNanos, ProtoAstReader.Metrics wireMetrics, long astConstructionNanos, File sourceFile, String id,
+            String parseArgsSha256, String parseArgsOriginalSha256, List<String> parseArgsForDebug,
+            long parseElapsedNanos, String ccacheCacheDir,
+            AstWireBenchmarkIdentity.Identity benchmarkIdentity) {
         if (!Boolean.getBoolean("clava.astWireMetrics")) {
             return;
         }
@@ -486,46 +523,225 @@ public class ClangAstDumper {
         double cacheMillis = cacheRestored ? transportMillis : 0.0;
 
         String json = String.format(Locale.ROOT,
-                "{\"format\":\"protobuf\",\"native_ms\":%.3f,"
+                "{\"format\":\"protobuf\",\"source_path\":%s,\"parse_id\":%s,"
+                        + "\"source_content_sha256\":%s,\"parse_args_sha256\":%s,"
+                        + "\"parse_args_original_sha256\":%s,\"ccache_cache_dir\":%s,"
+                        + "\"test_id\":%s,\"tester_invocation\":%s,\"parse_pass\":%s,\"resource_key\":%s,"
+                        + "\"parse_elapsed_ms\":%.3f,\"native_ms\":%.3f,\"ccache_invoke_ms\":%.3f,"
                         + "\"cache_restore_ms\":%.3f,\"read_ms\":%.3f,\"decode_ms\":%.3f,"
                         + "\"record_ms\":%.3f,\"reference_ms\":%.3f,"
                         + "\"ast_ms\":%.3f,\"frames\":%d,\"records\":%d,"
                         + "\"nodes\":%d,\"files\":%d,\"encoded_bytes\":%d,"
-                        + "\"dump_bytes\":%d,\"compressed\":%s,\"cached\":%s,"
-                        + "\"ccache_disabled\":%s}",
-                nativeMillis, cacheMillis, nanosToMillis(readNanos),
+                        + "\"dump_bytes\":%d,\"compressed\":%s,\"cache_enabled\":%s,\"cached\":%s,"
+                        + "\"ccache_disabled\":%s,\"explicit_gc_disabled\":%s}",
+                jsonString(sourceFile.getAbsoluteFile().toPath().normalize().toString()), jsonString(String.valueOf(id)),
+                nullableJsonString(sourceContentSha256(sourceFile)), jsonString(parseArgsSha256),
+                jsonString(parseArgsOriginalSha256), nullableJsonString(ccacheCacheDir),
+                identityString(benchmarkIdentity == null ? null : benchmarkIdentity.testId()),
+                identityInteger(benchmarkIdentity),
+                identityString(benchmarkIdentity == null ? null : benchmarkIdentity.parsePass()),
+                identityString(benchmarkIdentity == null ? null : benchmarkIdentity.resourceKey()),
+                nanosToMillis(parseElapsedNanos), nativeMillis, cacheRestored ? transportMillis : 0.0, cacheMillis,
+                nanosToMillis(readNanos),
                 nanosToMillis(wireMetrics.protobufDecodeNanos()),
                 nanosToMillis(wireMetrics.recordConstructionNanos()),
                 nanosToMillis(wireMetrics.referenceResolutionNanos()),
                 nanosToMillis(astConstructionNanos), wireMetrics.frames(), wireMetrics.records(),
                 wireMetrics.nodes(), wireMetrics.files(), wireMetrics.encodedBytes(), dumpFile.length(),
-                compressed, cacheRestored, isCcacheDisabled());
+                compressed, cacheRestored, cacheRestored, isCcacheDisabled(), explicitGcDisabledJson());
 
         // The normal Clava-JS test runner deliberately disables informational
         // logging. Keep this opt-in measurement independent from that policy,
         // while leaving the default production path silent.
+        if (Boolean.getBoolean("clava.astWireMetrics.debugArgs")) {
+            json = json.substring(0, json.length() - 1) + ",\"parse_args_debug\":"
+                    + jsonStringArray(parseArgsForDebug) + "}";
+        }
         System.err.println("PROTOBUF_METRIC " + json);
     }
 
     private void reportTextMetrics(File dumpFile, boolean compressed, boolean cacheRestored, long transportNanos,
-            long readNanos, long astConstructionNanos) {
+            long readNanos, long astConstructionNanos, File sourceFile, String id, String parseArgsSha256,
+            String parseArgsOriginalSha256, List<String> parseArgsForDebug, long parseElapsedNanos,
+            String ccacheCacheDir,
+            AstWireBenchmarkIdentity.Identity benchmarkIdentity) {
         if (!Boolean.getBoolean("clava.astWireMetrics")) {
             return;
         }
 
         double transportMillis = nanosToMillis(transportNanos);
         String json = String.format(Locale.ROOT,
-                "{\"format\":\"text\",\"native_ms\":%.3f,\"cache_restore_ms\":%.3f,"
+                "{\"format\":\"text\",\"source_path\":%s,\"parse_id\":%s,"
+                        + "\"source_content_sha256\":%s,\"parse_args_sha256\":%s,"
+                        + "\"parse_args_original_sha256\":%s,\"ccache_cache_dir\":%s,"
+                        + "\"test_id\":%s,\"tester_invocation\":%s,\"parse_pass\":%s,\"resource_key\":%s,"
+                        + "\"parse_elapsed_ms\":%.3f,\"native_ms\":%.3f,\"ccache_invoke_ms\":%.3f,"
+                        + "\"cache_restore_ms\":%.3f,"
                         + "\"read_ms\":%.3f,\"ast_ms\":%.3f,\"dump_bytes\":%d,"
-                        + "\"compressed\":%s,\"cached\":%s,\"ccache_disabled\":%s}",
+                        + "\"compressed\":%s,\"cache_enabled\":%s,\"cached\":%s,\"ccache_disabled\":%s,"
+                        + "\"explicit_gc_disabled\":%s}",
+                jsonString(sourceFile.getAbsoluteFile().toPath().normalize().toString()), jsonString(String.valueOf(id)),
+                nullableJsonString(sourceContentSha256(sourceFile)), jsonString(parseArgsSha256),
+                jsonString(parseArgsOriginalSha256), nullableJsonString(ccacheCacheDir),
+                identityString(benchmarkIdentity == null ? null : benchmarkIdentity.testId()),
+                identityInteger(benchmarkIdentity),
+                identityString(benchmarkIdentity == null ? null : benchmarkIdentity.parsePass()),
+                identityString(benchmarkIdentity == null ? null : benchmarkIdentity.resourceKey()),
+                nanosToMillis(parseElapsedNanos),
                 cacheRestored ? 0.0 : transportMillis, cacheRestored ? transportMillis : 0.0,
+                cacheRestored ? transportMillis : 0.0,
                 nanosToMillis(readNanos), nanosToMillis(astConstructionNanos), dumpFile.length(), compressed,
-                cacheRestored, isCcacheDisabled());
+                cacheRestored, cacheRestored, isCcacheDisabled(), explicitGcDisabledJson());
+        if (Boolean.getBoolean("clava.astWireMetrics.debugArgs")) {
+            json = json.substring(0, json.length() - 1) + ",\"parse_args_debug\":"
+                    + jsonStringArray(parseArgsForDebug) + "}";
+        }
         System.err.println("CLAVA_AST_METRIC " + json);
     }
 
     private static double nanosToMillis(long nanos) {
         return nanos / 1_000_000.0;
+    }
+
+    private static String jsonString(String value) {
+        StringBuilder result = new StringBuilder(value.length() + 2).append('"');
+        for (int i = 0; i < value.length(); i++) {
+            char character = value.charAt(i);
+            switch (character) {
+                case '"' -> result.append("\\\"");
+                case '\\' -> result.append("\\\\");
+                case '\b' -> result.append("\\b");
+                case '\f' -> result.append("\\f");
+                case '\n' -> result.append("\\n");
+                case '\r' -> result.append("\\r");
+                case '\t' -> result.append("\\t");
+                default -> {
+                    if (character < 0x20) {
+                        result.append(String.format(Locale.ROOT, "\\u%04x", (int) character));
+                    } else {
+                        result.append(character);
+                    }
+                }
+            }
+        }
+        return result.append('"').toString();
+    }
+
+    private static String jsonStringArray(List<String> values) {
+        StringBuilder result = new StringBuilder("[");
+        for (int i = 0; i < values.size(); i++) {
+            if (i > 0) {
+                result.append(',');
+            }
+            result.append(jsonString(values.get(i)));
+        }
+        return result.append(']').toString();
+    }
+
+    private static String nullableJsonString(String value) {
+        return value == null ? "null" : jsonString(value);
+    }
+
+    private static String identityString(String value) {
+        return nullableJsonString(value);
+    }
+
+    private static String identityInteger(AstWireBenchmarkIdentity.Identity identity) {
+        return identity == null ? "null" : Integer.toString(identity.testerInvocation());
+    }
+
+    private static String explicitGcDisabledJson() {
+        String value = explicitGcDisabledMetric;
+        if (value == null) {
+            synchronized (ClangAstDumper.class) {
+                value = explicitGcDisabledMetric;
+                if (value == null) {
+                    try {
+                        HotSpotDiagnosticMXBean bean = ManagementFactory.getPlatformMXBean(
+                                HotSpotDiagnosticMXBean.class);
+                        value = bean == null ? "unknown"
+                                : Boolean.toString(Boolean.parseBoolean(
+                                        bean.getVMOption("DisableExplicitGC").getValue()));
+                    } catch (RuntimeException exception) {
+                        value = "unknown";
+                    }
+                    explicitGcDisabledMetric = value;
+                }
+            }
+        }
+        return value.equals("unknown") ? "null" : value;
+    }
+
+    private static String sourceContentSha256(File sourceFile) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            try (InputStream source = Files.newInputStream(sourceFile.toPath())) {
+                byte[] buffer = new byte[8192];
+                int count;
+                while ((count = source.read(buffer)) >= 0) {
+                    digest.update(buffer, 0, count);
+                }
+            }
+            return HexFormat.of().formatHex(digest.digest());
+        } catch (IOException | NoSuchAlgorithmException e) {
+            // The run validator treats a missing digest as an invalid identity;
+            // do not turn opt-in measurement telemetry into a parser failure.
+            return null;
+        }
+    }
+
+    static List<String> stableParseArguments(List<String> arguments, String sourceArgument,
+            boolean normalizeJavaTempRoot) {
+        List<String> stableArguments = new ArrayList<>(arguments.size());
+        String javaTempRoot = normalizeJavaTempRoot
+                ? Path.of(System.getProperty("java.io.tmpdir")).toAbsolutePath().normalize().toString()
+                : null;
+        for (String argument : arguments) {
+            if (argument.equals(sourceArgument)) {
+                stableArguments.add("<source>");
+            } else if (argument.startsWith("-id=")) {
+                stableArguments.add("-id=<id>");
+            } else if (javaTempRoot != null && argument.contains(javaTempRoot)) {
+                // Only remove the exact experiment-specific temp root. Keep every
+                // relative suffix and all argument ordering in the fingerprint.
+                stableArguments.add(replaceTempRootPrefix(argument, javaTempRoot));
+            } else {
+                stableArguments.add(argument);
+            }
+        }
+        return stableArguments;
+    }
+
+    private static String replaceTempRootPrefix(String argument, String javaTempRoot) {
+        int index = argument.indexOf(javaTempRoot);
+        while (index >= 0) {
+            int suffixIndex = index + javaTempRoot.length();
+            boolean componentPrefix = suffixIndex == argument.length()
+                    || argument.charAt(suffixIndex) == File.separatorChar;
+            String optionPrefix = argument.substring(0, index);
+            boolean pathArgumentStart = optionPrefix.isEmpty() || optionPrefix.endsWith("=")
+                    || optionPrefix.endsWith(":")
+                    || List.of("-I", "-F", "-isystem", "-iquote", "-include", "-iframework",
+                            "-resource-dir", "--sysroot").stream().anyMatch(optionPrefix::endsWith);
+            if (componentPrefix && pathArgumentStart) {
+                return argument.substring(0, index) + "<java.io.tmpdir>" + argument.substring(suffixIndex);
+            }
+            index = argument.indexOf(javaTempRoot, index + 1);
+        }
+        return argument;
+    }
+
+    static String parseArgumentsSha256(List<String> arguments) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            for (String argument : arguments) {
+                digest.update(argument.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                digest.update((byte) 0);
+            }
+            return HexFormat.of().formatHex(digest.digest());
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("SHA-256 is not available", e);
+        }
     }
 
     private static boolean isCcacheDisabled() {

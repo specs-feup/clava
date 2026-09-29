@@ -14,13 +14,21 @@
 package pt.up.fe.specs.clang.parser;
 
 import java.io.File;
+import java.lang.annotation.Annotation;
+import java.lang.invoke.MethodType;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,6 +36,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
+import pt.up.fe.specs.clang.dumper.AstWireBenchmarkIdentity;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsIo;
@@ -39,7 +48,18 @@ import pt.up.fe.specs.util.providers.ResourceProvider;
 public abstract class AClangAstTester {
 
     private static final boolean CLEAN_CLANG_FILES = !SpecsSystem.isDebug();
+    private static final Set<String> JUNIT_TEST_ANNOTATIONS = Set.of(
+            "org.junit.jupiter.api.Test",
+            "org.junit.jupiter.api.RepeatedTest",
+            "org.junit.jupiter.api.TestFactory",
+            "org.junit.jupiter.api.TestTemplate",
+            "org.junit.jupiter.params.ParameterizedTest");
+    private static final Map<String, AtomicInteger> TESTER_INVOCATIONS = new ConcurrentHashMap<>();
+
     private File outputFolder;
+    private final Map<File, String> copiedResourceKeys = new LinkedHashMap<>();
+    private String benchmarkTestId;
+    private int benchmarkTesterInvocation;
 
     private final Collection<ResourceProvider> resources;
     private List<String> compilerOptions;
@@ -147,6 +167,16 @@ public abstract class AClangAstTester {
             return;
         }
 
+        if (AstWireBenchmarkIdentity.isEnabled()) {
+            benchmarkTestId = currentJUnitTestId();
+            benchmarkTesterInvocation = TESTER_INVOCATIONS
+                    .computeIfAbsent(benchmarkTestId, ignored -> new AtomicInteger())
+                    .incrementAndGet();
+        } else {
+            benchmarkTestId = null;
+            benchmarkTesterInvocation = 0;
+        }
+
         try {
             setUp();
             testProper();
@@ -159,6 +189,8 @@ public abstract class AClangAstTester {
                 // Log but don't fail the test if cleanup fails
                 SpecsLogs.info("Failed to cleanup test folder: " + e.getMessage());
             }
+            benchmarkTestId = null;
+            benchmarkTesterInvocation = 0;
         }
 
     }
@@ -167,9 +199,11 @@ public abstract class AClangAstTester {
         SpecsSystem.programStandardInit();
 
         outputFolder = Files.createTempDirectory("temp-clang-ast-").toFile();
+        copiedResourceKeys.clear();
         for (ResourceProvider resource : resources) {
             File copiedFile = SpecsIo.resourceCopy(resource.getResource(), outputFolder, false, true);
             assertTrue(copiedFile.isFile(), "Could not copy resource '" + resource + "'");
+            copiedResourceKeys.put(copiedFile, resource.getResource());
         }
 
     }
@@ -189,7 +223,10 @@ public abstract class AClangAstTester {
 
         // Parse files
         codeParser.set(CodeParser.GENERATED_PARSE_ROOT, workFolder);
-        App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
+        App clavaAst;
+        try (AstWireBenchmarkIdentity.Registration ignored = registerBenchmarkIdentity(workFolder, "original")) {
+            clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
+        }
 
         File firstOutputFolder = SpecsIo.mkdir(new File(outputFolder, "outputFirst"));
         clavaAst.write(firstOutputFolder);
@@ -205,7 +242,10 @@ public abstract class AClangAstTester {
 
         // Parse output again, check if files are the same
         testCodeParser.set(CodeParser.GENERATED_PARSE_ROOT, firstOutputFolder);
-        App testClavaAst = testCodeParser.parse(Arrays.asList(firstOutputFolder), compilerOptions);
+        App testClavaAst;
+        try (AstWireBenchmarkIdentity.Registration ignored = registerBenchmarkIdentity(firstOutputFolder, "roundtrip")) {
+            testClavaAst = testCodeParser.parse(Arrays.asList(firstOutputFolder), compilerOptions);
+        }
 
         File secondOutputFolder = SpecsIo.mkdir(new File(outputFolder, "outputSecond"));
         testClavaAst.write(secondOutputFolder);
@@ -251,6 +291,64 @@ public abstract class AClangAstTester {
         if (idempotenceTest) {
             testIdempotence(outputFiles1, outputFiles2);
         }
+    }
+
+    private AstWireBenchmarkIdentity.Registration registerBenchmarkIdentity(File parseRoot, String parsePass) {
+        if (!AstWireBenchmarkIdentity.isEnabled() || benchmarkTestId == null) {
+            return AstWireBenchmarkIdentity.Registration.NO_OP;
+        }
+
+        Map<File, String> identities = new HashMap<>();
+        if (parseRoot.equals(outputFolder)) {
+            identities.putAll(copiedResourceKeys);
+        } else {
+            Map<String, List<String>> resourcesByFilename = copiedResourceKeys.entrySet().stream()
+                    .collect(Collectors.groupingBy(entry -> entry.getKey().getName(),
+                            Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
+
+            try (var files = Files.walk(parseRoot.toPath())) {
+                files.filter(Files::isRegularFile).forEach(path -> {
+                    File file = path.toFile();
+                    List<String> resourceKeys = resourcesByFilename.getOrDefault(file.getName(), List.of());
+                    String resourceKey = resourceKeys.size() == 1
+                            ? resourceKeys.get(0)
+                            : "generated/" + parseRoot.toPath().relativize(path).toString()
+                                    .replace(File.separatorChar, '/');
+                    identities.put(file, resourceKey);
+                });
+            } catch (java.io.IOException e) {
+                throw new RuntimeException("Could not enumerate roundtrip sources for benchmark identity", e);
+            }
+        }
+
+        return AstWireBenchmarkIdentity.register(
+                identities, benchmarkTestId, benchmarkTesterInvocation, parsePass);
+    }
+
+    private static String currentJUnitTestId() {
+        return StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).walk(frames -> frames
+                .filter(AClangAstTester::isJUnitTestFrame)
+                .findFirst()
+                .map(frame -> frame.getClassName() + "#" + frame.getMethodName())
+                .orElse("unknown"));
+    }
+
+    private static boolean isJUnitTestFrame(StackWalker.StackFrame frame) {
+        try {
+            MethodType methodType = MethodType.fromMethodDescriptorString(
+                    frame.getDescriptor(), frame.getDeclaringClass().getClassLoader());
+            Method method = frame.getDeclaringClass().getDeclaredMethod(
+                    frame.getMethodName(), methodType.parameterArray());
+            for (Annotation annotation : method.getDeclaredAnnotations()) {
+                if (JUNIT_TEST_ANNOTATIONS.contains(annotation.annotationType().getName())) {
+                    return true;
+                }
+            }
+        } catch (ReflectiveOperationException | RuntimeException ignored) {
+            // The stack can contain synthetic frames or methods unavailable to reflection.
+        }
+
+        return false;
     }
 
     private void testIdempotence(Map<String, File> outputFiles1, Map<String, File> outputFiles2) {
