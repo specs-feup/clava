@@ -44,3 +44,17 @@ Render with the existing historical `--input`, `--ab-results`, and `--java-gc-pr
 `--java-gc-ab-results` adds the interleaved 2-by-2 Java control: Text and Protobuf, each with explicit GC allowed and disabled in the Gradle test worker. The renderer requires six passing pairs per policy, the same 116-test population and 247 AST metric events per run, direct ccache bypass, a passed fidelity gate, and the same parser JAR and native executable as the post-fix A/B. Supply `--java-gc-ab-dependency-revision` when the control deliberately uses the concurrency-corrected SpecsUtils/jOptions commit; the renderer checks that exact revision and labels the cross-revision boundary. It plots all four wall-time distributions on one time scale and shows each matched-run gap in a second chart. The median paired gap need not equal the difference between the two format medians. Warm-ups and prior historical JFR diagnostics are not substituted for the six measured pairs.
 
 Two earlier GC-off attempts stopped on the same 13 Protobuf test failures. Pass one partial `results.json` through `--java-gc-ab-audit-results` alongside the complete result to preserve its run record without using its timing. Do not use `--java-gc-ab-results` unless all 28 invocations pass with the established single-worker workload.
+
+## Per-parse timing report
+
+Render the individual parser-call timings and their paired comparison from the harness CSVs:
+
+```sh
+python3 clava/experiments/protocol-comparison/report/render_per_parse.py \
+  --input-csv clava/experiments/protocol-comparison/results/per-parse/parses.csv \
+  --runs-csv clava/experiments/protocol-comparison/results/per-parse/runs.csv \
+  --plan-json clava/experiments/protocol-comparison/results/per-parse/plan.json \
+  --output clava/experiments/protocol-comparison/results/per-parse/report.html
+```
+
+The report leads with a workload panel and paired full-command gap charts/tables, followed by per-suite and per-parse distributions. The plan supplies test/event counts, timer boundaries, and collapsed revision/JAR/native fingerprints; it is optional. All candle statistics, whiskers, summary counts, and axis ranges use every valid event, including rows with `pair_available=false` and `cache_enabled=false`. For compact HTML, individual dots are deterministic, range-spanning display samples capped at 250 per protocol or suite; pooled and central-scale charts are candle-only to avoid duplicate dots. The full per-event data remains in the CSV. Paired deltas use only rows marked pairable and joined by `parse_pair_key`; unresolved duplicates are counted but never assigned an arbitrary counterpart. The suite summary shows the fraction of matched invocations where Protobuf was faster, tied, or slower. Each suite also lists up to five largest positive and negative per-source median deltas across repeats, labeled with test, resource, pass, and parser fields when available. `cache_enabled` identifies event-level AST-cache eligibility, not a cache hit; hit/miss counters stay at command scope. Parser-call latency, pooled parse distributions, and full suite-command wall time from `runs.csv` remain distinct measures; per-parse timings are never summed to manufacture a suite wall time. The standalone HTML omits machine-local paths and uses DraftLink's `html.dark` theme class for its dark palette.

@@ -440,10 +440,10 @@ def gc_diagnostic_html(profile: dict[str, Any]) -> str:
     off_gap = off_proto["wall_s"] - off_text["wall_s"]
     forced_pause_gap = normal_proto["system_gc_pause_s"] - normal_text["system_gc_pause_s"]
     return f'''<section class="gc-section" aria-labelledby="gc-title">
-      <p class="eyebrow">Why Java slowed down</p><h3 id="gc-title">Forced garbage collection dominates the Java gap</h3>
+      <p class="eyebrow">Pre-fix Java diagnostic</p><h3 id="gc-title">Forced GC dominated one profiled run</h3>
       <p>In the pre-fix source, Java's used-heap logging requested <code>System.gc()</code> twice per parse: once for the flag and once unconditionally. In the profiled pair, both formats recorded {normal_text['system_gc_count']} explicit-GC-caused full collections. Protobuf spent {forced_pause_gap:.2f}s more paused for those collections, close to its {wall_gap:.2f}s longer whole-suite run.</p>
       <div class="gc-grid">{bars('wall_s', 'Whole Java test command', 50, (0, 25, 50))}{bars('gc_pause_s', 'Test-worker GC pauses', 15, (0, 5, 10, 15))}</div>
-      <p class="takeaway">When the test worker ignored explicit GC requests, Protobuf was only {off_gap:.2f}s slower ({off_text['wall_s']:.2f}s vs {off_proto['wall_s']:.2f}s), and GC pauses fell below 0.4s in both modes. This identifies repeated full GC in the Java test path as the main source of its measured gap. It does not show a 4-second Protobuf reader penalty.</p>
+      <p class="takeaway">In this one pre-fix profiled run, ignoring explicit GC requests left Protobuf {off_gap:.2f}s slower ({off_text['wall_s']:.2f}s vs {off_proto['wall_s']:.2f}s), with GC pauses below 0.4s in both modes. That supports a GC explanation for this run's larger gap, not a general claim about every revision or cache state.</p>
       {gc_mechanism_html(profile['gc_mechanism']) if profile.get('gc_mechanism') else ''}
       <p class="small">These are exploratory JFR-profiled runs, not new six-run medians. The original six-pair comparison above remains the measured result. Protobuf reported about {used_heap['protobuf']} MiB of used Java heap after logging versus {used_heap['text']} MiB for Text in the original runs. Turning off explicit GC is a diagnostic control, not a claim that the Java test configuration should silently change.</p>
     </section>'''
@@ -1501,7 +1501,7 @@ def java_gc_factorial_section(manifest: dict[str, Any]) -> str:
     )
     return f'''<section class="ab-section" aria-labelledby="gc-ab-title">
       <p class="eyebrow">Java explicit-GC control</p><h2 id="gc-ab-title">Does the format gap survive with explicit GC off?</h2>
-      <p class="takeaway">The median paired Protobuf penalty was {normal_gap:+.2f}s with explicit GC allowed and {disabled_gap:+.2f}s with it blocked. Blocking explicit GC reduced the observed gap by {difference:.2f}s ({removed_percent:.0f}%), but Protobuf remained slower in all six GC-blocked pairs. The remaining {disabled_gap:.2f}s is not an explicit-GC artifact.</p>
+      <p class="takeaway">In this direct ccache-bypass comparison, the median paired Protobuf penalty was {normal_gap:+.2f}s with explicit GC allowed and {disabled_gap:+.2f}s with it blocked. Blocking explicit GC reduced the observed gap by {difference:.2f}s ({removed_percent:.0f}%), but Protobuf remained slower in all six GC-blocked pairs. The remaining {disabled_gap:.2f}s is not an explicit-GC artifact in the bypass workload. A separate warm-ccache comparison found a different Java result and must not be treated as the same condition.</p>
       <figure class="chart-card"><figcaption><h3>Java parser suite, 116 tests</h3><p>One time scale for all four conditions</p></figcaption>{java_gc_factorial_svg(manifest)}</figure>
       <figure class="chart-card"><figcaption><h3>Protobuf minus Text, matched runs</h3><p>Each dot is one pair; zero means equal time</p></figcaption>{java_gc_paired_gap_svg(manifest)}</figure>
       <p class="small">The paired gap is the median of six per-repeat differences, so it need not equal the difference between the two medians in the candle chart.</p>
