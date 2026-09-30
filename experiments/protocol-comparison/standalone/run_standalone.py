@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Prepare or run standalone Text/Protobuf per-source parses from a frozen corpus.
 
-`--pilot` materializes five representative inputs and writes a Java schedule only.
+`--pilot` writes a five-input Java schedule only. Inputs stay at captured paths.
 `--run` is the full 191/247-event, two-cache-mode, three-repeat experiment. It is
 deliberately explicit so preparing a schedule can never start benchmark work.
 """
@@ -164,35 +164,8 @@ def verify_corpus(corpus_root: Path) -> tuple[dict[str, Any], list[dict[str, Any
     return manifest, events, sha256_bytes(manifest_bytes)
 
 
-def map_path(original: str | Path, replay_root: Path) -> str:
-    path = Path(original)
-    if not path.is_absolute():
-        raise RuntimeError(f"expected absolute captured path, got {original!r}")
-    return str(replay_root / path.relative_to("/"))
-
-
-def remap_token(token: str, replay_root: Path) -> str:
-    """Remap absolute path arguments without re-tokenizing or shell quoting."""
-    if token.startswith("/"):
-        return map_path(token, replay_root)
-    for prefix in ("-I", "-isystem", "-iquote", "-idirafter", "-include", "-imacros", "-isysroot"):
-        if token.startswith(prefix + "/"):
-            return prefix + map_path(token[len(prefix):], replay_root)
-    for separator in ("=", ":"):
-        index = token.find(separator + "/")
-        if index >= 0:
-            return token[:index + 1] + map_path(token[index + 1:], replay_root)
-    return token
-
-
-def remap_options(options: list[str], replay_root: Path) -> list[str]:
-    return [remap_token(option, replay_root) for option in options]
-
-
-def normalized_native_argv(event: dict[str, Any], replay_root: Path) -> list[str]:
-    source = map_path(event["source"]["original_path"], replay_root)
-    source_original = Path(event["source"]["original_path"])
-    original_cwd = Path(event.get("working_directory") or event["original_cwd"])
+def normalized_native_argv(event: dict[str, Any]) -> list[str]:
+    """Normalize output-only argv differences while preserving captured input paths."""
     argv = event["argv"]
     normalized: list[str] = []
     index = 0
@@ -201,31 +174,15 @@ def normalized_native_argv(event: dict[str, Any], replay_root: Path) -> list[str
         if item == "-o" and index + 1 < len(argv):
             index += 2
             continue
-        if item == "-ast-dump-format=text":
+        if item.startswith("-ast-dump-format="):
             index += 1
             continue
         if item.startswith("-id="):
             normalized.append("-id=<id>")
-        elif item == event["source"]["original_path"] or is_source_argument(item, source_original, original_cwd):
-            normalized.append("<source>")
-        elif index == 0:
-            # The executable is pinned by hash and deliberately remains a host path.
-            normalized.append(item)
         else:
-            mapped = remap_token(item, replay_root)
-            normalized.append("<source>" if mapped == source else mapped)
+            normalized.append(item)
         index += 1
     return normalized
-
-
-def is_source_argument(argument: str, source: Path, working_directory: Path) -> bool:
-    try:
-        candidate = Path(argument)
-        if not candidate.is_absolute():
-            candidate = working_directory / candidate
-        return os.path.normpath(str(candidate)) == os.path.normpath(str(source))
-    except (TypeError, ValueError):
-        return False
 
 
 def semantic_options_hash(event: dict[str, Any]) -> str:
@@ -259,45 +216,111 @@ def input_id(event: dict[str, Any]) -> str:
     return f"{suite}-{int(event['ordinal']):04d}"
 
 
-def materialize_event(corpus_root: Path, event: dict[str, Any], root_parent: Path) -> dict[str, Any]:
-    event_root = root_parent / event["suite"] / input_id(event)
-    rootfs = event_root / "rootfs"
+def captured_input_hashes(events: list[dict[str, Any]]) -> dict[str, str]:
+    hashes: dict[str, str] = {}
+    conflicts: dict[str, set[str]] = {}
+    for event in events:
+        for item in [event["source"], *event.get("dependencies", [])]:
+            original = item.get("original_path")
+            digest = item.get("sha256")
+            if not original or not digest:
+                raise RuntimeError(
+                    f"captured input is missing original_path or sha256 in event {event.get('event_id')}"
+                )
+            if not Path(original).is_absolute():
+                raise RuntimeError(f"expected absolute captured input path, got {original!r}")
+            previous = hashes.get(original)
+            if previous is not None and previous != digest:
+                conflicts.setdefault(original, {previous}).add(digest)
+            else:
+                hashes[original] = digest
+
+    if conflicts:
+        examples = "; ".join(
+            f"{path}: {', '.join(sorted(digests))}" for path, digests in list(conflicts.items())[:5]
+        )
+        missing = [path for path in {*hashes, *conflicts} if not Path(path).is_file()]
+        missing_summary = ""
+        if missing:
+            missing_summary = (
+                f"; {len(missing)} captured input path(s) are also missing, including "
+                + ", ".join(missing[:5])
+            )
+        raise RuntimeError(
+            f"captured corpus has conflicting SHA-256 snapshots for {len(conflicts)} live input path(s): "
+            f"{examples}{missing_summary}. Capture a fresh corpus with distinct, retained input paths. "
+            "Content-addressed blobs are audit evidence and are not restored as parser inputs."
+        )
+    return hashes
+
+
+def verify_live_inputs(events: list[dict[str, Any]], expected_hashes: dict[str, str], boundary: str) -> None:
+    errors: list[str] = []
+    for original, expected in expected_hashes.items():
+        path = Path(original)
+        if not path.is_file():
+            errors.append(f"missing source/dependency: {original}")
+            continue
+        actual = sha256_file(path)
+        if actual != expected:
+            errors.append(f"SHA-256 mismatch for {original}: expected {expected}, got {actual}")
+
+    directories: set[str] = set()
+    for event in events:
+        working_directory = event.get("working_directory") or event.get("original_cwd")
+        if working_directory:
+            directories.add(working_directory)
+        else:
+            errors.append(f"event {event.get('event_id')} is missing its captured working directory")
+        generated_root = event.get("generated_parse_root")
+        if not generated_root:
+            generated_root = (event.get("parser_config") or {}).get("generated_parse_root")
+        if generated_root:
+            directories.add(generated_root)
+    for original in sorted(directories):
+        path = Path(original)
+        if not path.is_absolute():
+            errors.append(f"expected absolute captured directory, got {original!r}")
+        elif not path.is_dir():
+            errors.append(f"missing working/generated parse directory: {original}")
+
+    if errors:
+        examples = "; ".join(errors[:8])
+        raise RuntimeError(
+            f"live-input validation failed {boundary}: {len(errors)} missing, changed, or invalid path(s): "
+            f"{examples}. Capture a fresh valid corpus with its source/dependency files and generated roots "
+            "still present. Do not restore missing paths from content-addressed blobs."
+        )
+
+
+def preflight_live_inputs(events: list[dict[str, Any]], boundary: str) -> dict[str, str]:
+    expected_hashes = captured_input_hashes(events)
+    verify_live_inputs(events, expected_hashes, boundary)
+    return expected_hashes
+
+
+def describe_event_inputs(event: dict[str, Any]) -> dict[str, Any]:
     files_by_path: dict[str, dict[str, Any]] = {}
     for item in [event["source"], *event.get("dependencies", [])]:
         previous = files_by_path.get(item["original_path"])
         if previous is not None and previous["sha256"] != item["sha256"]:
             raise RuntimeError(f"one event has conflicting snapshots for {item['original_path']}")
         files_by_path[item["original_path"]] = item
-    for original, item in files_by_path.items():
-        target = Path(map_path(original, rootfs))
-        target.parent.mkdir(parents=True, exist_ok=True)
-        blob = corpus_root / item["blob"]
-        try:
-            os.link(blob, target)
-        except OSError:
-            shutil.copyfile(blob, target)
-    source_path = Path(map_path(event["source"]["original_path"], rootfs))
-    replay_cwd = Path(map_path(event["working_directory"], rootfs))
-    replay_cwd.mkdir(parents=True, exist_ok=True)
     generated_root_value = event.get("generated_parse_root")
-    generated_root = Path(map_path(generated_root_value, rootfs)) if generated_root_value else None
-    if generated_root is not None:
-        generated_root.mkdir(parents=True, exist_ok=True)
-
-    staged = []
+    if not generated_root_value:
+        generated_root_value = (event.get("parser_config") or {}).get("generated_parse_root")
+    files = []
     for original, item in sorted(files_by_path.items()):
-        replay_path = Path(map_path(original, rootfs))
-        if sha256_file(replay_path) != item["sha256"]:
-            raise RuntimeError(f"materialized file hash mismatch for {replay_path}")
-        staged.append({
+        files.append({
             "event_id": event["event_id"], "input_id": input_id(event),
-            "original_path": original, "replay_path": str(replay_path),
+            "original_path": original,
             "sha256": item["sha256"], "size_bytes": item["size_bytes"],
         })
     return {
-        "event_root": event_root, "rootfs": rootfs, "source_path": source_path,
-        "replay_cwd": replay_cwd, "generated_parse_root": generated_root,
-        "files": staged,
+        "source_path": Path(event["source"]["original_path"]),
+        "replay_cwd": Path(event.get("working_directory") or event["original_cwd"]),
+        "generated_parse_root": Path(generated_root_value) if generated_root_value else None,
+        "files": files,
     }
 
 
@@ -357,42 +380,39 @@ def source_fingerprint() -> dict[str, Any]:
     }
 
 
-def build_parser_config(event: dict[str, Any], condition: dict[str, Any], rootfs: Path,
-                        dumper_folder: Path) -> dict[str, Any]:
+def build_parser_config(event: dict[str, Any], condition: dict[str, Any], dumper_folder: Path) -> dict[str, Any]:
     config = dict(event.get("parser_config") or {})
-    if config.get("generated_parse_root"):
-        config["generated_parse_root"] = map_path(config["generated_parse_root"], rootfs)
     config["dumper_folder"] = str(dumper_folder)
     config["show_exec_info"] = False
     config["ast_dump_cache"] = condition["cache_mode"] == "warmcache"
     return config
 
 
-def parse_operation(event: dict[str, Any], staged: dict[str, Any], output_root: Path,
+def parse_operation(event: dict[str, Any], live: dict[str, Any], output_root: Path,
                     protocol: str, cache_mode: str, phase: str, repeat: int,
                     ) -> dict[str, Any]:
     condition = {"protocol": protocol, "cache_mode": cache_mode}
     state = output_root / "parser-state" / event["suite"] / protocol / cache_mode
     dumper_folder = state / "dumper"
     dumper_folder.mkdir(parents=True, exist_ok=True)
-    options = remap_options(event["compiler_options"], staged["rootfs"])
+    options = list(event["compiler_options"])
     operation: dict[str, Any] = {
         "phase": phase, "suite": event["suite"], "input_id": input_id(event),
         "source_label": event_label(event), "event_id": event["event_id"],
         "source_sha256": event["source"]["sha256"], "args_sha256": event["args_sha256"],
         "options_sha256": semantic_options_hash(event),
         "protocol": protocol, "cache_mode": JAVA_CACHE_MODE[cache_mode],
-        "source_path": str(staged["source_path"]), "replay_cwd": str(staged["replay_cwd"]),
-        "generated_parse_root": str(staged["generated_parse_root"])
-            if staged["generated_parse_root"] else None,
+        "source_path": str(live["source_path"]), "replay_cwd": str(live["replay_cwd"]),
+        "generated_parse_root": str(live["generated_parse_root"])
+            if live["generated_parse_root"] else None,
         "dumper_folder": str(dumper_folder), "compiler_options": options,
-        "parser_config": build_parser_config(event, condition, staged["rootfs"], dumper_folder),
+        "parser_config": build_parser_config(event, condition, dumper_folder),
         "effective_libc_mode": event["effective_libc_mode"],
         "parse_id": event["parse_id"], "standard": event["standard"],
         "repeat": repeat,
     }
     if phase == "diagnostic":
-        operation["expected_native_argv"] = normalized_native_argv(event, staged["rootfs"])
+        operation["expected_native_argv"] = normalized_native_argv(event)
     if phase == "fidelity":
         operation["snapshot_path"] = str(
             output_root / "fidelity-snapshots" / event["suite"] / input_id(event) / f"{protocol}.json"
@@ -412,19 +432,19 @@ def ccache_operation(operation: str, event: dict[str, Any], output_root: Path,
     }
 
 
-def pilot_schedule(events: list[dict[str, Any]], staged: dict[str, dict[str, Any]],
+def pilot_schedule(events: list[dict[str, Any]], live: dict[str, dict[str, Any]],
                    output_root: Path) -> list[dict[str, Any]]:
     selected = select_pilot_events(events)
     rows: list[dict[str, Any]] = []
     for cache_mode in CACHE_MODES:
         for protocol in PROTOCOLS:
             for event in selected:
-                rows.append(parse_operation(event, staged[event["event_id"]], output_root,
+                rows.append(parse_operation(event, live[event["event_id"]], output_root,
                                             protocol, cache_mode, "warmup", 0))
     for cache_mode in CACHE_MODES:
         for protocol in PROTOCOLS:
             for event in selected:
-                rows.append(parse_operation(event, staged[event["event_id"]], output_root,
+                rows.append(parse_operation(event, live[event["event_id"]], output_root,
                                             protocol, cache_mode, "diagnostic", 1))
             for suite in NATIVE_EVENTS:
                 suite_selected = [event for event in selected if event["suite"] == suite]
@@ -432,14 +452,14 @@ def pilot_schedule(events: list[dict[str, Any]], staged: dict[str, dict[str, Any
                     rows.append(ccache_operation("ccache_zero", suite_selected[0], output_root, protocol, 1))
                 for event in suite_selected:
                     rows.append(parse_operation(
-                        event, staged[event["event_id"]], output_root, protocol, cache_mode, "measure", 1,
+                        event, live[event["event_id"]], output_root, protocol, cache_mode, "measure", 1,
                     ))
                 if cache_mode == "warmcache":
                     rows.append(ccache_operation("ccache_stats", suite_selected[0], output_root, protocol, 1))
     for protocol in PROTOCOLS:
         for event in selected:
             if event["suite"] == "java" or event["suite"] == "clava-js":
-                rows.append(parse_operation(event, staged[event["event_id"]], output_root,
+                rows.append(parse_operation(event, live[event["event_id"]], output_root,
                                             protocol, "directbypass", "fidelity", 1))
     return rows
 
@@ -513,8 +533,10 @@ def row_identity_matches(operation: dict[str, Any], result: dict[str, Any]) -> b
 
 
 def run_schedule(output_root: Path, schedule_rows: list[dict[str, Any]], manifest: dict[str, Any],
-                 corpus_events: list[dict[str, Any]], classes: Path, runtime_root: Path,
+                 corpus_events: list[dict[str, Any]], input_hashes: dict[str, str],
+                 classes: Path, runtime_root: Path,
                  runner_class: str, native_tool: Path, name: str) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    verify_live_inputs(corpus_events, input_hashes, f"before {name}")
     schedule_path = output_root / "schedules" / f"{name}.jsonl"
     result_path = output_root / "runner-output" / f"{name}.jsonl"
     log_path = output_root / "logs" / f"{name}.log"
@@ -525,9 +547,12 @@ def run_schedule(output_root: Path, schedule_rows: list[dict[str, Any]], manifes
                           require_ccache=any(row.get("cache_mode") == "warm" for row in schedule_rows))
     Path(env["TMPDIR"]).mkdir(parents=True, exist_ok=True)
     command = java_command(classes, runtime_root, runner_class, schedule_path, result_path)
-    with log_path.open("w", encoding="utf-8") as log:
-        completed = subprocess.run(command, cwd=CLAVA_ROOT, env=env,
-                                   stdout=log, stderr=subprocess.STDOUT, check=False)
+    try:
+        with log_path.open("w", encoding="utf-8") as log:
+            completed = subprocess.run(command, cwd=CLAVA_ROOT, env=env,
+                                       stdout=log, stderr=subprocess.STDOUT, check=False)
+    finally:
+        verify_live_inputs(corpus_events, input_hashes, f"after {name}")
     results = read_jsonl(result_path) if result_path.is_file() else []
     if len(results) != len(schedule_rows):
         raise RuntimeError(f"{name}: runner returned {len(results)} rows for {len(schedule_rows)} operations")
@@ -545,19 +570,19 @@ def run_schedule(output_root: Path, schedule_rows: list[dict[str, Any]], manifes
     return results, summary
 
 
-def build_full_batch(events: list[dict[str, Any]], staged: dict[str, dict[str, Any]], output_root: Path,
+def build_full_batch(events: list[dict[str, Any]], live: dict[str, dict[str, Any]], output_root: Path,
                      protocol: str, cache_mode: str, phase: str, repeat: int) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     if phase in ("diagnostic", "measure"):
         warmup_ids = {event["event_id"] for event in warmup_events_for_suite(events)}
         for event in events:
             if event["event_id"] in warmup_ids:
-                rows.append(parse_operation(event, staged[event["event_id"]], output_root,
+                rows.append(parse_operation(event, live[event["event_id"]], output_root,
                                             protocol, cache_mode, "warmup", repeat))
     if phase == "measure" and cache_mode == "warmcache":
         rows.append(ccache_operation("ccache_zero", events[0], output_root, protocol, repeat))
     for event in events:
-        rows.append(parse_operation(event, staged[event["event_id"]], output_root,
+        rows.append(parse_operation(event, live[event["event_id"]], output_root,
                                     protocol, cache_mode, phase, repeat))
     if phase == "measure" and cache_mode == "warmcache":
         rows.append(ccache_operation("ccache_stats", events[0], output_root, protocol, repeat))
@@ -801,19 +826,20 @@ def validate_ccache_pair(stats: dict[tuple[str, str, int], dict[str, int]],
 
 def run_full(output_root: Path, corpus_root: Path, manifest: dict[str, Any],
              events: list[dict[str, Any]], manifest_sha: str,
-             pilot_root: Path) -> int:
+             pilot_root: Path, input_hashes: dict[str, str]) -> int:
+    verify_live_inputs(events, input_hashes, "before benchmark setup")
     source_start = source_fingerprint()
     pilot_validation = verify_pilot_validation(pilot_root, manifest_sha)
     runtime_root = Path(manifest["runtime"]["root"])
     native_tool = Path(manifest["runtime"]["native_tool"])
     overlay, runner_class = compile_overlay(output_root, runtime_root)
     write_json(output_root / "source-fingerprint.json", source_start)
-    staging_root = output_root / "inputs"
-    staged = {event["event_id"]: materialize_event(corpus_root, event, staging_root) for event in events}
-    staged_rows = [file_row for event in events for file_row in staged[event["event_id"]]["files"]]
-    write_jsonl(output_root / "staged-inputs.jsonl", staged_rows)
+    live = {event["event_id"]: describe_event_inputs(event) for event in events}
+    live_rows = [file_row for event in events for file_row in live[event["event_id"]]["files"]]
+    write_jsonl(output_root / "live-inputs.jsonl", live_rows)
     write_json(output_root / "plan.json", {
         "experiment": "standalone per-source Text and Protobuf A/B",
+        "input_mode": "original-paths", "input_relocation": False,
         "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "corpus_root": str(corpus_root), "corpus_manifest_sha256": manifest_sha,
         "corpus_replay_events_sha256": manifest["hashes"]["replay_events.jsonl"],
@@ -828,8 +854,8 @@ def run_full(output_root: Path, corpus_root: Path, manifest: dict[str, Any],
         "source_fingerprint": source_start,
         "native_tool_sha256": manifest["runtime"]["native_tool_sha256"],
         "runtime_manifest": manifest["runtime"]["manifest"],
-        "staged_input_path_count": len(staged_rows),
-        "unique_staged_path_sha256_pairs": len({(row["original_path"], row["sha256"]) for row in staged_rows}),
+        "live_input_path_count": len(live_rows),
+        "unique_live_path_sha256_pairs": len({(row["original_path"], row["sha256"]) for row in live_rows}),
         "run_directory": str(output_root),
     })
 
@@ -846,11 +872,11 @@ def run_full(output_root: Path, corpus_root: Path, manifest: dict[str, Any],
     for suite in NATIVE_EVENTS:
         suite_events = [event for event in events if event["suite"] == suite]
         for protocol in PROTOCOLS:
-            rows = [parse_operation(event, staged[event["event_id"]], output_root,
+            rows = [parse_operation(event, live[event["event_id"]], output_root,
                                     protocol, "warmcache", "warmup", 0)
                     for event in suite_events]
-            output, meta = run_schedule(output_root, rows, manifest, events, overlay,
-                                        runtime_root, runner_class, native_tool,
+            output, meta = run_schedule(output_root, rows, manifest, events, input_hashes,
+                                        overlay, runtime_root, runner_class, native_tool,
                                         f"cache-seed-{suite}-{protocol}")
             _, errors = validate_batch(rows, output, suite_events, "warmup")
             all_errors.extend(errors)
@@ -870,10 +896,10 @@ def run_full(output_root: Path, corpus_root: Path, manifest: dict[str, Any],
             suite_events = [event for event in events if event["suite"] == suite]
             for cache_mode in CACHE_MODES:
                 for protocol in PROTOCOLS:
-                    rows = build_full_batch(suite_events, staged, output_root,
+                    rows = build_full_batch(suite_events, live, output_root,
                                             protocol, cache_mode, "diagnostic", 0)
-                    output, meta = run_schedule(output_root, rows, manifest, events, overlay,
-                                                runtime_root, runner_class, native_tool,
+                    output, meta = run_schedule(output_root, rows, manifest, events, input_hashes,
+                                                overlay, runtime_root, runner_class, native_tool,
                                                 f"diagnostic-{suite}-{protocol}-{cache_mode}")
                     parse_rows, errors = validate_batch(rows, output, suite_events, "diagnostic")
                     all_errors.extend(errors)
@@ -920,10 +946,10 @@ def run_full(output_root: Path, corpus_root: Path, manifest: dict[str, Any],
                 suite_events = [event for event in events if event["suite"] == suite]
                 for cache_mode in cache_order:
                     for protocol in protocol_order:
-                        rows = build_full_batch(suite_events, staged, output_root,
+                        rows = build_full_batch(suite_events, live, output_root,
                                                 protocol, cache_mode, "measure", repeat)
-                        output, meta = run_schedule(output_root, rows, manifest, events, overlay,
-                                                    runtime_root, runner_class, native_tool,
+                        output, meta = run_schedule(output_root, rows, manifest, events, input_hashes,
+                                                    overlay, runtime_root, runner_class, native_tool,
                                                     f"measure-{suite}-{protocol}-{cache_mode}-r{repeat}")
                         parse_rows, errors = validate_batch(rows, output, suite_events, "measure")
                         all_errors.extend(errors)
@@ -982,11 +1008,11 @@ def run_full(output_root: Path, corpus_root: Path, manifest: dict[str, Any],
         for suite in NATIVE_EVENTS:
             suite_events = [event for event in events if event["suite"] == suite]
             for protocol in PROTOCOLS:
-                rows = [parse_operation(event, staged[event["event_id"]], output_root,
+                rows = [parse_operation(event, live[event["event_id"]], output_root,
                                         protocol, "directbypass", "fidelity", 0)
                         for event in suite_events]
-                output, meta = run_schedule(output_root, rows, manifest, events, overlay,
-                                            runtime_root, runner_class, native_tool,
+                output, meta = run_schedule(output_root, rows, manifest, events, input_hashes,
+                                            overlay, runtime_root, runner_class, native_tool,
                                             f"fidelity-{suite}-{protocol}")
                 result_by_id = {row.get("event_id"): row for row in output}
                 condition = [fidelity_row(event, result_by_id[event["event_id"]], protocol)
@@ -1021,15 +1047,12 @@ def run_full(output_root: Path, corpus_root: Path, manifest: dict[str, Any],
     ccache_comparison, ccache_errors = validate_ccache_pair(cache_stats, adapter_counts)
     all_errors.extend(ccache_errors)
 
-    # All per-event roots are checked after execution. Hardlinked content must
-    # remain byte-identical to the immutable content-addressed corpus.
-    materialized_changes = []
-    for row in staged_rows:
-        path = Path(row["replay_path"])
-        if not path.is_file() or sha256_file(path) != row["sha256"]:
-            materialized_changes.append(str(path))
-    if materialized_changes:
-        all_errors.append(f"{len(materialized_changes)} staged input/dependency files changed during replay")
+    try:
+        verify_live_inputs(events, input_hashes, "after benchmark")
+        live_inputs_unchanged = True
+    except RuntimeError as error:
+        all_errors.append(str(error))
+        live_inputs_unchanged = False
     try:
         end_manifest, end_events, end_manifest_sha = verify_corpus(corpus_root)
         if end_manifest_sha != manifest_sha or len(end_events) != len(events):
@@ -1052,7 +1075,8 @@ def run_full(output_root: Path, corpus_root: Path, manifest: dict[str, Any],
         "ccache_comparison": ccache_comparison, "errors": all_errors,
         "corpus_manifest_sha256": manifest_sha,
         "source_fingerprint_unchanged": source_fingerprint() == source_start,
-        "materialized_inputs_unchanged": not materialized_changes,
+        "original_inputs_unchanged": live_inputs_unchanged,
+        "input_mode": "original-paths",
     }
     write_json(output_root / "results.json", results)
     write_json(output_root / "run-metadata.json", {
@@ -1064,11 +1088,11 @@ def run_full(output_root: Path, corpus_root: Path, manifest: dict[str, Any],
 
 def prepare_pilot(output_root: Path, corpus_root: Path, manifest: dict[str, Any],
                   events: list[dict[str, Any]], manifest_sha: str) -> int:
-    staged: dict[str, dict[str, Any]] = {}
+    live: dict[str, dict[str, Any]] = {}
     selected = select_pilot_events(events)
     for event in selected:
-        staged[event["event_id"]] = materialize_event(corpus_root, event, output_root / "inputs")
-    rows = pilot_schedule(events, staged, output_root)
+        live[event["event_id"]] = describe_event_inputs(event)
+    rows = pilot_schedule(events, live, output_root)
     schedule = output_root / "pilot_schedule.jsonl"
     write_jsonl(schedule, rows)
     runtime_root = Path(manifest["runtime"]["root"])
@@ -1079,6 +1103,7 @@ def prepare_pilot(output_root: Path, corpus_root: Path, manifest: dict[str, Any]
     command[0:1] = ["java", "-Xlog:gc"]
     plan = {
         "kind": "pilot schedule only; this script does not start Java",
+        "input_mode": "original-paths", "input_relocation": False,
         "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "corpus_manifest_sha256": manifest_sha,
         "selected_categories": ["c", "c++", "opencl", "header", "generated-roundtrip"],
@@ -1091,8 +1116,8 @@ def prepare_pilot(output_root: Path, corpus_root: Path, manifest: dict[str, Any]
         "gc_policy": "no explicit GC flags; -Xlog:gc is observational only",
     }
     write_json(output_root / "pilot_plan.json", plan)
-    write_jsonl(output_root / "staged-inputs.jsonl",
-                (row for event in selected for row in staged[event["event_id"]]["files"]))
+    write_jsonl(output_root / "live-inputs.jsonl",
+                (row for event in selected for row in live[event["event_id"]]["files"]))
     write_json(output_root / "pilot_command.json", {"argv": command, "cwd": str(CLAVA_ROOT),
                 "environment": {"CLANG_DUMPER_TOOL": str(native_tool),
                                 "JAVA_TOOL_OPTIONS": "unset", "explicit_gc_policy_flags": []}})
@@ -1105,7 +1130,7 @@ def prepare_pilot(output_root: Path, corpus_root: Path, manifest: dict[str, Any]
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
-    mode.add_argument("--pilot", action="store_true", help="materialize five inputs and write Java schedule only")
+    mode.add_argument("--pilot", action="store_true", help="write a five-input Java schedule only")
     mode.add_argument("--run", action="store_true", help="run full standalone benchmark, after pilot approval")
     parser.add_argument("--corpus-root", type=Path, default=DEFAULT_CORPUS)
     parser.add_argument("--output-root", type=Path)
@@ -1128,12 +1153,13 @@ def main() -> int:
     if not (corpus_root / "corpus.json").is_file():
         raise SystemExit(f"missing frozen corpus manifest: {corpus_root / 'corpus.json'}")
     manifest, events, manifest_sha = verify_corpus(corpus_root)
+    input_hashes = preflight_live_inputs(events, "during initial preflight")
     manifest["_environment_template"] = events[0].get("effective_environment", {})
     output_root.mkdir(parents=True)
     if args.pilot:
         return prepare_pilot(output_root, corpus_root, manifest, events, manifest_sha)
     return run_full(output_root, corpus_root, manifest, events, manifest_sha,
-                    args.pilot_validation_dir.resolve())
+                    args.pilot_validation_dir.resolve(), input_hashes)
 
 
 if __name__ == "__main__":

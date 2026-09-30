@@ -193,7 +193,7 @@ public final class StandaloneParseRunner {
                 result.addProperty("validity_reason", "expected one per-source parser metric, found " + metrics.size());
             } else if (operation.has("expected_native_argv")) {
                 List<String> expectedArgv = stringList(operation.getAsJsonArray("expected_native_argv"));
-                List<String> actualArgv = normalizedDiagnosticArgv(metrics.get(0).getAsJsonObject(), protocol);
+                List<String> actualArgv = normalizedDiagnosticArgv(metrics.get(0).getAsJsonObject());
                 result.addProperty("argv_match", expectedArgv.equals(actualArgv));
                 if (!expectedArgv.equals(actualArgv)) {
                     result.addProperty("valid", false);
@@ -309,7 +309,7 @@ public final class StandaloneParseRunner {
         return metrics;
     }
 
-    private static List<String> normalizedDiagnosticArgv(JsonObject metric, String protocol) {
+    private static List<String> normalizedDiagnosticArgv(JsonObject metric) {
         JsonArray values = metric.getAsJsonArray("native_argv_debug");
         if (values == null) {
             throw new IllegalArgumentException("diagnostic metric lacks native_argv_debug");
@@ -327,10 +327,10 @@ public final class StandaloneParseRunner {
                 foundOutput = true;
                 continue;
             }
-            if (protocol.equals("text") && value.equals("-ast-dump-format=text")) {
+            if (value.startsWith("-ast-dump-format=")) {
                 continue;
             }
-            normalized.add(value);
+            normalized.add(value.startsWith("-id=") ? "-id=<id>" : value);
         }
         if (!foundOutput) {
             throw new IllegalArgumentException("native argv does not contain -o output path");
