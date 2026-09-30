@@ -595,7 +595,7 @@ def validate_batch(schedule_rows: list[dict[str, Any]], results: list[dict[str, 
     errors: list[str] = []
     expected = {row["event_id"]: row for row in suite_events}
     got = collections.Counter(row.get("event_id") for row in parse_results)
-    if got != collections.Counter(expected):
+    if got != collections.Counter(expected.keys()):
         errors.append(f"{phase}: parse-event coverage mismatch {sum(got.values())}/{len(expected)}")
     rows_by_id = {row["event_id"]: row for row in parse_results}
     if len(rows_by_id) != len(parse_results):
