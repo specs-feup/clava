@@ -14,7 +14,10 @@
 package pt.up.fe.specs.clang.parser;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,6 +43,9 @@ public abstract class AClangAstTester {
 
     private static final boolean CLEAN_CLANG_FILES = !SpecsSystem.isDebug();
     private File outputFolder;
+    private File stagedInputFolder;
+    private File inputRoot;
+    private List<File> inputFiles;
 
     private final Collection<ResourceProvider> resources;
     private List<String> compilerOptions;
@@ -167,17 +173,88 @@ public abstract class AClangAstTester {
         SpecsSystem.programStandardInit();
 
         outputFolder = Files.createTempDirectory("temp-clang-ast-").toFile();
-        for (ResourceProvider resource : resources) {
-            File copiedFile = SpecsIo.resourceCopy(resource.getResource(), outputFolder, false, true);
-            assertTrue(copiedFile.isFile(), "Could not copy resource '" + resource + "'");
+        stagedInputFolder = null;
+        inputRoot = null;
+        inputFiles = null;
+
+        List<File> filesystemResources = resolveFilesystemResources(resources);
+        if (filesystemResources != null && !filesystemResources.isEmpty()) {
+            inputFiles = filesystemResources;
+            inputRoot = commonParent(inputFiles);
+            if (inputRoot != null) {
+                return;
+            }
         }
 
+        // Packaged resources have no filesystem paths for Clang to parse. Keep their
+        // test-local copy isolated from the generated-code output directory.
+        stagedInputFolder = Files.createTempDirectory("temp-clang-ast-input-").toFile();
+        inputRoot = stagedInputFolder;
+        inputFiles = new ArrayList<>();
+        for (ResourceProvider resource : resources) {
+            File copiedFile = SpecsIo.resourceCopy(resource.getResource(), stagedInputFolder, false, true);
+            assertTrue(copiedFile != null && copiedFile.isFile(), "Could not copy resource '" + resource + "'");
+            inputFiles.add(copiedFile);
+        }
     }
 
     public void cleanupInstance() throws Exception {
         if (CLEAN_CLANG_FILES) {
             SpecsIo.deleteFolder(outputFolder);
+            if (stagedInputFolder != null) {
+                SpecsIo.deleteFolder(stagedInputFolder);
+            }
         }
+    }
+
+    List<File> getInputFiles() {
+        return inputFiles;
+    }
+
+    File getInputRoot() {
+        return inputRoot;
+    }
+
+    File getOutputFolder() {
+        return outputFolder;
+    }
+
+    private static List<File> resolveFilesystemResources(Collection<ResourceProvider> resources) throws Exception {
+        List<File> resolvedResources = new ArrayList<>();
+        ClassLoader classLoader = AClangAstTester.class.getClassLoader();
+
+        for (ResourceProvider resource : resources) {
+            URL resourceUrl = classLoader.getResource(resource.getResource());
+            if (resourceUrl == null || !resourceUrl.getProtocol().equals("file")) {
+                return null;
+            }
+
+            Path resourcePath = Paths.get(resourceUrl.toURI());
+            if (!Files.isRegularFile(resourcePath)) {
+                return null;
+            }
+
+            resolvedResources.add(resourcePath.toFile());
+        }
+
+        return resolvedResources;
+    }
+
+    private static File commonParent(List<File> files) {
+        Path commonParent = files.get(0).toPath().toAbsolutePath().normalize().getParent();
+
+        for (int i = 1; i < files.size(); i++) {
+            Path filePath = files.get(i).toPath().toAbsolutePath().normalize();
+            while (commonParent != null && !filePath.startsWith(commonParent)) {
+                commonParent = commonParent.getParent();
+            }
+
+            if (commonParent == null) {
+                return null;
+            }
+        }
+
+        return commonParent == null ? null : commonParent.toFile();
     }
 
     public void testProper() {
@@ -185,11 +262,9 @@ public abstract class AClangAstTester {
         // Enable parallel parsing
         codeParser.set(ParallelCodeParser.PARALLEL_PARSING);
 
-        File workFolder = outputFolder;
-
         // Parse files
-        codeParser.set(CodeParser.GENERATED_PARSE_ROOT, workFolder);
-        App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
+        codeParser.set(CodeParser.GENERATED_PARSE_ROOT, inputRoot);
+        App clavaAst = codeParser.parse(inputFiles, compilerOptions);
 
         File firstOutputFolder = SpecsIo.mkdir(new File(outputFolder, "outputFirst"));
         clavaAst.write(firstOutputFolder);
