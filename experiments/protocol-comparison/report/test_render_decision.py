@@ -5,7 +5,7 @@ import io
 import re
 import xml.etree.ElementTree as ET
 
-from render_decision import candle, measurements_download, validate_matrix
+from render_decision import candle, csv_viewer, measurements_download, validate_matrix
 from render_report import SUITES, STAGE_ORDER, MODE_ORDER
 
 
@@ -20,6 +20,14 @@ def complete_rows():
 
 
 class DecisionReportTest(unittest.TestCase):
+    def test_csv_viewer_works_without_download_or_network_permissions(self):
+        viewer = csv_viewer()
+        self.assertIn("event.preventDefault()", viewer)
+        self.assertIn("text.select()", viewer)
+        self.assertIn("new TextDecoder()", viewer)
+        self.assertNotIn("fetch(", viewer)
+        self.assertNotIn("clipboard", viewer)
+
     def test_four_round_matrix_is_explicit_and_complete(self):
         rows = [row for row in complete_rows() if row["repeat"] <= 4]
         validate_matrix(rows, 4)

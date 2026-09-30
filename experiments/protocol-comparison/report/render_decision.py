@@ -118,7 +118,37 @@ def measurements_download(rows):
                     writer.writerow({field: row.get(field, "") for field in fields})
                     count += 1
     payload = base64.b64encode(stream.getvalue().encode()).decode()
-    return f'<a download="clava-suite-measurements.csv" href="data:text/csv;charset=utf-8;base64,{payload}">Download all {count} accepted suite timings (CSV)</a>'
+    return f'<a download="clava-suite-measurements.csv" href="data:text/csv;charset=utf-8;base64,{payload}">All {count} accepted suite timings (CSV)</a>'
+
+
+def csv_viewer():
+    """CSV export remains usable inside DraftLink's download-blocking sandbox."""
+    return '''<details id="csv-viewer" hidden><summary id="csv-name">CSV data</summary>
+<p>Copy the selected text into a file with the displayed .csv name. This avoids DraftLink's embedded-download restriction.</p>
+<button type="button" id="csv-select">Select all CSV text</button>
+<textarea id="csv-text" readonly spellcheck="false" aria-label="CSV contents" style="display:block;width:100%;height:240px;margin-top:12px;font:13px monospace;color:var(--ink);background:var(--panel);border:1px solid var(--line)"></textarea>
+</details><script>
+document.addEventListener('click', function(event) {
+  const link = event.target.closest('a[href^="data:text/csv"]');
+  if (!link) return;
+  event.preventDefault();
+  const viewer = document.getElementById('csv-viewer');
+  const text = document.getElementById('csv-text');
+  const payload = link.getAttribute('href').split('base64,')[1];
+  text.value = new TextDecoder().decode(Uint8Array.from(atob(payload), c => c.charCodeAt(0)));
+  document.getElementById('csv-name').textContent = link.getAttribute('download') || 'CSV data';
+  viewer.hidden = false;
+  viewer.open = true;
+  viewer.scrollIntoView({block:'center'});
+  text.focus();
+  text.select();
+});
+document.getElementById('csv-select').addEventListener('click', function() {
+  const text = document.getElementById('csv-text');
+  text.focus();
+  text.select();
+});
+</script>'''
 
 
 def render(manifests, provenance, analysis):
@@ -148,13 +178,13 @@ def render(manifests, provenance, analysis):
 /* DraftLink injects Tailwind's reset after this stylesheet. Scoped rules must win. */
 main .tick,main .label,main .value{{font-size:15px}}main .mode{{font-size:15px}}main .foot{{font-size:13px}}
 main h1{{font-size:clamp(27px,4vw,38px);line-height:1.15;font-weight:750;margin:0 0 14px}}main h2{{font-size:24px;font-weight:700;margin:34px 0 12px}}main h3{{font-size:18px;font-weight:650;margin:0 0 8px}}main p{{margin:8px 0 14px}}main li{{margin:8px 0}}main ul{{list-style:disc;padding-left:22px}}main summary{{font-weight:650}}main .cards{{margin-top:20px}}@media(max-width:700px){{main h2{{font-size:22px}}}}
-</style></head><body><main><p class="muted">Decision brief · 30 September 2026 · five-minute read</p><h1>Clava protocol and cache decision</h1><div class="verdict"><p>{esc(analysis["recommendation"])}</p></div>{cards(analysis["reasons"])}
+</style></head><body><main><p class="muted">Decision brief · {esc(analysis.get("measurement_date", "30 September to 1 October 2026"))} · five-minute read</p><h1>Clava protocol and cache decision</h1><div class="verdict"><p>{esc(analysis["recommendation"])}</p></div>{cards(analysis["reasons"])}
 <h2>What changes the runtime?</h2><p>Percent change versus Text in the same cache state. Negative is faster. These compare the implemented branches; the controlled format experiment below checks the cause.</p>{comparison(rows)}
 <h2>Both suites, every cache state</h2><p class="muted">Whole test-command wall time; builds excluded. Line = median. Box = middle half. Whiskers = full range. Dots = individual runs. Each suite uses one scale across all three sections.</p><div class="charts">{charts}</div>
 <h2>Why do the results look this way?</h2>{cards(analysis["discrepancy"], "explain")}{extra_visuals}
 <h2>What would we maintain?</h2>{cards(analysis["tradeoffs"])}
 <details><summary>Measurement method and limits</summary><p>{esc(analysis["method"])}</p><p>{esc(analysis["limitations"])}</p><ul>{revisions}</ul></details>
-<details><summary>Data, run audit, and sources</summary><p>{measurements_download(rows)}</p><ul>{evidence}</ul></details></main></body></html>'''
+<details><summary>Data, run audit, and sources</summary><p>CSV links open selectable data in this page.</p><p>{measurements_download(rows)}</p><ul>{evidence}</ul></details>{csv_viewer()}</main></body></html>'''
 
 
 def main():
