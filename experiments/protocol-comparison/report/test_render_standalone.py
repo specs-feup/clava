@@ -4,6 +4,52 @@ import render_standalone as report
 
 
 class StandaloneReportTest(unittest.TestCase):
+    def test_report_labels_the_isolated_source_workload_before_results(self):
+        rows = [
+            dict(suite='clava-js', cache_mode='warm', input_id='js-0001', repeat='1',
+                 protocol=protocol, elapsed_ms=elapsed, source_sha256='source-sha',
+                 source_content_sha256='source-sha', args_sha256='args-sha',
+                 parse_args_sha256='args-sha', identity='unit.c')
+            for protocol, elapsed in [('text', 10.0), ('protobuf', 12.0)]
+        ]
+        metadata = {
+            'plan': {
+                'source_fingerprint': {'clava_head': 'clava-rev'},
+                'native_tool_sha256': 'native-sha',
+                'runtime_manifest': {'sha256': 'runtime-sha'},
+                'suite_event_counts': {'clava-js': 1, 'java': 0},
+                'repeats': [1], 'cache_modes': ['warmcache'],
+                'compression': False, 'show_exec_info': False,
+            },
+            'results': {
+                'valid': True, 'complete': True,
+                'source_fingerprint_unchanged': True,
+                'materialized_inputs_unchanged': True,
+                'measured_rows': 2, 'diagnostic_rows': 0,
+                'fidelity': {'valid': True, 'compared_input_pairs': 1},
+            },
+            'historical_context': [{
+                'suite': 'clava-js', 'comparison': 'Across branches',
+                'text_s': 39.93, 'protobuf_s': 38.55, 'change_pct': -3.5,
+            }],
+        }
+
+        html = report.render(rows, metadata)
+
+        self.assertLess(html.index('Isolated-source replay'),
+                        html.index('Cumulative time for isolated sources'))
+        self.assertIn('Each captured source ran in its own CodeParser call', html)
+        self.assertIn('cross-translation-unit reconciliation are absent', html)
+        self.assertIn('each call still builds an App', html)
+        self.assertIn('Clava-JS and Java identify input origin', html)
+        self.assertIn('All replayed inputs', html)
+        self.assertNotIn('Both suites', html)
+        self.assertIn('516 original CodeParser calls', html)
+        self.assertIn('73 carried multiple sources', html)
+        self.assertIn('Separate historical suite measurements', html)
+        self.assertIn('across-branch rows also change code and runtime artifacts', html)
+        self.assertIn('cannot reproduce or explain an earlier suite speedup or regression', html)
+
     def test_total_change_is_median_of_matched_differences(self):
         pairs = [dict(repeat=index, text_ms=text, protobuf_ms=proto)
                  for index, (text, proto) in enumerate([(100, 101), (1, 11), (5, 25)])]

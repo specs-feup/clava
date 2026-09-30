@@ -45,7 +45,24 @@ Render with the existing historical `--input`, `--ab-results`, and `--java-gc-pr
 
 Two earlier GC-off attempts stopped on the same 13 Protobuf test failures. Pass one partial `results.json` through `--java-gc-ab-audit-results` alongside the complete result to preserve its run record without using its timing. Do not use `--java-gc-ab-results` unless all 28 invocations pass with the established single-worker workload.
 
-## Per-parse timing report
+## Isolated-source replay report
+
+Render the separate-source replay from a completed standalone run:
+
+```sh
+python3 clava/experiments/protocol-comparison/report/render_standalone.py \
+  --csv /path/to/standalone-run/measured.csv \
+  --metadata /path/to/standalone-run/run-metadata.json \
+  --diagnostics /path/to/standalone-run/diagnostics.csv \
+  --history clava/experiments/protocol-comparison/results/standalone-report-20260930/history.json \
+  --output clava/experiments/protocol-comparison/results/standalone-report-20260930/report.html
+```
+
+This is not a suite benchmark. Each captured source runs in a separate `CodeParser` call, so the original multi-source groups and cross-translation-unit reconciliation are absent. Each call still builds and postprocesses its own `App`. The Clava-JS and Java labels identify input origin. The replay excludes suite tests, code generation, heap sampling, and explicit GC; it relocates inputs into per-event snapshots to keep captured versions of shared paths separate. It cannot reproduce the suite workload or explain earlier suite results.
+
+## Full-suite per-parse timing report
+
+This renderer uses parse events recorded inside suite runs, with full-command wall time available from `runs.csv`. It is a separate experiment from the isolated-source replay above: per-parse timings remain part of the original suite workload and are never summed to manufacture suite wall time.
 
 The report starts with the measured result. Each suite groups the GC conditions on a shared scale. Charts use a separate narrow-screen layout with readable labels; they do not require horizontal scrolling. Methods, per-source rankings, and audit tables are expandable.
 
