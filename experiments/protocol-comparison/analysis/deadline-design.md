@@ -4,7 +4,7 @@
 
 1. Which implemented configuration is fastest for each suite: the before-cache baseline, Text with ccache, Protobuf, or eager FlatBuffers?
 2. Does ccache save enough time on repeated parses to justify its cold-miss overhead?
-3. Why did the older branch comparison show a Protobuf gain for Clava-JS and a loss for Java? Does that opposite-direction result survive controlled measurement?
+3. If the new results disagree between suites or between the full suites and the grouped parser control, why? Establish the cause with measured evidence, not speculation about code differences. Reconstructing older discrepancies is out of scope.
 
 The final recommendation must consider runtime first, then the code a two-person maintenance team must understand and support. A smaller wire file is not, by itself, a faster parser.
 
@@ -34,7 +34,7 @@ Use the same-revision dual-format Text/Protobuf build. Time the outer `CodeParse
 
 Run phase diagnostics separately. Native execution, wire reading, AST construction, and parent-call residuals must have explicit boundaries. Parallel worker occupancy is not additive suite wall time. Use serial diagnostic controls only as labelled explanations, never as replacements for the original parallel workload.
 
-The older opposite-direction result needs an explanation supported by an intervention or measured contribution. Differences in revisions are a warning about causal attribution, not a sufficient root-cause explanation. If the fresh result still differs by suite, identify the files/groups and phases responsible, then validate the proposed cause. If the sign reversal disappears, distinguish a disproved format claim from any remaining unassigned branch effect.
+Any discrepancy in the fresh results needs an explanation supported by an intervention or measured contribution. Differences in revisions are a warning about causal attribution, not a sufficient root-cause explanation. If the fresh result differs by suite, identify the files/groups and phases responsible, then validate the proposed cause. Code inspection may suggest a test; it does not establish a performance cause. Do not spend the deadline reconstructing an older discrepancy that is absent from the new results.
 
 ## Analysis and report gates
 
