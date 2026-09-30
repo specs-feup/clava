@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import base64
+import html
 import re
 import sys
 from pathlib import Path
@@ -126,7 +127,7 @@ class GroupedABVisualsTest(unittest.TestCase):
         fragment = grouped.render_reviewed_visuals_html(
             summary, expected_group_counts=self.counts
         )
-        self.assertIn("@media(max-width:700px)", fragment)
+        self.assertIn("@media(max-width:560px)", fragment)
         self.assertIn("log scale", fragment)
         self.assertIn("aria-label=", fragment)
         self.assertIn("download=\"grouped-ab-paired-rounds.csv\"", fragment)
@@ -141,6 +142,20 @@ class GroupedABVisualsTest(unittest.TestCase):
         self.assertIn("fixture-1.c", group_csv)
         self.assertIn("d" * 64, group_csv)
         self.assertNotIn("/private/", group_csv)
+
+        main, details = fragment.split("<details>", 1)
+        self.assertEqual(main.count('<svg class="ga-main-svg"'), 2)
+        self.assertEqual(main.count('viewBox="0 0 360 270"'), 2)
+        self.assertIn(".ga-main-label,section.grouped-ab .ga-main-tick", fragment)
+        self.assertIn("font-size:15px", fragment)
+        self.assertNotIn("overflow-x", fragment)
+        self.assertNotIn("nowrap", fragment)
+        self.assertEqual(main.count("<tr>"), 7)  # header plus six scope/cache medians
+        self.assertEqual(details.count('<svg class="ga-detail-svg"'), 6)
+        prose = re.sub(r"<style.*?</style>|<svg.*?</svg>", " ", main, flags=re.DOTALL)
+        prose = html.unescape(re.sub(r"<[^>]*>", " ", prose))
+        self.assertLessEqual(len(re.findall(r"\b[\w×−%]+\b", prose)), 150)
+        self.assertLess(len(fragment.encode("utf-8")), 4 * 1024 * 1024)
 
 
 if __name__ == "__main__":

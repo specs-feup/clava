@@ -477,61 +477,61 @@ def _ratio_axis_label(value: float) -> str:
     return f"{value:g}×"
 
 
-def _svg_candle(summary: dict[str, Any], suite: str, cache_mode: str) -> str:
-    rows = [row for row in summary["group_summaries"]
-            if row["suite"] == suite and row["cache_mode"] == cache_mode]
-    values_by_protocol = {
-        protocol: [row[f"{protocol}_median_ms"] for row in rows]
-        for protocol in PROTOCOLS
+def _svg_candle(summary: dict[str, Any], suite: str) -> str:
+    rows = [row for row in summary["group_summaries"] if row["suite"] == suite]
+    values = {
+        (cache_mode, protocol): [
+            row[f"{protocol}_median_ms"] for row in rows if row["cache_mode"] == cache_mode
+        ]
+        for cache_mode in CACHE_MODES for protocol in PROTOCOLS
     }
-    low = min(min(values) for values in values_by_protocol.values())
-    high = max(max(values) for values in values_by_protocol.values())
-    log_low, log_high = math.log10(low), math.log10(high)
+    all_values = [value for sample in values.values() for value in sample]
+    log_low, log_high = math.log10(min(all_values)), math.log10(max(all_values))
     if log_high - log_low < 0.5:
         middle = (log_high + log_low) / 2
         log_low, log_high = middle - 0.25, middle + 0.25
-    pad = (log_high - log_low) * 0.04
-    log_low -= pad
-    log_high += pad
-    left, right = 130.0, 425.0
+    padding = (log_high - log_low) * 0.04
+    log_low -= padding
+    log_high += padding
+    left, right = 94.0, 330.0
     x = lambda value: left + (math.log10(value) - log_low) * (right - left) / (log_high - log_low)
-    y_positions = {"text": 48, "protobuf": 103}
+    positions = (("direct", "text", 70), ("direct", "protobuf", 99),
+                 ("warm", "text", 171), ("warm", "protobuf", 200))
     output = [
-        '<svg class="ga-svg" viewBox="0 0 440 164" role="img" '
-        f'aria-label="{html.escape(SUITE_LABELS[suite])} {html.escape(CACHE_LABELS[cache_mode])} '
-        'per-group median runtime spread, logarithmic milliseconds">',
-        '<desc>Each observation is the median of six paired rounds for one stable group. '
-        'Box spans the first through third quartile; whiskers show the full range. Lower is faster.</desc>',
+        '<svg class="ga-main-svg" viewBox="0 0 360 270" role="img" '
+        f'aria-label="{html.escape(SUITE_LABELS[suite])} per-group runtime spread, direct and warm, '
+        'shared logarithmic millisecond axis">',
+        '<desc>Each candle summarizes per-group medians across six matched rounds. '
+        'Boxes show the middle half; whiskers show the full group range. Lower is faster.</desc>',
     ]
-    tick_exponents = list(range(math.ceil(log_low), math.floor(log_high) + 1))
-    if not tick_exponents:
-        tick_values = [10.0 ** ((log_low + log_high) / 2)]
-    elif len(tick_exponents) > 5:
-        tick_values = [10.0 ** (log_low + (log_high - log_low) * part / 4)
-                       for part in range(5)]
-    else:
-        tick_values = [10.0 ** exponent for exponent in tick_exponents]
-    for value in tick_values:
+    ticks = [10.0 ** (log_low + (log_high - log_low) * fraction / 2) for fraction in range(3)]
+    for value in ticks:
         px = x(value)
+        label = f"{value:.2g}ms"
         output.extend([
-            f'<line class="ga-grid" x1="{px:.2f}" x2="{px:.2f}" y1="25" y2="132"/>',
-            f'<text class="ga-tick" x="{px:.2f}" y="19" text-anchor="middle">{html.escape(_fmt_ms(value))}</text>',
+            f'<line class="ga-grid-line" x1="{px:.2f}" x2="{px:.2f}" y1="31" y2="225"/>',
+            f'<text class="ga-main-tick" x="{px:.2f}" y="23" text-anchor="middle">{html.escape(label)}</text>',
         ])
-    for protocol in PROTOCOLS:
-        protocol_values = values_by_protocol[protocol]
-        stats = _summary(protocol_values)
-        y = y_positions[protocol]
+    output.extend([
+        '<text class="ga-group-title" x="3" y="49">Direct</text>',
+        '<line class="ga-divider" x1="2" x2="355" y1="133" y2="133"/>',
+        '<text class="ga-group-title" x="3" y="151">Warm</text>',
+    ])
+    for cache_mode, protocol, y in positions:
+        sample = values[(cache_mode, protocol)]
+        stats = _summary(sample)
         color = PROTOCOL_COLORS[protocol]
+        label = PROTOCOL_LABELS[protocol]
         output.extend([
-            f'<text class="ga-label" x="4" y="{y + 4}">{PROTOCOL_LABELS[protocol]} · n={len(protocol_values)}</text>',
+            f'<text class="ga-main-label" x="5" y="{y + 5}">{label}</text>',
             f'<line class="ga-whisker" stroke="{color}" x1="{x(stats["min"]):.2f}" x2="{x(stats["max"]):.2f}" y1="{y}" y2="{y}"/>',
-            f'<line class="ga-cap" stroke="{color}" x1="{x(stats["min"]):.2f}" x2="{x(stats["min"]):.2f}" y1="{y - 6}" y2="{y + 6}"/>',
-            f'<line class="ga-cap" stroke="{color}" x1="{x(stats["max"]):.2f}" x2="{x(stats["max"]):.2f}" y1="{y - 6}" y2="{y + 6}"/>',
-            f'<rect class="ga-box" stroke="{color}" x="{x(stats["q1"]):.2f}" y="{y - 11}" width="{max(1.5, x(stats["q3"]) - x(stats["q1"])):.2f}" height="22"/>',
-            f'<line class="ga-median" stroke="{color}" x1="{x(stats["median"]):.2f}" x2="{x(stats["median"]):.2f}" y1="{y - 12}" y2="{y + 12}"/>',
-            f'<text class="ga-value" x="438" y="{y + 4}" text-anchor="end">med {html.escape(_fmt_ms(stats["median"]))}</text>',
+            f'<line class="ga-cap" stroke="{color}" x1="{x(stats["min"]):.2f}" x2="{x(stats["min"]):.2f}" y1="{y - 7}" y2="{y + 7}"/>',
+            f'<line class="ga-cap" stroke="{color}" x1="{x(stats["max"]):.2f}" x2="{x(stats["max"]):.2f}" y1="{y - 7}" y2="{y + 7}"/>',
+            f'<rect class="ga-box" stroke="{color}" x="{x(stats["q1"]):.2f}" y="{y - 10}" width="{max(1.5, x(stats["q3"]) - x(stats["q1"])):.2f}" height="20"/>',
+            f'<line class="ga-median" stroke="{color}" x1="{x(stats["median"]):.2f}" x2="{x(stats["median"]):.2f}" y1="{y - 11}" y2="{y + 11}"/>',
+            f'<title>{CACHE_LABELS[cache_mode]} {label}: median {html.escape(_fmt_ms(stats["median"]))}; {len(sample)} groups</title>',
         ])
-    output.append('<text class="ga-axis-title" x="278" y="153" text-anchor="middle">Per-group median runtime · milliseconds · log scale</text>')
+    output.append('<text class="ga-main-axis-title" x="212" y="254" text-anchor="middle">Runtime (ms; log)</text>')
     output.append('</svg>')
     return "".join(output)
 
@@ -569,7 +569,7 @@ def _svg_distribution(
         return left + (actual - domain_min) * (right - left) / (domain_max - domain_min)
 
     output = [
-        '<svg class="ga-svg" viewBox="0 0 440 244" role="img" '
+        '<svg class="ga-detail-svg" viewBox="0 0 440 244" role="img" '
         f'aria-label="{html.escape(title)}">',
         '<desc>Each row is a distribution across stable groups, with full-range whiskers and an interquartile box.</desc>',
     ]
@@ -625,7 +625,7 @@ def _svg_round_totals(summary: dict[str, Any], cache_mode: str, protocol: str) -
     left, right = 58.0, 420.0
     x = lambda value: left + value * (right - left) / domain
     output = [
-        '<svg class="ga-svg" viewBox="0 0 440 222" role="img" '
+        '<svg class="ga-detail-svg" viewBox="0 0 440 222" role="img" '
         f'aria-label="{html.escape(CACHE_LABELS[cache_mode])} {html.escape(PROTOCOL_LABELS[protocol])} '
         'per-round summed parse time by suite">',
         '<desc>Six rounds. Each horizontal bar sums per-group parser-call times and is stacked by suite.</desc>',
@@ -659,7 +659,9 @@ def _svg_round_totals(summary: dict[str, Any], cache_mode: str, protocol: str) -
     return "".join(output)
 
 
-def _csv_link(filename: str, columns: list[str], rows: Iterable[dict[str, Any]]) -> str:
+def _csv_link(
+    filename: str, columns: list[str], rows: Iterable[dict[str, Any]], *, label: str | None = None
+) -> str:
     stream = io.StringIO(newline="")
     writer = csv.DictWriter(stream, fieldnames=columns, extrasaction="ignore", lineterminator="\n")
     writer.writeheader()
@@ -667,7 +669,7 @@ def _csv_link(filename: str, columns: list[str], rows: Iterable[dict[str, Any]])
     encoded = base64.b64encode(stream.getvalue().encode("utf-8")).decode("ascii")
     return (
         f'<a download="{html.escape(filename, quote=True)}" '
-        f'href="data:text/csv;charset=utf-8;base64,{encoded}">{html.escape(filename)}</a>'
+        f'href="data:text/csv;charset=utf-8;base64,{encoded}">{html.escape(label or filename)}</a>'
     )
 
 
@@ -684,9 +686,9 @@ def render_reviewed_visuals_html(
         raise AnalysisError(f"reviewed grouped visuals require all expected IDs: {counts}")
     runtime_charts = "".join(
         '<figure class="ga-figure"><figcaption>'
-        f'{html.escape(SUITE_LABELS[suite])} · {html.escape(CACHE_LABELS[cache_mode])}'
-        f'</figcaption>{_svg_candle(summary, suite, cache_mode)}</figure>'
-        for suite in SUITES for cache_mode in CACHE_MODES
+        f'{html.escape(SUITE_LABELS[suite])} · {counts[suite]} groups</figcaption>'
+        f'{_svg_candle(summary, suite)}</figure>'
+        for suite in SUITES
     )
     total_charts = "".join(
         '<figure class="ga-figure"><figcaption>'
@@ -713,33 +715,53 @@ def render_reviewed_visuals_html(
             stats = _summary(values)
             ratio_rows.append(
                 f'<tr><th scope="row">{html.escape(SUITE_LABELS[suite])} · '
-                f'{html.escape(CACHE_LABELS[cache_mode])}</th><td>{len(values)}</td>'
-                f'<td>{stats["median"]:.3f}×</td><td>{stats["q1"]:.3f}×–{stats["q3"]:.3f}×</td>'
-                f'<td>{stats["min"]:.3f}×–{stats["max"]:.3f}×</td></tr>'
+                f'{html.escape(CACHE_LABELS[cache_mode])}</th>'
+                f'<td data-label="Groups">{len(values)}</td>'
+                f'<td data-label="Median ratio">{stats["median"]:.3f}×</td>'
+                f'<td data-label="Middle half">{stats["q1"]:.3f}×–{stats["q3"]:.3f}×</td>'
+                f'<td data-label="Full range">{stats["min"]:.3f}×–{stats["max"]:.3f}×</td></tr>'
             )
 
-    total_table_rows = []
+    full_total_rows = []
     for row in summary["paired_round_totals"]:
         scope = "Global (all groups)" if row["scope"] == "global" else SUITE_LABELS[row["scope"]]
-        total_table_rows.append(
+        full_total_rows.append(
             f'<tr><th scope="row">{html.escape(scope)}</th>'
-            f'<td>{html.escape(CACHE_LABELS[row["cache_mode"]])}</td>'
-            f'<td>{row["repeat"]}</td><td>{html.escape(_fmt_ms(row["text_sum_ms"]))}</td>'
-            f'<td>{html.escape(_fmt_ms(row["protobuf_sum_ms"]))}</td>'
-            f'<td>{html.escape(_fmt_ms(row["delta_ms"]))}</td>'
-            f'<td>{row["relative_pct"]:+.2f}%</td></tr>'
+            f'<td data-label="Cache">{html.escape(CACHE_LABELS[row["cache_mode"]])}</td>'
+            f'<td data-label="Round">{row["repeat"]}</td>'
+            f'<td data-label="Text sum">{html.escape(_fmt_ms(row["text_sum_ms"]))}</td>'
+            f'<td data-label="Proto sum">{html.escape(_fmt_ms(row["protobuf_sum_ms"]))}</td>'
+            f'<td data-label="Proto − Text">{html.escape(_fmt_ms(row["delta_ms"]))}</td>'
+            f'<td data-label="Paired change">{row["relative_pct"]:+.2f}%</td></tr>'
         )
+    median_total_rows = []
+    for scope in (*SUITES, "global"):
+        for cache_mode in CACHE_MODES:
+            rows = [row for row in summary["paired_round_totals"]
+                    if row["scope"] == scope and row["cache_mode"] == cache_mode]
+            text_s = statistics.median(row["text_sum_ms"] for row in rows) / 1000
+            proto_s = statistics.median(row["protobuf_sum_ms"] for row in rows) / 1000
+            delta_pct = statistics.median(row["relative_pct"] for row in rows)
+            label = {"clava-js": "JS", "java": "Java", "global": "All"}[scope]
+            median_total_rows.append(
+                f'<tr><th scope="row">{html.escape(label)} · {html.escape(CACHE_LABELS[cache_mode])}</th>'
+                f'<td data-label="Text median">{text_s:.3f}</td>'
+                f'<td data-label="Proto median">{proto_s:.3f}</td>'
+                f'<td data-label="Paired change">{delta_pct:+.2f}</td></tr>'
+            )
 
     per_round_link = _csv_link(
         "grouped-ab-round-totals.csv",
         ["scope", "suite", "cache_mode", "repeat", "protocol", "group_count", "sum_elapsed_ms"],
         summary["round_totals"],
+        label="round totals",
     )
     paired_totals_link = _csv_link(
         "grouped-ab-paired-round-totals.csv",
         ["scope", "cache_mode", "repeat", "group_count", "text_sum_ms",
          "protobuf_sum_ms", "delta_ms", "relative_pct"],
         summary["paired_round_totals"],
+        label="paired totals",
     )
     group_link = _csv_link(
         "grouped-ab-group-medians-and-ratios.csv",
@@ -747,14 +769,16 @@ def render_reviewed_visuals_html(
          "options_sha256", "cache_mode", "n_rounds", "text_median_ms", "protobuf_median_ms",
          "proto_text_ratio", "median_paired_relative_pct"],
         summary["group_summaries"],
+        label="group medians + ratios",
     )
     paired_link = _csv_link(
         "grouped-ab-paired-rounds.csv",
         ["suite", "input_id", "source_labels", "source_count", "source_sha256", "source_file_sha256s", "args_sha256",
          "options_sha256", "cache_mode", "repeat", "text_ms", "protobuf_ms", "delta_ms", "relative_pct"],
         summary["group_rounds"],
+        label="paired rounds",
     )
-    return f'''<section class="grouped-ab" aria-labelledby="grouped-ab-title">
+    fragment = f'''<section class="grouped-ab" aria-labelledby="grouped-ab-title">
 <style>
 section.grouped-ab{{max-width:1040px;margin:34px auto;color:inherit}}
 section.grouped-ab *{{box-sizing:border-box}}
@@ -765,43 +789,50 @@ section.grouped-ab .ga-note{{color:var(--muted,#536174);font-size:14px}}
 section.grouped-ab .ga-grid-layout{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
 section.grouped-ab .ga-figure{{margin:0;min-width:0;border:1px solid var(--line,#d5dfe8);border-radius:9px;padding:10px;background:var(--panel,#f4f7fa)}}
 section.grouped-ab figcaption{{font-weight:650;font-size:14px;margin:0 0 3px}}
-section.grouped-ab .ga-svg{{display:block;width:100%;height:auto;max-width:720px;margin:0 auto}}
+section.grouped-ab .ga-main-svg{{display:block;width:100%;height:auto;max-width:520px;margin:0 auto}}
+section.grouped-ab .ga-detail-svg{{display:block;width:100%;height:auto;max-width:720px;margin:0 auto}}
 section.grouped-ab svg text{{fill:currentColor;font-family:system-ui,sans-serif}}
-section.grouped-ab .ga-grid-line{{stroke:var(--line,#d5dfe8);stroke-dasharray:3 4}}
+section.grouped-ab .ga-grid-line,section.grouped-ab .ga-grid{{stroke:var(--line,#d5dfe8);stroke-dasharray:3 4}}
 section.grouped-ab .ga-zero{{stroke:#64748b;stroke-dasharray:4 3;stroke-width:1}}
+section.grouped-ab .ga-divider{{stroke:var(--line,#d5dfe8);stroke-width:1.2}}
 section.grouped-ab .ga-whisker,section.grouped-ab .ga-cap{{stroke-width:1.4}}
 section.grouped-ab .ga-box{{fill:rgba(35,104,162,.16);stroke-width:1.4}}
 section.grouped-ab .ga-median{{stroke-width:2.5}}
+section.grouped-ab .ga-main-label,section.grouped-ab .ga-main-tick,section.grouped-ab .ga-group-title,section.grouped-ab .ga-main-axis-title{{font-size:15px}}
 section.grouped-ab .ga-label{{font-size:11px}}
 section.grouped-ab .ga-value{{font-size:10px;fill:var(--muted,#455568)}}
-section.grouped-ab .ga-tick,section.grouped-ab .ga-legend{{font-size:10px;fill:var(--muted,#536174)}}
-section.grouped-ab .ga-axis-title{{font-size:10px;fill:var(--muted,#536174)}}
+section.grouped-ab .ga-tick,section.grouped-ab .ga-legend,section.grouped-ab .ga-axis-title{{font-size:10px;fill:var(--muted,#536174)}}
 section.grouped-ab .ga-links{{display:flex;flex-wrap:wrap;gap:8px 18px;padding-left:20px}}
-section.grouped-ab .ga-table-wrap{{width:100%;overflow-x:auto}}
-section.grouped-ab table{{border-collapse:collapse;width:100%;font-size:13px}}
-section.grouped-ab th,section.grouped-ab td{{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line,#d5dfe8);white-space:nowrap}}
+section.grouped-ab .ga-table-wrap{{width:100%;min-width:0}}
+section.grouped-ab table{{border-collapse:collapse;width:100%;table-layout:fixed;font-size:13px}}
+section.grouped-ab th,section.grouped-ab td{{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line,#d5dfe8);overflow-wrap:anywhere;word-break:normal}}
 section.grouped-ab th[scope="col"]{{font-size:12px;color:var(--muted,#536174)}}
 section.grouped-ab a{{overflow-wrap:anywhere}}
-@media(max-width:700px){{section.grouped-ab{{margin:28px 0}}section.grouped-ab .ga-grid-layout{{grid-template-columns:1fr;gap:10px}}section.grouped-ab .ga-figure{{padding:8px 6px}}section.grouped-ab .ga-svg{{max-width:440px}}section.grouped-ab table{{font-size:12px}}}}
+@media(max-width:700px){{section.grouped-ab{{margin:28px 0}}section.grouped-ab .ga-grid-layout{{grid-template-columns:1fr;gap:10px}}section.grouped-ab .ga-figure{{padding:8px 6px}}section.grouped-ab .ga-main-svg{{max-width:360px}}}}
+@media(max-width:560px){{section.grouped-ab .ga-table-wrap table,section.grouped-ab .ga-table-wrap tbody,section.grouped-ab .ga-table-wrap tr,section.grouped-ab .ga-table-wrap th,section.grouped-ab .ga-table-wrap td{{display:block;width:100%}}section.grouped-ab .ga-table-wrap thead{{display:none}}section.grouped-ab .ga-table-wrap tr{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-bottom:1px solid var(--line,#d5dfe8);padding:6px 0}}section.grouped-ab .ga-table-wrap th[scope="row"]{{grid-column:1/-1;border:0;font-weight:700}}section.grouped-ab .ga-table-wrap td{{min-width:0;border:0;padding:5px 8px}}section.grouped-ab .ga-table-wrap td::before{{content:attr(data-label);display:block;color:var(--muted,#536174);font-size:12px;font-weight:650;margin-bottom:2px}}}}
 </style>
 <h2 id="grouped-ab-title">Grouped parser-call timing</h2>
-<p>Each stable CodeParser call group is one observation unit. This matrix includes {counts['clava-js']} Clava-JS and {counts['java']} Java groups, measured in six matched rounds across Text and Proto under direct and warm cache states. Invalid, unselected, untimed, fidelity, and estimate rows do not enter these statistics. Repeated rounds are paired within group and are not counted as extra groups.</p>
+<p>Six paired rounds: {counts['clava-js']} Clava-JS and {counts['java']} Java groups, Text/Proto, direct/warm. Invalid, unselected, untimed, fidelity, and estimated rows are excluded. Candles show per-group six-round medians; boxes mark the middle half, whiskers the full range. Each suite shares a log-ms axis. Lower is faster.</p>
 <h3>Per-group runtime spread</h3>
-<p class="ga-note">Each candle summarizes each group’s median across six rounds, then shows the distribution across groups. Boxes show the interquartile range; whiskers show the full group range. Runtime and ratio axes are logarithmic to keep the heavily skewed tail visible. Lower runtime is faster; a Proto/Text ratio below 1× is lower for Proto.</p>
 <div class="ga-grid-layout">{runtime_charts}</div>
-<h3>Per-group Proto/Text ratio distribution</h3>
-<p class="ga-note">Ratio uses the per-group median runtime across six rounds. It is shown separately from the paired percent-delta distribution because median-of-ratios and ratio-of-medians are not interchangeable summaries.</p>
+<h3>Median parse totals</h3>
+<p class="ga-note">Six-round sum medians; paired change is median same-round delta. Global sums 516 groups.</p>
+<div class="ga-table-wrap"><table class="ga-median-table"><thead><tr><th scope="col">Scope/cache</th><th scope="col">Text (s)</th><th scope="col">Proto (s)</th><th scope="col">Delta (%)</th></tr></thead><tbody>{''.join(median_total_rows)}</tbody></table></div>
+<p>CSV: <span class="ga-links">{per_round_link}{paired_totals_link}{group_link}{paired_link}</span></p>
+<details><summary>Detailed ratios, paired deltas, and per-round totals</summary>
+<h3>Per-group Proto/Text ratio distribution</h3><p class="ga-note">Ratios use per-group medians across six rounds. Values below 1× are lower for Proto.</p>
 <div class="ga-figure">{ratio_chart}</div>
 <div class="ga-table-wrap"><table><thead><tr><th scope="col">Suite · cache</th><th scope="col">Groups</th><th scope="col">Median ratio</th><th scope="col">Middle half</th><th scope="col">Full range</th></tr></thead><tbody>{''.join(ratio_rows)}</tbody></table></div>
-<h3>Paired percent-delta distribution</h3>
-<p class="ga-note">For each group, this uses the median of its six same-round changes: 100 × (Proto / Text − 1). Positive means a longer Proto parse. The underlying six individual pairs remain available in the CSV.</p>
+<h3>Per-group paired percent-delta distribution</h3><p class="ga-note">For each group, this is the median of its six same-round changes: 100 × (Proto / Text − 1). Positive means Proto took longer.</p>
 <div class="ga-figure">{delta_chart}</div>
-<h3>Summed parser time by round</h3>
-<p class="ga-note">Bars sum the elapsed time for all groups in each suite and round, then stack the suite sums. The global total is the sum across the 516 measured groups for that cell; it is not whole-suite command wall time.</p>
+<h3>Per-round summed parse time by suite</h3><p class="ga-note">Bars show six round sums, stacked by suite, for each cache/protocol condition. The global sum covers 516 groups, not command wall time.</p>
 <div class="ga-grid-layout">{total_charts}</div>
-<div class="ga-table-wrap"><table><thead><tr><th scope="col">Scope</th><th scope="col">Cache</th><th scope="col">Round</th><th scope="col">Text sum</th><th scope="col">Proto sum</th><th scope="col">Proto − Text</th><th scope="col">Paired change</th></tr></thead><tbody>{''.join(total_table_rows)}</tbody></table></div>
-<p>Download sanitized data: <span class="ga-links">{per_round_link}{paired_totals_link}{group_link}{paired_link}</span></p>
+<div class="ga-table-wrap"><table><thead><tr><th scope="col">Scope</th><th scope="col">Cache</th><th scope="col">Round</th><th scope="col">Text sum</th><th scope="col">Proto sum</th><th scope="col">Proto − Text</th><th scope="col">Paired change</th></tr></thead><tbody>{''.join(full_total_rows)}</tbody></table></div>
+</details>
 </section>'''
+    if len(fragment.encode("utf-8")) > 4 * 1024 * 1024:
+        raise AnalysisError("grouped visual fragment exceeds the 4 MiB report limit")
+    return fragment
 
 
 if __name__ == "__main__":
