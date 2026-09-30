@@ -108,6 +108,18 @@ public class ParallelCodeParser extends CodeParser {
                 .collect(Collectors.toList());
 
         Standard standard = getStandard(sources, options);
+        String benchmarkStandard = System.getProperty("clava.astWireBenchmarkStandard");
+        if (benchmarkStandard != null && !benchmarkStandard.isBlank()) {
+            String standardValue = benchmarkStandard.startsWith("-std=")
+                    ? benchmarkStandard.substring("-std=".length())
+                    : benchmarkStandard;
+            Standard capturedStandard = Standard.getEnumHelper().getValuesTranslationMap().get(standardValue);
+            if (capturedStandard == null) {
+                throw new IllegalArgumentException("Unknown benchmark standard: " + benchmarkStandard);
+            }
+            standard = capturedStandard;
+        }
+        final Standard selectedStandard = standard;
         // Standard standard = getStandard(allUserSources.values(), options);
         // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
 
@@ -142,11 +154,14 @@ public class ParallelCodeParser extends CodeParser {
 
         List<Future<ClangAstData>> futureTUnits = new ArrayList<>();
         for (int i = 0; i < sources.size(); i++) {
-            String id = Integer.toString(i + 1);
+            String benchmarkParseId = System.getProperty("clava.astWireBenchmarkParseId");
+            String id = benchmarkParseId == null || benchmarkParseId.isBlank()
+                    ? Integer.toString(i + 1)
+                    : benchmarkParseId;
             File source = sources.get(i);
 
             Future<ClangAstData> tUnit = executor
-                    .submit(() -> parseSource(source, id, standard, options, clangDump,
+                    .submit(() -> parseSource(source, id, selectedStandard, options, clangDump,
                             counter, clangFiles, syntaxErrors, corpusCallId));
 
             futureTUnits.add(tUnit);

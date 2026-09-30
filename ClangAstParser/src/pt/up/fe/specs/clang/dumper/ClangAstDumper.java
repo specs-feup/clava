@@ -352,7 +352,10 @@ public class ClangAstDumper {
         String ccacheCacheDir = null;
         boolean useAstDumpCache = false;
         boolean compressedDump = false;
+        boolean benchmarkDisableCompression = Boolean.getBoolean("clava.astWireBenchmarkDisableCompression");
         List<String> compilerArgv = null;
+        List<String> nativeArgsForDebug = null;
+        String benchmarkWorkingDirectory = System.getProperty("clava.astWireBenchmarkWorkingDirectory");
         ProcessBuilder processBuilder = null;
         Path processWorkingDirectory = Path.of("").toAbsolutePath().normalize();
         long transportNanos = 0L;
@@ -374,8 +377,7 @@ public class ClangAstDumper {
                     && ClangCcacheAdapter.isAvailable();
             // The native dumper supports zstd compression only for Protobuf.
             // Text remains ccache-backed, but its payload is stored and read raw.
-            compressedDump = useAstDumpCache && !textWire
-                    && !Boolean.getBoolean("clava.astWireBenchmarkDisableCompression");
+            compressedDump = useAstDumpCache && !textWire && !benchmarkDisableCompression;
             dumpFile = new File(lastWorkingFolder,
                     textWire
                             ? (compressedDump ? COMPRESSED_TEXT_DUMP_FILENAME : TEXT_DUMP_FILENAME)
@@ -400,6 +402,12 @@ public class ClangAstDumper {
             compilerArgv = new ArrayList<>(arguments);
             if (generatedParseRoot != null) {
                 processWorkingDirectory = generatedParseRoot.toPath().toAbsolutePath().normalize();
+            } else if (benchmarkWorkingDirectory != null && !benchmarkWorkingDirectory.isBlank()) {
+                processWorkingDirectory = Path.of(benchmarkWorkingDirectory).toAbsolutePath().normalize();
+            }
+            if (Boolean.getBoolean("clava.astWireMetrics.debugArgs")) {
+                nativeArgsForDebug = stableParseArguments(compilerArgv,
+                        pathForCompiler(sourceFile, generatedParseRoot), false);
             }
 
             List<String> command = arguments;
@@ -423,6 +431,8 @@ public class ClangAstDumper {
             processBuilder = new ProcessBuilder(command);
             if (generatedParseRoot != null) {
                 processBuilder.directory(generatedParseRoot);
+            } else if (benchmarkWorkingDirectory != null && !benchmarkWorkingDirectory.isBlank()) {
+                processBuilder.directory(processWorkingDirectory.toFile());
             }
             if (ccache != null) {
                 ccache.configureEnvironment(processBuilder.environment());
@@ -516,12 +526,12 @@ public class ClangAstDumper {
         if (textWire) {
             reportTextMetrics(dumpFile, compressedDump, cacheRestored, transportNanos, readNanos,
                     astConstructionNanos, sourceFile, id, parseArgsSha256, parseArgsOriginalSha256,
-                    parseArgsForDebug, parseElapsedNanos,
+                    parseArgsForDebug, nativeArgsForDebug, parseElapsedNanos,
                     ccacheCacheDir, benchmarkIdentity);
         } else {
             reportProtobufMetrics(dumpFile, compressedDump, cacheRestored, transportNanos, readNanos,
                     wireResult.metrics(), astConstructionNanos, sourceFile, id, parseArgsSha256,
-                    parseArgsOriginalSha256, parseArgsForDebug, parseElapsedNanos,
+                    parseArgsOriginalSha256, parseArgsForDebug, nativeArgsForDebug, parseElapsedNanos,
                     ccacheCacheDir, benchmarkIdentity);
         }
 
@@ -543,7 +553,7 @@ public class ClangAstDumper {
     private void reportProtobufMetrics(File dumpFile, boolean compressed, boolean cacheRestored, long transportNanos,
             long readNanos, ProtoAstReader.Metrics wireMetrics, long astConstructionNanos, File sourceFile, String id,
             String parseArgsSha256, String parseArgsOriginalSha256, List<String> parseArgsForDebug,
-            long parseElapsedNanos, String ccacheCacheDir,
+            List<String> nativeArgsForDebug, long parseElapsedNanos, String ccacheCacheDir,
             AstWireBenchmarkIdentity.Identity benchmarkIdentity) {
         if (!Boolean.getBoolean("clava.astWireMetrics")) {
             return;
@@ -586,15 +596,16 @@ public class ClangAstDumper {
         // while leaving the default production path silent.
         if (Boolean.getBoolean("clava.astWireMetrics.debugArgs")) {
             json = json.substring(0, json.length() - 1) + ",\"parse_args_debug\":"
-                    + jsonStringArray(parseArgsForDebug) + "}";
+                    + jsonStringArray(parseArgsForDebug) + ",\"native_argv_debug\":"
+                    + jsonStringArray(nativeArgsForDebug) + "}";
         }
         System.err.println("PROTOBUF_METRIC " + json);
     }
 
     private void reportTextMetrics(File dumpFile, boolean compressed, boolean cacheRestored, long transportNanos,
             long readNanos, long astConstructionNanos, File sourceFile, String id, String parseArgsSha256,
-            String parseArgsOriginalSha256, List<String> parseArgsForDebug, long parseElapsedNanos,
-            String ccacheCacheDir,
+            String parseArgsOriginalSha256, List<String> parseArgsForDebug, List<String> nativeArgsForDebug,
+            long parseElapsedNanos, String ccacheCacheDir,
             AstWireBenchmarkIdentity.Identity benchmarkIdentity) {
         if (!Boolean.getBoolean("clava.astWireMetrics")) {
             return;
@@ -625,7 +636,8 @@ public class ClangAstDumper {
                 cacheRestored, cacheRestored, isCcacheDisabled(), explicitGcDisabledJson());
         if (Boolean.getBoolean("clava.astWireMetrics.debugArgs")) {
             json = json.substring(0, json.length() - 1) + ",\"parse_args_debug\":"
-                    + jsonStringArray(parseArgsForDebug) + "}";
+                    + jsonStringArray(parseArgsForDebug) + ",\"native_argv_debug\":"
+                    + jsonStringArray(nativeArgsForDebug) + "}";
         }
         System.err.println("CLAVA_AST_METRIC " + json);
     }
