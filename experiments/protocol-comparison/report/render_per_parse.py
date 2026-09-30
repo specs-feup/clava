@@ -281,6 +281,24 @@ def compact_ticks(ticks: list[float], limit: int = 5) -> list[float]:
     return sorted(selected)
 
 
+def spaced_ticks(ticks, position, label):
+    """Drop colliding mobile labels, preserving zero and endpoints first."""
+    if not ticks:
+        return []
+    selected, intervals = [], []
+    priorities = [tick for tick in ticks if tick == 0] + [ticks[0], ticks[-1]] + list(ticks)
+    for tick in priorities:
+        if tick in selected:
+            continue
+        half_width = len(label(tick)) * 5.0
+        left, right = position(tick) - half_width, position(tick) + half_width
+        if any(left < end + 8 and right > start - 8 for start, end in intervals):
+            continue
+        selected.append(tick)
+        intervals.append((left, right))
+    return sorted(selected)
+
+
 def format_axis(value: float, scale: float, unit: str) -> str:
     scaled = value / scale
     magnitude = abs(scaled)
@@ -782,6 +800,8 @@ def svg_distribution_chart(title: str, by_protocol: dict[str, list[dict[str, Any
         axis["transform"](value) - axis["low_position"]
     ) / (axis["high_position"] - axis["low_position"])
     ticks = compact_ticks(axis["ticks"]) if mobile else axis["ticks"]
+    if mobile:
+        ticks = spaced_ticks(ticks, x, lambda value: format_axis(value, scale, unit))
     svg = [
         f'<svg class="chart-svg {"chart-svg-mobile" if mobile else "chart-svg-wide"}" viewBox="0 0 {width} {height}" role="img" aria-label="{esc(title)} individual parse latency distributions">',
         f'<title>{esc(title)} individual parse latency distributions</title>',
@@ -798,6 +818,9 @@ def svg_distribution_chart(title: str, by_protocol: dict[str, list[dict[str, Any
         rows = by_protocol.get(protocol, [])
         if not rows:
             continue
+        if index and '/' in protocol and protocol.split('/')[0] != order[index - 1].split('/')[0]:
+            divider_y = (76 + index * 67 - 42) if mobile else (93 + index * 94 - 47)
+            svg.append(f'<line x1="12" x2="{right}" y1="{divider_y}" y2="{divider_y}" class="grid-line"/>')
         values_for_protocol = [row["elapsed_ms"] for row in rows]
         stats = distribution(values_for_protocol)
         y = (76 + index * 67) if mobile else (93 + index * 94)
@@ -869,11 +892,13 @@ def svg_delta_chart(title: str, by_group: list[tuple[str, list[dict[str, Any]]]]
     left, right = (50, 360) if mobile else (235, 1138)
     x = lambda value: left + (right - left) * (value - low) / (high - low)
     ticks = compact_ticks(nice_ticks(low, high)) if mobile else nice_ticks(low, high)
+    if mobile:
+        ticks = spaced_ticks(ticks, x, lambda value: format_axis(value, scale, unit))
     plot_bottom = height - (32 if mobile else 32)
     svg = [
         f'<svg class="chart-svg {"chart-svg-mobile" if mobile else "chart-svg-wide"}" viewBox="0 0 {width} {height}" role="img" aria-label="{esc(title)} paired {esc(metric_label)} differences">',
         f'<title>{esc(title)} paired {esc(metric_label)} differences</title>',
-        f'<desc>The paired delta is Protobuf minus Text plus ccache. Positive values mean Protobuf took longer. '
+        f'<desc>The paired delta is Protobuf minus Text. Positive values mean Protobuf took longer. '
         'Candle and whisker statistics use every matched invocation. '
         + (f'Dots are a deterministic display sample, at most {max_points_per_group} per group; '
            'they do not determine the candle statistics.' if show_points
