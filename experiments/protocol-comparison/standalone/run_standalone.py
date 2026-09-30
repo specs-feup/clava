@@ -515,6 +515,8 @@ def run_schedule(output_root: Path, schedule_rows: list[dict[str, Any]], manifes
     schedule_path = output_root / "schedules" / f"{name}.jsonl"
     result_path = output_root / "runner-output" / f"{name}.jsonl"
     log_path = output_root / "logs" / f"{name}.log"
+    result_path.parent.mkdir(parents=True, exist_ok=True)
+    log_path.parent.mkdir(parents=True, exist_ok=True)
     write_jsonl(schedule_path, schedule_rows)
     env = environment_for(manifest, native_tool, output_root / "scratch" / name,
                           require_ccache=any(row.get("cache_mode") == "warm" for row in schedule_rows))
