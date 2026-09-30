@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import copy
+import base64
+import re
 import sys
 from pathlib import Path
 import unittest
@@ -11,7 +13,7 @@ import grouped_ab_visuals as grouped
 
 def fixture_rows():
     ids_by_suite = {
-        "clava-js": ["clava-js-group-0001", "clava-js-group-0002"],
+        "clava-js": ["js-group-0001", "js-group-0002"],
         "java": ["java-group-0001"],
     }
     schedules = []
@@ -31,9 +33,16 @@ def fixture_rows():
                             "protocol": protocol,
                             "cache_mode": cache_mode,
                             "compression_policy": "raw_control",
-                            "source_sha256": f"source-{input_id}",
-                            "args_sha256": f"args-{input_id}",
-                            "options_sha256": f"options-{input_id}",
+                            "source_label": f"src/fixture-{index}.c",
+                            "source_paths": [f"/private/corpus/fixture-{index}.c"],
+                            "source_files": [{
+                                "original_path": f"/private/corpus/fixture-{index}.c",
+                                "sha256": "d" * 64,
+                            }],
+                            "source_count": 1,
+                            "source_sha256": "a" * 64,
+                            "args_sha256": "b" * 64,
+                            "options_sha256": "c" * 64,
                         }
                         schedules.append(schedule)
                         text_ms = 10.0 + index + repeat
@@ -104,7 +113,7 @@ class GroupedABVisualsTest(unittest.TestCase):
 
     def test_schedule_id_drift_is_rejected(self):
         schedules = copy.deepcopy(self.schedules)
-        schedules[0]["input_id"] = "clava-js-group-9999"
+        schedules[0]["input_id"] = "js-group-9999"
         with self.assertRaisesRegex(grouped.AnalysisError, "event/group identity is not unique|stable IDs"):
             grouped.analyze_grouped_runs(
                 schedules, self.observations, expected_group_counts=self.counts
@@ -124,7 +133,14 @@ class GroupedABVisualsTest(unittest.TestCase):
         self.assertIn("data:text/csv;charset=utf-8;base64,", fragment)
         self.assertNotIn("/home/", fragment)
         self.assertNotIn("internal-group", fragment)
-        self.assertNotIn("source-", fragment)
+        csv_blobs = re.findall(r'href="data:text/csv;charset=utf-8;base64,([^"]+)"', fragment)
+        decoded_csvs = [base64.b64decode(blob).decode("utf-8") for blob in csv_blobs]
+        group_csv = next(content for content in decoded_csvs
+                         if content.startswith("suite,input_id,source_labels"))
+        self.assertIn("source_sha256,source_file_sha256s,args_sha256,options_sha256", group_csv)
+        self.assertIn("fixture-1.c", group_csv)
+        self.assertIn("d" * 64, group_csv)
+        self.assertNotIn("/private/", group_csv)
 
 
 if __name__ == "__main__":

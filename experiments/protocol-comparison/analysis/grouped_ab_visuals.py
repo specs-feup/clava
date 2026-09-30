@@ -25,7 +25,7 @@ CACHE_MODES = ("direct", "warm")
 REPEATS = tuple(range(1, 7))
 EXPECTED_GROUP_COUNTS = {"clava-js": 300, "java": 216}
 GROUP_ID_PATTERNS = {
-    "clava-js": re.compile(r"^clava-js-group-[0-9]{4}$"),
+    "clava-js": re.compile(r"^(?:js|clava-js)-group-[0-9]{4}$"),
     "java": re.compile(r"^java-group-[0-9]{4}$"),
 }
 
@@ -62,6 +62,69 @@ def _cell(row: dict[str, Any], source: str) -> tuple[str, str, str, int]:
     if row.get("phase") != "measure":
         raise AnalysisError(f"{source}: expected phase=measure")
     return suite, protocol, cache_mode, repeat
+
+
+def _safe_basename(value: Any) -> str | None:
+    if not isinstance(value, str) or not value.strip():
+        return None
+    basename = value.strip().replace("\\", "/").rsplit("/", 1)[-1]
+    if basename in ("", ".", ".."):
+        return None
+    if basename[0] in "=+-@\t\r":
+        basename = "'" + basename
+    return basename
+
+
+def _source_attribution(row: dict[str, Any]) -> dict[str, Any]:
+    labels: list[str] = []
+    for field in ("source_paths", "source_files"):
+        values = row.get(field)
+        if isinstance(values, list):
+            for value in values:
+                label = _safe_basename(value)
+                if label is not None and label not in labels:
+                    labels.append(label)
+    source_label = row.get("source_label")
+    if isinstance(source_label, str):
+        for component in source_label.split(","):
+            label = _safe_basename(component)
+            if label is not None and label not in labels:
+                labels.append(label)
+    source_count = row.get("source_count")
+    if type(source_count) is not int or source_count < 0:
+        source_files = row.get("source_files")
+        source_paths = row.get("source_paths")
+        if type(source_files) is int and source_files >= 0:
+            source_count = source_files
+        elif isinstance(source_files, list):
+            source_count = len(source_files)
+        elif isinstance(source_paths, list):
+            source_count = len(source_paths)
+        else:
+            source_count = len(labels) if labels else None
+    hashes = {}
+    for field in ("source_sha256", "args_sha256", "options_sha256"):
+        value = row.get(field)
+        if value is not None and (not isinstance(value, str)
+                                  or not re.fullmatch(r"[0-9a-fA-F]{64}", value)):
+            raise AnalysisError(f"schedule has an invalid {field}")
+        hashes[field] = value.lower() if isinstance(value, str) else ""
+    source_file_hashes: list[str] = []
+    source_files = row.get("source_files")
+    if isinstance(source_files, list):
+        for record in source_files:
+            if not isinstance(record, dict) or record.get("sha256") is None:
+                continue
+            digest = record["sha256"]
+            if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-fA-F]{64}", digest):
+                raise AnalysisError("schedule has an invalid source file SHA-256")
+            source_file_hashes.append(digest.lower())
+    return {
+        "source_labels": "; ".join(labels),
+        "source_file_sha256s": ";".join(source_file_hashes),
+        "source_count": source_count,
+        **hashes,
+    }
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -130,6 +193,7 @@ def analyze_grouped_runs(
     schedule_cells: dict[tuple[str, str, str, int], dict[str, dict[str, Any]]] = {}
     expected_ids_by_suite: dict[str, set[str]] = {}
     stable_metadata: dict[tuple[str, str], tuple[Any, ...]] = {}
+    attribution_by_group: dict[tuple[str, str], dict[str, Any]] = {}
     event_ids_by_suite: dict[str, set[str]] = {suite: set() for suite in SUITES}
     group_ids_by_suite: dict[str, set[str]] = {suite: set() for suite in SUITES}
     schedule_row_count = 0
@@ -155,10 +219,13 @@ def analyze_grouped_runs(
         scheduled[input_id] = row
         expected_ids_by_suite.setdefault(suite, set()).add(input_id)
 
-        # These values identify the exact source/configuration event.  They
-        # are checked for stability but never copied into any report or CSV.
-        identity = (event_id, group_id, row.get("source_sha256"),
-                    row.get("args_sha256"), row.get("options_sha256"))
+        # These values identify the exact source/configuration event. Hashes
+        # and safe basenames are exported; source paths stay internal.
+        attribution = _source_attribution(row)
+        identity = (event_id, group_id, attribution["source_labels"],
+                    attribution["source_file_sha256s"],
+                    attribution["source_count"], attribution["source_sha256"],
+                    attribution["args_sha256"], attribution["options_sha256"])
         identity_key = (suite, input_id)
         previous = stable_metadata.get(identity_key)
         if previous is None:
@@ -167,6 +234,7 @@ def analyze_grouped_runs(
             event_ids_by_suite[suite].add(event_id)
             group_ids_by_suite[suite].add(group_id)
             stable_metadata[identity_key] = identity
+            attribution_by_group[identity_key] = attribution
         elif previous != identity:
             raise AnalysisError(f"scheduled identity changed for {input_id}")
         schedule_row_count += 1
@@ -284,6 +352,7 @@ def analyze_grouped_runs(
                     group_rounds.append({
                         "suite": suite,
                         "input_id": input_id,
+                        **attribution_by_group[(suite, input_id)],
                         "cache_mode": cache_mode,
                         "repeat": repeat,
                         "text_ms": text_ms,
@@ -296,6 +365,7 @@ def analyze_grouped_runs(
                 group_summaries.append({
                     "suite": suite,
                     "input_id": input_id,
+                    **attribution_by_group[(suite, input_id)],
                     "cache_mode": cache_mode,
                     "n_rounds": len(REPEATS),
                     "text_median_ms": text_median,
@@ -673,13 +743,15 @@ def render_reviewed_visuals_html(
     )
     group_link = _csv_link(
         "grouped-ab-group-medians-and-ratios.csv",
-        ["suite", "input_id", "cache_mode", "n_rounds", "text_median_ms", "protobuf_median_ms",
+        ["suite", "input_id", "source_labels", "source_count", "source_sha256", "source_file_sha256s", "args_sha256",
+         "options_sha256", "cache_mode", "n_rounds", "text_median_ms", "protobuf_median_ms",
          "proto_text_ratio", "median_paired_relative_pct"],
         summary["group_summaries"],
     )
     paired_link = _csv_link(
         "grouped-ab-paired-rounds.csv",
-        ["suite", "input_id", "cache_mode", "repeat", "text_ms", "protobuf_ms", "delta_ms", "relative_pct"],
+        ["suite", "input_id", "source_labels", "source_count", "source_sha256", "source_file_sha256s", "args_sha256",
+         "options_sha256", "cache_mode", "repeat", "text_ms", "protobuf_ms", "delta_ms", "relative_pct"],
         summary["group_rounds"],
     )
     return f'''<section class="grouped-ab" aria-labelledby="grouped-ab-title">
