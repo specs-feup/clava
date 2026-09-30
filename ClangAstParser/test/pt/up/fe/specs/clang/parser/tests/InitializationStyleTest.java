@@ -16,29 +16,24 @@ package pt.up.fe.specs.clang.parser.tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 import pt.up.fe.specs.clang.codeparser.CodeParser;
+import pt.up.fe.specs.clang.parser.TestResourceResolver;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
 
 public class InitializationStyleTest {
-
-    @TempDir
-    Path tempFolder;
 
     @Test
     public void parenthesizedListInitializationKeepsAllArguments() {
         SpecsSystem.programStandardInit();
 
-        File sourceFile = SpecsIo.resourceCopy("cxx/paren_list_initialization.cpp", tempFolder.toFile(), false, true);
+        File sourceFile = TestResourceResolver.resolve("cxx/paren_list_initialization.cpp");
         App app = CodeParser.newInstance().parse(List.of(sourceFile), List.of("-std=c++20"));
 
         VarDecl point = app.getDescendants(VarDecl.class).stream()

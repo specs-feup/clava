@@ -17,6 +17,8 @@ gradle.afterProject { project ->
                 excludeTestsMatching 'pt.up.fe.specs.clang.CudaResourcesTest'
                 excludeTestsMatching 'pt.up.fe.specs.clang.parser.tests.CxxCudaTest'
                 excludeTestsMatching 'pt.up.fe.specs.clang.parser.tests.GeneratedParseRootTest'
+                // Harness regression coverage runs separately from the fixed 116-test workload.
+                excludeTestsMatching 'pt.up.fe.specs.clang.parser.AClangAstTesterResourceTest'
                 excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangCcacheAdapterTest'
                 // Added only on the Protobuf experiment branch; keep the
                 // measured population identical to the shared 116-test base.

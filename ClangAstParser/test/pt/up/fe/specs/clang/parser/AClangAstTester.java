@@ -18,6 +18,7 @@ import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -57,7 +58,9 @@ public abstract class AClangAstTester {
     private static final Map<String, AtomicInteger> TESTER_INVOCATIONS = new ConcurrentHashMap<>();
 
     private File outputFolder;
-    private final Map<File, String> copiedResourceKeys = new LinkedHashMap<>();
+    private File inputRoot;
+    private List<File> inputFiles;
+    private final Map<File, String> inputResourceKeys = new LinkedHashMap<>();
     private String benchmarkTestId;
     private int benchmarkTesterInvocation;
 
@@ -199,11 +202,23 @@ public abstract class AClangAstTester {
         SpecsSystem.programStandardInit();
 
         outputFolder = Files.createTempDirectory("temp-clang-ast-").toFile();
-        copiedResourceKeys.clear();
+        inputFiles = new ArrayList<>();
+        inputResourceKeys.clear();
         for (ResourceProvider resource : resources) {
-            File copiedFile = SpecsIo.resourceCopy(resource.getResource(), outputFolder, false, true);
-            assertTrue(copiedFile.isFile(), "Could not copy resource '" + resource + "'");
-            copiedResourceKeys.put(copiedFile, resource.getResource());
+            File inputFile = TestResourceResolver.resolve(resource.getResource());
+            assertTrue(inputFile.isFile(), "Could not resolve resource '" + resource + "'");
+            inputFiles.add(inputFile);
+            inputResourceKeys.put(inputFile, resource.getResource());
+        }
+
+        if (inputFiles.isEmpty()) {
+            throw new IllegalStateException("Parser test has no input resources");
+        }
+
+        inputRoot = commonParent(inputFiles);
+        if (inputRoot == null) {
+            throw new IllegalStateException("Parser test input resources do not share a filesystem parent: "
+                    + inputFiles);
         }
 
     }
@@ -214,18 +229,45 @@ public abstract class AClangAstTester {
         }
     }
 
+    List<File> getInputFiles() {
+        return inputFiles;
+    }
+
+    File getInputRoot() {
+        return inputRoot;
+    }
+
+    File getOutputFolder() {
+        return outputFolder;
+    }
+
+    private static File commonParent(List<File> files) {
+        Path commonParent = files.get(0).toPath().toAbsolutePath().normalize().getParent();
+
+        for (int i = 1; i < files.size(); i++) {
+            Path filePath = files.get(i).toPath().toAbsolutePath().normalize();
+            while (commonParent != null && !filePath.startsWith(commonParent)) {
+                commonParent = commonParent.getParent();
+            }
+
+            if (commonParent == null) {
+                return null;
+            }
+        }
+
+        return commonParent == null ? null : commonParent.toFile();
+    }
+
     public void testProper() {
 
         // Enable parallel parsing
         codeParser.set(ParallelCodeParser.PARALLEL_PARSING);
 
-        File workFolder = outputFolder;
-
         // Parse files
-        codeParser.set(CodeParser.GENERATED_PARSE_ROOT, workFolder);
+        codeParser.set(CodeParser.GENERATED_PARSE_ROOT, inputRoot);
         App clavaAst;
-        try (AstWireBenchmarkIdentity.Registration ignored = registerBenchmarkIdentity(workFolder, "original")) {
-            clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
+        try (AstWireBenchmarkIdentity.Registration ignored = registerBenchmarkIdentity(inputRoot, "original")) {
+            clavaAst = codeParser.parse(inputFiles, compilerOptions);
         }
 
         File firstOutputFolder = SpecsIo.mkdir(new File(outputFolder, "outputFirst"));
@@ -299,10 +341,10 @@ public abstract class AClangAstTester {
         }
 
         Map<File, String> identities = new HashMap<>();
-        if (parseRoot.equals(outputFolder)) {
-            identities.putAll(copiedResourceKeys);
+        if (parseRoot.equals(inputRoot)) {
+            identities.putAll(inputResourceKeys);
         } else {
-            Map<String, List<String>> resourcesByFilename = copiedResourceKeys.entrySet().stream()
+            Map<String, List<String>> resourcesByFilename = inputResourceKeys.entrySet().stream()
                     .collect(Collectors.groupingBy(entry -> entry.getKey().getName(),
                             Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
 
