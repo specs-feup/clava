@@ -495,6 +495,9 @@ def parse_ccache_stats(rows: list[dict[str, Any]]) -> dict[str, int]:
     for field, label in labels.items():
         match = re.search(rf"^\s*{label}\s*([\d,]+)", output, re.MULTILINE)
         if match is None:
+            if field == "ccache_uncacheable_calls":
+                result[field] = 0
+                continue
             raise RuntimeError(f"ccache stats output lacks {label!r}: {output[:1200]}")
         result[field] = int(match.group(1).replace(",", ""))
     return result
