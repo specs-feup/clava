@@ -1,0 +1,736 @@
+#!/usr/bin/env python3
+"""Validate grouped parser A/B observations and render report-ready SVGs.
+
+The unit of analysis is one scheduled CodeParser call group.  Rows are paired
+by the stable suite/input_id identity; repeated rounds are kept as repeated
+measurements of that group, never as additional groups.
+"""
+from __future__ import annotations
+
+import base64
+import csv
+import html
+import io
+import json
+import math
+from pathlib import Path
+import re
+import statistics
+from typing import Any, Iterable
+
+
+SUITES = ("clava-js", "java")
+PROTOCOLS = ("text", "protobuf")
+CACHE_MODES = ("direct", "warm")
+REPEATS = tuple(range(1, 7))
+EXPECTED_GROUP_COUNTS = {"clava-js": 300, "java": 216}
+GROUP_ID_PATTERNS = {
+    "clava-js": re.compile(r"^clava-js-group-[0-9]{4}$"),
+    "java": re.compile(r"^java-group-[0-9]{4}$"),
+}
+
+SUITE_LABELS = {"clava-js": "Clava-JS", "java": "Java"}
+PROTOCOL_LABELS = {"text": "Text", "protobuf": "Proto"}
+CACHE_LABELS = {"direct": "Direct", "warm": "Warm"}
+SUITE_COLORS = {"clava-js": "#2368a2", "java": "#b45a2a"}
+PROTOCOL_COLORS = {"text": "#4d647a", "protobuf": "#147d64"}
+
+
+class AnalysisError(ValueError):
+    """The schedules or observations do not form the complete valid matrix."""
+
+
+def _number(value: Any, label: str, *, positive: bool = False) -> float:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise AnalysisError(f"{label} must be numeric")
+    number = float(value)
+    if not math.isfinite(number) or number < 0 or (positive and number == 0):
+        qualifier = "finite and positive" if positive else "finite and non-negative"
+        raise AnalysisError(f"{label} must be {qualifier}")
+    return number
+
+
+def _cell(row: dict[str, Any], source: str) -> tuple[str, str, str, int]:
+    suite = row.get("suite")
+    protocol = row.get("protocol")
+    cache_mode = row.get("cache_mode")
+    repeat = row.get("repeat")
+    if suite not in SUITES or protocol not in PROTOCOLS or cache_mode not in CACHE_MODES:
+        raise AnalysisError(f"{source}: unexpected suite/protocol/cache cell")
+    if type(repeat) is not int or repeat not in REPEATS:
+        raise AnalysisError(f"{source}: repeat must be an integer from 1 through 6")
+    if row.get("phase") != "measure":
+        raise AnalysisError(f"{source}: expected phase=measure")
+    return suite, protocol, cache_mode, repeat
+
+
+def _read_jsonl(path: Path) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    try:
+        with path.open(encoding="utf-8") as source:
+            for line_number, line in enumerate(source, start=1):
+                if not line.strip():
+                    continue
+                try:
+                    row = json.loads(line)
+                except json.JSONDecodeError as error:
+                    raise AnalysisError(
+                        f"{path.name}:{line_number}: malformed JSON: {error.msg}"
+                    ) from error
+                if not isinstance(row, dict):
+                    raise AnalysisError(f"{path.name}:{line_number}: row must be an object")
+                rows.append(row)
+    except OSError as error:
+        raise AnalysisError(f"cannot read {path.name}: {error}") from error
+    return rows
+
+
+def load_grouped_analysis(
+    run_root: Path,
+    *,
+    expected_group_counts: dict[str, int] | None = None,
+) -> dict[str, Any]:
+    """Load the 48 scheduled cells under ``schedules/`` and ``observations/``."""
+    run_root = Path(run_root)
+    schedules: list[dict[str, Any]] = []
+    observations: list[dict[str, Any]] = []
+    for suite in SUITES:
+        for protocol in PROTOCOLS:
+            for cache_mode in CACHE_MODES:
+                for repeat in REPEATS:
+                    name = f"measure-{suite}-{protocol}-{cache_mode}-r{repeat:02d}.jsonl"
+                    schedule_path = run_root / "schedules" / name
+                    result_path = run_root / "observations" / name
+                    schedules.extend(_read_jsonl(schedule_path))
+                    observations.extend(_read_jsonl(result_path))
+    return analyze_grouped_runs(
+        schedules, observations, expected_group_counts=expected_group_counts
+    )
+
+
+def analyze_grouped_runs(
+    schedule_rows: Iterable[dict[str, Any]],
+    observation_rows: Iterable[dict[str, Any]],
+    *,
+    expected_group_counts: dict[str, int] | None = None,
+) -> dict[str, Any]:
+    """Validate and summarize a six-round Text/Proto direct/warm group matrix.
+
+    ``schedule_rows`` must contain all 48 schedule files flattened into one
+    iterable.  Invalid, unselected, untimed, and non-measure observation rows
+    are left out.  The remaining selected valid observations must still cover
+    every planned suite/input_id/protocol/cache/repeat cell exactly once.
+    """
+    expected_group_counts = expected_group_counts or EXPECTED_GROUP_COUNTS
+    if set(expected_group_counts) != set(SUITES) or any(
+        type(count) is not int or count < 1 for count in expected_group_counts.values()
+    ):
+        raise AnalysisError("expected_group_counts must provide a positive count for both suites")
+
+    schedule_cells: dict[tuple[str, str, str, int], dict[str, dict[str, Any]]] = {}
+    expected_ids_by_suite: dict[str, set[str]] = {}
+    stable_metadata: dict[tuple[str, str], tuple[Any, ...]] = {}
+    event_ids_by_suite: dict[str, set[str]] = {suite: set() for suite in SUITES}
+    group_ids_by_suite: dict[str, set[str]] = {suite: set() for suite in SUITES}
+    schedule_row_count = 0
+    for index, row in enumerate(schedule_rows, start=1):
+        if not isinstance(row, dict):
+            raise AnalysisError(f"schedule row {index} must be an object")
+        suite, protocol, cache_mode, repeat = _cell(row, f"schedule row {index}")
+        if row.get("compression_policy") != "raw_control":
+            raise AnalysisError(f"schedule row {index}: expected compression_policy=raw_control")
+        input_id = row.get("input_id")
+        if not isinstance(input_id, str) or not GROUP_ID_PATTERNS[suite].fullmatch(input_id):
+            raise AnalysisError(f"schedule row {index}: invalid stable input_id")
+        event_id, group_id = row.get("event_id"), row.get("group_id")
+        if not isinstance(event_id, str) or not event_id.strip():
+            raise AnalysisError(f"schedule row {index}: missing event_id")
+        if not isinstance(group_id, str) or not group_id.strip():
+            raise AnalysisError(f"schedule row {index}: missing group_id")
+
+        cell_key = (suite, protocol, cache_mode, repeat)
+        scheduled = schedule_cells.setdefault(cell_key, {})
+        if input_id in scheduled:
+            raise AnalysisError(f"duplicate scheduled input_id {input_id} in {cell_key}")
+        scheduled[input_id] = row
+        expected_ids_by_suite.setdefault(suite, set()).add(input_id)
+
+        # These values identify the exact source/configuration event.  They
+        # are checked for stability but never copied into any report or CSV.
+        identity = (event_id, group_id, row.get("source_sha256"),
+                    row.get("args_sha256"), row.get("options_sha256"))
+        identity_key = (suite, input_id)
+        previous = stable_metadata.get(identity_key)
+        if previous is None:
+            if event_id in event_ids_by_suite[suite] or group_id in group_ids_by_suite[suite]:
+                raise AnalysisError(f"event/group identity is not unique for {suite}")
+            event_ids_by_suite[suite].add(event_id)
+            group_ids_by_suite[suite].add(group_id)
+            stable_metadata[identity_key] = identity
+        elif previous != identity:
+            raise AnalysisError(f"scheduled identity changed for {input_id}")
+        schedule_row_count += 1
+
+    expected_cells = {
+        (suite, protocol, cache_mode, repeat)
+        for suite in SUITES for protocol in PROTOCOLS
+        for cache_mode in CACHE_MODES for repeat in REPEATS
+    }
+    actual_cells = set(schedule_cells)
+    if actual_cells != expected_cells:
+        raise AnalysisError(
+            f"schedule matrix incomplete; missing={sorted(expected_cells - actual_cells)}, "
+            f"unexpected={sorted(actual_cells - expected_cells)}"
+        )
+    for suite in SUITES:
+        actual_ids = expected_ids_by_suite.get(suite, set())
+        required_count = expected_group_counts[suite]
+        if len(actual_ids) != required_count:
+            raise AnalysisError(
+                f"schedule has {len(actual_ids)} stable IDs for {suite}; expected {required_count}"
+            )
+        ordinals = sorted(int(input_id.rsplit("-", 1)[1]) for input_id in actual_ids)
+        if ordinals != list(range(1, required_count + 1)):
+            raise AnalysisError(f"schedule does not contain the complete one-based ID range for {suite}")
+        for cell_key in sorted(key for key in expected_cells if key[0] == suite):
+            cell_ids = set(schedule_cells[cell_key])
+            if cell_ids != actual_ids:
+                missing = sorted(actual_ids - cell_ids)
+                unexpected = sorted(cell_ids - actual_ids)
+                raise AnalysisError(
+                    f"schedule ID set differs for {cell_key}; "
+                    f"missing={missing[:4]}, unexpected={unexpected[:4]}"
+                )
+
+    expected_by_cell: dict[tuple[str, str, str, int], set[str]] = {
+        cell: set(rows) for cell, rows in schedule_cells.items()
+    }
+    valid: dict[tuple[str, str, str, int, str], dict[str, Any]] = {}
+    excluded = {"non_measure": 0, "unselected": 0, "invalid": 0, "untimed": 0}
+    for index, row in enumerate(observation_rows, start=1):
+        if not isinstance(row, dict):
+            raise AnalysisError(f"observation row {index} must be an object")
+        if row.get("phase") != "measure":
+            excluded["non_measure"] += 1
+            continue
+        if row.get("selected") is False:
+            excluded["unselected"] += 1
+            continue
+        if row.get("valid") is not True:
+            excluded["invalid"] += 1
+            continue
+        if row.get("app_null") is True or row.get("app_returned_null") is True:
+            excluded["invalid"] += 1
+            continue
+        if "elapsed_ms" not in row or row.get("elapsed_ms") is None:
+            excluded["untimed"] += 1
+            continue
+        suite, protocol, cache_mode, repeat = _cell(row, f"observation row {index}")
+        input_id = row.get("input_id")
+        if not isinstance(input_id, str) or input_id not in expected_by_cell[(suite, protocol, cache_mode, repeat)]:
+            raise AnalysisError(f"observation row {index}: unexpected stable input_id")
+        if input_id not in expected_ids_by_suite[suite]:
+            raise AnalysisError(f"observation row {index}: input_id is not in the schedule")
+        schedule = schedule_cells[(suite, protocol, cache_mode, repeat)][input_id]
+        for field in ("event_id", "group_id"):
+            if row.get(field) != schedule.get(field):
+                raise AnalysisError(f"observation row {index}: {field} differs from schedule")
+        elapsed_ms = _number(row.get("elapsed_ms"), f"observation row {index}.elapsed_ms", positive=True)
+        key = (suite, cache_mode, protocol, repeat, input_id)
+        if key in valid:
+            raise AnalysisError(f"duplicate selected valid observation for {key}")
+        valid[key] = {
+            "suite": suite,
+            "input_id": input_id,
+            "cache_mode": cache_mode,
+            "protocol": protocol,
+            "repeat": repeat,
+            "elapsed_ms": elapsed_ms,
+        }
+
+    expected_observation_keys = {
+        (suite, cache_mode, protocol, repeat, input_id)
+        for suite, protocol, cache_mode, repeat in expected_cells
+        for input_id in expected_by_cell[(suite, protocol, cache_mode, repeat)]
+    }
+    actual_observation_keys = set(valid)
+    if actual_observation_keys != expected_observation_keys:
+        missing = sorted(expected_observation_keys - actual_observation_keys)
+        unexpected = sorted(actual_observation_keys - expected_observation_keys)
+        raise AnalysisError(
+            "selected valid timed observations do not cover the complete matrix; "
+            f"missing={missing[:6]}, unexpected={unexpected[:6]}, excluded={excluded}"
+        )
+
+    group_ids = {suite: sorted(expected_ids_by_suite[suite]) for suite in SUITES}
+    group_rounds: list[dict[str, Any]] = []
+    group_summaries: list[dict[str, Any]] = []
+    for suite in SUITES:
+        for cache_mode in CACHE_MODES:
+            for input_id in group_ids[suite]:
+                text_samples = [
+                    valid[(suite, cache_mode, "text", repeat, input_id)]["elapsed_ms"]
+                    for repeat in REPEATS
+                ]
+                proto_samples = [
+                    valid[(suite, cache_mode, "protobuf", repeat, input_id)]["elapsed_ms"]
+                    for repeat in REPEATS
+                ]
+                paired_pct: list[float] = []
+                for repeat, text_ms, proto_ms in zip(REPEATS, text_samples, proto_samples):
+                    delta_ms = proto_ms - text_ms
+                    relative_pct = 100 * (proto_ms / text_ms - 1)
+                    paired_pct.append(relative_pct)
+                    group_rounds.append({
+                        "suite": suite,
+                        "input_id": input_id,
+                        "cache_mode": cache_mode,
+                        "repeat": repeat,
+                        "text_ms": text_ms,
+                        "protobuf_ms": proto_ms,
+                        "delta_ms": delta_ms,
+                        "relative_pct": relative_pct,
+                    })
+                text_median = statistics.median(text_samples)
+                proto_median = statistics.median(proto_samples)
+                group_summaries.append({
+                    "suite": suite,
+                    "input_id": input_id,
+                    "cache_mode": cache_mode,
+                    "n_rounds": len(REPEATS),
+                    "text_median_ms": text_median,
+                    "protobuf_median_ms": proto_median,
+                    "proto_text_ratio": proto_median / text_median,
+                    "median_paired_relative_pct": statistics.median(paired_pct),
+                })
+
+    round_totals: list[dict[str, Any]] = []
+    for cache_mode in CACHE_MODES:
+        for repeat in REPEATS:
+            suite_totals: dict[str, dict[str, float]] = {}
+            for suite in SUITES:
+                suite_totals[suite] = {}
+                for protocol in PROTOCOLS:
+                    suite_totals[suite][protocol] = sum(
+                        valid[(suite, cache_mode, protocol, repeat, input_id)]["elapsed_ms"]
+                        for input_id in group_ids[suite]
+                    )
+                    round_totals.append({
+                        "scope": suite,
+                        "suite": suite,
+                        "cache_mode": cache_mode,
+                        "repeat": repeat,
+                        "protocol": protocol,
+                        "group_count": len(group_ids[suite]),
+                        "sum_elapsed_ms": suite_totals[suite][protocol],
+                    })
+            for protocol in PROTOCOLS:
+                round_totals.append({
+                    "scope": "global",
+                    "suite": "global",
+                    "cache_mode": cache_mode,
+                    "repeat": repeat,
+                    "protocol": protocol,
+                    "group_count": sum(len(group_ids[suite]) for suite in SUITES),
+                    "sum_elapsed_ms": sum(suite_totals[suite][protocol] for suite in SUITES),
+                })
+
+    totals_by_key = {
+        (row["scope"], row["cache_mode"], row["repeat"], row["protocol"]): row
+        for row in round_totals
+    }
+    paired_round_totals: list[dict[str, Any]] = []
+    for scope in (*SUITES, "global"):
+        for cache_mode in CACHE_MODES:
+            for repeat in REPEATS:
+                text_sum = totals_by_key[(scope, cache_mode, repeat, "text")]["sum_elapsed_ms"]
+                proto_sum = totals_by_key[(scope, cache_mode, repeat, "protobuf")]["sum_elapsed_ms"]
+                paired_round_totals.append({
+                    "scope": scope,
+                    "cache_mode": cache_mode,
+                    "repeat": repeat,
+                    "group_count": (sum(len(group_ids[suite]) for suite in SUITES)
+                                    if scope == "global" else len(group_ids[scope])),
+                    "text_sum_ms": text_sum,
+                    "protobuf_sum_ms": proto_sum,
+                    "delta_ms": proto_sum - text_sum,
+                    "relative_pct": 100 * (proto_sum / text_sum - 1),
+                })
+
+    return {
+        "schema_version": 1,
+        "suites": list(SUITES),
+        "protocols": list(PROTOCOLS),
+        "cache_modes": list(CACHE_MODES),
+        "repeats": list(REPEATS),
+        "group_counts": {suite: len(group_ids[suite]) for suite in SUITES},
+        "excluded_rows": excluded,
+        "schedule_row_count": schedule_row_count,
+        "observation_row_count": len(valid),
+        "group_rounds": group_rounds,
+        "group_summaries": group_summaries,
+        "round_totals": round_totals,
+        "paired_round_totals": paired_round_totals,
+    }
+
+
+def _quantile(values: list[float], fraction: float) -> float:
+    ordered = sorted(values)
+    position = (len(ordered) - 1) * fraction
+    lo, hi = math.floor(position), math.ceil(position)
+    if lo == hi:
+        return ordered[lo]
+    return ordered[lo] + (ordered[hi] - ordered[lo]) * (position - lo)
+
+
+def _summary(values: list[float]) -> dict[str, float]:
+    return {
+        "min": min(values),
+        "q1": _quantile(values, 0.25),
+        "median": statistics.median(values),
+        "q3": _quantile(values, 0.75),
+        "max": max(values),
+    }
+
+
+def _fmt_ms(value: float) -> str:
+    if value >= 1000:
+        return f"{value / 1000:.2f} s"
+    if value >= 10:
+        return f"{value:.0f} ms"
+    if value >= 1:
+        return f"{value:.2f} ms"
+    return f"{value:.3f} ms"
+
+
+def _ratio_axis_label(value: float) -> str:
+    return f"{value:g}×"
+
+
+def _svg_candle(summary: dict[str, Any], suite: str, cache_mode: str) -> str:
+    rows = [row for row in summary["group_summaries"]
+            if row["suite"] == suite and row["cache_mode"] == cache_mode]
+    values_by_protocol = {
+        protocol: [row[f"{protocol}_median_ms"] for row in rows]
+        for protocol in PROTOCOLS
+    }
+    low = min(min(values) for values in values_by_protocol.values())
+    high = max(max(values) for values in values_by_protocol.values())
+    log_low, log_high = math.log10(low), math.log10(high)
+    if log_high - log_low < 0.5:
+        middle = (log_high + log_low) / 2
+        log_low, log_high = middle - 0.25, middle + 0.25
+    pad = (log_high - log_low) * 0.04
+    log_low -= pad
+    log_high += pad
+    left, right = 130.0, 425.0
+    x = lambda value: left + (math.log10(value) - log_low) * (right - left) / (log_high - log_low)
+    y_positions = {"text": 48, "protobuf": 103}
+    output = [
+        '<svg class="ga-svg" viewBox="0 0 440 164" role="img" '
+        f'aria-label="{html.escape(SUITE_LABELS[suite])} {html.escape(CACHE_LABELS[cache_mode])} '
+        'per-group median runtime spread, logarithmic milliseconds">',
+        '<desc>Each observation is the median of six paired rounds for one stable group. '
+        'Box spans the first through third quartile; whiskers show the full range. Lower is faster.</desc>',
+    ]
+    tick_exponents = list(range(math.ceil(log_low), math.floor(log_high) + 1))
+    if not tick_exponents:
+        tick_values = [10.0 ** ((log_low + log_high) / 2)]
+    elif len(tick_exponents) > 5:
+        tick_values = [10.0 ** (log_low + (log_high - log_low) * part / 4)
+                       for part in range(5)]
+    else:
+        tick_values = [10.0 ** exponent for exponent in tick_exponents]
+    for value in tick_values:
+        px = x(value)
+        output.extend([
+            f'<line class="ga-grid" x1="{px:.2f}" x2="{px:.2f}" y1="25" y2="132"/>',
+            f'<text class="ga-tick" x="{px:.2f}" y="19" text-anchor="middle">{html.escape(_fmt_ms(value))}</text>',
+        ])
+    for protocol in PROTOCOLS:
+        protocol_values = values_by_protocol[protocol]
+        stats = _summary(protocol_values)
+        y = y_positions[protocol]
+        color = PROTOCOL_COLORS[protocol]
+        output.extend([
+            f'<text class="ga-label" x="4" y="{y + 4}">{PROTOCOL_LABELS[protocol]} · n={len(protocol_values)}</text>',
+            f'<line class="ga-whisker" stroke="{color}" x1="{x(stats["min"]):.2f}" x2="{x(stats["max"]):.2f}" y1="{y}" y2="{y}"/>',
+            f'<line class="ga-cap" stroke="{color}" x1="{x(stats["min"]):.2f}" x2="{x(stats["min"]):.2f}" y1="{y - 6}" y2="{y + 6}"/>',
+            f'<line class="ga-cap" stroke="{color}" x1="{x(stats["max"]):.2f}" x2="{x(stats["max"]):.2f}" y1="{y - 6}" y2="{y + 6}"/>',
+            f'<rect class="ga-box" stroke="{color}" x="{x(stats["q1"]):.2f}" y="{y - 11}" width="{max(1.5, x(stats["q3"]) - x(stats["q1"])):.2f}" height="22"/>',
+            f'<line class="ga-median" stroke="{color}" x1="{x(stats["median"]):.2f}" x2="{x(stats["median"]):.2f}" y1="{y - 12}" y2="{y + 12}"/>',
+            f'<text class="ga-value" x="438" y="{y + 4}" text-anchor="end">med {html.escape(_fmt_ms(stats["median"]))}</text>',
+        ])
+    output.append('<text class="ga-axis-title" x="278" y="153" text-anchor="middle">Per-group median runtime · milliseconds · log scale</text>')
+    output.append('</svg>')
+    return "".join(output)
+
+
+def _svg_distribution(
+    summary: dict[str, Any], *, field: str, title: str, axis_label: str,
+    formatter, zero_line: bool = False, logarithmic: bool = False,
+) -> str:
+    categories: list[tuple[str, list[float]]] = []
+    for suite in SUITES:
+        for cache_mode in CACHE_MODES:
+            rows = [row for row in summary["group_summaries"]
+                    if row["suite"] == suite and row["cache_mode"] == cache_mode]
+            categories.append((f"{SUITE_LABELS[suite]} {CACHE_LABELS[cache_mode].lower()}",
+                               [float(row[field]) for row in rows]))
+    all_values = [value for _, values in categories for value in values]
+    if logarithmic:
+        if any(value <= 0 for value in all_values):
+            raise AnalysisError(f"{field} contains non-positive values on a logarithmic chart")
+        domain_min, domain_max = math.log10(min(all_values)), math.log10(max(all_values))
+    else:
+        domain_min, domain_max = min(all_values), max(all_values)
+    span = domain_max - domain_min
+    if span == 0:
+        span = max(abs(domain_min) * 0.2, 1.0)
+        domain_min -= span / 2
+        domain_max += span / 2
+    else:
+        domain_min -= span * 0.04
+        domain_max += span * 0.04
+    left, right = 147.0, 425.0
+
+    def project(value: float) -> float:
+        actual = math.log10(value) if logarithmic else value
+        return left + (actual - domain_min) * (right - left) / (domain_max - domain_min)
+
+    output = [
+        '<svg class="ga-svg" viewBox="0 0 440 244" role="img" '
+        f'aria-label="{html.escape(title)}">',
+        '<desc>Each row is a distribution across stable groups, with full-range whiskers and an interquartile box.</desc>',
+    ]
+    baseline = 218
+    tick_values: list[float]
+    if logarithmic:
+        min_exp, max_exp = math.ceil(domain_min), math.floor(domain_max)
+        exponents = list(range(min_exp, max_exp + 1))
+        if not exponents:
+            tick_values = [10.0 ** ((domain_min + domain_max) / 2)]
+        elif len(exponents) > 5:
+            tick_values = [10.0 ** (domain_min + (domain_max - domain_min) * part / 4)
+                           for part in range(5)]
+        else:
+            tick_values = [10.0 ** exponent for exponent in exponents]
+    else:
+        tick_values = [domain_min + (domain_max - domain_min) * part / 4 for part in range(5)]
+    if zero_line and domain_min <= 0 <= domain_max:
+        px = project(0)
+        output.append(f'<line class="ga-zero" x1="{px:.2f}" x2="{px:.2f}" y1="25" y2="{baseline}"/>')
+    for value in tick_values:
+        px = project(value)
+        label = formatter(value)
+        output.extend([
+            f'<line class="ga-grid-line" x1="{px:.2f}" x2="{px:.2f}" y1="27" y2="{baseline}"/>',
+            f'<text class="ga-tick" x="{px:.2f}" y="232" text-anchor="middle">{html.escape(label)}</text>',
+        ])
+    for index, (label, values) in enumerate(categories):
+        y = 42 + index * 43
+        stats = _summary(values)
+        color = SUITE_COLORS["clava-js" if label.startswith("Clava-JS") else "java"]
+        output.extend([
+            f'<text class="ga-label" x="3" y="{y + 4}">{html.escape(label)} · n={len(values)}</text>',
+            f'<line class="ga-whisker" stroke="{color}" x1="{project(stats["min"]):.2f}" x2="{project(stats["max"]):.2f}" y1="{y}" y2="{y}"/>',
+            f'<rect class="ga-box" stroke="{color}" x="{project(stats["q1"]):.2f}" y="{y - 9}" width="{max(1.5, project(stats["q3"]) - project(stats["q1"])):.2f}" height="18"/>',
+            f'<line class="ga-median" stroke="{color}" x1="{project(stats["median"]):.2f}" x2="{project(stats["median"]):.2f}" y1="{y - 11}" y2="{y + 11}"/>',
+            f'<text class="ga-value" x="438" y="{y + 4}" text-anchor="end">{html.escape(formatter(stats["median"]))}</text>',
+        ])
+    output.append(f'<text class="ga-axis-title" x="286" y="242" text-anchor="middle">{html.escape(axis_label)}</text>')
+    output.append('</svg>')
+    return "".join(output)
+
+
+def _svg_round_totals(summary: dict[str, Any], cache_mode: str, protocol: str) -> str:
+    totals = {
+        (row["suite"], row["repeat"]): row["sum_elapsed_ms"]
+        for row in summary["round_totals"]
+        if row["scope"] != "global" and row["cache_mode"] == cache_mode
+        and row["protocol"] == protocol
+    }
+    maximum = max(sum(totals[(suite, repeat)] for suite in SUITES) for repeat in REPEATS)
+    domain = max(1.0, maximum * 1.05)
+    left, right = 58.0, 420.0
+    x = lambda value: left + value * (right - left) / domain
+    output = [
+        '<svg class="ga-svg" viewBox="0 0 440 222" role="img" '
+        f'aria-label="{html.escape(CACHE_LABELS[cache_mode])} {html.escape(PROTOCOL_LABELS[protocol])} '
+        'per-round summed parse time by suite">',
+        '<desc>Six rounds. Each horizontal bar sums per-group parser-call times and is stacked by suite.</desc>',
+    ]
+    for tick in range(5):
+        value = domain * tick / 4
+        px = x(value)
+        output.extend([
+            f'<line class="ga-grid" x1="{px:.2f}" x2="{px:.2f}" y1="22" y2="193"/>',
+            f'<text class="ga-tick" x="{px:.2f}" y="207" text-anchor="middle">{html.escape(_fmt_ms(value))}</text>',
+        ])
+    for index, repeat in enumerate(REPEATS):
+        y = 37 + index * 27
+        offset = 0.0
+        output.append(f'<text class="ga-label" x="2" y="{y + 4}">Round {repeat}</text>')
+        for suite in SUITES:
+            value = totals[(suite, repeat)]
+            output.append(
+                f'<rect x="{x(offset):.2f}" y="{y - 8}" width="{max(0.6, x(offset + value) - x(offset)):.2f}" height="16" '
+                f'fill="{SUITE_COLORS[suite]}"><title>{SUITE_LABELS[suite]}: {html.escape(_fmt_ms(value))}</title></rect>'
+            )
+            offset += value
+        output.append(f'<text class="ga-value" x="438" y="{y + 4}" text-anchor="end">{html.escape(_fmt_ms(offset))}</text>')
+    output.extend([
+        f'<rect x="83" y="216" width="9" height="9" fill="{SUITE_COLORS["clava-js"]}"/>',
+        '<text class="ga-legend" x="96" y="224">Clava-JS</text>',
+        f'<rect x="174" y="216" width="9" height="9" fill="{SUITE_COLORS["java"]}"/>',
+        '<text class="ga-legend" x="187" y="224">Java</text>',
+    ])
+    output.append('</svg>')
+    return "".join(output)
+
+
+def _csv_link(filename: str, columns: list[str], rows: Iterable[dict[str, Any]]) -> str:
+    stream = io.StringIO(newline="")
+    writer = csv.DictWriter(stream, fieldnames=columns, extrasaction="ignore", lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(rows)
+    encoded = base64.b64encode(stream.getvalue().encode("utf-8")).decode("ascii")
+    return (
+        f'<a download="{html.escape(filename, quote=True)}" '
+        f'href="data:text/csv;charset=utf-8;base64,{encoded}">{html.escape(filename)}</a>'
+    )
+
+
+def render_reviewed_visuals_html(
+    summary: dict[str, Any], *,
+    expected_group_counts: dict[str, int] | None = None,
+) -> str:
+    """Render a self-contained, responsive HTML fragment for the decision report."""
+    expected_group_counts = expected_group_counts or EXPECTED_GROUP_COUNTS
+    if summary.get("schema_version") != 1:
+        raise AnalysisError("unsupported grouped analysis schema")
+    counts = summary["group_counts"]
+    if counts != expected_group_counts:
+        raise AnalysisError(f"reviewed grouped visuals require all expected IDs: {counts}")
+    runtime_charts = "".join(
+        '<figure class="ga-figure"><figcaption>'
+        f'{html.escape(SUITE_LABELS[suite])} · {html.escape(CACHE_LABELS[cache_mode])}'
+        f'</figcaption>{_svg_candle(summary, suite, cache_mode)}</figure>'
+        for suite in SUITES for cache_mode in CACHE_MODES
+    )
+    total_charts = "".join(
+        '<figure class="ga-figure"><figcaption>'
+        f'{html.escape(CACHE_LABELS[cache_mode])} · {html.escape(PROTOCOL_LABELS[protocol])}'
+        f'</figcaption>{_svg_round_totals(summary, cache_mode, protocol)}</figure>'
+        for cache_mode in CACHE_MODES for protocol in PROTOCOLS
+    )
+    ratio_chart = _svg_distribution(
+        summary, field="proto_text_ratio", title="Per-group median Proto/Text runtime ratio",
+        axis_label="Proto / Text ratio · log scale · 1× means equal",
+        formatter=_ratio_axis_label, logarithmic=True,
+    )
+    delta_chart = _svg_distribution(
+        summary, field="median_paired_relative_pct", title="Per-group paired percent delta",
+        axis_label="Median paired Proto minus Text · percent",
+        formatter=lambda value: f"{value:+.1f}%", zero_line=True,
+    )
+
+    ratio_rows = []
+    for suite in SUITES:
+        for cache_mode in CACHE_MODES:
+            values = [row["proto_text_ratio"] for row in summary["group_summaries"]
+                      if row["suite"] == suite and row["cache_mode"] == cache_mode]
+            stats = _summary(values)
+            ratio_rows.append(
+                f'<tr><th scope="row">{html.escape(SUITE_LABELS[suite])} · '
+                f'{html.escape(CACHE_LABELS[cache_mode])}</th><td>{len(values)}</td>'
+                f'<td>{stats["median"]:.3f}×</td><td>{stats["q1"]:.3f}×–{stats["q3"]:.3f}×</td>'
+                f'<td>{stats["min"]:.3f}×–{stats["max"]:.3f}×</td></tr>'
+            )
+
+    total_table_rows = []
+    for row in summary["paired_round_totals"]:
+        scope = "Global (all groups)" if row["scope"] == "global" else SUITE_LABELS[row["scope"]]
+        total_table_rows.append(
+            f'<tr><th scope="row">{html.escape(scope)}</th>'
+            f'<td>{html.escape(CACHE_LABELS[row["cache_mode"]])}</td>'
+            f'<td>{row["repeat"]}</td><td>{html.escape(_fmt_ms(row["text_sum_ms"]))}</td>'
+            f'<td>{html.escape(_fmt_ms(row["protobuf_sum_ms"]))}</td>'
+            f'<td>{html.escape(_fmt_ms(row["delta_ms"]))}</td>'
+            f'<td>{row["relative_pct"]:+.2f}%</td></tr>'
+        )
+
+    per_round_link = _csv_link(
+        "grouped-ab-round-totals.csv",
+        ["scope", "suite", "cache_mode", "repeat", "protocol", "group_count", "sum_elapsed_ms"],
+        summary["round_totals"],
+    )
+    paired_totals_link = _csv_link(
+        "grouped-ab-paired-round-totals.csv",
+        ["scope", "cache_mode", "repeat", "group_count", "text_sum_ms",
+         "protobuf_sum_ms", "delta_ms", "relative_pct"],
+        summary["paired_round_totals"],
+    )
+    group_link = _csv_link(
+        "grouped-ab-group-medians-and-ratios.csv",
+        ["suite", "input_id", "cache_mode", "n_rounds", "text_median_ms", "protobuf_median_ms",
+         "proto_text_ratio", "median_paired_relative_pct"],
+        summary["group_summaries"],
+    )
+    paired_link = _csv_link(
+        "grouped-ab-paired-rounds.csv",
+        ["suite", "input_id", "cache_mode", "repeat", "text_ms", "protobuf_ms", "delta_ms", "relative_pct"],
+        summary["group_rounds"],
+    )
+    return f'''<section class="grouped-ab" aria-labelledby="grouped-ab-title">
+<style>
+section.grouped-ab{{max-width:1040px;margin:34px auto;color:inherit}}
+section.grouped-ab *{{box-sizing:border-box}}
+section.grouped-ab h2{{font-size:clamp(21px,3vw,27px);line-height:1.2;margin:26px 0 10px}}
+section.grouped-ab h3{{font-size:18px;line-height:1.3;margin:22px 0 8px}}
+section.grouped-ab p,section.grouped-ab li{{line-height:1.5}}
+section.grouped-ab .ga-note{{color:var(--muted,#536174);font-size:14px}}
+section.grouped-ab .ga-grid-layout{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
+section.grouped-ab .ga-figure{{margin:0;min-width:0;border:1px solid var(--line,#d5dfe8);border-radius:9px;padding:10px;background:var(--panel,#f4f7fa)}}
+section.grouped-ab figcaption{{font-weight:650;font-size:14px;margin:0 0 3px}}
+section.grouped-ab .ga-svg{{display:block;width:100%;height:auto;max-width:720px;margin:0 auto}}
+section.grouped-ab svg text{{fill:currentColor;font-family:system-ui,sans-serif}}
+section.grouped-ab .ga-grid-line{{stroke:var(--line,#d5dfe8);stroke-dasharray:3 4}}
+section.grouped-ab .ga-zero{{stroke:#64748b;stroke-dasharray:4 3;stroke-width:1}}
+section.grouped-ab .ga-whisker,section.grouped-ab .ga-cap{{stroke-width:1.4}}
+section.grouped-ab .ga-box{{fill:rgba(35,104,162,.16);stroke-width:1.4}}
+section.grouped-ab .ga-median{{stroke-width:2.5}}
+section.grouped-ab .ga-label{{font-size:11px}}
+section.grouped-ab .ga-value{{font-size:10px;fill:var(--muted,#455568)}}
+section.grouped-ab .ga-tick,section.grouped-ab .ga-legend{{font-size:10px;fill:var(--muted,#536174)}}
+section.grouped-ab .ga-axis-title{{font-size:10px;fill:var(--muted,#536174)}}
+section.grouped-ab .ga-links{{display:flex;flex-wrap:wrap;gap:8px 18px;padding-left:20px}}
+section.grouped-ab .ga-table-wrap{{width:100%;overflow-x:auto}}
+section.grouped-ab table{{border-collapse:collapse;width:100%;font-size:13px}}
+section.grouped-ab th,section.grouped-ab td{{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line,#d5dfe8);white-space:nowrap}}
+section.grouped-ab th[scope="col"]{{font-size:12px;color:var(--muted,#536174)}}
+section.grouped-ab a{{overflow-wrap:anywhere}}
+@media(max-width:700px){{section.grouped-ab{{margin:28px 0}}section.grouped-ab .ga-grid-layout{{grid-template-columns:1fr;gap:10px}}section.grouped-ab .ga-figure{{padding:8px 6px}}section.grouped-ab .ga-svg{{max-width:440px}}section.grouped-ab table{{font-size:12px}}}}
+</style>
+<h2 id="grouped-ab-title">Grouped parser-call timing</h2>
+<p>Each stable CodeParser call group is one observation unit. This matrix includes {counts['clava-js']} Clava-JS and {counts['java']} Java groups, measured in six matched rounds across Text and Proto under direct and warm cache states. Invalid, unselected, untimed, fidelity, and estimate rows do not enter these statistics. Repeated rounds are paired within group and are not counted as extra groups.</p>
+<h3>Per-group runtime spread</h3>
+<p class="ga-note">Each candle summarizes each group’s median across six rounds, then shows the distribution across groups. Boxes show the interquartile range; whiskers show the full group range. Runtime and ratio axes are logarithmic to keep the heavily skewed tail visible. Lower runtime is faster; a Proto/Text ratio below 1× is lower for Proto.</p>
+<div class="ga-grid-layout">{runtime_charts}</div>
+<h3>Per-group Proto/Text ratio distribution</h3>
+<p class="ga-note">Ratio uses the per-group median runtime across six rounds. It is shown separately from the paired percent-delta distribution because median-of-ratios and ratio-of-medians are not interchangeable summaries.</p>
+<div class="ga-figure">{ratio_chart}</div>
+<div class="ga-table-wrap"><table><thead><tr><th scope="col">Suite · cache</th><th scope="col">Groups</th><th scope="col">Median ratio</th><th scope="col">Middle half</th><th scope="col">Full range</th></tr></thead><tbody>{''.join(ratio_rows)}</tbody></table></div>
+<h3>Paired percent-delta distribution</h3>
+<p class="ga-note">For each group, this uses the median of its six same-round changes: 100 × (Proto / Text − 1). Positive means a longer Proto parse. The underlying six individual pairs remain available in the CSV.</p>
+<div class="ga-figure">{delta_chart}</div>
+<h3>Summed parser time by round</h3>
+<p class="ga-note">Bars sum the elapsed time for all groups in each suite and round, then stack the suite sums. The global total is the sum across the 516 measured groups for that cell; it is not whole-suite command wall time.</p>
+<div class="ga-grid-layout">{total_charts}</div>
+<div class="ga-table-wrap"><table><thead><tr><th scope="col">Scope</th><th scope="col">Cache</th><th scope="col">Round</th><th scope="col">Text sum</th><th scope="col">Proto sum</th><th scope="col">Proto − Text</th><th scope="col">Paired change</th></tr></thead><tbody>{''.join(total_table_rows)}</tbody></table></div>
+<p>Download sanitized data: <span class="ga-links">{per_round_link}{paired_totals_link}{group_link}{paired_link}</span></p>
+</section>'''
+
+
+if __name__ == "__main__":
+    raise SystemExit("Import this helper from the report pipeline; it does not run benchmarks.")
