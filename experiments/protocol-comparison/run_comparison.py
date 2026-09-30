@@ -550,7 +550,8 @@ def run_clava_js(stage: dict[str, Any], output_root: Path, ordinal: int, measure
 
 
 def run_java(stage: dict[str, Any], output_root: Path, ordinal: int, measured: bool,
-             repeat: int | None, mode: str) -> dict[str, Any]:
+             repeat: int | None, mode: str, jfr_path: Path | None = None,
+             jfr_init_script: Path | None = None) -> dict[str, Any]:
     root = Path(stage["root"])
     clava = root / "clava"
     run_dir = output_root / "runs" / "java" / f"{ordinal:02d}-{stage['key']}"
@@ -566,6 +567,15 @@ def run_java(stage: dict[str, Any], output_root: Path, ordinal: int, measured: b
         "gradle", "--no-daemon", "--offline", "--init-script", str(SCRIPT_ROOT / "java-suite.init.gradle"),
         "-p", "ClangAstParser", "test",
     ]
+    if jfr_path is not None:
+        if jfr_init_script is None or not jfr_init_script.is_file():
+            raise RuntimeError("JFR was requested without a valid Gradle init script")
+        command[command.index("-p"):command.index("-p")] = ["--init-script", str(jfr_init_script)]
+        environment_jfr = str(jfr_path.resolve())
+    else:
+        environment_jfr = None
+    if stage["key"] == "protobuf":
+        command.insert(command.index("-p"), f"-PclangDumperRoot={stage['native_root']}")
     environment = os.environ.copy()
     environment.update({
         "TMPDIR": str(temp_root),
@@ -575,6 +585,19 @@ def run_java(stage: dict[str, Any], output_root: Path, ordinal: int, measured: b
         "JAVA_TOOL_OPTIONS": environment.get("JAVA_TOOL_OPTIONS", "")
         + f" -Djava.io.tmpdir={temp_root} -Dclava.astWire={stage['wire']}",
     })
+    if environment_jfr is not None:
+        environment["DEADLINE_JFR_PATH"] = environment_jfr
+        java_home = subprocess.run(
+            ["java", "-XshowSettings:properties", "-version"], text=True,
+            capture_output=True, check=False,
+        )
+        home_line = next((line for line in (java_home.stdout + java_home.stderr).splitlines() if "java.home =" in line), None)
+        if java_home.returncode != 0 or home_line is None:
+            raise RuntimeError("could not locate the active Java runtime for JFR settings")
+        profile = Path(home_line.split("=", 1)[1].strip()) / "lib" / "jfr" / "profile.jfc"
+        if not profile.is_file():
+            raise RuntimeError(f"missing JFR profile settings: {profile}")
+        environment["DEADLINE_JFR_SETTINGS"] = str(profile)
     if stage["key"] == "flatbuffers":
         environment["FLAT_NATIVE"] = stage["native_root"]
     ccache_dir = (
