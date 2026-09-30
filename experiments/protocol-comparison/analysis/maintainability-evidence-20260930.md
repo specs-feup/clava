@@ -63,6 +63,8 @@ FlatBuffers uses nine modular v2 `.fbs` files. Its Clava Gradle build invokes a 
 * FlatBuffers cleanup: `ParallelCodeParser` releases parser lookup maps and registers the dump folder for JVM-exit deletion whenever `WireMode.enabled()` is true, not only when `WireMode.lazy()` is true (`ast-flatbuffers/clava/ClangAstParser/src/pt/up/fe/specs/clang/codeparser/ParallelCodeParser.java:265-267,417-424`). Eager values are decoded immediately, but this report does not assert that the broader AST never retains any mapped data.
 * No format is producer/consumer-overlapped in these Java paths. Each calls `SpecsSystem.runProcess` to completion before opening/reading the completed dump (`ast-protobuf/clava/ClangAstParser/src/pt/up/fe/specs/clang/dumper/ClangAstDumper.java:361-393`; `ast-flatbuffers/clava/ClangAstParser/src/pt/up/fe/specs/clang/dumper/ClangAstDumper.java:368-400`).
 
+That completed-file statement covers the three cache-era implementations, not the historical before-cache stage. At `70c30bdb8`, `ClangAstDumper` supplies `processStdErr` as the process stderr consumer; that method calls `LineStreamParser.parse(inputStream)` on the live process stream (`ClangAstDumper.java:323-325,425-442`). It therefore permits wire decoding during native production. The historical baseline differs in transport as well as revision and native-build provenance; a branch-to-branch runtime difference is not proof of an isolated cache or wire-format effect. This is a verified implementation boundary, not a measured explanation for any performance difference.
+
 Cache/compression semantics are important for interpretation of new measurements:
 
 | Mode | Text / Protobuf | FlatBuffers v2 |
