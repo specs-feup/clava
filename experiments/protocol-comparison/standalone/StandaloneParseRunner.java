@@ -107,7 +107,8 @@ public final class StandaloneParseRunner {
                 ? operation.getAsJsonObject("parser_config") : new JsonObject();
 
         JsonObject result = identity(operation, scheduleLine);
-        result.addProperty("record_type", phase.equals("diagnostic") ? "diagnostic" : "parse");
+        result.addProperty("record_type", phase.equals("diagnostic") ? "diagnostic"
+                : phase.equals("fidelity") ? "fidelity" : "parse");
         result.addProperty("source_sha256", sourceSha256);
         result.addProperty("args_sha256", argsSha256);
         result.addProperty("options_sha256", optionsSha256);
@@ -157,13 +158,13 @@ public final class StandaloneParseRunner {
                 if (app == null) {
                     throw new IllegalStateException("CodeParser returned no App");
                 }
-                if (operation.has("post_timer_fidelity") && operation.get("post_timer_fidelity").getAsBoolean()) {
-                    addPostTimerFidelity(result, app);
-                }
             } else {
                 App app = parser.parse(List.of(source.toFile()), compilerOptions);
                 if (app == null) {
                     throw new IllegalStateException("CodeParser returned no App");
+                }
+                if (phase.equals("fidelity")) {
+                    addAstFidelity(result, app);
                 }
             }
             success = true;
@@ -337,7 +338,7 @@ public final class StandaloneParseRunner {
         return normalized;
     }
 
-    private static void addPostTimerFidelity(JsonObject result, App app) throws Exception {
+    private static void addAstFidelity(JsonObject result, App app) throws Exception {
         String generatedCode = app.getCode();
         byte[] codeBytes = generatedCode.getBytes(StandardCharsets.UTF_8);
         result.addProperty("generated_code_sha256", sha256(codeBytes));
