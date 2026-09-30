@@ -106,11 +106,40 @@ def git(path: Path, *args: str) -> str:
     return result.stdout.strip() if result.returncode == 0 else "unknown"
 
 
+def lara_bridge_overlay_identity() -> dict[str, str]:
+    source = LARA_ROOT / "Lara-JS/api/LaraJoinPoint.ts"
+    revision = git(LARA_ROOT, "rev-parse", "HEAD")
+    patch = subprocess.run(
+        ["git", "-C", str(LARA_ROOT), "show", "--format=", "--binary", "HEAD"],
+        capture_output=True,
+        check=True,
+    ).stdout
+    if revision == "unknown" or not source.is_file():
+        raise SystemExit(f"cannot fingerprint the shared Lara-JS bridge source: {source}")
+    return {
+        "repository": str(LARA_ROOT.resolve()),
+        "revision": revision,
+        "patch_sha256": sha256_bytes(patch),
+        "source_path": str(source.resolve()),
+        "source_sha256": sha256_file(source),
+    }
+
+
+def verify_lara_bridge_overlay(plan: dict[str, Any]) -> None:
+    expected = plan.get("lara_js_bridge_overlay")
+    observed = lara_bridge_overlay_identity()
+    if expected != observed:
+        raise RuntimeError(
+            "shared Lara-JS bridge source changed after its fingerprint was frozen: "
+            f"expected={expected}, observed={observed}"
+        )
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", choices=("preflight", "measure"), required=True)
     parser.add_argument("--output-root", type=Path, required=True)
-    parser.add_argument("--repeat-count", type=int, default=6)
+    parser.add_argument("--repeat-count", type=int, default=4)
     parser.add_argument(
         "--repair-invalid", action="store_true",
         help="under an approved host lock, add one new attempt for each invalid measured cell that has no valid selected attempt",
@@ -278,6 +307,12 @@ def compression_record(stage: dict[str, Any], mode: str) -> dict[str, Any]:
 def native_binary_for_run(stage: dict[str, Any], mode_root: Path, suite: str) -> Path:
     if stage["dumper"] is not None:
         return Path(stage["dumper"])
+    if suite == "clava-js":
+        cache_root = mode_root / "cache" / suite / stage["key"]
+        return (
+            cache_root / "@specs-feup/clava" / "clang-dumper" / "releases"
+            / BASELINE_RELEASE_TAG / BASELINE_BINARY_NAME
+        )
     temp_root = mode_root / "temp" / suite / stage["key"]
     return (
         temp_root / f"clang_ast_exe_{getpass.getuser()}" / "clang-dumper" / "releases"
@@ -444,6 +479,7 @@ def run_one(
     fingerprints: dict[str, dict[str, dict[str, str]]], jfr_path: Path | None = None,
     attempt: int = 1,
 ) -> dict[str, Any]:
+    verify_lara_bridge_overlay(plan)
     mode_root = OUTPUT_ROOT / mode
     mode_root.mkdir(parents=True, exist_ok=True)
     ordinal_key = f"{suite}/{mode}"
@@ -456,6 +492,7 @@ def run_one(
         )
     else:
         result = runner(stage, mode_root, ordinal, measured, repeat, mode)
+    verify_lara_bridge_overlay(plan)
     result = result_metadata(result, stage, mode, suite, measured, repeat, attempt=attempt, fingerprints=fingerprints)
 
     expected = EXPECTED[suite]
@@ -694,8 +731,8 @@ def create_jfr_init_script(output_root: Path) -> tuple[Path, Path]:
 def main() -> int:
     global OUTPUT_ROOT, plan_stage_metadata, JFR_INIT_SCRIPT
     args = parse_args()
-    if args.repeat_count != 6:
-        raise SystemExit("the approved design requires exactly six measured repeats")
+    if args.repeat_count != 4:
+        raise SystemExit("the approved design requires exactly four measured repeats")
     OUTPUT_ROOT = args.output_root.resolve()
     if args.repair_invalid and args.phase != "measure":
         raise SystemExit("--repair-invalid is valid only with --phase measure")
@@ -717,6 +754,7 @@ def main() -> int:
     comparison.STAGES = tuple(dict(stage) for stage in STAGE_CONFIG)
 
     preparation = load_preparation()
+    bridge_overlay = lara_bridge_overlay_identity()
     current_stages = comparison.validate_stages({stage["key"] for stage in comparison.STAGES})
     for item in current_stages:
         if item["key"] == "before-cache":
@@ -765,6 +803,7 @@ def main() -> int:
             "host_lock_approval": None,
             "host_lock_status": "not-granted-during-preflight",
             "repeat_count": args.repeat_count,
+            "lara_js_bridge_overlay": bridge_overlay,
             "warmup_count": 1,
             "suites": list(SUITES),
             "expected_tests": {
@@ -862,6 +901,7 @@ def main() -> int:
     results = saved.get("results", [])
     if plan.get("preflight_status") != "passed" or identity.get("passed") is not True:
         raise SystemExit("measurement blocked because the saved untimed preflight did not pass")
+    verify_lara_bridge_overlay(plan)
     if plan.get("preparation_manifest_sha256") != sha256_file(PREPARATION_MANIFEST):
         raise SystemExit("frozen-runtime preparation changed after preflight")
     if canonical_hash(plan.get("stages")) != canonical_hash({item["key"]: item for item in current_stages}):

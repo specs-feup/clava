@@ -399,11 +399,17 @@ def stage_runtime(source: Path, destination: Path, dumper: str | None) -> None:
 def write_vitest_config(run_dir: Path, clava: Path, runtime: Path) -> Path:
     config = run_dir / "vitest.comparison.config.ts"
     helper = clava.parent / "node_modules/@specs-feup/lara/vitest/weaverVitestConfig.ts"
+    side_effect_imports = [
+        (clava / "Clava-JS/api/Joinpoints.ts").as_uri(),
+        (clava / "Clava-JS/code/sideEffects.ts").as_uri(),
+    ]
     config.write_text(
         f'import {{ createWeaverVitestConfig }} from "{helper.as_uri()}";\n'
         f'import {{ weaverConfig }} from "{(clava / "Clava-JS/code/WeaverConfiguration.ts").as_uri()}";\n'
-        f'export default {{ ...createWeaverVitestConfig({{ ...weaverConfig, jarPath: {json.dumps(str(runtime))} }}), '
-        f'root: {json.dumps(str(clava / "Clava-JS"))} }};\n'
+        f'const baseConfig = createWeaverVitestConfig({{ ...weaverConfig, '
+        f'jarPath: {json.dumps(str(runtime))}, '
+        f'importForSideEffects: {json.dumps(side_effect_imports)} }});\n'
+        f'export default {{ ...baseConfig, root: {json.dumps(str(clava / "Clava-JS"))} }};\n'
     )
     return config
 
