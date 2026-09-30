@@ -274,7 +274,7 @@ def _parse_signature(row: dict[str, Any]) -> tuple[Any, ...]:
     return tuple(row.get(field) for field in (
         "schedule_line", "phase", "suite", "protocol", "cache_mode", "repeat",
         "input_id", "event_id", "group_id", "source_sha256", "args_sha256",
-        "options_sha256", "source_label", "valid", "app_returned_null", "elapsed_ms",
+        "options_sha256", "valid", "app_returned_null", "elapsed_ms",
     ))
 
 
@@ -409,7 +409,8 @@ def _validate_cell(
                 raise AnalysisError(
                     f"{observation_name}:{line_number}: {field} differs from schedule"
                 )
-        if observed.get("source_label") != scheduled.get("source_label"):
+        if ("source_label" in observed
+                and observed["source_label"] != scheduled.get("source_label")):
             raise AnalysisError(f"{observation_name}:{line_number}: source_label differs from schedule")
         if type(observed.get("app_returned_null")) is not bool:
             raise AnalysisError(f"{observation_name}:{line_number}: app_returned_null must be boolean")

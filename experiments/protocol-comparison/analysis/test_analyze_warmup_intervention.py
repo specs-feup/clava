@@ -215,6 +215,23 @@ class AnalyzeWarmupInterventionTest(unittest.TestCase):
         finally:
             _write_jsonl(path, original)
 
+    def test_source_label_can_be_derived_from_the_joined_schedule(self):
+        path = self.root / "observations" / "control-clava-js-text-warm-r01.jsonl"
+        original = _read_jsonl(path)
+        damaged = copy.deepcopy(original)
+        del damaged[1]["source_label"]
+        _write_jsonl(path, damaged)
+        try:
+            summary = intervention.analyze_warmup_intervention(self.root)
+            selected = next(row for row in summary["group_summaries"]
+                            if row["treatment"] == "control"
+                            and row["suite"] == "clava-js"
+                            and row["protocol"] == "text"
+                            and row["input_id"] == "js-group-0002")
+            self.assertEqual(selected["source_label"], "js-group-0002.cpp")
+        finally:
+            _write_jsonl(path, original)
+
     def test_invalid_observation_is_rejected_not_silently_dropped(self):
         path = self.root / "observations" / "control-java-protobuf-warm-r02.jsonl"
         original = _read_jsonl(path)
