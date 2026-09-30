@@ -262,6 +262,12 @@ final class ProtoNodeDataReader {
     private Object scalarValue(DataKey<?> key, Object value) {
         Class<?> target = key.getValueClass();
         if (Optional.class.isAssignableFrom(target)) {
+            // The legacy text parser treats an empty pseudo-destructor
+            // qualifier as absent; keep that behavior for the format A/B.
+            if (key == pt.up.fe.specs.clava.ast.expr.CXXPseudoDestructorExpr.QUALIFIER
+                    && value instanceof String string && string.isEmpty()) {
+                return Optional.empty();
+            }
             return Optional.ofNullable(value);
         }
         if (target.isEnum()) {
