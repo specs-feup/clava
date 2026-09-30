@@ -27,6 +27,13 @@ PROTOCOLS = {
     "proto": ("Protobuf", "#7c3aed"),
 }
 PROTOCOL_ORDER = ("text", "protobuf")
+CHART_CONDITIONS = {
+    "text-normal": ("Text + ccache · explicit GC on", "#059669"),
+    "protobuf-normal": ("Protobuf · explicit GC on", "#7c3aed"),
+    "text-disabled": ("Text + ccache · explicit GC off", "#059669"),
+    "protobuf-disabled": ("Protobuf · explicit GC off", "#7c3aed"),
+}
+CHART_CONDITION_ORDER = tuple(CHART_CONDITIONS)
 REQUIRED_COLUMNS = {
     "run_id", "pair_id", "suite", "cache_mode", "gc_policy", "protocol", "repeat",
     "source_identity", "parse_pair_key", "pair_available", "parse_elapsed_ms", "parse_timing_boundary",
@@ -260,6 +267,18 @@ def nice_ticks(low: float, high: float) -> list[float]:
         abs(math.log(candidate / rough)),
     ))
     return ticks(step)
+
+
+def compact_ticks(ticks: list[float], limit: int = 5) -> list[float]:
+    """Keep axis labels legible on narrow charts without changing their domain."""
+    if len(ticks) <= limit:
+        return ticks
+    indexes = {round(index * (len(ticks) - 1) / (limit - 1)) for index in range(limit)}
+    selected = {ticks[index] for index in indexes}
+    if 0.0 in ticks and 0.0 not in selected:
+        selected.remove(ticks[min(indexes, key=lambda index: abs(ticks[index]))])
+        selected.add(0.0)
+    return sorted(selected)
 
 
 def format_axis(value: float, scale: float, unit: str) -> str:
@@ -744,40 +763,51 @@ def padded_domain(values: list[float], include_zero: bool = False) -> tuple[floa
 
 def svg_distribution_chart(title: str, by_protocol: dict[str, list[dict[str, Any]]],
                           max_points_per_protocol: int = 250,
-                          show_points: bool = True) -> str:
-    entries = [(protocol, row) for protocol in PROTOCOL_ORDER for row in by_protocol.get(protocol, [])]
+                          show_points: bool = True,
+                          protocol_order: tuple[str, ...] | list[str] | None = None,
+                          mobile: bool = False) -> str:
+    order = tuple(protocol_order or PROTOCOL_ORDER)
+    entries = [(protocol, row) for protocol in order for row in by_protocol.get(protocol, [])]
     values = [row["elapsed_ms"] for _, row in entries]
     if not values:
         return '<p class="empty">No valid parse measurements for this group.</p>'
     axis = duration_axis(values)
     scale, unit = axis["unit_scale"], axis["unit"]
     fmt_time = lambda value: format_time_ms(value, scale)
-    width, height, left, right = 1160, 264, 235, 890
+    width = 380 if mobile else 1160
+    height = max(250, 112 + 67 * len(order)) if mobile else max(264, 264 + 94 * (len(order) - 2))
+    left, right = (48, 360) if mobile else (235, 1138)
+    plot_top, plot_bottom = (34, height - 34) if mobile else (35, height - 36)
     x = lambda value: left + (right - left) * (
         axis["transform"](value) - axis["low_position"]
     ) / (axis["high_position"] - axis["low_position"])
+    ticks = compact_ticks(axis["ticks"]) if mobile else axis["ticks"]
     svg = [
-        f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{esc(title)} individual parse latency distributions">',
+        f'<svg class="chart-svg {"chart-svg-mobile" if mobile else "chart-svg-wide"}" viewBox="0 0 {width} {height}" role="img" aria-label="{esc(title)} individual parse latency distributions">',
         f'<title>{esc(title)} individual parse latency distributions</title>',
         '<desc>Candles and whiskers summarize every valid measured parse event using the 1.5 interquartile-range rule. '
         + (f'Dots are a deterministic display sample, at most {max_points_per_protocol} per protocol; '
            'they do not determine the candle statistics.' if show_points
            else 'Dots are omitted in this pooled summary; candles use every parse event.') + '</desc>',
     ]
-    for tick in axis["ticks"]:
+    for tick in ticks:
         tx = x(tick)
-        svg.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="35" y2="222" class="grid-line"/>')
-        svg.append(f'<text x="{tx:.2f}" y="27" text-anchor="middle" class="axis-text">{esc(format_axis(tick, scale, unit))}</text>')
-    for index, protocol in enumerate(PROTOCOL_ORDER):
+        svg.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="{plot_top}" y2="{plot_bottom}" class="grid-line"/>')
+        svg.append(f'<text x="{tx:.2f}" y="25" text-anchor="middle" class="{"mobile-axis-text" if mobile else "axis-text"}">{esc(format_axis(tick, scale, unit))}</text>')
+    for index, protocol in enumerate(order):
         rows = by_protocol.get(protocol, [])
         if not rows:
             continue
         values_for_protocol = [row["elapsed_ms"] for row in rows]
         stats = distribution(values_for_protocol)
-        y = 93 + index * 94
-        label, color = PROTOCOLS[protocol]
-        svg.append(f'<text x="14" y="{y + 5}" class="condition-text">{esc(label)}</text>')
-        svg.append(f'<line x1="{x(stats["whisker_minimum"]):.2f}" x2="{x(stats["whisker_maximum"]):.2f}" y1="{y}" y2="{y}" stroke="{color}" stroke-width="2"/>')
+        y = (76 + index * 67) if mobile else (93 + index * 94)
+        label, color = CHART_CONDITIONS.get(protocol, PROTOCOLS.get(protocol, (protocol, "#475569")))
+        if mobile:
+            svg.append(f'<text x="12" y="{y - 24}" class="mobile-condition-text">{esc(label)}</text>')
+        else:
+            svg.append(f'<text x="14" y="{y + 5}" class="condition-text">{esc(label)}</text>')
+        dash = ' stroke-dasharray="5 4"' if protocol.endswith("-disabled") else ""
+        svg.append(f'<line x1="{x(stats["whisker_minimum"]):.2f}" x2="{x(stats["whisker_maximum"]):.2f}" y1="{y}" y2="{y}" stroke="{color}" stroke-width="2"{dash}/>')
         for end in (stats["whisker_minimum"], stats["whisker_maximum"]):
             svg.append(f'<line x1="{x(end):.2f}" x2="{x(end):.2f}" y1="{y - 10}" y2="{y + 10}" stroke="{color}" stroke-width="2"/>')
         box_width = max(3.0, x(stats["q3"]) - x(stats["q1"]))
@@ -787,14 +817,12 @@ def svg_distribution_chart(title: str, by_protocol: dict[str, list[dict[str, Any
                         if show_points else [])
         for point_index, row in enumerate(plotted_rows):
             value = row["elapsed_ms"]
-            jitter = ((point_index * 37 + len(row.get("source_identity", ""))) % 11 - 5) * 3.3
+            jitter = ((point_index * 37 + len(row.get("source_identity", ""))) % 11 - 5) * (2.2 if mobile else 3.3)
             klass = ("point outlier" if value < stats["whisker_minimum"]
                      or value > stats["whisker_maximum"] else "point")
-            svg.append(f'<circle cx="{x(value):.2f}" cy="{y + jitter:.2f}" r="3.5" class="{klass}" fill="{color}"/>')
-        svg.append(f'<text x="916" y="{y - 3}" class="sample-text">n={stats["n"]}</text>')
-        point_label = f'dots {len(plotted_rows)}/{stats["n"]}' if show_points else 'dots omitted'
-        svg.append(f'<text x="916" y="{y + 16}" class="detail-text">median {esc(fmt_time(stats["median"]))}, IQR {esc(fmt_time(stats["q3"] - stats["q1"]))}, outliers {len(stats["outliers"])}; {point_label}</text>')
-    svg.append(f'<text x="{(left + right) / 2:.1f}" y="251" text-anchor="middle" class="axis-title">Parser invocation latency ({unit}, {esc(axis["label"])})</text>')
+            svg.append(f'<circle cx="{x(value):.2f}" cy="{y + jitter:.2f}" r="{4 if mobile else 3.5}" class="{klass}" fill="{color}"/>')
+    axis_y = height - 6 if mobile else height - 8
+    svg.append(f'<text x="{(left + right) / 2:.1f}" y="{axis_y}" text-anchor="middle" class="{"mobile-axis-title" if mobile else "axis-title"}">Parse latency ({unit}, {esc(axis["label"])})</text>')
     svg.append('</svg>')
     return "".join(svg)
 
@@ -818,7 +846,8 @@ def svg_delta_chart(title: str, by_group: list[tuple[str, list[dict[str, Any]]]]
                     central_scale: bool = False,
                     max_points_per_group: int = 250,
                     show_points: bool = True,
-                    point_groups: set[str] | None = None) -> str:
+                    point_groups: set[str] | None = None,
+                    mobile: bool = False) -> str:
     available = [(name, rows) for name, rows in by_group if rows]
     if not available:
         return '<p class="empty">No complete matched parse pairs for this GC policy.</p>'
@@ -835,11 +864,14 @@ def svg_delta_chart(title: str, by_group: list[tuple[str, list[dict[str, Any]]]]
         low, high = padded_domain(values, include_zero=True)
     scale, unit = axis_unit(values)
     fmt_delta = lambda value: format_delta_ms(value, scale)
-    width, height = 1160, 104 + 82 * len(available)
-    left, right = 235, 890
+    width = 380 if mobile else 1160
+    height = (118 + 75 * len(available)) if mobile else (104 + 82 * len(available))
+    left, right = (50, 360) if mobile else (235, 1138)
     x = lambda value: left + (right - left) * (value - low) / (high - low)
+    ticks = compact_ticks(nice_ticks(low, high)) if mobile else nice_ticks(low, high)
+    plot_bottom = height - (32 if mobile else 32)
     svg = [
-        f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{esc(title)} paired {esc(metric_label)} differences">',
+        f'<svg class="chart-svg {"chart-svg-mobile" if mobile else "chart-svg-wide"}" viewBox="0 0 {width} {height}" role="img" aria-label="{esc(title)} paired {esc(metric_label)} differences">',
         f'<title>{esc(title)} paired {esc(metric_label)} differences</title>',
         f'<desc>The paired delta is Protobuf minus Text plus ccache. Positive values mean Protobuf took longer. '
         'Candle and whisker statistics use every matched invocation. '
@@ -849,16 +881,19 @@ def svg_delta_chart(title: str, by_group: list[tuple[str, list[dict[str, Any]]]]
         + (" This central-scale view counts observations outside its linear axis; the full-range chart preserves the complete range." if central_scale else " The axis spans the full observed range.")
         + "</desc>",
     ]
-    for tick in nice_ticks(low, high):
+    for tick in ticks:
         tx = x(tick)
         klass = "zero-line" if abs(tick) < 1e-9 else "grid-line"
-        svg.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="34" y2="{height - 32}" class="{klass}"/>')
-        svg.append(f'<text x="{tx:.2f}" y="26" text-anchor="middle" class="axis-text">{esc(format_axis(tick, scale, unit))}</text>')
+        svg.append(f'<line x1="{tx:.2f}" x2="{tx:.2f}" y1="34" y2="{plot_bottom}" class="{klass}"/>')
+        svg.append(f'<text x="{tx:.2f}" y="25" text-anchor="middle" class="{"mobile-axis-text" if mobile else "axis-text"}">{esc(format_axis(tick, scale, unit))}</text>')
     for index, (name, rows) in enumerate(available):
         values_for_group = [pair["delta_ms"] for pair in rows]
         stats = stats_by_group[name]
-        y = 75 + index * 82
-        svg.append(f'<text x="14" y="{y + 5}" class="condition-text">{esc(name)}</text>')
+        y = (78 + index * 75) if mobile else (75 + index * 82)
+        if mobile:
+            svg.append(f'<text x="12" y="{y - 25}" class="mobile-condition-text">{esc(name)}</text>')
+        else:
+            svg.append(f'<text x="14" y="{y + 5}" class="condition-text">{esc(name)}</text>')
         svg.append(f'<line x1="{x(stats["whisker_minimum"]):.2f}" x2="{x(stats["whisker_maximum"]):.2f}" y1="{y}" y2="{y}" class="delta-whisker"/>')
         for end in (stats["whisker_minimum"], stats["whisker_maximum"]):
             svg.append(f'<line x1="{x(end):.2f}" x2="{x(end):.2f}" y1="{y - 9}" y2="{y + 9}" class="delta-whisker"/>')
@@ -875,21 +910,123 @@ def svg_delta_chart(title: str, by_group: list[tuple[str, list[dict[str, Any]]]]
             delta = pair["delta_ms"]
             if central_scale and not low <= delta <= high:
                 continue
-            jitter = ((point_index * 37 + len(pair["identity"])) % 11 - 5) * 3.0
+            jitter = ((point_index * 37 + len(pair["identity"])) % 11 - 5) * (2.2 if mobile else 3.0)
             klass = ("point outlier" if delta < stats["whisker_minimum"]
                      or delta > stats["whisker_maximum"] else "point")
-            svg.append(f'<circle cx="{x(delta):.2f}" cy="{y + jitter:.2f}" r="3.5" class="{klass}" fill="#334155"/>')
-        if central_scale:
-            svg.append(f'<text x="916" y="{y - 3}" class="sample-text">n={stats["n"]}</text>')
-            svg.append(f'<text x="916" y="{y + 16}" class="detail-text">median {esc(fmt_delta(stats["median"]))}, IQR {esc(fmt_delta(stats["q3"] - stats["q1"]))}; dots omitted; off-scale {off_scale}</text>')
-        else:
-            svg.append(f'<text x="916" y="{y - 3}" class="sample-text">n={stats["n"]}</text>')
-            point_label = f'dots {len(plotted_rows)}/{stats["n"]}' if draw_points else 'dots omitted'
-            svg.append(f'<text x="916" y="{y + 16}" class="detail-text">median {esc(fmt_delta(stats["median"]))}, IQR {esc(fmt_delta(stats["q3"] - stats["q1"]))}; {point_label}</text>')
+            svg.append(f'<circle cx="{x(delta):.2f}" cy="{y + jitter:.2f}" r="{4 if mobile else 3.5}" class="delta-point {klass}"/>')
     axis_label = "central linear scale" if central_scale else "full linear range"
-    svg.append(f'<text x="{(left + right) / 2:.1f}" y="{height - 8}" text-anchor="middle" class="axis-title">Protobuf minus Text + ccache per {esc(metric_label)} ({unit}, {axis_label})</text>')
+    axis_title = f"Protobuf − Text ({unit})" if mobile else f"Protobuf − Text per {metric_label} ({unit}, {axis_label})"
+    svg.append(f'<text x="{(left + right) / 2:.1f}" y="{height - 7}" text-anchor="middle" class="{"mobile-axis-title" if mobile else "axis-title"}">{esc(axis_title)}</text>')
     svg.append('</svg>')
     return "".join(svg)
+
+
+def responsive_chart(wide_svg: str, mobile_svg: str, stats_html: str) -> str:
+    return (
+        '<div class="responsive-chart"><div class="chart-wide">' + wide_svg + '</div>'
+        '<div class="chart-mobile">' + mobile_svg + '</div>' + stats_html + '</div>'
+    )
+
+
+def distribution_chart_stats(by_condition: dict[str, list[dict[str, Any]]],
+                             order: tuple[str, ...] | list[str],
+                             max_points: int = 250,
+                             show_points: bool = True) -> str:
+    all_values = [row["elapsed_ms"] for key in order for row in by_condition.get(key, [])]
+    scale, _unit = axis_unit(all_values)
+    items: list[str] = []
+    for key in order:
+        rows = by_condition.get(key, [])
+        if not rows:
+            continue
+        summary = distribution([row["elapsed_ms"] for row in rows])
+        plotted = len(display_sample(rows, "elapsed_ms", max_points)) if show_points else 0
+        label, color = CHART_CONDITIONS.get(key, PROTOCOLS.get(key, (key, "#475569")))
+        points = f"{plotted}/{summary['n']} points" if show_points else "points omitted"
+        items.append(
+            f'<li><span class="swatch" style="background:{color}"></span><b>{esc(label)}</b> '
+            f'<span>median {format_time_ms(summary["median"], scale)} · n={summary["n"]}</span>'
+            f'<details><summary>Distribution details</summary><p>IQR '
+            f'{format_time_ms(summary["q3"] - summary["q1"], scale)} · '
+            f'{len(summary["outliers"])} outliers · {points}</p></details></li>'
+        )
+    return '<ul class="chart-stats">' + "".join(items) + '</ul>'
+
+
+def delta_chart_stats(by_group: list[tuple[str, list[dict[str, Any]]]],
+                      central_scale: bool = False,
+                      max_points: int = 250,
+                      show_points: bool = True,
+                      point_groups: set[str] | None = None) -> str:
+    values = [pair["delta_ms"] for _, rows in by_group for pair in rows]
+    scale, _unit = axis_unit(values)
+    if central_scale:
+        summaries = [distribution([pair["delta_ms"] for pair in rows])
+                     for _, rows in by_group if rows]
+        low, high = padded_domain([
+            min(summary["whisker_minimum"] for summary in summaries),
+            max(summary["whisker_maximum"] for summary in summaries),
+        ], include_zero=True)
+    else:
+        low = high = 0.0
+    items: list[str] = []
+    for label, rows in by_group:
+        if not rows:
+            continue
+        summary = distribution([pair["delta_ms"] for pair in rows])
+        draw_points = show_points and (point_groups is None or label in point_groups)
+        plotted = len(display_sample(rows, "delta_ms", max_points)) if draw_points else 0
+        point_note = f"{plotted}/{summary['n']} points" if draw_points else "points omitted"
+        off_scale = sum(not low <= pair["delta_ms"] <= high for pair in rows) if central_scale else 0
+        off_scale_note = f" · {off_scale} off scale" if central_scale else ""
+        items.append(
+            f'<li><b>{esc(label)}</b> <span>median {format_delta_ms(summary["median"], scale)} · '
+            f'n={summary["n"]}</span><details><summary>Distribution details</summary><p>IQR '
+            f'{format_delta_ms(summary["q3"] - summary["q1"], scale)} · '
+            f'{len(summary["outliers"])} outliers · {point_note}{off_scale_note}</p></details></li>'
+        )
+    return '<ul class="chart-stats">' + "".join(items) + '</ul>'
+
+
+def distribution_chart_html(title: str, by_condition: dict[str, list[dict[str, Any]]],
+                            order: tuple[str, ...] | list[str],
+                            max_points: int = 250,
+                            show_points: bool = True) -> str:
+    return responsive_chart(
+        svg_distribution_chart(title, by_condition, max_points, show_points, order),
+        svg_distribution_chart(title, by_condition, max_points, show_points, order, mobile=True),
+        distribution_chart_stats(by_condition, order, max_points, show_points),
+    )
+
+
+def delta_chart_html(title: str, by_group: list[tuple[str, list[dict[str, Any]]]],
+                     metric_label: str = "source invocation",
+                     central_scale: bool = False,
+                     max_points: int = 250,
+                     show_points: bool = True,
+                     point_groups: set[str] | None = None) -> str:
+    return responsive_chart(
+        svg_delta_chart(title, by_group, metric_label, central_scale, max_points,
+                        show_points, point_groups),
+        svg_delta_chart(title, by_group, metric_label, central_scale, max_points,
+                        show_points, point_groups, mobile=True),
+        delta_chart_stats(by_group, central_scale, max_points, show_points, point_groups),
+    )
+
+
+def comparative_delta_chart_html(title: str, by_group: list[tuple[str, list[dict[str, Any]]]],
+                                 metric_label: str) -> str:
+    if not delta_chart_needs_central_scale(by_group):
+        return delta_chart_html(title, by_group, metric_label=metric_label)
+    return (
+        '<p class="chart-note">All pairs determine the candles; outliers appear in the full-range view.</p>'
+        '<h4>Typical paired changes</h4>'
+        + delta_chart_html(title + " central scale", by_group, metric_label=metric_label,
+                           central_scale=True, show_points=False)
+        + '<details class="full-range-details"><summary>Full range, including outliers</summary>'
+        + delta_chart_html(title + " full range", by_group, metric_label=metric_label)
+        + '</details>'
+    )
 
 
 def fmt_summary(values: list[float], paired: bool = False) -> str:
@@ -1153,7 +1290,7 @@ def measurement_panel(run_rows: list[dict[str, Any]], plan: dict[str, Any] | Non
     plan = plan or {}
     planned_tests = plan.get("expected_suite_counts", {})
     planned_events = plan.get("expected_parse_events", {})
-    suite_rows: list[str] = []
+    suite_cards: list[str] = []
     for suite in SUITES:
         selected = [row for row in run_rows if row["suite"] == suite]
         fallback = planned_tests.get(suite, {})
@@ -1166,41 +1303,35 @@ def measurement_panel(run_rows: list[dict[str, Any]], plan: dict[str, Any] | Non
         for (policy, _cache_mode), by_suite in pairs_by_suite.items():
             count_pairs = len(by_suite.get(suite, []))
             if count_pairs:
-                policy_repeats.append(f"{policy}: {count_pairs}")
+                label = "GC requests blocked" if policy == "disabled" else "GC requests allowed" if policy == "normal" else policy
+                policy_repeats.append(f"{label}: {count_pairs}")
         repeats = ", ".join(policy_repeats) if policy_repeats else "not available"
-        suite_rows.append(
-            f'<tr><th scope="row">{esc(SUITES[suite])}</th>'
-            f'<td>{esc(total)} total; {esc(passed)} passed; {esc(skipped)} skipped</td>'
-            f'<td>{esc(expected_events)} per run</td><td>{esc(repeats)}</td></tr>'
+        suite_cards.append(
+            f'<article class="suite-glance"><h3>{esc(SUITES[suite])}</h3>'
+            f'<p>{esc(total)} total; {esc(passed)} passed; {esc(skipped)} skipped</p>'
+            f'<p>{esc(expected_events)} parse events per run</p>'
+            f'<p>{esc(repeats)} matched command runs</p></article>'
         )
 
     warm = sorted({row["cache_mode"] for row in run_rows})
     cache_text = ", ".join(warm) if warm else str(plan.get("cache_mode", "not recorded"))
-    repeat_counts = [len(by_suite[suite]) for by_suite in pairs_by_suite.values()
-                     for suite in SUITES if by_suite.get(suite)]
-    repeat_count = (repeat_counts[0] if repeat_counts and len(set(repeat_counts)) == 1
-                    else plan.get("repeat_count") if not repeat_counts else None)
-    repeat_sentence = (f"{repeat_count} paired measured repeats per GC condition" if repeat_count
-                       else "Paired measured repeats per GC condition are listed below")
     parse_boundary = str(plan.get("parse_timing_boundary") or "not recorded")
     wall_boundary = str(plan.get("full_command_timing_boundary") or
                         "full elapsed time around each suite command")
     details = provenance_details(plan)
-    revision_claim = ("Same captured source revision and runtime artifacts, "
-                     if plan.get("sources") else "")
     return (
-        '<section class="measurement-panel"><h2>What was measured</h2>'
-        f'<p>{esc(revision_claim)}comparing Text + ccache with Protobuf; '
-        f'ccache mode: <b>{esc(cache_text)}</b> for both. {esc(repeat_sentence)}.</p>'
-        '<div class="table-wrap"><table class="compact-table"><thead><tr>'
-        '<th>Suite</th><th>Test population per command</th><th>Parse events</th>'
-        '<th>Matched command repeats by GC policy</th></tr></thead><tbody>'
-        + "".join(suite_rows)
-        + '</tbody></table></div>'
-        f'<p class="chart-note"><b>Parse timer:</b> {esc(parse_boundary)}. '
-        f'<b>Command wall timer:</b> {esc(wall_boundary)}. Command wall time includes caller-side heap logging and explicit GC; '
-        'parse-call latency excludes them. These are separate measures, not sums of concurrent parse timings.</p>'
-        + details + '</section>'
+        '<section class="measurement-panel"><h2>Study at a glance</h2>'
+        f'<p>Text + ccache vs Protobuf · {esc(cache_text)} ccache · '
+        'paired full-command runs shown by GC policy.</p>'
+        '<div class="suite-glance-grid">' + "".join(suite_cards) + '</div>'
+        '<details class="method-details"><summary>Timer and measurement details</summary>'
+        f'<p><b>Parse timer:</b> {esc(parse_boundary)}</p>'
+        f'<p><b>Command timer:</b> {esc(wall_boundary)}. It includes caller-side heap logging and explicit GC; '
+        'parse-call latency excludes them. The two measures are not added together.</p>'
+        '<p>Per-parse charts retain valid events even when an event is not individually pairable. '
+        'Paired deltas join only rows marked pairable by GC policy, cache mode, suite, pair ID, repeat, and source key. '
+        'Command-level ccache counters are not assigned to parse events.</p>'
+        '</details>' + details + '</section>'
     )
 
 
@@ -1276,34 +1407,105 @@ def command_conclusion(by_suite: dict[str, list[dict[str, Any]]],
     return " ".join(snippets)
 
 
+def command_result_finding(
+        run_pairs_by_suite: dict[tuple[str, str], dict[str, list[dict[str, Any]]]],
+        dimensions: list[tuple[str, str]]) -> str:
+    medians = {
+        (policy, suite): statistics.median(pair["delta_s"] for pair in by_suite.get(suite, []))
+        for policy, cache_mode in dimensions
+        for by_suite in [run_pairs_by_suite[(policy, cache_mode)]]
+        for suite in SUITES if by_suite.get(suite)
+    }
+    findings = []
+    clava = [medians[(policy, "clava-js")] for policy, _cache in dimensions
+             if (policy, "clava-js") in medians]
+    if clava and all(value > 0 for value in clava):
+        findings.append("Clava-JS was slower with Protobuf in both conditions.")
+    elif clava and all(value < 0 for value in clava):
+        findings.append("Clava-JS was faster with Protobuf in both conditions.")
+    normal_java = medians.get(("normal", "java"))
+    disabled_java = medians.get(("disabled", "java"))
+    if normal_java is not None and disabled_java is not None and normal_java * disabled_java < 0:
+        findings.append("Java switched from slower to faster when explicit GC was turned off." if normal_java > 0 else "Java switched from faster to slower when explicit GC was turned off.")
+    elif normal_java is not None and disabled_java is not None:
+        direction = "slower" if disabled_java > 0 else "faster" if disabled_java < 0 else "tied"
+        findings.append(f"With test-harness GC requests blocked, Protobuf was {direction} on Java.")
+    return " ".join(findings)
+
+
 def command_results_section(run_pairs_by_suite: dict[tuple[str, str], dict[str, list[dict[str, Any]]]],
                             global_run_pairs: dict[tuple[str, str], list[dict[str, Any]]],
+                            unmatched_run_pairs: dict[tuple[str, str], int],
                             runs_grouped: dict[tuple[str, str], list[dict[str, Any]]],
-                            parse_pairs: dict[tuple[str, str], dict[str, list[dict[str, Any]]]]) -> str:
+                            parse_pairs: dict[tuple[str, str], dict[str, list[dict[str, Any]]]],
+                            invalid_runs: list[dict[str, Any]]) -> str:
     policy_order = {"normal": 0, "disabled": 1}
     dimensions = sorted(run_pairs_by_suite,
                         key=lambda dimension: (policy_order.get(dimension[0], 2), dimension[1]))
     if not dimensions:
         return ""
-    output = ['<section class="headline-results"><h2>Full suite-command result</h2>'
-              '<p class="chart-note">Each point is a matched full-command difference: Protobuf minus Text + ccache. '
-              'These wall times include caller-side heap logging and explicit GC; they are not sums of parse-event times. '
-              'The combined Clava-JS + Java row adds only commands measured within the same sequential pair group.</p>']
-    for policy, cache_mode in dimensions:
-        by_suite = run_pairs_by_suite[(policy, cache_mode)]
-        global_pairs = global_run_pairs.get((policy, cache_mode), [])
-        rows = runs_grouped.get((policy, cache_mode), [])
-        title = "Explicit GC disabled" if policy == "disabled" else "Explicit GC allowed" if policy == "normal" else policy
-        output.append(f'<section class="headline-condition"><h3>{esc(title)} · {esc(cache_mode)} cache</h3>')
-        output.append(f'<p class="headline-conclusion">{command_conclusion(by_suite, global_pairs)}</p>')
-        output.append(run_wall_table(rows, by_suite, global_pairs))
-        output.append(svg_delta_chart(
-            f'Paired full-command wall-time difference — {title}',
-            wall_chart_rows(by_suite, global_pairs),
-            metric_label="command pair/block",
-        ))
-        output.append('</section>')
+    cache_label = ", ".join(sorted({cache for _, cache in dimensions}))
+    output = ['<section class="headline-results"><h2>Whole-suite runtime</h2>'
+              f'<p class="chart-note">{esc(cache_label.capitalize())} cache · same revision. Positive means Protobuf was slower.</p>']
+    finding = command_result_finding(run_pairs_by_suite, dimensions)
+    if finding:
+        output.append(f'<p class="overall-finding">{esc(finding)}</p>')
+        output.append('<p class="gc-definition">Explicit GC is garbage collection requested by the tests. Automatic GC stays on.</p>')
+    policy_label = {"normal": "Explicit GC on", "disabled": "Explicit GC off"}
+    for suite in SUITES:
+        suite_groups: list[tuple[str, list[dict[str, Any]]]] = []
+        for policy, cache_mode in dimensions:
+            pairs = run_pairs_by_suite[(policy, cache_mode)].get(suite, [])
+            if not pairs:
+                continue
+            label = policy_label.get(policy, policy)
+            chart_rows = [{
+                "pair_id": pair["pair_id"], "repeat": pair["repeat"],
+                "identity": f'{SUITES[suite]} command pair {pair["pair_id"]}',
+                "delta_ms": pair["delta_s"] * 1000,
+            } for pair in pairs]
+            suite_groups.append((label, chart_rows))
+        if not suite_groups:
+            continue
+        output.append(f'<article class="command-suite-result"><h3>{esc(SUITES[suite])}</h3>')
+        output.append(comparative_delta_chart_html(
+            f'Paired {SUITES[suite]} full-command differences', suite_groups, "command pair"))
+        output.append('</article>')
 
+    global_groups: list[tuple[str, list[dict[str, Any]]]] = []
+    for policy, cache_mode in dimensions:
+        pairs = global_run_pairs.get((policy, cache_mode), [])
+        if not pairs:
+            continue
+        label = policy_label.get(policy, policy)
+        global_groups.append((label, [{
+            "pair_id": pair["pair_group_id"], "repeat": pair["repeat"],
+            "identity": f'Sequential suite block {pair["pair_group_id"]}',
+            "delta_ms": pair["delta_s"] * 1000,
+        } for pair in pairs]))
+    if global_groups:
+        output.append('<article class="command-suite-result"><h3>Sequential Clava-JS + Java block</h3>'
+                      '<p class="chart-note">Only commands measured in the same sequential pair group are combined.</p>')
+        output.append(comparative_delta_chart_html(
+            'Paired sequential suite-block command differences', global_groups,
+            "sequential block"))
+        output.append('</article>')
+
+    output.append('<details class="command-details"><summary>Command medians, quartiles, and run audit</summary>')
+    for policy, cache_mode in dimensions:
+        title = policy_label.get(policy, policy)
+        output.append(f'<h3>{esc(title)} · {esc(cache_mode)} cache</h3>')
+        output.append(run_wall_table(
+            runs_grouped.get((policy, cache_mode), []),
+            run_pairs_by_suite[(policy, cache_mode)],
+            global_run_pairs.get((policy, cache_mode), [])))
+        output.append(f'<p>{command_conclusion(run_pairs_by_suite[(policy, cache_mode)], global_run_pairs.get((policy, cache_mode), []))}</p>')
+        output.append(f'<p class="chart-note">Unmatched or incomplete command groups: '
+                      f'{unmatched_run_pairs.get((policy, cache_mode), 0)}. '
+                      f'{esc(invalid_run_summary(invalid_runs, policy, cache_mode))}</p>')
+    output.append('</details>')
+
+    interpretation: list[str] = []
     normal_dim = next((dimension for dimension in dimensions if dimension[0] == "normal"), None)
     disabled_dim = next((dimension for dimension in dimensions if dimension[0] == "disabled"), None)
     if normal_dim and disabled_dim:
@@ -1314,19 +1516,20 @@ def command_results_section(run_pairs_by_suite: dict[tuple[str, str], dict[str, 
         common = sorted(set(normal_java) & set(disabled_java))
         if common:
             did = statistics.median(normal_java[repeat] - disabled_java[repeat] for repeat in common)
-            output.append(
+            contrast = (
                 f'<p class="pairing-note"><b>Java GC-policy contrast:</b> the median of {len(common)} '
                 f'within-repeat differences in the protocol gap is {did:+.3f} s '
                 '(normal-policy Proto−Text gap minus GC-disabled Proto−Text gap). '
                 'This is paired by repeat, not the subtraction of the two condition medians. '
                 'It describes this warm-ccache instrumented workload and is not the prior direct-bypass result.</p>'
             )
+            interpretation.append(contrast)
         normal_parse = [pair["delta_ms"] for pair in parse_pairs.get(normal_dim, {}).get("java", [])]
         disabled_parse = [pair["delta_ms"] for pair in parse_pairs.get(disabled_dim, {}).get("java", [])]
         normal_gap = [pair["delta_s"] for pair in run_pairs_by_suite[normal_dim].get("java", [])]
         disabled_gap = [pair["delta_s"] for pair in run_pairs_by_suite[disabled_dim].get("java", [])]
         if normal_parse and disabled_parse and normal_gap and disabled_gap:
-            output.append(
+            boundary = (
                 '<p class="boundary-callout"><b>Java timing-boundary check:</b> the full-command gap is '
                 f'{statistics.median(normal_gap):+.3f} s with explicit GC allowed and '
                 f'{statistics.median(disabled_gap):+.3f} s with it disabled, while the paired per-invocation '
@@ -1336,6 +1539,11 @@ def command_results_section(run_pairs_by_suite: dict[tuple[str, str], dict[str, 
                 'command wall time but excluded from parse-call latency. It does not quantify GC pauses or claim '
                 'the earlier direct-bypass result applies unchanged to this warm-ccache workload.</p>'
             )
+            interpretation.append(boundary)
+    if interpretation:
+        output.append('<details class="interpretation-details"><summary>GC contrast and timer interpretation</summary>')
+        output.extend(interpretation)
+        output.append('</details>')
     output.append('</section>')
     return "".join(output)
 
@@ -1355,92 +1563,93 @@ def report_html(path: Path, valid_rows: list[dict[str, Any]],
         runs_grouped.setdefault((row["gc_policy"], row["cache_mode"]), []).append(row)
     headline_sections: list[str] = []
     if run_rows:
-        headline_sections.append(measurement_panel(run_rows, plan, run_pairs_by_suite))
         headline_sections.append(command_results_section(
-            run_pairs_by_suite, global_run_pairs, runs_grouped, pairs))
-    sections: list[str] = []
-    for policy, cache_mode in sorted(grouped):
+            run_pairs_by_suite, global_run_pairs, unmatched_run_pairs, runs_grouped, pairs, invalid_runs))
+        headline_sections.append(measurement_panel(run_rows, plan, run_pairs_by_suite))
+    sections: list[str] = ['<section class="parser-results"><h2>Per-parse results</h2>'
+                            '<p class="chart-note">Candles use every valid event; dots are sampled. Positive paired deltas mean Protobuf took longer.</p>']
+    policy_order = {"normal": 0, "disabled": 1}
+    dimensions = sorted(grouped, key=lambda dimension: (policy_order.get(dimension[0], 2), dimension[1]))
+    cache_modes = sorted({cache_mode for _policy, cache_mode in dimensions})
+    for suite in SUITES:
+        for cache_mode in cache_modes:
+            suite_dimensions = [dimension for dimension in dimensions
+                                if dimension[1] == cache_mode and suite in grouped[dimension]]
+            if not suite_dimensions:
+                continue
+            condition_rows: dict[str, list[dict[str, Any]]] = {}
+            condition_order: list[str] = []
+            delta_groups: list[tuple[str, list[dict[str, Any]]]] = []
+            for policy, _mode in suite_dimensions:
+                label = "Explicit GC on" if policy == "normal" else "Explicit GC off" if policy == "disabled" else policy
+                for protocol in PROTOCOL_ORDER:
+                    key = f"{protocol}-{policy}"
+                    rows = [row for row in grouped[(policy, cache_mode)][suite]
+                            if row["protocol"] == protocol]
+                    if rows:
+                        condition_rows[key] = rows
+                        condition_order.append(key)
+                delta_groups.append((label, pairs.get((policy, cache_mode), {}).get(suite, [])))
+
+            sections.append(f'<article class="parse-suite-result"><h3>{esc(SUITES[suite])} · {esc(cache_mode)} cache</h3>')
+            sections.append(distribution_chart_html(
+                f'{SUITES[suite]} parser-call latency by protocol and GC policy',
+                condition_rows, condition_order))
+            if any(rows for _, rows in delta_groups):
+                sections.append('<h4>Matched per-parse differences</h4>')
+                sections.append(comparative_delta_chart_html(
+                    f'{SUITES[suite]} matched parser-call differences', delta_groups,
+                    "source invocation"))
+            for policy, _mode in suite_dimensions:
+                dimension = (policy, cache_mode)
+                policy_title = "Explicit GC on" if policy == "normal" else "Explicit GC off" if policy == "disabled" else policy
+                suite_rows = grouped[dimension][suite]
+                suite_pairs = pairs.get(dimension, {}).get(suite, [])
+                missing_pairs = unmatched.get((policy, cache_mode, suite), 0)
+                unavailable_pairs = unpairable.get((policy, cache_mode, suite), 0)
+                sections.append(f'<details class="evidence-details"><summary>{esc(policy_title)} pairing and source details</summary>')
+                sections.append(f'<p>{esc(cache_state_summary(suite_rows))} Cache flags describe adapter eligibility, not hits. '
+                                f'{esc(pair_eligibility_summary(suite_rows))}</p>')
+                sections.append(f'<p>Matched invocations: {len(suite_pairs)}. Missing counterparts: {missing_pairs}. '
+                                f'Events unavailable for pairing: {unavailable_pairs}. '
+                                f'{esc(invalid_summary(invalid_rows, policy, cache_mode, suite))}</p>')
+                sections.append('<h4>Largest per-source median changes across repeats</h4>')
+                sections.append(source_change_table(suite_pairs))
+                sections.append('</details>')
+            sections.append('</article>')
+
+    for policy, cache_mode in dimensions:
         dimension = (policy, cache_mode)
         raw_by_suite = grouped[dimension]
         pairs_by_suite = pairs.get(dimension, {})
-        policy_title = f"GC policy: {policy}, cache mode: {cache_mode}"
-        sections.append(f'<section class="policy"><h2>{esc(policy_title)}</h2>')
-        sections.append('<p class="policy-note">This panel contains only rows with this GC policy and cache mode. The pooled row combines individual parse samples from the listed suites. It is not total suite runtime or a global speedup.</p>')
-        sections.append(summary_table(policy, raw_by_suite, pairs_by_suite))
-        for suite in SUITES:
-            if suite not in raw_by_suite:
-                continue
-            suite_title = f'{SUITES[suite]}, {policy}'
-            suite_rows = raw_by_suite[suite]
-            sections.append(f'<section class="chart-section"><h3>{esc(SUITES[suite])} individual parses</h3>')
-            sections.append(
-                f'<p class="chart-note">{esc(cache_state_summary(suite_rows))} '
-                'The flag describes whether the AST-cache adapter was active for an event, not a cache hit. '
-                'Text + ccache and Protobuf use the same time axis. Candle statistics use every valid event, including '
-                'ineligible parses; dots are a deterministic sample of up to 250 per protocol. '
-                'Outlined sample dots lie outside the 1.5-IQR whiskers; exact per-event measurements remain in the CSV.</p>'
-            )
-            sections.append(
-                f'<p class="pairing-note"><b>Pairability:</b> '
-                f'{esc(pair_eligibility_summary(suite_rows))}</p>'
-            )
-            sections.append(svg_distribution_chart(suite_title, {
-                protocol: [row for row in suite_rows if row["protocol"] == protocol]
-                for protocol in PROTOCOL_ORDER
-            }))
-            missing_pairs = unmatched.get((policy, cache_mode, suite), 0)
-            unavailable_pairs = unpairable.get((policy, cache_mode, suite), 0)
-            suite_pairs = pairs_by_suite.get(suite, [])
-            sections.append(
-                f'<p class="chart-note">Matched invocations: {len(suite_pairs)}. '
-                f'Pairable keys missing a counterpart: {missing_pairs}. '
-                f'Parse events excluded from pairing (<code>pair_available=false</code> or missing key): '
-                f'{unavailable_pairs}. {esc(invalid_summary(invalid_rows, policy, cache_mode, suite))}</p>'
-            )
-            sections.append('<h3>Largest per-source changes across repeats</h3>')
-            sections.append('<p class="chart-note">For each stable source/config key, deltas are first summarized by their median across repeats. Positive means Protobuf took longer; the table lists up to five largest changes in each direction.</p>')
-            sections.append(source_change_table(suite_pairs))
-            sections.append('</section>')
-
+        policy_title = "Explicit GC on" if policy == "normal" else "Explicit GC off" if policy == "disabled" else policy
         all_rows = [row for rows in raw_by_suite.values() for row in rows]
-        sections.append('<section class="chart-section"><h3>Pooled per-parse distribution</h3>')
-        sections.append('<p class="chart-note">All valid Clava-JS and Java parse invocations under this GC policy share one time axis. Each invocation counts once. This pooled candle-only view computes all statistics from the complete data; individual dots are omitted to avoid repeating points already shown in the suite charts.</p>')
-        sections.append(svg_distribution_chart(f'Pooled per-parse distribution for {policy}', {
-            protocol: [row for row in all_rows if row["protocol"] == protocol]
-            for protocol in PROTOCOL_ORDER
-        }, show_points=False))
+        pooled_rows = {protocol: [row for row in all_rows if row["protocol"] == protocol]
+                       for protocol in PROTOCOL_ORDER}
         pooled_pairs = [pair for rows in pairs_by_suite.values() for pair in rows]
         delta_groups = [(SUITES[suite], pairs_by_suite.get(suite, [])) for suite in SUITES
                         if pairs_by_suite.get(suite)]
         delta_groups.append(("Pooled per-parse", pooled_pairs))
-        sections.append('<section class="chart-section"><h3>Matched per-parse differences</h3>')
-        sections.append('<p class="chart-note">Positive means Protobuf took longer. Candles and axis limits use all matched invocations. The suite rows show a deterministic sample of up to 250 dots each; the pooled row is candle-only to avoid duplicating those dots, and is not a whole-suite speed difference.</p>')
-        sections.append(svg_delta_chart(f'Paired per-parse difference for {policy}', delta_groups,
-                                        metric_label="source invocation",
-                                        point_groups={SUITES[suite] for suite in SUITES}))
-        if delta_chart_needs_central_scale(delta_groups):
-            sections.append('<h3>Central-scale view of paired parse differences</h3>')
-            sections.append('<p class="chart-note">This candle-only linear view spans the shared non-outlier whisker range across suites. Every candle and count uses all paired rows; observations beyond this view are counted beside each group and the full-range chart above shows the complete range with sampled dots.</p>')
-            sections.append(svg_delta_chart(
-                f'Central-scale paired per-parse difference for {policy}',
-                delta_groups,
-                metric_label="source invocation",
-                central_scale=True,
-                show_points=False,
-            ))
-        sections.append(f'<p class="chart-note">{esc(invalid_summary(invalid_rows, policy, cache_mode))}</p></section>')
-
+        sections.append(f'<details class="pooled-details"><summary>Pooled summaries · {esc(policy_title)}</summary>')
+        sections.append(summary_table(policy, raw_by_suite, pairs_by_suite))
+        sections.append('<h3>Pooled per-parse distribution</h3>')
+        sections.append(distribution_chart_html(
+            f'Pooled per-parse distribution for {policy_title}', pooled_rows,
+            PROTOCOL_ORDER, show_points=False))
+        sections.append('<h3>Matched per-parse differences</h3>')
+        sections.append(delta_chart_html(
+            f'Pooled and suite per-parse differences for {policy_title}', delta_groups,
+            metric_label="source invocation", point_groups={SUITES[suite] for suite in SUITES}))
         if run_rows:
             wall_rows = runs_grouped.get(dimension, [])
-            wall_unmatched = unmatched_run_pairs.get(dimension, 0)
-            sections.append('<details class="run-audit"><summary>Run-level ccache audit</summary>')
-            sections.append('<p class="chart-note">ccache totals below come from command-run counters. They describe run-level cache activity and are not assigned to individual parse points.</p>')
+            sections.append('<details class="run-audit"><summary>Run-level ccache counters</summary>')
             sections.append(ccache_counter_table(wall_rows))
-            sections.append(f'<p class="chart-note">Unmatched or incomplete command groups excluded from paired summaries: {wall_unmatched}. {esc(invalid_run_summary(invalid_runs, policy, cache_mode))}</p></details>')
-        sections.append('</section>')
+            sections.append(f'<p>Incomplete command groups: {unmatched_run_pairs.get(dimension, 0)}. '
+                            f'{esc(invalid_run_summary(invalid_runs, policy, cache_mode))}</p></details>')
+        sections.append('</details>')
+    sections.append('</section>')
 
     invalid_count = len(invalid_rows) + len(invalid_runs)
-    timing_boundary = valid_rows[0]["timing_boundary"]
     return f'''<!doctype html>
 <html lang="en">
 <head>
@@ -1448,8 +1657,8 @@ def report_html(path: Path, valid_rows: list[dict[str, Any]],
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Per-parse protocol comparison</title>
 <style>
-:root {{ color-scheme: light; --surface:#fff; --ink:#172033; --muted:#526174; --line:#d8dee8; --grid:#e5eaf1; --outlier:#b91c1c; --soft:#f4f7fb; }}
-html.dark {{ color-scheme: dark; --surface:#111827; --ink:#e5e7eb; --muted:#aab5c5; --line:#374151; --grid:#273244; --outlier:#f87171; --soft:#182334; }}
+:root {{ color-scheme: light; --surface:#fff; --ink:#172033; --muted:#526174; --line:#d8dee8; --grid:#e5eaf1; --outlier:#b91c1c; --soft:#f4f7fb; --delta-ink:#475569; --delta-box:#64748b; }}
+html.dark {{ color-scheme: dark; --surface:#111827; --ink:#e5e7eb; --muted:#aab5c5; --line:#374151; --grid:#273244; --outlier:#f87171; --soft:#182334; --delta-ink:#cbd5e1; --delta-box:#94a3b8; }}
 * {{ box-sizing:border-box; }}
 body {{ margin:0; background:var(--surface); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }}
 main {{ max-width:1320px; margin:0 auto; padding:32px 24px 64px; }}
@@ -1461,9 +1670,9 @@ p {{ margin:8px 0 14px; }}
 .lede {{ max-width:1000px; }}
 .policy {{ margin-top:36px; }}
 .chart-section {{ margin:24px 0 34px; }}
-.table-wrap {{ overflow-x:auto; margin:20px 0 28px; border:1px solid var(--line); border-radius:10px; }}
-table {{ width:100%; border-collapse:collapse; min-width:920px; }}
-.compact-table {{ min-width:500px; }}
+.table-wrap {{ overflow:visible; margin:20px 0 28px; border:1px solid var(--line); border-radius:10px; }}
+table {{ width:100%; border-collapse:collapse; table-layout:fixed; min-width:0; }}
+.compact-table {{ min-width:0; }}
 .top-delta-grid {{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }}
 .top-delta-grid h4 {{ margin:8px 0; }}
 .pairing-note {{ padding:12px 14px; border-left:4px solid #b45309; background:var(--soft); border-radius:4px; }}
@@ -1477,35 +1686,83 @@ svg {{ display:block; width:100%; height:auto; overflow:visible; }}
 .zero-line {{ stroke:var(--muted); stroke-width:1.6; stroke-dasharray:5 4; }}
 .axis-text {{ fill:var(--muted); font-size:12px; }}
 .axis-title {{ fill:var(--muted); font-size:13px; }}
+.mobile-axis-text,.mobile-axis-title,.mobile-condition-text {{ fill:var(--muted); font-size:18px; }}
+.mobile-condition-text {{ fill:var(--ink); font-weight:650; }}
 .condition-text {{ fill:var(--ink); font-size:14px; font-weight:650; }}
 .sample-text {{ fill:var(--ink); font-size:13px; font-weight:650; }}
 .detail-text {{ fill:var(--muted); font-size:11px; }}
 .point {{ opacity:.7; stroke:var(--surface); stroke-width:1; }}
 .point.outlier {{ opacity:1; stroke:var(--outlier); stroke-width:2; }}
-.delta-whisker {{ stroke:#475569; stroke-width:2; }}
-.delta-box {{ fill:#64748b; fill-opacity:.18; stroke:#475569; stroke-width:1.5; }}
-.delta-median {{ stroke:#334155; stroke-width:4; }}
+.delta-whisker {{ stroke:var(--delta-ink); stroke-width:2; }}
+.delta-box {{ fill:var(--delta-box); fill-opacity:.18; stroke:var(--delta-ink); stroke-width:1.5; }}
+.delta-median {{ stroke:var(--delta-ink); stroke-width:4; }}
+.delta-point {{ fill:var(--delta-ink); }}
 .empty {{ color:var(--muted); font-style:italic; }}
+.chart-mobile {{ display:none; }}
+.chart-svg-mobile {{ width:min(100%,560px); height:auto; margin:0 auto; }}
+.chart-stats {{ display:grid; gap:7px; list-style:none; margin:10px 0 18px; padding:0; }}
+.chart-stats li {{ display:block; padding:8px 10px; border-bottom:1px solid var(--line); }}
+.chart-stats li > span:not(.swatch) {{ display:block; }}
+.chart-stats .swatch {{ display:inline-block; margin-right:5px; }}
+.chart-stats details summary {{ color:var(--muted); font-size:.88rem; cursor:pointer; }}
+.chart-stats details p {{ margin:3px 0 0; color:var(--muted); font-size:.9rem; }}
+.swatch {{ width:11px; height:11px; border-radius:50%; align-self:center; }}
+.suite-glance-grid {{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }}
+.suite-glance {{ padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--surface); }}
+.suite-glance h3 {{ margin:0 0 4px; }}
+.suite-glance p {{ margin:2px 0; }}
+.command-suite-result,.parse-suite-result {{ margin:16px 0 28px; padding:14px; border:1px solid var(--line); border-radius:12px; }}
+.command-suite-result h3,.parse-suite-result h3 {{ margin:0 0 4px; }}
+.parse-suite-result h4 {{ margin:20px 0 4px; }}
+.headline-conclusion {{ display:flex; flex-wrap:wrap; gap:4px 16px; margin:8px 0; }}
+.overall-finding {{ margin:10px 0 3px; font-size:1.05rem; font-weight:650; }}
+.gc-definition {{ margin:0 0 14px; color:var(--muted); font-size:.9rem; }}
+summary {{ cursor:pointer; }}
+code {{ overflow-wrap:anywhere; word-break:break-word; }}
 .measurement-panel,.headline-results {{ margin:20px 0 32px; padding:20px; border:1px solid var(--line); border-radius:14px; background:var(--soft); }}
 .measurement-panel h2,.headline-results h2 {{ margin:0 0 8px; padding:0; border:0; }}
 .headline-condition {{ margin:22px 0 32px; }}
 .headline-condition h3 {{ margin-top:14px; }}
 .headline-conclusion {{ font-size:1.06rem; line-height:1.75; }}
 .boundary-callout {{ padding:14px 16px; border-left:4px solid #6d28d9; background:var(--soft); border-radius:4px; }}
-.provenance,.run-audit {{ margin:16px 0 0; }}
+.provenance,.run-audit,.method-details,.evidence-details,.pooled-details,.command-details,.interpretation-details {{ margin:12px 0; }}
 .provenance summary,.run-audit summary {{ cursor:pointer; color:var(--muted); }}
-@media (max-width:720px) {{ main {{ padding:22px 12px 44px; }} .chart-section {{ overflow-x:auto; }} .chart-section svg {{ min-width:820px; }} .top-delta-grid {{ grid-template-columns:1fr; }} }}
+@media (max-width:1024px) {{
+  main {{ padding:22px 12px 44px; }}
+  .chart-wide {{ display:none; }}
+  .chart-mobile {{ display:block; }}
+  .chart-mobile .chart-svg-mobile {{ width:min(100%,560px); }}
+  .chart-stats li {{ grid-template-columns:auto minmax(0,1fr); }}
+  .table-wrap {{ overflow:visible; margin:12px 0 18px; border:0; }}
+  .table-wrap table {{ width:100%; min-width:0; table-layout:fixed; }}
+  .table-wrap th,.table-wrap td {{ padding:8px 6px; overflow-wrap:anywhere; }}
+  .suite-glance-grid {{ grid-template-columns:1fr; }}
+  .measurement-panel,.headline-results {{ padding:14px; }}
+}}
+@media (max-width:600px) {{
+  table.mobile-cards, .mobile-cards tbody, .mobile-cards tr, .mobile-cards th, .mobile-cards td {{ display:block; width:100%; }}
+  .mobile-cards thead {{ display:none; }}
+  .mobile-cards tr {{ margin:10px 0; padding:8px 10px; border:1px solid var(--line); border-radius:8px; }}
+  .mobile-cards th, .mobile-cards td {{ border:0; padding:4px 0; }}
+  .mobile-cards [data-label]::before {{ content:attr(data-label); display:block; color:var(--muted); font-size:.8rem; font-weight:650; }}
+}}
 </style>
 </head>
 <body><main>
 <h1>Per-parse protocol comparison</h1>
 {''.join(headline_sections)}
-<p class="lede">Input: <code>{esc(path.name)}</code>. The CSV records the timer boundary as <code>{esc(timing_boundary)}</code>. These values are parser-call latency, not full test-command wall time or explicit-GC pause measurements. The CSV retains every valid invocation; charts label when dots are sampled or omitted.</p>
-<p class="lede">All candle statistics, whiskers, medians, IQRs, outlier counts, and axis ranges use the full valid dataset. Where displayed, dots are deterministic, range-spanning samples and do not determine the candles. Pooled runtime and central-scale delta views are candle-only.</p>
-<p class="lede">Per-parse delta is Protobuf minus Text + ccache. Positive values mean Protobuf took longer. Pairing uses GC policy, cache mode, suite, pair ID, repeat, and source identity. Pooled rows give every parse event equal weight and do not estimate suite-level or global wall-time speedup. Excluded parse or command rows, including invalid, incomplete, and seed rows: {invalid_count}.</p>
-<p class="lede">Raw runtime charts retain all valid parse events, including events where <code>cache_enabled</code> is false. That field describes event-level cache-adapter state, not a per-file hit; ccache hits and misses are shown only as command-level counters when <code>runs.csv</code> is supplied. The effective explicit-GC setting is checked against each row's GC policy when recorded.</p>
 {''.join(sections)}
-</main></body></html>'''
+<details class="run-audit"><summary>CSV inclusion audit</summary><p>Excluded parse or command rows, including invalid, incomplete, and seed rows: {invalid_count}. Input: <code>{esc(path.name)}</code>. Parser timing boundary: <code>{esc(valid_rows[0]['timing_boundary'])}</code>. Command wall time includes caller-side heap logging and explicit GC; the parse timer excludes them.</p></details>
+</main><script>
+document.querySelectorAll('main table').forEach(table => {{
+  const headers = Array.from(table.querySelectorAll('thead th'), cell => cell.textContent.trim());
+  if (!headers.length) return;
+  table.classList.add('mobile-cards');
+  table.querySelectorAll('tbody tr').forEach(row => {{
+    Array.from(row.cells).forEach((cell, index) => cell.dataset.label = headers[index] || '');
+  }});
+}});
+</script></body></html>'''
 
 
 def main(argv: list[str] | None = None) -> int:

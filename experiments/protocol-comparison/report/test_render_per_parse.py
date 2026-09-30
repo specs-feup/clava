@@ -121,7 +121,9 @@ class PerParseReportTest(unittest.TestCase):
         central = ET.fromstring(render_per_parse.svg_delta_chart("Central", groups, central_scale=True))
         self.assertEqual(len(full.findall(".//circle")), 5)
         self.assertEqual(len(central.findall(".//circle")), 3)
-        self.assertIn("off-scale 2", "".join(central.itertext()))
+        central_stats = render_per_parse.delta_chart_stats(
+            groups, central_scale=True, show_points=False)
+        self.assertIn("2 off scale", central_stats)
         self.assertIn("central linear scale", "".join(central.itertext()))
         self.assertFalse(render_per_parse.delta_chart_needs_central_scale([
             ("compact", [{**point, "delta_ms": index} for index, point in enumerate(points)])
@@ -142,14 +144,20 @@ class PerParseReportTest(unittest.TestCase):
             "Full range", [("Suite", points), ("Pooled", points)],
             max_points_per_group=80, point_groups={"Suite"}))
         self.assertEqual(len(full.findall(".//circle")), 80)
-        self.assertIn("n=1000", "".join(full.itertext()))
-        self.assertIn("dots 80/1000", "".join(full.itertext()))
-        self.assertIn("dots omitted", "".join(full.itertext()))
+        delta_stats = render_per_parse.delta_chart_stats(
+            [("Suite", points), ("Pooled", points)], max_points=80,
+            point_groups={"Suite"})
+        self.assertIn("n=1000", delta_stats)
+        self.assertIn("80/1000 points", delta_stats)
+        self.assertIn("points omitted", delta_stats)
+        self.assertNotIn("n=1000", "".join(full.itertext()))
         central = ET.fromstring(render_per_parse.svg_delta_chart(
             "Central", [("Suite", points)], central_scale=True, show_points=False))
         self.assertEqual(len(central.findall(".//circle")), 0)
-        self.assertIn("off-scale", "".join(central.itertext()))
-        self.assertIn("n=1000", "".join(central.itertext()))
+        central_stats = render_per_parse.delta_chart_stats(
+            [("Suite", points)], central_scale=True, show_points=False)
+        self.assertIn("0 off scale", central_stats)
+        self.assertIn("n=1000", central_stats)
 
         runtime = ET.fromstring(render_per_parse.svg_distribution_chart(
             "Runtime", {"text": [
@@ -157,9 +165,21 @@ class PerParseReportTest(unittest.TestCase):
                 for index in range(1000)
             ]}, max_points_per_protocol=80))
         self.assertEqual(len(runtime.findall(".//circle")), 80)
-        self.assertIn("n=1000", "".join(runtime.itertext()))
-        self.assertIn("dots 80/1000", "".join(runtime.itertext()))
+        runtime_stats = render_per_parse.distribution_chart_stats(
+            {"text": [
+                {"elapsed_ms": float(index + 1), "source_identity": f"source-{index}"}
+                for index in range(1000)
+            ]}, ("text",), max_points=80)
+        self.assertIn("n=1000", runtime_stats)
+        self.assertIn("80/1000 points", runtime_stats)
+        self.assertNotIn("n=1000", "".join(runtime.itertext()))
         self.assertEqual(len(runtime.findall(".//circle/title")), 0)
+
+        responsive = render_per_parse.distribution_chart_html(
+            "Runtime", {"text": [{"elapsed_ms": value} for value in (1.0, 2.0)]}, ("text",))
+        self.assertIn("chart-svg-wide", responsive)
+        self.assertIn("chart-svg-mobile", responsive)
+        self.assertIn("Distribution details", responsive)
 
     def test_distribution_and_paired_charts_are_well_formed_svg_with_each_sample(self):
         rows, _ = load_parse_fixture()
@@ -214,20 +234,22 @@ class PerParseReportTest(unittest.TestCase):
         rows, invalid = load_parse_fixture()
         html = render_per_parse.report_html(FIXTURE, rows, invalid)
 
-        self.assertIn("GC policy: disabled", html)
-        self.assertIn("GC policy: normal", html)
+        self.assertIn('class="parser-results"', html)
         self.assertEqual(html.count("Pooled per-parse distribution</h3>"), 2)
-        self.assertIn("Clava-JS individual parses", html)
-        self.assertIn("Java parser individual parses", html)
+        self.assertIn("Clava-JS · warm cache", html)
+        self.assertIn("Java parser · warm cache", html)
         self.assertIn("Pooled per-parse sample", html)
         self.assertIn("Excluded parse or command rows, including invalid, incomplete, and seed rows: 2", html)
+        self.assertIn('class="evidence-details"', html)
+        self.assertIn('class="pooled-details"', html)
         self.assertIn("duplicate source identity", html)
         self.assertIn("parsePrivate", html)
         self.assertIn("Positive values mean Protobuf took longer", html)
-        self.assertIn("Largest per-source changes across repeats", html)
+        self.assertIn("Largest per-source median changes across repeats", html)
         self.assertIn("Paired invocations: faster / tied / slower", html)
-        self.assertIn("Candle statistics use every valid event", html)
-        self.assertIn("dots are a deterministic sample of up to 250 per protocol", html)
+        self.assertIn("Candles use every valid event", html)
+        self.assertIn("dots are a deterministic display sample, at most 250 per protocol",
+                      html.lower())
         self.assertNotIn("http://", html)
         self.assertNotIn("https://", html)
 
@@ -303,10 +325,11 @@ class PerParseReportTest(unittest.TestCase):
         run_rows, invalid_runs = load_runs_fixture()
         html = render_per_parse.report_html(FIXTURE, rows, invalid, run_rows, invalid_runs)
 
-        self.assertIn("Full suite-command result", html)
+        self.assertIn("Whole-suite runtime", html)
         self.assertIn("Sequential Clava-JS + Java block", html)
         self.assertIn("includes caller-side heap logging and explicit GC", html)
-        self.assertIn("Paired full-command wall-time difference", html)
+        self.assertIn("Paired Clava-JS full-command differences", html)
+        self.assertIn('class="command-details"', html)
         self.assertIn("Excluded parse or command rows, including invalid, incomplete, and seed rows: 3", html)
 
     def test_headline_workload_and_command_results_precede_parse_candles(self):
@@ -334,12 +357,12 @@ class PerParseReportTest(unittest.TestCase):
         }
         html = render_per_parse.report_html(FIXTURE, rows, invalid, run_rows, invalid_runs, plan)
 
-        self.assertLess(html.index("What was measured"), html.index("Full suite-command result"))
-        self.assertLess(html.index("Full suite-command result"), html.index("Clava-JS individual parses"))
+        self.assertLess(html.index("Whole-suite runtime"), html.index("Study at a glance"))
+        self.assertLess(html.index("Study at a glance"), html.index("Per-parse results"))
         self.assertIn("164 total; 158 passed; 6 skipped", html)
         self.assertIn("116 total; 116 passed; 0 skipped", html)
-        self.assertIn("191 per run", html)
-        self.assertIn("247 per run", html)
+        self.assertIn("191 parse events per run", html)
+        self.assertIn("247 parse events per run", html)
         self.assertIn("Java GC-policy contrast", html)
         self.assertIn("Java timing-boundary check", html)
         self.assertIn("Revision and artifact fingerprints", html)

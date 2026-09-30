@@ -47,6 +47,8 @@ Two earlier GC-off attempts stopped on the same 13 Protobuf test failures. Pass 
 
 ## Per-parse timing report
 
+The report starts with the measured result. Each suite groups the GC conditions on a shared scale. Charts use a separate narrow-screen layout with readable labels; they do not require horizontal scrolling. Methods, per-source rankings, and audit tables are expandable.
+
 Render the individual parser-call timings and their paired comparison from the harness CSVs:
 
 ```sh
