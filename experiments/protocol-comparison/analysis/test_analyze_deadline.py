@@ -114,6 +114,8 @@ def fixture_manifest():
                 "measured": measured,
                 "repeat": repeat,
                 "attempt": 1,
+                "selected": True,
+                "superseded_by_attempt": None,
                 "valid": True,
                 "return_code": 0,
                 "elapsed_s": (20 if suite == "java" else 10) + repeat_or_zero(repeat) +
@@ -214,6 +216,46 @@ class AnalyzeDeadlineTest(unittest.TestCase):
             sources.append(Path(f"{mode}.json"))
         result = analyzer.analyze_cohort(sources, manifests)
         self.assertEqual(len(result["summaries"]), 20)
+
+    def test_repaired_attempt_is_selected_and_failed_attempt_stays_audit_only(self):
+        selected = next(
+            row for row in self.manifest["results"]
+            if row["cell_id"] == "clava-js/direct/protobuf/repeat-03"
+        )
+        selected["attempt"] = 2
+        selected["elapsed_s"] = 777.0
+        failed = copy.deepcopy(selected)
+        failed.update({
+            "attempt": 1,
+            "selected": False,
+            "superseded_by_attempt": 2,
+            "valid": False,
+            "return_code": 1,
+            "failure_names": ["synthetic failure"],
+            "elapsed_s": 99999.0,
+        })
+        self.manifest["results"].append(failed)
+
+        result = analyzer.analyze_cohort([self.source], [self.manifest])
+        comparison = next(
+            item for item in result["comparisons"]
+            if item["kind"] == "vs_text_same_mode" and item["suite"] == "clava-js"
+            and item["mode"] == "direct" and item["stage"] == "protobuf"
+        )
+        selected_pair = next(pair for pair in comparison["pairs"] if pair["repeat"] == 3)
+        self.assertEqual(selected_pair["candidate_s"], 777.0)
+        self.assertEqual(len(result["attempt_audit"]), 1)
+        self.assertNotIn("elapsed_s", result["attempt_audit"][0])
+        self.assertEqual(result["attempt_audit"][0]["superseded_by_attempt"], 2)
+
+    def test_retry_without_prior_attempt_linkage_is_rejected(self):
+        selected = next(
+            row for row in self.manifest["results"]
+            if row["cell_id"] == "clava-js/direct/protobuf/repeat-03"
+        )
+        selected["attempt"] = 2
+        with self.assertRaisesRegex(analyzer.AnalysisError, "not contiguous"):
+            analyzer.analyze_cohort([self.source], [self.manifest])
 
     def test_cli_writes_machine_readable_json_and_csv(self):
         with tempfile.TemporaryDirectory() as temporary:

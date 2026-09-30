@@ -227,6 +227,58 @@ def test_identity_digest(identities: list[Any]) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def _attempt_key(row: Any, planned: set[tuple[str, str, str]], source: Path):
+    if not isinstance(row, dict):
+        raise AnalysisError(f"{source}: result rows must be objects")
+    suite, mode, stage = row.get("suite"), row.get("mode"), row.get("stage")
+    if not all(isinstance(part, str) for part in (suite, mode, stage)):
+        raise AnalysisError(f"{source}: result row has invalid suite/mode/stage identifiers")
+    cell = (suite, mode, stage)
+    if cell not in planned:
+        raise AnalysisError(f"{source}: unexpected suite/mode/stage row {cell}")
+    measured, repeat = row.get("measured"), row.get("repeat")
+    if measured is True:
+        if type(repeat) is not int or repeat not in REPEATS:
+            raise AnalysisError(f"{source}: measured {cell} row has invalid repeat {repeat!r}")
+        slot = repeat
+    elif measured is False and repeat in (None, 0):
+        slot = 0
+    else:
+        raise AnalysisError(f"{source}: invalid measured/repeat values for {cell}")
+    if row.get("cell_id") != cell_id(suite, mode, stage, None if slot == 0 else slot):
+        raise AnalysisError(f"{source}: inconsistent cell_id for {cell} repeat {repeat!r}")
+    attempt = row.get("attempt")
+    if type(attempt) is not int or attempt < 1:
+        raise AnalysisError(f"{source}: invalid attempt number for {cell} repeat {repeat!r}")
+    if type(row.get("selected")) is not bool:
+        raise AnalysisError(f"{source}: missing boolean selected flag for {cell} attempt {attempt}")
+    return (*cell, slot), attempt
+
+
+def _audit_attempt(row: dict[str, Any], key: tuple[str, str, str, int], attempt: int, source: Path) -> dict[str, Any]:
+    next_attempt = row.get("superseded_by_attempt")
+    if row.get("selected") is not False or row.get("valid") is not False:
+        raise AnalysisError(f"{source}: unselected attempt {attempt} is not an invalid superseded attempt")
+    if type(next_attempt) is not int or next_attempt != attempt + 1:
+        raise AnalysisError(f"{source}: attempt {attempt} lacks a link to the next repair attempt")
+    suite, mode, stage, repeat = key
+    return {
+        "suite": suite,
+        "mode": mode,
+        "stage": stage,
+        "cell_id": row["cell_id"],
+        "measured": row["measured"],
+        "repeat": None if repeat == 0 else repeat,
+        "attempt": attempt,
+        "selected": False,
+        "valid": False,
+        "return_code": row.get("return_code"),
+        "failure_names": row.get("failure_names", []),
+        "superseded_by_attempt": next_attempt,
+        "run_dir_relative": row.get("run_dir_relative"),
+    }
+
+
 def _validate_row(row: Any, plan: dict[str, Any], planned: set[tuple[str, str, str]], baseline: dict[str, str], source: Path) -> tuple[str, str, str, int | None]:
     if not isinstance(row, dict):
         raise AnalysisError(f"{source}: result rows must be objects")
@@ -251,8 +303,10 @@ def _validate_row(row: Any, plan: dict[str, Any], planned: set[tuple[str, str, s
         raise AnalysisError(f"{source}: {key} row must declare measured as true or false")
     if row.get("cell_id") != expected_id:
         raise AnalysisError(f"{source}: inconsistent cell_id {row.get('cell_id')!r}; expected {expected_id!r}")
-    if type(row.get("attempt")) is not int or row.get("attempt") != 1:
-        raise AnalysisError(f"{source}: unexpected retry/attempt number for {expected_id}")
+    if type(row.get("attempt")) is not int or row.get("attempt") < 1 or row.get("selected") is not True:
+        raise AnalysisError(f"{source}: invalid selected attempt for {expected_id}")
+    if row.get("superseded_by_attempt") is not None:
+        raise AnalysisError(f"{source}: selected attempt is marked superseded for {expected_id}")
 
     counts = EXPECTED_TESTS[suite]
     count_fields = {
@@ -324,7 +378,7 @@ def _validate_row(row: Any, plan: dict[str, Any], planned: set[tuple[str, str, s
     return suite, mode, stage, repeat
 
 
-def validate_manifest(manifest: Any, source: Path) -> tuple[dict[str, Any], set[tuple[str, str, str]], dict[str, str], list[dict[str, Any]]]:
+def validate_manifest(manifest: Any, source: Path) -> tuple[dict[str, Any], set[tuple[str, str, str]], dict[str, str], list[dict[str, Any]], list[dict[str, Any]]]:
     if not isinstance(manifest, dict) or manifest.get("schema_version") != 1:
         raise AnalysisError(f"{source}: expected results.json schema_version 1")
     plan = manifest.get("plan")
@@ -334,11 +388,34 @@ def validate_manifest(manifest: Any, source: Path) -> tuple[dict[str, Any], set[
     if not isinstance(rows, list):
         raise AnalysisError(f"{source}: results must be an array")
 
-    validated_rows = []
+    attempts_by_cell: dict[tuple[str, str, str, int], dict[int, dict[str, Any]]] = {}
     for row in rows:
-        _validate_row(row, plan, planned, baseline, source)
-        validated_rows.append(row)
-    return plan, planned, baseline, validated_rows
+        key, attempt = _attempt_key(row, planned, source)
+        attempts = attempts_by_cell.setdefault(key, {})
+        if attempt in attempts:
+            raise AnalysisError(f"{source}: duplicate attempt {attempt} for logical cell {key}")
+        attempts[attempt] = row
+
+    selected_rows, audit_rows = [], []
+    for key, attempts in attempts_by_cell.items():
+        attempt_numbers = sorted(attempts)
+        if attempt_numbers != list(range(1, attempt_numbers[-1] + 1)):
+            raise AnalysisError(f"{source}: attempt history for {key} is not contiguous from attempt 1")
+        slot = key[-1]
+        if slot == 0 and attempt_numbers != [1]:
+            raise AnalysisError(f"{source}: warm-up {key} may not be retried")
+        selected_attempts = [number for number, row in attempts.items() if row["selected"] is True]
+        if len(selected_attempts) != 1:
+            raise AnalysisError(f"{source}: logical cell {key} needs exactly one selected valid attempt")
+        chosen = selected_attempts[0]
+        if chosen != attempt_numbers[-1]:
+            raise AnalysisError(f"{source}: selected attempt for {key} is not the terminal attempt")
+        for number in attempt_numbers[:-1]:
+            audit_rows.append(_audit_attempt(attempts[number], key, number, source))
+        selected = attempts[chosen]
+        _validate_row(selected, plan, planned, baseline, source)
+        selected_rows.append(selected)
+    return plan, planned, baseline, selected_rows, audit_rows
 
 
 def pair_summary(pairs: list[dict[str, Any]], delta_key: str) -> dict[str, Any]:
@@ -360,8 +437,12 @@ def analyze_cohort(sources: list[Path], manifests: list[Any]) -> dict[str, Any]:
     stage_by_key: dict[str, dict[str, Any]] = {}
     provenance_by_cell: dict[tuple[str, str], dict[str, Any]] = {}
     grouped: dict[tuple[str, str, str], dict[int, dict[str, Any]]] = {}
+    attempt_audits: list[dict[str, Any]] = []
     for source, manifest in zip(sources, manifests):
-        plan, planned, baseline, rows = validate_manifest(manifest, source)
+        plan, planned, baseline, rows, audit = validate_manifest(manifest, source)
+        # The unsuccessful retries remain in the audit output; only the one
+        # selected valid attempt returned as `rows` enters any timing statistic.
+        attempt_audits.extend(audit)
         plans.append(plan)
         planned_cells.append(planned)
         for suite, digest in baseline.items():
@@ -520,6 +601,7 @@ def analyze_cohort(sources: list[Path], manifests: list[Any]) -> dict[str, Any]:
         "summaries": summaries,
         "comparisons": comparisons,
         "combined_two_suite_time": combined,
+        "attempt_audit": attempt_audits,
         "note": "Descriptive statistics only; no automatic winner or technology recommendation.",
     }
 
@@ -553,6 +635,8 @@ def csv_rows(cohorts: list[dict[str, Any]]) -> list[dict[str, Any]]:
             })
             for pair in combined["pairs"]:
                 output.append({"record_type": "combined_two_suite_pair", "cohort": name, "mode": combined["mode"], "stage": combined["stage"], **pair})
+        for attempt in cohort["attempt_audit"]:
+            output.append({"record_type": "attempt_audit", "cohort": name, **attempt})
     return output
 
 
@@ -590,6 +674,8 @@ def main(argv: list[str] | None = None) -> int:
         "median_relative_effect_pct", "median_paired_relative_effect_pct",
         "median_relative_benefit_pct", "median_paired_relative_benefit_pct", "median_delta_s",
         "positive_count", "negative_count", "zero_count", "repeat", "delta_definition",
+        "attempt", "selected", "valid", "return_code", "failure_names", "superseded_by_attempt",
+        "run_dir_relative",
         "reference_s", "candidate_s", "delta_s_candidate_minus_reference", "relative_effect_pct",
         "direct_s", "cached_s", "benefit_s_direct_minus_cached", "relative_benefit_pct",
         "clava_js_s", "java_s", "combined_s", "label",
