@@ -29,6 +29,13 @@ class DecisionReportTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_matrix(rows)
 
+    def test_superseded_valid_attempt_does_not_enter_chart(self):
+        rows = complete_rows()
+        old = dict(rows[0], selected=False, elapsed_s=10000)
+        rows.append(old)
+        validate_matrix(rows)
+        self.assertNotIn("10000", candle("clava-js", rows))
+
     def test_chart_has_every_run_and_shared_axis(self):
         root = ET.fromstring(candle("java", complete_rows()))
         self.assertEqual(len(root.findall("circle")), 60)

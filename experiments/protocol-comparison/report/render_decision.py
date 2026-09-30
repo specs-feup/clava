@@ -10,6 +10,7 @@ import argparse
 import json
 from pathlib import Path
 import statistics
+import sys
 
 from render_report import (
     MODE_ORDER, STAGE_ORDER, STAGES, SUITES, esc, flatten_results,
@@ -22,7 +23,8 @@ MODES = {"direct": "Direct · ccache off", "cold": "Cold · empty cache", "warm"
 
 def cell(rows, suite, mode, stage):
     return [r for r in rows if r.get("suite") == suite and r.get("mode") == mode
-            and r.get("stage") == stage and is_measured(r) and is_valid_run(r, suite)]
+            and r.get("stage") == stage and r.get("selected", True)
+            and is_measured(r) and is_valid_run(r, suite)]
 
 
 def values(rows, suite, mode, stage):
@@ -99,6 +101,12 @@ def cards(items, class_name="cards"):
 def render(manifests, provenance, analysis):
     rows = flatten_results(manifests)
     validate_matrix(rows)
+    # The deadline runner keeps fixed artifact identities under plan.stages.
+    # Historical runners instead used a top-level stage array.
+    provenance = dict(provenance)
+    for manifest in manifests:
+        for key, metadata in manifest.get("plan", {}).get("stages", {}).items():
+            provenance.setdefault(key, {})["all"] = metadata
     required = ("recommendation", "reasons", "discrepancy", "tradeoffs", "method", "limitations", "evidence")
     if any(k not in analysis for k in required):
         raise ValueError("Analysis is incomplete; refuse to publish a measurement-only decision report")
@@ -114,7 +122,7 @@ def render(manifests, provenance, analysis):
 main h1{{font-size:clamp(27px,4vw,38px);line-height:1.15;font-weight:750;margin:0 0 14px}}main h2{{font-size:24px;font-weight:700;margin:34px 0 12px}}main h3{{font-size:18px;font-weight:650;margin:0 0 8px}}main p{{margin:8px 0 14px}}main li{{margin:8px 0}}main ul{{list-style:disc;padding-left:22px}}main summary{{font-weight:650}}main .cards{{margin-top:20px}}@media(max-width:700px){{main h2{{font-size:22px}}}}
 </style></head><body><main><p class="muted">Decision brief · 30 September 2026 · five-minute read</p><h1>Clava protocol and cache decision</h1><div class="verdict"><p>{esc(analysis["recommendation"])}</p></div>{cards(analysis["reasons"])}
 <h2>What changes the runtime?</h2><p>Percent change versus Text in the same cache state. Negative is faster. These compare the implemented branches; the controlled format experiment below checks the cause.</p>{comparison(rows)}
-<h2>Both suites, every cache state</h2><p class="muted">Line = median. Box = middle half. Whiskers = full range. Dots = individual runs. Each suite uses one scale across all three sections.</p><div class="charts">{charts}</div>
+<h2>Both suites, every cache state</h2><p class="muted">Whole test-command wall time; builds excluded. Line = median. Box = middle half. Whiskers = full range. Dots = individual runs. Each suite uses one scale across all three sections.</p><div class="charts">{charts}</div>
 <h2>Why do the results look this way?</h2>{cards(analysis["discrepancy"], "explain")}{extra_visuals}
 <h2>What would we maintain?</h2>{cards(analysis["tradeoffs"])}
 <details><summary>Measurement method and limits</summary><p>{esc(analysis["method"])}</p><p>{esc(analysis["limitations"])}</p><ul>{revisions}</ul></details>
@@ -130,6 +138,11 @@ def main():
     manifests, provenance, warnings = load_inputs(args.input)
     if warnings:
         raise ValueError("Refuse inconsistent provenance: " + "; ".join(warnings))
+    if not all(m.get("schema_version") == 1 and "plan" in m for m in manifests):
+        raise ValueError("The decision report requires the fresh deadline matrix schema")
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "analysis"))
+    from analyze_deadline import analyze_cohort
+    analyze_cohort(args.input, manifests)
     result = render(manifests, provenance, json.loads(args.analysis.read_text()))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(result, encoding="utf-8")
