@@ -7,6 +7,9 @@ Measurements retain the comparison runner's results.json schema.
 from __future__ import annotations
 
 import argparse
+import base64
+import csv
+import io
 import json
 from pathlib import Path
 import statistics
@@ -98,6 +101,24 @@ def cards(items, class_name="cards"):
         f'<article><h3>{esc(item["title"])}</h3><p>{esc(item["text"])}</p></article>' for item in items) + '</div>'
 
 
+def measurements_download(rows):
+    """Publish measurement fields without commands or local filesystem paths."""
+    fields = ("suite", "stage", "mode", "repeat", "elapsed_s",
+              "junit_aggregate_s", "total_tests", "passed_tests",
+              "failed_tests", "skipped_tests", "cacheable_calls",
+              "cache_hits", "cache_misses")
+    stream = io.StringIO(newline="")
+    writer = csv.DictWriter(stream, fieldnames=fields)
+    writer.writeheader()
+    for suite in SUITES:
+        for mode in MODE_ORDER:
+            for stage in STAGE_ORDER:
+                for row in sorted(cell(rows, suite, mode, stage), key=lambda r: r["repeat"]):
+                    writer.writerow({field: row.get(field, "") for field in fields})
+    payload = base64.b64encode(stream.getvalue().encode()).decode()
+    return f'<a download="clava-suite-measurements.csv" href="data:text/csv;charset=utf-8;base64,{payload}">Download all 120 accepted suite timings (CSV)</a>'
+
+
 def render(manifests, provenance, analysis):
     rows = flatten_results(manifests)
     validate_matrix(rows)
@@ -126,7 +147,7 @@ main h1{{font-size:clamp(27px,4vw,38px);line-height:1.15;font-weight:750;margin:
 <h2>Why do the results look this way?</h2>{cards(analysis["discrepancy"], "explain")}{extra_visuals}
 <h2>What would we maintain?</h2>{cards(analysis["tradeoffs"])}
 <details><summary>Measurement method and limits</summary><p>{esc(analysis["method"])}</p><p>{esc(analysis["limitations"])}</p><ul>{revisions}</ul></details>
-<details><summary>Data, run audit, and sources</summary><ul>{evidence}</ul></details></main></body></html>'''
+<details><summary>Data, run audit, and sources</summary><p>{measurements_download(rows)}</p><ul>{evidence}</ul></details></main></body></html>'''
 
 
 def main():

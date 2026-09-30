@@ -1,7 +1,11 @@
 import unittest
+import base64
+import csv
+import io
+import re
 import xml.etree.ElementTree as ET
 
-from render_decision import candle, validate_matrix
+from render_decision import candle, measurements_download, validate_matrix
 from render_report import SUITES, STAGE_ORDER, MODE_ORDER
 
 
@@ -16,6 +20,18 @@ def complete_rows():
 
 
 class DecisionReportTest(unittest.TestCase):
+    def test_download_has_only_accepted_timings_and_no_local_paths(self):
+        rows = complete_rows()
+        rows[0]["command"] = "/private/local/file"
+        rows.append(dict(rows[0], selected=False, elapsed_s=10000))
+        link = measurements_download(rows)
+        payload = re.search(r'base64,([^\"]+)', link).group(1)
+        decoded = base64.b64decode(payload).decode()
+        records = list(csv.DictReader(io.StringIO(decoded)))
+        self.assertEqual(len(records), 120)
+        self.assertNotIn("/private/local/file", decoded)
+        self.assertNotIn("10000", decoded)
+
     def test_requires_complete_valid_matrix(self):
         rows = complete_rows()
         validate_matrix(rows)
