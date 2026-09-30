@@ -94,9 +94,9 @@ def cell_id(suite: str, mode: str, stage: str, repeat: int | None) -> str:
 def validate_plan(plan: Any, source: Path) -> tuple[set[tuple[str, str, str]], dict[str, dict[str, Any]]]:
     if not isinstance(plan, dict):
         raise AnalysisError(f"{source}: plan must be an object")
-    if (type(plan.get("repeat_count")) is not int or plan.get("repeat_count") != 6
+    if (type(plan.get("repeat_count")) is not int or plan.get("repeat_count") not in (4, 6)
             or type(plan.get("warmup_count")) is not int or plan.get("warmup_count") != 1):
-        raise AnalysisError(f"{source}: expected one warm-up and six measured repeats")
+        raise AnalysisError(f"{source}: expected one warm-up and four or six planned measured repeats")
     planned_suites = plan.get("suites")
     if (not isinstance(planned_suites, list) or not planned_suites
             or not all(isinstance(suite, str) for suite in planned_suites)
@@ -133,7 +133,7 @@ def validate_plan(plan: Any, source: Path) -> tuple[set[tuple[str, str, str]], d
         key = (item.get("suite"), item.get("mode"), item.get("stage"))
         if (not all(isinstance(part, str) for part in key)
                 or type(item.get("warmup_count")) is not int or item.get("warmup_count") != 1
-                or type(item.get("repeat_count")) is not int or item.get("repeat_count") != 6):
+                or type(item.get("repeat_count")) is not int or item.get("repeat_count") != plan["repeat_count"]):
             raise AnalysisError(f"{source}: {key} has the wrong warm-up/repeat count")
         planned.append(key)
     planned_set = set(planned)
@@ -489,12 +489,13 @@ def analyze_cohort(sources: list[Path], manifests: list[Any]) -> dict[str, Any]:
             raise AnalysisError(f"input manifests lack identity baseline for {suite}")
     if set(grouped) != expected_cells():
         raise AnalysisError("result rows do not cover every expected matrix cell")
+    repeats = range(1, plans[0]["repeat_count"] + 1)
     for key in sorted(expected_cells()):
         attempts = grouped[key]
         measured_ids = {repeat for repeat in attempts if repeat != 0}
-        if measured_ids != set(REPEATS):
-            raise AnalysisError(f"incomplete {key}: expected measured repeats 1-6, found {sorted(measured_ids)}")
-        if len(attempts) > 7:
+        if measured_ids != set(repeats):
+            raise AnalysisError(f"incomplete {key}: expected measured repeats {list(repeats)}, found {sorted(measured_ids)}")
+        if len(attempts) > len(repeats) + 1:
             raise AnalysisError(f"too many warm-up/measurement attempts for {key}")
 
     plan = plans[0]
@@ -509,7 +510,7 @@ def analyze_cohort(sources: list[Path], manifests: list[Any]) -> dict[str, Any]:
                 key = (suite, mode, stage)
                 values = {
                     repeat: finite_number(grouped[key][repeat]["elapsed_s"], "elapsed_s")
-                    for repeat in REPEATS
+                    for repeat in repeats
                 }
                 runs[key] = values
                 summaries.append({
@@ -534,7 +535,7 @@ def analyze_cohort(sources: list[Path], manifests: list[Any]) -> dict[str, Any]:
                         "delta_s_candidate_minus_reference": candidate[repeat] - reference[repeat],
                         "relative_effect_pct": 100 * (candidate[repeat] / reference[repeat] - 1),
                     }
-                    for repeat in REPEATS
+                    for repeat in repeats
                 ]
                 comparisons.append({
                     "kind": "vs_text_same_mode",
@@ -560,7 +561,7 @@ def analyze_cohort(sources: list[Path], manifests: list[Any]) -> dict[str, Any]:
                         "benefit_s_direct_minus_cached": direct[repeat] - cached[repeat],
                         "relative_benefit_pct": 100 * (direct[repeat] / cached[repeat] - 1),
                     }
-                    for repeat in REPEATS
+                    for repeat in repeats
                 ]
                 comparisons.append({
                     "kind": "cache_benefit_vs_same_stage_direct",
@@ -583,7 +584,7 @@ def analyze_cohort(sources: list[Path], manifests: list[Any]) -> dict[str, Any]:
                     "java_s": runs[("java", mode, stage)][repeat],
                     "combined_s": runs[("clava-js", mode, stage)][repeat] + runs[("java", mode, stage)][repeat],
                 }
-                for repeat in REPEATS
+                for repeat in repeats
             ]
             values = [pair["combined_s"] for pair in pairs]
             combined.append({
@@ -596,7 +597,7 @@ def analyze_cohort(sources: list[Path], manifests: list[Any]) -> dict[str, Any]:
         "cohort": ", ".join(source.stem for source in sources),
         "source_manifests": [source.name for source in sources],
         "experiment": plan.get("experiment"),
-        "repeat_count": 6,
+        "repeat_count": plan["repeat_count"],
         "timing_field": "elapsed_s (runner subprocess wall time)",
         "summaries": summaries,
         "comparisons": comparisons,

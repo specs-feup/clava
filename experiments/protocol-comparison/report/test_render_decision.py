@@ -20,6 +20,14 @@ def complete_rows():
 
 
 class DecisionReportTest(unittest.TestCase):
+    def test_four_round_matrix_is_explicit_and_complete(self):
+        rows = [row for row in complete_rows() if row["repeat"] <= 4]
+        validate_matrix(rows, 4)
+        self.assertIn("80 accepted", measurements_download(rows))
+        rows.pop()
+        with self.assertRaises(ValueError):
+            validate_matrix(rows, 4)
+
     def test_download_has_only_accepted_timings_and_no_local_paths(self):
         rows = complete_rows()
         rows[0]["command"] = "/private/local/file"

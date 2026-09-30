@@ -34,15 +34,15 @@ def values(rows, suite, mode, stage):
     return [time_value(r) for r in cell(rows, suite, mode, stage)]
 
 
-def validate_matrix(rows):
+def validate_matrix(rows, repeat_count=6):
     for suite in SUITES:
         for mode in MODE_ORDER:
             for stage in STAGE_ORDER:
                 if mode != "direct" and stage == "before-cache":
                     continue
                 selected = cell(rows, suite, mode, stage)
-                if len(selected) != 6 or len({r.get("repeat") for r in selected}) != 6:
-                    raise ValueError(f"Expected six distinct valid repeats for {suite}/{mode}/{stage}")
+                if len(selected) != repeat_count or {r.get("repeat") for r in selected} != set(range(1, repeat_count + 1)):
+                    raise ValueError(f"Expected {repeat_count} distinct valid repeats for {suite}/{mode}/{stage}")
 
 
 def candle(suite, rows):
@@ -55,7 +55,7 @@ def candle(suite, rows):
     x = lambda v: 112 + (v-low) * 180 / (high-low)
     height = 525
     out = [f'<svg viewBox="0 0 360 {height}" role="img" aria-label="{esc(SUITES[suite]["title"])} runtime distributions">',
-           '<desc>Lower is faster. Dots are six runs. Box is middle half. Line is median. Whiskers show all runs. All cache sections share one non-zero time axis.</desc>']
+           '<desc>Lower is faster. Dots are individual runs. Box is middle half. Line is median. Whiskers show all runs. All cache sections share one non-zero time axis.</desc>']
     for v in (low, (low+high)/2, high):
         out += [f'<line class="grid" x1="{x(v):.2f}" x2="{x(v):.2f}" y1="28" y2="480"/>',
                 f'<text class="tick" x="{x(v):.2f}" y="18" text-anchor="middle">{v:.1f}s</text>']
@@ -110,18 +110,24 @@ def measurements_download(rows):
     stream = io.StringIO(newline="")
     writer = csv.DictWriter(stream, fieldnames=fields)
     writer.writeheader()
+    count = 0
     for suite in SUITES:
         for mode in MODE_ORDER:
             for stage in STAGE_ORDER:
                 for row in sorted(cell(rows, suite, mode, stage), key=lambda r: r["repeat"]):
                     writer.writerow({field: row.get(field, "") for field in fields})
+                    count += 1
     payload = base64.b64encode(stream.getvalue().encode()).decode()
-    return f'<a download="clava-suite-measurements.csv" href="data:text/csv;charset=utf-8;base64,{payload}">Download all 120 accepted suite timings (CSV)</a>'
+    return f'<a download="clava-suite-measurements.csv" href="data:text/csv;charset=utf-8;base64,{payload}">Download all {count} accepted suite timings (CSV)</a>'
 
 
 def render(manifests, provenance, analysis):
     rows = flatten_results(manifests)
-    validate_matrix(rows)
+    repeat_counts = {m.get("plan", {}).get("repeat_count", 6) for m in manifests}
+    if len(repeat_counts) != 1:
+        raise ValueError("Repeat count differs across manifests")
+    repeat_count = repeat_counts.pop()
+    validate_matrix(rows, repeat_count)
     # The deadline runner keeps fixed artifact identities under plan.stages.
     # Historical runners instead used a top-level stage array.
     provenance = dict(provenance)
@@ -133,7 +139,7 @@ def render(manifests, provenance, analysis):
         raise ValueError("Analysis is incomplete; refuse to publish a measurement-only decision report")
     if len(analysis["discrepancy"]) < 2:
         raise ValueError("The new results need an explicit consistency check and evidence-backed explanation")
-    charts = ''.join(f'<article class="chart"><h3>{esc(SUITES[s]["title"])}</h3><p>{"158 pass · 6 skip" if s=="clava-js" else "116 pass · no skips"} · six runs per candle</p>{candle(s,rows)}</article>' for s in SUITES)
+    charts = ''.join(f'<article class="chart"><h3>{esc(SUITES[s]["title"])}</h3><p>{"158 pass · 6 skip" if s=="clava-js" else "116 pass · no skips"} · {repeat_count} runs per candle</p>{candle(s,rows)}</article>' for s in SUITES)
     evidence = ''.join(f'<li><a href="{esc(e["url"])}">{esc(e["title"])}</a></li>' for e in analysis["evidence"])
     revisions = ''.join(f'<li>{esc(STAGES[k][0])}: <code>{esc(next(iter(v.values())).get("clava_revision", "not recorded"))}</code></li>' for k,v in provenance.items())
     extra_visuals = analysis.get("reviewed_visuals_html", "")

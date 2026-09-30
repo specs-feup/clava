@@ -16,7 +16,9 @@ Prepare owned source/build overlays. Preserve the four branch implementations an
 
 Execution-info heap sampling is off for every parser invocation. This means no harness-requested explicit GC; normal JVM automatic GC remains enabled. Do not use `DisableExplicitGC` as a substitute for removing heap sampling from the measurement path.
 
-Build once before measuring. Report separately the complete command wall time and, where available, the Java test-execution duration. Compilation is outside the measured boundary. Use one untimed warm-up and six measured runs per cell. Rotate stage order between rounds and serialize all measured commands on the host.
+Build once before measuring. Report separately the complete command wall time and, where available, the Java test-execution duration. Compilation is outside the measured boundary. Use one untimed warm-up and four measured runs per cell. Rotate stage order between rounds and serialize all measured commands on the host.
+
+Before any accepted matrix measurement, the repetition plan was amended on 30 September: observed untimed command durations of 35–42 seconds made six matrix rounds plus the controlled replay incompatible with the same-day deadline. Four complete matrix rounds retain every stage, cache mode, and test. The faster controlled grouped replay retains six rounds. Treat these as descriptive comparisons, show every observation, and do not call a small or inconsistent difference a conclusive advantage.
 
 | Cache state | Eligible stages | Validation |
 | --- | --- | --- |
@@ -32,13 +34,15 @@ Replay captured **parent parser calls**, not one call per source file. Preserve 
 
 Use the same-revision dual-format Text/Protobuf build. Time the outer `CodeParser.parse` call, including App processing and cross-file linking, with execution-info reporting and diagnostic metrics off. Validate equivalent output before accepting the result. Keep full-suite timing and grouped replay timing distinct.
 
+Use six measured rounds for each suite, format, and Direct/Warm state in this control.
+
 Run phase diagnostics separately. Native execution, wire reading, AST construction, and parent-call residuals must have explicit boundaries. Parallel worker occupancy is not additive suite wall time. Use serial diagnostic controls only as labelled explanations, never as replacements for the original parallel workload.
 
 Any discrepancy in the fresh results needs an explanation supported by an intervention or measured contribution. Differences in revisions are a warning about causal attribution, not a sufficient root-cause explanation. If the fresh result differs by suite, identify the files/groups and phases responsible, then validate the proposed cause. Code inspection may suggest a test; it does not establish a performance cause. Do not spend the deadline reconstructing an older discrepancy that is absent from the new results.
 
 ## Analysis and report gates
 
-- Show all six valid repeat points and median/interquartile candles, not only one fastest run.
+- Show all four matrix repeat points (six in the grouped control) and median/interquartile candles, not only one fastest run.
 - Use paired deltas only for genuinely matched rounds or calls. Do not imply independent branch medians are a controlled format A/B.
 - Separate total runtime, per-call latency spread, wire size, cache counters, and memory measurements.
 - Publish CSVs and a complete run audit. Preserve failed attempts as excluded evidence and rerun repaired cells with the same workload.

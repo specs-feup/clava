@@ -176,6 +176,19 @@ class AnalyzeDeadlineTest(unittest.TestCase):
         self.assertIn("not production weighting", result["combined_two_suite_time"][0]["label"])
         self.assertTrue(all(len(item["pairs"]) == 6 for item in result["comparisons"]))
 
+    def test_four_round_plan_requires_exactly_four_complete_rounds(self):
+        self.manifest["plan"]["repeat_count"] = 4
+        for cell in self.manifest["plan"]["cells"]:
+            cell["repeat_count"] = 4
+        self.manifest["results"] = [row for row in self.manifest["results"]
+                                    if not row["measured"] or row["repeat"] <= 4]
+        result = analyzer.analyze_cohort([self.source], [self.manifest])
+        self.assertEqual(result["repeat_count"], 4)
+        self.assertTrue(all(len(item["pairs"]) == 4 for item in result["comparisons"]))
+        self.manifest["results"].pop()
+        with self.assertRaises(analyzer.AnalysisError):
+            analyzer.analyze_cohort([self.source], [self.manifest])
+
     def test_incomplete_measured_cell_is_rejected(self):
         self.manifest["results"] = [
             row for row in self.manifest["results"]
