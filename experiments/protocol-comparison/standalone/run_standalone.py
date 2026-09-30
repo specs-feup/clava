@@ -670,7 +670,7 @@ def compare_fidelity(rows: list[dict[str, Any]]) -> tuple[dict[str, Any], list[s
     )
     grouped: dict[tuple[str, str], dict[str, dict[str, Any]]] = collections.defaultdict(dict)
     for row in rows:
-        if row.get("cache_mode") == "directbypass":
+        if row.get("cache_mode") in ("directbypass", "bypass"):
             grouped[(row["suite"], row["input_id"])][row["protocol"]] = row
     errors: list[str] = []
     compared = 0
