@@ -22,29 +22,25 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 import pt.up.fe.specs.clang.codeparser.CodeParser;
+import pt.up.fe.specs.clang.parser.TestResourceResolver;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
 
 public class SourceLocationsTest {
 
     private static final String RESOURCE = "cxx/source_locations.cpp";
 
-    @TempDir
-    Path tempFolder;
-
     @Test
     public void sourceLocationsUseRealFileCoordinates() {
         SpecsSystem.programStandardInit();
 
-        File sourceFile = SpecsIo.resourceCopy(RESOURCE, tempFolder.toFile(), false, true);
+        File sourceFile = TestResourceResolver.resolve(RESOURCE);
         App app = CodeParser.newInstance().parse(List.of(sourceFile), List.of("-std=c++11"));
 
         VarDecl ordinary = find(app.getDescendants(VarDecl.class), varDecl -> varDecl.getDeclName().equals("ordinary"));

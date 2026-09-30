@@ -14,10 +14,8 @@
 package pt.up.fe.specs.clang.parser;
 
 import java.io.File;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,7 +41,6 @@ public abstract class AClangAstTester {
 
     private static final boolean CLEAN_CLANG_FILES = !SpecsSystem.isDebug();
     private File outputFolder;
-    private File stagedInputFolder;
     private File inputRoot;
     private List<File> inputFiles;
 
@@ -173,37 +170,24 @@ public abstract class AClangAstTester {
         SpecsSystem.programStandardInit();
 
         outputFolder = Files.createTempDirectory("temp-clang-ast-").toFile();
-        stagedInputFolder = null;
-        inputRoot = null;
-        inputFiles = null;
+        inputFiles = resources.stream()
+                .map(resource -> TestResourceResolver.resolve(resource.getResource()))
+                .collect(Collectors.toList());
 
-        List<File> filesystemResources = resolveFilesystemResources(resources);
-        if (filesystemResources != null && !filesystemResources.isEmpty()) {
-            inputFiles = filesystemResources;
-            inputRoot = commonParent(inputFiles);
-            if (inputRoot != null) {
-                return;
-            }
+        if (inputFiles.isEmpty()) {
+            throw new IllegalStateException("Parser test has no input resources");
         }
 
-        // Packaged resources have no filesystem paths for Clang to parse. Keep their
-        // test-local copy isolated from the generated-code output directory.
-        stagedInputFolder = Files.createTempDirectory("temp-clang-ast-input-").toFile();
-        inputRoot = stagedInputFolder;
-        inputFiles = new ArrayList<>();
-        for (ResourceProvider resource : resources) {
-            File copiedFile = SpecsIo.resourceCopy(resource.getResource(), stagedInputFolder, false, true);
-            assertTrue(copiedFile != null && copiedFile.isFile(), "Could not copy resource '" + resource + "'");
-            inputFiles.add(copiedFile);
+        inputRoot = commonParent(inputFiles);
+        if (inputRoot == null) {
+            throw new IllegalStateException("Parser test input resources do not share a filesystem parent: "
+                    + inputFiles);
         }
     }
 
     public void cleanupInstance() throws Exception {
         if (CLEAN_CLANG_FILES) {
             SpecsIo.deleteFolder(outputFolder);
-            if (stagedInputFolder != null) {
-                SpecsIo.deleteFolder(stagedInputFolder);
-            }
         }
     }
 
@@ -217,27 +201,6 @@ public abstract class AClangAstTester {
 
     File getOutputFolder() {
         return outputFolder;
-    }
-
-    private static List<File> resolveFilesystemResources(Collection<ResourceProvider> resources) throws Exception {
-        List<File> resolvedResources = new ArrayList<>();
-        ClassLoader classLoader = AClangAstTester.class.getClassLoader();
-
-        for (ResourceProvider resource : resources) {
-            URL resourceUrl = classLoader.getResource(resource.getResource());
-            if (resourceUrl == null || !resourceUrl.getProtocol().equals("file")) {
-                return null;
-            }
-
-            Path resourcePath = Paths.get(resourceUrl.toURI());
-            if (!Files.isRegularFile(resourcePath)) {
-                return null;
-            }
-
-            resolvedResources.add(resourcePath.toFile());
-        }
-
-        return resolvedResources;
     }
 
     private static File commonParent(List<File> files) {
