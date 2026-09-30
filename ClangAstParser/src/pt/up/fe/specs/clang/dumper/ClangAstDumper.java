@@ -95,6 +95,7 @@ public class ClangAstDumper {
     private final ClangResources clangResources;
     private boolean validationOnly;
     private String lastValidationError;
+    private String corpusCallId;
 
     private final CodeParser parserConfig;
 
@@ -131,6 +132,11 @@ public class ClangAstDumper {
 
     public ClangAstDumper setSystemIncludesThreshold(int systemIncludesThreshold) {
         this.systemIncludesThreshold = systemIncludesThreshold;
+        return this;
+    }
+
+    public ClangAstDumper setCorpusCallId(String corpusCallId) {
+        this.corpusCallId = corpusCallId;
         return this;
     }
 
@@ -346,6 +352,9 @@ public class ClangAstDumper {
         String ccacheCacheDir = null;
         boolean useAstDumpCache = false;
         boolean compressedDump = false;
+        List<String> compilerArgv = null;
+        ProcessBuilder processBuilder = null;
+        Path processWorkingDirectory = Path.of("").toAbsolutePath().normalize();
         long transportNanos = 0L;
         long readNanos = 0L;
         ProtoAstReader.Result wireResult = null;
@@ -358,13 +367,15 @@ public class ClangAstDumper {
 
             useAstDumpCache = SpecsPlatforms.isLinux() && !USE_PLUGIN
                     && parserConfig.get(CodeParser.AST_DUMP_CACHE)
+                    && !ClangAstCorpusCapture.isEnabled()
                     && !parserConfig.get(CodeParser.SHOW_CLANG_DUMP)
                     && !isOpenCL
                     && !SourceType.isHeader(sourceFile)
                     && ClangCcacheAdapter.isAvailable();
             // The native dumper supports zstd compression only for Protobuf.
             // Text remains ccache-backed, but its payload is stored and read raw.
-            compressedDump = useAstDumpCache && !textWire;
+            compressedDump = useAstDumpCache && !textWire
+                    && !Boolean.getBoolean("clava.astWireBenchmarkDisableCompression");
             dumpFile = new File(lastWorkingFolder,
                     textWire
                             ? (compressedDump ? COMPRESSED_TEXT_DUMP_FILENAME : TEXT_DUMP_FILENAME)
@@ -386,17 +397,30 @@ public class ClangAstDumper {
                 arguments.add(optionEnd >= 0 ? optionEnd : arguments.size(), "-ast-dump-format=text");
             }
 
+            compilerArgv = new ArrayList<>(arguments);
+            if (generatedParseRoot != null) {
+                processWorkingDirectory = generatedParseRoot.toPath().toAbsolutePath().normalize();
+            }
+
             List<String> command = arguments;
             ClangCcacheAdapter.Invocation ccache = null;
             if (useAstDumpCache) {
                 ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), generatedParseRoot);
                 ccacheCacheDir = ccache.cacheFolder().toPath().toAbsolutePath().normalize().toString();
                 command = ClangCcacheAdapter.command(arguments, dependencyFile);
+            } else if (ClangAstCorpusCapture.isEnabled()) {
+                int optionEnd = arguments.indexOf("--");
+                if (optionEnd < 0) {
+                    throw new IllegalArgumentException("Expected clang-dumper command to contain '--': " + arguments);
+                }
+                arguments.add(optionEnd, "-MD");
+                arguments.add(optionEnd + 1, "-MF");
+                arguments.add(optionEnd + 2, dependencyFile.getAbsolutePath());
             }
 
             ClavaLog.debug("Calling Clang AST Dumper: " + command);
 
-            var processBuilder = new ProcessBuilder(command);
+            processBuilder = new ProcessBuilder(command);
             if (generatedParseRoot != null) {
                 processBuilder.directory(generatedParseRoot);
             }
@@ -499,6 +523,13 @@ public class ClangAstDumper {
                     wireResult.metrics(), astConstructionNanos, sourceFile, id, parseArgsSha256,
                     parseArgsOriginalSha256, parseArgsForDebug, parseElapsedNanos,
                     ccacheCacheDir, benchmarkIdentity);
+        }
+
+        if (ClangAstCorpusCapture.isEnabled() && processBuilder != null && compilerArgv != null) {
+            ClangAstCorpusCapture.recordNativeInvocation(corpusCallId, sourceFile, id, standard, compilerArgv,
+                    processBuilder.command(), processWorkingDirectory, processBuilder.environment(),
+                    new File(lastWorkingFolder, "clangDump.d"), benchmarkIdentity, config, systemIncludes,
+                    generatedParseRoot);
         }
 
         return parsedData;

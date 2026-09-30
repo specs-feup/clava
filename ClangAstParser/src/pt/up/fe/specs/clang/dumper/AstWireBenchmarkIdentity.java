@@ -85,7 +85,7 @@ public final class AstWireBenchmarkIdentity {
     }
 
     public static boolean isEnabled() {
-        return Boolean.getBoolean(METRICS_PROPERTY);
+        return Boolean.getBoolean(METRICS_PROPERTY) || ClangAstCorpusCapture.isEnabled();
     }
 
     private static Path normalizedPath(File file) {

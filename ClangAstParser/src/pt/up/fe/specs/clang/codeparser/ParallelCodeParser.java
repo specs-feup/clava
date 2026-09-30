@@ -20,6 +20,7 @@ import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangFiles;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.dumper.ClangAstData;
+import pt.up.fe.specs.clang.dumper.ClangAstCorpusCapture;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clang.dumper.ClangAstParser;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
@@ -117,6 +118,9 @@ public class ParallelCodeParser extends CodeParser {
 
         var clangFiles = clangResources.getClangFiles(get(ClangAstKeys.LIBC_CXX_MODE));
         options.set(ClangAstKeys.LIBC_CXX_MODE, clangFiles.libcMode());
+        String corpusCallId = ClangAstCorpusCapture.beginCodeParserCall(inputSources, sources, compilerOptions,
+                this, clangFiles.libcMode().name(), clangFiles.clangExecutable(), clangFiles.builtinIncludes(),
+                clangFiles.systemResourceDir());
         // File clangExecutable = clangResources.prepareResources(version);
         // List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,
         // get(ClangAstKeys.USE_PLATFORM_INCLUDES));
@@ -143,7 +147,7 @@ public class ParallelCodeParser extends CodeParser {
 
             Future<ClangAstData> tUnit = executor
                     .submit(() -> parseSource(source, id, standard, options, clangDump,
-                            counter, clangFiles, syntaxErrors));
+                            counter, clangFiles, syntaxErrors, corpusCallId));
 
             futureTUnits.add(tUnit);
 
@@ -207,7 +211,7 @@ public class ParallelCodeParser extends CodeParser {
         // System.out.println(
         // "TUNITS:" + tUnits.stream().map(tunit -> tunit.getFile().toString()).collect(Collectors.joining(", ")));
 
-        if (get(SHOW_EXEC_INFO)) {
+        if (get(SHOW_EXEC_INFO) && !ClangAstCorpusCapture.isCorpusCollectionRun()) {
             ClavaLog.metrics(SpecsStrings.takeTime("Code to AST", tic));
             // ClavaLog.metrics("Current memory used (Java):" +
             // SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
@@ -269,7 +273,7 @@ public class ParallelCodeParser extends CodeParser {
         // Applies passes related with text elements
         new TreeTransformer(ClangAstParser.getTextParsingRules()).transform(app);
 
-        if (get(SHOW_EXEC_INFO)) {
+        if (get(SHOW_EXEC_INFO) && !ClangAstCorpusCapture.isCorpusCollectionRun()) {
             ClavaLog.metrics(SpecsStrings.takeTime("AST Processing", tic));
             String usedSize = SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true));
             ClavaLog.metrics("Current memory used (Java):" + usedSize);
@@ -374,7 +378,8 @@ public class ParallelCodeParser extends CodeParser {
 
     private ClangAstData parseSource(File sourceFile, String id, Standard standard, DataStore options,
                                      ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter,
-                                     ClangFiles clangFiles, ConcurrentLinkedQueue<String> syntaxErrors) {
+                                     ClangFiles clangFiles, ConcurrentLinkedQueue<String> syntaxErrors,
+                                     String corpusCallId) {
 
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
 
@@ -387,7 +392,8 @@ public class ParallelCodeParser extends CodeParser {
 
         ClangAstDumper clangParser = new ClangAstDumper(streamConsoleOutput, clangFiles.clangExecutable(),
                 clangFiles.builtinIncludes(), clangFiles.systemResourceDir(), this)
-                .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
+                .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD))
+                .setCorpusCallId(corpusCallId);
 
         // .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
