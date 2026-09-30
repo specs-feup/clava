@@ -574,7 +574,7 @@ def set_reference_identities(identity: dict[str, Any], results: list[dict[str, A
     identity.pop("_identity_sets", None)
 
 
-def load_preparation() -> dict[str, Any]:
+def load_preparation(bridge_overlay: dict[str, str]) -> dict[str, Any]:
     if not PREPARATION_MANIFEST.is_file():
         raise SystemExit(f"missing frozen-runtime preparation manifest: {PREPARATION_MANIFEST}")
     manifest = json.loads(PREPARATION_MANIFEST.read_text())
@@ -597,14 +597,37 @@ def load_preparation() -> dict[str, Any]:
         ).stdout),
         "specsutils_jar_sha256": sha256_file(SPECS_ROOT / "SpecsUtils/build/libs/SpecsUtils.jar"),
         "joptions_jar_sha256": sha256_file(SPECS_ROOT / "jOptions/build/libs/jOptions.jar"),
-        "lara_framework_revision": git(LARA_ROOT, "rev-parse", "HEAD"),
-        "lara_framework_diff_sha256": sha256_bytes(subprocess.run(
-            ["git", "-C", str(LARA_ROOT), "diff", "--binary", "HEAD"], capture_output=True, check=True,
-        ).stdout),
     }
     for field, value in expected_common.items():
         if common.get(field) != value:
             raise SystemExit(f"common dependency identity changed after build preparation: {field}")
+
+    # The frozen Java runtimes were prepared before the benchmark-only Lara-JS
+    # Object[] bridge overlay. Allow that one source-only commit, but retain the
+    # original preparation revision in the manifest and fingerprint the exact
+    # overlay separately in the plan. Any other Lara change remains a blocker.
+    prepared_lara_revision = str(common.get("lara_framework_revision", ""))
+    current_lara_revision = git(LARA_ROOT, "rev-parse", "HEAD")
+    current_lara_diff_sha = sha256_bytes(subprocess.run(
+        ["git", "-C", str(LARA_ROOT), "diff", "--binary", "HEAD"], capture_output=True, check=True,
+    ).stdout)
+    if common.get("lara_framework_diff_sha256") != current_lara_diff_sha:
+        raise SystemExit("shared Lara worktree changed after build preparation")
+    if current_lara_revision != prepared_lara_revision:
+        prepared_parent = git(LARA_ROOT, "rev-parse", f"{current_lara_revision}^")
+        changed_paths = set(git(
+            LARA_ROOT, "diff", "--name-only", f"{prepared_lara_revision}..{current_lara_revision}"
+        ).splitlines())
+        allowed_overlay_paths = {
+            "Lara-JS/api/LaraJoinPoint.ts",
+            "Lara-JS/scripts/build-LaraJoinPoint.ts",
+        }
+        if (
+            prepared_parent != prepared_lara_revision
+            or changed_paths != allowed_overlay_paths
+            or bridge_overlay.get("revision") != current_lara_revision
+        ):
+            raise SystemExit("shared Lara revision changed outside the frozen Lara-JS bridge overlay")
     return manifest
 
 
@@ -753,8 +776,8 @@ def main() -> int:
     comparison.FIXED_SPECSUTILS_REVISION = FIXED_SPECSUTILS_REVISION
     comparison.STAGES = tuple(dict(stage) for stage in STAGE_CONFIG)
 
-    preparation = load_preparation()
     bridge_overlay = lara_bridge_overlay_identity()
+    preparation = load_preparation(bridge_overlay)
     current_stages = comparison.validate_stages({stage["key"] for stage in comparison.STAGES})
     for item in current_stages:
         if item["key"] == "before-cache":
