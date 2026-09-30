@@ -153,8 +153,15 @@ def load_grouped_analysis(
     *,
     expected_group_counts: dict[str, int] | None = None,
 ) -> dict[str, Any]:
-    """Load the 48 scheduled cells under ``schedules/`` and ``observations/``."""
+    """Load the 48 scheduled cells and outputs from the grouped runner."""
     run_root = Path(run_root)
+    results_root = next(
+        (run_root / name for name in ("observations", "measure")
+         if (run_root / name).is_dir()),
+        None,
+    )
+    if results_root is None:
+        raise AnalysisError("run root needs an observations/ or measure/ directory")
     schedules: list[dict[str, Any]] = []
     observations: list[dict[str, Any]] = []
     for suite in SUITES:
@@ -163,7 +170,7 @@ def load_grouped_analysis(
                 for repeat in REPEATS:
                     name = f"measure-{suite}-{protocol}-{cache_mode}-r{repeat:02d}.jsonl"
                     schedule_path = run_root / "schedules" / name
-                    result_path = run_root / "observations" / name
+                    result_path = results_root / name
                     schedules.extend(_read_jsonl(schedule_path))
                     observations.extend(_read_jsonl(result_path))
     return analyze_grouped_runs(
@@ -287,22 +294,39 @@ def analyze_grouped_runs(
         if row.get("valid") is not True:
             excluded["invalid"] += 1
             continue
-        if row.get("app_null") is True or row.get("app_returned_null") is True:
-            excluded["invalid"] += 1
-            continue
         if "elapsed_ms" not in row or row.get("elapsed_ms") is None:
             excluded["untimed"] += 1
             continue
         suite, protocol, cache_mode, repeat = _cell(row, f"observation row {index}")
         input_id = row.get("input_id")
-        if not isinstance(input_id, str) or input_id not in expected_by_cell[(suite, protocol, cache_mode, repeat)]:
+        cell = (suite, protocol, cache_mode, repeat)
+        if not isinstance(input_id, str) or input_id not in expected_by_cell.get(cell, set()):
             raise AnalysisError(f"observation row {index}: unexpected stable input_id")
         if input_id not in expected_ids_by_suite[suite]:
             raise AnalysisError(f"observation row {index}: input_id is not in the schedule")
-        schedule = schedule_cells[(suite, protocol, cache_mode, repeat)][input_id]
-        for field in ("event_id", "group_id"):
-            if row.get(field) != schedule.get(field):
-                raise AnalysisError(f"observation row {index}: {field} differs from schedule")
+        schedule = schedule_cells[cell][input_id]
+        app_returned_null = row.get("app_null") is True or row.get("app_returned_null") is True
+        parser_config = schedule.get("parser_config")
+        syntax_only = isinstance(parser_config, dict) and parser_config.get("syntax_only") is True
+        if app_returned_null and not syntax_only:
+            excluded["invalid"] += 1
+            continue
+        if row.get("event_id") != schedule.get("event_id"):
+            raise AnalysisError(f"observation row {index}: event_id differs from schedule")
+        for field in ("source_sha256", "args_sha256", "options_sha256"):
+            if field in schedule:
+                scheduled_digest = schedule[field]
+                observed_digest = row.get(field)
+                if (not isinstance(scheduled_digest, str)
+                        or not re.fullmatch(r"[0-9a-fA-F]{64}", scheduled_digest)
+                        or not isinstance(observed_digest, str)
+                        or observed_digest.lower() != scheduled_digest.lower()):
+                    raise AnalysisError(f"observation row {index}: {field} differs from schedule")
+        # StandaloneParseRunner exports event_id/input_id but not group_id.
+        # The schedules independently prove group_id stability; event_id is
+        # unique per group and is the join key for these result rows.
+        if row.get("group_id") is not None and row.get("group_id") != schedule.get("group_id"):
+            raise AnalysisError(f"observation row {index}: group_id differs from schedule")
         elapsed_ms = _number(row.get("elapsed_ms"), f"observation row {index}.elapsed_ms", positive=True)
         key = (suite, cache_mode, protocol, repeat, input_id)
         if key in valid:
@@ -473,6 +497,20 @@ def _fmt_ms(value: float) -> str:
     return f"{value:.3f} ms"
 
 
+def _fmt_main_axis_ms(value: float) -> str:
+    if value >= 100:
+        label = f"{value:,.0f}"
+    elif value >= 10:
+        label = f"{value:.1f}".rstrip("0").rstrip(".")
+    elif value >= 1:
+        label = f"{value:.2f}".rstrip("0").rstrip(".")
+    else:
+        label = f"{value:.6f}".rstrip("0").rstrip(".")
+        if label == "0":
+            label = f"{value:.12f}".rstrip("0").rstrip(".")
+    return f"{label}ms"
+
+
 def _ratio_axis_label(value: float) -> str:
     return f"{value:g}×"
 
@@ -493,7 +531,7 @@ def _svg_candle(summary: dict[str, Any], suite: str) -> str:
     padding = (log_high - log_low) * 0.04
     log_low -= padding
     log_high += padding
-    left, right = 94.0, 330.0
+    left, right = 94.0, 318.0
     x = lambda value: left + (math.log10(value) - log_low) * (right - left) / (log_high - log_low)
     positions = (("direct", "text", 70), ("direct", "protobuf", 99),
                  ("warm", "text", 171), ("warm", "protobuf", 200))
@@ -507,7 +545,7 @@ def _svg_candle(summary: dict[str, Any], suite: str) -> str:
     ticks = [10.0 ** (log_low + (log_high - log_low) * fraction / 2) for fraction in range(3)]
     for value in ticks:
         px = x(value)
-        label = f"{value:.2g}ms"
+        label = _fmt_main_axis_ms(value)
         output.extend([
             f'<line class="ga-grid-line" x1="{px:.2f}" x2="{px:.2f}" y1="31" y2="225"/>',
             f'<text class="ga-main-tick" x="{px:.2f}" y="23" text-anchor="middle">{html.escape(label)}</text>',
@@ -662,15 +700,81 @@ def _svg_round_totals(summary: dict[str, Any], cache_mode: str, protocol: str) -
 def _csv_link(
     filename: str, columns: list[str], rows: Iterable[dict[str, Any]], *, label: str | None = None
 ) -> str:
-    stream = io.StringIO(newline="")
-    writer = csv.DictWriter(stream, fieldnames=columns, extrasaction="ignore", lineterminator="\n")
-    writer.writeheader()
-    writer.writerows(rows)
-    encoded = base64.b64encode(stream.getvalue().encode("utf-8")).decode("ascii")
+    csv_text = _csv_text(columns, rows)
+    encoded = base64.b64encode(csv_text.encode("utf-8")).decode("ascii")
     return (
         f'<a download="{html.escape(filename, quote=True)}" '
         f'href="data:text/csv;charset=utf-8;base64,{encoded}">{html.escape(label or filename)}</a>'
     )
+
+
+def _csv_text(columns: list[str], rows: Iterable[dict[str, Any]]) -> str:
+    stream = io.StringIO(newline="")
+    writer = csv.DictWriter(stream, fieldnames=columns, extrasaction="ignore", lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(rows)
+    return stream.getvalue()
+
+
+def _csv_exports(summary: dict[str, Any]) -> dict[str, tuple[list[str], Iterable[dict[str, Any]]]]:
+    return {
+        "grouped-ab-round-totals.csv": (
+            ["scope", "suite", "cache_mode", "repeat", "protocol", "group_count", "sum_elapsed_ms"],
+            summary["round_totals"],
+        ),
+        "grouped-ab-paired-round-totals.csv": (
+            ["scope", "cache_mode", "repeat", "group_count", "text_sum_ms",
+             "protobuf_sum_ms", "delta_ms", "relative_pct"],
+            summary["paired_round_totals"],
+        ),
+        "grouped-ab-group-medians-and-ratios.csv": (
+            ["suite", "input_id", "source_labels", "source_count", "source_sha256",
+             "source_file_sha256s", "args_sha256", "options_sha256", "cache_mode", "n_rounds",
+             "text_median_ms", "protobuf_median_ms", "proto_text_ratio", "median_paired_relative_pct"],
+            summary["group_summaries"],
+        ),
+        "grouped-ab-paired-rounds.csv": (
+            # Keep each timing row directly identifiable by filename. Stable
+            # group keys join it to the medians CSV, which carries provenance
+            # hashes once per group/cache instead of repeating them per round.
+            ["suite", "input_id", "source_labels", "cache_mode", "repeat",
+             "text_ms", "protobuf_ms", "delta_ms", "relative_pct"],
+            summary["group_rounds"],
+        ),
+    }
+
+
+def write_grouped_analysis_exports(
+    summary: dict[str, Any], output_directory: Path, *,
+    expected_group_counts: dict[str, int] | None = None,
+) -> dict[str, Path]:
+    """Write the sanitized JSON, HTML fragment, and four linked CSV datasets."""
+    if summary.get("schema_version") != 1:
+        raise AnalysisError("unsupported grouped analysis schema")
+    output_directory = Path(output_directory)
+    output_directory.mkdir(parents=True, exist_ok=True)
+    summary_text = json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    if any(marker in summary_text for marker in ("/home/", "/private/", "/tmp/", "file://")):
+        raise AnalysisError("summary includes an absolute/local path")
+    paths = {
+        "summary": output_directory / "grouped-ab-analysis.json",
+        "html": output_directory / "grouped-ab-review-visuals.html",
+    }
+    paths["summary"].write_text(summary_text, encoding="utf-8")
+    html_text = render_reviewed_visuals_html(
+        summary, expected_group_counts=expected_group_counts
+    )
+    if any(marker in html_text for marker in ("/home/", "/private/", "/tmp/", "file://")):
+        raise AnalysisError("HTML fragment includes an absolute/local path")
+    paths["html"].write_text(html_text, encoding="utf-8")
+    for filename, (columns, rows) in _csv_exports(summary).items():
+        csv_text = _csv_text(columns, rows)
+        if any(marker in csv_text for marker in ("/home/", "/private/", "/tmp/", "file://")):
+            raise AnalysisError(f"{filename} includes an absolute/local path")
+        path = output_directory / filename
+        path.write_text(csv_text, encoding="utf-8", newline="")
+        paths[filename] = path
+    return paths
 
 
 def render_reviewed_visuals_html(
@@ -750,33 +854,20 @@ def render_reviewed_visuals_html(
                 f'<td data-label="Paired change">{delta_pct:+.2f}</td></tr>'
             )
 
+    exports = _csv_exports(summary)
     per_round_link = _csv_link(
-        "grouped-ab-round-totals.csv",
-        ["scope", "suite", "cache_mode", "repeat", "protocol", "group_count", "sum_elapsed_ms"],
-        summary["round_totals"],
-        label="round totals",
+        "grouped-ab-round-totals.csv", *exports["grouped-ab-round-totals.csv"], label="round totals"
     )
     paired_totals_link = _csv_link(
-        "grouped-ab-paired-round-totals.csv",
-        ["scope", "cache_mode", "repeat", "group_count", "text_sum_ms",
-         "protobuf_sum_ms", "delta_ms", "relative_pct"],
-        summary["paired_round_totals"],
+        "grouped-ab-paired-round-totals.csv", *exports["grouped-ab-paired-round-totals.csv"],
         label="paired totals",
     )
     group_link = _csv_link(
-        "grouped-ab-group-medians-and-ratios.csv",
-        ["suite", "input_id", "source_labels", "source_count", "source_sha256", "source_file_sha256s", "args_sha256",
-         "options_sha256", "cache_mode", "n_rounds", "text_median_ms", "protobuf_median_ms",
-         "proto_text_ratio", "median_paired_relative_pct"],
-        summary["group_summaries"],
+        "grouped-ab-group-medians-and-ratios.csv", *exports["grouped-ab-group-medians-and-ratios.csv"],
         label="group medians + ratios",
     )
     paired_link = _csv_link(
-        "grouped-ab-paired-rounds.csv",
-        ["suite", "input_id", "source_labels", "source_count", "source_sha256", "source_file_sha256s", "args_sha256",
-         "options_sha256", "cache_mode", "repeat", "text_ms", "protobuf_ms", "delta_ms", "relative_pct"],
-        summary["group_rounds"],
-        label="paired rounds",
+        "grouped-ab-paired-rounds.csv", *exports["grouped-ab-paired-rounds.csv"], label="paired rounds"
     )
     fragment = f'''<section class="grouped-ab" aria-labelledby="grouped-ab-title">
 <style>
@@ -811,15 +902,17 @@ section.grouped-ab a{{overflow-wrap:anywhere}}
 @media(max-width:700px){{section.grouped-ab{{margin:28px 0}}section.grouped-ab .ga-grid-layout{{grid-template-columns:1fr;gap:10px}}section.grouped-ab .ga-figure{{padding:8px 6px}}section.grouped-ab .ga-main-svg{{max-width:360px}}}}
 @media(max-width:560px){{section.grouped-ab .ga-table-wrap table,section.grouped-ab .ga-table-wrap tbody,section.grouped-ab .ga-table-wrap tr,section.grouped-ab .ga-table-wrap th,section.grouped-ab .ga-table-wrap td{{display:block;width:100%}}section.grouped-ab .ga-table-wrap thead{{display:none}}section.grouped-ab .ga-table-wrap tr{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-bottom:1px solid var(--line,#d5dfe8);padding:6px 0}}section.grouped-ab .ga-table-wrap th[scope="row"]{{grid-column:1/-1;border:0;font-weight:700}}section.grouped-ab .ga-table-wrap td{{min-width:0;border:0;padding:5px 8px}}section.grouped-ab .ga-table-wrap td::before{{content:attr(data-label);display:block;color:var(--muted,#536174);font-size:12px;font-weight:650;margin-bottom:2px}}}}
 </style>
-<h2 id="grouped-ab-title">Grouped parser-call timing</h2>
-<p>Six paired rounds: {counts['clava-js']} Clava-JS and {counts['java']} Java groups, Text/Proto, direct/warm. Invalid, unselected, untimed, fidelity, and estimated rows are excluded. Candles show per-group six-round medians; boxes mark the middle half, whiskers the full range. Each suite shares a log-ms axis. Lower is faster.</p>
+<h2 id="grouped-ab-title">Text/Protobuf format-only control</h2>
+<p>Same build; two legacy-compatibility patches enforce AST equality. Raw uncompressed dumps in direct/warm modes; deployment Proto is compressed. Original CodeParser groups, Apps and cross-file linking remain. No heap log or explicit GC. 130 syntax-only JS groups return no App; retained for workload. Candles show group-call, not file, times.</p>
 <h3>Per-group runtime spread</h3>
 <div class="ga-grid-layout">{runtime_charts}</div>
 <h3>Median parse totals</h3>
-<p class="ga-note">Six-round sum medians; paired change is median same-round delta. Global sums 516 groups.</p>
+<p class="ga-note">Six-round sums; delta is median round change. Global covers 516 groups.</p>
 <div class="ga-table-wrap"><table class="ga-median-table"><thead><tr><th scope="col">Scope/cache</th><th scope="col">Text (s)</th><th scope="col">Proto (s)</th><th scope="col">Delta (%)</th></tr></thead><tbody>{''.join(median_total_rows)}</tbody></table></div>
 <p>CSV: <span class="ga-links">{per_round_link}{paired_totals_link}{group_link}{paired_link}</span></p>
 <details><summary>Detailed ratios, paired deltas, and per-round totals</summary>
+<p class="ga-note">The format-only Proto control includes compatibility patches for ReferenceType <code>pointeeTypeAsWritten</code> and the optional empty-string <code>CXXPseudoDestructorExpr</code> qualifier. Fidelity checks require complete AST field and node/reference-graph identity. This is not the unmodified Proto branch.</p>
+<p class="ga-note">Join paired-round timings to group medians/provenance by <code>suite</code> + <code>input_id</code>. The medians CSV carries source counts and SHA-256 digests without repeating them on every round.</p>
 <h3>Per-group Proto/Text ratio distribution</h3><p class="ga-note">Ratios use per-group medians across six rounds. Values below 1× are lower for Proto.</p>
 <div class="ga-figure">{ratio_chart}</div>
 <div class="ga-table-wrap"><table><thead><tr><th scope="col">Suite · cache</th><th scope="col">Groups</th><th scope="col">Median ratio</th><th scope="col">Middle half</th><th scope="col">Full range</th></tr></thead><tbody>{''.join(ratio_rows)}</tbody></table></div>

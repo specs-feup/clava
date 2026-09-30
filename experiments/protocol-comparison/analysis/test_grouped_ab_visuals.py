@@ -2,9 +2,13 @@ from __future__ import annotations
 
 import copy
 import base64
+import csv
 import html
+import io
+import json
 import re
 import sys
+import tempfile
 from pathlib import Path
 import unittest
 
@@ -51,12 +55,10 @@ def fixture_rows():
                         elapsed_ms = text_ms * multiplier
                         if protocol == "protobuf":
                             elapsed_ms *= 1.2
-                        observations.append({
-                            **schedule,
-                            "valid": True,
-                            "app_null": False,
-                            "elapsed_ms": elapsed_ms,
-                        })
+                        observation = {**schedule}
+                        observation.pop("group_id")  # Raw runner rows join by stable event_id.
+                        observation.update(valid=True, app_returned_null=False, elapsed_ms=elapsed_ms)
+                        observations.append(observation)
     return schedules, observations, {suite: len(ids) for suite, ids in ids_by_suite.items()}
 
 
@@ -96,6 +98,22 @@ class GroupedABVisualsTest(unittest.TestCase):
         self.assertIn("'invalid': 1", str(caught.exception))
         self.assertIn("'unselected': 1", str(caught.exception))
 
+    def test_timed_null_app_is_valid_only_for_scheduled_syntax_only_group(self):
+        schedules = copy.deepcopy(self.schedules)
+        schedules[0]["parser_config"] = {"syntax_only": True}
+        observations = copy.deepcopy(self.observations)
+        observations[0]["app_returned_null"] = True
+        summary = grouped.analyze_grouped_runs(
+            schedules, observations, expected_group_counts=self.counts
+        )
+        self.assertEqual(summary["observation_row_count"], len(self.observations))
+
+        schedules[0]["parser_config"] = {"syntax_only": False}
+        with self.assertRaisesRegex(grouped.AnalysisError, "invalid': 1"):
+            grouped.analyze_grouped_runs(
+                schedules, observations, expected_group_counts=self.counts
+            )
+
     def test_non_measure_and_untimed_rows_do_not_enter_statistics(self):
         observations = copy.deepcopy(self.observations)
         observations.append({"phase": "fidelity", "valid": True})
@@ -120,6 +138,70 @@ class GroupedABVisualsTest(unittest.TestCase):
                 schedules, self.observations, expected_group_counts=self.counts
             )
 
+    def test_observation_event_id_is_strict_and_group_id_is_checked_when_emitted(self):
+        observations = copy.deepcopy(self.observations)
+        observations[0]["group_id"] = "wrong-group"
+        with self.assertRaisesRegex(grouped.AnalysisError, "group_id differs"):
+            grouped.analyze_grouped_runs(
+                self.schedules, observations, expected_group_counts=self.counts
+            )
+
+        observations = copy.deepcopy(self.observations)
+        observations[0]["event_id"] = "wrong-event"
+        with self.assertRaisesRegex(grouped.AnalysisError, "event_id differs"):
+            grouped.analyze_grouped_runs(
+                self.schedules, observations, expected_group_counts=self.counts
+            )
+
+    def test_observation_provenance_hashes_are_required_and_matched(self):
+        for field in ("source_sha256", "args_sha256", "options_sha256"):
+            with self.subTest(field=field, case="mismatch"):
+                observations = copy.deepcopy(self.observations)
+                observations[0][field] = "e" * 64
+                with self.assertRaisesRegex(grouped.AnalysisError, f"{field} differs"):
+                    grouped.analyze_grouped_runs(
+                        self.schedules, observations, expected_group_counts=self.counts
+                    )
+
+            with self.subTest(field=field, case="missing"):
+                observations = copy.deepcopy(self.observations)
+                observations[0].pop(field)
+                with self.assertRaisesRegex(grouped.AnalysisError, f"{field} differs"):
+                    grouped.analyze_grouped_runs(
+                        self.schedules, observations, expected_group_counts=self.counts
+                    )
+
+    def test_loader_accepts_runner_measure_directory(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            schedules_by_file = {}
+            observations_by_file = {}
+            for schedule in self.schedules:
+                name = (
+                    f"measure-{schedule['suite']}-{schedule['protocol']}-"
+                    f"{schedule['cache_mode']}-r{schedule['repeat']:02d}.jsonl"
+                )
+                schedules_by_file.setdefault(name, []).append(schedule)
+            for observation in self.observations:
+                name = (
+                    f"measure-{observation['suite']}-{observation['protocol']}-"
+                    f"{observation['cache_mode']}-r{observation['repeat']:02d}.jsonl"
+                )
+                observations_by_file.setdefault(name, []).append(observation)
+            for name, rows in schedules_by_file.items():
+                path = root / "schedules" / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("".join(json.dumps(row) + "\n" for row in rows))
+            for name, rows in observations_by_file.items():
+                path = root / "measure" / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("".join(json.dumps(row) + "\n" for row in rows))
+
+            summary = grouped.load_grouped_analysis(
+                root, expected_group_counts=self.counts
+            )
+        self.assertEqual(summary["group_counts"], self.counts)
+
     def test_rendered_fragment_has_mobile_svg_and_sanitized_download_links(self):
         summary = grouped.analyze_grouped_runs(
             self.schedules, self.observations, expected_group_counts=self.counts
@@ -134,14 +216,36 @@ class GroupedABVisualsTest(unittest.TestCase):
         self.assertIn("data:text/csv;charset=utf-8;base64,", fragment)
         self.assertNotIn("/home/", fragment)
         self.assertNotIn("internal-group", fragment)
-        csv_blobs = re.findall(r'href="data:text/csv;charset=utf-8;base64,([^"]+)"', fragment)
-        decoded_csvs = [base64.b64decode(blob).decode("utf-8") for blob in csv_blobs]
-        group_csv = next(content for content in decoded_csvs
-                         if content.startswith("suite,input_id,source_labels"))
+        csv_links = {
+            filename: base64.b64decode(blob).decode("utf-8")
+            for filename, blob in re.findall(
+                r'download="([^"]+)" href="data:text/csv;charset=utf-8;base64,([^"]+)"',
+                fragment,
+            )
+        }
+        self.assertEqual(len(csv_links), 4)
+        group_csv = csv_links["grouped-ab-group-medians-and-ratios.csv"]
         self.assertIn("source_sha256,source_file_sha256s,args_sha256,options_sha256", group_csv)
         self.assertIn("fixture-1.c", group_csv)
         self.assertIn("d" * 64, group_csv)
         self.assertNotIn("/private/", group_csv)
+        paired_csv = csv_links["grouped-ab-paired-rounds.csv"]
+        self.assertEqual(
+            paired_csv.splitlines()[0],
+            "suite,input_id,source_labels,cache_mode,repeat,text_ms,protobuf_ms,delta_ms,relative_pct",
+        )
+        self.assertNotIn("source_sha256", paired_csv.splitlines()[0])
+        metadata_rows = list(csv.DictReader(io.StringIO(group_csv)))
+        paired_rows = list(csv.DictReader(io.StringIO(paired_csv)))
+        metadata_keys = {(row["suite"], row["input_id"]) for row in metadata_rows}
+        pair_keys = {
+            (row["suite"], row["input_id"], row["cache_mode"], row["repeat"])
+            for row in paired_rows
+        }
+        self.assertTrue(all((row["suite"], row["input_id"]) in metadata_keys
+                            for row in paired_rows))
+        self.assertEqual(len(pair_keys), len(self.observations) // 2)
+        self.assertTrue(all(row["text_ms"] and row["protobuf_ms"] for row in paired_rows))
 
         main, details = fragment.split("<details>", 1)
         self.assertEqual(main.count('<svg class="ga-main-svg"'), 2)
@@ -155,7 +259,45 @@ class GroupedABVisualsTest(unittest.TestCase):
         prose = re.sub(r"<style.*?</style>|<svg.*?</svg>", " ", main, flags=re.DOTALL)
         prose = html.unescape(re.sub(r"<[^>]*>", " ", prose))
         self.assertLessEqual(len(re.findall(r"\b[\w×−%]+\b", prose)), 150)
+        self.assertIn("format-only control", prose)
+        self.assertIn("same build", prose.lower())
+        self.assertIn("130 syntax-only js groups return no app", prose.lower())
+        self.assertIn("not file, times", prose)
+        self.assertIn("pointeeTypeAsWritten", details)
+        self.assertIn("CXXPseudoDestructorExpr", details)
+        self.assertIn("node/reference-graph identity", details)
+        self.assertIn("Join paired-round timings", details)
+        self.assertIn("suite", details)
+        self.assertIn("input_id", details)
+        ticks = re.findall(
+            r'<text class="ga-main-tick" x="([0-9.]+)" y="23"[^>]*>([^<]+)</text>', main
+        )
+        self.assertEqual(len(ticks), 6)
+        for x_value, label in ticks:
+            self.assertNotRegex(label, r"\d[eE][+-]\d+")
+            center, half_width = float(x_value), len(html.unescape(label)) * 4.5
+            self.assertGreaterEqual(center - half_width, 0)
+            self.assertLessEqual(center + half_width, 360)
         self.assertLess(len(fragment.encode("utf-8")), 4 * 1024 * 1024)
+
+        with tempfile.TemporaryDirectory() as temporary:
+            exports = grouped.write_grouped_analysis_exports(
+                summary, Path(temporary), expected_group_counts=self.counts
+            )
+            expected_rows = {
+                "grouped-ab-round-totals.csv": 72,
+                "grouped-ab-paired-round-totals.csv": 36,
+                "grouped-ab-group-medians-and-ratios.csv": 6,
+                "grouped-ab-paired-rounds.csv": 36,
+            }
+            for filename, row_count in expected_rows.items():
+                content = exports[filename].read_text(encoding="utf-8")
+                self.assertNotIn("/private/", content)
+                self.assertEqual(sum(1 for _ in csv.reader(io.StringIO(content))) - 1, row_count)
+                self.assertEqual(content, csv_links[filename])
+            self.assertTrue(exports["summary"].is_file())
+            self.assertTrue(exports["html"].is_file())
+            self.assertLess(exports["html"].stat().st_size, 4 * 1024 * 1024)
 
 
 if __name__ == "__main__":
