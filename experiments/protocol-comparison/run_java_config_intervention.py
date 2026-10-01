@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import datetime as dt
 import hashlib
 import json
@@ -40,7 +41,7 @@ SCHEDULE = (
     (4, ("control", "original")),
 )
 ARMS = ("original", "control")
-TASK_STATUS = re.compile(r"^> Task\s+\S+\s+(.+?)\s*$")
+TASK_STATUS = re.compile(r"^(:\S+)\s+(\S+)\s*$")
 WORKER_MARKERS = (
     "Gradle Test Executor",
     "DEADLINE_TEST_WORKER",
@@ -418,7 +419,7 @@ def validate_dry_run(log_path: Path, events_path: Path) -> dict:
     for marker in WORKER_MARKERS:
         require(marker not in log, f"dry-run unexpectedly spawned a test worker ({marker})")
     require("BUILD SUCCESSFUL" in log, "Gradle dry-run did not report BUILD SUCCESSFUL")
-    task_statuses = [match.group(1) for line in log.splitlines()
+    task_statuses = [match.group(2) for line in log.splitlines()
                      if (match := TASK_STATUS.match(line))]
     require(bool(task_statuses), "dry-run log contained no Gradle task status lines")
     require(all(status == "SKIPPED" for status in task_statuses),
@@ -438,9 +439,6 @@ def validate_dry_run(log_path: Path, events_path: Path) -> dict:
     after_events = [event for event in events
                     if event.get("event") == "task_after_execute"
                     and event.get("root_name") == "ClangAstParser"]
-    require(bool(after_events), "dry-run produced no root task completion events")
-    require(all(event.get("skipped") is True for event in after_events),
-            "a Gradle task action may have executed during dry-run")
     return {
         "project_configuration_s": (
             evaluated["monotonic_ns"] - loaded["monotonic_ns"]
@@ -452,6 +450,7 @@ def validate_dry_run(log_path: Path, events_path: Path) -> dict:
         "task_paths": graph.get("task_paths", []),
         "task_after_execute_count": len(after_events),
         "all_tasks_dry_run_skipped": True,
+        "task_action_event_gate": "no Test worker markers; every Gradle task log line says SKIPPED",
         "test_worker_spawned": False,
         "test_actions_run": False,
     }
@@ -523,14 +522,29 @@ def paired_summary(rows: list[dict]) -> dict:
             "control_minus_original_task_graph_s": (
                 control["task_graph_creation_s"] - original["task_graph_creation_s"]
             ),
+            "control_minus_original_whole_command_wall_s": (
+                by_arm["control"]["whole_command_wall_s"]
+                - by_arm["original"]["whole_command_wall_s"]
+            ),
             "original_task_count": original["task_count"],
             "control_task_count": control["task_count"],
         })
     config_deltas = [row["control_minus_original_project_configuration_s"] for row in pairs]
+    graph_deltas = [row["control_minus_original_task_graph_s"] for row in pairs]
+    wall_deltas = [row["control_minus_original_whole_command_wall_s"] for row in pairs]
+    measured_rows = [row for row in rows if row.get("measured")]
+    original_walls = [row["whole_command_wall_s"] for row in measured_rows
+                      if row["arm"] == "original"]
+    control_walls = [row["whole_command_wall_s"] for row in measured_rows
+                     if row["arm"] == "control"]
     return {
         "pairs": pairs,
         "median_control_minus_original_project_configuration_s": statistics.median(config_deltas),
         "median_original_minus_control_project_configuration_s": -statistics.median(config_deltas),
+        "median_control_minus_original_task_graph_s": statistics.median(graph_deltas),
+        "median_control_minus_original_whole_command_wall_s": statistics.median(wall_deltas),
+        "median_original_whole_command_wall_s": statistics.median(original_walls),
+        "median_control_whole_command_wall_s": statistics.median(control_walls),
         "n_pairs": len(pairs),
         "direction_consistent": all(value < 0 for value in config_deltas)
                               or all(value > 0 for value in config_deltas),
@@ -543,12 +557,149 @@ def paired_summary(rows: list[dict]) -> dict:
     }
 
 
+def results_csv_rows(preflight: list[dict], measured: list[dict]) -> list[dict]:
+    rows = []
+    for item in [*preflight, *measured]:
+        rows.append({
+            "label": item["label"],
+            "arm": item["arm"],
+            "measured": item.get("measured", False),
+            "valid": item["valid"],
+            "return_code": item.get("return_code"),
+            "whole_command_wall_s": item.get("whole_command_wall_s"),
+            "project_configuration_s": item["phases"]["project_configuration_s"],
+            "task_graph_creation_s": item["phases"]["task_graph_creation_s"],
+            "task_count": item["phases"]["task_count"],
+            "task_after_execute_count": item["phases"]["task_after_execute_count"],
+            "all_tasks_dry_run_skipped": item["phases"]["all_tasks_dry_run_skipped"],
+            "test_worker_spawned": item["phases"]["test_worker_spawned"],
+            "test_actions_run": item["phases"]["test_actions_run"],
+            "build_file_sha256": item["build_file_sha256"],
+            "run_dir": item["run_dir"],
+        })
+    return rows
+
+
+def write_results_csv(path: Path, rows: list[dict]) -> None:
+    fields = (
+        "label", "arm", "measured", "valid", "return_code", "whole_command_wall_s",
+        "project_configuration_s", "task_graph_creation_s", "task_count",
+        "task_after_execute_count", "all_tasks_dry_run_skipped", "test_worker_spawned",
+        "test_actions_run", "build_file_sha256", "run_dir",
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def export_completed(output_root: Path) -> dict:
+    plan_path = output_root / "plan.json"
+    require(plan_path.is_file(), f"completed plan missing: {plan_path}")
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    require(plan.get("status") == "complete", "cannot export an incomplete intervention")
+    preflight = plan.get("preflight_results", [])
+    measured = plan.get("results", [])
+    require(len(preflight) == 2 and len(measured) == 8,
+            "completed intervention row counts do not match 2 preflight + 8 measured")
+    stage_project = Path(plan["frozen_stage"]["root"]) / "clava" / "ClangAstParser"
+    isolated_project = Path(plan["isolated_project"])
+    require(sha256_file(stage_project / "build.gradle") ==
+            plan["protobuf_build_file_sha256"],
+            "post-run frozen protobuf build.gradle hash changed")
+    require(sha256_file(stage_project / "settings.gradle") ==
+            plan["settings_file_sha256"]
+            and sha256_file(isolated_project / "settings.gradle") ==
+            plan["settings_file_sha256"],
+            "post-run frozen or isolated settings.gradle hash changed")
+    require(tree_hashes(stage_project) == plan["source_tree_hashes"],
+            "post-run frozen source/test/resource hashes changed")
+    require(generated_source_manifest(stage_project) ==
+            plan["generated_source_tree_manifest"]
+            and generated_source_manifest(isolated_project) ==
+            plan["generated_source_tree_manifest"],
+            "post-run frozen/copied generated Java source hashes changed")
+    require(sha256_file(isolated_project / "build.gradle") ==
+            plan["protobuf_build_file_sha256"]
+            and plan.get("isolated_build_file_restored_to_original") is True,
+            "isolated build.gradle was not restored after measurements")
+    require(all(row.get("valid") is True
+                and row["phases"].get("all_tasks_dry_run_skipped") is True
+                and row["phases"].get("test_worker_spawned") is False
+                and row["phases"].get("test_actions_run") is False
+                for row in [*preflight, *measured]),
+            "post-run no-worker/no-task-action evidence gate failed")
+    summary = paired_summary([*preflight, *measured])
+    plan["paired_summary"] = summary
+    plan["results_csv"] = str((output_root / "results.csv").resolve())
+    plan["postrun_integrity"] = {
+        "frozen_source_test_resource_tree_hashes_match_preparation": True,
+        "frozen_generated_java_hashes_match_preparation": True,
+        "isolated_generated_java_hashes_match_frozen_stage": True,
+        "frozen_build_and_settings_hashes_match_preparation": True,
+        "isolated_build_file_restored_to_frozen_original": True,
+        "all_rows_no_worker_no_task_action_gates_passed": True,
+    }
+    write_json(plan_path, plan)
+    write_results_csv(output_root / "results.csv", results_csv_rows(preflight, measured))
+    results = {
+        "schema_version": 1,
+        "diagnostic_only_not_headline": True,
+        "experiment": plan["experiment"],
+        "plan_sha256": sha256_file(plan_path),
+        "results_csv": str((output_root / "results.csv").resolve()),
+        "results_csv_sha256": sha256_file(output_root / "results.csv"),
+        "results": measured,
+        "preflight_results": preflight,
+        "paired_summary": summary,
+        "postrun_integrity": plan["postrun_integrity"],
+    }
+    write_json(output_root / "results.json", results)
+    return results
+
+
+def recover_collector_rejected_preflight(output_root: Path, plan: dict) -> dict:
+    """Adopt a successful dry-run rejected only by the previous log parser."""
+    expected_failure = (
+        "RuntimeError: dry-run log contained no Gradle task status lines"
+    )
+    require(plan.get("failure") == expected_failure,
+            "refusing to resume a failed intervention unless only the known collector check failed")
+    run_dir = output_root / "runs" / "preflight" / "original"
+    command_path = run_dir / "command.json"
+    require(command_path.is_file(), "collector-recovery original preflight command is missing")
+    command = json.loads(command_path.read_text(encoding="utf-8"))
+    require(command.get("arm") == "original"
+            and command.get("build_file_sha256") == plan["protobuf_build_file_sha256"],
+            "collector-recovery preflight is not the frozen original arm")
+    require(not (output_root / "runs" / "preflight" / "control").exists(),
+            "unexpected control preflight exists; refusing ambiguous recovery")
+    phases = validate_dry_run(run_dir / "gradle.log", run_dir / "gradle-events.jsonl")
+    return {
+        "label": "preflight",
+        "arm": "original",
+        "measured": False,
+        "valid": True,
+        "return_code": 0,
+        "return_code_observed_before_collector_failure": True,
+        "whole_command_wall_s": None,
+        "whole_command_wall_note": "not persisted before collector failure; phase timing is recovered from raw Gradle events",
+        "phases": phases,
+        "isolated_project": plan["isolated_project"],
+        "build_file_sha256": plan["protobuf_build_file_sha256"],
+        "run_dir": str(run_dir),
+        "recovered_existing_raw_run": True,
+    }
+
+
 def measure(output_root: Path, matrix_path: Path, worker_evidence_path: Path,
             host_lock_note: str) -> dict:
     plan_path = output_root / "plan.json"
     require(plan_path.is_file(), f"prepared plan missing: {plan_path}")
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
-    require(plan.get("status") == "prepared_not_run",
+    recover_original_preflight = plan.get("status") == "failed"
+    require(plan.get("status") == "prepared_not_run" or recover_original_preflight,
             f"intervention plan is not runnable: {plan.get('status')}")
     require(host_lock_note.strip(), "a parent host-lock note is required to run Gradle")
     require(sha256_file(matrix_path) == plan["source_matrix_sha256"],
@@ -566,12 +717,22 @@ def measure(output_root: Path, matrix_path: Path, worker_evidence_path: Path,
     }
     plan["inherited_jvm_environment_audit"] = inherited_audit
     plan["status"] = "running"
+    rows: list[dict] = []
+    if recover_original_preflight:
+        recovered = recover_collector_rejected_preflight(output_root, plan)
+        rows.append(recovered)
+        plan["preflight_results"] = rows.copy()
+        plan["collector_recovery"] = {
+            "adopted_raw_original_preflight": True,
+            "reason": "Gradle 9.6.1 logs dry-run tasks as ':task SKIPPED' and emits no TaskExecutionListener completion callbacks",
+            "reran_preflight": False,
+        }
+        plan.pop("failure", None)
     write_json(plan_path, plan)
 
-    rows: list[dict] = []
     original_path = output_root / "arms" / "original-build.gradle"
     try:
-        for arm in ("original", "control"):
+        for arm in (("control",) if recover_original_preflight else ("original", "control")):
             row = run_once(plan, matrix, stage, output_root, project, arm,
                            "preflight", inherited)
             row["measured"] = False
@@ -606,17 +767,7 @@ def measure(output_root: Path, matrix_path: Path, worker_evidence_path: Path,
         )
         write_json(plan_path, plan)
 
-    results = {
-        "schema_version": 1,
-        "diagnostic_only_not_headline": True,
-        "experiment": plan["experiment"],
-        "plan_sha256": sha256_file(plan_path),
-        "preflight_results": [row for row in rows if row["label"] == "preflight"],
-        "results": [row for row in rows if row.get("measured")],
-        "paired_summary": plan["paired_summary"],
-    }
-    write_json(output_root / "results.json", results)
-    return results
+    return export_completed(output_root)
 
 
 def main() -> None:
@@ -632,6 +783,8 @@ def main() -> None:
     measure_parser.add_argument("--worker-evidence", type=Path, default=WORKER_EVIDENCE_PATH)
     measure_parser.add_argument("--host-lock-confirmed", action="store_true")
     measure_parser.add_argument("--host-lock-note", default="")
+    export_parser = commands.add_parser("export", help="derive CSV and paired wall summaries from completed raw rows")
+    export_parser.add_argument("--output-root", type=Path, default=OUTPUT_ROOT)
     args = parser.parse_args()
 
     if args.action == "prepare":
@@ -645,6 +798,10 @@ def main() -> None:
         }, indent=2))
         return
 
+    if args.action == "export":
+        results = export_completed(args.output_root.resolve())
+        print(json.dumps(results["paired_summary"], indent=2))
+        return
     if not args.host_lock_confirmed:
         raise SystemExit("refusing Gradle runs until the parent explicitly confirms host release")
     results = measure(args.output_root.resolve(), args.matrix.resolve(),
