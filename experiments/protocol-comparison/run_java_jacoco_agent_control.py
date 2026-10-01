@@ -74,6 +74,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--max-cells", type=int, default=len(ORDER),
                         help="run only the first N fixed-order cells for an acceptance pilot")
+    parser.add_argument("--resume-existing", action="store_true",
+                        help="resume a preserved partial output root after strict guard revalidation")
     parser.add_argument("--dry-run", action="store_true", help="validate identities and print the fixed order")
     return parser.parse_args()
 
@@ -450,14 +452,124 @@ def summarize(results: list[dict[str, object]]) -> dict[str, object]:
     }
 
 
+def revalidate_prefix(results: list[dict[str, object]], stages: dict[str, dict],
+                      expected_cache: dict[str, dict[str, int]], reference_test_sha256: str,
+                      output_root: Path) -> tuple[dict[str, dict[str, object]], list[dict[str, object]]]:
+    if not results or len(results) >= len(ORDER):
+        raise RuntimeError(f"resume requires a nonempty, incomplete result prefix; found {len(results)} rows")
+    original_path = output_root / "results.json"
+    original_sha256 = base.sha256_file(original_path)
+    snapshot = output_root / "results-before-revalidation.json"
+    if snapshot.exists():
+        raise RuntimeError(f"refusing to overwrite existing result snapshot: {snapshot}")
+    shutil.copy2(original_path, snapshot)
+    snapshot_sha256 = base.sha256_file(snapshot)
+    if snapshot_sha256 != original_sha256:
+        raise RuntimeError("immutable pre-revalidation results snapshot hash mismatch")
+
+    worker_baseline: dict[str, dict[str, object]] = {}
+    proofs = []
+    for index, row in enumerate(results):
+        ordinal = index + 1
+        expected_stage, expected_agent = ORDER[index]
+        if row.get("ordinal") != ordinal or row.get("stage") != expected_stage or row.get("agent") != expected_agent:
+            raise RuntimeError(f"partial result prefix diverged from the fixed order at cell {ordinal}")
+        stage = stages[expected_stage]
+        executor_args = row.get("actual_test_executor_args")
+        if not isinstance(executor_args, list):
+            raise RuntimeError(f"cell {ordinal} has no recorded actual executor argv")
+        normalized_executor, response_files = normalize_executor_args(executor_args)
+        worker = row.get("worker_configuration", {})
+        worker_args = worker.get("jvm_args", [])
+        normalized_worker = [arg for arg in worker_args if not arg.startswith("-javaagent:")]
+        identity = {
+            "max_heap_size": worker.get("max_heap_size"),
+            "jvm_args_without_javaagent": normalized_worker,
+            "actual_executor_args_without_javaagent": normalized_executor,
+        }
+        baseline = worker_baseline.setdefault(expected_stage, identity)
+        worker_stable = identity == baseline
+        all_worker_agents = [arg for arg in worker_args
+                             if arg.startswith(("-javaagent:", "-agentlib:", "-agentpath:", "-Xrun"))]
+        worker_only_jacoco = (
+            len(all_worker_agents) == 1 and all_worker_agents[0].startswith("-javaagent:")
+            and "jacocoagent" in all_worker_agents[0]
+        ) if expected_agent == "on" else len(all_worker_agents) == 0
+        executor_agents = [arg for arg in executor_args
+                           if arg.startswith(("-javaagent:", "-agentlib:", "-agentpath:", "-Xrun"))]
+        executor_only_jacoco = (
+            len(executor_agents) == 1 and executor_agents[0].startswith("-javaagent:")
+            and "jacocoagent" in executor_agents[0]
+        ) if expected_agent == "on" else len(executor_agents) == 0
+        cache_delta = {
+            "cacheable_calls": int(row.get("cacheable_calls_delta", -1)),
+            "hits": int(row.get("cache_hits_delta", -1)),
+            "misses": int(row.get("cache_misses_delta", -1)),
+            "uncacheable_calls": int(row.get("uncacheable_calls_delta", -1)),
+        }
+        native_path = Path(str(row.get("actual_native_tool", ""))).resolve()
+        native_sha256 = base.sha256_file(native_path) if native_path.is_file() else ""
+        expected_valid = (
+            row.get("return_code") == 0
+            and {name: row.get(name) for name in EXPECTED_JAVA} == EXPECTED_JAVA
+            and cache_delta == expected_cache[expected_stage]
+            and row.get("test_identity_sha256") == reference_test_sha256
+            and native_path == Path(stage["dumper"]).resolve()
+            and native_sha256 == stage["native_binary_sha256"]
+            and not row.get("compile_tasks_not_up_to_date")
+            and worker.get("requested_agent") == expected_agent
+            and worker.get("jacoco_enabled") is (expected_agent == "on")
+            and worker_only_jacoco and executor_only_jacoco
+            and [arg for arg in executor_args if arg.startswith("-Xmx")] == ["-Xmx512m"]
+            and row.get("test_task_executed") is True
+            and all(row.get("report_tasks_skipped", {}).values())
+            and worker_stable
+        )
+        old_valid = row.get("valid")
+        old_stability = row.get("worker_args_stable_except_agent")
+        row["original_guard_valid"] = old_valid
+        row["original_worker_args_stable_except_agent"] = old_stability
+        row["worker_args_stable_except_agent"] = worker_stable
+        row["actual_executor_classpath_response_files"] = response_files
+        row["valid"] = expected_valid
+        proof = {
+            "ordinal": ordinal,
+            "stage": expected_stage,
+            "agent": expected_agent,
+            "original_guard_valid": old_valid,
+            "original_worker_args_stable_except_agent": old_stability,
+            "revalidated_worker_args_stable_except_agent": worker_stable,
+            "revalidated_valid": expected_valid,
+            "normalization": "replace Gradle @response-file path with SHA-256 of response-file contents; remove only the per-run JaCoCo agent token",
+            "executor_classpath_response_files": response_files,
+            "executor_argv_without_agent": normalized_executor,
+        }
+        proofs.append(proof)
+        if not expected_valid:
+            raise RuntimeError(f"resume revalidation failed for cell {ordinal}: {json.dumps(proof, sort_keys=True)}")
+
+    proof_record = {
+        "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "original_results_sha256": original_sha256,
+        "immutable_original_results_snapshot": str(snapshot),
+        "immutable_snapshot_sha256": snapshot_sha256,
+        "revalidated_prefix_length": len(results),
+        "rows": proofs,
+    }
+    (output_root / "revalidation.json").write_text(json.dumps(proof_record, indent=2) + "\n")
+    return worker_baseline, proofs
+
+
 def main() -> int:
     args = parse_args()
     matrix_path = args.matrix.resolve()
     output_root = args.output_root.resolve()
     if not 1 <= args.max_cells <= len(ORDER):
         raise SystemExit(f"--max-cells must be between 1 and {len(ORDER)}")
-    if output_root.exists():
+    if output_root.exists() and not args.resume_existing:
         raise SystemExit(f"refusing to reuse diagnostic output root: {output_root}")
+    if args.resume_existing and not output_root.is_dir():
+        raise SystemExit(f"--resume-existing requires an existing output root: {output_root}")
     matrix = load_matrix(matrix_path)
     plan = matrix["plan"]
     stages = {key: plan["stages"][key] for key in STAGE_KEYS}
@@ -498,49 +610,82 @@ def main() -> int:
                               for i, (stage, agent) in enumerate(ORDER[:args.max_cells])]}, indent=2))
         return 0
 
-    output_root.mkdir(parents=True)
     temp_roots = {key: output_root / "temp/java" / key for key in STAGE_KEYS}
     cache_dirs: dict[str, Path] = {}
     cache_source_hashes: dict[str, str] = {}
-    for key in STAGE_KEYS:
-        temp_roots[key].mkdir(parents=True, exist_ok=True)
-        cache_dirs[key], cache_source_hashes[key] = ensure_cache_clone(
-            stages[key], source_caches[key], temp_roots[key])
-        zero = subprocess.run(["ccache", "--zero-stats"],
-                              env={**os.environ, "CCACHE_DIR": str(cache_dirs[key]), "LC_ALL": "C"},
-                              text=True, capture_output=True, check=False)
-        if zero.returncode != 0:
-            raise RuntimeError(f"could not zero cloned-cache stats: {zero.stderr.strip()}")
+    if args.resume_existing:
+        if args.max_cells != len(ORDER):
+            raise RuntimeError("resuming an existing partial control requires the complete 16-cell schedule")
+        plan_path = output_root / "plan.json"
+        results_path = output_root / "results.json"
+        if not plan_path.is_file() or not results_path.is_file():
+            raise RuntimeError("existing output root is missing its frozen plan or partial results")
+        plan_record = json.loads(plan_path.read_text())
+        expected_matrix_sha256 = base.sha256_file(matrix_path)
+        if plan_record.get("primary_matrix_sha256") != expected_matrix_sha256:
+            raise RuntimeError("resume primary-matrix identity differs from the frozen run")
+        results_data = json.loads(results_path.read_text())
+        if results_data.get("plan", {}).get("primary_matrix_sha256") != expected_matrix_sha256:
+            raise RuntimeError("partial results do not belong to the frozen primary matrix")
+        results = results_data.get("results", [])
+        for key in STAGE_KEYS:
+            stage_plan = plan_record.get("stages", {}).get(key, {})
+            if Path(stage_plan.get("cache_source", "")).resolve() != source_caches[key]:
+                raise RuntimeError(f"resume source cache path changed for {key}")
+            cache_dirs[key] = Path(stage_plan.get("cache_clone", "")).resolve()
+            if not cache_dirs[key].is_dir() or output_root not in cache_dirs[key].parents:
+                raise RuntimeError(f"resume cache clone is missing or escapes output root: {cache_dirs[key]}")
+            cache_source_hashes[key] = str(stage_plan.get("cache_source_manifest_sha256", ""))
+            current_source_hash = canonical_hash(cache_manifest(source_caches[key]))
+            if cache_source_hashes[key] != current_source_hash:
+                raise RuntimeError(f"primary cache payload changed since the partial control for {key}")
+        worker_baseline, _ = revalidate_prefix(
+            results, stages, expected_cache, reference_test_identity["sha256"], output_root)
+        (output_root / "results.json").write_text(json.dumps({"plan": plan_record, "results": results}, indent=2) + "\n")
+        write_csv(results, output_root / "results.csv")
+    else:
+        output_root.mkdir(parents=True)
+        for key in STAGE_KEYS:
+            temp_roots[key].mkdir(parents=True, exist_ok=True)
+            cache_dirs[key], cache_source_hashes[key] = ensure_cache_clone(
+                stages[key], source_caches[key], temp_roots[key])
+            zero = subprocess.run(["ccache", "--zero-stats"],
+                                  env={**os.environ, "CCACHE_DIR": str(cache_dirs[key]), "LC_ALL": "C"},
+                                  text=True, capture_output=True, check=False)
+            if zero.returncode != 0:
+                raise RuntimeError(f"could not zero cloned-cache stats: {zero.stderr.strip()}")
 
-    plan_record = {
-        "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-        "primary_matrix": str(matrix_path),
-        "primary_matrix_sha256": base.sha256_file(matrix_path),
-        "output_root": str(output_root),
-        "control": "JaCoCo Test-worker javaagent enabled vs disabled; reporting tasks disabled in both arms",
-        "rounds": len(ORDER) // 4,
-        "max_cells": args.max_cells,
-        "expected_tests": EXPECTED_JAVA,
-        "reference_test_identity_sha256": reference_test_identity["sha256"],
-        "inherited_jvm_environment_audit": inherited_jvm_options,
-        "expected_per_command_cache_delta": expected_cache,
-        "order": [{"ordinal": i + 1, "round": i // 4 + 1, "stage": stage, "agent": agent}
-                  for i, (stage, agent) in enumerate(ORDER[:args.max_cells])],
-        "stages": {key: {"identity": verify_stage(stage), "runtime_manifest_sha256": stage["runtime_manifest_sha256"],
-                          "cache_source": str(source_caches[key]), "cache_clone": str(cache_dirs[key]),
-                          "cache_source_manifest_sha256": cache_source_hashes[key],
-                          "source_metadata": stage}
-                   for key, stage in stages.items()},
-        "init_scripts": [str(SCRIPT_ROOT / "java-suite.init.gradle"),
-                         str(SCRIPT_ROOT / "java-suite-jacoco-agent-control.init.gradle")],
-        "timing": "GNU time elapsed for Gradle test with --info logging in both arms; JUnit XML testcase duration reported separately",
-    }
-    (output_root / "plan.json").write_text(json.dumps(plan_record, indent=2) + "\n")
-    results: list[dict[str, object]] = []
-    worker_baseline: dict[str, dict[str, object]] = {}
+        plan_record = {
+            "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+            "primary_matrix": str(matrix_path),
+            "primary_matrix_sha256": base.sha256_file(matrix_path),
+            "output_root": str(output_root),
+            "control": "JaCoCo Test-worker javaagent enabled vs disabled; reporting tasks disabled in both arms",
+            "rounds": len(ORDER) // 4,
+            "max_cells": args.max_cells,
+            "expected_tests": EXPECTED_JAVA,
+            "reference_test_identity_sha256": reference_test_identity["sha256"],
+            "inherited_jvm_environment_audit": inherited_jvm_options,
+            "expected_per_command_cache_delta": expected_cache,
+            "order": [{"ordinal": i + 1, "round": i // 4 + 1, "stage": stage, "agent": agent}
+                      for i, (stage, agent) in enumerate(ORDER[:args.max_cells])],
+            "stages": {key: {"identity": verify_stage(stage), "runtime_manifest_sha256": stage["runtime_manifest_sha256"],
+                              "cache_source": str(source_caches[key]), "cache_clone": str(cache_dirs[key]),
+                              "cache_source_manifest_sha256": cache_source_hashes[key],
+                              "source_metadata": stage}
+                       for key, stage in stages.items()},
+            "init_scripts": [str(SCRIPT_ROOT / "java-suite.init.gradle"),
+                             str(SCRIPT_ROOT / "java-suite-jacoco-agent-control.init.gradle")],
+            "timing": "GNU time elapsed for Gradle test with --info logging in both arms; JUnit XML testcase duration reported separately",
+        }
+        (output_root / "plan.json").write_text(json.dumps(plan_record, indent=2) + "\n")
+        results = []
+        worker_baseline: dict[str, dict[str, object]] = {}
     try:
         active_order = ORDER[:args.max_cells]
         for ordinal, (key, agent) in enumerate(active_order, start=1):
+            if ordinal <= len(results):
+                continue
             stage = stages[key]
             verify_stage(stage)
             run_dir = output_root / "runs" / "java" / f"{ordinal:02d}-r{(ordinal - 1) // 4 + 1}-{key}-jacoco-{agent}"
