@@ -330,10 +330,24 @@ def _validate_row(row: Any, plan: dict[str, Any], planned: set[tuple[str, str, s
         raise AnalysisError(f"{source}: cache validation failed or is absent in {expected_id}")
     counters = {
         name: row.get(name)
-        for name in ("cacheable_calls", "cache_hits", "cache_misses", "uncacheable_calls")
+        for name in ("cacheable_calls", "cache_hits", "cache_misses")
     }
     if any(type(value) is not int or value < 0 for value in counters.values()):
         raise AnalysisError(f"{source}: invalid cache counters in {expected_id}")
+    nested_uncacheable = validation.get("uncacheable_calls")
+    if type(nested_uncacheable) is not int or nested_uncacheable < 0:
+        raise AnalysisError(f"{source}: invalid nested uncacheable_calls in {expected_id}")
+    if "uncacheable_calls" in row:
+        root_uncacheable = row["uncacheable_calls"]
+        if type(root_uncacheable) is not int or root_uncacheable < 0:
+            raise AnalysisError(f"{source}: invalid root uncacheable_calls in {expected_id}")
+        if root_uncacheable != nested_uncacheable:
+            raise AnalysisError(f"{source}: cache counters disagree with validation record in {expected_id}")
+    else:
+        # run_comparison currently keeps this counter only in its validation
+        # object. Use it only when that nested proof is present and well-typed.
+        root_uncacheable = nested_uncacheable
+    counters["uncacheable_calls"] = root_uncacheable
     expected_applicable = stage != "before-cache"
     if validation.get("applicable") is not expected_applicable:
         raise AnalysisError(f"{source}: cache applicability is inconsistent in {expected_id}")

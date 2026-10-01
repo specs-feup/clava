@@ -176,6 +176,28 @@ class AnalyzeDeadlineTest(unittest.TestCase):
         self.assertIn("not production weighting", result["combined_two_suite_time"][0]["label"])
         self.assertTrue(all(len(item["pairs"]) == 6 for item in result["comparisons"]))
 
+    def test_nested_uncacheable_counter_fills_only_an_absent_root_field(self):
+        for row in self.manifest["results"]:
+            row.pop("uncacheable_calls")
+        result = analyzer.analyze_cohort([self.source], [self.manifest])
+        self.assertEqual(len(result["summaries"]), 20)
+
+    def test_root_uncacheable_counter_must_match_nested_validation(self):
+        self.manifest["results"][0]["uncacheable_calls"] = 1
+        with self.assertRaisesRegex(analyzer.AnalysisError, "cache counters disagree"):
+            analyzer.analyze_cohort([self.source], [self.manifest])
+
+    def test_missing_or_non_integer_uncacheable_proof_is_rejected(self):
+        row = self.manifest["results"][0]
+        row.pop("uncacheable_calls")
+        row["cache_validation"].pop("uncacheable_calls")
+        with self.assertRaisesRegex(analyzer.AnalysisError, "invalid nested uncacheable_calls"):
+            analyzer.analyze_cohort([self.source], [self.manifest])
+
+        row["cache_validation"]["uncacheable_calls"] = False
+        with self.assertRaisesRegex(analyzer.AnalysisError, "invalid nested uncacheable_calls"):
+            analyzer.analyze_cohort([self.source], [self.manifest])
+
     def test_four_round_plan_requires_exactly_four_complete_rounds(self):
         self.manifest["plan"]["repeat_count"] = 4
         for cell in self.manifest["plan"]["cells"]:
