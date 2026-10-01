@@ -201,7 +201,8 @@ def _js_warm_comparison(rows: list[dict], cohort: str) -> dict:
         "suite": "clava-js", "cohort": cohort, "mode": "warm", "metric": "elapsed_s",
         "label": "Warm command wall", "n_pairs": len(values), "values": values,
         "median_delta_s": statistics.median(values),
-        "definition": "FlatBuffers minus Protobuf; negative means FlatBuffers was faster",
+        "definition": ("Flat-fast syntax control minus Protobuf" if cohort != "original"
+                        else "Original FlatBuffers minus Protobuf"),
     }
 
 
@@ -210,37 +211,42 @@ def _scale_limit(values: list[float]) -> float:
 
 
 def java_svg(rows: list[dict]) -> str:
-    values = [value for row in rows for value in row["values"]]
+    plotted = [row for row in rows if row["metric"] in ("elapsed_s", "junit_aggregate_s")]
+    values = [value for row in plotted for value in row["values"]]
     limit = _scale_limit(values)
-    left, right = 108.0, 268.0
+    left, right = 20.0, 270.0
     zero = (left + right) / 2
     scale = (right - left) / (2 * limit)
     x = lambda value: zero + value * scale
-    height = 324
+    height = 376
     output = [f'<svg class="paired-chart" viewBox="0 0 360 {height}" role="img" aria-label="Java OFF paired differences, FlatBuffers minus Protobuf, in seconds">']
     for value in (-limit, 0.0, limit):
         position = x(value)
         label = "0 s" if value == 0 else f'{value:+.1f} s'
         anchor = "start" if value < 0 else ("end" if value > 0 else "middle")
         output.append(f'<text class="axis" x="{position:.1f}" y="18" text-anchor="{anchor}">{html.escape(label)}</text>')
-        output.append(f'<line class="{("zero" if value == 0 else "gridline")}" x1="{position:.1f}" x2="{position:.1f}" y1="25" y2="315"/>')
+        output.append(f'<line class="{("zero" if value == 0 else "gridline")}" x1="{position:.1f}" x2="{position:.1f}" y1="25" y2="364"/>')
 
     for mode in MODES:
-        top = 43 + MODES.index(mode) * 92
-        output.append(f'<text class="mode" x="4" y="{top}">{html.escape(mode.title())}</text>')
-        for row in (item for item in rows if item["mode"] == mode):
-            metric_index = JAVA_METRICS.index((row["metric"], row["label"]))
-            y = top + 24 + metric_index * 21
+        mode_index = MODES.index(mode)
+        top = 43 + mode_index * 108
+        if mode_index:
+            output.append(f'<line class="divider" x1="0" x2="360" y1="{top - 16}" y2="{top - 16}"/>')
+        output.append(f'<text class="mode" x="20" y="{top}">{html.escape(mode.title())}</text>')
+        for metric_index, metric in enumerate(("elapsed_s", "junit_aggregate_s")):
+            row = next(item for item in plotted if item["mode"] == mode and item["metric"] == metric)
+            label_y = top + 20 + metric_index * 43
+            y = label_y + 20
             data = row["values"]
             median = row["median_delta_s"]
             colour = "negative" if median < 0 else ("positive" if median > 0 else "neutral")
-            output.append(f'<text class="metric" x="4" y="{y + 4}">{html.escape(row["label"])}</text>')
+            output.append(f'<text class="metric" x="20" y="{label_y}">{html.escape(row["label"])}</text>')
             output.append(f'<line class="range {colour}" x1="{x(min(data)):.2f}" x2="{x(max(data)):.2f}" y1="{y}" y2="{y}"/>')
             for pair_index, value in enumerate(data):
                 cy = y + (-4.5 + pair_index * 3)
                 output.append(f'<circle class="point {colour}" cx="{x(value):.2f}" cy="{cy:.1f}" r="2.8"><title>Round {pair_index + 1}: {value:+.4f} s</title></circle>')
             output.append(f'<line class="median {colour}" x1="{x(median):.2f}" x2="{x(median):.2f}" y1="{y - 8}" y2="{y + 8}"/>')
-            output.append(f'<text class="value" x="357" y="{y + 4}" text-anchor="end">{median:+.2f} s</text>')
+            output.append(f'<text class="value" x="355" y="{y + 5}" text-anchor="end">{median:+.2f} s</text>')
     output.append('</svg>')
     return "".join(output)
 
@@ -249,12 +255,12 @@ def js_svg(comparisons: dict[str, dict]) -> str:
     cohorts = list(comparisons.items())
     values = [value for _, row in cohorts for value in row["values"]]
     limit = _scale_limit(values)
-    left, right = 116.0, 278.0
+    left, right = 20.0, 270.0
     zero = (left + right) / 2
     scale = (right - left) / (2 * limit)
     x = lambda value: zero + value * scale
     height = 70 + len(cohorts) * 54
-    output = [f'<svg class="paired-chart" viewBox="0 0 360 {height}" role="img" aria-label="Warm Clava-JS paired differences, FlatBuffers minus Protobuf, in seconds">']
+    output = [f'<svg class="paired-chart" viewBox="0 0 360 {height}" role="img" aria-label="Warm Clava-JS paired differences, Flat or Flat-fast minus Protobuf, in seconds">']
     for value in (-limit, 0.0, limit):
         position = x(value)
         label = "0 s" if value == 0 else f'{value:+.1f} s'
@@ -262,39 +268,51 @@ def js_svg(comparisons: dict[str, dict]) -> str:
         output.append(f'<text class="axis" x="{position:.1f}" y="18" text-anchor="{anchor}">{html.escape(label)}</text>')
         output.append(f'<line class="{("zero" if value == 0 else "gridline")}" x1="{position:.1f}" x2="{position:.1f}" y1="25" y2="{height - 8}"/>')
     for index, (cohort, row) in enumerate(cohorts):
-        y = 48 + index * 54
+        label_y = 48 + index * 58
+        y = label_y + 20
         values = row["values"]
         median = row["median_delta_s"]
         colour = "negative" if median < 0 else ("positive" if median > 0 else "neutral")
-        label = "Original" if cohort == "original" else "Syntax-normalized"
-        output.append(f'<text class="metric" x="4" y="{y + 4}">{label}</text>')
+        label = "Original" if cohort == "original" else "Flat fast-syntax control"
+        output.append(f'<text class="metric" x="20" y="{label_y}">{label}</text>')
         output.append(f'<line class="range {colour}" x1="{x(min(values)):.2f}" x2="{x(max(values)):.2f}" y1="{y}" y2="{y}"/>')
         for pair_index, value in enumerate(values):
             cy = y + (-5 + pair_index * 3.3)
             output.append(f'<circle class="point {colour}" cx="{x(value):.2f}" cy="{cy:.1f}" r="3"><title>{html.escape(label)} round {pair_index + 1}: {value:+.4f} s</title></circle>')
         output.append(f'<line class="median {colour}" x1="{x(median):.2f}" x2="{x(median):.2f}" y1="{y - 10}" y2="{y + 10}"/>')
-        output.append(f'<text class="value" x="357" y="{y + 4}" text-anchor="end">{median:+.2f} s</text>')
+        output.append(f'<text class="value" x="355" y="{y + 5}" text-anchor="end">{median:+.2f} s</text>')
     output.append('</svg>')
     return "".join(output)
 
 
 def render_html(data: dict) -> str:
     js_rows = data["js"]
-    js_caption = "Original accepted rows" + (" and a separate syntax-normalized warm control" if "normalized" in js_rows else "")
     js_content = js_svg(js_rows)
+    js_heading = "Original + Flat fast-syntax control" if "normalized" in js_rows else "Original cohort"
+    js_caption = ("Whole-command wall time. The optional Flat fast-syntax cohort stays separate from the original rows."
+                  if "normalized" in js_rows
+                  else "Whole-command warm wall time from the accepted original rows.")
+    outside = [row for row in data["java"] if row["metric"] == "outside_junit_s"]
+    detail_rows = "".join(
+        f'<tr><th>{html.escape(row["mode"].title())}</th><td>{row["median_delta_s"]:+.3f} s</td>'
+        f'<td>{", ".join(f"{value:+.3f}" for value in row["values"])}</td></tr>'
+        for row in outside)
     return f'''<section class="pb-flat-head-to-head" aria-label="Paired Protobuf and FlatBuffers comparison">
 <style>
 .pb-flat-head-to-head {{ color:var(--ink,#18212e); font:15px/1.4 system-ui,sans-serif; min-width:0; }}
 .pb-flat-head-to-head h2 {{ margin:0 0 6px; font-size:20px; line-height:1.25; }}
-.pb-flat-head-to-head h3 {{ margin:14px 0 4px; font-size:16px; }}
+.pb-flat-head-to-head h3 {{ margin:0 0 6px; font-size:16px; }}
 .pb-flat-head-to-head p {{ margin:5px 0 10px; color:var(--muted,#536174); }}
+.pb-flat-head-to-head .panels {{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:12px; }}
+.pb-flat-head-to-head .panel {{ min-width:0; border:1px solid var(--line,#d5dfe8); border-radius:8px; padding:12px; }}
 .pb-flat-head-to-head .paired-chart {{ display:block; width:100%; max-width:520px; height:auto; overflow:visible; }}
 .pb-flat-head-to-head text {{ font-family:system-ui,sans-serif; fill:var(--ink,#18212e); }}
-.pb-flat-head-to-head .axis {{ font-size:12px; fill:var(--muted,#536174); }}
-.pb-flat-head-to-head .mode {{ font-size:14px; font-weight:700; }}
-.pb-flat-head-to-head .metric {{ font-size:12px; }}
-.pb-flat-head-to-head .value {{ font:12px ui-monospace,monospace; }}
+.pb-flat-head-to-head .axis {{ font-size:15px; fill:var(--muted,#536174); }}
+.pb-flat-head-to-head .mode {{ font-size:15px; font-weight:700; }}
+.pb-flat-head-to-head .metric {{ font-size:15px; }}
+.pb-flat-head-to-head .value {{ font:15px ui-monospace,monospace; }}
 .pb-flat-head-to-head .gridline {{ stroke:var(--line,#d5dfe8); stroke-dasharray:3 4; }}
+.pb-flat-head-to-head .divider {{ stroke:var(--line,#d5dfe8); }}
 .pb-flat-head-to-head .zero {{ stroke:var(--muted,#536174); stroke-width:1.4; }}
 .pb-flat-head-to-head .range {{ stroke-width:2; }}
 .pb-flat-head-to-head .median {{ stroke-width:2.4; }}
@@ -303,17 +321,17 @@ def render_html(data: dict) -> str:
 .pb-flat-head-to-head .neutral {{ stroke:var(--muted,#536174); fill:var(--muted,#536174); }}
 .pb-flat-head-to-head .legend {{ display:flex; flex-wrap:wrap; gap:8px 16px; margin:5px 0; color:var(--muted,#536174); font-size:12px; }}
 .pb-flat-head-to-head .legend span {{ white-space:nowrap; }}
-@media(max-width:400px) {{ .pb-flat-head-to-head .paired-chart {{ max-width:100%; }} }}
+@media(max-width:700px) {{ .pb-flat-head-to-head .panels {{ grid-template-columns:minmax(0,1fr); }} .pb-flat-head-to-head .panel {{ padding:10px 8px; }} }}
 </style>
 <h2>Protobuf vs FlatBuffers · paired runtime</h2>
-<p>FlatBuffers − Protobuf; negative means FlatBuffers was faster. Each point is one of four matched rounds; the marker is the exact median of round deltas, not the difference of stage medians.</p>
-<h3>Java OFF · 116-test suite</h3>
+<p>Flat minus Protobuf; left is faster. Dots = four paired rounds; median tick and full range.</p>
+<div class="panels"><article class="panel"><h3>Java OFF · 116-test suite</h3>
 {java_svg(data["java"])}
-<p>Wall and JUnit sums are separate; outside-JUnit is calculated per run as wall minus JUnit. It is an unassigned residual, not parser time.</p>
-<div class="legend"><span>● four paired rounds</span><span>│ paired median</span><span>green: Flat faster</span><span>red: Flat slower</span></div>
-<h3>Clava-JS · warm · {html.escape(js_caption)}</h3>
-<p>Whole command wall time, shown separately from the Java suite; normalized observations are not combined with the original cohort.</p>
-{js_content}
+<div class="legend"><span>Green: Flat faster</span><span>Red: Flat slower</span></div></article>
+<article class="panel"><h3>Clava-JS · warm · {html.escape(js_heading)}</h3>
+<p>{html.escape(js_caption)}</p>
+{js_content}</article></div>
+<details><summary>Outside-JUnit paired residuals</summary><p>Each value is calculated per round as (Flat wall − Flat JUnit) − (Protobuf wall − Protobuf JUnit), in seconds.</p><table><thead><tr><th>Mode</th><th>Median</th><th>Round deltas</th></tr></thead><tbody>{detail_rows}</tbody></table></details>
 </section>'''
 
 

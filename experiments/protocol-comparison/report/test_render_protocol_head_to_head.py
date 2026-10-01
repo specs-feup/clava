@@ -86,11 +86,14 @@ class PairedProtocolReportTest(unittest.TestCase):
         fragment = render_html(data)
         self.assertIn("Java OFF · 116-test suite", fragment)
         self.assertIn("Clava-JS · warm", fragment)
-        self.assertIn("Syntax-normalized", fragment)
-        self.assertIn("outside-JUnit is calculated per run", fragment)
+        self.assertIn("Flat fast-syntax control", fragment)
+        self.assertIn("Outside-JUnit paired residuals", fragment)
+        self.assertIn("font-size:15px", fragment)
         roots = [ET.fromstring(svg) for svg in re.findall(r"<svg .*?</svg>", fragment)]
         self.assertEqual(len(roots), 2)
         self.assertTrue(all(root.get("viewBox", "").startswith("0 0 360 ") for root in roots))
+        java_metrics = [node.text for node in roots[0].findall("text") if node.get("class") == "metric"]
+        self.assertEqual(java_metrics, ["Wall", "JUnit"] * 3)
 
     def test_normalized_js_requires_an_explicit_fast_syntax_flag(self):
         js, java, normalized = _matrices()
