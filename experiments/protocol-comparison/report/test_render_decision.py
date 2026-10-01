@@ -5,7 +5,7 @@ import io
 import re
 import xml.etree.ElementTree as ET
 
-from render_decision import candle, csv_viewer, measurements_download, validate_matrix
+from render_decision import candle, comparison, csv_viewer, measurements_download, validate_matrix
 from render_report import SUITES, STAGE_ORDER, MODE_ORDER
 
 
@@ -20,6 +20,15 @@ def complete_rows():
 
 
 class DecisionReportTest(unittest.TestCase):
+    def test_mixed_paired_results_are_not_coloured_as_consistent_wins(self):
+        rows = complete_rows()
+        for row in rows:
+            if row["stage"] == "protobuf":
+                row["elapsed_s"] *= 0.9 if row["repeat"] <= 3 else 1.01
+        rendered = comparison(rows)
+        self.assertIn("3/6 faster", rendered)
+        self.assertIn('class="delta muted"', rendered)
+
     def test_csv_viewer_works_without_download_or_network_permissions(self):
         viewer = csv_viewer()
         self.assertIn("event.preventDefault()", viewer)

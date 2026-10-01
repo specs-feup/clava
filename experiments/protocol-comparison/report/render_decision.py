@@ -88,9 +88,18 @@ def comparison(rows):
         for stage in ("protobuf", "flatbuffers"):
             out.append(f'<div class="matrix-row"><span>{esc(LABELS[stage])}</span>')
             for mode in MODE_ORDER:
-                reference = statistics.median(values(rows, suite, mode, "ccache-text"))
-                delta = 100*(statistics.median(values(rows, suite, mode, stage))/reference-1)
-                out.append(f'<span class="delta {"faster" if delta<0 else "slower"}">{delta:+.1f}%</span>')
+                reference = {r["repeat"]: time_value(r) for r in cell(rows, suite, mode, "ccache-text")}
+                candidate = {r["repeat"]: time_value(r) for r in cell(rows, suite, mode, stage)}
+                effects = [100 * (candidate[n] / reference[n] - 1) for n in sorted(reference)]
+                delta = statistics.median(effects)
+                faster = sum(value < 0 for value in effects)
+                slower = sum(value > 0 for value in effects)
+                direction = "faster" if delta < 0 else "slower"
+                count = faster if delta < 0 else slower
+                consistent = count == len(effects)
+                colour = direction if consistent else "muted"
+                note = f"{count}/{len(effects)} {direction}" if delta else "tied"
+                out.append(f'<span class="delta {colour}">{delta:+.1f}%<small style="display:block;font-size:12px;font-weight:400">{note}</small></span>')
             out.append('</div>')
         out.append('</div>')
     return ''.join(out) + '</div>'
@@ -179,7 +188,7 @@ def render(manifests, provenance, analysis):
 main .tick,main .label,main .value{{font-size:15px}}main .mode{{font-size:15px}}main .foot{{font-size:13px}}
 main h1{{font-size:clamp(27px,4vw,38px);line-height:1.15;font-weight:750;margin:0 0 14px}}main h2{{font-size:24px;font-weight:700;margin:34px 0 12px}}main h3{{font-size:18px;font-weight:650;margin:0 0 8px}}main p{{margin:8px 0 14px}}main li{{margin:8px 0}}main ul{{list-style:disc;padding-left:22px}}main summary{{font-weight:650}}main .cards{{margin-top:20px}}@media(max-width:700px){{main h2{{font-size:22px}}}}
 </style></head><body><main><p class="muted">Decision brief · {esc(analysis.get("measurement_date", "30 September to 1 October 2026"))} · five-minute read</p><h1>Clava protocol and cache decision</h1><div class="verdict"><p>{esc(analysis["recommendation"])}</p></div>{cards(analysis["reasons"])}
-<h2>What changes the runtime?</h2><p>Percent change versus Text in the same cache state. Negative is faster. These compare the implemented branches; the controlled format experiment below checks the cause.</p>{comparison(rows)}
+<h2>What changes the runtime?</h2><p>Median same-round change versus Text in the same cache state. Negative is faster. Counts show how often that direction repeated. These compare implemented branches, not the format alone.</p>{comparison(rows)}
 <h2>Both suites, every cache state</h2><p class="muted">Whole test-command wall time; builds excluded. Line = median. Box = middle half. Whiskers = full range. Dots = individual runs. Each suite uses one scale across all three sections.</p><div class="charts">{charts}</div>
 <h2>Why do the results look this way?</h2>{cards(analysis["discrepancy"], "explain")}{extra_visuals}
 <h2>What would we maintain?</h2>{cards(analysis["tradeoffs"])}
