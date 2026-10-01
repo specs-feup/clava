@@ -48,6 +48,29 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def make_java_tool_options(base: str, mode_order: list[bool]) -> list[str]:
+    controlled_options = []
+    stable_signatures = []
+    for fast_syntax in mode_order:
+        value = (
+            f"{base.strip()} -Dclava.fullParseMetrics=true "
+            f"-Dclava.astWireBenchmarkSyntaxOnly={'true' if fast_syntax else 'false'}"
+        ).strip()
+        tokens = shlex.split(value)
+        metrics_flags = [item for item in tokens if item.startswith("-Dclava.fullParseMetrics=")]
+        syntax_flags = [item for item in tokens if item.startswith("-Dclava.astWireBenchmarkSyntaxOnly=")]
+        expected_syntax_flag = f"-Dclava.astWireBenchmarkSyntaxOnly={'true' if fast_syntax else 'false'}"
+        if metrics_flags != ["-Dclava.fullParseMetrics=true"] or syntax_flags != [expected_syntax_flag]:
+            raise RuntimeError(f"invalid Java option arm for fast_syntax={fast_syntax}: {tokens}")
+        controlled_options.append(value)
+        stable_signatures.append(tuple(
+            item for item in tokens if not item.startswith("-Dclava.astWireBenchmarkSyntaxOnly=")
+        ))
+    if len(set(stable_signatures)) > 1:
+        raise RuntimeError("non-syntax Java options differ between controlled arms")
+    return controlled_options
+
+
 def replace_once(source: str, old: str, new: str, label: str) -> str:
     count = source.count(old)
     if count != 1:
@@ -393,7 +416,7 @@ def main() -> int:
     args = parse_args()
     matrix_root = args.matrix_root.resolve()
     diagnostic_root = args.diagnostic_root.resolve()
-    output_root = (args.output_root or diagnostic_root / "syntax-only-control-r2").resolve()
+    output_root = (args.output_root or diagnostic_root / "syntax-only-control-r3").resolve()
     plan = {
         "mode": "plan-only" if not args.host_release_note else "execute",
         "matrix_root": str(matrix_root),
@@ -412,6 +435,41 @@ def main() -> int:
         raise SystemExit(f"refusing to overwrite existing output root: {output_root}")
     if not matrix_root.is_dir() or not diagnostic_root.is_dir():
         raise SystemExit("matrix or diagnostic source root is missing")
+
+    java_option_env = {name: os.environ.get(name, "") for name in
+                       ("JAVA_TOOL_OPTIONS", "JDK_JAVA_OPTIONS", "_JAVA_OPTIONS")}
+    inherited_java_options = {
+        name: shlex.split(value) for name, value in java_option_env.items() if value.strip()
+    }
+    unsafe = [f"{name}:{item}" for name, items in inherited_java_options.items() for item in items
+              if item.startswith(("-Xmx", "-Xms", "-javaagent", "-agentlib", "-agentpath"))
+              or "ExplicitGC" in item or "DisableExplicitGC" in item]
+    if unsafe:
+        raise SystemExit(f"requires the inherited default heap, GC and no-agent JVM; found {unsafe}")
+    benchmark_flags = [f"{name}:{item}" for name, items in inherited_java_options.items() for item in items
+                       if item.startswith(("-Dclava.fullParseMetrics=", "-Dclava.astWireBenchmarkSyntaxOnly="))]
+    if benchmark_flags:
+        raise SystemExit(f"benchmark properties are set by the runner and must not be inherited: {benchmark_flags}")
+
+    base_java_tool_options = java_option_env["JAVA_TOOL_OPTIONS"].strip()
+    try:
+        java_tool_options_by_run = make_java_tool_options(base_java_tool_options, plan["order"])
+    except RuntimeError as exception:
+        raise SystemExit(str(exception)) from exception
+    java_options_policy = {
+        "inherited": java_option_env,
+        "default_heap_gc_and_no_agent": True,
+        "heap": "default",
+        "explicit_gc": False,
+        "agent": None,
+        "controlled_arm_options_sha256": [
+            hashlib.sha256(value.encode()).hexdigest() for value in java_tool_options_by_run
+        ],
+        "controlled_arm_mode_values": ["true" if value else "false" for value in plan["order"]],
+        "non_mode_flags_equal_across_arms": True,
+        "mode_property_count_per_arm": 1,
+        "metrics_property_count_per_arm": 1,
+    }
 
     scripts_root = matrix_root / "orchestration/experiments/protocol-comparison"
     sys.path.insert(0, str(scripts_root))
@@ -474,28 +532,6 @@ def main() -> int:
         runtime_gates.append(gate)
 
     comparison.stage_runtime = stage_runtime_with_overlay
-    java_option_env = {name: os.environ.get(name, "") for name in
-                       ("JAVA_TOOL_OPTIONS", "JDK_JAVA_OPTIONS", "_JAVA_OPTIONS")}
-    inherited_java_options = {
-        name: shlex.split(value) for name, value in java_option_env.items() if value.strip()
-    }
-    unsafe = [f"{name}:{item}" for name, items in inherited_java_options.items() for item in items
-              if item.startswith(("-Xmx", "-Xms", "-javaagent", "-agentlib", "-agentpath"))
-              or "ExplicitGC" in item or "DisableExplicitGC" in item]
-    if unsafe:
-        raise SystemExit(f"requires the inherited default heap, GC and no-agent JVM; found {unsafe}")
-    benchmark_flags = [f"{name}:{item}" for name, items in inherited_java_options.items() for item in items
-                       if item.startswith(("-Dclava.fullParseMetrics=", "-Dclava.astWireBenchmarkSyntaxOnly="))]
-    if benchmark_flags:
-        raise SystemExit(f"benchmark properties are set by the runner and must not be inherited: {benchmark_flags}")
-    java_options_policy = {
-        "inherited": java_option_env,
-        "default_heap_gc_and_no_agent": True,
-        "heap": "default",
-        "explicit_gc": False,
-        "agent": None,
-    }
-
     all_rows: list[dict[str, Any]] = []
     results: list[dict[str, Any]] = []
     try:
@@ -503,11 +539,7 @@ def main() -> int:
             stage_for_run = dict(stage)
             stage_for_run["dumper"] = str(native_tool)
             repeat = (ordinal + 1) // 2
-            base_options = os.environ.get("JAVA_TOOL_OPTIONS", "").strip()
-            os.environ["JAVA_TOOL_OPTIONS"] = (
-                f"{base_options} -Dclava.fullParseMetrics=true "
-                f"-Dclava.astWireBenchmarkSyntaxOnly={'true' if fast_syntax else 'false'}"
-            ).strip()
+            os.environ["JAVA_TOOL_OPTIONS"] = java_tool_options_by_run[ordinal - 1]
             result = comparison.run_clava_js(
                 stage_for_run, output_root, ordinal, measured=True, repeat=repeat, mode="direct"
             )
