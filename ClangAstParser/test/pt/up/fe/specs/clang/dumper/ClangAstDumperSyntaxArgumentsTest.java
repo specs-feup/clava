@@ -15,22 +15,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ClangAstDumperSyntaxArgumentsTest {
 
     @Test
-    public void addsSyntaxCheckOptionBeforeCompilerArgumentsExactlyOnce() {
+    public void addsSyntaxCheckOptionBeforeCompilerArgumentsWithoutChangingInput() {
         var arguments = List.of("/tool", "-c", "/source.cpp", "--", "-std=c++17");
 
         assertEquals(List.of(
                 "/tool", "-c", "/source.cpp", "-syntax-check-only", "--", "-std=c++17"),
                 ClangAstDumper.withSyntaxCheckOnlyArgument(arguments));
+        assertEquals(List.of("/tool", "-c", "/source.cpp", "--", "-std=c++17"), arguments);
     }
 
     @Test
-    public void replacesAnyExistingSyntaxCheckOptionsWithOne() {
-        var arguments = List.of(
-                "/tool", "-syntax-check-only", "-c", "/source.cpp", "--",
-                "-syntax-check-only", "-std=c++17");
+    public void appendsSyntaxCheckOptionWhenThereIsNoCompilerArgumentSeparator() {
+        var arguments = List.of("/tool", "-c", "/source.cpp", "-std=c++17");
 
         assertEquals(List.of(
-                "/tool", "-c", "/source.cpp", "-syntax-check-only", "--", "-std=c++17"),
+                "/tool", "-c", "/source.cpp", "-std=c++17", "-syntax-check-only"),
                 ClangAstDumper.withSyntaxCheckOnlyArgument(arguments));
     }
 }

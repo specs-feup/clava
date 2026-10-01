@@ -494,8 +494,6 @@ public class ClangAstDumper {
 
     static List<String> withSyntaxCheckOnlyArgument(List<String> arguments) {
         List<String> syntaxArguments = new ArrayList<>(arguments);
-        syntaxArguments.removeIf(SYNTAX_CHECK_ONLY_OPTION::equals);
-
         int separatorIndex = syntaxArguments.indexOf("--");
         if (separatorIndex >= 0) {
             syntaxArguments.add(separatorIndex, SYNTAX_CHECK_ONLY_OPTION);
