@@ -248,6 +248,7 @@ main .java-format-control{{color:var(--ink)}}main .java-format-control svg text{
 main h1{{font-size:clamp(27px,4vw,38px);line-height:1.15;font-weight:750;margin:0 0 14px}}main h2{{font-size:24px;font-weight:700;margin:34px 0 12px}}main h3{{font-size:18px;font-weight:650;margin:0 0 8px}}main p{{margin:8px 0 14px}}main li{{margin:8px 0}}main ul{{list-style:disc;padding-left:22px}}main summary{{font-weight:650}}main .cards{{margin-top:20px}}@media(max-width:700px){{main h2{{font-size:22px}}}}
 .diagnostics{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:22px 0}}.diagnostic{{min-width:0;padding:16px;border:1px solid var(--line);border-radius:10px}}.diagnostic svg{{display:block;width:100%;max-width:480px;height:auto;margin:auto}}.diagnostic svg text{{font-size:15px}}.diagnostic p{{font-size:14px;color:var(--muted)}}@media(max-width:700px){{.diagnostics{{grid-template-columns:1fr}}}}
 </style></head><body><main><p class="muted">Decision brief · {esc(analysis.get("measurement_date", "30 September to 1 October 2026"))} · five-minute read</p><h1>Clava protocol and cache decision</h1><div class="verdict"><p>{esc(analysis["recommendation"])}</p></div>{cards(analysis["reasons"])}
+{analysis.get("decision_visuals_html", "")}
 <h2>What changes the runtime?</h2><p>Median same-round change versus Text in the same cache state. Negative is faster. Counts show how often that direction repeated. These compare implemented branches, not the format alone.</p>{comparison(rows)}
 <h2>Both suites, every cache state</h2><p class="muted">Whole test-command wall time; builds excluded. Line = median. Box = middle half. Whiskers = full range. Dots = individual runs. Each suite uses one scale across all three sections.</p><div class="charts">{charts}</div>
 <h2>Why do the results look this way?</h2>{cards(analysis["discrepancy"], "explain")}{extra_visuals}
@@ -262,6 +263,8 @@ def main():
     p.add_argument("--input", type=Path, action="append", required=True)
     p.add_argument("--analysis", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument("--decision-fragment", type=Path, action="append", default=[],
+                   help="Reviewed head-to-head decision evidence, shown immediately below the verdict")
     p.add_argument("--visual-fragment", type=Path, action="append", default=[],
                    help="Reviewed, self-contained HTML evidence fragment; repeat in display order")
     p.add_argument("--detail-fragment", type=Path, action="append", default=[],
@@ -278,6 +281,8 @@ def main():
     from analyze_deadline import analyze_cohort
     analyze_cohort(args.input, manifests)
     analysis = json.loads(args.analysis.read_text())
+    analysis["decision_visuals_html"] = analysis.get("decision_visuals_html", "") + ''.join(
+        fragment.read_text(encoding="utf-8") for fragment in args.decision_fragment)
     analysis["extra_csv_html"] = ''.join(csv_link(path) for path in args.csv_file)
     analysis["reviewed_visuals_html"] = analysis.get("reviewed_visuals_html", "") + ''.join(
         fragment.read_text(encoding="utf-8") for fragment in args.visual_fragment)

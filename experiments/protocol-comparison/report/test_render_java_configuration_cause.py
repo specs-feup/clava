@@ -122,7 +122,7 @@ class JavaConfigurationCauseTest(unittest.TestCase):
         data = cause_data(timeline, phases, plan, config)
         fragment = render_html(data)
         self.assertIn("font-size:15px", fragment)
-        self.assertIn("Whole-command wall times are not plotted or summed", fragment)
+        self.assertIn("separate comparisons, not times to add together", fragment)
         roots = [ET.fromstring(svg) for svg in re.findall(r"<svg .*?</svg>", fragment)]
         self.assertEqual(len(roots), 1)
         self.assertTrue(roots[0].get("viewBox", "").startswith("0 0 360 "))

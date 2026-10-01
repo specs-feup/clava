@@ -5,7 +5,7 @@ import io
 import re
 import xml.etree.ElementTree as ET
 
-from render_decision import candle, comparison, csv_viewer, diagnostic_chart, measurements_download, validate_matrix, validate_uninstrumented_headlines
+from render_decision import candle, comparison, csv_viewer, diagnostic_chart, measurements_download, render, validate_matrix, validate_uninstrumented_headlines
 from render_report import SUITES, STAGE_ORDER, MODE_ORDER
 
 
@@ -20,6 +20,14 @@ def complete_rows():
 
 
 class DecisionReportTest(unittest.TestCase):
+    def test_head_to_head_evidence_precedes_text_relative_comparisons(self):
+        analysis = dict(recommendation="Choose one format", reasons=[],
+                        discrepancy=[dict(title="Cause", text="Evidence")] * 2,
+                        tradeoffs=[], method="Matched workloads", limitations="Four pairs",
+                        evidence=[], decision_visuals_html='<section id="direct-choice"></section>')
+        output = render([dict(plan=dict(repeat_count=6), results=complete_rows())], {}, analysis)
+        self.assertLess(output.index('id="direct-choice"'), output.index('What changes the runtime?'))
+
     def test_diagnostic_uses_paired_values_and_readable_units(self):
         output = diagnostic_chart({"title": "AST & validation", "caption": "Paired changes",
             "rows": [{"label": "AST construction", "values": [1.1, 1.0]},

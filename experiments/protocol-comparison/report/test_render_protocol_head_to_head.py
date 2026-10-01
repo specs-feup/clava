@@ -84,9 +84,9 @@ class PairedProtocolReportTest(unittest.TestCase):
         js, java, normalized = _matrices()
         data = paired_data(js, java, normalized)
         fragment = render_html(data)
-        self.assertIn("Java OFF · 116-test suite", fragment)
+        self.assertIn("Java · no coverage agent · 116 tests", fragment)
         self.assertIn("Clava-JS · warm", fragment)
-        self.assertIn("Flat fast-syntax control", fragment)
+        self.assertIn("Both use fast validation", fragment)
         self.assertIn("Outside-JUnit paired residuals", fragment)
         self.assertIn("font-size:15px", fragment)
         roots = [ET.fromstring(svg) for svg in re.findall(r"<svg .*?</svg>", fragment)]

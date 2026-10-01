@@ -215,15 +215,19 @@ def java_svg(rows: list[dict]) -> str:
     values = [value for row in plotted for value in row["values"]]
     limit = _scale_limit(values)
     left, right = 20.0, 270.0
-    zero = (left + right) / 2
-    scale = (right - left) / (2 * limit)
+    lower = -limit if min(values) < 0 else 0.0
+    upper = limit if max(values) > 0 else 0.0
+    if lower == upper:
+        lower, upper = -limit, limit
+    scale = (right - left) / (upper - lower)
+    zero = left - lower * scale
     x = lambda value: zero + value * scale
     height = 376
     output = [f'<svg class="paired-chart" viewBox="0 0 360 {height}" role="img" aria-label="Java OFF paired differences, FlatBuffers minus Protobuf, in seconds">']
-    for value in (-limit, 0.0, limit):
+    for value in (lower, (lower + upper) / 2, upper):
         position = x(value)
         label = "0 s" if value == 0 else f'{value:+.1f} s'
-        anchor = "start" if value < 0 else ("end" if value > 0 else "middle")
+        anchor = "start" if value == lower else ("end" if value == upper else "middle")
         output.append(f'<text class="axis" x="{position:.1f}" y="18" text-anchor="{anchor}">{html.escape(label)}</text>')
         output.append(f'<line class="{("zero" if value == 0 else "gridline")}" x1="{position:.1f}" x2="{position:.1f}" y1="25" y2="364"/>')
 
@@ -273,7 +277,7 @@ def js_svg(comparisons: dict[str, dict]) -> str:
         values = row["values"]
         median = row["median_delta_s"]
         colour = "negative" if median < 0 else ("positive" if median > 0 else "neutral")
-        label = "Original" if cohort == "original" else "Flat fast-syntax control"
+        label = "Original implementations" if cohort == "original" else "Both use fast validation"
         output.append(f'<text class="metric" x="20" y="{label_y}">{label}</text>')
         output.append(f'<line class="range {colour}" x1="{x(min(values)):.2f}" x2="{x(max(values)):.2f}" y1="{y}" y2="{y}"/>')
         for pair_index, value in enumerate(values):
@@ -288,8 +292,8 @@ def js_svg(comparisons: dict[str, dict]) -> str:
 def render_html(data: dict) -> str:
     js_rows = data["js"]
     js_content = js_svg(js_rows)
-    js_heading = "Original + Flat fast-syntax control" if "normalized" in js_rows else "Original cohort"
-    js_caption = ("Whole-command wall time. The optional Flat fast-syntax cohort stays separate from the original rows."
+    js_heading = "validation matters" if "normalized" in js_rows else "original implementations"
+    js_caption = ("Protobuf's original lead disappears when FlatBuffers also skips discarded AST output during validation. Separate four-pair warm-cache comparison; unchanged test groups."
                   if "normalized" in js_rows
                   else "Whole-command warm wall time from the accepted original rows.")
     outside = [row for row in data["java"] if row["metric"] == "outside_junit_s"]
@@ -325,7 +329,7 @@ def render_html(data: dict) -> str:
 </style>
 <h2>Protobuf vs FlatBuffers · paired runtime</h2>
 <p>Flat minus Protobuf; left is faster. Dots = four paired rounds; median tick and full range.</p>
-<div class="panels"><article class="panel"><h3>Java OFF · 116-test suite</h3>
+<div class="panels"><article class="panel"><h3>Java · no coverage agent · 116 tests</h3>
 {java_svg(data["java"])}
 <div class="legend"><span>Green: Flat faster</span><span>Red: Flat slower</span></div></article>
 <article class="panel"><h3>Clava-JS · warm · {html.escape(js_heading)}</h3>

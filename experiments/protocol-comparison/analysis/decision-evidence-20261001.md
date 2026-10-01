@@ -53,8 +53,52 @@ a larger Protobuf instrumentation penalty. Without coverage, paired Protobuf
 test-body differences are -0.102 s direct, -0.018 s cold, and -0.483 s warm.
 These JUnit sums include testcase setup, code generation and assertions, not
 pure parsing. Outside-JUnit paired residuals are about +0.53 s across all modes.
-Their precise internal cause is not established. Never label the residual a
-parser regression or assign it to an unmeasured Gradle task.
+Two rotated cold timeline pairs reproduce +0.546/+0.524 seconds outside JUnit.
+Internally timestamped project configuration costs +0.533/+0.437 seconds;
+task-graph creation is approximately even. A same-root isolated Protobuf
+configuration intervention then removes only its plugin/generation setup,
+preserving dependencies, sources and generated Java inputs. Four rotated
+`test --dry-run` pairs remove 0.4153/0.3923/0.3853/0.4971 seconds of configuration,
+median 0.4038 seconds, with all tasks skipped and no test worker. The dominant
+cause is Protobuf build integration, not parsing. This combined intervention
+does not distinguish plugin internals from custom generation wiring, or account
+for every remaining millisecond of command setup.
+
+## Direct binary choice and validation normalization
+
+FlatBuffers-minus-Protobuf Java command paired medians are -2.255 seconds direct,
+-2.280 seconds cold and -1.615 seconds warm (6.2--6.5 percent), all four pairs
+faster in every mode. JUnit sums independently improve by 5.3--6.2 percent.
+This advantage therefore remains after excluding all build setup.
+
+Original warm JS favors Protobuf by 1.015 seconds paired median, but FlatBuffers
+also lacks the fast syntax-only validation used by Protobuf. A frozen-object
+FlatBuffers overlay adds only that frontend action for validation and leaves
+AST producers unchanged. Four rotated Protobuf-original/Flat-fast warm pairs
+produce Flat-minus-Protobuf +0.49/+0.09/-0.70/-0.22 seconds, median -0.065 seconds,
+two wins each: operationally tied, not a demonstrated FlatBuffers JS speedup.
+All eight preserve 164 identities, 158 passes/six skips, and 166 cache hits with
+zero misses. The malformed-input probe preserves failure status/error lines.
+Both successful cache-prime commands and earlier collector-gate rejection are
+excluded from measured rows. Native original, tool object, build metadata and
+31 linked objects remain unchanged. Results and sanitized CSVs live under
+`matrix-r2/decision-noagent-r1/flat-fast-syntax-control-r1`.
+
+Sanitized permanent decision data is checked in alongside this note:
+`decision-binary-pairs-20261001.csv`, `decision-java-setup-20261001.csv`, and
+`decision-js-fast-validation-20261001.csv`. Raw diagnostic JSON SHA-256 values:
+
+- Timeline: `889c174a4990eab3d7b5902be0e6ccdf52590f0335ab874083f1b816d181780a`.
+- Config intervention: `2a5999c0d4474c0e9153bde1ba27c3c844e2bad7ca7f7447647b3b9ab4477bb7`.
+- Fair JS control: `7465e8bf381b122691ef70861eeed4f5ea97fd68a34b705de26b23c9686fa34d`.
+
+The updated private DraftLink `T8Nfm77p4Olp` was read back byte-for-byte against
+the rendered HTML (1,548,127 bytes, SHA-256
+`daab78c80bd3ef7238d953fb7ea5d6e249894a095fc7e6358b24c3879dc1f5de`).
+Validation: 56 report tests and 41 analysis tests pass. Headless browser checks
+cover 360/390/1100-pixel layouts, light/dark themes, CSV selection and expanded
+details without horizontal overflow. T3 preview status/open explicitly reported
+no available automation host, so browser checks used the allowed fallback.
 
 ## Decision and boundaries
 
@@ -62,7 +106,8 @@ Enable ccache. Seeded versus empty Text cache improves command time in all four
 pairs: median -10.6% JS and -30.6% Java. Eager FlatBuffers has the most repeatable
 Java improvement in the implemented-branch matrix: -4.5% to -6.5% command time,
 all four pairs in every cache state. JS warm directions are mixed. Recommend
-eager FlatBuffers for performance-first adoption, subject to release correctness,
+eager FlatBuffers with fast syntax-only validation for performance-first adoption,
+given the normalized JS tie and consistent Java win over Protobuf, subject to release correctness,
 generation, cleanup and one-path maintenance checks. Text plus ccache is the
 lower-migration-cost choice; fast syntax validation does not require Protobuf.
 Protobuf is already pipeline-integrated, not unfinished. None of these branch

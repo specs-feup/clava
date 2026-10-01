@@ -236,8 +236,8 @@ def render_html(primary: list[dict], causal: list[dict], csv_content: str) -> st
 .java-boundaries .value {{ font: 15px ui-monospace, monospace; fill: var(--ink, #28343e); }}
 .java-boundaries .tick {{ stroke: var(--line, #d9e0e5); stroke-width: 1; }}
 .java-boundaries .zero {{ stroke: var(--muted, #596772); stroke-width: 1.4; }}
-.java-boundaries .positive {{ fill: var(--good, {COLORS['positive']}); }}
-.java-boundaries .negative {{ fill: var(--bad, {COLORS['negative']}); }}
+.java-boundaries .positive {{ fill: var(--bad, {COLORS['positive']}); }}
+.java-boundaries .negative {{ fill: var(--good, {COLORS['negative']}); }}
 .java-boundaries details {{ margin-top: 12px; }}
 .java-boundaries summary {{ cursor: pointer; }}
 .java-boundaries .note {{ margin: 6px 0; }}
@@ -247,10 +247,10 @@ def render_html(primary: list[dict], causal: list[dict], csv_content: str) -> st
 <p class="subtitle">116 test bodies include setup, codegen, assertions; not parse-only.</p>
 <p class="caption">Protobuf − Text · JaCoCo off · paired median (n=4); positive means slower.</p>
 {primary_svg(primary)}
-<p class="caption">Outside = wall−JUnit; unassigned, not parser/coverage time. Reports skipped; no explicit GC.</p>
+<p class="caption">Outside = wall−JUnit, not parser time. The separate phase control below locates the main extra cost in project configuration. Reports skipped; no explicit GC.</p>
 <details>
 <summary>JaCoCo ON−OFF wall, direct/cold, n=4 (expand)</summary>
-<p class="note">CSV has JUnit and residual deltas; residual is unassigned. Reports skipped; no explicit GC.</p>
+<p class="note">CSV separates test-body and outside-test deltas. Coverage is a diagnostic only, not part of the headline timings.</p>
 {causal_svg(causal)}
 </details>
 <a class="csv-link" href="{html.escape(csv_href, quote=True)}" data-csv-href="{html.escape(csv_href, quote=True)}" download="java-runtime-boundaries.csv">CSV data</a>

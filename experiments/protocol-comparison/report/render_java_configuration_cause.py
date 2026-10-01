@@ -270,9 +270,13 @@ def cause_svg(rows: list[dict]) -> str:
         output.append(f'<line class="{("zero" if fraction == 0 else "gridline")}" x1="{position:.1f}" x2="{position:.1f}" y1="25" y2="{height - 7}"/>')
     for index, row in enumerate(rows):
         top = row_top + row_step * index
+        display_labels = ("Extra time outside tests", "Extra project configuration",
+                          "Removed with generators disabled")
+        display_scopes = ("Protobuf − Text · two cold pairs", "Same two paired suite commands",
+                          "Same Protobuf project · four pairs")
         # Split the label and sample-size note to keep 15px text inside a 360px viewBox.
-        output.append(f'<text class="label" x="20" y="{top}">{html.escape(row["label"])}</text>')
-        output.append(f'<text class="scope" x="20" y="{top + 18}">{html.escape(row["scope"])}</text>')
+        output.append(f'<text class="label" x="20" y="{top}">{display_labels[index]}</text>')
+        output.append(f'<text class="scope" x="20" y="{top + 18}">{display_scopes[index]}</text>')
         y = top + 39
         data = row["values"]
         median = row["median_delta_s"]
@@ -310,10 +314,10 @@ def render_html(data: dict) -> str:
 .java-configuration-cause th,.java-configuration-cause td {{ border-bottom:1px solid var(--line,#d5dfe8); padding:5px; text-align:left; }}
 @media(max-width:380px) {{ .java-configuration-cause .panel {{ padding:10px 6px; }} }}
 </style>
-<article class="panel"><h3>Java Gradle configuration diagnostics</h3>
-<p>Positive paired differences in seconds, oriented as PB − Text or original − disabled. Dots are pairs; tick is the median; whisker is the range. Descriptive diagnostics (n=2 and n=4), not a significance test.</p>
+<article class="panel"><h3>The Java overhead is build setup</h3>
+<p>Protobuf's plugin and generator setup causes most of the outside-test penalty. The final control confirms this without running any tests. Dots = pairs; tick = median; line = range.</p>
 {cause_svg(data["rows"])}
-<p>Timeline residual and direct project-configuration timings are separate diagnostics. Whole-command wall times are not plotted or summed.</p>
+<p>These are separate comparisons, not times to add together. The control identifies the main cause, not every remaining millisecond.</p>
 <details><summary>Pair values and intervention scope</summary>
 <p>The isolated intervention disables the protobuf Gradle plugin plus schema/binding generation wiring as one combined build-integration package. It preserves the protobuf-java dependency, generated Java inputs, and test configuration; it does not isolate a single plugin method.</p>
 {_detail_table(data["rows"])}
