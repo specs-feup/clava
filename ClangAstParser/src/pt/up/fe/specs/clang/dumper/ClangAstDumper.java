@@ -57,6 +57,7 @@ public class ClangAstDumper {
 
     private final static boolean USE_PLUGIN = false;
     private final static String SYSTEM_HEADER_THRESHOLD_OPTION = "-system-header-threshold=";
+    private final static String SYNTAX_CHECK_ONLY_OPTION = "-syntax-check-only";
 
     public static boolean usePlugin() {
         return USE_PLUGIN;
@@ -448,6 +449,17 @@ public class ClangAstDumper {
         return parsedData;
     }
 
+    static List<String> getSyntaxArguments(List<String> arguments) {
+        List<String> syntaxArguments = new ArrayList<>(arguments);
+        int separatorIndex = syntaxArguments.indexOf("--");
+        if (separatorIndex >= 0) {
+            syntaxArguments.add(separatorIndex, SYNTAX_CHECK_ONLY_OPTION);
+        } else {
+            syntaxArguments.add(SYNTAX_CHECK_ONLY_OPTION);
+        }
+        return syntaxArguments;
+    }
+
     private String validateSyntax(List<String> arguments, File sourceFile, String id) {
         try {
             lastWorkingFolder = Files.createTempDirectory("clava_ast_").toFile();
@@ -455,7 +467,7 @@ public class ClangAstDumper {
             throw new UncheckedIOException("Could not create syntax validation working folder", e);
         }
 
-        var output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
+        var output = SpecsSystem.runProcess(getSyntaxArguments(arguments), lastWorkingFolder,
                 this::discardOutput,
                 inputStream -> processOutput(inputStream));
 
