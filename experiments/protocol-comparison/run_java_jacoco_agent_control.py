@@ -37,7 +37,7 @@ DEADLINE_ROOT = SCRIPT_ROOT / "results/deadline-20260930"
 SHARED_ROOT = DEADLINE_ROOT / "shared"
 SPECS_JAVA_LIBS_ROOT = SHARED_ROOT / "specs-java-libs"
 LARA_FRAMEWORK_ROOT = SHARED_ROOT / "lara-framework"
-DEFAULT_OUTPUT = SCRIPT_ROOT / "results/deadline-20260930/matrix-r2/java-jacoco-agent-control-r2"
+DEFAULT_OUTPUT = SCRIPT_ROOT / "results/deadline-20260930/matrix-r2/java-jacoco-agent-control-r3"
 EXPECTED_JAVA = {"total_tests": 116, "passed_tests": 116, "failed_tests": 0, "skipped_tests": 0}
 EXPECTED_JAVA_PLAN = {"total": 116, "passed": 116, "failed": 0, "skipped": 0}
 EXPECTED_PRIMARY_CACHE = {"cacheable_calls": 208, "hits": 207, "misses": 1, "uncacheable_calls": 0}
@@ -72,6 +72,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--matrix", type=Path, default=DEFAULT_MATRIX)
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--max-cells", type=int, default=len(ORDER),
+                        help="run only the first N fixed-order cells for an acceptance pilot")
     parser.add_argument("--dry-run", action="store_true", help="validate identities and print the fixed order")
     return parser.parse_args()
 
@@ -347,6 +349,23 @@ def observed_native_tool(stage: dict, log_path: Path) -> tuple[str, str]:
     return str(actual_path), actual_sha256
 
 
+def observed_test_executor_args(log_path: Path) -> list[str]:
+    marker = "Command: "
+    commands = []
+    for line in log_path.read_text(errors="replace").splitlines():
+        if "Gradle Test Executor" not in line or marker not in line:
+            continue
+        try:
+            arguments = shlex.split(line.split(marker, 1)[1].strip())
+        except ValueError as exc:
+            raise RuntimeError(f"could not parse Gradle Test Executor command: {line}") from exc
+        if arguments:
+            commands.append(arguments)
+    if len(commands) != 1:
+        raise RuntimeError(f"expected one actual Gradle Test Executor command in {log_path}, found {len(commands)}")
+    return commands[0]
+
+
 def write_csv(rows: list[dict[str, object]], path: Path) -> None:
     fields = ("ordinal", "round", "stage", "agent", "valid", "elapsed_s", "junit_aggregate_s",
               "wall_minus_junit_residual_s", "max_rss_kb", "cacheable_calls_delta", "cache_hits_delta",
@@ -417,6 +436,8 @@ def main() -> int:
     args = parse_args()
     matrix_path = args.matrix.resolve()
     output_root = args.output_root.resolve()
+    if not 1 <= args.max_cells <= len(ORDER):
+        raise SystemExit(f"--max-cells must be between 1 and {len(ORDER)}")
     if output_root.exists():
         raise SystemExit(f"refusing to reuse diagnostic output root: {output_root}")
     matrix = load_matrix(matrix_path)
@@ -454,9 +475,9 @@ def main() -> int:
 
     if args.dry_run:
         print(json.dumps({"primary_matrix": str(matrix_path), "output_root": str(output_root),
-                          "rounds": len(ORDER) // 4, "commands": [
+                          "rounds": len(ORDER) // 4, "max_cells": args.max_cells, "commands": [
                               {"ordinal": i + 1, "round": i // 4 + 1, "stage": stage, "agent": agent}
-                              for i, (stage, agent) in enumerate(ORDER)]}, indent=2))
+                              for i, (stage, agent) in enumerate(ORDER[:args.max_cells])]}, indent=2))
         return 0
 
     output_root.mkdir(parents=True)
@@ -480,12 +501,13 @@ def main() -> int:
         "output_root": str(output_root),
         "control": "JaCoCo Test-worker javaagent enabled vs disabled; reporting tasks disabled in both arms",
         "rounds": len(ORDER) // 4,
+        "max_cells": args.max_cells,
         "expected_tests": EXPECTED_JAVA,
         "reference_test_identity_sha256": reference_test_identity["sha256"],
         "inherited_jvm_environment_audit": inherited_jvm_options,
         "expected_per_command_cache_delta": expected_cache,
         "order": [{"ordinal": i + 1, "round": i // 4 + 1, "stage": stage, "agent": agent}
-                  for i, (stage, agent) in enumerate(ORDER)],
+                  for i, (stage, agent) in enumerate(ORDER[:args.max_cells])],
         "stages": {key: {"identity": verify_stage(stage), "runtime_manifest_sha256": stage["runtime_manifest_sha256"],
                           "cache_source": str(source_caches[key]), "cache_clone": str(cache_dirs[key]),
                           "cache_source_manifest_sha256": cache_source_hashes[key],
@@ -493,13 +515,14 @@ def main() -> int:
                    for key, stage in stages.items()},
         "init_scripts": [str(SCRIPT_ROOT / "java-suite.init.gradle"),
                          str(SCRIPT_ROOT / "java-suite-jacoco-agent-control.init.gradle")],
-        "timing": "GNU time elapsed for Gradle test; JUnit XML testcase duration reported separately",
+        "timing": "GNU time elapsed for Gradle test with --info logging in both arms; JUnit XML testcase duration reported separately",
     }
     (output_root / "plan.json").write_text(json.dumps(plan_record, indent=2) + "\n")
     results: list[dict[str, object]] = []
     worker_baseline: dict[str, dict[str, object]] = {}
     try:
-        for ordinal, (key, agent) in enumerate(ORDER, start=1):
+        active_order = ORDER[:args.max_cells]
+        for ordinal, (key, agent) in enumerate(active_order, start=1):
             stage = stages[key]
             verify_stage(stage)
             run_dir = output_root / "runs" / "java" / f"{ordinal:02d}-r{(ordinal - 1) // 4 + 1}-{key}-jacoco-{agent}"
@@ -523,7 +546,7 @@ def main() -> int:
                 "LARA_FRAMEWORK_HOME": str(LARA_FRAMEWORK_ROOT.resolve()),
             })
             command = ["/usr/bin/time", "-f", base.TIME_FORMAT, "-o", str(run_dir / "time.txt"), "--",
-                       "gradle", "--no-daemon", "--offline",
+                       "gradle", "--no-daemon", "--offline", "--info",
                        "--init-script", str(SCRIPT_ROOT / "java-suite.init.gradle"),
                        "--init-script", str(SCRIPT_ROOT / "java-suite-jacoco-agent-control.init.gradle")]
             if key == "protobuf":
@@ -552,6 +575,7 @@ def main() -> int:
             actual_native_path, actual_native_sha256 = observed_native_tool(stage, log_path)
             worker_path = diagnostic_dir / "worker-configuration.json"
             worker = json.loads(worker_path.read_text()) if worker_path.is_file() else {}
+            executor_args = observed_test_executor_args(log_path)
             compilation = task_compilation_lines(log_path)
             agent_present = bool(worker.get("javaagent_args"))
             all_agent_flags = [arg for arg in worker.get("jvm_args", [])
@@ -561,15 +585,23 @@ def main() -> int:
                 and "jacocoagent" in all_agent_flags[0]
             ) if agent == "on" else len(all_agent_flags) == 0
             normalized_worker_args = [arg for arg in worker.get("jvm_args", []) if not arg.startswith("-javaagent:")]
+            normalized_executor_args = [arg for arg in executor_args if not arg.startswith("-javaagent:")]
             worker_identity = {
                 "max_heap_size": worker.get("max_heap_size"),
                 "jvm_args_without_javaagent": normalized_worker_args,
+                "actual_executor_args_without_javaagent": normalized_executor_args,
             }
             if key not in worker_baseline:
                 worker_baseline[key] = worker_identity
             worker_stable = worker_identity == worker_baseline[key]
-            heap_flags = [arg for arg in worker.get("jvm_args", []) if arg.startswith("-Xmx")]
-            heap_is_512m = heap_flags == ["-Xmx512m"]
+            executor_heap_flags = [arg for arg in executor_args if arg.startswith("-Xmx")]
+            heap_is_512m = executor_heap_flags == ["-Xmx512m"]
+            executor_agent_flags = [arg for arg in executor_args
+                                    if arg.startswith(("-javaagent:", "-agentlib:", "-agentpath:", "-Xrun"))]
+            executor_only_jacoco_agent = (
+                len(executor_agent_flags) == 1 and executor_agent_flags[0].startswith("-javaagent:")
+                and "jacocoagent" in executor_agent_flags[0]
+            ) if agent == "on" else len(executor_agent_flags) == 0
             test_executed = test_task_was_executed(log_path)
             log_text = log_path.read_text(errors="replace")
             report_tasks_skipped = {
@@ -589,7 +621,8 @@ def main() -> int:
                      and not compilation and worker.get("requested_agent") == agent
                      and worker.get("jacoco_enabled") is (agent == "on")
                      and agent_present is (agent == "on") and only_jacoco_agent and worker_stable
-                     and heap_is_512m and test_executed and all(report_tasks_skipped.values()))
+                     and executor_only_jacoco_agent and heap_is_512m
+                     and test_executed and all(report_tasks_skipped.values()))
             time_data = parse_time(run_dir / "time.txt")
             row: dict[str, object] = {
                 "ordinal": ordinal, "round": (ordinal - 1) // 4 + 1, "stage": key, "agent": agent,
@@ -605,6 +638,8 @@ def main() -> int:
                 "worker_args_stable_except_agent": worker_stable,
                 "test_task_executed": test_executed, "test_worker_xmx_512m": heap_is_512m,
                 "only_expected_jacoco_agent": only_jacoco_agent,
+                "actual_test_executor_args": executor_args,
+                "actual_test_executor_only_jacoco_agent": executor_only_jacoco_agent,
                 "report_tasks_skipped": report_tasks_skipped,
                 "expected_cache_delta": expected_cache[key],
                 "observed_cache_delta": observed_cache_delta,
@@ -615,7 +650,7 @@ def main() -> int:
             results.append(row)
             write_csv(results, output_root / "results.csv")
             (output_root / "results.json").write_text(json.dumps({"plan": plan_record, "results": results}, indent=2) + "\n")
-            if len(results) == 16:
+            if len(results) == len(ORDER):
                 summary = summarize(results)
                 (output_root / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
             print(json.dumps({k: row[k] for k in ("ordinal", "round", "stage", "agent", "valid",
@@ -624,10 +659,11 @@ def main() -> int:
             if not valid:
                 raise RuntimeError(f"JaCoCo control cell failed acceptance checks; see {run_dir}")
             verify_stage(stage)
-        if len(results) != 16:
-            raise RuntimeError(f"expected 16 diagnostic commands, completed {len(results)}")
-        summary = summarize(results)
-        (output_root / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+        if len(results) != len(active_order):
+            raise RuntimeError(f"expected {len(active_order)} diagnostic commands, completed {len(results)}")
+        if len(results) == len(ORDER):
+            summary = summarize(results)
+            (output_root / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     except Exception as exc:
         (output_root / "failure.txt").write_text(f"{type(exc).__name__}: {exc}\n")
         raise
