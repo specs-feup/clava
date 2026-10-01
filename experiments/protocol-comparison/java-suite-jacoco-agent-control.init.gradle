@@ -21,6 +21,7 @@ gradle.afterProject { project ->
             jacoco.enabled = mode == 'on'
 
             def diagnosticRoot = new File(diagnosticDir)
+            jacoco.destinationFile = new File(diagnosticRoot, 'jacoco.exec')
             testTask.reports.junit.outputLocation.set(
                     project.layout.dir(project.provider { new File(diagnosticRoot, 'junit-xml') }))
             testTask.binaryResultsDirectory.set(

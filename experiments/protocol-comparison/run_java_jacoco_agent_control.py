@@ -18,6 +18,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import shutil
 import statistics
 import subprocess
@@ -35,6 +36,7 @@ DEFAULT_MATRIX = SCRIPT_ROOT / "results/deadline-20260930/matrix-r2/results.json
 DEFAULT_OUTPUT = SCRIPT_ROOT / "results/deadline-20260930/matrix-r2/java-jacoco-agent-control-r1"
 EXPECTED_JAVA = {"total_tests": 116, "passed_tests": 116, "failed_tests": 0, "skipped_tests": 0}
 EXPECTED_JAVA_PLAN = {"total": 116, "passed": 116, "failed": 0, "skipped": 0}
+EXPECTED_PRIMARY_CACHE = {"cacheable_calls": 208, "hits": 207, "misses": 1, "uncacheable_calls": 0}
 STAGE_KEYS = ("ccache-text", "protobuf")
 NAMESPACE = {
     "ccache-text": "clang-dumper-ccache",
@@ -58,6 +60,8 @@ ORDER = (
     ("ccache-text", "off"),
     ("protobuf", "on"),
 )
+JVM_CONTROL_FLAGS = ("-Xms", "-Xmx", "-Xmn", "-XX:", "-javaagent:", "-agentlib:",
+                     "-agentpath:", "-Xrun", "-Xlog:gc", "-Xloggc", "-verbose:gc")
 
 
 def parse_args() -> argparse.Namespace:
@@ -80,7 +84,13 @@ def git(root: Path, *args: str) -> str:
 
 
 def git_status(root: Path) -> list[str]:
-    return git(root, "status", "--porcelain=v1", "--untracked-files=all").splitlines()
+    result = subprocess.run(
+        ["git", "-C", str(root), "status", "--porcelain=v1", "--untracked-files=all"],
+        text=True, capture_output=True, check=False,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"git status failed in {root}: {result.stderr.strip()}")
+    return result.stdout.splitlines()
 
 
 def diff_sha256(root: Path) -> str:
@@ -115,7 +125,41 @@ def load_matrix(path: Path) -> dict:
                     or not row.get("cache_validation", {}).get("passed")
                     or row.get("cache_hits", 0) <= 0):
                 raise RuntimeError(f"invalid primary warm run in {key}: {row.get('run_dir')}")
+            observed_cache = {
+                "cacheable_calls": int(row.get("cacheable_calls", 0)),
+                "hits": int(row.get("cache_hits", 0)),
+                "misses": int(row.get("cache_misses", 0)),
+                "uncacheable_calls": int(row.get("cache_validation", {}).get("uncacheable_calls", 0)),
+            }
+            if observed_cache != EXPECTED_PRIMARY_CACHE:
+                raise RuntimeError(
+                    f"primary warm cache outcome drifted for {key}: "
+                    f"expected={EXPECTED_PRIMARY_CACHE}, observed={observed_cache}"
+                )
     return data
+
+
+def audit_inherited_jvm_options() -> dict[str, object]:
+    audit: dict[str, object] = {}
+    violations: list[str] = []
+    for name in ("JAVA_TOOL_OPTIONS", "JDK_JAVA_OPTIONS", "JAVA_OPTS"):
+        raw = os.environ.get(name, "")
+        try:
+            arguments = shlex.split(raw)
+        except ValueError as exc:
+            raise RuntimeError(f"could not safely parse inherited {name}: {exc}") from exc
+        relevant = [arg for arg in arguments if arg.startswith(JVM_CONTROL_FLAGS)]
+        audit[name] = {
+            "present": bool(raw),
+            "argument_count": len(arguments),
+            # Persist only heap/GC/agent switches, never arbitrary -D values.
+            "heap_gc_agent_flags": relevant,
+        }
+        if relevant:
+            violations.append(f"{name}: {relevant}")
+    if violations:
+        raise RuntimeError("inherited JVM options would confound the control: " + "; ".join(violations))
+    return audit
 
 
 def verify_stage(stage: dict) -> dict[str, object]:
@@ -216,6 +260,24 @@ def junit_counts(root: Path) -> dict[str, int | float]:
             "failed_tests": failures, "skipped_tests": skipped, "junit_aggregate_s": duration}
 
 
+def junit_identity_sha256(root: Path) -> str:
+    records = []
+    for path in sorted(root.glob("TEST-*.xml")):
+        suite = ET.parse(path).getroot()
+        for case in suite.findall("testcase"):
+            failed = case.find("failure") is not None or case.find("error") is not None
+            skipped = case.find("skipped") is not None
+            status = "failed" if failed else "skipped" if skipped else "passed"
+            records.append({
+                "class": case.attrib.get("classname", ""),
+                "name": case.attrib.get("name", ""),
+                "status": status,
+            })
+    records.sort(key=lambda item: (item["class"], item["name"], item["status"]))
+    canonical = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()
+    return hashlib.sha256(canonical).hexdigest()
+
+
 def parse_time(path: Path) -> dict[str, float | int]:
     values: dict[str, float | int] = {}
     if not path.is_file():
@@ -248,7 +310,7 @@ def test_task_was_executed(log_path: Path) -> bool:
 
 def write_csv(rows: list[dict[str, object]], path: Path) -> None:
     fields = ("ordinal", "round", "stage", "agent", "valid", "elapsed_s", "junit_aggregate_s",
-              "gradle_non_test_elapsed_s", "max_rss_kb", "cacheable_calls_delta", "cache_hits_delta",
+              "wall_minus_junit_residual_s", "max_rss_kb", "cacheable_calls_delta", "cache_hits_delta",
               "cache_misses_delta", "uncacheable_calls_delta", "total_tests", "passed_tests",
               "failed_tests", "skipped_tests")
     with path.open("w", newline="") as output:
@@ -258,7 +320,7 @@ def write_csv(rows: list[dict[str, object]], path: Path) -> None:
 
 
 def summarize(results: list[dict[str, object]]) -> dict[str, object]:
-    metrics = ("elapsed_s", "junit_aggregate_s", "gradle_non_test_elapsed_s")
+    metrics = ("elapsed_s", "junit_aggregate_s", "wall_minus_junit_residual_s")
     by_stage: dict[str, object] = {}
     treatment_effects: dict[str, dict[str, float]] = {}
     for key in STAGE_KEYS:
@@ -286,15 +348,29 @@ def summarize(results: list[dict[str, object]]) -> dict[str, object]:
                 "percent_of_off_median": 100.0 * (on_median - off_median) / off_median if off_median else None,
             }
         by_stage[key] = stage_metrics
-    effect_difference = {
-        metric: treatment_effects["protobuf"][metric] - treatment_effects["ccache-text"][metric]
-        for metric in metrics
-    }
+    effect_difference = {}
+    for metric in metrics:
+        per_round = []
+        for repeat in range(1, 5):
+            protobuf_effect = (
+                float(next(row for row in results if row["stage"] == "protobuf" and row["round"] == repeat and row["agent"] == "on")[metric])
+                - float(next(row for row in results if row["stage"] == "protobuf" and row["round"] == repeat and row["agent"] == "off")[metric])
+            )
+            text_effect = (
+                float(next(row for row in results if row["stage"] == "ccache-text" and row["round"] == repeat and row["agent"] == "on")[metric])
+                - float(next(row for row in results if row["stage"] == "ccache-text" and row["round"] == repeat and row["agent"] == "off")[metric])
+            )
+            per_round.append(protobuf_effect - text_effect)
+        effect_difference[metric] = {
+            "per_round_difference_in_differences": per_round,
+            "median_difference_in_differences": statistics.median(per_round),
+        }
     return {
         "n_per_arm_per_stage": 4,
         "units": "seconds; positive on-minus-off means the JaCoCo agent made the observed timing larger",
+        "residual_definition": "max(0, elapsed_s - junit_aggregate_s); a timing-boundary residual, not a Gradle task timer",
         "by_stage": by_stage,
-        "protobuf_minus_text_agent_effect_s": effect_difference,
+        "protobuf_minus_text_agent_effect_difference_in_differences_s": effect_difference,
     }
 
 
@@ -307,6 +383,9 @@ def main() -> int:
     matrix = load_matrix(matrix_path)
     plan = matrix["plan"]
     stages = {key: plan["stages"][key] for key in STAGE_KEYS}
+    reference_test_identity = matrix["identity_preflight"]["reference_test_ids"]["java"]
+    if reference_test_identity.get("count") != EXPECTED_JAVA["total_tests"]:
+        raise RuntimeError("primary Java test identity does not contain exactly 116 test cases")
     for stage in stages.values():
         verify_stage(stage)
 
@@ -316,11 +395,23 @@ def main() -> int:
         for key in STAGE_KEYS
     }
     source_caches = {}
+    expected_cache = {}
     for key, rows in primary_rows.items():
         cache_paths = {Path(row["cache_validation"]["cache_dir"]).resolve() for row in rows}
         if len(cache_paths) != 1:
             raise RuntimeError(f"primary warm runs do not share one cache path for {key}")
         source_caches[key] = next(iter(cache_paths))
+        outcomes = {
+            (int(row.get("cacheable_calls", 0)), int(row.get("cache_hits", 0)),
+             int(row.get("cache_misses", 0)),
+             int(row.get("cache_validation", {}).get("uncacheable_calls", 0)))
+            for row in rows
+        }
+        if outcomes != {(208, 207, 1, 0)}:
+            raise RuntimeError(f"warm cache outcomes are not repeatable for {key}: {outcomes}")
+        expected_cache[key] = EXPECTED_PRIMARY_CACHE.copy()
+
+    inherited_jvm_options = audit_inherited_jvm_options()
 
     if args.dry_run:
         print(json.dumps({"primary_matrix": str(matrix_path), "output_root": str(output_root),
@@ -351,6 +442,9 @@ def main() -> int:
         "control": "JaCoCo Test-worker javaagent enabled vs disabled; reporting tasks disabled in both arms",
         "rounds": len(ORDER) // 4,
         "expected_tests": EXPECTED_JAVA,
+        "reference_test_identity_sha256": reference_test_identity["sha256"],
+        "inherited_jvm_environment_audit": inherited_jvm_options,
+        "expected_per_command_cache_delta": expected_cache,
         "order": [{"ordinal": i + 1, "round": i // 4 + 1, "stage": stage, "agent": agent}
                   for i, (stage, agent) in enumerate(ORDER)],
         "stages": {key: {"identity": verify_stage(stage), "runtime_manifest_sha256": stage["runtime_manifest_sha256"],
@@ -374,6 +468,9 @@ def main() -> int:
             diagnostic_dir = run_dir / "gradle-output"
             cache_dir = cache_dirs[key]
             stats_before = ccache_stats(cache_dir)
+            inherited_jvm_options_now = audit_inherited_jvm_options()
+            if inherited_jvm_options_now != inherited_jvm_options:
+                raise RuntimeError("inherited JVM environment changed after the plan was frozen")
             java_options = os.environ.get("JAVA_TOOL_OPTIONS", "")
             java_options += f" -Djava.io.tmpdir={temp_roots[key]} -Dclava.astWire={stage['wire']}"
             environment = os.environ.copy()
@@ -404,10 +501,18 @@ def main() -> int:
             stats_after = ccache_stats(cache_dir)
             delta = {f"{name}_delta": stats_after[name] - stats_before[name] for name in stats_before}
             counts = junit_counts(diagnostic_dir / "junit-xml")
+            test_identity_sha256 = junit_identity_sha256(diagnostic_dir / "junit-xml")
+            test_identity_match = test_identity_sha256 == reference_test_identity["sha256"]
             worker_path = diagnostic_dir / "worker-configuration.json"
             worker = json.loads(worker_path.read_text()) if worker_path.is_file() else {}
             compilation = task_compilation_lines(log_path)
             agent_present = bool(worker.get("javaagent_args"))
+            all_agent_flags = [arg for arg in worker.get("jvm_args", [])
+                               if arg.startswith(("-javaagent:", "-agentlib:", "-agentpath:", "-Xrun"))]
+            only_jacoco_agent = (
+                len(all_agent_flags) == 1 and all_agent_flags[0].startswith("-javaagent:")
+                and "jacocoagent" in all_agent_flags[0]
+            ) if agent == "on" else len(all_agent_flags) == 0
             normalized_worker_args = [arg for arg in worker.get("jvm_args", []) if not arg.startswith("-javaagent:")]
             worker_identity = {
                 "max_heap_size": worker.get("max_heap_size"),
@@ -424,12 +529,19 @@ def main() -> int:
                 task: bool(re.search(rf"{task}\s+SKIPPED", log_text))
                 for task in ("jacocoTestReport", "jacocoTestCoverageVerification")
             }
-            cache_passed = delta["cacheable_calls_delta"] > 0 and delta["cache_hits_delta"] > 0
+            observed_cache_delta = {
+                "cacheable_calls": delta["cacheable_calls_delta"],
+                "hits": delta["hits_delta"],
+                "misses": delta["misses_delta"],
+                "uncacheable_calls": delta["uncacheable_calls_delta"],
+            }
+            cache_passed = observed_cache_delta == expected_cache[key]
             valid = (process.returncode == 0 and counts == {**EXPECTED_JAVA,
                      "junit_aggregate_s": counts.get("junit_aggregate_s")} and cache_passed
+                     and test_identity_match
                      and not compilation and worker.get("requested_agent") == agent
                      and worker.get("jacoco_enabled") is (agent == "on")
-                     and agent_present is (agent == "on") and worker_stable
+                     and agent_present is (agent == "on") and only_jacoco_agent and worker_stable
                      and heap_is_512m and test_executed and all(report_tasks_skipped.values()))
             time_data = parse_time(run_dir / "time.txt")
             row: dict[str, object] = {
@@ -437,13 +549,17 @@ def main() -> int:
                 "return_code": process.returncode, "valid": valid, "elapsed_s": time_data.get("elapsed_s", elapsed),
                 "run_started_at": run_started_at, "run_finished_at": run_finished_at,
                 "driver_elapsed_s": elapsed, "junit_aggregate_s": counts.get("junit_aggregate_s", 0.0),
-                "gradle_non_test_elapsed_s": max(0.0, float(time_data.get("elapsed_s", elapsed))
-                                                   - float(counts.get("junit_aggregate_s", 0.0))),
+                "wall_minus_junit_residual_s": max(0.0, float(time_data.get("elapsed_s", elapsed))
+                                                     - float(counts.get("junit_aggregate_s", 0.0))),
                 **time_data, **counts, **delta, "cache_validation_passed": cache_passed,
                 "cache_dir": str(cache_dir), "worker_configuration": worker,
+                "test_identity_sha256": test_identity_sha256, "test_identity_match": test_identity_match,
                 "worker_args_stable_except_agent": worker_stable,
                 "test_task_executed": test_executed, "test_worker_xmx_512m": heap_is_512m,
+                "only_expected_jacoco_agent": only_jacoco_agent,
                 "report_tasks_skipped": report_tasks_skipped,
+                "expected_cache_delta": expected_cache[key],
+                "observed_cache_delta": observed_cache_delta,
                 "compile_tasks_not_up_to_date": compilation, "command": command,
                 "run_dir": str(run_dir),
             }
