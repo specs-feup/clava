@@ -26,6 +26,15 @@ def _read_jsonl(path: Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
 
 
+def _refresh_manifest_sha(root: Path, stem: str, field: str, target: Path) -> None:
+    manifest_path = root / "run-manifests" / f"run-{stem}.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest[field] = intervention._jsonl_sha256(target)
+    if field == "observation_sha256":
+        manifest["runner_output_sha256"] = manifest[field]
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+
 def _schedule_row(suite: str, input_id: str, protocol: str, repeat: int,
                   phase: str = "measure") -> dict:
     event_id = str(uuid.uuid5(uuid.NAMESPACE_URL, f"event:{suite}:{input_id}"))
@@ -46,6 +55,8 @@ def _schedule_row(suite: str, input_id: str, protocol: str, repeat: int,
         "suite": suite,
         "input_id": input_id,
         "source_label": label,
+        "source_paths": [] if label == "<empty source group>" else [label],
+        "source_files": [] if label == "<empty source group>" else [label],
         "event_id": event_id,
         "group_id": group_id,
         "source_sha256": _sha(f"source:{suite}:{input_id}"),
@@ -69,6 +80,7 @@ def _schedule_row(suite: str, input_id: str, protocol: str, repeat: int,
 
 
 def _make_fixture(root: Path) -> None:
+    source_schedules = root.parent / "schedules"
     for treatment in intervention.TREATMENTS:
         for suite in intervention.SUITES:
             count = intervention.GROUP_COUNTS[suite]
@@ -85,9 +97,12 @@ def _make_fixture(root: Path) -> None:
                         _schedule_row(suite, input_id, protocol, repeat)
                         for input_id in intervention._group_ids(suite, count)
                     )
-                    schedule_path = root / "schedules" / intervention._schedule_filename(
+                    source_schedule_path = source_schedules / intervention._schedule_filename(
                         treatment, suite, protocol, repeat
                     )
+                    schedule_path = root / "run-schedules" / (intervention._cell_name(*(
+                        treatment, suite, protocol, repeat
+                    )) + ".jsonl")
                     observation_path = root / "observations" / intervention._observation_filename(
                         treatment, suite, protocol, repeat
                     )
@@ -97,6 +112,7 @@ def _make_fixture(root: Path) -> None:
                     manifest_path = root / "run-manifests" / intervention._manifest_filename(
                         treatment, suite, protocol, repeat
                     )
+                    _write_jsonl(source_schedule_path, schedule_rows)
                     _write_jsonl(schedule_path, schedule_rows)
 
                     observations = []
@@ -114,13 +130,15 @@ def _make_fixture(root: Path) -> None:
                             "repeat": schedule["repeat"],
                             "input_id": schedule["input_id"],
                             "event_id": schedule["event_id"],
-                            "group_id": schedule["group_id"],
                             "source_sha256": schedule["source_sha256"],
                             "args_sha256": schedule["args_sha256"],
                             "options_sha256": schedule["options_sha256"],
                             "source_label": schedule["source_label"],
                             "valid": True,
                             "app_returned_null": False,
+                            "show_exec_info": False,
+                            "compression_policy": "raw_control",
+                            "expected_compressed": False,
                         }
                         if schedule["phase"] == "measure":
                             observation["elapsed_ms"] = (
@@ -134,35 +152,81 @@ def _make_fixture(root: Path) -> None:
                     proof_rows = [
                         {"record_type": "ccache", "input_id": "__ccache__",
                          "operation": "ccache_zero", "command_status": 0,
+                         "suite": suite, "protocol": protocol, "cache_mode": "warm",
+                         "repeat": repeat, "cache_directory": "/test/cache", "valid": True,
                          "output": "Statistics zeroed\n"},
-                        *observations,
                         {"record_type": "ccache", "input_id": "__ccache__",
                          "operation": "ccache_stats", "command_status": 0,
-                         "output": (f"Cacheable calls: {expected_hits}\n"
-                                    f"Hits: {expected_hits}\nMisses: 0\n")},
+                         "suite": suite, "protocol": protocol, "cache_mode": "warm",
+                         "repeat": repeat, "cache_directory": "/test/cache", "valid": True,
+                         "output": (f"Cacheable calls: {expected_hits} / {expected_hits} (100.0%)\n"
+                                    f"Hits: {expected_hits} / {expected_hits} (100.0%)\n"
+                                    f"Misses: 0 / {expected_hits} (0.00%)\n"
+                                    f"Local storage:\n  Hits: {expected_hits} / {expected_hits} (100.0%)\n"
+                                    f"  Misses: 0 / {expected_hits} (0.00%)\n")},
                     ]
                     _write_jsonl(proof_path, proof_rows)
                     manifest = {
                         "schema_version": 1,
-                        "treatment": "control" if not prefix else "prefix-java-nas",
+                        "name": intervention._cell_name(treatment, suite, protocol, repeat),
+                        "phase": "measure",
+                        "treatment": "control" if not prefix else "prefix",
                         "suite": suite,
                         "protocol": protocol,
                         "cache_mode": "warm",
                         "repeat": repeat,
-                        "schedule_path": schedule_path.name,
-                        "schedule_sha256": intervention._jsonl_sha256(schedule_path),
-                        "observation_path": observation_path.name,
-                        "ccache_proof_path": proof_path.name,
-                        "java_argv": ["java", "-cp", "runner.jar"],
-                        "cwd": "/test/worktree",
-                        "env": {name: None for name in intervention.JVM_OPTION_ENV},
+                        "exit_code": 0,
+                        "valid": True,
+                        "profiled": False,
+                        "show_exec_info": False,
+                        "runner_has_no_explicit_gc_call": True,
                         "explicit_gc_policy_flags": [],
                         "gc_policy": intervention.GC_POLICY,
+                        "counter_reset_recorded": True,
+                        "schedule_path": str(source_schedule_path),
+                        "schedule_sha256": intervention._jsonl_sha256(source_schedule_path),
+                        "executed_schedule_path": str(schedule_path),
+                        "executed_schedule_sha256": intervention._jsonl_sha256(schedule_path),
+                        "observation_path": str(observation_path),
+                        "runner_output_path": str(observation_path),
+                        "observation_sha256": intervention._jsonl_sha256(observation_path),
+                        "runner_output_sha256": intervention._jsonl_sha256(observation_path),
+                        "counterproof_path": str(proof_path),
+                        "counterproof_sha256": intervention._jsonl_sha256(proof_path),
+                        "env_policy": {
+                            "automatic_gc_allowed": True,
+                            "ccache_disable": "unset",
+                            "forced_gc_policy_flags": [],
+                            "java_agent": "none",
+                            "runner_has_no_explicit_gc_call": True,
+                            "show_exec_info": False,
+                            "removed_inherited_option_vars": {
+                                name: False for name in (
+                                    "CCACHE_DISABLE", "CLAVA_AST_CORPUS_CAPTURE_DIR",
+                                    "CLAVA_AST_CORPUS_SUITE", "GRADLE_OPTS", "JAVA_OPTS",
+                                    "JAVA_TOOL_OPTIONS", "JDK_JAVA_OPTIONS", "_JAVA_OPTIONS",
+                                )
+                            },
+                        },
+                        "java_argv": ["java", "-cp", "runner.jar"],
+                        "cwd": "/test/worktree",
+                        "java_agent": "none",
+                        "cache_directory": "/test/cache",
+                        "expected_eligible_hits": expected_hits,
+                        "ccache_counters": {
+                            "cacheable_calls": expected_hits,
+                            "hits": expected_hits,
+                            "misses": 0,
+                        },
+                        "cache_seed_payload_sha256": "e" * 64,
+                        "cache_payload_sha256_after_zero": "e" * 64,
+                        "cache_payload_sha256_after_run": "e" * 64,
                         "runner_has_no_explicit_gc_call": True,
-                        "show_exec_info": False,
                         "runner_class_sha256": "a" * 64,
                         "overlay_class_manifest_sha256": "b" * 64,
-                        "jar_manifest_sha256": "c" * 64,
+                        "runtime_jar_manifest_sha256": "c" * 64,
+                        "reader_class_sha256": "f" * 64,
+                        "compat_proto_types_sha256": "9" * 64,
                         "native_tool_sha256": "d" * 64,
                         "started_utc": "2026-10-01T00:00:00Z",
                         "finished_utc": "2026-10-01T00:01:00Z",
@@ -198,7 +262,7 @@ class AnalyzeWarmupInterventionTest(unittest.TestCase):
         fragment = intervention.render_warmup_intervention_html(summary)
         self.assertEqual(fragment.count("<svg "), 2)
         self.assertIn('viewBox="0 0 360 360"', fragment)
-        self.assertIn("Two rounds only, separate from the primary six-round comparison", fragment)
+        self.assertIn("Two rounds, separate from the six-round primary", fragment)
         self.assertIn("@media(max-width:560px)", fragment)
         self.assertNotIn("overflow-x", fragment)
         self.assertNotIn("/test/worktree", fragment)
@@ -221,6 +285,9 @@ class AnalyzeWarmupInterventionTest(unittest.TestCase):
         damaged = copy.deepcopy(original)
         del damaged[1]["source_label"]
         _write_jsonl(path, damaged)
+        _refresh_manifest_sha(
+            self.root, "control-clava-js-text-warm-r01", "observation_sha256", path
+        )
         try:
             summary = intervention.analyze_warmup_intervention(self.root)
             selected = next(row for row in summary["group_summaries"]
@@ -231,6 +298,9 @@ class AnalyzeWarmupInterventionTest(unittest.TestCase):
             self.assertEqual(selected["source_label"], "js-group-0002.cpp")
         finally:
             _write_jsonl(path, original)
+            _refresh_manifest_sha(
+                self.root, "control-clava-js-text-warm-r01", "observation_sha256", path
+            )
 
     def test_invalid_observation_is_rejected_not_silently_dropped(self):
         path = self.root / "observations" / "control-java-protobuf-warm-r02.jsonl"
@@ -245,16 +315,20 @@ class AnalyzeWarmupInterventionTest(unittest.TestCase):
             _write_jsonl(path, original)
 
     def test_treatment_schedule_must_keep_exact_measured_tail(self):
-        path = self.root / "schedules" / "prefix-java-nas-java-text-warm-r01.jsonl"
+        path = self.root / "run-schedules" / "prefix-java-text-warm-r01.jsonl"
+        source_path = self.root.parent / "schedules" / "prefix-java-nas-java-text-warm-r01.jsonl"
         original = _read_jsonl(path)
+        original_source = _read_jsonl(source_path)
         damaged = copy.deepcopy(original)
-        damaged[8]["source_sha256"] = "0" * 64
+        damaged[8]["source_label"] = "changed.cpp"
         _write_jsonl(path, damaged)
+        _write_jsonl(source_path, damaged)
         try:
             with self.assertRaisesRegex(intervention.AnalysisError, "measured schedule tail differs"):
                 intervention.analyze_warmup_intervention(self.root)
         finally:
             _write_jsonl(path, original)
+            _write_jsonl(source_path, original_source)
 
     def test_gc_flag_and_wrong_counter_proof_are_rejected(self):
         manifest_path = self.root / "run-manifests" / "run-control-java-text-warm-r01.json"
@@ -268,16 +342,22 @@ class AnalyzeWarmupInterventionTest(unittest.TestCase):
         finally:
             manifest_path.write_text(json.dumps(original_manifest, indent=2) + "\n", encoding="utf-8")
 
-        proof_path = self.root / "warm-counters" / "counterproof-control-clava-js-protobuf-warm-r02.txt"
+        proof_path = self.root / "warm-counters" / "counterproof-control-clava-js-protobuf-warm-r02.jsonl"
         original_proof = _read_jsonl(proof_path)
         damaged = copy.deepcopy(original_proof)
         damaged[-1]["output"] = damaged[-1]["output"].replace("Misses: 0", "Misses: 1")
         _write_jsonl(proof_path, damaged)
+        _refresh_manifest_sha(
+            self.root, "control-clava-js-protobuf-warm-r02", "counterproof_sha256", proof_path
+        )
         try:
             with self.assertRaisesRegex(intervention.AnalysisError, "eligible hits and zero misses"):
                 intervention.analyze_warmup_intervention(self.root)
         finally:
             _write_jsonl(proof_path, original_proof)
+            _refresh_manifest_sha(
+                self.root, "control-clava-js-protobuf-warm-r02", "counterproof_sha256", proof_path
+            )
 
     def test_synthetic_fixture_is_never_written_as_measured_output(self):
         summary = intervention.analyze_warmup_intervention(self.root)

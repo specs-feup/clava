@@ -9,6 +9,7 @@ and round cells.
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import html
 import json
@@ -37,8 +38,7 @@ EXPECTED_ELIGIBLE_CALLS = {
     ("prefix-java-nas", "clava-js"): 174,
     ("prefix-java-nas", "java"): 216,
 }
-JVM_OPTION_ENV = ("JAVA_TOOL_OPTIONS", "JDK_JAVA_OPTIONS", "JAVA_OPTS")
-GC_POLICY = "no explicit/forced GC flags; JVM automatic GC remains enabled"
+GC_POLICY = "no explicit/forced GC options or calls in runner; JVM automatic GC allowed"
 HASH_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 INPUT_ID_RE = {
     "clava-js": re.compile(r"^js-group-(\d{4})$"),
@@ -127,19 +127,21 @@ def _schedule_filename(treatment: str, suite: str, protocol: str, repeat: int) -
     return f"{prefix}-{suite}-{protocol}-warm-r{repeat:02d}.jsonl"
 
 
+def _cell_name(treatment: str, suite: str, protocol: str, repeat: int) -> str:
+    prefix = "control" if treatment == "control" else "prefix"
+    return f"{prefix}-{suite}-{protocol}-warm-r{repeat:02d}"
+
+
 def _observation_filename(treatment: str, suite: str, protocol: str, repeat: int) -> str:
-    name = "control" if treatment == "control" else "prefix"
-    return f"{name}-{suite}-{protocol}-warm-r{repeat:02d}.jsonl"
+    return f"{_cell_name(treatment, suite, protocol, repeat)}.jsonl"
 
 
 def _manifest_filename(treatment: str, suite: str, protocol: str, repeat: int) -> str:
-    name = "control" if treatment == "control" else "prefix"
-    return f"run-{name}-{suite}-{protocol}-warm-r{repeat:02d}.json"
+    return f"run-{_cell_name(treatment, suite, protocol, repeat)}.json"
 
 
 def _counter_filename(treatment: str, suite: str, protocol: str, repeat: int) -> str:
-    name = "control" if treatment == "control" else "prefix"
-    return f"counterproof-{name}-{suite}-{protocol}-warm-r{repeat:02d}.txt"
+    return f"counterproof-{_cell_name(treatment, suite, protocol, repeat)}.jsonl"
 
 
 def _cell_keys() -> list[tuple[str, str, str, int]]:
@@ -185,43 +187,86 @@ def _validate_schedule_flags(row: dict[str, Any], source: str, protocol: str) ->
         if type(call.get("cache_enabled")) is not bool:
             raise AnalysisError(f"{source}: native call cache_enabled must be boolean")
         if (call.get("ccache_disabled") is not False
-                or call.get("ccache_nocompress") is not True
                 or call.get("compressed") is not False
                 or call.get("wire_format") != protocol):
             raise AnalysisError(f"{source}: native call is not warm/raw/{protocol}")
+        if call["cache_enabled"] and call.get("ccache_nocompress") is not True:
+            raise AnalysisError(f"{source}: cacheable native call must disable ccache compression")
+        if not call["cache_enabled"] and type(call.get("ccache_nocompress")) is not bool:
+            raise AnalysisError(f"{source}: non-cacheable native call has invalid ccache policy")
 
 
 def _validate_manifest(
     manifest: dict[str, Any], *, treatment: str, suite: str,
-    protocol: str, repeat: int, schedule_path: Path,
+    protocol: str, repeat: int, source_schedule_path: Path,
+    executed_schedule_path: Path, observation_path: Path, counterproof_path: Path,
 ) -> dict[str, Any]:
     source = _manifest_filename(treatment, suite, protocol, repeat)
-    expected_treatment = "control" if treatment == "control" else "prefix-java-nas"
+    expected_hits = EXPECTED_ELIGIBLE_CALLS[(treatment, suite)]
     expected = {
         "schema_version": 1,
-        "treatment": expected_treatment,
+        "name": _cell_name(treatment, suite, protocol, repeat),
+        "phase": "measure",
+        "treatment": "control" if treatment == "control" else "prefix",
         "suite": suite,
         "protocol": protocol,
-        "cache_mode": "warm",
         "repeat": repeat,
         "exit_code": 0,
+        "valid": True,
+        "profiled": False,
         "show_exec_info": False,
         "runner_has_no_explicit_gc_call": True,
         "explicit_gc_policy_flags": [],
         "gc_policy": GC_POLICY,
+        "counter_reset_recorded": True,
     }
     for field, value in expected.items():
         if manifest.get(field) != value:
             raise AnalysisError(f"{source}: {field} does not match the required run proof")
-    if manifest.get("schedule_sha256") != _jsonl_sha256(schedule_path):
-        raise AnalysisError(f"{source}: schedule_sha256 does not match the schedule file")
+    expected_paths = {
+        "schedule_path": source_schedule_path,
+        "executed_schedule_path": executed_schedule_path,
+        "observation_path": observation_path,
+        "runner_output_path": observation_path,
+        "counterproof_path": counterproof_path,
+    }
+    for field, path in expected_paths.items():
+        value = manifest.get(field)
+        if not isinstance(value, str) or Path(value).name != path.name:
+            raise AnalysisError(f"{source}: {field} does not name {path.name}")
+    expected_hashes = {
+        "schedule_sha256": source_schedule_path,
+        "executed_schedule_sha256": executed_schedule_path,
+        "observation_sha256": observation_path,
+        "runner_output_sha256": observation_path,
+        "counterproof_sha256": counterproof_path,
+    }
+    for field, path in expected_hashes.items():
+        value = manifest.get(field)
+        if not _is_sha256(value) or value.lower() != _jsonl_sha256(path):
+            raise AnalysisError(f"{source}: {field} does not match {path.name}")
 
-    env = manifest.get("env")
-    if not isinstance(env, dict):
-        raise AnalysisError(f"{source}: env proof is missing")
-    for name in JVM_OPTION_ENV:
-        if name not in env or env[name] is not None:
-            raise AnalysisError(f"{source}: {name} must be unset")
+    policy = manifest.get("env_policy")
+    if not isinstance(policy, dict):
+        raise AnalysisError(f"{source}: env_policy proof is missing")
+    policy_expected = {
+        "automatic_gc_allowed": True,
+        "ccache_disable": "unset",
+        "forced_gc_policy_flags": [],
+        "java_agent": "none",
+        "runner_has_no_explicit_gc_call": True,
+        "show_exec_info": False,
+    }
+    for field, value in policy_expected.items():
+        if policy.get(field) != value:
+            raise AnalysisError(f"{source}: env_policy.{field} does not match the required run proof")
+    removed_vars = policy.get("removed_inherited_option_vars")
+    expected_removed_vars = (
+        "CCACHE_DISABLE", "CLAVA_AST_CORPUS_CAPTURE_DIR", "CLAVA_AST_CORPUS_SUITE",
+        "GRADLE_OPTS", "JAVA_OPTS", "JAVA_TOOL_OPTIONS", "JDK_JAVA_OPTIONS", "_JAVA_OPTIONS",
+    )
+    if not isinstance(removed_vars, dict) or any(removed_vars.get(name) is not False for name in expected_removed_vars):
+        raise AnalysisError(f"{source}: inherited environment option policy is not clean")
     java_argv = manifest.get("java_argv")
     if not isinstance(java_argv, list) or not java_argv or not all(
         isinstance(argument, str) for argument in java_argv
@@ -231,33 +276,50 @@ def _validate_manifest(
         raise AnalysisError(f"{source}: java_argv contains an explicit GC policy flag")
     if not isinstance(manifest.get("cwd"), str) or not manifest["cwd"]:
         raise AnalysisError(f"{source}: cwd is missing")
-    expected_files = {
-        "schedule_path": schedule_path.name,
-        "observation_path": _observation_filename(treatment, suite, protocol, repeat),
-        "ccache_proof_path": _counter_filename(treatment, suite, protocol, repeat),
-    }
-    for field, basename in expected_files.items():
-        value = manifest.get(field)
-        if not isinstance(value, str) or Path(value).name != basename:
-            raise AnalysisError(f"{source}: {field} does not name {basename}")
+    if manifest.get("java_agent") != "none":
+        raise AnalysisError(f"{source}: unexpected Java agent in a non-profiled run")
+    if not isinstance(manifest.get("cache_directory"), str) or not manifest["cache_directory"]:
+        raise AnalysisError(f"{source}: cache_directory is missing")
     for field in ("runner_class_sha256", "overlay_class_manifest_sha256",
-                  "jar_manifest_sha256", "native_tool_sha256"):
+                  "runtime_jar_manifest_sha256", "reader_class_sha256",
+                  "compat_proto_types_sha256", "native_tool_sha256"):
         if not _is_sha256(manifest.get(field)):
             raise AnalysisError(f"{source}: {field} must be a SHA-256 digest")
     for field in ("started_utc", "finished_utc"):
         value = manifest.get(field)
         if not isinstance(value, str) or not value:
             raise AnalysisError(f"{source}: {field} is missing")
+    if type(manifest.get("expected_eligible_hits")) is not int or manifest["expected_eligible_hits"] != expected_hits:
+        raise AnalysisError(f"{source}: expected_eligible_hits differs from the prepared schedule")
+    counters = manifest.get("ccache_counters")
+    expected_counters = {"cacheable_calls": expected_hits, "hits": expected_hits, "misses": 0}
+    if not isinstance(counters, dict) or counters != expected_counters:
+        raise AnalysisError(f"{source}: ccache_counters differ from the expected warm-cache proof")
+    payload_hashes = [manifest.get(field) for field in (
+        "cache_seed_payload_sha256", "cache_payload_sha256_after_zero",
+        "cache_payload_sha256_after_run",
+    )]
+    if not all(_is_sha256(value) for value in payload_hashes) or len(set(payload_hashes)) != 1:
+        raise AnalysisError(f"{source}: cache payload changed or lacks a SHA-256 proof")
     return {
         "suite": suite,
         "protocol": protocol,
         "treatment": treatment,
         "repeat": repeat,
         "schedule_sha256": manifest["schedule_sha256"].lower(),
+        "executed_schedule_sha256": manifest["executed_schedule_sha256"].lower(),
+        "observation_sha256": manifest["observation_sha256"].lower(),
+        "counterproof_sha256": manifest["counterproof_sha256"].lower(),
         "runner_class_sha256": manifest["runner_class_sha256"].lower(),
         "overlay_class_manifest_sha256": manifest["overlay_class_manifest_sha256"].lower(),
-        "jar_manifest_sha256": manifest["jar_manifest_sha256"].lower(),
+        "runtime_jar_manifest_sha256": manifest["runtime_jar_manifest_sha256"].lower(),
+        "reader_class_sha256": manifest["reader_class_sha256"].lower(),
+        "compat_proto_types_sha256": manifest["compat_proto_types_sha256"].lower(),
         "native_tool_sha256": manifest["native_tool_sha256"].lower(),
+        "cache_payload_sha256": payload_hashes[0].lower(),
+        "cacheable_calls": expected_hits,
+        "cache_hits": expected_hits,
+        "cache_misses": 0,
         "no_explicit_gc": True,
         "show_exec_info": False,
     }
@@ -270,53 +332,46 @@ def _counter_value(output: str, label: str, source: str) -> int:
     return int(matches[0].replace(",", ""))
 
 
-def _parse_signature(row: dict[str, Any]) -> tuple[Any, ...]:
-    return tuple(row.get(field) for field in (
-        "schedule_line", "phase", "suite", "protocol", "cache_mode", "repeat",
-        "input_id", "event_id", "group_id", "source_sha256", "args_sha256",
-        "options_sha256", "valid", "app_returned_null", "elapsed_ms",
-    ))
-
-
 def _validate_counterproof(
     rows: list[dict[str, Any]], *, source: str, treatment: str, suite: str,
-    protocol: str, repeat: int, observation_rows: list[dict[str, Any]],
-    eligible_calls: int,
+    protocol: str, repeat: int, eligible_calls: int, cache_directory: str,
+    manifest_counters: dict[str, Any],
 ) -> dict[str, int]:
-    ccache_rows = [index for index, row in enumerate(rows) if row.get("record_type") == "ccache"]
-    operations = [rows[index].get("operation") for index in ccache_rows]
-    if len(ccache_rows) != 2 or operations != ["ccache_zero", "ccache_stats"]:
+    if len(rows) != 2 or any(row.get("record_type") != "ccache" for row in rows):
+        raise AnalysisError(f"{source}: expected only ccache reset and stats proof rows")
+    operations = [row.get("operation") for row in rows]
+    if operations != ["ccache_zero", "ccache_stats"]:
         raise AnalysisError(f"{source}: expected ccache_zero then ccache_stats")
-    zero_index, stats_index = ccache_rows
-    zero, stats = rows[zero_index], rows[stats_index]
-    if zero_index != 0 or stats_index != len(rows) - 1:
-        raise AnalysisError(f"{source}: ccache reset must precede parse rows and stats must follow them")
-    for row in (zero, stats):
-        if row.get("input_id") != "__ccache__" or row.get("command_status") != 0:
-            raise AnalysisError(f"{source}: ccache command did not complete successfully")
+    zero, stats = rows
+    expected_hits = EXPECTED_ELIGIBLE_CALLS[(treatment, suite)]
+    for row in rows:
+        if (row.get("input_id") != "__ccache__" or row.get("command_status") != 0
+                or row.get("valid") is not True or row.get("suite") != suite
+                or row.get("protocol") != protocol or row.get("cache_mode") != "warm"
+                or row.get("repeat") != repeat or row.get("cache_directory") != cache_directory):
+            raise AnalysisError(f"{source}: ccache command attribution or status is invalid")
     if not isinstance(zero.get("output"), str) or "Statistics zeroed" not in zero["output"]:
         raise AnalysisError(f"{source}: ccache statistics were not confirmed zeroed")
-    parse_rows = [row for row in rows if row.get("record_type") == "parse"]
-    if len(parse_rows) != len(observation_rows):
-        raise AnalysisError(f"{source}: ccache proof parse count differs from observations")
-    if [_parse_signature(row) for row in parse_rows] != [
-        _parse_signature(row) for row in observation_rows
-    ]:
-        raise AnalysisError(f"{source}: ccache proof parse rows differ from observations")
-    if any(row.get("record_type") not in ("parse", "ccache") for row in rows):
-        raise AnalysisError(f"{source}: unexpected record in ccache proof")
     output = stats.get("output")
     if not isinstance(output, str):
         raise AnalysisError(f"{source}: ccache stats output is missing")
-    cacheable = _counter_value(output, "Cacheable calls", source)
-    hits = _counter_value(output, "Hits", source)
-    misses = _counter_value(output, "Misses", source)
-    expected = EXPECTED_ELIGIBLE_CALLS[(treatment, suite)]
-    if (eligible_calls, cacheable, hits, misses) != (expected, expected, expected, 0):
+    stats_sections = output.split("Local storage:")
+    if len(stats_sections) != 2:
+        raise AnalysisError(f"{source}: ccache stats must contain one Local storage section")
+    totals, local_storage = stats_sections
+    cacheable = _counter_value(totals, "Cacheable calls", source)
+    hits = _counter_value(totals, "Hits", source)
+    misses = _counter_value(totals, "Misses", source)
+    if (_counter_value(local_storage, "Hits", source) != hits
+            or _counter_value(local_storage, "Misses", source) != misses):
+        raise AnalysisError(f"{source}: local-storage counters disagree with ccache totals")
+    if (eligible_calls, cacheable, hits, misses) != (expected_hits, expected_hits, expected_hits, 0):
         raise AnalysisError(
-            f"{source}: ccache proof expected {expected} eligible hits and zero misses; "
+            f"{source}: ccache proof expected {expected_hits} eligible hits and zero misses; "
             f"schedule={eligible_calls}, stats={cacheable}/{hits}/{misses}"
         )
+    if manifest_counters != {"cacheable_calls": cacheable, "hits": hits, "misses": misses}:
+        raise AnalysisError(f"{source}: ccache output disagrees with run manifest counters")
     return {"cacheable_calls": cacheable, "hits": hits, "misses": misses}
 
 
@@ -326,7 +381,7 @@ def _validate_cell(
     manifest: dict[str, Any], manifest_summary: dict[str, Any],
     counterproof_rows: list[dict[str, Any]], expected_group_counts: dict[str, int],
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    schedule_name = _schedule_filename(treatment, suite, protocol, repeat)
+    schedule_name = _cell_name(treatment, suite, protocol, repeat) + ".jsonl"
     observation_name = _observation_filename(treatment, suite, protocol, repeat)
     is_prefix = treatment == "prefix-java-nas"
     expected_ids = _group_ids(suite, expected_group_counts[suite])
@@ -382,6 +437,9 @@ def _validate_cell(
             if not _is_sha256(scheduled.get(field)):
                 raise AnalysisError(f"{source}: {field} must be a SHA-256 digest")
         _safe_source_label(scheduled.get("source_label"))
+        source_paths = scheduled.get("source_paths")
+        if not isinstance(source_paths, list) or any(not isinstance(path, str) for path in source_paths):
+            raise AnalysisError(f"{source}: source_paths must be a list of strings")
         _validate_schedule_flags(scheduled, source, protocol)
         eligible_calls += sum(call["cache_enabled"] is True
                               for call in scheduled["expected_native_calls"])
@@ -398,7 +456,6 @@ def _validate_cell(
             "repeat": 0 if expected_phase == "warmup" else repeat,
             "input_id": input_id,
             "event_id": scheduled["event_id"],
-            "group_id": scheduled["group_id"],
             "source_sha256": scheduled["source_sha256"],
             "args_sha256": scheduled["args_sha256"],
             "options_sha256": scheduled["options_sha256"],
@@ -409,6 +466,12 @@ def _validate_cell(
                 raise AnalysisError(
                     f"{observation_name}:{line_number}: {field} differs from schedule"
                 )
+        if "group_id" in observed and observed["group_id"] != scheduled["group_id"]:
+            raise AnalysisError(f"{observation_name}:{line_number}: group_id differs from schedule")
+        if observed.get("show_exec_info") is not False:
+            raise AnalysisError(f"{observation_name}:{line_number}: SHOW_EXEC_INFO must be false")
+        if observed.get("compression_policy") != "raw_control" or observed.get("expected_compressed") is not False:
+            raise AnalysisError(f"{observation_name}:{line_number}: observation is not warm/raw")
         if ("source_label" in observed
                 and observed["source_label"] != scheduled.get("source_label")):
             raise AnalysisError(f"{observation_name}:{line_number}: source_label differs from schedule")
@@ -435,6 +498,7 @@ def _validate_cell(
                 "input_id": input_id,
                 "event_id": scheduled["event_id"],
                 "source_label": _safe_source_label(scheduled["source_label"]),
+                "source_count": len(source_paths),
                 "source_sha256": scheduled["source_sha256"].lower(),
                 "args_sha256": scheduled["args_sha256"].lower(),
                 "options_sha256": scheduled["options_sha256"].lower(),
@@ -460,14 +524,17 @@ def _validate_cell(
             raise AnalysisError(f"{schedule_name}: prefix does not contain eight eligible NAS calls")
 
     run_summary = _validate_manifest(
-        manifest, treatment=treatment,
-        suite=suite, protocol=protocol, repeat=repeat,
-        schedule_path=manifest_summary["schedule_path"],
+        manifest, treatment=treatment, suite=suite, protocol=protocol, repeat=repeat,
+        source_schedule_path=manifest_summary["source_schedule_path"],
+        executed_schedule_path=manifest_summary["executed_schedule_path"],
+        observation_path=manifest_summary["observation_path"],
+        counterproof_path=manifest_summary["counterproof_path"],
     )
     counter_summary = _validate_counterproof(
         counterproof_rows, source=_counter_filename(treatment, suite, protocol, repeat),
         treatment=treatment, suite=suite, protocol=protocol, repeat=repeat,
-        observation_rows=observation_rows, eligible_calls=eligible_calls,
+        eligible_calls=eligible_calls, cache_directory=manifest["cache_directory"],
+        manifest_counters=manifest["ccache_counters"],
     )
     return output_measurements, {**run_summary, **counter_summary}
 
@@ -489,6 +556,26 @@ def _median_delta_rows(rows: list[dict[str, Any]], *, keys: tuple[str, ...]) -> 
             "max_delta_ms": max(deltas),
             "round_relative_pct": pcts,
             "median_relative_pct": statistics.median(pcts),
+        })
+    return result
+
+
+def _median_field_rows(
+    rows: list[dict[str, Any]], *, keys: tuple[str, ...], value_field: str,
+) -> list[dict[str, Any]]:
+    groups: dict[tuple[Any, ...], list[dict[str, Any]]] = {}
+    for row in rows:
+        groups.setdefault(tuple(row[key] for key in keys), []).append(row)
+    result = []
+    for key_values, group in sorted(groups.items(), key=lambda item: tuple(map(str, item[0]))):
+        values = [row[value_field] for row in group]
+        result.append({
+            **dict(zip(keys, key_values)),
+            "round_count": len(group),
+            "round_values_ms": values,
+            "median_ms": statistics.median(values),
+            "min_ms": min(values),
+            "max_ms": max(values),
         })
     return result
 
@@ -568,6 +655,27 @@ def _build_summary(
                     "relative_pct": 100.0 * (prefix_sum / control_sum - 1.0),
                 })
 
+    difference_in_differences = []
+    for suite in SUITES:
+        for repeat in REPEATS:
+            control_text = totals[("control", suite, "text", repeat)]
+            control_proto = totals[("control", suite, "protobuf", repeat)]
+            prefix_text = totals[("prefix-java-nas", suite, "text", repeat)]
+            prefix_proto = totals[("prefix-java-nas", suite, "protobuf", repeat)]
+            text_treatment_delta = prefix_text - control_text
+            proto_treatment_delta = prefix_proto - control_proto
+            difference_in_differences.append({
+                "suite": suite,
+                "repeat": repeat,
+                "control_text_ms": control_text,
+                "control_protobuf_ms": control_proto,
+                "prefix_text_ms": prefix_text,
+                "prefix_protobuf_ms": prefix_proto,
+                "text_treatment_delta_ms": text_treatment_delta,
+                "protobuf_treatment_delta_ms": proto_treatment_delta,
+                "difference_in_differences_ms": proto_treatment_delta - text_treatment_delta,
+            })
+
     group_summaries = []
     for treatment in TREATMENTS:
         for suite in SUITES:
@@ -582,6 +690,7 @@ def _build_summary(
                         "protocol": protocol,
                         "input_id": input_id,
                         "source_label": first["source_label"],
+                        "source_count": first["source_count"],
                         "event_id": first["event_id"],
                         "source_sha256": first["source_sha256"],
                         "args_sha256": first["args_sha256"],
@@ -610,6 +719,7 @@ def _build_summary(
                     "suite": suite,
                     "input_id": input_id,
                     "source_label": text_control["source_label"],
+                    "source_count": text_control["source_count"],
                     "source_sha256": text_control["source_sha256"],
                     "repeat": repeat,
                     "control_text_ms": text_control["elapsed_ms"],
@@ -656,10 +766,38 @@ def _build_summary(
         "same_format_treatment_delta_summary": _median_delta_rows(
             treatment_deltas, keys=("suite", "protocol")
         ),
+        "difference_in_differences": difference_in_differences,
+        "difference_in_differences_summary": _median_field_rows(
+            difference_in_differences, keys=("suite",),
+            value_field="difference_in_differences_ms",
+        ),
         "group_rounds": group_rounds,
         "group_summaries": group_summaries,
         "key_group_rounds": key_group_rows,
     }
+
+
+def _normalized_schedule_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Ignore only the relocatable dumper output path when checking copied schedules."""
+    normalized = dict(row)
+    normalized.pop("dumper_folder", None)
+    parser_config = normalized.get("parser_config")
+    if isinstance(parser_config, dict):
+        parser_config = dict(parser_config)
+        parser_config.pop("dumper_folder", None)
+        normalized["parser_config"] = parser_config
+    return normalized
+
+
+def _validate_schedule_copy(
+    source_rows: list[dict[str, Any]], executed_rows: list[dict[str, Any]], source: str,
+) -> None:
+    if len(source_rows) != len(executed_rows):
+        raise AnalysisError(f"{source}: executed schedule row count differs from source schedule")
+    if [_normalized_schedule_row(row) for row in source_rows] != [
+        _normalized_schedule_row(row) for row in executed_rows
+    ]:
+        raise AnalysisError(f"{source}: executed schedule differs beyond dumper-folder relocation")
 
 
 def analyze_warmup_intervention(
@@ -672,22 +810,36 @@ def analyze_warmup_intervention(
         type(value) is not int or value < 1 for value in expected_group_counts.values()
     ):
         raise AnalysisError("expected_group_counts must contain positive counts for both suites")
+    source_schedules: dict[tuple[str, str, str, int], list[dict[str, Any]]] = {}
     schedules: dict[tuple[str, str, str, int], list[dict[str, Any]]] = {}
     observations: dict[tuple[str, str, str, int], list[dict[str, Any]]] = {}
     manifests: dict[tuple[str, str, str, int], dict[str, Any]] = {}
     proofs: dict[tuple[str, str, str, int], list[dict[str, Any]]] = {}
-    schedule_paths: dict[tuple[str, str, str, int], Path] = {}
+    manifest_inputs: dict[tuple[str, str, str, int], dict[str, Path]] = {}
     for cell in _cell_keys():
         treatment, suite, protocol, repeat = cell
-        schedule_path = root / "schedules" / _schedule_filename(*cell)
+        stem = _cell_name(*cell)
+        source_schedule_path = root.parent / "schedules" / _schedule_filename(*cell)
+        executed_schedule_path = root / "run-schedules" / f"{stem}.jsonl"
         observation_path = root / "observations" / _observation_filename(*cell)
         manifest_path = root / "run-manifests" / _manifest_filename(*cell)
         proof_path = root / "warm-counters" / _counter_filename(*cell)
-        schedules[cell] = _read_jsonl(schedule_path)
+        source_schedules[cell] = _read_jsonl(source_schedule_path)
+        schedules[cell] = _read_jsonl(executed_schedule_path)
         observations[cell] = _read_jsonl(observation_path)
         manifests[cell] = _read_json(manifest_path)
         proofs[cell] = _read_jsonl(proof_path)
-        schedule_paths[cell] = schedule_path
+        manifest_inputs[cell] = {
+            "source_schedule_path": source_schedule_path,
+            "executed_schedule_path": executed_schedule_path,
+            "observation_path": observation_path,
+            "counterproof_path": proof_path,
+        }
+
+    for cell in _cell_keys():
+        _validate_schedule_copy(
+            source_schedules[cell], schedules[cell], _cell_name(*cell)
+        )
 
     # First validate schedule-level treatment equality before looking at elapsed values.
     for suite in SUITES:
@@ -747,7 +899,7 @@ def analyze_warmup_intervention(
             treatment=treatment, suite=suite, protocol=protocol, repeat=repeat,
             schedule_rows=schedules[cell], observation_rows=observations[cell],
             manifest=manifests[cell],
-            manifest_summary={"schedule_path": schedule_paths[cell]},
+            manifest_summary=manifest_inputs[cell],
             counterproof_rows=proofs[cell], expected_group_counts=expected_group_counts,
         )
         measured.extend(batch)
@@ -890,6 +1042,15 @@ def render_warmup_intervention_html(summary: dict[str, Any]) -> str:
             f'<td data-label="Prefix minus control">{row["delta_ms"] / 1000:+.3f} s</td>'
             f'<td data-label="Relative change">{row["relative_pct"]:+.2f}%</td></tr>'
         )
+    did_rows = []
+    for row in summary["difference_in_differences"]:
+        did_rows.append(
+            f'<tr><th scope="row">{html.escape("Clava-JS" if row["suite"] == "clava-js" else "Java")}</th>'
+            f'<td data-label="Round">{row["repeat"]}</td>'
+            f'<td data-label="Control Proto minus Text">{(row["control_protobuf_ms"] - row["control_text_ms"]) / 1000:+.3f} s</td>'
+            f'<td data-label="Prefix Proto minus Text">{(row["prefix_protobuf_ms"] - row["prefix_text_ms"]) / 1000:+.3f} s</td>'
+            f'<td data-label="Difference in differences">{row["difference_in_differences_ms"] / 1000:+.3f} s</td></tr>'
+        )
     key_rows = []
     for row in summary["key_group_rounds"]:
         key_rows.append(
@@ -923,7 +1084,8 @@ section.warmup-intervention th[scope="col"]{{font-size:12px;color:var(--muted,#5
 @media(max-width:560px){{section.warmup-intervention .wi-table,section.warmup-intervention .wi-table tbody,section.warmup-intervention .wi-table tr,section.warmup-intervention .wi-table th,section.warmup-intervention .wi-table td{{display:block;width:100%}}section.warmup-intervention .wi-table thead{{display:none}}section.warmup-intervention .wi-table tr{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));padding:5px 0;border-bottom:1px solid var(--line,#d5dfe8)}}section.warmup-intervention .wi-table th[scope="row"]{{grid-column:1/-1;border:0}}section.warmup-intervention .wi-table td{{border:0;min-width:0}}section.warmup-intervention .wi-table td::before{{content:attr(data-label);display:block;color:var(--muted,#536174);font-size:12px;font-weight:650;margin-bottom:2px}}}}
 </style>
 <h2 id="wi-title">Warm-cache prefix intervention</h2>
-<p>Two rounds only, separate from the primary six-round comparison. Each suite chart uses one linear seconds axis for all four conditions. Warm, raw protocol output; no explicit or forced GC flags. The JVM's automatic GC remains enabled. The eight NAS prefix calls are unmeasured.</p>
+<p>Two rounds, separate from the six-round primary. These unprofiled runs use warm ccache and raw protocol output, with eight NAS groups placed before each measured batch. The measured calls stay in the same order. Totals include only the 300 Clava-JS or 216 Java measured groups, not prefix calls. Values sum outer CodeParser.parse wall time, not reader-only time. No explicit or forced GC; automatic JVM GC remains allowed.</p>
+<p><a href="warmup-intervention-rounds.csv" download>Download paired round totals (CSV)</a> · <a href="warmup-intervention-groups.csv" download>Download paired group timings and labels (CSV)</a></p>
 <div class="wi-grid">{charts}</div>
 <details><summary>Per-cell totals, paired deltas, and selected input timings</summary>
 <h3>Summed parse time by suite, treatment, protocol, and round</h3>
@@ -932,6 +1094,8 @@ section.warmup-intervention th[scope="col"]{{font-size:12px;color:var(--muted,#5
 <div class="wi-table-wrap"><table class="wi-table"><thead><tr><th scope="col">Suite</th><th scope="col">Treatment</th><th scope="col">Round</th><th scope="col">Delta</th><th scope="col">Change</th></tr></thead><tbody>{''.join(format_rows)}</tbody></table></div>
 <h3>Same-format treatment delta, prefix minus no prefix</h3>
 <div class="wi-table-wrap"><table class="wi-table"><thead><tr><th scope="col">Suite</th><th scope="col">Protocol</th><th scope="col">Round</th><th scope="col">Delta</th><th scope="col">Change</th></tr></thead><tbody>{''.join(treatment_rows)}</tbody></table></div>
+<h3>Difference in differences, format-gap change after prefix</h3>
+<div class="wi-table-wrap"><table class="wi-table"><thead><tr><th scope="col">Suite</th><th scope="col">Round</th><th scope="col">Control Proto minus Text</th><th scope="col">Prefix Proto minus Text</th><th scope="col">Change in gap</th></tr></thead><tbody>{''.join(did_rows)}</tbody></table></div>
 <h3>Selected input groups, each round shown separately</h3>
 <div class="wi-table-wrap"><table class="wi-table"><thead><tr><th scope="col">Group</th><th scope="col">Input</th><th scope="col">Round</th><th scope="col">Control Text</th><th scope="col">Control Proto</th><th scope="col">Prefix Text</th><th scope="col">Prefix Proto</th></tr></thead><tbody>{''.join(key_rows)}</tbody></table></div>
 </details>
@@ -953,9 +1117,101 @@ def write_intervention_outputs(summary: dict[str, Any], output_dir: Path) -> dic
     html_text = render_warmup_intervention_html(summary)
     json_path = output_dir / "warmup-intervention-analysis.json"
     html_path = output_dir / "warmup-intervention-review.html"
+    round_csv_path = output_dir / "warmup-intervention-rounds.csv"
+    group_csv_path = output_dir / "warmup-intervention-groups.csv"
     json_path.write_text(json_text, encoding="utf-8")
     html_path.write_text(html_text, encoding="utf-8")
-    return {"summary": json_path, "html": html_path}
+
+    total_index = {
+        (row["treatment"], row["suite"], row["protocol"], row["repeat"]): row
+        for row in summary["cell_totals"]
+    }
+    round_fields = (
+        "suite", "repeat", "group_count", "control_text_s", "control_protobuf_s",
+        "prefix_text_s", "prefix_protobuf_s", "control_format_delta_s",
+        "prefix_format_delta_s", "text_treatment_delta_s",
+        "protobuf_treatment_delta_s", "difference_in_differences_s",
+    )
+    with round_csv_path.open("w", encoding="utf-8", newline="") as output:
+        writer = csv.DictWriter(output, fieldnames=round_fields)
+        writer.writeheader()
+        did_index = {(row["suite"], row["repeat"]): row
+                     for row in summary["difference_in_differences"]}
+        for suite in SUITES:
+            for repeat in REPEATS:
+                get_seconds = lambda treatment, protocol: (
+                    total_index[(treatment, suite, protocol, repeat)]["sum_elapsed_s"]
+                )
+                control_text = get_seconds("control", "text")
+                control_proto = get_seconds("control", "protobuf")
+                prefix_text = get_seconds("prefix-java-nas", "text")
+                prefix_proto = get_seconds("prefix-java-nas", "protobuf")
+                writer.writerow({
+                    "suite": suite,
+                    "repeat": repeat,
+                    "group_count": summary["group_counts"][suite],
+                    "control_text_s": f"{control_text:.9f}",
+                    "control_protobuf_s": f"{control_proto:.9f}",
+                    "prefix_text_s": f"{prefix_text:.9f}",
+                    "prefix_protobuf_s": f"{prefix_proto:.9f}",
+                    "control_format_delta_s": f"{control_proto - control_text:.9f}",
+                    "prefix_format_delta_s": f"{prefix_proto - prefix_text:.9f}",
+                    "text_treatment_delta_s": f"{prefix_text - control_text:.9f}",
+                    "protobuf_treatment_delta_s": f"{prefix_proto - control_proto:.9f}",
+                    "difference_in_differences_s": (
+                        f"{did_index[(suite, repeat)]['difference_in_differences_ms'] / 1000:.9f}"
+                    ),
+                })
+
+    group_index = {
+        (row["treatment"], row["suite"], row["protocol"], row["repeat"], row["input_id"]): row
+        for row in summary["group_rounds"]
+    }
+    group_fields = (
+        "suite", "input_id", "source_label", "source_count", "source_sha256", "repeat",
+        "control_text_ms", "control_protobuf_ms", "prefix_text_ms", "prefix_protobuf_ms",
+        "control_format_delta_ms", "prefix_format_delta_ms",
+        "text_treatment_delta_ms", "protobuf_treatment_delta_ms",
+        "difference_in_differences_ms",
+    )
+    with group_csv_path.open("w", encoding="utf-8", newline="") as output:
+        writer = csv.DictWriter(output, fieldnames=group_fields)
+        writer.writeheader()
+        for suite in SUITES:
+            for input_id in _group_ids(suite, summary["group_counts"][suite]):
+                for repeat in REPEATS:
+                    get_ms = lambda treatment, protocol: group_index[(
+                        treatment, suite, protocol, repeat, input_id
+                    )]["elapsed_ms"]
+                    control_text = get_ms("control", "text")
+                    control_proto = get_ms("control", "protobuf")
+                    prefix_text = get_ms("prefix-java-nas", "text")
+                    prefix_proto = get_ms("prefix-java-nas", "protobuf")
+                    source = group_index[("control", suite, "text", repeat, input_id)]
+                    writer.writerow({
+                        "suite": suite,
+                        "input_id": input_id,
+                        "source_label": source["source_label"],
+                        "source_count": source["source_count"],
+                        "source_sha256": source["source_sha256"],
+                        "repeat": repeat,
+                        "control_text_ms": f"{control_text:.6f}",
+                        "control_protobuf_ms": f"{control_proto:.6f}",
+                        "prefix_text_ms": f"{prefix_text:.6f}",
+                        "prefix_protobuf_ms": f"{prefix_proto:.6f}",
+                        "control_format_delta_ms": f"{control_proto - control_text:.6f}",
+                        "prefix_format_delta_ms": f"{prefix_proto - prefix_text:.6f}",
+                        "text_treatment_delta_ms": f"{prefix_text - control_text:.6f}",
+                        "protobuf_treatment_delta_ms": f"{prefix_proto - control_proto:.6f}",
+                        "difference_in_differences_ms": f"{(prefix_proto - control_proto) - (prefix_text - control_text):.6f}",
+                    })
+
+    for path in (round_csv_path, group_csv_path):
+        if any(marker in path.read_text(encoding="utf-8")
+               for marker in ("/home/", "/private/", "/tmp/", "file://")):
+            raise AnalysisError(f"{path.name} contains a local path")
+    return {"summary": json_path, "html": html_path,
+            "rounds_csv": round_csv_path, "groups_csv": group_csv_path}
 
 
 def main(argv: list[str] | None = None) -> int:
