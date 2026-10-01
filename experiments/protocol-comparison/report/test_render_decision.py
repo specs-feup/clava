@@ -5,7 +5,7 @@ import io
 import re
 import xml.etree.ElementTree as ET
 
-from render_decision import candle, comparison, csv_viewer, measurements_download, validate_matrix
+from render_decision import candle, comparison, csv_viewer, diagnostic_chart, measurements_download, validate_matrix, validate_uninstrumented_headlines
 from render_report import SUITES, STAGE_ORDER, MODE_ORDER
 
 
@@ -20,6 +20,29 @@ def complete_rows():
 
 
 class DecisionReportTest(unittest.TestCase):
+    def test_diagnostic_uses_paired_values_and_readable_units(self):
+        output = diagnostic_chart({"title": "AST & validation", "caption": "Paired changes",
+            "rows": [{"label": "AST construction", "values": [1.1, 1.0]},
+                     {"label": "Syntax checks", "values": [-1.5, -1.4]}]})
+        self.assertIn("AST &amp; validation", output)
+        self.assertIn("+1.05s", output)
+        self.assertIn("-1.45s", output)
+        self.assertEqual(output.count("<circle"), 4)
+        ET.fromstring(re.search(r"(<svg.*</svg>)", output).group(1))
+
+    def test_uninstrumented_headline_requires_actual_worker_proof(self):
+        rows = complete_rows()
+        with self.assertRaises(ValueError):
+            validate_uninstrumented_headlines(rows)
+        for row in rows:
+            if row["suite"] == "java":
+                row.update(agent="off", actual_test_executor_args=["java", "-Xmx512m", "GradleWorkerMain"])
+        validate_uninstrumented_headlines(rows)
+        java = next(row for row in rows if row["suite"] == "java")
+        java["actual_test_executor_args"].append("-javaagent:coverage.jar")
+        with self.assertRaises(ValueError):
+            validate_uninstrumented_headlines(rows)
+
     def test_mixed_paired_results_are_not_coloured_as_consistent_wins(self):
         rows = complete_rows()
         for row in rows:

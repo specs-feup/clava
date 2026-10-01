@@ -747,6 +747,7 @@ def _csv_exports(summary: dict[str, Any]) -> dict[str, tuple[list[str], Iterable
 def write_grouped_analysis_exports(
     summary: dict[str, Any], output_directory: Path, *,
     expected_group_counts: dict[str, int] | None = None,
+    compact: bool = False,
 ) -> dict[str, Path]:
     """Write the sanitized JSON, HTML fragment, and four linked CSV datasets."""
     if summary.get("schema_version") != 1:
@@ -762,7 +763,7 @@ def write_grouped_analysis_exports(
     }
     paths["summary"].write_text(summary_text, encoding="utf-8")
     html_text = render_reviewed_visuals_html(
-        summary, expected_group_counts=expected_group_counts
+        summary, expected_group_counts=expected_group_counts, compact=compact
     )
     if any(marker in html_text for marker in ("/home/", "/private/", "/tmp/", "file://")):
         raise AnalysisError("HTML fragment includes an absolute/local path")
@@ -780,6 +781,7 @@ def write_grouped_analysis_exports(
 def render_reviewed_visuals_html(
     summary: dict[str, Any], *,
     expected_group_counts: dict[str, int] | None = None,
+    compact: bool = False,
 ) -> str:
     """Render a self-contained, responsive HTML fragment for the decision report."""
     expected_group_counts = expected_group_counts or EXPECTED_GROUP_COUNTS
@@ -902,8 +904,8 @@ section.grouped-ab a{{overflow-wrap:anywhere}}
 @media(max-width:700px){{section.grouped-ab{{margin:28px 0}}section.grouped-ab .ga-grid-layout{{grid-template-columns:1fr;gap:10px}}section.grouped-ab .ga-figure{{padding:8px 6px}}section.grouped-ab .ga-main-svg{{max-width:360px}}}}
 @media(max-width:560px){{section.grouped-ab .ga-table-wrap table,section.grouped-ab .ga-table-wrap tbody,section.grouped-ab .ga-table-wrap tr,section.grouped-ab .ga-table-wrap th,section.grouped-ab .ga-table-wrap td{{display:block;width:100%}}section.grouped-ab .ga-table-wrap thead{{display:none}}section.grouped-ab .ga-table-wrap tr{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-bottom:1px solid var(--line,#d5dfe8);padding:6px 0}}section.grouped-ab .ga-table-wrap th[scope="row"]{{grid-column:1/-1;border:0;font-weight:700}}section.grouped-ab .ga-table-wrap td{{min-width:0;border:0;padding:5px 8px}}section.grouped-ab .ga-table-wrap td::before{{content:attr(data-label);display:block;color:var(--muted,#536174);font-size:12px;font-weight:650;margin-bottom:2px}}}}
 </style>
-<h2 id="grouped-ab-title">Text/Protobuf format-only control</h2>
-<p>Same build; two patches enforce legacy AST equality. Raw dumps here; native-compressed Text/Protobuf in cache-enabled suite runs. Original parser groups, Apps and cross-file linking. No heap log or explicit GC. 130 syntax-only JS groups return no App; retained. Candles show group-call, not file, times.</p>
+<h2 id="grouped-ab-title">Raw same-build grouped replay</h2>
+<p>Both formats use fast syntax-only validation here. This removes Text's wasted AST dumping; the replay cannot predict whole-suite rankings. Two patches enforce legacy AST equality. Raw dumps, captured parser groups and cross-file linking. JS includes 130 syntax-only groups. Candles show group-call times, not isolated-file times.</p>
 <h3>Per-group runtime spread</h3>
 <div class="ga-grid-layout">{runtime_charts}</div>
 <h3>Median parse totals</h3>
@@ -923,6 +925,9 @@ section.grouped-ab a{{overflow-wrap:anywhere}}
 <div class="ga-table-wrap"><table><thead><tr><th scope="col">Scope</th><th scope="col">Cache</th><th scope="col">Round</th><th scope="col">Text sum</th><th scope="col">Proto sum</th><th scope="col">Proto − Text</th><th scope="col">Paired change</th></tr></thead><tbody>{''.join(full_total_rows)}</tbody></table></div>
 </details>
 </section>'''
+    if compact:
+        marker = '<details><summary>Detailed ratios, paired deltas, and per-round totals</summary>'
+        fragment = fragment.partition(marker)[0] + '''<p class="ga-note">Compatibility patches preserve the legacy reference-type field and absent pseudo-destructor qualifier. Full graph and generated-code fidelity passed. This is not the unmodified Protobuf branch. All per-group and per-round values remain in the CSVs.</p></section>'''
     if len(fragment.encode("utf-8")) > 4 * 1024 * 1024:
         raise AnalysisError("grouped visual fragment exceeds the 4 MiB report limit")
     return fragment
