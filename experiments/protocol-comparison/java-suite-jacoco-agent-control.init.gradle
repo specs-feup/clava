@@ -1,0 +1,46 @@
+import groovy.json.JsonOutput
+import org.gradle.api.tasks.testing.Test
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+
+gradle.afterProject { project ->
+    if (project.name == 'ClangAstParser') {
+        project.tasks.named('test', Test) { testTask ->
+            def mode = System.getenv('DEADLINE_JACOCO_AGENT')
+            def diagnosticDir = System.getenv('DEADLINE_JAVA_DIAGNOSTIC_DIR')
+            if (!(mode in ['on', 'off'])) {
+                throw new GradleException('DEADLINE_JACOCO_AGENT must be on or off')
+            }
+            if (!diagnosticDir) {
+                throw new GradleException('DEADLINE_JAVA_DIAGNOSTIC_DIR is required')
+            }
+
+            def jacoco = testTask.extensions.findByType(JacocoTaskExtension)
+            if (jacoco == null) {
+                throw new GradleException('The test task has no JaCoCo extension')
+            }
+            jacoco.enabled = mode == 'on'
+
+            def diagnosticRoot = new File(diagnosticDir)
+            testTask.reports.junit.outputLocation.set(
+                    project.layout.dir(project.provider { new File(diagnosticRoot, 'junit-xml') }))
+            testTask.binaryResultsDirectory.set(
+                    project.layout.dir(project.provider { new File(diagnosticRoot, 'binary-results') }))
+
+            testTask.doFirst {
+                def workerArgs = testTask.allJvmArgs
+                def agentArgs = workerArgs.findAll { it.startsWith('-javaagent:') }
+                def record = [
+                    requested_agent: mode,
+                    jacoco_enabled: jacoco.enabled,
+                    max_heap_size: testTask.maxHeapSize,
+                    jvm_args: workerArgs,
+                    javaagent_args: agentArgs,
+                ]
+                diagnosticRoot.mkdirs()
+                new File(diagnosticRoot, 'worker-configuration.json').text =
+                        JsonOutput.prettyPrint(JsonOutput.toJson(record)) + '\n'
+                logger.lifecycle('DEADLINE_TEST_WORKER ' + JsonOutput.toJson(record))
+            }
+        }
+    }
+}
