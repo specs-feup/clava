@@ -154,7 +154,7 @@ class ComponentsAndRenderingTest(unittest.TestCase):
         self.assertIn('viewBox="0 0 360 420"', html_text)
         self.assertIn('name="viewport"', html_text)
         self.assertIn("Protobuf faster", html_text)
-        self.assertIn("Native/runtime and raw option fingerprints differ", html_text)
+        self.assertIn("Native/runtime hashes differ.", html_text)
         self.assertNotIn("/home/", csv_text + html_text)
         self.assertNotIn("/private/", csv_text + html_text)
 

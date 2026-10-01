@@ -79,8 +79,7 @@ class SelectCohortTest(unittest.TestCase):
                                           self.java, self.java_source)
 
     def test_rejects_java_input_that_is_not_its_own_partition(self):
-        java_with_js = copy.deepcopy(self.java)
-        java_with_js["plan"]["suites"] = ["clava-js", "java"]
+        java_with_js = copy.deepcopy(self.primary)
         with self.assertRaisesRegex(analyzer.AnalysisError, "Java-only"):
             selector.select_js_partition(self.primary, self.primary_source,
                                          java_with_js, self.java_source)
