@@ -57,6 +57,7 @@ import java.util.Locale;
 public class ClangAstDumper {
 
     private final static boolean USE_PLUGIN = false;
+    private static final String SYNTAX_CHECK_ONLY_OPTION = "-syntax-check-only";
     private final static String SYSTEM_HEADER_THRESHOLD_OPTION = "-system-header-threshold=";
 
     public static boolean usePlugin() {
@@ -475,7 +476,8 @@ public class ClangAstDumper {
             throw new UncheckedIOException("Could not create syntax validation working folder", e);
         }
 
-        var output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
+        var output = SpecsSystem.runProcess(
+                withSyntaxCheckOnlyArgument(arguments), lastWorkingFolder,
                 this::discardOutput,
                 inputStream -> processOutput(inputStream));
 
@@ -488,6 +490,20 @@ public class ClangAstDumper {
         }
 
         return null;
+    }
+
+    static List<String> withSyntaxCheckOnlyArgument(List<String> arguments) {
+        List<String> syntaxArguments = new ArrayList<>(arguments);
+        syntaxArguments.removeIf(SYNTAX_CHECK_ONLY_OPTION::equals);
+
+        int separatorIndex = syntaxArguments.indexOf("--");
+        if (separatorIndex >= 0) {
+            syntaxArguments.add(separatorIndex, SYNTAX_CHECK_ONLY_OPTION);
+        } else {
+            syntaxArguments.add(SYNTAX_CHECK_ONLY_OPTION);
+        }
+
+        return syntaxArguments;
     }
 
     private String discardOutput(InputStream inputStream) {
