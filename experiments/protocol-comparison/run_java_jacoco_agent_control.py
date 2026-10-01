@@ -33,7 +33,11 @@ import run_comparison as base
 
 SCRIPT_ROOT = Path(__file__).resolve().parent
 DEFAULT_MATRIX = SCRIPT_ROOT / "results/deadline-20260930/matrix-r2/results.json"
-DEFAULT_OUTPUT = SCRIPT_ROOT / "results/deadline-20260930/matrix-r2/java-jacoco-agent-control-r1"
+DEADLINE_ROOT = SCRIPT_ROOT / "results/deadline-20260930"
+SHARED_ROOT = DEADLINE_ROOT / "shared"
+SPECS_JAVA_LIBS_ROOT = SHARED_ROOT / "specs-java-libs"
+LARA_FRAMEWORK_ROOT = SHARED_ROOT / "lara-framework"
+DEFAULT_OUTPUT = SCRIPT_ROOT / "results/deadline-20260930/matrix-r2/java-jacoco-agent-control-r2"
 EXPECTED_JAVA = {"total_tests": 116, "passed_tests": 116, "failed_tests": 0, "skipped_tests": 0}
 EXPECTED_JAVA_PLAN = {"total": 116, "passed": 116, "failed": 0, "skipped": 0}
 EXPECTED_PRIMARY_CACHE = {"cacheable_calls": 208, "hits": 207, "misses": 1, "uncacheable_calls": 0}
@@ -199,6 +203,8 @@ def verify_stage(stage: dict) -> dict[str, object]:
         )
     dependency = stage["java_build_dependencies"]["specs_java_libs"]
     specs_root = Path(dependency["root"])
+    if specs_root.resolve() != SPECS_JAVA_LIBS_ROOT.resolve():
+        raise RuntimeError(f"frozen SpecsUtils root is not the shared build root: {specs_root}")
     observed_dependency = {
         "revision": git(specs_root, "rev-parse", "HEAD"),
         "status": git_status(specs_root),
@@ -213,6 +219,20 @@ def verify_stage(stage: dict) -> dict[str, object]:
     }
     if observed_dependency != expected_dependency:
         raise RuntimeError(f"frozen SpecsUtils build input changed for {stage['key']}")
+    lara = stage["java_build_dependencies"]["lara_framework"]
+    lara_root = Path(lara["root"])
+    if lara_root.resolve() != LARA_FRAMEWORK_ROOT.resolve():
+        raise RuntimeError(f"frozen Lara root is not the shared build root: {lara_root}")
+    observed_lara = {
+        "revision": git(lara_root, "rev-parse", "HEAD"),
+        "status": git_status(lara_root),
+        "diff_sha256": diff_sha256(lara_root),
+    }
+    expected_lara = {
+        "revision": lara["revision"], "status": lara["status"], "diff_sha256": lara["diff_sha256"],
+    }
+    if observed_lara != expected_lara:
+        raise RuntimeError(f"frozen Lara framework build input changed for {stage['key']}")
     return observations
 
 
@@ -306,6 +326,25 @@ def test_task_was_executed(log_path: Path) -> bool:
         if match and (match.group(1) or "").strip() not in {"UP-TO-DATE", "NO-SOURCE", "SKIPPED"}:
             return True
     return False
+
+
+def observed_native_tool(stage: dict, log_path: Path) -> tuple[str, str]:
+    marker = "Using local clang-dumper build:"
+    paths = {
+        line.split(marker, 1)[1].strip()
+        for line in log_path.read_text(errors="replace").splitlines()
+        if marker in line
+    }
+    if len(paths) != 1:
+        raise RuntimeError(f"expected one actual native tool path in {log_path}, found {sorted(paths)}")
+    actual_path = Path(next(iter(paths))).resolve()
+    expected_path = Path(stage["dumper"]).resolve()
+    if actual_path != expected_path:
+        raise RuntimeError(f"test used unexpected native tool: expected={expected_path}, actual={actual_path}")
+    actual_sha256 = base.sha256_file(actual_path)
+    if actual_sha256 != stage["native_binary_sha256"]:
+        raise RuntimeError(f"actual native tool hash changed for {stage['key']}: {actual_sha256}")
+    return str(actual_path), actual_sha256
 
 
 def write_csv(rows: list[dict[str, object]], path: Path) -> None:
@@ -480,6 +519,8 @@ def main() -> int:
                 "JAVA_TOOL_OPTIONS": java_options,
                 "DEADLINE_JACOCO_AGENT": agent,
                 "DEADLINE_JAVA_DIAGNOSTIC_DIR": str(diagnostic_dir),
+                "SPECS_JAVA_LIBS_HOME": str(SPECS_JAVA_LIBS_ROOT.resolve()),
+                "LARA_FRAMEWORK_HOME": str(LARA_FRAMEWORK_ROOT.resolve()),
             })
             command = ["/usr/bin/time", "-f", base.TIME_FORMAT, "-o", str(run_dir / "time.txt"), "--",
                        "gradle", "--no-daemon", "--offline",
@@ -499,10 +540,16 @@ def main() -> int:
             elapsed = time.perf_counter() - started
             run_finished_at = dt.datetime.now(dt.timezone.utc).isoformat()
             stats_after = ccache_stats(cache_dir)
-            delta = {f"{name}_delta": stats_after[name] - stats_before[name] for name in stats_before}
+            delta = {
+                "cacheable_calls_delta": stats_after["cacheable_calls"] - stats_before["cacheable_calls"],
+                "cache_hits_delta": stats_after["hits"] - stats_before["hits"],
+                "cache_misses_delta": stats_after["misses"] - stats_before["misses"],
+                "uncacheable_calls_delta": stats_after["uncacheable_calls"] - stats_before["uncacheable_calls"],
+            }
             counts = junit_counts(diagnostic_dir / "junit-xml")
             test_identity_sha256 = junit_identity_sha256(diagnostic_dir / "junit-xml")
             test_identity_match = test_identity_sha256 == reference_test_identity["sha256"]
+            actual_native_path, actual_native_sha256 = observed_native_tool(stage, log_path)
             worker_path = diagnostic_dir / "worker-configuration.json"
             worker = json.loads(worker_path.read_text()) if worker_path.is_file() else {}
             compilation = task_compilation_lines(log_path)
@@ -531,8 +578,8 @@ def main() -> int:
             }
             observed_cache_delta = {
                 "cacheable_calls": delta["cacheable_calls_delta"],
-                "hits": delta["hits_delta"],
-                "misses": delta["misses_delta"],
+                "hits": delta["cache_hits_delta"],
+                "misses": delta["cache_misses_delta"],
                 "uncacheable_calls": delta["uncacheable_calls_delta"],
             }
             cache_passed = observed_cache_delta == expected_cache[key]
@@ -554,6 +601,7 @@ def main() -> int:
                 **time_data, **counts, **delta, "cache_validation_passed": cache_passed,
                 "cache_dir": str(cache_dir), "worker_configuration": worker,
                 "test_identity_sha256": test_identity_sha256, "test_identity_match": test_identity_match,
+                "actual_native_tool": actual_native_path, "actual_native_tool_sha256": actual_native_sha256,
                 "worker_args_stable_except_agent": worker_stable,
                 "test_task_executed": test_executed, "test_worker_xmx_512m": heap_is_512m,
                 "only_expected_jacoco_agent": only_jacoco_agent,

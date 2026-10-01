@@ -22,7 +22,7 @@ gradle.afterProject { project ->
 
             def diagnosticRoot = new File(diagnosticDir)
             jacoco.destinationFile = new File(diagnosticRoot, 'jacoco.exec')
-            testTask.reports.junit.outputLocation.set(
+            testTask.reports.junitXml.outputLocation.set(
                     project.layout.dir(project.provider { new File(diagnosticRoot, 'junit-xml') }))
             testTask.binaryResultsDirectory.set(
                     project.layout.dir(project.provider { new File(diagnosticRoot, 'binary-results') }))
