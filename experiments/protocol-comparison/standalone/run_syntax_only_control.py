@@ -251,7 +251,8 @@ def build_native_control(native_root: Path, output_root: Path) -> tuple[Path, di
     overlay_source = overlay_dir / "tool.cpp"
     overlay_source.write_text(native_control_source(source_text))
     object_file = overlay_dir / "tool.cpp.o"
-    native_tool = overlay_dir / "tool-syntax-control"
+    # ClangResources.getLocalExecutable() resolves a local-build tag to <dir>/tool.
+    native_tool = overlay_dir / "tool"
 
     compile_db = json.loads((build_dir / "compile_commands.json").read_text())
     compile_rows = [row for row in compile_db if Path(row["file"]).resolve() == source_file.resolve()]
@@ -392,7 +393,7 @@ def main() -> int:
     args = parse_args()
     matrix_root = args.matrix_root.resolve()
     diagnostic_root = args.diagnostic_root.resolve()
-    output_root = (args.output_root or diagnostic_root / "syntax-only-control-r1").resolve()
+    output_root = (args.output_root or diagnostic_root / "syntax-only-control-r2").resolve()
     plan = {
         "mode": "plan-only" if not args.host_release_note else "execute",
         "matrix_root": str(matrix_root),
