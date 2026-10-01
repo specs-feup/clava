@@ -178,7 +178,7 @@ def render(manifests, provenance, analysis):
         raise ValueError("Analysis is incomplete; refuse to publish a measurement-only decision report")
     if len(analysis["discrepancy"]) < 2:
         raise ValueError("The new results need an explicit consistency check and evidence-backed explanation")
-    charts = ''.join(f'<article class="chart"><h3>{esc(SUITES[s]["title"])}</h3><p>{"158 pass · 6 skip" if s=="clava-js" else "116 pass · no skips"} · {repeat_count} runs per candle</p>{candle(s,rows)}</article>' for s in SUITES)
+    charts = ''.join(f'<article class="chart"><h3>{esc(SUITES[s]["title"])}</h3><p>{"158 pass · 6 skip · no coverage agent" if s=="clava-js" else "116 pass · coverage agent enabled"} · {repeat_count} runs per candle</p>{candle(s,rows)}</article>' for s in SUITES)
     evidence = ''.join(f'<li><a href="{esc(e["url"])}">{esc(e["title"])}</a></li>' for e in analysis["evidence"])
     revisions = ''.join(f'<li>{esc(STAGES[k][0])}: <code>{esc(next(iter(v.values())).get("clava_revision", "not recorded"))}</code></li>' for k,v in provenance.items())
     extra_visuals = analysis.get("reviewed_visuals_html", "")
@@ -186,6 +186,7 @@ def render(manifests, provenance, analysis):
 :root{{--bg:#fff;--ink:#18212e;--muted:#536174;--panel:#f4f7fa;--line:#d5dfe8;--good:#08744c;--bad:#ae3535}}html.dark{{--bg:#111923;--ink:#edf2f7;--muted:#b2c0ce;--panel:#1c2836;--line:#3c4b5e;--good:#77dcb1;--bad:#ffaaa2}}*{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,sans-serif}}main{{max-width:1100px;margin:auto;padding:24px}}h1{{font-size:clamp(27px,4vw,38px);line-height:1.15;margin:0 0 14px}}h2{{font-size:24px;margin:34px 0 12px}}h3{{font-size:18px;margin:0 0 8px}}p{{margin:8px 0 14px}}.muted,.chart>p{{color:var(--muted);font-size:14px}}.verdict{{padding:22px;background:var(--panel);border-left:5px solid var(--good);border-radius:8px}}.verdict p{{font-size:20px;margin:0}}.cards,.charts,.comparison{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}}.cards article,.chart,.comparison>div{{border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}}.cards article p{{margin:0}}.charts svg{{display:block;width:100%;height:auto;max-width:480px;margin:auto}}svg text{{fill:var(--ink);font-family:system-ui,sans-serif}}.grid{{stroke:var(--line);stroke-dasharray:3 4}}.divider{{stroke:var(--line)}}.tick,.label,.value{{font-size:12px}}.mode{{font-size:13px;font-weight:650}}.foot{{font-size:11px;fill:var(--muted)}}.matrix-row{{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:8px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;align-items:center}}.matrix-row span:not(:first-child){{text-align:center}}.matrix-head{{color:var(--muted);font-size:12px}}.delta{{font-weight:700}}.faster{{color:var(--good)}}.slower{{color:var(--bad)}}details{{border-top:1px solid var(--line);padding:14px 0;margin-top:18px}}summary{{cursor:pointer;font-weight:650}}a{{color:var(--good);overflow-wrap:anywhere}}code{{overflow-wrap:anywhere}}li{{margin:8px 0}}.explain{{display:grid;gap:12px}}.explain article{{padding:16px 20px;border-left:4px solid var(--line);background:var(--panel)}}.explain article p{{margin:0}}@media(max-width:700px){{main{{padding:18px 12px}}.cards,.charts,.comparison{{grid-template-columns:1fr;gap:14px}}.chart{{padding:14px 10px}}h2{{font-size:22px}}.verdict{{padding:16px}}.verdict p{{font-size:18px}}}}
 /* DraftLink injects Tailwind's reset after this stylesheet. Scoped rules must win. */
 main .tick,main .label,main .value{{font-size:15px}}main .mode{{font-size:15px}}main .foot{{font-size:13px}}
+main .java-format-control{{color:var(--ink)}}main .java-format-control svg text{{fill:var(--ink)}}main .java-format-control .median{{fill:var(--ink);stroke:var(--bg)}}main .java-format-control .whisker{{stroke:var(--ink)}}
 main h1{{font-size:clamp(27px,4vw,38px);line-height:1.15;font-weight:750;margin:0 0 14px}}main h2{{font-size:24px;font-weight:700;margin:34px 0 12px}}main h3{{font-size:18px;font-weight:650;margin:0 0 8px}}main p{{margin:8px 0 14px}}main li{{margin:8px 0}}main ul{{list-style:disc;padding-left:22px}}main summary{{font-weight:650}}main .cards{{margin-top:20px}}@media(max-width:700px){{main h2{{font-size:22px}}}}
 </style></head><body><main><p class="muted">Decision brief · {esc(analysis.get("measurement_date", "30 September to 1 October 2026"))} · five-minute read</p><h1>Clava protocol and cache decision</h1><div class="verdict"><p>{esc(analysis["recommendation"])}</p></div>{cards(analysis["reasons"])}
 <h2>What changes the runtime?</h2><p>Median same-round change versus Text in the same cache state. Negative is faster. Counts show how often that direction repeated. These compare implemented branches, not the format alone.</p>{comparison(rows)}
@@ -201,6 +202,8 @@ def main():
     p.add_argument("--input", type=Path, action="append", required=True)
     p.add_argument("--analysis", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument("--visual-fragment", type=Path, action="append", default=[],
+                   help="Reviewed, self-contained HTML evidence fragment; repeat in display order")
     args = p.parse_args()
     manifests, provenance, warnings = load_inputs(args.input)
     if warnings:
@@ -210,7 +213,10 @@ def main():
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "analysis"))
     from analyze_deadline import analyze_cohort
     analyze_cohort(args.input, manifests)
-    result = render(manifests, provenance, json.loads(args.analysis.read_text()))
+    analysis = json.loads(args.analysis.read_text())
+    analysis["reviewed_visuals_html"] = analysis.get("reviewed_visuals_html", "") + ''.join(
+        fragment.read_text(encoding="utf-8") for fragment in args.visual_fragment)
+    result = render(manifests, provenance, analysis)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(result, encoding="utf-8")
 

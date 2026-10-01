@@ -505,7 +505,7 @@ def _fmt_main_axis_ms(value: float) -> str:
     elif value >= 1:
         label = f"{value:.2f}".rstrip("0").rstrip(".")
     else:
-        label = f"{value:.6f}".rstrip("0").rstrip(".")
+        label = f"{value:.2g}"
         if label == "0":
             label = f"{value:.12f}".rstrip("0").rstrip(".")
     return f"{label}ms"
@@ -849,9 +849,9 @@ def render_reviewed_visuals_html(
             label = {"clava-js": "JS", "java": "Java", "global": "All"}[scope]
             median_total_rows.append(
                 f'<tr><th scope="row">{html.escape(label)} · {html.escape(CACHE_LABELS[cache_mode])}</th>'
-                f'<td data-label="Text median">{text_s:.3f}</td>'
-                f'<td data-label="Proto median">{proto_s:.3f}</td>'
-                f'<td data-label="Paired change">{delta_pct:+.2f}</td></tr>'
+                f'<td data-label="Text median">{text_s:.3f}s</td>'
+                f'<td data-label="Proto median">{proto_s:.3f}s</td>'
+                f'<td data-label="Paired change">{delta_pct:+.2f}%</td></tr>'
             )
 
     exports = _csv_exports(summary)
@@ -903,7 +903,7 @@ section.grouped-ab a{{overflow-wrap:anywhere}}
 @media(max-width:560px){{section.grouped-ab .ga-table-wrap table,section.grouped-ab .ga-table-wrap tbody,section.grouped-ab .ga-table-wrap tr,section.grouped-ab .ga-table-wrap th,section.grouped-ab .ga-table-wrap td{{display:block;width:100%}}section.grouped-ab .ga-table-wrap thead{{display:none}}section.grouped-ab .ga-table-wrap tr{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-bottom:1px solid var(--line,#d5dfe8);padding:6px 0}}section.grouped-ab .ga-table-wrap th[scope="row"]{{grid-column:1/-1;border:0;font-weight:700}}section.grouped-ab .ga-table-wrap td{{min-width:0;border:0;padding:5px 8px}}section.grouped-ab .ga-table-wrap td::before{{content:attr(data-label);display:block;color:var(--muted,#536174);font-size:12px;font-weight:650;margin-bottom:2px}}}}
 </style>
 <h2 id="grouped-ab-title">Text/Protobuf format-only control</h2>
-<p>Same build; two legacy-compatibility patches enforce AST equality. Raw uncompressed dumps in direct/warm modes; deployment Proto is compressed. Original CodeParser groups, Apps and cross-file linking remain. No heap log or explicit GC. 130 syntax-only JS groups return no App; retained for workload. Candles show group-call, not file, times.</p>
+<p>Same build; two patches enforce legacy AST equality. Raw dumps here; native-compressed Text/Protobuf in cache-enabled suite runs. Original parser groups, Apps and cross-file linking. No heap log or explicit GC. 130 syntax-only JS groups return no App; retained. Candles show group-call, not file, times.</p>
 <h3>Per-group runtime spread</h3>
 <div class="ga-grid-layout">{runtime_charts}</div>
 <h3>Median parse totals</h3>
