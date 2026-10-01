@@ -366,6 +366,24 @@ def observed_test_executor_args(log_path: Path) -> list[str]:
     return commands[0]
 
 
+def normalize_executor_args(arguments: list[str]) -> tuple[list[str], list[dict[str, str]]]:
+    normalized = []
+    response_files = []
+    for argument in arguments:
+        if argument.startswith("@"):
+            response_file = Path(argument[1:]).resolve()
+            if not response_file.is_file():
+                raise RuntimeError(f"Gradle worker classpath response file is missing: {response_file}")
+            response_sha256 = base.sha256_file(response_file)
+            response_files.append({"path": str(response_file), "sha256": response_sha256})
+            normalized.append(f"@response-file-sha256:{response_sha256}")
+        elif argument.startswith("-javaagent:"):
+            continue
+        else:
+            normalized.append(argument)
+    return normalized, response_files
+
+
 def write_csv(rows: list[dict[str, object]], path: Path) -> None:
     fields = ("ordinal", "round", "stage", "agent", "valid", "elapsed_s", "junit_aggregate_s",
               "wall_minus_junit_residual_s", "max_rss_kb", "cacheable_calls_delta", "cache_hits_delta",
@@ -585,11 +603,11 @@ def main() -> int:
                 and "jacocoagent" in all_agent_flags[0]
             ) if agent == "on" else len(all_agent_flags) == 0
             normalized_worker_args = [arg for arg in worker.get("jvm_args", []) if not arg.startswith("-javaagent:")]
-            normalized_executor_args = [arg for arg in executor_args if not arg.startswith("-javaagent:")]
+            executor_args_normalized, executor_classpath_response_files = normalize_executor_args(executor_args)
             worker_identity = {
                 "max_heap_size": worker.get("max_heap_size"),
                 "jvm_args_without_javaagent": normalized_worker_args,
-                "actual_executor_args_without_javaagent": normalized_executor_args,
+                "actual_executor_args_without_javaagent": executor_args_normalized,
             }
             if key not in worker_baseline:
                 worker_baseline[key] = worker_identity
@@ -639,6 +657,7 @@ def main() -> int:
                 "test_task_executed": test_executed, "test_worker_xmx_512m": heap_is_512m,
                 "only_expected_jacoco_agent": only_jacoco_agent,
                 "actual_test_executor_args": executor_args,
+                "actual_executor_classpath_response_files": executor_classpath_response_files,
                 "actual_test_executor_only_jacoco_agent": executor_only_jacoco_agent,
                 "report_tasks_skipped": report_tasks_skipped,
                 "expected_cache_delta": expected_cache[key],
