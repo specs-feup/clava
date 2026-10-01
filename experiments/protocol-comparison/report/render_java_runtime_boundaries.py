@@ -4,8 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import csv
 import html
+import io
 import json
 import statistics
 from decimal import Decimal, ROUND_HALF_UP
@@ -218,53 +220,52 @@ def causal_svg(rows: list[dict]) -> str:
     return "".join(out)
 
 
-def render_html(primary: list[dict], causal: list[dict]) -> str:
+def render_html(primary: list[dict], causal: list[dict], csv_content: str) -> str:
+    csv_href = "data:text/csv;base64," + base64.b64encode(
+        csv_content.encode("utf-8")
+    ).decode("ascii")
     return f'''<section class="java-boundaries" aria-label="Java runtime evidence">
 <style>
-.java-boundaries {{ color: #202a34; font: 16px/1.4 system-ui, sans-serif; }}
+.java-boundaries {{ color: var(--ink, #202a34); font: 16px/1.4 system-ui, sans-serif; }}
 .java-boundaries .title {{ margin: 0 0 6px; font-size: 20px; line-height: 1.25; }}
-.java-boundaries .subtitle, .java-boundaries .caption {{ margin: 5px 0; }}
-.java-boundaries .chart-scroll {{ max-width: 100%; overflow-x: auto; }}
-.java-boundaries .chart {{ display: block; width: 360px; height: auto; margin: 6px 0 0; }}
-.java-boundaries .axis {{ font: 15px system-ui, sans-serif; fill: #56636e; }}
-.java-boundaries .group, .java-boundaries .rowlabel {{ font: 15px system-ui, sans-serif; fill: #28343e; }}
+.java-boundaries .subtitle, .java-boundaries .caption {{ margin: 5px 0; color: var(--muted, #56636e); }}
+.java-boundaries .chart {{ display: block; width: 100%; max-width: 480px; height: auto; margin: 6px 0 0; }}
+.java-boundaries .axis {{ font: 15px system-ui, sans-serif; fill: var(--muted, #56636e); }}
+.java-boundaries .group, .java-boundaries .rowlabel {{ font: 15px system-ui, sans-serif; fill: var(--ink, #28343e); }}
 .java-boundaries .group {{ font-weight: 650; }}
-.java-boundaries .value {{ font: 15px ui-monospace, monospace; fill: #28343e; }}
-.java-boundaries .tick {{ stroke: #d9e0e5; stroke-width: 1; }}
-.java-boundaries .zero {{ stroke: #596772; stroke-width: 1.4; }}
-.java-boundaries .positive {{ fill: {COLORS['positive']}; }}
-.java-boundaries .negative {{ fill: {COLORS['negative']}; }}
+.java-boundaries .value {{ font: 15px ui-monospace, monospace; fill: var(--ink, #28343e); }}
+.java-boundaries .tick {{ stroke: var(--line, #d9e0e5); stroke-width: 1; }}
+.java-boundaries .zero {{ stroke: var(--muted, #596772); stroke-width: 1.4; }}
+.java-boundaries .positive {{ fill: var(--good, {COLORS['positive']}); }}
+.java-boundaries .negative {{ fill: var(--bad, {COLORS['negative']}); }}
 .java-boundaries details {{ margin-top: 12px; }}
 .java-boundaries summary {{ cursor: pointer; }}
 .java-boundaries .note {{ margin: 6px 0; }}
-.java-boundaries .csv-link {{ display: inline-block; margin-top: 8px; }}
+.java-boundaries .csv-link {{ display: inline-block; margin-top: 8px; color: var(--ink, #202a34); }}
 </style>
 <h2 class="title">Java protocol runtime differences</h2>
-<p class="subtitle">116 test bodies include setup, codegen, and assertions; these are not parse-only timings.</p>
-<p class="caption">Protobuf − Text · JaCoCo off · paired median, n=4 · positive means Protobuf slower.</p>
-<div class="chart-scroll">
+<p class="subtitle">116 test bodies include setup, codegen, assertions; not parse-only.</p>
+<p class="caption">Protobuf − Text · JaCoCo off · paired median (n=4); positive means slower.</p>
 {primary_svg(primary)}
-</div>
-<p class="caption">Outside = wall − JUnit sum; unassigned, not parser or coverage time. Reports skipped; no explicit GC.</p>
+<p class="caption">Outside = wall−JUnit; unassigned, not parser/coverage time. Reports skipped; no explicit GC.</p>
 <details>
-<summary>JaCoCo wall effect · ON − OFF · direct and cold · four paired rounds</summary>
-<p class="note">Wall times only. JUnit and outside-JUnit deltas are in the CSV. Outside-JUnit is unassigned, not parser or coverage time. Reports were skipped; no explicit GC was requested.</p>
-<div class="chart-scroll">
+<summary>JaCoCo ON−OFF wall, direct/cold, n=4 (expand)</summary>
+<p class="note">CSV has JUnit and residual deltas; residual is unassigned. Reports skipped; no explicit GC.</p>
 {causal_svg(causal)}
- </div>
 </details>
-<a class="csv-link" href="java-runtime-boundaries.csv" data-csv-href="java-runtime-boundaries.csv">CSV data</a>
+<a class="csv-link" href="{html.escape(csv_href, quote=True)}" data-csv-href="{html.escape(csv_href, quote=True)}" download="java-runtime-boundaries.csv">CSV data</a>
 </section>
 '''
 
 
-def write_csv(path: Path, rows: list[dict]) -> None:
+def csv_text(rows: list[dict]) -> str:
     fields = ("comparison", "condition", "stage", "n_pairs", "metric", "median_delta_s", "definition")
-    with path.open("w", encoding="utf-8", newline="") as output:
-        writer = csv.DictWriter(output, fieldnames=fields)
-        writer.writeheader()
-        for row in rows:
-            writer.writerow({field: row[field] for field in fields})
+    output = io.StringIO(newline="")
+    writer = csv.DictWriter(output, fieldnames=fields)
+    writer.writeheader()
+    for row in rows:
+        writer.writerow({field: row[field] for field in fields})
+    return output.getvalue()
 
 
 def main() -> int:
@@ -286,8 +287,9 @@ def main() -> int:
 
     args.html.parent.mkdir(parents=True, exist_ok=True)
     args.csv.parent.mkdir(parents=True, exist_ok=True)
-    args.html.write_text(render_html(primary, causal), encoding="utf-8")
-    write_csv(args.csv, output_rows)
+    contents = csv_text(output_rows)
+    args.html.write_text(render_html(primary, causal, contents), encoding="utf-8")
+    args.csv.write_text(contents, encoding="utf-8")
     print(json.dumps({
         "html": str(args.html),
         "csv": str(args.csv),
