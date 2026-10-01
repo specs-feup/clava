@@ -8,6 +8,7 @@ import csv
 import html
 import json
 import statistics
+from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
 
@@ -17,7 +18,6 @@ MATRIX_ROOT = (
     / "experiments/protocol-comparison/results/deadline-20260930/matrix-r2"
 )
 FRESH_ROOT = MATRIX_ROOT / "java-noagent-matrix-r2"
-WARM_ROOT = MATRIX_ROOT / "java-jacoco-agent-control-r4"
 DEFAULT_HTML = MATRIX_ROOT / "decision-noagent-r1/java-runtime-boundaries.html"
 DEFAULT_CSV = MATRIX_ROOT / "decision-noagent-r1/java-runtime-boundaries.csv"
 
@@ -27,7 +27,6 @@ METRICS = (
     ("outside_junit_s", "outside"),
 )
 PRIMARY_MODES = ("direct", "cold", "warm")
-STAGE_LABELS = {"ccache-text": "Text", "protobuf": "PB"}
 COLORS = {"positive": "#bd4a21", "negative": "#246f9b"}
 
 
@@ -157,195 +156,105 @@ def diagnostic_rows(matrix: dict, diagnostics: dict) -> list[dict]:
     return output
 
 
-def normalized_stage_identity(stage: dict, old_stage: dict) -> dict:
-    old = old_stage["identity"]
-    return {
-        "clava_revision": stage.get("clava_revision"),
-        "clava_patch_sha256": stage.get("clava_patch_sha256"),
-        "native_revision": stage.get("native_revision"),
-        "native_binary_sha256": stage.get("native_binary_sha256"),
-        "runtime_manifest_sha256": stage.get("runtime_manifest_sha256"),
-        "parser_jar_sha256": stage.get("parser_jar_sha256"),
-    }, {
-        "clava_revision": old.get("clava_revision"),
-        "clava_patch_sha256": old.get("clava_patch_sha256"),
-        "native_revision": old.get("native_revision"),
-        "native_binary_sha256": old.get("native_tool_sha256"),
-        "runtime_manifest_sha256": old.get("runtime_manifest", {}).get("sha256"),
-        "parser_jar_sha256": old.get("parser_jar_sha256"),
-    }
-
-
-def prior_warm_rows(matrix: dict, warm: dict, summary: dict) -> list[dict]:
-    old_rows = warm.get("results", [])
-    require(len(old_rows) == 16 and all(row.get("valid") for row in old_rows),
-            "prior warm control must contain 16 valid ON/OFF invocations")
-    require(all((row.get("passed_tests"), row.get("failed_tests"), row.get("skipped_tests"))
-                == (116, 0, 0) for row in old_rows),
-            "prior warm control does not preserve the 116-test result")
-    require(all(row.get("test_identity_sha256") ==
-                "11660f260465c336e4b34d961858247df15975ac1053daddb6ba8eb56eb03450"
-                for row in old_rows), "prior warm test identity differs")
-    require(all(row.get("test_task_executed") is True
-                and row.get("test_worker_xmx_512m") is True
-                and row.get("worker_args_stable_except_agent") is True
-                and row.get("actual_test_executor_only_jacoco_agent") is True
-                and row.get("report_tasks_skipped", {}).get("jacocoTestReport") is True
-                and row.get("report_tasks_skipped", {}).get(
-                    "jacocoTestCoverageVerification") is True
-                for row in old_rows), "prior warm worker/report settings differ")
-    require(warm["plan"].get("rounds") == 4,
-            "prior warm control is not a four-round paired run")
-
-    fresh_stages = matrix["plan"]["stages"]
-    for stage_name in ("ccache-text", "protobuf"):
-        current, old = normalized_stage_identity(
-            fresh_stages[stage_name], warm["plan"]["stages"][stage_name]
-        )
-        require(current == old, f"prior warm {stage_name} stage identity differs")
-
-    # Require four executions per arm and stage before using the summarized pairs.
-    for stage_name in ("ccache-text", "protobuf"):
-        for agent in ("on", "off"):
-            count = sum(row.get("stage") == stage_name and row.get("agent") == agent
-                        for row in old_rows)
-            require(count == 4, f"prior warm {stage_name}/{agent} count is not four")
-
-    stage_metrics = {
-        "elapsed_s": "elapsed_s",
-        "junit_aggregate_s": "junit_aggregate_s",
-        "outside_junit_s": "wall_minus_junit_residual_s",
-    }
-    output = []
-    for stage_name in ("ccache-text", "protobuf"):
-        stage_summary = summary["by_stage"][stage_name]
-        for metric, summary_metric in stage_metrics.items():
-            value = stage_summary[summary_metric]["on_minus_off_paired_median"]
-            output.append({
-                "comparison": "jacoco_on_minus_off_prior_warm",
-                "condition": "warm-prior",
-                "stage": stage_name,
-                "n_pairs": 4,
-                "metric": metric,
-                "label": dict(METRICS)[metric],
-                "median_delta_s": round(value, 6),
-                "definition": "Prior warm JaCoCo ON minus OFF; shown separately, not pooled",
-            })
-    return output
-
-
 def fmt(value: float) -> str:
-    return f"{value:+.4f}".rstrip("0").rstrip(".")
+    rounded = Decimal(str(value)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    return f"{rounded:+.2f} s"
 
 
 def primary_svg(rows: list[dict]) -> str:
     values = {(row["condition"], row["metric"]): row["median_delta_s"] for row in rows}
-    x_zero = 199
-    scale = 142
+    x_zero = 194
+    scale = 120
     plot_min = x_zero - 0.6 * scale
     plot_max = x_zero + 0.6 * scale
-    height = 240
+    height = 354
     out = [f'<svg class="chart" viewBox="0 0 360 {height}" role="img" aria-label="Paired median differences, Protobuf minus Text, in seconds">']
-    out.append('<text class="axis" x="112" y="13">−0.6 s</text><text class="axis" x="199" y="13" text-anchor="middle">0</text><text class="axis" x="285" y="13" text-anchor="end">+0.6 s</text>')
-    out.append(f'<line class="tick" x1="{plot_min:.1f}" y1="20" x2="{plot_min:.1f}" y2="232"/><line class="zero" x1="{x_zero}" y1="20" x2="{x_zero}" y2="232"/><line class="tick" x1="{plot_max:.1f}" y1="20" x2="{plot_max:.1f}" y2="232"/>')
+    out.append('<text class="axis" x="122" y="19">−0.60 s</text><text class="axis" x="194" y="19" text-anchor="middle">0 s</text><text class="axis" x="266" y="19" text-anchor="end">+0.60 s</text>')
+    out.append(f'<line class="tick" x1="{plot_min:.1f}" y1="28" x2="{plot_min:.1f}" y2="346"/><line class="zero" x1="{x_zero}" y1="28" x2="{x_zero}" y2="346"/><line class="tick" x1="{plot_max:.1f}" y1="28" x2="{plot_max:.1f}" y2="346"/>')
     for index, mode in enumerate(PRIMARY_MODES):
-        top = 38 + index * 66
+        top = 45 + index * 100
         out.append(f'<text class="group" x="5" y="{top}">{html.escape(mode)}</text>')
         for metric_index, (metric, label) in enumerate(METRICS):
-            y = top + 16 + metric_index * 14
+            y = top + 30 + metric_index * 26
             value = values[(mode, metric)]
             end = x_zero + value * scale
             x = min(x_zero, end)
             width = abs(end - x_zero)
             direction = "positive" if value >= 0 else "negative"
             out.append(f'<text class="rowlabel" x="5" y="{y + 3}">{html.escape(label)}</text>')
-            out.append(f'<rect class="{direction}" x="{x:.2f}" y="{y - 5}" width="{width:.2f}" height="8" rx="2"/>')
-            out.append(f'<text class="value" x="294" y="{y + 3}">{fmt(value)}</text>')
+            out.append(f'<rect class="{direction}" x="{x:.2f}" y="{y - 9}" width="{width:.2f}" height="15" rx="3"/>')
+            out.append(f'<text class="value" x="271" y="{y + 4}">{fmt(value)}</text>')
     out.append('</svg>')
     return "".join(out)
 
 
 def causal_svg(rows: list[dict]) -> str:
-    values = {(row["condition"], row["stage"], row["metric"]): row["median_delta_s"]
-              for row in rows}
+    values = {(row["condition"], row["stage"]): row["median_delta_s"]
+              for row in rows if row["metric"] == "elapsed_s"}
     groups = (
         ("direct", "ccache-text", "direct · Text"),
         ("direct", "protobuf", "direct · PB"),
         ("cold", "ccache-text", "cold · Text"),
         ("cold", "protobuf", "cold · PB"),
-        ("warm-prior", "ccache-text", "warm prior · Text"),
-        ("warm-prior", "protobuf", "warm prior · PB"),
     )
     x_zero = 191
     scale = 42.0
     max_delta = 1.8
-    height = 356
-    out = [f'<svg class="chart" viewBox="0 0 360 {height}" role="img" aria-label="JaCoCo agent ON minus OFF paired median timing differences in seconds">']
-    out.append('<text class="axis" x="115" y="13">−1.8 s</text><text class="axis" x="191" y="13" text-anchor="middle">0</text><text class="axis" x="267" y="13" text-anchor="end">+1.8 s</text>')
-    out.append(f'<line class="tick" x1="{x_zero - max_delta * scale:.1f}" y1="20" x2="{x_zero - max_delta * scale:.1f}" y2="350"/><line class="zero" x1="{x_zero}" y1="20" x2="{x_zero}" y2="350"/><line class="tick" x1="{x_zero + max_delta * scale:.1f}" y1="20" x2="{x_zero + max_delta * scale:.1f}" y2="350"/>')
+    height = 166
+    out = [f'<svg class="chart" viewBox="0 0 360 {height}" role="img" aria-label="JaCoCo agent ON minus OFF paired median wall-time differences in seconds">']
+    out.append('<text class="axis" x="115" y="19">−1.80 s</text><text class="axis" x="191" y="19" text-anchor="middle">0 s</text><text class="axis" x="267" y="19" text-anchor="end">+1.80 s</text>')
+    out.append(f'<line class="tick" x1="{x_zero - max_delta * scale:.1f}" y1="28" x2="{x_zero - max_delta * scale:.1f}" y2="158"/><line class="zero" x1="{x_zero}" y1="28" x2="{x_zero}" y2="158"/><line class="tick" x1="{x_zero + max_delta * scale:.1f}" y1="28" x2="{x_zero + max_delta * scale:.1f}" y2="158"/>')
     for group_index, (condition, stage, title) in enumerate(groups):
-        top = 31 + group_index * 54
-        out.append(f'<text class="group" x="5" y="{top}">{html.escape(title)}</text>')
-        for metric_index, (metric, label) in enumerate(METRICS):
-            y = top + 13 + metric_index * 12
-            value = values[(condition, stage, metric)]
-            end = x_zero + value * scale
-            x = min(x_zero, end)
-            width = abs(end - x_zero)
-            direction = "positive" if value >= 0 else "negative"
-            out.append(f'<text class="rowlabel" x="5" y="{y + 3}">{html.escape(label)}</text>')
-            out.append(f'<rect class="{direction}" x="{x:.2f}" y="{y - 4}" width="{width:.2f}" height="7" rx="2"/>')
-            out.append(f'<text class="value" x="272" y="{y + 3}">{fmt(value)}</text>')
+        y = 49 + group_index * 31
+        value = values[(condition, stage)]
+        end = x_zero + value * scale
+        x = min(x_zero, end)
+        width = abs(end - x_zero)
+        direction = "positive" if value >= 0 else "negative"
+        out.append(f'<text class="group" x="5" y="{y + 4}">{html.escape(title)}</text>')
+        out.append(f'<rect class="{direction}" x="{x:.2f}" y="{y - 10}" width="{width:.2f}" height="15" rx="3"/>')
+        out.append(f'<text class="value" x="272" y="{y + 4}">{fmt(value)}</text>')
     out.append('</svg>')
     return "".join(out)
 
 
 def render_html(primary: list[dict], causal: list[dict]) -> str:
-    return f'''<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Java runtime boundaries</title>
+    return f'''<section class="java-boundaries" aria-label="Java runtime evidence">
 <style>
-:root {{ color-scheme: light; font: 14px/1.45 system-ui, sans-serif; color: #202a34; background: #f2f5f7; }}
-body {{ margin: 0 auto; padding: 20px 14px 32px; max-width: 540px; }}
-main {{ background: #fff; border: 1px solid #dce3e8; border-radius: 12px; padding: 18px; }}
-h1 {{ font-size: 1.25rem; margin: 0 0 6px; }}
-h2 {{ font-size: 1rem; margin: 20px 0 4px; }}
-p {{ margin: 6px 0; color: #4e5b67; }}
-.chart {{ display: block; width: min(100%, 360px); height: auto; margin: 5px 0 0; overflow: visible; }}
-.axis {{ font: 10px system-ui, sans-serif; fill: #56636e; }}
-.group {{ font: 600 11px system-ui, sans-serif; fill: #28343e; }}
-.rowlabel {{ font: 10px system-ui, sans-serif; fill: #52606b; }}
-.value {{ font: 10px ui-monospace, monospace; fill: #28343e; }}
-.tick {{ stroke: #d9e0e5; stroke-width: 1; }}
-.zero {{ stroke: #596772; stroke-width: 1.25; }}
-.positive {{ fill: {COLORS['positive']}; }}
-.negative {{ fill: {COLORS['negative']}; }}
-.note {{ font-size: .82rem; }}
-.legend {{ display: flex; gap: 12px; font-size: .78rem; color: #52606b; margin-top: 4px; }}
-.swatch {{ display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 4px; }}
-.positive-swatch {{ background: {COLORS['positive']}; }}
-.negative-swatch {{ background: {COLORS['negative']}; }}
-@media (max-width: 390px) {{ main {{ padding: 13px 10px; }} body {{ padding: 10px 8px; }} }}
+.java-boundaries {{ color: #202a34; font: 16px/1.4 system-ui, sans-serif; }}
+.java-boundaries .title {{ margin: 0 0 6px; font-size: 20px; line-height: 1.25; }}
+.java-boundaries .subtitle, .java-boundaries .caption {{ margin: 5px 0; }}
+.java-boundaries .chart-scroll {{ max-width: 100%; overflow-x: auto; }}
+.java-boundaries .chart {{ display: block; width: 360px; height: auto; margin: 6px 0 0; }}
+.java-boundaries .axis {{ font: 15px system-ui, sans-serif; fill: #56636e; }}
+.java-boundaries .group, .java-boundaries .rowlabel {{ font: 15px system-ui, sans-serif; fill: #28343e; }}
+.java-boundaries .group {{ font-weight: 650; }}
+.java-boundaries .value {{ font: 15px ui-monospace, monospace; fill: #28343e; }}
+.java-boundaries .tick {{ stroke: #d9e0e5; stroke-width: 1; }}
+.java-boundaries .zero {{ stroke: #596772; stroke-width: 1.4; }}
+.java-boundaries .positive {{ fill: {COLORS['positive']}; }}
+.java-boundaries .negative {{ fill: {COLORS['negative']}; }}
+.java-boundaries details {{ margin-top: 12px; }}
+.java-boundaries summary {{ cursor: pointer; }}
+.java-boundaries .note {{ margin: 6px 0; }}
+.java-boundaries .csv-link {{ display: inline-block; margin-top: 8px; }}
 </style>
-</head>
-<body>
-<main>
-<h1>Java runtime boundaries</h1>
-<p>Each run covers 116 test bodies, including setup, codegen, and assertions. This is not parse-only time.</p>
-<h2>Protobuf − Text · JaCoCo off</h2>
-<p>Paired medians across four fresh rounds; positive means Protobuf took longer.</p>
+<h2 class="title">Java protocol runtime differences</h2>
+<p class="subtitle">116 test bodies include setup, codegen, and assertions; these are not parse-only timings.</p>
+<p class="caption">Protobuf − Text · JaCoCo off · paired median, n=4 · positive means Protobuf slower.</p>
+<div class="chart-scroll">
 {primary_svg(primary)}
-<div class="legend"><span><i class="swatch positive-swatch"></i>longer</span><span><i class="swatch negative-swatch"></i>shorter</span></div>
-<h2>JaCoCo on − off</h2>
-<p>Four paired rounds per direct/cold cell. Warm is the prior four-pair control, shown separately.</p>
+</div>
+<p class="caption">Outside = wall − JUnit sum; unassigned, not parser or coverage time. Reports skipped; no explicit GC.</p>
+<details>
+<summary>JaCoCo wall effect · ON − OFF · direct and cold · four paired rounds</summary>
+<p class="note">Wall times only. JUnit and outside-JUnit deltas are in the CSV. Outside-JUnit is unassigned, not parser or coverage time. Reports were skipped; no explicit GC was requested.</p>
+<div class="chart-scroll">
 {causal_svg(causal)}
-<p class="note">Outside-JUnit residual is wall minus summed JUnit duration. Gradle exposed no task-level split, so the residual is unassigned, not parser or coverage time. Reports were skipped; no explicit GC was requested.</p>
-</main>
-</body>
-</html>
+ </div>
+</details>
+<a class="csv-link" href="java-runtime-boundaries.csv" data-csv-href="java-runtime-boundaries.csv">CSV data</a>
+</section>
 '''
 
 
@@ -363,8 +272,6 @@ def main() -> int:
     parser.add_argument("--matrix", type=Path, default=FRESH_ROOT / "results.json")
     parser.add_argument("--paired-summary", type=Path, default=FRESH_ROOT / "paired-summary.json")
     parser.add_argument("--diagnostics", type=Path, default=FRESH_ROOT / "agent-diagnostics.json")
-    parser.add_argument("--warm-control", type=Path, default=WARM_ROOT / "results.json")
-    parser.add_argument("--warm-summary", type=Path, default=WARM_ROOT / "summary.json")
     parser.add_argument("--html", type=Path, default=DEFAULT_HTML)
     parser.add_argument("--csv", type=Path, default=DEFAULT_CSV)
     args = parser.parse_args()
@@ -372,14 +279,10 @@ def main() -> int:
     matrix = load_json(args.matrix)
     paired = load_json(args.paired_summary)
     diagnostics = load_json(args.diagnostics)
-    warm = load_json(args.warm_control)
-    warm_summary = load_json(args.warm_summary)
-
     primary = primary_rows(matrix, paired)
     fresh_agent = diagnostic_rows(matrix, diagnostics)
-    prior_agent = prior_warm_rows(matrix, warm, warm_summary)
-    causal = fresh_agent + prior_agent
-    output_rows = primary + causal
+    causal = fresh_agent
+    output_rows = primary + fresh_agent
 
     args.html.parent.mkdir(parents=True, exist_ok=True)
     args.csv.parent.mkdir(parents=True, exist_ok=True)
@@ -390,7 +293,6 @@ def main() -> int:
         "csv": str(args.csv),
         "primary_points": len(primary),
         "fresh_agent_points": len(fresh_agent),
-        "prior_warm_points": len(prior_agent),
         "csv_rows": len(output_rows),
         "validated": True,
     }, indent=2))
