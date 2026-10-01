@@ -37,6 +37,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--matrix", type=Path, default=MATRIX)
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--resume-existing", action="store_true",
+                        help="resume the preserved Text/Flat control after a pre-test configuration failure")
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -123,8 +125,10 @@ def main() -> int:
     args = parse_args()
     matrix_path = args.matrix.resolve()
     output_root = args.output_root.resolve()
-    if output_root.exists() and not args.dry_run:
+    if output_root.exists() and not (args.dry_run or args.resume_existing):
         raise SystemExit(f"refusing to reuse diagnostic output root: {output_root}")
+    if args.resume_existing and not output_root.is_dir():
+        raise SystemExit(f"--resume-existing requires an existing output root: {output_root}")
     matrix, stages, source_caches = load_inputs(matrix_path)
     reference = matrix["identity_preflight"]["reference_test_ids"]["java"]
     inherited_jvm_options = control.audit_inherited_jvm_options()
@@ -136,51 +140,103 @@ def main() -> int:
                                      "agent": "off"} for index, (stage, round_number) in enumerate(ORDER)]}, indent=2))
         return 0
 
-    output_root.mkdir(parents=True)
     temp_roots = {key: output_root / "temp/java" / key for key in STAGES}
     cache_dirs = {}
     cache_manifests = {}
-    for key in STAGES:
-        temp_roots[key].mkdir(parents=True)
-        clone = temp_roots[key] / f"clang_ast_exe_{getpass.getuser()}" / source_caches[key].name
-        manifest_sha256, _ = clone_cache(source_caches[key], clone)
-        cache_dirs[key] = clone
-        cache_manifests[key] = manifest_sha256
-        zero = subprocess.run(["ccache", "--zero-stats"],
-                              env={**os.environ, "CCACHE_DIR": str(clone), "LC_ALL": "C"},
-                              text=True, capture_output=True, check=False)
-        if zero.returncode != 0:
-            raise RuntimeError(f"could not zero cloned cache stats: {zero.stderr.strip()}")
+    if args.resume_existing:
+        plan_path = output_root / "plan.json"
+        results_path = output_root / "results.json"
+        if not plan_path.is_file() or not results_path.is_file():
+            raise RuntimeError("existing output root is missing its plan or partial results")
+        plan = json.loads(plan_path.read_text())
+        matrix_sha256 = base.sha256_file(matrix_path)
+        if plan.get("primary_matrix_sha256") != matrix_sha256:
+            raise RuntimeError("resume primary matrix differs from the frozen run")
+        result_data = json.loads(results_path.read_text())
+        if result_data.get("plan", {}).get("primary_matrix_sha256") != matrix_sha256:
+            raise RuntimeError("partial results do not belong to the frozen primary matrix")
+        results = result_data.get("results", [])
+        if not results or len(results) >= len(ORDER):
+            raise RuntimeError(f"resume requires an incomplete result prefix; found {len(results)} rows")
+        for index, row in enumerate(results):
+            if (row.get("ordinal") != index + 1 or row.get("stage") != ORDER[index][0]
+                    or row.get("round") != ORDER[index][1] or row.get("valid") is not True):
+                raise RuntimeError(f"existing results are not a valid fixed-order prefix at cell {index + 1}")
+        worker_baseline: dict[str, dict] = {}
+        for key in STAGES:
+            stage_plan = plan.get("stages", {}).get(key, {})
+            if Path(stage_plan.get("cache_source", "")).resolve() != source_caches[key]:
+                raise RuntimeError(f"primary source cache path changed for {key}")
+            cache_dirs[key] = Path(stage_plan.get("cache_clone", "")).resolve()
+            if not cache_dirs[key].is_dir() or output_root not in cache_dirs[key].parents:
+                raise RuntimeError(f"preserved cache clone is missing or outside output root: {cache_dirs[key]}")
+            cache_manifests[key] = str(stage_plan.get("cache_source_manifest_sha256", ""))
+            if cache_manifests[key] != control.canonical_hash(control.cache_manifest(source_caches[key])):
+                raise RuntimeError(f"primary cache payload changed since original attempt for {key}")
+        for row in results:
+            key = row["stage"]
+            worker = row["worker_configuration"]
+            executor_args = row["actual_test_executor_args"]
+            executor_normalized, _ = control.normalize_executor_args(executor_args)
+            identity = {
+                "max_heap_size": worker.get("max_heap_size"),
+                "jvm_args_without_javaagent": [arg for arg in worker.get("jvm_args", [])
+                                               if not arg.startswith("-javaagent:")],
+                "actual_executor_args_without_javaagent": executor_normalized,
+            }
+            if key in worker_baseline and worker_baseline[key] != identity:
+                raise RuntimeError(f"existing worker arguments are not stable for {key}")
+            worker_baseline[key] = identity
+    else:
+        output_root.mkdir(parents=True)
+        for key in STAGES:
+            temp_roots[key].mkdir(parents=True)
+            clone = temp_roots[key] / f"clang_ast_exe_{getpass.getuser()}" / source_caches[key].name
+            manifest_sha256, _ = clone_cache(source_caches[key], clone)
+            cache_dirs[key] = clone
+            cache_manifests[key] = manifest_sha256
+            zero = subprocess.run(["ccache", "--zero-stats"],
+                                  env={**os.environ, "CCACHE_DIR": str(clone), "LC_ALL": "C"},
+                                  text=True, capture_output=True, check=False)
+            if zero.returncode != 0:
+                raise RuntimeError(f"could not zero cloned cache stats: {zero.stderr.strip()}")
 
-    plan = {
-        "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-        "primary_matrix": str(matrix_path),
-        "primary_matrix_sha256": base.sha256_file(matrix_path),
-        "output_root": str(output_root),
-        "stages": {key: {"identity": control.verify_stage(stages[key]),
-                         "runtime_manifest_sha256": stages[key]["runtime_manifest_sha256"],
-                         "native_binary_sha256": stages[key]["native_binary_sha256"],
-                         "cache_source": str(source_caches[key]), "cache_clone": str(cache_dirs[key]),
-                         "cache_namespace_from_primary": source_caches[key].name,
-                         "cache_source_manifest_sha256": cache_manifests[key],
-                         "source_metadata": stages[key]} for key in STAGES},
-        "expected_java": control.EXPECTED_JAVA,
-        "reference_test_ids_sha256": reference["sha256"],
-        "expected_cache_per_call": control.EXPECTED_PRIMARY_CACHE,
-        "inherited_jvm_environment_audit": inherited_jvm_options,
-        "constant_settings": ["--info", "Gradle Test Executor -Xmx512m", "JaCoCo agent off",
-                              "JaCoCo report tasks skipped", "exact 116-test identity"],
-        "order": [{"ordinal": index + 1, "round": round_number, "stage": stage,
-                   "agent": "off"} for index, (stage, round_number) in enumerate(ORDER)],
-    }
-    (output_root / "plan.json").write_text(json.dumps(plan, indent=2) + "\n")
-    results: list[dict] = []
-    worker_baseline: dict[str, dict] = {}
+        plan = {
+            "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+            "primary_matrix": str(matrix_path),
+            "primary_matrix_sha256": base.sha256_file(matrix_path),
+            "output_root": str(output_root),
+            "stages": {key: {"identity": control.verify_stage(stages[key]),
+                             "runtime_manifest_sha256": stages[key]["runtime_manifest_sha256"],
+                             "native_binary_sha256": stages[key]["native_binary_sha256"],
+                             "cache_source": str(source_caches[key]), "cache_clone": str(cache_dirs[key]),
+                             "cache_namespace_from_primary": source_caches[key].name,
+                             "cache_source_manifest_sha256": cache_manifests[key],
+                             "source_metadata": stages[key]} for key in STAGES},
+            "expected_java": control.EXPECTED_JAVA,
+            "reference_test_ids_sha256": reference["sha256"],
+            "expected_cache_per_call": control.EXPECTED_PRIMARY_CACHE,
+            "inherited_jvm_environment_audit": inherited_jvm_options,
+            "constant_settings": ["--info", "Gradle Test Executor -Xmx512m", "JaCoCo agent off",
+                                  "JaCoCo report tasks skipped", "exact 116-test identity"],
+            "order": [{"ordinal": index + 1, "round": round_number, "stage": stage,
+                       "agent": "off"} for index, (stage, round_number) in enumerate(ORDER)],
+        }
+        (output_root / "plan.json").write_text(json.dumps(plan, indent=2) + "\n")
+        results: list[dict] = []
+        worker_baseline: dict[str, dict] = {}
     try:
         for ordinal, (key, round_number) in enumerate(ORDER, start=1):
+            if ordinal <= len(results):
+                continue
             stage = stages[key]
             control.verify_stage(stage)
-            run_dir = output_root / "runs/java" / f"{ordinal:02d}-r{round_number}-{key}-jacoco-off"
+            run_name = f"{ordinal:02d}-r{round_number}-{key}-jacoco-off"
+            run_dir = output_root / "runs/java" / run_name
+            retry = 1
+            while run_dir.exists():
+                run_dir = output_root / "runs/java" / f"{run_name}-retry{retry}"
+                retry += 1
             run_dir.mkdir(parents=True)
             diagnostic_dir = run_dir / "gradle-output"
             cache_dir = cache_dirs[key]
@@ -199,6 +255,8 @@ def main() -> int:
                 "SPECS_JAVA_LIBS_HOME": str(control.SPECS_JAVA_LIBS_ROOT.resolve()),
                 "LARA_FRAMEWORK_HOME": str(control.LARA_FRAMEWORK_ROOT.resolve()),
             })
+            if key == "flatbuffers":
+                environment["FLAT_NATIVE"] = str(stage["native_root"])
             command = ["/usr/bin/time", "-f", base.TIME_FORMAT, "-o", str(run_dir / "time.txt"), "--",
                        "gradle", "--no-daemon", "--offline", "--info",
                        "--init-script", str(SCRIPT_ROOT / "java-suite.init.gradle"),
