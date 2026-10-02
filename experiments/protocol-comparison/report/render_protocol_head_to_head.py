@@ -120,7 +120,7 @@ def _validate_java_matrix(matrix: dict) -> list[dict]:
                 row.get("skipped_tests")) != (116, 116, 0, 0):
             raise ValueError("Java contrast requires 116/116 passing tests in every run")
         args = row.get("actual_test_executor_args")
-        if not isinstance(args, list) or any("javaagent" in str(arg) for arg in args):
+        if not isinstance(args, list) or not args or any("javaagent" in str(arg) for arg in args):
             raise ValueError("Java OFF contrast lacks proof of agent-free worker arguments")
         skipped = row.get("report_tasks_skipped", {})
         if skipped.get("jacocoTestReport") is not True or skipped.get("jacocoTestCoverageVerification") is not True:
@@ -169,7 +169,7 @@ def _pair_values(left: dict[int, dict], right: dict[int, dict], metric: str) -> 
     return result
 
 
-def paired_data(js_original, java_matrix: dict, normalized_js=None) -> dict:
+def paired_data(js_original, java_matrix: dict, normalized_js=None, *, matched_validation=False) -> dict:
     """Validate cohorts and return round-paired deltas (candidate minus baseline)."""
     original_rows = _validate_js_rows(js_original)
     java_rows = _validate_java_matrix(java_matrix)
@@ -186,23 +186,53 @@ def paired_data(js_original, java_matrix: dict, normalized_js=None) -> dict:
                 "definition": "FlatBuffers minus Protobuf; negative means FlatBuffers was faster",
             })
 
-    js = {"original": _js_warm_comparison(original_rows, "original")}
+    if matched_validation:
+        if normalized_js is not None:
+            raise ValueError("Matched matrix must not pool a historical normalized control")
+        measured = [row for row in original_rows if row.get("measured") and row.get("selected", True)]
+        if not measured or any(row.get("fast_syntax") is not True for row in measured):
+            raise ValueError("Matched matrix requires fast_syntax=true in every selected JS run")
+        for suite, rows in (("clava-js", measured), ("java", java_rows)):
+            if len(rows) != 40:
+                raise ValueError(f"Matched matrix requires 40 selected {suite} measurements")
+            for mode in MODES:
+                for stage in ("before-cache", "ccache-text", "protobuf", "flatbuffers"):
+                    if stage == "before-cache" and mode != "direct":
+                        continue
+                    _validate_cell(rows, suite, mode, stage, normalized_js=(suite == "clava-js"))
+        if any(row.get("fast_syntax") is not True for row in java_rows
+               if row.get("measured") and row.get("selected", True)):
+            raise ValueError("Matched matrix requires fast_syntax=true in every selected Java run")
+        js = {mode: _js_comparison(original_rows, "matched-validation", mode) for mode in MODES}
+    else:
+        js = {"original": _js_warm_comparison(original_rows, "original")}
     if normalized_js is not None:
         normalized_rows = _validate_js_rows(normalized_js, normalized=True)
         js["normalized"] = _js_warm_comparison(normalized_rows, "syntax-normalized")
-    return {"java": java, "js": js}
+    return {"java": java, "js": js, "matched_validation": matched_validation}
 
 
 def _js_warm_comparison(rows: list[dict], cohort: str) -> dict:
-    pb = _validate_cell(rows, "clava-js", "warm", "protobuf", normalized_js=(cohort != "original"))
-    flat = _validate_cell(rows, "clava-js", "warm", "flatbuffers", normalized_js=(cohort != "original"))
+    return _js_comparison(rows, cohort, "warm")
+
+
+def _js_comparison(rows: list[dict], cohort: str, mode: str) -> dict:
+    pb = _validate_cell(rows, "clava-js", mode, "protobuf", normalized_js=(cohort != "original"))
+    flat = _validate_cell(rows, "clava-js", mode, "flatbuffers", normalized_js=(cohort != "original"))
+    _require_stable_identity(pb, "clava-js")
+    _require_stable_identity(flat, "clava-js")
+    _require_same_identity(pb, flat, "clava-js")
+    for row in list(pb.values()) + list(flat.values()):
+        if (row.get("total_tests"), row.get("passed_tests"), row.get("failed_tests"), row.get("skipped_tests")) != (164, 158, 0, 6):
+            raise ValueError("JS comparison requires the accepted 164-test outcome")
     values = _pair_values(pb, flat, "elapsed_s")
     return {
-        "suite": "clava-js", "cohort": cohort, "mode": "warm", "metric": "elapsed_s",
-        "label": "Warm command wall", "n_pairs": len(values), "values": values,
+        "suite": "clava-js", "cohort": cohort, "mode": mode, "metric": "elapsed_s",
+        "label": f"{mode.title()} command wall", "n_pairs": len(values), "values": values,
         "median_delta_s": statistics.median(values),
-        "definition": ("Flat-fast syntax control minus Protobuf" if cohort != "original"
-                        else "Original FlatBuffers minus Protobuf"),
+        "definition": ("Fresh matched FlatBuffers minus Protobuf" if cohort == "matched-validation"
+                       else "Flat-fast syntax control minus Protobuf" if cohort != "original"
+                       else "Original FlatBuffers minus Protobuf"),
     }
 
 
@@ -215,8 +245,8 @@ def java_svg(rows: list[dict]) -> str:
     values = [value for row in plotted for value in row["values"]]
     limit = _scale_limit(values)
     left, right = 20.0, 270.0
-    lower = -limit if min(values) < 0 else 0.0
-    upper = limit if max(values) > 0 else 0.0
+    lower = -_scale_limit([v for v in values if v < 0]) if min(values) < 0 else 0.0
+    upper = _scale_limit([v for v in values if v > 0]) if max(values) > 0 else 0.0
     if lower == upper:
         lower, upper = -limit, limit
     scale = (right - left) / (upper - lower)
@@ -260,15 +290,19 @@ def js_svg(comparisons: dict[str, dict]) -> str:
     values = [value for _, row in cohorts for value in row["values"]]
     limit = _scale_limit(values)
     left, right = 20.0, 270.0
-    zero = (left + right) / 2
-    scale = (right - left) / (2 * limit)
-    x = lambda value: zero + value * scale
+    lower = -_scale_limit([v for v in values if v < 0]) if min(values) < 0 else 0.0
+    upper = _scale_limit([v for v in values if v > 0]) if max(values) > 0 else 0.0
+    if lower == upper:
+        lower, upper = -limit, limit
+    scale = (right - left) / (upper - lower)
+    x = lambda value: left + (value - lower) * scale
     height = 70 + len(cohorts) * 54
-    output = [f'<svg class="paired-chart" viewBox="0 0 360 {height}" role="img" aria-label="Warm Clava-JS paired differences, Flat or Flat-fast minus Protobuf, in seconds">']
-    for value in (-limit, 0.0, limit):
+    output = [f'<svg class="paired-chart" viewBox="0 0 360 {height}" role="img" aria-label="Clava-JS paired differences, FlatBuffers minus Protobuf, in seconds">']
+    ticks = (lower, 0.0, upper) if lower < 0 < upper else (lower, (lower + upper) / 2, upper)
+    for value in ticks:
         position = x(value)
         label = "0 s" if value == 0 else f'{value:+.1f} s'
-        anchor = "start" if value < 0 else ("end" if value > 0 else "middle")
+        anchor = "start" if value == lower else ("end" if value == upper else "middle")
         output.append(f'<text class="axis" x="{position:.1f}" y="18" text-anchor="{anchor}">{html.escape(label)}</text>')
         output.append(f'<line class="{("zero" if value == 0 else "gridline")}" x1="{position:.1f}" x2="{position:.1f}" y1="25" y2="{height - 8}"/>')
     for index, (cohort, row) in enumerate(cohorts):
@@ -277,7 +311,8 @@ def js_svg(comparisons: dict[str, dict]) -> str:
         values = row["values"]
         median = row["median_delta_s"]
         colour = "negative" if median < 0 else ("positive" if median > 0 else "neutral")
-        label = "Original implementations" if cohort == "original" else "Both use fast validation"
+        label = ({"direct": "Bypass", "cold": "Cold cache", "warm": "Warm cache"}.get(cohort)
+                 or ("Original implementations" if cohort == "original" else "Both use fast validation"))
         output.append(f'<text class="metric" x="20" y="{label_y}">{label}</text>')
         output.append(f'<line class="range {colour}" x1="{x(min(values)):.2f}" x2="{x(max(values)):.2f}" y1="{y}" y2="{y}"/>')
         for pair_index, value in enumerate(values):
@@ -296,6 +331,20 @@ def render_html(data: dict) -> str:
     js_caption = ("Protobuf's original lead disappears when FlatBuffers also skips discarded AST output during validation. Separate four-pair warm-cache comparison; unchanged test groups."
                   if "normalized" in js_rows
                   else "Whole-command warm wall time from the accepted original rows.")
+    js_state = "warm"
+    java_plot = data["java"]
+    java_caption = ""
+    outside_heading = "Outside-JUnit paired residuals"
+    outside_caption = "Each value is calculated per round as (Flat wall − Flat JUnit) − (Protobuf wall − Protobuf JUnit), in seconds."
+    if data.get("matched_validation"):
+        js_heading = "same fast validation"
+        js_state = "all cache states"
+        js_caption = "Fresh matched suite commands. Text, Protobuf and FlatBuffers all skip discarded AST dumps during syntax validation. One scale across cache states."
+        java_plot = [dict(row, label={"elapsed_s": "Whole command", "junit_aggregate_s": "Test bodies", "outside_junit_s": "Outside tests"}[row["metric"]])
+                     for row in data["java"]]
+        java_caption = "<p>Test bodies = sum of JUnit test timers; whole command also includes build-tool setup and other work outside those timers.</p>"
+        outside_heading = "Setup and other work outside test timers"
+        outside_caption = "Per round: (Flat whole command − Flat test-body sum) minus (Protobuf whole command − Protobuf test-body sum). This residual includes multiple kinds of work; it is not a measurement of one phase."
     outside = [row for row in data["java"] if row["metric"] == "outside_junit_s"]
     detail_rows = "".join(
         f'<tr><th>{html.escape(row["mode"].title())}</th><td>{row["median_delta_s"]:+.3f} s</td>'
@@ -307,7 +356,7 @@ def render_html(data: dict) -> str:
 .pb-flat-head-to-head h2 {{ margin:0 0 6px; font-size:20px; line-height:1.25; }}
 .pb-flat-head-to-head h3 {{ margin:0 0 6px; font-size:16px; }}
 .pb-flat-head-to-head p {{ margin:5px 0 10px; color:var(--muted,#536174); }}
-.pb-flat-head-to-head .panels {{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:12px; }}
+.pb-flat-head-to-head .panels {{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:12px; align-items:start; }}
 .pb-flat-head-to-head .panel {{ min-width:0; border:1px solid var(--line,#d5dfe8); border-radius:8px; padding:12px; }}
 .pb-flat-head-to-head .paired-chart {{ display:block; width:100%; max-width:520px; height:auto; overflow:visible; }}
 .pb-flat-head-to-head text {{ font-family:system-ui,sans-serif; fill:var(--ink,#18212e); }}
@@ -330,12 +379,12 @@ def render_html(data: dict) -> str:
 <h2>Protobuf vs FlatBuffers · paired runtime</h2>
 <p>Flat minus Protobuf; left is faster. Dots = four paired rounds; median tick and full range.</p>
 <div class="panels"><article class="panel"><h3>Java · no coverage agent · 116 tests</h3>
-{java_svg(data["java"])}
+{java_caption}{java_svg(java_plot)}
 <div class="legend"><span>Green: Flat faster</span><span>Red: Flat slower</span></div></article>
-<article class="panel"><h3>Clava-JS · warm · {html.escape(js_heading)}</h3>
+<article class="panel"><h3>Clava-JS · {js_state} · {html.escape(js_heading)}</h3>
 <p>{html.escape(js_caption)}</p>
 {js_content}</article></div>
-<details><summary>Outside-JUnit paired residuals</summary><p>Each value is calculated per round as (Flat wall − Flat JUnit) − (Protobuf wall − Protobuf JUnit), in seconds.</p><table><thead><tr><th>Mode</th><th>Median</th><th>Round deltas</th></tr></thead><tbody>{detail_rows}</tbody></table></details>
+<details><summary>{outside_heading}</summary><p>{outside_caption}</p><table><thead><tr><th>Mode</th><th>Median</th><th>Round deltas</th></tr></thead><tbody>{detail_rows}</tbody></table></details>
 </section>'''
 
 
@@ -364,11 +413,14 @@ def main() -> int:
     parser.add_argument("--java-matrix", type=Path, default=DEFAULT_JAVA)
     parser.add_argument("--normalized-js", type=Path,
                         help="Optional completed warm JS rows with fast_syntax=true")
+    parser.add_argument("--matched-validation", action="store_true",
+                        help="Fresh full matrix with fast validation in every stage; compare all JS cache states")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--csv", type=Path, default=DEFAULT_CSV)
     args = parser.parse_args()
     data = paired_data(read_json(args.js_matrix), read_json(args.java_matrix),
-                       read_json(args.normalized_js) if args.normalized_js else None)
+                       read_json(args.normalized_js) if args.normalized_js else None,
+                       matched_validation=args.matched_validation)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.csv.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(render_html(data), encoding="utf-8")

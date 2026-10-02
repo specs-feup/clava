@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+"""Replay the Java-only OFF-agent measurement loop for this frozen matrix.
+
+Run from experiments/protocol-comparison after the Java preflight has passed:
+  python3 results/matched-fast-20261002-r1/preparation/run_java_off_measurements.py
+
+This intentionally calls run_cell directly instead of the helper's full measure
+phase, which also executes ON-agent diagnostic cells. Timed rows here are only
+the forty OFF-agent primary cells.
+"""
+
+import datetime as dt
+import json
+from pathlib import Path
+
+import run_java_uninstrumented_matrix as jm
+
+
+matrix_path = Path("results/matched-fast-20261002-r1/java-stage-matrix.json").resolve()
+root = Path("results/matched-fast-20261002-r1/java-r1").resolve()
+matrix, stages = jm.load_frozen(matrix_path)
+plan, identity, rows = jm.load_preflight(root, matrix)
+control = jm.control
+worker_baselines = {}
+for row in rows:
+    worker = row["worker_configuration"]
+    executor, _ = control.normalize_executor_args(row["actual_test_executor_args"])
+    worker_baselines[row["stage"]] = {
+        "max_heap_size": worker.get("max_heap_size"),
+        "jvm_args_without_javaagent": [
+            arg for arg in worker.get("jvm_args", []) if not arg.startswith("-javaagent:")
+        ],
+        "actual_executor_args_without_javaagent": executor,
+    }
+
+ordinal = sum(1 for row in rows if row.get("measured"))
+for round_number in range(1, 5):
+    round_rows = []
+    for mode, key in jm.schedule(round_number):
+        stage = stages[key]
+        if mode == "warm":
+            jm.restore_warm_seed(root, stage)
+        ordinal += 1
+        row = jm.run_cell(matrix, stage, root, mode, round_number, "off", True, ordinal, worker_baselines)
+        row["ordinal"] = ordinal
+        rows.append(row)
+        round_rows.append(row)
+        jm.persist(root, plan, identity, rows)
+        if not row["valid"]:
+            print(json.dumps({
+                "stop": "invalid_cell",
+                "round": round_number,
+                "row": {k: row.get(k) for k in (
+                    "cell_id", "valid", "total_tests", "passed_tests", "failed_tests",
+                    "skipped_tests", "cacheable_calls", "cache_hits", "cache_misses",
+                    "native_binary_path", "native_binary_sha256", "run_dir"
+                )},
+            }), flush=True)
+            raise SystemExit(2)
+        jm.verify_stage(stage)
+    print(json.dumps({
+        "round_complete": round_number,
+        "rows": len(round_rows),
+        "valid": all(row["valid"] for row in round_rows),
+        "tests": sum(row["total_tests"] for row in round_rows),
+        "failed": sum(row["failed_tests"] for row in round_rows),
+        "cells": [row["cell_id"] for row in round_rows],
+    }), flush=True)
+
+if len([row for row in rows if row.get("measured") is True]) != 40:
+    raise RuntimeError("Java-only primary matrix does not contain exactly forty OFF-agent measured rows")
+plan["all_measurements_valid"] = True
+plan["measurement_completed_at"] = dt.datetime.now(dt.timezone.utc).isoformat()
+jm.persist(root, plan, identity, rows)
+(root / "plan.json").write_text(json.dumps(plan, indent=2) + "\n")
+jm.write_agent_diagnostics(root, matrix, [], rows, True)
+print(json.dumps({
+    "java_matrix_complete": True,
+    "measured_rows": 40,
+    "preflight_rows": 10,
+    "output_root": str(root),
+}), flush=True)

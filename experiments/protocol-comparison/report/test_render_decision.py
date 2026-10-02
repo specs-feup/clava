@@ -5,7 +5,7 @@ import io
 import re
 import xml.etree.ElementTree as ET
 
-from render_decision import candle, comparison, csv_viewer, diagnostic_chart, measurements_download, render, validate_matrix, validate_uninstrumented_headlines
+from render_decision import candle, comparison, csv_viewer, diagnostic_chart, measurements_download, render, validate_matrix, validate_uninstrumented_headlines, validate_matched_syntax
 from render_report import SUITES, STAGE_ORDER, MODE_ORDER
 
 
@@ -20,6 +20,19 @@ def complete_rows():
 
 
 class DecisionReportTest(unittest.TestCase):
+    def test_matched_validation_requires_every_selected_stage(self):
+        rows = complete_rows()
+        with self.assertRaisesRegex(ValueError, "fast_syntax=true"):
+            validate_matched_syntax(rows)
+        for row in rows:
+            row["fast_syntax"] = True
+        validate_matched_syntax(rows)
+        rows.append(dict(rows[0], selected=False, fast_syntax=False))
+        validate_matched_syntax(rows)
+        rows[0]["fast_syntax"] = False
+        with self.assertRaises(ValueError):
+            validate_matched_syntax(rows)
+
     def test_head_to_head_evidence_precedes_text_relative_comparisons(self):
         analysis = dict(recommendation="Choose one format", reasons=[],
                         discrepancy=[dict(title="Cause", text="Evidence")] * 2,

@@ -10,6 +10,8 @@ gradle.afterProject { project ->
                 // Harness regression coverage runs separately from the fixed 116-test workload.
                 excludeTestsMatching 'pt.up.fe.specs.clang.parser.AClangAstTesterResourceTest'
                 excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangCcacheAdapterTest'
+                // Syntax-mode regression tests run separately; retain the same 116 parser tests.
+                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangAstDumperSyntax*Test'
                 // Added only on the Protobuf experiment branch; keep the
                 // measured population identical to the shared 116-test base.
                 excludeTestsMatching 'pt.up.fe.specs.clang.dumper.CXXConversionDeclTest'
