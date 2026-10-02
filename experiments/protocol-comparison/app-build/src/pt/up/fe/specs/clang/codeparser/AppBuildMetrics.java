@@ -11,6 +11,7 @@ import pt.up.fe.specs.util.SpecsIo;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
@@ -49,6 +50,8 @@ public final class AppBuildMetrics {
     private static String overlaySha256;
     private static String helperClassOrigin;
     private static String parserClassOrigin;
+    private static List<String> jvmInputArguments = Collections.emptyList();
+    private static long jvmMaxMemoryBytes;
     private static boolean initialized;
 
     private AppBuildMetrics() {
@@ -69,6 +72,8 @@ public final class AppBuildMetrics {
         helperClassOrigin = classOrigin(AppBuildMetrics.class);
         parserClassOrigin = classOrigin(ParallelCodeParser.class);
         overlaySha256 = sha256IfFile(overlayJar);
+        jvmInputArguments = new ArrayList<>(ManagementFactory.getRuntimeMXBean().getInputArguments());
+        jvmMaxMemoryBytes = Runtime.getRuntime().maxMemory();
         initialized = true;
     }
 
@@ -191,6 +196,8 @@ public final class AppBuildMetrics {
         row.put("overlay_sha256", overlaySha256);
         row.put("stage_root", stageRoot);
         row.put("working_directory", Path.of("").toAbsolutePath().normalize().toString());
+        row.put("jvm_input_arguments", jvmInputArguments);
+        row.put("jvm_max_memory_bytes", jvmMaxMemoryBytes);
 
         try {
             Path destination = Path.of(metricsPath).toAbsolutePath().normalize();

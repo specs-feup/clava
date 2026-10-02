@@ -18,6 +18,7 @@ from typing import Any
 PARSER_SUFFIX = Path(
     "pt/up/fe/specs/clang/codeparser/ParallelCodeParser.java"
 )
+PARSER_CLASS_ENTRY = "pt/up/fe/specs/clang/codeparser/ParallelCodeParser.class"
 PARSER_SIGNATURE = re.compile(
     r"public\s+App\s+parse\s*\(\s*List<File>\s+inputSources\s*,\s*"
     r"List<String>\s+compilerOptions\s*,\s*ClavaContext\s+context\s*\)"
@@ -33,6 +34,20 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: source.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def classfile_major(class_bytes: bytes) -> int:
+    if len(class_bytes) < 8 or class_bytes[:4] != b"\xca\xfe\xba\xbe":
+        raise ValueError("invalid or truncated Java class file")
+    return int.from_bytes(class_bytes[6:8], "big")
+
+
+def _jar_class_major(jar_path: Path, entry: str) -> int:
+    with zipfile.ZipFile(jar_path) as archive:
+        try:
+            return classfile_major(archive.read(entry))
+        except KeyError as error:
+            raise ValueError(f"frozen runtime JAR is missing {entry}: {jar_path}") from error
 
 
 def _find_parser_source(source_root: Path) -> Path:
@@ -296,6 +311,12 @@ def build_overlay(
     """Compile one frozen-stage shadow and return its JAR and provenance paths."""
     source_path = _find_parser_source(Path(source_root))
     runtime_root, lib_dir = _runtime_layout(runtime_lib)
+    original_class_major = _jar_class_major(lib_dir / "ClangAstParser.jar", PARSER_CLASS_ENTRY)
+    if original_class_major != 61:
+        raise ValueError(
+            f"expected Java 17 frozen parser class major 61, got {original_class_major}"
+        )
+    javac_target_release = original_class_major - 44
     output_root = Path(output_dir).resolve()
     output_root.mkdir(parents=True, exist_ok=True)
     overlay_jar = output_root / "overlay.jar"
@@ -325,6 +346,7 @@ def build_overlay(
         classes.mkdir()
         command = [
             javac,
+            "--release", str(javac_target_release),
             "-encoding", "UTF-8",
             "-classpath", str(lib_dir / "*"),
             "-d", str(classes),
@@ -337,6 +359,19 @@ def build_overlay(
                 f"javac failed for {stage_key}:\n{completed.stdout}\n{completed.stderr}"
             )
         class_entries = _class_entries(classes)
+        output_class_majors = {
+            entry: classfile_major((classes / entry).read_bytes())
+            for entry in class_entries
+        }
+        mismatched_class_majors = {
+            entry: major for entry, major in output_class_majors.items()
+            if major != original_class_major
+        }
+        if mismatched_class_majors:
+            raise RuntimeError(
+                f"overlay classes do not match frozen parser major {original_class_major}: "
+                f"{mismatched_class_majors}"
+            )
         _write_overlay_jar(classes, class_entries, overlay_jar)
         transformed_sha = sha256_file(parser_shadow)
 
@@ -358,6 +393,10 @@ def build_overlay(
         "helper_source": str(HELPER_SOURCE.resolve()),
         "helper_source_sha256": helper_sha,
         "transformed_parser_source": str(shadow_source),
+        "original_parser_class_major_version": original_class_major,
+        "javac_target_release": javac_target_release,
+        "overlay_class_major_versions": output_class_majors,
+        "overlay_classes_match_frozen_major": True,
         "runtime_root": str(runtime_root),
         "runtime_lib": str(lib_dir),
         "runtime_jars_before": jars_before,

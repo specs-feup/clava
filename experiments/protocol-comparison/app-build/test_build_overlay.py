@@ -43,6 +43,13 @@ public class ParallelCodeParser extends CodeParser {
 
 
 class BuildOverlayTest(unittest.TestCase):
+    def test_classfile_major_reader_and_java17_release_mapping(self) -> None:
+        major_61_class_header = bytes.fromhex("cafebabe0000003d")
+        self.assertEqual(build_overlay.classfile_major(major_61_class_header), 61)
+        self.assertEqual(build_overlay.classfile_major(major_61_class_header) - 44, 17)
+        with self.assertRaisesRegex(ValueError, "invalid or truncated"):
+            build_overlay.classfile_major(b"not-a-class")
+
     def test_instrumentation_keeps_parser_body_and_places_timer_anchors(self) -> None:
         transformed, anchors = build_overlay.instrument_source(PARSER_FIXTURE)
 
@@ -98,6 +105,10 @@ class BuildOverlayTest(unittest.TestCase):
         self.assertIn('result.put("LIBC_CXX_MODE"', helper)
         self.assertIn('row.put("working_directory"', helper)
         self.assertIn('row.put("metadata_complete"', helper)
+        self.assertIn("ManagementFactory.getRuntimeMXBean().getInputArguments()", helper)
+        self.assertIn("Runtime.getRuntime().maxMemory()", helper)
+        self.assertIn('row.put("jvm_input_arguments"', helper)
+        self.assertIn('row.put("jvm_max_memory_bytes"', helper)
 
 
 if __name__ == "__main__":
