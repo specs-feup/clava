@@ -254,6 +254,19 @@ def render(manifests, provenance, analysis):
     extra_visuals = '<div class="diagnostics">' + ''.join(diagnostic_chart(spec) for spec in analysis.get("diagnostic_charts", [])) + '</div>' + analysis.get("reviewed_visuals_html", "")
     detail_visuals = analysis.get("detail_visuals_html", "")
     cohort_note = f'<p class="muted">{esc(analysis["cohort_note"])}</p>' if analysis.get("cohort_note") else ""
+    suite_visuals = f'''{analysis.get("decision_visuals_html", "")}
+<h2>Whole-command change versus Text</h2><p>Median same-round change versus Text in the same cache state. Negative is faster. Counts show how often that direction repeated. These compare implemented branches, not the format alone.</p>{comparison(rows)}
+<h2>Both suites, every cache state</h2><p class="muted">Whole test-command wall time; builds excluded. Line = median. Box = middle half. Whiskers = full range. Dots = individual runs. Each suite uses one scale across all three sections.</p><div class="charts">{charts}</div>'''
+    app_visuals = analysis.get("app_build_visuals_html", "")
+    reason_cards = cards(analysis["reasons"])
+    lead_reason_cards, following_reason_cards = reason_cards, ""
+    if analysis.get("primary_timing") == "app-build":
+        if not app_visuals:
+            raise ValueError("App-build headline requires its validated evidence fragment")
+        performance_visuals = app_visuals + '<details><summary>Whole-suite command timings and binary controls</summary>' + suite_visuals + '</details>'
+        lead_reason_cards, following_reason_cards = "", reason_cards
+    else:
+        performance_visuals = suite_visuals.replace("Whole-command change versus Text", "What changes the runtime?", 1) + app_visuals
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Clava protocol and cache decision</title><style>
 :root{{--bg:#fff;--ink:#18212e;--muted:#536174;--panel:#f4f7fa;--line:#d5dfe8;--good:#08744c;--bad:#ae3535}}html.dark{{--bg:#111923;--ink:#edf2f7;--muted:#b2c0ce;--panel:#1c2836;--line:#3c4b5e;--good:#77dcb1;--bad:#ffaaa2}}*{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,sans-serif}}main{{max-width:1100px;margin:auto;padding:24px}}h1{{font-size:clamp(27px,4vw,38px);line-height:1.15;margin:0 0 14px}}h2{{font-size:24px;margin:34px 0 12px}}h3{{font-size:18px;margin:0 0 8px}}p{{margin:8px 0 14px}}.muted,.chart>p{{color:var(--muted);font-size:14px}}.verdict{{padding:22px;background:var(--panel);border-left:5px solid var(--good);border-radius:8px}}.verdict p{{font-size:20px;margin:0}}.cards,.charts,.comparison{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}}.cards article,.chart,.comparison>div{{border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}}.cards article p{{margin:0}}.charts svg{{display:block;width:100%;height:auto;max-width:480px;margin:auto}}svg text{{fill:var(--ink);font-family:system-ui,sans-serif}}.grid{{stroke:var(--line);stroke-dasharray:3 4}}.divider{{stroke:var(--line)}}.tick,.label,.value{{font-size:12px}}.mode{{font-size:13px;font-weight:650}}.foot{{font-size:11px;fill:var(--muted)}}.matrix-row{{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:8px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;align-items:center}}.matrix-row span:not(:first-child){{text-align:center}}.matrix-head{{color:var(--muted);font-size:12px}}.delta{{font-weight:700}}.faster{{color:var(--good)}}.slower{{color:var(--bad)}}details{{border-top:1px solid var(--line);padding:14px 0;margin-top:18px}}summary{{cursor:pointer;font-weight:650}}a{{color:var(--good);overflow-wrap:anywhere}}code{{overflow-wrap:anywhere}}li{{margin:8px 0}}.explain{{display:grid;gap:12px}}.explain article{{padding:16px 20px;border-left:4px solid var(--line);background:var(--panel)}}.explain article p{{margin:0}}@media(max-width:700px){{main{{padding:18px 12px}}.cards,.charts,.comparison{{grid-template-columns:1fr;gap:14px}}.chart{{padding:14px 10px}}h2{{font-size:22px}}.verdict{{padding:16px}}.verdict p{{font-size:18px}}}}
 /* DraftLink injects Tailwind's reset after this stylesheet. Scoped rules must win. */
@@ -262,10 +275,8 @@ main .cards>article:last-child:nth-child(odd){{grid-column:1/-1}}
 main .java-format-control{{color:var(--ink)}}main .java-format-control svg text{{fill:var(--ink)}}main .java-format-control .median{{fill:var(--ink);stroke:var(--bg)}}main .java-format-control .whisker{{stroke:var(--ink)}}
 main h1{{font-size:clamp(27px,4vw,38px);line-height:1.15;font-weight:750;margin:0 0 14px}}main h2{{font-size:24px;font-weight:700;margin:34px 0 12px}}main h3{{font-size:18px;font-weight:650;margin:0 0 8px}}main p{{margin:8px 0 14px}}main li{{margin:8px 0}}main ul{{list-style:disc;padding-left:22px}}main summary{{font-weight:650}}main .cards{{margin-top:20px}}@media(max-width:700px){{main h2{{font-size:22px}}}}
 .diagnostics{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:22px 0}}.diagnostic{{min-width:0;padding:16px;border:1px solid var(--line);border-radius:10px}}.diagnostic svg{{display:block;width:100%;max-width:480px;height:auto;margin:auto}}.diagnostic svg text{{font-size:15px}}.diagnostic p{{font-size:14px;color:var(--muted)}}@media(max-width:700px){{.diagnostics{{grid-template-columns:1fr}}}}
-</style></head><body><main><p class="muted">Decision brief · {esc(analysis.get("measurement_date", "30 September to 1 October 2026"))} · five-minute read</p><h1>Clava protocol and cache decision</h1><div class="verdict"><p>{esc(analysis["recommendation"])}</p></div>{cohort_note}{cards(analysis["reasons"])}
-{analysis.get("decision_visuals_html", "")}
-<h2>What changes the runtime?</h2><p>Median same-round change versus Text in the same cache state. Negative is faster. Counts show how often that direction repeated. These compare implemented branches, not the format alone.</p>{comparison(rows)}
-<h2>Both suites, every cache state</h2><p class="muted">Whole test-command wall time; builds excluded. Line = median. Box = middle half. Whiskers = full range. Dots = individual runs. Each suite uses one scale across all three sections.</p><div class="charts">{charts}</div>
+</style></head><body><main><p class="muted">Decision brief · {esc(analysis.get("measurement_date", "30 September to 1 October 2026"))} · five-minute read</p><h1>Clava protocol and cache decision</h1><div class="verdict"><p>{esc(analysis["recommendation"])}</p></div>{cohort_note}{lead_reason_cards}
+{performance_visuals}{following_reason_cards}
 <h2>Why do the results look this way?</h2>{cards(analysis["discrepancy"], "explain")}{extra_visuals}
 <h2>What would we maintain?</h2>{cards(analysis["tradeoffs"])}
 {detail_visuals}
@@ -282,6 +293,8 @@ def main():
                    help="Reviewed head-to-head decision evidence, shown immediately below the verdict")
     p.add_argument("--visual-fragment", type=Path, action="append", default=[],
                    help="Reviewed, self-contained HTML evidence fragment; repeat in display order")
+    p.add_argument("--app-build-fragment", type=Path, action="append", default=[],
+                   help="Validated App-building evidence, shown beside whole-suite timings")
     p.add_argument("--detail-fragment", type=Path, action="append", default=[],
                    help="Reviewed supplementary evidence, collapsed to keep the decision brief short")
     p.add_argument("--csv-file", type=Path, action="append", default=[],
@@ -301,6 +314,8 @@ def main():
     analysis["extra_csv_html"] = ''.join(csv_link(path) for path in args.csv_file)
     analysis["reviewed_visuals_html"] = analysis.get("reviewed_visuals_html", "") + ''.join(
         fragment.read_text(encoding="utf-8") for fragment in args.visual_fragment)
+    analysis["app_build_visuals_html"] = analysis.get("app_build_visuals_html", "") + ''.join(
+        fragment.read_text(encoding="utf-8") for fragment in args.app_build_fragment)
     if args.detail_fragment:
         analysis["detail_visuals_html"] = '<details><summary>Per-group replay, distributions and CSVs</summary>' + ''.join(
             fragment.read_text(encoding="utf-8") for fragment in args.detail_fragment) + '</details>'

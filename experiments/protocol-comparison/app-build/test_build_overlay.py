@@ -110,6 +110,33 @@ class BuildOverlayTest(unittest.TestCase):
         self.assertIn('row.put("jvm_input_arguments"', helper)
         self.assertIn('row.put("jvm_max_memory_bytes"', helper)
 
+    def test_include_directory_audit_is_opt_in_and_success_only(self) -> None:
+        helper = build_overlay.HELPER_SOURCE.read_text(encoding="utf-8")
+        self.assertIn(
+            'auditIncludes = "true".equalsIgnoreCase(environment("APP_BUILD_AUDIT_INCLUDES"));',
+            helper,
+        )
+        success_method = helper[
+            helper.index("public static void recordSuccess("):
+            helper.index("public static void recordSyntaxOnly(")
+        ]
+        syntax_method = helper[
+            helper.index("public static void recordSyntaxOnly("):
+            helper.index("public static void recordFailure(")
+        ]
+        self.assertIn("originalShowExecInfo, null, auditIncludes);", success_method)
+        self.assertIn('"syntax_only", true, originalShowExecInfo, null, false);', syntax_method)
+
+        audit_block_start = helper.index("if (includeAuditEnabled) {")
+        audit_block_end = helper.index("List<String> errors = metadataErrors", audit_block_start)
+        audit_block = helper[audit_block_start:audit_block_end]
+        self.assertIn('row.put("include_directory_audit"', audit_block)
+        self.assertIn('row.put("source_parent_audit"', audit_block)
+        self.assertEqual(helper.count('row.put("include_directory_audit"'), 1)
+        self.assertEqual(helper.count('row.put("source_parent_audit"'), 1)
+        self.assertIn("Files.walk(walkRoot, FileVisitOption.FOLLOW_LINKS)", helper)
+        self.assertIn('metadata.put("relative_path"', helper)
+
 
 if __name__ == "__main__":
     unittest.main()

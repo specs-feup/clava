@@ -51,6 +51,30 @@ class DecisionReportTest(unittest.TestCase):
         self.assertEqual(output.count("<circle"), 4)
         ET.fromstring(re.search(r"(<svg.*</svg>)", output).group(1))
 
+    def test_app_build_chart_follows_whole_suite_chart(self):
+        analysis = dict(recommendation="Choose one format", reasons=[],
+                        discrepancy=[dict(title="Cause", text="Evidence")] * 2,
+                        tradeoffs=[], method="Matched workloads", limitations="Four pairs",
+                        evidence=[], app_build_visuals_html='<section id="app-build"></section>')
+        output = render([dict(plan=dict(repeat_count=6), results=complete_rows())], {}, analysis)
+        self.assertLess(output.index('Both suites, every cache state'), output.index('id="app-build"'))
+        self.assertLess(output.index('id="app-build"'), output.index('Why do the results look this way?'))
+
+    def test_app_build_can_be_primary_without_discarding_whole_suite_data(self):
+        analysis = dict(recommendation="Choose one format", reasons=[dict(title="Performance conclusion", text="Paired evidence")],
+                        discrepancy=[dict(title="Cause", text="Evidence")] * 2,
+                        tradeoffs=[], method="Matched workloads", limitations="Four pairs",
+                        evidence=[], primary_timing="app-build",
+                        app_build_visuals_html='<section id="app-build"></section>')
+        output = render([dict(plan=dict(repeat_count=6), results=complete_rows())], {}, analysis)
+        self.assertLess(output.index('id="app-build"'), output.index('Whole-suite command timings and binary controls'))
+        self.assertLess(output.index('id="app-build"'), output.index('Performance conclusion'))
+        self.assertIn('Both suites, every cache state', output)
+        self.assertIn('Whole-command change versus Text', output)
+        analysis.pop('app_build_visuals_html')
+        with self.assertRaisesRegex(ValueError, 'requires its validated evidence'):
+            render([dict(plan=dict(repeat_count=6), results=complete_rows())], {}, analysis)
+
     def test_uninstrumented_headline_requires_actual_worker_proof(self):
         rows = complete_rows()
         with self.assertRaises(ValueError):

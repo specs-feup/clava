@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "benchmark": "in-suite Clava App construction timing",
+  "scope": {
+    "stages": ["before-cache", "ccache-text", "protobuf", "flatbuffers"],
+    "cache_modes": ["direct", "cold", "warm"],
+    "rotated_rounds": 4,
+    "valid_cells": 80,
+    "timing_boundary": "ParallelCodeParser.parse (3-arg) entry to completed App",
+    "excluded_from_timing": [
+      "Gradle/Vitest startup",
+      "JVM startup",
+      "test adapters and assertions",
+      "code generation",
+      "syntax-only calls"
+    ],
+    "forced_gc": false,
+    "natural_gc_included": true
+  },
+  "suites": {
+    "java": {
+      "test_counts_per_invocation": {"total": 116, "passed": 116, "failed": 0, "skipped": 0},
+      "test_identity_count": 116,
+      "test_identity_sha256": "03d86ec788beef3d62998cb1e001adef1c2d355fe9bd36617dd4c2a03cf2ab35",
+      "measured_invocations": 40,
+      "app_calls_per_invocation": 216,
+      "timed_app_calls": 8640,
+      "syntax_only_calls_excluded": 0,
+      "runtime_max_heap_bytes": 536870912,
+      "runtime_max_heap_evidence": "-Xmx512m in captured JVM input arguments"
+    },
+    "clava-js": {
+      "test_counts_per_invocation": {"total": 164, "passed": 158, "failed": 0, "skipped": 6},
+      "test_identity_count": 164,
+      "test_identity_sha256": "a8c373bc492b9e4391a399a2ff332abfc2fb54645e3e60dab44095fbd7ff0973",
+      "measured_invocations": 40,
+      "app_calls_per_invocation": 170,
+      "timed_app_calls": 6800,
+      "syntax_only_calls_excluded": 5200,
+      "runtime_max_heap_bytes": 8103395328,
+      "runtime_max_heap_evidence": "captured JVM Runtime.maxMemory; no explicit -Xmx argument"
+    }
+  },
+  "capture_integrity": {
+    "captured_rows_including_excluded_syntax_only": 20640,
+    "timed_app_calls": 15440,
+    "excluded_syntax_only_rows": 5200,
+    "null_app_rows": 0,
+    "invalid_rows": 0,
+    "forbidden_agent_or_gc_jvm_arg_rows": 0,
+    "forbidden_jvm_args_checked": ["-javaagent", "-agentlib", "-agentpath", "-Xrun", "DisableExplicitGC", "ExplicitGCInvokesConcurrent"],
+    "runtime_overlay_class_major": 61,
+    "runtime_overlay_target_release": 17,
+    "runtime_jars_unchanged_by_overlay": true
+  },
+  "cache_totals_over_four_invocations": {
+    "tuple_order": ["cache_applicable", "cacheable_calls", "hits", "misses", "uncacheable_calls"],
+    "java": {
+      "before-cache": {"direct": [false, 0, 0, 0, 0]},
+      "ccache-text": {"direct": [true, 0, 0, 0, 0], "cold": [true, 832, 0, 832, 0], "warm": [true, 832, 828, 4, 0]},
+      "protobuf": {"direct": [true, 0, 0, 0, 0], "cold": [true, 832, 0, 832, 0], "warm": [true, 832, 828, 4, 0]},
+      "flatbuffers": {"direct": [true, 0, 0, 0, 0], "cold": [true, 832, 0, 832, 0], "warm": [true, 832, 828, 4, 0]}
+    },
+    "clava-js": {
+      "before-cache": {"direct": [false, 0, 0, 0, 0]},
+      "ccache-text": {"direct": [true, 0, 0, 0, 0], "cold": [true, 664, 64, 600, 0], "warm": [true, 664, 664, 0, 0]},
+      "protobuf": {"direct": [true, 0, 0, 0, 0], "cold": [true, 664, 64, 600, 0], "warm": [true, 664, 664, 0, 0]},
+      "flatbuffers": {"direct": [true, 0, 0, 0, 0], "cold": [true, 664, 64, 600, 0], "warm": [true, 664, 664, 0, 0]}
+    }
+  },
+  "stages": {
+    "before-cache": {
+      "wire": "text",
+      "cache_enabled": false,
+      "fast_syntax_validation": true,
+      "clava_revision": "70c30bdb8cce66dba53c0e2963c3ec31cbc223bc",
+      "clava_patch_sha256": "222649f4f714d03699b3701e027590fb617ebc8bae62a2faa6ac7ad07a1501de",
+      "native_revision": "522c60be801256999fd6aba4997038f440212975",
+      "native_syntax_backport_commit": "da01039d96f4e959a2fc5bf1cdc734b09855c4d4",
+      "native_source_diff_sha256": "59b8cd4f8dd535aec53c85480bf04f1e6e2f4fc31ed22221ed41e145c9dd1ac3",
+      "producer_schema_commit": "522c60be801256999fd6aba4997038f440212975",
+      "parser_jar_sha256": "368e3f7e388ab2efb0812153a614e2d3aba73b187d78e2aac27b9de7987aa281",
+      "native_tool_sha256": "c6de0d20f4c330e9f480ac5234e1c44202d524ed4b36064ef02e3373e211b657",
+      "runtime_jar_inventory": {"count": 87, "sha256": "26d735a42875dfb09cf4643fd6b4aec78262184109aab40c4395a8298349f1bc"},
+      "java_resource_tag_sha256": "f389386e0a53d6bfa219456d3c8756520d1599dd7993452e16a5c82ebc3d1209",
+      "measurement_overlay_sha256": "2ecb4cdfb360c4870b18437d4531d7abee25aefa2ed6e70c13457b29820758d9",
+      "measurement_overlay_provenance_sha256": "991fa4ba9838607581159af329cd6ea130ff92cebfd6951031c89d61fa762050",
+      "overlay_parser_source_sha256": "1de7fbd53a1e88b0182d93161c558ec5d2006a838c7069a7a1bfcc774eee9f73",
+      "overlay_transformed_parser_sha256": "7a6faefdd4469d48dc4cc11542fa77470a5b8a1ef0e2adcc2688f26d070ffa1e",
+      "overlay_helper_source_sha256": "ef3686c30b4789d805df8628f819f81cd228426b87700c2e6a1f8eac6936ab76",
+      "overlay_target_release": 17
+    },
+    "ccache-text": {
+      "wire": "text",
+      "cache_enabled": true,
+      "fast_syntax_validation": true,
+      "clava_revision": "bae33249933f57bd78de5121dbb9611ace955aa1",
+      "clava_patch_sha256": "ff7cbfeb979fb625800eb8bf9463ffcebb481b94e5aebc4d8dd86fb801fcc24c",
+      "native_revision": "c549b4b2f490af8a1be20b5f30e7aa875c9c95fe",
+      "native_source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "producer_schema_commit": "c549b4b2f490af8a1be20b5f30e7aa875c9c95fe",
+      "parser_jar_sha256": "bf5dc4116d694040bac89f700850703209dc1360d3c400e0b7752e7d855e4550",
+      "native_tool_sha256": "b145b989a87e5e22288ce8e39ffb223669b761bf1ac7d8f8855cc7f19b6f024e",
+      "runtime_jar_inventory": {"count": 88, "sha256": "41d42a3125636e6cd1a0843c585e2e858d1584886691149796331ee7b6e8421d"},
+      "java_resource_tag_sha256": "fa57e9e82b85d58482be9ee3799b8adebfab7f92ba0d754bfd8dbef24d9340ad",
+      "measurement_overlay_sha256": "fd61e8a9b87d38f5c9a8f0de0b939c857f6c88e267b7e9434979227f688a86b3",
+      "measurement_overlay_provenance_sha256": "37e05de5fa8c228fbc23dd22757bddd79ac69c326aaee4eb995f01301abb4b4e",
+      "overlay_parser_source_sha256": "3caf0c47c80bbfb41cad5bf0d9dbfc11d61eda10f3a4d55b9b5f5ae7187b9779",
+      "overlay_transformed_parser_sha256": "fd8859d7e8f5a9f6262ac13c031d3ff216aea268354510c1bcaa522b5e89a8eb",
+      "overlay_helper_source_sha256": "ef3686c30b4789d805df8628f819f81cd228426b87700c2e6a1f8eac6936ab76",
+      "overlay_target_release": 17
+    },
+    "protobuf": {
+      "wire": "protobuf",
+      "cache_enabled": true,
+      "fast_syntax_validation": true,
+      "clava_revision": "52bbaaed4259cbf4431e66e36afe3c163f1ec7cc",
+      "clava_patch_sha256": "a19418253f4b730bfd351240ae7b2036104fe0504400d235c7dce4d7a7d52aa2",
+      "native_revision": "ab9d0238bd9c27eb9f156fd19967d16025137a37",
+      "native_source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "producer_schema_commit": "ab9d0238bd9c27eb9f156fd19967d16025137a37",
+      "parser_jar_sha256": "cffd53fc9734cb824078495c63065b217d039a8e1a332fa3ff0e50cfbc7de0e5",
+      "native_tool_sha256": "8c6dc982c3303c9e574f2ed11d005081fef0f83c177c02acc56495305b23ec6b",
+      "runtime_jar_inventory": {"count": 89, "sha256": "8d1171733e28d935ed4e504a7d194ae537d041fd46c977f47ce24ffc0a6cc5d3"},
+      "java_resource_tag_sha256": "523a8c774c964d62f71bfb6a10833b61306595626204efcfc766513fc7c66ef5",
+      "measurement_overlay_sha256": "fd61e8a9b87d38f5c9a8f0de0b939c857f6c88e267b7e9434979227f688a86b3",
+      "measurement_overlay_provenance_sha256": "f2af0fc801514628b6958a98f65c5775330e3845ad8193b1e66f541b1e818145",
+      "overlay_parser_source_sha256": "3caf0c47c80bbfb41cad5bf0d9dbfc11d61eda10f3a4d55b9b5f5ae7187b9779",
+      "overlay_transformed_parser_sha256": "fd8859d7e8f5a9f6262ac13c031d3ff216aea268354510c1bcaa522b5e89a8eb",
+      "overlay_helper_source_sha256": "ef3686c30b4789d805df8628f819f81cd228426b87700c2e6a1f8eac6936ab76",
+      "overlay_target_release": 17
+    },
+    "flatbuffers": {
+      "wire": "flat-eager",
+      "cache_enabled": true,
+      "fast_syntax_validation": true,
+      "clava_revision": "01c6b739e5606af12734a3a21c63a45ce5dd5e67",
+      "clava_patch_sha256": "12bea3a9f4cf5ac099558b8af9ca04362a4d3a798558a860014a624223007008",
+      "native_revision": "0a27378395b2f10d232cbd0f7b167e5e588f95b8",
+      "native_source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "producer_schema_commit": "0a27378395b2f10d232cbd0f7b167e5e588f95b8",
+      "parser_jar_sha256": "8dfbd94c76503a5070f156d7b5495ff0a168d27e6b08663810c387d0a9d51acc",
+      "native_tool_sha256": "3f019caf6fd1e3366a44819bca4d6ae465e303c858349350e608b16624002422",
+      "runtime_jar_inventory": {"count": 88, "sha256": "595ca64e52b3c9f94edb5a0920912abe8dd093cd3e04a978b9f768efc2d01abc"},
+      "java_resource_tag_sha256": "38584be1417ee5e3275abca5e41f7d9088c767d503959cf1427632153d4b58bc",
+      "measurement_overlay_sha256": "0f1f1047dfd47a5b698429d9ac2b08f44aaace8cfcc5ddb5cd13caea607fd537",
+      "measurement_overlay_provenance_sha256": "9db69013f9c5b59309c63cc4eb1d24a615cfca73fd59d4441a5e2c501bf99a6b",
+      "overlay_parser_source_sha256": "c0be1aca2ba6ddfe1e3156412218b6cd40b6b70b33b04d0e04ebb6e859b8a62f",
+      "overlay_transformed_parser_sha256": "0ff1734aa12c449c79cef38159f29685258897c9ab1675ae7e3ea2960bbf0aa7",
+      "overlay_helper_source_sha256": "ef3686c30b4789d805df8628f819f81cd228426b87700c2e6a1f8eac6936ab76",
+      "overlay_target_release": 17
+    }
+  },
+  "recovery": {
+    "algorithm": "verified-round1-recovery-r1",
+    "reused_measured_cells": 20,
+    "suite_invocations_during_recovery": 0,
+    "round1_raw_digest_entries": 20,
+    "digest_fields_per_entry": ["app-calls.jsonl", "app-calls.enriched.jsonl", "summary.json"],
+    "canonical_raw_digest_map_sha256": "eca4601117e88fca05738af1c0a0af410d664acaa528097893124aa6c5c0f16b",
+    "digest_map_embedded_in": "measurement plan at measurement_recovery.raw_cell_sha256_by_run; its complete artifact is pinned above",
+    "warm_cache_snapshot_entry_counts": {
+      "clava-js/ccache-text": 454,
+      "java/ccache-text": 602,
+      "clava-js/protobuf": 467,
+      "java/protobuf": 593,
+      "clava-js/flatbuffers": 466,
+      "java/flatbuffers": 604
+    },
+    "note": "Round-one raw rows, enriched rows, and summaries were preserved byte-for-byte; no suite invocation was used to recover them."
+  },
+  "artifacts": {
+    "base_directory": "experiments/protocol-comparison",
+    "final_measurement_plan": {
+      "path": "results/app-build-20261002-r1/measure-app-only-r2/plan.json",
+      "sha256": "6e5ecc5d97393b679b6efe6c11075b107b84e4a43bddb8f1c0db2188faa6b1bc"
+    },
+    "raw_measurement_csv": {
+      "path": "results/app-build-20261002-r1/measure-app-only-r2/app-build-calls.csv",
+      "sha256": "36f6c4d7ef8af552bd322eaef40b0b356094b0f1804644f1ede757c3909fd68a"
+    },
+    "measurement_payload": {
+      "path": "results/app-build-20261002-r1/measure-app-only-r2/app-build-matrix.json",
+      "sha256": "9f01de87f3d00a9db494e2f6bd7581290fdfcbe1b4c22651a448feb75b8963f7"
+    },
+    "verified_preflight_manifest": {
+      "path": "results/app-build-20261002-r1/preflight-app-only-verified-r2/plan.json",
+      "sha256": "adef5bc050a4a6f38a6d2a56b0386ade61bbb1ee77abd4ff5ccbe410f3bd82f9"
+    },
+    "decision_csv": {
+      "path": "analysis/decision-app-build-20261002.csv",
+      "sha256": "ee5a21ccd53f1c6631212918e0a7ea766ca0df1019df1602cca4215f542b7113"
+    },
+    "decision_payload": {
+      "path": "analysis/decision-app-build-20261002.json",
+      "sha256": "c90ec35caf47682abb44685e6d57c9940ea8caa8d7a789f281e040c30ad40fa1"
+    }
+  },
+  "baseline_note": "The before-cache control is the historical Clava/native baseline with the same narrowly scoped fast-syntax validation backport, not the untouched published binary/runtime. Its isolated Clava and native source deltas are identified by the stage patch/diff SHA256 values above."
+}

@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
 
 /** Emits per-call measurements for the temporary parser shadow used by the App-build matrix. */
 public final class AppBuildMetrics {
@@ -50,6 +52,7 @@ public final class AppBuildMetrics {
     private static String overlaySha256;
     private static String helperClassOrigin;
     private static String parserClassOrigin;
+    private static boolean auditIncludes;
     private static List<String> jvmInputArguments = Collections.emptyList();
     private static long jvmMaxMemoryBytes;
     private static boolean initialized;
@@ -74,6 +77,7 @@ public final class AppBuildMetrics {
         overlaySha256 = sha256IfFile(overlayJar);
         jvmInputArguments = new ArrayList<>(ManagementFactory.getRuntimeMXBean().getInputArguments());
         jvmMaxMemoryBytes = Runtime.getRuntime().maxMemory();
+        auditIncludes = "true".equalsIgnoreCase(environment("APP_BUILD_AUDIT_INCLUDES"));
         initialized = true;
     }
 
@@ -94,7 +98,7 @@ public final class AppBuildMetrics {
         double elapsedMillis = nanosToMillis(Math.max(0L, stopNanos - startNanos));
         emit(parser, inputSources, compilerOptions, context, callOrdinal,
                 elapsedMillis, !appReturnedNull, appReturnedNull,
-                null, false, originalShowExecInfo, null);
+                null, false, originalShowExecInfo, null, auditIncludes);
     }
 
     public static void recordSyntaxOnly(
@@ -105,7 +109,7 @@ public final class AppBuildMetrics {
             long callOrdinal,
             boolean originalShowExecInfo) {
         emit(parser, inputSources, compilerOptions, context, callOrdinal,
-                null, true, true, "syntax_only", true, originalShowExecInfo, null);
+                null, true, true, "syntax_only", true, originalShowExecInfo, null, false);
     }
 
     public static void recordFailure(
@@ -124,7 +128,7 @@ public final class AppBuildMetrics {
         emit(parser, inputSources, compilerOptions, context, callOrdinal,
                 syntaxOnly ? null : nanosToMillis(Math.max(0L, stopNanos - startNanos)),
                 false, null, syntaxOnly ? "syntax_only" : reason,
-                syntaxOnly, originalShowExecInfo, reason + ":" + failureMessage);
+                syntaxOnly, originalShowExecInfo, reason + ":" + failureMessage, false);
     }
 
     @SuppressWarnings("unchecked")
@@ -150,7 +154,8 @@ public final class AppBuildMetrics {
             String excludedReason,
             boolean syntaxOnly,
             boolean originalShowExecInfo,
-            String failure) {
+            String failure,
+            boolean includeAuditEnabled) {
         if (metricsPath == null || metricsPath.isBlank()) {
             return;
         }
@@ -181,14 +186,20 @@ public final class AppBuildMetrics {
                 ? Collections.emptyList() : new ArrayList<>(compilerOptions));
         Map<String, Object> config = parserConfig(parser, originalShowExecInfo);
         row.put("parser_config", config);
-        List<String> configErrors = metadataErrors(sourceMetadata, config);
-        row.put("metadata_complete", configErrors.isEmpty());
-        if (!configErrors.isEmpty()) {
+        List<String> auditErrors = new ArrayList<>();
+        if (includeAuditEnabled) {
+            row.put("include_directory_audit", includeDirectoryAudit(compilerOptions, auditErrors));
+            row.put("source_parent_audit", sourceParentAudit(sourceMetadata, auditErrors));
+        }
+        List<String> errors = metadataErrors(sourceMetadata, config);
+        errors.addAll(auditErrors);
+        row.put("metadata_complete", errors.isEmpty());
+        if (!errors.isEmpty()) {
             row.put("valid", false);
             if (excludedReason == null) {
                 row.put("excluded_reason", "metadata_error");
             }
-            row.put("metadata_errors", configErrors);
+            row.put("metadata_errors", errors);
         }
         row.put("parser_class_origin", parserClassOrigin);
         row.put("helper_class_origin", helperClassOrigin);
@@ -213,6 +224,118 @@ public final class AppBuildMetrics {
         } catch (IOException exception) {
             throw new IllegalStateException("Could not append App-build metrics to " + metricsPath, exception);
         }
+    }
+
+    private static List<Map<String, Object>> includeDirectoryAudit(
+            List<String> compilerOptions, List<String> errors) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        if (compilerOptions == null) {
+            return result;
+        }
+
+        for (int index = 0; index < compilerOptions.size(); index++) {
+            String option = compilerOptions.get(index);
+            String includePath = null;
+            if ("-I".equals(option)) {
+                if (index + 1 < compilerOptions.size()) {
+                    includePath = compilerOptions.get(++index);
+                } else {
+                    errors.add("include_directory_audit:missing_path_after_-I");
+                }
+            } else if (option != null && option.startsWith("-I") && option.length() > 2) {
+                includePath = option.substring(2);
+            }
+
+            if (includePath == null || includePath.isBlank()) {
+                continue;
+            }
+            includePath = unquote(includePath);
+            try {
+                Path root = Path.of(includePath);
+                if (!root.isAbsolute()) {
+                    root = Path.of("").toAbsolutePath().resolve(root);
+                }
+                result.add(directoryAudit(root.normalize(), errors, "include_directory_audit"));
+            } catch (RuntimeException exception) {
+                errors.add("include_directory_audit:" + includePath + ":" + exception);
+            }
+        }
+        return result;
+    }
+
+    private static List<Map<String, Object>> sourceParentAudit(
+            List<Map<String, Object>> sourceMetadata, List<String> errors) {
+        Map<String, Path> parents = new TreeMap<>();
+        for (Map<String, Object> source : sourceMetadata) {
+            Object absolutePath = source.get("absolute_path");
+            if (!(absolutePath instanceof String)) {
+                continue;
+            }
+            try {
+                Path parent = Path.of((String) absolutePath).toAbsolutePath().normalize().getParent();
+                if (parent != null) {
+                    parents.put(parent.toString(), parent);
+                }
+            } catch (RuntimeException exception) {
+                errors.add("source_parent_audit:" + absolutePath + ":" + exception);
+            }
+        }
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Path parent : parents.values()) {
+            result.add(directoryAudit(parent, errors, "source_parent_audit"));
+        }
+        return result;
+    }
+
+    private static Map<String, Object> directoryAudit(Path root, List<String> errors, String field) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("path", root.toString());
+        List<Map<String, Object>> files = new ArrayList<>();
+        result.put("files", files);
+        try {
+            boolean exists = Files.exists(root);
+            result.put("exists", exists);
+            if (!exists || !Files.isDirectory(root)) {
+                return result;
+            }
+
+            Path walkRoot = root.toRealPath();
+            List<Path> regularFiles = new ArrayList<>();
+            try (Stream<Path> paths = Files.walk(walkRoot, FileVisitOption.FOLLOW_LINKS)) {
+                paths.filter(path -> !path.equals(walkRoot) && Files.isRegularFile(path))
+                        .forEach(regularFiles::add);
+            }
+            regularFiles.sort((left, right) -> walkRoot.relativize(left).toString()
+                    .compareTo(walkRoot.relativize(right).toString()));
+            for (Path file : regularFiles) {
+                Map<String, Object> metadata = new LinkedHashMap<>();
+                metadata.put("relative_path", walkRoot.relativize(file).toString());
+                try {
+                    metadata.put("sha256", sha256(file));
+                } catch (IOException exception) {
+                    metadata.put("sha256", null);
+                    metadata.put("sha256_error", exception.toString());
+                    errors.add(field + ".sha256:" + file + ":" + exception);
+                }
+                files.add(metadata);
+            }
+        } catch (IOException | RuntimeException exception) {
+            result.put("error", exception.toString());
+            errors.add(field + ":" + root + ":" + exception);
+        }
+        return result;
+    }
+
+    private static String unquote(String path) {
+        if (path.length() >= 2) {
+            char first = path.charAt(0);
+            char last = path.charAt(path.length() - 1);
+            if ((first == '"' && last == '"') || (first == '\'' && last == '\'')) {
+                return path.substring(1, path.length() - 1);
+            }
+        }
+        return path;
     }
 
     private static List<String> inputPaths(List<File> inputSources) {
