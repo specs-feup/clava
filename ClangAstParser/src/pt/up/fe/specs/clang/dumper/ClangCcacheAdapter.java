@@ -10,10 +10,16 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import pt.up.fe.specs.util.SpecsLogs;
@@ -23,6 +29,7 @@ final class ClangCcacheAdapter {
 
     private static final String CACHE_FOLDER_NAME = "clang-dumper-ccache";
     private static final AtomicBoolean MISSING_CCACHE_REPORTED = new AtomicBoolean();
+    private static final Map<Path, CachedDigest> EXECUTABLE_DIGESTS = new ConcurrentHashMap<>();
 
     private ClangCcacheAdapter() {
     }
@@ -33,8 +40,9 @@ final class ClangCcacheAdapter {
         }
 
         return switch (value.trim().toLowerCase(Locale.ROOT)) {
-            case "1", "true", "yes", "on" -> true;
-            default -> false;
+            case "0", "false", "no" -> throw new IllegalArgumentException(
+                    "CCACHE_DISABLE does not accept false values; unset it to enable ccache");
+            default -> true;
         };
     }
 
@@ -58,12 +66,17 @@ final class ClangCcacheAdapter {
         return false;
     }
 
-    static Invocation prepare(File dumperFolder) {
-        return prepare(dumperFolder, null);
-    }
+    static Invocation prepare(File dumperFolder, File baseDir, File executable, String schemaHash) {
+        if (!schemaHash.matches("[0-9a-f]{64}")) {
+            throw new IllegalArgumentException("Invalid FlatBuffers schema hash: " + schemaHash);
+        }
 
-    static Invocation prepare(File dumperFolder, File baseDir) {
-        var cacheFolder = new File(dumperFolder, CACHE_FOLDER_NAME);
+        String executableHash = sha256(executable);
+        var cacheFolder = new File(new File(dumperFolder, CACHE_FOLDER_NAME),
+                "flatbuffers-v" + pt.up.fe.specs.clang.wire.WireProtocol.SCHEMA_VERSION + "-"
+                        + pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION + "-"
+                        + pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_COMMIT + "-"
+                        + schemaHash + "-" + executableHash);
         try {
             Files.createDirectories(cacheFolder.toPath());
         } catch (IOException e) {
@@ -71,6 +84,52 @@ final class ClangCcacheAdapter {
         }
 
         return new Invocation(cacheFolder, baseDir);
+    }
+
+    static String sha256(File file) {
+        if (file == null || !file.isFile()) {
+            throw new IllegalArgumentException("Cannot hash missing clang-dumper executable: " + file);
+        }
+        try {
+            Path path = file.toPath().toRealPath();
+            BasicFileAttributes before = Files.readAttributes(path, BasicFileAttributes.class);
+            CachedDigest cached = EXECUTABLE_DIGESTS.get(path);
+            if (cached != null && cached.matches(before)) {
+                return cached.sha256();
+            }
+
+            var digest = MessageDigest.getInstance("SHA-256");
+            try (var input = Files.newInputStream(path)) {
+                var buffer = new byte[64 * 1024];
+                int read;
+                while ((read = input.read(buffer)) >= 0) {
+                    digest.update(buffer, 0, read);
+                }
+            }
+            BasicFileAttributes after = Files.readAttributes(path, BasicFileAttributes.class);
+            if (!sameFileVersion(before, after)) {
+                throw new IOException("clang-dumper executable changed while hashing: " + path);
+            }
+            String hash = HexFormat.of().formatHex(digest.digest());
+            EXECUTABLE_DIGESTS.put(path, new CachedDigest(after.size(), after.lastModifiedTime(), after.fileKey(), hash));
+            return hash;
+        } catch (IOException e) {
+            throw new RuntimeException("Could not hash clang-dumper executable '" + file + "'", e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new AssertionError("SHA-256 is required by the JRE", e);
+        }
+    }
+
+    private static boolean sameFileVersion(BasicFileAttributes left, BasicFileAttributes right) {
+        return left.size() == right.size() && left.lastModifiedTime().equals(right.lastModifiedTime())
+                && java.util.Objects.equals(left.fileKey(), right.fileKey());
+    }
+
+    private record CachedDigest(long size, FileTime modifiedTime, Object fileKey, String sha256) {
+        private boolean matches(BasicFileAttributes attributes) {
+            return size == attributes.size() && modifiedTime.equals(attributes.lastModifiedTime())
+                    && java.util.Objects.equals(fileKey, attributes.fileKey());
+        }
     }
 
     static List<String> command(List<String> dumperCommand, File dependencyFile) {
@@ -103,14 +162,8 @@ final class ClangCcacheAdapter {
             if (baseDir != null) {
                 environment.put("CCACHE_BASEDIR", baseDir.getAbsolutePath());
             }
-            // clang-dumper already streams a compressed Zstandard frame. Recompressing
-            // it inside ccache roughly doubles miss latency without changing semantics.
-            if (pt.up.fe.specs.clang.wire.WireMode.enabled()) {
-                environment.remove("CCACHE_NOCOMPRESS");
-                environment.put("CCACHE_COMPRESS", "true");
-            } else {
-                environment.put("CCACHE_NOCOMPRESS", "true");
-            }
+            environment.put("CCACHE_COMPRESS", "true");
+            environment.remove("CCACHE_NOCOMPRESS");
         }
     }
 }

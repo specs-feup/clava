@@ -24,7 +24,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.ClangAstPathResolver;
-import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
 import pt.up.fe.specs.clang.parsers.ClavaNodeParser;
 import pt.up.fe.specs.clang.parsers.util.PragmasLocations;
 import pt.up.fe.specs.clang.version.Clang_3_8;
@@ -49,10 +48,11 @@ public final class CompleteReader {
      * until {@link #releaseLookup(ClangAstData)} is called by the production
      * multi-translation-unit pipeline.
      */
-    public static Result read(Path path, ClavaContext context, File parseRoot, String scope, boolean lazy)
+    public static Result read(Path path, ClavaContext context, File parseRoot, String scope)
             throws IOException {
 
-        ClangAstData data = ClangStreamParserV2.newInstance(context).getData();
+        ClangAstData data = new ClangAstData();
+        data.set(ClangAstData.CONTEXT, context);
         if(parseRoot!=null)data.set(ClangAstData.PARSE_ROOT, parseRoot);
         initializeData(data);
 
@@ -70,8 +70,10 @@ public final class CompleteReader {
         try (var mapped = new MappedRecords(path)) {
             MappedRecords.Frame frame;
             while ((frame = mapped.next()) != null) {
+                WireVerifier.verify(frame.buffer(), frame.rootOffset());
                 var block=new astwire.v2.Block().__assign(frame.rootOffset(),frame.buffer());
                 if(block.recordsVector()==null)throw new IOException("Missing block records");
+                if(block.recordsLength()==0)throw new IOException("Empty wire block");
                 for(int recordIndex=0;recordIndex<block.recordsLength();recordIndex++) {
                 if (endSeen) {
                     throw new IOException("Record found after End");
@@ -79,7 +81,10 @@ public final class CompleteReader {
 
                 records++;
                 var record = block.records(recordIndex);
-                GeneratedNodes.validate(record);
+                if (!headerSeen && record.payloadType() != RecordPayload.Header) {
+                    throw new IOException("Header must be the first wire record");
+                }
+                GeneratedNodes.validateRecord(record);
 
                 switch (record.payloadType()) {
                     case RecordPayload.Header -> {
@@ -94,7 +99,7 @@ public final class CompleteReader {
                     }
                     case RecordPayload.File -> readFile(record, data, files);
                     case RecordPayload.Node -> {
-                        readNode(record, data, files, importContext, lazy);
+                        readNode(record, data, files, importContext);
                         nodes++;
                         flushClass(recordNodeId(record, files), pendingClasses, nodeParser, data);
                     }
@@ -168,9 +173,10 @@ public final class CompleteReader {
     }
 
     private static void readNode(astwire.v2.Record record, ClangAstData data, SchemaRuntime.Files files,
-            SchemaRuntime.ImportContext importContext, boolean lazy) {
+            SchemaRuntime.ImportContext importContext) {
         var node = (astwire.v2.Node) record.payload(new astwire.v2.Node());
-        String id = files.id(node.id());
+        GeneratedNodes.validateNodeClass(node);
+        String id = files.ownerId(node.id(), "Node");
         if (data.get(ClangAstData.NODE_DATA).containsKey(id)) {
             throw new IllegalArgumentException("Duplicated wire node id " + id);
         }
@@ -179,15 +185,18 @@ public final class CompleteReader {
         if (descriptor == null) {
             throw new IllegalArgumentException("Missing descriptor for wire node payload " + node.payloadType());
         }
-        DataStore nodeData = descriptor.read(payload, node.className(), id, importContext, lazy);
+        DataStore nodeData = descriptor.read(payload, node.className(), id, importContext);
         data.get(ClangAstData.NODE_DATA).put(id, nodeData);
     }
 
     private static void readChildren(astwire.v2.Record record, ClangAstData data, SchemaRuntime.Files files) {
         var children = (astwire.v2.Children) record.payload(new astwire.v2.Children());
-        String id = files.id(children.node());
-        if (data.get(ClangAstData.VISITED_CHILDREN).putIfAbsent(id,
-                SchemaRuntime.list(children.childrenLength(), i -> files.id(children.children(i)))) != null) {
+        String id = files.ownerId(children.node(), "Children");
+        var childIds = SchemaRuntime.list(children.childrenLength(), i -> {
+            long childId = children.children(i);
+            return files.id(childId);
+        });
+        if (data.get(ClangAstData.VISITED_CHILDREN).putIfAbsent(id, childIds) != null) {
             throw new IllegalArgumentException("Duplicated wire children record for " + id);
         }
     }
@@ -195,8 +204,11 @@ public final class CompleteReader {
     private static void readNodeClass(astwire.v2.Record record, ClangAstData data, SchemaRuntime.Files files,
             Map<String, String> pendingClasses, ClavaNodeParser nodeParser) {
         var nodeClass = (astwire.v2.NodeClass) record.payload(new astwire.v2.NodeClass());
-        String id = files.id(nodeClass.node());
-        pendingClasses.putIfAbsent(id, nodeClass.className());
+        String id = files.ownerId(nodeClass.node(), "NodeClass");
+        if (pendingClasses.containsKey(id) || data.getClavaNodes().getNodes().containsKey(id)) {
+            throw new IllegalArgumentException("Duplicated wire node-class record for " + id);
+        }
+        pendingClasses.put(id, nodeClass.className());
         flushClass(id, pendingClasses, nodeParser, data);
     }
 
@@ -295,10 +307,11 @@ public final class CompleteReader {
 
     private static void readEnd(astwire.v2.Record record, long records, long nodes, SchemaRuntime.Files files) {
         var end = (astwire.v2.End) record.payload(new astwire.v2.End());
-        if (end.records() != records - 1 || end.nodes() != nodes || end.files() != files.paths.size() - 1) {
+        if (end.records() != records - 1 || end.nodes() != nodes || end.files() != files.paths.size() - 1
+                || end.ids() < files.largestPositiveId()) {
             throw new IllegalArgumentException("v2 End count mismatch: records=" + end.records() + "/" + (records - 1)
                     + ", nodes=" + end.nodes() + "/" + nodes + ", files=" + end.files() + "/"
-                    + (files.paths.size() - 1));
+                    + (files.paths.size() - 1) + ", ids=" + end.ids() + "/" + files.largestPositiveId());
         }
     }
 

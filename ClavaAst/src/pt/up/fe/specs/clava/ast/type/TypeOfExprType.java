@@ -38,7 +38,7 @@ public class TypeOfExprType extends Type {
 
     public final static DataKey<Boolean> IS_SUGARED = KeyFactory.bool("isSugared");
 
-    public final static DataKey<Expr> UNDERLYING_EXPR = KeyFactory.object("underlingExpr", Expr.class);
+    public final static DataKey<Expr> UNDERLYING_EXPR = KeyFactory.object("underlyingExpr", Expr.class);
 
     /// DATAKEYS END
 

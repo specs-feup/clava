@@ -13,17 +13,14 @@
 
 package pt.up.fe.specs.clang.dumper;
 
-import com.github.luben.zstd.ZstdInputStream;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.JOptionsUtils;
-import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.cilk.CilkParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
-import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -35,12 +32,11 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
-import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -63,9 +59,7 @@ public class ClangAstDumper {
         return USE_PLUGIN;
     }
 
-    private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
-    private final static String COMPRESSED_CLANG_DUMP_FILENAME = "clangDump.txt.zst";
-    private final static String STDERR_DUMP_FILENAME = "stderr.txt";
+    private final static String CLANG_DUMP_FILENAME = "clangDump.clv2";
 
     /**
      * TODO: Not implemented yet
@@ -156,6 +150,7 @@ public class ClangAstDumper {
     }
 
     private ClangAstData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
+        rejectLegacyWireSelection();
         ClavaLog.debug(() -> "Data store config for single file parser: " + config);
 
         File generatedParseRoot = parserConfig.hasValue(CodeParser.GENERATED_PARSE_ROOT)
@@ -297,6 +292,8 @@ public class ClangAstDumper {
 
         arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
 
+        rejectLegacyWireArguments(arguments);
+
         if (generatedParseRoot != null) {
             relativizeGeneratedPathArguments(arguments, generatedParseRoot);
         }
@@ -306,21 +303,11 @@ public class ClangAstDumper {
             return null;
         }
 
-        boolean flatWire = pt.up.fe.specs.clang.wire.WireMode.enabled();
         long nativeNanos = 0, readStart = 0, dumpBytes = 0;
-        pt.up.fe.specs.clang.wire.CompleteReader.Result flatResult = null;
+        pt.up.fe.specs.clang.wire.CompleteReader.Result flatResult;
         ClangAstData parsedData = null;
-        ProcessOutput<String, String> output = null;
 
-        try (LineStreamParser<ClangAstData> lineStreamParser = flatWire ? null : ClangStreamParserV2
-                .newInstance(config.get(ClavaNode.CONTEXT))) {
-
-            if (!flatWire && SpecsSystem.isDebug()) {
-                lineStreamParser.getData().set(ClangAstData.DEBUG, true);
-            }
-            if (!flatWire && generatedParseRoot != null) {
-                lineStreamParser.getData().set(ClangAstData.PARSE_ROOT, generatedParseRoot);
-            }
+        try {
 
             // Each invocation needs unique output paths, but clang-dumper no longer
             // creates side files or needs a dedicated process working directory.
@@ -332,18 +319,12 @@ public class ClangAstDumper {
                     && !isOpenCL
                     && !SourceType.isHeader(sourceFile)
                     && ClangCcacheAdapter.isAvailable();
-            File dumpFile = new File(lastWorkingFolder,
-                    useAstDumpCache && !flatWire ? COMPRESSED_CLANG_DUMP_FILENAME : CLANG_DUMP_FILENAME);
+            File dumpFile = new File(lastWorkingFolder, CLANG_DUMP_FILENAME);
             File dependencyFile = new File(lastWorkingFolder, "clangDump.d");
             int separatorIndex = arguments.indexOf("--");
             if (separatorIndex >= 0) {
                 arguments.add(separatorIndex, "-o");
                 arguments.add(separatorIndex + 1, dumpFile.getAbsolutePath());
-                if (flatWire) {
-                    arguments.add(separatorIndex + 2, "-ast-dump-format=flatbuffers-v2");
-                } else if (useAstDumpCache) {
-                    arguments.add(separatorIndex + 2, "-ast-dump-compression=zstd");
-                }
             } else {
                 arguments.add("-o");
                 arguments.add(dumpFile.getAbsolutePath());
@@ -352,7 +333,8 @@ public class ClangAstDumper {
             List<String> command = arguments;
             ClangCcacheAdapter.Invocation ccache = null;
             if (useAstDumpCache) {
-                ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), generatedParseRoot);
+                ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), generatedParseRoot,
+                        clangExecutable, pt.up.fe.specs.clang.wire.GeneratedNodes.SCHEMA_HASH);
                 command = ClangCcacheAdapter.command(arguments, dependencyFile);
             }
 
@@ -367,7 +349,7 @@ public class ClangAstDumper {
             }
 
             long nativeStart = System.nanoTime();
-            output = SpecsSystem.runProcess(processBuilder, SpecsIo::read, SpecsIo::read);
+            var output = SpecsSystem.runProcess(processBuilder, SpecsIo::read, SpecsIo::read);
             nativeNanos = System.nanoTime() - nativeStart;
 
             if (output.isError()) {
@@ -395,30 +377,11 @@ public class ClangAstDumper {
 
             dumpBytes = dumpFile.length();
             readStart = System.nanoTime();
-            if (flatWire) {
-                flatResult = pt.up.fe.specs.clang.wire.CompleteReader.read(dumpFile.toPath(),
-                        config.get(ClavaNode.CONTEXT), generatedParseRoot, id,
-                        pt.up.fe.specs.clang.wire.WireMode.lazy());
-                parsedData = flatResult.data();
-                parsedData.set(ClangAstData.LINES_NOT_PARSED, output.getStdErr());
-                parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
-            } else {
-                String linesNotParsed;
-                try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
-                        InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {
-                    File unparsedDumpFile = SpecsSystem.isDebug()
-                            ? new File(lastWorkingFolder, STDERR_DUMP_FILENAME) : null;
-                    linesNotParsed = lineStreamParser.parse(dumpInput, unparsedDumpFile);
-                }
-
-                parsedData = lineStreamParser.getData();
-                parsedData.set(ClangAstData.LINES_NOT_PARSED, linesNotParsed);
-                parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
-
-                if (lineStreamParser.hasExceptions()) {
-                    SpecsLogs.warn("Exceptions happened while parsing the file '" + sourceFile.getAbsolutePath() + "'");
-                }
-            }
+            flatResult = pt.up.fe.specs.clang.wire.CompleteReader.read(dumpFile.toPath(),
+                    config.get(ClavaNode.CONTEXT), generatedParseRoot, id);
+            parsedData = flatResult.data();
+            parsedData.set(ClangAstData.LINES_NOT_PARSED, output.getStdErr());
+            parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
         } catch (Exception e) {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }
@@ -432,17 +395,19 @@ public class ClangAstDumper {
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
         if (Boolean.getBoolean("clava.astWireMetrics")) {
             var metric = new java.util.LinkedHashMap<String, Object>();
-            metric.put("format", pt.up.fe.specs.clang.wire.WireMode.mode());
+            metric.put("format", pt.up.fe.specs.clang.wire.WireProtocol.FORMAT);
+            metric.put("wire_schema_version", pt.up.fe.specs.clang.wire.WireProtocol.SCHEMA_VERSION);
+            metric.put("wire_schema_hash", pt.up.fe.specs.clang.wire.GeneratedNodes.SCHEMA_HASH);
+            metric.put("flatbuffers_version", pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION);
+            metric.put("flatbuffers_commit", pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_COMMIT);
+            metric.put("dumper_sha256", ClangCcacheAdapter.sha256(clangExecutable));
             metric.put("source", sourceFile.getPath());
             metric.put("native_ms", nativeNanos / 1e6);
             metric.put("read_ms", readNanos / 1e6);
             metric.put("tu_ms", (System.nanoTime() - tuStart) / 1e6);
             metric.put("dump_bytes", dumpBytes);
             metric.put("nodes", parsedData.getClavaNodes().getNodes().size());
-            if (flatResult != null) {
-                metric.put("deferred", flatResult.stats().deferred);
-                metric.put("materialized_at_tu", flatResult.stats().materialized);
-            }
+            metric.put("materialized", flatResult.stats().materialized);
             System.err.println("CLAVA_AST_METRIC " + new com.google.gson.Gson().toJson(metric));
         }
 
@@ -458,6 +423,23 @@ public class ClangAstDumper {
             syntaxArguments.add(SYNTAX_CHECK_ONLY_OPTION);
         }
         return syntaxArguments;
+    }
+
+    private static void rejectLegacyWireSelection() {
+        String selection = System.getProperty("clava.astWire");
+        if (selection != null) {
+            throw new IllegalArgumentException("The clava.astWire selector was removed; Clava uses eager "
+                    + "FlatBuffers v2 exclusively (configured value: '" + selection + "')");
+        }
+    }
+
+    private static void rejectLegacyWireArguments(List<String> arguments) {
+        for (String argument : arguments) {
+            if (argument.equals("-ast-dump-format") || argument.startsWith("-ast-dump-format=")) {
+                throw new IllegalArgumentException("The -ast-dump-format selector was removed; "
+                        + "clang-dumper emits eager FlatBuffers v2 only");
+            }
+        }
     }
 
     private String validateSyntax(List<String> arguments, File sourceFile, String id) {
@@ -591,7 +573,8 @@ public class ClangAstDumper {
             return "";
         }
 
-        return "ClangDump for '" + lastWorkingFolder.getName() + "':\n" + SpecsIo.read(clangDumpFile);
+        return "Clang dump for '" + lastWorkingFolder.getName() + "' is a FlatBuffers v2 stream ("
+                + clangDumpFile.length() + " bytes): " + clangDumpFile.getAbsolutePath();
     }
 
 }

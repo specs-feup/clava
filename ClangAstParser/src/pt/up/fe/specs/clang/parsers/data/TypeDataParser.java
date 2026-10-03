@@ -129,7 +129,7 @@ public class TypeDataParser {
         data.add(FunctionType.IS_RESTRICT, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionType.NO_RETURN, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionType.PRODUCES_RESULT, LineStreamParsers.oneOrZero(lines));
-        data.add(FunctionType.HAS_REG_PARM, LineStreamParsers.oneOrZero(lines));
+        data.add(FunctionType.USES_REG_PARM, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionType.REG_PARM, LineStreamParsers.longInt(lines));
         data.add(FunctionType.CALLING_CONVENTION, LineStreamParsers.enumFromName(CallingConvention.getHelper(), lines));
 

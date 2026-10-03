@@ -321,8 +321,7 @@ public class DeclDataParser {
         // Parse FunctionDecl data
         DataStore data = parseFunctionDeclData(lines, dataStore);
 
-        data.add(CXXMethodDecl.RECORD_ID, lines.nextLine());
-        dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.RECORD, data.get(CXXMethodDecl.RECORD_ID));
+        dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.RECORD, lines.nextLine());
 
         var numOverriddenMethods = LineStreamParsers.integer(lines);
         List<String> overriddenMethodsIds = new ArrayList<>();
@@ -340,7 +339,7 @@ public class DeclDataParser {
         data.add(CXXMethodDecl.IS_MOVE_ASSIGNMENT_OPERATOR, LineStreamParsers.oneOrZero(lines));
 
         dataStore.getClavaNodes().queueSetOptionalNode(data, CXXMethodDecl.THIS_TYPE, lines.nextLine());
-        dataStore.getClavaNodes().queueSetOptionalNode(data, CXXMethodDecl.THIS_OJBECT_TYPE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, CXXMethodDecl.THIS_OBJECT_TYPE, lines.nextLine());
 
         data.add(CXXMethodDecl.HAS_INLINE_BODY, LineStreamParsers.oneOrZero(lines));
         data.add(CXXMethodDecl.IS_LAMBDA_STATIC_INVOKER, LineStreamParsers.oneOrZero(lines));
@@ -369,10 +368,9 @@ public class DeclDataParser {
 
         // System.out.println("SPECIFIER: " + data.get(CXXConstructorDecl.EXPLICIT_SPECIFIER));
         // List<CXXCtor>
-        // dataStore.getClavaNodes().queueSetNode(data, CXXConstructorDecl.INI, data.get(CXXMethodDecl.RECORD_ID));
+        // dataStore.getClavaNodes().queueSetNode(data, CXXConstructorDecl.INI, data.get(CXXMethodDecl.RECORD).getId());
 
-        // data.add(CXXMethodDecl.RECORD_ID, lines.nextLine());
-        // dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.RECORD, data.get(CXXMethodDecl.RECORD_ID));
+        // dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.RECORD, lines.nextLine());
 
         return data;
     }

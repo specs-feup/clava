@@ -371,7 +371,7 @@ public class ExprDataParser {
 
         data.add(CXXNewExpr.IS_GLOBAL, LineStreamParsers.oneOrZero(lines));
         data.add(CXXNewExpr.IS_ARRAY, LineStreamParsers.oneOrZero(lines));
-        data.add(CXXNewExpr.HAS_INITIALIZER, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXNewExpr.INITIALIZATION_PRESENT, LineStreamParsers.oneOrZero(lines));
         data.add(CXXNewExpr.INIT_STYLE, LineStreamParsers.enumFromName(NewInitStyle.class, lines));
         dataStore.getClavaNodes().queueSetOptionalNode(data, CXXNewExpr.INITIALIZER, lines.nextLine());
         dataStore.getClavaNodes().queueSetOptionalNode(data, CXXNewExpr.CONSTRUCT_EXPR, lines.nextLine());

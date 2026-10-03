@@ -77,7 +77,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     /**
      * True if the "inline" keyword was specified for this function.
      */
-    public final static DataKey<Boolean> IS_INLINE_SPECIFIED = KeyFactory.bool("isInline");
+    public final static DataKey<Boolean> IS_INLINE_SPECIFIED = KeyFactory.bool("isInlineSpecified");
 
     /**
      * True if this function is explicitly marked as virtual.
