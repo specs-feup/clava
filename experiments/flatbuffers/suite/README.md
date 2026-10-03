@@ -112,6 +112,13 @@ observation. It then makes three sequential observations per runtime in
 rotated order, with one Gradle worker and one test JVM fork. Every process has
 `CCACHE_DISABLE=true` and a PATH link farm that omits ccache and aliases to it.
 JaCoCo is disabled for these comparison invocations only.
+The historical Text checkout's Gradle build needs its sibling dumper schema
+generator, so preflight and observations pin `FLAT_NATIVE` to that same
+source-identified control checkout and record the generator, schema, and
+FlatBuffers `flatc` hashes. Older controls do not emit the current
+`selected-release.json`; their report records the embedded parser release tag,
+local tool hash, and complete source checkout snapshots. Eager still requires
+the resolved selected-release record and pinned RC tool hash.
 The reports capture checkout revisions
 and patches, parser source and fixture hashes, release selection, test IDs and
 counts, classpath hashes, worker settings, and task states. The Issue 15 golden

@@ -355,6 +355,38 @@ def base_environment(path: str, temp_root: Path, run_root: Path | None = None) -
     return environment
 
 
+def stage_build_environment(stage: str, checkout: Path, environment: dict[str, str]) -> dict[str, Any]:
+    """Pin any historical schema-generation inputs to that control checkout."""
+    build_file = checkout / "ClangAstParser" / "build.gradle"
+    build_text = build_file.read_text(encoding="utf-8")
+    if "wireNative" not in build_text:
+        environment.pop("FLAT_NATIVE", None)
+        environment.pop("FLATBUFFERS_ROOT", None)
+        return {"FLAT_NATIVE": None, "FLATBUFFERS_ROOT": None}
+
+    native = checkout.parent / "clang-dumper"
+    generator = native / "scripts" / "generate_complete_wire.py"
+    schema_root = native / "wire" / "v2"
+    if not generator.is_file() or not schema_root.is_dir():
+        raise RuntimeError(f"{stage} schema-generation inputs are missing from its source checkout: {native}")
+    sdk = Path(environment.get("FLATBUFFERS_ROOT") or
+                (Path.home() / ".cache" / "ast-flatbuffers-planning" / "flatbuffers")).resolve()
+    flatc = sdk / "build-make" / "flatc"
+    if not flatc.is_file():
+        raise RuntimeError(f"{stage} schema-generation flatc is missing: {flatc}")
+    environment["FLAT_NATIVE"] = str(native.resolve())
+    environment["FLATBUFFERS_ROOT"] = str(sdk)
+    schema_manifest = tree_manifest(schema_root)
+    return {
+        "FLAT_NATIVE": str(native.resolve()),
+        "generator_sha256": sha256_file(generator),
+        "schema_manifest_sha256": canonical_sha256(schema_manifest),
+        "schema_files": schema_manifest,
+        "FLATBUFFERS_ROOT": str(sdk),
+        "flatc_sha256": sha256_file(flatc),
+    }
+
+
 def jvm_environment_audit(environment: dict[str, str]) -> dict[str, str]:
     names = ("JAVA_TOOL_OPTIONS", "_JAVA_OPTIONS", "JDK_JAVA_OPTIONS", "JAVA_OPTS", "GRADLE_OPTS")
     observed = {name: environment.get(name, "") for name in names}
@@ -388,6 +420,7 @@ def run_preflight(stage: str, checkout: Path, output_root: Path, no_cache_path: 
     temp_root = stage_root / "tmp"
     temp_root.mkdir(parents=True)
     environment = base_environment(no_cache_path, temp_root)
+    build_environment = stage_build_environment(stage, checkout, environment)
     command = gradle_base_command(SCRIPT_ROOT / "java-suite.init.gradle")
     command += ["-p", "ClangAstParser", "testClasses"]
     compile_log = stage_root / "test-classes.log"
@@ -407,7 +440,18 @@ def run_preflight(stage: str, checkout: Path, output_root: Path, no_cache_path: 
     validate_worker(classpath_data["worker"])
     resolved_release_path = checkout / "ClangAstParser" / "build" / "wire" / "selected-release.json"
     if not resolved_release_path.is_file():
-        raise RuntimeError(f"{stage} testClasses preflight did not resolve its wire release")
+        if stage == "eager":
+            raise RuntimeError(f"{stage} testClasses preflight did not resolve its wire release")
+        resolved_release = {
+            "source": "historical parser release tag and exact local executable hash",
+            "selected_release": selected_release(stage, checkout),
+        }
+        resolved_release_hash = None
+        resolved_release_location = None
+    else:
+        resolved_release = json.loads(resolved_release_path.read_text(encoding="utf-8"))
+        resolved_release_hash = sha256_file(resolved_release_path)
+        resolved_release_location = str(resolved_release_path.resolve())
     return {
         "test_classes_command": command,
         "test_classes_log": str(compile_log),
@@ -420,9 +464,10 @@ def run_preflight(stage: str, checkout: Path, output_root: Path, no_cache_path: 
         "worker": classpath_data["worker"],
         "classpath_fingerprint": classpath_fingerprint,
         "classpath_artifact_sha256": classpath_fingerprint["sha256"],
-        "resolved_release_path": str(resolved_release_path.resolve()),
-        "resolved_release_sha256": sha256_file(resolved_release_path),
-        "resolved_release": json.loads(resolved_release_path.read_text(encoding="utf-8")),
+        "build_environment": build_environment,
+        "resolved_release_path": resolved_release_location,
+        "resolved_release_sha256": resolved_release_hash,
+        "resolved_release": resolved_release,
     }
 
 
@@ -559,6 +604,7 @@ def run_observation(
     temp_root = run_root / "tmp"
     temp_root.mkdir()
     environment = base_environment(no_cache_path, temp_root, run_root)
+    build_environment = stage_build_environment(stage, checkout, environment)
     environment_options = jvm_environment_audit(environment)
     if shutil.which("ccache", path=environment["PATH"]) is not None:
         raise RuntimeError("ccache unexpectedly resolves from the Java comparison PATH")
@@ -592,6 +638,8 @@ def run_observation(
     classpath_stable = pre_run_classpath["sha256"] == post_run_classpath["sha256"]
 
     errors = []
+    if build_environment != preflight["build_environment"]:
+        errors.append("schema-generation build inputs differ from the preflight")
     if process_result["return_code"] != 0:
         errors.append(f"Gradle returned {process_result['return_code']}")
     if junit["counts"] != {"total": EXPECTED_TESTS, "passed": EXPECTED_TESTS, "failed": 0, "skipped": 0}:
@@ -646,6 +694,7 @@ def run_observation(
         },
         "worker": runtime_metadata["worker"],
         "compile_task_states": task_states,
+        "build_environment": build_environment,
         "test_classpath_sha256": preflight["classpath_fingerprint"]["sha256"],
         "installed_native_tool": installed_tool,
         "installed_native_tool_sha256": None if installed_tool is None else installed_tool["native_tool_sha256"],
