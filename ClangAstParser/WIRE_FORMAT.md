@@ -29,6 +29,6 @@ Select that published tag in Clava, regenerate the inventory, and validate the r
 
 ## Caching and cleanup
 
-AST ccache entries are isolated by FlatBuffers version, upstream commit, schema hash and executable hash. Every present `CCACHE_DISABLE` value disables Clava's ccache wrapper; `0`, `false` and `no` are rejected, so unset the variable to enable caching. Clava's explicit disable takes precedence over a conflicting `CCACHE_NODISABLE`. Bypass measurements must use the same policy for each control.
+AST ccache entries are isolated by FlatBuffers version, upstream commit, schema hash and executable hash. Every present `CCACHE_DISABLE` value disables Clava's ccache wrapper; `0`, `false` and `no` are rejected, so unset the variable to enable caching. Clava's explicit disable takes precedence over a conflicting `CCACHE_NODISABLE`. Bypass measurements must use the same policy for each control. Executable digest metadata is limited to 128 file identities; temporary resource paths cannot grow that cache indefinitely.
 
 Mapped windows are released when replaced and when the reader closes, including rejection paths. Parsing releases temporary native files after importing the eager graph. The repeated-parse probe checks collected ASTs, retained heap, mapped files and temporary folders; these checks are required in addition to a short-process peak memory measurement.

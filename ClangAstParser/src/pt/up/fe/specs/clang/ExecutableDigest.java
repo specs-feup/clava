@@ -25,17 +25,24 @@ import java.nio.file.attribute.FileTime;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Computes an executable digest once per unchanged file identity. Clang may
  * request the same executable from many translation units in parallel, so the
  * digest is shared across resource validation and cache namespace creation.
+ * A bounded cache prevents temporary resource directories from accumulating.
  */
 public final class ExecutableDigest {
 
-    private static final ConcurrentHashMap<Path, CachedDigest> DIGESTS = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<Path, Object> LOCKS = new ConcurrentHashMap<>();
+    private static final int MAX_CACHED_EXECUTABLES = 128;
+    private static final Map<Path, CachedDigest> DIGESTS = new LinkedHashMap<>(16, 0.75f, true) {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<Path, CachedDigest> eldest) {
+            return size() > MAX_CACHED_EXECUTABLES;
+        }
+    };
 
     private ExecutableDigest() {
     }
@@ -47,15 +54,11 @@ public final class ExecutableDigest {
 
         try {
             Path path = executable.toPath().toRealPath();
-            BasicFileAttributes initialAttributes = Files.readAttributes(path, BasicFileAttributes.class);
-            CachedDigest cached = DIGESTS.get(path);
-            if (cached != null && cached.matches(initialAttributes)) {
-                return cached.sha256();
-            }
-
-            synchronized (LOCKS.computeIfAbsent(path, ignored -> new Object())) {
+            // The lock also deduplicates concurrent first reads. Keeping it on
+            // the bounded cache avoids retaining a second lock entry per path.
+            synchronized (DIGESTS) {
                 BasicFileAttributes before = Files.readAttributes(path, BasicFileAttributes.class);
-                cached = DIGESTS.get(path);
+                CachedDigest cached = DIGESTS.get(path);
                 if (cached != null && cached.matches(before)) {
                     return cached.sha256();
                 }
