@@ -81,6 +81,16 @@ jacocoTestCoverageVerification {
     }
 }
 
+// Coverage applies to maintained parser code; generated bindings and the pinned
+// upstream FlatBuffers runtime are checked through regeneration and wire tests.
+tasks.withType(org.gradle.testing.jacoco.tasks.JacocoReportBase).configureEach {
+    classDirectories.setFrom(sourceSets.main.output.classesDirs.asFileTree.matching {
+        exclude 'astwire/**', 'com/google/flatbuffers/**'
+        exclude 'pt/up/fe/specs/clang/wire/GeneratedNodes*'
+        exclude 'pt/up/fe/specs/clang/wire/GeneratedWireVerifier*'
+    })
+}
+
 // Make sure jacoco report is generated after tests
 test {
     useJUnitPlatform()
