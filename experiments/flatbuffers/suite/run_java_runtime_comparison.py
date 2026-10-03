@@ -183,7 +183,7 @@ def issue15_line(fixture_root: Path) -> str:
     return matches[0]
 
 
-def selected_release(checkout: Path) -> dict[str, Any]:
+def selected_release(stage: str, checkout: Path) -> dict[str, Any]:
     tag_file = checkout / "ClangAstParser" / "clang-dumper-release.tag"
     if not tag_file.is_file():
         raise RuntimeError(f"missing clang-dumper release tag: {tag_file}")
@@ -202,7 +202,20 @@ def selected_release(checkout: Path) -> dict[str, Any]:
 
     manifest_path = local_root / "clang-dumper-release-manifest.json"
     if not manifest_path.is_file():
-        raise RuntimeError(f"local release directory has no manifest: {manifest_path}")
+        if stage == "eager":
+            raise RuntimeError(f"eager local release directory has no manifest: {manifest_path}")
+        tool_path = next((local_root / name for name in ("tool", "tool.exe")
+                          if (local_root / name).is_file()), None)
+        if tool_path is None:
+            raise RuntimeError(f"historical local release has no tool executable: {local_root}")
+        selected.update({
+            "kind": "legacy_local_build_without_manifest",
+            "release_root": str(local_root.resolve()),
+            "manifest_available": False,
+            "tool_path": str(tool_path.resolve()),
+            "tool_sha256": sha256_file(tool_path),
+        })
+        return selected
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     tool_assets = [asset for asset in manifest.get("assets", []) if asset.get("kind") == "tool"]
     if not tool_assets:
@@ -249,7 +262,7 @@ def stage_snapshot(name: str, checkout: Path) -> dict[str, Any]:
         "fixture_manifest": source_trees["test-resources"],
         "fixture_manifest_sha256": canonical_sha256(source_trees["test-resources"]),
         "issue15_assembly_line": issue15_line(parser_root / "test-resources"),
-        "selected_release": selected_release(checkout),
+        "selected_release": selected_release(name, checkout),
     }
 
 

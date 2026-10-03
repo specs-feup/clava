@@ -27,6 +27,8 @@ from benchmark_environment import make_path_without_ccache
 PROBE = Path(__file__).with_name("java") / "ValidationProbe.java"
 RESULTS_ROOT = ROOT / "results" / "validation"
 TIME_FORMAT = "elapsed_s=%e\\nuser_s=%U\\nsys_s=%S\\nmax_rss_kb=%M\\nexit_status=%x"
+JVM_OPTION_ENV = ("JAVA_TOOL_OPTIONS", "JDK_JAVA_OPTIONS", "_JAVA_OPTIONS")
+GC_FLAGS = ("-XX:+UseG1GC", "-XX:-DisableExplicitGC")
 
 
 def sha256_file(path: Path) -> str:
@@ -116,6 +118,18 @@ def parse_time(path: Path) -> dict[str, float | int]:
     return values
 
 
+def java_environment_audit() -> dict[str, Any]:
+    """Record ambient JVM options without copying potentially sensitive values."""
+    return {
+        name: {
+            "present": name in os.environ,
+            "value_sha256": hashlib.sha256(os.environ[name].encode()).hexdigest()
+            if name in os.environ else None,
+        }
+        for name in JVM_OPTION_ENV
+    }
+
+
 def parse_heap(output: str) -> list[dict[str, Any]]:
     rows = []
     for line in output.splitlines():
@@ -166,6 +180,19 @@ def main() -> int:
     ).strftime("memory-%Y%m%dT%H%M%SZ")
     output.mkdir(parents=True, exist_ok=False)
     benchmark_path, _ = make_path_without_ccache(output, ("java", "javac"))
+    java_options_audit = java_environment_audit()
+    ambient_java_options = " ".join(os.environ.get(name, "") for name in JVM_OPTION_ENV)
+    if re.search(r"(?<!\S)-Dclava\.astWire=\S+", ambient_java_options):
+        raise SystemExit("remove obsolete AST wire-selection overrides before memory runs")
+    java_version_env = os.environ.copy()
+    for name in JVM_OPTION_ENV:
+        java_version_env.pop(name, None)
+    java_binary = shutil.which("java", path=benchmark_path)
+    if java_binary is None:
+        raise SystemExit("java is missing from the benchmark PATH")
+    java_version = subprocess.run([java_binary, *GC_FLAGS, "-version"], env=java_version_env,
+                                  capture_output=True, text=True, check=True)
+    java_version_text = (java_version.stdout + java_version.stderr).strip()
     temp_root = output / "tmp"
     temp_root.mkdir()
 
@@ -203,13 +230,15 @@ def main() -> int:
             time_path = run_dir / "time.txt"
             java = [
                 "/usr/bin/time", "-f", TIME_FORMAT, "-o", str(time_path), "--",
-                "java", "-Xms128m", f"-Xmx{args.heap}", f"-Djava.io.tmpdir={run_tmp}",
+                "java", *GC_FLAGS, "-Xms128m", f"-Xmx{args.heap}",
+                f"-Djava.io.tmpdir={run_tmp}",
                 "-cp", classpath, "ValidationProbe", "memory", str(source), str(work),
                 standard, str(args.parse_repeats), str(label == args.strict_cleanup_label).lower(),
             ]
             env = os.environ.copy()
-            options = env.get("JAVA_TOOL_OPTIONS", "")
-            if re.search(r"(?<!\S)-Dclava\.astWire=\S+", options) or any(
+            for name in JVM_OPTION_ENV:
+                env.pop(name, None)
+            if any(
                 key in env for key in ("AST_WIRE_FLAT", "AST_WIRE_DENSE_TEXT")
             ):
                 raise SystemExit("remove obsolete AST wire-selection overrides before memory runs")
@@ -217,7 +246,7 @@ def main() -> int:
             env["PATH"] = benchmark_path
             env["XDG_CACHE_HOME"] = str(run_cache)
             env.update({"TMPDIR": str(run_tmp), "TMP": str(run_tmp), "TEMP": str(run_tmp)})
-            env["JAVA_TOOL_OPTIONS"] = (options + " " if options else "") + f"-Djava.io.tmpdir={run_tmp}"
+            env["JAVA_TOOL_OPTIONS"] = f"-Djava.io.tmpdir={run_tmp}"
             before = host_state()
             started = time.perf_counter()
             completed = subprocess.run(java, cwd=CLAVA_ROOT, env=env, capture_output=True,
@@ -243,6 +272,7 @@ def main() -> int:
                 "standard": standard,
                 "parse_repeats": args.parse_repeats,
                 "cache_policy": "CCACHE_DISABLE=true; ccache absent from PATH; AST_DUMP_CACHE=false",
+                "gc_policy": {"collector": "G1", "explicit_gc": "enabled", "flags": list(GC_FLAGS)},
                 "tmp_root": str(run_tmp),
                 "wall_s": wall_s,
                 "gnu_time": time_metrics,
@@ -302,6 +332,14 @@ def main() -> int:
         "repeat_count": args.repeat_count,
         "parse_repeats": args.parse_repeats,
         "strict_cleanup_label": args.strict_cleanup_label,
+        "java_version": java_version_text,
+        "java_option_environment_audit": java_options_audit,
+        "measured_java_option_environment": {
+            "JAVA_TOOL_OPTIONS": "-Djava.io.tmpdir=<run-specific temp directory>",
+            "JDK_JAVA_OPTIONS": None,
+            "_JAVA_OPTIONS": None,
+        },
+        "gc_policy": {"collector": "G1", "explicit_gc": "enabled", "flags": list(GC_FLAGS)},
         "timing_boundary": "GNU time covers launch, native parses, AST construction and explicit GCs; its RSS includes child maxima. peak_rss aggregates use Linux /proc/self/status VmHWM from the JVM only, sampled after each parse/collect cycle.",
         "run_order": "sequential; runtime order rotates by repeat",
         "host_activity_recorded_before_and_after_each_process": True,
