@@ -214,7 +214,8 @@ describe("CxxTest", () => {
     it("Setters", async () => {
         const tester = newTester();
 
-        if (isMacOS) {
+        // The bundled libc++ headers alias high_resolution_clock to steady_clock.
+        if (isMacOS || isWindows) {
             tester.setResultsFile("Setters.js.macos.txt");
         }
 
