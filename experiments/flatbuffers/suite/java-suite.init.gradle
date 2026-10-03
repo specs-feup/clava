@@ -1,0 +1,77 @@
+import groovy.json.JsonOutput
+import org.gradle.api.tasks.testing.Test
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+
+gradle.afterProject { project ->
+    if (project.name == 'ClangAstParser') {
+        def testTask = project.tasks.named('test', Test)
+        def jacoco = testTask.get().extensions.findByType(JacocoTaskExtension)
+        if (jacoco == null) {
+            throw new GradleException('ClangAstParser test task has no JaCoCo extension')
+        }
+        jacoco.enabled = false
+
+        def emitClasspath = {
+            testTask.get().testClassesDirs.files.each { directory ->
+                project.logger.lifecycle('JAVA_RUNTIME_MATRIX_TEST_CLASSES\t' + directory.canonicalPath)
+            }
+            testTask.get().classpath.files.each { entry ->
+                project.logger.lifecycle('JAVA_RUNTIME_MATRIX_TEST_CLASSPATH\t' + entry.canonicalPath)
+            }
+        }
+
+        testTask.configure { task ->
+            outputs.upToDateWhen { false }
+            maxParallelForks = 1
+            maxHeapSize = '512m'
+            filter {
+                excludeTestsMatching 'pt.up.fe.specs.clang.ClangResourcesTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.CudaResourcesTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.parser.tests.CxxCudaTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.parser.tests.GeneratedParseRootTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.parser.AClangAstTesterResourceTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangCcacheAdapterTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangAstDumperSyntax*Test'
+                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.CXXConversionDeclTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangAstDumperTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.wire.*'
+            }
+
+            def outputRoot = new File(System.getenv('JAVA_RUNTIME_MATRIX_RUN_DIR')
+                    ?: new File(project.buildDir, 'java-runtime-matrix-preflight').absolutePath)
+            reports.junitXml.outputLocation.set(
+                    project.layout.dir(project.provider { new File(outputRoot, 'junit-xml') }))
+            reports.html.outputLocation.set(
+                    project.layout.dir(project.provider { new File(outputRoot, 'html') }))
+            binaryResultsDirectory.set(
+                    project.layout.dir(project.provider { new File(outputRoot, 'binary-results') }))
+
+            doFirst {
+                emitClasspath()
+                def worker = [
+                    max_heap_size: task.maxHeapSize,
+                    max_parallel_forks: task.maxParallelForks,
+                    jacoco_enabled: jacoco.enabled,
+                    jvm_args: task.allJvmArgs,
+                ]
+                project.logger.lifecycle('JAVA_RUNTIME_MATRIX_WORKER\t' + JsonOutput.toJson(worker))
+            }
+        }
+
+        project.tasks.named('jacocoTestReport') { onlyIf { false } }
+        project.tasks.named('jacocoTestCoverageVerification') { onlyIf { false } }
+
+        project.tasks.register('printJavaRuntimeMatrixTestClasspath') {
+            doLast {
+                emitClasspath()
+                def worker = [
+                    max_heap_size: testTask.get().maxHeapSize,
+                    max_parallel_forks: testTask.get().maxParallelForks,
+                    jacoco_enabled: jacoco.enabled,
+                    jvm_args: testTask.get().allJvmArgs,
+                ]
+                project.logger.lifecycle('JAVA_RUNTIME_MATRIX_WORKER\t' + JsonOutput.toJson(worker))
+            }
+        }
+    }
+}

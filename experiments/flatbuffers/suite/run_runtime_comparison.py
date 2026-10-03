@@ -25,6 +25,7 @@ import os
 from pathlib import Path
 import sys
 import shutil
+import subprocess
 import time
 from types import ModuleType
 from typing import Any, Callable
@@ -64,6 +65,11 @@ TIMING_BOUNDARY = (
     "npm/Vitest command until that command exits; excludes runtime staging, setup, and report parsing"
 )
 HOST_ENVIRONMENT = os.environ.copy()
+GLOBAL_ATTRIBUTES_FILES = (
+    "test/weaver/GlobalAttributes.js",
+    "test/weaver/cpp/results/GlobalAttributes.js.txt",
+    "test/weaver/cpp/src/global_attributes.cpp",
+)
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(EXPERIMENT_ROOT))
@@ -128,11 +134,39 @@ def git_status(repo: Path) -> dict[str, Any]:
     revision = subprocess_text(["git", "-C", str(repo), "rev-parse", "HEAD"])
     status = subprocess_text(["git", "-C", str(repo), "status", "--porcelain=v1", "--untracked-files=all"])
     lines = status.splitlines()
+    patch = subprocess.run(
+        ["git", "-C", str(repo), "diff", "--binary", "HEAD"],
+        capture_output=True,
+        check=False,
+    )
+    untracked = subprocess.run(
+        ["git", "-C", str(repo), "ls-files", "--others", "--exclude-standard", "-z"],
+        capture_output=True,
+        check=False,
+    )
+    untracked_manifest: dict[str, str] = {}
+    if untracked.returncode == 0:
+        for raw_path in untracked.stdout.split(b"\0"):
+            if not raw_path:
+                continue
+            path = repo / os.fsdecode(raw_path)
+            if path.is_symlink():
+                digest = hashlib.sha256(os.fsencode(os.readlink(path))).hexdigest()
+            elif path.is_file():
+                digest = sha256_file(path)
+            else:
+                continue
+            untracked_manifest[path.relative_to(repo).as_posix()] = digest
     return {
         "root": str(repo.resolve()),
         "revision": revision.strip() or "unknown",
         "dirty": bool(lines),
         "porcelain": lines,
+        "patch_sha256": hashlib.sha256(patch.stdout).hexdigest() if patch.returncode == 0 else None,
+        "untracked_files": untracked_manifest,
+        "untracked_manifest_sha256": hashlib.sha256(
+            json.dumps(untracked_manifest, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest(),
     }
 
 
@@ -149,6 +183,89 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: source.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def global_attributes_fixture_manifest(clava_checkout: Path) -> dict[str, Any]:
+    fixture_root = clava_checkout / "ClavaWeaver" / "resources" / "clava"
+    files = {}
+    for relative in GLOBAL_ATTRIBUTES_FILES:
+        path = fixture_root / relative
+        if not path.is_file():
+            raise SystemExit(f"GlobalAttributes fixture is missing: {path}")
+        files[relative] = sha256_file(path)
+    return {
+        "checkout": str(clava_checkout.resolve()),
+        "files": files,
+        "resource_root": str(fixture_root.resolve()),
+        "resource_tree_sha256": sha256_tree(fixture_root),
+    }
+
+
+def stage_control_workspace(output_root: Path, label: str, control_checkout: Path) -> tuple[Path, dict[str, Any]]:
+    """Give a historical parser its matching GlobalAttributes input and golden."""
+
+    overlay = output_root / "source-overlays" / label
+    js_root = overlay / "Clava-JS"
+    js_root.mkdir(parents=True)
+    for entry in CLAVA_JS_ROOT.iterdir():
+        destination = js_root / entry.name
+        if entry.name == "woven_code":
+            destination.mkdir()
+        elif entry.name == "node_modules":
+            shutil.copytree(entry, destination, symlinks=True)
+        elif entry.is_dir():
+            destination.symlink_to(entry.resolve(), target_is_directory=True)
+        else:
+            shutil.copy2(entry, destination)
+
+    source_checkout = control_checkout / "clava"
+    current_resources = CLAVA_ROOT / "ClavaWeaver" / "resources" / "clava"
+    staged_resources = overlay / "ClavaWeaver" / "resources" / "clava"
+    shutil.copytree(current_resources, staged_resources)
+    historical_resources = source_checkout / "ClavaWeaver" / "resources" / "clava"
+    for relative in GLOBAL_ATTRIBUTES_FILES:
+        shutil.copy2(historical_resources / relative, staged_resources / relative)
+
+    return js_root, {
+        "checkout": str(source_checkout.resolve()),
+        "workspace_root": str(overlay.resolve()),
+        "resource_root": str(staged_resources.resolve()),
+        "fixture_variant": "historical parser-matched GlobalAttributes source and golden",
+        "files": {
+            relative: sha256_file(staged_resources / relative)
+            for relative in GLOBAL_ATTRIBUTES_FILES
+        },
+        "current_resource_tree_sha256": sha256_tree(current_resources),
+        "staged_resource_tree_sha256": sha256_tree(staged_resources),
+    }
+
+
+def sha256_tree(root: Path) -> str:
+    digest = hashlib.sha256()
+    for path in sorted(item for item in root.rglob("*") if item.is_file()):
+        digest.update(path.relative_to(root).as_posix().encode("utf-8") + b"\0")
+        digest.update(bytes.fromhex(sha256_file(path)))
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def compare_global_attributes_fixtures(checkouts: dict[str, Path]) -> dict[str, Any]:
+    manifests = {
+        name: global_attributes_fixture_manifest(checkout / "clava" if name != "eager" else checkout)
+        for name, checkout in checkouts.items()
+    }
+    eager = manifests["eager"]["files"]
+    text = manifests["text"]["files"]
+    protobuf = manifests["protobuf"]["files"]
+    if text != protobuf:
+        raise SystemExit("Text and Protobuf controls do not have identical GlobalAttributes fixtures")
+    source = "test/weaver/cpp/src/global_attributes.cpp"
+    if eager[source] != text[source]:
+        raise SystemExit("GlobalAttributes C++ source input differs between eager and historical controls")
+    for relative in GLOBAL_ATTRIBUTES_FILES[:2]:
+        if eager[relative] == text[relative]:
+            raise SystemExit(f"expected eager GlobalAttributes fixture correction is absent: {relative}")
+    return manifests
 
 
 def jar_manifest(root: Path) -> dict[str, Any]:
@@ -323,6 +440,7 @@ def run_eager(args: argparse.Namespace, run_root: Path, path: str) -> dict[str, 
     module.ccache = lambda _command, _cache: NO_CCACHE_STATS
     output_root = run_root / "eager"
     output_root.mkdir()
+    fixture_manifest = global_attributes_fixture_manifest(CLAVA_ROOT)
     log_path = run_root / "runner-logs" / "eager.log"
     before = set(output_root.glob("*/summary.json"))
     argv = [
@@ -338,15 +456,16 @@ def run_eager(args: argparse.Namespace, run_root: Path, path: str) -> dict[str, 
     return observation_result(
         "eager-flatbuffers", code, summary_path, error, driver_s, args.eager_runtime,
         CLAVA_ROOT, EAGER_RUNNER, None, path,
+        fixture_manifest, CLAVA_JS_ROOT,
     )
 
 
 def configure_historical_module(
     module: ModuleType, *, runtime: Path,
-    experiment_root: Path, result_root: Path, runtime_kind: str,
+    experiment_root: Path, result_root: Path, runtime_kind: str, js_root: Path,
 ) -> None:
     module.CLAVA_ROOT = CLAVA_ROOT
-    module.CLAVA_JS_ROOT = CLAVA_JS_ROOT
+    module.CLAVA_JS_ROOT = js_root
     module.EXPERIMENT_ROOT = experiment_root
     module.RESULTS_ROOT = result_root
     module.git_revision = lambda repo: git_status(Path(repo))["revision"] if Path(repo).exists() else "unknown"
@@ -369,9 +488,10 @@ def run_text(args: argparse.Namespace, run_root: Path, path: str) -> dict[str, A
     output_root.mkdir()
     logs = run_root / "runner-logs"
     log_path = logs / "text.log"
+    js_root, fixture_manifest = stage_control_workspace(run_root, "text", args.text_checkout)
     configure_historical_module(
         module, runtime=args.text_runtime, experiment_root=EXPERIMENT_ROOT, result_root=output_root,
-        runtime_kind="text",
+        runtime_kind="text", js_root=js_root,
     )
     before = set(output_root.glob("*/summary.json"))
     argv = [
@@ -388,6 +508,7 @@ def run_text(args: argparse.Namespace, run_root: Path, path: str) -> dict[str, A
     return observation_result(
         "text", code, summary_path, error, driver_s, args.text_runtime,
         args.text_checkout / "clava", args.text_runner, args.text_dumper, path,
+        fixture_manifest, js_root,
     )
 
 
@@ -396,9 +517,10 @@ def run_protobuf(args: argparse.Namespace, run_root: Path, path: str) -> dict[st
     output_root = run_root / "protobuf"
     output_root.mkdir()
     log_path = run_root / "runner-logs" / "protobuf.log"
+    js_root, fixture_manifest = stage_control_workspace(run_root, "protobuf", args.protobuf_checkout)
     configure_historical_module(
         module, runtime=args.protobuf_runtime, experiment_root=EXPERIMENT_ROOT, result_root=output_root,
-        runtime_kind="protobuf",
+        runtime_kind="protobuf", js_root=js_root,
     )
     before = set(output_root.glob("*/summary.json"))
     argv = [
@@ -418,14 +540,21 @@ def run_protobuf(args: argparse.Namespace, run_root: Path, path: str) -> dict[st
     return observation_result(
         "protobuf", code, summary_path, error, driver_s, args.protobuf_runtime,
         args.protobuf_checkout / "clava", args.protobuf_runner, args.protobuf_dumper, path,
+        fixture_manifest, js_root,
     )
 
 
 def observation_result(
     implementation: str, return_code: int, summary_path: Path | None, error: str | None,
     driver_elapsed_s: float, runtime_root: Path, source_repo: Path, runner_path: Path,
-    dumper_path: Path | None, path: str,
+    dumper_path: Path | None, path: str, fixture_manifest: dict[str, Any], js_root: Path,
 ) -> dict[str, Any]:
+    test_suite_state = git_status(CLAVA_ROOT)
+    fixture_root = Path(fixture_manifest["resource_root"])
+    fixture_files_after_run = {
+        relative: sha256_file(fixture_root / relative)
+        for relative in GLOBAL_ATTRIBUTES_FILES
+    }
     result: dict[str, Any] = {
         "implementation": implementation,
         "driver_return_code": return_code,
@@ -441,10 +570,14 @@ def observation_result(
         },
         "timing_boundary": TIMING_BOUNDARY,
         "source": {
-            "repo": git_status(source_repo),
-            "clava_repo": git_status(CLAVA_ROOT),
+            "runtime_source_repo": git_status(source_repo),
+            "test_suite_repo": test_suite_state,
             "runner": str(runner_path.resolve()),
             "runner_sha256": sha256_file(runner_path),
+            "test_workspace_root": str(js_root.resolve()),
+            "test_fixture_manifest": fixture_manifest,
+            "test_fixture_files_after_run": fixture_files_after_run,
+            "test_fixture_resource_tree_after_run_sha256": sha256_tree(fixture_root),
             "runtime_root": str(runtime_root.resolve()),
             "runtime_jars": jar_manifest(runtime_root),
             "dumper": str(dumper_path.resolve()) if dumper_path else None,
@@ -535,6 +668,15 @@ def main() -> int:
             "text_control": git_status(args.text_checkout / "clava"),
             "protobuf_control": git_status(args.protobuf_checkout / "clava"),
         },
+        "current_clava_js_test_source": {
+            "repository": git_status(CLAVA_ROOT),
+            "legacy_cxx_suite_sha256": sha256_file(CLAVA_JS_ROOT / "api" / "LegacyIntegrationTests - CXX.test.ts"),
+        },
+        "global_attributes_fixtures": compare_global_attributes_fixtures({
+            "eager": CLAVA_ROOT,
+            "text": args.text_checkout,
+            "protobuf": args.protobuf_checkout,
+        }),
         "runtime_roots": {
             "eager_flatbuffers": str(args.eager_runtime.resolve()),
             "text": str(args.text_runtime.resolve()),
@@ -558,6 +700,35 @@ def main() -> int:
     reference_identities: list[tuple[str, str]] | None = None
     for runner in runners:
         result = runner(args, output_root, comparison_path)
+        fixture_stage = {
+            "eager-flatbuffers": "eager",
+            "text": "text",
+            "protobuf": "protobuf",
+        }[result["implementation"]]
+        expected_fixtures = plan["global_attributes_fixtures"][fixture_stage]
+        actual_fixtures = result.get("source", {}).get("test_fixture_manifest", {})
+        if actual_fixtures.get("files") != expected_fixtures["files"]:
+            result.setdefault("validation_errors", []).append(
+                "GlobalAttributes fixture files differ from their pre-run source manifest"
+            )
+        if result.get("source", {}).get("test_fixture_files_after_run") != expected_fixtures["files"]:
+            result.setdefault("validation_errors", []).append(
+                "GlobalAttributes fixture files changed during the observation"
+            )
+        if fixture_stage == "eager":
+            tree_hash = actual_fixtures.get("resource_tree_sha256")
+            expected_post_tree_hash = expected_fixtures["resource_tree_sha256"]
+        else:
+            tree_hash = actual_fixtures.get("current_resource_tree_sha256")
+            expected_post_tree_hash = actual_fixtures.get("staged_resource_tree_sha256")
+        if tree_hash != plan["global_attributes_fixtures"]["eager"]["resource_tree_sha256"]:
+            result.setdefault("validation_errors", []).append(
+                "GlobalAttributes source resources changed after the comparison plan was recorded"
+            )
+        if result.get("source", {}).get("test_fixture_resource_tree_after_run_sha256") != expected_post_tree_hash:
+            result.setdefault("validation_errors", []).append(
+                "test resource tree changed during the observation"
+            )
         identities = result.get("test_identities")
         if isinstance(identities, list):
             normalized = [tuple(item) for item in identities]

@@ -32,10 +32,18 @@ the ignored `experiments/flatbuffers/suite/results/` directory.
 sequence. It uses the eager runner in this checkout and the historical Text
 and Protobuf runners in
 `~/.cache/ast-flatbuffers-release-validation/{text-build,protobuf-build}`.
-The historical runners are loaded as controls, then pointed at the current
-`Clava-JS` checkout and this suite's Vitest config. They stage the supplied
-runtime into each run directory and patch only the staged parser JAR's dumper
-tag. The checked out `clang-dumper-release.tag` is not changed.
+The historical runners are loaded as controls and run the same current
+`Clava-JS` test sources and this suite's Vitest config. Each historical run
+gets an isolated workspace whose `Clava-JS` source files point to the current
+checkout. Its ClavaWeaver test resources start from the current tree, with the
+historical Text/Protobuf `GlobalAttributes.js` script and golden staged from
+that control checkout. This keeps the old `builtinKind` access paired with its
+matching parser and golden while preserving the same test identity and C++
+input. The plan and each observation record the fixture hashes and resource
+tree hashes before and after the run. The runners stage the supplied runtime
+into each run directory. The historical Text runner patches only its staged
+parser JAR's dumper tag to its matching control; the checked out
+`clang-dumper-release.tag` is not changed.
 
 The default inputs use these distributions and matching native tools:
 
@@ -79,3 +87,39 @@ exits. It excludes runtime staging, setup, and report parsing. The result
 manifest records each source revision, runner SHA-256, runtime JAR hashes,
 dumper hash where applicable, test counts, cache state, and timing boundary.
 Reports and the PATH link farm stay beneath the ignored `results/` directory.
+
+## Compare Java parser runtimes
+
+`run_java_runtime_comparison.py` runs the same 116 direct parser tests against
+historical Text and Protobuf controls and an isolated eager release checkout.
+The exact JUnit identities are checked in at `java-runtime-test-ids.json`; the
+Gradle init script fixes the exclusions and accepts no workload arguments.
+Pass alternate checkouts explicitly when reproducing a release candidate:
+
+```sh
+python3 experiments/flatbuffers/suite/run_java_runtime_comparison.py \
+  --eager-checkout ~/.cache/ast-flatbuffers-release-validation/eager-release-build/clava \
+  --text-checkout ~/.cache/ast-flatbuffers-release-validation/text-build/clava \
+  --protobuf-checkout ~/.cache/ast-flatbuffers-release-validation/protobuf-build/clava
+```
+
+The runner preflights `testClasses` and hashes the actual Gradle test classpath
+before timing. It hashes the classpath content again immediately before each
+timed observation and after the test process exits; any mismatch against the
+preflight or between the pre-run and post-run fingerprints invalidates that
+observation. It then makes three sequential observations per runtime in
+rotated order, with one Gradle worker and one test JVM fork. Every process has
+`CCACHE_DISABLE=true` and a PATH link farm that omits ccache and aliases to it.
+JaCoCo is disabled for these comparison invocations only.
+The reports capture checkout revisions
+and patches, parser source and fixture hashes, release selection, test IDs and
+counts, classpath hashes, worker settings, and task states. The Issue 15 golden
+remains historical in Text and Protobuf (`$$$$10`/`$$$$20`); eager preserves
+the source operands as `$10`/`$20`.
+
+`testcase_duration_s` is the sum of JUnit testcase durations and is the
+test-only measure. `gradle_wall_s` is reported separately and includes Gradle
+configuration and test-worker startup. The runner makes no wall-time
+performance claim. All nine observations run serially; do not run this
+comparison beside another benchmark or parser test build. Results go in a new
+timestamped directory under `results/`.
