@@ -556,8 +556,9 @@ describe("CxxApiTest", () => {
     }
 
     it("Cuda", async () => {
+        // The first CUDA parse can download and assemble the built-in headers.
         await newTester().test("Cuda.js", "atomicAdd.cu");
-    });
+    }, 30_000);
 
     it("CudaMatrixMul", async () => {
         await newTester().test("CudaMatrixMul.js", "mult_matrix.cu");
