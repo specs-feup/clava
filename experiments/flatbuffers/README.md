@@ -56,6 +56,14 @@ accepts one runtime and fails if any selected input cannot be reparsed or change
 on the second generation. It preserves the corpus flags and the original header
 search path, and records source and generated-code hashes for each case.
 
+An intentional correction to historical Text output must be reviewed individually.
+`--reviewed-differences` accepts a version 1 JSON inventory with a `differences`
+list. Each entry pins `control`, `relative`, `source_sha256`,
+`eager_code_sha256`, `control_code_sha256`, a source-fidelity `reason`, and
+`roundtrip_summary` plus `roundtrip_summary_sha256`. The proof must contain a
+successful stable round trip for that exact source and generated output using
+the same complete runtime JAR manifest and native binary. Missing, changed or
+unused entries fail the comparison; consumer regressions cannot be waived.
 
 `run_correctness.py` separately checks C and C++ parse-generate-reparse byte
 stability and a two-translation-unit call linked to its provider definition.

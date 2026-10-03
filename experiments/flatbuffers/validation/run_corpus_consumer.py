@@ -56,6 +56,9 @@ def runtime_metadata(runtime: Path) -> dict[str, Any]:
         "runtime_root": str(runtime),
         "release_tag": tag,
         "parser_jar_sha256": sha256_file(parser_jar),
+        "native_tool_sha256": next((sha256_file(Path(tag) / name)
+            for name in ("tool", "tool.exe") if tag and Path(tag).is_absolute()
+            and (Path(tag) / name).is_file()), None),
         "jar_count": len(jar_hashes),
         "jar_manifest_sha256": hashlib.sha256(canonical).hexdigest(),
         "source_revisions_file": str(source_revisions_path) if source_revisions_path else None,
@@ -89,6 +92,8 @@ def parse_args() -> argparse.Namespace:
                         help="consumer-inputs.json emitted by run_binary_corpus.py")
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--heap", default="8g")
+    parser.add_argument("--reviewed-differences", type=Path,
+                        help="Exact source/code hashes and matching round-trip proof for reviewed fidelity corrections.")
     parser.add_argument("--reparse-generated", action="store_true",
                         help="Reparse each emitted translation unit and require stable generation.")
     return parser.parse_args()
@@ -171,6 +176,66 @@ def run_runtime(label: str, runtime: Path, manifest: dict[str, Any], output: Pat
     return result
 
 
+def apply_reviewed_differences(comparisons: list[dict[str, Any]],
+                               results: list[dict[str, Any]], manifest: dict[str, Any],
+                               inventory_path: Path) -> dict[str, Any]:
+    """Accept only individually pinned corrections proven stable by the same eager runtime."""
+    inventory_path = inventory_path.resolve()
+    inventory = json.loads(inventory_path.read_text())
+    if inventory.get("version") != 1 or not isinstance(inventory.get("differences"), list):
+        raise ValueError("reviewed difference inventory requires version 1 and a differences list")
+    sources = {item["relative"]: Path(item["source"]) for item in manifest["files"]}
+    by_case = {(row["control"], row["relative"]): row for row in comparisons}
+    eager_result = next(item for item in results if item["label"] == "eager")
+    eager_runtime = eager_result["runtime"]
+    seen = set()
+    proofs = {}
+    for entry in inventory["differences"]:
+        key = (entry["control"], entry["relative"])
+        if key in seen:
+            raise ValueError(f"duplicate reviewed difference: {key}")
+        seen.add(key)
+        row = by_case.get(key)
+        if row is None or row["status"] != "GENERATED_CODE_MISMATCH":
+            raise ValueError(f"reviewed difference is absent or no longer a code mismatch: {key}")
+        if not isinstance(entry.get("reason"), str) or not entry["reason"].strip():
+            raise ValueError(f"reviewed difference has no source-fidelity explanation: {key}")
+        for field in ("eager_code_sha256", "control_code_sha256"):
+            if entry.get(field) != row[field]:
+                raise ValueError(f"reviewed difference {field} drift: {key}")
+        source_hash = sha256_file(sources[entry["relative"]])
+        if entry.get("source_sha256") != source_hash:
+            raise ValueError(f"reviewed difference source drift: {key}")
+        proof_path = (inventory_path.parent / entry["roundtrip_summary"]).resolve()
+        if sha256_file(proof_path) != entry.get("roundtrip_summary_sha256"):
+            raise ValueError(f"reviewed difference round-trip proof drift: {key}")
+        if proof_path not in proofs:
+            proofs[proof_path] = json.loads(proof_path.read_text())
+        proof = proofs[proof_path]
+        if not proof.get("reparse_generated"):
+            raise ValueError(f"reviewed difference proof did not reparse generated source: {key}")
+        proof_result = next((item for item in proof["results"] if item["label"] == "eager"), None)
+        if proof_result is None or any(
+            eager_runtime.get(field) is None
+            or proof_result["runtime"].get(field) != eager_runtime[field]
+            for field in ("jar_manifest_sha256", "native_tool_sha256")
+        ):
+            raise ValueError(f"reviewed difference proof used different runtime jars or native tool: {key}")
+        proof_row = next((item for item in proof_result["rows"]
+                          if item["relative"] == entry["relative"]), None)
+        if (proof_row is None or proof_row.get("bucket") != "CLEAN"
+                or proof_row.get("source_sha256") != source_hash
+                or proof_row.get("generated_code_sha256") != row["eager_code_sha256"]
+                or proof_row.get("regenerated_code_sha256") != row["eager_code_sha256"]
+                or proof_row.get("source_equal_after_reparse") is not True):
+            raise ValueError(f"reviewed difference has no matching stable round-trip result: {key}")
+        row["status"] = "REVIEWED_SOURCE_FIDELITY_CORRECTION"
+        row["reason"] = entry["reason"]
+        row["roundtrip_summary"] = str(proof_path)
+    return {"path": str(inventory_path), "sha256": sha256_file(inventory_path),
+            "corrections": len(seen)}
+
+
 def main() -> int:
     args = parse_args()
     if len(args.runtime) < 2 and not args.reparse_generated:
@@ -224,6 +289,9 @@ def main() -> int:
                 "eager_code_sha256": eager_row.get("generated_code_sha256") if eager_row else None,
                 "control_code_sha256": other_row.get("generated_code_sha256") if other_row else None,
             })
+    reviewed = None
+    if args.reviewed_differences:
+        reviewed = apply_reviewed_differences(comparisons, results, manifest, args.reviewed_differences)
     counts: dict[str, dict[str, int]] = {}
     for row in comparisons:
         control = row["control"]
@@ -234,6 +302,7 @@ def main() -> int:
     summary = {
         "created_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
         "reparse_generated": args.reparse_generated,
+        "reviewed_source_fidelity_corrections": reviewed,
         "consumer_manifest": str(manifest_path),
         "consumer_manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
         "corpus": manifest.get("corpus"),
