@@ -213,7 +213,7 @@ def main() -> int:
         if not runtime.is_dir():
             raise SystemExit(f"runtime directory does not exist: {runtime}")
         metadata = runtime_metadata(runtime)
-        if metadata.get("release_tag") == "v18.1.8_5-rc1":
+        if label == args.strict_cleanup_label:
             if eager_release is not None:
                 raise SystemExit("memory matrix has more than one eager RC runtime")
             eager_release = release_metadata(runtime, None, args.resource_cache_root,
@@ -245,7 +245,7 @@ def main() -> int:
             work.mkdir()
             resource_root = work / "dumper-resources"
             resource_before = None
-            if metadata.get("release_tag") == "v18.1.8_5-rc1":
+            if label == args.strict_cleanup_label:
                 if eager_release is None:
                     raise SystemExit("eager runtime has no verified RC release metadata")
                 resource_root.mkdir()
