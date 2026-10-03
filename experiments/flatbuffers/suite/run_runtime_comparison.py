@@ -81,6 +81,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--text-checkout", type=Path, default=TEXT_CHECKOUT)
     parser.add_argument("--protobuf-checkout", type=Path, default=PROTOBUF_CHECKOUT)
     parser.add_argument("--eager-runtime", type=Path, default=DEFAULT_EAGER_RUNTIME)
+    parser.add_argument(
+        "--resource-cache-root", type=Path, required=True,
+        help="Preverified published eager release cache containing releases/<tag> and includes.",
+    )
+    parser.add_argument(
+        "--release-assets-root", type=Path, required=True,
+        help="Source-identified eager release manifest and schema bundle.",
+    )
     parser.add_argument("--text-runtime", type=Path)
     parser.add_argument("--protobuf-runtime", type=Path)
     parser.add_argument("--text-dumper", type=Path)
@@ -458,6 +466,8 @@ def run_eager(args: argparse.Namespace, run_root: Path, path: str) -> dict[str, 
     argv = [
         "--mode", "bypass",
         "--runtime-root", str(args.eager_runtime.resolve()),
+        "--resource-cache-root", str(args.resource_cache_root.resolve()),
+        "--release-assets-root", str(args.release_assets_root.resolve()),
         "--output-root", str(output_root),
     ]
     for item in args.vitest_arg:
@@ -641,6 +651,10 @@ def observation_result(
 def main() -> int:
     args = parse_args()
     require_inputs(args)
+    if not args.resource_cache_root.is_dir():
+        raise SystemExit(f"eager resource cache does not exist: {args.resource_cache_root}")
+    if not args.release_assets_root.is_dir():
+        raise SystemExit(f"eager source-identified release assets do not exist: {args.release_assets_root}")
     results_root = RESULTS_ROOT.resolve()
     if args.output_root is None:
         stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
@@ -694,6 +708,8 @@ def main() -> int:
             "text": str(args.text_runtime.resolve()),
             "protobuf": str(args.protobuf_runtime.resolve()),
         },
+        "eager_resource_cache_root": str(args.resource_cache_root.resolve()),
+        "eager_release_assets_root": str(args.release_assets_root.resolve()),
         "control_checkouts": {
             "text": str(args.text_checkout.resolve()),
             "protobuf": str(args.protobuf_checkout.resolve()),

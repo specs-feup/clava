@@ -76,6 +76,19 @@ Run the comparison after the three distributions are ready:
 python3 experiments/flatbuffers/suite/run_runtime_comparison.py
 ```
 
+For a published eager RC comparison, pass its preverified cache and its
+source-identified release assets explicitly. This keeps resource installation
+outside the timed Vitest command while the runner verifies the selected tool,
+manifest, schema, and includes before and after the eager observation:
+
+```sh
+VALIDATION_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/ast-flatbuffers-release-validation"
+python3 experiments/flatbuffers/suite/run_runtime_comparison.py \
+  --eager-runtime "$VALIDATION_CACHE/eager-release-build/clava/ClavaWeaver/build/install/ClavaWeaver" \
+  --resource-cache-root "/tmp/clang_ast_exe_$(id -un)/clang-dumper" \
+  --release-assets-root "$VALIDATION_CACHE/release-final-d2836b8/release-assets"
+```
+
 Use `--text-checkout` and `--protobuf-checkout` to point at other frozen
 control checkouts. Their runtime and dumper defaults follow those paths. Each
 runtime, dumper, and checkout can also be supplied directly. Extra Vitest
