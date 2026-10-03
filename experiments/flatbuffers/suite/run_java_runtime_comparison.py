@@ -805,9 +805,12 @@ def run_observation(
                 errors.append(f"eager release tag must be {EXPECTED_EAGER_RELEASE_TAG}, found {selected_release['tag']}")
             if installed_tool["native_tool_sha256"] != EXPECTED_EAGER_NATIVE_TOOL_SHA256:
                 errors.append("the installed eager native tool does not match the pinned final RC SHA-256")
-    observed_local_tools = sorted(set(re.findall(
-        r"(?m)^Using local clang-dumper build:\s*(.+?)\s*$", log_path.read_text(encoding="utf-8")
-    )))
+    local_tool_prefix = "Using local clang-dumper build:"
+    observed_local_tools = sorted({
+        line.removeprefix(local_tool_prefix).strip()
+        for line in log_path.read_text(encoding="utf-8").splitlines()
+        if line.startswith(local_tool_prefix)
+    })
     if stage in {"text", "protobuf"}:
         expected_local_tool = str(Path(selected_release["tool_path"]).resolve())
         if observed_local_tools != [expected_local_tool]:

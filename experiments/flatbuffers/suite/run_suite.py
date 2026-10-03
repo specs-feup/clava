@@ -433,11 +433,14 @@ def parse_ccache_stats(text: str) -> dict[str, int | float | str]:
     values: dict[str, int | float | str] = {}
     for raw_line in text.splitlines():
         line = raw_line.strip()
-        match = re.match(r"([^:]+):\s+([0-9][0-9,]*(?:\.[0-9]+)?)(?:\s+.*)?$", line)
-        if not match:
+        label, separator, rest = line.partition(":")
+        if not label or not separator or not rest or not rest[0].isspace():
             continue
-        key = re.sub(r"[^a-z0-9]+", "_", match.group(1).strip().lower()).strip("_")
-        raw_value = match.group(2).replace(",", "")
+        tokens = rest.split(maxsplit=1)
+        if not tokens or not re.fullmatch(r"[0-9][0-9,]*(?:\.[0-9]+)?", tokens[0]):
+            continue
+        key = re.sub(r"[^a-z0-9]+", "_", label.strip().lower()).strip("_")
+        raw_value = tokens[0].replace(",", "")
         values[key] = float(raw_value) if "." in raw_value else int(raw_value)
     return values
 
