@@ -47,6 +47,28 @@ class JavaClasspathProvenanceTest(unittest.TestCase):
         )
 
 
+class JavaRuntimeClasspathPreparationTest(unittest.TestCase):
+    def test_default_local_options_are_seeded_before_fingerprint(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            main_classes = Path(temporary) / "ClangAstParser" / "build" / "classes" / "java" / "main"
+            main_classes.mkdir(parents=True)
+            checkout = Path(temporary)
+            classpath = {"test_classpath": [str(main_classes)]}
+
+            prepared = java_comparison.prepare_empty_local_options(checkout, classpath)
+            self.assertTrue(prepared["created_before_classpath_fingerprint"])
+            self.assertEqual(
+                prepared["sha256"], java_comparison.sha256_file(Path(prepared["path"]))
+            )
+            self.assertFalse(java_comparison.prepare_empty_local_options(checkout, classpath)[
+                "created_before_classpath_fingerprint"
+            ])
+
+            Path(prepared["path"]).write_text("custom parser options\n")
+            with self.assertRaisesRegex(RuntimeError, "non-default local parser options"):
+                java_comparison.prepare_empty_local_options(checkout, classpath)
+
+
 class HistoricalGlobalAttributesFixtureTest(unittest.TestCase):
     def test_overlay_uses_control_script_and_golden_with_same_input(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

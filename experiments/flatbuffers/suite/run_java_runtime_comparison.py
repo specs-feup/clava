@@ -68,6 +68,13 @@ TIMING_BOUNDARY = {
     "gradle_wall": "monotonic elapsed time around one Gradle test process; includes Gradle configuration and test-worker startup",
     "preflight": "testClasses compilation and classpath fingerprinting run before all measured observations",
 }
+EMPTY_LOCAL_OPTIONS = (
+    b"<SimpleDataStore>\n"
+    b"  <name>ClangAstParser Local Options</name>\n"
+    b"  <values/>\n"
+    b"  <strict>false</strict>\n"
+    b"</SimpleDataStore>"
+)
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(EXPERIMENT_ROOT))
@@ -387,6 +394,26 @@ def stage_build_environment(stage: str, checkout: Path, environment: dict[str, s
     }
 
 
+def prepare_empty_local_options(checkout: Path, classpath: dict[str, Any]) -> dict[str, Any]:
+    """Seed the runtime's default writable-JAR options file before hashing the classpath."""
+    main_classes = (checkout / "ClangAstParser" / "build" / "classes" / "java" / "main").resolve()
+    classpath_paths = {Path(path).resolve() for path in classpath["test_classpath"]}
+    if main_classes not in classpath_paths:
+        raise RuntimeError(f"ClangAstParser main classes are absent from the test classpath: {main_classes}")
+    options_file = main_classes / "local_options.xml"
+    created = not options_file.exists()
+    if created:
+        options_file.write_bytes(EMPTY_LOCAL_OPTIONS)
+    elif options_file.read_bytes() != EMPTY_LOCAL_OPTIONS:
+        raise RuntimeError(f"refusing to benchmark with non-default local parser options: {options_file}")
+    return {
+        "path": str(options_file),
+        "sha256": sha256_file(options_file),
+        "created_before_classpath_fingerprint": created,
+        "content": "empty ClangAstParser Local Options default",
+    }
+
+
 def jvm_environment_audit(environment: dict[str, str]) -> dict[str, str]:
     names = ("JAVA_TOOL_OPTIONS", "_JAVA_OPTIONS", "JDK_JAVA_OPTIONS", "JAVA_OPTS", "GRADLE_OPTS")
     observed = {name: environment.get(name, "") for name in names}
@@ -435,6 +462,7 @@ def run_preflight(stage: str, checkout: Path, output_root: Path, no_cache_path: 
     if classpath_result["return_code"] != 0:
         raise RuntimeError(f"{stage} test classpath preflight failed; see {classpath_log}")
     classpath_data = parse_runtime_metadata(classpath_log)
+    prepared_runtime_file = prepare_empty_local_options(checkout, classpath_data)
     classpath_fingerprint = fingerprint_test_classpath(
         classpath_data["test_classes_dirs"], classpath_data["test_classpath"])
     validate_worker(classpath_data["worker"])
@@ -465,6 +493,7 @@ def run_preflight(stage: str, checkout: Path, output_root: Path, no_cache_path: 
         "classpath_fingerprint": classpath_fingerprint,
         "classpath_artifact_sha256": classpath_fingerprint["sha256"],
         "build_environment": build_environment,
+        "prepared_runtime_file": prepared_runtime_file,
         "resolved_release_path": resolved_release_location,
         "resolved_release_sha256": resolved_release_hash,
         "resolved_release": resolved_release,
@@ -817,6 +846,18 @@ def main() -> int:
             report["preflight"][stage] = preflight
             report["status"] = f"preflight_{stage}"
             write_results(output_root, report)
+
+        local_options_hashes = {
+            stage: report["preflight"][stage]["prepared_runtime_file"]["sha256"]
+            for stage in ("text", "protobuf", "eager")
+        }
+        if len(set(local_options_hashes.values())) != 1:
+            raise RuntimeError(f"the parser default local-options file differs across runtimes: {local_options_hashes}")
+        report["inputs"]["default_local_options"] = {
+            "sha256": next(iter(local_options_hashes.values())),
+            "per_stage": local_options_hashes,
+        }
+        write_results(output_root, report)
 
         source_signatures = {stage: stable_source_signature(snapshots[stage]) for stage in snapshots}
         for round_number, stage in STAGE_ORDER:

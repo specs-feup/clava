@@ -112,6 +112,11 @@ observation. It then makes three sequential observations per runtime in
 rotated order, with one Gradle worker and one test JVM fork. Every process has
 `CCACHE_DISABLE=true` and a PATH link farm that omits ccache and aliases to it.
 JaCoCo is disabled for these comparison invocations only.
+Preflight seeds ClangAstParser's exact empty default `local_options.xml` before
+hashing the classpath. The parser creates this file on its first test parse;
+placing it before the fingerprint keeps lazy initialization outside measured
+observations. All controls must have the same file hash, and customized parser
+options fail preflight.
 The historical Text checkout's Gradle build needs its sibling dumper schema
 generator, so preflight and observations pin `FLAT_NATIVE` to that same
 source-identified control checkout and record the generator, schema, and
