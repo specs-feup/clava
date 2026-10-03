@@ -301,11 +301,10 @@ public final class ValidationProbe {
     }
 
     private static boolean awaitCollection(WeakReference<App> reference) {
-        for (int attempt = 0; attempt < 50; attempt++) {
+        // Use the same GC and waiting budget for every transport, even when
+        // a historical control keeps an AST reachable.
+        for (int attempt = 0; attempt < 3; attempt++) {
             System.gc();
-            if (reference.get() == null) {
-                return true;
-            }
             try {
                 TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException exception) {

@@ -62,7 +62,8 @@ when they are needed as release evidence.
 ## Memory gate
 
 `validation/run_memory_matrix.py` launches one isolated JVM per observation,
-uses 20 repeated parse/collect cycles by default, and records kernel peak JVM
+uses 20 repeated parse/collect cycles by default, with the same fixed GC budget
+for every runtime, and records kernel peak JVM
 RSS (Linux VmHWM) and post-GC retained heap. GNU time also records the
 process-tree maximum single-process RSS; that secondary number may include a native child. It records mapped files and temporary folders
 for all controls; the eager run must collect every AST and leave no mappings or
