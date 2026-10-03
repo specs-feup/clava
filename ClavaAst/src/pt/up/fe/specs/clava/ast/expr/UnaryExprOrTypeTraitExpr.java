@@ -86,7 +86,11 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
 
     private String getExpressionCode() {
         if (hasArgumentExpression()) {
-            return getArgumentExpression().getCode();
+            Expr argument = getArgumentExpression();
+            // The sizeof printer supplies the operand's outer parentheses.
+            return argument instanceof ParenExpr parenthesized
+                    ? parenthesized.getSubExpr().getCode()
+                    : argument.getCode();
         }
 
         if (hasTypeExpression()) {
