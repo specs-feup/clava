@@ -81,7 +81,8 @@ def reader_expression(table_name: str, field_access: str, field: dict, key: dict
     if base == "Long" and not is_list and is_optional and key_type.get("kind") == "node":
         return f'reference({key["java_ref"]},"optional",(t,c)->{expr})', "reference"
     if base == "Long" and not is_list and not is_optional and key_type.get("kind") == "node":
-        return f'reference({key["java_ref"]},"node",(t,c)->{expr})', "reference"
+        mode = "nullable" if key.get("nullable_reference") else "node"
+        return f'reference({key["java_ref"]},"{mode}",(t,c)->{expr})', "reference"
     if base == "Vector" and typ.get("element") in ("Long", "ULong") and is_list and element_type.get("kind") == "node":
         vector_path = expr[:-2]
         return (f'references({key["java_ref"]},(t,c)->longs({table_expr}{field_access[:-2]}Length(),'

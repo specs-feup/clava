@@ -81,6 +81,8 @@ public final class BindingInventory {
             entry.put("generic_type", value.getTypeName());
             entry.put("value_class", key.getValueClass().getName());
             entry.put("type", describe(value));
+            entry.put("nullable_reference", field.isAnnotationPresent(
+                    pt.up.fe.specs.clava.NullableNodeReference.class));
             entry.put("source_field", field);
             result.add(entry);
         }
