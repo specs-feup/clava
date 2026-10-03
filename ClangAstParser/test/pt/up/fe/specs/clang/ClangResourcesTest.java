@@ -17,8 +17,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifest;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
+import pt.up.fe.specs.clang.ClangAstWebResource.FlatbuffersToolchain;
 import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.ClangAstWebResource.Release;
+import pt.up.fe.specs.clang.ClangAstWebResource.WireSchema;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
@@ -106,18 +108,40 @@ public class ClangResourcesTest {
     }
 
     @Test
+    public void executableDigestIsReusedAndInvalidatedAfterReplacement() throws IOException {
+        var executable = tempFolder.resolve("dumper");
+        Files.writeString(executable, "first");
+        var firstHash = ExecutableDigest.sha256(executable.toFile());
+
+        assertEquals(firstHash, ExecutableDigest.sha256(executable.toFile()));
+
+        Files.writeString(executable, "other");
+        Files.setLastModifiedTime(executable, FileTime.from(Instant.now().plusSeconds(2)));
+        var secondHash = ExecutableDigest.sha256(executable.toFile());
+
+        assertNotEquals(firstHash, secondHash);
+        assertEquals(secondHash, ExecutableDigest.sha256(executable.toFile()));
+    }
+
+    @Test
     public void manifestValidationAndAssetSelectionArePreserved() {
         var tool = asset("tool", "tool", "linux", "x64");
         var plugin = asset("plugin", "plugin", "linux", "x64");
-        var manifest = new ClangDumperManifest(1, List.of(tool, plugin));
+        var manifest = manifest(List.of(tool, plugin));
 
         assertDoesNotThrow(manifest::validate);
         assertEquals(tool, manifest.getAsset("linux", "x64", "tool"));
         assertEquals(plugin, manifest.getAsset("linux", "x64", "plugin"));
         assertEquals(HELLO_SHA256, tool.sha256());
         assertThrows(RuntimeException.class, () -> manifest.getAsset("windows", "x64", "tool"));
-        assertThrows(RuntimeException.class, () -> new ClangDumperManifest(2, List.of(tool)).validate());
-        assertThrows(RuntimeException.class, () -> new ClangDumperManifest(1, List.of()).validate());
+        assertThrows(RuntimeException.class, () -> new ClangDumperManifest(1, List.of(tool),
+                toolchain(), wireSchema()).validate());
+        assertThrows(RuntimeException.class, () -> manifest(List.of()).validate());
+
+        var mismatchedSchema = new WireSchema(2, "wire/v2/complete.fbs", "clang-dumper-wire-schema-v2.zip",
+                "0".repeat(64), HELLO_SHA256, pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION);
+        assertThrows(RuntimeException.class,
+                () -> new ClangDumperManifest(2, List.of(tool), toolchain(), mismatchedSchema).validate());
     }
 
     @Test
@@ -155,8 +179,8 @@ public class ClangResourcesTest {
         var sha = sha256(archive);
         var firstAsset = new ClangDumperManifestAsset("v1-includes.zip", "includes", "linux", "x64", 18, sha);
         var secondAsset = new ClangDumperManifestAsset("v2-includes.zip", "includes", "linux", "x64", 18, sha);
-        var firstManifest = new ClangDumperManifest(1, List.of(firstAsset));
-        var secondManifest = new ClangDumperManifest(1, List.of(secondAsset));
+        var firstManifest = manifest(List.of(firstAsset));
+        var secondManifest = manifest(List.of(secondAsset));
         var firstRelease = Files.createDirectories(tempFolder.resolve("releases/v1"));
         var secondRelease = Files.createDirectories(tempFolder.resolve("releases/v2"));
         var firstWrites = new AtomicInteger();
@@ -418,6 +442,9 @@ public class ClangResourcesTest {
 
     @Test
     public void releaseResourcesCanBeInitializedBySeparateJvms() throws Exception {
+        assumeTrue(ClangAstWebResource.getDumperSource() instanceof Release,
+                "Release assets are unavailable when the selected dumper source is a local build");
+
         var cacheFolder = Files.createDirectory(tempFolder.resolve("cache")).toFile();
         var firstDone = tempFolder.resolve("first.done");
         var secondDone = tempFolder.resolve("second.done");
@@ -488,6 +515,9 @@ public class ClangResourcesTest {
 
     @Test
     public void sameJvmInstancesReuseReleaseFilesAndPrepareIncludesOnlyForBuiltinLibc() throws Exception {
+        assumeTrue(ClangAstWebResource.getDumperSource() instanceof Release,
+                "Release assets are unavailable when the selected dumper source is a local build");
+
         var firstParser = newParser("");
         var secondParser = newParser("");
         var thirdParser = newParser("");
@@ -611,6 +641,21 @@ public class ClangResourcesTest {
 
     private static ClangDumperManifestAsset asset(String filename, String kind, String platform, String arch) {
         return new ClangDumperManifestAsset(filename, kind, platform, arch, 18, HELLO_SHA256);
+    }
+
+    private static ClangDumperManifest manifest(List<ClangDumperManifestAsset> assets) {
+        return new ClangDumperManifest(2, assets, toolchain(), wireSchema());
+    }
+
+    private static FlatbuffersToolchain toolchain() {
+        return new FlatbuffersToolchain(pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION,
+                pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_COMMIT);
+    }
+
+    private static WireSchema wireSchema() {
+        return new WireSchema(2, "wire/v2/complete.fbs", "clang-dumper-wire-schema-v2.zip",
+                pt.up.fe.specs.clang.wire.GeneratedNodes.SCHEMA_HASH, HELLO_SHA256,
+                pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION);
     }
 
     private static FileResourceProvider copyingResource(Path source, AtomicInteger writes) {

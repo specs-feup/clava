@@ -72,7 +72,15 @@ public class ClangResources {
         var forceSystemLibc = source instanceof LocalBuild || ClangAstDumper.usePlugin();
 
         if (source instanceof LocalBuild localBuild) {
+            var manifest = ClangAstWebResource.getLocalManifest(localBuild.folder());
+            var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
+            var localAsset = getCurrentAsset(manifest, executableKind);
             var clangExecutable = getLocalExecutable(localBuild.folder());
+            if (!localAsset.filename().equals(clangExecutable.getName())
+                    || !localAsset.sha256().equalsIgnoreCase(ExecutableDigest.sha256(clangExecutable))) {
+                throw new RuntimeException("Local clang-dumper executable does not match its release manifest: '"
+                        + clangExecutable + "'");
+            }
             var libcMode = resolveLibcMode(clangExecutable, requestedLibcMode, forceSystemLibc);
             var systemResourceDir = libcMode == LibcMode.SYSTEM && useBuiltinCuda
                     ? findSystemClangResourceDir(null)
