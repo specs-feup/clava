@@ -30,10 +30,10 @@ def git_revision(path: Path) -> str | None:
 
 
 def translate_flags(flags: list[str]) -> tuple[list[str], list[str]]:
-    """Match the corpus baseline's cc1-to-driver flag conversion."""
+    """Preserve frontend target settings when invoking the compiler driver."""
     out: list[str] = []
     dropped: list[str] = []
-    paired_drop = {"-target-feature", "-target-cpu", "-target-abi"}
+    frontend_pairs = {"-target-feature", "-target-cpu", "-target-abi"}
     discard_pair = {"-aux-triple", "-main-file-name", "-internal-isystem",
                     "-internal-externc-isystem"}
     index = 0
@@ -43,9 +43,11 @@ def translate_flags(flags: list[str]) -> tuple[list[str], list[str]]:
             out += ["-target", flags[index + 1]]
             index += 2
             continue
-        if flag in paired_drop:
-            dropped.append(f"{flag} {flags[index + 1]}" if index + 1 < len(flags) else flag)
-            index += 2 if index + 1 < len(flags) else 1
+        if flag in frontend_pairs:
+            if index + 1 >= len(flags):
+                raise ValueError(f"Missing value for frontend option {flag}")
+            out += ["-Xclang", flag, "-Xclang", flags[index + 1]]
+            index += 2
             continue
         if flag in discard_pair:
             index += 2 if index + 1 < len(flags) else 1
