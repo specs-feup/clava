@@ -435,7 +435,16 @@ def validate_observation(
 
 
 def test_identities(rows: list[dict[str, str]]) -> list[tuple[str, str]]:
-    return sorted((row.get("suite_file", ""), row.get("test_name", "")) for row in rows)
+    identities = []
+    for row in rows:
+        parts = Path(row.get("suite_file", "")).parts
+        root_index = next((index for index in range(len(parts) - 1, -1, -1)
+                           if parts[index] == "Clava-JS"), None)
+        if root_index is None or root_index + 1 == len(parts):
+            raise ValueError(f"Vitest test path is outside a Clava-JS workspace: {row.get('suite_file')!r}")
+        suite_file = Path(*parts[root_index + 1:]).as_posix()
+        identities.append((suite_file, row.get("test_name", "")))
+    return sorted(identities)
 
 
 def base_environment(no_ccache_path: str, suite_root: Path | None = None) -> dict[str, str]:
@@ -674,6 +683,7 @@ def main() -> int:
     plan = {
         "output_root": str(output_root),
         "workload": {
+            "test_identity_paths": "relative to the final Clava-JS workspace component, independent of the eager checkout or historical overlay path",
             "vitest_filter": JS_TEST_FILTER,
             "vitest_config": str((SCRIPT_ROOT / "vitest.suite.config.ts").resolve()),
             "vitest_config_sha256": sha256_file(SCRIPT_ROOT / "vitest.suite.config.ts"),

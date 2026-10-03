@@ -70,6 +70,18 @@ class JavaRuntimeClasspathPreparationTest(unittest.TestCase):
 
 
 class HistoricalGlobalAttributesFixtureTest(unittest.TestCase):
+    def test_test_identities_ignore_checkout_specific_workspace_prefix(self) -> None:
+        eager = [{
+            "suite_file": "/repo/current/Clava-JS/api/Issues.test.ts",
+            "test_name": "issue187 should return a valid definition",
+        }]
+        overlay = [{
+            "suite_file": "/tmp/results/source-overlays/text/Clava-JS/api/Issues.test.ts",
+            "test_name": "issue187 should return a valid definition",
+        }]
+
+        self.assertEqual(js_comparison.test_identities(eager), js_comparison.test_identities(overlay))
+
     def test_overlay_uses_control_script_and_golden_with_same_input(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
