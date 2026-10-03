@@ -49,7 +49,8 @@ public final class ValidationProbe {
         case "cross-tu" -> crossTranslationUnit(input, work);
         case "memory" -> memory(input, work, args.length > 3 ? args[3] : inferStandard(input),
                 args.length > 4 ? Integer.parseInt(args[4]) : 20,
-                args.length <= 5 || Boolean.parseBoolean(args[5]));
+                args.length <= 5 || Boolean.parseBoolean(args[5]),
+                args.length > 6 ? Path.of(args[6]).toAbsolutePath().normalize() : work.resolve("dumper-resources"));
         case "corpus" -> corpus(input, work, false);
         case "corpus-roundtrip" -> corpus(input, work, true);
         default -> throw new IllegalArgumentException("unknown mode: " + mode);
@@ -119,7 +120,7 @@ public final class ValidationProbe {
     }
 
     private static void memory(Path source, Path work, String standard, int repeats,
-            boolean strictCleanup) throws IOException {
+            boolean strictCleanup, Path resourceRoot) throws IOException {
         if (repeats < 2) {
             throw new IllegalArgumentException("memory probe needs at least two parse repeats");
         }
@@ -127,7 +128,7 @@ public final class ValidationProbe {
         for (int index = 1; index <= repeats; index++) {
             Path iteration = work.resolve("iteration-" + index);
             Files.createDirectories(iteration);
-            Trial trial = parseAndRelease(source, iteration, standard);
+            Trial trial = parseAndRelease(source, iteration, standard, resourceRoot);
             boolean collected = awaitCollection(trial.reference());
             long retained = usedHeapAfterGc();
             int mapped = mappedPaths(work, tempRoot);
@@ -144,6 +145,7 @@ public final class ValidationProbe {
             row.put("mapped_paths_under_work", mapped);
             row.put("leftover_clang_temp_folders", temporaryFolders);
             row.put("open_parser_files", openParserFiles);
+            row.put("dumper_resource_root", resourceRoot.toAbsolutePath().normalize().toString());
             emit("CLAVA_HEAP", row);
             if (strictCleanup && (!collected || mapped != 0 || temporaryFolders != 0 || openParserFiles != 0)) {
                 throw new IllegalStateException("AST release or mapped-file cleanup failed on repeat " + index);
@@ -277,8 +279,8 @@ public final class ValidationProbe {
         return hex(digest.digest());
     }
 
-    private static Trial parseAndRelease(Path source, Path work, String standard) {
-        App app = parse(List.of(source), work, standard, List.of());
+    private static Trial parseAndRelease(Path source, Path work, String standard, Path resourceRoot) {
+        App app = parse(List.of(source), work, standard, List.of(), resourceRoot);
         long nodes = app.getDescendantsAndSelfStream().count();
         long liveHeap = usedHeapAfterGc();
         WeakReference<App> reference = new WeakReference<>(app);

@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import statistics
 import subprocess
 import sys
@@ -24,6 +25,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CLAVA_ROOT = ROOT.parents[1]
 sys.path.insert(0, str(ROOT))
 from benchmark_environment import make_path_without_ccache
+sys.path.insert(0, str(ROOT / "suite"))
+from run_suite import release_metadata, resource_cache_hashes
 PROBE = Path(__file__).with_name("java") / "ValidationProbe.java"
 RESULTS_ROOT = ROOT / "results" / "validation"
 TIME_FORMAT = "elapsed_s=%e\\nuser_s=%U\\nsys_s=%S\\nmax_rss_kb=%M\\nexit_status=%x"
@@ -152,6 +155,10 @@ def parse_args() -> argparse.Namespace:
                         help="Prebuilt distribution; repeat for eager, text and protobuf controls.")
     parser.add_argument("--source", type=Path, required=True,
                         help="One representative C or C++ source parsed repeatedly by each JVM.")
+    parser.add_argument("--resource-cache-root", type=Path, required=True,
+                        help="Preverified eager release cache containing releases/<tag> and includes.")
+    parser.add_argument("--release-assets-root", type=Path, required=True,
+                        help="Source-identified published eager manifest and schema bundle.")
     parser.add_argument("--standard", default=None)
     parser.add_argument("--output-root", type=Path)
     parser.add_argument("--repeat-count", type=int, default=3,
@@ -170,11 +177,15 @@ def main() -> int:
         raise SystemExit("at least two isolated runtimes are needed for a comparison")
     if len({label for label, _ in args.runtime}) != len(args.runtime):
         raise SystemExit("runtime labels must be unique")
+    if {label for label, _ in args.runtime} != {"eager", "text", "protobuf"}:
+        raise SystemExit("memory matrix requires exactly the eager, text, and protobuf runtimes")
     if args.repeat_count < 1 or args.parse_repeats < 2:
         raise SystemExit("repeat counts must be positive, with at least two parse repeats")
     source = args.source.resolve()
     if not source.is_file():
         raise SystemExit(f"source file does not exist: {source}")
+    if not args.resource_cache_root.is_dir() or not args.release_assets_root.is_dir():
+        raise SystemExit("eager release cache and source-identified release assets must exist")
     output = args.output_root.resolve() if args.output_root else RESULTS_ROOT / dt.datetime.now(
         dt.timezone.utc
     ).strftime("memory-%Y%m%dT%H%M%SZ")
@@ -197,10 +208,18 @@ def main() -> int:
     temp_root.mkdir()
 
     compiled: dict[str, tuple[Path, str, dict[str, Any]]] = {}
+    eager_release: dict[str, Any] | None = None
     for label, runtime in args.runtime:
         if not runtime.is_dir():
             raise SystemExit(f"runtime directory does not exist: {runtime}")
         metadata = runtime_metadata(runtime)
+        if metadata.get("release_tag") == "v18.1.8_5-rc1":
+            if eager_release is not None:
+                raise SystemExit("memory matrix has more than one eager RC runtime")
+            eager_release = release_metadata(runtime, None, args.resource_cache_root,
+                                             args.release_assets_root)
+            metadata["selected_release"] = eager_release
+            metadata["selected_release_resources"] = resource_cache_hashes(eager_release)
         classes = output / "classes" / label
         classes.mkdir(parents=True)
         lib = runtime / "lib"
@@ -210,6 +229,8 @@ def main() -> int:
         metadata["probe_compile_command"] = command
         compiled[label] = (runtime, classpath, metadata)
 
+    if eager_release is None:
+        raise SystemExit("memory matrix is missing the published eager RC runtime")
     labels = [label for label, _ in args.runtime]
     if args.strict_cleanup_label not in labels:
         raise SystemExit(f"strict cleanup label {args.strict_cleanup_label!r} is not in the runtime matrix")
@@ -222,6 +243,18 @@ def main() -> int:
             run_dir.mkdir()
             work = run_dir / "work"
             work.mkdir()
+            resource_root = work / "dumper-resources"
+            resource_before = None
+            if metadata.get("release_tag") == "v18.1.8_5-rc1":
+                if eager_release is None:
+                    raise SystemExit("eager runtime has no verified RC release metadata")
+                resource_root.mkdir()
+                resource_cache_link = resource_root / "clang-dumper"
+                selected_cache = args.resource_cache_root.resolve()
+                resource_cache_link.symlink_to(selected_cache, target_is_directory=True)
+                if resource_cache_link.resolve() != selected_cache:
+                    raise SystemExit("memory observation did not select the verified RC resource cache")
+                resource_before = resource_cache_hashes(eager_release)
             run_tmp = run_dir / "tmp"
             run_tmp.mkdir()
             run_cache = run_dir / "xdg-cache"
@@ -234,6 +267,7 @@ def main() -> int:
                 f"-Djava.io.tmpdir={run_tmp}",
                 "-cp", classpath, "ValidationProbe", "memory", str(source), str(work),
                 standard, str(args.parse_repeats), str(label == args.strict_cleanup_label).lower(),
+                str(resource_root),
             ]
             env = os.environ.copy()
             for name in JVM_OPTION_ENV:
@@ -252,6 +286,7 @@ def main() -> int:
             completed = subprocess.run(java, cwd=CLAVA_ROOT, env=env, capture_output=True,
                                        text=True, check=False)
             wall_s = time.perf_counter() - started
+            resource_after = resource_cache_hashes(eager_release) if resource_before is not None else None
             (run_dir / "probe.log").write_text(completed.stdout + completed.stderr)
             rows = parse_heap(completed.stdout + completed.stderr)
             time_metrics = parse_time(time_path) if time_path.is_file() else {}
@@ -274,6 +309,9 @@ def main() -> int:
                 "cache_policy": "CCACHE_DISABLE=true; ccache absent from PATH; AST_DUMP_CACHE=false",
                 "gc_policy": {"collector": "G1", "explicit_gc": "enabled", "flags": list(GC_FLAGS)},
                 "tmp_root": str(run_tmp),
+                "resource_root": str(resource_root),
+                "selected_resource_before": resource_before,
+                "selected_resource_after": resource_after,
                 "wall_s": wall_s,
                 "gnu_time": time_metrics,
                 "heap_rows": rows,
@@ -281,6 +319,8 @@ def main() -> int:
                 "return_code": completed.returncode,
                 "command": java,
                 "passed": completed.returncode == 0 and len(rows) == args.parse_repeats
+                    and (resource_before is None or resource_before == resource_after)
+                    and (resource_before is None or resource_cache_link.resolve() == selected_cache)
                     and (label != args.strict_cleanup_label or all(
                         row.get("app_collected") and row.get("mapped_paths_under_work") == 0
                         and row.get("leftover_clang_temp_folders") == 0
@@ -340,6 +380,7 @@ def main() -> int:
             "_JAVA_OPTIONS": None,
         },
         "gc_policy": {"collector": "G1", "explicit_gc": "enabled", "flags": list(GC_FLAGS)},
+        "resource_cache_policy": "Eager RC manifest, native executable, published schema bundle, canonical schema, and extracted includes tree are verified before each JVM observation; the selected cache root is linked into its DUMPER_FOLDER and rehashed after. One shared cache root is used across all repeated parses in an observation.",
         "timing_boundary": "GNU time covers launch, native parses, AST construction and explicit GCs; its RSS includes child maxima. peak_rss aggregates use Linux /proc/self/status VmHWM from the JVM only, sampled after each parse/collect cycle.",
         "run_order": "sequential; runtime order rotates by repeat",
         "host_activity_recorded_before_and_after_each_process": True,
