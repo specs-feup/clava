@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -31,6 +32,9 @@ import pt.up.fe.specs.clava.ClavaNode;
 public class GCCAsmStmt extends AsmStmt {
 
     public static final DataKey<String> ASM_STRING = KeyFactory.string("asmString");
+    public static final DataKey<Boolean> IS_INLINE = KeyFactory.bool("isInline");
+    public static final DataKey<Boolean> IS_GOTO = KeyFactory.bool("isGoto");
+    public static final DataKey<List<String>> LABELS = KeyFactory.list("labels", String.class);
 
     public GCCAsmStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -46,6 +50,14 @@ public class GCCAsmStmt extends AsmStmt {
             code.append(" __volatile__");
         }
 
+        if (Boolean.TRUE.equals(get(IS_INLINE))) {
+            code.append(" __inline__");
+        }
+
+        if (Boolean.TRUE.equals(get(IS_GOTO))) {
+            code.append(" goto");
+        }
+
         code.append("(\"");
         code.append(escapeStringLiteral(get(ASM_STRING)));
         code.append("\"");
@@ -54,25 +66,33 @@ public class GCCAsmStmt extends AsmStmt {
         var outputs = get(OUTPUTS).stream().map(output -> output.getCode())
                 .collect(Collectors.joining(", "));
 
-        if (!outputs.isEmpty()) {
-            code.append("\n   :").append(outputs);
-        }
-
-        // Inputs
         var inputs = get(INPUTS).stream().map(input -> input.getCode())
                 .collect(Collectors.joining(", "));
 
-        if (!inputs.isEmpty()) {
-            code.append("\n   :").append(inputs);
-        }
-
-        // Cobblers
-        var cobblers = get(CLOBBERS).stream()
+        var clobbers = get(CLOBBERS).stream()
                 .map(clobber -> "\"" + clobber + "\"")
                 .collect(Collectors.joining(", "));
 
-        if (!cobblers.isEmpty()) {
-            code.append("\n   :").append(cobblers);
+        var labels = String.join(", ", get(LABELS));
+        var hasLabels = Boolean.TRUE.equals(get(IS_GOTO)) || !labels.isEmpty();
+
+        boolean hasExtendedSyntax = !Boolean.TRUE.equals(get(IS_SIMPLE))
+                || !outputs.isEmpty() || !inputs.isEmpty() || !clobbers.isEmpty() || hasLabels;
+
+        if (hasExtendedSyntax) {
+            code.append("\n   :").append(outputs);
+        }
+
+        if (!inputs.isEmpty() || !clobbers.isEmpty() || hasLabels) {
+            code.append("\n   :").append(inputs);
+        }
+
+        if (!clobbers.isEmpty() || hasLabels) {
+            code.append("\n   :").append(clobbers);
+        }
+
+        if (hasLabels) {
+            code.append("\n   :").append(labels);
         }
 
         code.append(");");
