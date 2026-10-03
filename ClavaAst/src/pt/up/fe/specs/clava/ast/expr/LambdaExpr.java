@@ -58,6 +58,8 @@ public class LambdaExpr extends Expr {
     public final static DataKey<List<LambdaCaptureKind>> CAPTURE_KINDS = KeyFactory.generic("captureKinds",
             new ArrayList<LambdaCaptureKind>());
 
+    public final static DataKey<List<String>> INIT_CAPTURE_NAMES = KeyFactory.list("initCaptureNames", String.class);
+
     /// DATAKEYS END
 
     public LambdaExpr(DataStore data, Collection<? extends ClavaNode> children) {
@@ -127,9 +129,19 @@ public class LambdaExpr extends Expr {
         // Add captures, if present
         List<Expr> captureArgs = getCaptureArguments();
         List<LambdaCaptureKind> captureKinds = get(CAPTURE_KINDS);
+        List<String> initCaptureNames = hasValue(INIT_CAPTURE_NAMES) ? get(INIT_CAPTURE_NAMES) : List.of();
+        Preconditions.checkArgument(captureKinds.size() == captureArgs.size(),
+                "Expected one capture kind per initializer, got %s kinds and %s initializers",
+                captureKinds.size(), captureArgs.size());
+        Preconditions.checkArgument(!hasValue(INIT_CAPTURE_NAMES) || initCaptureNames.size() == captureArgs.size(),
+                "Expected one init-capture name per initializer, got %s names and %s initializers",
+                initCaptureNames.size(), captureArgs.size());
         for (int i = 0; i < captureArgs.size(); i++) {
             LambdaCaptureKind kind = captureKinds.get(i);
-            captureElements.add(kind.getCode(captureArgs.get(i).getCode()));
+            String name = initCaptureNames.isEmpty() ? "" : initCaptureNames.get(i);
+            String captureCode = name.isEmpty() ? captureArgs.get(i).getCode()
+                    : name + "=" + captureArgs.get(i).getCode();
+            captureElements.add(kind.getCode(captureCode));
         }
 
         capture.append("[").append(captureElements.stream().collect(Collectors.joining(", "))).append("]");

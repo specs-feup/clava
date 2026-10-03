@@ -414,7 +414,8 @@ public class ClavaFactory {
 
     public CStyleCastExpr cStyleCastExpr(Type type, Expr expr) {
         DataStore data = newDataStore(CStyleCastExpr.class)
-                .put(Expr.TYPE, Optional.of(type));
+                .put(Expr.TYPE, Optional.of(type))
+                .put(ExplicitCastExpr.TYPE_AS_WRITTEN, type);
 
         data.set(CastExpr.CAST_KIND, CastKind.NoOp);
 
