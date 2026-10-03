@@ -23,7 +23,6 @@ import pt.up.fe.specs.clang.ClangAstWebResource.Release;
 import pt.up.fe.specs.clang.ClangAstWebResource.WireSchema;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
-import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 
 import java.io.BufferedReader;
@@ -58,6 +57,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -105,6 +105,58 @@ public class ClangResourcesTest {
     @Test
     public void localBuildRequiresExpectedTool() {
         assertThrows(RuntimeException.class, () -> ClangResources.getLocalExecutable(tempFolder.toFile()));
+    }
+
+    @Test
+    public void localCudaHeadersUseTheToolManifestLLVMVersion() {
+        var tool = asset("tool", "tool", "linux", "x64");
+
+        assertEquals(18, ClangResources.getLocalLLVMMajor(tool));
+    }
+
+    @Test
+    public void localCudaHeadersRequireTheToolManifestLLVMVersion() {
+        var tool = new ClangDumperManifestAsset("tool", "tool", "linux", "x64", 0, HELLO_SHA256);
+
+        var error = assertThrows(RuntimeException.class, () -> ClangResources.getLocalLLVMMajor(tool));
+        assertTrue(error.getMessage().contains("must specify llvm_major"));
+    }
+
+    @Test
+    public void pathMetadataCacheIsBoundedAndEvictsLeastRecentlyUsedEntry() throws Exception {
+        assertEquals(128, ClangResources.CLANG_FILES_CACHE.maxEntries());
+        assertEquals(128, ClangResources.HAS_LIBC.maxEntries());
+
+        var cache = new ClangResources.BoundedMetadataCache<String, Boolean>(3);
+        cache.putIfAbsent("oldest", true);
+        cache.putIfAbsent("middle", false);
+        cache.get("oldest");
+        cache.putIfAbsent("newest", true);
+        cache.putIfAbsent("replacement", false);
+
+        assertEquals(3, cache.size());
+        assertTrue(cache.containsKey("oldest"));
+        assertFalse(cache.containsKey("middle"));
+        assertEquals(Boolean.TRUE, cache.get("oldest"));
+        assertEquals(Boolean.FALSE, cache.get("replacement"));
+
+        var workers = Executors.newFixedThreadPool(8);
+        try {
+            var writes = new ArrayList<Future<?>>();
+            for (int index = 0; index < 256; index++) {
+                int key = index;
+                writes.add(workers.submit(() -> cache.computeIfAbsent("path-" + key, ignored -> key % 2 == 0)));
+            }
+
+            for (var write : writes) {
+                write.get();
+            }
+        } finally {
+            workers.shutdownNow();
+        }
+
+        assertEquals(3, cache.size());
+        assertNull(cache.get("middle"));
     }
 
     @Test
@@ -595,7 +647,7 @@ public class ClangResourcesTest {
 
         var systemLibcDumper = tempFolder.resolve("system-libc-dumper");
         Files.writeString(systemLibcDumper,
-                "#!/bin/sh\nprintf '%s\\n' '" + TopLevelNodesParser.getTopLevelNodesHeader() + "'\n");
+                "#!/bin/sh\nprintf '%s\\n' '" + ClangResources.TOP_LEVEL_NODES_HEADER + "'\n");
         assertTrue(systemLibcDumper.toFile().setExecutable(true));
 
         var builtinLibcDumper = tempFolder.resolve("builtin-libc-dumper");

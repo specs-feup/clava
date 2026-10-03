@@ -18,7 +18,6 @@ import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
 import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
-import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -33,23 +32,29 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 public class ClangResources {
 
-    private static final Map<String, CachedClangFiles> CLANG_FILES_CACHE = new ConcurrentHashMap<>();
+    static final String TOP_LEVEL_NODES_HEADER = "<Top Level Nodes>";
+
+    static final int MAX_METADATA_CACHE_ENTRIES = 128;
+
+    static final BoundedMetadataCache<String, CachedClangFiles> CLANG_FILES_CACHE =
+            new BoundedMetadataCache<>(MAX_METADATA_CACHE_ENTRIES);
     private static final String CLANG_FOLDERNAME = "clang_ast_exe";
     private static final String CLANG_CACHE_FOLDERNAME = "clang-dumper";
     private static final String RELEASES_FOLDERNAME = "releases";
     private static final String INCLUDES_FOLDERNAME = "includes";
     private static final Duration STALE_CACHE_MAX_AGE = Duration.ofDays(60);
 
-    private static final Map<String, Boolean> HAS_LIBC = new ConcurrentHashMap<>();
+    static final BoundedMetadataCache<String, Boolean> HAS_LIBC =
+            new BoundedMetadataCache<>(MAX_METADATA_CACHE_ENTRIES);
 
     private final CodeParser options;
 
@@ -82,9 +87,11 @@ public class ClangResources {
                         + clangExecutable + "'");
             }
             var libcMode = resolveLibcMode(clangExecutable, requestedLibcMode, forceSystemLibc);
-            var systemResourceDir = libcMode == LibcMode.SYSTEM && useBuiltinCuda
-                    ? findSystemClangResourceDir(null)
-                    : null;
+            File systemResourceDir = null;
+            if (libcMode == LibcMode.SYSTEM && useBuiltinCuda) {
+                systemResourceDir = findSystemClangResourceDir(
+                        getLocalLLVMMajor(getCurrentAsset(manifest, "tool")));
+            }
             return new ClangFiles(clangExecutable, List.of(), systemResourceDir, libcMode);
         }
 
@@ -306,7 +313,7 @@ public class ClangResources {
                 }
 
                 if (testFile.getName().endsWith(".cpp")
-                        && !output.getOutput().contains(TopLevelNodesParser.getTopLevelNodesHeader())) {
+                        && !output.getOutput().contains(TOP_LEVEL_NODES_HEADER)) {
                     needsLib = true;
                     break;
                 }
@@ -345,6 +352,16 @@ public class ClangResources {
         var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
         var llvmMajor = getCurrentAsset(manifest, executableKind).llvm_major();
         return findSystemClangResourceDir(llvmMajor);
+    }
+
+    static int getLocalLLVMMajor(ClangDumperManifestAsset localAsset) {
+        var llvmMajor = localAsset.llvm_major();
+        if (llvmMajor < 1) {
+            throw new RuntimeException("Local clang-dumper manifest tool asset must specify llvm_major "
+                    + "to select matching system CUDA headers");
+        }
+
+        return llvmMajor;
     }
 
     private File findSystemClangResourceDir(Integer llvmMajor) {
@@ -590,6 +607,92 @@ public class ClangResources {
     private record PreparedIncludes(List<String> folders, File extractedFolder) {
     }
 
-    private record CachedClangFiles(ClangFiles files, File includesFolder) {
+    record CachedClangFiles(ClangFiles files, File includesFolder) {
+    }
+
+    /** A small LRU for path metadata; values must not retain parsed ASTs. */
+    static final class BoundedMetadataCache<K, V> {
+
+        private static final int LOCK_STRIPE_COUNT = 64;
+
+        private final int maxEntries;
+        private final LinkedHashMap<K, V> entries = new LinkedHashMap<>(16, 0.75f, true);
+        private final Object[] computationLocks = new Object[LOCK_STRIPE_COUNT];
+
+        BoundedMetadataCache(int maxEntries) {
+            if (maxEntries < 1) {
+                throw new IllegalArgumentException("Metadata cache limit must be positive");
+            }
+
+            this.maxEntries = maxEntries;
+            Arrays.setAll(computationLocks, ignored -> new Object());
+        }
+
+        synchronized V get(K key) {
+            return entries.get(key);
+        }
+
+        synchronized V putIfAbsent(K key, V value) {
+            var existing = entries.get(key);
+            if (existing != null || entries.containsKey(key)) {
+                return existing;
+            }
+
+            entries.put(key, Objects.requireNonNull(value, "value"));
+            evictEldest();
+            return null;
+        }
+
+        synchronized boolean remove(K key, V value) {
+            if (!Objects.equals(entries.get(key), value)) {
+                return false;
+            }
+
+            entries.remove(key);
+            return true;
+        }
+
+        V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
+            Objects.requireNonNull(mappingFunction, "mappingFunction");
+            var lock = computationLocks[Math.floorMod(key.hashCode(), LOCK_STRIPE_COUNT)];
+            synchronized (lock) {
+                var existing = get(key);
+                if (existing != null || containsKey(key)) {
+                    return existing;
+                }
+
+                var computed = mappingFunction.apply(key);
+                if (computed == null) {
+                    return null;
+                }
+
+                var prior = putIfAbsent(key, computed);
+                return prior == null ? computed : prior;
+            }
+        }
+
+        synchronized int size() {
+            return entries.size();
+        }
+
+        synchronized boolean containsKey(K key) {
+            return entries.containsKey(key);
+        }
+
+        synchronized void clear() {
+            entries.clear();
+        }
+
+        synchronized int maxEntries() {
+            return maxEntries;
+        }
+
+        private void evictEldest() {
+            if (entries.size() > maxEntries) {
+                var eldest = entries.keySet().iterator();
+                eldest.next();
+                eldest.remove();
+            }
+        }
     }
 }

@@ -55,6 +55,8 @@ class GeneratedParseRootTest {
         assertFalse(allFilepaths(second).stream().anyMatch(path -> path.startsWith(firstRoot)));
 
         if (SpecsPlatforms.isLinux()) {
+            Assumptions.assumeFalse(System.getenv().containsKey("CCACHE_DISABLE"),
+                    "CCACHE_DISABLE is set, so this run deliberately bypasses cache hit counters");
             Assumptions.assumeTrue(hasCcache(), "ccache is required for the cache counter assertion");
             String stats = ccacheStats(cacheFolder);
             assertEquals(1L, statsFor("Hits", stats), stats);
@@ -111,9 +113,18 @@ class GeneratedParseRootTest {
     }
 
     private String ccacheStats(File cacheFolder) throws Exception {
+        Path ccacheRoot = cacheFolder.toPath().resolve("clang-dumper-ccache");
+        List<Path> versionedCaches;
+        try (var children = Files.list(ccacheRoot)) {
+            versionedCaches = children
+                    .filter(Files::isDirectory)
+                    .filter(path -> path.getFileName().toString().startsWith("flatbuffers-v"))
+                    .toList();
+        }
+        assertEquals(1, versionedCaches.size(), "Expected one schema/executable-specific cache namespace");
+
         ProcessBuilder processBuilder = new ProcessBuilder("ccache", "--show-stats");
-        processBuilder.environment().put("CCACHE_DIR",
-                new File(cacheFolder, "clang-dumper-ccache").getAbsolutePath());
+        processBuilder.environment().put("CCACHE_DIR", versionedCaches.get(0).toAbsolutePath().toString());
         Process process = processBuilder.start();
         String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         assertTrue(process.waitFor() == 0, output);
