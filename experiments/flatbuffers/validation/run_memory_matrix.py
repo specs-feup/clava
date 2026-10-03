@@ -48,7 +48,7 @@ def runtime_metadata(runtime: Path) -> dict[str, Any]:
     canonical = json.dumps(jars, sort_keys=True, separators=(",", ":")).encode()
     source_revisions = None
     source_revisions_path = None
-    for parent in runtime.parents:
+    for parent in (runtime, *runtime.parents):
         candidate = parent / "source-revisions.json"
         if candidate.is_file():
             source_revisions_path = candidate
@@ -58,6 +58,9 @@ def runtime_metadata(runtime: Path) -> dict[str, Any]:
         "runtime_root": str(runtime),
         "release_tag": tag,
         "parser_jar_sha256": sha256_file(parser_jar),
+        "native_tool_sha256": next((sha256_file(Path(tag) / name)
+            for name in ("tool", "tool.exe") if tag and Path(tag).is_absolute()
+            and (Path(tag) / name).is_file()), None),
         "jar_count": len(jars),
         "jar_manifest_sha256": hashlib.sha256(canonical).hexdigest(),
         "source_revisions_file": str(source_revisions_path) if source_revisions_path else None,
