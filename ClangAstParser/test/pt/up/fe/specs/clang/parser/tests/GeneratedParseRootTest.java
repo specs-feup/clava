@@ -9,12 +9,16 @@ package pt.up.fe.specs.clang.parser.tests;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +36,33 @@ class GeneratedParseRootTest {
 
     @TempDir
     Path tempFolder;
+
+    @Test
+    void syntaxValidationUsesTheGeneratedRootAndCleansWorkingFolders() throws Exception {
+        Path root = createProject("syntax");
+        Path source = root.resolve("src/foo.cpp");
+        Files.writeString(source, "#include \"relative/header.h\"\nint value = header_value;\n");
+        Set<Path> foldersBefore = syntaxWorkingFolders();
+        CodeParser parser = CodeParser.newInstance();
+        parser.set(CodeParser.GENERATED_PARSE_ROOT, root.toFile());
+        parser.set(CodeParser.SHOW_EXEC_INFO, false);
+        parser.set(ParallelCodeParser.PARALLEL_PARSING, false);
+        parser.set(ParallelCodeParser.SYNTAX_ONLY, true);
+        List<String> flags = List.of("-std=c++17", "-I" + root.resolve("include"));
+
+        assertDoesNotThrow(() -> parser.parse(List.of(source.toFile()), flags));
+        assertEquals(foldersBefore, syntaxWorkingFolders());
+        Files.writeString(source, "int value = ;\n");
+        assertThrows(RuntimeException.class, () -> parser.parse(List.of(source.toFile()), flags));
+        assertEquals(foldersBefore, syntaxWorkingFolders());
+    }
+
+    private Set<Path> syntaxWorkingFolders() throws Exception {
+        try (var paths = Files.list(Path.of(System.getProperty("java.io.tmpdir")))) {
+            return paths.filter(path -> path.getFileName().toString().startsWith("clava_ast_"))
+                    .collect(Collectors.toSet());
+        }
+    }
 
     @Test
     void cachedGeneratedDumpIsResolvedAgainstTheCurrentRoot() throws Exception {

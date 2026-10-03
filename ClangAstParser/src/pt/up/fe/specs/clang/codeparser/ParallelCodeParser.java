@@ -377,17 +377,16 @@ public class ParallelCodeParser extends CodeParser {
 
         counter.print(sourceFile);
 
-        // Run the same clang invocation, discard dumper output
-        if (get(SYNTAX_ONLY)) {
-            String error = clangParser.validateSyntax(sourceFile, id, standard, options);
-            if (error != null) {
-                syntaxErrors.add(error);
+        try {
+            // Run the same clang invocation, discard dumper output.
+            if (get(SYNTAX_ONLY)) {
+                String error = clangParser.validateSyntax(sourceFile, id, standard, options);
+                if (error != null) {
+                    syntaxErrors.add(error);
+                }
+                return null;
             }
 
-            return null;
-        }
-
-        try {
             ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
 
             if (get(SHOW_CLANG_DUMP)) {

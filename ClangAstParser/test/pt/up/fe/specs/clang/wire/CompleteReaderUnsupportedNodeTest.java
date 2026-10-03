@@ -58,6 +58,16 @@ class CompleteReaderUnsupportedNodeTest {
     }
 
     @Test
+    void rejectsASupportedNodeWithoutItsClassRecordAndReleasesItsFile() throws IOException {
+        Path path = write(block(header(), file(), node(1, "Decl"), end(3, 1, 1, 1)));
+        IOException failure = assertThrows(IOException.class,
+                () -> CompleteReader.read(path, new ClavaContext(), null, "test"));
+        assertTrue(failure.getMessage().contains("Missing NodeClass"));
+        Files.delete(path);
+        assertTrue(Files.notExists(path));
+    }
+
+    @Test
     void rejectsAKnownClassWithAnIncompatiblePayloadFamily() throws IOException {
         Path path = write(block(header(), file(), node(1, "BuiltinType"), end(3, 1, 1, 1)));
         IllegalArgumentException failure = assertThrows(IllegalArgumentException.class,

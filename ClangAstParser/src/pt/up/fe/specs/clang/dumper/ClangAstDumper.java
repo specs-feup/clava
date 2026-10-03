@@ -299,7 +299,7 @@ public class ClangAstDumper {
         }
 
         if (validationOnly) {
-            lastValidationError = validateSyntax(arguments, sourceFile, id);
+            lastValidationError = validateSyntax(arguments, sourceFile, generatedParseRoot);
             return null;
         }
 
@@ -442,14 +442,15 @@ public class ClangAstDumper {
         }
     }
 
-    private String validateSyntax(List<String> arguments, File sourceFile, String id) {
+    private String validateSyntax(List<String> arguments, File sourceFile, File generatedParseRoot) {
         try {
             lastWorkingFolder = Files.createTempDirectory("clava_ast_").toFile();
         } catch (IOException e) {
             throw new UncheckedIOException("Could not create syntax validation working folder", e);
         }
 
-        var output = SpecsSystem.runProcess(getSyntaxArguments(arguments), lastWorkingFolder,
+        File workingDirectory = generatedParseRoot != null ? generatedParseRoot : lastWorkingFolder;
+        var output = SpecsSystem.runProcess(getSyntaxArguments(arguments), workingDirectory,
                 this::discardOutput,
                 inputStream -> processOutput(inputStream));
 

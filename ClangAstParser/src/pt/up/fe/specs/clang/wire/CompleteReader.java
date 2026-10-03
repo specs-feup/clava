@@ -135,6 +135,9 @@ public final class CompleteReader {
         if (!pendingClasses.isEmpty()) {
             throw new IOException("Missing node payload for NodeClass records: " + pendingClasses.keySet());
         }
+        if (!awaitingClasses.isEmpty()) {
+            throw new IOException("Missing NodeClass records for node payloads: " + awaitingClasses.keySet());
+        }
 
         try {
             nodeParser.close(data);
