@@ -173,14 +173,6 @@ public class ParallelCodeParser extends CodeParser {
 
         }
 
-        // List<ClangParserData> clangParserResults = futureTUnits.stream()
-        // .map(future -> getParserData(future))
-        // .filter(parser -> parser != null)
-        // .collect(Collectors.toList());
-        // for (var data : clangParserResults) {
-        // System.out.println("CLANG PARSER NODES:\n" + data.get(ClangParserData.CLAVA_NODES).getNodes());
-        // }
-
         // No AST was decoded, just report syntax validation errors
         if (syntaxOnly) {
             List<String> validationErrors = new ArrayList<>(syntaxErrors);
@@ -308,15 +300,6 @@ public class ParallelCodeParser extends CodeParser {
         return app;
 
     }
-
-    // private ClangParserData getParserData(Future<ClangParserData> future) {
-    // try {
-    // return SpecsSystem.get(future);
-    // } catch (Exception e) {
-    // ClavaLog.info(e.getMessage());
-    // return null;
-    // }
-    // }
 
     //
     // private <T> Stream<T> getSourceFileStream(Collection<T> sourceFiles) {

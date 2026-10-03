@@ -151,7 +151,6 @@ public final class CompleteReader {
         data.get(ClangAstData.NODE_DATA).clear();
         data.get(ClangAstData.VISITED_CHILDREN).clear();
         data.get(ClangAstData.ID_TO_FILENAME_MAP).clear();
-        if(data.hasValue(ClangAstData.SKIPPED_NODES_MAP))data.get(ClangAstData.SKIPPED_NODES_MAP).clear();
         data.get(ClangAstData.TOP_LEVEL_DECL_IDS).clear();
         data.get(ClangAstData.TOP_LEVEL_TYPE_IDS).clear();
         data.get(ClangAstData.TOP_LEVEL_ATTR_IDS).clear();
