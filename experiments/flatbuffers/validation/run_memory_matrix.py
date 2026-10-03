@@ -12,6 +12,7 @@ from pathlib import Path
 import re
 import statistics
 import subprocess
+import sys
 import time
 from typing import Any
 import zipfile
@@ -19,6 +20,8 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 CLAVA_ROOT = ROOT.parents[1]
+sys.path.insert(0, str(ROOT))
+from benchmark_environment import make_path_without_ccache
 PROBE = Path(__file__).with_name("java") / "ValidationProbe.java"
 RESULTS_ROOT = ROOT / "results" / "validation"
 TIME_FORMAT = "elapsed_s=%e\\nuser_s=%U\\nsys_s=%S\\nmax_rss_kb=%M\\nexit_status=%x"
@@ -160,6 +163,7 @@ def main() -> int:
         dt.timezone.utc
     ).strftime("memory-%Y%m%dT%H%M%SZ")
     output.mkdir(parents=True, exist_ok=False)
+    benchmark_path, _ = make_path_without_ccache(output, ("java", "javac"))
     temp_root = output / "tmp"
     temp_root.mkdir()
 
@@ -208,6 +212,7 @@ def main() -> int:
             ):
                 raise SystemExit("remove obsolete AST wire-selection overrides before memory runs")
             env["CCACHE_DISABLE"] = "true"
+            env["PATH"] = benchmark_path
             env["XDG_CACHE_HOME"] = str(run_cache)
             env.update({"TMPDIR": str(run_tmp), "TMP": str(run_tmp), "TEMP": str(run_tmp)})
             env["JAVA_TOOL_OPTIONS"] = (options + " " if options else "") + f"-Djava.io.tmpdir={run_tmp}"
@@ -230,7 +235,7 @@ def main() -> int:
                 "source_sha256": sha256_file(source),
                 "standard": standard,
                 "parse_repeats": args.parse_repeats,
-                "cache_policy": "CCACHE_DISABLE=true and AST_DUMP_CACHE=false",
+                "cache_policy": "CCACHE_DISABLE=true; ccache absent from PATH; AST_DUMP_CACHE=false",
                 "tmp_root": str(run_tmp),
                 "wall_s": wall_s,
                 "gnu_time": time_metrics,
@@ -241,7 +246,8 @@ def main() -> int:
                 "passed": completed.returncode == 0 and len(rows) == args.parse_repeats
                     and (label != args.strict_cleanup_label or all(
                         row.get("app_collected") and row.get("mapped_paths_under_work") == 0
-                        and row.get("leftover_clang_temp_folders") == 0 for row in rows
+                        and row.get("leftover_clang_temp_folders") == 0
+                        and row.get("open_parser_files") == 0 for row in rows
                     )),
             }
             (run_dir / "summary.json").write_text(json.dumps(result, indent=2) + "\n")

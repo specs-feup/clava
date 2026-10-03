@@ -131,6 +131,7 @@ public final class ValidationProbe {
             long retained = usedHeapAfterGc();
             int mapped = mappedPaths(iteration, tempRoot);
             int temporaryFolders = countClangTempFolders(tempRoot);
+            int openParserFiles = openParserFiles(iteration, tempRoot);
             Map<String, Object> row = new HashMap<>();
             row.put("phase", "parse_released");
             row.put("repeat", index);
@@ -141,8 +142,9 @@ public final class ValidationProbe {
             row.put("app_collected", collected);
             row.put("mapped_paths_under_work", mapped);
             row.put("leftover_clang_temp_folders", temporaryFolders);
+            row.put("open_parser_files", openParserFiles);
             emit("CLAVA_HEAP", row);
-            if (strictCleanup && (!collected || mapped != 0 || temporaryFolders != 0)) {
+            if (strictCleanup && (!collected || mapped != 0 || temporaryFolders != 0 || openParserFiles != 0)) {
                 throw new IllegalStateException("AST release or mapped-file cleanup failed on repeat " + index);
             }
         }
@@ -334,6 +336,30 @@ public final class ValidationProbe {
             return (int) lines.filter(line -> line.contains(workText) || line.contains(tempText + "/clava_ast_"))
                     .count();
         }
+    }
+
+    private static int openParserFiles(Path work, Path tempRoot) throws IOException {
+        Path descriptors = Path.of("/proc/self/fd");
+        if (!Files.isDirectory(descriptors)) {
+            return -1;
+        }
+        String workText = work.toAbsolutePath().normalize().toString();
+        String parserTempPrefix = tempRoot.toString() + "/clava_ast_";
+        int count = 0;
+        try (Stream<Path> entries = Files.list(descriptors)) {
+            for (Path entry : entries.toList()) {
+                String target;
+                try {
+                    target = Files.readSymbolicLink(entry).toString();
+                } catch (java.nio.file.NoSuchFileException closedDescriptor) {
+                    continue;
+                }
+                if (target.startsWith(workText + "/") || target.startsWith(parserTempPrefix)) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     private static int countClangTempFolders(Path tempRoot) throws IOException {
