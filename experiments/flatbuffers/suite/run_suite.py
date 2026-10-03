@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""Run the real Clava-JS Vitest suite with isolated cache and runtime state.
+"""Run the production Clava-JS suite with isolated cache and runtime state.
 
 The runner records one JSON result from Vitest, GNU time resource metrics,
 ccache statistics, environment/revision metadata, and flattened per-test
 durations. It never writes outside this experiment's ignored ``results`` tree
 except for the Vitest process itself, which runs against the checked-out suite.
 
-Use one invocation per cache state. ``cold`` creates a new cache and measures
+The parser uses the production eager FlatBuffers path selected by its release
+tag. This runner has no wire-format switch. Use one invocation per cache state.
+``cold`` creates a new cache and measures
 the first run. ``warm`` reuses an existing cache root supplied with
 ``--cache-root``; this lets a previous cold run populate it without hiding the
 population run inside the measured observation. ``bypass`` sets CCACHE_DISABLE.
@@ -28,16 +30,26 @@ import sys
 import tempfile
 import time
 from typing import Any, Iterable
+from urllib.parse import quote
+from urllib.request import urlopen
 
 
 EXPERIMENT_ROOT = Path(__file__).resolve().parents[1]
 CLAVA_ROOT = EXPERIMENT_ROOT.parents[1]
 CLAVA_JS_ROOT = CLAVA_ROOT / "Clava-JS"
 RESULTS_ROOT = EXPERIMENT_ROOT / "suite" / "results"
-DEFAULT_DUMPER = Path(
-    "/home/lmsousa/Documents/Projects/SPeCS/clang-dumper-ast-flatbuffers/build/tool"
+DEFAULT_RUNTIME = CLAVA_ROOT / "ClavaWeaver" / "build" / "install" / "ClavaWeaver"
+JS_TEST_FILTER = (
+    r"^(?!(?:CxxTest OmpThreadsExplore|CudaTest Cuda|CudaTest CudaMatrixMul|"
+    r"CudaTest CudaQuery)$).*$"
 )
-DEFAULT_DUMPER_REPO = DEFAULT_DUMPER.parents[1]
+EXPECTED_TEST_COUNTS = {
+    "total_tests": 164,
+    "passed_tests": 158,
+    "failed_tests": 0,
+    "pending_tests": 6,
+}
+PINNED_FLATBUFFERS_VERSION = "25.12.19"
 
 
 def parse_args() -> argparse.Namespace:
@@ -48,25 +60,20 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="XDG cache root. Cold creates it; warm must point at a populated root.",
     )
-    parser.add_argument("--format", choices=("text", "flat-eager", "flat-lazy"), default="text")
-    parser.add_argument("--dumper", type=Path, default=DEFAULT_DUMPER)
-    parser.add_argument("--dumper-repo", type=Path, default=DEFAULT_DUMPER_REPO)
-    parser.add_argument("--output-root", type=Path, default=RESULTS_ROOT)
     parser.add_argument(
-        "--runtime-root",
-        type=Path,
-        help="Optional staged Java runtime directory. Defaults to a new ignored directory.",
+        "--runtime-root", type=Path, default=DEFAULT_RUNTIME,
+        help="Prebuilt ClavaWeaver lib directory; its parser JAR carries the selected release tag.",
     )
+    parser.add_argument(
+        "--local-release-dir", type=Path,
+        help="Explicit local release directory. The staged parser JAR tag is set to this path.",
+    )
+    parser.add_argument("--output-root", type=Path, default=RESULTS_ROOT)
     parser.add_argument(
         "--vitest-arg",
         action="append",
         default=[],
-        help="Additional argument passed to `vitest run`; repeat for multiple arguments.",
-    )
-    parser.add_argument(
-        "--no-stage-runtime",
-        action="store_true",
-        help="Use the packaged runtime as-is. This is only useful after its release tag is updated.",
+        help="Additional scheduling/output argument for `vitest run`; test selection stays fixed.",
     )
     return parser.parse_args()
 
@@ -80,8 +87,8 @@ def run_checked(command: list[str], *, cwd: Path) -> subprocess.CompletedProcess
     return subprocess.run(command, cwd=cwd, check=True, text=True, capture_output=True)
 
 
-def stage_java_runtime(source: Path, destination: Path, dumper: Path) -> Path:
-    """Copy the existing distribution and patch only the staged tag resource."""
+def stage_java_runtime(source: Path, destination: Path, release_dir: Path | None) -> Path:
+    """Copy the built distribution, with an optional audited local release override."""
 
     if destination.exists():
         raise SystemExit(f"Refusing to overwrite runtime staging directory: {destination}")
@@ -92,9 +99,12 @@ def stage_java_runtime(source: Path, destination: Path, dumper: Path) -> Path:
     import zipfile
 
     temporary_jar = parser_jar.with_suffix(".patched.jar")
-    # ClangAstWebResource's LocalBuild tag names the build directory; Java
-    # appends the platform executable name (``tool`` on this host).
-    tag = (str(dumper.resolve().parent) + "\n").encode()
+    if release_dir is None:
+        return destination
+
+    # LocalBuild points at a published-contract release directory containing
+    # the manifest, schema bundle, and native executable.
+    tag = (str(release_dir.resolve()) + "\n").encode()
     with zipfile.ZipFile(parser_jar) as original, zipfile.ZipFile(
         temporary_jar, "w", compression=zipfile.ZIP_DEFLATED
     ) as patched:
@@ -103,6 +113,140 @@ def stage_java_runtime(source: Path, destination: Path, dumper: Path) -> Path:
             patched.writestr(entry, data)
     temporary_jar.replace(parser_jar)
     return destination
+
+
+def release_metadata(runtime: Path, local_release_dir: Path | None) -> dict[str, Any]:
+    """Record the tag and the selected local manifest when one is available."""
+
+    import zipfile
+
+    parser_jar = runtime / "lib" / "ClangAstParser.jar"
+    require_file(parser_jar, "runtime ClangAstParser.jar")
+    with zipfile.ZipFile(parser_jar) as archive:
+        try:
+            tag = archive.read("clang-dumper-release.tag").decode().strip()
+        except KeyError as error:
+            raise SystemExit("ClangAstParser.jar has no clang-dumper-release.tag") from error
+    release_root = local_release_dir.resolve() if local_release_dir else None
+    if release_root is None:
+        candidate = Path(tag)
+        if candidate.is_absolute():
+            release_root = candidate
+    result: dict[str, Any] = {"release_tag": tag, "local_release_dir": str(release_root) if release_root else None}
+    if release_root is None:
+        result["manifest"] = None
+        result["schema_sha256"] = None
+        result["tool_sha256"] = None
+        return result
+
+    if release_root is not None:
+        manifest_path = release_root / "clang-dumper-release-manifest.json"
+        require_file(manifest_path, "selected local clang-dumper release manifest")
+        manifest_bytes = manifest_path.read_bytes()
+        manifest_source = str(manifest_path)
+    else:
+        manifest_url = (
+            "https://github.com/specs-feup/clang-dumper/releases/download/"
+            f"{quote(tag, safe='')}/clang-dumper-release-manifest.json"
+        )
+        try:
+            with urlopen(manifest_url, timeout=30) as response:
+                manifest_bytes = response.read()
+        except OSError as error:
+            raise SystemExit(f"could not obtain the manifest for selected release {tag}: {error}") from error
+        manifest_path = None
+        manifest_source = manifest_url
+    manifest = json.loads(manifest_bytes)
+    wire_schema = manifest.get("wire_schema", {})
+    flatbuffers = manifest.get("flatbuffers", {})
+    schema_asset = str(wire_schema.get("asset", ""))
+    schema_asset_path = release_root / schema_asset if release_root and schema_asset else None
+    schema_asset_hash = wire_schema.get("asset_sha256")
+    schema_hash = wire_schema.get("sha256")
+    entrypoint = str(wire_schema.get("entrypoint", ""))
+    if not entrypoint:
+        raise SystemExit("selected release manifest has no wire_schema.entrypoint")
+    if manifest.get("schema_version") != 2 or wire_schema.get("version") != 2:
+        raise SystemExit("selected release is not schema v2")
+    if flatbuffers.get("version") != wire_schema.get("flatbuffers_version"):
+        raise SystemExit("release manifest FlatBuffers compiler/runtime versions disagree")
+    if flatbuffers.get("version") != PINNED_FLATBUFFERS_VERSION:
+        raise SystemExit(
+            f"release FlatBuffers version {flatbuffers.get('version')!r} does not match pin "
+            f"{PINNED_FLATBUFFERS_VERSION}"
+        )
+    actual_schema_asset_hash = None
+    actual_schema_hash = schema_hash
+    if schema_asset_path is not None:
+        require_file(schema_asset_path, "selected release schema bundle")
+        actual_schema_asset_hash = sha256_file(schema_asset_path)
+        if schema_asset_hash != actual_schema_asset_hash:
+            raise SystemExit(
+                f"schema asset SHA-256 {actual_schema_asset_hash} does not match manifest {schema_asset_hash}"
+            )
+        import zipfile
+        try:
+            with zipfile.ZipFile(schema_asset_path) as schema_bundle:
+                schema_bytes = schema_bundle.read(entrypoint)
+        except (KeyError, zipfile.BadZipFile) as error:
+            raise SystemExit(f"schema bundle is missing {entrypoint}: {error}") from error
+        actual_schema_hash = hashlib.sha256(schema_bytes).hexdigest()
+        if schema_hash != actual_schema_hash:
+            raise SystemExit(
+                f"schema entrypoint SHA-256 {actual_schema_hash} does not match manifest {schema_hash}"
+            )
+    tool_record = manifest.get("tool", {})
+    if not tool_record:
+        assets = manifest.get("assets", [])
+        tool_record = next((asset for asset in assets
+                            if str(asset.get("filename", asset.get("asset", ""))) != schema_asset), {})
+    tool: Path | None = None
+    tool_hash = None
+    if release_root is not None:
+        tool = release_root / "tool"
+        if not tool.is_file():
+            tool = release_root / "tool.exe"
+        require_file(tool, "selected local clang-dumper executable")
+        tool_hash = sha256_file(tool)
+    manifest_tool_hash = tool_record.get("sha256") or manifest.get("tool_sha256")
+    if manifest_tool_hash and tool_hash and manifest_tool_hash != tool_hash:
+        raise SystemExit(f"local release tool SHA-256 {tool_hash} does not match manifest {manifest_tool_hash}")
+    result.update({
+        "manifest": manifest_source,
+        "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
+        "manifest_schema_version": manifest.get("schema_version"),
+        "wire_schema_version": wire_schema.get("version"),
+        "schema_entrypoint": entrypoint,
+        "schema_asset": schema_asset,
+        "schema_asset_sha256": actual_schema_asset_hash or schema_asset_hash,
+        "schema_sha256": actual_schema_hash,
+        "flatbuffers_version": flatbuffers.get("version") or wire_schema.get("flatbuffers_version"),
+        "flatbuffers_commit": flatbuffers.get("commit"),
+        "tool": str(tool) if tool else None,
+        "tool_sha256": tool_hash,
+        "manifest_tool_sha256": manifest_tool_hash,
+    })
+    return result
+
+
+def host_state() -> dict[str, Any]:
+    """Capture host pressure beside each observation, without changing it."""
+
+    state: dict[str, Any] = {}
+    try:
+        state["loadavg"] = Path("/proc/loadavg").read_text().strip()
+    except OSError:
+        pass
+    try:
+        memory: dict[str, int] = {}
+        for line in Path("/proc/meminfo").read_text().splitlines():
+            key, _, value = line.partition(":")
+            if key in {"MemTotal", "MemAvailable", "SwapTotal", "SwapFree"}:
+                memory[key] = int(value.strip().split()[0])
+        state["meminfo_kib"] = memory
+    except OSError:
+        pass
+    return state
 
 
 def cache_dir(xdg_root: Path) -> Path:
@@ -324,9 +468,10 @@ def write_svg(summary_root: Path, svg_path: Path) -> None:
 
 def main() -> int:
     args = parse_args()
-    require_file(args.dumper, "clang-dumper executable")
-    if not os.access(args.dumper, os.X_OK):
-        raise SystemExit(f"clang-dumper is not executable: {args.dumper}")
+    if not args.runtime_root.is_dir():
+        raise SystemExit(f"runtime distribution does not exist: {args.runtime_root}")
+    if args.local_release_dir is not None and not args.local_release_dir.is_dir():
+        raise SystemExit(f"local release directory does not exist: {args.local_release_dir}")
     if args.mode == "warm" and args.cache_root is None:
         raise SystemExit("--mode warm requires --cache-root from a previous cold run")
 
@@ -355,14 +500,11 @@ def main() -> int:
     elif args.mode == "warm" and not cache.is_dir():
         raise SystemExit(f"Warm cache directory does not exist: {cache}")
 
-    runtime_root = args.runtime_root.resolve() if args.runtime_root else run_dir / "java-binaries"
-    if args.no_stage_runtime:
-        runtime_root = CLAVA_JS_ROOT / "java-binaries"
-    else:
-        stage_java_runtime(CLAVA_JS_ROOT / "java-binaries", runtime_root, args.dumper)
-    runtime_manifest = runtime_jar_manifest(CLAVA_JS_ROOT / "java-binaries")
+    runtime_root = run_dir / "runtime"
+    stage_java_runtime(args.runtime_root.resolve(), runtime_root, args.local_release_dir)
+    runtime_manifest = runtime_jar_manifest(runtime_root)
+    release = release_metadata(runtime_root, args.local_release_dir)
     clava_git = git_status(CLAVA_ROOT)
-    dumper_git = git_status(args.dumper_repo)
 
     stats_before = ccache("--show-stats", cache) if cache.is_dir() else ""
     ccache("--zero-stats", cache)
@@ -373,14 +515,21 @@ def main() -> int:
         "/usr/bin/time", "-f", "elapsed_s=%e\\nuser_s=%U\\nsys_s=%S\\nmax_rss_kb=%M\\nexit_status=%x",
         "-o", str(time_path), "--", "npm", "exec", "--workspace", "@specs-feup/clava", "--",
         "vitest", "run", "--config", str(EXPERIMENT_ROOT / "suite" / "vitest.suite.config.ts"),
-        "--reporter=json", "--outputFile", str(report_path), *args.vitest_arg,
+        "--reporter=json", "--outputFile", str(report_path),
+        "--testNamePattern", JS_TEST_FILTER, *args.vitest_arg,
     ]
+    forbidden_filters = {"-t", "--testNamePattern", "--testNamePattern=", "--exclude", "--include"}
+    if any(argument in forbidden_filters or argument.startswith("--testNamePattern=") for argument in args.vitest_arg):
+        raise SystemExit("--vitest-arg cannot change the fixed Clava-JS test selection")
     environment = os.environ.copy()
-    environment["JAVA_TOOL_OPTIONS"] = environment.get("JAVA_TOOL_OPTIONS", "") + " -Djava.io.tmpdir=" + str(temp_root) + " -Dclava.astWire=" + args.format + " -Dclava.astWireMetrics=true"
+    java_options = environment.get("JAVA_TOOL_OPTIONS", "")
+    if re.search(r"(?<!\S)-Dclava\.astWire=\S+", java_options) or any(
+        key in environment for key in ("AST_WIRE_FLAT", "AST_WIRE_DENSE_TEXT")
+    ):
+        raise SystemExit("remove obsolete AST wire-selection overrides before running the eager suite")
+    environment["JAVA_TOOL_OPTIONS"] = java_options + " -Djava.io.tmpdir=" + str(temp_root) + " -Dclava.astWireMetrics=true"
     environment["XDG_CACHE_HOME"] = str(xdg_root)
     environment["CLAVA_SUITE_JAR_PATH"] = str(runtime_root)
-    environment.pop("AST_WIRE_FLAT", None)
-    environment.pop("AST_WIRE_DENSE_TEXT", None)
     if args.mode == "bypass":
         environment["CCACHE_DISABLE"] = "true"
     else:
@@ -394,6 +543,7 @@ def main() -> int:
     stats = parse_ccache_stats(stats_after)
     report = json.loads(report_path.read_text()) if report_path.is_file() else {}
     test_counts = flatten_tests(report, run_dir / "per_test_timings.csv", report_path, log_path)
+    test_counts_valid = all(test_counts.get(key) == value for key, value in EXPECTED_TEST_COUNTS.items())
     time_metrics = parse_time_metrics(time_path) if time_path.is_file() else {}
     parse_metrics = []
     for match in re.finditer(r'CLAVA_AST_METRIC (\{[^\n]+\})', log_path.read_text(errors="replace")):
@@ -402,9 +552,42 @@ def main() -> int:
         except json.JSONDecodeError:
             pass
     (run_dir / "parse-metrics.json").write_text(json.dumps(parse_metrics, indent=2) + "\n")
+    identity_fields = ("format", "wire_schema_version", "wire_schema_hash", "dumper_sha256",
+                       "flatbuffers_version", "flatbuffers_commit")
+    runtime_identities = [
+        {key: metric[key] for key in identity_fields if key in metric}
+        for metric in parse_metrics
+        if any(key in metric for key in identity_fields)
+    ]
+    if runtime_identities:
+        identities = {json.dumps(identity, sort_keys=True) for identity in runtime_identities}
+        if len(identities) != 1:
+            raise SystemExit("parser runs used inconsistent selected release identities")
+        runtime_identity = runtime_identities[0]
+        if runtime_identity.get("format", "flatbuffers-v2") != "flatbuffers-v2":
+            raise SystemExit(f"production parser reported non-eager protocol: {runtime_identity}")
+        runtime_schema_hash = runtime_identity.get("wire_schema_hash")
+        runtime_tool_hash = runtime_identity.get("dumper_sha256")
+        if release.get("schema_sha256") and runtime_schema_hash \
+                and release["schema_sha256"] != runtime_schema_hash:
+            raise SystemExit("runtime schema hash differs from the selected release manifest")
+        if release.get("tool_sha256") and runtime_tool_hash \
+                and release["tool_sha256"] != runtime_tool_hash:
+            raise SystemExit("runtime native tool hash differs from the selected local release")
+        release["wire_protocol"] = "flatbuffers-eager"
+        release["schema_sha256"] = runtime_schema_hash or release.get("schema_sha256")
+        release["tool_sha256"] = runtime_tool_hash or release.get("tool_sha256")
+        release.update(runtime_identity)
+    if not release.get("tool_sha256"):
+        raise SystemExit("parser metrics did not identify the native dumper executable used")
+    if not release.get("schema_sha256"):
+        raise SystemExit("parser metrics did not identify the wire schema used")
     summary = {
         "mode": args.mode,
-        "format": args.format,
+        "wire_protocol": "flatbuffers-eager",
+        "js_test_filter": JS_TEST_FILTER,
+        "expected_test_counts": EXPECTED_TEST_COUNTS,
+        "test_counts_valid": test_counts_valid,
         "parse_count": len(parse_metrics),
         "parse_aggregate": {key: sum(m.get(key,0) for m in parse_metrics) for key in
             ["native_ms","read_ms","tu_ms","dump_bytes","nodes","deferred","materialized_at_tu"]},
@@ -416,15 +599,14 @@ def main() -> int:
         "ccache_dir": str(cache),
         "ccache_stats": stats,
         "ccache_stats_before": parse_ccache_stats(stats_before),
-        "dumper": str(args.dumper.resolve()),
-        "dumper_sha256": hashlib.sha256(args.dumper.read_bytes()).hexdigest(),
         "clava_revision": git_revision(CLAVA_ROOT),
-        "clang_dumper_revision": git_revision(args.dumper_repo),
-        "dumper_repo": str(args.dumper_repo.resolve()),
+        "runtime_source": str(args.runtime_root.resolve()),
+        "release": release,
         "runtime_jar_manifest": runtime_manifest,
+        "host_state": host_state(),
         "temp_root": str(temp_root),
         "temp_filesystem": temp_metadata,
-        "git": {"clava": clava_git, "clang_dumper": dumper_git},
+        "git": {"clava": clava_git},
         "vitest_success": report.get("success"),
         "vitest_total_test_suites": report.get("numTotalTestSuites"),
         "vitest_passed_test_suites": report.get("numPassedTestSuites"),
@@ -445,7 +627,7 @@ def main() -> int:
     (run_dir / "ccache.stats.before").write_text(stats_before)
     write_svg(output_root, output_root / "suite-observations.svg")
     print(json.dumps({"run_dir": str(run_dir), **summary}, indent=2))
-    return process.returncode
+    return 0 if process.returncode == 0 and summary["test_counts_valid"] else 1
 
 
 if __name__ == "__main__":

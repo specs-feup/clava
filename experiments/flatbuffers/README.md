@@ -1,96 +1,91 @@
-# Complete FlatBuffers and lazy Clava properties
+# FlatBuffers release validation
 
-This experiment integrates the full v2 protocol into Clava's normal parsing pipeline.
-The companion native branch is `ast-flatbuffers` in `clang-dumper-ast-flatbuffers`.
-The [report](https://draftlink.lmsousa.workers.dev/d/dnyeY92urT89) contains the measured
-comparison. The earlier ten-payload hybrid experiment is documented in [PILOT.md](PILOT.md).
-Do not mix its timings with the complete-schema measurements.
+Clava's production parser consumes the release-selected eager FlatBuffers
+stream. The checked-in scripts here exercise that ordinary parser path; they do
+not select a wire format or substitute a text parser. Text and Protobuf runs are
+historical comparison controls and must use isolated, source-identified builds.
 
-## Architecture
+## Validation commands
 
-The native schema declares 112 node payload alternatives. Dispatch also includes aliases
-and generic binary family defaults. This describes current dumper support, not every Clang AST class. Its 173 tables describe both node fields and compound values. Both
-sides use generated FlatBuffers accessors; official schema reflection also generates
-Clava DataKey bindings and presence checks. Native Clang getters and compound-value
-adapters remain handwritten. Complete mode has no raw-text serialization fallback.
-
-The native writer emits size-prefixed blocks at a 64 KiB target. Java maps windows,
-builds the graph and resolves every node reference eagerly. This includes references
-inside template arguments, constructor targets and exception specifications. Construction
-maps are released after multi-TU normalization and structural postprocessing. The wire
-IDs are dense integers; the current importer converts them to scoped strings for the
-existing Java queues. It does not yet use an array-indexed construction map.
-
-The lazy mode places unloaded markers in existing DataStore slots. One decoder per node
-retains its mapped record and file table. Reading a field memoizes the value; writing
-replaces it. Copies preserve Clava's normal copy policies. This avoids a Lazy object and
-supplier per field. New nodes use ordinary in-memory storage. Detached nodes can be
-collected if no other AST or context references retain them.
-
-Immutable mapped files remain available through execution. Normal cleanup schedules
-their deletion at JVM exit. Binary files are uncompressed locally;
-ccache compresses their persistent entries. Text keeps its native zstd compression.
-The file/cache path waits for the native process before import, so incremental mapping
-does not restore native/Java overlap.
-
-## Build and select
-
-Use the pinned SDK and build the native companion as described in its `wire/README.md`.
-From this Clava repository:
+Build Clava from its normal Gradle project, then run the production JavaScript
+suite and the parser integration probes:
 
 ```sh
-python3 experiments/flatbuffers/bootstrap.py
+cd /home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava
 gradle -p ClavaWeaver --no-daemon installDist
+python3 experiments/flatbuffers/suite/run_matrix.py \
+  --runtime-root ClavaWeaver/build/install/ClavaWeaver --repeat-count 3
+python3 experiments/flatbuffers/validation/run_java_suite.py --offline
+python3 experiments/flatbuffers/validation/run_correctness.py
 ```
 
-Set `FLAT_NATIVE` and `FLATBUFFERS_ROOT` to override the sibling native worktree and SDK
-paths. Gradle generates Java bindings from the companion schema during the build and
-compiles the Java FlatBuffers runtime from the same pinned SDK.
+The Vitest workload contains 164 tests: 158 expected passes and six pending.
+Four host-dependent OpenMP/CUDA failures are excluded by the same fixed test
+filter in every cache state. The Java comparison workload is the established
+116 parser tests; new wire, resource, dumper, and harness tests are excluded
+from that matched workload and should also run in the ordinary full Gradle
+test task.
 
-Normal Clava defaults to text. Select the integrated experiment with a JVM property:
-
-```text
--Dclava.astWire=text
--Dclava.astWire=flat-eager
--Dclava.astWire=flat-lazy
-```
-
-`-Dclava.astWireMetrics=true` emits per-TU native/read/construction timings and sizes.
-The dumper format argument is part of ccache invocation identity. The native executable
-must be the matching experimental build; the suite runner patches its isolated Java distribution to select that local build. For normal Clava runs outside that runner, the existing local-build
-override is an absolute directory path in `ClangAstParser/clang-dumper-release.tag`.
-Point it at the native `build` directory containing `tool`, then run `installDist`
-again. That local override uses system C/C++ headers rather than release-bundled ones. Schema hash mismatch fails explicitly. Downloading the schema through a
-release manifest remains release engineering work, not part of this prototype.
-
-## Validate and measure
+The C/C++ corpus check reuses the fixed 5,000-file LLVM 18.1.8 candidate list
+and its independently recorded clean-text classifications. It reruns the
+1,062 clean cases through the selected native release, requires the matching
+`verify_flatbuffers` executable to accept every stream, and emits a consumer
+input manifest. The consumer comparison processes that manifest in one JVM
+per runtime and compares generated-code hashes between eager and fresh Text
+controls:
 
 ```sh
-python3 experiments/flatbuffers/complete-check/run.py
-java -Xmx512m -cp 'experiments/flatbuffers/complete-check/build:Clava-JS/java-binaries/lib/*' \
-  pt.up.fe.specs.clang.wire.MappingChecks
-python3 experiments/flatbuffers/complete-check/memory.py --repeats 3
-python3 experiments/flatbuffers/suite/run_matrix.py \
-  --dumper ../../clang-dumper-ast-flatbuffers/build/tool --repeat-count 3
+CORPUS=/home/lmsousa/.cache/ast-flatbuffers-release-validation/llvm-project/clang/test
+BASELINE=/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-corpus-5000/results.json
+EAGER="$PWD/ClavaWeaver/build/install/ClavaWeaver"
+TEXT=/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-build/clava/ClavaWeaver/build/install/ClavaWeaver
+PROTOBUF=/home/lmsousa/.cache/ast-flatbuffers-release-validation/protobuf-build/clava/ClavaWeaver/build/install/ClavaWeaver
+python3 experiments/flatbuffers/validation/run_binary_corpus.py \
+  --tool ../clang-dumper/build/tool --verifier ../clang-dumper/build/verify_flatbuffers \
+  --baseline-results "$BASELINE" --corpus "$CORPUS" \
+  --output-root experiments/flatbuffers/results/validation/eager-corpus
+python3 experiments/flatbuffers/validation/run_corpus_consumer.py \
+  --runtime "eager=$EAGER" --runtime "text=$TEXT" --runtime "protobuf=$PROTOBUF" \
+  --manifest experiments/flatbuffers/results/validation/eager-corpus/consumer-inputs.json \
+  --output-root experiments/flatbuffers/results/validation/consumer-corpus
 ```
 
-The eleven fixtures compare normalized graph references, all reachable field values,
-generated code and mutation/copy behavior across text, eager and lazy readers. Mapping
-checks include a sparse file above 2 GiB, a record above 64 MiB, malformed framing and
-required scalar/reference presence and optional scalar absence. Memory probes run in separate JVMs with explicit
-GC, outside timing trials. These probes are single-TU tests and are not a GCC-scale
-memory guarantee or an original/weave/reparse dump-identity proof.
+`run_correctness.py` separately checks C and C++ parse-generate-reparse byte
+stability and a two-translation-unit call linked to its provider definition.
 
-The matrix runs all Clava-JS tests, with three repeats of each format and cache state.
-Cold/warm pairs share a fresh isolated ccache. Cold means an empty AST cache, not dropped
-OS pages; repeated inputs within that cold suite can already hit. Bypass disables ccache
-but still uses the file path. The Java distribution is staged before timing; the local native build uses system headers. Do not run
-builds or other experiments concurrently with the matrix.
+Every run records its repository revisions and dirty state, runtime JAR hashes,
+release tag, schema bundle and entrypoint hashes, native tool hash, host load
+and memory, cache state, test counts, and timing boundary. Generated run data
+stays under the ignored `results/` directories. Commit durable summaries only
+when they are needed as release evidence.
 
-Per-TU timers sum to aggregate occupancy across potentially parallel work. They cannot
-be stacked into suite wall time. GNU time peak RSS is a process high-water mark, not the
-sum of simultaneous processes. Three repetitions show median and range, not statistical
-confidence. The four known baseline suite failures remain included and visible.
+## Memory gate
 
-Raw generated files and local caches are ignored under `results/`. Durable summaries,
-field-check logs and environment manifests belong under `measurements/complete/`.
+`validation/run_memory_matrix.py` launches one isolated JVM per observation,
+uses 20 repeated parse/collect cycles by default, and records kernel peak JVM
+RSS (Linux VmHWM) and post-GC retained heap. GNU time also records the
+process-tree maximum single-process RSS; that secondary number may include a native child. It records mapped files and temporary folders
+for all controls; the eager run must collect every AST and leave no mappings or
+temporary Clang directories. It accepts prebuilt runtime directories, so eager,
+Text, and Protobuf observations run through the same probe without a wire-format
+switch. Run it once for each of the NAS and templates workloads:
+
+```sh
+python3 experiments/flatbuffers/validation/run_memory_matrix.py \
+  --runtime "eager=$EAGER" --runtime "text=$TEXT" --runtime "protobuf=$PROTOBUF" \
+  --source /path/to/nas.c --repeat-count 3 --parse-repeats 20
+python3 experiments/flatbuffers/validation/run_memory_matrix.py \
+  --runtime "eager=$EAGER" --runtime "text=$TEXT" --runtime "protobuf=$PROTOBUF" \
+  --source /path/to/templates.cpp --repeat-count 3 --parse-repeats 20
+```
+
+Build Text and Protobuf controls in isolated worktrees and record their source
+revisions before including them. Each run captures host load, available memory,
+and top CPU processes before and after the JVM. Keep the observations sequential
+and do not overlap them with builds or benchmarks.
+
+Historical prototype sources and their reports were kept on the
+`lazy-flatbuffers-experiment` branch. Snapshots under `measurements/` are
+historical results and are not current-build performance evidence. Current
+release claims must cite runs made from the selected release and its exact
+consumer build.
