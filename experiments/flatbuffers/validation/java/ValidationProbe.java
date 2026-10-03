@@ -203,6 +203,8 @@ public final class ValidationProbe {
                 row.put("relative", relative);
                 row.put("source", source.toString());
                 row.put("source_sha256", sha256(Files.readAllBytes(source)));
+                row.put("standard", standard);
+                row.put("options", List.copyOf(options));
                 row.put("bucket", "CLEAN");
                 row.put("nodes", nodes);
                 row.put("generated_code_sha256", codeHash);
@@ -211,7 +213,7 @@ public final class ValidationProbe {
                     // Keep the original flags and header search path while parsing
                     // the emitted translation unit from its new directory.
                     List<String> reparseOptions = new ArrayList<>(options);
-                    reparseOptions.add("-I" + source.getParent());
+                    reparseOptions.add(0, "-iquote" + source.getParent());
                     Path generatedSource = matchingSource(written, source.getFileName().toString());
                     App second = parse(List.of(generatedSource), caseRoot.resolve("reparse"),
                             standard, reparseOptions, resources);

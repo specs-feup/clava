@@ -17,7 +17,8 @@ class ReviewedDifferenceTest(unittest.TestCase):
         source = self.root / "case.c"
         source.write_text('void f(void) { asm("%0"); }\n')
         self.source_hash = sha256_file(source)
-        self.manifest = {"files": [{"relative": "case.c", "source": str(source)}]}
+        self.manifest = {"files": [{"relative": "case.c", "source": str(source),
+                                     "standard": "c11", "options": ["-DVALUE=1"]}]}
         self.runtime = {"jar_manifest_sha256": "jars", "native_tool_sha256": "tool"}
         self.results = [{"label": "eager", "runtime": self.runtime}]
         self.comparisons = [{"control": "text", "relative": "case.c",
@@ -28,6 +29,7 @@ class ReviewedDifferenceTest(unittest.TestCase):
             "label": "eager", "runtime": copy.deepcopy(self.runtime), "rows": [{
                 "relative": "case.c", "bucket": "CLEAN",
                 "source_sha256": self.source_hash,
+                "standard": "c11", "options": ["-DVALUE=1"],
                 "generated_code_sha256": "source-spelling",
                 "regenerated_code_sha256": "source-spelling",
                 "source_equal_after_reparse": True}]}]}
@@ -77,6 +79,16 @@ class ReviewedDifferenceTest(unittest.TestCase):
 
     def test_rejects_unstable_regeneration(self):
         self.proof["results"][0]["rows"][0]["regenerated_code_sha256"] = "changed"
+        with self.assertRaisesRegex(ValueError, "no matching stable round-trip"):
+            self.apply()
+
+    def test_rejects_different_compiler_options(self):
+        self.proof["results"][0]["rows"][0]["options"] = ["-DVALUE=2"]
+        with self.assertRaisesRegex(ValueError, "no matching stable round-trip"):
+            self.apply()
+
+    def test_rejects_different_language_standard(self):
+        self.proof["results"][0]["rows"][0]["standard"] = "c17"
         with self.assertRaisesRegex(ValueError, "no matching stable round-trip"):
             self.apply()
 

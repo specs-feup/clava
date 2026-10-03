@@ -184,7 +184,8 @@ def apply_reviewed_differences(comparisons: list[dict[str, Any]],
     inventory = json.loads(inventory_path.read_text())
     if inventory.get("version") != 1 or not isinstance(inventory.get("differences"), list):
         raise ValueError("reviewed difference inventory requires version 1 and a differences list")
-    sources = {item["relative"]: Path(item["source"]) for item in manifest["files"]}
+    inputs = {item["relative"]: item for item in manifest["files"]}
+    sources = {relative: Path(item["source"]) for relative, item in inputs.items()}
     by_case = {(row["control"], row["relative"]): row for row in comparisons}
     eager_result = next(item for item in results if item["label"] == "eager")
     eager_runtime = eager_result["runtime"]
@@ -223,7 +224,12 @@ def apply_reviewed_differences(comparisons: list[dict[str, Any]],
             raise ValueError(f"reviewed difference proof used different runtime jars or native tool: {key}")
         proof_row = next((item for item in proof_result["rows"]
                           if item["relative"] == entry["relative"]), None)
+        case = inputs[entry["relative"]]
+        expected_standard = case.get("standard") or (
+            "c11" if sources[entry["relative"]].name.lower().endswith(".c") else "c++17")
         if (proof_row is None or proof_row.get("bucket") != "CLEAN"
+                or proof_row.get("standard") != expected_standard
+                or proof_row.get("options") != (case.get("options") or [])
                 or proof_row.get("source_sha256") != source_hash
                 or proof_row.get("generated_code_sha256") != row["eager_code_sha256"]
                 or proof_row.get("regenerated_code_sha256") != row["eager_code_sha256"]

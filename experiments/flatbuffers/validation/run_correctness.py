@@ -115,7 +115,7 @@ def run_case(
     log.write_text(output)
     rows = []
     for line in output.splitlines():
-        match = re.match(r"(?:CLAVA_VALIDATION) (\{.*\})$", line)
+        match = re.match(r"(?:CLAVA_VALIDATION|CLAVA_CORPUS) (\{.*\})$", line)
         if match:
             try:
                 rows.append(json.loads(match.group(1)))
@@ -127,7 +127,9 @@ def run_case(
         "command": command,
         "log": str(log),
         "results": rows,
-        "passed": started.returncode == 0 and len(rows) == 1,
+        "passed": started.returncode == 0 and len(rows) == 1
+                  and rows[0].get("bucket", "CLEAN") == "CLEAN"
+                  and rows[0].get("source_equal_after_reparse", True),
     }
 
 
@@ -162,6 +164,7 @@ def main() -> int:
         cases.extend([
             ("roundtrip-c", FIXTURES / "fidelity.c", "c11"),
             ("roundtrip-cpp", FIXTURES / "fidelity.cpp", "c++17"),
+            ("roundtrip-shadowed-header", VALIDATION_FIXTURES / "include-shadow", "c++17"),
         ])
     if args.case in {"all", "cross-tu"}:
         cases.append(("cross-tu", VALIDATION_FIXTURES / "cross-tu", "c++17"))
@@ -174,6 +177,14 @@ def main() -> int:
             mode = "cross-tu"
             source = fixture
             arguments = [mode, str(source), str(work)]
+        elif name == "roundtrip-shadowed-header":
+            manifest = work / "inputs.json"
+            source = fixture / "source/main.cpp"
+            manifest.write_text(json.dumps({"files": [{
+                "source": str(source), "relative": "include-shadow/main.cpp",
+                "standard": standard, "options": ["-I" + str(fixture / "shadow")]
+            }]}))
+            arguments = ["corpus-roundtrip", str(manifest), str(work)]
         else:
             mode = "roundtrip"
             arguments = [mode, str(fixture), str(work), standard]

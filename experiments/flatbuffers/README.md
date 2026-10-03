@@ -62,11 +62,13 @@ list. Each entry pins `control`, `relative`, `source_sha256`,
 `eager_code_sha256`, `control_code_sha256`, a source-fidelity `reason`, and
 `roundtrip_summary` plus `roundtrip_summary_sha256`. The proof must contain a
 successful stable round trip for that exact source and generated output using
-the same complete runtime JAR manifest and native binary. Missing, changed or
+the same language standard, ordered compiler options, complete runtime JAR
+manifest and native binary. Missing, changed or
 unused entries fail the comparison; consumer regressions cannot be waived.
 
 `run_correctness.py` separately checks C and C++ parse-generate-reparse byte
-stability and a two-translation-unit call linked to its provider definition.
+stability, quoted-header precedence with a competing include directory, and a
+two-translation-unit call linked to its provider definition.
 
 Every run records its repository revisions and dirty state, runtime JAR hashes,
 release tag, schema bundle and entrypoint hashes, native tool hash, host load
