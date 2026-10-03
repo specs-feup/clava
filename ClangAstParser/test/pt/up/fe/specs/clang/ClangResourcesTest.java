@@ -662,7 +662,7 @@ public class ClangResourcesTest {
                         + "  previous=\"$argument\"\n"
                         + "done\n"
                         + "printf '%s\\n' \"$resource\" >> '" + resourceLog + "'\n"
-                        + "if [ -z \"$output\" ] || [ \"$previous\" != \"--\" ]; then exit 2; fi\n"
+                        + "if [ -z \"$output\" ] || ! printf '%s\\n' \"$@\" | grep -qx -- '--'; then exit 2; fi\n"
                         + "printf '%s\\n' '<Top Level Nodes>' > \"$output\"\n"
                         + "printf '%s\\n' '<Top Level Nodes>'\n");
         assertTrue(systemLibcDumper.toFile().setExecutable(true));
@@ -676,11 +676,12 @@ public class ClangResourcesTest {
         assertEquals(LibcMode.BUILTIN_AND_LIBC,
                 ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.AUTO, false, resourceDirOne));
         var actualArguments = Files.readAllLines(argumentLog);
-        assertTrue(actualArguments.contains("-resource-dir=" + resourceDirOne.getAbsolutePath()));
         var outputArgument = actualArguments.indexOf("-o");
         assertTrue(outputArgument >= 0);
         assertTrue(actualArguments.get(outputArgument + 1).endsWith(".clv2"));
-        assertEquals("--", actualArguments.get(actualArguments.size() - 1));
+        var separatorArgument = actualArguments.indexOf("--");
+        assertTrue(separatorArgument > outputArgument + 1);
+        assertEquals("-resource-dir=" + resourceDirOne.getAbsolutePath(), actualArguments.get(separatorArgument + 1));
         assertEquals(LibcMode.BUILTIN_AND_LIBC,
                 ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.AUTO, false, resourceDirOne));
         assertEquals(1, Files.readAllLines(invocationLog).size(), "The same resource path should use the cached probe");

@@ -376,12 +376,12 @@ public class ClangResources {
         var arguments = new ArrayList<String>();
         arguments.add(clangExecutable.getAbsolutePath());
         arguments.add(testFile.getAbsolutePath());
-        if (systemResourceDir != null) {
-            arguments.add("-resource-dir=" + systemResourceDir.getAbsolutePath());
-        }
         arguments.add("-o");
         arguments.add(dumpFile.getAbsolutePath());
         arguments.add("--");
+        if (systemResourceDir != null) {
+            arguments.add("-resource-dir=" + systemResourceDir.getAbsolutePath());
+        }
         return SpecsSystem.runProcess(arguments, true, false);
     }
 
