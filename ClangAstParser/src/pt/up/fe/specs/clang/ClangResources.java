@@ -18,7 +18,9 @@ import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
 import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
+import pt.up.fe.specs.clang.wire.CompleteReader;
 import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -26,6 +28,7 @@ import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.system.ProcessOutputAsString;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -40,8 +43,6 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public class ClangResources {
-
-    static final String TOP_LEVEL_NODES_HEADER = "<Top Level Nodes>";
 
     static final int MAX_METADATA_CACHE_ENTRIES = 128;
 
@@ -304,16 +305,17 @@ public class ClangResources {
 
             boolean needsLib = false;
             for (var testFile : testFiles) {
-                var output = runClangAstDumper(clangExecutable, testFile);
+                var dumpFile = new File(clangTest, testFile.getName() + ".clv2");
+                var output = runClangAstDumper(clangExecutable, testFile, dumpFile);
 
-                if (output.getReturnValue() != 0) {
-                    ClavaLog.info("Problems while running dumper to test if libc/libcxx is needed");
+                if (output.getReturnValue() != 0 || !dumpFile.isFile()) {
+                    ClavaLog.debug("Could not produce a FlatBuffers dump while checking system libc/libcxx");
                     needsLib = true;
                     break;
                 }
 
-                if (testFile.getName().endsWith(".cpp")
-                        && !output.getOutput().contains(TOP_LEVEL_NODES_HEADER)) {
+                if (!hasValidFlatBuffersOutput(dumpFile)) {
+                    ClavaLog.debug("Could not validate the FlatBuffers dump while checking system libc/libcxx");
                     needsLib = true;
                     break;
                 }
@@ -331,8 +333,20 @@ public class ClangResources {
         }
     }
 
-    private static ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile) {
-        List<String> arguments = List.of(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
+    private static boolean hasValidFlatBuffersOutput(File dumpFile) {
+        try {
+            var result = CompleteReader.read(dumpFile.toPath(), new ClavaContext(), null,
+                    dumpFile.getAbsolutePath());
+            return result.stats().nodes > 0;
+        } catch (IOException | RuntimeException e) {
+            ClavaLog.debug(() -> "Could not read libc probe dump '" + dumpFile + "': " + e.getMessage());
+            return false;
+        }
+    }
+
+    private static ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile, File dumpFile) {
+        List<String> arguments = List.of(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(),
+                "-o", dumpFile.getAbsolutePath(), "--");
         return SpecsSystem.runProcess(arguments, true, false);
     }
 

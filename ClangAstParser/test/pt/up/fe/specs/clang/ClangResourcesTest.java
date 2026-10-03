@@ -642,20 +642,29 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void libcDetectionIsScopedToTheExecutable() throws IOException {
+    public void libcDetectionRequiresValidFlatbuffersOutput() throws IOException {
         assumeTrue(!SupportedPlatform.getCurrentPlatform().isWindows(), "Shell fixtures require a Unix executable");
 
         var systemLibcDumper = tempFolder.resolve("system-libc-dumper");
+        var argumentLog = tempFolder.resolve("libc-probe-args.txt");
         Files.writeString(systemLibcDumper,
-                "#!/bin/sh\nprintf '%s\\n' '" + ClangResources.TOP_LEVEL_NODES_HEADER + "'\n");
+                "#!/bin/sh\n"
+                        + "printf '%s\\n' \"$@\" > '" + argumentLog + "'\n"
+                        + "if [ \"$2\" != \"-o\" ] || [ \"$4\" != \"--\" ]; then exit 2; fi\n"
+                        + "printf '%s\\n' '<Top Level Nodes>' > \"$3\"\n"
+                        + "printf '%s\\n' '<Top Level Nodes>'\n");
         assertTrue(systemLibcDumper.toFile().setExecutable(true));
 
         var builtinLibcDumper = tempFolder.resolve("builtin-libc-dumper");
         Files.writeString(builtinLibcDumper, "#!/bin/sh\nexit 1\n");
         assertTrue(builtinLibcDumper.toFile().setExecutable(true));
 
-        assertEquals(LibcMode.SYSTEM,
+        assertEquals(LibcMode.BUILTIN_AND_LIBC,
                 ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.AUTO, false));
+        var actualArguments = Files.readAllLines(argumentLog);
+        assertEquals("-o", actualArguments.get(1));
+        assertTrue(actualArguments.get(2).endsWith(".clv2"));
+        assertEquals("--", actualArguments.get(3));
         assertEquals(LibcMode.BUILTIN_AND_LIBC,
                 ClangResources.resolveLibcMode(builtinLibcDumper.toFile(), LibcMode.AUTO, false));
         assertEquals(LibcMode.SYSTEM,
@@ -678,6 +687,22 @@ public class ClangResourcesTest {
                 ClangResources.resolveLibcMode(dumper.toFile(), LibcMode.AUTO, true));
         assertThrows(IllegalArgumentException.class,
                 () -> new ClangFiles(dumper.toFile(), List.of(), null, LibcMode.AUTO));
+    }
+
+    @Test
+    public void releasedDumperAutoLibcProbeProducesValidFlatbuffers() {
+        assumeTrue(ClangAstWebResource.getDumperSource() instanceof Release,
+                "The published dumper is required to exercise the released AUTO probe path");
+
+        ClangResources.HAS_LIBC.clear();
+        var files = new ClangResources(newParser("")).getClangFiles(LibcMode.AUTO);
+
+        assertTrue(files.clangExecutable().isFile());
+        assertTrue(files.libcMode() == LibcMode.SYSTEM || files.libcMode() == LibcMode.BUILTIN_AND_LIBC);
+        assertEquals(files.libcMode() == LibcMode.SYSTEM, files.builtinIncludes().isEmpty());
+        if (SupportedPlatform.getCurrentPlatform().isLinux()) {
+            assertEquals(LibcMode.SYSTEM, files.libcMode());
+        }
     }
 
     private CodeParser newParser(String cudaPath) {
