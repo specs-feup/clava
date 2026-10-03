@@ -15,6 +15,8 @@ import subprocess
 import sys
 import time
 from typing import Any
+
+from artifact_metadata import installed_tool_metadata
 import zipfile
 
 
@@ -224,11 +226,16 @@ def main() -> int:
             (run_dir / "probe.log").write_text(completed.stdout + completed.stderr)
             rows = parse_heap(completed.stdout + completed.stderr)
             time_metrics = parse_time(time_path) if time_path.is_file() else {}
+            run_metadata = dict(metadata)
+            if run_metadata.get("native_tool_sha256") is None:
+                installed = installed_tool_metadata(work)
+                if installed:
+                    run_metadata.update(installed)
             result = {
                 "label": label,
                 "repeat": repeat,
                 "order_in_repeat": order.index(label) + 1,
-                "runtime": metadata,
+                "runtime": run_metadata,
                 "host_before": before,
                 "host_after": host_state(),
                 "source": str(source),

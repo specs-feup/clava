@@ -15,6 +15,8 @@ import time
 import zipfile
 from typing import Any
 
+from artifact_metadata import installed_tool_metadata
+
 
 ROOT = Path(__file__).resolve().parents[1]
 CLAVA_ROOT = ROOT.parents[1]
@@ -152,6 +154,10 @@ def run_runtime(label: str, runtime: Path, manifest: dict[str, Any], output: Pat
     missing = sorted(set(item["relative"] for item in manifest["files"]) - seen)
     clean = sum(row.get("bucket") == "CLEAN" for row in rows)
     failed = sum(row.get("bucket") != "CLEAN" for row in rows)
+    if metadata.get("native_tool_sha256") is None:
+        installed = installed_tool_metadata(work)
+        if installed:
+            metadata.update(installed)
     result = {
         "label": label,
         "runtime": metadata,
