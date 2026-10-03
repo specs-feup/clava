@@ -46,7 +46,7 @@ def runtime_metadata(runtime: Path) -> dict[str, Any]:
     canonical = json.dumps(jar_hashes, sort_keys=True, separators=(",", ":")).encode()
     source_revisions = None
     source_revisions_path = None
-    for parent in runtime.parents:
+    for parent in (runtime, *runtime.parents):
         candidate = parent / "source-revisions.json"
         if candidate.is_file():
             source_revisions_path = candidate
@@ -89,6 +89,8 @@ def parse_args() -> argparse.Namespace:
                         help="consumer-inputs.json emitted by run_binary_corpus.py")
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--heap", default="8g")
+    parser.add_argument("--reparse-generated", action="store_true",
+                        help="Reparse each emitted translation unit and require stable generation.")
     return parser.parse_args()
 
 
@@ -102,7 +104,7 @@ def parse_rows(text: str) -> list[dict[str, Any]]:
 
 
 def run_runtime(label: str, runtime: Path, manifest: dict[str, Any], output: Path,
-                heap: str) -> dict[str, Any]:
+                heap: str, reparse: bool = False) -> dict[str, Any]:
     metadata = runtime_metadata(runtime)
     classes = output / "classes" / label
     classes.mkdir(parents=True)
@@ -120,7 +122,8 @@ def run_runtime(label: str, runtime: Path, manifest: dict[str, Any], output: Pat
     xdg.mkdir(parents=True)
     command = [
         "java", "-Xms256m", f"-Xmx{heap}", f"-Djava.io.tmpdir={tmp}",
-        "-cp", classpath, "ValidationProbe", "corpus", str(manifest_path), str(work),
+        "-cp", classpath, "ValidationProbe",
+        "corpus-roundtrip" if reparse else "corpus", str(manifest_path), str(work),
     ]
     env = os.environ.copy()
     options = env.get("JAVA_TOOL_OPTIONS", "")
@@ -161,7 +164,8 @@ def run_runtime(label: str, runtime: Path, manifest: dict[str, Any], output: Pat
         "log": str(log),
         "results": str(output / f"{label}-results.json"),
         "rows": rows,
-        "passed": completed.returncode == 0 and len(rows) == expected and not missing,
+        "passed": completed.returncode == 0 and len(rows) == expected and not missing
+                  and (not reparse or failed == 0),
     }
     (output / f"{label}-results.json").write_text(json.dumps(rows, indent=2) + "\n")
     return result
@@ -169,8 +173,8 @@ def run_runtime(label: str, runtime: Path, manifest: dict[str, Any], output: Pat
 
 def main() -> int:
     args = parse_args()
-    if len(args.runtime) < 2:
-        raise SystemExit("supply eager plus at least one isolated comparison runtime")
+    if len(args.runtime) < 2 and not args.reparse_generated:
+        raise SystemExit("supply eager plus at least one isolated comparison runtime, or --reparse-generated")
     if len({label for label, _ in args.runtime}) != len(args.runtime):
         raise SystemExit("runtime labels must be unique")
     for _, runtime in args.runtime:
@@ -188,7 +192,7 @@ def main() -> int:
     if output.exists() and any(output.iterdir()):
         raise SystemExit(f"refusing to reuse non-empty output directory: {output}")
     output.mkdir(parents=True, exist_ok=True)
-    results = [run_runtime(label, runtime, manifest, output, args.heap)
+    results = [run_runtime(label, runtime, manifest, output, args.heap, args.reparse_generated)
                for label, runtime in args.runtime]
     by_label = {item["label"]: {row["relative"]: row for row in item["rows"]} for item in results}
     eager_label = next((label for label, _ in args.runtime if label == "eager"), args.runtime[0][0])
@@ -229,6 +233,7 @@ def main() -> int:
                                  for row in comparisons)
     summary = {
         "created_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "reparse_generated": args.reparse_generated,
         "consumer_manifest": str(manifest_path),
         "consumer_manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
         "corpus": manifest.get("corpus"),
@@ -239,7 +244,9 @@ def main() -> int:
         "comparisons": str(output / "comparisons.json"),
         "comparison_counts": counts,
         "pass": all(result["passed"] for result in results) and not regression_or_mismatch,
-        "comparison_contract": "Require no eager-only consumer failures and exact generated-code hashes for cases both runtimes consume.",
+        "comparison_contract": ("Require every selected input to parse, generate, reparse and generate identical bytes."
+                                if args.reparse_generated else
+                                "Require no eager-only consumer failures and exact generated-code hashes for cases both runtimes consume."),
     }
     (output / "comparisons.json").write_text(json.dumps(comparisons, indent=2) + "\n")
     (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")

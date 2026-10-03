@@ -50,6 +50,13 @@ python3 experiments/flatbuffers/validation/run_corpus_consumer.py \
   --output-root experiments/flatbuffers/results/validation/consumer-corpus
 ```
 
+For a selected manifest of supported inputs, add `--reparse-generated` to
+require parse → generate → reparse → generate byte identity. This mode also
+accepts one runtime and fails if any selected input cannot be reparsed or changes
+on the second generation. It preserves the corpus flags and the original header
+search path, and records source and generated-code hashes for each case.
+
+
 `run_correctness.py` separately checks C and C++ parse-generate-reparse byte
 stability and a two-translation-unit call linked to its provider definition.
 

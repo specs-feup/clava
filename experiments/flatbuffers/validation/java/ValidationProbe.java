@@ -35,7 +35,7 @@ public final class ValidationProbe {
 
     public static void main(String[] args) throws Exception {
         if (args.length < 3) {
-            throw new IllegalArgumentException("usage: ValidationProbe <roundtrip|cross-tu|memory|corpus> <input> <work> [standard] [repeats] [strict-cleanup]");
+            throw new IllegalArgumentException("usage: ValidationProbe <roundtrip|cross-tu|memory|corpus|corpus-roundtrip> <input> <work> [standard] [repeats] [strict-cleanup]");
         }
 
         SpecsSystem.programStandardInit();
@@ -50,7 +50,8 @@ public final class ValidationProbe {
         case "memory" -> memory(input, work, args.length > 3 ? args[3] : inferStandard(input),
                 args.length > 4 ? Integer.parseInt(args[4]) : 20,
                 args.length <= 5 || Boolean.parseBoolean(args[5]));
-        case "corpus" -> corpus(input, work);
+        case "corpus" -> corpus(input, work, false);
+        case "corpus-roundtrip" -> corpus(input, work, true);
         default -> throw new IllegalArgumentException("unknown mode: " + mode);
         }
     }
@@ -129,9 +130,9 @@ public final class ValidationProbe {
             Trial trial = parseAndRelease(source, iteration, standard);
             boolean collected = awaitCollection(trial.reference());
             long retained = usedHeapAfterGc();
-            int mapped = mappedPaths(iteration, tempRoot);
+            int mapped = mappedPaths(work, tempRoot);
             int temporaryFolders = countClangTempFolders(tempRoot);
-            int openParserFiles = openParserFiles(iteration, tempRoot);
+            int openParserFiles = openParserFiles(work, tempRoot);
             Map<String, Object> row = new HashMap<>();
             row.put("phase", "parse_released");
             row.put("repeat", index);
@@ -161,7 +162,7 @@ public final class ValidationProbe {
         return -1;
     }
 
-    private static void corpus(Path manifestPath, Path work) throws IOException {
+    private static void corpus(Path manifestPath, Path work, boolean reparse) throws IOException {
         JsonObject manifest = JsonParser.parseString(Files.readString(manifestPath)).getAsJsonObject();
         JsonArray files = manifest.getAsJsonArray("files");
         if (files == null || files.isEmpty()) {
@@ -197,14 +198,39 @@ public final class ValidationProbe {
                 }
                 List<File> written = app.write(generated.toFile());
                 String codeHash = generatedCodeHash(written);
-                emit("CLAVA_CORPUS", Map.of(
-                        "index", index,
-                        "relative", relative,
-                        "source", source.toString(),
-                        "bucket", "CLEAN",
-                        "nodes", nodes,
-                        "generated_code_sha256", codeHash));
+                Map<String, Object> row = new HashMap<>();
+                row.put("index", index);
+                row.put("relative", relative);
+                row.put("source", source.toString());
+                row.put("source_sha256", sha256(Files.readAllBytes(source)));
+                row.put("bucket", "CLEAN");
+                row.put("nodes", nodes);
+                row.put("generated_code_sha256", codeHash);
                 app = null;
+                if (reparse) {
+                    // Keep the original flags and header search path while parsing
+                    // the emitted translation unit from its new directory.
+                    List<String> reparseOptions = new ArrayList<>(options);
+                    reparseOptions.add("-I" + source.getParent());
+                    Path generatedSource = matchingSource(written, source.getFileName().toString());
+                    App second = parse(List.of(generatedSource), caseRoot.resolve("reparse"),
+                            standard, reparseOptions, resources);
+                    long secondNodes = second.getDescendantsAndSelfStream().count();
+                    if (secondNodes == 0) {
+                        throw new IllegalStateException("reparse returned an empty AST");
+                    }
+                    List<File> regenerated = second.write(work.resolve("regenerated")
+                            .resolve(String.format("%05d", index)).toFile());
+                    String regeneratedHash = generatedCodeHash(regenerated);
+                    row.put("reparsed_nodes", secondNodes);
+                    row.put("regenerated_code_sha256", regeneratedHash);
+                    row.put("source_equal_after_reparse", codeHash.equals(regeneratedHash));
+                    if (!codeHash.equals(regeneratedHash)) {
+                        row.put("bucket", "ROUNDTRIP_MISMATCH");
+                    }
+                    second = null;
+                }
+                emit("CLAVA_CORPUS", row);
                 parsed++;
             } catch (Exception | LinkageError failure) {
                 String message = failure.getMessage() == null ? failure.getClass().getName()
