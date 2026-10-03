@@ -67,6 +67,7 @@ TIMING_BOUNDARY = {
     "test_only": "sum of JUnit XML testcase time attributes for the 116 selected parser tests",
     "gradle_wall": "monotonic elapsed time around one Gradle test process; includes Gradle configuration and test-worker startup",
     "preflight": "testClasses compilation and classpath fingerprinting run before all measured observations",
+    "resource_cache": "verified parser resources are symlinked into the run-local JVM temp root before Gradle test timing; no release download or cache staging is included",
 }
 EMPTY_LOCAL_OPTIONS = (
     b"<SimpleDataStore>\n"
@@ -394,6 +395,79 @@ def stage_build_environment(stage: str, checkout: Path, environment: dict[str, s
     }
 
 
+def java_runtime_properties(path: str) -> dict[str, str]:
+    java = shutil.which("java", path=path)
+    if java is None:
+        raise RuntimeError("java is missing from the comparison PATH")
+    environment = os.environ.copy()
+    for name in ("JAVA_TOOL_OPTIONS", "JDK_JAVA_OPTIONS", "_JAVA_OPTIONS"):
+        environment.pop(name, None)
+    result = subprocess.run([java, "-XshowSettings:properties", "-version"], env=environment,
+                            capture_output=True, text=True, check=True)
+    properties = {}
+    for line in result.stdout.splitlines() + result.stderr.splitlines():
+        key, separator, value = line.strip().partition("=")
+        if separator:
+            properties[key.strip()] = value.strip()
+    required = ("java.version", "java.io.tmpdir", "user.name")
+    if any(name not in properties for name in required):
+        raise RuntimeError(f"Java did not report required runtime properties: {required}")
+    return {
+        "java_binary": str(Path(java).resolve()),
+        **{name: properties[name] for name in required},
+    }
+
+
+def runtime_resource_cache_snapshot(java_runtime: dict[str, str]) -> dict[str, Any]:
+    source_root = (Path(java_runtime["java.io.tmpdir"])
+                   / f"clang_ast_exe_{java_runtime['user.name']}" / "clang-dumper").resolve()
+    if not source_root.is_dir():
+        raise RuntimeError(f"the warmed Clava parser resource cache is missing: {source_root}")
+    release_root = source_root / "releases" / EXPECTED_EAGER_RELEASE_TAG
+    installed = installed_tool_metadata(release_root)
+    if installed is None:
+        raise RuntimeError(f"the eager release is absent from the warmed parser resource cache: {release_root}")
+    if installed["native_tool_sha256"] != EXPECTED_EAGER_NATIVE_TOOL_SHA256:
+        raise RuntimeError("the warmed eager resource cache has the wrong native tool hash")
+    files = tree_manifest(source_root)
+    return {
+        "source_root": str(source_root),
+        "cache_tree_sha256": canonical_sha256(files),
+        "cache_file_count": len(files),
+        "release_root": str(release_root),
+        "release_manifest_sha256": installed["release_manifest_sha256"],
+        "native_tool_path": installed["native_tool_path"],
+        "native_tool_sha256": installed["native_tool_sha256"],
+        "wire_schema_sha256": installed["wire_schema_sha256"],
+        "flatbuffers": installed["flatbuffers"],
+    }
+
+
+def resource_cache_tree_sha256(cache_root: Path) -> str:
+    return canonical_sha256(tree_manifest(cache_root))
+
+
+def stage_runtime_resource_cache(run_tmp: Path, java_runtime: dict[str, str],
+                                 cache: dict[str, Any]) -> dict[str, Any]:
+    home = run_tmp / f"clang_ast_exe_{java_runtime['user.name']}"
+    home.mkdir(parents=True, exist_ok=True)
+    link = home / "clang-dumper"
+    if link.exists() or link.is_symlink():
+        raise RuntimeError(f"refusing to replace an existing per-run parser cache: {link}")
+    source = Path(cache["source_root"])
+    before = resource_cache_tree_sha256(source)
+    if before != cache["cache_tree_sha256"]:
+        raise RuntimeError("the warmed parser resource cache changed after preflight")
+    link.symlink_to(source, target_is_directory=True)
+    if link.resolve(strict=True) != source:
+        raise RuntimeError(f"per-run parser cache does not resolve to the pinned cache: {link}")
+    return {
+        "staged_path": str(link),
+        "staged_target": str(link.resolve()),
+        "cache_tree_sha256_before": before,
+    }
+
+
 def prepare_empty_local_options(checkout: Path, classpath: dict[str, Any]) -> dict[str, Any]:
     """Seed the runtime's default writable-JAR options file before hashing the classpath."""
     main_classes = (checkout / "ClangAstParser" / "build" / "classes" / "java" / "main").resolve()
@@ -490,6 +564,7 @@ def run_preflight(stage: str, checkout: Path, output_root: Path, no_cache_path: 
         "test_classes_dirs": classpath_data["test_classes_dirs"],
         "test_classpath": classpath_data["test_classpath"],
         "worker": classpath_data["worker"],
+        "worker_java_io_tmpdir": worker_java_tmpdir(classpath_data["worker"]),
         "classpath_fingerprint": classpath_fingerprint,
         "classpath_artifact_sha256": classpath_fingerprint["sha256"],
         "build_environment": build_environment,
@@ -563,6 +638,14 @@ def validate_worker(worker: dict[str, Any]) -> None:
         raise RuntimeError(f"test JVM has profiler or GC options enabled: {injected}")
 
 
+def worker_java_tmpdir(worker: dict[str, Any]) -> str:
+    values = [argument.split("=", 1)[1] for argument in worker.get("jvm_args", [])
+              if argument.startswith("-Djava.io.tmpdir=")]
+    if len(values) != 1:
+        raise RuntimeError(f"test worker must have exactly one pinned java.io.tmpdir: {worker.get('jvm_args')}")
+    return str(Path(values[0]).resolve())
+
+
 def parse_junit_results(xml_root: Path) -> dict[str, Any]:
     if not xml_root.is_dir():
         raise RuntimeError(f"JUnit XML output is missing: {xml_root}")
@@ -626,6 +709,8 @@ def run_observation(
     expected_test_ids: list[str],
     output_root: Path,
     no_cache_path: str,
+    java_runtime: dict[str, str],
+    resource_cache: dict[str, Any],
 ) -> dict[str, Any]:
     ordinal = len(list((output_root / "runs").glob("*"))) + 1
     run_root = output_root / "runs" / f"{ordinal:02d}-round-{round_number}-{stage}"
@@ -637,6 +722,7 @@ def run_observation(
     environment_options = jvm_environment_audit(environment)
     if shutil.which("ccache", path=environment["PATH"]) is not None:
         raise RuntimeError("ccache unexpectedly resolves from the Java comparison PATH")
+    staged_cache = stage_runtime_resource_cache(temp_root, java_runtime, resource_cache)
 
     pre_run_classpath = fingerprint_test_classpath(
         preflight["test_classes_dirs"], preflight["test_classpath"])
@@ -646,9 +732,14 @@ def run_observation(
     process_result = run_process(command, checkout, environment, log_path)
     junit_root = run_root / "junit-xml"
     junit = parse_junit_results(junit_root)
-    installed_tool = installed_tool_metadata(run_root)
+    installed_tool = None
     runtime_metadata = parse_runtime_metadata(log_path)
     validate_worker(runtime_metadata["worker"])
+    actual_java_tmpdir = worker_java_tmpdir(runtime_metadata["worker"])
+    if stage == "eager":
+        installed_tool = installed_tool_metadata(
+            Path(resource_cache["source_root"]) / "releases" / EXPECTED_EAGER_RELEASE_TAG
+        )
 
     actual_classes = runtime_metadata["test_classes_dirs"]
     actual_classpath = runtime_metadata["test_classpath"]
@@ -660,6 +751,11 @@ def run_observation(
     compile_clean = bool(task_states) and all(state in UP_TO_DATE_TASK_STATES for state in task_states.values())
     source_after = stage_snapshot(stage, checkout)
     source_stable = source_unchanged(source_before, source_after)
+    cache_after = resource_cache_tree_sha256(Path(resource_cache["source_root"]))
+    release_manifest_after = sha256_file(
+        Path(resource_cache["release_root"]) / "clang-dumper-release-manifest.json"
+    )
+    native_tool_after = sha256_file(Path(resource_cache["native_tool_path"]))
     post_run_classpath = fingerprint_test_classpath(
         preflight["test_classes_dirs"], preflight["test_classpath"])
     classpath_matches_preflight = (
@@ -671,6 +767,14 @@ def run_observation(
         errors.append("schema-generation build inputs differ from the preflight")
     if process_result["return_code"] != 0:
         errors.append(f"Gradle returned {process_result['return_code']}")
+    if actual_java_tmpdir != str(temp_root.resolve()):
+        errors.append(f"test worker java.io.tmpdir differs from the run temp root: {actual_java_tmpdir}")
+    if cache_after != staged_cache["cache_tree_sha256_before"]:
+        errors.append("the pinned parser resource cache changed during the observation")
+    if release_manifest_after != resource_cache["release_manifest_sha256"]:
+        errors.append("the pinned parser release manifest changed during the observation")
+    if native_tool_after != resource_cache["native_tool_sha256"]:
+        errors.append("the pinned parser native tool changed during the observation")
     if junit["counts"] != {"total": EXPECTED_TESTS, "passed": EXPECTED_TESTS, "failed": 0, "skipped": 0}:
         errors.append(f"unexpected JUnit counts: {junit['counts']}")
     if junit["identities"] != expected_test_ids:
@@ -701,6 +805,15 @@ def run_observation(
                 errors.append(f"eager release tag must be {EXPECTED_EAGER_RELEASE_TAG}, found {selected_release['tag']}")
             if installed_tool["native_tool_sha256"] != EXPECTED_EAGER_NATIVE_TOOL_SHA256:
                 errors.append("the installed eager native tool does not match the pinned final RC SHA-256")
+    observed_local_tools = sorted(set(re.findall(
+        r"(?m)^Using local clang-dumper build:\s*(.+?)\s*$", log_path.read_text(encoding="utf-8")
+    )))
+    if stage in {"text", "protobuf"}:
+        expected_local_tool = str(Path(selected_release["tool_path"]).resolve())
+        if observed_local_tools != [expected_local_tool]:
+            errors.append(f"the observed local dumper paths differ from the pinned control: {observed_local_tools}")
+        if sha256_file(Path(expected_local_tool)) != selected_release["tool_sha256"]:
+            errors.append("the pinned historical control dumper changed during the observation")
 
     return {
         "ordinal": ordinal,
@@ -722,6 +835,7 @@ def run_observation(
             "ccache_invocations_expected": 0,
         },
         "worker": runtime_metadata["worker"],
+        "worker_java_io_tmpdir": actual_java_tmpdir,
         "compile_task_states": task_states,
         "build_environment": build_environment,
         "test_classpath_sha256": preflight["classpath_fingerprint"]["sha256"],
@@ -731,6 +845,16 @@ def run_observation(
         else installed_tool["release_manifest_sha256"],
         "installed_wire_schema_sha256": None if installed_tool is None else installed_tool["wire_schema_sha256"],
         "installed_flatbuffers_toolchain": None if installed_tool is None else installed_tool["flatbuffers"],
+        "observed_local_dumper_paths": observed_local_tools,
+        "runtime_resource_cache": {
+            **staged_cache,
+            "cache_tree_sha256_after": cache_after,
+            "release_manifest_sha256_before": resource_cache["release_manifest_sha256"],
+            "release_manifest_sha256_after": release_manifest_after,
+            "native_tool_sha256_before": resource_cache["native_tool_sha256"],
+            "native_tool_sha256_after": native_tool_after,
+            "wire_schema_sha256": resource_cache["wire_schema_sha256"],
+        },
         "test_classpath_matches_preflight": classpath_match,
         "test_classpath_content_matches_preflight": classpath_matches_preflight,
         "test_classpath_pre_run_sha256": pre_run_classpath["sha256"],
@@ -799,6 +923,8 @@ def main() -> int:
     })
     output_root = make_output_root(args.output_root)
     no_cache_path, path_root = make_path_without_ccache(output_root, ("gradle", "java", "javac", "git", "python3"))
+    java_runtime = java_runtime_properties(no_cache_path)
+    resource_cache = runtime_resource_cache_snapshot(java_runtime)
     snapshots = {stage: stage_snapshot(stage, checkouts[stage]) for stage in ("eager", "text", "protobuf")}
     fixture_comparison = compare_fixture_maps(snapshots)
     environment_options = jvm_environment_audit(base_environment(no_cache_path, output_root))
@@ -814,6 +940,8 @@ def main() -> int:
             "ccache_resolves_from_PATH": shutil.which("ccache", path=no_cache_path) is not None,
         },
         "jvm_environment": environment_options,
+        "java_runtime": java_runtime,
+        "runtime_resource_cache": resource_cache,
         "expected_test_count": EXPECTED_TESTS,
         "max_gradle_workers": 1,
         "pinned_test_ids_file": str(PINNED_TEST_IDS_FILE.resolve()),
@@ -864,6 +992,7 @@ def main() -> int:
             row = run_observation(
                 stage, round_number, checkouts[stage], report["preflight"][stage], snapshots[stage],
                 expected_test_ids, output_root, no_cache_path,
+                java_runtime, resource_cache,
             )
             if row["source_signature_sha256"] != source_signatures[stage]:
                 row["valid"] = False

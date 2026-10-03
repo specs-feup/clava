@@ -112,6 +112,10 @@ observation. It then makes three sequential observations per runtime in
 rotated order, with one Gradle worker and one test JVM fork. Every process has
 `CCACHE_DISABLE=true` and a PATH link farm that omits ccache and aliases to it.
 JaCoCo is disabled for these comparison invocations only.
+Each test JVM uses a run-local `java.io.tmpdir`; the harness symlinks the
+already-verified Clava parser resource cache there before timing. The report
+records cache-tree, release-manifest, and native-tool hashes before and after
+every observation, keeping downloads and cache setup outside test timing.
 Preflight seeds ClangAstParser's exact empty default `local_options.xml` before
 hashing the classpath. The parser creates this file on its first test parse;
 placing it before the fingerprint keeps lazy initialization outside measured

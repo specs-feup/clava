@@ -39,6 +39,7 @@ gradle.afterProject { project ->
 
             def outputRoot = new File(System.getenv('JAVA_RUNTIME_MATRIX_RUN_DIR')
                     ?: new File(project.buildDir, 'java-runtime-matrix-preflight').absolutePath)
+            jvmArgs("-Djava.io.tmpdir=${new File(outputRoot, 'tmp').absolutePath}")
             reports.junitXml.outputLocation.set(
                     project.layout.dir(project.provider { new File(outputRoot, 'junit-xml') }))
             reports.html.outputLocation.set(
