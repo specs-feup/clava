@@ -16,7 +16,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import astwire.v2.RecordPayload;
 import astwire.v2.TopLevelKind;
@@ -62,6 +61,8 @@ public final class CompleteReader {
         var files = new SchemaRuntime.Files(scope);
         var importContext = new SchemaRuntime.ImportContext(data, files);
         Map<String, String> pendingClasses = new LinkedHashMap<>();
+        Map<String, String> awaitingClasses = new HashMap<>();
+        Map<String, NodeState> unsupportedNodes = new HashMap<>();
         boolean headerSeen = false;
         boolean endSeen = false;
         long records = 0;
@@ -99,13 +100,14 @@ public final class CompleteReader {
                     }
                     case RecordPayload.File -> readFile(record, data, files);
                     case RecordPayload.Node -> {
-                        readNode(record, data, files, importContext);
+                        readNode(record, data, files, importContext, pendingClasses, awaitingClasses,
+                                unsupportedNodes, nodeParser);
                         nodes++;
-                        flushClass(recordNodeId(record, files), pendingClasses, nodeParser, data);
                     }
-                    case RecordPayload.Children -> readChildren(record, data, files);
-                    case RecordPayload.NodeClass -> readNodeClass(record, data, files, pendingClasses, nodeParser);
-                    case RecordPayload.TopLevel -> readTopLevel(record, data, files);
+                    case RecordPayload.Children -> readChildren(record, data, files, unsupportedNodes);
+                    case RecordPayload.NodeClass -> readNodeClass(record, data, files, pendingClasses, nodeParser,
+                            awaitingClasses, unsupportedNodes);
+                    case RecordPayload.TopLevel -> readTopLevel(record, data, files, unsupportedNodes);
                     case RecordPayload.Include -> readInclude(record, data);
                     case RecordPayload.Pragma -> readPragma(record, data);
                     case RecordPayload.TranslationUnitFile -> readTranslationUnitFile(record, data);
@@ -134,7 +136,11 @@ public final class CompleteReader {
             throw new IOException("Missing node payload for NodeClass records: " + pendingClasses.keySet());
         }
 
-        nodeParser.close(data);
+        try {
+            nodeParser.close(data);
+        } catch (RuntimeException failure) {
+            throw new IOException("Could not resolve references in the eager AST graph", failure);
+        }
         return new Result(data, files.stats);
     }
 
@@ -173,12 +179,29 @@ public final class CompleteReader {
     }
 
     private static void readNode(astwire.v2.Record record, ClangAstData data, SchemaRuntime.Files files,
-            SchemaRuntime.ImportContext importContext) {
+            SchemaRuntime.ImportContext importContext, Map<String, String> pendingClasses,
+            Map<String, String> awaitingClasses, Map<String, NodeState> unsupportedNodes,
+            ClavaNodeParser nodeParser) {
         var node = (astwire.v2.Node) record.payload(new astwire.v2.Node());
-        GeneratedNodes.validateNodeClass(node);
         String id = files.ownerId(node.id(), "Node");
-        if (data.get(ClangAstData.NODE_DATA).containsKey(id)) {
+        if (data.get(ClangAstData.NODE_DATA).containsKey(id) || awaitingClasses.containsKey(id)
+                || unsupportedNodes.containsKey(id)) {
             throw new IllegalArgumentException("Duplicated wire node id " + id);
+        }
+        String className = node.className();
+        String pendingClass = pendingClasses.get(id);
+        if (pendingClass != null && !pendingClass.equals(className)) {
+            throw new IllegalArgumentException("Node and NodeClass names differ for " + id + ": "
+                    + className + " / " + pendingClass);
+        }
+        if (!GeneratedNodes.validateNodeClass(node)) {
+            boolean childrenSeen = data.get(ClangAstData.VISITED_CHILDREN).remove(id) != null;
+            unsupportedNodes.put(id, new NodeState(className, pendingClass != null, childrenSeen));
+            pendingClasses.remove(id);
+            data.get(ClangAstData.TOP_LEVEL_DECL_IDS).remove(id);
+            data.get(ClangAstData.TOP_LEVEL_TYPE_IDS).remove(id);
+            data.get(ClangAstData.TOP_LEVEL_ATTR_IDS).remove(id);
+            return;
         }
         var payload = GeneratedNodes.payload(node);
         var descriptor = GeneratedNodes.descriptor(node.payloadType());
@@ -187,28 +210,60 @@ public final class CompleteReader {
         }
         DataStore nodeData = descriptor.read(payload, node.className(), id, importContext);
         data.get(ClangAstData.NODE_DATA).put(id, nodeData);
+        if (pendingClass == null) {
+            awaitingClasses.put(id, className);
+        }
+        flushClass(id, pendingClasses, nodeParser, data);
     }
 
-    private static void readChildren(astwire.v2.Record record, ClangAstData data, SchemaRuntime.Files files) {
+    private static void readChildren(astwire.v2.Record record, ClangAstData data, SchemaRuntime.Files files,
+            Map<String, NodeState> unsupportedNodes) {
         var children = (astwire.v2.Children) record.payload(new astwire.v2.Children());
         String id = files.ownerId(children.node(), "Children");
         var childIds = SchemaRuntime.list(children.childrenLength(), i -> {
             long childId = children.children(i);
             return files.id(childId);
         });
+        NodeState unsupported = unsupportedNodes.get(id);
+        if (unsupported != null) {
+            if (unsupported.childrenSeen) {
+                throw new IllegalArgumentException("Duplicated wire children record for " + id);
+            }
+            unsupported.childrenSeen = true;
+            return;
+        }
         if (data.get(ClangAstData.VISITED_CHILDREN).putIfAbsent(id, childIds) != null) {
             throw new IllegalArgumentException("Duplicated wire children record for " + id);
         }
     }
 
     private static void readNodeClass(astwire.v2.Record record, ClangAstData data, SchemaRuntime.Files files,
-            Map<String, String> pendingClasses, ClavaNodeParser nodeParser) {
+            Map<String, String> pendingClasses, ClavaNodeParser nodeParser, Map<String, String> awaitingClasses,
+            Map<String, NodeState> unsupportedNodes) {
         var nodeClass = (astwire.v2.NodeClass) record.payload(new astwire.v2.NodeClass());
         String id = files.ownerId(nodeClass.node(), "NodeClass");
+        String nodeClassName = nodeClass.className();
+        NodeState unsupported = unsupportedNodes.get(id);
+        if (unsupported != null) {
+            if (unsupported.nodeClassSeen) {
+                throw new IllegalArgumentException("Duplicated wire node-class record for " + id);
+            }
+            if (!unsupported.className.equals(nodeClassName)) {
+                throw new IllegalArgumentException("Node and NodeClass names differ for " + id + ": "
+                        + unsupported.className + " / " + nodeClassName);
+            }
+            unsupported.nodeClassSeen = true;
+            return;
+        }
+        String nodeName = awaitingClasses.remove(id);
+        if (nodeName != null && !nodeName.equals(nodeClassName)) {
+            throw new IllegalArgumentException("Node and NodeClass names differ for " + id + ": "
+                    + nodeName + " / " + nodeClassName);
+        }
         if (pendingClasses.containsKey(id) || data.getClavaNodes().getNodes().containsKey(id)) {
             throw new IllegalArgumentException("Duplicated wire node-class record for " + id);
         }
-        pendingClasses.put(id, nodeClass.className());
+        pendingClasses.put(id, nodeClassName);
         flushClass(id, pendingClasses, nodeParser, data);
     }
 
@@ -222,13 +277,13 @@ public final class CompleteReader {
         pendingClasses.remove(id);
     }
 
-    private static String recordNodeId(astwire.v2.Record record, SchemaRuntime.Files files) {
-        return files.id(((astwire.v2.Node) record.payload(new astwire.v2.Node())).id());
-    }
-
-    private static void readTopLevel(astwire.v2.Record record, ClangAstData data, SchemaRuntime.Files files) {
+    private static void readTopLevel(astwire.v2.Record record, ClangAstData data, SchemaRuntime.Files files,
+            Map<String, NodeState> unsupportedNodes) {
         var topLevel = (astwire.v2.TopLevel) record.payload(new astwire.v2.TopLevel());
         String id = files.id(topLevel.node());
+        if (unsupportedNodes.containsKey(id)) {
+            return;
+        }
         switch (topLevel.kind()) {
             case TopLevelKind.Decl -> data.get(ClangAstData.TOP_LEVEL_DECL_IDS).add(id);
             case TopLevelKind.Type -> data.get(ClangAstData.TOP_LEVEL_TYPE_IDS).add(id);
@@ -312,6 +367,18 @@ public final class CompleteReader {
             throw new IllegalArgumentException("v2 End count mismatch: records=" + end.records() + "/" + (records - 1)
                     + ", nodes=" + end.nodes() + "/" + nodes + ", files=" + end.files() + "/"
                     + (files.paths.size() - 1) + ", ids=" + end.ids() + "/" + files.largestPositiveId());
+        }
+    }
+
+    private static final class NodeState {
+        private final String className;
+        private boolean nodeClassSeen;
+        private boolean childrenSeen;
+
+        private NodeState(String className, boolean nodeClassSeen, boolean childrenSeen) {
+            this.className = className;
+            this.nodeClassSeen = nodeClassSeen;
+            this.childrenSeen = childrenSeen;
         }
     }
 

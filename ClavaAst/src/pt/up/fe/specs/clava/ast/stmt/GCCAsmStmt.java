@@ -47,7 +47,7 @@ public class GCCAsmStmt extends AsmStmt {
         }
 
         code.append("(\"");
-        code.append(get(ASM_STRING));
+        code.append(escapeStringLiteral(get(ASM_STRING)));
         code.append("\"");
 
         // Outputs
@@ -78,5 +78,32 @@ public class GCCAsmStmt extends AsmStmt {
         code.append(");");
 
         return code.toString();
+    }
+
+    private static String escapeStringLiteral(String value) {
+        var escaped = new StringBuilder(value.length());
+        for (int index = 0; index < value.length(); index++) {
+            char character = value.charAt(index);
+            switch (character) {
+                case '\\' -> escaped.append("\\\\");
+                case '"' -> escaped.append("\\\"");
+                case '\n' -> escaped.append("\\n");
+                case '\r' -> escaped.append("\\r");
+                case '\t' -> escaped.append("\\t");
+                default -> {
+                    if (character < 0x20 || character == 0x7f) {
+                        // A fixed three-digit escape cannot absorb a following
+                        // octal digit, unlike a variable-width hexadecimal escape.
+                        escaped.append('\\')
+                                .append((char) ('0' + ((character >>> 6) & 0x7)))
+                                .append((char) ('0' + ((character >>> 3) & 0x7)))
+                                .append((char) ('0' + (character & 0x7)));
+                    } else {
+                        escaped.append(character);
+                    }
+                }
+            }
+        }
+        return escaped.toString();
     }
 }

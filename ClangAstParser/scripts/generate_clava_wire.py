@@ -356,12 +356,15 @@ def generate(reflection: dict, inventory: dict, schema_hash: str, destination: P
     node = next((table for table in objects if short(table["name"]) == "Node"), None)
     if node is None:
         raise ValueError("Reflection schema has no Node record table")
-    lines.append(" public static void validateNodeClass(astwire.v2.Node node) {"
+    lines.append(" public static boolean validateNodeClass(astwire.v2.Node node) {"
                  " if(node.id()<=0)missing(\"Node.id must be positive\");"
-                 " Class<?> actual=ClassesService.getClavaClass(node.className());"
+                 " Class<?> actual;try{actual=ClassesService.getClavaClass(node.className());}"
+                 "catch(RuntimeException failure){String message=failure.getMessage();"
+                 "if(message!=null&&message.startsWith(\"Could not map classname '\"))return false;throw failure;}"
                  " Class<?> payload=classForPayload(node.payloadType());"
-                 " if(!payload.isAssignableFrom(actual))missing(\"Node.class_name/payload mismatch: \"+node.className());"
-                 " }")
+                 " boolean ompDecl=node.className().startsWith(\"OMP\")&&payload==pt.up.fe.specs.clava.ast.decl.Decl.class;"
+                 " if(!payload.isAssignableFrom(actual)&&!ompDecl)missing(\"Node.class_name/payload mismatch: \"+node.className());"
+                 " return true; }")
     lines.append(' private static void missing(String field) { throw new IllegalArgumentException("Missing or invalid wire field: " + field); }')
     lines.append("}")
 
