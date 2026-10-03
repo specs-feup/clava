@@ -38,6 +38,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--runtime-root", type=Path, default=DEFAULT_RUNTIME)
     parser.add_argument("--local-release-dir", type=Path)
     parser.add_argument(
+        "--resource-cache-root", type=Path, required=True,
+        help="Preverified Clava cache containing releases/<tag> and matching includes assets.",
+    )
+    parser.add_argument(
+        "--release-assets-root", type=Path, required=True,
+        help="Source-identified published assets containing the matching manifest and schema bundle.",
+    )
+    parser.add_argument(
         "--output-root",
         type=Path,
         help="Matrix output directory; defaults to a new timestamped results directory.",
@@ -102,6 +110,12 @@ def main() -> int:
         raise SystemExit(f"ClavaWeaver runtime distribution does not exist: {args.runtime_root}")
     if args.local_release_dir is not None and not args.local_release_dir.is_dir():
         raise SystemExit(f"local release directory does not exist: {args.local_release_dir}")
+    if not args.resource_cache_root.is_dir():
+        raise SystemExit(f"Clava resource cache does not exist: {args.resource_cache_root}")
+    if not args.release_assets_root.is_dir():
+        raise SystemExit(f"published release assets do not exist: {args.release_assets_root}")
+    if args.local_release_dir is not None:
+        raise SystemExit("the eager cache matrix requires the published release tag and resource cache")
 
     if args.output_root is None:
         stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
@@ -133,6 +147,8 @@ def main() -> int:
         "output_root": str(output_root),
         "runtime_root": str(args.runtime_root.resolve()),
         "local_release_dir": str(args.local_release_dir.resolve()) if args.local_release_dir else None,
+        "resource_cache_root": str(args.resource_cache_root.resolve()),
+        "release_assets_root": str(args.release_assets_root.resolve()),
         "repeat_count": args.repeat_count,
         "wire_protocol": "flatbuffers-eager",
         "modes": list(MODES),
@@ -157,6 +173,10 @@ def main() -> int:
             str(args.runtime_root.resolve()),
             "--output-root",
             str(output_root),
+            "--resource-cache-root",
+            str(args.resource_cache_root.resolve()),
+            "--release-assets-root",
+            str(args.release_assets_root.resolve()),
         ]
         if args.local_release_dir is not None:
             command.extend(["--local-release-dir", str(args.local_release_dir.resolve())])

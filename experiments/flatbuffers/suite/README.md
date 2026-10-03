@@ -17,12 +17,26 @@ to their warm observations and cache bypass still exercising the production
 file path:
 
 ```sh
+VALIDATION_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/ast-flatbuffers-release-validation"
+RESOURCE_CACHE="/tmp/clang_ast_exe_$(id -un)/clang-dumper"
+RELEASE_ASSETS="$VALIDATION_CACHE/release-final-d2836b8/release-assets"
 python3 experiments/flatbuffers/suite/run_matrix.py \
-  --runtime-root ClavaWeaver/build/install/ClavaWeaver --repeat-count 3
+  --runtime-root ClavaWeaver/build/install/ClavaWeaver \
+  --resource-cache-root "$RESOURCE_CACHE" \
+  --release-assets-root "$RELEASE_ASSETS" --repeat-count 3
 ```
 
-The matrix sets `CCACHE_DISABLE=true` for bypass and requires zero ccache calls
-there; cold and warm runs require misses and restored hits, respectively. Do
+`--resource-cache-root` must contain the selected published release under
+`releases/<tag>` and its matching extracted includes. `--release-assets-root`
+must hold the byte-identical published manifest and its schema bundle. The
+harness checks both roots, then symlinks only the selected release and includes
+directory into each isolated XDG cache before timing, so each
+observation starts with the same eager RC tool/schema/includes while cold and
+warm AST-dump caches remain paired. The embedded release tag stays unchanged.
+The matrix resolves ccache's namespace from the selected release schema,
+FlatBuffers version/commit, and host native executable hashes. Cold and warm
+stats query that exact directory; bypass sets `CCACHE_DISABLE=true` and requires
+zero ccache calls, while cold and warm require misses and restored hits. Do
 not run build or benchmark jobs at the same time. Reports are written beneath
 the ignored `experiments/flatbuffers/suite/results/` directory.
 

@@ -22,6 +22,7 @@ import datetime as dt
 import hashlib
 import json
 import os
+import platform
 from pathlib import Path
 import re
 import shutil
@@ -67,6 +68,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--local-release-dir", type=Path,
         help="Explicit local release directory. The staged parser JAR tag is set to this path.",
+    )
+    parser.add_argument(
+        "--resource-cache-root", type=Path,
+        help="Preverified Clava resource cache root whose selected RC release is staged into XDG_CACHE_HOME.",
+    )
+    parser.add_argument(
+        "--release-assets-root", type=Path,
+        help="Source-identified published assets containing the matching release manifest and schema bundle.",
     )
     parser.add_argument("--output-root", type=Path, default=RESULTS_ROOT)
     parser.add_argument(
@@ -115,8 +124,33 @@ def stage_java_runtime(source: Path, destination: Path, release_dir: Path | None
     return destination
 
 
-def release_metadata(runtime: Path, local_release_dir: Path | None) -> dict[str, Any]:
-    """Record the tag and the selected local manifest when one is available."""
+def native_manifest_assets(manifest: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any] | None]:
+    """Select this host's tool and includes assets from a multi-platform manifest."""
+
+    os_name = {"linux": "linux", "darwin": "macos", "win32": "windows"}.get(sys.platform)
+    machine = platform.machine().lower()
+    arch = "arm64" if machine in {"aarch64", "arm64"} else "x64"
+    if os_name == "windows" and arch == "x64":
+        arch = "x86_64"
+    if os_name is None:
+        raise SystemExit(f"unsupported platform for release asset selection: {sys.platform}")
+
+    assets = manifest.get("assets", [])
+    tool_assets = [asset for asset in assets if asset.get("kind") == "tool"
+                   and asset.get("platform") == os_name and asset.get("arch") == arch]
+    include_assets = [asset for asset in assets if asset.get("kind") == "includes"
+                      and asset.get("platform") == os_name and asset.get("arch") == arch]
+    if len(tool_assets) != 1:
+        raise SystemExit(f"expected one {os_name}/{arch} tool asset in selected release manifest")
+    if len(include_assets) > 1:
+        raise SystemExit(f"selected release manifest has ambiguous {os_name}/{arch} includes assets")
+    return tool_assets[0], include_assets[0] if include_assets else None
+
+
+def release_metadata(runtime: Path, local_release_dir: Path | None,
+                     resource_cache_root: Path | None = None,
+                     release_assets_root: Path | None = None) -> dict[str, Any]:
+    """Record the selected manifest and this host's verified native asset."""
 
     import zipfile
 
@@ -128,20 +162,27 @@ def release_metadata(runtime: Path, local_release_dir: Path | None) -> dict[str,
         except KeyError as error:
             raise SystemExit("ClangAstParser.jar has no clang-dumper-release.tag") from error
     release_root = local_release_dir.resolve() if local_release_dir else None
+    tagged_local_root = None
     if release_root is None:
         candidate = Path(tag)
         if candidate.is_absolute():
             release_root = candidate
-    result: dict[str, Any] = {"release_tag": tag, "local_release_dir": str(release_root) if release_root else None}
-    if release_root is None:
-        result["manifest"] = None
-        result["schema_sha256"] = None
-        result["tool_sha256"] = None
-        return result
+            tagged_local_root = candidate.resolve()
+        elif resource_cache_root is not None:
+            release_root = resource_cache_root.resolve() / "releases" / tag
+    metadata_root = release_root
+    result: dict[str, Any] = {
+        "release_tag": tag,
+        "local_release_dir": str(local_release_dir.resolve()) if local_release_dir else (
+            str(tagged_local_root) if tagged_local_root else None
+        ),
+        "resource_cache_release_dir": str(metadata_root) if resource_cache_root and metadata_root else None,
+        "release_assets_root": str(release_assets_root.resolve()) if release_assets_root else None,
+    }
 
     if release_root is not None:
         manifest_path = release_root / "clang-dumper-release-manifest.json"
-        require_file(manifest_path, "selected local clang-dumper release manifest")
+        require_file(manifest_path, "selected cached clang-dumper release manifest")
         manifest_bytes = manifest_path.read_bytes()
         manifest_source = str(manifest_path)
     else:
@@ -156,11 +197,18 @@ def release_metadata(runtime: Path, local_release_dir: Path | None) -> dict[str,
             raise SystemExit(f"could not obtain the manifest for selected release {tag}: {error}") from error
         manifest_path = None
         manifest_source = manifest_url
+    assets_manifest = None
+    if release_assets_root is not None:
+        assets_manifest = release_assets_root.resolve() / "clang-dumper-release-manifest.json"
+        require_file(assets_manifest, "source-identified published release manifest")
+        if assets_manifest.read_bytes() != manifest_bytes:
+            raise SystemExit("cached RC manifest differs from its source-identified published manifest")
     manifest = json.loads(manifest_bytes)
     wire_schema = manifest.get("wire_schema", {})
     flatbuffers = manifest.get("flatbuffers", {})
     schema_asset = str(wire_schema.get("asset", ""))
-    schema_asset_path = release_root / schema_asset if release_root and schema_asset else None
+    schema_source_root = release_assets_root.resolve() if release_assets_root else release_root
+    schema_asset_path = schema_source_root / schema_asset if schema_source_root and schema_asset else None
     schema_asset_hash = wire_schema.get("asset_sha256")
     schema_hash = wire_schema.get("sha256")
     entrypoint = str(wire_schema.get("entrypoint", ""))
@@ -187,37 +235,56 @@ def release_metadata(runtime: Path, local_release_dir: Path | None) -> dict[str,
         import zipfile
         try:
             with zipfile.ZipFile(schema_asset_path) as schema_bundle:
-                schema_bytes = schema_bundle.read(entrypoint)
+                names = sorted(name for name in schema_bundle.namelist()
+                               if name.startswith("wire/v2/") and name.endswith(".fbs"))
+                if entrypoint not in names:
+                    raise KeyError(entrypoint)
+                schema_digest = hashlib.sha256()
+                for name in names:
+                    schema_digest.update(name.encode("utf-8") + b"\0")
+                    schema_digest.update(schema_bundle.read(name) + b"\0")
         except (KeyError, zipfile.BadZipFile) as error:
             raise SystemExit(f"schema bundle is missing {entrypoint}: {error}") from error
-        actual_schema_hash = hashlib.sha256(schema_bytes).hexdigest()
+        actual_schema_hash = schema_digest.hexdigest()
         if schema_hash != actual_schema_hash:
             raise SystemExit(
                 f"schema entrypoint SHA-256 {actual_schema_hash} does not match manifest {schema_hash}"
             )
     tool_record = manifest.get("tool", {})
+    includes_record = None
     if not tool_record:
-        assets = manifest.get("assets", [])
-        tool_record = next((asset for asset in assets
-                            if str(asset.get("filename", asset.get("asset", ""))) != schema_asset), {})
+        tool_record, includes_record = native_manifest_assets(manifest)
+    elif not isinstance(tool_record, dict):
+        raise SystemExit("selected release manifest tool entry is not an object")
+    if includes_record is None:
+        _, includes_record = native_manifest_assets(manifest)
     tool: Path | None = None
-    tool_hash = None
+    manifest_tool_hash = tool_record.get("sha256") or manifest.get("tool_sha256")
     if release_root is not None:
-        tool = release_root / "tool"
-        if not tool.is_file():
+        filename = tool_record.get("filename") or tool_record.get("asset")
+        tool = release_root / filename if filename else release_root / "tool"
+        if not tool.is_file() and not filename:
             tool = release_root / "tool.exe"
         require_file(tool, "selected local clang-dumper executable")
         tool_hash = sha256_file(tool)
-    manifest_tool_hash = tool_record.get("sha256") or manifest.get("tool_sha256")
-    if manifest_tool_hash and tool_hash and manifest_tool_hash != tool_hash:
-        raise SystemExit(f"local release tool SHA-256 {tool_hash} does not match manifest {manifest_tool_hash}")
+        if manifest_tool_hash and manifest_tool_hash != tool_hash:
+            raise SystemExit(f"selected release tool SHA-256 {tool_hash} does not match manifest {manifest_tool_hash}")
+    else:
+        tool_hash = manifest_tool_hash
+    includes_hash = includes_record.get("sha256") if includes_record else None
+    includes_cache = resource_cache_root.resolve() / "includes" / includes_hash \
+        if resource_cache_root is not None and includes_hash else None
+    if includes_cache is not None and not includes_cache.is_dir():
+        raise SystemExit(f"selected release includes cache is missing: {includes_cache}")
     result.update({
         "manifest": manifest_source,
         "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
+        "release_assets_manifest": str(assets_manifest) if assets_manifest else None,
         "manifest_schema_version": manifest.get("schema_version"),
         "wire_schema_version": wire_schema.get("version"),
         "schema_entrypoint": entrypoint,
         "schema_asset": schema_asset,
+        "schema_asset_file": str(schema_asset_path) if schema_asset_path else None,
         "schema_asset_sha256": actual_schema_asset_hash or schema_asset_hash,
         "schema_sha256": actual_schema_hash,
         "flatbuffers_version": flatbuffers.get("version") or wire_schema.get("flatbuffers_version"),
@@ -225,8 +292,90 @@ def release_metadata(runtime: Path, local_release_dir: Path | None) -> dict[str,
         "tool": str(tool) if tool else None,
         "tool_sha256": tool_hash,
         "manifest_tool_sha256": manifest_tool_hash,
+        "tool_asset": tool_record.get("filename") or tool_record.get("asset"),
+        "includes_asset": includes_record.get("filename") if includes_record else None,
+        "includes_asset_sha256": includes_hash,
+        "includes_cache": str(includes_cache) if includes_cache else None,
     })
     return result
+
+
+def stage_resource_cache(resource_cache_root: Path, xdg_root: Path,
+                         release: dict[str, Any]) -> dict[str, Any]:
+    """Expose the preverified published-release cache under this isolated XDG root."""
+
+    source = resource_cache_root.resolve()
+    release_dir = source / "releases" / str(release["release_tag"])
+    manifest_path = release_dir / "clang-dumper-release-manifest.json"
+    target = xdg_root / "@specs-feup" / "clava" / "clang-dumper"
+    release_link = target / "releases" / release["release_tag"]
+    includes_link = target / "includes" / str(release.get("includes_asset_sha256"))
+    if not source.is_dir() or not manifest_path.is_file():
+        raise SystemExit(f"selected release cache is missing its published RC: {release_dir}")
+    source_includes = Path(str(release.get("includes_cache"))) if release.get("includes_cache") else None
+    if target.exists() or target.is_symlink():
+        matching_release = release_link.is_symlink() and release_link.resolve() == release_dir.resolve()
+        matching_includes = source_includes is None or (
+            includes_link.is_symlink() and includes_link.resolve() == source_includes.resolve()
+        )
+        if not target.is_dir() or target.is_symlink() or not matching_release or not matching_includes:
+            raise SystemExit(f"staged Clava resource cache does not match selected RC: {target}")
+    else:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        (target / "releases").mkdir(parents=True)
+        release_link.symlink_to(release_dir, target_is_directory=True)
+        (target / "includes").mkdir()
+        if source_includes is not None:
+            includes_link.symlink_to(source_includes, target_is_directory=True)
+    return {
+        "source_root": str(source),
+        "staged_cache_root": str(target),
+        "staged_release_link": str(release_link),
+        "staged_includes_link": str(includes_link) if source_includes is not None else None,
+        "release_tag": release["release_tag"],
+        "release_dir": str(release_dir),
+        "manifest_sha256": release.get("manifest_sha256"),
+        "tool_asset": release.get("tool_asset"),
+        "tool_path": release.get("tool"),
+        "tool_sha256": release.get("tool_sha256"),
+        "schema_asset_sha256": release.get("schema_asset_sha256"),
+        "schema_sha256": release.get("schema_sha256"),
+        "includes_asset_sha256": release.get("includes_asset_sha256"),
+        "includes_cache": release.get("includes_cache"),
+    }
+
+
+def resource_cache_hashes(release: dict[str, Any]) -> dict[str, Any]:
+    """Rehash the published manifest, native tool and schema used by a run."""
+
+    manifest_path = Path(str(release["manifest"]))
+    tool_path = Path(str(release["tool"])) if release.get("tool") else None
+    schema_path = Path(str(release["schema_asset_file"])) if release.get("schema_asset_file") else None
+    includes_path = Path(str(release["includes_cache"])) if release.get("includes_cache") else None
+    result = {
+        "manifest_sha256": sha256_file(manifest_path),
+        "tool_sha256": sha256_file(tool_path) if tool_path and tool_path.is_file() else None,
+        "schema_asset_sha256": sha256_file(schema_path) if schema_path and schema_path.is_file() else None,
+        "schema_sha256": release.get("schema_sha256"),
+        "includes_asset_sha256": release.get("includes_asset_sha256"),
+        "includes_tree": sha256_tree(includes_path) if includes_path and includes_path.is_dir() else None,
+    }
+    return result
+
+
+def sha256_tree(root: Path) -> dict[str, Any]:
+    """Hash every file by sorted relative path and content, independent of mtimes."""
+
+    digest = hashlib.sha256()
+    files = sorted(path for path in root.rglob("*") if path.is_file())
+    total_bytes = 0
+    for path in files:
+        relative = path.relative_to(root).as_posix().encode("utf-8")
+        file_digest = sha256_file(path)
+        size = path.stat().st_size
+        total_bytes += size
+        digest.update(relative + b"\0" + file_digest.encode("ascii") + b"\0")
+    return {"sha256": digest.hexdigest(), "file_count": len(files), "total_bytes": total_bytes}
 
 
 def host_state() -> dict[str, Any]:
@@ -249,8 +398,21 @@ def host_state() -> dict[str, Any]:
     return state
 
 
-def cache_dir(xdg_root: Path) -> Path:
-    return xdg_root / "@specs-feup" / "clava" / "clang-dumper-ccache"
+def cache_dir(xdg_root: Path, release: dict[str, Any]) -> Path:
+    """Return the production cache namespace selected by the staged runtime."""
+
+    required = (
+        "wire_schema_version", "flatbuffers_version", "flatbuffers_commit",
+        "schema_sha256", "tool_sha256",
+    )
+    missing = [key for key in required if not release.get(key)]
+    if missing:
+        raise SystemExit(f"selected release is missing ccache identity fields: {missing}")
+    namespace = (
+        f"flatbuffers-v{release['wire_schema_version']}-{release['flatbuffers_version']}"
+        f"-{release['flatbuffers_commit']}-{release['schema_sha256']}-{release['tool_sha256']}"
+    )
+    return xdg_root / "@specs-feup" / "clava" / "clang-dumper-ccache" / namespace
 
 
 def ccache(command: str, cache: Path) -> str:
@@ -472,6 +634,14 @@ def main() -> int:
         raise SystemExit(f"runtime distribution does not exist: {args.runtime_root}")
     if args.local_release_dir is not None and not args.local_release_dir.is_dir():
         raise SystemExit(f"local release directory does not exist: {args.local_release_dir}")
+    if args.resource_cache_root is not None and not args.resource_cache_root.is_dir():
+        raise SystemExit(f"Clava resource cache does not exist: {args.resource_cache_root}")
+    if args.release_assets_root is not None and not args.release_assets_root.is_dir():
+        raise SystemExit(f"published release assets do not exist: {args.release_assets_root}")
+    if args.resource_cache_root is not None and args.release_assets_root is None:
+        raise SystemExit("--resource-cache-root requires matching --release-assets-root for schema verification")
+    if args.local_release_dir is not None and args.resource_cache_root is not None:
+        raise SystemExit("--local-release-dir and --resource-cache-root select different release modes")
     if args.mode == "warm" and args.cache_root is None:
         raise SystemExit("--mode warm requires --cache-root from a previous cold run")
 
@@ -484,6 +654,10 @@ def main() -> int:
     prepare_temp_environment(temp_root)
     temp_metadata = filesystem_metadata(temp_root)
 
+    runtime_root = run_dir / "runtime"
+    stage_java_runtime(args.runtime_root.resolve(), runtime_root, args.local_release_dir)
+    runtime_manifest = runtime_jar_manifest(runtime_root)
+
     if args.cache_root is None:
         xdg_root = Path(tempfile.mkdtemp(prefix="xdg-", dir=output_root))
     else:
@@ -493,17 +667,17 @@ def main() -> int:
                 f"{args.mode} mode requires a new cache root, already exists: {xdg_root}"
             )
         xdg_root.mkdir(parents=True, exist_ok=True)
-    cache = cache_dir(xdg_root)
+    release = release_metadata(runtime_root, args.local_release_dir, args.resource_cache_root,
+                               args.release_assets_root)
+    resource_cache = stage_resource_cache(args.resource_cache_root, xdg_root, release) \
+        if args.resource_cache_root is not None else None
+    cache = cache_dir(xdg_root, release)
     cache.parent.mkdir(parents=True, exist_ok=True)
     if args.mode == "cold":
         cache.mkdir(parents=True, exist_ok=True)
     elif args.mode == "warm" and not cache.is_dir():
         raise SystemExit(f"Warm cache directory does not exist: {cache}")
 
-    runtime_root = run_dir / "runtime"
-    stage_java_runtime(args.runtime_root.resolve(), runtime_root, args.local_release_dir)
-    runtime_manifest = runtime_jar_manifest(runtime_root)
-    release = release_metadata(runtime_root, args.local_release_dir)
     clava_git = git_status(CLAVA_ROOT)
 
     stats_before = ccache("--show-stats", cache) if cache.is_dir() else ""
@@ -534,6 +708,7 @@ def main() -> int:
         environment["CCACHE_DISABLE"] = "true"
     else:
         environment.pop("CCACHE_DISABLE", None)
+    resource_hashes_before = resource_cache_hashes(release) if resource_cache is not None else None
     started = time.perf_counter()
     with log_path.open("w") as log:
         process = subprocess.run(command, cwd=CLAVA_JS_ROOT, env=environment, stdout=log, stderr=subprocess.STDOUT)
@@ -541,6 +716,14 @@ def main() -> int:
 
     stats_after = ccache("--show-stats", cache)
     stats = parse_ccache_stats(stats_after)
+    if resource_cache is not None:
+        release_after = release_metadata(runtime_root, args.local_release_dir, args.resource_cache_root,
+                                         args.release_assets_root)
+        resource_hashes_after = resource_cache_hashes(release_after)
+        if resource_hashes_before != resource_hashes_after:
+            raise SystemExit("preverified Clava release resources changed during the observation")
+        resource_cache["hashes_before"] = resource_hashes_before
+        resource_cache["hashes_after"] = resource_hashes_after
     report = json.loads(report_path.read_text()) if report_path.is_file() else {}
     test_counts = flatten_tests(report, run_dir / "per_test_timings.csv", report_path, log_path)
     test_counts_valid = all(test_counts.get(key) == value for key, value in EXPECTED_TEST_COUNTS.items())
@@ -599,6 +782,7 @@ def main() -> int:
         "ccache_dir": str(cache),
         "ccache_stats": stats,
         "ccache_stats_before": parse_ccache_stats(stats_before),
+        "resource_cache": resource_cache,
         "clava_revision": git_revision(CLAVA_ROOT),
         "runtime_source": str(args.runtime_root.resolve()),
         "release": release,
