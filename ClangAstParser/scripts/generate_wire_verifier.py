@@ -81,8 +81,9 @@ def generate(spec, out):
     dest = Path(out) / "pt/up/fe/specs/clang/wire/GeneratedWireVerifier.java"
     dest.parent.mkdir(parents=True, exist_ok=True)
     content = '\n'.join(lines) + '\n'
-    if not dest.exists() or dest.read_text() != content:
-        dest.write_text(content)
+    encoded = content.encode("utf-8")
+    if not dest.exists() or dest.read_bytes() != encoded:
+        dest.write_bytes(encoded)
 
 
 def main():

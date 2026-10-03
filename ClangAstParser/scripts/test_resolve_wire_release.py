@@ -93,6 +93,7 @@ class ReleaseSchemaTest(unittest.TestCase):
             [("wire/v2/other.fbs", "missing root")],
             [("wire/v2/complete.fbs", "one"), ("wire/v2/complete.fbs", "two")],
             [("wire/v2/complete.fbs", "root"), ("wire/v2/script.py", "bad")],
+            [("wire/v2/complete.fbs", "root"), ("wire/v2/nested/hidden.fbs", "unhashed")],
         ]
         for entries in cases:
             with self.subTest(entries=entries), tempfile.TemporaryDirectory() as temporary:
@@ -104,6 +105,37 @@ class ReleaseSchemaTest(unittest.TestCase):
         with patch.object(resolver.subprocess, "run", return_value=result):
             with self.assertRaisesRegex(ValueError, "Expected flatc"):
                 resolver.verify_flatc(Path("flatc"))
+
+    def test_cached_compiler_is_checked_against_verified_archive(self):
+        compiler = b"verified compiler"
+        data = archive([("flatc", compiler)])
+        with tempfile.TemporaryDirectory() as temporary:
+            with patch.object(resolver, "flatc_asset", return_value=("compiler.zip", resolver.sha256(data))), \
+                    patch.object(resolver, "fetch", return_value=data) as fetch, \
+                    patch.object(resolver, "verify_flatc"):
+                path = resolver.ensure_flatc(Path(temporary))
+                self.assertEqual(compiler, path.read_bytes())
+                resolver.ensure_flatc(Path(temporary))
+                path.write_bytes(b"tampered")
+                resolver.ensure_flatc(Path(temporary))
+                self.assertEqual(compiler, path.read_bytes())
+                fetch.assert_called_once()
+
+    def test_java_runtime_requires_pinned_archive_hash(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            with patch.object(resolver, "fetch", return_value=b"wrong commit"):
+                with self.assertRaisesRegex(ValueError, "runtime source archive hash"):
+                    resolver.resolve_java_runtime(root / "cache", root / "runtime")
+
+    def test_arm_hosts_bootstrap_compiler_from_verified_source(self):
+        for system, machine in [("Linux", "aarch64"), ("Windows", "ARM64")]:
+            with self.subTest(system=system), \
+                    patch.object(resolver.platform, "system", return_value=system), \
+                    patch.object(resolver.platform, "machine", return_value=machine), \
+                    patch.object(resolver, "build_flatc_from_source", return_value=Path("native-flatc")) as build:
+                self.assertEqual(Path("native-flatc"), resolver.ensure_flatc(Path("cache")))
+                build.assert_called_once_with(Path("cache"))
 
 
 if __name__ == "__main__":

@@ -43,21 +43,26 @@ public class ClangCcacheAdapterTest {
 
     @Test
     public void schemaVersionsHaveSeparateCaches(@TempDir Path folder) throws Exception {
-        var first = ClangCcacheAdapter.prepare(folder.toFile(), null, "a".repeat(64));
-        var second = ClangCcacheAdapter.prepare(folder.toFile(), null, "b".repeat(64));
+        var executable = folder.resolve("tool");
+        Files.writeString(executable, "producer revision one");
+        var first = ClangCcacheAdapter.prepare(folder.toFile(), null, executable.toFile(), "a".repeat(64));
+        var second = ClangCcacheAdapter.prepare(folder.toFile(), null, executable.toFile(), "b".repeat(64));
         assertNotEquals(first.cacheFolder(), second.cacheFolder());
         assertTrue(Files.isDirectory(first.cacheFolder().toPath()));
         assertTrue(Files.isDirectory(second.cacheFolder().toPath()));
         assertTrue(first.cacheFolder().getName().startsWith("flatbuffers-"));
         Files.writeString(first.cacheFolder().toPath().resolve("cached.dump"), "old schema");
         assertFalse(Files.exists(second.cacheFolder().toPath().resolve("cached.dump")));
+        Files.writeString(executable, "producer revision two with different bytes");
+        var rebuilt = ClangCcacheAdapter.prepare(folder.toFile(), null, executable.toFile(), "a".repeat(64));
+        assertNotEquals(first.cacheFolder(), rebuilt.cacheFolder());
     }
 
     @Test
     public void invalidSchemaCannotChooseACacheDirectory(@TempDir Path folder) {
         for (String hash : List.of("../text", "", "A".repeat(64), "a".repeat(63))) {
             assertThrows(IllegalArgumentException.class,
-                    () -> ClangCcacheAdapter.prepare(folder.toFile(), null, hash));
+                    () -> ClangCcacheAdapter.prepare(folder.toFile(), null, folder.resolve("tool").toFile(), hash));
         }
     }
 
