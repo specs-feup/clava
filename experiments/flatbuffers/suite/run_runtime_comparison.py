@@ -207,6 +207,13 @@ def stage_control_workspace(output_root: Path, label: str, control_checkout: Pat
     overlay = output_root / "source-overlays" / label
     js_root = overlay / "Clava-JS"
     js_root.mkdir(parents=True)
+    workspace_manifest = {
+        "name": "flatbuffers-suite-control-overlay",
+        "private": True,
+        "workspaces": ["Clava-JS"],
+    }
+    workspace_manifest_path = overlay / "package.json"
+    workspace_manifest_path.write_text(json.dumps(workspace_manifest, indent=2) + "\n")
     for entry in CLAVA_JS_ROOT.iterdir():
         destination = js_root / entry.name
         if entry.name == "woven_code":
@@ -229,6 +236,7 @@ def stage_control_workspace(output_root: Path, label: str, control_checkout: Pat
     return js_root, {
         "checkout": str(source_checkout.resolve()),
         "workspace_root": str(overlay.resolve()),
+        "workspace_manifest_sha256": sha256_file(workspace_manifest_path),
         "resource_root": str(staged_resources.resolve()),
         "fixture_variant": "historical parser-matched GlobalAttributes source and golden",
         "files": {
@@ -422,10 +430,14 @@ def test_identities(rows: list[dict[str, str]]) -> list[tuple[str, str]]:
     return sorted((row.get("suite_file", ""), row.get("test_name", "")) for row in rows)
 
 
-def base_environment(no_ccache_path: str) -> dict[str, str]:
+def base_environment(no_ccache_path: str, suite_root: Path | None = None) -> dict[str, str]:
     environment = HOST_ENVIRONMENT.copy()
     environment["PATH"] = no_ccache_path
     environment["CCACHE_DISABLE"] = "true"
+    if suite_root is None:
+        environment.pop("CLAVA_SUITE_SOURCE_ROOT", None)
+    else:
+        environment["CLAVA_SUITE_SOURCE_ROOT"] = str(suite_root.resolve())
     environment.pop("AST_WIRE_FLAT", None)
     environment.pop("AST_WIRE_DENSE_TEXT", None)
     java_options = environment.get("JAVA_TOOL_OPTIONS", "")
@@ -503,7 +515,7 @@ def run_text(args: argparse.Namespace, run_root: Path, path: str) -> dict[str, A
     for item in ["--testNamePattern", JS_TEST_FILTER, *args.vitest_arg]:
         argv.append(f"--vitest-arg={item}")
     os.environ.clear()
-    os.environ.update(base_environment(path))
+    os.environ.update(base_environment(path, suite_root=js_root))
     code, summary_path, error, driver_s = invoke_module(module, argv, log_path, before, output_root)
     return observation_result(
         "text", code, summary_path, error, driver_s, args.text_runtime,
@@ -535,7 +547,7 @@ def run_protobuf(args: argparse.Namespace, run_root: Path, path: str) -> dict[st
     for item in ["--testNamePattern", JS_TEST_FILTER, *args.vitest_arg]:
         argv.append(f"--vitest-arg={item}")
     os.environ.clear()
-    os.environ.update(base_environment(path))
+    os.environ.update(base_environment(path, suite_root=js_root))
     code, summary_path, error, driver_s = invoke_module(module, argv, log_path, before, output_root)
     return observation_result(
         "protobuf", code, summary_path, error, driver_s, args.protobuf_runtime,

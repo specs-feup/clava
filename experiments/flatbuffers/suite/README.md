@@ -34,8 +34,9 @@ and Protobuf runners in
 `~/.cache/ast-flatbuffers-release-validation/{text-build,protobuf-build}`.
 The historical runners are loaded as controls and run the same current
 `Clava-JS` test sources and this suite's Vitest config. Each historical run
-gets an isolated workspace whose `Clava-JS` source files point to the current
-checkout. Its ClavaWeaver test resources start from the current tree, with the
+gets an isolated npm workspace whose `Clava-JS` source files point to the
+current checkout; Vitest's root is set to that overlay. Its ClavaWeaver test
+resources start from the current tree, with the
 historical Text/Protobuf `GlobalAttributes.js` script and golden staged from
 that control checkout. This keeps the old `builtinKind` access paired with its
 matching parser and golden while preserving the same test identity and C++

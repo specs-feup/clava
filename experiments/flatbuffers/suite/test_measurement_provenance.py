@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 import sys
@@ -115,6 +116,8 @@ class HistoricalGlobalAttributesFixtureTest(unittest.TestCase):
                 staged["staged_resource_tree_sha256"], js_comparison.sha256_tree(staged_resources)
             )
             self.assertTrue((workspace / "api").is_symlink())
+            registry = json.loads((workspace.parent / "package.json").read_text())
+            self.assertEqual(registry["workspaces"], ["Clava-JS"])
             self.assertEqual(
                 (current_resources / "test/weaver/GlobalAttributes.js").read_text(),
                 "type.getValue('kind');\n",

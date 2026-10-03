@@ -618,7 +618,8 @@ def main() -> int:
         "command": command,
         "environment": {
             key: environment[key]
-            for key in ("TMPDIR", "TMP", "TEMP", "XDG_CACHE_HOME", "CLAVA_SUITE_JAR_PATH", "CCACHE_DISABLE", "JAVA_TOOL_OPTIONS")
+            for key in ("TMPDIR", "TMP", "TEMP", "XDG_CACHE_HOME", "CLAVA_SUITE_JAR_PATH",
+                        "CLAVA_SUITE_SOURCE_ROOT", "CCACHE_DISABLE", "JAVA_TOOL_OPTIONS")
             if key in environment
         },
     }
