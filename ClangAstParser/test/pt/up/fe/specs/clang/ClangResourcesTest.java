@@ -647,11 +647,23 @@ public class ClangResourcesTest {
 
         var systemLibcDumper = tempFolder.resolve("system-libc-dumper");
         var argumentLog = tempFolder.resolve("libc-probe-args.txt");
+        var resourceLog = tempFolder.resolve("libc-probe-resource-dirs.txt");
+        var invocationLog = tempFolder.resolve("libc-probe-invocations.txt");
         Files.writeString(systemLibcDumper,
                 "#!/bin/sh\n"
+                        + "printf '%s\\n' call >> '" + invocationLog + "'\n"
                         + "printf '%s\\n' \"$@\" > '" + argumentLog + "'\n"
-                        + "if [ \"$2\" != \"-o\" ] || [ \"$4\" != \"--\" ]; then exit 2; fi\n"
-                        + "printf '%s\\n' '<Top Level Nodes>' > \"$3\"\n"
+                        + "output=\n"
+                        + "previous=\n"
+                        + "resource=\n"
+                        + "for argument in \"$@\"; do\n"
+                        + "  if [ \"$previous\" = \"-o\" ]; then output=\"$argument\"; fi\n"
+                        + "  case \"$argument\" in -resource-dir=*) resource=\"$argument\" ;; esac\n"
+                        + "  previous=\"$argument\"\n"
+                        + "done\n"
+                        + "printf '%s\\n' \"$resource\" >> '" + resourceLog + "'\n"
+                        + "if [ -z \"$output\" ] || [ \"$previous\" != \"--\" ]; then exit 2; fi\n"
+                        + "printf '%s\\n' '<Top Level Nodes>' > \"$output\"\n"
                         + "printf '%s\\n' '<Top Level Nodes>'\n");
         assertTrue(systemLibcDumper.toFile().setExecutable(true));
 
@@ -659,12 +671,27 @@ public class ClangResourcesTest {
         Files.writeString(builtinLibcDumper, "#!/bin/sh\nexit 1\n");
         assertTrue(builtinLibcDumper.toFile().setExecutable(true));
 
+        var resourceDirOne = tempFolder.resolve("resource-one").toFile();
+        var resourceDirTwo = tempFolder.resolve("resource-two").toFile();
+        assertEquals(LibcMode.BUILTIN_AND_LIBC,
+                ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.AUTO, false, resourceDirOne));
+        var actualArguments = Files.readAllLines(argumentLog);
+        assertTrue(actualArguments.contains("-resource-dir=" + resourceDirOne.getAbsolutePath()));
+        var outputArgument = actualArguments.indexOf("-o");
+        assertTrue(outputArgument >= 0);
+        assertTrue(actualArguments.get(outputArgument + 1).endsWith(".clv2"));
+        assertEquals("--", actualArguments.get(actualArguments.size() - 1));
+        assertEquals(LibcMode.BUILTIN_AND_LIBC,
+                ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.AUTO, false, resourceDirOne));
+        assertEquals(1, Files.readAllLines(invocationLog).size(), "The same resource path should use the cached probe");
+        assertEquals(LibcMode.BUILTIN_AND_LIBC,
+                ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.AUTO, false, resourceDirTwo));
+        assertEquals(2, Files.readAllLines(invocationLog).size(), "A different resource path needs its own probe");
+        assertEquals(List.of("-resource-dir=" + resourceDirOne.getAbsolutePath(),
+                "-resource-dir=" + resourceDirTwo.getAbsolutePath()), Files.readAllLines(resourceLog));
         assertEquals(LibcMode.BUILTIN_AND_LIBC,
                 ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.AUTO, false));
-        var actualArguments = Files.readAllLines(argumentLog);
-        assertEquals("-o", actualArguments.get(1));
-        assertTrue(actualArguments.get(2).endsWith(".clv2"));
-        assertEquals("--", actualArguments.get(3));
+        assertEquals(3, Files.readAllLines(invocationLog).size(), "The default resource path needs a separate probe");
         assertEquals(LibcMode.BUILTIN_AND_LIBC,
                 ClangResources.resolveLibcMode(builtinLibcDumper.toFile(), LibcMode.AUTO, false));
         assertEquals(LibcMode.SYSTEM,
@@ -702,6 +729,8 @@ public class ClangResourcesTest {
         assertEquals(files.libcMode() == LibcMode.SYSTEM, files.builtinIncludes().isEmpty());
         if (SupportedPlatform.getCurrentPlatform().isLinux()) {
             assertEquals(LibcMode.SYSTEM, files.libcMode());
+            assertNotNull(files.systemResourceDir());
+            assertTrue(files.systemResourceDir().isDirectory());
         }
     }
 

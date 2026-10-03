@@ -99,8 +99,27 @@ public class ClangResources {
         var resourceFolder = getClangResourceFolder();
         var manifest = ClangAstWebResource.getManifest(resourceFolder);
         File clangExecutable = prepareResources(manifest, resourceFolder);
-        var libcMode = resolveLibcMode(clangExecutable, requestedLibcMode, forceSystemLibc);
-        var key = libcMode.name() + "_" + useBuiltinCuda + "_" + source + "_" + resourceFolder.getAbsolutePath();
+        var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
+        var llvmMajor = getLLVMMajor(getCurrentAsset(manifest, executableKind));
+        var systemResourceDir = !forceSystemLibc && requestedLibcMode == LibcMode.BUILTIN_AND_LIBC
+                ? null
+                : tryFindSystemClangResourceDir(llvmMajor);
+        var libcMode = requestedLibcMode == LibcMode.AUTO && !forceSystemLibc && systemResourceDir == null
+                ? LibcMode.BUILTIN_AND_LIBC
+                : resolveLibcMode(clangExecutable, requestedLibcMode, forceSystemLibc, systemResourceDir);
+
+        if (libcMode == LibcMode.SYSTEM && useBuiltinCuda && systemResourceDir == null) {
+            systemResourceDir = findSystemClangResourceDir(llvmMajor);
+        }
+
+        if (libcMode != LibcMode.SYSTEM) {
+            systemResourceDir = null;
+        }
+
+        var systemResourceKey = systemResourceDir == null ? "no-system-resource-dir"
+                : SpecsIo.getCanonicalPath(systemResourceDir);
+        var key = libcMode.name() + "_" + useBuiltinCuda + "_" + source + "_"
+                + resourceFolder.getAbsolutePath() + "_" + systemResourceKey;
         var cached = CLANG_FILES_CACHE.get(key);
         if (isUsable(cached)) {
             SpecsLogs.debug(() -> "Using cached version of Clang files: " + cached.files());
@@ -112,10 +131,6 @@ public class ClangResources {
         }
 
         var includes = prepareIncludes(manifest, libcMode);
-        var systemResourceDir = libcMode == LibcMode.SYSTEM && useBuiltinCuda
-                ? prepareSystemClangResourceDir(manifest)
-                : null;
-
         if (useBuiltinCuda) {
             getBuiltinCudaLib();
         }
@@ -134,6 +149,11 @@ public class ClangResources {
     }
 
     static LibcMode resolveLibcMode(File clangExecutable, LibcMode requestedLibcMode, boolean forceSystem) {
+        return resolveLibcMode(clangExecutable, requestedLibcMode, forceSystem, null);
+    }
+
+    static LibcMode resolveLibcMode(File clangExecutable, LibcMode requestedLibcMode, boolean forceSystem,
+            File systemResourceDir) {
         Objects.requireNonNull(clangExecutable, "clangExecutable");
         Objects.requireNonNull(requestedLibcMode, "requestedLibcMode");
 
@@ -142,7 +162,7 @@ public class ClangResources {
         }
 
         return switch (requestedLibcMode) {
-            case AUTO -> useBuiltinLibc(clangExecutable, requestedLibcMode)
+            case AUTO -> useBuiltinLibc(clangExecutable, requestedLibcMode, systemResourceDir)
                     ? LibcMode.BUILTIN_AND_LIBC
                     : LibcMode.SYSTEM;
             case BUILTIN_AND_LIBC, SYSTEM -> requestedLibcMode;
@@ -283,19 +303,26 @@ public class ClangResources {
     }
 
     public static boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode) {
+        return useBuiltinLibc(clangExecutable, libcMode, null);
+    }
+
+    private static boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode, File systemResourceDir) {
         return switch (libcMode) {
-            case AUTO -> !hasLibC(clangExecutable);
+            case AUTO -> !hasLibC(clangExecutable, systemResourceDir);
             case BUILTIN_AND_LIBC -> true;
             case SYSTEM -> false;
         };
     }
 
-    private static boolean hasLibC(File clangExecutable) {
+    private static boolean hasLibC(File clangExecutable, File systemResourceDir) {
         var executableKey = SpecsIo.getCanonicalPath(clangExecutable);
-        return HAS_LIBC.computeIfAbsent(executableKey, ignored -> detectLibC(clangExecutable));
+        var resourceDirKey = systemResourceDir == null ? "default-resource-dir"
+                : SpecsIo.getCanonicalPath(systemResourceDir);
+        var probeKey = executableKey + "|" + resourceDirKey + "|clv2-c-cpp-nonempty-v1";
+        return HAS_LIBC.computeIfAbsent(probeKey, ignored -> detectLibC(clangExecutable, systemResourceDir));
     }
 
-    private static boolean detectLibC(File clangExecutable) {
+    private static boolean detectLibC(File clangExecutable, File systemResourceDir) {
         File clangTest = SpecsIo.getTempFolder("clang_ast_test_" + UUID.randomUUID());
 
         try {
@@ -306,7 +333,7 @@ public class ClangResources {
             boolean needsLib = false;
             for (var testFile : testFiles) {
                 var dumpFile = new File(clangTest, testFile.getName() + ".clv2");
-                var output = runClangAstDumper(clangExecutable, testFile, dumpFile);
+                var output = runClangAstDumper(clangExecutable, testFile, dumpFile, systemResourceDir);
 
                 if (output.getReturnValue() != 0 || !dumpFile.isFile()) {
                     ClavaLog.debug("Could not produce a FlatBuffers dump while checking system libc/libcxx");
@@ -344,9 +371,17 @@ public class ClangResources {
         }
     }
 
-    private static ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile, File dumpFile) {
-        List<String> arguments = List.of(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(),
-                "-o", dumpFile.getAbsolutePath(), "--");
+    private static ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile, File dumpFile,
+            File systemResourceDir) {
+        var arguments = new ArrayList<String>();
+        arguments.add(clangExecutable.getAbsolutePath());
+        arguments.add(testFile.getAbsolutePath());
+        if (systemResourceDir != null) {
+            arguments.add("-resource-dir=" + systemResourceDir.getAbsolutePath());
+        }
+        arguments.add("-o");
+        arguments.add(dumpFile.getAbsolutePath());
+        arguments.add("--");
         return SpecsSystem.runProcess(arguments, true, false);
     }
 
@@ -362,23 +397,44 @@ public class ClangResources {
         return new PreparedIncludes(includeFolders.stream().map(File::getAbsolutePath).toList(), extractedFolder);
     }
 
-    private File prepareSystemClangResourceDir(ClangDumperManifest manifest) {
-        var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
-        var llvmMajor = getCurrentAsset(manifest, executableKind).llvm_major();
-        return findSystemClangResourceDir(llvmMajor);
+    static int getLocalLLVMMajor(ClangDumperManifestAsset localAsset) {
+        return getLLVMMajor(localAsset);
     }
 
-    static int getLocalLLVMMajor(ClangDumperManifestAsset localAsset) {
-        var llvmMajor = localAsset.llvm_major();
+    private static int getLLVMMajor(ClangDumperManifestAsset asset) {
+        var llvmMajor = asset.llvm_major();
         if (llvmMajor < 1) {
-            throw new RuntimeException("Local clang-dumper manifest tool asset must specify llvm_major "
-                    + "to select matching system CUDA headers");
+            throw new RuntimeException("Clang-dumper manifest asset must specify llvm_major "
+                    + "to select matching system Clang resources");
         }
 
         return llvmMajor;
     }
 
     private File findSystemClangResourceDir(Integer llvmMajor) {
+        var resourceDir = tryFindSystemClangResourceDir(llvmMajor);
+        if (resourceDir != null) {
+            return resourceDir;
+        }
+
+        var commandNames = getSystemClangCommandNames(llvmMajor);
+        var expectedVersion = llvmMajor == null ? "the local clang-dumper build's version"
+                : "LLVM " + llvmMajor;
+        var installHint = llvmMajor == null ? "clang++" : "clang++-" + llvmMajor;
+        throw new RuntimeException("Could not find a system Clang resource directory for SYSTEM mode with built-in CUDA"
+                + " on host '" + SupportedPlatform.getCurrentPlatform() + "' (expected " + expectedVersion
+                + "). Tried: " + commandNames
+                + ". SYSTEM mode does not bundle Clang's CUDA wrapper headers, so a matching system Clang"
+                + " installation is required: install '" + installHint + "' (e.g. 'apt install " + installHint
+                + "' or 'brew install llvm'), or set the libc mode to 'builtin' to use the bundled includes"
+                + " instead of the system libc");
+    }
+
+    private File tryFindSystemClangResourceDir(Integer llvmMajor) {
+        if (llvmMajor == null || llvmMajor < 1) {
+            return null;
+        }
+
         var commandNames = getSystemClangCommandNames(llvmMajor);
         for (var commandName : commandNames) {
             final ProcessOutputAsString output;
@@ -399,17 +455,7 @@ public class ClangResources {
                 return resourceDir;
             }
         }
-
-        var expectedVersion = llvmMajor == null ? "the local clang-dumper build's version"
-                : "LLVM " + llvmMajor;
-        var installHint = llvmMajor == null ? "clang++" : "clang++-" + llvmMajor;
-        throw new RuntimeException("Could not find a system Clang resource directory for SYSTEM mode with built-in CUDA"
-                + " on host '" + SupportedPlatform.getCurrentPlatform() + "' (expected " + expectedVersion
-                + "). Tried: " + commandNames
-                + ". SYSTEM mode does not bundle Clang's CUDA wrapper headers, so a matching system Clang"
-                + " installation is required: install '" + installHint + "' (e.g. 'apt install " + installHint
-                + "' or 'brew install llvm'), or set the libc mode to 'builtin' to use the bundled includes"
-                + " instead of the system libc");
+        return null;
     }
 
     private static List<String> getSystemClangCommandNames(Integer llvmMajor) {
