@@ -102,8 +102,7 @@ revisions before including them. Each run captures host load, available memory,
 and top CPU processes before and after the JVM. Keep the observations sequential
 and do not overlap them with builds or benchmarks.
 
-Historical prototype sources and their reports were kept on the
-`lazy-flatbuffers-experiment` branch. Snapshots under `measurements/` are
-historical results and are not current-build performance evidence. Current
+Historical prototype sources, measurement snapshots and reports were kept on the
+`lazy-flatbuffers-experiment` branch. They are not current-build performance evidence. Current
 release claims must cite runs made from the selected release and its exact
 consumer build.
