@@ -91,11 +91,18 @@ switch. Run it once for each of the NAS and templates workloads:
 ```sh
 python3 experiments/flatbuffers/validation/run_memory_matrix.py \
   --runtime "eager=$EAGER" --runtime "text=$TEXT" --runtime "protobuf=$PROTOBUF" \
-  --source /path/to/nas.c --repeat-count 3 --parse-repeats 20
+  --resource-cache-root "$RESOURCE_CACHE" --release-assets-root "$RELEASE_ASSETS" \
+  --source /path/to/nas.c --standard c99 --repeat-count 3 --parse-repeats 20
 python3 experiments/flatbuffers/validation/run_memory_matrix.py \
   --runtime "eager=$EAGER" --runtime "text=$TEXT" --runtime "protobuf=$PROTOBUF" \
-  --source /path/to/templates.cpp --repeat-count 3 --parse-repeats 20
+  --resource-cache-root "$RESOURCE_CACHE" --release-assets-root "$RELEASE_ASSETS" \
+  --source /path/to/templates.cpp --standard c++17 --repeat-count 3 --parse-repeats 20
 ```
+
+`RESOURCE_CACHE` contains the verified selected release under `releases/<tag>`
+and its extracted includes. `RELEASE_ASSETS` contains that release's manifest
+and schema archive downloaded from GitHub. The runner checks both against the
+release tag in the eager parser JAR before measuring it.
 
 Build Text and Protobuf controls in isolated worktrees and record their source
 revisions before including them. Each run captures host load, available memory,
