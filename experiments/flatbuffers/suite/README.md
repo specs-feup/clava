@@ -64,8 +64,8 @@ The fixed filter is
 `^(?!(?:CxxTest OmpThreadsExplore|CudaTest Cuda|CudaTest CudaMatrixMul|CudaTest CudaQuery)$).*$`.
 The driver requires 164 total tests, 158 passed, zero failed, and six pending.
 It also checks that the four named exclusions are pending and that exactly two
-other tests remain pending. The ordered suite and test names must match across
-all three observations.
+other tests remain pending. The suite and test name pairs must match across all
+three observations.
 
 Every observation sets `CCACHE_DISABLE=true`. The driver builds a result-local
 PATH link farm without a `ccache` executable and verifies that `ccache` does
