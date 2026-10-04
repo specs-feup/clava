@@ -56,6 +56,23 @@ accepts one runtime and fails if any selected input cannot be reparsed or change
 on the second generation. It preserves the corpus flags and the original header
 search path, and records source and generated-code hashes for each case.
 
+Check generated source acceptance separately from successful AST import:
+
+```sh
+python3 experiments/flatbuffers/validation/audit_generated_corpus_syntax.py \
+  --manifest experiments/flatbuffers/results/validation/eager-corpus/consumer-inputs.json \
+  --summary experiments/flatbuffers/results/validation/consumer-corpus/summary.json \
+  --output experiments/flatbuffers/results/validation/generated-syntax.json
+```
+
+The audit verifies every source and generated-output hash before invoking LLVM
+18 with the recorded language standard, compiler options and original quoted
+header search path. It reports paired compiler acceptance and rejection,
+including cases where both historical Text and eager output fail. These results
+do not waive a generation or roundtrip failure. The default manifest hash pins
+the fixed 1,062-case corpus; use `--allow-nonfixed-manifest` for another selection
+and `--expected-manifest-sha256` to pin it explicitly.
+
 An intentional correction to historical Text output must be reviewed individually.
 `--reviewed-differences` accepts a version 1 JSON inventory with a `differences`
 list. Each entry pins `control`, `relative`, `source_sha256`,
