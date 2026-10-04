@@ -1,3 +1,6 @@
+import groovy.json.JsonSlurper
+import java.security.MessageDigest
+
 plugins {
     id 'distribution'
     id 'java'
@@ -24,6 +27,7 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.12.1'
     implementation 'com.google.guava:guava:33.4.0-jre'
+    implementation 'com.github.luben:zstd-jni:1.5.7-16'
     implementation 'org.apache.commons:commons-compress:1.27.1'
     implementation 'org.tukaani:xz:1.9'
 
@@ -77,6 +81,16 @@ jacocoTestCoverageVerification {
     }
 }
 
+// Coverage applies to maintained parser code; generated bindings and the pinned
+// upstream FlatBuffers runtime are checked through regeneration and wire tests.
+tasks.withType(org.gradle.testing.jacoco.tasks.JacocoReportBase).configureEach {
+    classDirectories.setFrom(sourceSets.main.output.classesDirs.asFileTree.matching {
+        exclude 'astwire/**', 'com/google/flatbuffers/**'
+        exclude 'pt/up/fe/specs/clang/wire/GeneratedNodes*'
+        exclude 'pt/up/fe/specs/clang/wire/GeneratedWireVerifier*'
+    })
+}
+
 // Make sure jacoco report is generated after tests
 test {
     useJUnitPlatform()
@@ -86,3 +100,165 @@ test {
 
     finalizedBy jacocoTestReport
 }
+
+// Schema and compiler come from the exact selected release; no sibling schema checkout is read.
+def wireRoot = layout.buildDirectory.dir('wire').get().asFile
+def wireSchema = new File(wireRoot, 'schema')
+def wireTools = new File(wireRoot, 'tools')
+def wireFlatc = new File(wireTools, System.getProperty('os.name').startsWith('Windows') ? 'flatc.exe' : 'flatc')
+def wireReflection = new File(wireRoot, 'reflection')
+def wireGenerated = layout.buildDirectory.dir('generated/sources/wire').get().asFile
+def wireInventory = new File(wireRoot, 'binding-inventory.json')
+def wireResolved = new File(wireRoot, 'selected-release.json')
+def wireCache = new File(gradle.gradleUserHomeDir, 'caches/clava-wire')
+
+def runWire = { Closure configure ->
+    def process = providers.exec {
+        ignoreExitValue = true
+        configure.delegate = delegate
+        configure.resolveStrategy = Closure.DELEGATE_FIRST
+        configure.call()
+    }
+    def result = process.result.get()
+    def errors = process.standardError.asText.get()
+    if (errors) logger.lifecycle(errors.trim())
+    result.assertNormalExitValue()
+    process
+}
+
+tasks.register('resolveWireRelease', Exec) {
+    inputs.file('clang-dumper-release.tag')
+    inputs.file('scripts/resolve_wire_release.py')
+    // Local build manifests may change without changing the selected absolute path.
+    def selected = file('clang-dumper-release.tag').text.trim()
+    if (new File(selected).isAbsolute()) {
+        inputs.file(new File(selected, 'clang-dumper-release-manifest.json'))
+        inputs.file(new File(selected, 'clang-dumper-wire-schema-v2.zip'))
+    }
+    outputs.dir(wireSchema)
+    outputs.dir(wireTools)
+    outputs.file(wireResolved)
+    outputs.dir(new File(wireTools, 'java-runtime'))
+    commandLine 'python3', file('scripts/resolve_wire_release.py'),
+        '--tag-file', file('clang-dumper-release.tag'), '--cache-root', wireCache,
+        '--schema-out', wireSchema, '--flatc-out', wireFlatc,
+        '--reflection-fbs-out', new File(wireTools, 'reflection.fbs'), '--manifest-out', wireResolved,
+        '--java-runtime-out', new File(wireTools, 'java-runtime')
+}
+
+tasks.register('generateWireReflection') {
+    dependsOn('resolveWireRelease')
+    inputs.dir(wireSchema)
+    inputs.file(wireFlatc)
+    inputs.file(new File(wireTools, 'reflection.fbs'))
+    outputs.dir(wireReflection)
+    outputs.dir(new File(wireGenerated, 'astwire'))
+    doLast {
+        delete(wireReflection, new File(wireGenerated, 'astwire'))
+        wireReflection.mkdirs()
+        wireGenerated.mkdirs()
+        def schemaFiles = fileTree(new File(wireSchema, 'wire/v2')).matching { include '*.fbs' }.files.sort { it.name }
+        runWire {
+            commandLine([wireFlatc.absolutePath, '--java', '--gen-all', '--gen-object-api', '-I',
+                new File(wireSchema, 'wire/v2').absolutePath, '-o', wireGenerated.absolutePath] + schemaFiles*.absolutePath)
+        }
+        runWire {
+            commandLine wireFlatc.absolutePath, '--binary', '--schema', '--bfbs-comments', '--bfbs-builtins',
+                '-I', new File(wireSchema, 'wire/v2').absolutePath, '-o', wireReflection.absolutePath,
+                new File(wireSchema, 'wire/v2/complete.fbs').absolutePath
+        }
+        runWire {
+            commandLine wireFlatc.absolutePath, '--json', '--strict-json', '--defaults-json',
+                '-o', wireReflection.absolutePath, new File(wireTools, 'reflection.fbs').absolutePath,
+                '--', new File(wireReflection, 'complete.bfbs').absolutePath
+        }
+    }
+}
+
+tasks.register('generateWireBindingInventory') {
+    dependsOn('generateWireReflection', configurations.compileClasspath)
+    inputs.file('scripts/BindingInventory.java')
+    inputs.file(new File(wireReflection, 'complete.json'))
+    inputs.files(configurations.compileClasspath)
+    inputs.files(fileTree('../ClavaAst/src') { include '**/*.java' })
+    outputs.file(wireInventory)
+    doLast {
+        def schema = new JsonSlurper().parse(new File(wireReflection, 'complete.json'))
+        def union = schema.enums.find { it.name == 'astwire.v2.NodePayload' }
+        if (!union || !union.is_union) throw new GradleException('Schema lacks NodePayload union')
+        def sources = fileTree('../ClavaAst/src') { include '**/*.java' }.files
+        def classes = union.values.findAll { it.name != 'NONE' }.collect { value ->
+            def table = schema.objects[value.union_type.index].name.tokenize('.').last()
+            if (!table.endsWith('Data')) throw new GradleException("Node payload table must end in Data: ${table}")
+            def name = table.substring(0, table.length() - 4)
+            def matches = sources.findAll { it.name == name + '.java' }
+            if (matches.size() != 1) throw new GradleException("Expected one Java class for ${table}: ${matches}")
+            def matcher = matches[0].text =~ /(?m)^package\s+([\w.]+)\s*;/
+            if (!matcher.find()) throw new GradleException("Missing package in ${matches[0]}")
+            matcher.group(1) + '.' + name
+        }.unique().sort()
+        def helper = new File(wireRoot, 'inventory-helper')
+        helper.mkdirs()
+        def classpath = configurations.compileClasspath.asPath
+        runWire {
+            commandLine 'javac', '--release', '17', '-cp', classpath, '-d', helper.absolutePath,
+                file('scripts/BindingInventory.java').absolutePath
+        }
+        def inventoryProcess = runWire {
+            commandLine(['java', '-cp', helper.absolutePath + File.pathSeparator + classpath,
+                'BindingInventory'] + classes)
+        }
+        wireInventory.text = inventoryProcess.standardOutput.asText.get()
+        inventoryProcess.result.get().assertNormalExitValue()
+    }
+}
+
+tasks.register('generateCompleteWire') {
+    dependsOn('generateWireBindingInventory')
+    inputs.file('scripts/generate_clava_wire.py')
+    inputs.file('scripts/generate_wire_verifier.py')
+    inputs.file(wireInventory)
+    inputs.file(wireResolved)
+    inputs.file(new File(wireReflection, 'complete.json'))
+    outputs.dir(new File(wireGenerated, 'pt'))
+    doLast {
+        def selected = new JsonSlurper().parse(wireResolved)
+        runWire {
+            commandLine 'python3', file('scripts/generate_clava_wire.py'),
+                '--reflection', new File(wireReflection, 'complete.json'), '--inventory', wireInventory,
+                '--schema-hash', selected.schema_hash, '--out', wireGenerated
+        }
+        runWire {
+            commandLine 'python3', file('scripts/generate_wire_verifier.py'),
+                '--reflection', new File(wireReflection, 'complete.json'), '--out', wireGenerated
+        }
+    }
+}
+
+sourceSets.main.java.srcDir(wireGenerated)
+sourceSets.main.java.srcDir(new File(wireTools, 'java-runtime'))
+compileJava.dependsOn('generateCompleteWire')
+
+def generatedWireHashes = {
+    fileTree(wireGenerated).matching { include '**/*.java' }.files.sort {
+        wireGenerated.toPath().relativize(it.toPath()).toString().replace('\\', '/')
+    }.collect { source ->
+        def path = wireGenerated.toPath().relativize(source.toPath()).toString().replace('\\', '/')
+        MessageDigest.getInstance('SHA-256').digest(source.bytes).encodeHex().toString() + '  ' + path
+    }.join('\n') + '\n'
+}
+tasks.register('updateGeneratedWireInventory') {
+    dependsOn('generateCompleteWire')
+    doLast { file('generated-wire.sha256').text = generatedWireHashes() }
+}
+tasks.register('verifyGeneratedWire') {
+    dependsOn('generateCompleteWire')
+    inputs.file('generated-wire.sha256')
+    inputs.dir(wireGenerated)
+    doLast {
+        if (file('generated-wire.sha256').text != generatedWireHashes()) {
+            throw new GradleException('Generated wire bindings drifted. Review the schema and generator changes, then run updateGeneratedWireInventory.')
+        }
+    }
+}
+check.dependsOn('verifyGeneratedWire')

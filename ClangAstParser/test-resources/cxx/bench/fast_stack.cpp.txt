@@ -7,14 +7,14 @@ class FastStack {
    
    
    public:
-   FastStack<Type>(size_t size) {
+   FastStack(size_t size) {
       this->ptr = new Type[size];
       this->size = size;
       this->idx = 0;
       std::cout << "Initialized with " << size << std::endl;
    }
    
-   ~FastStack<Type>() {
+   ~FastStack() {
       if(this->ptr != nullptr) {
          delete[] this->ptr;
       }

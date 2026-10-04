@@ -39,7 +39,7 @@ public class FunctionProtoType extends FunctionType {
     public final static DataKey<List<Type>> PARAMETERS_TYPES = KeyFactory.generic("parametersTypes",
             new ArrayList<Type>());
 
-    public final static DataKey<Boolean> HAS_TRAILING_RETURNS = KeyFactory.bool("hasTrailingReturn");
+    public final static DataKey<Boolean> HAS_TRAILING_RETURNS = KeyFactory.bool("hasTrailingReturns");
 
     public final static DataKey<Boolean> IS_VARIADIC = KeyFactory.bool("isVariadic");
 

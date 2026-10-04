@@ -1,0 +1,4 @@
+void asmExtendedEmpty() {
+   __asm__ __volatile__("nop"
+      :);
+}

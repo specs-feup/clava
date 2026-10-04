@@ -303,7 +303,7 @@ public class TranslationUnit extends ClavaNode {
             }
             // Could not find code where to insert inline comment, just add to the beginning
             else {
-                lines.add(0, commentCode);
+                lines.add(0, commentCode.stripLeading());
             }
 
             code = lines.stream().collect(Collectors.joining(ln()));

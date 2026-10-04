@@ -16,6 +16,8 @@ package pt.up.fe.specs.clang;
 import com.google.gson.Gson;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.providers.WebResourceProvider;
+import pt.up.fe.specs.clang.wire.GeneratedNodes;
+import pt.up.fe.specs.clang.wire.WireProtocol;
 
 import java.io.File;
 import java.io.IOException;
@@ -118,6 +120,22 @@ public final class ClangAstWebResource {
         return manifest;
     }
 
+    public static ClangDumperManifest getLocalManifest(File buildFolder) {
+        File manifestFile = new File(buildFolder, MANIFEST_FILENAME);
+        if (!manifestFile.isFile()) {
+            throw new RuntimeException("Local clang-dumper build is missing its release manifest: '"
+                    + manifestFile + "'");
+        }
+
+        var manifest = GSON.fromJson(SpecsIo.read(manifestFile), ClangDumperManifest.class);
+        if (manifest == null) {
+            throw new RuntimeException("Could not parse local clang-dumper manifest from '" + manifestFile + "'");
+        }
+
+        manifest.validate();
+        return manifest;
+    }
+
     public static WebResourceProvider getAssetResource(ClangDumperManifestAsset asset) {
         var releaseTag = getReleaseTag();
         return WebResourceProvider.newInstance(getReleaseBaseUrl(releaseTag), asset.filename(),
@@ -137,15 +155,37 @@ public final class ClangAstWebResource {
     public record LocalBuild(File folder) implements DumperSource {
     }
 
-    public record ClangDumperManifest(int schema_version, List<ClangDumperManifestAsset> assets) {
+    public record ClangDumperManifest(int schema_version, List<ClangDumperManifestAsset> assets,
+            FlatbuffersToolchain flatbuffers, WireSchema wire_schema) {
 
         public void validate() {
-            if (schema_version != 1) {
+            if (schema_version != 2) {
                 throw new RuntimeException("Unsupported clang-dumper manifest schema version: " + schema_version);
             }
 
             if (assets == null || assets.isEmpty()) {
                 throw new RuntimeException("Clang-dumper manifest does not contain assets");
+            }
+
+            if (flatbuffers == null || !WireProtocol.FLATBUFFERS_VERSION.equals(flatbuffers.version())
+                    || !WireProtocol.FLATBUFFERS_COMMIT.equals(flatbuffers.commit())) {
+                throw new RuntimeException("Clang-dumper manifest uses an unsupported FlatBuffers toolchain: "
+                        + flatbuffers);
+            }
+
+            if (wire_schema == null || wire_schema.version() != 2
+                    || !"wire/v2/complete.fbs".equals(wire_schema.entrypoint())
+                    || !"clang-dumper-wire-schema-v2.zip".equals(wire_schema.asset())
+                    || !WireProtocol.FLATBUFFERS_VERSION.equals(wire_schema.flatbuffers_version())) {
+                throw new RuntimeException("Clang-dumper manifest has an unsupported wire schema contract: "
+                        + wire_schema);
+            }
+
+            requireSha256(wire_schema.sha256(), "wire schema");
+            requireSha256(wire_schema.asset_sha256(), "wire schema archive");
+            if (!GeneratedNodes.SCHEMA_HASH.equals(wire_schema.sha256())) {
+                throw new RuntimeException("Clang-dumper schema hash " + wire_schema.sha256()
+                        + " does not match Clava bindings " + GeneratedNodes.SCHEMA_HASH);
             }
         }
 
@@ -161,6 +201,19 @@ public final class ClangAstWebResource {
             return asset.orElseThrow(() -> new RuntimeException("Could not find clang-dumper asset for platform '"
                     + platform + "', architecture '" + arch + "' and kind '" + kind + "'"));
         }
+    }
+
+    private static void requireSha256(String value, String kind) {
+        if (value == null || !value.matches("[0-9a-f]{64}")) {
+            throw new RuntimeException("Invalid SHA-256 for " + kind + ": " + value);
+        }
+    }
+
+    public record FlatbuffersToolchain(String version, String commit) {
+    }
+
+    public record WireSchema(int version, String entrypoint, String asset, String sha256, String asset_sha256,
+            String flatbuffers_version) {
     }
 
     public record ClangDumperManifestAsset(String filename, String kind, String platform, String arch, int llvm_major,

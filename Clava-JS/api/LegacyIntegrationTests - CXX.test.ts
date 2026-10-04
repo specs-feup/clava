@@ -214,7 +214,8 @@ describe("CxxTest", () => {
     it("Setters", async () => {
         const tester = newTester();
 
-        if (isMacOS) {
+        // The bundled libc++ headers alias high_resolution_clock to steady_clock.
+        if (isMacOS || isWindows) {
             tester.setResultsFile("Setters.js.macos.txt");
         }
 
@@ -555,8 +556,9 @@ describe("CxxApiTest", () => {
     }
 
     it("Cuda", async () => {
+        // The first CUDA parse can download and assemble the built-in headers.
         await newTester().test("Cuda.js", "atomicAdd.cu");
-    });
+    }, 30_000);
 
     it("CudaMatrixMul", async () => {
         await newTester().test("CudaMatrixMul.js", "mult_matrix.cu");

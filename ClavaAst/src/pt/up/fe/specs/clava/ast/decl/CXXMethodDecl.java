@@ -45,8 +45,6 @@ public class CXXMethodDecl extends FunctionDecl {
     // TODO: Change to Optional<CXXRecordDecl>, since it can be null
     public final static DataKey<Decl> RECORD = KeyFactory.object("record", Decl.class);
 
-    public final static DataKey<String> RECORD_ID = KeyFactory.string("recordId");
-
     public final static DataKey<List<CXXMethodDecl>> OVERRIDDEN_METHODS = KeyFactory.list("overriddenMethods",
             CXXMethodDecl.class);
 
@@ -79,7 +77,7 @@ public class CXXMethodDecl extends FunctionDecl {
     /**
      * The type of the object pointed by 'this'.
      */
-    public final static DataKey<Optional<Type>> THIS_OJBECT_TYPE = KeyFactory.optional("thisObjectType");
+    public final static DataKey<Optional<Type>> THIS_OBJECT_TYPE = KeyFactory.optional("thisObjectType");
 
     public final static DataKey<Boolean> HAS_INLINE_BODY = KeyFactory.bool("hasInlineBody");
 
@@ -144,6 +142,7 @@ public class CXXMethodDecl extends FunctionDecl {
     @Override
     public String getDeclarationId(boolean useReturnType) {
         StringBuilder code = new StringBuilder();
+        code.append(getTemplateHeadersCode());
 
         // if (getFunctionDeclData().getStorageClass() == StorageClass.STATIC) {
         if (get(STORAGE_CLASS) != StorageClass.None) {
@@ -174,6 +173,13 @@ public class CXXMethodDecl extends FunctionDecl {
         if (addNamespace()) {
             // String namespace = getCurrentNamespace(getRecordName()).map(str -> str + "::").orElse("");
             String namespace = getCurrentQualifiedPrefix().map(str -> str + "::").orElse("");
+            if (getRecordDecl().orElse(null) instanceof ClassTemplateSpecializationDecl specialization) {
+                String arguments = specialization.get(ClassTemplateSpecializationDecl.TEMPLATE_ARGUMENTS).stream()
+                        .map(argument -> argument.getCode(this)).collect(java.util.stream.Collectors.joining(", "));
+                String prefix = specialization.get(QUALIFIED_PREFIX);
+                namespace = (prefix.isEmpty() ? "" : prefix + "::")
+                        + specialization.getDeclName() + "<" + arguments + ">::";
+            }
 
             code.append(namespace);
         }
@@ -282,7 +288,6 @@ public class CXXMethodDecl extends FunctionDecl {
         var newQualifiedPrefix = getQualifiedPrefixWithoutRecord();
 
         set(RECORD, getFactory().nullDecl());
-        set(RECORD_ID, "null");
         set(QUALIFIED_PREFIX, newQualifiedPrefix);
         // Removed record from qualified prefix
     }
@@ -314,7 +319,6 @@ public class CXXMethodDecl extends FunctionDecl {
 
         set(QUALIFIED_PREFIX, newQualifiedPrefix);
         set(RECORD, cxxRecordDecl);
-        set(RECORD_ID, cxxRecordDecl.getId());
 
     }
 }

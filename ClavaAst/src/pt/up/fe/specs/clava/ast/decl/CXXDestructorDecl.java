@@ -30,4 +30,9 @@ public class CXXDestructorDecl extends CXXMethodDecl {
         return getCode(false);
     }
 
+    @Override
+    protected String getNameForCode() {
+        return getRecordDecl().map(record -> "~" + record.getDeclName()).orElseGet(super::getNameForCode);
+    }
+
 }

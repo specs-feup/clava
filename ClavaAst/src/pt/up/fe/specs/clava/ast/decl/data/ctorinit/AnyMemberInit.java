@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.decl.data.ctorinit;
 
+import java.util.stream.Collectors;
+
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
@@ -20,6 +22,7 @@ import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
+import pt.up.fe.specs.clava.ast.expr.ParenListExpr;
 
 public class AnyMemberInit extends CXXCtorInitializer {
 
@@ -57,6 +60,14 @@ public class AnyMemberInit extends CXXCtorInitializer {
         // https://github.com/specs-feup/clava/issues/20#issuecomment-751799537
         if (initExpr instanceof CXXConstructExpr && ((CXXConstructExpr) initExpr).getArgs().isEmpty()) {
             return "";
+        }
+
+        // getCode() adds the member initializer's surrounding parentheses. ParenListExpr already represents those
+        // delimiters, so emit only its arguments here to avoid another pair on each parse/generate cycle.
+        if (initExpr instanceof ParenListExpr parenList) {
+            return parenList.getExpressions().stream()
+                    .map(expression -> expression.getCode())
+                    .collect(Collectors.joining(", "));
         }
 
         return initExpr.getCode();

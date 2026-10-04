@@ -42,7 +42,7 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
     /**
      * The type associated with this TypeDecl.
      */
-    public final static DataKey<Optional<Type>> TYPE_FOR_DECL = KeyFactory.optional("type_for_decl");
+    public final static DataKey<Optional<Type>> TYPE_FOR_DECL = KeyFactory.optional("typeForDecl");
 
     /// DATAKEYS END
 
