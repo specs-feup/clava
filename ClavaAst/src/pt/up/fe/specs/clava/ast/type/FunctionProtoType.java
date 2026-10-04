@@ -88,6 +88,11 @@ public class FunctionProtoType extends FunctionType {
             codeElements.add("volatile");
         }
 
+        String referenceCode = get(REFERENCE_QUALIFIER).getCode();
+        if (!referenceCode.isEmpty()) {
+            codeElements.add(referenceCode);
+        }
+
         String exceptCode = get(EXCEPTION_SPECIFICATION).getCode(this);
 
         if (!exceptCode.isEmpty()) {

@@ -47,7 +47,7 @@ public class MemberPointerType extends Type {
 
     @Override
     public String getCode(ClavaNode sourceNode, String declaratorName) {
-        String memberPointerDeclarator = getClassType().getCode(sourceNode) + "::*"
+        String memberPointerDeclarator = getClassCode(sourceNode) + "::*"
                 + (declaratorName == null ? "" : declaratorName);
         Type pointeeType = getPointeeType();
         Type unqualifiedPointeeType = getUnqualifiedType(pointeeType);
@@ -56,7 +56,7 @@ public class MemberPointerType extends Type {
                 ? pointeeType.getCode(sourceNode, "(" + memberPointerDeclarator + ")")
                 : pointeeType.getCode(sourceNode, memberPointerDeclarator);
 
-        if (unqualifiedPointeeType instanceof FunctionProtoType functionType) {
+        if (getFunctionPointee(pointeeType) instanceof FunctionProtoType functionType) {
             List<String> suffix = new ArrayList<>();
             if (functionType.get(FunctionType.IS_CONST)) {
                 suffix.add("const");
@@ -79,6 +79,33 @@ public class MemberPointerType extends Type {
         }
 
         return code;
+    }
+
+    private String getClassCode(ClavaNode sourceNode) {
+        Type classType = getUnqualifiedType(getClassType());
+        if (classType instanceof RecordType recordType) {
+            var declaration = recordType.getDecl();
+            String name = declaration.getFullyQualifiedName();
+            if (declaration.getAncestorTry(pt.up.fe.specs.clava.ast.decl.FunctionDecl.class).isEmpty()) {
+                name = "::" + name;
+            }
+            if (declaration instanceof pt.up.fe.specs.clava.ast.decl.ClassTemplateSpecializationDecl specialization) {
+                String arguments = specialization.get(
+                        pt.up.fe.specs.clava.ast.decl.ClassTemplateSpecializationDecl.TEMPLATE_ARGUMENTS).stream()
+                        .map(argument -> argument.getCode(sourceNode)).collect(java.util.stream.Collectors.joining(", "));
+                name += "<" + arguments + ">";
+            }
+            return name;
+        }
+        return getClassType().getCode(sourceNode);
+    }
+
+    private static Type getFunctionPointee(Type type) {
+        type = getUnqualifiedType(type);
+        while (type instanceof ParenType parenthesized) {
+            type = getUnqualifiedType(parenthesized.getInnerType());
+        }
+        return type;
     }
 
     private static boolean requiresParenthesizedDeclarator(Type type) {
