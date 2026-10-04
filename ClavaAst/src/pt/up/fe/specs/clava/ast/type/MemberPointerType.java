@@ -47,9 +47,23 @@ public class MemberPointerType extends Type {
 
     @Override
     public String getCode(ClavaNode sourceNode, String declaratorName) {
-        String memberPointerDeclarator = getClassCode(sourceNode) + "::*"
-                + (declaratorName == null ? "" : declaratorName);
-        Type pointeeType = getPointeeType();
+        String classCode = getClassCode(sourceNode);
+        Type semanticPointee = getFunctionPointee(getPointeeType());
+        boolean groupedDataPointer = classCode.startsWith("::")
+                && !(semanticPointee instanceof BuiltinType)
+                && !(semanticPointee instanceof FunctionType)
+                && !(semanticPointee instanceof ArrayType);
+        String name = declaratorName == null ? "" : declaratorName;
+        if (groupedDataPointer) {
+            while (hasWholeParentheses(name)) {
+                name = name.substring(1, name.length() - 1);
+            }
+        }
+        String memberPointerDeclarator = classCode + "::*" + name;
+        if (groupedDataPointer) {
+            memberPointerDeclarator = "(" + memberPointerDeclarator + ")";
+        }
+        Type pointeeType = groupedDataPointer ? withoutDataParentheses(getPointeeType()) : getPointeeType();
         Type unqualifiedPointeeType = getUnqualifiedType(pointeeType);
 
         String code = requiresParenthesizedDeclarator(unqualifiedPointeeType)
@@ -79,6 +93,50 @@ public class MemberPointerType extends Type {
         }
 
         return code;
+    }
+
+    // The grouped declarator creates ParenType sugar when reparsed. Render one
+    // canonical group while retaining the pointee's qualifiers.
+    private static Type withoutDataParentheses(Type type) {
+        if (type instanceof ParenType parenthesized) {
+            return withoutDataParentheses(parenthesized.getInnerType());
+        }
+        if (type instanceof QualType qualified) {
+            Type inner = withoutDataParentheses(qualified.getUnqualifiedType());
+            if (inner != qualified.getUnqualifiedType()) {
+                QualType copy = (QualType) qualified.copy();
+                copy.set(QualType.UNQUALIFIED_TYPE, inner);
+                return copy;
+            }
+        }
+        return type;
+    }
+
+    private static boolean hasWholeParentheses(String name) {
+        if (!name.startsWith("(") || !name.endsWith(")")) {
+            return false;
+        }
+        int depth = 0;
+        char quote = 0;
+        for (int index = 0; index < name.length(); index++) {
+            char character = name.charAt(index);
+            if (quote != 0) {
+                if (character == '\\') {
+                    index++;
+                } else if (character == quote) {
+                    quote = 0;
+                }
+                continue;
+            }
+            if (character == '\'' || character == '"') {
+                quote = character;
+            } else if (character == '(') {
+                depth++;
+            } else if (character == ')' && --depth == 0) {
+                return index == name.length() - 1;
+            }
+        }
+        return false;
     }
 
     private String getClassCode(ClavaNode sourceNode) {

@@ -23,3 +23,18 @@ int local_class() {
     Local owner;
     return (owner.*local)();
 }
+
+namespace data_scope {
+struct Value { int field; };
+struct Owner { Value member; };
+Value Owner::*data = &Owner::member;
+Value Owner::*array[2] = { &Owner::member, &Owner::member };
+Value Owner::**pointer = &data;
+Value Owner::*(*array_pointer)[2] = &array;
+}
+
+namespace qualified_data_scope {
+struct Value { int field; };
+struct Owner { const Value member; };
+const Value Owner::*data = &Owner::member;
+}
