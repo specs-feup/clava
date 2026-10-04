@@ -20,8 +20,9 @@ python3 experiments/flatbuffers/validation/run_correctness.py
 ```
 
 The Vitest workload contains 164 tests: 158 expected passes and six pending.
-Four host-dependent OpenMP/CUDA failures are excluded by the same fixed test
-filter in every cache state. The Java comparison workload is the established
+The historical comparison filter excludes four OpenMP/CUDA integration tests
+in every cache state. Run the full suite separately with those integrations
+enabled; a comparison pass alone is not a full-suite pass. The Java comparison workload is the established
 116 parser tests; new wire, resource, dumper, and harness tests are excluded
 from that matched workload and should also run in the ordinary full Gradle
 test task.
@@ -72,6 +73,24 @@ including cases where both historical Text and eager output fail. These results
 do not waive a generation or roundtrip failure. The default manifest hash pins
 the fixed 1,062-case corpus; use `--allow-nonfixed-manifest` for another selection
 and `--expected-manifest-sha256` to pin it explicitly.
+
+Select every generated program accepted by the syntax audit before the strict
+round-trip run. The selector verifies the pinned manifest, source and generated
+hashes, and complete paired classifications. It records every excluded input
+and permits no manual exclusions from the accepted set:
+
+```sh
+python3 experiments/flatbuffers/validation/select_syntax_clean_cases.py \
+  --manifest /path/to/consumer-inputs.json \
+  --consumer-summary /path/to/consumer-corpus/summary.json \
+  --syntax-summary /path/to/generated-syntax.json \
+  --syntax-cases /path/to/generated-syntax.json.cases.jsonl \
+  --output-manifest /path/to/syntax-clean-manifest.json \
+  --provenance /path/to/selection.json
+python3 experiments/flatbuffers/validation/run_corpus_consumer.py \
+  --runtime "eager=$EAGER" --manifest /path/to/syntax-clean-manifest.json \
+  --output-root /path/to/new/roundtrip-results --reparse-generated
+```
 
 An intentional correction to historical Text output must be reviewed individually.
 `--reviewed-differences` accepts a version 1 JSON inventory with a `differences`
