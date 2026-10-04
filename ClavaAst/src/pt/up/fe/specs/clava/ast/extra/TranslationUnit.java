@@ -234,6 +234,7 @@ public class TranslationUnit extends ClavaNode {
 
         String body = getChildrenStream()
                 .map(this::getChildCode)
+                .filter(code -> !code.isEmpty())
                 .collect(Collectors.joining(ln()));
 
         // If header file, add include guards
@@ -306,7 +307,11 @@ public class TranslationUnit extends ClavaNode {
                 lines.add(0, commentCode.stripLeading());
             }
 
+            boolean endsWithNewline = code.endsWith(ln());
             code = lines.stream().collect(Collectors.joining(ln()));
+            if (endsWithNewline) {
+                code += ln();
+            }
         }
 
         return code;
