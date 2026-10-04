@@ -46,8 +46,8 @@ STAGE_ORDER = (
     (3, "eager"), (3, "text"), (3, "protobuf"),
 )
 EXPECTED_TESTS = 116
-EXPECTED_EAGER_RELEASE_TAG = "v18.1.8_5-rc2"
-EXPECTED_EAGER_NATIVE_TOOL_SHA256 = "de8ec4f461a4c9370a3ee3bbea5a28e54fa977ac2ab090e727fe4e9614e12b5c"
+EXPECTED_EAGER_RELEASE_TAG = "v18.1.8_5-rc3"
+EXPECTED_EAGER_NATIVE_TOOL_SHA256 = "2349d4ec4ad0926249ad6db2d665c7ec3fc253bf3d241e035c1e428c977249e0"
 COMPILE_TASK_NAMES = {
     "classes", "compileJava", "compileTestJava", "generateCompleteWire",
     "generateWireBindingInventory", "generateWireReflection", "processResources",
