@@ -181,6 +181,11 @@ public class CXXMethodDecl extends FunctionDecl {
                         + specialization.getDeclName() + "<" + arguments + ">::";
             }
 
+            var record = getRecordDecl().orElse(null);
+            if (record != null && record.getParent() instanceof ClassTemplateDecl template
+                    && template.getTemplateDecl() == record && !get(TEMPLATE_PARAMETER_LIST_SIZES).isEmpty()) {
+                namespace = getPrimaryTemplateQualifier(record);
+            }
             code.append(namespace);
         }
 
@@ -196,6 +201,59 @@ public class CXXMethodDecl extends FunctionDecl {
         }
 
         return code.toString();
+    }
+
+    private String getPrimaryTemplateQualifier(CXXRecordDecl record) {
+        List<CXXRecordDecl> scopes = new java.util.ArrayList<>();
+        for (CXXRecordDecl scope = record; scope != null;
+                scope = scope.getAncestorTry(CXXRecordDecl.class).orElse(null)) {
+            scopes.add(scope);
+        }
+        java.util.Collections.reverse(scopes);
+        String prefix = scopes.get(0).get(QUALIFIED_PREFIX);
+        StringBuilder qualifier = new StringBuilder(prefix.isEmpty() ? "" : prefix + "::");
+        int group = 0;
+        int offset = 0;
+        for (CXXRecordDecl scope : scopes) {
+            qualifier.append(scope.getDeclName());
+            if (scope.getParent() instanceof ClassTemplateDecl template && template.getTemplateDecl() == scope) {
+                if (group >= get(TEMPLATE_PARAMETER_LIST_SIZES).size()) {
+                    throw new IllegalArgumentException("Missing enclosing class template parameter list");
+                }
+                int size = get(TEMPLATE_PARAMETER_LIST_SIZES).get(group++);
+                if (size != template.getNumTemplateParameters() || size > get(TEMPLATE_PARAMETERS).size() - offset) {
+                    throw new IllegalArgumentException("Class template parameters do not match method context");
+                }
+                String arguments = get(TEMPLATE_PARAMETERS).subList(offset, offset + size).stream()
+                        .map(CXXMethodDecl::getTemplateArgumentCode).collect(java.util.stream.Collectors.joining(", "));
+                qualifier.append("<").append(arguments).append(">");
+                offset += size;
+            } else if (scope instanceof ClassTemplateSpecializationDecl specialization) {
+                String arguments = specialization.get(ClassTemplateSpecializationDecl.TEMPLATE_ARGUMENTS).stream()
+                        .map(argument -> argument.getCode(this)).collect(java.util.stream.Collectors.joining(", "));
+                qualifier.append("<").append(arguments).append(">");
+                if (scope instanceof ClassTemplatePartialSpecializationDecl partial) {
+                    if (group >= get(TEMPLATE_PARAMETER_LIST_SIZES).size()) {
+                        throw new IllegalArgumentException("Missing enclosing partial specialization parameter list");
+                    }
+                    int size = get(TEMPLATE_PARAMETER_LIST_SIZES).get(group++);
+                    if (size != partial.get(ClassTemplatePartialSpecializationDecl.TEMPLATE_PARAMETERS).size()
+                            || size > get(TEMPLATE_PARAMETERS).size() - offset) {
+                        throw new IllegalArgumentException("Partial specialization parameters do not match method context");
+                    }
+                    offset += size;
+                }
+            }
+            qualifier.append("::");
+        }
+        return qualifier.toString();
+    }
+
+    private static String getTemplateArgumentCode(NamedDecl parameter) {
+        boolean packed = parameter instanceof TemplateTypeParmDecl type && type.get(TemplateTypeParmDecl.IS_PARAMETER_PACK)
+                || parameter instanceof NonTypeTemplateParmDecl value && value.get(NonTypeTemplateParmDecl.IS_PARAMETER_PACK)
+                || parameter instanceof TemplateTemplateParmDecl template && template.get(TemplateTemplateParmDecl.IS_PARAMETER_PACK);
+        return parameter.getDeclName() + (packed ? "..." : "");
     }
 
     /**

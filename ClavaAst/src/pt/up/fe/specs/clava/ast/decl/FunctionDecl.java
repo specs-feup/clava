@@ -363,6 +363,14 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     protected String getTemplateHeadersCode() {
+        if (getParent() instanceof FunctionTemplateDecl template && template.getTemplateDecl() == this) {
+            return "";
+        }
+        return getEnclosingTemplateHeadersCode();
+    }
+
+    /** Template headers belonging to enclosing classes, before a member template header. */
+    public String getEnclosingTemplateHeadersCode() {
         List<NamedDecl> parameters = get(TEMPLATE_PARAMETERS);
         StringBuilder code = new StringBuilder();
         int offset = 0;
