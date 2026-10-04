@@ -1,5 +1,6 @@
 import JavaInterop from "@specs-feup/lara/api/lara/JavaInterop.ts";
 import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
+import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.ts";
 import PrintOnce from "@specs-feup/lara/api/lara/util/PrintOnce.js";
 import path from "path";
 import { ClavaLegacyTester } from "../vitest/ClavaLegacyTester.ts";
@@ -539,7 +540,11 @@ describe("CxxApiTest", () => {
     });
 });
 
-(isWindows ? describe.skip : describe)("CudaTest", () => {
+const isBuiltinCudaSupported =
+    !isWindows &&
+    JavaTypes.getType("pt.up.fe.specs.clang.ClangResources").isBuiltinCudaSupported();
+
+(isWindows || !isBuiltinCudaSupported ? describe.skip : describe)("CudaTest", () => {
     function newTester() {
         const cudaTester = new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/weaver/"),
