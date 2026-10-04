@@ -1,0 +1,16 @@
+{
+  "check": {
+    "tests": 238,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "passed": 237
+  },
+  "cache-enabled": {
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 2
+  }
+}

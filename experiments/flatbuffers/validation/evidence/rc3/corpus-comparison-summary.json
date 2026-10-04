@@ -1,0 +1,25 @@
+{
+  "created_utc": "2026-10-04T15:44:42.255407+00:00",
+  "reparse_generated": false,
+  "reviewed_source_fidelity_corrections": null,
+  "consumer_manifest": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/local-fidelity-new-native-corpus/consumer-inputs.json",
+  "consumer_manifest_sha256": "e2d71d99190ec95c345214bc69064e438934660961fc56e302e6d9ed574fe6bd",
+  "corpus": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/llvm-project/clang/test",
+  "corpus_revision": "3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff",
+  "clava_git": {
+    "revision": "f03eb45d8baf7ce9a41dee18d681db3455790746",
+    "dirty": true,
+    "porcelain": [" M ClangAstParser/clang-dumper-release.tag"]
+  },
+  "baseline_results_sha256": "779715468c024cec84016d673c2abfd2e78bdd2d0098575226f119f98206cae0",
+  "comparison_counts": {
+    "text": {
+      "MATCH": 746,
+      "GENERATED_CODE_MISMATCH": 125,
+      "BOTH_UNSUPPORTED": 187,
+      "EAGER_ONLY": 4
+    }
+  },
+  "pass": false,
+  "comparison_contract": "Require no eager-only consumer failures and exact generated-code hashes for cases both runtimes consume."
+}
