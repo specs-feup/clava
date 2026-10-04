@@ -50,7 +50,8 @@ public class FunctionProtoType extends FunctionType {
     // public final static DataKey<Boolean> IS_RESTRICT = KeyFactory.bool("isRestrict");
 
     public final static DataKey<ReferenceQualifier> REFERENCE_QUALIFIER = KeyFactory
-            .enumeration("referenceQualifier", ReferenceQualifier.class);
+            .enumeration("referenceQualifier", ReferenceQualifier.class)
+            .setDefault(() -> ReferenceQualifier.None);
 
     public final static DataKey<ExceptionSpecification> EXCEPTION_SPECIFICATION = KeyFactory
             .object("exceptionSpecification", ExceptionSpecification.class)
