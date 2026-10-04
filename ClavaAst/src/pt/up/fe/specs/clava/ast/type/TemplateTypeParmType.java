@@ -23,7 +23,9 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.ClassTemplatePartialSpecializationDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.TemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeDecl;
 
@@ -50,7 +52,7 @@ public class TemplateTypeParmType extends Type {
 
     @Override
     public String getCode(ClavaNode sourceNode, String intermediateCode) {
-        String name = getLinkedName().orElseGet(() -> getPartialSpecializationParameterName(sourceNode).orElse(null));
+        String name = getLinkedName().orElseGet(() -> getVisibleTemplateParameterName(sourceNode).orElse(null));
         if (name == null) {
             return super.getCode(sourceNode, intermediateCode);
         }
@@ -65,23 +67,35 @@ public class TemplateTypeParmType extends Type {
                 .map(NamedDecl::getDeclName);
     }
 
-    private Optional<String> getPartialSpecializationParameterName(ClavaNode sourceNode) {
-        if (!(sourceNode instanceof ClassTemplatePartialSpecializationDecl partialSpecialization)) {
-            return Optional.empty();
-        }
+    private Optional<String> getVisibleTemplateParameterName(ClavaNode sourceNode) {
+        return getVisibleTemplateParameterName(sourceNode, get(DEPTH), get(INDEX));
+    }
 
-        var parameters = partialSpecialization.get(ClassTemplatePartialSpecializationDecl.TEMPLATE_PARAMETERS);
-        for (NamedDecl parameter : parameters) {
-            if (!(parameter instanceof TemplateTypeParmDecl templateParameter)) {
+    private static Optional<String> getVisibleTemplateParameterName(ClavaNode sourceNode, int depth, int index) {
+        for (ClavaNode context = sourceNode; context != null; context = context.getParent()) {
+            Iterable<NamedDecl> parameters;
+            if (context instanceof ClassTemplatePartialSpecializationDecl partialSpecialization) {
+                parameters = partialSpecialization.get(ClassTemplatePartialSpecializationDecl.TEMPLATE_PARAMETERS);
+            } else if (context instanceof FunctionDecl function) {
+                parameters = function.get(FunctionDecl.TEMPLATE_PARAMETERS);
+            } else if (context instanceof TemplateDecl templateDecl) {
+                parameters = templateDecl.getTemplateParameters();
+            } else {
                 continue;
             }
 
-            var declaredType = templateParameter.get(TypeDecl.TYPE_FOR_DECL).orElse(null);
-            if (declaredType instanceof TemplateTypeParmType templateParameterType
-                    && templateParameterType.get(DEPTH).equals(get(DEPTH))
-                    && templateParameterType.get(INDEX).equals(get(INDEX))
-                    && templateParameter.hasDeclName()) {
-                return Optional.of(templateParameter.getDeclName());
+            for (NamedDecl parameter : parameters) {
+                if (!(parameter instanceof TemplateTypeParmDecl templateParameter)
+                        || !templateParameter.hasDeclName()) {
+                    continue;
+                }
+
+                var declaredType = templateParameter.get(TypeDecl.TYPE_FOR_DECL).orElse(null);
+                if (declaredType instanceof TemplateTypeParmType parameterType
+                        && parameterType.get(DEPTH) == depth
+                        && parameterType.get(INDEX) == index) {
+                    return Optional.of(templateParameter.getDeclName());
+                }
             }
         }
 

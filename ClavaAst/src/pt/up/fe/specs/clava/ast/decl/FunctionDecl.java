@@ -114,6 +114,9 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     public final static DataKey<List<TemplateArgument>> TEMPLATE_ARGUMENTS = KeyFactory
             .generic("templateArguments", (List<TemplateArgument>) new ArrayList<TemplateArgument>());
 
+    public static final DataKey<List<NamedDecl>> TEMPLATE_PARAMETERS = KeyFactory.list("templateParameters", NamedDecl.class);
+    public static final DataKey<List<Integer>> TEMPLATE_PARAMETER_LIST_SIZES = KeyFactory.list("templateParameterListSizes", Integer.class);
+
     /// DATAKEYS END
 
     // CHECK: Directly enconding information relative to the tree structure (e.g., how many parameter nodes)
@@ -356,14 +359,36 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         var typelessCode = currentNamespace + getTypelessCode();
         codeElements.add(typelessCode);
 
-        return codeElements.stream().collect(Collectors.joining(" ")).trim();
+        return getTemplateHeadersCode() + codeElements.stream().collect(Collectors.joining(" ")).trim();
+    }
+
+    protected String getTemplateHeadersCode() {
+        List<NamedDecl> parameters = get(TEMPLATE_PARAMETERS);
+        StringBuilder code = new StringBuilder();
+        int offset = 0;
+        for (int size : get(TEMPLATE_PARAMETER_LIST_SIZES)) {
+            if (size < 0 || size > parameters.size() - offset) {
+                throw new IllegalArgumentException("Invalid function template parameter list sizes");
+            }
+            code.append("template<").append(parameters.subList(offset, offset + size).stream()
+                    .map(ClavaNode::getCode).collect(Collectors.joining(", "))).append(">\n");
+            offset += size;
+        }
+        if (offset != parameters.size()) {
+            throw new IllegalArgumentException("Function template parameters do not match their list sizes");
+        }
+        return code.toString();
+    }
+
+    protected String getNameForCode() {
+        return getDeclName();
     }
 
     @Override
     public String getTypelessCode() {
         List<String> codeElements = new ArrayList<>();
 
-        codeElements.add(getDeclName() + "(" + getParametersCode() + ")");
+        codeElements.add(getNameForCode() + "(" + getParametersCode() + ")");
 
         var codeAfterParams = getCodeAfterParams();
         if (!codeAfterParams.isBlank()) {

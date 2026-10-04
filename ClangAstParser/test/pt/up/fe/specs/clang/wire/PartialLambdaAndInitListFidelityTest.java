@@ -2,6 +2,7 @@
 package pt.up.fe.specs.clang.wire;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -28,6 +29,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
 import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureKind;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.type.MemberPointerType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
@@ -52,6 +54,7 @@ class PartialLambdaAndInitListFidelityTest {
 
         App parsed = parse(source, "parse-first");
         assertPartialSpecialization(parsed);
+        assertTemplateParameterContext(parsed);
         assertInitCaptures(parsed);
         assertFunctionalCasts(parsed);
         assertReferenceCastType(parsed);
@@ -64,6 +67,7 @@ class PartialLambdaAndInitListFidelityTest {
 
         App reparsed = parse(generated.get(0), "parse-second");
         assertPartialSpecialization(reparsed);
+        assertTemplateParameterContext(reparsed);
         assertInitCaptures(reparsed);
         assertFunctionalCasts(reparsed);
         assertReferenceCastType(reparsed);
@@ -147,6 +151,63 @@ class PartialLambdaAndInitListFidelityTest {
         assertMatches(lambda.getCode(), "\\[copy\\s*=\\s*values\\[0\\],\\s*&reference\\s*=\\s*values\\[1\\]\\]");
     }
 
+    private static void assertTemplateParameterContext(App app) {
+        ClassTemplatePartialSpecializationDecl partialMethod = app
+                .getDescendants(ClassTemplatePartialSpecializationDecl.class).stream()
+                .filter(candidate -> candidate.getDeclName().equals("PartialMethod"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Missing PartialMethod<T *, N> specialization"));
+        assertMatches(partialMethod.getCode(), "PartialMethod\\s*<\\s*T\\s*\\*\\s*,\\s*N\\s*>");
+        assertMatches(partialMethod.getCode(), "\\bT\\s+value\\s*\\(");
+
+        ClassTemplatePartialSpecializationDecl memberPointer = app
+                .getDescendants(ClassTemplatePartialSpecializationDecl.class).stream()
+                .filter(candidate -> candidate.getDeclName().equals("MemberPointerKind"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Missing member-function pointer specialization"));
+        TemplateArgumentType memberArgument = assertInstanceOf(TemplateArgumentType.class,
+                memberPointer.get(ClassTemplatePartialSpecializationDecl.TEMPLATE_ARGUMENTS).get(0));
+        MemberPointerType memberType = assertInstanceOf(MemberPointerType.class,
+                memberArgument.get(TemplateArgumentType.TYPE));
+        assertTrue(memberType.hasValue(MemberPointerType.CLASS_TYPE)
+                && memberType.hasValue(MemberPointerType.POINTEE_TYPE),
+                "Member pointer type components must be read from structured FlatBuffers metadata");
+        assertMatches(memberPointer.getCode(),
+                "MemberPointerKind\\s*<\\s*R\\s*\\(\\s*C\\s*::\\s*\\*\\s*\\)\\s*\\(\\s*Args\\s*\\.\\.\\.\\s*\\)\\s*>");
+
+        ClassTemplatePartialSpecializationDecl qualifiedMemberPointer = app
+                .getDescendants(ClassTemplatePartialSpecializationDecl.class).stream()
+                .filter(candidate -> candidate.getDeclName().equals("QualifiedMemberPointerKind"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Missing qualified member-function pointer specialization"));
+        assertMatches(qualifiedMemberPointer.getCode(),
+                "QualifiedMemberPointerKind\\s*<\\s*R\\s*\\(\\s*C\\s*::\\s*\\*\\s*\\)\\s*\\(\\s*Args\\s*\\.\\.\\.\\s*\\)\\s*const\\s*&\\s*noexcept\\s*>");
+
+        ClassTemplatePartialSpecializationDecl memberArrayPointer = app
+                .getDescendants(ClassTemplatePartialSpecializationDecl.class).stream()
+                .filter(candidate -> candidate.getDeclName().equals("MemberArrayPointerKind"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Missing member-array pointer specialization"));
+        assertMatches(memberArrayPointer.getCode(),
+                "MemberArrayPointerKind\\s*<\\s*T\\s*\\(\\s*C\\s*::\\s*\\*\\s*\\)\\s*\\[\\s*N\\s*\\]\\s*>");
+
+        ClassTemplatePartialSpecializationDecl functionSignature = app
+                .getDescendants(ClassTemplatePartialSpecializationDecl.class).stream()
+                .filter(candidate -> candidate.getDeclName().equals("FunctionSignature"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Missing variadic function signature specialization"));
+        assertMatches(functionSignature.getCode(),
+                "FunctionSignature\\s*<\\s*R\\s*\\(\\s*Args\\s*\\.\\.\\.\\s*\\)\\s*>");
+
+        ClassTemplatePartialSpecializationDecl nested = app
+                .getDescendants(ClassTemplatePartialSpecializationDecl.class).stream()
+                .filter(candidate -> candidate.getCode().contains("Inner"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Missing nested Inner<I *> partial specialization"));
+        assertMatches(nested.getCode(), "\\bO\\s*\\*\\s*outer");
+        assertMatches(nested.getCode(), "\\bI\\s*\\*\\s*inner");
+    }
+
     private static void assertFunctionalCasts(App app) {
         List<CXXFunctionalCastExpr> casts = app.getDescendants(CXXFunctionalCastExpr.class);
         assertTrue(casts.stream().anyMatch(cast -> cast.getCode().startsWith("ValueArray{")),
@@ -174,8 +235,20 @@ class PartialLambdaAndInitListFidelityTest {
     }
 
     private static void assertGeneratedSyntax(String code) {
+        assertFalse(code.contains("type-parameter-"),
+                "Generated declarations must use named template parameters rather than Clang's canonical placeholders:\n"
+                        + code);
         assertMatches(code, "Box\\s*<\\s*T\\s*\\*\\s*>");
         assertMatches(code, "Inner\\s*<\\s*I\\s*\\*\\s*>");
+        assertMatches(code, "PartialMethod\\s*<\\s*T\\s*\\*\\s*,\\s*N\\s*>");
+        assertMatches(code, "PartialMethod\\s*<\\s*X\\s*\\*\\s*,\\s*N\\s*>\\s*::\\s*value");
+        assertMatches(code,
+                "MemberPointerKind\\s*<\\s*R\\s*\\(\\s*C\\s*::\\s*\\*\\s*\\)\\s*\\(\\s*Args\\s*\\.\\.\\.\\s*\\)\\s*>");
+        assertMatches(code,
+                "QualifiedMemberPointerKind\\s*<\\s*R\\s*\\(\\s*C\\s*::\\s*\\*\\s*\\)\\s*\\(\\s*Args\\s*\\.\\.\\.\\s*\\)\\s*const\\s*&\\s*noexcept\\s*>");
+        assertMatches(code,
+                "MemberArrayPointerKind\\s*<\\s*T\\s*\\(\\s*C\\s*::\\s*\\*\\s*\\)\\s*\\[\\s*N\\s*\\]\\s*>");
+        assertMatches(code, "FunctionSignature\\s*<\\s*R\\s*\\(\\s*Args\\s*\\.\\.\\.\\s*\\)\\s*>");
         assertMatches(code, "\\bint\\s+values\\s*\\[2\\]\\s*(?:=\\s*)?\\{\\s*1\\s*,\\s*2\\s*}");
         assertMatches(code, "\\bPoint\\s+aggregate\\s*(?:=\\s*)?\\{[^}]+}");
         assertMatches(code, "Point\\s*\\{[^}]+}");
@@ -183,7 +256,7 @@ class PartialLambdaAndInitListFidelityTest {
         assertMatches(code, "ValueArray\\s*\\{[^}]+}");
         assertMatches(code, "Value\\s*\\([^)]*\\)");
         assertMatches(code,
-                "PointerHolder\\s*<\\s*E\\s*>\\s*\\(\\s*\\)\\s*:\\s*p\\s*\\(\\s*nullptr\\s*\\),\\s*q\\s*\\(\\s*\\(\\s*nullptr\\s*\\)\\s*\\)");
+                "PointerHolder\\s*\\(\\s*\\)\\s*:\\s*p\\s*\\(\\s*nullptr\\s*\\),\\s*q\\s*\\(\\s*\\(\\s*nullptr\\s*\\)\\s*\\)");
         assertMatches(code, "\\(\\s*Holder\\s+const\\s*&\\s*\\)");
         assertMatches(code, "\\[copy\\s*=\\s*values\\[0\\],\\s*&reference\\s*=\\s*values\\[1\\]\\]");
     }

@@ -142,6 +142,7 @@ public class CXXMethodDecl extends FunctionDecl {
     @Override
     public String getDeclarationId(boolean useReturnType) {
         StringBuilder code = new StringBuilder();
+        code.append(getTemplateHeadersCode());
 
         // if (getFunctionDeclData().getStorageClass() == StorageClass.STATIC) {
         if (get(STORAGE_CLASS) != StorageClass.None) {
@@ -172,6 +173,13 @@ public class CXXMethodDecl extends FunctionDecl {
         if (addNamespace()) {
             // String namespace = getCurrentNamespace(getRecordName()).map(str -> str + "::").orElse("");
             String namespace = getCurrentQualifiedPrefix().map(str -> str + "::").orElse("");
+            if (getRecordDecl().orElse(null) instanceof ClassTemplateSpecializationDecl specialization) {
+                String arguments = specialization.get(ClassTemplateSpecializationDecl.TEMPLATE_ARGUMENTS).stream()
+                        .map(argument -> argument.getCode(this)).collect(java.util.stream.Collectors.joining(", "));
+                String prefix = specialization.get(QUALIFIED_PREFIX);
+                namespace = (prefix.isEmpty() ? "" : prefix + "::")
+                        + specialization.getDeclName() + "<" + arguments + ">::";
+            }
 
             code.append(namespace);
         }

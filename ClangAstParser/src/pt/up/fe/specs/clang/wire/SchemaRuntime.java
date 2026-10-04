@@ -103,6 +103,7 @@ public final class SchemaRuntime {
         @SuppressWarnings({"rawtypes","unchecked"})
         public DataStore read(Table table,String className,String id,ImportContext context) {
             validateLambdaCaptureVectors(table);
+            validateFunctionTemplateLists(table);
             boolean hasLocation=location!=null&&location.location.apply(table)!=null;
             var definition=StoreDefinitions.fromInterface(ClassesService.getClavaClass(className));
             DataStore store=DataStore.newInstance(definition,true);
@@ -141,6 +142,32 @@ public final class SchemaRuntime {
                         pt.up.fe.specs.clava.ast.decl.CXXConversionDecl::buildDeclName);
             }
             return store;
+        }
+
+        private static void validateFunctionTemplateLists(Table table) {
+            astwire.v2.FunctionDeclData function;
+            if (table instanceof astwire.v2.FunctionDeclData direct) {
+                function = direct;
+            } else if (table instanceof astwire.v2.CXXMethodDeclData method) {
+                function = method.base();
+            } else if (table instanceof astwire.v2.CXXConstructorDeclData constructor) {
+                function = constructor.base().base();
+            } else if (table instanceof astwire.v2.CXXConversionDeclData conversion) {
+                function = conversion.base().base();
+            } else {
+                return;
+            }
+            long total = 0;
+            for (int i = 0; i < function.templateParameterListSizesLength(); i++) {
+                int size = function.templateParameterListSizes(i);
+                if (size < 0) {
+                    throw new IllegalArgumentException("Negative function template parameter list size");
+                }
+                total += size;
+            }
+            if (total != function.templateParametersLength()) {
+                throw new IllegalArgumentException("Function template parameters do not match their list sizes");
+            }
         }
 
         private static void validateLambdaCaptureVectors(Table table) {
