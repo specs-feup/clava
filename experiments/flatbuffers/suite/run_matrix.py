@@ -4,8 +4,8 @@
 The matrix has one cold, one warm and one bypass run per repeat. A warm run
 reuses its paired cold cache. Every invocation is kept as
 the runner's normal raw result directory, while this script writes a manifest
-that maps each matrix cell to its result. The fixed test filter excludes the
-four host-dependent CUDA/OpenMP failures in every cache state.
+that maps each matrix cell to its result. The fixed comparison workload excludes four CUDA/OpenMP integration tests
+in every cache state. Run the full integration suite separately before timing.
 """
 
 from __future__ import annotations
