@@ -13,6 +13,8 @@ import java.util.function.ToIntFunction;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
@@ -20,6 +22,13 @@ import astwire.v2.Block;
 import astwire.v2.Counter;
 import astwire.v2.End;
 import astwire.v2.Header;
+import astwire.v2.ClavaNodeData;
+import astwire.v2.ExprData;
+import astwire.v2.LambdaExprData;
+import astwire.v2.Node;
+import astwire.v2.NodePayload;
+import astwire.v2.SourceInfo;
+import astwire.v2.StmtData;
 import astwire.v2.Record;
 import astwire.v2.RecordPayload;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -93,6 +102,41 @@ class CompleteReaderEnvelopeTest {
     void rejectsATruncatedSizePrefix() throws IOException {
         Path path = write(block(header(), end(1)), new byte[] { 1, 0, 0 });
         assertThrows(IOException.class, () -> read(path));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3 })
+    void rejectsMisalignedLambdaCaptureMetadataAndReleasesItsFile(int shortenedVector) throws IOException {
+        Path path = write(block(header(), builder -> malformedLambda(builder, shortenedVector), end(2)));
+        IllegalArgumentException failure = assertThrows(IllegalArgumentException.class, () -> read(path));
+        assertTrue(failure.getMessage().contains("capture vector length mismatch"), failure.getMessage());
+        Files.delete(path);
+        assertTrue(Files.notExists(path));
+    }
+
+    private static int malformedLambda(FlatBufferBuilder builder, int shortenedVector) {
+        SourceInfo.startSourceInfo(builder);
+        SourceInfo.addIsMacro(builder, false);
+        SourceInfo.addIsInSystemHeader(builder, false);
+        int source = SourceInfo.endSourceInfo(builder);
+        int nodeBase = ClavaNodeData.createClavaNodeData(builder, source);
+        int statement = StmtData.createStmtData(builder, nodeBase);
+        int expression = ExprData.createExprData(builder, statement, -1, 0, 0, false);
+        int kinds = LambdaExprData.createCaptureKindsVector(builder, new int[] { 0 });
+        int name = builder.createString("value");
+        int names = LambdaExprData.createInitCaptureNamesVector(builder,
+                shortenedVector == 0 ? new int[0] : new int[] { name });
+        int styles = LambdaExprData.createCaptureInitStylesVector(builder,
+                shortenedVector == 1 ? new int[0] : new int[] { 0 });
+        int packs = LambdaExprData.createCapturePackExpansionsVector(builder,
+                shortenedVector == 2 ? new boolean[0] : new boolean[] { false });
+        int implicit = LambdaExprData.createCaptureIsImplicitVector(builder,
+                shortenedVector == 3 ? new boolean[0] : new boolean[] { false });
+        int payload = LambdaExprData.createLambdaExprData(builder, expression, false, false, false, false,
+                0, -2, kinds, names, styles, packs, implicit);
+        int node = Node.createNode(builder, 1, builder.createString("LambdaExpr"), NodePayload.LambdaExprData,
+                payload);
+        return record(builder, RecordPayload.Node, node);
     }
 
     private CompleteReader.Result read(Path path) throws IOException {

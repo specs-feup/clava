@@ -102,6 +102,7 @@ public final class SchemaRuntime {
         }
         @SuppressWarnings({"rawtypes","unchecked"})
         public DataStore read(Table table,String className,String id,ImportContext context) {
+            validateLambdaCaptureVectors(table);
             boolean hasLocation=location!=null&&location.location.apply(table)!=null;
             var definition=StoreDefinitions.fromInterface(ClassesService.getClavaClass(className));
             DataStore store=DataStore.newInstance(definition,true);
@@ -140,6 +141,25 @@ public final class SchemaRuntime {
                         pt.up.fe.specs.clava.ast.decl.CXXConversionDecl::buildDeclName);
             }
             return store;
+        }
+
+        private static void validateLambdaCaptureVectors(Table table) {
+            if (!(table instanceof astwire.v2.LambdaExprData lambda)) {
+                return;
+            }
+
+            int captureCount = lambda.captureKindsLength();
+            requireCaptureVectorLength("init_capture_names", lambda.initCaptureNamesLength(), captureCount);
+            requireCaptureVectorLength("capture_init_styles", lambda.captureInitStylesLength(), captureCount);
+            requireCaptureVectorLength("capture_pack_expansions", lambda.capturePackExpansionsLength(), captureCount);
+            requireCaptureVectorLength("capture_is_implicit", lambda.captureIsImplicitLength(), captureCount);
+        }
+
+        private static void requireCaptureVectorLength(String field, int actualLength, int captureCount) {
+            if (actualLength != captureCount) {
+                throw new IllegalArgumentException("LambdaExprData capture vector length mismatch: capture_kinds="
+                        + captureCount + ", " + field + "=" + actualLength);
+            }
         }
     }
 }
