@@ -1,10 +1,12 @@
 package pt.up.fe.specs.clang.wire;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.*;
 import com.google.flatbuffers.Table;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
 import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clava.*;
@@ -12,6 +14,9 @@ import pt.up.fe.specs.clava.utils.ClassesService;
 
 /** Shared mechanics for schema-generated field mappings. No field layout is defined here. */
 public final class SchemaRuntime {
+    private static final Map<Class<? extends ClavaNode>, StoreDefinition> STORE_DEFINITIONS =
+            new ConcurrentHashMap<>();
+
     public static final class Stats {
         public long nodes, materialized;
     }
@@ -105,7 +110,8 @@ public final class SchemaRuntime {
             validateLambdaCaptureVectors(table);
             validateFunctionTemplateLists(table);
             boolean hasLocation=location!=null&&location.location.apply(table)!=null;
-            var definition=StoreDefinitions.fromInterface(ClassesService.getClavaClass(className));
+            var definition=STORE_DEFINITIONS.computeIfAbsent(ClassesService.getClavaClass(className),
+                    StoreDefinitions::fromInterface);
             DataStore store=DataStore.newInstance(definition,true);
             context.files.stats.nodes++;
             store.set(ClavaNode.CONTEXT,context.data.get(ClangAstData.CONTEXT));store.set(ClavaNode.ID,id);

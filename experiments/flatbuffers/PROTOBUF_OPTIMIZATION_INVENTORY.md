@@ -2,6 +2,14 @@
 
 Audited on 6 October 2026 by GPT-6-Luna with xhigh reasoning; key findings checked against source by the parent agent.
 
+Implementation follow-up on 6 October: the first two omissions were addressed. The GC fix was cherry-picked as specs-java-libs `98653998`, and `SchemaRuntime` now caches store definitions by Clava class with `ConcurrentHashMap.computeIfAbsent`. The findings below describe the audited baseline revisions, not the updated reader.
+
+The concurrency-fix comparison chose `19c8e3e4`'s direct section traversal and immutable ordered key map, avoiding overridable method calls in the constructor. Its atomic index cache is equivalent to `ead48b71`; the stronger FlatBuffers concurrency test is retained. specs-java-libs `ae7194a7` includes the chosen implementation and constructor, ordering and immutability regressions.
+
+**Compatibility warning:** the immutable map breaks existing XStream XML persistence. The user accepted this incompatibility because XStream is being removed in another PR. Final jOptions validation passed 1,725 tests and failed 17 legacy XML tests: 13 in `DataStoreXmlTest` and four in `XmlPersistenceTest`. All new metadata/concurrency regressions passed. This does not claim a green jOptions check.
+
+SpecsUtils check and coverage passed with 6,654 tests passing and two skipped, including a JFR test verifying zero/one explicit GC requests. The final ClangAstParser check passed 234 tests with four skips, coverage and generated-output drift verification, using the preserved local dumper selector and an isolated temporary CUDA cache. Three release-resource checks skipped because the selector is local; one cache-hit check skipped under `CCACHE_DISABLE=true`. The subsequent enabled-cache `GeneratedParseRootTest` run passed both tests without skips. No speed improvement is inferred from these correctness checks.
+
 ## Scope and revisions
 
 Read-only source and history audit. I compared the actual branches and worktrees; their HEADs match the supplied frozen controls:
