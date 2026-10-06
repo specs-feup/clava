@@ -12,6 +12,26 @@ Three rotated serial rounds compare the prior production reader, the Protobuf ex
 
 Negative change means faster. The first row sums 116 JUnit test bodies, including production heap diagnostics. App rows sum parse entry through final App transformations, with heap diagnostics disabled by the same instrumentation as the earlier report. They exclude parser/context construction, assertions and code generation. Native dump production and consumer parsing are both included; this is not reader-only timing. Phase occupancies are not added to these boundaries.
 
+## Whole-command wall time
+
+These durations were recorded in the same 27 observations, outside the nested App timers. Java includes Gradle configuration and worker startup; JS uses the runner's Vitest test-command boundary. Compilation, resource preparation and wrapper setup were excluded as documented by each runner. The historical comparison workloads are 116 Java tests and 164 JS tests. They are not unfiltered runs of every test now present on the production branch.
+
+| Median seconds | Previous FlatBuffers | Protobuf | Updated FlatBuffers | Updated vs Protobuf |
+|---|---:|---:|---:|---:|
+| ClangAstParser command, production diagnostics | 44.338 | 37.933 | 39.648 | +4.52% |
+| ClangAstParser command, diagnostics off | 34.009 | 32.424 | 33.819 | +4.30% |
+| Clava-JS command, diagnostics off | 35.846 | 33.170 | 34.827 | +4.99% |
+
+The diagnostics-off command measurements also favor Protobuf. Fixing duplicate GC explains why the production comparison improves more than the diagnostics-off comparisons, but these combined ports do not isolate its exact contribution.
+
+### Relation to the earlier decision report
+
+The [earlier report](https://draftlink.lmsousa.workers.dev/d/T8Nfm77p4Olp?v=64) contains both cumulative App measurements and supplementary whole-command results. Its App measurements favored FlatBuffers in both suites and every measured cache state. Java whole-command measurements also favored FlatBuffers. Its matched fast-validation JS command comparison was much closer: median paired FlatBuffers-minus-Protobuf deltas were -0.155 s in bypass, -0.315 s cold and +0.115 s warm. Protobuf therefore won the warm-cache median; JS whole-command results did not establish a universal FlatBuffers advantage.
+
+The earlier cumulative App cohort used Clava `01c6b739e` and native `0a2737839`; the current optimized consumer is `09542632a` with the published RC3 producer. The production reader now includes a separate structural verifier and record validation, with additional fidelity and cleanup changes. Those are real implementation changes inside the App boundary. The matched diagnostics-off rerun confirms that a remaining reversal exists independently of heap diagnostics. It does not identify which production changes caused it. The prior pilot ranking should not have been carried forward into a production performance recommendation without remeasuring the integrated implementation.
+
+[Whole-command evidence and historical comparison audit](validation/evidence/optimization-wall-comparison-20261006.json) records exact observations and report/CSV hashes. Absolute times across the earlier and current dates are not treated as causal comparisons.
+
 ## Workload checks
 
 All 18 Java runs passed the same 116 tests. All nine JS runs passed 158 tests with six pending, the same 164 test identities. Each Java App run captured 216 timed calls; each JS run captured 170 timed calls and 130 excluded syntax-only calls. No failed observation enters the summaries.

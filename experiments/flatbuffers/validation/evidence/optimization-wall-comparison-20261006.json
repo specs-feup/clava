@@ -1,0 +1,205 @@
+{
+  "source_results_sha256": "4a0f56f55e8d759cb9a1427751d31c52744d5dfc7cddfb2d5ffd651ece665dff",
+  "source_evidence": "optimization-benchmark-20261006.json",
+  "whole_command_comparisons": [
+    {
+      "phase": "production-java",
+      "metric": "gradle_wall_s",
+      "medians_s": {
+        "previous-flatbuffers": 44.33818921004422,
+        "protobuf": 37.933392965001985,
+        "optimized-flatbuffers": 39.64781212899834
+      },
+      "updated_vs_protobuf_percent": 4.519551324022375,
+      "runs": [
+        {
+          "implementation": "previous-flatbuffers",
+          "round": 1,
+          "gradle_wall_s": 44.35565323079936
+        },
+        {
+          "implementation": "protobuf",
+          "round": 1,
+          "gradle_wall_s": 37.66323916683905
+        },
+        {
+          "implementation": "optimized-flatbuffers",
+          "round": 1,
+          "gradle_wall_s": 39.81007978506386
+        },
+        {
+          "implementation": "protobuf",
+          "round": 2,
+          "gradle_wall_s": 37.933392965001985
+        },
+        {
+          "implementation": "optimized-flatbuffers",
+          "round": 2,
+          "gradle_wall_s": 39.64781212899834
+        },
+        {
+          "implementation": "previous-flatbuffers",
+          "round": 2,
+          "gradle_wall_s": 43.80320943589322
+        },
+        {
+          "implementation": "optimized-flatbuffers",
+          "round": 3,
+          "gradle_wall_s": 39.62280021584593
+        },
+        {
+          "implementation": "previous-flatbuffers",
+          "round": 3,
+          "gradle_wall_s": 44.33818921004422
+        },
+        {
+          "implementation": "protobuf",
+          "round": 3,
+          "gradle_wall_s": 38.049856500001624
+        }
+      ]
+    },
+    {
+      "phase": "app-java",
+      "metric": "gradle_wall_s",
+      "medians_s": {
+        "previous-flatbuffers": 34.00931138196029,
+        "protobuf": 32.42393885203637,
+        "optimized-flatbuffers": 33.818704307079315
+      },
+      "updated_vs_protobuf_percent": 4.301653359907398,
+      "runs": [
+        {
+          "implementation": "previous-flatbuffers",
+          "round": 1,
+          "gradle_wall_s": 34.00931138196029
+        },
+        {
+          "implementation": "protobuf",
+          "round": 1,
+          "gradle_wall_s": 32.48155351099558
+        },
+        {
+          "implementation": "optimized-flatbuffers",
+          "round": 1,
+          "gradle_wall_s": 33.784624106949195
+        },
+        {
+          "implementation": "protobuf",
+          "round": 2,
+          "gradle_wall_s": 32.42393885203637
+        },
+        {
+          "implementation": "optimized-flatbuffers",
+          "round": 2,
+          "gradle_wall_s": 33.818704307079315
+        },
+        {
+          "implementation": "previous-flatbuffers",
+          "round": 2,
+          "gradle_wall_s": 33.85113970004022
+        },
+        {
+          "implementation": "optimized-flatbuffers",
+          "round": 3,
+          "gradle_wall_s": 33.92269818903878
+        },
+        {
+          "implementation": "previous-flatbuffers",
+          "round": 3,
+          "gradle_wall_s": 34.075259221950546
+        },
+        {
+          "implementation": "protobuf",
+          "round": 3,
+          "gradle_wall_s": 32.21810214291327
+        }
+      ]
+    },
+    {
+      "phase": "app-js",
+      "metric": "wall_s",
+      "medians_s": {
+        "previous-flatbuffers": 35.84569753007963,
+        "protobuf": 33.17015624511987,
+        "optimized-flatbuffers": 34.82689082506113
+      },
+      "updated_vs_protobuf_percent": 4.99465413336726,
+      "runs": [
+        {
+          "implementation": "previous-flatbuffers",
+          "round": 1,
+          "wall_s": 36.21839489485137
+        },
+        {
+          "implementation": "protobuf",
+          "round": 1,
+          "wall_s": 32.95238606794737
+        },
+        {
+          "implementation": "optimized-flatbuffers",
+          "round": 1,
+          "wall_s": 35.402015110943466
+        },
+        {
+          "implementation": "protobuf",
+          "round": 2,
+          "wall_s": 33.17015624511987
+        },
+        {
+          "implementation": "optimized-flatbuffers",
+          "round": 2,
+          "wall_s": 34.76871251105331
+        },
+        {
+          "implementation": "previous-flatbuffers",
+          "round": 2,
+          "wall_s": 35.84569753007963
+        },
+        {
+          "implementation": "optimized-flatbuffers",
+          "round": 3,
+          "wall_s": 34.82689082506113
+        },
+        {
+          "implementation": "previous-flatbuffers",
+          "round": 3,
+          "wall_s": 34.647308609914035
+        },
+        {
+          "implementation": "protobuf",
+          "round": 3,
+          "wall_s": 33.25073562585749
+        }
+      ]
+    }
+  ],
+  "earlier_report_url": "https://draftlink.lmsousa.workers.dev/d/T8Nfm77p4Olp?v=64",
+  "earlier_html_sha256": "35ac92a6aa090061681caeb4db735d03f63c0ffe4cdb33a5ec5fbbfc499e929a",
+  "historical_csv_hashes": {
+    "decision-binary-pairs-20261002.csv": "7f1118c9485c2abfae3dc9cf83fa42a353c6c5b9a9d27e68fb18ca7482f8a53d",
+    "decision-app-build-20261002.csv": "ee5a21ccd53f1c6631212918e0a7ea766ca0df1019df1602cca4215f542b7113",
+    "clava-suite-measurements.csv": "e7ec33725ce2f77a92cfd5d70622a67de1d43b1c97e1926d55f035a2450fa897"
+  },
+  "earlier_matched_js_paired_deltas_s": {
+    "bypass": [
+      -0.02,
+      -0.7,
+      -0.29,
+      0.07
+    ],
+    "cold": [
+      -2.01,
+      -0.36,
+      0.11,
+      -0.27
+    ],
+    "warm": [
+      0.58,
+      0.32,
+      -0.09,
+      -0.17
+    ]
+  },
+  "scope": "Whole test-command timing for common historical workloads, not all current production-branch tests; current measurements are bypass only"
+}
