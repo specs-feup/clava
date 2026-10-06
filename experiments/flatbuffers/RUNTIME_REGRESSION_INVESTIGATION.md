@@ -21,3 +21,7 @@ The production reader adds `WireVerifier.verify` before generated accessor reads
 The earlier report remains evidence for its frozen implementations. The final report remains evidence for its GC-enabled test bodies. Neither establishes the current implementation's App-building advantage. Reproduce the original App timer and disabled diagnostics on current builds, then profile the residual before accepting the performance gate.
 
 [Committed diagnostic evidence](validation/evidence/runtime-gc-diagnostic-20261006.json) records every accepted duration, test counts and identity, source/classpath provenance, raw-result hash, and exact temporary diagnostic driver and init script. No runtime source was changed by this investigation.
+
+## Optimization follow-up
+
+The [matched optimization benchmark](OPTIMIZATION_BENCHMARK.md) measured updated Clava `09542632a` with specs-java-libs `ae7194a7` against the frozen production reader and Protobuf. Across 27 accepted serial observations, production Java test time fell 12.0%, while App construction improved only 0.6% in Java and 0.9% in JS. Updated FlatBuffers remained 7.3% and 3.6% slower than Protobuf in the respective App comparisons. The production improvement does not restore the earlier decision report's App advantage.
