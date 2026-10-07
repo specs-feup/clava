@@ -165,7 +165,6 @@ public class ClangAstParser {
     }
 
     private void addPragmas(TranslationUnit tUnit) {
-        // System.out.println("PRAGMA LOCATIONS: " + data.get(ClangParserData.PRAGMAS_LOCATIONS));
         Map<Integer, Integer> pragmasLocations = data.get(ClangAstData.PRAGMAS_LOCATIONS)
                 .getPragmaLocations(tUnit.getFile());
 

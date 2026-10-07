@@ -15,19 +15,16 @@ package pt.up.fe.specs.clang.dumper;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.JOptionsUtils;
-import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.cilk.CilkParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
-import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.lang.SpecsPlatforms;
@@ -35,14 +32,17 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
-import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
@@ -53,13 +53,13 @@ public class ClangAstDumper {
 
     private final static boolean USE_PLUGIN = false;
     private final static String SYSTEM_HEADER_THRESHOLD_OPTION = "-system-header-threshold=";
+    private final static String SYNTAX_CHECK_ONLY_OPTION = "-syntax-check-only";
 
     public static boolean usePlugin() {
         return USE_PLUGIN;
     }
 
-    private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
-    private final static String STDERR_DUMP_FILENAME = "stderr.txt";
+    private final static String CLANG_DUMP_FILENAME = "clangDump.clv2";
 
     /**
      * TODO: Not implemented yet
@@ -71,9 +71,7 @@ public class ClangAstDumper {
      */
     private final boolean streamConsoleOutput;
 
-    private final List<File> workingFolders;
     private File lastWorkingFolder;
-    private File baseFolder;
     private File clangExecutable;
     private List<String> builtinIncludes;
     private File systemResourceDir;
@@ -105,9 +103,7 @@ public class ClangAstDumper {
         this.builtinIncludes = builtinIncludes;
         this.systemResourceDir = systemResourceDir;
 
-        this.workingFolders = new ArrayList<>();
         this.lastWorkingFolder = null;
-        this.baseFolder = null;
         this.systemIncludesThreshold = ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD.getDefault().get();
         this.parserConfig = parserConfig;
         this.clangResources = new ClangResources(parserConfig);
@@ -115,11 +111,6 @@ public class ClangAstDumper {
 
     public File getLastWorkingFolder() {
         return lastWorkingFolder;
-    }
-
-    public ClangAstDumper setBaseFolder(File baseFolder) {
-        this.baseFolder = baseFolder;
-        return this;
     }
 
     public ClangAstDumper setSystemIncludesThreshold(int systemIncludesThreshold) {
@@ -159,7 +150,12 @@ public class ClangAstDumper {
     }
 
     private ClangAstData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
+        rejectLegacyWireSelection();
         ClavaLog.debug(() -> "Data store config for single file parser: " + config);
+
+        File generatedParseRoot = parserConfig.hasValue(CodeParser.GENERATED_PARSE_ROOT)
+                ? parserConfig.get(CodeParser.GENERATED_PARSE_ROOT).getAbsoluteFile()
+                : null;
 
         DataStore localData = JOptionsUtils.loadDataStore(LocalOptionsKeys.getLocalOptionsFilename(), getClass(),
                 LocalOptionsKeys.getProvider().getStoreDefinition());
@@ -188,7 +184,8 @@ public class ClangAstDumper {
         } else {
             arguments.add(clangExecutable.getAbsolutePath());
 
-            arguments.add(sourceFile.getAbsolutePath());
+            arguments.add("-c");
+            arguments.add(pathForCompiler(sourceFile, generatedParseRoot));
 
             arguments.add("-id=" + id);
 
@@ -295,34 +292,65 @@ public class ClangAstDumper {
 
         arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
 
-        ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments);
+        rejectLegacyWireArguments(arguments);
+
+        if (generatedParseRoot != null) {
+            relativizeGeneratedPathArguments(arguments, generatedParseRoot);
+        }
 
         if (validationOnly) {
-            lastValidationError = validateSyntax(arguments, sourceFile, id);
+            lastValidationError = validateSyntax(arguments, sourceFile, generatedParseRoot);
             return null;
         }
 
+        long nativeNanos = 0, readStart = 0, dumpBytes = 0;
+        pt.up.fe.specs.clang.wire.CompleteReader.Result flatResult;
         ClangAstData parsedData = null;
-        ProcessOutput<String, ClangAstData> output = null;
 
-        try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2
-                .newInstance(config.get(ClavaNode.CONTEXT))) {
+        try {
 
-            if (SpecsSystem.isDebug()) {
-                lineStreamParser.getData().set(ClangAstData.DEBUG, true);
+            // Each invocation needs unique output paths, but clang-dumper no longer
+            // creates side files or needs a dedicated process working directory.
+            lastWorkingFolder = Files.createTempDirectory("clava_ast_").toFile();
+
+            boolean useAstDumpCache = SpecsPlatforms.isLinux() && !USE_PLUGIN
+                    && parserConfig.get(CodeParser.AST_DUMP_CACHE)
+                    && !parserConfig.get(CodeParser.SHOW_CLANG_DUMP)
+                    && !isOpenCL
+                    && !SourceType.isHeader(sourceFile)
+                    && ClangCcacheAdapter.isAvailable();
+            File dumpFile = new File(lastWorkingFolder, CLANG_DUMP_FILENAME);
+            File dependencyFile = new File(lastWorkingFolder, "clangDump.d");
+            int separatorIndex = arguments.indexOf("--");
+            if (separatorIndex >= 0) {
+                arguments.add(separatorIndex, "-o");
+                arguments.add(separatorIndex + 1, dumpFile.getAbsolutePath());
+            } else {
+                arguments.add("-o");
+                arguments.add(dumpFile.getAbsolutePath());
             }
 
-            // Create temporary working folder, in order to support running several dumps in parallel
-            lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
+            List<String> command = arguments;
+            ClangCcacheAdapter.Invocation ccache = null;
+            if (useAstDumpCache) {
+                ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), generatedParseRoot,
+                        clangExecutable, pt.up.fe.specs.clang.wire.GeneratedNodes.SCHEMA_HASH);
+                command = ClangCcacheAdapter.command(arguments, dependencyFile);
+            }
 
-            // Ensure folder is empty
-            SpecsIo.deleteFolderContents(lastWorkingFolder);
+            ClavaLog.debug("Calling Clang AST Dumper: " + command);
 
-            workingFolders.add(lastWorkingFolder);
+            var processBuilder = new ProcessBuilder(command);
+            if (generatedParseRoot != null) {
+                processBuilder.directory(generatedParseRoot);
+            }
+            if (ccache != null) {
+                ccache.configureEnvironment(processBuilder.environment());
+            }
 
-            output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
-                    this::processOutput,
-                    inputStream -> this.processStdErr(inputStream, config.get(ClavaNode.CONTEXT)));
+            long nativeStart = System.nanoTime();
+            var output = SpecsSystem.runProcess(processBuilder, SpecsIo::read, SpecsIo::read);
+            nativeNanos = System.nanoTime() - nativeStart;
 
             if (output.isError()) {
                 ClavaLog.debug("Dumper returned an error value: '" + output.getReturnValue() + "'");
@@ -333,52 +361,96 @@ public class ClangAstDumper {
                 throw new RuntimeException("Exception while processing the output streams", exception);
             });
 
-            parsedData = output.getStdErr();
-            Objects.requireNonNull(parsedData, () -> "Did not expect error output to be null");
-            parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
-
             // If console output streaming is disabled, show output only at the end
-            if (!streamConsoleOutput) {
+            if (!output.getStdOut().isBlank()) {
                 ClavaLog.info(output.getStdOut());
             }
 
-            if (lineStreamParser.hasExceptions()) {
-                SpecsLogs.warn("Exceptions happened while parsing the file '" + sourceFile.getAbsolutePath() + "'");
+            if (!output.getStdErr().isBlank()) {
+                ClavaLog.info("Clang AST dumper diagnostics:\n" + output.getStdErr());
             }
+
+            if (!dumpFile.isFile()) {
+                throw new RuntimeException("Clang AST dumper did not produce '" + dumpFile
+                        + "'\nDiagnostics:\n" + output.getStdErr());
+            }
+
+            dumpBytes = dumpFile.length();
+            readStart = System.nanoTime();
+            flatResult = pt.up.fe.specs.clang.wire.CompleteReader.read(dumpFile.toPath(),
+                    config.get(ClavaNode.CONTEXT), generatedParseRoot, id);
+            parsedData = flatResult.data();
+            parsedData.set(ClangAstData.LINES_NOT_PARSED, output.getStdErr());
+            parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
         } catch (Exception e) {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }
 
+        long readNanos = System.nanoTime() - readStart;
+        long tuStart = System.nanoTime();
         ClangAstParser clangStreamParser = new ClangAstParser(parsedData, SpecsSystem.isDebug(), config);
 
         TranslationUnit tUnit = clangStreamParser.parseTu(sourceFile);
 
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
+        if (Boolean.getBoolean("clava.astWireMetrics")) {
+            var metric = new java.util.LinkedHashMap<String, Object>();
+            metric.put("format", pt.up.fe.specs.clang.wire.WireProtocol.FORMAT);
+            metric.put("wire_schema_version", pt.up.fe.specs.clang.wire.WireProtocol.SCHEMA_VERSION);
+            metric.put("wire_schema_hash", pt.up.fe.specs.clang.wire.GeneratedNodes.SCHEMA_HASH);
+            metric.put("flatbuffers_version", pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION);
+            metric.put("flatbuffers_commit", pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_COMMIT);
+            metric.put("dumper_sha256", ClangCcacheAdapter.sha256(clangExecutable));
+            metric.put("source", sourceFile.getPath());
+            metric.put("native_ms", nativeNanos / 1e6);
+            metric.put("read_ms", readNanos / 1e6);
+            metric.put("tu_ms", (System.nanoTime() - tuStart) / 1e6);
+            metric.put("dump_bytes", dumpBytes);
+            metric.put("nodes", parsedData.getClavaNodes().getNodes().size());
+            metric.put("materialized", flatResult.stats().materialized);
+            System.err.println("CLAVA_AST_METRIC " + new com.google.gson.Gson().toJson(metric));
+        }
 
         return parsedData;
     }
 
-    private void addCudaPathArgument(List<String> arguments, String cudaPath) {
-        var useBuiltinCudaLib = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption());
+    static List<String> getSyntaxArguments(List<String> arguments) {
+        List<String> syntaxArguments = new ArrayList<>(arguments);
+        int separatorIndex = syntaxArguments.indexOf("--");
+        if (separatorIndex >= 0) {
+            syntaxArguments.add(separatorIndex, SYNTAX_CHECK_ONLY_OPTION);
+        } else {
+            syntaxArguments.add(SYNTAX_CHECK_ONLY_OPTION);
+        }
+        return syntaxArguments;
+    }
 
-        if (useBuiltinCudaLib) {
-            File cudaFolder = clangResources.getBuiltinCudaLib();
-
-            ClavaLog.debug("Setting --cuda-path to built-in CUDA folder '"
-                    + cudaFolder.getAbsolutePath() + "'");
-            arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
-        } else if (!cudaPath.isBlank()) {
-            File cudaFolder = SpecsIo.existingFolder(cudaPath);
-
-            ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
-            arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
+    private static void rejectLegacyWireSelection() {
+        String selection = System.getProperty("clava.astWire");
+        if (selection != null) {
+            throw new IllegalArgumentException("The clava.astWire selector was removed; Clava uses eager "
+                    + "FlatBuffers v2 exclusively (configured value: '" + selection + "')");
         }
     }
 
-    private String validateSyntax(List<String> arguments, File sourceFile, String id) {
-        lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
+    private static void rejectLegacyWireArguments(List<String> arguments) {
+        for (String argument : arguments) {
+            if (argument.equals("-ast-dump-format") || argument.startsWith("-ast-dump-format=")) {
+                throw new IllegalArgumentException("The -ast-dump-format selector was removed; "
+                        + "clang-dumper emits eager FlatBuffers v2 only");
+            }
+        }
+    }
 
-        var output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
+    private String validateSyntax(List<String> arguments, File sourceFile, File generatedParseRoot) {
+        try {
+            lastWorkingFolder = Files.createTempDirectory("clava_ast_").toFile();
+        } catch (IOException e) {
+            throw new UncheckedIOException("Could not create syntax validation working folder", e);
+        }
+
+        File workingDirectory = generatedParseRoot != null ? generatedParseRoot : lastWorkingFolder;
+        var output = SpecsSystem.runProcess(getSyntaxArguments(arguments), workingDirectory,
                 this::discardOutput,
                 inputStream -> processOutput(inputStream));
 
@@ -422,57 +494,88 @@ public class ClangAstDumper {
         return output.toString();
     }
 
-    private ClangAstData processStdErr(InputStream inputStream, ClavaContext context) {
-        // Create LineStreamParser
-        try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2.newInstance(context)) {
-
-            // Set debug
-            if (SpecsSystem.isDebug()) {
-                lineStreamParser.getData().set(ClangAstData.DEBUG, true);
-            }
-
-            // Dump file
-            File dumpfile = SpecsSystem.isDebug() ? new File(STDERR_DUMP_FILENAME) : null;
-
-            // Parse input stream
-            String linesNotParsed = lineStreamParser.parse(inputStream, dumpfile);
-
-            // Add lines not parsed to DataStore
-            ClangAstData data = lineStreamParser.getData();
-            data.set(ClangAstData.LINES_NOT_PARSED, linesNotParsed);
-
-            // Return data
-            return data;
-        } catch (Exception e) {
-            throw new RuntimeException("Error while parsing output of Clang AST dumper", e);
+    private static String pathForCompiler(File sourceFile, File generatedParseRoot) {
+        if (generatedParseRoot == null) {
+            return sourceFile.getAbsolutePath();
         }
 
+        String relativePath = relativizeIfInside(sourceFile, generatedParseRoot);
+        return relativePath == null ? sourceFile.getAbsolutePath() : relativePath;
+    }
+
+    private static void relativizeGeneratedPathArguments(List<String> arguments, File generatedParseRoot) {
+        for (int i = 0; i < arguments.size(); i++) {
+            String argument = arguments.get(i);
+            if (argument.equals("-I") || argument.equals("-isystem")) {
+                if (i + 1 < arguments.size()) {
+                    arguments.set(i + 1, relativizePath(arguments.get(i + 1), generatedParseRoot));
+                    i++;
+                }
+                continue;
+            }
+
+            if (argument.startsWith("-I") && argument.length() > 2) {
+                arguments.set(i, "-I" + relativizePath(argument.substring(2), generatedParseRoot));
+            } else if (argument.startsWith("-isystem=") && argument.length() > "-isystem=".length()) {
+                arguments.set(i, "-isystem=" + relativizePath(argument.substring("-isystem=".length()),
+                        generatedParseRoot));
+            } else if (argument.startsWith("--cuda-path=") && argument.length() > "--cuda-path=".length()) {
+                arguments.set(i, "--cuda-path=" + relativizePath(argument.substring("--cuda-path=".length()),
+                        generatedParseRoot));
+            }
+        }
+    }
+
+    private static String relativizePath(String path, File generatedParseRoot) {
+        String relativePath = relativizeIfInside(new File(path), generatedParseRoot);
+        return relativePath == null ? path : relativePath;
+    }
+
+    private static String relativizeIfInside(File file, File generatedParseRoot) {
+        Path root = generatedParseRoot.toPath().toAbsolutePath().normalize();
+        Path absolutePath = file.toPath().toAbsolutePath().normalize();
+        if (!absolutePath.startsWith(root)) {
+            return null;
+        }
+
+        String relativePath = root.relativize(absolutePath).toString();
+        return relativePath.isEmpty() ? "." : relativePath;
+    }
+
+    private void addCudaPathArgument(List<String> arguments, String cudaPath) {
+        var useBuiltinCudaLib = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption());
+
+        if (useBuiltinCudaLib) {
+            File cudaFolder = clangResources.getBuiltinCudaLib();
+
+            ClavaLog.debug("Setting --cuda-path to built-in CUDA folder '"
+                    + cudaFolder.getAbsolutePath() + "'");
+            arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
+        } else if (!cudaPath.isBlank()) {
+            File cudaFolder = SpecsIo.existingFolder(cudaPath);
+
+            ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
+            arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
+        }
     }
 
     /**
      * TODO: Current implementation only shows the last file, show all files
      */
     public String getClangDump() {
-        if (workingFolders.isEmpty()) {
+        if (lastWorkingFolder == null) {
             SpecsLogs.msgInfo("No working folders found, returning empty clang dump");
             return "";
         }
 
-        StringBuilder clangDump = new StringBuilder();
-
-        for (File workingFolder : workingFolders) {
-            File clangDumpFile = new File(workingFolder, CLANG_DUMP_FILENAME);
-
-            if (!clangDumpFile.isFile()) {
-                SpecsLogs.msgInfo("Clang dump file no found: '" + clangDumpFile + "'");
-                continue;
-            }
-
-            clangDump.append("ClangDump for '" + workingFolder.getName() + "':\n");
-            clangDump.append(SpecsIo.read(clangDumpFile));
+        File clangDumpFile = new File(lastWorkingFolder, CLANG_DUMP_FILENAME);
+        if (!clangDumpFile.isFile()) {
+            SpecsLogs.msgInfo("Clang dump file not found: '" + clangDumpFile + "'");
+            return "";
         }
 
-        return clangDump.toString();
+        return "Clang dump for '" + lastWorkingFolder.getName() + "' is a FlatBuffers v2 stream ("
+                + clangDumpFile.length() + " bytes): " + clangDumpFile.getAbsolutePath();
     }
 
 }

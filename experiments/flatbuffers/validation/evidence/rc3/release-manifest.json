@@ -1,0 +1,35 @@
+{
+  "assets": [
+    {"arch":"any","filename":"clang-dumper-generated-enums.zip","kind":"generated-enums","llvm_major":18,"platform":"any","sha256":"a32967d15d9a11b0eb87feaa246b498b83df9c07958be16d8d49ca7a65213d57"},
+    {"arch":"arm64","filename":"clang-dumper-linux-arm64","kind":"tool","llvm_major":18,"platform":"linux","sha256":"250a27638a8f9f6a17521cfbb0e4e16a5dc26cac98b3348477cb11ca3c397768"},
+    {"arch":"arm64","filename":"clang-dumper-linux-arm64-includes.zip","kind":"includes","llvm_major":18,"platform":"linux","sha256":"533fb2a910cc742b9ce50b1cb24f19b37d07a26ab9bc11c54f9abf91253d2caa"},
+    {"arch":"arm64","filename":"clang-dumper-linux-arm64-plugin.so","kind":"plugin","llvm_major":18,"platform":"linux","sha256":"ce9910ab7fbbdbdf7d8cf15064ad2c16435123884bf8044f3c0cc3a01712c96c"},
+    {"arch":"x64","filename":"clang-dumper-linux-x64","kind":"tool","llvm_major":18,"platform":"linux","sha256":"2349d4ec4ad0926249ad6db2d665c7ec3fc253bf3d241e035c1e428c977249e0"},
+    {"arch":"x64","filename":"clang-dumper-linux-x64-includes.zip","kind":"includes","llvm_major":18,"platform":"linux","sha256":"936bb0129a4ef83ce78e33a0809e96fc4bbd5c1b38786a73c1d52b9a039a76ee"},
+    {"arch":"x64","filename":"clang-dumper-linux-x64-plugin.so","kind":"plugin","llvm_major":18,"platform":"linux","sha256":"2576123fc8fe24feb546db4ec346c1afb60adef4a0f5a707c5a8f3e7ff54eb45"},
+    {"arch":"arm64","filename":"clang-dumper-macos-arm64","kind":"tool","llvm_major":18,"platform":"macos","sha256":"bee1fbd4353d346ec8c633b65b772f8d2c257180cb87571a9fab857b740134d2"},
+    {"arch":"arm64","filename":"clang-dumper-macos-arm64-includes.zip","kind":"includes","llvm_major":18,"platform":"macos","sha256":"7de8b8311679b5eb94ef89f1edcd113e2570c43125884c6fbdabc2cf775375a3"},
+    {"arch":"arm64","filename":"clang-dumper-macos-arm64-plugin.so","kind":"plugin","llvm_major":18,"platform":"macos","sha256":"e3120f4a599fee5ff9b2731f0905892cf636dfa9e5855d947fee8e21a774051b"},
+    {"arch":"x64","filename":"clang-dumper-macos-x64","kind":"tool","llvm_major":18,"platform":"macos","sha256":"90058d0a89d2815cdf4247d059883b9250d94630032a8eff5d167fa3a9ea524e"},
+    {"arch":"x64","filename":"clang-dumper-macos-x64-includes.zip","kind":"includes","llvm_major":18,"platform":"macos","sha256":"5d54e379724c0911edcf968916180515e5b4bc5ed2ad003a0814c9e05bf1dc8e"},
+    {"arch":"x64","filename":"clang-dumper-macos-x64-plugin.so","kind":"plugin","llvm_major":18,"platform":"macos","sha256":"6b32b6790ce69732872e1e7a3446546a52ae297b3e00938f8261dd40a122dd7d"},
+    {"arch":"arm64","filename":"clang-dumper-windows-arm64-includes.zip","kind":"includes","llvm_major":18,"platform":"windows","sha256":"99602004877b7e10e21688bebbf235d3362be2c6673d53e4f6845f60b9aa781d"},
+    {"arch":"arm64","filename":"clang-dumper-windows-arm64.exe","kind":"tool","llvm_major":18,"platform":"windows","sha256":"a97ec505d6b1caa4c695329691114cedf651f1f0eba1fbf084d8df668c3e07b1"},
+    {"arch":"x86_64","filename":"clang-dumper-windows-x86_64-includes.zip","kind":"includes","llvm_major":18,"platform":"windows","sha256":"aa2dc80971e27642de1fa6aba93be1c3224606e3c7a9fd3b4e844a3f05c1e18f"},
+    {"arch":"x86_64","filename":"clang-dumper-windows-x86_64.exe","kind":"tool","llvm_major":18,"platform":"windows","sha256":"c83aa1df80f1f758ad53f538e58a74c596877715ccc3432a91dea8f375552212"},
+    {"arch":"any","filename":"clang-dumper-wire-schema-v2.zip","kind":"wire-schema","llvm_major":18,"platform":"any","sha256":"8bd22fc5c0c3b708960db90c992cd0364d6fd3e6ebcb5ad141242a4e50065712"}
+  ],
+  "flatbuffers": {
+    "commit": "7e163021e59cca4f8e1e35a7c828b5c6b7915953",
+    "version": "25.12.19"
+  },
+  "schema_version": 2,
+  "wire_schema": {
+    "asset": "clang-dumper-wire-schema-v2.zip",
+    "asset_sha256": "8bd22fc5c0c3b708960db90c992cd0364d6fd3e6ebcb5ad141242a4e50065712",
+    "entrypoint": "wire/v2/complete.fbs",
+    "flatbuffers_version": "25.12.19",
+    "sha256": "a2487d2af712f5c0fe6a0860fbacedc0e4a7824bc3b81a3a515c70a3459a3869",
+    "version": 2
+  }
+}

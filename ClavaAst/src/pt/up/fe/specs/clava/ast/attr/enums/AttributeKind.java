@@ -465,6 +465,15 @@ public enum AttributeKind implements StringProvider {
     private static String toAttributeName(AttributeKind kind) {
         String name = kind.name();
 
+        // Clang uses RestrictAttr for the legacy GNU malloc attribute.
+        // Keep the schema name as Restrict, but print its GNU spelling.
+        if (kind == Restrict) {
+            return "malloc";
+        }
+        if (kind == NoThrow) {
+            return "nothrow";
+        }
+
         // Make certain expressions lower-case
         if (name.contains("OpenCL")) {
             name = name.replace("OpenCL", "Opencl");

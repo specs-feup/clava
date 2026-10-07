@@ -90,6 +90,11 @@ public class CXXConstructorDecl extends CXXMethodDecl {
     }
 
     @Override
+    protected String getNameForCode() {
+        return getRecordDecl().map(NamedDecl::getDeclName).orElseGet(super::getNameForCode);
+    }
+
+    @Override
     public String getCodeInitList() {
 
         // Check if super is not empty

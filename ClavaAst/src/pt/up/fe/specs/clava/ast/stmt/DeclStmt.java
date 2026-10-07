@@ -169,7 +169,7 @@ public class DeclStmt extends Stmt {
                     code += ";";
                 }
 
-                code += ln() + decls.get(i).getCode();
+                code = code.stripTrailing() + ln() + decls.get(i).getCode();
             }
         }
 

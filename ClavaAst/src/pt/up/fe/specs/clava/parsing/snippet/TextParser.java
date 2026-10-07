@@ -34,7 +34,9 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
@@ -43,6 +45,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
+import pt.up.fe.specs.clava.ast.stmt.MSAsmStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
@@ -97,6 +100,8 @@ public class TextParser {
     }
 
     public void addElements(TranslationUnit tu, TextElements textElements) {
+
+        textElements = excludeMsAsmBodyComments(tu, textElements);
 
         // TranslationUnit path
         String tuFilepath = tu.getFile().getPath();
@@ -243,6 +248,44 @@ public class TextParser {
         for (InlineComment comment : associatedNodes.keySet()) {
             associatedNodes.get(comment).associateComment(comment);
         }
+    }
+
+    private static TextElements excludeMsAsmBodyComments(TranslationUnit tu, TextElements textElements) {
+        List<SourceRange> msAsmRanges = tu.getDescendantsAndSelfStream()
+                .filter(MSAsmStmt.class::isInstance)
+                .map(ClavaNode::getLocation)
+                .toList();
+        if (msAsmRanges.isEmpty()) {
+            return textElements;
+        }
+
+        List<ClavaNode> standaloneElements = textElements.getStandaloneElements().stream()
+                .filter(element -> !(element instanceof Comment comment
+                        && msAsmRanges.stream().anyMatch(range -> contains(range, comment.getLocation().getStart()))))
+                .toList();
+        List<InlineComment> associatedComments = textElements.getAssociatedInlineComments().stream()
+                .filter(comment -> msAsmRanges.stream().noneMatch(range -> contains(range,
+                        comment.getLocation().getStart())))
+                .toList();
+
+        return new TextElements(standaloneElements, associatedComments);
+    }
+
+    private static boolean contains(SourceRange range, SourceLocation location) {
+        SourceLocation start = range.getStart();
+        SourceLocation end = range.getEnd();
+
+        if (start.getFilepath() == null || !start.getFilepath().equals(location.getFilepath())
+                || !start.getFilepath().equals(end.getFilepath())) {
+            return false;
+        }
+
+        return compare(start, location) <= 0 && compare(location, end) < 0;
+    }
+
+    private static int compare(SourceLocation left, SourceLocation right) {
+        int lineOrder = Integer.compare(left.getLine(), right.getLine());
+        return lineOrder != 0 ? lineOrder : Integer.compare(left.getColumn(), right.getColumn());
     }
 
     private List<ClavaNode> insertGuardNodes(TranslationUnit tu) {

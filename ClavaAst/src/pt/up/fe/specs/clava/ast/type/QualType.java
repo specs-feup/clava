@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,27 @@ public class QualType extends Type {
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
+        if (getUnqualifiedType() instanceof ArrayType array) {
+            // Array qualifiers apply to its elements, before the array declarator.
+            ArrayType qualifiedArray = (ArrayType) array.copy();
+            QualType qualifiedElement = (QualType) copy();
+            Type element = array.getElementType();
+            if (element instanceof QualType elementQualifiers) {
+                var qualifiers = new LinkedHashSet<>(elementQualifiers.get(C99_QUALIFIERS));
+                qualifiers.addAll(get(C99_QUALIFIERS));
+                qualifiedElement.set(C99_QUALIFIERS, new ArrayList<>(qualifiers));
+                qualifiedElement.set(UNQUALIFIED_TYPE, elementQualifiers.getUnqualifiedType());
+                if (get(ADDRESS_SPACE_QUALIFIER) == AddressSpaceQualifierV2.NONE) {
+                    qualifiedElement.set(ADDRESS_SPACE_QUALIFIER, elementQualifiers.get(ADDRESS_SPACE_QUALIFIER));
+                    qualifiedElement.set(ADDRESS_SPACE, elementQualifiers.get(ADDRESS_SPACE));
+                }
+            } else {
+                qualifiedElement.set(UNQUALIFIED_TYPE, element);
+            }
+            qualifiedArray.set(ArrayType.ELEMENT_TYPE, qualifiedElement);
+            return qualifiedArray.getCode(sourceNode, name);
+        }
+
         String type = getUnqualifiedType().getCode(sourceNode, name);
 
         // If not a top-level qualifier, has to be put after the type, but before the name

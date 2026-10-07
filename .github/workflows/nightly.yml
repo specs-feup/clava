@@ -94,6 +94,12 @@ jobs:
         run: |
           cd clava/ClangAstParser
           gradle test
+
+      - name: Verify generated wire bindings and release resolver
+        run: |
+          gradle -p clava/ClangAstParser verifyGeneratedWire
+          python3 -m unittest discover -s clava/ClangAstParser/scripts -p 'test_*.py'
+          python3 -m unittest discover -s clava/experiments/flatbuffers/validation -p 'test_*.py'
           
       - name: Test ClavaWeaver
         run: |

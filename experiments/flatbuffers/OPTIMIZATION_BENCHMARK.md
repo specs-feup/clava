@@ -1,0 +1,81 @@
+# Optimization benchmark, 6 October 2026
+
+The [fresh three-implementation comparison](CURRENT_COMPARISON_BENCHMARK.md) supersedes the reused controls with 7 October measurements of current Text, Protobuf and FlatBuffers builds, for both App and separate command timing.
+
+The ports reduced production Java test time by 12.0%, but did not restore the earlier App-construction advantage over Protobuf. App gains were below 1% in both suites. The speed adoption gate remains unresolved.
+
+Three rotated serial rounds compare the prior production reader, the Protobuf experiment and the updated eager reader. Both FlatBuffers builds use the same published RC3 binary and schema, identical Java fixtures and identical captured App workloads. The updated build combines the duplicate-GC fix, immutable ordered metadata construction and per-class reader cache. This experiment does not isolate individual changes.
+
+| Median seconds | Previous FlatBuffers | Protobuf | Updated FlatBuffers | Change vs previous | Updated vs Protobuf |
+|---|---:|---:|---:|---:|---:|
+| Java test bodies, production diagnostics | 38.638 | 31.926 | 34.010 | -11.98% | +6.53% |
+| Java App construction, diagnostics off | 27.280 | 25.284 | 27.122 | -0.58% | +7.27% |
+| JS App construction, diagnostics off | 9.933 | 9.507 | 9.847 | -0.86% | +3.58% |
+
+Negative change means faster. The first row sums 116 JUnit test bodies, including production heap diagnostics. App rows sum parse entry through final App transformations, with heap diagnostics disabled by the same instrumentation as the earlier report. They exclude parser/context construction, assertions and code generation. Native dump production and consumer parsing are both included; this is not reader-only timing. Phase occupancies are not added to these boundaries.
+
+## Whole-command wall time
+
+These durations were recorded in the same 27 observations, outside the nested App timers. Java includes Gradle configuration and worker startup; JS uses the runner's Vitest test-command boundary. Compilation, resource preparation and wrapper setup were excluded as documented by each runner. The historical comparison workloads are 116 Java tests and 164 JS tests. They are not unfiltered runs of every test now present on the production branch.
+
+| Median seconds | Previous FlatBuffers | Protobuf | Updated FlatBuffers | Updated vs Protobuf |
+|---|---:|---:|---:|---:|
+| ClangAstParser command, production diagnostics | 44.338 | 37.933 | 39.648 | +4.52% |
+| ClangAstParser command, diagnostics off | 34.009 | 32.424 | 33.819 | +4.30% |
+| Clava-JS command, diagnostics off | 35.846 | 33.170 | 34.827 | +4.99% |
+
+The diagnostics-off command measurements also favor Protobuf. Fixing duplicate GC explains why the production comparison improves more than the diagnostics-off comparisons, but these combined ports do not isolate its exact contribution.
+
+### Relation to the earlier decision report
+
+The [earlier report](https://draftlink.lmsousa.workers.dev/d/T8Nfm77p4Olp?v=64) contains both cumulative App measurements and supplementary whole-command results. Its App measurements favored FlatBuffers in both suites and every measured cache state. Java whole-command measurements also favored FlatBuffers. Its matched fast-validation JS command comparison was much closer: median paired FlatBuffers-minus-Protobuf deltas were -0.155 s in bypass, -0.315 s cold and +0.115 s warm. Protobuf therefore won the warm-cache median; JS whole-command results did not establish a universal FlatBuffers advantage.
+
+The earlier cumulative App cohort used Clava `01c6b739e` and native `0a2737839`; the current optimized consumer is `09542632a` with the published RC3 producer. The production reader now includes a separate structural verifier and record validation, with additional fidelity and cleanup changes. Those are real implementation changes inside the App boundary. The matched diagnostics-off rerun confirms that a remaining reversal exists independently of heap diagnostics. It does not identify which production changes caused it. The prior pilot ranking should not have been carried forward into a production performance recommendation without remeasuring the integrated implementation.
+
+[Whole-command evidence and historical comparison audit](validation/evidence/optimization-wall-comparison-20261006.json) records exact observations and report/CSV hashes. Absolute times across the earlier and current dates are not treated as causal comparisons.
+
+## Workload checks
+
+All 18 Java runs passed the same 116 tests. All nine JS runs passed 158 tests with six pending, the same 164 test identities. Each Java App run captured 216 timed calls; each JS run captured 170 timed calls and 130 excluded syntax-only calls. No failed observation enters the summaries.
+
+The before/after App calls match source hashes, filenames, ordered compiler options and semantic parser configuration in every round. Protobuf matches all 170 JS calls after normalizing its fixture-overlay and checkout roots. Its matching GlobalAttributes script/golden is retained, with the common C++ input unchanged. Protobuf matches 207 of 216 Java calls; the nine differing calls reparse source generated by different printers. The raw comparison retains all calls and the differing source hashes. A supplementary intersection comparison confirms the Java gap on the matching 207 calls.
+
+| Matching Java calls, median seconds | Previous FlatBuffers | Protobuf | Updated FlatBuffers |
+|---|---:|---:|---:|
+| 207 per round | 25.944 | 24.037 | 25.830 |
+
+Updated FlatBuffers is 7.46% slower on these matching calls. This supplementary subset was selected by workload identity after capture, not by performance.
+
+## Controls and limits
+
+All runs used ccache bypass with `CCACHE_DISABLE=true` and ccache absent from PATH. The runtimes were compiled before timing; Java uses one 512 MiB test worker without coverage instrumentation, JS uses one serialized worker with the default JVM heap, observed as 8,103,395,328 bytes, about 7.55 GiB. No explicit-GC override was passed. Test classpaths, source snapshots and native release hashes are checked. Release/cache staging, Gradle configuration and worker startup are excluded from App timing. They remain in separately recorded wall times. The Java production diagnostic retains each build's actual GC requests, so the duplicate-GC fix affects that row by design.
+
+Three repetitions on one host support a descriptive comparison, not a claim that sub-1% App changes exceed noise. Protobuf uses a different native producer and branch implementation; this is not a format switch in one source revision. Fidelity and malformed-input validation remain enabled. The results do not attribute the residual penalty to structural verification, generated decoding or another particular phase. No new memory measurements were taken. Prior memory observations do not establish the updated build's peak or retained memory.
+
+## Measured revisions
+
+| Build | Clava | specs-java-libs | lara-framework |
+|---|---|---|---|
+| Previous FlatBuffers | `f03eb45d8baf7ce9a41dee18d681db3455790746` | `fd41aceb8336d2b5e026abb2deee1a514a778be5` | `b780d0b8ba0aac2670ad5aa98998883a2a4f8030` |
+| Protobuf | `ff5e58afa96a07b18a3d2bd2e40a00a59bb28442` | `19c8e3e4c81dbc77a89d77cd7ab2bc8bfc3844fa` | `b780d0b8ba0aac2670ad5aa98998883a2a4f8030` |
+| Updated FlatBuffers | `09542632ad2c9e62db89b466fa81482612f03cd7` | `ae7194a7b3e981913d40a4403acfc759808b6c3a` | `b780d0b8ba0aac2670ad5aa98998883a2a4f8030` |
+
+Both FlatBuffers runtimes select `v18.1.8_5-rc3`, binary SHA-256 `2349d4ec4ad0926249ad6db2d665c7ec3fc253bf3d241e035c1e428c977249e0`, schema SHA-256 `a2487d2af712f5c0fe6a0860fbacedc0e4a7824bc3b81a3a515c70a3459a3869`. The optimized runtime was built from a fresh isolated checkout using the committed release selector. The user's local selector was preserved.
+
+## Raw observations
+
+| Phase | Build | Round 1 seconds | Round 2 seconds | Round 3 seconds |
+|---|---|---:|---:|---:|
+| Java test bodies, production diagnostics | Previous FlatBuffers | 38.638000 | 38.227000 | 38.670000 |
+| Java test bodies, production diagnostics | Protobuf | 31.640000 | 31.934000 | 31.926000 |
+| Java test bodies, production diagnostics | Updated FlatBuffers | 34.058000 | 34.010000 | 33.991000 |
+| Java App construction, diagnostics off | Previous FlatBuffers | 27.280063 | 27.163288 | 27.286971 |
+| Java App construction, diagnostics off | Protobuf | 25.283560 | 25.296662 | 25.148369 |
+| Java App construction, diagnostics off | Updated FlatBuffers | 27.121501 | 27.070538 | 27.265967 |
+| JS App construction, diagnostics off | Previous FlatBuffers | 9.864358 | 9.933338 | 9.975027 |
+| JS App construction, diagnostics off | Protobuf | 9.505409 | 9.523212 | 9.506712 |
+| JS App construction, diagnostics off | Updated FlatBuffers | 9.847472 | 9.834060 | 9.950691 |
+
+[Committed evidence](validation/evidence/optimization-benchmark-20261006.json) includes individual results, source/native/classpath provenance, workload differences, per-call durations and source hashes, overlay provenance, exact temporary drivers and helper hashes. Original logs and captures remain in the ignored `suite/results/optimization-benchmark-20261006-r2` artifact tree, authenticated by their recorded hashes. Setup failures are recorded separately and contributed no JS test observations.
+
+The immutable metadata map still breaks 17 legacy XStream XML persistence tests, as accepted for the separate XStream removal PR. The PR warnings remain. Nothing was merged or published as a stable release.
