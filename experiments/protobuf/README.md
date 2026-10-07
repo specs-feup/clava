@@ -179,7 +179,7 @@ the walk includes runtime node classes, child and node-field order, every
 populated `DataKey`, and recursively nested `DataClass`, optional, collection,
 map, array, and node-reference values. `CONTEXT`, `ORIGIN`, and `PREVIOUS_ID`
 are runtime wiring and are excluded. Only `ClavaNode.ID` and node/pointer
-identity (including the legacy `CXXMethodDecl.RECORD_ID` value) are replaced by
+identity are replaced by
 encounter-order ordinals; source locations, paths, names, literals, comments,
 pragmas, and all other values remain exact. Set
 `-Dprotobuf.graphTrace=/absolute/path/trace` to retain a per-node diagnostic

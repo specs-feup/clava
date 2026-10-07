@@ -30,7 +30,6 @@ import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
@@ -334,18 +333,6 @@ public final class ProtobufMemoryIdentityProbe {
             return;
         }
 
-        // Clava keeps this legacy scalar alongside the resolved node-valued
-        // RECORD field. Treat it as the same pointer for cross-runtime checks.
-        if (key == CXXMethodDecl.RECORD_ID) {
-            ClavaNode target = node.get(CXXMethodDecl.RECORD);
-            if (!String.valueOf(node.get(key)).equals(target.getId())) {
-                throw new IllegalStateException("CXXMethodDecl.RECORD_ID disagrees with RECORD");
-            }
-            hash.add("node");
-            hash.add(ordinal(target, ordinals));
-            return;
-        }
-
         appendValue(hash, node.get(key), ordinals);
     }
 
@@ -353,10 +340,6 @@ public final class ProtobufMemoryIdentityProbe {
             IdentityHashMap<ClavaNode, Integer> ordinals) {
         if (key == ClavaNode.ID) {
             return "normalized-id#" + ordinals.get(node);
-        }
-        if (key == CXXMethodDecl.RECORD_ID) {
-            ClavaNode target = node.get(CXXMethodDecl.RECORD);
-            return "node#" + ordinal(target, ordinals);
         }
         return canonicalValue(node.get(key), ordinals);
     }

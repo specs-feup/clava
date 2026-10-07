@@ -237,14 +237,18 @@ public final class ValidationProbe {
                 emit("CLAVA_CORPUS", row);
                 parsed++;
             } catch (Exception | LinkageError failure) {
-                String message = failure.getMessage() == null ? failure.getClass().getName()
-                        : failure.getClass().getName() + ": " + failure.getMessage();
+                StringBuilder message = new StringBuilder();
+                for (Throwable cause = failure; cause != null; cause = cause.getCause()) {
+                    if (!message.isEmpty()) message.append("\nCaused by: ");
+                    message.append(cause.getClass().getName()).append(": ").append(cause.getMessage());
+                }
+                failure.printStackTrace();
                 emit("CLAVA_CORPUS", Map.of(
                         "index", index,
                         "relative", relative,
                         "source", source.toString(),
                         "bucket", "CONSUMER_FAIL",
-                        "error", message));
+                        "error", message.toString()));
             }
             if ((index + 1) % 25 == 0) {
                 System.gc();
