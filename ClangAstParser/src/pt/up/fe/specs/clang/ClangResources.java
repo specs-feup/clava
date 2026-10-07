@@ -18,10 +18,9 @@ import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
 import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
-import pt.up.fe.specs.clang.wire.Envelope;
-import pt.up.fe.specs.clang.wire.FramedProtobufReader;
 import pt.up.fe.specs.clang.wire.ProtoAstReader;
 import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -29,30 +28,34 @@ import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.system.ProcessOutputAsString;
 
 import java.io.File;
-import java.io.InputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 public class ClangResources {
 
-    private static final Map<String, CachedClangFiles> CLANG_FILES_CACHE = new ConcurrentHashMap<>();
+    static final int MAX_METADATA_CACHE_ENTRIES = 128;
+
+    static final BoundedMetadataCache<String, CachedClangFiles> CLANG_FILES_CACHE =
+            new BoundedMetadataCache<>(MAX_METADATA_CACHE_ENTRIES);
     private static final String CLANG_FOLDERNAME = "clang_ast_exe";
     private static final String CLANG_CACHE_FOLDERNAME = "clang-dumper";
     private static final String RELEASES_FOLDERNAME = "releases";
     private static final String INCLUDES_FOLDERNAME = "includes";
     private static final Duration STALE_CACHE_MAX_AGE = Duration.ofDays(60);
 
-    private static final Map<String, Boolean> HAS_LIBC = new ConcurrentHashMap<>();
+    static final BoundedMetadataCache<String, Boolean> HAS_LIBC =
+            new BoundedMetadataCache<>(MAX_METADATA_CACHE_ENTRIES);
 
     private final CodeParser options;
 
@@ -75,19 +78,48 @@ public class ClangResources {
         var forceSystemLibc = source instanceof LocalBuild || ClangAstDumper.usePlugin();
 
         if (source instanceof LocalBuild localBuild) {
+            var manifest = ClangAstWebResource.getLocalManifest(localBuild.folder());
+            var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
+            var localAsset = getCurrentAsset(manifest, executableKind);
             var clangExecutable = getLocalExecutable(localBuild.folder());
+            if (!localAsset.filename().equals(clangExecutable.getName())
+                    || !localAsset.sha256().equalsIgnoreCase(ExecutableDigest.sha256(clangExecutable))) {
+                throw new RuntimeException("Local clang-dumper executable does not match its release manifest: '"
+                        + clangExecutable + "'");
+            }
             var libcMode = resolveLibcMode(clangExecutable, requestedLibcMode, forceSystemLibc);
-            var systemResourceDir = libcMode == LibcMode.SYSTEM && useBuiltinCuda
-                    ? findSystemClangResourceDir(null)
-                    : null;
+            File systemResourceDir = null;
+            if (libcMode == LibcMode.SYSTEM && useBuiltinCuda) {
+                systemResourceDir = findSystemClangResourceDir(
+                        getLocalLLVMMajor(getCurrentAsset(manifest, "tool")));
+            }
             return new ClangFiles(clangExecutable, List.of(), systemResourceDir, libcMode);
         }
 
         var resourceFolder = getClangResourceFolder();
         var manifest = ClangAstWebResource.getManifest(resourceFolder);
         File clangExecutable = prepareResources(manifest, resourceFolder);
-        var libcMode = resolveLibcMode(clangExecutable, requestedLibcMode, forceSystemLibc);
-        var key = libcMode.name() + "_" + useBuiltinCuda + "_" + source + "_" + resourceFolder.getAbsolutePath();
+        var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
+        var llvmMajor = getLLVMMajor(getCurrentAsset(manifest, executableKind));
+        var systemResourceDir = !forceSystemLibc && requestedLibcMode == LibcMode.BUILTIN_AND_LIBC
+                ? null
+                : tryFindSystemClangResourceDir(llvmMajor);
+        var libcMode = requestedLibcMode == LibcMode.AUTO && !forceSystemLibc && systemResourceDir == null
+                ? LibcMode.BUILTIN_AND_LIBC
+                : resolveLibcMode(clangExecutable, requestedLibcMode, forceSystemLibc, systemResourceDir);
+
+        if (libcMode == LibcMode.SYSTEM && useBuiltinCuda && systemResourceDir == null) {
+            systemResourceDir = findSystemClangResourceDir(llvmMajor);
+        }
+
+        if (libcMode != LibcMode.SYSTEM) {
+            systemResourceDir = null;
+        }
+
+        var systemResourceKey = systemResourceDir == null ? "no-system-resource-dir"
+                : SpecsIo.getCanonicalPath(systemResourceDir);
+        var key = libcMode.name() + "_" + useBuiltinCuda + "_" + source + "_"
+                + resourceFolder.getAbsolutePath() + "_" + systemResourceKey;
         var cached = CLANG_FILES_CACHE.get(key);
         if (isUsable(cached)) {
             SpecsLogs.debug(() -> "Using cached version of Clang files: " + cached.files());
@@ -99,10 +131,6 @@ public class ClangResources {
         }
 
         var includes = prepareIncludes(manifest, libcMode);
-        var systemResourceDir = libcMode == LibcMode.SYSTEM && useBuiltinCuda
-                ? prepareSystemClangResourceDir(manifest)
-                : null;
-
         if (useBuiltinCuda) {
             getBuiltinCudaLib();
         }
@@ -121,6 +149,11 @@ public class ClangResources {
     }
 
     static LibcMode resolveLibcMode(File clangExecutable, LibcMode requestedLibcMode, boolean forceSystem) {
+        return resolveLibcMode(clangExecutable, requestedLibcMode, forceSystem, null);
+    }
+
+    static LibcMode resolveLibcMode(File clangExecutable, LibcMode requestedLibcMode, boolean forceSystem,
+            File systemResourceDir) {
         Objects.requireNonNull(clangExecutable, "clangExecutable");
         Objects.requireNonNull(requestedLibcMode, "requestedLibcMode");
 
@@ -129,7 +162,7 @@ public class ClangResources {
         }
 
         return switch (requestedLibcMode) {
-            case AUTO -> useBuiltinLibc(clangExecutable, requestedLibcMode)
+            case AUTO -> useBuiltinLibc(clangExecutable, requestedLibcMode, systemResourceDir)
                     ? LibcMode.BUILTIN_AND_LIBC
                     : LibcMode.SYSTEM;
             case BUILTIN_AND_LIBC, SYSTEM -> requestedLibcMode;
@@ -210,6 +243,10 @@ public class ClangResources {
                 ClangAstWebResource.getAssetResource(asset), asset.sha256(),
                 "clang-dumper asset '" + asset.filename() + "'");
 
+        if (!asset.sha256().equalsIgnoreCase(ExecutableDigest.sha256(executable))) {
+            throw new RuntimeException("Cached clang-dumper executable does not match its release manifest: '"
+                    + executable + "'; remove the corrupt asset and retry");
+        }
         if (platform.isWindows()) {
             unblockWindowsFile(executable);
         }
@@ -270,19 +307,27 @@ public class ClangResources {
     }
 
     public static boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode) {
+        return useBuiltinLibc(clangExecutable, libcMode, null);
+    }
+
+    private static boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode, File systemResourceDir) {
         return switch (libcMode) {
-            case AUTO -> !hasLibC(clangExecutable);
+            case AUTO -> !hasLibC(clangExecutable, systemResourceDir);
             case BUILTIN_AND_LIBC -> true;
             case SYSTEM -> false;
         };
     }
 
-    private static boolean hasLibC(File clangExecutable) {
+    private static boolean hasLibC(File clangExecutable, File systemResourceDir) {
         var executableKey = SpecsIo.getCanonicalPath(clangExecutable);
-        return HAS_LIBC.computeIfAbsent(executableKey, ignored -> detectLibC(clangExecutable));
+        var resourceDirKey = systemResourceDir == null ? "default-resource-dir"
+                : SpecsIo.getCanonicalPath(systemResourceDir);
+        var probeKey = executableKey + "|" + ExecutableDigest.sha256(clangExecutable)
+                + "|" + resourceDirKey + "|" + ProtoAstReader.schemaHash() + "|protobuf-c-cpp-nonempty-v1";
+        return HAS_LIBC.computeIfAbsent(probeKey, ignored -> detectLibC(clangExecutable, systemResourceDir));
     }
 
-    private static boolean detectLibC(File clangExecutable) {
+    private static boolean detectLibC(File clangExecutable, File systemResourceDir) {
         File clangTest = SpecsIo.getTempFolder("clang_ast_test_" + UUID.randomUUID());
 
         try {
@@ -292,21 +337,20 @@ public class ClangResources {
 
             boolean needsLib = false;
             for (var testFile : testFiles) {
-                File dumpFile = new File(clangTest, testFile.getName() + ".pb");
-                var output = runClangAstDumper(clangExecutable, testFile, dumpFile);
+                var dumpFile = new File(clangTest, testFile.getName() + ".pb");
+                var output = runClangAstDumper(clangExecutable, testFile, dumpFile, systemResourceDir);
 
-                if (output.getReturnValue() != 0) {
-                    ClavaLog.info("Problems while running dumper to test if libc/libcxx is needed");
+                if (output.getReturnValue() != 0 || !dumpFile.isFile()) {
+                    ClavaLog.debug("Could not produce a Protobuf dump while checking system libc/libcxx");
                     needsLib = true;
                     break;
                 }
 
                 if (!isValidProtobufDump(dumpFile)) {
-                    ClavaLog.info("Dumper did not produce a valid protobuf AST while testing libc/libcxx");
+                    ClavaLog.debug("Could not validate the Protobuf dump while checking system libc/libcxx");
                     needsLib = true;
                     break;
                 }
-
             }
 
             if (needsLib) {
@@ -321,77 +365,29 @@ public class ClangResources {
         }
     }
 
-    private static ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile, File dumpFile) {
-        List<String> arguments = List.of(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "-o",
-                dumpFile.getAbsolutePath(), "--");
-        return SpecsSystem.runProcess(arguments, true, false);
+    static boolean isValidProtobufDump(File dumpFile) {
+        try {
+            var result = ProtoAstReader.read(dumpFile.toPath(), new ClavaContext(), null,
+                    dumpFile.getAbsolutePath());
+            return result.metrics().nodes() > 0;
+        } catch (IOException | RuntimeException e) {
+            ClavaLog.debug(() -> "Could not read libc probe dump '" + dumpFile + "': " + e.getMessage());
+            return false;
+        }
     }
 
-    /**
-     * Parse enough of the typed stream to prove that this resource is the
-     * expected protocol producer. The complete AST is deliberately not built
-     * during libc detection; normal parsing remains the only consumer path.
-     */
-    static boolean isValidProtobufDump(File dumpFile) {
-        if (!dumpFile.isFile()) {
-            return false;
+    private static ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile, File dumpFile,
+            File systemResourceDir) {
+        var arguments = new ArrayList<String>();
+        arguments.add(clangExecutable.getAbsolutePath());
+        arguments.add(testFile.getAbsolutePath());
+        arguments.add("-o");
+        arguments.add(dumpFile.getAbsolutePath());
+        arguments.add("--");
+        if (systemResourceDir != null) {
+            arguments.add("-resource-dir=" + systemResourceDir.getAbsolutePath());
         }
-
-        try (InputStream input = Files.newInputStream(dumpFile.toPath())) {
-            byte[] magic = input.readNBytes(8);
-            if (magic.length != 8 || magic[0] != 'C' || magic[1] != 'L' || magic[2] != 'A'
-                    || magic[3] != 'V' || magic[4] != 'A' || magic[5] != 'P' || magic[6] != 'B'
-                    || magic[7] != '1') {
-                return false;
-            }
-
-            final boolean[] headerSeen = { false };
-            final boolean[] endSeen = { false };
-            final long[] records = { 0 };
-            new FramedProtobufReader(input).read(Envelope::parseFrom, envelope -> {
-                if (endSeen[0]) {
-                    throw new IllegalArgumentException("protobuf End must be the final frame");
-                }
-
-                switch (envelope.getPayloadCase()) {
-                    case HEADER -> {
-                        if (headerSeen[0]) {
-                            throw new IllegalArgumentException("protobuf Header must occur exactly once");
-                        }
-                        ProtoAstReader.validateHeader(envelope.getHeader());
-                        headerSeen[0] = true;
-                    }
-                    case CHUNK -> {
-                        if (!headerSeen[0]) {
-                            throw new IllegalArgumentException("protobuf Header must be the first frame");
-                        }
-                        if (envelope.getChunk().getRecordsCount() == 0) {
-                            throw new IllegalArgumentException("protobuf Chunk must contain at least one Record");
-                        }
-                        records[0] += envelope.getChunk().getRecordsCount();
-                    }
-                    case END -> {
-                        if (!headerSeen[0]) {
-                            throw new IllegalArgumentException("protobuf Header must be the first frame");
-                        }
-                        var end = envelope.getEnd();
-                        if (!end.hasRecords() || !end.hasNodes() || !end.hasRawBytes()
-                                || !end.hasFiles() || !end.hasIds()) {
-                            throw new IllegalArgumentException("protobuf End is missing a required counter");
-                        }
-                        if (end.getRecords() != records[0]) {
-                            throw new IllegalArgumentException("protobuf End record count does not match the stream");
-                        }
-                        endSeen[0] = true;
-                    }
-                    case PAYLOAD_NOT_SET -> throw new IllegalArgumentException("protobuf frame has no payload");
-                }
-            });
-            return headerSeen[0] && endSeen[0];
-        } catch (Exception e) {
-            ClavaLog.debug(() -> "Invalid protobuf dumper probe: " + e.getMessage());
-            return false;
-        }
+        return SpecsSystem.runProcess(arguments, true, false);
     }
 
     private PreparedIncludes prepareIncludes(ClangDumperManifest manifest, LibcMode libcMode) {
@@ -406,13 +402,44 @@ public class ClangResources {
         return new PreparedIncludes(includeFolders.stream().map(File::getAbsolutePath).toList(), extractedFolder);
     }
 
-    private File prepareSystemClangResourceDir(ClangDumperManifest manifest) {
-        var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
-        var llvmMajor = getCurrentAsset(manifest, executableKind).llvm_major();
-        return findSystemClangResourceDir(llvmMajor);
+    static int getLocalLLVMMajor(ClangDumperManifestAsset localAsset) {
+        return getLLVMMajor(localAsset);
+    }
+
+    private static int getLLVMMajor(ClangDumperManifestAsset asset) {
+        var llvmMajor = asset.llvm_major();
+        if (llvmMajor < 1) {
+            throw new RuntimeException("Clang-dumper manifest asset must specify llvm_major "
+                    + "to select matching system Clang resources");
+        }
+
+        return llvmMajor;
     }
 
     private File findSystemClangResourceDir(Integer llvmMajor) {
+        var resourceDir = tryFindSystemClangResourceDir(llvmMajor);
+        if (resourceDir != null) {
+            return resourceDir;
+        }
+
+        var commandNames = getSystemClangCommandNames(llvmMajor);
+        var expectedVersion = llvmMajor == null ? "the local clang-dumper build's version"
+                : "LLVM " + llvmMajor;
+        var installHint = llvmMajor == null ? "clang++" : "clang++-" + llvmMajor;
+        throw new RuntimeException("Could not find a system Clang resource directory for SYSTEM mode with built-in CUDA"
+                + " on host '" + SupportedPlatform.getCurrentPlatform() + "' (expected " + expectedVersion
+                + "). Tried: " + commandNames
+                + ". SYSTEM mode does not bundle Clang's CUDA wrapper headers, so a matching system Clang"
+                + " installation is required: install '" + installHint + "' (e.g. 'apt install " + installHint
+                + "' or 'brew install llvm'), or set the libc mode to 'builtin' to use the bundled includes"
+                + " instead of the system libc");
+    }
+
+    private File tryFindSystemClangResourceDir(Integer llvmMajor) {
+        if (llvmMajor == null || llvmMajor < 1) {
+            return null;
+        }
+
         var commandNames = getSystemClangCommandNames(llvmMajor);
         for (var commandName : commandNames) {
             final ProcessOutputAsString output;
@@ -433,17 +460,7 @@ public class ClangResources {
                 return resourceDir;
             }
         }
-
-        var expectedVersion = llvmMajor == null ? "the local clang-dumper build's version"
-                : "LLVM " + llvmMajor;
-        var installHint = llvmMajor == null ? "clang++" : "clang++-" + llvmMajor;
-        throw new RuntimeException("Could not find a system Clang resource directory for SYSTEM mode with built-in CUDA"
-                + " on host '" + SupportedPlatform.getCurrentPlatform() + "' (expected " + expectedVersion
-                + "). Tried: " + commandNames
-                + ". SYSTEM mode does not bundle Clang's CUDA wrapper headers, so a matching system Clang"
-                + " installation is required: install '" + installHint + "' (e.g. 'apt install " + installHint
-                + "' or 'brew install llvm'), or set the libc mode to 'builtin' to use the bundled includes"
-                + " instead of the system libc");
+        return null;
     }
 
     private static List<String> getSystemClangCommandNames(Integer llvmMajor) {
@@ -655,6 +672,92 @@ public class ClangResources {
     private record PreparedIncludes(List<String> folders, File extractedFolder) {
     }
 
-    private record CachedClangFiles(ClangFiles files, File includesFolder) {
+    record CachedClangFiles(ClangFiles files, File includesFolder) {
+    }
+
+    /** A small LRU for path metadata; values must not retain parsed ASTs. */
+    static final class BoundedMetadataCache<K, V> {
+
+        private static final int LOCK_STRIPE_COUNT = 64;
+
+        private final int maxEntries;
+        private final LinkedHashMap<K, V> entries = new LinkedHashMap<>(16, 0.75f, true);
+        private final Object[] computationLocks = new Object[LOCK_STRIPE_COUNT];
+
+        BoundedMetadataCache(int maxEntries) {
+            if (maxEntries < 1) {
+                throw new IllegalArgumentException("Metadata cache limit must be positive");
+            }
+
+            this.maxEntries = maxEntries;
+            Arrays.setAll(computationLocks, ignored -> new Object());
+        }
+
+        synchronized V get(K key) {
+            return entries.get(key);
+        }
+
+        synchronized V putIfAbsent(K key, V value) {
+            var existing = entries.get(key);
+            if (existing != null || entries.containsKey(key)) {
+                return existing;
+            }
+
+            entries.put(key, Objects.requireNonNull(value, "value"));
+            evictEldest();
+            return null;
+        }
+
+        synchronized boolean remove(K key, V value) {
+            if (!Objects.equals(entries.get(key), value)) {
+                return false;
+            }
+
+            entries.remove(key);
+            return true;
+        }
+
+        V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
+            Objects.requireNonNull(mappingFunction, "mappingFunction");
+            var lock = computationLocks[Math.floorMod(key.hashCode(), LOCK_STRIPE_COUNT)];
+            synchronized (lock) {
+                var existing = get(key);
+                if (existing != null || containsKey(key)) {
+                    return existing;
+                }
+
+                var computed = mappingFunction.apply(key);
+                if (computed == null) {
+                    return null;
+                }
+
+                var prior = putIfAbsent(key, computed);
+                return prior == null ? computed : prior;
+            }
+        }
+
+        synchronized int size() {
+            return entries.size();
+        }
+
+        synchronized boolean containsKey(K key) {
+            return entries.containsKey(key);
+        }
+
+        synchronized void clear() {
+            entries.clear();
+        }
+
+        synchronized int maxEntries() {
+            return maxEntries;
+        }
+
+        private void evictEldest() {
+            if (entries.size() > maxEntries) {
+                var eldest = entries.keySet().iterator();
+                eldest.next();
+                eldest.remove();
+            }
+        }
     }
 }

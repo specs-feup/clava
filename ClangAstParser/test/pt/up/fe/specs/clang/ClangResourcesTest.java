@@ -18,6 +18,8 @@ import org.junit.jupiter.api.io.TempDir;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifest;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestProtocol;
+import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestCompatibility;
+import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestToolchain;
 import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.ClangAstWebResource.Release;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
@@ -59,6 +61,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -93,6 +96,30 @@ public class ClangResourcesTest {
     }
 
     @Test
+    public void nativeAndJavaProtobufToolchainsMayUseDifferentVersions() {
+        assertDoesNotThrow(() -> new ClangDumperManifestToolchain("28.3", "28.3").validate());
+        assertDoesNotThrow(() -> ClangAstWebResource.validateJavaGeneratorRuntime("4.28.3", "4.28.3"));
+    }
+
+    @Test
+    public void javaRuntimeMustFollowProtocCompatibilityRules() {
+        var olderRuntime = assertThrows(RuntimeException.class,
+                () -> ClangAstWebResource.validateJavaGeneratorRuntime("4.28.3", "4.28.2"));
+        assertTrue(olderRuntime.getMessage().contains("older than Java protoc"));
+
+        var unsupportedMajor = assertThrows(RuntimeException.class,
+                () -> ClangAstWebResource.validateJavaGeneratorRuntime("4.28.3", "6.0.0"));
+        assertTrue(unsupportedMajor.getMessage().contains("V/V+1"));
+    }
+
+    @Test
+    public void releaseJavaMinimumRequiresAnExplicitDependencyBump() {
+        var error = assertThrows(RuntimeException.class,
+                () -> new ClangDumperManifestCompatibility("4.29.0", "4.28.3").validate());
+        assertTrue(error.getMessage().contains("explicitly bump"));
+    }
+
+    @Test
     public void localBuildSelectsExpectedTool() throws IOException {
         var toolName = ClangAstDumper.usePlugin()
                 ? System.mapLibraryName("plugin")
@@ -109,10 +136,78 @@ public class ClangResourcesTest {
     }
 
     @Test
+    public void localCudaHeadersUseTheToolManifestLLVMVersion() {
+        var tool = asset("tool", "tool", "linux", "x64");
+
+        assertEquals(18, ClangResources.getLocalLLVMMajor(tool));
+    }
+
+    @Test
+    public void localCudaHeadersRequireTheToolManifestLLVMVersion() {
+        var tool = new ClangDumperManifestAsset("tool", "tool", "linux", "x64", 0, HELLO_SHA256);
+
+        var error = assertThrows(RuntimeException.class, () -> ClangResources.getLocalLLVMMajor(tool));
+        assertTrue(error.getMessage().contains("must specify llvm_major"));
+    }
+
+    @Test
+    public void pathMetadataCacheIsBoundedAndEvictsLeastRecentlyUsedEntry() throws Exception {
+        assertEquals(128, ClangResources.CLANG_FILES_CACHE.maxEntries());
+        assertEquals(128, ClangResources.HAS_LIBC.maxEntries());
+
+        var cache = new ClangResources.BoundedMetadataCache<String, Boolean>(3);
+        cache.putIfAbsent("oldest", true);
+        cache.putIfAbsent("middle", false);
+        cache.get("oldest");
+        cache.putIfAbsent("newest", true);
+        cache.putIfAbsent("replacement", false);
+
+        assertEquals(3, cache.size());
+        assertTrue(cache.containsKey("oldest"));
+        assertFalse(cache.containsKey("middle"));
+        assertEquals(Boolean.TRUE, cache.get("oldest"));
+        assertEquals(Boolean.FALSE, cache.get("replacement"));
+
+        var workers = Executors.newFixedThreadPool(8);
+        try {
+            var writes = new ArrayList<Future<?>>();
+            for (int index = 0; index < 256; index++) {
+                int key = index;
+                writes.add(workers.submit(() -> cache.computeIfAbsent("path-" + key, ignored -> key % 2 == 0)));
+            }
+
+            for (var write : writes) {
+                write.get();
+            }
+        } finally {
+            workers.shutdownNow();
+        }
+
+        assertEquals(3, cache.size());
+        assertNull(cache.get("middle"));
+    }
+
+    @Test
+    public void executableDigestIsReusedAndInvalidatedAfterReplacement() throws IOException {
+        var executable = tempFolder.resolve("dumper");
+        Files.writeString(executable, "first");
+        var firstHash = ExecutableDigest.sha256(executable.toFile());
+
+        assertEquals(firstHash, ExecutableDigest.sha256(executable.toFile()));
+
+        Files.writeString(executable, "other");
+        Files.setLastModifiedTime(executable, FileTime.from(Instant.now().plusSeconds(2)));
+        var secondHash = ExecutableDigest.sha256(executable.toFile());
+
+        assertNotEquals(firstHash, secondHash);
+        assertEquals(secondHash, ExecutableDigest.sha256(executable.toFile()));
+    }
+
+    @Test
     public void manifestValidationAndAssetSelectionArePreserved() {
         var tool = asset("tool", "tool", "linux", "x64");
         var plugin = asset("plugin", "plugin", "linux", "x64");
-        var manifest = new ClangDumperManifest(1, List.of(tool, plugin));
+        var manifest = manifestWithProtocolAssets(tool, plugin);
 
         assertDoesNotThrow(manifest::validate);
         assertEquals(tool, manifest.getAsset("linux", "x64", "tool"));
@@ -174,8 +269,8 @@ public class ClangResourcesTest {
         var sha = sha256(archive);
         var firstAsset = new ClangDumperManifestAsset("v1-includes.zip", "includes", "linux", "x64", 18, sha);
         var secondAsset = new ClangDumperManifestAsset("v2-includes.zip", "includes", "linux", "x64", 18, sha);
-        var firstManifest = new ClangDumperManifest(1, List.of(firstAsset));
-        var secondManifest = new ClangDumperManifest(1, List.of(secondAsset));
+        var firstManifest = manifestWithProtocolAssets(firstAsset);
+        var secondManifest = manifestWithProtocolAssets(secondAsset);
         var firstRelease = Files.createDirectories(tempFolder.resolve("releases/v1"));
         var secondRelease = Files.createDirectories(tempFolder.resolve("releases/v2"));
         var firstWrites = new AtomicInteger();
@@ -585,27 +680,70 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void libcDetectionIsScopedToTheExecutable() throws IOException {
+    public void libcDetectionRequiresNonemptyProtobufOutput() throws IOException {
         assumeTrue(!SupportedPlatform.getCurrentPlatform().isWindows(), "Shell fixtures require a Unix executable");
 
         var systemLibcDumper = tempFolder.resolve("system-libc-dumper");
-        String header = validHeaderStreamBase64();
+        var argumentLog = tempFolder.resolve("libc-probe-args.txt");
+        var resourceLog = tempFolder.resolve("libc-probe-resource-dirs.txt");
+        var invocationLog = tempFolder.resolve("libc-probe-invocations.txt");
         Files.writeString(systemLibcDumper,
-                "#!/bin/sh\nprintf '%s' '" + header + "' | base64 -d > \"$3\"\nexit 0\n");
+                "#!/bin/sh\n"
+                        + "printf '%s\\n' call >> '" + invocationLog + "'\n"
+                        + "printf '%s\\n' \"$@\" > '" + argumentLog + "'\n"
+                        + "output=\n"
+                        + "previous=\n"
+                        + "resource=\n"
+                        + "for argument in \"$@\"; do\n"
+                        + "  if [ \"$previous\" = \"-o\" ]; then output=\"$argument\"; fi\n"
+                        + "  case \"$argument\" in -resource-dir=*) resource=\"$argument\" ;; esac\n"
+                        + "  previous=\"$argument\"\n"
+                        + "done\n"
+                        + "printf '%s\\n' \"$resource\" >> '" + resourceLog + "'\n"
+                        + "if [ -z \"$output\" ] || ! printf '%s\\n' \"$@\" | grep -qx -- '--'; then exit 2; fi\n"
+                        + "printf '%s\\n' '<Top Level Nodes>' > \"$output\"\n"
+                        + "printf '%s\\n' '<Top Level Nodes>'\n");
         assertTrue(systemLibcDumper.toFile().setExecutable(true));
 
         var builtinLibcDumper = tempFolder.resolve("builtin-libc-dumper");
         Files.writeString(builtinLibcDumper, "#!/bin/sh\nexit 1\n");
         assertTrue(builtinLibcDumper.toFile().setExecutable(true));
 
-        assertEquals(LibcMode.SYSTEM,
+        var resourceDirOne = tempFolder.resolve("resource-one").toFile();
+        var resourceDirTwo = tempFolder.resolve("resource-two").toFile();
+        assertEquals(LibcMode.BUILTIN_AND_LIBC,
+                ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.AUTO, false, resourceDirOne));
+        var actualArguments = Files.readAllLines(argumentLog);
+        var outputArgument = actualArguments.indexOf("-o");
+        assertTrue(outputArgument >= 0);
+        assertTrue(actualArguments.get(outputArgument + 1).endsWith(".pb"));
+        var separatorArgument = actualArguments.indexOf("--");
+        assertTrue(separatorArgument > outputArgument + 1);
+        assertEquals("-resource-dir=" + resourceDirOne.getAbsolutePath(), actualArguments.get(separatorArgument + 1));
+        assertEquals(LibcMode.BUILTIN_AND_LIBC,
+                ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.AUTO, false, resourceDirOne));
+        assertEquals(1, Files.readAllLines(invocationLog).size(), "The same resource path should use the cached probe");
+        assertEquals(LibcMode.BUILTIN_AND_LIBC,
+                ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.AUTO, false, resourceDirTwo));
+        assertEquals(2, Files.readAllLines(invocationLog).size(), "A different resource path needs its own probe");
+        assertEquals(List.of("-resource-dir=" + resourceDirOne.getAbsolutePath(),
+                "-resource-dir=" + resourceDirTwo.getAbsolutePath()), Files.readAllLines(resourceLog));
+        assertEquals(LibcMode.BUILTIN_AND_LIBC,
                 ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.AUTO, false));
+        assertEquals(3, Files.readAllLines(invocationLog).size(), "The default resource path needs a separate probe");
         assertEquals(LibcMode.BUILTIN_AND_LIBC,
                 ClangResources.resolveLibcMode(builtinLibcDumper.toFile(), LibcMode.AUTO, false));
         assertEquals(LibcMode.SYSTEM,
                 ClangResources.resolveLibcMode(systemLibcDumper.toFile(), LibcMode.SYSTEM, false));
         assertEquals(LibcMode.BUILTIN_AND_LIBC,
                 ClangResources.resolveLibcMode(builtinLibcDumper.toFile(), LibcMode.BUILTIN_AND_LIBC, false));
+    }
+
+    @Test
+    public void libcProbeRejectsEmptyFramedStream() throws IOException {
+        var dump = tempFolder.resolve("empty.pb");
+        Files.write(dump, Base64.getDecoder().decode(validHeaderStreamBase64()));
+        assertFalse(ClangResources.isValidProtobufDump(dump.toFile()));
     }
 
     @Test
@@ -632,6 +770,24 @@ public class ClangResourcesTest {
                 () -> new ClangFiles(dumper.toFile(), List.of(), null, LibcMode.AUTO));
     }
 
+    @Test
+    public void releasedDumperAutoLibcProbeProducesValidProtobuf() {
+        assumeTrue(ClangAstWebResource.getDumperSource() instanceof Release,
+                "The published dumper is required to exercise the released AUTO probe path");
+
+        ClangResources.HAS_LIBC.clear();
+        var files = new ClangResources(newParser("")).getClangFiles(LibcMode.AUTO);
+
+        assertTrue(files.clangExecutable().isFile());
+        assertTrue(files.libcMode() == LibcMode.SYSTEM || files.libcMode() == LibcMode.BUILTIN_AND_LIBC);
+        assertEquals(files.libcMode() == LibcMode.SYSTEM, files.builtinIncludes().isEmpty());
+        if (SupportedPlatform.getCurrentPlatform().isLinux()) {
+            assertEquals(LibcMode.SYSTEM, files.libcMode());
+            assertNotNull(files.systemResourceDir());
+            assertTrue(files.systemResourceDir().isDirectory());
+        }
+    }
+
     private CodeParser newParser(String cudaPath) {
         var parser = CodeParser.newInstance();
         parser.set(CodeParser.DUMPER_FOLDER, tempFolder.toFile());
@@ -646,7 +802,7 @@ public class ClangResourcesTest {
     private static String validHeaderStreamBase64() {
         var header = Envelope.newBuilder().setHeader(pt.up.fe.specs.clang.wire.Header.newBuilder()
                 .setProtocolMajor(1)
-                .setProtocolMinor(0)
+                .setProtocolMinor(ProtoAstReader.PROTOCOL_MINOR)
                 .setSchemaId("clava-ast-wire")
                 .setProducerVersion(ProtoAstReader.PRODUCER_VERSION)
                 .setLlvmMajor(18)
@@ -678,7 +834,7 @@ public class ClangResourcesTest {
     private static String headerOnlyStreamBase64() {
         var header = Envelope.newBuilder().setHeader(pt.up.fe.specs.clang.wire.Header.newBuilder()
                 .setProtocolMajor(1)
-                .setProtocolMinor(0)
+                .setProtocolMinor(ProtoAstReader.PROTOCOL_MINOR)
                 .setSchemaId("clava-ast-wire")
                 .setProducerVersion(ProtoAstReader.PRODUCER_VERSION)
                 .setLlvmMajor(18)
@@ -694,6 +850,15 @@ public class ClangResourcesTest {
         framed.write(length);
         framed.writeBytes(header);
         return Base64.getEncoder().encodeToString(framed.toByteArray());
+    }
+
+    private static ClangDumperManifest manifestWithProtocolAssets(ClangDumperManifestAsset... assets) {
+        var allAssets = new ArrayList<>(List.of(assets));
+        allAssets.add(new ClangDumperManifestAsset("clang-dumper-ast-wire.proto", "protocol", "any", "any", 18,
+                pt.up.fe.specs.clang.wire.ProtoToolchain.SCHEMA_SHA256));
+        allAssets.add(new ClangDumperManifestAsset("clang-dumper-ast-wire.pb", "protocol", "any", "any", 18,
+                pt.up.fe.specs.clang.wire.ProtoToolchain.DESCRIPTOR_SHA256));
+        return new ClangDumperManifest(1, allAssets);
     }
 
     private static ClangDumperManifestAsset asset(String filename, String kind, String platform, String arch) {

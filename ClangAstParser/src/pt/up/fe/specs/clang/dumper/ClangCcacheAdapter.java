@@ -32,6 +32,9 @@ final class ClangCcacheAdapter {
     private ClangCcacheAdapter() {
     }
 
+    /** Preserve the Protobuf policy: unknown and false values leave caching enabled.
+     * A recognized disable value takes precedence over AST_DUMP_CACHE=true.
+     */
     static boolean isDisabled(String value) {
         if (value == null) {
             return false;
@@ -63,18 +66,22 @@ final class ClangCcacheAdapter {
         return false;
     }
 
-    static Invocation prepare(File dumperFolder) {
-        return prepare(dumperFolder, null);
-    }
-
-    static Invocation prepare(File dumperFolder, File baseDir) {
-        var cacheFolder = new File(dumperFolder, CACHE_FOLDER_NAME);
+    static Invocation prepare(File dumperFolder, File baseDir, File executable, String schemaHash,
+            String toolchainIdentity) {
+        if (schemaHash == null || !schemaHash.matches("[0-9a-f]{64}")) {
+            throw new IllegalArgumentException("Invalid Protobuf schema hash: " + schemaHash);
+        }
+        if (toolchainIdentity == null || !toolchainIdentity.matches("[A-Za-z0-9_.-]+")) {
+            throw new IllegalArgumentException("Invalid Protobuf toolchain identity: " + toolchainIdentity);
+        }
+        var cacheFolder = new File(new File(dumperFolder, CACHE_FOLDER_NAME),
+                "protobuf-v1-" + toolchainIdentity + "-" + schemaHash + "-"
+                        + pt.up.fe.specs.clang.ExecutableDigest.sha256(executable));
         try {
             Files.createDirectories(cacheFolder.toPath());
         } catch (IOException e) {
             throw new RuntimeException("Could not prepare clang-dumper ccache folder '" + cacheFolder + "'", e);
         }
-
         return new Invocation(cacheFolder, baseDir);
     }
 
@@ -101,6 +108,12 @@ final class ClangCcacheAdapter {
         }
 
         void configureEnvironment(Map<String, String> environment) {
+            // ccache treats every non-false value as disabled and rejects false/0.
+            // Normalize values our existing truthy policy treats as enabled so
+            // the subprocess implements the same policy as isAvailable().
+            if (!isDisabled(environment.get("CCACHE_DISABLE"))) {
+                environment.remove("CCACHE_DISABLE");
+            }
             environment.put("CCACHE_DIR", cacheFolder.getAbsolutePath());
             environment.put("CCACHE_COMPILERTYPE", "clang");
             environment.put("CCACHE_DEPEND", "true");

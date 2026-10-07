@@ -344,7 +344,13 @@ public class ClangAstDumper {
             List<String> command = arguments;
             ClangCcacheAdapter.Invocation ccache = null;
             if (useAstDumpCache) {
-                ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), generatedParseRoot);
+                ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), generatedParseRoot,
+                        clangExecutable, pt.up.fe.specs.clang.wire.ProtoAstReader.schemaHash(),
+                        pt.up.fe.specs.clang.wire.ProtoToolchain.NATIVE_PROTOC_VERSION + "-"
+                                + pt.up.fe.specs.clang.wire.ProtoToolchain.NATIVE_PROTOBUF_VERSION + "-"
+                                + pt.up.fe.specs.clang.wire.ProtoToolchain.JAVA_PROTOC_VERSION + "-"
+                                + pt.up.fe.specs.clang.wire.ProtoToolchain.JAVA_PROTOBUF_VERSION + "-"
+                                + pt.up.fe.specs.clang.wire.ProtoToolchain.DESCRIPTOR_SHA256);
                 command = ClangCcacheAdapter.command(arguments, dependencyFile);
             }
 

@@ -112,8 +112,12 @@ class GeneratedParseRootTest {
 
     private String ccacheStats(File cacheFolder) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("ccache", "--show-stats");
-        processBuilder.environment().put("CCACHE_DIR",
-                new File(cacheFolder, "clang-dumper-protobuf-ccache-v1").getAbsolutePath());
+        List<Path> namespaces;
+        try (var entries = Files.list(cacheFolder.toPath().resolve("clang-dumper-protobuf-ccache-v1"))) {
+            namespaces = entries.filter(Files::isDirectory).toList();
+        }
+        assertEquals(1, namespaces.size(), "Expected one schema/toolchain/executable cache namespace");
+        processBuilder.environment().put("CCACHE_DIR", namespaces.get(0).toAbsolutePath().toString());
         Process process = processBuilder.start();
         String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         assertTrue(process.waitFor() == 0, output);

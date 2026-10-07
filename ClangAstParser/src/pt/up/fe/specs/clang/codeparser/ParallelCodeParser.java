@@ -267,16 +267,16 @@ public class ParallelCodeParser extends CodeParser {
         // new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
         new TreeTransformer(ClangAstParser.getPostParsingRules()).transform(app);
 
+        // The final AST now owns every node needed after parsing. Drop the
+        // per-file decoder maps and node lookup tables before returning it.
+        clangParserResults.forEach(ClangAstData::releaseParserState);
+        clangParserResults.clear();
+
         // Add text elements (comments, pragmas) to the tree
         new TextParser(app.getContext()).addElements(app);
 
         // Applies passes related with text elements
         new TreeTransformer(ClangAstParser.getTextParsingRules()).transform(app);
-
-        // The final AST now owns every node needed after parsing. Drop the
-        // per-file decoder maps and node lookup tables before returning it.
-        clangParserResults.forEach(ClangAstData::releaseParserState);
-        clangParserResults.clear();
 
         if (get(SHOW_EXEC_INFO)) {
             ClavaLog.metrics(SpecsStrings.takeTime("AST Processing", tic));
