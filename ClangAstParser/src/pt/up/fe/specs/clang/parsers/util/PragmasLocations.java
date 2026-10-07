@@ -47,6 +47,10 @@ public class PragmasLocations {
         return previousColumn;
     }
 
+    public void clear() {
+        pragmaLocations.clear();
+    }
+
     @Override
     public String toString() {
         return pragmaLocations.toString();

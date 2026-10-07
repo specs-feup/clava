@@ -66,6 +66,21 @@ public class ClavaNodes {
         return queuedActions;
     }
 
+    /** Runs queued reference actions once and releases their captured stores. */
+    public void runQueuedActions() {
+        try {
+            queuedActions.forEach(Runnable::run);
+        } finally {
+            queuedActions.clear();
+        }
+    }
+
+    /** Drops parser lookup references after the nodes have joined the final AST. */
+    public void releaseParserState() {
+        queuedActions.clear();
+        clavaNodes.clear();
+    }
+
     public ClavaNode get(String nodeId) {
         ClavaNode clavaNode = clavaNodes.get(nodeId);
 

@@ -231,8 +231,7 @@ public class ClavaNodeParser {
     }
 
     public void close(ClangAstData data) {
-        data.get(ClangAstData.CLAVA_NODES).getQueuedActions().stream()
-                .forEach(Runnable::run);
+        data.get(ClangAstData.CLAVA_NODES).runQueuedActions();
     }
 
 }

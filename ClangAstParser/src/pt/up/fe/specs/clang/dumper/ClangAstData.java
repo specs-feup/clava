@@ -151,4 +151,38 @@ public class ClangAstData extends ADataClass<ClangAstData> {
     public ClavaFactory getFactory() {
         return get(CONTEXT).get(ClavaContext.FACTORY);
     }
+
+    /** Releases decoder-only state after the translation unit joins the final AST. */
+    public void releaseParserState() {
+        if (hasValue(CLAVA_NODES)) {
+            get(CLAVA_NODES).releaseParserState();
+        }
+        if (hasValue(NODE_DATA)) {
+            get(NODE_DATA).clear();
+        }
+        if (hasValue(VISITED_CHILDREN)) {
+            get(VISITED_CHILDREN).clear();
+        }
+        if (hasValue(ID_TO_FILENAME_MAP)) {
+            get(ID_TO_FILENAME_MAP).clear();
+        }
+        if (hasValue(INCLUDES)) {
+            get(INCLUDES).clear();
+        }
+        if (hasValue(TOP_LEVEL_DECL_IDS)) {
+            get(TOP_LEVEL_DECL_IDS).clear();
+        }
+        if (hasValue(TOP_LEVEL_TYPE_IDS)) {
+            get(TOP_LEVEL_TYPE_IDS).clear();
+        }
+        if (hasValue(TOP_LEVEL_ATTR_IDS)) {
+            get(TOP_LEVEL_ATTR_IDS).clear();
+        }
+        if (hasValue(FILE_LANGUAGE_DATA)) {
+            get(FILE_LANGUAGE_DATA).clear();
+        }
+        if (hasValue(PRAGMAS_LOCATIONS)) {
+            get(PRAGMAS_LOCATIONS).clear();
+        }
+    }
 }

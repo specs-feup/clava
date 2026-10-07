@@ -43,6 +43,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -172,6 +173,9 @@ public class ParallelCodeParser extends CodeParser {
             }
 
         }
+        // FutureTask retains its result after get(); release those references
+        // before cross-translation-unit processing builds the final AST.
+        futureTUnits.clear();
 
         // List<ClangParserData> clangParserResults = futureTUnits.stream()
         // .map(future -> getParserData(future))
@@ -268,6 +272,11 @@ public class ParallelCodeParser extends CodeParser {
 
         // Applies passes related with text elements
         new TreeTransformer(ClangAstParser.getTextParsingRules()).transform(app);
+
+        // The final AST now owns every node needed after parsing. Drop the
+        // per-file decoder maps and node lookup tables before returning it.
+        clangParserResults.forEach(ClangAstData::releaseParserState);
+        clangParserResults.clear();
 
         if (get(SHOW_EXEC_INFO)) {
             ClavaLog.metrics(SpecsStrings.takeTime("AST Processing", tic));
@@ -393,17 +402,17 @@ public class ParallelCodeParser extends CodeParser {
 
         counter.print(sourceFile);
 
-        // Run the same clang invocation, discard dumper output
-        if (get(SYNTAX_ONLY)) {
-            String error = clangParser.validateSyntax(sourceFile, id, standard, options);
-            if (error != null) {
-                syntaxErrors.add(error);
+        return runWithCleanup(clangParser, get(CLEAN), () -> {
+            // Run the same clang invocation, discarding dumper output when
+            // syntax-only validation is requested.
+            if (get(SYNTAX_ONLY)) {
+                String error = clangParser.validateSyntax(sourceFile, id, standard, options);
+                if (error != null) {
+                    syntaxErrors.add(error);
+                }
+                return null;
             }
 
-            return null;
-        }
-
-        try {
             ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
 
             if (get(SHOW_CLANG_DUMP)) {
@@ -411,8 +420,14 @@ public class ParallelCodeParser extends CodeParser {
             }
 
             return clangParserData;
+        });
+    }
+
+    static <T> T runWithCleanup(ClangAstDumper clangParser, boolean clean, Supplier<T> parsing) {
+        try {
+            return parsing.get();
         } finally {
-            if (get(CLEAN) && clangParser.getLastWorkingFolder() != null) {
+            if (clean && clangParser.getLastWorkingFolder() != null) {
                 SpecsIo.deleteFolder(clangParser.getLastWorkingFolder());
             }
         }
