@@ -1,5 +1,7 @@
 # Optimization benchmark, 6 October 2026
 
+The [fresh three-implementation comparison](CURRENT_COMPARISON_BENCHMARK.md) supersedes the reused controls with 7 October measurements of current Text, Protobuf and FlatBuffers builds, for both App and separate command timing.
+
 The ports reduced production Java test time by 12.0%, but did not restore the earlier App-construction advantage over Protobuf. App gains were below 1% in both suites. The speed adoption gate remains unresolved.
 
 Three rotated serial rounds compare the prior production reader, the Protobuf experiment and the updated eager reader. Both FlatBuffers builds use the same published RC3 binary and schema, identical Java fixtures and identical captured App workloads. The updated build combines the duplicate-GC fix, immutable ordered metadata construction and per-class reader cache. This experiment does not isolate individual changes.

@@ -1,5 +1,7 @@
 # Original-methodology FlatBuffers chart refresh
 
+The [fresh three-implementation comparison](CURRENT_COMPARISON_BENCHMARK.md) supersedes the reused controls with 7 October measurements of current Text, Protobuf and FlatBuffers builds, for both App and separate command timing.
+
 [Saved HTML report](ORIGINAL_METHODOLOGY_BENCHMARK.html).
 
 The new report replaces only the FlatBuffers values in the earlier App and suite-command boxplots. Before-cache, Text and Protobuf observations are reused from 2 October. Updated FlatBuffers was measured on 6 October. These observations are not same-round pairs across dates.
