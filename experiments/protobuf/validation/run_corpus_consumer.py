@@ -54,7 +54,7 @@ def runtime_metadata(runtime: Path) -> dict[str, Any]:
             source_revisions_path = candidate
             source_revisions = json.loads(candidate.read_text())
             break
-    return {
+    metadata = {
         "runtime_root": str(runtime),
         "release_tag": tag,
         "parser_jar_sha256": sha256_file(parser_jar),
@@ -67,6 +67,12 @@ def runtime_metadata(runtime: Path) -> dict[str, Any]:
         "source_revisions_sha256": sha256_file(source_revisions_path) if source_revisions_path else None,
         "source_revisions": source_revisions,
     }
+    if tag and Path(tag).is_absolute():
+        installed = installed_tool_metadata(Path(tag))
+        if installed is None:
+            raise ValueError(f"local runtime producer lacks a verified manifest: {tag}")
+        metadata.update(installed)
+    return metadata
 
 
 def parse_runtime(raw: str) -> tuple[str, Path]:

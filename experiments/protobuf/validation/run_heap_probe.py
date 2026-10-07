@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -93,7 +94,9 @@ def main() -> int:
     summary = {
         "created_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
         "source": str(args.source.resolve()),
+        "source_sha256": hashlib.sha256(args.source.read_bytes()).hexdigest(),
         "input": str(args.input.resolve()) if args.input else None,
+        "input_sha256": hashlib.sha256(args.input.read_bytes()).hexdigest() if args.input else None,
         "repeats": args.repeats,
         "retained_heap_contract": "production command emits phase used_bytes after explicit GC",
         "peak_rss_contract": "GNU time max_rss_kb",

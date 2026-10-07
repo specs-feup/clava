@@ -30,6 +30,9 @@ def installed_tool_metadata(work: Path) -> dict | None:
                 "native_tool_path": str(tool),
                 "release_manifest_sha256": sha256_file(manifest_path),
                 "wire_schema_sha256": manifest.get("protocol", {}).get("schema_sha256"),
+                "wire_descriptor_sha256": manifest.get("protocol", {}).get("descriptor_sha256"),
+                "semantic_contract": manifest.get("protocol", {}).get("semantic_contract"),
+                "llvm_major": asset.get("llvm_major"),
                 "toolchain": manifest.get("toolchain"),
             }
     return None
