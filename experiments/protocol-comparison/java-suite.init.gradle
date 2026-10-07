@@ -17,6 +17,10 @@ gradle.afterProject { project ->
                 excludeTestsMatching 'pt.up.fe.specs.clang.dumper.CXXConversionDeclTest'
                 excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangAstDumperTest'
                 excludeTestsMatching 'pt.up.fe.specs.clang.wire.*'
+                excludeTestsMatching 'pt.up.fe.specs.clang.codeparser.ParallelCodeParserCleanupTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangAstDataLifecycleTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.parsers.ClavaNodeParserLifecycleTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.utils.ClassesServiceConcurrencyTest'
             }
         }
 

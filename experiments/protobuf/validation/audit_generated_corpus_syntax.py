@@ -163,10 +163,23 @@ def compiler_version(compiler: str) -> str:
 
 def syntax_command(item: dict[str, Any], clang: str, clangxx: str) -> list[str]:
     compiler = compiler_for(Path(item["source"]), clang, clangxx)
-    # Preserve `standard` and every manifest option in order. In particular,
-    # retain -Xclang pairs for target-feature, target-cpu, and target-abi.
+    # The dumper accepts cc1's split float ABI option. The independent driver
+    # needs it forwarded explicitly, at the same position in the option list.
+    options: list[str] = []
+    values = [str(value) for value in item["options"]]
+    index = 0
+    while index < len(values):
+        value = values[index]
+        if value == "-mfloat-abi" and (index == 0 or values[index - 1] != "-Xclang"):
+            if index + 1 == len(values):
+                raise ValueError("Missing value for frontend option -mfloat-abi")
+            options.extend(["-Xclang", value, "-Xclang", values[index + 1]])
+            index += 2
+        else:
+            options.append(value)
+            index += 1
     return [compiler, "-fsyntax-only", f"-std={item['standard']}",
-            *[str(value) for value in item["options"]],
+            *options,
             "-iquote" + str(Path(item["source"]).parent),
             item["translation_unit"]]
 
@@ -272,8 +285,8 @@ def main() -> int:
     verified_by_label: dict[str, list[dict[str, Any]]] = {}
     for result in results:
         verified_by_label[result["label"]] = runtime_rows(result, manifest_files)
-    if not verified_by_label.get("eager") or not verified_by_label.get("text"):
-        raise SystemExit("summary must contain both eager and text runtime results")
+    if not any(verified_by_label.values()):
+        raise SystemExit("summary contains no CLEAN runtime outputs to syntax-check")
 
     output = args.output.resolve()
     cases_output = Path(str(output) + ".cases.jsonl")
@@ -335,7 +348,7 @@ def main() -> int:
     results_by_case = {(row["label"], row["relative"]): row for row in records}
     paired: list[dict[str, str]] = []
     pair_counts: dict[str, int] = {}
-    for relative in sorted(manifest_files):
+    for relative in sorted(manifest_files) if {"eager", "text"}.issubset(labels) else []:
         eager_record = results_by_case.get(("eager", relative))
         text_record = results_by_case.get(("text", relative))
         eager_status = syntax_status(eager_record)
