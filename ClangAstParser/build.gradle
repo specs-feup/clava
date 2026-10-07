@@ -258,8 +258,54 @@ processResources {
     from('cuda-release.tag')
 }
 
+// Keep generated protocol machinery out of source coverage. The hand-written
+// framing, resolver, inventory and node readers remain in the measured classes.
+def generatedProtoJavaRoots = [
+        file("$buildDir/generated/source/proto/main/java"),
+        protoBindingsDir,
+        protoSchemaHashDir,
+        protoDescriptorHashDir,
+        protoToolchainDir
+]
+def protoCoverageExclusionsFile = file("$buildDir/generated/proto-coverage/exclusions.txt")
+def generateProtoCoverageExclusions = tasks.register('generateProtoCoverageExclusions') {
+    dependsOn tasks.named('generateProto')
+    dependsOn tasks.named('generateProtoJavaBindings')
+    dependsOn tasks.named('generateProtoSchemaHash')
+    dependsOn tasks.named('generateProtoDescriptorHash')
+    dependsOn tasks.named('generateProtoToolchain')
+    outputs.file protoCoverageExclusionsFile
+    doLast {
+        def exclusions = new TreeSet<String>()
+        generatedProtoJavaRoots.each { sourceRoot ->
+            if (sourceRoot.isDirectory()) {
+                fileTree(dir: sourceRoot, includes: ['**/*.java']).files.each { javaFile ->
+                    def relative = sourceRoot.toPath().relativize(javaFile.toPath()).toString()
+                            .replace(File.separator, '/')
+                    def classPath = relative.substring(0, relative.length() - '.java'.length())
+                    exclusions.add(classPath + '.class')
+                    exclusions.add(classPath + '$*.class')
+                }
+            }
+        }
+        protoCoverageExclusionsFile.parentFile.mkdirs()
+        protoCoverageExclusionsFile.text = exclusions.join('\n') + '\n'
+    }
+}
+
+def measuredMainClasses = providers.provider {
+    def exclusions = protoCoverageExclusionsFile.isFile()
+            ? protoCoverageExclusionsFile.readLines().findAll { !it.isBlank() }
+            : []
+    sourceSets.main.output.classesDirs.asFileTree.matching {
+        exclusions.each { exclusion -> exclude exclusion }
+    }
+}
+
 // Test coverage configuration
 jacocoTestReport {
+    dependsOn generateProtoCoverageExclusions
+    classDirectories.setFrom(measuredMainClasses)
     reports {
         xml.required = true
         html.required = true
@@ -269,6 +315,8 @@ jacocoTestReport {
 }
 
 jacocoTestCoverageVerification {
+    dependsOn generateProtoCoverageExclusions
+    classDirectories.setFrom(measuredMainClasses)
     violationRules {
         rule {
             limit {

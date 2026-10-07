@@ -13,24 +13,34 @@
 
 package pt.up.fe.specs.clang.parser.tests;
 
+import java.nio.file.Path;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
+import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.LibcMode;
+import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.parser.CxxCudaTester;
 
 /** Verifies built-in CUDA parsing through the pinned NVIDIA redistribution packages. */
 public class CxxCudaTest {
+    @TempDir
+    static Path cudaCacheFolder;
+
     @Test
     public void testAtomicAddWithBuiltinLibc() {
-        new CxxCudaTester("atomicAdd.cu")
+        newCudaTester("atomicAdd.cu")
                 .set(ClangAstKeys.LIBC_CXX_MODE, LibcMode.BUILTIN_AND_LIBC)
                 .test();
     }
 
     @Test
     public void testAtomicAddWithSystemLibc() {
-        new CxxCudaTester("atomicAdd.cu")
+        newCudaTester("atomicAdd.cu")
                 .set(ClangAstKeys.LIBC_CXX_MODE, LibcMode.SYSTEM)
                 .onePass()
                 .test();
@@ -38,21 +48,29 @@ public class CxxCudaTest {
 
     @Test
     public void testConvolutionCache() {
-        new CxxCudaTester("convolution_cache.cu").test();
+        newCudaTester("convolution_cache.cu").test();
     }
 
     @Test
     public void testMultMatrix() {
-        new CxxCudaTester("mult_matrix.cu").test();
+        newCudaTester("mult_matrix.cu").test();
     }
 
     @Test
     public void testStreamAdd() {
-        new CxxCudaTester("streamAdd.cu").test();
+        newCudaTester("streamAdd.cu").test();
     }
 
     @Test
     public void testSumArrays() {
-        new CxxCudaTester("sumArrays.cu").showCode().test();
+        newCudaTester("sumArrays.cu").showCode().test();
+    }
+
+    private static CxxCudaTester newCudaTester(String input) {
+        assumeTrue(ClangResources.isBuiltinCudaSupported(),
+                "Built-in CUDA tests require a supported host platform");
+        var tester = new CxxCudaTester(input);
+        tester.set(CodeParser.DUMPER_FOLDER, cudaCacheFolder.toFile());
+        return tester;
     }
 }

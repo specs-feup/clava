@@ -45,6 +45,14 @@ Intentional producer exclusions and generic families belong in the release
 contract; a generic or dummy-node fallback does not make a missing mapping
 compatible.
 
+JaCoCo's 70% source-coverage gate measures hand-written code. Its report and
+verification task exclude only class files derived from generated Protobuf
+Java, the generated binding adapter, and generated hash/toolchain constants;
+the build derives those exact class patterns from the generated source roots.
+Hand-written framing, cache, parser, resolver, and binding-inventory classes
+remain covered by the unchanged threshold. Generated binding drift and
+compiled-inventory checks guard generated-code correctness separately.
+
 The stream retains its `CLAVAPB1` framing and bounded Protobuf `Envelope`
 chunks. Clava reads and validates one bounded frame at a time, and the producer
 accounts for chunk size incrementally. Do not buffer a whole dump or retain all

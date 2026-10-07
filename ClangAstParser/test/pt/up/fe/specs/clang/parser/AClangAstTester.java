@@ -258,6 +258,15 @@ public abstract class AClangAstTester {
                 .stream()
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
 
+        for (ResourceProvider resource : resources) {
+            assertNotNull(outputFiles1.get(resource.getFilename()),
+                    "First parse produced no output for input '" + resource.getResource()
+                            + "'; inspect the parser diagnostics above");
+            assertNotNull(outputFiles2.get(resource.getFilename()),
+                    "Reparse produced no output for input '" + resource.getResource()
+                            + "'; inspect the parser diagnostics above");
+        }
+
         for (String name : outputFiles1.keySet()) {
 
             // Get corresponding file in output 2
