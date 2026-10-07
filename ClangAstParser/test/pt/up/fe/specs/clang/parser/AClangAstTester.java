@@ -31,6 +31,7 @@ import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -259,6 +260,10 @@ public abstract class AClangAstTester {
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
 
         for (ResourceProvider resource : resources) {
+            if (SourceType.getType(resource.getFilename()) == SourceType.OUT_OF_SOURCE) {
+                continue;
+            }
+
             assertNotNull(outputFiles1.get(resource.getFilename()),
                     "First parse produced no output for input '" + resource.getResource()
                             + "'; inspect the parser diagnostics above");

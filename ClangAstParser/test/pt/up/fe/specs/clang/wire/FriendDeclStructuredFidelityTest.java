@@ -82,6 +82,31 @@ class FriendDeclStructuredFidelityTest {
         assertEquals("edited_friend", ((FunctionDecl) reparsedFriend.get(FriendDecl.FRIEND_DECL)).getDeclName());
     }
 
+    @Test
+    void printsCurrentDependentFriendTypeAfterTypeChildReplacementAndReparses() throws Exception {
+        SpecsSystem.programStandardInit();
+        Path source = Files.writeString(temporary.resolve("friend_type_transform.cpp"),
+                "struct Replacement {};\n"
+                        + "template <typename T> struct Owner { friend T; };\n");
+
+        App first = parse(source, "friend-type-first-parse");
+        FriendDecl friend = first.getDescendants(FriendDecl.class).stream().findFirst().orElseThrow();
+        CXXRecordDecl replacement = first.getDescendants(CXXRecordDecl.class).stream()
+                .filter(record -> record.getDeclName().equals("Replacement"))
+                .findFirst().orElseThrow();
+        friend.setChild(0, first.getFactory().recordType(replacement));
+
+        File generated = first.write(Files.createDirectories(temporary.resolve("friend-type-output")).toFile()).stream()
+                .filter(file -> file.getName().equals(source.getFileName().toString()))
+                .findFirst().orElseThrow();
+        String generatedCode = Files.readString(generated.toPath());
+        assertTrue(generatedCode.contains("friend Replacement;"), generatedCode);
+
+        App second = parse(generated.toPath(), "friend-type-second-parse");
+        FriendDecl reparsedFriend = second.getDescendants(FriendDecl.class).stream().findFirst().orElseThrow();
+        assertEquals("Replacement", reparsedFriend.get(FriendDecl.FRIEND_TYPE).getCode());
+    }
+
     private App parse(Path source, String name) throws Exception {
         CodeParser parser = CodeParser.newInstance();
         parser.set(CodeParser.GENERATED_PARSE_ROOT, Files.createDirectories(temporary.resolve(name)).toFile());
