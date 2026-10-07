@@ -44,7 +44,7 @@ public abstract class ValueDecl extends NamedDecl implements Typable {
     /**
      * True if this symbol is weakly-imported, or declared with the weak or weak-reference attribute.
      */
-    public final static DataKey<Boolean> IS_WEAK = KeyFactory.bool("is_weak");
+    public final static DataKey<Boolean> IS_WEAK = KeyFactory.bool("isWeak");
 
     /// DATAKEYS END
 

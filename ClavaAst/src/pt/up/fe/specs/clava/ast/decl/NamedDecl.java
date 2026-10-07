@@ -55,12 +55,12 @@ public abstract class NamedDecl extends Decl {
     /**
      * True if this declaration is a C++ class member.
      */
-    public final static DataKey<Boolean> IS_CXX_CLASS_MEMBER = KeyFactory.bool("isCXXClassMember");
+    public final static DataKey<Boolean> IS_CXX_CLASS_MEMBER = KeyFactory.bool("isCxxClassMember");
 
     /**
      * True if this declaration is an instance member of a C++ class.
      */
-    public final static DataKey<Boolean> IS_CXX_INSTANCE_MEMBER = KeyFactory.bool("isCXXInstanceMember");
+    public final static DataKey<Boolean> IS_CXX_INSTANCE_MEMBER = KeyFactory.bool("isCxxInstanceMember");
 
     /**
      * The linkage of the declaration from a semantic point of view.

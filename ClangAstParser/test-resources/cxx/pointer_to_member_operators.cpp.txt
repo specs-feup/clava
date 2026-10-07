@@ -20,8 +20,8 @@ class Testpm {
 
 // m_num, respectively.
 
-void (Testpm::*pmfn)() = &Testpm::m_func1;
-int Testpm::*pmd = &Testpm::m_num;
+void (::Testpm::*pmfn) () = &Testpm::m_func1;
+int ::Testpm::*pmd = &Testpm::m_num;
 int main() {
    Testpm ATestpm;
    Testpm *pTestpm = new Testpm;

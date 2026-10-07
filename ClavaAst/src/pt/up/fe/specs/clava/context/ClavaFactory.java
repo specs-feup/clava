@@ -414,7 +414,8 @@ public class ClavaFactory {
 
     public CStyleCastExpr cStyleCastExpr(Type type, Expr expr) {
         DataStore data = newDataStore(CStyleCastExpr.class)
-                .put(Expr.TYPE, Optional.of(type));
+                .put(Expr.TYPE, Optional.of(type))
+                .put(ExplicitCastExpr.TYPE_AS_WRITTEN, type);
 
         data.set(CastExpr.CAST_KIND, CastKind.NoOp);
 
@@ -598,6 +599,24 @@ public class ClavaFactory {
         decl.set(RecordDecl.IS_COMPLETE_DEFINITION);
 
         return decl;
+    }
+
+    public FriendDecl friendDecl(CXXRecordDecl ownerRecord, Decl friendDecl) {
+        DataStore data = newDataStore(FriendDecl.class)
+                .put(FriendDecl.OWNER_RECORD, ownerRecord)
+                .put(FriendDecl.FRIEND_DECL, friendDecl)
+                .put(FriendDecl.FRIEND_TYPE, nullType());
+
+        return new FriendDecl(data, List.of(friendDecl));
+    }
+
+    public FriendDecl friendType(CXXRecordDecl ownerRecord, Type friendType) {
+        DataStore data = newDataStore(FriendDecl.class)
+                .put(FriendDecl.OWNER_RECORD, ownerRecord)
+                .put(FriendDecl.FRIEND_DECL, nullDecl())
+                .put(FriendDecl.FRIEND_TYPE, friendType);
+
+        return new FriendDecl(data, List.of(friendType));
     }
 
     public FieldDecl fieldDecl(String fieldName, Type fieldType) {
