@@ -26,7 +26,6 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
 import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.data.CXXBaseSpecifier;
-import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.data.ExplicitSpecifier;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.AnyMemberInit;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.BaseInit;
@@ -216,13 +215,8 @@ final class ProtoNodeDataReader {
         data.getClavaNodes().queueSetNodeList(store, rawKey(key), ids);
     }
 
-    void putReference(DataStore store, DataKey<?> key, long value, boolean nullable, boolean record) {
+    void putReference(DataStore store, DataKey<?> key, long value, boolean nullable) {
         String reference = id.apply(value);
-        // The text parser retained this legacy scalar alongside the resolved
-        // RECORD pointer. Keep both values in sync for CXXMethodDecl.
-        if (record) {
-            set(CXXMethodDecl.RECORD_ID, store, reference);
-        }
         queueReference(store, key, reference, nullable);
     }
 

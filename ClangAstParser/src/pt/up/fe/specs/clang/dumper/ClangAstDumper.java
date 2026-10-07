@@ -23,6 +23,7 @@ import pt.up.fe.specs.clang.cilk.CilkParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clang.wire.ProtoAstReader;
+import pt.up.fe.specs.clang.wire.ProtobufAstParseException;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -396,6 +397,11 @@ public class ClangAstDumper {
             try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
                     InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {
                 wireResult = ProtoAstReader.read(dumpInput, config.get(ClavaNode.CONTEXT), generatedParseRoot, id);
+            } catch (ProtobufAstParseException e) {
+                throw e;
+            } catch (Exception e) {
+                throw new ProtobufAstParseException(
+                        "Could not decode protobuf AST for '" + sourceFile.getAbsolutePath() + "'", e);
             }
             if (readStart != 0L) {
                 readNanos = System.nanoTime() - readStart;
@@ -417,6 +423,8 @@ public class ClangAstDumper {
             }
             parsedData.set(ClangAstData.LINES_NOT_PARSED, linesNotParsed);
             parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
+        } catch (ProtobufAstParseException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }

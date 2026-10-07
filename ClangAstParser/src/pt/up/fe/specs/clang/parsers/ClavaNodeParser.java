@@ -33,6 +33,7 @@ import pt.up.fe.specs.clava.ast.attr.AlignedTypeAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
 import pt.up.fe.specs.clava.ast.attr.enums.AlignedAttrKind;
 import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
+import pt.up.fe.specs.clava.ast.decl.FriendDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -232,6 +233,11 @@ public class ClavaNodeParser {
 
     public void close(ClangAstData data) {
         data.get(ClangAstData.CLAVA_NODES).runQueuedActions();
+
+        data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream()
+                .filter(FriendDecl.class::isInstance)
+                .map(FriendDecl.class::cast)
+                .forEach(FriendDecl::validateStructuredSupport);
     }
 
 }

@@ -42,25 +42,9 @@ public final class ProtoAstReader {
     private static final byte[] MAGIC = new byte[] { 'C', 'L', 'A', 'V', 'A', 'P', 'B', '1' };
     public static final String PROTOCOL_ID = "clava-ast-wire";
     public static final int PROTOCOL_MAJOR = 1;
-    public static final int PROTOCOL_MINOR = 0;
+    public static final int PROTOCOL_MINOR = 1;
     public static final String PRODUCER_VERSION = "clang-dumper-18";
     public static final int LLVM_MAJOR = 18;
-
-    /*
-     * Clang's Stmt hierarchy contains several concrete classes whose names do
-     * not end in either "Stmt" or "Expr" (for example BinaryOperator and
-     * ConditionalOperator).  The native dispatcher intentionally serializes
-     * these through the generic statement/expression families, so suffix
-     * matching alone would reject valid producer output.  Keep this small list
-     * in sync with the non-suffixed entries in LLVM 18's StmtNodes.inc; OMP
-     * directive/loop nodes follow the same statement-family convention.
-     */
-    private static final Set<String> STATEMENT_EXPRESSION_CLASSES = Set.of(
-            "AbstractConditionalOperator", "BinaryConditionalOperator", "BinaryOperator",
-            "CXXRewrittenBinaryOperator", "CharacterLiteral", "CompoundAssignOperator",
-            "ConditionalOperator", "ExprWithCleanups", "FixedPointLiteral", "FloatingLiteral",
-            "ImaginaryLiteral", "IntegerLiteral", "ObjCArrayLiteral", "ObjCDictionaryLiteral",
-            "ObjCStringLiteral", "StringLiteral", "SwitchCase", "UnaryOperator", "UserDefinedLiteral");
 
     private ProtoAstReader() {
     }
@@ -363,7 +347,7 @@ public final class ProtoAstReader {
                 if (!node.hasClassName() || node.getClassName().isBlank()) {
                     throw new ProtocolException("Node.class_name is required for id " + node.getId());
                 }
-                validateNodePayload(node);
+                validateNodePayload(node, files);
                 String id = files.id(node.getId());
                 if (!nodeIdsSeen.add(id)) {
                     throw new ProtocolException("Duplicated Node " + id);
@@ -440,72 +424,45 @@ public final class ProtoAstReader {
         }
     }
 
-    private static void validateNodePayload(Node node) {
+    private static void validateNodePayload(Node node, Files files) {
         String className = node.getClassName();
-        Node.NodeCase payload = node.getNodeCase();
-        Node.NodeCase alias = switch (className) {
-            case "CXXDestructorDecl" -> Node.NodeCase.C_X_X_METHOD_DECL_DATA;
-            case "ObjCImplementationDecl", "UsingShadowDecl", "LabelDecl" -> Node.NodeCase.NAMED_DECL_DATA;
-            case "ClassTemplateDecl", "FunctionTemplateDecl", "TypeAliasTemplateDecl", "VarTemplateDecl" ->
-                    Node.NodeCase.TEMPLATE_DECL_DATA;
-            case "EnumConstantDecl" -> Node.NodeCase.VALUE_DECL_DATA;
-            case "TypeAliasDecl", "TypedefDecl" -> Node.NodeCase.TYPEDEF_NAME_DECL_DATA;
-            case "VarTemplateSpecializationDecl" -> Node.NodeCase.VAR_DECL_DATA;
-            case "CXXFunctionalCastExpr" -> Node.NodeCase.CAST_EXPR_DATA;
-            case "CStyleCastExpr" -> Node.NodeCase.EXPLICIT_CAST_EXPR_DATA;
-            case "CXXAddrspaceCastExpr", "CXXConstCastExpr", "CXXDynamicCastExpr", "CXXReinterpretCastExpr",
-                    "CXXStaticCastExpr" -> Node.NodeCase.C_X_X_NAMED_CAST_EXPR_DATA;
-            case "CXXOperatorCallExpr", "UserDefinedLiteral" -> Node.NodeCase.CALL_EXPR_DATA;
-            case "CompoundAssignOperator" -> Node.NodeCase.BINARY_OPERATOR_DATA;
-            case "FunctionNoProtoType" -> Node.NodeCase.FUNCTION_TYPE_DATA;
-            case "IncompleteArrayType" -> Node.NodeCase.ARRAY_TYPE_DATA;
-            case "RecordType", "EnumType" -> Node.NodeCase.TAG_TYPE_DATA;
-            case "LValueReferenceType", "RValueReferenceType" -> Node.NodeCase.REFERENCE_TYPE_DATA;
-            default -> null;
-        };
-        if (alias != null) {
-            if (payload != alias) {
-                throw new ProtocolException("Node payload " + payload + " does not match " + className);
+        try {
+            ProtoGeneratedBindings.validatePayload(className, node.getNodeCase());
+        } catch (IllegalArgumentException error) {
+            String sourceLocation = nodeSourceLocation(node, files);
+            String location = sourceLocation == null ? "" : " at " + sourceLocation;
+            throw new ProtocolException("Unsupported or incompatible emitted node class '" + className + "' id "
+                    + node.getId() + location + ": " + error.getMessage(), error);
+        }
+    }
+
+    private static String nodeSourceLocation(Node node, Files files) {
+        if (node.getNodeCase() == Node.NodeCase.NODE_NOT_SET) {
+            return null;
+        }
+        try {
+            Message payload = ProtoGeneratedBindings.payload(node);
+            SourceInfo source = ProtoGeneratedBindings.source(payload);
+            if (source == null || !source.hasExpansion()) {
+                return null;
             }
-            return;
+            Range expansion = source.getExpansion();
+            String path = expansion.hasFile() ? files.path(expansion.getFile()) : null;
+            if (path == null && !expansion.hasLine() && !expansion.hasColumn()) {
+                return null;
+            }
+            StringBuilder location = new StringBuilder(path == null ? "<unknown source>" : path);
+            if (expansion.hasLine()) {
+                location.append(':').append(expansion.getLine());
+                if (expansion.hasColumn()) {
+                    location.append(':').append(expansion.getColumn());
+                }
+            }
+            return location.toString();
+        } catch (RuntimeException ignored) {
+            // A malformed source reference must not hide the unsupported node diagnostic.
+            return null;
         }
-
-        String expected = normalize(className + "Data");
-        String actual = normalize(payload.name());
-        if (expected.equals(actual)) {
-            return;
-        }
-
-        if (!isFamilyPayload(className, payload)) {
-            throw new ProtocolException("Node payload " + payload + " does not match " + className);
-        }
-    }
-
-    private static boolean isFamilyPayload(String className, Node.NodeCase payload) {
-        if (className.endsWith("Decl")) {
-            return payload == Node.NodeCase.DECL_DATA || payload.name().endsWith("_DECL_DATA");
-        }
-        if (className.endsWith("Type")) {
-            return payload == Node.NodeCase.TYPE_DATA || payload.name().endsWith("_TYPE_DATA");
-        }
-        if (className.endsWith("Attr")) {
-            return payload == Node.NodeCase.ATTRIBUTE_DATA || payload.name().endsWith("_ATTR_DATA");
-        }
-        if (isStatementOrExpressionClass(className)) {
-            return payload == Node.NodeCase.STMT_DATA || payload == Node.NodeCase.EXPR_DATA
-                    || payload.name().endsWith("_STMT_DATA") || payload.name().endsWith("_EXPR_DATA");
-        }
-        return false;
-    }
-
-    private static boolean isStatementOrExpressionClass(String className) {
-        return className.endsWith("Stmt") || className.endsWith("Expr")
-                || STATEMENT_EXPRESSION_CLASSES.contains(className)
-                || className.startsWith("OMP");
-    }
-
-    private static String normalize(String value) {
-        return value.replace("_", "").toLowerCase(java.util.Locale.ROOT);
     }
 
     private static void readFile(File file, ClangAstData data, Files files) {

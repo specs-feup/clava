@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clang;
 
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifest;
@@ -216,6 +217,19 @@ public class ClangResourcesTest {
         assertThrows(RuntimeException.class, () -> manifest.getAsset("windows", "x64", "tool"));
         assertThrows(RuntimeException.class, () -> new ClangDumperManifest(2, List.of(tool)).validate());
         assertThrows(RuntimeException.class, () -> new ClangDumperManifest(1, List.of()).validate());
+    }
+
+    @Test
+    public void localManifestIsReadAndValidatedFromTheSelectedBuildFolder() throws IOException {
+        var expected = manifestWithProtocolAssets(asset("tool", "tool", "linux", "x64"));
+        Files.writeString(tempFolder.resolve(ClangAstWebResource.MANIFEST_FILENAME), new Gson().toJson(expected));
+
+        var actual = ClangAstWebResource.getLocalManifest(tempFolder.toFile());
+
+        assertEquals(expected.protocol(), actual.protocol());
+        assertEquals(expected.toolchain(), actual.toolchain());
+        assertEquals(expected.compatibility(), actual.compatibility());
+        assertEquals(expected.assets(), actual.assets());
     }
 
     @Test

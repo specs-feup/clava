@@ -22,6 +22,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.NullableNodeReference;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -43,9 +44,8 @@ public class CXXMethodDecl extends FunctionDecl {
     /// DATAKEYS BEGIN
 
     // TODO: Change to Optional<CXXRecordDecl>, since it can be null
+    @NullableNodeReference
     public final static DataKey<Decl> RECORD = KeyFactory.object("record", Decl.class);
-
-    public final static DataKey<String> RECORD_ID = KeyFactory.string("recordId");
 
     public final static DataKey<List<CXXMethodDecl>> OVERRIDDEN_METHODS = KeyFactory.list("overriddenMethods",
             CXXMethodDecl.class);
@@ -79,7 +79,7 @@ public class CXXMethodDecl extends FunctionDecl {
     /**
      * The type of the object pointed by 'this'.
      */
-    public final static DataKey<Optional<Type>> THIS_OJBECT_TYPE = KeyFactory.optional("thisObjectType");
+    public final static DataKey<Optional<Type>> THIS_OBJECT_TYPE = KeyFactory.optional("thisObjectType");
 
     public final static DataKey<Boolean> HAS_INLINE_BODY = KeyFactory.bool("hasInlineBody");
 
@@ -144,6 +144,7 @@ public class CXXMethodDecl extends FunctionDecl {
     @Override
     public String getDeclarationId(boolean useReturnType) {
         StringBuilder code = new StringBuilder();
+        code.append(getTemplateHeadersCode());
 
         // if (getFunctionDeclData().getStorageClass() == StorageClass.STATIC) {
         if (get(STORAGE_CLASS) != StorageClass.None) {
@@ -174,7 +175,19 @@ public class CXXMethodDecl extends FunctionDecl {
         if (addNamespace()) {
             // String namespace = getCurrentNamespace(getRecordName()).map(str -> str + "::").orElse("");
             String namespace = getCurrentQualifiedPrefix().map(str -> str + "::").orElse("");
+            if (getRecordDecl().orElse(null) instanceof ClassTemplateSpecializationDecl specialization) {
+                String arguments = specialization.get(ClassTemplateSpecializationDecl.TEMPLATE_ARGUMENTS).stream()
+                        .map(argument -> argument.getCode(this)).collect(java.util.stream.Collectors.joining(", "));
+                String prefix = specialization.get(QUALIFIED_PREFIX);
+                namespace = (prefix.isEmpty() ? "" : prefix + "::")
+                        + specialization.getDeclName() + "<" + arguments + ">::";
+            }
 
+            var record = getRecordDecl().orElse(null);
+            if (record != null && record.getParent() instanceof ClassTemplateDecl template
+                    && template.getTemplateDecl() == record && !get(TEMPLATE_PARAMETER_LIST_SIZES).isEmpty()) {
+                namespace = getPrimaryTemplateQualifier(record);
+            }
             code.append(namespace);
         }
 
@@ -190,6 +203,59 @@ public class CXXMethodDecl extends FunctionDecl {
         }
 
         return code.toString();
+    }
+
+    private String getPrimaryTemplateQualifier(CXXRecordDecl record) {
+        List<CXXRecordDecl> scopes = new java.util.ArrayList<>();
+        for (CXXRecordDecl scope = record; scope != null;
+                scope = scope.getAncestorTry(CXXRecordDecl.class).orElse(null)) {
+            scopes.add(scope);
+        }
+        java.util.Collections.reverse(scopes);
+        String prefix = scopes.get(0).get(QUALIFIED_PREFIX);
+        StringBuilder qualifier = new StringBuilder(prefix.isEmpty() ? "" : prefix + "::");
+        int group = 0;
+        int offset = 0;
+        for (CXXRecordDecl scope : scopes) {
+            qualifier.append(scope.getDeclName());
+            if (scope.getParent() instanceof ClassTemplateDecl template && template.getTemplateDecl() == scope) {
+                if (group >= get(TEMPLATE_PARAMETER_LIST_SIZES).size()) {
+                    throw new IllegalArgumentException("Missing enclosing class template parameter list");
+                }
+                int size = get(TEMPLATE_PARAMETER_LIST_SIZES).get(group++);
+                if (size != template.getNumTemplateParameters() || size > get(TEMPLATE_PARAMETERS).size() - offset) {
+                    throw new IllegalArgumentException("Class template parameters do not match method context");
+                }
+                String arguments = get(TEMPLATE_PARAMETERS).subList(offset, offset + size).stream()
+                        .map(CXXMethodDecl::getTemplateArgumentCode).collect(java.util.stream.Collectors.joining(", "));
+                qualifier.append("<").append(arguments).append(">");
+                offset += size;
+            } else if (scope instanceof ClassTemplateSpecializationDecl specialization) {
+                String arguments = specialization.get(ClassTemplateSpecializationDecl.TEMPLATE_ARGUMENTS).stream()
+                        .map(argument -> argument.getCode(this)).collect(java.util.stream.Collectors.joining(", "));
+                qualifier.append("<").append(arguments).append(">");
+                if (scope instanceof ClassTemplatePartialSpecializationDecl partial) {
+                    if (group >= get(TEMPLATE_PARAMETER_LIST_SIZES).size()) {
+                        throw new IllegalArgumentException("Missing enclosing partial specialization parameter list");
+                    }
+                    int size = get(TEMPLATE_PARAMETER_LIST_SIZES).get(group++);
+                    if (size != partial.get(ClassTemplatePartialSpecializationDecl.TEMPLATE_PARAMETERS).size()
+                            || size > get(TEMPLATE_PARAMETERS).size() - offset) {
+                        throw new IllegalArgumentException("Partial specialization parameters do not match method context");
+                    }
+                    offset += size;
+                }
+            }
+            qualifier.append("::");
+        }
+        return qualifier.toString();
+    }
+
+    private static String getTemplateArgumentCode(NamedDecl parameter) {
+        boolean packed = parameter instanceof TemplateTypeParmDecl type && type.get(TemplateTypeParmDecl.IS_PARAMETER_PACK)
+                || parameter instanceof NonTypeTemplateParmDecl value && value.get(NonTypeTemplateParmDecl.IS_PARAMETER_PACK)
+                || parameter instanceof TemplateTemplateParmDecl template && template.get(TemplateTemplateParmDecl.IS_PARAMETER_PACK);
+        return parameter.getDeclName() + (packed ? "..." : "");
     }
 
     /**
@@ -282,7 +348,6 @@ public class CXXMethodDecl extends FunctionDecl {
         var newQualifiedPrefix = getQualifiedPrefixWithoutRecord();
 
         set(RECORD, getFactory().nullDecl());
-        set(RECORD_ID, "null");
         set(QUALIFIED_PREFIX, newQualifiedPrefix);
         // Removed record from qualified prefix
     }
@@ -314,7 +379,6 @@ public class CXXMethodDecl extends FunctionDecl {
 
         set(QUALIFIED_PREFIX, newQualifiedPrefix);
         set(RECORD, cxxRecordDecl);
-        set(RECORD_ID, cxxRecordDecl.getId());
 
     }
 }

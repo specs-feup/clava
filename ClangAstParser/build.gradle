@@ -5,41 +5,58 @@ plugins {
     id 'com.google.protobuf' version '0.9.4'
 }
 
-// Keep the wire schema in the clang-dumper checkout. A normal checkout uses
-// the repository-relative sibling; CI or a packaged source tree can override
-// this with -PclangDumperRoot=/path/to/clang-dumper. The override is
-// intentionally explicit so generated sources never depend on a developer's
-// absolute worktree path.
-def clangDumperRoot = file(providers.gradleProperty('clangDumperRoot').orElse('../../clang-dumper').get())
-def wireSchemaDir = new File(clangDumperRoot, 'wire')
-def wireSchema = new File(wireSchemaDir, 'clava_ast_wire.proto')
-if (!wireSchema.isFile()) {
-    throw new GradleException("Could not find the protobuf schema at '${wireSchema}'. "
-            + "Use -PclangDumperRoot=/path/to/clang-dumper for an external checkout.")
-}
-
-// The native clang-dumper and Java runtime must use the same compiler/runtime
-// release.  Keep both values pinned here; update them together with the
-// native CMake pin and record the revision in the release manifest.
+// The selected dumper release owns the canonical schema and descriptor. Builds
+// resolve those artifacts through the release manifest and inject Java-only
+// options into a separate consumer schema copy.
 def protobufVersion = '4.28.3'
 def protocVersion = '4.28.3'
+def wireReleaseDir = file("$buildDir/generated/proto-release/main")
+def canonicalSchema = new File(wireReleaseDir, 'clang-dumper-ast-wire.proto')
+def canonicalDescriptor = new File(wireReleaseDir, 'clang-dumper-ast-wire.pb')
+def consumerSchema = new File(wireReleaseDir, 'java/clang-dumper-ast-wire.proto')
+def resolvedManifest = new File(wireReleaseDir, 'resolved-manifest.json')
+def wireSchemaDir = consumerSchema.parentFile
+def generatedDescriptor = file("$buildDir/generated/proto/main/consumer.pb")
 def protoSchemaHashDir = file("$buildDir/generated/source/proto-schema/main")
-def protoDescriptor = file("$buildDir/generated/proto/main/clava_ast_wire.pb")
 def protoBindingsDir = file("$buildDir/generated/source/proto-bindings/main")
 def protoDescriptorHashDir = file("$buildDir/generated/source/proto-descriptor-hash/main")
+def protoToolchainDir = file("$buildDir/generated/source/proto-toolchain/main")
+def protoInventoryFile = file("$buildDir/generated/proto-binding-inventory/main/bindings.json")
+def protoBindingsFile = new File(protoBindingsDir, 'pt/up/fe/specs/clang/wire/ProtoGeneratedBindings.java')
+def protoTagFile = file('clang-dumper-release.tag')
+def protoCacheRoot = new File(gradle.gradleUserHomeDir, 'caches/clava/protobuf-wire-artifacts')
+
+tasks.register('resolveProtoRelease', Exec) {
+    inputs.file protoTagFile
+    outputs.files canonicalSchema, canonicalDescriptor, consumerSchema, resolvedManifest
+    // Even an up-to-date build rechecks the selected manifest, hashes and any
+    // cache hits before protoc or the Java adapter can consume those files.
+    outputs.upToDateWhen { false }
+    doFirst {
+        commandLine 'python3', file('tools/resolve_proto_release.py').absolutePath,
+                '--tag-file', protoTagFile.absolutePath,
+                '--cache-root', protoCacheRoot.absolutePath,
+                '--schema-out', canonicalSchema.absolutePath,
+                '--descriptor-out', canonicalDescriptor.absolutePath,
+                '--java-schema-out', consumerSchema.absolutePath,
+                '--manifest-out', resolvedManifest.absolutePath,
+                '--executable-kind', 'tool'
+    }
+}
 
 tasks.register('generateProtoSchemaHash') {
-    inputs.file wireSchema
+    dependsOn tasks.named('resolveProtoRelease')
+    inputs.file canonicalSchema
+    inputs.file resolvedManifest
     outputs.file new File(protoSchemaHashDir, 'pt/up/fe/specs/clang/wire/ProtoSchemaHash.java')
     doLast {
-        def digest = java.security.MessageDigest.getInstance('SHA-256').digest(wireSchema.bytes)
-        def hash = digest.collect { String.format('%02x', it & 0xff) }.join()
+        def metadata = new groovy.json.JsonSlurper().parse(resolvedManifest)
         def output = new File(protoSchemaHashDir, 'pt/up/fe/specs/clang/wire/ProtoSchemaHash.java')
         output.parentFile.mkdirs()
-        output.text = """/** Generated from clang-dumper/wire/clava_ast_wire.proto. */
+        output.text = """/** Generated from the selected clang-dumper release manifest. */
 package pt.up.fe.specs.clang.wire;
 final class ProtoSchemaHash {
-    static final String VALUE = \"${hash}\";
+    static final String VALUE = \"${metadata.schema_sha256}\";
     private ProtoSchemaHash() { }
 }
 """
@@ -60,40 +77,106 @@ protobuf {
     }
 }
 
-// Generate the Clava adapter from protoc's descriptor set. The adapter is
-// intentionally a build artifact: generated protobuf getters and has*()
-// checks are kept in lockstep with the schema and are never hand-maintained.
+// Generate the Clava adapter from the selected release's canonical descriptor.
+// Consumer-only Java options are absent from this producer/consumer identity.
 tasks.named('generateProto') {
+    dependsOn tasks.named('resolveProtoRelease')
     generateDescriptorSet = true
-    descriptorSetOptions.path = protoDescriptor.absolutePath
+    descriptorSetOptions.path = generatedDescriptor.absolutePath
+}
+
+def bindingInventoryClasses = file("$buildDir/classes/proto-binding-inventory")
+tasks.register('compileBindingInventory', JavaCompile) {
+    source = file('tools/BindingInventory.java')
+    classpath = sourceSets.main.compileClasspath
+    destinationDirectory = bindingInventoryClasses
+    options.release = 17
+}
+
+tasks.register('generateBindingInventory', JavaExec) {
+    dependsOn tasks.named('compileBindingInventory')
+    classpath = files(bindingInventoryClasses) + sourceSets.main.compileClasspath
+    mainClass = 'BindingInventory'
+    args '--output', protoInventoryFile.absolutePath
+    outputs.file protoInventoryFile
+    doFirst { protoInventoryFile.parentFile.mkdirs() }
 }
 
 tasks.register('generateProtoJavaBindings', Exec) {
     dependsOn tasks.named('generateProto')
-    inputs.file protoDescriptor
+    dependsOn tasks.named('generateBindingInventory')
+    inputs.file canonicalDescriptor
+    inputs.file protoInventoryFile
+    inputs.file resolvedManifest
     inputs.file file('tools/generate_proto_java_bindings.py')
-    outputs.file new File(protoBindingsDir, 'pt/up/fe/specs/clang/wire/ProtoGeneratedBindings.java')
+    outputs.file protoBindingsFile
     commandLine 'python3', file('tools/generate_proto_java_bindings.py').absolutePath,
-            '--descriptor', protoDescriptor.absolutePath,
-            '--output', new File(protoBindingsDir,
-                    'pt/up/fe/specs/clang/wire/ProtoGeneratedBindings.java').absolutePath
+            '--descriptor', canonicalDescriptor.absolutePath,
+            '--inventory', protoInventoryFile.absolutePath,
+            '--release-metadata', resolvedManifest.absolutePath,
+            '--output', protoBindingsFile.absolutePath
+}
+
+tasks.register('verifyProtoBindings', Exec) {
+    dependsOn tasks.named('generateProtoJavaBindings')
+    inputs.file canonicalDescriptor
+    inputs.file protoInventoryFile
+    inputs.file resolvedManifest
+    inputs.file file('tools/generate_proto_java_bindings.py')
+    inputs.file protoBindingsFile
+    commandLine 'python3', file('tools/generate_proto_java_bindings.py').absolutePath,
+            '--descriptor', canonicalDescriptor.absolutePath,
+            '--inventory', protoInventoryFile.absolutePath,
+            '--release-metadata', resolvedManifest.absolutePath,
+            '--output', new File(wireReleaseDir, 'drift-check.java').absolutePath,
+            '--check-against', protoBindingsFile.absolutePath
+}
+
+tasks.register('testProtoReleaseResolver', Exec) {
+    inputs.files file('tools/resolve_proto_release.py'), file('tools/test_resolve_proto_release.py')
+    commandLine 'python3', file('tools/test_resolve_proto_release.py').absolutePath
 }
 
 tasks.register('generateProtoDescriptorHash') {
-    dependsOn tasks.named('generateProto')
-    inputs.file protoDescriptor
+    dependsOn tasks.named('resolveProtoRelease')
+    inputs.file canonicalDescriptor
+    inputs.file resolvedManifest
     outputs.file new File(protoDescriptorHashDir, 'pt/up/fe/specs/clang/wire/ProtoDescriptorHash.java')
     doLast {
-        def digest = java.security.MessageDigest.getInstance('SHA-256').digest(protoDescriptor.bytes)
-        def hash = digest.collect { String.format('%02x', it & 0xff) }.join()
+        def metadata = new groovy.json.JsonSlurper().parse(resolvedManifest)
         def output = new File(protoDescriptorHashDir,
                 'pt/up/fe/specs/clang/wire/ProtoDescriptorHash.java')
         output.parentFile.mkdirs()
-        output.text = """/** Generated from protoc's descriptor set. */
+        output.text = """/** Generated from the selected release's canonical descriptor set. */
 package pt.up.fe.specs.clang.wire;
 public final class ProtoDescriptorHash {
-    public static final String VALUE = \"${hash}\";
+    public static final String VALUE = \"${metadata.descriptor_sha256}\";
     private ProtoDescriptorHash() { }
+}
+"""
+    }
+}
+
+tasks.register('generateProtoToolchain') {
+    dependsOn tasks.named('resolveProtoRelease')
+    inputs.file resolvedManifest
+    outputs.file new File(protoToolchainDir, 'pt/up/fe/specs/clang/wire/ProtoToolchain.java')
+    doLast {
+        def metadata = new groovy.json.JsonSlurper().parse(resolvedManifest)
+        def output = new File(protoToolchainDir, 'pt/up/fe/specs/clang/wire/ProtoToolchain.java')
+        output.parentFile.mkdirs()
+        output.text = """/** Generated from the verified selected release and pinned Java toolchain. */
+package pt.up.fe.specs.clang.wire;
+public final class ProtoToolchain {
+    public static final String SCHEMA_SHA256 = \"${metadata.schema_sha256}\";
+    public static final String DESCRIPTOR_SHA256 = \"${metadata.descriptor_sha256}\";
+    public static final String SEMANTIC_CONTRACT = \"${metadata.semantic_contract}\";
+    public static final String NATIVE_PROTOC_VERSION = \"${metadata.native_protoc_version}\";
+    public static final String NATIVE_PROTOBUF_VERSION = \"${metadata.native_protobuf_version}\";
+    public static final String JAVA_PROTOC_VERSION = \"${metadata.java_protoc_version}\";
+    public static final String JAVA_PROTOBUF_VERSION = \"${metadata.java_protobuf_version}\";
+    public static final int LLVM_MAJOR = ${metadata.llvm_major};
+    private ProtoToolchain() { }
 }
 """
     }
@@ -140,6 +223,7 @@ sourceSets {
             srcDir protoSchemaHashDir
             srcDir protoBindingsDir
             srcDir protoDescriptorHashDir
+            srcDir protoToolchainDir
         }
         resources {
             srcDir 'resources'
@@ -160,9 +244,16 @@ tasks.named('compileJava') {
     dependsOn tasks.named('generateProtoSchemaHash')
     dependsOn tasks.named('generateProtoJavaBindings')
     dependsOn tasks.named('generateProtoDescriptorHash')
+    dependsOn tasks.named('generateProtoToolchain')
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('verifyProtoBindings')
+    dependsOn tasks.named('testProtoReleaseResolver')
 }
 
 processResources {
+    dependsOn tasks.named('resolveProtoRelease')
     from('clang-dumper-release.tag')
     from('cuda-release.tag')
 }
@@ -193,6 +284,8 @@ test {
 
     // Can't parellelize because it will trigger multiple simultaneous downloads of the dumper and stdlib zip files.
     maxParallelForks = 1
+    dependsOn tasks.named('verifyProtoBindings')
+    dependsOn tasks.named('testProtoReleaseResolver')
 
     finalizedBy jacocoTestReport
 }

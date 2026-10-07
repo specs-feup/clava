@@ -68,7 +68,7 @@ class ClangAstDumperTest {
     }
 
     @Test
-    void cxxMethodPreservesRecordReferenceAndLegacyRecordId() throws Exception {
+    void cxxMethodPreservesRecordReference() throws Exception {
         File tool = nativeTool();
         assumeTrue(tool.isFile(), "clang-dumper build/tool is required for this integration test");
         Path source = Files.writeString(tempFolder.resolve("record.cpp"),
@@ -83,7 +83,7 @@ class ClangAstDumperTest {
         assertFalse(methods.isEmpty());
         for (var method : methods) {
             var record = method.getRecordDecl().orElseThrow();
-            assertEquals(record.getId(), method.get(CXXMethodDecl.RECORD_ID));
+            assertEquals(record.getId(), method.get(CXXMethodDecl.RECORD).getId());
         }
     }
 

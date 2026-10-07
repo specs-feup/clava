@@ -212,6 +212,27 @@ class ProtoAstReaderTest {
     }
 
     @Test
+    void rejectsUnsupportedUnreachableNodeWithClassIdAndSourceLocation() {
+        var header = Envelope.newBuilder().setHeader(header()).build();
+        var source = SourceInfo.newBuilder().setExpansion(Range.newBuilder()
+                .setFile(1).setLine(12).setColumn(5));
+        var file = Record.newBuilder().setFile(File.newBuilder().setId(1).setPath("/tmp/unsupported.cpp"));
+        var node = Record.newBuilder().setNode(Node.newBuilder()
+                .setId(1)
+                .setClassName("LifetimeExtendedTemporaryDecl")
+                .setDeclData(DeclData.newBuilder()
+                        .setBase(NodeData.newBuilder().setSource(source))));
+        var records = chunk(file, node);
+
+        IOException error = assertThrows(IOException.class,
+                () -> ProtoAstReader.read(new ByteArrayInputStream(stream(header, records)),
+                        new ClavaContext(), null, "unit"));
+        assertEquals(true, error.getMessage().contains("LifetimeExtendedTemporaryDecl"));
+        assertEquals(true, error.getMessage().contains("id 1"));
+        assertEquals(true, error.getMessage().contains("/tmp/unsupported.cpp:12:5"));
+    }
+
+    @Test
     void rejectsAnEndIdCountThatIsNotExact() {
         var header = Envelope.newBuilder().setHeader(header()).build();
         var node = builtinNode("BuiltinType");

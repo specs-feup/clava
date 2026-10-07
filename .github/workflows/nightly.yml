@@ -85,6 +85,15 @@ jobs:
           path: specs-java-libs
           ref: ${{ env.specs_ref }}
 
+      - name: Setup Python descriptor tooling
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install Protobuf descriptor parser
+        working-directory: clava/ClangAstParser
+        run: python -m pip install -r tools/requirements.txt
+
       - name: Build with Gradle
         run: |
           cd clava/ClavaWeaver
@@ -94,6 +103,11 @@ jobs:
         run: |
           cd clava/ClangAstParser
           gradle test
+
+      - name: Verify Protobuf consumer bindings
+        run: |
+          cd clava/ClangAstParser
+          gradle verifyProtoBindings
           
       - name: Test ClavaWeaver
         run: |
