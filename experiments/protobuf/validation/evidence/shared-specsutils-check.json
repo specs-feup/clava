@@ -1,0 +1,12 @@
+{
+  "revision": "76fe6b15",
+  "command": "gradle --offline --no-daemon -p SpecsUtils check",
+  "result": "BUILD SUCCESSFUL",
+  "counts": {
+    "tests": 6656,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 2
+  },
+  "coverage_excluded": false
+}
