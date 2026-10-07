@@ -250,6 +250,18 @@ def nearest_payload(class_entry: dict, payloads: list[dict]) -> dict | None:
     return candidates[0][1]
 
 
+def abstract_payload_identity(class_entry: dict, payload_case: str, payloads: list[dict],
+                              compiled_classes: list[dict]) -> bool:
+    """Accept an abstract wire identity only when all concrete descendants share its payload."""
+    descendants = [candidate for candidate in compiled_classes
+                   if class_entry["name"] in candidate["parents"] and not candidate["abstract"]]
+    if not descendants:
+        return False
+    return all((selected := nearest_payload(candidate, payloads)) is not None
+               and selected["field"].name.upper() == payload_case
+               for candidate in descendants)
+
+
 def field_key(class_entry: dict, field: descriptor_pb2.FieldDescriptorProto) -> dict:
     expected_constant = field.name.upper()
     matches = [key for key in class_entry["keys"] if key["field"] == expected_constant]
@@ -572,7 +584,19 @@ def generate(file_desc: descriptor_pb2.FileDescriptorProto, inventory: dict, met
     ])
     for name, payload_case in sorted(class_to_payload.items()):
         entry = class_name_by_simple.get(name)
-        if entry is not None and (entry["abstract"] or name in {"Attribute", "GenericClangOMP"}):
+        # An abstract node class can still be the exact identity carried by
+        # Clang's stream when its payload has a specialized discriminator (for
+        # example AlignedAttr chooses AlignedExprAttr/AlignedTypeAttr). Permit
+        # that checked wire identity only when this class itself owns the
+        # payload. Do not route it through the closed generic Attribute
+        # contract, which applies to other *Attr class names.
+        owns_payload = any(payload["owner"]["simple_name"] == name
+                           and payload["field"].name.upper() == payload_case
+                           for payload in payloads)
+        if entry is not None and (name in {"Attribute", "GenericClangOMP"}
+                                  or (entry["abstract"] and not (owns_payload and
+                                      abstract_payload_identity(entry, payload_case, payloads,
+                                                                inventory["classes"])))):
             continue
         lines.append(f'            case "{name}" -> Node.NodeCase.{payload_case};')
     lines.extend([

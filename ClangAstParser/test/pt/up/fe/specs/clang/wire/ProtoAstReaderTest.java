@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.context.ClavaContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ProtoAstReaderTest {
 
@@ -209,6 +210,62 @@ class ProtoAstReaderTest {
                 () -> ProtoAstReader.read(new ByteArrayInputStream(stream(header, node)),
                         new ClavaContext(), null, "unit"));
         assertEquals(true, error.getMessage().contains("payload"));
+    }
+
+    @Test
+    void acceptsAlignedAttrSpecializedPayloadInsteadOfGenericAttributePayload() {
+        var completeAttribute = AttributeData.newBuilder()
+                .setBase(nodeData())
+                .setKind(AttributeKind.ATTRIBUTEKIND_ALIGNED)
+                .setIsImplicit(false)
+                .setIsInherited(false)
+                .setIsLateParsed(false)
+                .setIsPackExpansion(false)
+                .build();
+        var payload = AlignedAttrData.newBuilder()
+                .setBase(completeAttribute)
+                .setSpelling("aligned")
+                .setIsExpression(true)
+                .setAlignment(8)
+                .build();
+
+        assertEquals(Node.NodeCase.ALIGNED_ATTR_DATA,
+                ProtoGeneratedBindings.expectedPayload("AlignedAttr"));
+        assertEquals(Node.NodeCase.ATTRIBUTE_DATA,
+                ProtoGeneratedBindings.expectedPayload("AssumeAlignedAttr"));
+        assertThrows(IllegalArgumentException.class,
+                () -> ProtoGeneratedBindings.expectedPayload("Expr"));
+        assertDoesNotThrow(() -> ProtoGeneratedBindings.validatePayload(
+                "AlignedAttr", Node.NodeCase.ALIGNED_ATTR_DATA));
+        assertThrows(IllegalArgumentException.class, () -> ProtoGeneratedBindings.validatePayload(
+                "AlignedAttr", Node.NodeCase.ATTRIBUTE_DATA));
+        assertDoesNotThrow(() -> ProtoGeneratedBindings.validate(payload, "AlignedAttr"));
+    }
+
+    @Test
+    void rejectsAlignedAttrPayloadWhenInheritedAttributeDataIsIncomplete() {
+        var incompleteAttribute = AttributeData.newBuilder()
+                .setBase(nodeData())
+                .setKind(AttributeKind.ATTRIBUTEKIND_ALIGNED)
+                .setIsImplicit(false)
+                .setIsInherited(false)
+                .setIsLateParsed(false)
+                .build();
+        var payload = AlignedAttrData.newBuilder()
+                .setBase(incompleteAttribute)
+                .setSpelling("aligned")
+                .setIsExpression(true)
+                .setAlignment(8)
+                .build();
+
+        IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
+                () -> ProtoGeneratedBindings.validate(payload, "AlignedAttr"));
+        assertEquals(true, error.getMessage().contains("AttributeData.is_pack_expansion"));
+    }
+
+    private static NodeData nodeData() {
+        return NodeData.newBuilder().setSource(SourceInfo.newBuilder()
+                .setIsMacro(false).setSystemHeader(false)).build();
     }
 
     @Test
