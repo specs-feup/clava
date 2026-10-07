@@ -23,6 +23,7 @@ import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clang.dumper.ClangAstParser;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
+import pt.up.fe.specs.clang.wire.ProtobufAstParseException;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -156,6 +157,7 @@ public class ParallelCodeParser extends CodeParser {
         // Collect parsing results
         List<ClangAstData> clangParserResults = new ArrayList<>();
         List<File> ignoredFiles = new ArrayList<>();
+        List<RuntimeException> fatalFailures = new ArrayList<>();
         for (int i = 0; i < sources.size(); i++) {
             var future = futureTUnits.get(i);
             try {
@@ -164,7 +166,15 @@ public class ParallelCodeParser extends CodeParser {
                 clangParserResults.add(parserData);
             } catch (Exception e) {
                 if (syntaxOnly) {
-                    throw new RuntimeException("Error while validating syntax of file '" + sources.get(i) + "'", e);
+                    fatalFailures.add(new RuntimeException(
+                            "Error while validating syntax of file '" + sources.get(i) + "'", e));
+                    continue;
+                }
+
+                var wireFailure = findWireFailure(e);
+                if (wireFailure != null) {
+                    fatalFailures.add(wireFailure);
+                    continue;
                 }
 
                 SpecsLogs.warn("Could not parse file '" + sources.get(i) + "', will be ignored", e);
@@ -176,6 +186,17 @@ public class ParallelCodeParser extends CodeParser {
         // FutureTask retains its result after get(); release those references
         // before cross-translation-unit processing builds the final AST.
         futureTUnits.clear();
+
+        // Join every task before cleanup removes its working directory. A wire
+        // failure cannot be treated as an ignored translation unit, even when
+        // the caller permits ordinary compiler diagnostics.
+        if (!fatalFailures.isEmpty()) {
+            var failure = fatalFailures.get(0);
+            for (int i = 1; i < fatalFailures.size(); i++) {
+                failure.addSuppressed(fatalFailures.get(i));
+            }
+            throw failure;
+        }
 
         // List<ClangParserData> clangParserResults = futureTUnits.stream()
         // .map(future -> getParserData(future))
@@ -528,6 +549,15 @@ public class ParallelCodeParser extends CodeParser {
         Collections.sort(orderedSources);
 
         return orderedSources;
+    }
+
+    private static ProtobufAstParseException findWireFailure(Throwable failure) {
+        for (var cause = failure; cause != null; cause = cause.getCause()) {
+            if (cause instanceof ProtobufAstParseException wireFailure) {
+                return wireFailure;
+            }
+        }
+        return null;
     }
 
 }
