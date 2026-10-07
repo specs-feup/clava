@@ -20,8 +20,10 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
@@ -125,6 +127,7 @@ public final class ValidationProbe {
             throw new IllegalArgumentException("memory probe needs at least two parse repeats");
         }
         Path tempRoot = Path.of(System.getProperty("java.io.tmpdir")).toAbsolutePath().normalize();
+        Map<String, String> observerFdTargets = observerParserFileTargets(work, tempRoot);
         for (int index = 1; index <= repeats; index++) {
             Path iteration = work.resolve("iteration-" + index);
             Files.createDirectories(iteration);
@@ -133,7 +136,10 @@ public final class ValidationProbe {
             long retained = usedHeapAfterGc();
             int mapped = mappedPaths(work, tempRoot);
             int temporaryFolders = countClangTempFolders(tempRoot);
-            int openParserFiles = openParserFiles(work, tempRoot);
+            Map<String, String> observedFdTargets = openParserFileTargets(work, tempRoot);
+            Map<String, String> unexpectedFdTargets = unexpectedParserFileTargets(
+                    observerFdTargets, observedFdTargets);
+            int openParserFiles = unexpectedFdTargets == null ? -1 : unexpectedFdTargets.size();
             Map<String, Object> row = new HashMap<>();
             row.put("phase", "parse_released");
             row.put("repeat", index);
@@ -145,10 +151,14 @@ public final class ValidationProbe {
             row.put("mapped_paths_under_work", mapped);
             row.put("leftover_clang_temp_folders", temporaryFolders);
             row.put("open_parser_files", openParserFiles);
+            row.put("observer_open_parser_fd_targets", observerFdTargets);
+            row.put("observed_open_parser_fd_targets", observedFdTargets);
+            row.put("unexpected_open_parser_fd_targets", unexpectedFdTargets);
             row.put("dumper_resource_root", resourceRoot.toAbsolutePath().normalize().toString());
             emit("CLAVA_HEAP", row);
             if (strictCleanup && (!collected || mapped != 0 || temporaryFolders != 0 || openParserFiles != 0)) {
-                throw new IllegalStateException("AST release or mapped-file cleanup failed on repeat " + index);
+                throw new IllegalStateException("AST release or mapped-file cleanup failed on repeat " + index
+                        + "; unexpected open parser FD targets " + unexpectedFdTargets);
             }
         }
     }
@@ -372,16 +382,16 @@ public final class ValidationProbe {
         }
     }
 
-    private static int openParserFiles(Path work, Path tempRoot) throws IOException {
+    private static Map<String, String> openParserFileTargets(Path work, Path tempRoot) throws IOException {
         Path descriptors = Path.of("/proc/self/fd");
         if (!Files.isDirectory(descriptors)) {
-            return -1;
+            return null;
         }
         String workText = work.toAbsolutePath().normalize().toString();
         String parserTempPrefix = tempRoot.toString() + "/clava_ast_";
-        int count = 0;
+        Map<String, String> targets = new TreeMap<>();
         try (Stream<Path> entries = Files.list(descriptors)) {
-            for (Path entry : entries.toList()) {
+            for (Path entry : entries.sorted(Comparator.comparing(path -> path.getFileName().toString())).toList()) {
                 String target;
                 try {
                     target = Files.readSymbolicLink(entry).toString();
@@ -389,11 +399,53 @@ public final class ValidationProbe {
                     continue;
                 }
                 if (target.startsWith(workText + "/") || target.startsWith(parserTempPrefix)) {
-                    count++;
+                    targets.put(entry.getFileName().toString(), target);
                 }
             }
         }
-        return count;
+        return targets;
+    }
+
+    private static Map<String, String> observerParserFileTargets(Path work, Path tempRoot) throws IOException {
+        Map<String, String> openTargets = openParserFileTargets(work, tempRoot);
+        if (openTargets == null) {
+            return null;
+        }
+
+        String workText = work.toAbsolutePath().normalize().toString();
+        String parserTempPrefix = tempRoot.toString() + "/clava_ast_";
+        Map<String, String> observerTargets = new TreeMap<>();
+        for (Entry<String, String> entry : openTargets.entrySet()) {
+            String fd = entry.getKey();
+            String target = entry.getValue();
+            if (target.startsWith(parserTempPrefix)) {
+                continue;
+            }
+
+            Path targetPath = Path.of(target);
+            boolean standardOutput = fd.equals("1") || fd.equals("2");
+            boolean directWorkFile = targetPath.getParent() != null
+                    && targetPath.getParent().equals(Path.of(workText));
+            if (standardOutput || directWorkFile) {
+                observerTargets.put(fd, target);
+            }
+        }
+        return observerTargets;
+    }
+
+    private static Map<String, String> unexpectedParserFileTargets(
+            Map<String, String> observerTargets, Map<String, String> currentTargets) {
+        if (currentTargets == null) {
+            return null;
+        }
+
+        Map<String, String> unexpectedTargets = new TreeMap<>();
+        for (Entry<String, String> entry : currentTargets.entrySet()) {
+            if (observerTargets == null || !entry.getValue().equals(observerTargets.get(entry.getKey()))) {
+                unexpectedTargets.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return unexpectedTargets;
     }
 
     private static int countClangTempFolders(Path tempRoot) throws IOException {
