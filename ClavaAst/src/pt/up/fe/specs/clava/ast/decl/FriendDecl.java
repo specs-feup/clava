@@ -24,7 +24,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.DependentNameType;
 import pt.up.fe.specs.clava.ast.type.DependentTemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
 
 /**
  * Represents the declaration of a friend entity.
@@ -99,9 +98,7 @@ public class FriendDecl extends Decl {
 
     private boolean isUnsupportedDependentFriend(ClavaNode friendNode) {
         if (friendNode instanceof Type type) {
-            TypeDependency dependency = type.get(Type.TYPE_DEPENDENCY);
-            return dependency != TypeDependency.NONE
-                    || type instanceof DependentNameType
+            return type instanceof DependentNameType
                     || type instanceof DependentTemplateSpecializationType;
         }
 
@@ -110,10 +107,11 @@ public class FriendDecl extends Decl {
                         && template.getTemplateDecl() instanceof FunctionDecl wrapped ? wrapped
                                 : null;
 
-        // Clang associates dependent friend member templates with their owner in an
-        // incomplete form. The ordinary FunctionDecl printer cannot distinguish the
-        // declaration's own template headers from its enclosing class template headers.
-        return function != null && !function.get(FunctionDecl.TEMPLATE_PARAMETER_LIST_SIZES).isEmpty();
+        // Clang associates dependent friend member functions with their owning class
+        // template. A free FunctionDecl, including a friend function template declared
+        // inside a class template, has its own printable template headers instead.
+        return function instanceof CXXMethodDecl
+                && !function.get(FunctionDecl.TEMPLATE_PARAMETER_LIST_SIZES).isEmpty();
     }
 
     private ClavaNode getStructuredFriendNode() {
