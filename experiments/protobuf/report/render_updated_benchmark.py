@@ -741,34 +741,34 @@ def render_report(
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Clava Protobuf benchmark update</title>
 <style>
-html {{ color-scheme:light; --page:#f7f9fc; --panel:#fff; --ink:#202a34; --muted:#56636e; --line:#d9e0e5; --grid:#e1e7ec; --surface:#fff; --accent:#6d45c0; --code:#5630a2; }}
-html.dark {{ color-scheme:dark; --page:#101722; --panel:#182231; --ink:#e8edf5; --muted:#a7b4c7; --line:#354357; --grid:#2b394c; --surface:#182231; --accent:#8d68df; --code:#d7c6ff; }}
+html {{ color-scheme:light; --report-page:#f7f9fc; --report-panel:#fff; --report-ink:#202a34; --report-muted:#56636e; --report-line:#d9e0e5; --report-grid:#e1e7ec; --report-surface:#fff; --report-accent:#6d45c0; --report-code:#5630a2; }}
+html.dark {{ color-scheme:dark; --report-page:#101722; --report-panel:#182231; --report-ink:#e8edf5; --report-muted:#a7b4c7; --report-line:#354357; --report-grid:#2b394c; --report-surface:#182231; --report-accent:#8d68df; --report-code:#d7c6ff; }}
 * {{ box-sizing:border-box; }}
-body {{ max-width:1480px; margin:0 auto; padding:28px; background:var(--page); color:var(--ink); font:15px/1.55 system-ui,sans-serif; }}
+body {{ max-width:1480px; margin:0 auto; padding:28px; background:var(--report-page); color:var(--report-ink); font:15px/1.55 system-ui,sans-serif; }}
 h1,h2,h3 {{ line-height:1.2; }} h1 {{ font-size:30px; margin:0 0 8px; }} h2 {{ font-size:22px; margin:30px 0 10px; }}
-p {{ color:var(--muted); }} .lede {{ max-width:1000px; }} .note {{ border-left:3px solid #7c3aed; padding:8px 14px; background:var(--panel); }}
-button {{ background:var(--accent); color:white; border:0; border-radius:6px; padding:9px 13px; cursor:pointer; font:inherit; }}
+p {{ color:var(--report-muted); }} .lede {{ max-width:1000px; }} .note {{ border-left:3px solid #7c3aed; padding:8px 14px; background:var(--report-panel); }}
+button {{ background:var(--report-accent); color:white; border:0; border-radius:6px; padding:9px 13px; cursor:pointer; font:inherit; }}
 .sources,.summary {{ border-collapse:collapse; width:100%; margin:12px 0 18px; font-size:13px; }}
-th,td {{ padding:7px 9px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top; }}
-th {{ color:var(--ink); font-weight:650; }} .sources th:first-child {{ min-width:150px; }}
+th,td {{ padding:7px 9px; text-align:left; border-bottom:1px solid var(--report-line); vertical-align:top; }}
+th {{ color:var(--report-ink); font-weight:650; }} .sources th:first-child {{ min-width:150px; }}
 .panels {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(350px,1fr)); gap:14px; }}
-figure {{ background:var(--panel); border:1px solid var(--line); border-radius:9px; margin:0; padding:14px; min-width:0; }}
+figure {{ background:var(--report-panel); border:1px solid var(--report-line); border-radius:9px; margin:0; padding:14px; min-width:0; }}
 figcaption {{ font-weight:650; margin-bottom:7px; }} svg {{ max-width:100%; height:auto; }}
 .app-chart {{ display:block; width:100%; max-width:520px; }}
-.grid,.grid-line {{ stroke:var(--grid); }} .divider {{ stroke:var(--muted); }}
-.tick,.label,.mode,.foot,.axis-text,.stage-text,.empty-lane {{ fill:var(--muted); }}
-.value,.median-label {{ fill:var(--ink); }} .mode {{ font-weight:650; }}
+.grid,.grid-line {{ stroke:var(--report-grid); }} .divider {{ stroke:var(--report-muted); }}
+.tick,.label,.mode,.foot,.axis-text,.stage-text,.empty-lane {{ fill:var(--report-muted); }}
+.value,.median-label {{ fill:var(--report-ink); }} .mode {{ font-weight:650; }}
 .wall-chart .tick,.wall-chart .label,.wall-chart .value {{ font-size:12px; }}
 .wall-chart .mode {{ font-size:13px; }} .wall-chart .foot {{ font-size:11px; }}
-.app-chart .tick {{ fill:var(--muted); font:13px system-ui,sans-serif; }}
-.app-chart .label,.app-chart .mode {{ fill:var(--muted); font:15px system-ui,sans-serif; }}
+.app-chart .tick {{ fill:var(--report-muted); font:13px system-ui,sans-serif; }}
+.app-chart .label,.app-chart .mode {{ fill:var(--report-muted); font:15px system-ui,sans-serif; }}
 .app-chart .mode {{ font-weight:650; }}
-.app-chart .value {{ fill:var(--ink); font:14px ui-monospace,monospace; }}
-.app-chart .foot {{ fill:var(--muted); font:11px system-ui,sans-serif; }}
+.app-chart .value {{ fill:var(--report-ink); font:14px ui-monospace,monospace; }}
+.app-chart .foot {{ fill:var(--report-muted); font:11px system-ui,sans-serif; }}
 .panels figure svg {{ width:100%; }} .app-chart {{ max-width:520px; }}
-.details {{ color:var(--muted); }}
-details {{ margin:14px 0; background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:10px 13px; }}
-summary {{ cursor:pointer; color:var(--ink); font-weight:650; }} code {{ color:var(--code); }}
+.details {{ color:var(--report-muted); }}
+details {{ margin:14px 0; background:var(--report-panel); border:1px solid var(--report-line); border-radius:7px; padding:10px 13px; }}
+summary {{ cursor:pointer; color:var(--report-ink); font-weight:650; }} code {{ color:var(--report-code); }}
 @media(max-width:700px) {{ body {{ padding:16px; }} .panels {{ grid-template-columns:1fr; }} .summary {{ display:block; overflow-x:auto; }} }}
 </style>
 </head>
