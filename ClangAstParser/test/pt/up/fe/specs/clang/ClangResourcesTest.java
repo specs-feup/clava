@@ -155,6 +155,7 @@ public class ClangResourcesTest {
     public void pathMetadataCacheIsBoundedAndEvictsLeastRecentlyUsedEntry() throws Exception {
         assertEquals(128, ClangResources.CLANG_FILES_CACHE.maxEntries());
         assertEquals(128, ClangResources.HAS_LIBC.maxEntries());
+        assertEquals(128, ClangResources.FRAMEWORK_SEARCH_ROOTS.maxEntries());
 
         var cache = new ClangResources.BoundedMetadataCache<String, Boolean>(3);
         cache.putIfAbsent("oldest", true);

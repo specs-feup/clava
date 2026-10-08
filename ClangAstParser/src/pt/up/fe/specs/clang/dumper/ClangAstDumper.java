@@ -280,19 +280,9 @@ public class ClangAstDumper {
             arguments.add("-nostdinc++");
         }
 
-        List<String> systemIncludes = new ArrayList<>();
-
-        // Add bundled includes according to libc/cxx settings
-        systemIncludes.addAll(builtinIncludes);
-
-        // Add custom includes
-        systemIncludes.addAll(localData.get(LocalOptionsKeys.SYSTEM_INCLUDES).getStringList());
-
-        // Add local system includes
-        for (String systemInclude : systemIncludes) {
-            arguments.add("-isystem");
-            arguments.add(systemInclude);
-        }
+        // Bundled framework roots need Clang's framework search semantics. Custom system includes retain -isystem.
+        arguments.addAll(buildIncludeArguments(builtinIncludes,
+                localData.get(LocalOptionsKeys.SYSTEM_INCLUDES).getStringList()));
 
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
 
@@ -568,10 +558,26 @@ public class ClangAstDumper {
         return relativePath == null ? sourceFile.getAbsolutePath() : relativePath;
     }
 
+    static List<String> buildIncludeArguments(List<String> bundledIncludes, List<String> customSystemIncludes) {
+        var arguments = new ArrayList<String>();
+
+        for (String include : bundledIncludes) {
+            arguments.add(ClangResources.isFrameworkSearchRoot(include) ? "-iframework" : "-isystem");
+            arguments.add(include);
+        }
+
+        for (String include : customSystemIncludes) {
+            arguments.add("-isystem");
+            arguments.add(include);
+        }
+
+        return arguments;
+    }
+
     private static void relativizeGeneratedPathArguments(List<String> arguments, File generatedParseRoot) {
         for (int i = 0; i < arguments.size(); i++) {
             String argument = arguments.get(i);
-            if (argument.equals("-I") || argument.equals("-isystem")) {
+            if (argument.equals("-I") || argument.equals("-isystem") || argument.equals("-iframework")) {
                 if (i + 1 < arguments.size()) {
                     arguments.set(i + 1, relativizePath(arguments.get(i + 1), generatedParseRoot));
                     i++;
@@ -583,6 +589,9 @@ public class ClangAstDumper {
                 arguments.set(i, "-I" + relativizePath(argument.substring(2), generatedParseRoot));
             } else if (argument.startsWith("-isystem=") && argument.length() > "-isystem=".length()) {
                 arguments.set(i, "-isystem=" + relativizePath(argument.substring("-isystem=".length()),
+                        generatedParseRoot));
+            } else if (argument.startsWith("-iframework=") && argument.length() > "-iframework=".length()) {
+                arguments.set(i, "-iframework=" + relativizePath(argument.substring("-iframework=".length()),
                         generatedParseRoot));
             } else if (argument.startsWith("--cuda-path=") && argument.length() > "--cuda-path=".length()) {
                 arguments.set(i, "--cuda-path=" + relativizePath(argument.substring("--cuda-path=".length()),

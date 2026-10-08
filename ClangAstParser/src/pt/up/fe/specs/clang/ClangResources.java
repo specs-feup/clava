@@ -29,6 +29,7 @@ import pt.up.fe.specs.util.system.ProcessOutputAsString;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -55,6 +56,8 @@ public class ClangResources {
     private static final Duration STALE_CACHE_MAX_AGE = Duration.ofDays(60);
 
     static final BoundedMetadataCache<String, Boolean> HAS_LIBC =
+            new BoundedMetadataCache<>(MAX_METADATA_CACHE_ENTRIES);
+    static final BoundedMetadataCache<String, Boolean> FRAMEWORK_SEARCH_ROOTS =
             new BoundedMetadataCache<>(MAX_METADATA_CACHE_ENTRIES);
 
     private final CodeParser options;
@@ -308,6 +311,25 @@ public class ClangResources {
 
     public static boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode) {
         return useBuiltinLibc(clangExecutable, libcMode, null);
+    }
+
+    public static boolean isFrameworkSearchRoot(String includeRoot) {
+        var root = Path.of(includeRoot).toAbsolutePath().normalize();
+        var key = root.toString();
+        return FRAMEWORK_SEARCH_ROOTS.computeIfAbsent(key, ignored -> containsFrameworkBundle(root));
+    }
+
+    private static boolean containsFrameworkBundle(Path root) {
+        if (!Files.isDirectory(root)) {
+            return false;
+        }
+
+        try (var entries = Files.list(root)) {
+            return entries.anyMatch(entry -> entry.getFileName().toString().endsWith(".framework")
+                    && Files.isDirectory(entry.resolve("Headers")));
+        } catch (IOException e) {
+            throw new UncheckedIOException("Could not inspect bundled include root '" + root + "'", e);
+        }
     }
 
     private static boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode, File systemResourceDir) {
