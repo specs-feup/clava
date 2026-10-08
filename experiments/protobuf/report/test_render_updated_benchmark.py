@@ -75,7 +75,13 @@ def fixture_updated():
                     observations.append(row)
     release = fixture_release_manifest()
     release_bytes = json.dumps(release, separators=(",", ":")).encode()
-    native_sha = release["assets"][2]["sha256"]
+    selected_tool = next(
+        asset for asset in release["assets"]
+        if asset.get("kind") == "tool"
+        and asset.get("platform") == "linux"
+        and asset.get("arch") == "x64"
+    )
+    native_sha = selected_tool["sha256"]
     return {
         "status": "complete", "created_utc": "2026-10-07T12:00:00Z",
         "completed_utc": "2026-10-07T13:00:00+00:00", "observations": observations,
@@ -84,7 +90,7 @@ def fixture_updated():
             "selected_release": {
                 "manifest_sha256": hashlib.sha256(release_bytes).hexdigest(),
                 "tool_sha256": native_sha,
-                "tool_asset": {"sha256": native_sha},
+                "tool_asset": copy.deepcopy(selected_tool),
             },
             "repositories": {
                 name: {"revision": f"{index:040x}"}
@@ -99,7 +105,20 @@ def fixture_updated():
 def fixture_release_manifest():
     schema_sha = "b" * 64
     descriptor_sha = "c" * 64
-    tool_sha = hashlib.sha256(b"fixture native tool").hexdigest()
+    tools = [
+        {"kind": "tool", "filename": "clang-dumper-macos-x64", "platform": "macos", "arch": "x64",
+         "sha256": hashlib.sha256(b"fixture macos x64 tool").hexdigest()},
+        {"kind": "tool", "filename": "clang-dumper-linux-x64", "platform": "linux", "arch": "x64",
+         "sha256": hashlib.sha256(b"fixture linux x64 tool").hexdigest()},
+        {"kind": "tool", "filename": "clang-dumper-macos-arm64", "platform": "macos", "arch": "arm64",
+         "sha256": hashlib.sha256(b"fixture macos arm64 tool").hexdigest()},
+        {"kind": "tool", "filename": "clang-dumper-linux-arm64", "platform": "linux", "arch": "arm64",
+         "sha256": hashlib.sha256(b"fixture linux arm64 tool").hexdigest()},
+        {"kind": "tool", "filename": "clang-dumper-windows-x64.exe", "platform": "windows", "arch": "x64",
+         "sha256": hashlib.sha256(b"fixture windows x64 tool").hexdigest()},
+        {"kind": "tool", "filename": "clang-dumper-windows-arm64.exe", "platform": "windows", "arch": "arm64",
+         "sha256": hashlib.sha256(b"fixture windows arm64 tool").hexdigest()},
+    ]
     return {
         "protocol": {
             "id": "clava-ast-wire", "major": 1, "minor": 1,
@@ -108,7 +127,7 @@ def fixture_release_manifest():
         "assets": [
             {"kind": "protocol", "filename": "clang-dumper-ast-wire.proto", "sha256": schema_sha},
             {"kind": "protocol", "filename": "clang-dumper-ast-wire.pb", "sha256": descriptor_sha},
-            {"kind": "tool", "filename": "tool", "sha256": tool_sha},
+            *tools,
         ],
     }
 
@@ -175,6 +194,7 @@ class UpdatedReportTest(unittest.TestCase):
     def test_release_provenance_is_matched_and_renders_only_safe_hashes(self):
         updated = fixture_updated()
         manifest = fixture_release_manifest()
+        self.assertEqual(6, sum(asset.get("kind") == "tool" for asset in manifest["assets"]))
         manifest_sha = hashlib.sha256(json.dumps(manifest, separators=(",", ":")).encode()).hexdigest()
         report = REPORT.render_report(fixture_prior(), updated, release_manifest=manifest,
                                       release_manifest_sha256=manifest_sha)
@@ -198,6 +218,76 @@ class UpdatedReportTest(unittest.TestCase):
         ).hexdigest()
         with self.assertRaisesRegex(ValueError, "schema hash does not match"):
             REPORT.validate_release_provenance(updated, mismatch, hashlib.sha256(mismatch_bytes).hexdigest())
+
+    def test_release_provenance_accepts_a_single_tool_local_manifest(self):
+        updated = fixture_updated()
+        manifest = fixture_release_manifest()
+        selected = updated["sources"]["protobuf"]["selected_release"]["tool_asset"]
+        manifest["assets"] = [
+            asset for asset in manifest["assets"]
+            if asset.get("kind") != "tool" or asset == selected
+        ]
+        manifest_bytes = json.dumps(manifest, separators=(",", ":")).encode()
+        manifest_sha = hashlib.sha256(manifest_bytes).hexdigest()
+        updated["sources"]["protobuf"]["selected_release"]["manifest_sha256"] = manifest_sha
+
+        provenance = REPORT.validate_release_provenance(updated, manifest, manifest_sha)
+
+        self.assertEqual(selected["sha256"], provenance["tool_sha256"])
+
+    def test_release_provenance_requires_one_exact_selected_tool_identity(self):
+        base = fixture_updated()
+        selected = base["sources"]["protobuf"]["selected_release"]["tool_asset"]
+
+        missing = fixture_release_manifest()
+        missing["assets"] = [asset for asset in missing["assets"] if asset != selected]
+        missing_bytes = json.dumps(missing, separators=(",", ":")).encode()
+        missing_payload = copy.deepcopy(base)
+        missing_payload["sources"]["protobuf"]["selected_release"]["manifest_sha256"] = hashlib.sha256(
+            missing_bytes
+        ).hexdigest()
+        with self.assertRaisesRegex(ValueError, "missing or ambiguous"):
+            REPORT.validate_release_provenance(
+                missing_payload, missing, hashlib.sha256(missing_bytes).hexdigest()
+            )
+
+        ambiguous = fixture_release_manifest()
+        ambiguous["assets"].append(copy.deepcopy(selected))
+        ambiguous_bytes = json.dumps(ambiguous, separators=(",", ":")).encode()
+        ambiguous_payload = copy.deepcopy(base)
+        ambiguous_payload["sources"]["protobuf"]["selected_release"]["manifest_sha256"] = hashlib.sha256(
+            ambiguous_bytes
+        ).hexdigest()
+        with self.assertRaisesRegex(ValueError, "missing or ambiguous"):
+            REPORT.validate_release_provenance(
+                ambiguous_payload, ambiguous, hashlib.sha256(ambiguous_bytes).hexdigest()
+            )
+
+        for field, replacement in (
+            ("filename", "clang-dumper-other-linux-x64"),
+            ("platform", "macos"),
+            ("arch", "arm64"),
+        ):
+            mismatched_identity = copy.deepcopy(base)
+            mismatched_identity["sources"]["protobuf"]["selected_release"]["tool_asset"][field] = replacement
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "missing or ambiguous"):
+                REPORT.validate_release_provenance(
+                    mismatched_identity, fixture_release_manifest(),
+                    mismatched_identity["sources"]["protobuf"]["selected_release"]["manifest_sha256"],
+                )
+
+        wrong_hash = copy.deepcopy(base)
+        selected_release = wrong_hash["sources"]["protobuf"]["selected_release"]
+        selected_release["tool_sha256"] = "d" * 64
+        selected_release["tool_asset"]["sha256"] = "d" * 64
+        wrong_hash["native_sha256"]["protobuf"] = "d" * 64
+        manifest = fixture_release_manifest()
+        manifest_bytes = json.dumps(manifest, separators=(",", ":")).encode()
+        selected_release["manifest_sha256"] = hashlib.sha256(manifest_bytes).hexdigest()
+        with self.assertRaisesRegex(ValueError, "manifest selected tool"):
+            REPORT.validate_release_provenance(
+                wrong_hash, manifest, hashlib.sha256(manifest_bytes).hexdigest()
+            )
 
     def test_rejects_missing_duplicate_or_invalid_observations(self):
         missing = fixture_updated()

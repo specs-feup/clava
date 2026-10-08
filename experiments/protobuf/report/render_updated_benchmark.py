@@ -354,15 +354,32 @@ def validate_release_provenance(
     if tool_sha != native_sha:
         _fail("selected tool hash does not match the measured native tool")
     tool_asset = selected.get("tool_asset")
-    if not isinstance(tool_asset, dict) or _sha256(
-        tool_asset.get("sha256"), "selected tool asset hash"
-    ) != tool_sha:
+    if not isinstance(tool_asset, dict) or tool_asset.get("kind") != "tool":
+        _fail("selected tool asset must identify a manifest tool")
+    tool_filename = tool_asset.get("filename")
+    tool_platform = tool_asset.get("platform")
+    tool_arch = tool_asset.get("arch")
+    if (not isinstance(tool_filename, str) or not tool_filename
+            or Path(tool_filename).name != tool_filename or "\\" in tool_filename
+            or not isinstance(tool_platform, str) or not tool_platform
+            or not isinstance(tool_arch, str) or not tool_arch):
+        _fail("selected tool asset needs a safe filename, platform, and architecture")
+    selected_asset_sha = _sha256(tool_asset.get("sha256"), "selected tool asset hash")
+    if selected_asset_sha != tool_sha:
         _fail("selected tool asset does not match the measured native tool")
-    manifest_tools = [asset for asset in assets if isinstance(asset, dict) and asset.get("kind") == "tool"]
-    if len(manifest_tools) != 1 or _sha256(
-        manifest_tools[0].get("sha256"), "manifest tool hash"
-    ) != tool_sha:
-        _fail("release manifest tool does not match the measured native tool")
+    matching_tools = [
+        asset for asset in assets
+        if isinstance(asset, dict)
+        and asset.get("kind") == "tool"
+        and asset.get("filename") == tool_filename
+        and asset.get("platform") == tool_platform
+        and asset.get("arch") == tool_arch
+    ]
+    if len(matching_tools) != 1:
+        _fail("selected tool asset is missing or ambiguous in the release manifest")
+    manifest_tool_sha = _sha256(matching_tools[0].get("sha256"), "manifest tool hash")
+    if manifest_tool_sha != tool_sha:
+        _fail("release manifest selected tool does not match the measured native tool")
 
     repositories = protobuf.get("repositories")
     if not isinstance(repositories, dict):
