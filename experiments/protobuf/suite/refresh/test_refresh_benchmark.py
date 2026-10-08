@@ -167,6 +167,9 @@ MEMORY = load_memory_module()
 
 
 class RefreshWorkflowTests(unittest.TestCase):
+    def test_refresh_cli_disables_source_tree_bytecode_writes(self) -> None:
+        self.assertTrue(sys.dont_write_bytecode)
+
     def _copy_current_js_workload(self, target: Path) -> dict[str, bytes]:
         baseline = REFRESH.COHORT_BASELINE["javascript_test_sources"]
         original: dict[str, bytes] = {}

@@ -19,6 +19,10 @@ import sys
 import uuid
 from typing import Any, Callable
 
+# Loading the report renderer imports source modules from the canonical checkout.
+# Keep that read-only preparation step from creating untracked __pycache__ files.
+sys.dont_write_bytecode = True
+
 import support
 
 
