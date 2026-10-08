@@ -69,3 +69,14 @@ archive hashes, along with the validated extracted-cache key and JUnit, log,
 and JaCoCo digests. Raw output stays in the isolated local validation archive;
 the committed report contains no machine-local paths. The canonical selector
 and Lara engine worktree patch were preserved during this check.
+
+## Nightly consumer CI, October 8
+
+`consumer-ci-rc8-20261008.json` records the successful nightly run against
+Clava commit `360a41c5e48385effdbb459fa30cc0efc05da68b`, including the Java
+summary and all six Node/OS matrix summaries. Node 24 on Windows first lost
+runner communication; GitHub returned 404 for that attempt's log, and the
+successful second-attempt job log and original annotation are archived
+locally. This is nightly-run evidence only: it does not claim all PR checks
+passed; separate SonarCloud/CodeQL, Lara shared-resolver, and
+specs-java-libs 17 legacy checks remained unresolved.
