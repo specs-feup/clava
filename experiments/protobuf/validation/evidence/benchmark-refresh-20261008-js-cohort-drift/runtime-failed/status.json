@@ -1,0 +1,14 @@
+{
+  "created_utc": "2026-10-08T18:33:58.051690+00:00",
+  "error": "runtime collection failed with exit code 1",
+  "failed_utc": "2026-10-08T18:34:30.740889+00:00",
+  "frozen_controls_sha256": "36051f18ec0dc2da2db8a10fcaf46b899ba166f0651041c074733f50ca40a4f5",
+  "memory_driver_sha256": "aca2e9249c23db993673b2e64de0939a9a016c141fb4a94819d118feacfa08f0",
+  "memory_log": "memory.stdout.log",
+  "memory_origin": "fresh",
+  "release_tag": "v18.1.8_6-rc8",
+  "runtime_driver_sha256": "f7733b8794e88e10667a8c5745db080492fd96ff52011e76f676cd71cdb1e701",
+  "runtime_log": "runtime.stdout.log",
+  "snapshot_identity_sha256": "4ab4edd01c42b77b3d32db15c6c9da75bfcf8de90f506986cc474b722392e6c8",
+  "status": "failed"
+}
