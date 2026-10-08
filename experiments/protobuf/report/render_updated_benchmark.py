@@ -735,7 +735,7 @@ def render_report(
                 .replace("&", "\\u0026").replace("\u2028", "\\u2028")
                 .replace("\u2029", "\\u2029"))
     return f'''<!doctype html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

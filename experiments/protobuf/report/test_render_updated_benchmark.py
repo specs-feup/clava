@@ -166,7 +166,8 @@ class UpdatedReportTest(unittest.TestCase):
 
     def test_standalone_report_has_dark_theme_sources_and_csv_export(self):
         html = REPORT.render_report(fixture_prior(), fixture_updated())
-        self.assertIn('<html class="dark"', html)
+        self.assertIn('<html lang="en">', html)
+        self.assertNotIn('<html class="dark"', html)
         self.assertIn("html { color-scheme:light;", html)
         self.assertIn("html.dark { color-scheme:dark;", html)
         self.assertIn(".wall-chart .tick,.wall-chart .label,.wall-chart .value { font-size:12px; }", html)
