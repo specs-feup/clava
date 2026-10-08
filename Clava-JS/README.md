@@ -40,6 +40,14 @@ npm run build -w lara-framework/Lara-JS
 npm run build -w clava/Clava-JS
 ```
 
+If npm 11 reports that `java@0.18.0` scripts are unapproved, approve only that
+dependency from the workspace root, then build its native binding:
+
+```bash
+npm install-scripts approve java
+npm rebuild java
+```
+
 The `installDist` task synchronizes the complete ClavaWeaver distribution into `./clava/Clava-JS/java-binaries`. The generated directory is refreshed automatically, including when `installDist` is invoked directly, so do not copy or edit its contents manually. Local `npm pack` and `npm publish` also validate that `java-binaries` is a real, populated directory before creating a package.
 
 Install the package globally:
@@ -48,10 +56,17 @@ Install the package globally:
 npm install -g @specs-feup/clava
 ```
 
+For a global install, if npm 11 reports `java@0.18.0` scripts as unapproved,
+allow only that dependency:
+
+```bash
+npm install -g --allow-scripts=java @specs-feup/clava
+```
+
 It should now be available as a command in the terminal:
 
 ```bash
-npx clava classic <your CLI options, pass a non-existing flag, such as -dummy, to check the options>
+clava classic <your CLI options, pass a non-existing flag, such as -dummy, to check the options>
 ```
 
 If you want to reflect local changes in Clava-JS (or Lara-JS) in the installed command, use the `link` option:
@@ -65,19 +80,19 @@ npm link @specs-feup/clava
 You can execute Clava-JS by running the following on your terminal
 
 ```bash
-npx clava classic <scriptfile.js> -p "<c++ files or folders>"
+clava classic <scriptfile.js> -p "<c++ files or folders>"
 ```
 
 Additionally, if you would like to see the help menu
 
 ```bash
-npx clava --help
+clava --help
 ```
 
 or run in watch mode
 
 ```bash
-npx clava classic <scriptfile.js> -w <directory/file to watch> -c <clava config file>
+clava classic <scriptfile.js> -w <directory/file to watch> -c <clava config file>
 ```
 
 To create a Clava config file, launch the Java-based GUI:
@@ -92,7 +107,7 @@ You can get debugging information using a `DEBUG` environment variable.
 This variable is used by the [debug](https://www.npmjs.com/package/debug) module to determine what to expose.
 
 ```bash
-DEBUG="*" npx clava classic <scriptfile.js> <your CLI options>
+DEBUG="*" clava classic <scriptfile.js> <your CLI options>
 ```
 
 ## CMake

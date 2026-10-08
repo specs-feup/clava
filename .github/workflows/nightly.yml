@@ -202,9 +202,9 @@ jobs:
           cd clava/Clava-JS
           npm run test
 
-      # Only on ubuntu-latest
+      # Only on ubuntu-24.04
       - name: Publish JS
-        if: github.event_name == 'push' && github.ref == 'refs/heads/staging' && matrix.os == 'ubuntu-latest' && matrix.node-version == '25.x'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/staging' && matrix.os == 'ubuntu-24.04' && matrix.node-version == '25.x'
         run: | 
             cd clava/Clava-JS
             npm whoami

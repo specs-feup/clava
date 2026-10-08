@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "noEmit": true,
+    "noEmit": false,
     "module": "NodeNext",
     "declaration": true,
     "strict": true,
@@ -9,6 +9,8 @@
     "types": ["node", "vitest/globals"],
     "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "rootDir": ".",
+    "outDir": "dist"
   }
 }
