@@ -51,3 +51,21 @@ package-discovery and module-identity failures; the final source suites passed
 after the packaging corrections. Raw logs and JUnit reports are kept in the
 local archive identified by `final-canonical-20261008`; the JSON records their
 digests without embedding machine-local paths.
+
+## Published RC8 consumer checks, October 8
+
+`released-rc8-20261008.json` records validation against the published
+`v18.1.8_6-rc8` prerelease and its selected Linux x64 assets. The clean
+ClangAstParser check passed all 253 tests with four skips for direct native
+integration cases that require a native build sibling. All three tests that
+were previously skipped for unpublished resources ran and passed, including
+separate-JVM initialization, cache reuse, and the released AUTO-libc probe.
+Binding drift verification, all ten release-resolver tests, resource cleanup
+checks, and the normal JaCoCo gate passed. `ClavaWeaver installDist` also
+passed, and its installed parser JAR embeds the RC8 selector.
+
+The evidence records the manifest, executable, schema, descriptor, and include
+archive hashes, along with the validated extracted-cache key and JUnit, log,
+and JaCoCo digests. Raw output stays in the isolated local validation archive;
+the committed report contains no machine-local paths. The canonical selector
+and Lara engine worktree patch were preserved during this check.
