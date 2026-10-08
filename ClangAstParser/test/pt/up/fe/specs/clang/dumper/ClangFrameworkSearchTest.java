@@ -17,8 +17,10 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -40,6 +42,29 @@ class ClangFrameworkSearchTest {
                 ClangAstDumper.buildIncludeArguments(
                         List.of(fixture.frameworkRoot().toString(), fixture.bundledIncludeRoot().toString()),
                         List.of(fixture.customSystemRoot().toString())));
+    }
+
+    @Test
+    void automaticClangSearchSkipsWrongVersionsAndKeepsExplicitOverride() throws Exception {
+        boolean windows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win");
+        String executableName = windows ? "clang.exe" : "clang";
+        var firstPath = Files.createDirectories(tempFolder.resolve("path-first"));
+        var laterPath = Files.createDirectories(tempFolder.resolve("path-later"));
+        var wrongVersion = Files.writeString(firstPath.resolve(executableName), "clang version 17.0.0");
+        var clang18 = Files.writeString(laterPath.resolve(executableName), "clang version 18.1.0");
+        String pathValue = firstPath + File.pathSeparator + laterPath;
+        Predicate<Path> versionCheck = candidate -> {
+            try {
+                return isClang18Version(Files.readString(candidate));
+            } catch (java.io.IOException e) {
+                throw new java.io.UncheckedIOException(e);
+            }
+        };
+
+        assertEquals(clang18, findClang18(null, pathValue, windows, versionCheck));
+        assertNull(findClang18(null, firstPath.toString(), windows, versionCheck));
+        assertEquals(wrongVersion,
+                findClang18(wrongVersion.toString(), firstPath.toString(), windows, ignored -> false));
     }
 
     @Test
@@ -96,14 +121,18 @@ class ClangFrameworkSearchTest {
     }
 
     private static Path findClang18() {
-        var candidates = new ArrayList<Path>();
         String configured = System.getenv("CLANG_18");
-        if (configured != null && !configured.isBlank()) {
-            candidates.add(Path.of(configured));
-        }
-
         String path = System.getenv("PATH");
         boolean windows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win");
+        return findClang18(configured, path, windows, ClangFrameworkSearchTest::isClang18);
+    }
+
+    static Path findClang18(String configured, String path, boolean windows, Predicate<Path> isClang18) {
+        if (configured != null && !configured.isBlank()) {
+            return Path.of(configured);
+        }
+
+        var candidates = new ArrayList<Path>();
         List<String> exactNames = windows
                 ? List.of("clang-18.exe", "clang18.exe")
                 : List.of("clang-18", "clang18");
@@ -126,20 +155,31 @@ class ClangFrameworkSearchTest {
 
         return candidates.stream()
                 .filter(Files::isRegularFile)
-                .filter(Files::isExecutable)
+                .filter(isClang18)
                 .findFirst()
                 .orElse(null);
     }
 
-    private static boolean isClang18(Path clang) throws Exception {
-        var process = new ProcessBuilder(clang.toString(), "--version").redirectErrorStream(true).start();
-        if (!process.waitFor(10, java.util.concurrent.TimeUnit.SECONDS)) {
-            process.destroyForcibly();
+    private static boolean isClang18(Path clang) {
+        try {
+            var process = new ProcessBuilder(clang.toString(), "--version").redirectErrorStream(true).start();
+            if (!process.waitFor(10, java.util.concurrent.TimeUnit.SECONDS)) {
+                process.destroyForcibly();
+                return false;
+            }
+
+            var output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            return process.exitValue() == 0 && isClang18Version(output);
+        } catch (java.io.IOException e) {
+            return false;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             return false;
         }
+    }
 
-        var output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        return process.exitValue() == 0 && output.matches("(?s).*\\bversion 18(?:\\.|\\b).*");
+    private static boolean isClang18Version(String output) {
+        return output.matches("(?s).*\\bversion 18(?:\\.|\\b).*");
     }
 
     private record Fixture(Path frameworkRoot, Path bundledIncludeRoot, Path customSystemRoot,
