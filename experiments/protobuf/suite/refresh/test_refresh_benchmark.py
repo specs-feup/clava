@@ -7,6 +7,7 @@ import io
 import json
 import os
 from pathlib import Path
+import shutil
 import sys
 import tempfile
 import unittest
@@ -21,6 +22,7 @@ sys.modules[SPEC.name] = REFRESH
 SPEC.loader.exec_module(REFRESH)
 
 PROTOBUF_ROOT = Path(__file__).resolve().parents[2]
+CLAVA_ROOT = PROTOBUF_ROOT.parents[1]
 FIXTURE_ROOT = PROTOBUF_ROOT / "validation/evidence/benchmark-20261008-rc8"
 
 
@@ -44,6 +46,10 @@ def completed_bundle(root: Path) -> Path:
         REFRESH.COHORT_BASELINE["java_selected_test_sources"])
     runtime["sources"]["protobuf"]["javascript_test_sources"] = copy.deepcopy(
         REFRESH.COHORT_BASELINE["javascript_test_sources"])
+    js_overlay = REFRESH.support.expected_js_workload_overlay(
+        runtime["sources"]["protobuf"]["repositories"]["clava"]["revision"]
+    )
+    runtime["sources"]["protobuf"]["javascript_workload_overlay"] = copy.deepcopy(js_overlay)
     lara_config = REFRESH.PROTOBUF_ROOT.parents[2] / "lara-framework/Lara-JS/vitest/weaverVitestConfig.ts"
     config_sha = REFRESH.sha256_file(lara_config)
     runtime["js_vitest_defaults"] = {
@@ -117,6 +123,7 @@ def completed_bundle(root: Path) -> Path:
             "tag": runtime["selected_release"]["tag"],
             "native_repository_revision": repositories["clang-dumper"]["revision"],
         },
+        "isolated_overlays": {"javascript_workload": copy.deepcopy(js_overlay)},
     }
     write_json(run_dir / "snapshot-identity.json", snapshot_identity)
     write_json(run_dir / "status.json", {
@@ -160,6 +167,74 @@ MEMORY = load_memory_module()
 
 
 class RefreshWorkflowTests(unittest.TestCase):
+    def _copy_current_js_workload(self, target: Path) -> dict[str, bytes]:
+        baseline = REFRESH.COHORT_BASELINE["javascript_test_sources"]
+        original: dict[str, bytes] = {}
+        for relative in baseline:
+            contents = (CLAVA_ROOT / "Clava-JS" / relative).read_bytes()
+            destination = target / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(contents)
+            original[relative] = contents
+        return original
+
+    def test_pinned_js_workload_stages_only_owned_test_fixtures(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            snapshot_tests = root / "snapshot/clava/Clava-JS"
+            current = self._copy_current_js_workload(snapshot_tests)
+            implementation = snapshot_tests / "api/Joinpoints.ts"
+            implementation.parent.mkdir(parents=True, exist_ok=True)
+            implementation.write_text("current production implementation\n")
+            canonical_before = {
+                relative: (CLAVA_ROOT / "Clava-JS" / relative).read_bytes()
+                for relative in current
+            }
+            fixture_root = REFRESH.REFRESH_DIR / "workload-fixtures/clava-js"
+            fixture_before = {
+                relative: (fixture_root / relative).read_bytes()
+                for relative in current
+            }
+            revision = REFRESH.support.git(CLAVA_ROOT, "rev-parse", "HEAD")
+            overlay = REFRESH.support.stage_pinned_js_workload(snapshot_tests, revision)
+
+            self.assertEqual(overlay, REFRESH.support.expected_js_workload_overlay(revision))
+            self.assertEqual(REFRESH.support.js_test_sources(
+                snapshot_tests, REFRESH.support.load_js_file_orders(
+                    REFRESH.REFRESH_DIR / "js-file-orders.json")),
+                REFRESH.COHORT_BASELINE["javascript_test_sources"],
+            )
+            self.assertEqual(implementation.read_text(), "current production implementation\n")
+            self.assertEqual({relative: (CLAVA_ROOT / "Clava-JS" / relative).read_bytes()
+                              for relative in current}, canonical_before)
+            self.assertEqual({relative: (fixture_root / relative).read_bytes()
+                              for relative in current}, fixture_before)
+
+    def test_pinned_js_workload_rejects_unknown_current_and_fixture_bytes_before_writing(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            revision = REFRESH.support.git(CLAVA_ROOT, "rev-parse", "HEAD")
+            snapshot_tests = root / "snapshot/Clava-JS"
+            initial = self._copy_current_js_workload(snapshot_tests)
+            changed = "api/Issues.test.ts"
+            (snapshot_tests / changed).write_bytes(initial[changed] + b"// unknown drift\n")
+            before = {relative: (snapshot_tests / relative).read_bytes() for relative in initial}
+            with self.assertRaisesRegex(RuntimeError, "current JavaScript test source hash is unknown"):
+                REFRESH.support.stage_pinned_js_workload(snapshot_tests, revision)
+            self.assertEqual({relative: (snapshot_tests / relative).read_bytes()
+                              for relative in initial}, before)
+
+            snapshot_tests = root / "snapshot-with-bad-fixture/Clava-JS"
+            initial = self._copy_current_js_workload(snapshot_tests)
+            fixture_copy = root / "fixtures"
+            shutil.copytree(REFRESH.REFRESH_DIR / "workload-fixtures/clava-js", fixture_copy)
+            (fixture_copy / changed).write_bytes(b"unknown frozen fixture\n")
+            before = {relative: (snapshot_tests / relative).read_bytes() for relative in initial}
+            with self.assertRaisesRegex(RuntimeError, "fixture is missing or hash-mismatched"):
+                REFRESH.support.stage_pinned_js_workload(snapshot_tests, revision, fixture_copy)
+            self.assertEqual({relative: (snapshot_tests / relative).read_bytes()
+                              for relative in initial}, before)
+
     def test_memory_java_executable_is_resolved_through_symlinks(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -266,6 +341,17 @@ class RefreshWorkflowTests(unittest.TestCase):
             source_hashes[next(iter(source_hashes))] = "0" * 64
             write_json(results_path, runtime)
             with self.assertRaisesRegex(ValueError, "Java test source hashes"):
+                REFRESH.validate_run_bundle(run_dir)
+
+    def test_runtime_javascript_workload_overlay_provenance_is_pinned(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            run_dir = completed_bundle(Path(temp))
+            results_path = run_dir / "runtime/results.json"
+            runtime = json.loads(results_path.read_text())
+            file_record = runtime["sources"]["protobuf"]["javascript_workload_overlay"]["files"]
+            file_record["api/LegacyIntegrationTests - CXX.test.ts"]["original_current_sha256"] = "0" * 64
+            write_json(results_path, runtime)
+            with self.assertRaisesRegex(ValueError, "overlay provenance"):
                 REFRESH.validate_run_bundle(run_dir)
 
     def test_runtime_observations_are_checked_before_render_and_publish(self) -> None:

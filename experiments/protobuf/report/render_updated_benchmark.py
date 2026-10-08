@@ -43,6 +43,8 @@ def _load_module(name: str, path: Path) -> Any:
 
 
 _REPORT_DIR = Path(__file__).resolve().parents[2] / "protocol-comparison" / "report"
+_REFRESH_DIR = Path(__file__).resolve().parents[1] / "suite" / "refresh"
+_REFRESH_SUPPORT = _load_module("_protobuf_report_refresh_support", _REFRESH_DIR / "support.py")
 _APP_CHARTS = _load_module("_protobuf_report_app_charts", _REPORT_DIR / "render_app_build.py")
 if str(_REPORT_DIR) not in sys.path:
     sys.path.insert(0, str(_REPORT_DIR))
@@ -402,6 +404,12 @@ def validate_release_provenance(
     native_repository = protobuf.get("native_repository")
     if not isinstance(native_repository, dict) or native_repository.get("revision") != revisions["clang-dumper"]:
         _fail("native source revision disagrees with the clang-dumper revision")
+    try:
+        workload_overlay = _REFRESH_SUPPORT.expected_js_workload_overlay(revisions["Clava"])
+    except (RuntimeError, KeyError) as error:
+        _fail(f"JavaScript test workload source policy is invalid: {error}")
+    if protobuf.get("javascript_workload_overlay") != workload_overlay:
+        _fail("JavaScript test workload provenance differs from the pinned source policy")
 
     return {
         "revisions": revisions,
@@ -414,6 +422,7 @@ def validate_release_provenance(
         "clava_source_tree_sha256": _sha256(
             protobuf.get("clang_ast_parser_source_tree_sha256"), "Clava parser source tree hash"
         ),
+        "javascript_workload_overlay": workload_overlay,
     }
 
 
@@ -446,6 +455,45 @@ def _provenance_section(provenance: dict[str, Any]) -> str:
         'and native tool hash are checked against that measurement record.</p>'
         '<table class="sources"><thead><tr><th>Component</th><th>Identifier</th><th>Meaning</th></tr></thead>'
         f'<tbody>{"".join(rows)}</tbody></table></details>'
+    )
+
+
+def _javascript_workload_section(provenance: dict[str, Any]) -> str:
+    overlay = provenance["javascript_workload_overlay"]
+    rows = []
+    changed = []
+    for relative, hashes in overlay["files"].items():
+        current_hash = hashes["original_current_sha256"]
+        staged_hash = hashes["staged_sha256"]
+        if current_hash != staged_hash:
+            changed.append(relative)
+        rows.append(
+            f'<tr><th scope="row"><code>{html.escape(relative)}</code></th>'
+            f'<td><code>{html.escape(current_hash)}</code></td>'
+            f'<td><code>{html.escape(staged_hash)}</code></td></tr>'
+        )
+    if changed:
+        summary = (
+            "The current snapshot has different test bytes for "
+            + ", ".join(f"<code>{html.escape(path)}</code>" for path in changed)
+            + ". The benchmark staged the frozen test fixture into its isolated snapshot. "
+              "The measured Clava implementation and generated runtime artifacts remain from "
+              "the current Clava revision listed above."
+        )
+    else:
+        summary = (
+            "The current snapshot's selected test bytes already match the frozen fixtures. "
+            "The benchmark still staged and checked all selected files in its isolated snapshot."
+        )
+    return (
+        '<details><summary>JavaScript test workload provenance</summary>'
+        f'<p>{summary}</p>'
+        f'<p>All {overlay["file_count"]} selected test files were staged from frozen workload revision '
+        f'<code>{html.escape(overlay["frozen_source_revision"])}</code>. '
+        f'The fixture manifest SHA-256 is <code>{html.escape(overlay["staged_manifest_sha256"])}</code>.</p>'
+        '<table class="sources"><thead><tr><th>Test file</th><th>Current source SHA-256</th>'
+        '<th>Measured staged SHA-256</th></tr></thead><tbody>'
+        f'{"".join(rows)}</tbody></table></details>'
     )
 
 
@@ -797,6 +845,7 @@ summary {{ cursor:pointer; color:var(--report-ink); font-weight:650; }} code {{ 
 </section>
 {_memory_section(memory_payload)}
 {_provenance_section(provenance) if provenance is not None else ''}
+{_javascript_workload_section(provenance) if provenance is not None else ''}
 <details><summary>Measurement notes</summary>
 <p>The App timer starts at the three-argument <code>ParallelCodeParser.parse</code> entry and stops after the final App is returned. It includes native parsing and protobuf or text reading, cross-file linking, postprocessing, parser-state release, and final TextParser/text transforms. Parser/context construction before entry, suite setup and assertions, printing, and syntax-only validation are excluded. Natural garbage collection is included, with no forced-GC policy override, coverage agents, or execution-info logging.</p>
 <p>The Java suite uses its original 116 test identities, one worker, and a 512 MiB heap. The Clava-JS suite retains 164 selected test identities, uses one Vitest worker with file parallelism and isolation disabled, and records the actual per-run test counts above. Its worker JVM used the default heap limit, observed at about 7.55 GiB. App timing covers {updated["app_calls_by_suite"]["java"]} Java and {updated["app_calls_by_suite"]["clava-js"]} Clava-JS timed calls. Syntax-only calls are excluded from App time ({updated["syntax_calls_by_suite"]["java"]} Java and {updated["syntax_calls_by_suite"]["clava-js"]} Clava-JS).</p>

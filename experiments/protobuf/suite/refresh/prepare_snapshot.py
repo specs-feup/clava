@@ -15,6 +15,10 @@ import subprocess
 import sys
 import uuid
 
+if str(Path(__file__).resolve().parent) not in sys.path:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+import support
+
 
 RELEASE_TAG_DEFAULT = "v18.1.8_6-rc8"
 NATIVE_RELEASE_COMMIT = "e874debc111ec105fa5d1efa17ecd97300613178"
@@ -152,6 +156,9 @@ def prepare_snapshot(workspace: Path, output: Path, assets_root: Path,
             worktrees.append((source, destination))
 
         clava = output / "clava"
+        js_workload_overlay = support.stage_pinned_js_workload(
+            clava / "Clava-JS", str(sources["clava"]["revision"]),
+        )
         tag_file = clava / "ClangAstParser/clang-dumper-release.tag"
         original_committed_tag = run(["git", "-C", str(clava), "show", f"HEAD:{tag_file.relative_to(clava).as_posix()}"])
         tag_file.write_text(release_tag + "\n", encoding="utf-8")
@@ -230,6 +237,7 @@ def prepare_snapshot(workspace: Path, output: Path, assets_root: Path,
                     "sha256": lara_overlay_hash,
                     "copied_from_working_tree": copied_lara_overlay,
                 },
+                "javascript_workload": js_workload_overlay,
             },
             "published_release": {
                 "tag": release_tag,

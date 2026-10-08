@@ -22,6 +22,7 @@ COMPILE_TASK_NAMES = {
 JAVA_IDS_SHA256 = "67741eb11b38882b68c51b7e496e9cb82cd9ed9bf4539168208ea111e23681ff"
 JS_FILE_ORDERS_SHA256 = "c15c573b534ad291ebc94fcebbd0568c56def4cc78760ed951fa0da1dbfc335b"
 COHORT_BASELINE_SHA256 = "b1036cab6f893d0a00361f193b7435ac16259b8ab1c2853ee97e9cf746bd52b9"
+JS_WORKLOAD_POLICY_SHA256 = "1b0daec3d4d5edf5e5976f984951042125e4c4638af3a134a5df2e60126624cd"
 MEMORY_WORKLOADS = (
     {"key": "nas-lu", "relative_source": "c/bench/nas_lu.c", "standard": "c11",
      "expected_sha256": "26409fb2ace4dbb9e350b2990199c6b38f91814797bb93e8ef2770f36a121cc8"},
@@ -81,6 +82,94 @@ def js_test_sources(clava_js_root: Path, orders: dict[str, list[str]]) -> dict[s
     if set(files) != JS_FILE_SET:
         raise RuntimeError("JavaScript source manifest does not match the pinned ordered test cohort")
     return {relative: sha256_file(clava_js_root / relative) for relative in files}
+
+
+def load_js_workload_policy(path: Path | None = None) -> dict[str, Any]:
+    path = path or Path(__file__).with_name("js-workload-source-policy.json")
+    if sha256_file(path) != JS_WORKLOAD_POLICY_SHA256:
+        raise RuntimeError("pinned JavaScript workload source policy hash changed")
+    policy = json.loads(path.read_text(encoding="utf-8"))
+    baseline = load_cohort_baseline()
+    if (policy.get("schema_version") != 1
+            or not isinstance(policy.get("frozen_source_revision"), str)
+            or not re.fullmatch(r"[0-9a-f]{40}", policy["frozen_source_revision"])
+            or set(policy.get("current_source_sha256", {})) != set(baseline["javascript_test_sources"])):
+        raise RuntimeError("pinned JavaScript workload source policy has an invalid cohort")
+    for relative, current_hash in policy["current_source_sha256"].items():
+        if not isinstance(current_hash, str) or not re.fullmatch(r"[0-9a-f]{64}", current_hash):
+            raise RuntimeError(f"pinned current JavaScript test hash is malformed: {relative}")
+    return policy
+
+
+def expected_js_workload_overlay(current_source_revision: str) -> dict[str, Any]:
+    if not isinstance(current_source_revision, str) or not re.fullmatch(r"[0-9a-f]{40}", current_source_revision):
+        raise RuntimeError("current Clava source revision must be a full commit id")
+    baseline = load_cohort_baseline()
+    policy = load_js_workload_policy()
+    files = {
+        relative: {
+            "original_current_sha256": policy["current_source_sha256"][relative],
+            "frozen_sha256": frozen_hash,
+            "staged_sha256": frozen_hash,
+        }
+        for relative, frozen_hash in sorted(baseline["javascript_test_sources"].items())
+    }
+    return {
+        "applied_to": "isolated snapshot Clava-JS test tree",
+        "frozen_source_revision": policy["frozen_source_revision"],
+        "current_source_revision": current_source_revision,
+        "policy_sha256": JS_WORKLOAD_POLICY_SHA256,
+        "file_count": len(files),
+        "staged_manifest_sha256": digest(baseline["javascript_test_sources"]),
+        "files": files,
+    }
+
+
+def stage_pinned_js_workload(clava_js_root: Path, current_source_revision: str,
+                            fixture_root: Path | None = None) -> dict[str, Any]:
+    """Stage the owned, hash-pinned JavaScript tests into an isolated Clava snapshot."""
+    clava_js_root = clava_js_root.expanduser().resolve()
+    fixture_root = (fixture_root or Path(__file__).with_name("workload-fixtures") / "clava-js").resolve()
+    baseline = load_cohort_baseline()
+    policy = load_js_workload_policy()
+    overlay = expected_js_workload_overlay(current_source_revision)
+
+    staged_bytes: dict[str, bytes] = {}
+    for relative, frozen_hash in sorted(baseline["javascript_test_sources"].items()):
+        source = clava_js_root / relative
+        fixture = fixture_root / relative
+        if not source.is_file():
+            raise RuntimeError(f"selected JavaScript test source is missing: {relative}")
+        actual_current_hash = sha256_file(source)
+        expected_current_hash = policy["current_source_sha256"][relative]
+        if actual_current_hash != expected_current_hash:
+            raise RuntimeError(f"current JavaScript test source hash is unknown: {relative}")
+        if not fixture.is_file() or sha256_file(fixture) != frozen_hash:
+            raise RuntimeError(f"frozen JavaScript test fixture is missing or hash-mismatched: {relative}")
+        staged_bytes[relative] = fixture.read_bytes()
+
+    for relative, contents in staged_bytes.items():
+        (clava_js_root / relative).write_bytes(contents)
+    actual_staged = js_test_sources(clava_js_root, load_js_file_orders(
+        Path(__file__).with_name("js-file-orders.json")))
+    if actual_staged != baseline["javascript_test_sources"]:
+        raise RuntimeError("staged JavaScript test sources differ from the frozen cohort")
+    if overlay["file_count"] != len(JS_FILE_SET):
+        raise RuntimeError("JavaScript workload overlay does not cover the complete pinned file set")
+    return overlay
+
+
+def validate_js_workload_snapshot(clava_js_root: Path, overlay: Any,
+                                  current_source_revision: str) -> dict[str, Any]:
+    expected = expected_js_workload_overlay(current_source_revision)
+    if overlay != expected:
+        raise RuntimeError("snapshot JavaScript workload overlay provenance differs from the pinned policy")
+    baseline = load_cohort_baseline()
+    orders = load_js_file_orders(Path(__file__).with_name("js-file-orders.json"))
+    actual = js_test_sources(clava_js_root, orders)
+    if actual != baseline["javascript_test_sources"]:
+        raise RuntimeError("snapshot JavaScript test sources do not match the frozen cohort")
+    return expected
 
 
 def tree_manifest(root: Path) -> dict[str, str]:

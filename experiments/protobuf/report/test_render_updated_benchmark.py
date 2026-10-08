@@ -82,6 +82,7 @@ def fixture_updated():
         and asset.get("arch") == "x64"
     )
     native_sha = selected_tool["sha256"]
+    clava_revision = f"{1:040x}"
     return {
         "status": "complete", "created_utc": "2026-10-07T12:00:00Z",
         "completed_utc": "2026-10-07T13:00:00+00:00", "observations": observations,
@@ -98,6 +99,9 @@ def fixture_updated():
             },
             "native_repository": {"revision": f"{4:040x}"},
             "clang_ast_parser_source_tree_sha256": "a" * 64,
+            "javascript_workload_overlay": REPORT._REFRESH_SUPPORT.expected_js_workload_overlay(
+                clava_revision
+            ),
         }},
     }
 
@@ -200,6 +204,9 @@ class UpdatedReportTest(unittest.TestCase):
         report = REPORT.render_report(fixture_prior(), updated, release_manifest=manifest,
                                       release_manifest_sha256=manifest_sha)
         self.assertIn("Runtime source and wire provenance", report)
+        self.assertIn("JavaScript test workload provenance", report)
+        self.assertIn("9b588d48ae36b0bfe60eb4fe7748e0116083005f", report)
+        self.assertIn("api/LegacyIntegrationTests - CXX.test.ts", report)
         self.assertIn("clang-dumper-ast-wire", report)
         self.assertIn("b" * 64, report)
         self.assertIn("c" * 64, report)
@@ -219,6 +226,16 @@ class UpdatedReportTest(unittest.TestCase):
         ).hexdigest()
         with self.assertRaisesRegex(ValueError, "schema hash does not match"):
             REPORT.validate_release_provenance(updated, mismatch, hashlib.sha256(mismatch_bytes).hexdigest())
+
+    def test_release_provenance_rejects_unknown_javascript_test_source_hashes(self):
+        updated = fixture_updated()
+        manifest = fixture_release_manifest()
+        manifest_sha = hashlib.sha256(json.dumps(manifest, separators=(",", ":")).encode()).hexdigest()
+        updated["sources"]["protobuf"]["selected_release"]["manifest_sha256"] = manifest_sha
+        overlay = updated["sources"]["protobuf"]["javascript_workload_overlay"]
+        overlay["files"]["api/LegacyIntegrationTests - CXX.test.ts"]["original_current_sha256"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "test workload provenance"):
+            REPORT.validate_release_provenance(updated, manifest, manifest_sha)
 
     def test_release_provenance_accepts_a_single_tool_local_manifest(self):
         updated = fixture_updated()

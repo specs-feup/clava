@@ -181,6 +181,10 @@ def validate_runtime_contract(runtime: dict[str, Any]) -> None:
         raise ValueError("runtime Java test fixtures differ from the frozen cohort")
     if source.get("javascript_test_sources") != COHORT_BASELINE["javascript_test_sources"]:
         raise ValueError("runtime JavaScript test source hashes differ from the frozen cohort")
+    clava_revision = source.get("repositories", {}).get("clava", {}).get("revision")
+    expected_js_overlay = support.expected_js_workload_overlay(clava_revision)
+    if source.get("javascript_workload_overlay") != expected_js_overlay:
+        raise ValueError("runtime JavaScript workload overlay provenance differs from the pinned policy")
     js_defaults = runtime.get("js_vitest_defaults", {})
     for key, expected_value in (("isolate", False), ("fileParallelism", False), ("maxWorkers", 1)):
         if js_defaults.get(key) != expected_value:
@@ -505,6 +509,9 @@ def validate_run_bundle(run_dir: Path, prior_path: Path = FROZEN_CONTROLS,
     if runtime.get("driver_sha256") != sha256_file(REFRESH_DIR / "collect_runtime.py"):
         raise ValueError("runtime driver hash does not match this checked-in workflow")
     validate_runtime_contract(runtime)
+    if (snapshot_identity.get("isolated_overlays", {}).get("javascript_workload")
+            != runtime.get("sources", {}).get("protobuf", {}).get("javascript_workload_overlay")):
+        raise ValueError("snapshot and runtime JavaScript workload overlay provenance differ")
     if runtime.get("selected_release", {}).get("tag") != status.get("release_tag"):
         raise ValueError("runtime release selector does not match collection status")
     expected_revisions = {

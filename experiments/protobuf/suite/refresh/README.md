@@ -14,6 +14,12 @@ their hashes, sets the release selector only in the new Clava worktree, and
 uses the verified published Linux x64 tool and protocol assets. It also stages
 the checked-in workspace `package.json` so npm can resolve the Clava and Lara
 workspaces outside the original checkout; the staged manifest hash is recorded.
+The selected JavaScript tests come from checked-in workload fixtures whose
+hashes match the frozen cohort. Preparation checks every current test file
+against the pinned source policy, stages only those test files in the isolated
+Clava worktree, and records each current and staged hash with both source
+revisions. The production implementation and generated packages are built
+from the current Clava snapshot.
 
 ```sh
 python3 experiments/protobuf/suite/refresh/refresh_benchmark.py prepare \
@@ -89,7 +95,8 @@ memory evidence from the same isolated snapshot.
 - JavaScript uses the frozen 164-test suite, 158 passes, 6 skips, 170 App
   calls, and 130 syntax-only calls. App and wall runs use the checked-in
   original file orders, `isolate: false`, no file parallelism, and one Vitest
-  worker.
+  worker. Its nine selected test files are staged from pinned fixture bytes;
+  unknown current or fixture hashes fail before collection.
 - Each suite has direct, cold, and warm cache modes with four repetitions for
   App construction and separate uninstrumented suite wall time. The matrix
   contains 48 timed rows after identity and cache preflight.

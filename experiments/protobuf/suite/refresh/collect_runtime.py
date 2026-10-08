@@ -45,6 +45,10 @@ def load(name,p):
  sp=importlib.util.spec_from_file_location(name,p);m=importlib.util.module_from_spec(sp);sys.modules[name]=m;sp.loader.exec_module(m);return m
 sys.path.insert(0,str(P));a=load('protobuf_refresh_app',P/'app-build/run_app_build_matrix.py');b=load('protobuf_refresh_overlay',P/'app-build/build_overlay.py');support=load('protobuf_refresh_support',Path(__file__).with_name('support.py'));comparison=a.comparison
 cohort_baseline=support.load_cohort_baseline(Path(__file__).with_name('cohort-baseline.json'))
+snapshot_identity=json.loads((ROOT/'snapshot-identity.json').read_text())
+clava_revision=snapshot_identity.get('sources',{}).get('clava',{}).get('revision')
+js_workload_overlay=snapshot_identity.get('isolated_overlays',{}).get('javascript_workload')
+support.validate_js_workload_snapshot(CL/'Clava-JS',js_workload_overlay,clava_revision)
 execute_source=inspect.getsource(a.execute_cell)
 native_override='        if stage["key"] == "protobuf":\n            command += [f"-PclangDumperRoot={stage[\'native_root\']}"]\n'
 if execute_source.count(native_override)!=1: raise RuntimeError('shared App runner native-root selector changed; refusing an unreviewed benchmark command')
@@ -160,6 +164,7 @@ for key,root in roots.items():
  stages[key]=st
  source_snapshot=support.stage_snapshot(key,cl)
  source_snapshot['selected_release'].update({'tag':RELEASE_TAG,'manifest_sha256':hashlib.sha256(manifest_bytes).hexdigest(),'tool_sha256':st['toolsha'],'tool_asset':tool_asset})
+ source_snapshot['javascript_workload_overlay']=js_workload_overlay
  record['sources'][key]=source_snapshot
  record['sources'][key]['clava_js_source_sha256']=tracked_tree_sha256(cl,'Clava-JS');record['sources'][key]['lara_js_source_sha256']=tracked_tree_sha256(ROOT/'lara-framework','Lara-JS');record['sources'][key]['validation_probe_sha256']=a.sha256_file(cl/'experiments/protobuf/validation/java/ValidationProbe.java')
  record['sources'][key]['native_repository']=support.git_snapshot(st['native_root'])
