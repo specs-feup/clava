@@ -104,6 +104,57 @@
       },
       "installed_clang_ast_parser_jar_sha256": "5405f71b2c56b25f6772f834b71d729ed6d131e635165cbb08abba795c9406e4",
       "embedded_release_selector": "v18.1.8_6-rc8"
+    },
+    "clava_js_rc8_nightly_ci_triage": {
+      "workflow_run": "https://github.com/specs-feup/clava/actions/runs/37782392551",
+      "workflow_head_sha": "9b588d48ae36b0bfe60eb4fe7748e0116083005f",
+      "status_at_triage": "in_progress; Windows Node 25 job had not completed",
+      "total_tests_per_full_js_job": 164,
+      "failed_jobs": [
+        {
+          "job": "https://github.com/specs-feup/clava/actions/runs/37782392551/job/113339790410",
+          "platform": "ubuntu-24.04, Node 24",
+          "tests": { "passed": 161, "failed": 1, "skipped": 2 },
+          "failure": "CudaTest > Cuda exceeded the existing 5000 ms Vitest timeout; the log reports 8606 ms for the test. CudaMatrixMul and CudaQuery passed."
+        },
+        {
+          "job": "https://github.com/specs-feup/clava/actions/runs/37782392551/job/113339790540",
+          "platform": "ubuntu-24.04, Node 25",
+          "tests": { "passed": 161, "failed": 1, "skipped": 2 },
+          "failure": "CudaTest > Cuda exceeded the existing 5000 ms Vitest timeout during cold resource preparation. CudaMatrixMul and CudaQuery passed."
+        },
+        {
+          "job": "https://github.com/specs-feup/clava/actions/runs/37782392551/job/113339790549",
+          "platform": "macos-latest, Node 24",
+          "tests": { "passed": 159, "failed": 3, "skipped": 2 },
+          "failure": "All three CudaTest cases failed because the Java CUDA resource installer found no compatible platform key for mac_os (aarch64); required package keys are linux-ppc64le, linux-sbsa, linux-x86_64, and windows-x86_64."
+        },
+        {
+          "job": "https://github.com/specs-feup/clava/actions/runs/37782392551/job/113339790565",
+          "platform": "macos-latest, Node 25",
+          "tests": { "passed": 159, "failed": 3, "skipped": 2 },
+          "failure": "All three CudaTest cases failed because the Java CUDA resource installer found no compatible platform key for mac_os (aarch64); required package keys are linux-ppc64le, linux-sbsa, linux-x86_64, and windows-x86_64."
+        },
+        {
+          "job": "https://github.com/specs-feup/clava/actions/runs/37782392551/job/113339790655",
+          "platform": "windows-2022, Node 24",
+          "tests": { "passed": 156, "failed": 1, "skipped": 7 },
+          "failure": "CxxTest > Setters differed from its Windows expected output only in the std::chrono clock name; recorded for separate fixture triage."
+        }
+      ],
+      "log_source": "The linked GitHub Actions job pages retain the raw logs; failures above are from those logs. The workflow was run before the CUDA test fix and is not a green validation of the changed source."
+    },
+    "clava_js_cuda_fixture_local_followup": {
+      "source_file": "Clava-JS/api/LegacyIntegrationTests - CXX.test.ts",
+      "source_file_git_blob": "eed131a618205a9b549512a232cd899a134a4049",
+      "command": "node ../../node_modules/vitest/vitest.mjs run --config vitest.config.ts 'api/LegacyIntegrationTests - CXX.test.ts' -t CudaTest",
+      "result": "passed",
+      "runtime": "Linux x86_64",
+      "tests": { "passed": 3, "filtered_or_skipped": 87, "total_in_file": 90 },
+      "duration_seconds": 3.39,
+      "typecheck_command": "../../node_modules/.bin/tsc --noEmit",
+      "typecheck_result": "passed",
+      "notes": "The capability check is memoized in a bounded beforeEach hook, so filtered and Windows-skipped runs do not query the NVIDIA manifest. Unsupported hosts skip only the three executed CUDA cases. This focused local check does not replace a fresh full CI run."
     }
   },
   "verified_resource_cache": {

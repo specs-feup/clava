@@ -1,5 +1,6 @@
 import JavaInterop from "@specs-feup/lara/api/lara/JavaInterop.ts";
 import IdGenerator from "@specs-feup/lara/api/lara/util/IdGenerator.js";
+import JavaTypes from "@specs-feup/lara/api/lara/util/JavaTypes.ts";
 import PrintOnce from "@specs-feup/lara/api/lara/util/PrintOnce.js";
 import path from "path";
 import { ClavaLegacyTester } from "../vitest/ClavaLegacyTester.ts";
@@ -539,6 +540,19 @@ describe("CxxApiTest", () => {
 });
 
 (isWindows ? describe.skip : describe)("CudaTest", () => {
+    const cudaTestTimeout = 60_000;
+    let supportsBuiltinCuda: boolean | undefined;
+
+    beforeEach(({ skip }) => {
+        supportsBuiltinCuda ??= JavaTypes.getType(
+            "pt.up.fe.specs.clang.ClangResources"
+        ).isBuiltinCudaSupported();
+
+        if (!supportsBuiltinCuda) {
+            skip("Built-in CUDA resources are unavailable for this host");
+        }
+    }, cudaTestTimeout);
+
     function newTester() {
         const cudaTester = new ClavaLegacyTester(
             path.resolve("../ClavaWeaver/resources/clava/test/weaver/"),
@@ -556,13 +570,13 @@ describe("CxxApiTest", () => {
 
     it("Cuda", async () => {
         await newTester().test("Cuda.js", "atomicAdd.cu");
-    });
+    }, cudaTestTimeout);
 
     it("CudaMatrixMul", async () => {
         await newTester().test("CudaMatrixMul.js", "mult_matrix.cu");
-    });
+    }, cudaTestTimeout);
 
     it("CudaQuery", async () => {
         await newTester().test("CudaQuery.js", "sample.cu");
-    });
+    }, cudaTestTimeout);
 });
