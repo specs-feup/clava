@@ -193,6 +193,8 @@ def validate_runtime_contract(runtime: dict[str, Any]) -> None:
     for key, expected_value in (("isolate", False), ("fileParallelism", False), ("maxWorkers", 1)):
         if js_defaults.get(key) != expected_value:
             raise ValueError(f"JavaScript Vitest {key} differs from its pinned default")
+    if js_defaults.get("config_loader") != "runner":
+        raise ValueError("JavaScript Vitest generated-config loader differs from the pinned runner setting")
     for key in ("source_sha256", "emitted_sha256"):
         if not isinstance(js_defaults.get(key), str) or not re.fullmatch(r"[0-9a-f]{64}", js_defaults[key]):
             raise ValueError(f"JavaScript Vitest {key} is missing")
@@ -223,6 +225,8 @@ def validate_runtime_contract(runtime: dict[str, Any]) -> None:
             suite = row.get("suite")
             if suite not in COHORT_BASELINE["suites"]:
                 raise ValueError(f"runtime {field} contains an unknown test suite")
+            if suite == "clava-js":
+                _validate_vitest_runner_command(row)
             expected_suite = COHORT_BASELINE["suites"][suite]
             if row.get("test_identity_sha256") != expected_suite["test_identity_sha256"]:
                 raise ValueError(f"runtime {field} test identities differ from the pinned cohort")
@@ -262,6 +266,8 @@ def validate_runtime_contract(runtime: dict[str, Any]) -> None:
             raise ValueError(f"runtime observation failed or is not measured: {key}")
         if suite not in COHORT_BASELINE["suites"] or phase not in ("app", "wall"):
             raise ValueError(f"runtime observation has an unknown cohort identity: {key}")
+        if suite == "clava-js":
+            _validate_vitest_runner_command(row)
         _validate_test_counts(row, suite)
         if row.get("test_identity_sha256") != COHORT_BASELINE["suites"][suite]["test_identity_sha256"]:
             raise ValueError(f"runtime observation test identities differ from the pinned cohort: {key}")
@@ -303,6 +309,20 @@ def validate_runtime_contract(runtime: dict[str, Any]) -> None:
         missing = sorted(expected - actual)
         extra = sorted(actual - expected)
         raise ValueError(f"runtime observation matrix differs from contract; missing={missing}, extra={extra}")
+
+
+def _validate_vitest_runner_command(row: dict[str, Any]) -> None:
+    run_dir = Path(row.get("run_dir", ""))
+    command_path = run_dir / "command.json"
+    if not command_path.is_file():
+        raise ValueError("JavaScript Vitest command record is missing")
+    command = load_json(command_path).get("argv", [])
+    if not isinstance(command, list) or any(not isinstance(argument, str) for argument in command):
+        raise ValueError("JavaScript Vitest command record is malformed")
+    for index, argument in enumerate(command):
+        if argument == "--configLoader" and command[index + 1:index + 2] == ["runner"]:
+            return
+    raise ValueError("JavaScript Vitest command does not use the pinned runner config loader")
 
 
 def _validate_app_observation(row: dict[str, Any], suite: str,

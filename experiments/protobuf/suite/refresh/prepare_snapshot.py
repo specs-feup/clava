@@ -15,6 +15,9 @@ import subprocess
 import sys
 import uuid
 
+# This command imports helpers from the canonical checkout. Keep it read-only.
+sys.dont_write_bytecode = True
+
 if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 import support
@@ -157,7 +160,7 @@ def prepare_snapshot(workspace: Path, output: Path, assets_root: Path,
 
         clava = output / "clava"
         js_workload_overlay = support.stage_pinned_js_workload(
-            clava / "Clava-JS", str(sources["clava"]["revision"]),
+            clava / "Clava-JS", str(sources["clava"]["revision"]), workspace / "clava",
         )
         tag_file = clava / "ClangAstParser/clang-dumper-release.tag"
         original_committed_tag = run(["git", "-C", str(clava), "show", f"HEAD:{tag_file.relative_to(clava).as_posix()}"])

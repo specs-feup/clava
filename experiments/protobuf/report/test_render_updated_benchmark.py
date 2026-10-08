@@ -86,6 +86,7 @@ def fixture_updated():
     return {
         "status": "complete", "created_utc": "2026-10-07T12:00:00Z",
         "completed_utc": "2026-10-07T13:00:00+00:00", "observations": observations,
+        "js_vitest_defaults": {"config_loader": "runner"},
         "native_sha256": {"protobuf": native_sha},
         "sources": {"protobuf": {
             "selected_release": {
@@ -191,10 +192,31 @@ class UpdatedReportTest(unittest.TestCase):
         self.assertEqual(4, html.count("<svg"))
         self.assertIn("All cache sections share one non-zero time axis", html)
         self.assertIn("updated Protobuf session", html)
+        self.assertIn("JavaScript test workload provenance", html)
+        self.assertIn("Vitest's runner config loader", html)
+        self.assertIn("9b588d48ae36b0bfe60eb4fe7748e0116083005f", html)
         self.assertNotIn("paired percentage", html.lower())
         self.assertNotIn("file://", html.lower())
         self.assertNotIn("/home/private", html)
         self.assertNotIn("/tmp/private", html)
+
+    def test_standalone_report_requires_pinned_javascript_workload_provenance(self):
+        missing = fixture_updated()
+        del missing["sources"]["protobuf"]["javascript_workload_overlay"]
+        with self.assertRaisesRegex(ValueError, "test workload provenance"):
+            REPORT.render_report(fixture_prior(), missing)
+
+    def test_report_requires_pinned_vitest_config_loader(self):
+        updated = fixture_updated()
+        updated.pop("js_vitest_defaults")
+        with self.assertRaisesRegex(ValueError, "runner config loader"):
+            REPORT.render_report(fixture_prior(), updated)
+
+        forged = fixture_updated()
+        forged["sources"]["protobuf"]["javascript_workload_overlay"]["files"][
+            "api/LegacyIntegrationTests - CXX.test.ts"]["original_current_sha256"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "test workload provenance"):
+            REPORT.render_report(fixture_prior(), forged)
 
     def test_release_provenance_is_matched_and_renders_only_safe_hashes(self):
         updated = fixture_updated()

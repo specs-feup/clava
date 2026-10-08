@@ -95,7 +95,9 @@ memory evidence from the same isolated snapshot.
 - JavaScript uses the frozen 164-test suite, 158 passes, 6 skips, 170 App
   calls, and 130 syntax-only calls. App and wall runs use the checked-in
   original file orders, `isolate: false`, no file parallelism, and one Vitest
-  worker. Its nine selected test files are staged from pinned fixture bytes;
+  worker. Generated Vitest configs use the `runner` config loader in both
+  phases, and the runtime validator checks the recorded command. Its nine
+  selected test files are staged from pinned fixture bytes;
   unknown current or fixture hashes fail before collection.
 - Each suite has direct, cold, and warm cache modes with four repetitions for
   App construction and separate uninstrumented suite wall time. The matrix

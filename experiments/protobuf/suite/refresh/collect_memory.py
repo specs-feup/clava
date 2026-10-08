@@ -11,6 +11,10 @@ import shutil
 import subprocess
 import sys
 import time
+
+# This command imports helpers from the canonical checkout. Keep it read-only.
+sys.dont_write_bytecode = True
+
 from support import MEMORY_WORKLOADS, normalize_memory_workload
 
 MANIFEST_NAME = "clang-dumper-release-manifest.json"

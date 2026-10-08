@@ -108,6 +108,9 @@ def validate_updated_manifest(payload: Any) -> dict[str, Any]:
     completed = _utc(payload.get("completed_utc"), "completed_utc")
     if completed < created:
         _fail("completed_utc precedes created_utc")
+    js_defaults = payload.get("js_vitest_defaults")
+    if not isinstance(js_defaults, dict) or js_defaults.get("config_loader") != "runner":
+        _fail("updated results need the pinned Vitest runner config loader")
 
     observations = payload.get("observations")
     if not isinstance(observations, list) or len(observations) != EXPECTED_OBSERVATIONS:
@@ -313,6 +316,23 @@ def _sha256(value: Any, label: str) -> str:
     return value
 
 
+def validate_javascript_workload_provenance(updated_payload: Any) -> dict[str, Any]:
+    if not isinstance(updated_payload, dict):
+        _fail("JavaScript workload provenance needs a results object")
+    sources = updated_payload.get("sources")
+    protobuf = sources.get("protobuf") if isinstance(sources, dict) else None
+    repositories = protobuf.get("repositories") if isinstance(protobuf, dict) else None
+    clava = repositories.get("clava") if isinstance(repositories, dict) else None
+    revision = clava.get("revision") if isinstance(clava, dict) else None
+    try:
+        expected = _REFRESH_SUPPORT.expected_js_workload_overlay(revision)
+    except (RuntimeError, KeyError, AttributeError) as error:
+        _fail(f"JavaScript test workload source policy is invalid: {error}")
+    if protobuf.get("javascript_workload_overlay") != expected:
+        _fail("JavaScript test workload provenance differs from the pinned source policy")
+    return expected
+
+
 def validate_release_provenance(
     updated_payload: Any, manifest: Any, manifest_sha256: str
 ) -> dict[str, Any]:
@@ -404,12 +424,7 @@ def validate_release_provenance(
     native_repository = protobuf.get("native_repository")
     if not isinstance(native_repository, dict) or native_repository.get("revision") != revisions["clang-dumper"]:
         _fail("native source revision disagrees with the clang-dumper revision")
-    try:
-        workload_overlay = _REFRESH_SUPPORT.expected_js_workload_overlay(revisions["Clava"])
-    except (RuntimeError, KeyError) as error:
-        _fail(f"JavaScript test workload source policy is invalid: {error}")
-    if protobuf.get("javascript_workload_overlay") != workload_overlay:
-        _fail("JavaScript test workload provenance differs from the pinned source policy")
+    workload_overlay = validate_javascript_workload_provenance(updated_payload)
 
     return {
         "revisions": revisions,
@@ -458,8 +473,7 @@ def _provenance_section(provenance: dict[str, Any]) -> str:
     )
 
 
-def _javascript_workload_section(provenance: dict[str, Any]) -> str:
-    overlay = provenance["javascript_workload_overlay"]
+def _javascript_workload_section(overlay: dict[str, Any]) -> str:
     rows = []
     changed = []
     for relative, hashes in overlay["files"].items():
@@ -768,6 +782,7 @@ def render_report(
     release_manifest_sha256: str | None = None,
 ) -> str:
     updated = validate_updated_manifest(updated_payload)
+    workload_overlay = validate_javascript_workload_provenance(updated_payload)
     prior_app_rows = _validate_prior_rows(prior, "app_plot_rows", "app_elapsed_ms")
     prior_wall_rows = _validate_prior_rows(prior, "wall_plot_rows", "elapsed_s")
     app_rows, wall_rows = combine_rows(prior, updated)
@@ -835,7 +850,7 @@ summary {{ cursor:pointer; color:var(--report-ink); font-weight:650; }} code {{ 
 </section>
 <section>
 <h2>Full-command wall time</h2>
-<p>Each candle covers four separate full-suite commands. A monotonic process timer measures each command wall span, separate from the App-call timer. Direct disables ccache; cold starts with an isolated empty cache; warm restores the same complete-suite cache seed before measurement. Java used one worker with a 512 MiB heap. Clava-JS used one Vitest worker, with file parallelism and isolation disabled; its default worker JVM heap limit was about 7.55 GiB. The sessions ran serially after compilation and resource setup.</p>
+<p>Each candle covers four separate full-suite commands. A monotonic process timer measures each command wall span, separate from the App-call timer. Direct disables ccache; cold starts with an isolated empty cache; warm restores the same complete-suite cache seed before measurement. Java used one worker with a 512 MiB heap. Clava-JS used one Vitest worker, with file parallelism and isolation disabled; its generated configuration used Vitest's runner loader. Its default worker JVM heap limit was about 7.55 GiB. The sessions ran serially after compilation and resource setup.</p>
 <div class="panels">{_wall_charts(wall_rows)}</div>
 </section>
 <section>
@@ -845,10 +860,10 @@ summary {{ cursor:pointer; color:var(--report-ink); font-weight:650; }} code {{ 
 </section>
 {_memory_section(memory_payload)}
 {_provenance_section(provenance) if provenance is not None else ''}
-{_javascript_workload_section(provenance) if provenance is not None else ''}
+{_javascript_workload_section(workload_overlay)}
 <details><summary>Measurement notes</summary>
 <p>The App timer starts at the three-argument <code>ParallelCodeParser.parse</code> entry and stops after the final App is returned. It includes native parsing and protobuf or text reading, cross-file linking, postprocessing, parser-state release, and final TextParser/text transforms. Parser/context construction before entry, suite setup and assertions, printing, and syntax-only validation are excluded. Natural garbage collection is included, with no forced-GC policy override, coverage agents, or execution-info logging.</p>
-<p>The Java suite uses its original 116 test identities, one worker, and a 512 MiB heap. The Clava-JS suite retains 164 selected test identities, uses one Vitest worker with file parallelism and isolation disabled, and records the actual per-run test counts above. Its worker JVM used the default heap limit, observed at about 7.55 GiB. App timing covers {updated["app_calls_by_suite"]["java"]} Java and {updated["app_calls_by_suite"]["clava-js"]} Clava-JS timed calls. Syntax-only calls are excluded from App time ({updated["syntax_calls_by_suite"]["java"]} Java and {updated["syntax_calls_by_suite"]["clava-js"]} Clava-JS).</p>
+<p>The Java suite uses its original 116 test identities, one worker, and a 512 MiB heap. The Clava-JS suite retains 164 selected test identities, uses one Vitest worker with file parallelism and isolation disabled, and uses Vitest's runner config loader for generated configurations. It records the actual per-run test counts above. Its worker JVM used the default heap limit, observed at about 7.55 GiB. App timing covers {updated["app_calls_by_suite"]["java"]} Java and {updated["app_calls_by_suite"]["clava-js"]} Clava-JS timed calls. Syntax-only calls are excluded from App time ({updated["syntax_calls_by_suite"]["java"]} Java and {updated["syntax_calls_by_suite"]["clava-js"]} Clava-JS).</p>
 <p>Four repeats ran serially. Direct runs disabled ccache; cold runs began from isolated empty caches; warm runs restored an identical complete-suite cache seed before timing. Full-command wall measurements used a monotonic process timer and were collected separately from App-timing runs. GNU time peak RSS appears only in the optional memory diagnostic. Compilation and resource preparation finished before timing. Text and FlatBuffers measurements were reused from their earlier sessions.</p>
 </details>
 <script type="application/json" id="csv-data">{csv_json}</script>

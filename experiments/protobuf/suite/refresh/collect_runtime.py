@@ -1,6 +1,9 @@
 import argparse,importlib.util,sys,json,os,shutil,subprocess,time,getpass,re,hashlib,inspect,datetime
 from urllib.parse import urlparse,unquote
 from pathlib import Path
+# Dynamic imports target the isolated source snapshot; do not add Python bytecode
+# files to the recorded source tree.
+sys.dont_write_bytecode=True
 parser=argparse.ArgumentParser(description='Collect the pinned Protobuf-only runtime matrix.')
 parser.add_argument('--snapshot',type=Path,required=True,help='isolated sibling-repository build snapshot')
 parser.add_argument('--output',type=Path,required=True,help='new, empty runtime evidence directory')
@@ -48,12 +51,14 @@ cohort_baseline=support.load_cohort_baseline(Path(__file__).with_name('cohort-ba
 snapshot_identity=json.loads((ROOT/'snapshot-identity.json').read_text())
 clava_revision=snapshot_identity.get('sources',{}).get('clava',{}).get('revision')
 js_workload_overlay=snapshot_identity.get('isolated_overlays',{}).get('javascript_workload')
-support.validate_js_workload_snapshot(CL/'Clava-JS',js_workload_overlay,clava_revision)
+canonical_clava_root=Path(snapshot_identity.get('sources',{}).get('clava',{}).get('root',''))
+support.validate_js_workload_snapshot(CL/'Clava-JS',js_workload_overlay,clava_revision,canonical_clava_root)
 execute_source=inspect.getsource(a.execute_cell)
 native_override='        if stage["key"] == "protobuf":\n            command += [f"-PclangDumperRoot={stage[\'native_root\']}"]\n'
 if execute_source.count(native_override)!=1: raise RuntimeError('shared App runner native-root selector changed; refusing an unreviewed benchmark command')
 execute_source=execute_source.replace(native_override,'')
 if '-PclangDumperRoot' in execute_source: raise RuntimeError('published-release App command still has a local native-root override')
+execute_source=support.pin_vitest_runner_config_loader(execute_source)
 exec(compile(execute_source,str(P/'app-build/run_app_build_matrix.py'),'exec'),a.__dict__)
 native=ROOT/'clang-dumper'
 roots={'protobuf':ROOT};assert set(roots)=={'protobuf'}
@@ -134,7 +139,7 @@ for config_path in (vitest_config_source,vitest_config_emitted):
  for setting,expected_value in (('isolate',r'false'),('fileParallelism',r'false'),('maxWorkers',r'1')):
   if not re.search(rf'\b{setting}\s*:\s*{expected_value}\b',config_text):
    raise RuntimeError(f'Vitest {setting} default differs from the frozen configuration: {config_path}')
-record['js_vitest_defaults']={'isolate':False,'fileParallelism':False,'maxWorkers':1,'source_sha256':a.sha256_file(vitest_config_source),'emitted_sha256':a.sha256_file(vitest_config_emitted)}
+record['js_vitest_defaults']={'isolate':False,'fileParallelism':False,'maxWorkers':1,'config_loader':'runner','source_sha256':a.sha256_file(vitest_config_source),'emitted_sha256':a.sha256_file(vitest_config_emitted)}
 save()
 install_cmd=['gradle','--no-daemon','--offline','-p',str(CL/'ClavaWeaver'),'installDist']
 subprocess.run(install_cmd,cwd=CL,env=build_env,stdout=(OUT/'installdist-protobuf.log').open('w'),stderr=subprocess.STDOUT,check=True)
@@ -339,7 +344,7 @@ def wall_run(suite,mode,rnd,ordinal,measured):
   cfg.write_text(wall_config)
   if any(source in wall_config for source in ('Clava-JS/api/Joinpoints.ts','Clava-JS/code/sideEffects.ts','Clava-JS/code/WeaverConfiguration.ts','weaverVitestConfig.ts')):
    raise RuntimeError(f'wall config still imports a source runtime module: {cfg}')
-  cmd=['npm','exec','--workspace','@specs-feup/clava','--','vitest','run','--config',str(cfg),'--reporter=json','--outputFile',str(run/'vitest.json'),'-t',comparison.JS_TEST_FILTER];cwd=frontend/'Clava-JS'
+  cmd=['npm','exec','--workspace','@specs-feup/clava','--','vitest','run','--config',str(cfg),'--configLoader','runner','--reporter=json','--outputFile',str(run/'vitest.json'),'-t',comparison.JS_TEST_FILTER];cwd=frontend/'Clava-JS'
  (run/'command.json').write_text(json.dumps({'argv':cmd,'cwd':str(cwd)},indent=2)+'\n')
  start=time.perf_counter()
  with (run/'run.log').open('w') as log:p=subprocess.run(cmd,cwd=cwd,env=env,stdout=log,stderr=subprocess.STDOUT)

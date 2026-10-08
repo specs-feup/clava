@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import platform
 import re
+import stat
 import subprocess
 import xml.etree.ElementTree as ET
 from typing import Any
@@ -125,33 +126,135 @@ def expected_js_workload_overlay(current_source_revision: str) -> dict[str, Any]
     }
 
 
+def _absolute_without_symlinks(path: Path, label: str) -> Path:
+    absolute = Path(os.path.abspath(path.expanduser()))
+    if absolute.resolve() != absolute:
+        raise RuntimeError(f"{label} path contains a symlink")
+    return absolute
+
+
+def _assert_isolated_clava_worktree(clava_js_root: Path,
+                                    canonical_clava_root: Path) -> tuple[Path, Path]:
+    clava_js_root = _absolute_without_symlinks(clava_js_root, "snapshot Clava-JS")
+    canonical_clava_root = canonical_clava_root.expanduser().resolve()
+    clava_root = clava_js_root.parent
+    if clava_js_root.name != "Clava-JS" or clava_root.name != "clava":
+        raise RuntimeError("JavaScript workload destination is not the snapshot Clava-JS tree")
+    if clava_root.resolve() == canonical_clava_root:
+        raise RuntimeError("refusing to stage JavaScript tests in the canonical Clava checkout")
+    git_marker = clava_root / ".git"
+    if not git_marker.is_file() or git_marker.is_symlink():
+        raise RuntimeError("JavaScript workload destination must be a detached Git worktree")
+    top_level = Path(git(clava_root, "rev-parse", "--show-toplevel")).resolve()
+    if top_level != clava_root.resolve():
+        raise RuntimeError("JavaScript workload destination is not its Clava worktree root")
+    entries = git(clava_root, "worktree", "list", "--porcelain").split("\n\n")
+    expected_entry = f"worktree {clava_root.resolve()}"
+    if not any(expected_entry in entry.splitlines() and "detached" in entry.splitlines()
+               for entry in entries):
+        raise RuntimeError("JavaScript workload destination is not a registered detached worktree")
+    return clava_js_root, clava_root
+
+
+def _assert_snapshot_revision(clava_root: Path, current_source_revision: str) -> None:
+    if git(clava_root, "rev-parse", "HEAD") != current_source_revision:
+        raise RuntimeError("snapshot Clava revision differs from recorded current source revision")
+
+
+def _open_directory_chain(root: Path, parts: tuple[str, ...]) -> tuple[int, str]:
+    flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) | getattr(os, "O_NOFOLLOW", 0)
+    directory_fd = os.open(root, flags)
+    try:
+        for part in parts[:-1]:
+            next_fd = os.open(part, flags, dir_fd=directory_fd)
+            os.close(directory_fd)
+            directory_fd = next_fd
+        return directory_fd, parts[-1]
+    except Exception:
+        os.close(directory_fd)
+        raise
+
+
+def _read_regular_file(root: Path, relative: str, label: str) -> bytes:
+    parts = Path(relative).parts
+    if not parts or any(part in ("", ".", "..") for part in parts):
+        raise RuntimeError(f"invalid {label} path: {relative}")
+    directory_fd = file_fd = None
+    try:
+        directory_fd, filename = _open_directory_chain(root, parts)
+        flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+        file_fd = os.open(filename, flags, dir_fd=directory_fd)
+        if not stat.S_ISREG(os.fstat(file_fd).st_mode):
+            raise RuntimeError(f"{label} is not a regular file: {relative}")
+        chunks = []
+        while True:
+            chunk = os.read(file_fd, 1024 * 1024)
+            if not chunk:
+                break
+            chunks.append(chunk)
+        return b"".join(chunks)
+    except OSError as error:
+        raise RuntimeError(f"{label} path contains a symlink or is not readable: {relative}") from error
+    finally:
+        if file_fd is not None:
+            os.close(file_fd)
+        if directory_fd is not None:
+            os.close(directory_fd)
+
+
+def _write_regular_file(root: Path, relative: str, contents: bytes) -> None:
+    parts = Path(relative).parts
+    directory_fd = file_fd = None
+    try:
+        directory_fd, filename = _open_directory_chain(root, parts)
+        flags = os.O_WRONLY | os.O_TRUNC | getattr(os, "O_NOFOLLOW", 0)
+        file_fd = os.open(filename, flags, dir_fd=directory_fd)
+        if not stat.S_ISREG(os.fstat(file_fd).st_mode):
+            raise RuntimeError(f"JavaScript test destination is not a regular file: {relative}")
+        view = memoryview(contents)
+        while view:
+            written = os.write(file_fd, view)
+            view = view[written:]
+    except OSError as error:
+        raise RuntimeError(f"JavaScript test destination contains a symlink or is not writable: {relative}") from error
+    finally:
+        if file_fd is not None:
+            os.close(file_fd)
+        if directory_fd is not None:
+            os.close(directory_fd)
+
+
 def stage_pinned_js_workload(clava_js_root: Path, current_source_revision: str,
+                            canonical_clava_root: Path,
                             fixture_root: Path | None = None) -> dict[str, Any]:
     """Stage the owned, hash-pinned JavaScript tests into an isolated Clava snapshot."""
-    clava_js_root = clava_js_root.expanduser().resolve()
-    fixture_root = (fixture_root or Path(__file__).with_name("workload-fixtures") / "clava-js").resolve()
+    clava_js_root, clava_root = _assert_isolated_clava_worktree(clava_js_root, canonical_clava_root)
+    _assert_snapshot_revision(clava_root, current_source_revision)
+    fixture_root = fixture_root or Path(__file__).with_name("workload-fixtures") / "clava-js"
+    fixture_root = _absolute_without_symlinks(fixture_root, "frozen JavaScript fixture")
     baseline = load_cohort_baseline()
     policy = load_js_workload_policy()
     overlay = expected_js_workload_overlay(current_source_revision)
 
     staged_bytes: dict[str, bytes] = {}
     for relative, frozen_hash in sorted(baseline["javascript_test_sources"].items()):
-        source = clava_js_root / relative
-        fixture = fixture_root / relative
-        if not source.is_file():
-            raise RuntimeError(f"selected JavaScript test source is missing: {relative}")
-        actual_current_hash = sha256_file(source)
+        current_bytes = _read_regular_file(clava_js_root, relative, "current JavaScript test source")
+        actual_current_hash = hashlib.sha256(current_bytes).hexdigest()
         expected_current_hash = policy["current_source_sha256"][relative]
         if actual_current_hash != expected_current_hash:
             raise RuntimeError(f"current JavaScript test source hash is unknown: {relative}")
-        if not fixture.is_file() or sha256_file(fixture) != frozen_hash:
+        fixture_bytes = _read_regular_file(fixture_root, relative, "frozen JavaScript test fixture")
+        if hashlib.sha256(fixture_bytes).hexdigest() != frozen_hash:
             raise RuntimeError(f"frozen JavaScript test fixture is missing or hash-mismatched: {relative}")
-        staged_bytes[relative] = fixture.read_bytes()
+        staged_bytes[relative] = fixture_bytes
 
     for relative, contents in staged_bytes.items():
-        (clava_js_root / relative).write_bytes(contents)
-    actual_staged = js_test_sources(clava_js_root, load_js_file_orders(
-        Path(__file__).with_name("js-file-orders.json")))
+        _write_regular_file(clava_js_root, relative, contents)
+    actual_staged = {
+        relative: hashlib.sha256(_read_regular_file(
+            clava_js_root, relative, "staged JavaScript test source")).hexdigest()
+        for relative in sorted(JS_FILE_SET)
+    }
     if actual_staged != baseline["javascript_test_sources"]:
         raise RuntimeError("staged JavaScript test sources differ from the frozen cohort")
     if overlay["file_count"] != len(JS_FILE_SET):
@@ -160,16 +263,36 @@ def stage_pinned_js_workload(clava_js_root: Path, current_source_revision: str,
 
 
 def validate_js_workload_snapshot(clava_js_root: Path, overlay: Any,
-                                  current_source_revision: str) -> dict[str, Any]:
+                                  current_source_revision: str,
+                                  canonical_clava_root: Path) -> dict[str, Any]:
+    clava_js_root, clava_root = _assert_isolated_clava_worktree(clava_js_root, canonical_clava_root)
+    _assert_snapshot_revision(clava_root, current_source_revision)
     expected = expected_js_workload_overlay(current_source_revision)
     if overlay != expected:
         raise RuntimeError("snapshot JavaScript workload overlay provenance differs from the pinned policy")
     baseline = load_cohort_baseline()
-    orders = load_js_file_orders(Path(__file__).with_name("js-file-orders.json"))
-    actual = js_test_sources(clava_js_root, orders)
+    actual = {
+        relative: hashlib.sha256(_read_regular_file(
+            clava_js_root, relative, "snapshot JavaScript test source")).hexdigest()
+        for relative in sorted(JS_FILE_SET)
+    }
     if actual != baseline["javascript_test_sources"]:
         raise RuntimeError("snapshot JavaScript test sources do not match the frozen cohort")
     return expected
+
+
+def pin_vitest_runner_config_loader(source: str) -> str:
+    """Select Vitest's runner loader for generated config modules.
+
+    The bundled loader mis-resolves the pinned tinyrainbow ESM default in the
+    current Node/Vitest workspace. The runner loader evaluates the same config
+    modules without changing test selection or execution settings.
+    """
+    anchor = '"--config", str(config), "--reporter=json"'
+    replacement = '"--config", str(config), "--configLoader", "runner", "--reporter=json"'
+    if source.count(anchor) != 1:
+        raise RuntimeError("shared App runner Vitest command changed; refusing an unreviewed config-loader patch")
+    return source.replace(anchor, replacement, 1)
 
 
 def tree_manifest(root: Path) -> dict[str, str]:
