@@ -31,3 +31,23 @@ memory probes and is absent from runtime benchmark commands.
 Runtime measurements are captured separately on October 8. They measure only
 updated Protobuf. The report renderer retains the earlier Text and FlatBuffers
 controls and does not calculate paired statistics across sessions.
+
+## Final canonical consumer checks, October 8
+
+`final-canonical-20261008.json` records the tested source revisions, local
+producer and selector hashes, test counts, and raw-output digests. The clean
+ClangAstParser check passed 250 tests with three release-only assumption skips;
+binding drift verification, resolver tests, and the coverage gate passed.
+`ClavaWeaver installDist` passed. The final Clava-JS source suite passed 162 of
+164 tests with two skips. The Lara-JS source suite passed 54 tests with one
+expected failure. The source-suite counts exclude generated test copies from
+package output. Both package-runtime smoke checks also passed.
+
+The parser check used the local producer selected by the preserved user
+selector, with the matching LLVM 18 OpenMP include available to compiler
+invocations. The three release-only tests were skipped because they require a
+published dumper resource. The archived pre-fix runs document the temporary
+package-discovery and module-identity failures; the final source suites passed
+after the packaging corrections. Raw logs and JUnit reports are kept in the
+local archive identified by `final-canonical-20261008`; the JSON records their
+digests without embedding machine-local paths.
