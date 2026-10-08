@@ -5,6 +5,10 @@ comparison evidence and the later Protobuf-only measurement session. It keeps
 the existing App and wall-time chart implementations, removes only the older
 Protobuf rows, and leaves the Text, FlatBuffers, and before-cache rows intact.
 
+For the repeatable collect, render, and private DraftLink update workflow, see
+[`../suite/refresh/README.md`](../suite/refresh/README.md). The renderer remains
+usable by itself for saved evidence and does not publish anything.
+
 Render the final RC8 capture from the frozen controls, completed Protobuf
 results, and matching published release manifest:
 

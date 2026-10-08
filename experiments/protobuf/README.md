@@ -11,6 +11,12 @@ and a frozen protobuf build. Never point both options at the same runtime or
 native executable. Builds, Gradle installation, schema generation, resource
 downloads, and heap probes must finish before timing a suite cell.
 
+To refresh only the Protobuf benchmark and its report, use
+[`suite/refresh/README.md`](suite/refresh/README.md). That workflow prepares an
+isolated snapshot, keeps the existing Text and FlatBuffers controls frozen,
+collects validated runtime and memory evidence, and updates DraftLink only in
+an explicit private publish step.
+
 ## Inputs and revision capture
 
 Build each checkout into an owned staging directory, then record the native
