@@ -511,7 +511,7 @@ def _wall_charts(wall_rows: list[dict[str, Any]]) -> str:
         for suite in SUITES:
             chart = _WALL_CHARTS.candle(suite, wall_rows)
             charts.append(
-                f'<figure><figcaption>{html.escape(SUITE_LABELS[suite])}, '
+                f'<figure class="wall-chart"><figcaption>{html.escape(SUITE_LABELS[suite])}, '
                 f'all cache states</figcaption>{chart}</figure>'
             )
         return "".join(charts)
@@ -741,6 +741,13 @@ figcaption {{ font-weight:650; margin-bottom:7px; }} svg {{ max-width:100%; heig
 .grid,.grid-line {{ stroke:var(--grid); }} .divider {{ stroke:var(--muted); }}
 .tick,.label,.mode,.foot,.axis-text,.stage-text,.empty-lane {{ fill:var(--muted); }}
 .value,.median-label {{ fill:var(--ink); }} .mode {{ font-weight:650; }}
+.wall-chart .tick,.wall-chart .label,.wall-chart .value {{ font-size:12px; }}
+.wall-chart .mode {{ font-size:13px; }} .wall-chart .foot {{ font-size:11px; }}
+.app-chart .tick {{ fill:var(--muted); font:13px system-ui,sans-serif; }}
+.app-chart .label,.app-chart .mode {{ fill:var(--muted); font:15px system-ui,sans-serif; }}
+.app-chart .mode {{ font-weight:650; }}
+.app-chart .value {{ fill:var(--ink); font:14px ui-monospace,monospace; }}
+.app-chart .foot {{ fill:var(--muted); font:11px system-ui,sans-serif; }}
 .panels figure svg {{ width:100%; }} .app-chart {{ max-width:520px; }}
 .details {{ color:var(--muted); }}
 details {{ margin:14px 0; background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:10px 13px; }}
