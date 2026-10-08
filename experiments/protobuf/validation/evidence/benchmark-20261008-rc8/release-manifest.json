@@ -1,0 +1,261 @@
+{
+  "assets": [
+    {
+      "arch": "any",
+      "filename": "clang-dumper-ast-wire.pb",
+      "kind": "protocol",
+      "llvm_major": 18,
+      "platform": "any",
+      "sha256": "9b54021feb180f0e031d084ca1d463d3df00a80862476940e2cc73917f584238"
+    },
+    {
+      "arch": "any",
+      "filename": "clang-dumper-ast-wire.proto",
+      "kind": "protocol",
+      "llvm_major": 18,
+      "platform": "any",
+      "sha256": "723b6d44d97399a81ffd7d97759b45f79ca4eee2683f867f30d0c08facd4c44a"
+    },
+    {
+      "arch": "any",
+      "filename": "clang-dumper-generated-enums.zip",
+      "kind": "generated-enums",
+      "llvm_major": 18,
+      "platform": "any",
+      "sha256": "8e1177d0ca2c96c4db10bfd4ad517d04915972d79f6f600529dd6ed80d69a879"
+    },
+    {
+      "arch": "arm64",
+      "filename": "clang-dumper-linux-arm64",
+      "kind": "tool",
+      "llvm_major": 18,
+      "platform": "linux",
+      "sha256": "f59f255dce40641c285c4bdaf843cfaf35e1e943a2d0d5df812e170c12eedce6"
+    },
+    {
+      "arch": "arm64",
+      "filename": "clang-dumper-linux-arm64-includes.zip",
+      "kind": "includes",
+      "llvm_major": 18,
+      "platform": "linux",
+      "sha256": "90cb0388067a30400c47d1dccd1774eab00de5509556425b3393620f3d920eb4"
+    },
+    {
+      "arch": "arm64",
+      "filename": "clang-dumper-linux-arm64-plugin.so",
+      "kind": "plugin",
+      "llvm_major": 18,
+      "platform": "linux",
+      "sha256": "8f4eca212ef0091232da05f8dcdc427e4d54bca237903ed0096f5949c5512155"
+    },
+    {
+      "arch": "x64",
+      "filename": "clang-dumper-linux-x64",
+      "kind": "tool",
+      "llvm_major": 18,
+      "platform": "linux",
+      "sha256": "ce467a8355c389c45024490e1ee67930737db090d8e5b236db82ecf1f69c9d27"
+    },
+    {
+      "arch": "x64",
+      "filename": "clang-dumper-linux-x64-includes.zip",
+      "kind": "includes",
+      "llvm_major": 18,
+      "platform": "linux",
+      "sha256": "30179fe7a2b512d138ebe5f1b71c14c9043fbfef51ae7ee24d28223f5bc5ecfb"
+    },
+    {
+      "arch": "x64",
+      "filename": "clang-dumper-linux-x64-plugin.so",
+      "kind": "plugin",
+      "llvm_major": 18,
+      "platform": "linux",
+      "sha256": "609db74902e05b2893e10d47fd7090fb9ae107f5f4f8622b64b5e34e490e1861"
+    },
+    {
+      "arch": "arm64",
+      "filename": "clang-dumper-macos-arm64",
+      "kind": "tool",
+      "llvm_major": 18,
+      "platform": "macos",
+      "sha256": "e212e10aa2ed33c8569f1dfd9a3f7181b72e871d259af1a63261feddb4488fab"
+    },
+    {
+      "arch": "arm64",
+      "filename": "clang-dumper-macos-arm64-includes.zip",
+      "kind": "includes",
+      "llvm_major": 18,
+      "platform": "macos",
+      "sha256": "30e982d1772c69a2f41a2cecb5f04dbd248c0e17745f1684b00e5fa649e11b8c"
+    },
+    {
+      "arch": "arm64",
+      "filename": "clang-dumper-macos-arm64-plugin.so",
+      "kind": "plugin",
+      "llvm_major": 18,
+      "platform": "macos",
+      "sha256": "05a60879b0b88c5965b6cc46cfbe73df1b6224904158ab337dff18dd78214ceb"
+    },
+    {
+      "arch": "x64",
+      "filename": "clang-dumper-macos-x64",
+      "kind": "tool",
+      "llvm_major": 18,
+      "platform": "macos",
+      "sha256": "2bf1526668b4eaa9db0180910da7af8015726b6432a9c62f73fdd6ae2d164b0e"
+    },
+    {
+      "arch": "x64",
+      "filename": "clang-dumper-macos-x64-includes.zip",
+      "kind": "includes",
+      "llvm_major": 18,
+      "platform": "macos",
+      "sha256": "a8deae9925fa8ed0299b049662b6cdd551044cc0caf8efbc2e18b6f2dc0f1de5"
+    },
+    {
+      "arch": "x64",
+      "filename": "clang-dumper-macos-x64-plugin.so",
+      "kind": "plugin",
+      "llvm_major": 18,
+      "platform": "macos",
+      "sha256": "77e91cb85691c578adbb1232d0c5b1559114dfb8d1f741200fded86856a49d0a"
+    },
+    {
+      "arch": "arm64",
+      "filename": "clang-dumper-windows-arm64-includes.zip",
+      "kind": "includes",
+      "llvm_major": 18,
+      "platform": "windows",
+      "sha256": "1c00201e77030bd3e0393c7766bcc8e471f263a804c170c1d446baae126a7617"
+    },
+    {
+      "arch": "arm64",
+      "filename": "clang-dumper-windows-arm64.exe",
+      "kind": "tool",
+      "llvm_major": 18,
+      "platform": "windows",
+      "sha256": "92469d605408470d7671b18e12c739e6121f34cf85e5066566727d3831504cc9"
+    },
+    {
+      "arch": "x86_64",
+      "filename": "clang-dumper-windows-x86_64-includes.zip",
+      "kind": "includes",
+      "llvm_major": 18,
+      "platform": "windows",
+      "sha256": "78d70164ec5943aa17bb967d290d2ee103345767d4035fcd77b11969f45f55da"
+    },
+    {
+      "arch": "x86_64",
+      "filename": "clang-dumper-windows-x86_64.exe",
+      "kind": "tool",
+      "llvm_major": 18,
+      "platform": "windows",
+      "sha256": "d13f1ecc0c8ca467eb08d25688181ef742ce68c98e987591b202a83a4fb25415"
+    }
+  ],
+  "compatibility": {
+    "minimum_java_protoc_version": "4.28.3",
+    "minimum_java_runtime_version": "4.28.3"
+  },
+  "generic_payload_contracts": {
+    "attributes": {
+      "class_name_pattern": "<closed AttributeKind enum value>Attr",
+      "payload": "AttributeData"
+    },
+    "openmp": {
+      "class_names": [
+        "OMPAtomicDirective",
+        "OMPBarrierDirective",
+        "OMPCancelDirective",
+        "OMPCancellationPointDirective",
+        "OMPCanonicalLoop",
+        "OMPCriticalDirective",
+        "OMPDepobjDirective",
+        "OMPDispatchDirective",
+        "OMPDistributeDirective",
+        "OMPDistributeParallelForDirective",
+        "OMPDistributeParallelForSimdDirective",
+        "OMPDistributeSimdDirective",
+        "OMPErrorDirective",
+        "OMPFlushDirective",
+        "OMPForDirective",
+        "OMPForSimdDirective",
+        "OMPGenericLoopDirective",
+        "OMPInteropDirective",
+        "OMPMaskedDirective",
+        "OMPMaskedTaskLoopDirective",
+        "OMPMaskedTaskLoopSimdDirective",
+        "OMPMasterDirective",
+        "OMPMasterTaskLoopDirective",
+        "OMPMasterTaskLoopSimdDirective",
+        "OMPMetaDirective",
+        "OMPOrderedDirective",
+        "OMPParallelDirective",
+        "OMPParallelForDirective",
+        "OMPParallelForSimdDirective",
+        "OMPParallelGenericLoopDirective",
+        "OMPParallelMaskedDirective",
+        "OMPParallelMaskedTaskLoopDirective",
+        "OMPParallelMaskedTaskLoopSimdDirective",
+        "OMPParallelMasterDirective",
+        "OMPParallelMasterTaskLoopDirective",
+        "OMPParallelMasterTaskLoopSimdDirective",
+        "OMPParallelSectionsDirective",
+        "OMPScanDirective",
+        "OMPScopeDirective",
+        "OMPSectionDirective",
+        "OMPSectionsDirective",
+        "OMPSimdDirective",
+        "OMPSingleDirective",
+        "OMPTargetDataDirective",
+        "OMPTargetDirective",
+        "OMPTargetEnterDataDirective",
+        "OMPTargetExitDataDirective",
+        "OMPTargetParallelDirective",
+        "OMPTargetParallelForDirective",
+        "OMPTargetParallelForSimdDirective",
+        "OMPTargetParallelGenericLoopDirective",
+        "OMPTargetSimdDirective",
+        "OMPTargetTeamsDirective",
+        "OMPTargetTeamsDistributeDirective",
+        "OMPTargetTeamsDistributeParallelForDirective",
+        "OMPTargetTeamsDistributeParallelForSimdDirective",
+        "OMPTargetTeamsDistributeSimdDirective",
+        "OMPTargetTeamsGenericLoopDirective",
+        "OMPTargetUpdateDirective",
+        "OMPTaskDirective",
+        "OMPTaskLoopDirective",
+        "OMPTaskLoopSimdDirective",
+        "OMPTaskgroupDirective",
+        "OMPTaskwaitDirective",
+        "OMPTaskyieldDirective",
+        "OMPTeamsDirective",
+        "OMPTeamsDistributeDirective",
+        "OMPTeamsDistributeParallelForDirective",
+        "OMPTeamsDistributeParallelForSimdDirective",
+        "OMPTeamsDistributeSimdDirective",
+        "OMPTeamsGenericLoopDirective",
+        "OMPTileDirective",
+        "OMPUnrollDirective"
+      ],
+      "payload": "StmtData"
+    }
+  },
+  "protocol": {
+    "descriptor_sha256": "9b54021feb180f0e031d084ca1d463d3df00a80862476940e2cc73917f584238",
+    "framing": "CLAVAPB1 plus protobuf varint-delimited Envelope(Chunk)",
+    "id": "clava-ast-wire",
+    "llvm_major": 18,
+    "major": 1,
+    "max_record_bytes": 67108864,
+    "minor": 1,
+    "producer_version": "clang-dumper-18",
+    "schema_sha256": "723b6d44d97399a81ffd7d97759b45f79ca4eee2683f867f30d0c08facd4c44a",
+    "semantic_contract": "clava-ast-wire-v1"
+  },
+  "schema_version": 1,
+  "toolchain": {
+    "protobuf_version": "28.3",
+    "protoc_version": "28.3"
+  }
+}

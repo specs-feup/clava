@@ -5,15 +5,15 @@ comparison evidence and the later Protobuf-only measurement session. It keeps
 the existing App and wall-time chart implementations, removes only the older
 Protobuf rows, and leaves the Text, FlatBuffers, and before-cache rows intact.
 
-Render the archived October 8 comparison from the frozen controls, completed
-Protobuf results, and matching release manifest:
+Render the final RC8 capture from the frozen controls, completed Protobuf
+results, and matching published release manifest:
 
 ```sh
 python3 experiments/protobuf/report/render_updated_benchmark.py \
   --prior-evidence experiments/protobuf/validation/evidence/benchmark-20261008/frozen-controls-20261007.json \
-  --updated-results experiments/protobuf/validation/evidence/benchmark-20261008/updated-protobuf-results.json \
-  --release-manifest experiments/protobuf/validation/evidence/benchmark-20261008/release-manifest.json \
-  --output /tmp/protobuf-updated-report-20261008.html
+  --updated-results experiments/protobuf/validation/evidence/benchmark-20261008-rc8/updated-protobuf-results.json \
+  --release-manifest experiments/protobuf/validation/evidence/benchmark-20261008-rc8/release-manifest.json \
+  --output /tmp/protobuf-updated-report-20261008-rc8.html
 ```
 
 Pass two `--memory LABEL=PATH` options to add the separate NAS+ and C++ template
@@ -23,18 +23,18 @@ validation evidence folder:
 ```sh
 python3 experiments/protobuf/report/render_updated_benchmark.py \
   --prior-evidence experiments/protobuf/validation/evidence/benchmark-20261008/frozen-controls-20261007.json \
-  --updated-results experiments/protobuf/validation/evidence/benchmark-20261008/updated-protobuf-results.json \
-  --release-manifest experiments/protobuf/validation/evidence/benchmark-20261008/release-manifest.json \
-  --memory 'NAS+=experiments/protobuf/validation/evidence/memory-nas-20261007.json' \
-  --memory 'C++ templates=experiments/protobuf/validation/evidence/memory-templates-20261007.json' \
-  --output /tmp/protobuf-updated-report-20261008.html
+  --updated-results experiments/protobuf/validation/evidence/benchmark-20261008-rc8/updated-protobuf-results.json \
+  --release-manifest experiments/protobuf/validation/evidence/benchmark-20261008-rc8/release-manifest.json \
+  --memory 'NAS+=experiments/protobuf/validation/evidence/benchmark-20261008-rc8/memory-nas-lu.json' \
+  --memory 'C++ templates=experiments/protobuf/validation/evidence/benchmark-20261008-rc8/memory-templates.json' \
+  --output /tmp/protobuf-updated-report-20261008-rc8.html
 ```
 
-The report validates the 48 updated observations and the four-repeat chart
+The report validates the 48 final RC8 observations and the four-repeat chart
 cells before rendering. It checks all 120 memory phases for App collection and
 parser resource cleanup, then reports each JVM repeat's first and last retained
 heap readings, range, fitted slope, and separate JVM and GNU time RSS values.
-The optional release manifest is matched by SHA-256 to the selected measured
+The release manifest is matched by SHA-256 to the selected measured
 release and its schema, descriptor, and tool hashes are cross-checked against
 the protocol assets and measured native executable. The report displays source
 revisions and each measurement session's dates independently. It does not
