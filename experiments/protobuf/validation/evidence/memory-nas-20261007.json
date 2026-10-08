@@ -1,0 +1,1537 @@
+{
+  "created_utc": "2026-10-07T21:54:42.199569+00:00",
+  "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClangAstParser/test-resources/c/bench/nas_lu.c",
+  "source_sha256": "26409fb2ace4dbb9e350b2990199c6b38f91814797bb93e8ef2770f36a121cc8",
+  "input": null,
+  "input_sha256": null,
+  "repeats": 3,
+  "retained_heap_contract": "production command emits phase used_bytes after explicit GC",
+  "peak_rss_contract": "GNU time max_rss_kb",
+  "observations": [
+    {
+      "repeat": 1,
+      "return_code": 0,
+      "wall_s": 30.321796039119363,
+      "gnu_time": {
+        "elapsed_s": 30.32,
+        "user_s": 35.74,
+        "sys_s": 6.66,
+        "max_rss_kb": 708072,
+        "exit_status": 0
+      },
+      "heap_phases": [
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16360504,
+          "live_heap_bytes": 40440184,
+          "repeat": 1,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16396864,
+          "live_heap_bytes": 40438032,
+          "repeat": 2,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16398496,
+          "live_heap_bytes": 40530688,
+          "repeat": 3,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16399200,
+          "live_heap_bytes": 40539968,
+          "repeat": 4,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16399776,
+          "live_heap_bytes": 40438440,
+          "repeat": 5,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16400088,
+          "live_heap_bytes": 40484992,
+          "repeat": 6,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16400584,
+          "live_heap_bytes": 40522744,
+          "repeat": 7,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16402296,
+          "live_heap_bytes": 40437088,
+          "repeat": 8,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16402968,
+          "live_heap_bytes": 40543272,
+          "repeat": 9,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16403608,
+          "live_heap_bytes": 40500760,
+          "repeat": 10,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16406648,
+          "live_heap_bytes": 40519848,
+          "repeat": 11,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16407064,
+          "live_heap_bytes": 40489912,
+          "repeat": 12,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16407064,
+          "live_heap_bytes": 40443320,
+          "repeat": 13,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16407344,
+          "live_heap_bytes": 40475920,
+          "repeat": 14,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16408120,
+          "live_heap_bytes": 40548760,
+          "repeat": 15,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16409176,
+          "live_heap_bytes": 40440208,
+          "repeat": 16,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16409336,
+          "live_heap_bytes": 40458864,
+          "repeat": 17,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16409616,
+          "live_heap_bytes": 40483472,
+          "repeat": 18,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16410760,
+          "live_heap_bytes": 40455960,
+          "repeat": 19,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16410760,
+          "live_heap_bytes": 40441792,
+          "repeat": 20,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 725065728,
+          "app_collected": true
+        }
+      ],
+      "command": [
+        "/tmp/run-protobuf-validation-memory.py",
+        "--source",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClangAstParser/test-resources/c/bench/nas_lu.c",
+        "--work",
+        "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1",
+        "--standard",
+        "c11",
+        "--runtime",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClavaWeaver/build/install/ClavaWeaver",
+        "--classes",
+        "/tmp/protobuf-validation-probe-final-classes"
+      ],
+      "log": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-1/probe.log"
+    },
+    {
+      "repeat": 2,
+      "return_code": 0,
+      "wall_s": 30.578156656119972,
+      "gnu_time": {
+        "elapsed_s": 30.57,
+        "user_s": 35.94,
+        "sys_s": 6.96,
+        "max_rss_kb": 874272,
+        "exit_status": 0
+      },
+      "heap_phases": [
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16418136,
+          "live_heap_bytes": 40678928,
+          "repeat": 1,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 722616320,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16453384,
+          "live_heap_bytes": 40484416,
+          "repeat": 2,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 722616320,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16454944,
+          "live_heap_bytes": 40507784,
+          "repeat": 3,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 722616320,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16455648,
+          "live_heap_bytes": 40525128,
+          "repeat": 4,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 722616320,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16456224,
+          "live_heap_bytes": 40540552,
+          "repeat": 5,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 722616320,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16456536,
+          "live_heap_bytes": 40509512,
+          "repeat": 6,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 722616320,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16456968,
+          "live_heap_bytes": 40503400,
+          "repeat": 7,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 722616320,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16458376,
+          "live_heap_bytes": 40489408,
+          "repeat": 8,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 722616320,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16459112,
+          "live_heap_bytes": 40498032,
+          "repeat": 9,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 722616320,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16459904,
+          "live_heap_bytes": 40567536,
+          "repeat": 10,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 722616320,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16462840,
+          "live_heap_bytes": 40518952,
+          "repeat": 11,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 722616320,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16462976,
+          "live_heap_bytes": 40494008,
+          "repeat": 12,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 722616320,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16462976,
+          "live_heap_bytes": 40494008,
+          "repeat": 13,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 894857216,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16463208,
+          "live_heap_bytes": 40494240,
+          "repeat": 14,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 894857216,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16463984,
+          "live_heap_bytes": 40536672,
+          "repeat": 15,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 894857216,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16465040,
+          "live_heap_bytes": 40539776,
+          "repeat": 16,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 894857216,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16465200,
+          "live_heap_bytes": 40582528,
+          "repeat": 17,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 894857216,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16465480,
+          "live_heap_bytes": 40603464,
+          "repeat": 18,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 894857216,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16466624,
+          "live_heap_bytes": 40497656,
+          "repeat": 19,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 895254528,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16466624,
+          "live_heap_bytes": 40631136,
+          "repeat": 20,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 895254528,
+          "app_collected": true
+        }
+      ],
+      "command": [
+        "/tmp/run-protobuf-validation-memory.py",
+        "--source",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClangAstParser/test-resources/c/bench/nas_lu.c",
+        "--work",
+        "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2",
+        "--standard",
+        "c11",
+        "--runtime",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClavaWeaver/build/install/ClavaWeaver",
+        "--classes",
+        "/tmp/protobuf-validation-probe-final-classes"
+      ],
+      "log": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-2/probe.log"
+    },
+    {
+      "repeat": 3,
+      "return_code": 0,
+      "wall_s": 30.195426288060844,
+      "gnu_time": {
+        "elapsed_s": 30.19,
+        "user_s": 36.07,
+        "sys_s": 6.7,
+        "max_rss_kb": 704856,
+        "exit_status": 0
+      },
+      "heap_phases": [
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16362392,
+          "live_heap_bytes": 40546776,
+          "repeat": 1,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16396400,
+          "live_heap_bytes": 40555496,
+          "repeat": 2,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16398032,
+          "live_heap_bytes": 40492336,
+          "repeat": 3,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16398736,
+          "live_heap_bytes": 40533080,
+          "repeat": 4,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16399312,
+          "live_heap_bytes": 40553664,
+          "repeat": 5,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16399624,
+          "live_heap_bytes": 40598536,
+          "repeat": 6,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16399976,
+          "live_heap_bytes": 40431008,
+          "repeat": 7,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16401384,
+          "live_heap_bytes": 40529848,
+          "repeat": 8,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16402120,
+          "live_heap_bytes": 40434496,
+          "repeat": 9,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16402912,
+          "live_heap_bytes": 40544584,
+          "repeat": 10,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16405848,
+          "live_heap_bytes": 40519448,
+          "repeat": 11,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16405984,
+          "live_heap_bytes": 40525328,
+          "repeat": 12,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16405984,
+          "live_heap_bytes": 40474912,
+          "repeat": 13,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16406216,
+          "live_heap_bytes": 40524880,
+          "repeat": 14,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16406992,
+          "live_heap_bytes": 40507520,
+          "repeat": 15,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16408048,
+          "live_heap_bytes": 40593728,
+          "repeat": 16,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16408208,
+          "live_heap_bytes": 40631176,
+          "repeat": 17,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16408488,
+          "live_heap_bytes": 40489432,
+          "repeat": 18,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16409632,
+          "live_heap_bytes": 40442280,
+          "repeat": 19,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 28218,
+          "retained_heap_bytes": 16409632,
+          "live_heap_bytes": 40466024,
+          "repeat": 20,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 721772544,
+          "app_collected": true
+        }
+      ],
+      "command": [
+        "/tmp/run-protobuf-validation-memory.py",
+        "--source",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClangAstParser/test-resources/c/bench/nas_lu.c",
+        "--work",
+        "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3",
+        "--standard",
+        "c11",
+        "--runtime",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClavaWeaver/build/install/ClavaWeaver",
+        "--classes",
+        "/tmp/protobuf-validation-probe-final-classes"
+      ],
+      "log": "/home/lmsousa/.cache/protobuf-production-validation/memory-nas-20261007-verified-observer/repeat-3/probe.log"
+    }
+  ],
+  "failed": []
+}

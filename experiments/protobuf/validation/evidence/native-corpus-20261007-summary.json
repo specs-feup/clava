@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-10-07T21:28:45.963367+00:00",
+  "created_utc": "2026-10-07T21:40:10.508569+00:00",
   "baseline_candidates": 5000,
   "baseline_clean_cases": 1062,
   "cases_run": 1062,
@@ -8,18 +8,18 @@
     "CLEAN": 1062
   },
   "producer_regressions": 0,
-  "elapsed_s": 12.274214006960392,
+  "elapsed_s": 12.281009829137474,
   "corpus": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/llvm-project/clang/test",
   "corpus_revision": "3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff",
   "baseline_results": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-corpus-5000/results.json",
   "baseline_results_sha256": "779715468c024cec84016d673c2abfd2e78bdd2d0098575226f119f98206cae0",
   "tool": "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clang-dumper/build/tool",
-  "tool_sha256": "cac547839da8a79f768bffa069556e61add8573783608edf1156c13ab7e783c0",
+  "tool_sha256": "876522bb24b04574e68ec2f789e9a6f088346c26ac82d49421e161d56b550ef1",
   "verifier": "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clang-dumper/build/verify_protobuf",
   "verifier_sha256": "530f1d206768da7318afba49a17b0e55731279a053a45297df5e4498b2f04819",
   "clang_resource_dir": "/usr/lib/llvm-18/lib/clang/18",
   "jobs": 2,
-  "results": "/home/lmsousa/.cache/protobuf-production-validation/native-corpus-20261007-integrated/results.json",
+  "results": "/home/lmsousa/.cache/protobuf-production-validation/native-corpus-20261007-final/results.json",
   "pass": true,
   "classification": "A regression is any baseline CLEAN input not producing a non-empty stream that verify_protobuf accepts.",
   "timing_boundary": "Per-case wall time covers dumper process only; total includes executor startup and scheduling."
