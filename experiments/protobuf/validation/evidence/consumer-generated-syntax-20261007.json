@@ -1,0 +1,25 @@
+{
+  "manifest": "/home/lmsousa/.cache/protobuf-production-validation/native-corpus-20261007-final/consumer-inputs.json",
+  "manifest_sha256": "e2d71d99190ec95c345214bc69064e438934660961fc56e302e6d9ed574fe6bd",
+  "consumer_summary": "/home/lmsousa/.cache/protobuf-production-validation/consumer-corpus-20261007-final/summary.json",
+  "consumer_summary_created_utc": "2026-10-07T21:44:53.972173+00:00",
+  "compilers": {
+    "/usr/lib/llvm-18/bin/clang": "Ubuntu clang version 18.1.8 (20ubuntu8)",
+    "/usr/lib/llvm-18/bin/clang++": "Ubuntu clang version 18.1.8 (20ubuntu8)"
+  },
+  "inputs_expected": 1062,
+  "syntax_checks_by_runtime": {
+    "protobuf": {
+      "PASS": 773,
+      "FAIL": 0,
+      "TIMEOUT": 0
+    }
+  },
+  "paired_bucket_counts": {},
+  "paired_buckets": [],
+  "detailed_case_records": "/home/lmsousa/.cache/protobuf-production-validation/consumer-corpus-20261007-final/generated-syntax.json.cases.jsonl",
+  "all_clean_row_hashes_verified_before_compilation": true,
+  "syntax_scope": "the generated translation unit matching the input source basename; all generated files are included in the verified aggregate row hash",
+  "source_tree_modified": false,
+  "interpretation": "syntax buckets describe LLVM 18 acceptance only; they do not waive generator or roundtrip failures"
+}

@@ -19,13 +19,13 @@ import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum ElaboratedTypeKeyword implements StringProvider {
-    STRUCT,
-    INTERFACE,
-    UNION,
-    CLASS,
-    ENUM,
-    TYPENAME,
-    NONE;
+    Struct,
+    Interface,
+    Union,
+    Class,
+    Enum,
+    Typename,
+    None;
 
     private static final Lazy<EnumHelperWithValue<ElaboratedTypeKeyword>> HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(ElaboratedTypeKeyword.class);
@@ -35,7 +35,7 @@ public enum ElaboratedTypeKeyword implements StringProvider {
     }
 
     public String getCode() {
-        if (this == NONE) {
+        if (this == None) {
             return "";
         }
 

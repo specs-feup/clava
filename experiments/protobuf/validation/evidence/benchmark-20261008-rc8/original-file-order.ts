@@ -1,0 +1,3 @@
+import {BaseSequencer} from "vitest/node";
+const order=["api/LegacyIntegrationTests - C.test.ts", "api/LegacyIntegrationTests - CXX.test.ts", "api/LegacyIntegrationTests - Issues.test.ts", "api/Query.test.ts", "api/Issues.test.ts", "api/clava/ClavaJoinPoints.test.ts", "code/ClangPlugin/ClangPlugin.test.ts", "code/Sandbox.test.ts", "api/clava/analysis/AnalyserResult.test.ts"];
+export default class OriginalOrder extends BaseSequencer {async sort(files) {const key=f=>f.moduleId.split("/Clava-JS/")[1];for(const f of files) if(!order.includes(key(f)))throw new Error("Unexpected test file "+key(f));return [...files].sort((a,b)=>order.indexOf(key(a))-order.indexOf(key(b)));}}

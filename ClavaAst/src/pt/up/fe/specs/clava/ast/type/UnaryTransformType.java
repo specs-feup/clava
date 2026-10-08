@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -35,7 +36,11 @@ public class UnaryTransformType extends Type {
     public final static DataKey<UnaryTransformTypeKind> KIND = KeyFactory
             .enumeration("kind", UnaryTransformTypeKind.class);
 
-    public final static DataKey<Type> UNDERLYING_TYPE = KeyFactory.object("underlyingType", Type.class);
+    /**
+     * The transformed type, when Clang has resolved it. Dependent unary
+     * transforms can have no underlying type while still having a base type.
+     */
+    public final static DataKey<Optional<Type>> UNDERLYING_TYPE = KeyFactory.optional("underlyingType");
 
     public final static DataKey<Type> BASE_TYPE = KeyFactory.object("baseType", Type.class);
 
@@ -49,7 +54,7 @@ public class UnaryTransformType extends Type {
         return get(BASE_TYPE);
     }
 
-    public Type getUnderlyingType() {
+    public Optional<Type> getUnderlyingType() {
         return get(UNDERLYING_TYPE);
     }
 

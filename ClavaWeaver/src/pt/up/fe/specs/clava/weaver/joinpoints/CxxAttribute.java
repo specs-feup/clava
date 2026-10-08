@@ -13,26 +13,24 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AAttribute;
 
-public class CxxAttribute extends AAttribute {
+public class CxxAttribute<Self extends CxxAttribute<Self>> extends AAttribute<Self> {
 
-    private final Attribute attr;
-
-    public CxxAttribute(Attribute attr) {
-        this.attr = attr;
+    public CxxAttribute(Attribute attr, CxxWeaver weaver) {
+        super(attr, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return attr;
+    public Attribute getNodeImpl() {
+        return (Attribute) super.getNodeImpl();
     }
 
     @Override
     public String getKindImpl() {
-        var attrName = attr.getKind().name();
+        var attrName = this.getNodeImpl().getKind().name();
 
         if (attrName.endsWith("Attr")) {
             attrName = attrName.substring(0, attrName.length() - "Attr".length());

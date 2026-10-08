@@ -13,39 +13,35 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AAdjustedType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
-public class CxxAdjustedType extends AAdjustedType {
+public class CxxAdjustedType<Self extends CxxAdjustedType<Self>> extends AAdjustedType<Self> {
 
-    private final AdjustedType adjustedType;
-
-    public CxxAdjustedType(AdjustedType adjustedType) {
-        super(new CxxType(adjustedType));
-
-        this.adjustedType = adjustedType;
+    public CxxAdjustedType(AdjustedType adjustedType, CxxWeaver weaver) {
+        super(adjustedType, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return adjustedType;
+    public AdjustedType getNodeImpl() {
+        return (AdjustedType) super.getNodeImpl();
     }
 
     @Override
-    public AType getOriginalTypeImpl() {
-        return CxxJoinpoints.create(adjustedType.get(AdjustedType.ORIGINAL_TYPE), AType.class);
+    public AType<?> getOriginalTypeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().get(AdjustedType.ORIGINAL_TYPE), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public int[] getArrayDimsArrayImpl() {
-        return getOriginalTypeImpl().getArrayDimsArrayImpl();
+    public int[] getArrayDimsImpl() {
+        return getOriginalTypeImpl().getArrayDimsImpl();
     }
 
     @Override
-    public Integer getArraySizeImpl() {
+    public int getArraySizeImpl() {
         return getOriginalTypeImpl().getArraySizeImpl();
     }
 

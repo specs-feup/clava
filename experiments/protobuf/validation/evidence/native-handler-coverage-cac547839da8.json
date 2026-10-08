@@ -1,0 +1,6710 @@
+{
+  "commit": "3b5b2323a047ea77ee8166b514ed201d838bca23",
+  "tool_sha256": "cac547839da8a79f768bffa069556e61add8573783608edf1156c13ab7e783c0",
+  "sources_total": 157,
+  "sources_instrumented": 152,
+  "sources_skipped": [
+    [
+      "atomicAdd.cu",
+      [
+        "cuda"
+      ]
+    ],
+    [
+      "convolution_cache.cu",
+      [
+        "cuda"
+      ]
+    ],
+    [
+      "mult_matrix.cu",
+      [
+        "cuda"
+      ]
+    ],
+    [
+      "streamAdd.cu",
+      [
+        "cuda"
+      ]
+    ],
+    [
+      "sumArrays.cu",
+      [
+        "cuda"
+      ]
+    ]
+  ],
+  "tool_failures": [],
+  "fallbacks": [
+    {
+      "family": "attr children",
+      "class_name": "AllocSizeAttr",
+      "source_count": 6,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue25.cpp",
+        "fast_stack.cpp",
+        "new.cpp",
+        "pointer_to_member_operators.cpp",
+        "sizeof.c"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "AlwaysInlineAttr",
+      "source_count": 16,
+      "sources": [
+        "atom.cpp",
+        "attribute.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "AsmLabelAttr",
+      "source_count": 3,
+      "sources": [
+        "nas_bt.c",
+        "nas_lu.c",
+        "nas_ua.c"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "BuiltinAttr",
+      "source_count": 13,
+      "sources": [
+        "2mm.c",
+        "functions.cpp",
+        "goto.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "predefined.c",
+        "rdr6094103-unordered-compare-promote.c",
+        "sizeof.c",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "variadic.c"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "ColdAttr",
+      "source_count": 9,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "destructor.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "problematic_operator.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "ConstAttr",
+      "source_count": 9,
+      "sources": [
+        "cl_attribute.cl",
+        "decl.cpp",
+        "nas_bt.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "qualifiers.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "DeprecatedAttr",
+      "source_count": 34,
+      "sources": [
+        "ast-dump-c-attr.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "if.cpp",
+        "literals.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "FlagEnumAttr",
+      "source_count": 1,
+      "sources": [
+        "mini_logger.hpp"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "FormatAttr",
+      "source_count": 9,
+      "sources": [
+        "attribute.cpp",
+        "functions.cpp",
+        "goto.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "predefined.c",
+        "variadic.c"
+      ],
+      "node_payloads": [
+        "format_attr_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "MayAliasAttr",
+      "source_count": 2,
+      "sources": [
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "NoInlineAttr",
+      "source_count": 9,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "destructor.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "problematic_operator.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "NoThrowAttr",
+      "source_count": 10,
+      "sources": [
+        "2mm.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "rdr6094103-unordered-compare-promote.c",
+        "sizeof.c",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "variadic.c"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "NonNullAttr",
+      "source_count": 5,
+      "sources": [
+        "attribute.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c"
+      ],
+      "node_payloads": [
+        "non_null_attr_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "OpenCLKernelAttr",
+      "source_count": 2,
+      "sources": [
+        "builtin_types.cl",
+        "cl_attribute.cl"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "OpenCLUnrollHintAttr",
+      "source_count": 1,
+      "sources": [
+        "cl_attribute.cl"
+      ],
+      "node_payloads": [
+        "open_c_l_unroll_hint_attr_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "OverloadableAttr",
+      "source_count": 1,
+      "sources": [
+        "cl_attribute.cl"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "OwnerAttr",
+      "source_count": 20,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "source_locations.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "PointerAttr",
+      "source_count": 18,
+      "sources": [
+        "atom.cpp",
+        "classes.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "RestrictAttr",
+      "source_count": 9,
+      "sources": [
+        "blocked_mm.cpp",
+        "fast_stack.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "pointer_to_member_operators.cpp",
+        "sizeof.c"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "ReturnsNonNullAttr",
+      "source_count": 5,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue25.cpp",
+        "fast_stack.cpp",
+        "new.cpp",
+        "pointer_to_member_operators.cpp"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "TypeVisibilityAttr",
+      "source_count": 1,
+      "sources": [
+        "variadic.c"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "VisibilityAttr",
+      "source_count": 9,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue13.cpp",
+        "clava_issue25.cpp",
+        "decl.cpp",
+        "fast_stack.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "pointer_to_member_operators.cpp",
+        "using.cpp"
+      ],
+      "node_payloads": [
+        "visibility_attr_data"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "WarnUnusedResultAttr",
+      "source_count": 23,
+      "sources": [
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "classes.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "AllocSizeAttr",
+      "source_count": 6,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue25.cpp",
+        "fast_stack.cpp",
+        "new.cpp",
+        "pointer_to_member_operators.cpp",
+        "sizeof.c"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "AlwaysInlineAttr",
+      "source_count": 16,
+      "sources": [
+        "atom.cpp",
+        "attribute.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "AsmLabelAttr",
+      "source_count": 3,
+      "sources": [
+        "nas_bt.c",
+        "nas_lu.c",
+        "nas_ua.c"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "BuiltinAttr",
+      "source_count": 13,
+      "sources": [
+        "2mm.c",
+        "functions.cpp",
+        "goto.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "predefined.c",
+        "rdr6094103-unordered-compare-promote.c",
+        "sizeof.c",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "variadic.c"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "ColdAttr",
+      "source_count": 9,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "destructor.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "problematic_operator.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "ConstAttr",
+      "source_count": 9,
+      "sources": [
+        "cl_attribute.cl",
+        "decl.cpp",
+        "nas_bt.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "qualifiers.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "DeprecatedAttr",
+      "source_count": 34,
+      "sources": [
+        "ast-dump-c-attr.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "if.cpp",
+        "literals.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "FlagEnumAttr",
+      "source_count": 1,
+      "sources": [
+        "mini_logger.hpp"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "MayAliasAttr",
+      "source_count": 2,
+      "sources": [
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "NoInlineAttr",
+      "source_count": 9,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "destructor.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "problematic_operator.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "NoThrowAttr",
+      "source_count": 10,
+      "sources": [
+        "2mm.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "rdr6094103-unordered-compare-promote.c",
+        "sizeof.c",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "variadic.c"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "OpenCLKernelAttr",
+      "source_count": 2,
+      "sources": [
+        "builtin_types.cl",
+        "cl_attribute.cl"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "OverloadableAttr",
+      "source_count": 1,
+      "sources": [
+        "cl_attribute.cl"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "OwnerAttr",
+      "source_count": 20,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "source_locations.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "PointerAttr",
+      "source_count": 18,
+      "sources": [
+        "atom.cpp",
+        "classes.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "RestrictAttr",
+      "source_count": 9,
+      "sources": [
+        "blocked_mm.cpp",
+        "fast_stack.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "pointer_to_member_operators.cpp",
+        "sizeof.c"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "ReturnsNonNullAttr",
+      "source_count": 5,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue25.cpp",
+        "fast_stack.cpp",
+        "new.cpp",
+        "pointer_to_member_operators.cpp"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "TypeVisibilityAttr",
+      "source_count": 1,
+      "sources": [
+        "variadic.c"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "WarnUnusedResultAttr",
+      "source_count": 23,
+      "sources": [
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "classes.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "attribute_data"
+      ]
+    },
+    {
+      "family": "decl children",
+      "class_name": "AccessSpecDecl",
+      "source_count": 49,
+      "sources": [
+        "Routing.cpp",
+        "ShortcutPosition.h",
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "class_decl.cpp",
+        "class_template.cpp",
+        "class_template.h",
+        "classes.cpp",
+        "clava_issue09.h",
+        "clava_issue10.cpp",
+        "clava_issue11.cpp",
+        "clava_issue13.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue20.cpp",
+        "clava_issue25.cpp",
+        "clava_issue26.cpp",
+        "clava_issue29.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "default.h",
+        "destructor.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "if.cpp",
+        "literals.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "access_spec_decl_data"
+      ]
+    },
+    {
+      "family": "decl children",
+      "class_name": "EmptyDecl",
+      "source_count": 1,
+      "sources": [
+        "namespace.cpp"
+      ],
+      "node_payloads": [
+        "decl_data"
+      ]
+    },
+    {
+      "family": "decl children",
+      "class_name": "LabelDecl",
+      "source_count": 4,
+      "sources": [
+        "ast-dump-stmt.c",
+        "goto.c",
+        "labels.c",
+        "switch.c"
+      ],
+      "node_payloads": [
+        "named_decl_data"
+      ]
+    },
+    {
+      "family": "decl children",
+      "class_name": "UnresolvedUsingTypenameDecl",
+      "source_count": 2,
+      "sources": [
+        "class_template.cpp",
+        "types.cpp"
+      ],
+      "node_payloads": [
+        "unresolved_using_typename_decl_data"
+      ]
+    },
+    {
+      "family": "decl data",
+      "class_name": "EmptyDecl",
+      "source_count": 1,
+      "sources": [
+        "namespace.cpp"
+      ],
+      "node_payloads": [
+        "decl_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "AddrLabelExpr",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ArrayInitIndexExpr",
+      "source_count": 1,
+      "sources": [
+        "ArrayInitLoopExpr.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ArrayInitLoopExpr",
+      "source_count": 1,
+      "sources": [
+        "ArrayInitLoopExpr.cpp"
+      ],
+      "node_payloads": [
+        "array_init_loop_expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ArraySubscriptExpr",
+      "source_count": 17,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "ast-dump-expr.c",
+        "blocked_mm.cpp",
+        "cl_attribute.cl",
+        "clava_issue19.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "functions.cpp",
+        "literals.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "BinaryConditionalOperator",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "BinaryOperator",
+      "source_count": 46,
+      "sources": [
+        "2mm.c",
+        "OMPParallelForDirective.cpp",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "blocked_mm.cpp",
+        "c-casts.c",
+        "cl_attribute.cl",
+        "class_decl.cpp",
+        "clava_issue15.cpp",
+        "clava_issue19.cpp",
+        "clava_issue25.cpp",
+        "decl.c",
+        "decl.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "gnu_extensions.cpp",
+        "goto.c",
+        "if.cpp",
+        "implicit_reference.cpp",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "naked_loops.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "omp_pragmas.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "simple_function.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "switch.c",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "types.cpp",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "binary_operator_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXBindTemporaryExpr",
+      "source_count": 3,
+      "sources": [
+        "decl.cpp",
+        "exceptions.cpp",
+        "noexcept.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXBoolLiteralExpr",
+      "source_count": 11,
+      "sources": [
+        "clava_issue29.cpp",
+        "clava_issue39.cpp",
+        "decl.cpp",
+        "lambda.cpp",
+        "noexcept.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "throw.cpp",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "c_x_x_bool_literal_expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXDefaultArgExpr",
+      "source_count": 3,
+      "sources": [
+        "decl.cpp",
+        "exceptions.cpp",
+        "template_expansion_pack.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXDefaultInitExpr",
+      "source_count": 1,
+      "sources": [
+        "mini_logger.hpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXDynamicCastExpr",
+      "source_count": 1,
+      "sources": [
+        "clava_issue25.cpp"
+      ],
+      "node_payloads": [
+        "c_x_x_named_cast_expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXFunctionalCastExpr",
+      "source_count": 3,
+      "sources": [
+        "constructor.cpp",
+        "exceptions.cpp",
+        "noexcept.cpp"
+      ],
+      "node_payloads": [
+        "cast_expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXNoexceptExpr",
+      "source_count": 7,
+      "sources": [
+        "decl.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "sorted_id.cpp",
+        "template_expansion_pack.cpp"
+      ],
+      "node_payloads": [
+        "c_x_x_noexcept_expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXNullPtrLiteralExpr",
+      "source_count": 20,
+      "sources": [
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "classes.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "decl.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXStdInitializerListExpr",
+      "source_count": 1,
+      "sources": [
+        "decl.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXThisExpr",
+      "source_count": 10,
+      "sources": [
+        "class_decl.cpp",
+        "clava_issue18.cpp",
+        "clava_issue29.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "lambda.cpp",
+        "mini_logger.hpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXThrowExpr",
+      "source_count": 3,
+      "sources": [
+        "exceptions.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CharacterLiteral",
+      "source_count": 14,
+      "sources": [
+        "ast-dump-expr.c",
+        "character.cpp",
+        "clava_issue39.cpp",
+        "exceptions.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "noexcept.cpp",
+        "sizeof.cpp"
+      ],
+      "node_payloads": [
+        "character_literal_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CompoundAssignOperator",
+      "source_count": 11,
+      "sources": [
+        "2mm.c",
+        "ast-dump-expr.c",
+        "blocked_mm.cpp",
+        "expressions.cpp",
+        "for.cpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "omp_pragmas.cpp"
+      ],
+      "node_payloads": [
+        "binary_operator_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CompoundLiteralExpr",
+      "source_count": 4,
+      "sources": [
+        "ast-dump-expr.c",
+        "compound_literal.c",
+        "macro.c",
+        "nas_ft.c"
+      ],
+      "node_payloads": [
+        "compound_literal_expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ConditionalOperator",
+      "source_count": 5,
+      "sources": [
+        "ast-dump-expr.c",
+        "blocked_mm.cpp",
+        "expressions.cpp",
+        "nas_bt.c",
+        "nas_lu.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ConstantExpr",
+      "source_count": 36,
+      "sources": [
+        "ast-dump-c-attr.c",
+        "ast-dump-records.c",
+        "ast-dump-stmt.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "atom.cpp",
+        "attribute.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "enum.c",
+        "enum.cpp",
+        "enum.h",
+        "enum.hpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "struct.c",
+        "switch.c",
+        "system_header_threshold.cpp",
+        "system_header_threshold_option.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "throw.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ExprWithCleanups",
+      "source_count": 6,
+      "sources": [
+        "clava_issue29.cpp",
+        "decl.cpp",
+        "exceptions.cpp",
+        "friend.cpp",
+        "lambda.cpp",
+        "template_expansion_pack.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "FixedPointLiteral",
+      "source_count": 2,
+      "sources": [
+        "fixed_point.c",
+        "fixed_point_to_string.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "FloatingLiteral",
+      "source_count": 15,
+      "sources": [
+        "2mm.c",
+        "ast-dump-expr.c",
+        "dbl_max.cpp",
+        "decl.c",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "literals.cpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "omp_pragmas.cpp",
+        "struct.c"
+      ],
+      "node_payloads": [
+        "floating_literal_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "GNUNullExpr",
+      "source_count": 1,
+      "sources": [
+        "decl.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "GenericSelectionExpr",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ImplicitCastExpr",
+      "source_count": 91,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "OMPParallelForDirective.cpp",
+        "Routing.cpp",
+        "ShortcutPosition.h",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "c-casts.c",
+        "c99.c",
+        "character.cpp",
+        "cl_attribute.cl",
+        "class_decl.cpp",
+        "clava_issue09.h",
+        "clava_issue10.cpp",
+        "clava_issue15.cpp",
+        "clava_issue19.cpp",
+        "clava_issue25.cpp",
+        "clava_issue26.cpp",
+        "clava_issue29.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "compound_literal.c",
+        "constructor.cpp",
+        "dbl_max.cpp",
+        "decl.c",
+        "decl.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "enum.cpp",
+        "enum.hpp",
+        "exceptions.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "gnu_stmt_expr.c",
+        "goto.c",
+        "if.cpp",
+        "implicit-cast-dump.c",
+        "implicit_reference.cpp",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "multistep-explicit-cast.c",
+        "naked_loops.c",
+        "namespacealias.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "noexcept.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pointer_to_member_operators.cpp",
+        "predefined.c",
+        "problematic_operator.cpp",
+        "pseudo_destructor.cpp",
+        "qualifiers.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "scope.cpp",
+        "simple_function.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "source_locations.cpp",
+        "strings.cpp",
+        "switch.c",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "types.cpp",
+        "variadic-promotion.c",
+        "variadic.c",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "cast_expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ImplicitValueInitExpr",
+      "source_count": 4,
+      "sources": [
+        "array_filler.c",
+        "includes.cpp",
+        "nas_ua.c",
+        "struct.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "IntegerLiteral",
+      "source_count": 96,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "OMPParallelForDirective.cpp",
+        "array_filler.c",
+        "ast-dump-c-attr.c",
+        "ast-dump-expr.c",
+        "ast-dump-records.c",
+        "ast-dump-stmt.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "attr-target-ast.c",
+        "attribute.cpp",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "c99.c",
+        "character.cpp",
+        "cl_attribute.cl",
+        "class_decl.cpp",
+        "clava_issue09.h",
+        "clava_issue10.cpp",
+        "clava_issue15.cpp",
+        "clava_issue19.cpp",
+        "clava_issue24.cpp",
+        "clava_issue25.cpp",
+        "clava_issue29.cpp",
+        "clava_issue48.c",
+        "comment.cpp",
+        "compound_literal.c",
+        "constructor.cpp",
+        "decl.c",
+        "decl.cpp",
+        "dummy.cpp",
+        "enum.c",
+        "enum.cpp",
+        "enum.h",
+        "enum.hpp",
+        "exceptions.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "gnu_stmt_expr.c",
+        "goto.c",
+        "if.cpp",
+        "implicit-cast-dump.c",
+        "implicit_reference.cpp",
+        "includes.cpp",
+        "includes2.cpp",
+        "labels.c",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "macro.h",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "naked_loops.c",
+        "namespacealias.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "noexcept.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "simple_function.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "source_locations.cpp",
+        "strings.cpp",
+        "struct.c",
+        "struct.cpp",
+        "switch.c",
+        "system_header_threshold_option.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "test_includes.c",
+        "test_includes.cpp",
+        "throw.cpp",
+        "types.cpp",
+        "variadic-promotion.c",
+        "variadic.c",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "integer_literal_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "PackExpansionExpr",
+      "source_count": 3,
+      "sources": [
+        "mini_logger.hpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ParenExpr",
+      "source_count": 17,
+      "sources": [
+        "2mm.c",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "blocked_mm.cpp",
+        "clava_issue15.cpp",
+        "expressions.cpp",
+        "gnu_extensions.cpp",
+        "macro.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ParenListExpr",
+      "source_count": 18,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "PredefinedExpr",
+      "source_count": 1,
+      "sources": [
+        "predefined.c"
+      ],
+      "node_payloads": [
+        "predefined_expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "StmtExpr",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-stmt.c",
+        "gnu_stmt_expr.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "StringLiteral",
+      "source_count": 27,
+      "sources": [
+        "ast-dump-expr.c",
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue15.cpp",
+        "compound_literal.c",
+        "decl.cpp",
+        "dependent_scope_decl_ref_expr.cpp",
+        "enum.cpp",
+        "enum.hpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "functions.cpp",
+        "goto.c",
+        "literals.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "predefined.c",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "strings.cpp",
+        "variadic.c"
+      ],
+      "node_payloads": [
+        "string_literal_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "SubstNonTypeTemplateParmExpr",
+      "source_count": 22,
+      "sources": [
+        "atom.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "problematic_operator.cpp",
+        "sorted_id.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "TypeTraitExpr",
+      "source_count": 3,
+      "sources": [
+        "mini_logger.hpp",
+        "pair_hash.cpp",
+        "pair_hash.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "UnaryOperator",
+      "source_count": 40,
+      "sources": [
+        "2mm.c",
+        "OMPParallelForDirective.cpp",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "blocked_mm.cpp",
+        "cl_attribute.cl",
+        "class_template.cpp",
+        "clava_issue19.cpp",
+        "clava_issue29.cpp",
+        "decl.c",
+        "enum.c",
+        "enum.cpp",
+        "enum.h",
+        "enum.hpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "fixed_point.c",
+        "for.cpp",
+        "friend.cpp",
+        "gnu_extensions.cpp",
+        "goto.c",
+        "if.cpp",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "naked_loops.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "omp_pragmas.cpp",
+        "pointer_to_member_operators.cpp",
+        "scope.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "variadic-promotion.c",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "unary_operator_data"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "VAArgExpr",
+      "source_count": 1,
+      "sources": [
+        "variadic.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "AddrLabelExpr",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ArrayInitIndexExpr",
+      "source_count": 1,
+      "sources": [
+        "ArrayInitLoopExpr.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ArraySubscriptExpr",
+      "source_count": 17,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "ast-dump-expr.c",
+        "blocked_mm.cpp",
+        "cl_attribute.cl",
+        "clava_issue19.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "functions.cpp",
+        "literals.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "BinaryConditionalOperator",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXBindTemporaryExpr",
+      "source_count": 3,
+      "sources": [
+        "decl.cpp",
+        "exceptions.cpp",
+        "noexcept.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXDefaultArgExpr",
+      "source_count": 3,
+      "sources": [
+        "decl.cpp",
+        "exceptions.cpp",
+        "template_expansion_pack.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXDefaultInitExpr",
+      "source_count": 1,
+      "sources": [
+        "mini_logger.hpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXNullPtrLiteralExpr",
+      "source_count": 20,
+      "sources": [
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "classes.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "decl.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXStdInitializerListExpr",
+      "source_count": 1,
+      "sources": [
+        "decl.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXThisExpr",
+      "source_count": 10,
+      "sources": [
+        "class_decl.cpp",
+        "clava_issue18.cpp",
+        "clava_issue29.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "lambda.cpp",
+        "mini_logger.hpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXThrowExpr",
+      "source_count": 3,
+      "sources": [
+        "exceptions.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ConditionalOperator",
+      "source_count": 5,
+      "sources": [
+        "ast-dump-expr.c",
+        "blocked_mm.cpp",
+        "expressions.cpp",
+        "nas_bt.c",
+        "nas_lu.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ConstantExpr",
+      "source_count": 36,
+      "sources": [
+        "ast-dump-c-attr.c",
+        "ast-dump-records.c",
+        "ast-dump-stmt.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "atom.cpp",
+        "attribute.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "enum.c",
+        "enum.cpp",
+        "enum.h",
+        "enum.hpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "struct.c",
+        "switch.c",
+        "system_header_threshold.cpp",
+        "system_header_threshold_option.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "throw.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ExprWithCleanups",
+      "source_count": 6,
+      "sources": [
+        "clava_issue29.cpp",
+        "decl.cpp",
+        "exceptions.cpp",
+        "friend.cpp",
+        "lambda.cpp",
+        "template_expansion_pack.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "FixedPointLiteral",
+      "source_count": 2,
+      "sources": [
+        "fixed_point.c",
+        "fixed_point_to_string.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "GNUNullExpr",
+      "source_count": 1,
+      "sources": [
+        "decl.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "GenericSelectionExpr",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ImplicitValueInitExpr",
+      "source_count": 4,
+      "sources": [
+        "array_filler.c",
+        "includes.cpp",
+        "nas_ua.c",
+        "struct.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "OpaqueValueExpr",
+      "source_count": 3,
+      "sources": [
+        "ArrayInitLoopExpr.cpp",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "PackExpansionExpr",
+      "source_count": 3,
+      "sources": [
+        "mini_logger.hpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ParenExpr",
+      "source_count": 17,
+      "sources": [
+        "2mm.c",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "blocked_mm.cpp",
+        "clava_issue15.cpp",
+        "expressions.cpp",
+        "gnu_extensions.cpp",
+        "macro.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ParenListExpr",
+      "source_count": 18,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "StmtExpr",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-stmt.c",
+        "gnu_stmt_expr.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "SubstNonTypeTemplateParmExpr",
+      "source_count": 22,
+      "sources": [
+        "atom.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "problematic_operator.cpp",
+        "sorted_id.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "TypeTraitExpr",
+      "source_count": 3,
+      "sources": [
+        "mini_logger.hpp",
+        "pair_hash.cpp",
+        "pair_hash.h"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "VAArgExpr",
+      "source_count": 1,
+      "sources": [
+        "variadic.c"
+      ],
+      "node_payloads": [
+        "expr_data"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "BreakStmt",
+      "source_count": 5,
+      "sources": [
+        "ast-dump-stmt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "switch.c"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "CompoundStmt",
+      "source_count": 115,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "OMPParallelForDirective.cpp",
+        "Routing.cpp",
+        "ShortcutPosition.h",
+        "array_filler.c",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "attr-target-ast.c",
+        "attribute.cpp",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "builtin_types.cl",
+        "builtin_types.cpp",
+        "c-casts.c",
+        "c89.c",
+        "c99.c",
+        "character.cpp",
+        "cl_attribute.cl",
+        "class_decl.cpp",
+        "class_template.cpp",
+        "clava_issue09.h",
+        "clava_issue10.cpp",
+        "clava_issue13.cpp",
+        "clava_issue15.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue20.cpp",
+        "clava_issue24.cpp",
+        "clava_issue25.cpp",
+        "clava_issue26.cpp",
+        "clava_issue28.cpp",
+        "clava_issue29.cpp",
+        "clava_issue39.cpp",
+        "clava_issue40.cpp",
+        "comment.cpp",
+        "compound_literal.c",
+        "constructor.cpp",
+        "dbl_max.cpp",
+        "decl.c",
+        "decl.cpp",
+        "dependent_scope_decl_ref_expr.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "enum.c",
+        "enum.cpp",
+        "exceptions.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "gnu_stmt_expr.c",
+        "goto.c",
+        "if.cpp",
+        "implicit-cast-dump.c",
+        "implicit_reference.cpp",
+        "includes.cpp",
+        "includes2.cpp",
+        "labels.c",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "multistep-explicit-cast.c",
+        "naked_loops.c",
+        "namespace.cpp",
+        "namespacealias.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "noexcept.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "pointer_to_member_operators.cpp",
+        "pragmas.cpp",
+        "predefined.c",
+        "problematic_operator.cpp",
+        "pseudo_destructor.cpp",
+        "qualifiers.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "scope.cpp",
+        "simple_function.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "strings.cpp",
+        "struct.c",
+        "switch.c",
+        "system_header_threshold.cpp",
+        "system_header_threshold_option.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "throw.cpp",
+        "types.c",
+        "types.cpp",
+        "variadic-promotion.c",
+        "variadic.c",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "ContinueStmt",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "GCCAsmStmt",
+      "source_count": 1,
+      "sources": [
+        "clava_issue15.cpp"
+      ],
+      "node_payloads": [
+        "g_c_c_asm_stmt_data"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "IndirectGotoStmt",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "NullStmt",
+      "source_count": 11,
+      "sources": [
+        "2mm.c",
+        "OMPParallelForDirective.cpp",
+        "ast-dump-stmt.c",
+        "for.cpp",
+        "lambda.cpp",
+        "macro.c",
+        "nas_bt.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "scope.cpp",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "ReturnStmt",
+      "source_count": 59,
+      "sources": [
+        "2mm.c",
+        "array_filler.c",
+        "ast-dump-stmt.c",
+        "attr-target-ast.c",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "c99.c",
+        "character.cpp",
+        "class_decl.cpp",
+        "clava_issue10.cpp",
+        "clava_issue15.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue25.cpp",
+        "clava_issue29.cpp",
+        "comment.cpp",
+        "decl.c",
+        "decl.cpp",
+        "dummy.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "implicit_reference.cpp",
+        "includes2.cpp",
+        "labels.c",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "multiple_clauses_omp_pragmas.cpp",
+        "multistep-explicit-cast.c",
+        "naked_loops.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "problematic_operator.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "simple_function.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "strings.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "throw.cpp",
+        "variadic.c",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "SwitchStmt",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-stmt.c",
+        "switch.c"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "BreakStmt",
+      "source_count": 5,
+      "sources": [
+        "ast-dump-stmt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "switch.c"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "CXXCatchStmt",
+      "source_count": 5,
+      "sources": [
+        "comment.cpp",
+        "exceptions.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "throw.cpp"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "CXXForRangeStmt",
+      "source_count": 3,
+      "sources": [
+        "for.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "CXXTryStmt",
+      "source_count": 5,
+      "sources": [
+        "comment.cpp",
+        "exceptions.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "throw.cpp"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "CaseStmt",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-stmt.c",
+        "switch.c"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "CompoundStmt",
+      "source_count": 114,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "OMPParallelForDirective.cpp",
+        "Routing.cpp",
+        "ShortcutPosition.h",
+        "array_filler.c",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "attr-target-ast.c",
+        "attribute.cpp",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "builtin_types.cl",
+        "builtin_types.cpp",
+        "c-casts.c",
+        "c89.c",
+        "c99.c",
+        "character.cpp",
+        "cl_attribute.cl",
+        "class_decl.cpp",
+        "class_template.cpp",
+        "clava_issue09.h",
+        "clava_issue10.cpp",
+        "clava_issue13.cpp",
+        "clava_issue15.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue20.cpp",
+        "clava_issue24.cpp",
+        "clava_issue25.cpp",
+        "clava_issue26.cpp",
+        "clava_issue28.cpp",
+        "clava_issue29.cpp",
+        "clava_issue39.cpp",
+        "clava_issue40.cpp",
+        "comment.cpp",
+        "compound_literal.c",
+        "dbl_max.cpp",
+        "decl.c",
+        "decl.cpp",
+        "dependent_scope_decl_ref_expr.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "enum.c",
+        "enum.cpp",
+        "exceptions.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "gnu_stmt_expr.c",
+        "goto.c",
+        "if.cpp",
+        "implicit-cast-dump.c",
+        "implicit_reference.cpp",
+        "includes.cpp",
+        "includes2.cpp",
+        "labels.c",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "multistep-explicit-cast.c",
+        "naked_loops.c",
+        "namespace.cpp",
+        "namespacealias.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "noexcept.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "pointer_to_member_operators.cpp",
+        "pragmas.cpp",
+        "predefined.c",
+        "problematic_operator.cpp",
+        "pseudo_destructor.cpp",
+        "qualifiers.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "scope.cpp",
+        "simple_function.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "strings.cpp",
+        "struct.c",
+        "switch.c",
+        "system_header_threshold.cpp",
+        "system_header_threshold_option.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "throw.cpp",
+        "types.c",
+        "types.cpp",
+        "variadic-promotion.c",
+        "variadic.c",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "ContinueStmt",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "DeclStmt",
+      "source_count": 71,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "OMPParallelForDirective.cpp",
+        "Routing.cpp",
+        "array_filler.c",
+        "ast-dump-stmt.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "attribute.cpp",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "builtin_types.cl",
+        "builtin_types.cpp",
+        "c-casts.c",
+        "c99.c",
+        "character.cpp",
+        "cl_attribute.cl",
+        "class_template.cpp",
+        "clava_issue15.cpp",
+        "clava_issue19.cpp",
+        "clava_issue29.cpp",
+        "clava_issue40.cpp",
+        "comment.cpp",
+        "compound_literal.c",
+        "constructor.cpp",
+        "decl.c",
+        "decl.cpp",
+        "dependent_scope_decl_ref_expr.cpp",
+        "exceptions.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "gnu_extensions.cpp",
+        "gnu_stmt_expr.c",
+        "goto.c",
+        "if.cpp",
+        "implicit_reference.cpp",
+        "includes.cpp",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "multiple_clauses_omp_pragmas.cpp",
+        "naked_loops.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "noexcept.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pointer_to_member_operators.cpp",
+        "qualifiers.cpp",
+        "scope.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "strings.cpp",
+        "switch.c",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "types.cpp",
+        "variadic.c",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "DefaultStmt",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-stmt.c",
+        "switch.c"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "DoStmt",
+      "source_count": 4,
+      "sources": [
+        "ast-dump-stmt.c",
+        "nas_ua.c",
+        "scope.cpp",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "ForStmt",
+      "source_count": 19,
+      "sources": [
+        "2mm.c",
+        "OMPParallelForDirective.cpp",
+        "ast-dump-stmt.c",
+        "blocked_mm.cpp",
+        "cl_attribute.cl",
+        "clava_issue19.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "goto.c",
+        "macro.c",
+        "multiple_clauses_omp_pragmas.cpp",
+        "naked_loops.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "omp_pragmas.cpp",
+        "scope.cpp",
+        "template_expansion_pack.cpp"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "IfStmt",
+      "source_count": 14,
+      "sources": [
+        "ast-dump-stmt.c",
+        "clava_issue29.cpp",
+        "comment.cpp",
+        "decl.c",
+        "fast_stack.cpp",
+        "goto.c",
+        "if.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "scope.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "IndirectGotoStmt",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "NullStmt",
+      "source_count": 11,
+      "sources": [
+        "2mm.c",
+        "OMPParallelForDirective.cpp",
+        "ast-dump-stmt.c",
+        "for.cpp",
+        "lambda.cpp",
+        "macro.c",
+        "nas_bt.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "scope.cpp",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "ReturnStmt",
+      "source_count": 59,
+      "sources": [
+        "2mm.c",
+        "array_filler.c",
+        "ast-dump-stmt.c",
+        "attr-target-ast.c",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "c99.c",
+        "character.cpp",
+        "class_decl.cpp",
+        "clava_issue10.cpp",
+        "clava_issue15.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue25.cpp",
+        "clava_issue29.cpp",
+        "comment.cpp",
+        "decl.c",
+        "decl.cpp",
+        "dummy.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "implicit_reference.cpp",
+        "includes2.cpp",
+        "labels.c",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "multiple_clauses_omp_pragmas.cpp",
+        "multistep-explicit-cast.c",
+        "naked_loops.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "problematic_operator.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "simple_function.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "strings.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "throw.cpp",
+        "variadic.c",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "SwitchStmt",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-stmt.c",
+        "switch.c"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "WhileStmt",
+      "source_count": 11,
+      "sources": [
+        "ast-dump-stmt.c",
+        "comment.cpp",
+        "lambda.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "scope.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "stmt_data"
+      ]
+    },
+    {
+      "family": "type children",
+      "class_name": "AtomicType",
+      "source_count": 1,
+      "sources": [
+        "fixed_point.c"
+      ],
+      "node_payloads": [
+        "type_data"
+      ]
+    },
+    {
+      "family": "type children",
+      "class_name": "BuiltinType",
+      "source_count": 147,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "ComplexType.cpp",
+        "OMPParallelForDirective.cpp",
+        "Routing.cpp",
+        "ShortcutPosition.h",
+        "TemplateTemplateParmDecl.cpp",
+        "array_filler.c",
+        "ast-dump-c-attr.c",
+        "ast-dump-expr.c",
+        "ast-dump-records.c",
+        "ast-dump-stmt.c",
+        "ast-print-bool.c",
+        "ast-print-bool.cpp",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "atom.cpp",
+        "attr-target-ast.c",
+        "attribute.cpp",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "builtin_types.cl",
+        "builtin_types.cpp",
+        "c-casts.c",
+        "c89.c",
+        "c99.c",
+        "character.cpp",
+        "cl_attribute.cl",
+        "class_decl.cpp",
+        "class_template.cpp",
+        "classes.cpp",
+        "clava_issue09.h",
+        "clava_issue10.cpp",
+        "clava_issue11.cpp",
+        "clava_issue13.cpp",
+        "clava_issue15.cpp",
+        "clava_issue17.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue20.cpp",
+        "clava_issue21.cpp",
+        "clava_issue24.cpp",
+        "clava_issue25.cpp",
+        "clava_issue26.cpp",
+        "clava_issue27.cpp",
+        "clava_issue28.cpp",
+        "clava_issue28.h",
+        "clava_issue29.cpp",
+        "clava_issue39.cpp",
+        "clava_issue40.cpp",
+        "clava_issue48.c",
+        "comment.cpp",
+        "comment_include.cpp",
+        "compound_literal.c",
+        "constructor.cpp",
+        "constructor.h",
+        "dbl_max.cpp",
+        "decl.c",
+        "decl.cpp",
+        "default.h",
+        "dependent_scope_decl_ref_expr.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "enum.c",
+        "enum.cpp",
+        "enum.h",
+        "enum.hpp",
+        "exceptions.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "fixed_point.c",
+        "fixed_point_to_string.c",
+        "for.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "gnu_stmt_expr.c",
+        "goto.c",
+        "if.cpp",
+        "implicit-cast-dump.c",
+        "implicit_reference.cpp",
+        "includes.cpp",
+        "includes.h",
+        "includes2.cpp",
+        "includes2.h",
+        "labels.c",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "macro.h",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "multistep-explicit-cast.c",
+        "naked_loops.c",
+        "namespace.cpp",
+        "namespace.h",
+        "namespacealias.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "noexcept.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "pointer_to_member_operators.cpp",
+        "polybench.h",
+        "pragmas.cpp",
+        "predefined.c",
+        "problematic_operator.cpp",
+        "pseudo_destructor.cpp",
+        "qualifiers.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "scope.cpp",
+        "simple_function.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "source_locations.cpp",
+        "strings.cpp",
+        "struct.c",
+        "struct.cpp",
+        "struct2.c",
+        "switch.c",
+        "system_header_threshold.cpp",
+        "system_header_threshold_option.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "test_includes.c",
+        "test_includes.cpp",
+        "throw.cpp",
+        "types.c",
+        "types.cpp",
+        "variadic-promotion.c",
+        "variadic.c",
+        "while.cpp"
+      ],
+      "node_payloads": [
+        "builtin_type_data"
+      ]
+    },
+    {
+      "family": "type children",
+      "class_name": "ParenType",
+      "source_count": 26,
+      "sources": [
+        "2mm.c",
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "decl.c",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "macro.c",
+        "macro.h",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "struct.c"
+      ],
+      "node_payloads": [
+        "type_data"
+      ]
+    },
+    {
+      "family": "type children",
+      "class_name": "UsingType",
+      "source_count": 17,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "type_data"
+      ]
+    },
+    {
+      "family": "type children",
+      "class_name": "VectorType",
+      "source_count": 1,
+      "sources": [
+        "VectorType.cpp"
+      ],
+      "node_payloads": [
+        "type_data"
+      ]
+    },
+    {
+      "family": "type data",
+      "class_name": "AtomicType",
+      "source_count": 1,
+      "sources": [
+        "fixed_point.c"
+      ],
+      "node_payloads": [
+        "type_data"
+      ]
+    },
+    {
+      "family": "type data",
+      "class_name": "InjectedClassNameType",
+      "source_count": 41,
+      "sources": [
+        "TemplateTemplateParmDecl.cpp",
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "class_template.cpp",
+        "class_template.h",
+        "classes.cpp",
+        "clava_issue10.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "dbl_max.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "if.cpp",
+        "literals.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "source_locations.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "types.cpp"
+      ],
+      "node_payloads": [
+        "type_data"
+      ]
+    },
+    {
+      "family": "type data",
+      "class_name": "ParenType",
+      "source_count": 26,
+      "sources": [
+        "2mm.c",
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "decl.c",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "macro.c",
+        "macro.h",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "struct.c"
+      ],
+      "node_payloads": [
+        "type_data"
+      ]
+    },
+    {
+      "family": "type data",
+      "class_name": "UsingType",
+      "source_count": 17,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ],
+      "node_payloads": [
+        "type_data"
+      ]
+    },
+    {
+      "family": "type data",
+      "class_name": "VectorType",
+      "source_count": 1,
+      "sources": [
+        "VectorType.cpp"
+      ],
+      "node_payloads": [
+        "type_data"
+      ]
+    }
+  ],
+  "payload_fallbacks": [
+    {
+      "family": "attr children",
+      "class_name": "AllocSizeAttr",
+      "node_payload": "attribute_data",
+      "source_count": 6,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue25.cpp",
+        "fast_stack.cpp",
+        "new.cpp",
+        "pointer_to_member_operators.cpp",
+        "sizeof.c"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "AlwaysInlineAttr",
+      "node_payload": "attribute_data",
+      "source_count": 16,
+      "sources": [
+        "atom.cpp",
+        "attribute.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "AsmLabelAttr",
+      "node_payload": "attribute_data",
+      "source_count": 3,
+      "sources": [
+        "nas_bt.c",
+        "nas_lu.c",
+        "nas_ua.c"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "BuiltinAttr",
+      "node_payload": "attribute_data",
+      "source_count": 13,
+      "sources": [
+        "2mm.c",
+        "functions.cpp",
+        "goto.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "predefined.c",
+        "rdr6094103-unordered-compare-promote.c",
+        "sizeof.c",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "variadic.c"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "ColdAttr",
+      "node_payload": "attribute_data",
+      "source_count": 9,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "destructor.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "problematic_operator.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "ConstAttr",
+      "node_payload": "attribute_data",
+      "source_count": 9,
+      "sources": [
+        "cl_attribute.cl",
+        "decl.cpp",
+        "nas_bt.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "qualifiers.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "DeprecatedAttr",
+      "node_payload": "attribute_data",
+      "source_count": 34,
+      "sources": [
+        "ast-dump-c-attr.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "if.cpp",
+        "literals.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "FlagEnumAttr",
+      "node_payload": "attribute_data",
+      "source_count": 1,
+      "sources": [
+        "mini_logger.hpp"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "FormatAttr",
+      "node_payload": "format_attr_data",
+      "source_count": 9,
+      "sources": [
+        "attribute.cpp",
+        "functions.cpp",
+        "goto.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "predefined.c",
+        "variadic.c"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "MayAliasAttr",
+      "node_payload": "attribute_data",
+      "source_count": 2,
+      "sources": [
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "NoInlineAttr",
+      "node_payload": "attribute_data",
+      "source_count": 9,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "destructor.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "problematic_operator.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "NoThrowAttr",
+      "node_payload": "attribute_data",
+      "source_count": 10,
+      "sources": [
+        "2mm.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "rdr6094103-unordered-compare-promote.c",
+        "sizeof.c",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "variadic.c"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "NonNullAttr",
+      "node_payload": "non_null_attr_data",
+      "source_count": 5,
+      "sources": [
+        "attribute.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "OpenCLKernelAttr",
+      "node_payload": "attribute_data",
+      "source_count": 2,
+      "sources": [
+        "builtin_types.cl",
+        "cl_attribute.cl"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "OpenCLUnrollHintAttr",
+      "node_payload": "open_c_l_unroll_hint_attr_data",
+      "source_count": 1,
+      "sources": [
+        "cl_attribute.cl"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "OverloadableAttr",
+      "node_payload": "attribute_data",
+      "source_count": 1,
+      "sources": [
+        "cl_attribute.cl"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "OwnerAttr",
+      "node_payload": "attribute_data",
+      "source_count": 20,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "source_locations.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "PointerAttr",
+      "node_payload": "attribute_data",
+      "source_count": 18,
+      "sources": [
+        "atom.cpp",
+        "classes.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "RestrictAttr",
+      "node_payload": "attribute_data",
+      "source_count": 9,
+      "sources": [
+        "blocked_mm.cpp",
+        "fast_stack.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "pointer_to_member_operators.cpp",
+        "sizeof.c"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "ReturnsNonNullAttr",
+      "node_payload": "attribute_data",
+      "source_count": 5,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue25.cpp",
+        "fast_stack.cpp",
+        "new.cpp",
+        "pointer_to_member_operators.cpp"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "TypeVisibilityAttr",
+      "node_payload": "attribute_data",
+      "source_count": 1,
+      "sources": [
+        "variadic.c"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "VisibilityAttr",
+      "node_payload": "visibility_attr_data",
+      "source_count": 9,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue13.cpp",
+        "clava_issue25.cpp",
+        "decl.cpp",
+        "fast_stack.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "pointer_to_member_operators.cpp",
+        "using.cpp"
+      ]
+    },
+    {
+      "family": "attr children",
+      "class_name": "WarnUnusedResultAttr",
+      "node_payload": "attribute_data",
+      "source_count": 23,
+      "sources": [
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "classes.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "AllocSizeAttr",
+      "node_payload": "attribute_data",
+      "source_count": 6,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue25.cpp",
+        "fast_stack.cpp",
+        "new.cpp",
+        "pointer_to_member_operators.cpp",
+        "sizeof.c"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "AlwaysInlineAttr",
+      "node_payload": "attribute_data",
+      "source_count": 16,
+      "sources": [
+        "atom.cpp",
+        "attribute.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "AsmLabelAttr",
+      "node_payload": "attribute_data",
+      "source_count": 3,
+      "sources": [
+        "nas_bt.c",
+        "nas_lu.c",
+        "nas_ua.c"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "BuiltinAttr",
+      "node_payload": "attribute_data",
+      "source_count": 13,
+      "sources": [
+        "2mm.c",
+        "functions.cpp",
+        "goto.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "predefined.c",
+        "rdr6094103-unordered-compare-promote.c",
+        "sizeof.c",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "variadic.c"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "ColdAttr",
+      "node_payload": "attribute_data",
+      "source_count": 9,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "destructor.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "problematic_operator.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "ConstAttr",
+      "node_payload": "attribute_data",
+      "source_count": 9,
+      "sources": [
+        "cl_attribute.cl",
+        "decl.cpp",
+        "nas_bt.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "qualifiers.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "DeprecatedAttr",
+      "node_payload": "attribute_data",
+      "source_count": 34,
+      "sources": [
+        "ast-dump-c-attr.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "if.cpp",
+        "literals.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "FlagEnumAttr",
+      "node_payload": "attribute_data",
+      "source_count": 1,
+      "sources": [
+        "mini_logger.hpp"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "MayAliasAttr",
+      "node_payload": "attribute_data",
+      "source_count": 2,
+      "sources": [
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "NoInlineAttr",
+      "node_payload": "attribute_data",
+      "source_count": 9,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "destructor.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "problematic_operator.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "NoThrowAttr",
+      "node_payload": "attribute_data",
+      "source_count": 10,
+      "sources": [
+        "2mm.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "rdr6094103-unordered-compare-promote.c",
+        "sizeof.c",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "variadic.c"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "OpenCLKernelAttr",
+      "node_payload": "attribute_data",
+      "source_count": 2,
+      "sources": [
+        "builtin_types.cl",
+        "cl_attribute.cl"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "OverloadableAttr",
+      "node_payload": "attribute_data",
+      "source_count": 1,
+      "sources": [
+        "cl_attribute.cl"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "OwnerAttr",
+      "node_payload": "attribute_data",
+      "source_count": 20,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "source_locations.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "PointerAttr",
+      "node_payload": "attribute_data",
+      "source_count": 18,
+      "sources": [
+        "atom.cpp",
+        "classes.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "RestrictAttr",
+      "node_payload": "attribute_data",
+      "source_count": 9,
+      "sources": [
+        "blocked_mm.cpp",
+        "fast_stack.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "pointer_to_member_operators.cpp",
+        "sizeof.c"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "ReturnsNonNullAttr",
+      "node_payload": "attribute_data",
+      "source_count": 5,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue25.cpp",
+        "fast_stack.cpp",
+        "new.cpp",
+        "pointer_to_member_operators.cpp"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "TypeVisibilityAttr",
+      "node_payload": "attribute_data",
+      "source_count": 1,
+      "sources": [
+        "variadic.c"
+      ]
+    },
+    {
+      "family": "attr data",
+      "class_name": "WarnUnusedResultAttr",
+      "node_payload": "attribute_data",
+      "source_count": 23,
+      "sources": [
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "classes.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "decl children",
+      "class_name": "AccessSpecDecl",
+      "node_payload": "access_spec_decl_data",
+      "source_count": 49,
+      "sources": [
+        "Routing.cpp",
+        "ShortcutPosition.h",
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "class_decl.cpp",
+        "class_template.cpp",
+        "class_template.h",
+        "classes.cpp",
+        "clava_issue09.h",
+        "clava_issue10.cpp",
+        "clava_issue11.cpp",
+        "clava_issue13.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue20.cpp",
+        "clava_issue25.cpp",
+        "clava_issue26.cpp",
+        "clava_issue29.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "default.h",
+        "destructor.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "if.cpp",
+        "literals.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "decl children",
+      "class_name": "EmptyDecl",
+      "node_payload": "decl_data",
+      "source_count": 1,
+      "sources": [
+        "namespace.cpp"
+      ]
+    },
+    {
+      "family": "decl children",
+      "class_name": "LabelDecl",
+      "node_payload": "named_decl_data",
+      "source_count": 4,
+      "sources": [
+        "ast-dump-stmt.c",
+        "goto.c",
+        "labels.c",
+        "switch.c"
+      ]
+    },
+    {
+      "family": "decl children",
+      "class_name": "UnresolvedUsingTypenameDecl",
+      "node_payload": "unresolved_using_typename_decl_data",
+      "source_count": 2,
+      "sources": [
+        "class_template.cpp",
+        "types.cpp"
+      ]
+    },
+    {
+      "family": "decl data",
+      "class_name": "EmptyDecl",
+      "node_payload": "decl_data",
+      "source_count": 1,
+      "sources": [
+        "namespace.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "AddrLabelExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ArrayInitIndexExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "ArrayInitLoopExpr.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ArrayInitLoopExpr",
+      "node_payload": "array_init_loop_expr_data",
+      "source_count": 1,
+      "sources": [
+        "ArrayInitLoopExpr.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ArraySubscriptExpr",
+      "node_payload": "expr_data",
+      "source_count": 17,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "ast-dump-expr.c",
+        "blocked_mm.cpp",
+        "cl_attribute.cl",
+        "clava_issue19.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "functions.cpp",
+        "literals.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "BinaryConditionalOperator",
+      "node_payload": "expr_data",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "BinaryOperator",
+      "node_payload": "binary_operator_data",
+      "source_count": 46,
+      "sources": [
+        "2mm.c",
+        "OMPParallelForDirective.cpp",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "blocked_mm.cpp",
+        "c-casts.c",
+        "cl_attribute.cl",
+        "class_decl.cpp",
+        "clava_issue15.cpp",
+        "clava_issue19.cpp",
+        "clava_issue25.cpp",
+        "decl.c",
+        "decl.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "gnu_extensions.cpp",
+        "goto.c",
+        "if.cpp",
+        "implicit_reference.cpp",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "naked_loops.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "omp_pragmas.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "simple_function.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "switch.c",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "types.cpp",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXBindTemporaryExpr",
+      "node_payload": "expr_data",
+      "source_count": 3,
+      "sources": [
+        "decl.cpp",
+        "exceptions.cpp",
+        "noexcept.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXBoolLiteralExpr",
+      "node_payload": "c_x_x_bool_literal_expr_data",
+      "source_count": 11,
+      "sources": [
+        "clava_issue29.cpp",
+        "clava_issue39.cpp",
+        "decl.cpp",
+        "lambda.cpp",
+        "noexcept.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "throw.cpp",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXDefaultArgExpr",
+      "node_payload": "expr_data",
+      "source_count": 3,
+      "sources": [
+        "decl.cpp",
+        "exceptions.cpp",
+        "template_expansion_pack.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXDefaultInitExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "mini_logger.hpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXDynamicCastExpr",
+      "node_payload": "c_x_x_named_cast_expr_data",
+      "source_count": 1,
+      "sources": [
+        "clava_issue25.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXFunctionalCastExpr",
+      "node_payload": "cast_expr_data",
+      "source_count": 3,
+      "sources": [
+        "constructor.cpp",
+        "exceptions.cpp",
+        "noexcept.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXNoexceptExpr",
+      "node_payload": "c_x_x_noexcept_expr_data",
+      "source_count": 7,
+      "sources": [
+        "decl.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "sorted_id.cpp",
+        "template_expansion_pack.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXNullPtrLiteralExpr",
+      "node_payload": "expr_data",
+      "source_count": 20,
+      "sources": [
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "classes.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "decl.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXStdInitializerListExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "decl.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXThisExpr",
+      "node_payload": "expr_data",
+      "source_count": 10,
+      "sources": [
+        "class_decl.cpp",
+        "clava_issue18.cpp",
+        "clava_issue29.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "lambda.cpp",
+        "mini_logger.hpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CXXThrowExpr",
+      "node_payload": "expr_data",
+      "source_count": 3,
+      "sources": [
+        "exceptions.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CharacterLiteral",
+      "node_payload": "character_literal_data",
+      "source_count": 14,
+      "sources": [
+        "ast-dump-expr.c",
+        "character.cpp",
+        "clava_issue39.cpp",
+        "exceptions.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "noexcept.cpp",
+        "sizeof.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CompoundAssignOperator",
+      "node_payload": "binary_operator_data",
+      "source_count": 11,
+      "sources": [
+        "2mm.c",
+        "ast-dump-expr.c",
+        "blocked_mm.cpp",
+        "expressions.cpp",
+        "for.cpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "omp_pragmas.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "CompoundLiteralExpr",
+      "node_payload": "compound_literal_expr_data",
+      "source_count": 4,
+      "sources": [
+        "ast-dump-expr.c",
+        "compound_literal.c",
+        "macro.c",
+        "nas_ft.c"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ConditionalOperator",
+      "node_payload": "expr_data",
+      "source_count": 5,
+      "sources": [
+        "ast-dump-expr.c",
+        "blocked_mm.cpp",
+        "expressions.cpp",
+        "nas_bt.c",
+        "nas_lu.c"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ConstantExpr",
+      "node_payload": "expr_data",
+      "source_count": 36,
+      "sources": [
+        "ast-dump-c-attr.c",
+        "ast-dump-records.c",
+        "ast-dump-stmt.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "atom.cpp",
+        "attribute.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "enum.c",
+        "enum.cpp",
+        "enum.h",
+        "enum.hpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "struct.c",
+        "switch.c",
+        "system_header_threshold.cpp",
+        "system_header_threshold_option.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "throw.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ExprWithCleanups",
+      "node_payload": "expr_data",
+      "source_count": 6,
+      "sources": [
+        "clava_issue29.cpp",
+        "decl.cpp",
+        "exceptions.cpp",
+        "friend.cpp",
+        "lambda.cpp",
+        "template_expansion_pack.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "FixedPointLiteral",
+      "node_payload": "expr_data",
+      "source_count": 2,
+      "sources": [
+        "fixed_point.c",
+        "fixed_point_to_string.c"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "FloatingLiteral",
+      "node_payload": "floating_literal_data",
+      "source_count": 15,
+      "sources": [
+        "2mm.c",
+        "ast-dump-expr.c",
+        "dbl_max.cpp",
+        "decl.c",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "literals.cpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "omp_pragmas.cpp",
+        "struct.c"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "GNUNullExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "decl.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "GenericSelectionExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ImplicitCastExpr",
+      "node_payload": "cast_expr_data",
+      "source_count": 91,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "OMPParallelForDirective.cpp",
+        "Routing.cpp",
+        "ShortcutPosition.h",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "c-casts.c",
+        "c99.c",
+        "character.cpp",
+        "cl_attribute.cl",
+        "class_decl.cpp",
+        "clava_issue09.h",
+        "clava_issue10.cpp",
+        "clava_issue15.cpp",
+        "clava_issue19.cpp",
+        "clava_issue25.cpp",
+        "clava_issue26.cpp",
+        "clava_issue29.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "compound_literal.c",
+        "constructor.cpp",
+        "dbl_max.cpp",
+        "decl.c",
+        "decl.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "enum.cpp",
+        "enum.hpp",
+        "exceptions.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "gnu_stmt_expr.c",
+        "goto.c",
+        "if.cpp",
+        "implicit-cast-dump.c",
+        "implicit_reference.cpp",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "multistep-explicit-cast.c",
+        "naked_loops.c",
+        "namespacealias.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "noexcept.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pointer_to_member_operators.cpp",
+        "predefined.c",
+        "problematic_operator.cpp",
+        "pseudo_destructor.cpp",
+        "qualifiers.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "scope.cpp",
+        "simple_function.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "source_locations.cpp",
+        "strings.cpp",
+        "switch.c",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "types.cpp",
+        "variadic-promotion.c",
+        "variadic.c",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ImplicitValueInitExpr",
+      "node_payload": "expr_data",
+      "source_count": 4,
+      "sources": [
+        "array_filler.c",
+        "includes.cpp",
+        "nas_ua.c",
+        "struct.c"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "IntegerLiteral",
+      "node_payload": "integer_literal_data",
+      "source_count": 96,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "OMPParallelForDirective.cpp",
+        "array_filler.c",
+        "ast-dump-c-attr.c",
+        "ast-dump-expr.c",
+        "ast-dump-records.c",
+        "ast-dump-stmt.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "attr-target-ast.c",
+        "attribute.cpp",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "c99.c",
+        "character.cpp",
+        "cl_attribute.cl",
+        "class_decl.cpp",
+        "clava_issue09.h",
+        "clava_issue10.cpp",
+        "clava_issue15.cpp",
+        "clava_issue19.cpp",
+        "clava_issue24.cpp",
+        "clava_issue25.cpp",
+        "clava_issue29.cpp",
+        "clava_issue48.c",
+        "comment.cpp",
+        "compound_literal.c",
+        "constructor.cpp",
+        "decl.c",
+        "decl.cpp",
+        "dummy.cpp",
+        "enum.c",
+        "enum.cpp",
+        "enum.h",
+        "enum.hpp",
+        "exceptions.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "gnu_stmt_expr.c",
+        "goto.c",
+        "if.cpp",
+        "implicit-cast-dump.c",
+        "implicit_reference.cpp",
+        "includes.cpp",
+        "includes2.cpp",
+        "labels.c",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "macro.h",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "naked_loops.c",
+        "namespacealias.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "noexcept.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "simple_function.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "source_locations.cpp",
+        "strings.cpp",
+        "struct.c",
+        "struct.cpp",
+        "switch.c",
+        "system_header_threshold_option.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "test_includes.c",
+        "test_includes.cpp",
+        "throw.cpp",
+        "types.cpp",
+        "variadic-promotion.c",
+        "variadic.c",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "PackExpansionExpr",
+      "node_payload": "expr_data",
+      "source_count": 3,
+      "sources": [
+        "mini_logger.hpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ParenExpr",
+      "node_payload": "expr_data",
+      "source_count": 17,
+      "sources": [
+        "2mm.c",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "blocked_mm.cpp",
+        "clava_issue15.cpp",
+        "expressions.cpp",
+        "gnu_extensions.cpp",
+        "macro.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "ParenListExpr",
+      "node_payload": "expr_data",
+      "source_count": 18,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "PredefinedExpr",
+      "node_payload": "predefined_expr_data",
+      "source_count": 1,
+      "sources": [
+        "predefined.c"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "StmtExpr",
+      "node_payload": "expr_data",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-stmt.c",
+        "gnu_stmt_expr.c"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "StringLiteral",
+      "node_payload": "string_literal_data",
+      "source_count": 27,
+      "sources": [
+        "ast-dump-expr.c",
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue15.cpp",
+        "compound_literal.c",
+        "decl.cpp",
+        "dependent_scope_decl_ref_expr.cpp",
+        "enum.cpp",
+        "enum.hpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "functions.cpp",
+        "goto.c",
+        "literals.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "predefined.c",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "strings.cpp",
+        "variadic.c"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "SubstNonTypeTemplateParmExpr",
+      "node_payload": "expr_data",
+      "source_count": 22,
+      "sources": [
+        "atom.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "problematic_operator.cpp",
+        "sorted_id.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "TypeTraitExpr",
+      "node_payload": "expr_data",
+      "source_count": 3,
+      "sources": [
+        "mini_logger.hpp",
+        "pair_hash.cpp",
+        "pair_hash.h"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "UnaryOperator",
+      "node_payload": "unary_operator_data",
+      "source_count": 40,
+      "sources": [
+        "2mm.c",
+        "OMPParallelForDirective.cpp",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "blocked_mm.cpp",
+        "cl_attribute.cl",
+        "class_template.cpp",
+        "clava_issue19.cpp",
+        "clava_issue29.cpp",
+        "decl.c",
+        "enum.c",
+        "enum.cpp",
+        "enum.h",
+        "enum.hpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "fixed_point.c",
+        "for.cpp",
+        "friend.cpp",
+        "gnu_extensions.cpp",
+        "goto.c",
+        "if.cpp",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "naked_loops.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "omp_pragmas.cpp",
+        "pointer_to_member_operators.cpp",
+        "scope.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_expansion_pack.cpp",
+        "variadic-promotion.c",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "expr children",
+      "class_name": "VAArgExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "variadic.c"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "AddrLabelExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ArrayInitIndexExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "ArrayInitLoopExpr.cpp"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ArraySubscriptExpr",
+      "node_payload": "expr_data",
+      "source_count": 17,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "ast-dump-expr.c",
+        "blocked_mm.cpp",
+        "cl_attribute.cl",
+        "clava_issue19.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "functions.cpp",
+        "literals.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "BinaryConditionalOperator",
+      "node_payload": "expr_data",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXBindTemporaryExpr",
+      "node_payload": "expr_data",
+      "source_count": 3,
+      "sources": [
+        "decl.cpp",
+        "exceptions.cpp",
+        "noexcept.cpp"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXDefaultArgExpr",
+      "node_payload": "expr_data",
+      "source_count": 3,
+      "sources": [
+        "decl.cpp",
+        "exceptions.cpp",
+        "template_expansion_pack.cpp"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXDefaultInitExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "mini_logger.hpp"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXNullPtrLiteralExpr",
+      "node_payload": "expr_data",
+      "source_count": 20,
+      "sources": [
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "classes.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "decl.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXStdInitializerListExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "decl.cpp"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXThisExpr",
+      "node_payload": "expr_data",
+      "source_count": 10,
+      "sources": [
+        "class_decl.cpp",
+        "clava_issue18.cpp",
+        "clava_issue29.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "lambda.cpp",
+        "mini_logger.hpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "CXXThrowExpr",
+      "node_payload": "expr_data",
+      "source_count": 3,
+      "sources": [
+        "exceptions.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ConditionalOperator",
+      "node_payload": "expr_data",
+      "source_count": 5,
+      "sources": [
+        "ast-dump-expr.c",
+        "blocked_mm.cpp",
+        "expressions.cpp",
+        "nas_bt.c",
+        "nas_lu.c"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ConstantExpr",
+      "node_payload": "expr_data",
+      "source_count": 36,
+      "sources": [
+        "ast-dump-c-attr.c",
+        "ast-dump-records.c",
+        "ast-dump-stmt.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "atom.cpp",
+        "attribute.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "enum.c",
+        "enum.cpp",
+        "enum.h",
+        "enum.hpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "struct.c",
+        "switch.c",
+        "system_header_threshold.cpp",
+        "system_header_threshold_option.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "throw.cpp"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ExprWithCleanups",
+      "node_payload": "expr_data",
+      "source_count": 6,
+      "sources": [
+        "clava_issue29.cpp",
+        "decl.cpp",
+        "exceptions.cpp",
+        "friend.cpp",
+        "lambda.cpp",
+        "template_expansion_pack.cpp"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "FixedPointLiteral",
+      "node_payload": "expr_data",
+      "source_count": 2,
+      "sources": [
+        "fixed_point.c",
+        "fixed_point_to_string.c"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "GNUNullExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "decl.cpp"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "GenericSelectionExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ImplicitValueInitExpr",
+      "node_payload": "expr_data",
+      "source_count": 4,
+      "sources": [
+        "array_filler.c",
+        "includes.cpp",
+        "nas_ua.c",
+        "struct.c"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "OpaqueValueExpr",
+      "node_payload": "expr_data",
+      "source_count": 3,
+      "sources": [
+        "ArrayInitLoopExpr.cpp",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "PackExpansionExpr",
+      "node_payload": "expr_data",
+      "source_count": 3,
+      "sources": [
+        "mini_logger.hpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ParenExpr",
+      "node_payload": "expr_data",
+      "source_count": 17,
+      "sources": [
+        "2mm.c",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "blocked_mm.cpp",
+        "clava_issue15.cpp",
+        "expressions.cpp",
+        "gnu_extensions.cpp",
+        "macro.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "ParenListExpr",
+      "node_payload": "expr_data",
+      "source_count": 18,
+      "sources": [
+        "atom.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "problematic_operator.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "StmtExpr",
+      "node_payload": "expr_data",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-stmt.c",
+        "gnu_stmt_expr.c"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "SubstNonTypeTemplateParmExpr",
+      "node_payload": "expr_data",
+      "source_count": 22,
+      "sources": [
+        "atom.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "exceptions.cpp",
+        "for.cpp",
+        "if.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "problematic_operator.cpp",
+        "sorted_id.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "TypeTraitExpr",
+      "node_payload": "expr_data",
+      "source_count": 3,
+      "sources": [
+        "mini_logger.hpp",
+        "pair_hash.cpp",
+        "pair_hash.h"
+      ]
+    },
+    {
+      "family": "expr data",
+      "class_name": "VAArgExpr",
+      "node_payload": "expr_data",
+      "source_count": 1,
+      "sources": [
+        "variadic.c"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "BreakStmt",
+      "node_payload": "stmt_data",
+      "source_count": 5,
+      "sources": [
+        "ast-dump-stmt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "switch.c"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "CompoundStmt",
+      "node_payload": "stmt_data",
+      "source_count": 114,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "OMPParallelForDirective.cpp",
+        "Routing.cpp",
+        "ShortcutPosition.h",
+        "array_filler.c",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "attr-target-ast.c",
+        "attribute.cpp",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "builtin_types.cl",
+        "builtin_types.cpp",
+        "c-casts.c",
+        "c89.c",
+        "c99.c",
+        "character.cpp",
+        "cl_attribute.cl",
+        "class_decl.cpp",
+        "class_template.cpp",
+        "clava_issue09.h",
+        "clava_issue10.cpp",
+        "clava_issue13.cpp",
+        "clava_issue15.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue20.cpp",
+        "clava_issue24.cpp",
+        "clava_issue25.cpp",
+        "clava_issue26.cpp",
+        "clava_issue28.cpp",
+        "clava_issue29.cpp",
+        "clava_issue39.cpp",
+        "clava_issue40.cpp",
+        "comment.cpp",
+        "compound_literal.c",
+        "dbl_max.cpp",
+        "decl.c",
+        "decl.cpp",
+        "dependent_scope_decl_ref_expr.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "enum.c",
+        "enum.cpp",
+        "exceptions.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "gnu_stmt_expr.c",
+        "goto.c",
+        "if.cpp",
+        "implicit-cast-dump.c",
+        "implicit_reference.cpp",
+        "includes.cpp",
+        "includes2.cpp",
+        "labels.c",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "multistep-explicit-cast.c",
+        "naked_loops.c",
+        "namespace.cpp",
+        "namespacealias.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "noexcept.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "pointer_to_member_operators.cpp",
+        "pragmas.cpp",
+        "predefined.c",
+        "problematic_operator.cpp",
+        "pseudo_destructor.cpp",
+        "qualifiers.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "scope.cpp",
+        "simple_function.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "strings.cpp",
+        "struct.c",
+        "switch.c",
+        "system_header_threshold.cpp",
+        "system_header_threshold_option.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "throw.cpp",
+        "types.c",
+        "types.cpp",
+        "variadic-promotion.c",
+        "variadic.c",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "ContinueStmt",
+      "node_payload": "stmt_data",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "GCCAsmStmt",
+      "node_payload": "g_c_c_asm_stmt_data",
+      "source_count": 1,
+      "sources": [
+        "clava_issue15.cpp"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "IndirectGotoStmt",
+      "node_payload": "stmt_data",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "NullStmt",
+      "node_payload": "stmt_data",
+      "source_count": 11,
+      "sources": [
+        "2mm.c",
+        "OMPParallelForDirective.cpp",
+        "ast-dump-stmt.c",
+        "for.cpp",
+        "lambda.cpp",
+        "macro.c",
+        "nas_bt.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "scope.cpp",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "ReturnStmt",
+      "node_payload": "stmt_data",
+      "source_count": 59,
+      "sources": [
+        "2mm.c",
+        "array_filler.c",
+        "ast-dump-stmt.c",
+        "attr-target-ast.c",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "c99.c",
+        "character.cpp",
+        "class_decl.cpp",
+        "clava_issue10.cpp",
+        "clava_issue15.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue25.cpp",
+        "clava_issue29.cpp",
+        "comment.cpp",
+        "decl.c",
+        "decl.cpp",
+        "dummy.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "implicit_reference.cpp",
+        "includes2.cpp",
+        "labels.c",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "multiple_clauses_omp_pragmas.cpp",
+        "multistep-explicit-cast.c",
+        "naked_loops.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "problematic_operator.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "simple_function.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "strings.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "throw.cpp",
+        "variadic.c",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "stmt children",
+      "class_name": "SwitchStmt",
+      "node_payload": "stmt_data",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-stmt.c",
+        "switch.c"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "BreakStmt",
+      "node_payload": "stmt_data",
+      "source_count": 5,
+      "sources": [
+        "ast-dump-stmt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "switch.c"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "CXXCatchStmt",
+      "node_payload": "stmt_data",
+      "source_count": 5,
+      "sources": [
+        "comment.cpp",
+        "exceptions.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "throw.cpp"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "CXXForRangeStmt",
+      "node_payload": "stmt_data",
+      "source_count": 3,
+      "sources": [
+        "for.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "CXXTryStmt",
+      "node_payload": "stmt_data",
+      "source_count": 5,
+      "sources": [
+        "comment.cpp",
+        "exceptions.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "throw.cpp"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "CaseStmt",
+      "node_payload": "stmt_data",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-stmt.c",
+        "switch.c"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "CompoundStmt",
+      "node_payload": "stmt_data",
+      "source_count": 114,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "OMPParallelForDirective.cpp",
+        "Routing.cpp",
+        "ShortcutPosition.h",
+        "array_filler.c",
+        "ast-dump-expr.c",
+        "ast-dump-stmt.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "attr-target-ast.c",
+        "attribute.cpp",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "builtin_types.cl",
+        "builtin_types.cpp",
+        "c-casts.c",
+        "c89.c",
+        "c99.c",
+        "character.cpp",
+        "cl_attribute.cl",
+        "class_decl.cpp",
+        "class_template.cpp",
+        "clava_issue09.h",
+        "clava_issue10.cpp",
+        "clava_issue13.cpp",
+        "clava_issue15.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue20.cpp",
+        "clava_issue24.cpp",
+        "clava_issue25.cpp",
+        "clava_issue26.cpp",
+        "clava_issue28.cpp",
+        "clava_issue29.cpp",
+        "clava_issue39.cpp",
+        "clava_issue40.cpp",
+        "comment.cpp",
+        "compound_literal.c",
+        "dbl_max.cpp",
+        "decl.c",
+        "decl.cpp",
+        "dependent_scope_decl_ref_expr.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "enum.c",
+        "enum.cpp",
+        "exceptions.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "gnu_stmt_expr.c",
+        "goto.c",
+        "if.cpp",
+        "implicit-cast-dump.c",
+        "implicit_reference.cpp",
+        "includes.cpp",
+        "includes2.cpp",
+        "labels.c",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "multistep-explicit-cast.c",
+        "naked_loops.c",
+        "namespace.cpp",
+        "namespacealias.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "noexcept.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "pointer_to_member_operators.cpp",
+        "pragmas.cpp",
+        "predefined.c",
+        "problematic_operator.cpp",
+        "pseudo_destructor.cpp",
+        "qualifiers.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "scope.cpp",
+        "simple_function.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "strings.cpp",
+        "struct.c",
+        "switch.c",
+        "system_header_threshold.cpp",
+        "system_header_threshold_option.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "throw.cpp",
+        "types.c",
+        "types.cpp",
+        "variadic-promotion.c",
+        "variadic.c",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "ContinueStmt",
+      "node_payload": "stmt_data",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "DeclStmt",
+      "node_payload": "stmt_data",
+      "source_count": 71,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "OMPParallelForDirective.cpp",
+        "Routing.cpp",
+        "array_filler.c",
+        "ast-dump-stmt.c",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "attribute.cpp",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "builtin_types.cl",
+        "builtin_types.cpp",
+        "c-casts.c",
+        "c99.c",
+        "character.cpp",
+        "cl_attribute.cl",
+        "class_template.cpp",
+        "clava_issue15.cpp",
+        "clava_issue19.cpp",
+        "clava_issue29.cpp",
+        "clava_issue40.cpp",
+        "comment.cpp",
+        "compound_literal.c",
+        "constructor.cpp",
+        "decl.c",
+        "decl.cpp",
+        "dependent_scope_decl_ref_expr.cpp",
+        "exceptions.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "gnu_extensions.cpp",
+        "gnu_stmt_expr.c",
+        "goto.c",
+        "if.cpp",
+        "implicit_reference.cpp",
+        "includes.cpp",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "multiple_clauses_omp_pragmas.cpp",
+        "naked_loops.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "noexcept.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pointer_to_member_operators.cpp",
+        "qualifiers.cpp",
+        "scope.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "strings.cpp",
+        "switch.c",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "types.cpp",
+        "variadic.c",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "DefaultStmt",
+      "node_payload": "stmt_data",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-stmt.c",
+        "switch.c"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "DoStmt",
+      "node_payload": "stmt_data",
+      "source_count": 4,
+      "sources": [
+        "ast-dump-stmt.c",
+        "nas_ua.c",
+        "scope.cpp",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "ForStmt",
+      "node_payload": "stmt_data",
+      "source_count": 19,
+      "sources": [
+        "2mm.c",
+        "OMPParallelForDirective.cpp",
+        "ast-dump-stmt.c",
+        "blocked_mm.cpp",
+        "cl_attribute.cl",
+        "clava_issue19.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "goto.c",
+        "macro.c",
+        "multiple_clauses_omp_pragmas.cpp",
+        "naked_loops.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "omp_pragmas.cpp",
+        "scope.cpp",
+        "template_expansion_pack.cpp"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "IfStmt",
+      "node_payload": "stmt_data",
+      "source_count": 14,
+      "sources": [
+        "ast-dump-stmt.c",
+        "clava_issue29.cpp",
+        "comment.cpp",
+        "decl.c",
+        "fast_stack.cpp",
+        "goto.c",
+        "if.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "scope.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "IndirectGotoStmt",
+      "node_payload": "stmt_data",
+      "source_count": 1,
+      "sources": [
+        "ast-dump-stmt.c"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "NullStmt",
+      "node_payload": "stmt_data",
+      "source_count": 11,
+      "sources": [
+        "2mm.c",
+        "OMPParallelForDirective.cpp",
+        "ast-dump-stmt.c",
+        "for.cpp",
+        "lambda.cpp",
+        "macro.c",
+        "nas_bt.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "scope.cpp",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "ReturnStmt",
+      "node_payload": "stmt_data",
+      "source_count": 59,
+      "sources": [
+        "2mm.c",
+        "array_filler.c",
+        "ast-dump-stmt.c",
+        "attr-target-ast.c",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "c99.c",
+        "character.cpp",
+        "class_decl.cpp",
+        "clava_issue10.cpp",
+        "clava_issue15.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue25.cpp",
+        "clava_issue29.cpp",
+        "comment.cpp",
+        "decl.c",
+        "decl.cpp",
+        "dummy.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "implicit_reference.cpp",
+        "includes2.cpp",
+        "labels.c",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "multiple_clauses_omp_pragmas.cpp",
+        "multistep-explicit-cast.c",
+        "naked_loops.c",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "problematic_operator.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "simple_function.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "strings.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "throw.cpp",
+        "variadic.c",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "SwitchStmt",
+      "node_payload": "stmt_data",
+      "source_count": 2,
+      "sources": [
+        "ast-dump-stmt.c",
+        "switch.c"
+      ]
+    },
+    {
+      "family": "stmt data",
+      "class_name": "WhileStmt",
+      "node_payload": "stmt_data",
+      "source_count": 11,
+      "sources": [
+        "ast-dump-stmt.c",
+        "comment.cpp",
+        "lambda.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "scope.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "type children",
+      "class_name": "AtomicType",
+      "node_payload": "type_data",
+      "source_count": 1,
+      "sources": [
+        "fixed_point.c"
+      ]
+    },
+    {
+      "family": "type children",
+      "class_name": "BuiltinType",
+      "node_payload": "builtin_type_data",
+      "source_count": 147,
+      "sources": [
+        "2mm.c",
+        "ArrayInitLoopExpr.cpp",
+        "ComplexType.cpp",
+        "OMPParallelForDirective.cpp",
+        "Routing.cpp",
+        "ShortcutPosition.h",
+        "TemplateTemplateParmDecl.cpp",
+        "array_filler.c",
+        "ast-dump-c-attr.c",
+        "ast-dump-expr.c",
+        "ast-dump-records.c",
+        "ast-dump-stmt.c",
+        "ast-print-bool.c",
+        "ast-print-bool.cpp",
+        "ast-print-enum-decl.c",
+        "ast-print-record-decl.c",
+        "ast-print-record-decl.cpp",
+        "atom.cpp",
+        "attr-target-ast.c",
+        "attribute.cpp",
+        "blocked_mm.cpp",
+        "boolean.c",
+        "boolean.cpp",
+        "boolean2.c",
+        "builtin_types.cl",
+        "builtin_types.cpp",
+        "c-casts.c",
+        "c89.c",
+        "c99.c",
+        "character.cpp",
+        "cl_attribute.cl",
+        "class_decl.cpp",
+        "class_template.cpp",
+        "classes.cpp",
+        "clava_issue09.h",
+        "clava_issue10.cpp",
+        "clava_issue11.cpp",
+        "clava_issue13.cpp",
+        "clava_issue15.cpp",
+        "clava_issue17.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue20.cpp",
+        "clava_issue21.cpp",
+        "clava_issue24.cpp",
+        "clava_issue25.cpp",
+        "clava_issue26.cpp",
+        "clava_issue27.cpp",
+        "clava_issue28.cpp",
+        "clava_issue28.h",
+        "clava_issue29.cpp",
+        "clava_issue39.cpp",
+        "clava_issue40.cpp",
+        "clava_issue48.c",
+        "comment.cpp",
+        "comment_include.cpp",
+        "compound_literal.c",
+        "constructor.cpp",
+        "constructor.h",
+        "dbl_max.cpp",
+        "decl.c",
+        "decl.cpp",
+        "default.h",
+        "dependent_scope_decl_ref_expr.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "enum.c",
+        "enum.cpp",
+        "enum.h",
+        "enum.hpp",
+        "exceptions.cpp",
+        "expressions.cpp",
+        "fast_stack.cpp",
+        "fixed_point.c",
+        "fixed_point_to_string.c",
+        "for.cpp",
+        "friend.cpp",
+        "functions.cpp",
+        "gnu_extensions.cpp",
+        "gnu_stmt_expr.c",
+        "goto.c",
+        "if.cpp",
+        "implicit-cast-dump.c",
+        "implicit_reference.cpp",
+        "includes.cpp",
+        "includes.h",
+        "includes2.cpp",
+        "includes2.h",
+        "labels.c",
+        "lambda.cpp",
+        "literals.cpp",
+        "macro.c",
+        "macro.h",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "multiple_clauses_omp_pragmas.cpp",
+        "multistep-explicit-cast.c",
+        "naked_loops.c",
+        "namespace.cpp",
+        "namespace.h",
+        "namespacealias.cpp",
+        "nas_bt.c",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "new.cpp",
+        "noexcept.cpp",
+        "offset.c",
+        "offset.cpp",
+        "omp_pragmas.cpp",
+        "operator.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "pointer_to_member_operators.cpp",
+        "polybench.h",
+        "pragmas.cpp",
+        "predefined.c",
+        "problematic_operator.cpp",
+        "pseudo_destructor.cpp",
+        "qualifiers.cpp",
+        "rdr6094103-unordered-compare-promote.c",
+        "scope.cpp",
+        "simple_function.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "source_locations.cpp",
+        "strings.cpp",
+        "struct.c",
+        "struct.cpp",
+        "struct2.c",
+        "switch.c",
+        "system_header_threshold.cpp",
+        "system_header_threshold_option.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "test_includes.c",
+        "test_includes.cpp",
+        "throw.cpp",
+        "types.c",
+        "types.cpp",
+        "variadic-promotion.c",
+        "variadic.c",
+        "while.cpp"
+      ]
+    },
+    {
+      "family": "type children",
+      "class_name": "ParenType",
+      "node_payload": "type_data",
+      "source_count": 26,
+      "sources": [
+        "2mm.c",
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "decl.c",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "macro.c",
+        "macro.h",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "struct.c"
+      ]
+    },
+    {
+      "family": "type children",
+      "class_name": "UsingType",
+      "node_payload": "type_data",
+      "source_count": 17,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "type children",
+      "class_name": "VectorType",
+      "node_payload": "type_data",
+      "source_count": 1,
+      "sources": [
+        "VectorType.cpp"
+      ]
+    },
+    {
+      "family": "type data",
+      "class_name": "AtomicType",
+      "node_payload": "type_data",
+      "source_count": 1,
+      "sources": [
+        "fixed_point.c"
+      ]
+    },
+    {
+      "family": "type data",
+      "class_name": "InjectedClassNameType",
+      "node_payload": "type_data",
+      "source_count": 41,
+      "sources": [
+        "TemplateTemplateParmDecl.cpp",
+        "atom.cpp",
+        "blocked_mm.cpp",
+        "class_template.cpp",
+        "class_template.h",
+        "classes.cpp",
+        "clava_issue10.cpp",
+        "clava_issue18.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "comment.cpp",
+        "constructor.cpp",
+        "dbl_max.cpp",
+        "decl.cpp",
+        "destructor.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "for.cpp",
+        "friend.cpp",
+        "if.cpp",
+        "literals.cpp",
+        "member_calls.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "new.cpp",
+        "noexcept.cpp",
+        "pair_hash.cpp",
+        "pair_hash.h",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "qualifiers.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "source_locations.cpp",
+        "template_auto.cpp",
+        "template_expansion_pack.cpp",
+        "templates.cpp",
+        "templates.h",
+        "types.cpp"
+      ]
+    },
+    {
+      "family": "type data",
+      "class_name": "ParenType",
+      "node_payload": "type_data",
+      "source_count": 26,
+      "sources": [
+        "2mm.c",
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "decl.c",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "macro.c",
+        "macro.h",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "nas_ft.c",
+        "nas_lu.c",
+        "nas_ua.c",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "sizeof.c",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h",
+        "struct.c"
+      ]
+    },
+    {
+      "family": "type data",
+      "class_name": "UsingType",
+      "node_payload": "type_data",
+      "source_count": 17,
+      "sources": [
+        "blocked_mm.cpp",
+        "clava_issue10.cpp",
+        "clava_issue19.cpp",
+        "clava_issue39.cpp",
+        "dummy.cpp",
+        "exceptions.cpp",
+        "fast_stack.cpp",
+        "friend.cpp",
+        "literals.cpp",
+        "mini_logger.hpp",
+        "namespacealias.cpp",
+        "noexcept.cpp",
+        "pointer_to_member_operators.cpp",
+        "problematic_operator.cpp",
+        "sizeof.cpp",
+        "sorted_id.cpp",
+        "sorted_id.h"
+      ]
+    },
+    {
+      "family": "type data",
+      "class_name": "VectorType",
+      "node_payload": "type_data",
+      "source_count": 1,
+      "sources": [
+        "VectorType.cpp"
+      ]
+    }
+  ]
+}

@@ -24,13 +24,15 @@ import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum InitializationStyle implements StringProvider {
-    NO_INIT,
     CINIT, // C-style initialization with assignment
+    // Keep these explicit names for compatibility: build-interfaces exposes strings to TS, with no TS enum to convert
+    // them to.
     CALL_INIT("callinit"), // Call-style initialization (C++98)
-    LIST_INIT("listinit"); // Direct list-initialization (C++11)
+    LIST_INIT("listinit"), // Direct list-initialization (C++11)
+    ParenListInit;
 
     private static Lazy<EnumHelperWithValue<InitializationStyle>> ENUM_HELPER = EnumHelperWithValue
-            .newLazyHelperWithValue(InitializationStyle.class, NO_INIT);
+            .newLazyHelperWithValue(InitializationStyle.class);
 
     public static EnumHelperWithValue<InitializationStyle> getHelper() {
         return ENUM_HELPER.get();
@@ -56,10 +58,10 @@ public enum InitializationStyle implements StringProvider {
         switch (this) {
         case CINIT:
             return cinitCode(node);
-        case NO_INIT:
-            return "";
         case CALL_INIT:
             return callInitCode(node);
+        case ParenListInit:
+            return parenListInitCode(node);
         case LIST_INIT:
             return listInitCode(node);
         default:
@@ -96,6 +98,16 @@ public enum InitializationStyle implements StringProvider {
                 "Expected an Expr, got '" + init.getClass().getSimpleName() + "'");
 
         return "(" + init.getCode() + ")";
+    }
+
+    private String parenListInitCode(VarDecl node) {
+        Preconditions.checkArgument(node.getNumChildren() == 1, "Expected one child");
+        ClavaNode init = node.getChild(0);
+
+        Preconditions.checkArgument(init instanceof Expr,
+                "Expected an Expr, got '" + init.getClass().getSimpleName() + "'");
+
+        return init.getCode();
     }
 
     private String listInitCode(VarDecl node) {

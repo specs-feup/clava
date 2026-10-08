@@ -13,70 +13,72 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryExprOrType;
 import pt.up.fe.specs.util.SpecsLogs;
 
-public class CxxUnaryExprOrType extends AUnaryExprOrType {
+public class CxxUnaryExprOrType<Self extends CxxUnaryExprOrType<Self>> extends AUnaryExprOrType<Self> {
 
-    private final UnaryExprOrTypeTraitExpr expr;
-
-    public CxxUnaryExprOrType(UnaryExprOrTypeTraitExpr expr) {
-        super(new CxxExpression(expr));
-
-        this.expr = expr;
+    public CxxUnaryExprOrType(UnaryExprOrTypeTraitExpr expr, CxxWeaver weaver) {
+        super(expr, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return expr;
+    public UnaryExprOrTypeTraitExpr getNodeImpl() {
+        return (UnaryExprOrTypeTraitExpr) super.getNodeImpl();
     }
 
     @Override
-    public Boolean getHasTypeExprImpl() {
-        return expr.hasTypeExpression();
+    public boolean getHasTypeExprImpl() {
+        return this.getNodeImpl().hasTypeExpression();
     }
 
     @Override
-    public Boolean getHasArgExprImpl() {
-        return expr.hasArgumentExpression();
+    public boolean getHasArgExprImpl() {
+        return this.getNodeImpl().hasArgumentExpression();
     }
 
     @Override
-    public AType getArgTypeImpl() {
+    public AType<?> getArgTypeImpl() {
+        var expr = this.getNodeImpl();
+
         if (!expr.hasTypeExpression()) {
             return null;
         }
 
-        return CxxJoinpoints.create(expr.getArgumentType().get(), AType.class);
+        return CxxJoinpoints.create(expr.getArgumentType().get(), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public AExpression getArgExprImpl() {
+    public AExpression<?> getArgExprImpl() {
+        var expr = this.getNodeImpl();
+
         if (!expr.hasArgumentExpression()) {
             return null;
         }
 
-        return CxxJoinpoints.create(expr.getArgumentExpression(), AExpression.class);
+        return CxxJoinpoints.create(expr.getArgumentExpression(), getWeaverEngine(), AExpression.class);
     }
 
     @Override
-    public void setArgTypeImpl(AType argType) {
+    public void setArgTypeImpl(AType<?> argType) {
+        var expr = this.getNodeImpl();
+
         if (!expr.hasTypeExpression()) {
             SpecsLogs.msgInfo("UnaryExprOrType '" + expr.getUettKind() + "' does not have a type argument");
             return;
         }
 
-        expr.setArgType((Type) argType.getNode());
+        expr.setArgType((Type) argType.getNodeImpl());
     }
 
     @Override
     public String getKindImpl() {
-        return expr.getUettKind().getString();
+        return this.getNodeImpl().getUettKind().getString();
     }
 }

@@ -1,0 +1,69 @@
+import DotFormatter from "@specs-feup/lara/api/lara/graphs/DotFormatter.ts";
+import Graph from "@specs-feup/lara/api/lara/graphs/Graph.ts";
+import Graphs from "@specs-feup/lara/api/lara/graphs/Graphs.ts";
+import cytoscape from "cytoscape";
+import { FunctionJp, Joinpoint } from "../../Joinpoints.ts";
+import ScgNodeData from "./scg/ScgNodeData.ts";
+import StaticCallGraphBuilder from "./scg/StaticCallGraphBuilder.ts";
+
+export default class StaticCallGraph extends Graph {
+  private static dotFormatterInstance: DotFormatter | undefined = undefined;
+
+  /**
+   * Maps functions to graph nodes
+   */
+  private functionMap: Record<string, cytoscape.NodeSingular>;
+
+  constructor(
+    graph: cytoscape.Core,
+    functions: Record<string, cytoscape.NodeSingular>
+  ) {
+    super(graph);
+    this.functionMap = functions;
+  }
+
+  /**
+   *
+   * @param $jp -
+   * @param visitCalls - If true, recursively visits the functions of each call, building a call graph of the available code
+   * @returns
+   */
+  static build($jp: Joinpoint, visitCalls: boolean = true) {
+    const builder = new StaticCallGraphBuilder();
+
+    const graph = builder.build($jp, visitCalls);
+
+    return new StaticCallGraph(graph, builder.nodes);
+  }
+
+  get functions() {
+    return this.functionMap;
+  }
+
+  getNode($function: FunctionJp) {
+    // Normalize function
+    return this.functionMap[$function.canonical.astId];
+  }
+
+  static get dotFormatter() {
+    if (StaticCallGraph.dotFormatterInstance === undefined) {
+      StaticCallGraph.dotFormatterInstance = new DotFormatter();
+      StaticCallGraph.dotFormatterInstance.addNodeAttribute(
+        "style=dashed",
+        (node) =>
+          Graphs.isLeaf(node) &&
+          !(node.data() as ScgNodeData).hasImplementation()
+      );
+      StaticCallGraph.dotFormatterInstance.addNodeAttribute(
+        "style=filled",
+        (node) => Graphs.isLeaf(node) && (node.data() as ScgNodeData).hasCalls()
+      );
+    }
+
+    return StaticCallGraph.dotFormatterInstance;
+  }
+
+  toDot() {
+    return super.toDot(StaticCallGraph.dotFormatter);
+  }
+}

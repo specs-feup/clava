@@ -1,0 +1,10 @@
+run_id,pair_group_id,pair_id,suite,phase,measured,cache_mode,gc_policy,protocol,repeat,return_code,elapsed_s,parse_event_count,expected_event_count,ccache_disabled,ccache_cacheable_calls,ccache_hits,ccache_misses,ccache_uncacheable_calls,gc_policy_verified,identity_multiset_match,valid,validity_reason
+text-normal-clava-r1,gc-normal-r1,clava-js|normal|r1,clava-js,measured,true,warm,normal,text,1,0,30,3,3,false,3,2,1,0,true,true,true,
+text-normal-java-r1,gc-normal-r1,java|normal|r1,java,measured,true,warm,normal,text,1,0,10,2,2,false,2,1,1,0,true,true,true,
+proto-normal-clava-r1,gc-normal-r1,clava-js|normal|r1,clava-js,measured,true,warm,normal,protobuf,1,0,34,3,3,false,3,0,3,0,true,true,true,
+proto-normal-java-r1,gc-normal-r1,java|normal|r1,java,measured,true,warm,normal,protobuf,1,0,12,2,2,false,2,0,2,0,true,true,true,
+text-disabled-clava-r2,gc-disabled-r2,clava-js|disabled|r2,clava-js,measured,true,warm,disabled,text,2,0,28,2,2,false,2,1,1,0,true,true,true,
+text-disabled-java-r2,gc-disabled-r2,java|disabled|r2,java,measured,true,warm,disabled,text,2,0,11,2,2,false,2,1,1,0,true,true,true,
+proto-disabled-clava-r2,gc-disabled-r2,clava-js|disabled|r2,clava-js,measured,true,warm,disabled,protobuf,2,0,27,2,2,false,2,0,2,0,true,true,true,
+proto-disabled-java-r2,gc-disabled-r2,java|disabled|r2,java,measured,true,warm,disabled,protobuf,2,0,15,2,2,false,2,0,2,0,true,true,true,
+warmup-clava,gc-normal-r0,clava-js|normal|r0,clava-js,seed,false,warm,normal,text,0,0,25,3,3,false,3,3,0,0,true,true,true,

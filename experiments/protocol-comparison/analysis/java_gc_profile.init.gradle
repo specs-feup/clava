@@ -1,0 +1,23 @@
+// Diagnostic only: keep the existing Java suite selection and profile its test worker.
+gradle.afterProject { project ->
+    if (project.name == 'ClangAstParser') {
+        project.tasks.named('test') {
+            def byClass = [:].withDefault { 0L }
+            afterTest { descriptor, result ->
+                byClass[descriptor.className] += result.endTime - result.startTime
+            }
+            afterSuite { descriptor, result ->
+                if (descriptor.parent == null) {
+                    println "AB_CLASS_TIMING " + groovy.json.JsonOutput.toJson(byClass)
+                }
+            }
+            def jfrFile = System.getenv('CLAVA_AB_PROFILE_JFR')
+            if (jfrFile) {
+                jvmArgs "-XX:StartFlightRecording=filename=${jfrFile},settings=profile,dumponexit=true"
+            }
+            if (System.getenv('CLAVA_AB_DISABLE_EXPLICIT_GC') == 'true') {
+                jvmArgs '-XX:+DisableExplicitGC'
+            }
+        }
+    }
+}

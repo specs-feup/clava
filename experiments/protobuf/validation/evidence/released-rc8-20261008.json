@@ -1,0 +1,184 @@
+{
+  "date": "2026-10-08",
+  "purpose": "Release-backed Clava consumer validation for the published Protobuf RC8 artifacts",
+  "release": {
+    "tag": "v18.1.8_6-rc8",
+    "is_prerelease": true,
+    "published_at": "2026-10-08T13:31:32Z",
+    "native_source_commit": "e874debc111ec105fa5d1efa17ecd97300613178",
+    "release_manifest_sha256": "9ed7487eff35ef0cdbcd3628fb7a9f429005b4e14a6fa4070db50ba14d0c8ecc",
+    "protocol": {
+      "id": "clava-ast-wire",
+      "major": 1,
+      "minor": 1,
+      "llvm_major": 18,
+      "producer_version": "clang-dumper-18",
+      "schema_sha256": "723b6d44d97399a81ffd7d97759b45f79ca4eee2683f867f30d0c08facd4c44a",
+      "descriptor_sha256": "9b54021feb180f0e031d084ca1d463d3df00a80862476940e2cc73917f584238"
+    },
+    "producer_toolchain": {
+      "protobuf": "28.3",
+      "protoc": "28.3"
+    },
+    "assets": {
+      "clang-dumper-release-manifest.json": "9ed7487eff35ef0cdbcd3628fb7a9f429005b4e14a6fa4070db50ba14d0c8ecc",
+      "clang-dumper-linux-x64": "ce467a8355c389c45024490e1ee67930737db090d8e5b236db82ecf1f69c9d27",
+      "clang-dumper-ast-wire.proto": "723b6d44d97399a81ffd7d97759b45f79ca4eee2683f867f30d0c08facd4c44a",
+      "clang-dumper-ast-wire.pb": "9b54021feb180f0e031d084ca1d463d3df00a80862476940e2cc73917f584238",
+      "clang-dumper-linux-x64-includes.zip": "30179fe7a2b512d138ebe5f1b71c14c9043fbfef51ae7ee24d28223f5bc5ecfb"
+    }
+  },
+  "source_revisions": {
+    "clava": "9b588d48ae36b0bfe60eb4fe7748e0116083005f",
+    "clava_framework_include_fix": "4607f5272b4517c5369773c1b012dabc49a0565c",
+    "specs_java_libs": "76fe6b1586bdc6bdb7f6501f30ce238891757b1b",
+    "lara_framework": "73c5b955ab5484a3fd3199f9e2da7580758c5683"
+  },
+  "runtime": {
+    "os": "Linux x86_64",
+    "java": "26.0.1",
+    "gradle": "9.6.1",
+    "consumer_protobuf_java": "4.28.3",
+    "pinned_python_protobuf": "5.29.6",
+    "caches_and_java_tmp": "isolated under the RC8 validation run root"
+  },
+  "preserved_canonical_inputs": {
+    "user_release_selector_sha256_before_and_after": "f12c778b73c3fe0efcf2d5cd02c114953d8a03b64a8fc78b6ee32f84c5b99a1d",
+    "lara_engine_modified_file_sha256": "276ead7d821b322df07b70c0b7b1e85383fb30754aaa548522ec6b10c34de477",
+    "canonical_checkouts_modified_by_this_validation": false
+  },
+  "checks": {
+    "clang_ast_parser": {
+      "command": "gradle --no-daemon --max-workers=1 --console=plain clean check",
+      "result": "passed",
+      "junit": {
+        "files": 43,
+        "total": 253,
+        "passed": 249,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 4
+      },
+      "skipped_tests": [
+        "pt.up.fe.specs.clang.dumper.CXXConversionDeclTest#preservesLegacySystemHeaderConversionOperatorName()",
+        "pt.up.fe.specs.clang.dumper.ClangAstDumperTest#validSyntaxDoesNotCreateAProtobufDump()",
+        "pt.up.fe.specs.clang.dumper.ClangAstDumperTest#invalidSyntaxReturnsStderrDiagnosticsWithoutProtocolBytes()",
+        "pt.up.fe.specs.clang.dumper.ClangAstDumperTest#cxxMethodPreservesRecordReference()"
+      ],
+      "skip_reason": "These direct integration tests require a native build/tool sibling, which the clean release worktree intentionally does not contain.",
+      "release_gated_tests": {
+        "releaseResourcesCanBeInitializedBySeparateJvms": "passed",
+        "sameJvmInstancesReuseReleaseFilesAndPrepareIncludesOnlyForBuiltinLibc": "passed",
+        "releasedDumperAutoLibcProbeProducesValidProtobuf": "passed"
+      },
+      "cleanup_and_cache_tests": {
+        "existingReleaseResourceIsReused": "passed",
+        "releasesWithTheSameIncludesShaShareOneExtraction": "passed",
+        "staleReleaseAndSharedIncludesAreRemovedAfterSixtyDays": "passed",
+        "cleanupWinnerMakesSubsequentIncludesResolutionAcknowledgeTheMiss": "passed",
+        "maintenanceLockMakesUsageWinOverContendingCleanup": "passed",
+        "maintenanceLockIsSharedAcrossJvmProcesses": "passed"
+      },
+      "additional_checks": {
+        "testProtoReleaseResolver": "10 passed",
+        "verifyProtoBindings": "passed",
+        "jacocoTestCoverageVerification": "passed"
+      },
+      "jacoco": {
+        "minimum_class_coverage": 0.7,
+        "classes_covered": 73,
+        "classes_missed": 7,
+        "class_coverage_percent": 91.25,
+        "instructions_covered": 13756,
+        "instructions_missed": 3735,
+        "instruction_coverage_percent": 78.65
+      }
+    },
+    "clava_weaver_install_dist": {
+      "command": "gradle --no-daemon --max-workers=1 --console=plain installDist",
+      "result": "passed",
+      "tasks": {
+        "total": 57,
+        "executed": 30,
+        "up_to_date": 27
+      },
+      "installed_clang_ast_parser_jar_sha256": "5405f71b2c56b25f6772f834b71d729ed6d131e635165cbb08abba795c9406e4",
+      "embedded_release_selector": "v18.1.8_6-rc8"
+    },
+    "clava_js_rc8_nightly_ci_triage": {
+      "workflow_run": "https://github.com/specs-feup/clava/actions/runs/37782392551",
+      "workflow_head_sha": "9b588d48ae36b0bfe60eb4fe7748e0116083005f",
+      "status_at_triage": "in_progress; Windows Node 25 job had not completed",
+      "total_tests_per_full_js_job": 164,
+      "failed_jobs": [
+        {
+          "job": "https://github.com/specs-feup/clava/actions/runs/37782392551/job/113339790410",
+          "platform": "ubuntu-24.04, Node 24",
+          "tests": { "passed": 161, "failed": 1, "skipped": 2 },
+          "failure": "CudaTest > Cuda exceeded the existing 5000 ms Vitest timeout; the log reports 8606 ms for the test. CudaMatrixMul and CudaQuery passed."
+        },
+        {
+          "job": "https://github.com/specs-feup/clava/actions/runs/37782392551/job/113339790540",
+          "platform": "ubuntu-24.04, Node 25",
+          "tests": { "passed": 161, "failed": 1, "skipped": 2 },
+          "failure": "CudaTest > Cuda exceeded the existing 5000 ms Vitest timeout during cold resource preparation. CudaMatrixMul and CudaQuery passed."
+        },
+        {
+          "job": "https://github.com/specs-feup/clava/actions/runs/37782392551/job/113339790549",
+          "platform": "macos-latest, Node 24",
+          "tests": { "passed": 159, "failed": 3, "skipped": 2 },
+          "failure": "All three CudaTest cases failed because the Java CUDA resource installer found no compatible platform key for mac_os (aarch64); required package keys are linux-ppc64le, linux-sbsa, linux-x86_64, and windows-x86_64."
+        },
+        {
+          "job": "https://github.com/specs-feup/clava/actions/runs/37782392551/job/113339790565",
+          "platform": "macos-latest, Node 25",
+          "tests": { "passed": 159, "failed": 3, "skipped": 2 },
+          "failure": "All three CudaTest cases failed because the Java CUDA resource installer found no compatible platform key for mac_os (aarch64); required package keys are linux-ppc64le, linux-sbsa, linux-x86_64, and windows-x86_64."
+        },
+        {
+          "job": "https://github.com/specs-feup/clava/actions/runs/37782392551/job/113339790655",
+          "platform": "windows-2022, Node 24",
+          "tests": { "passed": 156, "failed": 1, "skipped": 7 },
+          "failure": "CxxTest > Setters differed from its Windows expected output only in the std::chrono clock name; recorded for separate fixture triage."
+        }
+      ],
+      "log_source": "The linked GitHub Actions job pages retain the raw logs; failures above are from those logs. The workflow was run before the CUDA test fix and is not a green validation of the changed source."
+    },
+    "clava_js_cuda_fixture_local_followup": {
+      "source_file": "Clava-JS/api/LegacyIntegrationTests - CXX.test.ts",
+      "source_file_git_blob": "eed131a618205a9b549512a232cd899a134a4049",
+      "command": "node ../../node_modules/vitest/vitest.mjs run --config vitest.config.ts 'api/LegacyIntegrationTests - CXX.test.ts' -t CudaTest",
+      "result": "passed",
+      "runtime": "Linux x86_64",
+      "tests": { "passed": 3, "filtered_or_skipped": 87, "total_in_file": 90 },
+      "duration_seconds": 3.39,
+      "typecheck_command": "../../node_modules/.bin/tsc --noEmit",
+      "typecheck_result": "passed",
+      "notes": "The capability check is memoized in a bounded beforeEach hook, so filtered and Windows-skipped runs do not query the NVIDIA manifest. Unsupported hosts skip only the three executed CUDA cases. This focused local check does not replace a fresh full CI run."
+    },
+    "clava_js_windows_setters_fixture_followup": {
+      "trigger_job": "https://github.com/specs-feup/clava/actions/runs/37782392551/job/113339790655",
+      "failure": "CxxTest > Setters expected std::chrono::system_clock::now but Windows produced std::chrono::steady_clock::now; the remaining 32 output lines were identical.",
+      "source_evidence": "The fixture input calls std::chrono::high_resolution_clock::now(), and the setter test prints the declaration qualified name before and after the existing setter assertions.",
+      "change": "Renamed the macOS-specific expected output to Setters.js.steady-clock.txt and select it on macOS and Windows; the test input, transformation, and remaining expected output are unchanged.",
+      "verification": "The full fixture diff confirms only the first clock-name line differs from the default baseline. The Windows job failure predates this fixture selection change; fresh Windows CI verification is pending."
+    }
+  },
+  "verified_resource_cache": {
+    "release_resources_relative_path": "clang-dumper/releases/v18.1.8_6-rc8",
+    "includes_relative_path": "clang-dumper/includes/30179fe7a2b512d138ebe5f1b71c14c9043fbfef51ae7ee24d28223f5bc5ecfb",
+    "includes_files": 13871,
+    "includes_bytes": 211944456,
+    "entrypoints_file_present": true,
+    "wire_artifacts_relative_path": "GRADLE_USER_HOME/caches/clava/protobuf-wire-artifacts/<sha256>/"
+  },
+  "raw_evidence": {
+    "archive_id": "release-rc8-20261008",
+    "storage": "isolated local validation archive; raw logs and JUnit XML are not embedded in this report",
+    "clang_ast_parser_log_sha256": "29471ecb3f168f874766e1eab1e5c831c0822349ad0648c8a2dd910b2de1f745",
+    "clavaweaver_install_dist_log_sha256": "f001b2d38ede68fa9d4aef14c3895356816448367891913e834bb4c79d7aa7ef",
+    "junit_xml_set_sha256": "415c7c763b7cc51c99c58d6559865a251d6ef4f20cf0e1a187382f0f48c85e50",
+    "junit_xml_set_hash_method": "SHA-256 of sorted lines '<report basename> <report SHA-256>\\n'",
+    "jacoco_xml_sha256": "a19b94864f713bad42caec6a57a387b0f84a784b0eb5c44b6f6470dca540a293"
+  }
+}

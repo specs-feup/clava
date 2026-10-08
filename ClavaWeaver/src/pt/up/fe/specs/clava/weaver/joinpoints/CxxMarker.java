@@ -13,47 +13,42 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.util.List;
-
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMarker;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.util.SpecsCollections;
 
-public class CxxMarker extends AMarker {
+public class CxxMarker<Self extends CxxMarker<Self>> extends AMarker<Self> {
 
-    private final LaraMarkerPragma marker;
-
-    public CxxMarker(LaraMarkerPragma marker) {
-        super(new CxxPragma(marker));
-        this.marker = marker;
+    public CxxMarker(LaraMarkerPragma marker, CxxWeaver weaver) {
+        super(marker, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return marker;
+    public LaraMarkerPragma getNodeImpl() {
+        return (LaraMarkerPragma) super.getNodeImpl();
     }
 
     @Override
     public String getIdImpl() {
-        return marker.getMarkerId();
+        return this.getNodeImpl().getMarkerId();
     }
 
     @Override
-    public AScope getContentsImpl() {
-        List<? extends AScope> result = CxxSelects.select(AScope.class, SpecsCollections.toList(marker.getTarget()),
+    public AScope<?> getContentsImpl() {
+        AScope<?>[] result = CxxSelects.select(getWeaverEngine(), AScope.class, SpecsCollections.toList(this.getNodeImpl().getTarget()),
                 false, node -> node instanceof CompoundStmt && ((CompoundStmt) node).isNestedScope());
 
-        Preconditions.checkArgument(!result.isEmpty(),
-                "Could not find the 'scope' associated with the marker '" + marker.getCode() + "'. Pragma target is: "
-                        + marker.getTarget());
-        Preconditions.checkArgument(result.size() == 1, "Expected just one scope, but found more than one");
+        Preconditions.checkArgument(result.length > 0,
+                "Could not find the 'scope' associated with the marker '" + this.getNodeImpl().getCode() + "'. Pragma target is: "
+                        + this.getNodeImpl().getTarget());
+        Preconditions.checkArgument(result.length == 1, "Expected just one scope, but found more than one");
 
-        return result.get(0);
+        return result[0];
     }
 }

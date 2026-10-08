@@ -13,61 +13,57 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 
-public class CxxCast extends ACast {
+public class CxxCast<Self extends CxxCast<Self>> extends ACast<Self> {
 
-    private final CastExpr cast;
-
-    public CxxCast(CastExpr cast) {
-        super(new CxxExpression(cast));
-
-        this.cast = cast;
+    public CxxCast(CastExpr cast, CxxWeaver weaver) {
+        super(cast, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return cast;
+    public CastExpr getNodeImpl() {
+        return (CastExpr) super.getNodeImpl();
     }
 
     @Override
-    public Boolean getIsImplicitCastImpl() {
+    public boolean getIsImplicitCastImpl() {
         throw new RuntimeException("cast.isImplicitCast deprecated, please use instead expr.implicitCast");
     }
 
     @Override
-    public AType getFromTypeImpl() {
-        Type fromType = cast.getSubExpr().getType();
+    public AType<?> getFromTypeImpl() {
+        Type fromType = this.getNodeImpl().getSubExpr().getType();
 
-        return CxxJoinpoints.create(fromType, AType.class);
+        return CxxJoinpoints.create(fromType, getWeaverEngine(), AType.class);
     }
 
     @Override
-    public AType getToTypeImpl() {
-        return CxxJoinpoints.create(cast.getCastType(), AType.class);
+    public AType<?> getToTypeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getCastType(), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public AVardecl getVardeclImpl() {
-        return ((AExpression) CxxJoinpoints.create(cast.getSubExpr())).getVardeclImpl();
+    public AVardecl<?> getVardeclImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getSubExpr(), getWeaverEngine(), AExpression.class).getVardeclImpl();
     }
 
     @Override
-    public ADecl getDeclImpl() {
+    public ADecl<?> getDeclImpl() {
         return getVardeclImpl();
     }
 
     @Override
-    public AExpression getSubExprImpl() {
-        return (AExpression) CxxJoinpoints.create(cast.getSubExpr());
+    public AExpression<?> getSubExprImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getSubExpr(), getWeaverEngine(), AExpression.class);
 
     }
 }

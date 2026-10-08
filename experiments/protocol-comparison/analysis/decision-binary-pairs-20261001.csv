@@ -1,0 +1,45 @@
+suite,cohort,mode,metric,repeat,delta_s,definition
+java,original,direct,elapsed_s,1,-1.920000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,direct,elapsed_s,2,-2.180000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,direct,elapsed_s,3,-2.500000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,direct,elapsed_s,4,-2.330000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,direct,junit_aggregate_s,1,-1.423000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,direct,junit_aggregate_s,2,-1.798000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,direct,junit_aggregate_s,3,-1.941000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,direct,junit_aggregate_s,4,-1.699000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,direct,outside_junit_s,1,-0.497000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,direct,outside_junit_s,2,-0.382000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,direct,outside_junit_s,3,-0.559000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,direct,outside_junit_s,4,-0.631000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,cold,elapsed_s,1,-2.640000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,cold,elapsed_s,2,-2.580000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,cold,elapsed_s,3,-1.980000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,cold,elapsed_s,4,-1.480000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,cold,junit_aggregate_s,1,-1.953000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,cold,junit_aggregate_s,2,-1.581000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,cold,junit_aggregate_s,3,-1.623000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,cold,junit_aggregate_s,4,-1.118000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,cold,outside_junit_s,1,-0.687000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,cold,outside_junit_s,2,-0.999000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,cold,outside_junit_s,3,-0.357000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,cold,outside_junit_s,4,-0.362000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,warm,elapsed_s,1,-1.840000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,warm,elapsed_s,2,-1.330000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,warm,elapsed_s,3,-1.980000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,warm,elapsed_s,4,-1.390000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,warm,junit_aggregate_s,1,-1.451000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,warm,junit_aggregate_s,2,-0.897000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,warm,junit_aggregate_s,3,-1.504000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,warm,junit_aggregate_s,4,-0.812000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,warm,outside_junit_s,1,-0.389000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,warm,outside_junit_s,2,-0.433000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,warm,outside_junit_s,3,-0.476000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+java,original,warm,outside_junit_s,4,-0.578000,FlatBuffers minus Protobuf; negative means FlatBuffers was faster
+clava-js,original,warm,elapsed_s,1,0.780000,Original FlatBuffers minus Protobuf
+clava-js,original,warm,elapsed_s,2,1.250000,Original FlatBuffers minus Protobuf
+clava-js,original,warm,elapsed_s,3,0.220000,Original FlatBuffers minus Protobuf
+clava-js,original,warm,elapsed_s,4,1.690000,Original FlatBuffers minus Protobuf
+clava-js,syntax-normalized,warm,elapsed_s,1,0.490000,Flat-fast syntax control minus Protobuf
+clava-js,syntax-normalized,warm,elapsed_s,2,0.090000,Flat-fast syntax control minus Protobuf
+clava-js,syntax-normalized,warm,elapsed_s,3,-0.700000,Flat-fast syntax control minus Protobuf
+clava-js,syntax-normalized,warm,elapsed_s,4,-0.220000,Flat-fast syntax control minus Protobuf

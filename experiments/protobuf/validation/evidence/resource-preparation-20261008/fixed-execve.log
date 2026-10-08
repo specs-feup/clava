@@ -1,0 +1,27 @@
+630386 execve("/usr/bin/java", ["java", "-cp", "/tmp/protobuf-resource-productio"..., "ProtobufResourceProbe", "/home/lmsousa/.cache/protobuf-pr"..., "10"], 0x7fff77da8bc0 /* 71 vars */) = 0
+630387 --- SIGSEGV {si_signo=SIGSEGV, si_code=SEGV_MAPERR, si_addr=NULL} ---
+630396 +++ exited with 0 +++
+630395 +++ exited with 0 +++
+630394 +++ exited with 0 +++
+630397 +++ exited with 0 +++
+630391 +++ exited with 0 +++
+630393 +++ exited with 0 +++
+630389 +++ exited with 0 +++
+630398 +++ exited with 0 +++
+630387 +++ exited with 0 +++
+630410 +++ exited with 0 +++
+630407 +++ exited with 0 +++
+630404 +++ exited with 0 +++
+630402 +++ exited with 0 +++
+630400 +++ exited with 0 +++
+630390 +++ exited with 0 +++
+630403 +++ exited with 0 +++
+630401 +++ exited with 0 +++
+630399 +++ exited with 0 +++
+630392 +++ exited with 0 +++
+630388 +++ exited with 0 +++
+630409 +++ exited with 0 +++
+630408 +++ exited with 0 +++
+630405 +++ exited with 0 +++
+630406 +++ exited with 0 +++
+630386 +++ exited with 0 +++

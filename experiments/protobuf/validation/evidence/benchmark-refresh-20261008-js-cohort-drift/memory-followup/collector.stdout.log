@@ -1,0 +1,6 @@
+{"workload": "nas-lu", "repeat": 1, "cycles": 20, "valid": true}
+{"workload": "nas-lu", "repeat": 2, "cycles": 20, "valid": true}
+{"workload": "nas-lu", "repeat": 3, "cycles": 20, "valid": true}
+{"workload": "templates", "repeat": 1, "cycles": 20, "valid": true}
+{"workload": "templates", "repeat": 2, "cycles": 20, "valid": true}
+{"workload": "templates", "repeat": 3, "cycles": 20, "valid": true}

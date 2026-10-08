@@ -1,0 +1,21 @@
+run_id,pair_id,suite,cache_mode,gc_policy,protocol,repeat,invocation_index,source_identity,source_path,parse_id,parse_elapsed_ms,parse_timing_boundary,run_valid,event_valid,validity_reason,ccache_disabled
+text-normal-clava-r1,clava-js|normal|r1,clava-js,warm,normal,text,1,0,src/a.c|ast|0,src/a.c,ast,10,parsePrivate,true,true,,false
+proto-normal-clava-r1,clava-js|normal|r1,clava-js,warm,normal,protobuf,1,0,src/a.c|ast|0,src/a.c,ast,12,parsePrivate,true,true,,false
+text-normal-clava-r1,clava-js|normal|r1,clava-js,warm,normal,text,1,1,src/b.c|ast|0,src/b.c,ast,20,parsePrivate,true,true,,false
+proto-normal-clava-r1,clava-js|normal|r1,clava-js,warm,normal,protobuf,1,1,src/b.c|ast|0,src/b.c,ast,18,parsePrivate,true,true,,false
+text-normal-clava-r1,clava-js|normal|r1,clava-js,warm,normal,text,1,2,src/c.c|ast|0,src/c.c,ast,30,parsePrivate,true,true,,false
+proto-normal-clava-r1,clava-js|normal|r1,clava-js,warm,normal,protobuf,1,2,src/c.c|ast|0,src/c.c,ast,40,parsePrivate,true,true,,false
+text-normal-java-r1,java|normal|r1,java,warm,normal,text,1,0,src/J1.cpp|java-ast|0,src/J1.cpp,java-ast,8,parsePrivate,true,true,,false
+proto-normal-java-r1,java|normal|r1,java,warm,normal,protobuf,1,0,src/J1.cpp|java-ast|0,src/J1.cpp,java-ast,9,parsePrivate,true,true,,false
+text-normal-java-r1,java|normal|r1,java,warm,normal,text,1,1,src/J2.cpp|java-ast|0,src/J2.cpp,java-ast,12,parsePrivate,true,true,,false
+proto-normal-java-r1,java|normal|r1,java,warm,normal,protobuf,1,1,src/J2.cpp|java-ast|0,src/J2.cpp,java-ast,12,parsePrivate,true,true,,false
+text-disabled-clava-r2,clava-js|disabled|r2,clava-js,warm,disabled,text,2,0,src/a.c|ast|0,src/a.c,ast,10,parsePrivate,true,true,,false
+proto-disabled-clava-r2,clava-js|disabled|r2,clava-js,warm,disabled,protobuf,2,0,src/a.c|ast|0,src/a.c,ast,9,parsePrivate,true,true,,false
+text-disabled-clava-r2,clava-js|disabled|r2,clava-js,warm,disabled,text,2,1,src/b.c|ast|0,src/b.c,ast,20,parsePrivate,true,true,,false
+proto-disabled-clava-r2,clava-js|disabled|r2,clava-js,warm,disabled,protobuf,2,1,src/b.c|ast|0,src/b.c,ast,30,parsePrivate,true,true,,false
+text-disabled-java-r2,java|disabled|r2,java,warm,disabled,text,2,0,src/J1.cpp|java-ast|0,src/J1.cpp,java-ast,8,parsePrivate,true,true,,false
+proto-disabled-java-r2,java|disabled|r2,java,warm,disabled,protobuf,2,0,src/J1.cpp|java-ast|0,src/J1.cpp,java-ast,7,parsePrivate,true,true,,false
+text-disabled-java-r2,java|disabled|r2,java,warm,disabled,text,2,1,src/J2.cpp|java-ast|0,src/J2.cpp,java-ast,10,parsePrivate,true,true,,false
+proto-disabled-java-r2,java|disabled|r2,java,warm,disabled,protobuf,2,1,src/J2.cpp|java-ast|0,src/J2.cpp,java-ast,13,parsePrivate,true,true,,false
+invalid-normal-clava,clava-js|normal|r1,clava-js,warm,normal,text,1,3,,src/broken.c,ast,,parsePrivate,true,false,duplicate source identity,false
+warmup-clava,warmup-clava,clava-js,warm,normal,text,0,0,src/warmup.c|ast|0,src/warmup.c,ast,999,parsePrivate,true,true,,false

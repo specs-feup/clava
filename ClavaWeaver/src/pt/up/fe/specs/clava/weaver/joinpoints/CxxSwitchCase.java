@@ -1,21 +1,18 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.SwitchCase;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ASwitchCase;
 
-public class CxxSwitchCase extends ASwitchCase {
+public class CxxSwitchCase<Self extends CxxSwitchCase<Self>> extends ASwitchCase<Self> {
 
-    private final SwitchCase switchCase;
-
-    public CxxSwitchCase(SwitchCase switchCase) {
-        super(new CxxStatement(switchCase));
-        this.switchCase = switchCase;
+    public CxxSwitchCase(SwitchCase switchCase, CxxWeaver weaver) {
+        super(switchCase, weaver);
     }
 
 
     @Override
-    public ClavaNode getNode() {
-        return switchCase;
+    public SwitchCase getNodeImpl() {
+        return (SwitchCase) super.getNodeImpl();
     }
 }

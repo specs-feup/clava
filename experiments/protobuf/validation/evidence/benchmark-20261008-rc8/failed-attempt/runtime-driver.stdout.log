@@ -1,0 +1,12 @@
+{"preflight": "app", "stage": "protobuf", "suite": "clava-js", "valid": true}
+Traceback (most recent call last):
+  File "/tmp/run-final-protobuf-benchmark-20261008.py", line 271, in <module>
+    ordinal+=1;row=runfun(suite,'direct',0,ordinal,False);record['preflight'].append(row);save();print(json.dumps({'preflight':phase,'stage':key,'suite':suite,'valid':True}),flush=True)
+                   ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/run-final-protobuf-benchmark-20261008.py", line 220, in app_run
+    return validate(a.execute_cell(selected_stage,suite,mode,rnd,pr,ordinal,measured),'app')
+                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lmsousa/.cache/protobuf-production-validation/build-final-20261008/clava/experiments/protocol-comparison/app-build/run_app_build_matrix.py", line 66, in execute_cell
+  File "/home/lmsousa/.cache/protobuf-production-validation/build-final-20261008/clava/experiments/protocol-comparison/app-build/run_app_build_matrix.py", line 538, in check_test_counts
+    raise RuntimeError(f"suite failed fixed test contract for {suite}: rc={process_code}, counts={counts_only}, expected={expected}, run={run_dir}")
+RuntimeError: suite failed fixed test contract for java: rc=0, counts={'total_tests': 119, 'passed_tests': 119, 'failed_tests': 0, 'skipped_tests': 0}, expected={'total_tests': 116, 'passed_tests': 116, 'failed_tests': 0, 'skipped_tests': 0}, run=/home/lmsousa/.cache/protobuf-production-validation/build-final-20261008/clava/experiments/protobuf/suite/results/final-protobuf-20261008/app/preflight/java/003-protobuf-direct-r0

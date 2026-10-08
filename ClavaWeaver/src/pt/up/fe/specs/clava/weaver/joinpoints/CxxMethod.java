@@ -13,36 +13,32 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
-public class CxxMethod extends AMethod {
+public class CxxMethod<Self extends CxxMethod<Self>> extends AMethod<Self> {
 
-    private final CXXMethodDecl method;
-
-    public CxxMethod(CXXMethodDecl method) {
-        super(new CxxFunction(method));
-
-        this.method = method;
+    public CxxMethod(CXXMethodDecl method, CxxWeaver weaver) {
+        super(method, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return method;
+    public CXXMethodDecl getNodeImpl() {
+        return (CXXMethodDecl) super.getNodeImpl();
     }
 
     @Override
-    public AClass getRecordImpl() {
-        return method.getRecordDecl().map(record -> (AClass) CxxJoinpoints.create(record)).orElse(null);
+    public AClass<?> getRecordImpl() {
+        return this.getNodeImpl().getRecordDecl().map(record -> CxxJoinpoints.create(record, getWeaverEngine(), AClass.class)).orElse(null);
     }
 
     @Override
     public void removeRecordImpl() {
-        method.removeRecord();
+        this.getNodeImpl().removeRecord();
     }
 
     /**
@@ -50,24 +46,13 @@ public class CxxMethod extends AMethod {
      * this is not required
      */
     @Override
-    public AType getTypeImpl() {
-        return CxxJoinpoints.create(method.getReturnType(), AType.class);
+    public AType<?> getTypeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getReturnType(), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public Boolean getIsVirtualImpl() {
-        return method.get(CXXMethodDecl.IS_VIRTUAL);
+    public boolean getIsVirtualImpl() {
+        return this.getNodeImpl().get(CXXMethodDecl.IS_VIRTUAL);
     }
 
-    /*
-    @Override
-    public void defRecordImpl(AClass value) {
-        method.set(CXXMethodDecl.RECORD, (CXXRecordDecl) value.getNode());
-    }
-    
-    @Override
-    public void setRecordImpl(AClass classJp) {
-        defRecordImpl(classJp);
-    }
-    */
 }

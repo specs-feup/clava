@@ -21,33 +21,30 @@ import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.TagKind;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANamedDecl;
 
-public class CxxNamedDecl extends ANamedDecl {
+public class CxxNamedDecl<Self extends CxxNamedDecl<Self>> extends ANamedDecl<Self> {
 
-    private final NamedDecl namedDecl;
-
-    public CxxNamedDecl(NamedDecl namedDecl) {
-        super(new CxxDecl(namedDecl));
-
-        this.namedDecl = namedDecl;
+    public CxxNamedDecl(NamedDecl namedDecl, CxxWeaver weaver) {
+        super(namedDecl, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return namedDecl;
+    public NamedDecl getNodeImpl() {
+        return (NamedDecl) super.getNodeImpl();
     }
 
     @Override
     public String getNameImpl() {
-        return namedDecl.hasDeclName() ? namedDecl.getDeclName() : null;
+        return this.getNodeImpl().hasDeclName() ? this.getNodeImpl().getDeclName() : null;
     }
 
     @Override
-    public Boolean getIsPublicImpl() {
+    public boolean getIsPublicImpl() {
         // Search for the first AccessSpecDecl that appears before this node
-        int declIndex = namedDecl.indexOfSelf();
-        List<ClavaNode> siblings = namedDecl.getParent().getChildren();
+        int declIndex = this.getNodeImpl().indexOfSelf();
+        List<ClavaNode> siblings = this.getNodeImpl().getParent().getChildren();
 
         for (int i = declIndex - 1; i >= 0; i--) {
             if (siblings.get(i) instanceof AccessSpecDecl) {
@@ -55,7 +52,7 @@ public class CxxNamedDecl extends ANamedDecl {
             }
         }
 
-        boolean isInsideClass = namedDecl.getAncestorTry(RecordDecl.class)
+        boolean isInsideClass = this.getNodeImpl().getAncestorTry(RecordDecl.class)
                 .map(recordDecl -> recordDecl.get(RecordDecl.TAG_KIND) == TagKind.CLASS)
                 .orElse(false);
 
@@ -65,27 +62,27 @@ public class CxxNamedDecl extends ANamedDecl {
 
     @Override
     public void setNameImpl(String name) {
-        namedDecl.set(NamedDecl.DECL_NAME, name);
+        this.getNodeImpl().set(NamedDecl.DECL_NAME, name);
     }
 
     @Override
     public String getQualifiedPrefixImpl() {
-        return namedDecl.get(NamedDecl.QUALIFIED_PREFIX);
+        return this.getNodeImpl().get(NamedDecl.QUALIFIED_PREFIX);
     }
 
     @Override
     public String getQualifiedNameImpl() {
-        return namedDecl.getFullyQualifiedName();
+        return this.getNodeImpl().getFullyQualifiedName();
     }
 
     @Override
     public void setQualifiedPrefixImpl(String qualifiedPrefix) {
-        namedDecl.set(NamedDecl.QUALIFIED_PREFIX, qualifiedPrefix);
+        this.getNodeImpl().set(NamedDecl.QUALIFIED_PREFIX, qualifiedPrefix);
     }
 
     @Override
     public void setQualifiedNameImpl(String name) {
-        namedDecl.setQualifiedName(name);
+        this.getNodeImpl().setQualifiedName(name);
     }
 
 }

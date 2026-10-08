@@ -54,7 +54,7 @@ public class VarDecl extends DeclaratorDecl {
     /**
      * True if this local variable can be used with the named return value optimization (NRVO).
      */
-    public final static DataKey<Boolean> IS_NRVO_VARIABLE = KeyFactory.bool("isNRVOVariable");
+    public final static DataKey<Boolean> IS_NRVO_VARIABLE = KeyFactory.bool("isNrvoVariable");
 
     /**
      * The style of initialization for this declaration.
@@ -256,6 +256,10 @@ public class VarDecl extends DeclaratorDecl {
         // Get corresponding enum
         var storageClass = StorageClass.getHelper().fromValue(value);
         // Store it
+        set(STORAGE_CLASS, storageClass);
+    }
+
+    public void setStorageClass(StorageClass storageClass) {
         set(STORAGE_CLASS, storageClass);
     }
 

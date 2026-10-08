@@ -13,27 +13,24 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AAccessSpecifier;
 
-public class CxxAccessSpecifier extends AAccessSpecifier {
+public class CxxAccessSpecifier<Self extends CxxAccessSpecifier<Self>> extends AAccessSpecifier<Self> {
 
-    private final AccessSpecDecl accessSpecifier;
-
-    public CxxAccessSpecifier(AccessSpecDecl accessSpecifier) {
-        super(new CxxDecl(accessSpecifier));
-        this.accessSpecifier = accessSpecifier;
+    public CxxAccessSpecifier(AccessSpecDecl accessSpecifier, CxxWeaver weaver) {
+        super(accessSpecifier, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return accessSpecifier;
+    public AccessSpecDecl getNodeImpl() {
+        return (AccessSpecDecl) super.getNodeImpl();
     }
 
     @Override
     public String getKindImpl() {
-        return accessSpecifier.get(AccessSpecDecl.ACCESS_SPECIFIER).name().toLowerCase();
+        return this.getNodeImpl().get(AccessSpecDecl.ACCESS_SPECIFIER).name().toLowerCase();
     }
 
 }

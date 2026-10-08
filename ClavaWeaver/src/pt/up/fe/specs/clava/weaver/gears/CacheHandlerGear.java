@@ -19,12 +19,18 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 
 public class CacheHandlerGear extends AGear {
 
+    private final CxxWeaver weaver;
+
+    public CacheHandlerGear(CxxWeaver weaver) {
+        this.weaver = weaver;
+    }
+
     /**
      * Every time an action is called, clear cache
      */
     @Override
     public void onAction(ActionEvent data) {
-        CxxWeaver.getCxxWeaver().getApp().clearCache();
+        weaver.getApp().clearCache();
     }
 
 }

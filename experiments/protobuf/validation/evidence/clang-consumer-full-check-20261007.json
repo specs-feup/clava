@@ -1,0 +1,44 @@
+{
+  "revision": "885e79152a3870d9cbd4c4306bff5215301c0d4e",
+  "command": "gradle --no-daemon check (ClangAstParser)",
+  "result": "BUILD SUCCESSFUL",
+  "counts": {
+    "tests": 249,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 3
+  },
+  "skips": [
+    {
+      "test": "ClangResourcesTest.sameJvmInstancesReuseReleaseFilesAndPrepareIncludesOnlyForBuiltinLibc",
+      "reason": "Requires a published dumper resource."
+    },
+    {
+      "test": "ClangResourcesTest.releasedDumperAutoLibcProbeProducesValidProtobuf",
+      "reason": "Requires a published dumper resource for the released AUTO probe path."
+    },
+    {
+      "test": "ClangResourcesTest.releaseResourcesCanBeInitializedBySeparateJvms",
+      "reason": "Requires a published dumper resource."
+    }
+  ],
+  "coverage": {
+    "class_covered": 70,
+    "class_missed": 10,
+    "class_percent": 87.5,
+    "minimum_class_percent": 70,
+    "verification": "passed",
+    "instruction_covered": 13288,
+    "instruction_missed": 4078,
+    "scope": "Generated Protobuf Java, binding adapter, and generated constants are excluded by exact class patterns derived from generated source roots; hand-written reader, framing, cache, resource, and resolver code remains measured."
+  },
+  "native_artifacts": {
+    "tool_sha256": "876522bb24b04574e68ec2f789e9a6f088346c26ac82d49421e161d56b550ef1",
+    "build_local_manifest_sha256": "7be09147ea434ed07cc8ae9d709e049fbb2f4b1518336af63c302f4310369f8f"
+  },
+  "clava_weaver_install_dist": {
+    "command": "gradle --no-daemon installDist (ClavaWeaver)",
+    "result": "BUILD SUCCESSFUL",
+    "sync_clava_js_java_binaries": "completed"
+  }
+}

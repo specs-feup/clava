@@ -37,9 +37,6 @@ public interface CxxWeaverOption {
     DataKey<Boolean> CHECK_SYNTAX = KeyFactory.bool("Check C/CXX Syntax")
             .setLabel("Check C/C++ syntax (performs additional parsing step)");
 
-    DataKey<Boolean> CLEAN_INTERMEDIATE_FILES = KeyFactory.bool("Clean intermediate files")
-            .setDefault(() -> true);
-
     DataKey<FileList> HEADER_INCLUDES = LaraIKeyFactory.folderList("header includes")
             .setLabel("Normal Includes")
             .setDefault(FileList::newInstance);
@@ -85,7 +82,7 @@ public interface CxxWeaverOption {
 
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("C/C++ Weaver")
             .addKeys(ClavaOptions.STORE_DEFINITION.getKeys())
-            .addKeys(WOVEN_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
+            .addKeys(WOVEN_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX,
                     HEADER_INCLUDES,
                     // SKIP_HEADER_INCLUDES_PARSING,
                     PARSE_INCLUDES,
@@ -103,6 +100,7 @@ public interface CxxWeaverOption {
             .startSection("Parsing Options")
             .addKey(CodeParser.CUDA_GPU_ARCH)
             .addKey(CodeParser.CUDA_PATH)
+            .addKey(CodeParser.AST_DUMP_CACHE)
             .addKey(ParallelCodeParser.PARALLEL_PARSING)
             .addKey(ParallelCodeParser.PARSING_NUM_THREADS)
             .addKey(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS)

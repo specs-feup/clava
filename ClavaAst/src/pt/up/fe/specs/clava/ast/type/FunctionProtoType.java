@@ -39,7 +39,7 @@ public class FunctionProtoType extends FunctionType {
     public final static DataKey<List<Type>> PARAMETERS_TYPES = KeyFactory.generic("parametersTypes",
             new ArrayList<Type>());
 
-    public final static DataKey<Boolean> HAS_TRAILING_RETURNS = KeyFactory.bool("hasTrailingReturn");
+    public final static DataKey<Boolean> HAS_TRAILING_RETURNS = KeyFactory.bool("hasTrailingReturns");
 
     public final static DataKey<Boolean> IS_VARIADIC = KeyFactory.bool("isVariadic");
 
@@ -50,7 +50,8 @@ public class FunctionProtoType extends FunctionType {
     // public final static DataKey<Boolean> IS_RESTRICT = KeyFactory.bool("isRestrict");
 
     public final static DataKey<ReferenceQualifier> REFERENCE_QUALIFIER = KeyFactory
-            .enumeration("referenceQualifier", ReferenceQualifier.class);
+            .enumeration("referenceQualifier", ReferenceQualifier.class)
+            .setDefault(() -> ReferenceQualifier.None);
 
     public final static DataKey<ExceptionSpecification> EXCEPTION_SPECIFICATION = KeyFactory
             .object("exceptionSpecification", ExceptionSpecification.class)
@@ -86,6 +87,11 @@ public class FunctionProtoType extends FunctionType {
         }
         if (get(IS_VOLATILE)) {
             codeElements.add("volatile");
+        }
+
+        String referenceCode = get(REFERENCE_QUALIFIER).getCode();
+        if (!referenceCode.isEmpty()) {
+            codeElements.add(referenceCode);
         }
 
         String exceptCode = get(EXCEPTION_SPECIFICATION).getCode(this);

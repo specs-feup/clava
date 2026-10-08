@@ -15,7 +15,10 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -86,7 +89,16 @@ public abstract class Decl extends ClavaNode {
     public String getAttributesCode() {
         var code = new StringBuilder();
 
-        for (Attribute attr : get(ATTRIBUTES)) {
+        // Clang may report GNU attributes in a different order after reparsing. Sort only
+        // GNU attribute spellings, keeping inline C++/CUDA and other attributes in place.
+        List<Attribute> sortedAttributes = get(ATTRIBUTES).stream()
+                .filter(Decl::isGnuAttribute)
+                .sorted(Comparator.comparing(Attribute::getCode))
+                .collect(Collectors.toList());
+        Iterator<Attribute> sortedAttributeIterator = sortedAttributes.iterator();
+
+        for (Attribute originalAttr : get(ATTRIBUTES)) {
+            Attribute attr = isGnuAttribute(originalAttr) ? sortedAttributeIterator.next() : originalAttr;
 
             // If generic class, do not generated code for it
             if (attr.getClass().equals(Attribute.class)) {
@@ -106,6 +118,10 @@ public abstract class Decl extends ClavaNode {
         }
 
         return code.toString();
+    }
+
+    private static boolean isGnuAttribute(Attribute attr) {
+        return !attr.getKind().isInline() && attr.getCode().startsWith("__attribute__((");
     }
 
     @Override

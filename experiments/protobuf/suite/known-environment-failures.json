@@ -1,0 +1,6 @@
+[
+  "CxxTest OmpThreadsExplore",
+  "CudaTest Cuda",
+  "CudaTest CudaMatrixMul",
+  "CudaTest CudaQuery"
+]

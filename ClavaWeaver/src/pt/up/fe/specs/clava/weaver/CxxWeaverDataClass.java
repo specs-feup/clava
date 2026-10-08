@@ -19,10 +19,12 @@ import org.suikasoft.jOptions.DataStore.DataClassWrapper;
 public class CxxWeaverDataClass extends DataClassWrapper<CxxWeaverDataClass> {
 
     private final DataClass<?> originalData;
+    private final CxxWeaver weaver;
 
-    public CxxWeaverDataClass(DataClass<?> data) {
+    public CxxWeaverDataClass(CxxWeaver weaver, DataClass<?> data) {
         super(data);
 
+        this.weaver = weaver;
         this.originalData = data;
     }
 
@@ -45,7 +47,7 @@ public class CxxWeaverDataClass extends DataClassWrapper<CxxWeaverDataClass> {
         var value = super.getValue(key);
 
         // Adapt value
-        return CxxAttributes.toLara(value);
+        return CxxAttributes.toLara(value, this.weaver);
 
         // // Special case
         //

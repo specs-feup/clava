@@ -14,8 +14,21 @@
 package pt.up.fe.specs.clava.ast.type.enums;
 
 public enum UnaryTransformTypeKind {
-
+    AddLvalueReference,
+    AddPointer,
+    AddRvalueReference,
     Decay,
+    MakeSigned,
+    MakeUnsigned,
+    RemoveAllExtents,
+    RemoveConst,
+    RemoveCV,
+    RemoveCVRef,
+    RemoveExtent,
+    RemovePointer,
+    RemoveReference,
+    RemoveRestrict,
+    RemoveVolatile,
     EnumUnderlyingType;
 
 }

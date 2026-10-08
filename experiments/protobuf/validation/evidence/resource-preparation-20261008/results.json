@@ -1,0 +1,95 @@
+{
+  "date_utc": "2026-10-08T17:38:05.577825+00:00",
+  "scope": "Resource-only diagnostic, not full-suite performance remeasurement",
+  "commit": "b46778a5cfbd37203105abf1a92e27d942d24cd4",
+  "source_sha256": "dc40d9b9e632fed66397a9ce114e5bd13d25d03687baa9dfeb4029bc99135c21",
+  "released_parser_jar_sha256": "fc1bafc75702042ce447708ebd3b3bb739b15c99b1f89520e109fb50241ff6ef",
+  "rows": [
+    {
+      "phase": "released",
+      "repeat": 1,
+      "stdout": "calls=200 elapsed_ms=1522.047 ms_per_call=7.610",
+      "stderr": "",
+      "command": [
+        "java",
+        "-cp",
+        "/tmp:/home/lmsousa/.cache/protobuf-production-validation/build-final-20261008/clava/ClavaWeaver/build/install/ClavaWeaver/lib/*",
+        "ProtobufResourceProbe",
+        "/home/lmsousa/.cache/protobuf-production-validation/release-rc8/consumer-validation/tmp/clang_ast_exe_lmsousa",
+        "200"
+      ]
+    },
+    {
+      "phase": "released",
+      "repeat": 2,
+      "stdout": "calls=200 elapsed_ms=1533.942 ms_per_call=7.670",
+      "stderr": "",
+      "command": [
+        "java",
+        "-cp",
+        "/tmp:/home/lmsousa/.cache/protobuf-production-validation/build-final-20261008/clava/ClavaWeaver/build/install/ClavaWeaver/lib/*",
+        "ProtobufResourceProbe",
+        "/home/lmsousa/.cache/protobuf-production-validation/release-rc8/consumer-validation/tmp/clang_ast_exe_lmsousa",
+        "200"
+      ]
+    },
+    {
+      "phase": "released",
+      "repeat": 3,
+      "stdout": "calls=200 elapsed_ms=1522.034 ms_per_call=7.610",
+      "stderr": "",
+      "command": [
+        "java",
+        "-cp",
+        "/tmp:/home/lmsousa/.cache/protobuf-production-validation/build-final-20261008/clava/ClavaWeaver/build/install/ClavaWeaver/lib/*",
+        "ProtobufResourceProbe",
+        "/home/lmsousa/.cache/protobuf-production-validation/release-rc8/consumer-validation/tmp/clang_ast_exe_lmsousa",
+        "200"
+      ]
+    },
+    {
+      "phase": "fixed",
+      "repeat": 1,
+      "stdout": "calls=200 elapsed_ms=159.358 ms_per_call=0.797",
+      "stderr": "",
+      "command": [
+        "java",
+        "-cp",
+        "/tmp/protobuf-resource-production-fix/classes:/tmp:/home/lmsousa/.cache/protobuf-production-validation/build-final-20261008/clava/ClavaWeaver/build/install/ClavaWeaver/lib/*",
+        "ProtobufResourceProbe",
+        "/home/lmsousa/.cache/protobuf-production-validation/release-rc8/consumer-validation/tmp/clang_ast_exe_lmsousa",
+        "200"
+      ]
+    },
+    {
+      "phase": "fixed",
+      "repeat": 2,
+      "stdout": "calls=200 elapsed_ms=156.130 ms_per_call=0.781",
+      "stderr": "",
+      "command": [
+        "java",
+        "-cp",
+        "/tmp/protobuf-resource-production-fix/classes:/tmp:/home/lmsousa/.cache/protobuf-production-validation/build-final-20261008/clava/ClavaWeaver/build/install/ClavaWeaver/lib/*",
+        "ProtobufResourceProbe",
+        "/home/lmsousa/.cache/protobuf-production-validation/release-rc8/consumer-validation/tmp/clang_ast_exe_lmsousa",
+        "200"
+      ]
+    },
+    {
+      "phase": "fixed",
+      "repeat": 3,
+      "stdout": "calls=200 elapsed_ms=159.069 ms_per_call=0.795",
+      "stderr": "",
+      "command": [
+        "java",
+        "-cp",
+        "/tmp/protobuf-resource-production-fix/classes:/tmp:/home/lmsousa/.cache/protobuf-production-validation/build-final-20261008/clava/ClavaWeaver/build/install/ClavaWeaver/lib/*",
+        "ProtobufResourceProbe",
+        "/home/lmsousa/.cache/protobuf-production-validation/release-rc8/consumer-validation/tmp/clang_ast_exe_lmsousa",
+        "200"
+      ]
+    }
+  ],
+  "fixed_trace_chmod_execs": 0,
+  "fixed_trace_resource_dir_queries": 0
+}

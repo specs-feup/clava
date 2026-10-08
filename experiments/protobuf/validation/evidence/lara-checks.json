@@ -1,0 +1,25 @@
+{
+  "java": {
+    "revision": "b780d0b8",
+    "local_patch": "existing caller-owned LaraWeaverEngine corpus capture patch retained",
+    "command": "gradle --offline --no-daemon -p LARAI check",
+    "counts": {
+      "tests": 158,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "result": "BUILD SUCCESSFUL",
+    "coverage_excluded": false
+  },
+  "js": {
+    "command": "npm run test --workspace @specs-feup/lara",
+    "counts": {
+      "numTotalTests": 55,
+      "numPassedTests": 55,
+      "numFailedTests": 0,
+      "numPendingTests": 0,
+      "success": true
+    }
+  }
+}

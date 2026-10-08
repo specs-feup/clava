@@ -1,0 +1,129 @@
+/**
+ * Copyright 2026 SPeCS.
+ * <p>
+ * Licensed under the Apache License, Version 2.0.
+ */
+
+package pt.up.fe.specs.clang.dumper;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import pt.up.fe.specs.util.SpecsLogs;
+
+/** Configures ccache to invoke clang-dumper directly in depend mode. */
+final class ClangCcacheAdapter {
+
+    /**
+     * AST dumps are serialized data, not compiler objects. Keep this cache
+     * namespace distinct from the legacy text protocol (and from any future
+     * protocol) so an old entry can never be restored as a protobuf frame.
+     */
+    private static final String CACHE_FOLDER_NAME = "clang-dumper-protobuf-ccache-v1";
+    private static final AtomicBoolean MISSING_CCACHE_REPORTED = new AtomicBoolean();
+
+    private ClangCcacheAdapter() {
+    }
+
+    /** Preserve the Protobuf policy: unknown and false values leave caching enabled.
+     * A recognized disable value takes precedence over AST_DUMP_CACHE=true.
+     */
+    static boolean isDisabled(String value) {
+        if (value == null) {
+            return false;
+        }
+
+        return switch (value.trim().toLowerCase(Locale.ROOT)) {
+            case "1", "true", "yes", "on" -> true;
+            default -> false;
+        };
+    }
+
+    static boolean isAvailable() {
+        if (isDisabled(System.getenv("CCACHE_DISABLE"))) {
+            return false;
+        }
+
+        var path = System.getenv("PATH");
+        if (path != null) {
+            for (var folder : path.split(File.pathSeparator)) {
+                if (Files.isExecutable(Path.of(folder.isEmpty() ? "." : folder, "ccache"))) {
+                    return true;
+                }
+            }
+        }
+
+        if (MISSING_CCACHE_REPORTED.compareAndSet(false, true)) {
+            SpecsLogs.warn("ccache is not available on PATH; AST dump caching is disabled");
+        }
+        return false;
+    }
+
+    static Invocation prepare(File dumperFolder, File baseDir, File executable, String schemaHash,
+            String toolchainIdentity) {
+        if (schemaHash == null || !schemaHash.matches("[0-9a-f]{64}")) {
+            throw new IllegalArgumentException("Invalid Protobuf schema hash: " + schemaHash);
+        }
+        if (toolchainIdentity == null || !toolchainIdentity.matches("[A-Za-z0-9_.-]+")) {
+            throw new IllegalArgumentException("Invalid Protobuf toolchain identity: " + toolchainIdentity);
+        }
+        var cacheFolder = new File(new File(dumperFolder, CACHE_FOLDER_NAME),
+                "protobuf-v1-" + toolchainIdentity + "-" + schemaHash + "-"
+                        + pt.up.fe.specs.clang.ExecutableDigest.sha256(executable));
+        try {
+            Files.createDirectories(cacheFolder.toPath());
+        } catch (IOException e) {
+            throw new RuntimeException("Could not prepare clang-dumper ccache folder '" + cacheFolder + "'", e);
+        }
+        return new Invocation(cacheFolder, baseDir);
+    }
+
+    static List<String> command(List<String> dumperCommand, File dependencyFile) {
+        var separatorIndex = dumperCommand.indexOf("--");
+        if (separatorIndex < 0) {
+            throw new IllegalArgumentException("Expected clang-dumper command to contain '--': " + dumperCommand);
+        }
+
+        var command = new ArrayList<String>();
+        command.add("ccache");
+        command.addAll(dumperCommand.subList(0, separatorIndex));
+        command.add("-MD");
+        command.add("-MF");
+        command.add(dependencyFile.getAbsolutePath());
+        command.addAll(dumperCommand.subList(separatorIndex, dumperCommand.size()));
+        return command;
+    }
+
+    record Invocation(File cacheFolder, File baseDir) {
+
+        Invocation(File cacheFolder) {
+            this(cacheFolder, null);
+        }
+
+        void configureEnvironment(Map<String, String> environment) {
+            // ccache treats every non-false value as disabled and rejects false/0.
+            // Normalize values our existing truthy policy treats as enabled so
+            // the subprocess implements the same policy as isAvailable().
+            if (!isDisabled(environment.get("CCACHE_DISABLE"))) {
+                environment.remove("CCACHE_DISABLE");
+            }
+            environment.put("CCACHE_DIR", cacheFolder.getAbsolutePath());
+            environment.put("CCACHE_COMPILERTYPE", "clang");
+            environment.put("CCACHE_DEPEND", "true");
+            environment.put("CCACHE_NOHASHDIR", "true");
+            if (baseDir != null) {
+                environment.put("CCACHE_BASEDIR", baseDir.getAbsolutePath());
+            }
+            // clang-dumper already streams a compressed Zstandard frame. Recompressing
+            // it inside ccache roughly doubles miss latency without changing semantics.
+            environment.put("CCACHE_NOCOMPRESS", "true");
+        }
+    }
+}

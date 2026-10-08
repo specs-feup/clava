@@ -239,3 +239,10 @@ int callsFunctionWithLabels() {
 	
 	return a;
 }
+
+void callsFunctionWithLabelsFresh() {
+	int a = 0;
+	
+	a = functionWithLabel();
+	a = functionWithLabel();
+}

@@ -3,10 +3,9 @@
         "sonarsource.sonarlint-vscode",
         "ms-vscode.cpptools",
         "ms-vscode.cmake-tools",
-        "orta.vscode-jest",
-        "esbenp.prettier-vscode",
-        "dbaeumer.vscode-eslint",
+        "oxc.oxc-vscode",
         "redhat.java",
+        "vitest.explorer",
         "vscjava.vscode-gradle",
         "vscjava.vscode-java-debug"
     ]

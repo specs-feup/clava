@@ -17,12 +17,13 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clang.ClangAstKeys;
+import pt.up.fe.specs.clang.ClangFiles;
 import pt.up.fe.specs.clang.ClangResources;
-import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clang.dumper.ClangAstParser;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
+import pt.up.fe.specs.clang.wire.ProtobufAstParseException;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -43,6 +44,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -71,6 +73,9 @@ public class ParallelCodeParser extends CodeParser {
     public static final DataKey<Boolean> CONTINUE_ON_PARSING_ERRORS = KeyFactory.bool("continueOnParsingErrors")
             .setLabel("Ignores parsing errors in C/C++ source code");
 
+    public static final DataKey<Boolean> SYNTAX_ONLY = KeyFactory.bool("syntaxOnly")
+            .setLabel("Runs the compiler/dumper pipeline only to validate syntax, without decoding the AST");
+
     // public static final DataKey<Integer> SYSTEM_INCLUDES_THRESHOLD = KeyFactory.integer("systemIncludesThreshold", 1)
     // .setLabel("Number of threads to use for parallel parsing");
 
@@ -87,6 +92,9 @@ public class ParallelCodeParser extends CodeParser {
         Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
 
         ConcurrentLinkedQueue<String> clangDump = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<String> syntaxErrors = new ConcurrentLinkedQueue<>();
+
+        boolean syntaxOnly = get(SYNTAX_ONLY);
 
         DataStore options = ClangAstKeys.toDataStore(compilerOptions);
 
@@ -104,29 +112,19 @@ public class ParallelCodeParser extends CodeParser {
         // Standard standard = getStandard(allUserSources.values(), options);
         // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
 
-        // Get version for the executable
-        String version = options.get(ClangAstKeys.CLANGAST_VERSION);
         // System.out.println("PARALLEL OPTIONS: " + options);
         // Prepare resources before execution
         // ClangResources clangResources = new ClangResources(get(SHOW_CLANG_DUMP));
         ClangResources clangResources = new ClangResources(this);
 
-
-        if (ClangAstDumper.usePlugin()) {
-            set(ClangAstKeys.LIBC_CXX_MODE, LibcMode.SYSTEM);
-            ClavaLog.debug(() -> "In Linux, ClangAstDumper is a plugin. LIBC_CXX_MODE is reset to SYSTEM.");
-        }
-
-        var clangFiles = clangResources.getClangFiles(version, get(ClangAstKeys.LIBC_CXX_MODE));
+        var clangFiles = clangResources.getClangFiles(get(ClangAstKeys.LIBC_CXX_MODE));
+        options.set(ClangAstKeys.LIBC_CXX_MODE, clangFiles.libcMode());
         // File clangExecutable = clangResources.prepareResources(version);
         // List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,
         // get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         ClavaLog.info("Found " + sources.size() + " source files");
         // ClavaLog.debug(() -> "[ParallelCodeParser] Files to parse:" + sources);
-
-        File parsingFolder = SpecsIo.getTempFolder("clava_parsing_" + UUID.randomUUID().toString());
-        ClavaLog.debug(() -> "Parsing using folder '" + parsingFolder + "'");
 
         // AtomicInteger currentSourceFileIndex = new AtomicInteger(0);
         ParallelProgressCounter counter = new ParallelProgressCounter(sources.size());
@@ -147,7 +145,7 @@ public class ParallelCodeParser extends CodeParser {
 
             Future<ClangAstData> tUnit = executor
                     .submit(() -> parseSource(source, id, standard, options, clangDump,
-                            counter, parsingFolder, clangFiles.clangExecutable(), clangFiles.builtinIncludes()));
+                            counter, clangFiles, syntaxErrors));
 
             futureTUnits.add(tUnit);
 
@@ -159,6 +157,7 @@ public class ParallelCodeParser extends CodeParser {
         // Collect parsing results
         List<ClangAstData> clangParserResults = new ArrayList<>();
         List<File> ignoredFiles = new ArrayList<>();
+        List<RuntimeException> fatalFailures = new ArrayList<>();
         for (int i = 0; i < sources.size(); i++) {
             var future = futureTUnits.get(i);
             try {
@@ -166,11 +165,37 @@ public class ParallelCodeParser extends CodeParser {
                 var parserData = SpecsSystem.get(future);
                 clangParserResults.add(parserData);
             } catch (Exception e) {
+                if (syntaxOnly) {
+                    fatalFailures.add(new RuntimeException(
+                            "Error while validating syntax of file '" + sources.get(i) + "'", e));
+                    continue;
+                }
+
+                var wireFailure = findWireFailure(e);
+                if (wireFailure != null) {
+                    fatalFailures.add(wireFailure);
+                    continue;
+                }
+
                 SpecsLogs.warn("Could not parse file '" + sources.get(i) + "', will be ignored", e);
                 ignoredFiles.add(sources.get(i));
                 continue;
             }
 
+        }
+        // FutureTask retains its result after get(); release those references
+        // before cross-translation-unit processing builds the final AST.
+        futureTUnits.clear();
+
+        // Join every task before cleanup removes its working directory. A wire
+        // failure cannot be treated as an ignored translation unit, even when
+        // the caller permits ordinary compiler diagnostics.
+        if (!fatalFailures.isEmpty()) {
+            var failure = fatalFailures.get(0);
+            for (int i = 1; i < fatalFailures.size(); i++) {
+                failure.addSuppressed(fatalFailures.get(i));
+            }
+            throw failure;
         }
 
         // List<ClangParserData> clangParserResults = futureTUnits.stream()
@@ -181,8 +206,16 @@ public class ParallelCodeParser extends CodeParser {
         // System.out.println("CLANG PARSER NODES:\n" + data.get(ClangParserData.CLAVA_NODES).getNodes());
         // }
 
-        // Delete temporary folder
-        SpecsIo.deleteFolder(parsingFolder);
+        // No AST was decoded, just report syntax validation errors
+        if (syntaxOnly) {
+            List<String> validationErrors = new ArrayList<>(syntaxErrors);
+            if (!validationErrors.isEmpty() && !get(CONTINUE_ON_PARSING_ERRORS)) {
+                throw new ClavaParserException(validationErrors, clangFiles);
+            }
+
+            return null;
+        }
+
 
         // List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
         // .map(sourceFile -> parseSource(new File(sourceFile), standard, options, clangDump,
@@ -246,12 +279,19 @@ public class ParallelCodeParser extends CodeParser {
         app.getContext().pushApp(app);
 
         app.setSourcesFromStrings(allSources);
-        app.addConfig(ClangAstKeys.toDataStore(compilerOptions));
+        DataStore appConfig = ClangAstKeys.toDataStore(compilerOptions);
+        appConfig.set(ClangAstKeys.LIBC_CXX_MODE, clangFiles.libcMode());
+        app.addConfig(appConfig);
 
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree
         // new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
         new TreeTransformer(ClangAstParser.getPostParsingRules()).transform(app);
+
+        // The final AST now owns every node needed after parsing. Drop the
+        // per-file decoder maps and node lookup tables before returning it.
+        clangParserResults.forEach(ClangAstData::releaseParserState);
+        clangParserResults.clear();
 
         // Add text elements (comments, pragmas) to the tree
         new TextParser(app.getContext()).addElements(app);
@@ -363,8 +403,8 @@ public class ParallelCodeParser extends CodeParser {
     }
 
     private ClangAstData parseSource(File sourceFile, String id, Standard standard, DataStore options,
-                                     ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
-                                     File clangExecutable, List<String> builtinIncludes) {
+                                     ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter,
+                                     ClangFiles clangFiles, ConcurrentLinkedQueue<String> syntaxErrors) {
 
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
 
@@ -375,36 +415,43 @@ public class ParallelCodeParser extends CodeParser {
         // Only show output of console after parsing is done, when using parallel parsing
         boolean streamConsoleOutput = !get(PARALLEL_PARSING);
 
-        ClangAstDumper clangParser = new ClangAstDumper(streamConsoleOutput, clangExecutable, builtinIncludes,
-                this)
-                .setBaseFolder(parsingFolder)
+        ClangAstDumper clangParser = new ClangAstDumper(streamConsoleOutput, clangFiles.clangExecutable(),
+                clangFiles.builtinIncludes(), clangFiles.systemResourceDir(), this)
                 .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
 
         // .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         counter.print(sourceFile);
-        // ClavaLog.info("Parsing '" + sourceFile.getAbsolutePath() + "'");
-        ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
 
-        if (get(SHOW_CLANG_DUMP)) {
-            // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
-            // SpecsLogs.msgInfo(clangParser.getClangDump());
-            clangDump.add(clangParser.getClangDump());
-        }
-
-        if (get(CLEAN)) {
-            // if (clangParser.getLastWorkingFolder() == null) {
-            // workingFolders.add(clangParser.getLastWorkingFolder());
-            // }
-            if (clangParser.getLastWorkingFolder() == null) {
-                SpecsLogs.msgInfo("No working folder found for source file '" + sourceFile + "'");
-            } else {
-                SpecsIo.deleteFolder(clangParser.getLastWorkingFolder());
+        return runWithCleanup(clangParser, get(CLEAN), () -> {
+            // Run the same clang invocation, discarding dumper output when
+            // syntax-only validation is requested.
+            if (get(SYNTAX_ONLY)) {
+                String error = clangParser.validateSyntax(sourceFile, id, standard, options);
+                if (error != null) {
+                    syntaxErrors.add(error);
+                }
+                return null;
             }
 
-        }
+            ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
 
-        return clangParserData;
+            if (get(SHOW_CLANG_DUMP)) {
+                clangDump.add(clangParser.getClangDump());
+            }
+
+            return clangParserData;
+        });
+    }
+
+    static <T> T runWithCleanup(ClangAstDumper clangParser, boolean clean, Supplier<T> parsing) {
+        try {
+            return parsing.get();
+        } finally {
+            if (clean && clangParser.getLastWorkingFolder() != null) {
+                SpecsIo.deleteFolder(clangParser.getLastWorkingFolder());
+            }
+        }
     }
 
     /*
@@ -502,6 +549,15 @@ public class ParallelCodeParser extends CodeParser {
         Collections.sort(orderedSources);
 
         return orderedSources;
+    }
+
+    private static ProtobufAstParseException findWireFailure(Throwable failure) {
+        for (var cause = failure; cause != null; cause = cause.getCause()) {
+            if (cause instanceof ProtobufAstParseException wireFailure) {
+                return wireFailure;
+            }
+        }
+        return null;
     }
 
 }

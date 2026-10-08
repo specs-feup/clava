@@ -14,22 +14,18 @@
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
 import pt.up.fe.specs.clava.ast.type.NullType;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUndefinedType;
 
-public class CxxUndefinedType extends AUndefinedType {
+public class CxxUndefinedType<Self extends CxxUndefinedType<Self>> extends AUndefinedType<Self> {
 
-    private final NullType nullType;
-
-    public CxxUndefinedType(NullType nullType) {
-        super(new CxxType(nullType));
-
-        this.nullType = nullType;
+    public CxxUndefinedType(NullType nullType, CxxWeaver weaver) {
+        super(nullType, weaver);
     }
 
     @Override
-    public Type getNode() {
-        return nullType;
+    public NullType getNodeImpl() {
+        return (NullType) super.getNodeImpl();
     }
 
 }

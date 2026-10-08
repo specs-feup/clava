@@ -13,41 +13,37 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APointerType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
-public class CxxPointerType extends APointerType {
+public class CxxPointerType<Self extends CxxPointerType<Self>> extends APointerType<Self> {
 
-    private final PointerType pointerType;
-
-    public CxxPointerType(PointerType pointerType) {
-        super(new CxxType(pointerType));
-
-        this.pointerType = pointerType;
+    public CxxPointerType(PointerType pointerType, CxxWeaver weaver) {
+        super(pointerType, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return pointerType;
+    public PointerType getNodeImpl() {
+        return (PointerType) super.getNodeImpl();
     }
 
     @Override
-    public AType getPointeeImpl() {
-        return CxxJoinpoints.create(pointerType.getPointeeType(), AType.class);
+    public AType<?> getPointeeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getPointeeType(), getWeaverEngine(), AType.class);
     }
 
     @Override
-    public Integer getPointerLevelsImpl() {
-        return pointerType.getPointerLevels();
+    public int getPointerLevelsImpl() {
+        return this.getNodeImpl().getPointerLevels();
     }
 
     @Override
-    public void setPointeeImpl(AType pointeeType) {
-        pointerType.set(PointerType.POINTEE_TYPE, (Type) pointeeType.getNode());
+    public void setPointeeImpl(AType<?> pointeeType) {
+        this.getNodeImpl().set(PointerType.POINTEE_TYPE, (Type) pointeeType.getNodeImpl());
     }
 
 }

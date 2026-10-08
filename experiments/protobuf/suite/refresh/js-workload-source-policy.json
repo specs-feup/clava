@@ -1,0 +1,15 @@
+{
+  "current_source_sha256": {
+    "api/Issues.test.ts": "16f821575eee5755454ae3b5b24d76205a525fdc95569fc6babc6aa758eae9a6",
+    "api/LegacyIntegrationTests - C.test.ts": "e00c6c805129f58d11589df8622a4f16dd89b898360e26e81d81bd1a83b5dab3",
+    "api/LegacyIntegrationTests - CXX.test.ts": "36b2e023ccbef4e118bc2e9fdcf958c8f6bff789f3b545affe7545de8afb34fa",
+    "api/LegacyIntegrationTests - Issues.test.ts": "339dba95ad22a444a573227aa042adbdfc13e2625e946e999fa2b95bf20dba26",
+    "api/Query.test.ts": "b2c76ac20d61e95cf93af56dfe7450a70f73adab166616d8614331aee160f24b",
+    "api/clava/ClavaJoinPoints.test.ts": "a047eb52d81fe5ad3bd82f7b801a37b22ebdef34446ffff5885368a3b5aa69b3",
+    "api/clava/analysis/AnalyserResult.test.ts": "2c536374c90c17d48542c17282f4abd2c82031589c2372bf5a75b044ab567e66",
+    "code/ClangPlugin/ClangPlugin.test.ts": "7c17fac48c1c9fd0e7f65bc10faf4e701b7be21008eff8bcffa3eb8d8db970fc",
+    "code/Sandbox.test.ts": "0d60880d1a1a00dc84979f61e86336c97daa2ffddadb47b2cb45159c47daae20"
+  },
+  "frozen_source_revision": "9b588d48ae36b0bfe60eb4fe7748e0116083005f",
+  "schema_version": 1
+}

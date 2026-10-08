@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
+    "noEmit": false,
     "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "isolatedModules": true,
     "declaration": true,
     "strict": true,
-    //"allowJs": true,
-    //"checkJs": true,
-    "sourceMap": true,
-    "declarationMap": true,
-    "allowSyntheticDefaultImports": true
-    //"esModuleInterop": true
-  }
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "types": ["node", "vitest/globals"],
+    "rewriteRelativeImportExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "rootDir": ".",
+    "outDir": "dist"
+  },
+  "exclude": ["**/*.test.ts", "test"]
 }

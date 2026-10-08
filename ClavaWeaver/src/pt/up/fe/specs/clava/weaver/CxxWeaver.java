@@ -3,10 +3,8 @@ package pt.up.fe.specs.clava.weaver;
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.weaver.ast.AstMethods;
 import org.lara.interpreter.weaver.interf.AGear;
-import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import org.lara.interpreter.weaver.options.WeaverOption;
-import org.lara.language.specification.dsl.LanguageSpecification;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
@@ -14,7 +12,6 @@ import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
-import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -27,6 +24,7 @@ import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
 import pt.up.fe.specs.clava.utils.SourceType;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
 import pt.up.fe.specs.clava.weaver.gears.CacheHandlerGear;
 import pt.up.fe.specs.clava.weaver.gears.ModifiedFilesGear;
@@ -53,7 +51,7 @@ import java.util.stream.Collectors;
  * implementation should be done by extending those
  * abstract classes with user-defined classes.<br>
  * The abstract class
- * {@link pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint} can be used
+ * {@link pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint} can be used
  * to add user-defined
  * methods and fields which the user intends to add for all join points and are
  * not intended to be used in LARA aspects.
@@ -61,11 +59,6 @@ import java.util.stream.Collectors;
  * @author Lara Weaver Generator
  */
 public class CxxWeaver extends ACxxWeaver {
-
-    public static LanguageSpecification buildLanguageSpecification() {
-        return LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
-                ClavaWeaverResource.ACTIONS);
-    }
 
     private static final List<String> CLAVA_PREDEFINED_EXTERNAL_DEPS = Arrays.asList("LAT - Lara Autotuning Tool",
             "https://github.com/specs-feup/LAT-Lara-Autotuning-Tool.git",
@@ -88,9 +81,6 @@ public class CxxWeaver extends ACxxWeaver {
     private static final String TEMP_WEAVING_FOLDER = "__clava_woven";
     private static final String TEMP_SRC_FOLDER = "__clava_src";
     private static final String WOVEN_CODE_FOLDERNAME = "woven_code";
-
-    private static final ThreadLocal<Buffer<File>> REBUILD_WEAVING_FOLDERS = ThreadLocal
-            .withInitial(() -> new Buffer<>(2, CxxWeaver::newTemporaryWeavingFolder));
 
     private static final Set<String> LANGUAGES = Collections
             .unmodifiableSet(new HashSet<>(Arrays.asList("c", "cxx", "opencl")));
@@ -154,6 +144,8 @@ public class CxxWeaver extends ACxxWeaver {
     private CacheHandlerGear cacheHandlerGear = null;
 
     // Parsed program state
+    private Buffer<File> rebuildWeavingFolders;
+
     private List<File> currentSources = null;
     private Map<File, File> currentBases = null;
     private Map<File, String> sourceFoldernames = null;
@@ -173,9 +165,11 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     private void reset() {
+        this.rebuildWeavingFolders = new Buffer<>(2, this::newTemporaryWeavingFolder);
+
         // Gears
         this.modifiedFilesGear = new ModifiedFilesGear();
-        this.cacheHandlerGear = new CacheHandlerGear();
+        this.cacheHandlerGear = new CacheHandlerGear(this);
 
         // Weaver configuration
         context = new ClavaContext();
@@ -214,8 +208,8 @@ public class CxxWeaver extends ACxxWeaver {
         return weaverData.getAst();
     }
 
-    public CxxProgram getAppJp() {
-        return CxxJoinpoints.programFactory(getApp());
+    public CxxProgram<?> getAppJp() {
+        return new CxxProgram<>(getApp(), this);
     }
 
     private Map<ClavaNode, Map<String, Object>> getUserValues() {
@@ -238,7 +232,7 @@ public class CxxWeaver extends ACxxWeaver {
     @Override
     protected boolean begin(List<File> sources, File outputDir, DataStore args) {
         setData(args);
-        this.weaverData = new ClavaWeaverData();
+        this.weaverData = new ClavaWeaverData(this);
         this.accMap = new AccumulatorMap<>();
         this.messagesToUser = new LinkedHashSet<>();
 
@@ -578,45 +572,23 @@ public class CxxWeaver extends ACxxWeaver {
      * @return
      */
     public App createApp(List<File> sources, List<String> parserOptions, List<String> extraOptions) {
+        return createApp(sources, parserOptions, extraOptions, null);
+    }
+
+    private App createApp(List<File> sources, List<String> parserOptions, List<String> extraOptions,
+            File generatedParseRoot) {
         ClavaLog.debug(() -> "Creating App from the following sources: " + sources);
         ClavaLog.debug(() -> "Creating App using the following options: " + parserOptions);
         ClavaLog.debug(() -> "Creating App using the following extra options: " + extraOptions);
 
-        // Collect additional include folders
-        Set<String> sourceIncludeFolders = getSourceIncludes(sources);
-        ClavaLog.debug(() -> "Source include folders: " + sourceIncludeFolders);
+        CodeParser codeParser = newCodeParser();
 
-        // Add include folders to extra options
-        List<String> adaptedExtraOptions = new ArrayList<>(sourceIncludeFolders.size() + extraOptions.size());
-        adaptedExtraOptions.addAll(extraOptions);
-        sourceIncludeFolders.stream().map(includeFolder -> "-I" + includeFolder).forEach(adaptedExtraOptions::add);
+        if (generatedParseRoot != null) {
+            codeParser.set(CodeParser.GENERATED_PARSE_ROOT, generatedParseRoot);
+        }
 
-        List<String> allFiles = sources.stream().map(File::toString).collect(Collectors.toList());
-
-        // Sort filenames so that select order of files is consistent between OSes
-        Collections.sort(allFiles);
-
-        boolean useCustomResources = this.dataStore.get(ClavaOptions.CUSTOM_RESOURCES);
-
-        CodeParser codeParser = CodeParser.newInstance();
-
-        // Setup code parser
-        codeParser.set(CodeParser.USE_CUSTOM_RESOURCES, useCustomResources);
-        codeParser.set(CodeParser.CUDA_GPU_ARCH, this.dataStore.get(CodeParser.CUDA_GPU_ARCH));
-        codeParser.set(CodeParser.CUDA_PATH, this.dataStore.get(CodeParser.CUDA_PATH));
-        codeParser.set(ParallelCodeParser.PARALLEL_PARSING, this.dataStore.get(ParallelCodeParser.PARALLEL_PARSING));
-        codeParser.set(ParallelCodeParser.PARSING_NUM_THREADS, this.dataStore.get(ParallelCodeParser.PARSING_NUM_THREADS));
-        codeParser.set(ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD,
-                this.dataStore.get(ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD));
-        codeParser.set(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS,
-                this.dataStore.get(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS));
-        codeParser.set(ClangAstKeys.LIBC_CXX_MODE, this.dataStore.get(ClangAstKeys.LIBC_CXX_MODE));
-        codeParser.set(CodeParser.DUMPER_FOLDER, this.dataStore.get(CodeParser.DUMPER_FOLDER));
-
-        List<String> allParserOptions = new ArrayList<>(parserOptions.size() + adaptedExtraOptions.size());
-        allParserOptions.addAll(parserOptions);
-        allParserOptions.addAll(adaptedExtraOptions);
-        App app = codeParser.parse(SpecsCollections.map(allFiles, File::new), allParserOptions, context);
+        List<String> allParserOptions = addSourceIncludes(sources, parserOptions, extraOptions);
+        App app = codeParser.parse(sources, allParserOptions, context);
 
         // Set source paths of each TranslationUnit
         app.setSources(currentBases);
@@ -627,6 +599,36 @@ public class CxxWeaver extends ACxxWeaver {
                 .setDisableRemoteDependencies(this.dataStore.get(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES));
 
         return app;
+    }
+
+    private CodeParser newCodeParser() {
+        CodeParser codeParser = CodeParser.newInstance();
+
+        codeParser.set(CodeParser.USE_CUSTOM_RESOURCES, this.dataStore.get(ClavaOptions.CUSTOM_RESOURCES));
+        codeParser.set(CodeParser.CUDA_GPU_ARCH, this.dataStore.get(CodeParser.CUDA_GPU_ARCH));
+        codeParser.set(CodeParser.CUDA_PATH, this.dataStore.get(CodeParser.CUDA_PATH));
+        codeParser.set(ParallelCodeParser.PARALLEL_PARSING, this.dataStore.get(ParallelCodeParser.PARALLEL_PARSING));
+        codeParser.set(ParallelCodeParser.PARSING_NUM_THREADS, this.dataStore.get(ParallelCodeParser.PARSING_NUM_THREADS));
+        codeParser.set(ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD,
+                this.dataStore.get(ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD));
+        codeParser.set(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS,
+                this.dataStore.get(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS));
+        codeParser.set(ClangAstKeys.LIBC_CXX_MODE, this.dataStore.get(ClangAstKeys.LIBC_CXX_MODE));
+        codeParser.set(CodeParser.DUMPER_FOLDER, this.dataStore.get(CodeParser.DUMPER_FOLDER));
+        codeParser.set(CodeParser.AST_DUMP_CACHE, this.dataStore.get(CodeParser.AST_DUMP_CACHE));
+
+        return codeParser;
+    }
+
+    private List<String> addSourceIncludes(List<File> sources, List<String> parserOptions, List<String> extraOptions) {
+        Set<String> sourceIncludeFolders = getSourceIncludes(sources);
+        ClavaLog.debug(() -> "Source include folders: " + sourceIncludeFolders);
+
+        List<String> allParserOptions = new ArrayList<>(parserOptions.size() + sourceIncludeFolders.size() + extraOptions.size());
+        allParserOptions.addAll(parserOptions);
+        allParserOptions.addAll(extraOptions);
+        sourceIncludeFolders.stream().map(includeFolder -> "-I" + includeFolder).forEach(allParserOptions::add);
+        return allParserOptions;
     }
 
     private Set<String> getSourceIncludes(List<File> sources) {
@@ -741,8 +743,8 @@ public class CxxWeaver extends ACxxWeaver {
      * @return an instance of the join point root/program
      */
     @Override
-    public JoinPoint getRootJp() {
-        return CxxJoinpoints.create(getApp());
+    public AJoinpoint<?> getRootJp() {
+        return CxxJoinpoints.create(getApp(), this);
     }
 
     public String getProgramName() {
@@ -803,13 +805,6 @@ public class CxxWeaver extends ACxxWeaver {
         SpecsIo.deleteFolder(new File(TEMP_SRC_FOLDER));
 
         if (this.dataStore != null) {
-            // Delete intermediary files
-            if (this.dataStore.get(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES)) {
-                for (String tempFile : ClangAstDumper.getTempFiles()) {
-                    new File(tempFile).delete();
-                }
-            }
-
             // Re-enable output
             if (this.dataStore.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
                 SpecsLogs.getSpecsLogger().setLevelAll(null);
@@ -1042,7 +1037,7 @@ public class CxxWeaver extends ACxxWeaver {
         ClavaData.clearAllCaches(nodes);
 
         // Write current tree to a temporary folder
-        File tempFolder = REBUILD_WEAVING_FOLDERS.get().next();
+        File tempFolder = rebuildWeavingFolders.next();
 
         File destinationFile = tUnit.getDestinationFile(tempFolder);
         String code = tUnit.getCode();
@@ -1075,8 +1070,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Write the other translation units and add folder as includes, in case they
         // are needed
-        String currentCodeFoldername = TEMP_WEAVING_FOLDER + "_for_file_rebuild";
-        File currentCodeFolder = SpecsIo.mkdir(currentCodeFoldername).getAbsoluteFile();
+        File currentCodeFolder = new File(tempFolder, "current-code");
         SpecsIo.deleteFolderContents(currentCodeFolder, true);
 
         // Add include
@@ -1095,7 +1089,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // App rebuiltApp = createApp(srcFolders, rebuildOptions);
 
-        App rebuiltApp = createApp(Arrays.asList(destinationFile), rebuildOptions);
+        App rebuiltApp = createApp(Arrays.asList(destinationFile), rebuildOptions, Collections.emptyList(), tempFolder);
 
         // Remove app from context stack
         context.popApp();
@@ -1106,8 +1100,8 @@ public class CxxWeaver extends ACxxWeaver {
         // After rebuilding, clear current app cache
         getApp().clearCache();
         getEventTrigger().triggerAction(Stage.DURING,
-                "CxxWeaver.rebuildFile",
-                CxxJoinpoints.create(tUnit), Collections.emptyList(), Optional.empty());
+                CxxJoinpoints.create(tUnit, this),
+                "CxxWeaver.rebuildFile", Optional.empty(), Collections.emptyList());
 
         // Return correct TranslationUnit
         for (TranslationUnit tu : rebuiltApp.getTranslationUnits()) {
@@ -1202,7 +1196,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Check if inside apply
 
         // Write current tree to a temporary folder
-        File tempFolder = REBUILD_WEAVING_FOLDERS.get().next();
+        File tempFolder = rebuildWeavingFolders.next();
 
         // Ensure folder is empty
         SpecsIo.deleteFolderContents(tempFolder);
@@ -1247,7 +1241,15 @@ public class CxxWeaver extends ACxxWeaver {
                 .forEach(writtenFile -> rebuildBases.put(SpecsIo.getCanonicalFile(writtenFile), tempFolder));
 
         currentBases = rebuildBases;
-        App rebuiltApp = createApp(writtenFiles, rebuildOptions, extraOptions);
+        if (!update) {
+            CodeParser codeParser = newCodeParser();
+            codeParser.set(ParallelCodeParser.SYNTAX_ONLY, true);
+            codeParser.parse(writtenFiles, addSourceIncludes(writtenFiles, rebuildOptions, extraOptions), context);
+            currentBases = previousBases;
+            return true;
+        }
+
+        App rebuiltApp = createApp(writtenFiles, rebuildOptions, extraOptions, tempFolder);
 
         // Restore current bases
         currentBases = previousBases;
@@ -1322,7 +1324,7 @@ public class CxxWeaver extends ACxxWeaver {
      *
      * @return
      */
-    private static File newTemporaryWeavingFolder() {
+    private File newTemporaryWeavingFolder() {
 
         File tempFolder = SpecsIo.getTempFolder(TEMP_WEAVING_FOLDER + "_" + UUID.randomUUID().toString());
 
@@ -1363,10 +1365,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     public boolean clearUserField(ClavaNode node) {
         return getUserValues().remove(node) != null;
-    }
-
-    public static CxxWeaver getCxxWeaver() {
-        return (CxxWeaver) getThreadLocalWeaver();
     }
 
     @Override
@@ -1436,15 +1434,15 @@ public class CxxWeaver extends ACxxWeaver {
         return includes;
     }
 
-    public static ClavaFactory getFactory() {
+    public ClavaFactory getFactory() {
         return getContex().get(ClavaContext.FACTORY);
     }
 
-    public static ClavaContext getContex() {
-        return getCxxWeaver().getApp().getContext();
+    public ClavaContext getContex() {
+        return getApp().getContext();
     }
 
-    public static SnippetParser getSnippetParser() {
+    public SnippetParser getSnippetParser() {
         return new SnippetParser(getContex());
     }
 
@@ -1468,7 +1466,10 @@ public class CxxWeaver extends ACxxWeaver {
      */
     private Set<File> getSourceIncludeFolders(File weavingFolder, boolean onlyHeaders) {
         Set<File> includeFolders = new LinkedHashSet<>();
-        includeFolders.addAll(SpecsIo.getFolders(weavingFolder));
+        List<File> generatedFolders = new ArrayList<>(SpecsIo.getFolders(weavingFolder));
+        generatedFolders.sort(Comparator.comparing(folder ->
+                SpecsIo.normalizePath(SpecsIo.getRelativePath(folder, weavingFolder))));
+        includeFolders.addAll(generatedFolders);
         includeFolders.add(weavingFolder);
 
         return includeFolders;
@@ -1541,11 +1542,6 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     @Override
-    protected LanguageSpecification buildLangSpecs() {
-        return buildLanguageSpecification();
-    }
-
-    @Override
     public List<String> getPredefinedExternalDependencies() {
         return SpecsCollections.concatList(super.getPredefinedExternalDependencies(), CLAVA_PREDEFINED_EXTERNAL_DEPS);
     }
@@ -1556,7 +1552,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public AstMethods getAstMethods() {
-        return new ClavaAstMethods(this, ClavaNode.class, node -> CxxJoinpoints.create(node),
+        return new ClavaAstMethods(this, ClavaNode.class, node -> CxxJoinpoints.create(node, this),
                 node -> ClavaCommonLanguage.getJoinPointName(node), node -> node.getScopeChildren());
     }
 

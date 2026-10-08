@@ -1,0 +1,6 @@
+build/
+results/
+suite/results/
+validation/results/
+*.pyc
+__pycache__/

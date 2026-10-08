@@ -13,22 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABody;
 
-public class CxxBody extends ABody {
+public class CxxBody<Self extends CxxBody<Self>> extends ABody<Self> {
 
-    private final CompoundStmt scope;
-
-    public CxxBody(CompoundStmt scope) {
-        super(new CxxScope(scope));
-        this.scope = scope;
+    public CxxBody(CompoundStmt scope, CxxWeaver weaver) {
+        super(scope, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return scope;
+    public CompoundStmt getNodeImpl() {
+        return (CompoundStmt) super.getNodeImpl();
     }
 
 }

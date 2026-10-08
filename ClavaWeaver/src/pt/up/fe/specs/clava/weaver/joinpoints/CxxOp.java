@@ -13,38 +13,42 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Operator;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOp;
+import pt.up.fe.specs.clava.weaver.enums.OpKind;
 
-public class CxxOp extends AOp {
+public class CxxOp<Self extends CxxOp<Self>> extends AOp<Self> {
 
-    private final Operator op;
-
-    public CxxOp(Operator op) {
-        super(new CxxExpression(op));
-
-        this.op = op;
+    public CxxOp(Operator op, CxxWeaver weaver) {
+        super(op, weaver);
     }
 
     @Override
-    public String getKindImpl() {
-        return op.getKindName();
+    public Operator getNodeImpl() {
+        return (Operator) super.getNodeImpl();
     }
 
     @Override
-    public Boolean getIsBitwiseImpl() {
-        return op.isBitwise();
+    public OpKind getKindImpl() {
+        var op = this.getNodeImpl();
+
+        try {
+            return OpKind.fromDisplay(op.getKindName());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Could not determine operator kind for operator with code '" + op.getOperatorCode()
+                    + "' and kind name '" + op.getKindName() + "'", e);
+        }
     }
 
     @Override
-    public ClavaNode getNode() {
-        return op;
+    public boolean getIsBitwiseImpl() {
+        return this.getNodeImpl().isBitwise();
     }
 
     @Override
     public String getOperatorImpl() {
-        return op.getOperatorCode();
+        return this.getNodeImpl().getOperatorCode();
     }
 
 }

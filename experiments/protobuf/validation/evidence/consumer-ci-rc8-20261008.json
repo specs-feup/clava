@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-08",
+  "scope": "Clava nightly consumer CI evidence for the Protobuf work",
+  "tested_source_commit": "360a41c5e48385effdbb459fa30cc0efc05da68b",
+  "workflow": {
+    "name": "nightly",
+    "run_id": 37787399693,
+    "run_attempt": 2,
+    "event": "push",
+    "branch": "ast-protobuf",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-10-08T13:49:17Z",
+    "completed_at": "2026-10-08T17:08:51Z",
+    "url": "https://github.com/specs-feup/clava/actions/runs/37787399693"
+  },
+  "jobs": {
+    "java": {
+      "id": 113436063899,
+      "name": "Build Java",
+      "conclusion": "success",
+      "tests": 253,
+      "passed": 248,
+      "skipped": 5,
+      "failed": 0,
+      "skip_detail": "The uploaded JUnit summary reported five skips; individual skip names were not in the archived job log."
+    },
+    "javascript": [
+      {
+        "id": 113436065139,
+        "runtime": "Node 24.x",
+        "runner": "ubuntu-24.04",
+        "conclusion": "success",
+        "test_files_passed": 9,
+        "tests": 164,
+        "passed": 162,
+        "skipped": 2,
+        "failed": 0
+      },
+      {
+        "id": 113436064678,
+        "runtime": "Node 25.x",
+        "runner": "ubuntu-24.04",
+        "conclusion": "success",
+        "test_files_passed": 9,
+        "tests": 164,
+        "passed": 162,
+        "skipped": 2,
+        "failed": 0
+      },
+      {
+        "id": 113436065438,
+        "runtime": "Node 24.x",
+        "runner": "macos-latest",
+        "conclusion": "success",
+        "test_files_passed": 9,
+        "tests": 164,
+        "passed": 159,
+        "skipped": 5,
+        "failed": 0
+      },
+      {
+        "id": 113436102782,
+        "runtime": "Node 25.x",
+        "runner": "macos-latest",
+        "conclusion": "success",
+        "test_files_passed": 9,
+        "tests": 164,
+        "passed": 159,
+        "skipped": 5,
+        "failed": 0
+      },
+      {
+        "id": 113436063438,
+        "runtime": "Node 24.x",
+        "runner": "windows-2022",
+        "conclusion": "success",
+        "test_files_passed": 9,
+        "tests": 164,
+        "passed": 157,
+        "skipped": 7,
+        "failed": 0,
+        "retry_attempt": 2
+      },
+      {
+        "id": 113436065149,
+        "runtime": "Node 25.x",
+        "runner": "windows-2022",
+        "conclusion": "success",
+        "test_files_passed": 9,
+        "tests": 164,
+        "passed": 157,
+        "skipped": 7,
+        "failed": 0
+      }
+    ],
+    "junit_report": {
+      "id": 113438805944,
+      "conclusion": "success"
+    }
+  },
+  "javascript_totals": {
+    "matrix_jobs": 6,
+    "tests_per_job": 164,
+    "tests": 984,
+    "passed": 956,
+    "skipped": 28,
+    "failed": 0
+  },
+  "windows_node24_runner_retry": {
+    "first_attempt_job_id": 113347595330,
+    "first_attempt": 1,
+    "first_attempt_conclusion": "failure",
+    "annotation": "The hosted runner lost communication with the server.",
+    "first_attempt_job_log_available": false,
+    "first_attempt_job_log_http_status": 404,
+    "second_attempt_job_id": 113436063438,
+    "second_attempt": 2,
+    "second_attempt_conclusion": "success",
+    "second_attempt_tests_passed": 157,
+    "second_attempt_tests_skipped": 7
+  },
+  "scope_note": "This successful nightly workflow is not evidence that every PR check passed. At capture time, separate SonarCloud/CodeQL checks, the Lara shared resolver, and the specs-java-libs 17 legacy suite remained unresolved.",
+  "raw_evidence": {
+    "local_archive_id": "release-rc8/consumer-ci",
+    "job_logs_are_local_only": true,
+    "files": {
+      "run.json": "9e04251da6d5389ba890c6aa8a31fe0080b4eaf8af7434b354f5ea6ffd32e89e",
+      "jobs.json": "43e1d17c7814cc7ec160644fa34a2500f07186e72c20c87c45471492de6489d1",
+      "java.log": "2eb35ea97e2d1cd99085373b7f067ee6e646c05ce7f6bc127cc7bbf3cbdd942e",
+      "node24-ubuntu.log": "80fe5e79dee3ef0083a5252bc240855a08bfa8f9d872ab79b5a5aa5b7e131900",
+      "node25-ubuntu.log": "758af819866aee308101f244f37cdca944e908240256a57f3104349421393175",
+      "node24-macos.log": "4fbe181f86f147ac8786e012fbf3f6a7e7b91e23a9e8808b2114f04303ab1ef0",
+      "node25-macos.log": "64c5beea88b52cdc80c2bd8c0c5d54c73b40b13d5bb1663cdb2d76c242603236",
+      "node24-windows-attempt2.log": "989e890b3359527dda3204e56d5ea0fc45bd726558b735a2f306a40d94ac28f5",
+      "node25-windows.log": "9f492d39d169988211e9919be1bec7d64143cfba956229d26ffbf1a6df8a0ace",
+      "node24-windows-attempt1-metadata.json": "a78e03e0f27fe54729364fc6d2875a0d85937f39a80d333e8b4c4cdd70a40005",
+      "node24-windows-attempt1-check-run.json": "87e162eb958bc5caa7eac37d0ddab13912dfe39f5af4482c16849e15ec4298ae",
+      "node24-windows-attempt1.log": "435e957e28cb8f2b9f3a744f52c8a1cb1f07915be205c8029fa75553e6154f85",
+      "windows-node24-runner-loss.json": "81f9e1572ebc19585cb957a26caae00a8cb45a688ca18f2daee5f55a72e79861"
+    }
+  }
+}

@@ -63,8 +63,6 @@ public class CxxWeaverOptions {
 
         addBooleanOption(CxxWeaverOption.CHECK_SYNTAX, "cs", "check-syntax", "Checks syntax of woven code");
 
-        addBooleanOption(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES, "cl", "clean", "Clean intermediate files");
-
         addBooleanOption(CxxWeaverOption.DISABLE_CODE_GENERATION, "ncg", "no-code-gen",
                 "Disables automatic code generation");
 
@@ -116,6 +114,9 @@ public class CxxWeaverOptions {
         //
         addBooleanOption(ParallelCodeParser.PARALLEL_PARSING, "par", "parallel-parsing",
                 "Enables parallel parsing of source files");
+
+        addOneArgOption(CodeParser.AST_DUMP_CACHE, "adc", "ast-dump-cache",
+                "true|false", "Enables or disables caching of per-file AST dumps (enabled by default)");
 
         addOneArgOption(ParallelCodeParser.PARSING_NUM_THREADS, "thd", "parsing-threads",
                 "#threads", "Sets the number of threads for parallel parsing");
