@@ -11,6 +11,7 @@
     "updated-protobuf-results.json": "caf64475ab52b9f71299dcb7c89fb94c5c78e7b781b4c4e0ca4baedb46ebd6ff",
     "measurement-driver.py": "f9aa3a2aefb42d9a6ff2939a6861ff38f4c7ccf5e90753e382995dcc2241ca21",
     "measurement.log": "7c91811a6fef036d5c93060d4a881ee94f499f850e99f23207e2daf162da3199",
-    "frozen-controls-20261007.json": "36051f18ec0dc2da2db8a10fcaf46b899ba166f0651041c074733f50ca40a4f5"
+    "frozen-controls-20261007.json": "36051f18ec0dc2da2db8a10fcaf46b899ba166f0651041c074733f50ca40a4f5",
+    "release-manifest.json": "7be09147ea434ed07cc8ae9d709e049fbb2f4b1518336af63c302f4310369f8f"
   }
 }
