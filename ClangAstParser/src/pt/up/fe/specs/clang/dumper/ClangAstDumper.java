@@ -392,7 +392,7 @@ public class ClangAstDumper {
                         + "'\nDiagnostics:\n" + output.getStdErr());
             }
 
-            String linesNotParsed = "";
+            String linesNotParsed = output.isError() ? output.getStdErr() : "";
             long readStart = Boolean.getBoolean("clava.astWireMetrics") ? System.nanoTime() : 0L;
             try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
                     InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {

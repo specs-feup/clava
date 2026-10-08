@@ -8,6 +8,7 @@ package pt.up.fe.specs.clang.codeparser;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -24,6 +25,8 @@ import org.junit.jupiter.api.io.TempDir;
 
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clang.wire.ProtobufAstParseException;
+import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.util.SpecsSystem;
 
 class ParallelCodeParserCleanupTest {
@@ -88,6 +91,39 @@ class ParallelCodeParserCleanupTest {
                     () -> parser.parse(List.of(rejected.toFile(), accepted.toFile()), List.of("-std=c++17")));
             assertEquals(initialFolders, parserFolders());
         }
+    }
+
+    @Test
+    void compilerErrorsPreserveDiagnosticsWithAndWithoutContinue() throws IOException {
+        SpecsSystem.programStandardInit();
+        Path source = Files.writeString(tempFolder.resolve("continue_on_error.cpp"),
+                "int continue_after_error() { return missing_protobuf_error_symbol; }\n");
+        Set<Path> initialFolders = parserFolders();
+
+        var strictParser = parser(false);
+        ClavaParserException exception = assertThrows(ClavaParserException.class,
+                () -> strictParser.parse(List.of(source.toFile()), List.of("-std=c++17")));
+        assertTrue(exception.getErrors().stream()
+                .anyMatch(error -> error.contains("missing_protobuf_error_symbol")));
+        assertEquals(initialFolders, parserFolders());
+
+        App app = parser(true).parse(List.of(source.toFile()), List.of("-std=c++17"));
+
+        assertEquals(1, app.getTranslationUnits().size());
+        TranslationUnit translationUnit = app.getTranslationUnits().get(0);
+        assertTrue(translationUnit.get(TranslationUnit.HAS_PARSING_ERRORS));
+        assertTrue(translationUnit.get(TranslationUnit.ERROR_OUTPUT)
+                .contains("missing_protobuf_error_symbol"));
+        assertEquals(initialFolders, parserFolders());
+    }
+
+    private static CodeParser parser(boolean continueOnParsingErrors) {
+        var parser = CodeParser.newInstance();
+        parser.set(CodeParser.AST_DUMP_CACHE, false);
+        parser.set(CodeParser.SHOW_EXEC_INFO, false);
+        parser.set(ParallelCodeParser.PARSING_NUM_THREADS, 1);
+        parser.set(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS, continueOnParsingErrors);
+        return parser;
     }
 
     private static Set<Path> parserFolders() throws IOException {
