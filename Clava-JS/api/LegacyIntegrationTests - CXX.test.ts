@@ -215,8 +215,8 @@ describe("CxxTest", () => {
     it("Setters", async () => {
         const tester = newTester();
 
-        if (isMacOS) {
-            tester.setResultsFile("Setters.js.macos.txt");
+        if (isMacOS || isWindows) {
+            tester.setResultsFile("Setters.js.steady-clock.txt");
         }
 
         await tester.test("Setters.js", "setters.cpp");

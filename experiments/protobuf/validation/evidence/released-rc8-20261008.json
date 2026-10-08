@@ -155,6 +155,13 @@
       "typecheck_command": "../../node_modules/.bin/tsc --noEmit",
       "typecheck_result": "passed",
       "notes": "The capability check is memoized in a bounded beforeEach hook, so filtered and Windows-skipped runs do not query the NVIDIA manifest. Unsupported hosts skip only the three executed CUDA cases. This focused local check does not replace a fresh full CI run."
+    },
+    "clava_js_windows_setters_fixture_followup": {
+      "trigger_job": "https://github.com/specs-feup/clava/actions/runs/37782392551/job/113339790655",
+      "failure": "CxxTest > Setters expected std::chrono::system_clock::now but Windows produced std::chrono::steady_clock::now; the remaining 32 output lines were identical.",
+      "source_evidence": "The fixture input calls std::chrono::high_resolution_clock::now(), and the setter test prints the declaration qualified name before and after the existing setter assertions.",
+      "change": "Renamed the macOS-specific expected output to Setters.js.steady-clock.txt and select it on macOS and Windows; the test input, transformation, and remaining expected output are unchanged.",
+      "verification": "The full fixture diff confirms only the first clock-name line differs from the default baseline. The Windows job failure predates this fixture selection change; fresh Windows CI verification is pending."
     }
   },
   "verified_resource_cache": {
