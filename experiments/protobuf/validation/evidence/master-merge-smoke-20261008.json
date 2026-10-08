@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-08",
+  "revision": "e399d227d449de58e8f6376d4ea6e7308c94bc18",
+  "checks": [
+    {
+      "name": "ClavaWeaver resource processing",
+      "command": "gradle --no-daemon processResources (ClavaWeaver)",
+      "result": "BUILD SUCCESSFUL",
+      "files": {
+        "source": 453,
+        "processed": 453,
+        "missing": 0,
+        "extra": 0,
+        "content_mismatches": 0
+      }
+    },
+    {
+      "name": "ClavaWeaver jar resources",
+      "command": "gradle --no-daemon jar (ClavaWeaver)",
+      "result": "BUILD SUCCESSFUL",
+      "gradle_tasks": {
+        "total": 54,
+        "executed": 4,
+        "up_to_date": 50
+      },
+      "files": {
+        "source": 453,
+        "packaged": 453,
+        "missing": 0,
+        "extra": 0,
+        "content_mismatches": 0,
+        "weaver_spec_or_release_selector_entries": 0
+      }
+    },
+    {
+      "name": "ClavaGenerate CMake wrapper",
+      "commands": [
+        "cmake -S source -B build",
+        "cmake --build build --target generated_checker"
+      ],
+      "result": "passed",
+      "stub_invocations": 2,
+      "assertions": [
+        "--cmake, -p, -o, and -of were present",
+        "the stub rejected -s and neither invocation passed it"
+      ]
+    },
+    {
+      "name": "ClavaWeave CMake command",
+      "commands": [
+        "cmake -S . -B build",
+        "cmake --build build --target sample_weaving"
+      ],
+      "result": "passed",
+      "stub_invocations": 1,
+      "assertions": [
+        "--cmake, -p, -o, and -of were present",
+        "the stub rejected -s and the invocation did not pass it"
+      ]
+    }
+  ],
+  "limitations": [
+    "The CMake smoke checks used an argument-capturing Clava stub; the real Clava executable and native integration were not run.",
+    "Full Gradle test suites and native tests were not run.",
+    "A fixture target with no INCLUDE_DIRECTORIES exposed the existing ClavaGenerate NOTFOUND sentinel handling issue. The passing smoke used an explicit include directory; the helper code was unchanged by this merge."
+  ],
+  "runtime_source_diff_since_00612af31": {
+    "java_paths": [],
+    "typescript_paths": []
+  }
+}
