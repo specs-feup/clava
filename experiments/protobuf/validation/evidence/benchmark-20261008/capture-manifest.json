@@ -1,0 +1,16 @@
+{
+  "created_utc": "2026-10-08T02:14:33.782041+00:00",
+  "completed_utc": "2026-10-08T02:44:28.237897+00:00",
+  "observations": 48,
+  "measured_stages": [
+    "protobuf"
+  ],
+  "frozen_controls_rerun": false,
+  "cross_session_paired_statistics": false,
+  "files": {
+    "updated-protobuf-results.json": "caf64475ab52b9f71299dcb7c89fb94c5c78e7b781b4c4e0ca4baedb46ebd6ff",
+    "measurement-driver.py": "f9aa3a2aefb42d9a6ff2939a6861ff38f4c7ccf5e90753e382995dcc2241ca21",
+    "measurement.log": "7c91811a6fef036d5c93060d4a881ee94f499f850e99f23207e2daf162da3199",
+    "frozen-controls-20261007.json": "36051f18ec0dc2da2db8a10fcaf46b899ba166f0651041c074733f50ca40a4f5"
+  }
+}
