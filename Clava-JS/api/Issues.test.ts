@@ -3,8 +3,8 @@ import {
   registerSourceCodes,
 } from "@specs-feup/lara/vitest/weaverTestHelpers.ts";
 import Query from "@specs-feup/lara/api/weaver/Query.ts";
-import { FunctionJp } from "./Joinpoints.ts";
-import ClavaJoinPoints from "./clava/ClavaJoinPoints.ts";
+import { FunctionJp } from "@specs-feup/clava/api/Joinpoints.ts";
+import ClavaJoinPoints from "@specs-feup/clava/api/clava/ClavaJoinPoints.ts";
 
 const code187 = `
 int foo(int a);

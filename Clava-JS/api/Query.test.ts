@@ -1,6 +1,6 @@
 import { registerSourceCode } from "@specs-feup/lara/vitest/weaverTestHelpers.ts";
 import Query from "@specs-feup/lara/api/weaver/Query.ts";
-import { FunctionJp, Loop } from "./Joinpoints.ts";
+import { FunctionJp, Loop } from "@specs-feup/clava/api/Joinpoints.ts";
 
 const code = `void query_loop() {
     for(int i=0; i<10; i++) {
