@@ -12,5 +12,6 @@
     "verbatimModuleSyntax": true,
     "rootDir": ".",
     "outDir": "dist"
-  }
+  },
+  "exclude": ["**/*.test.ts", "test"]
 }

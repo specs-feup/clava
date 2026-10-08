@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "run": "node ./dist/code/index.js",
-    "build": "tsc",
+    "build": "node ./scripts/clean-dist.mjs && tsc",
     "build:watch": "npm run build -- --watch",
     "lint": "oxlint .",
     "format": "oxfmt .",

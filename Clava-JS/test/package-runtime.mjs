@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
+import { readdir } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -40,5 +41,23 @@ const cli = spawnSync(process.execPath, [cliPath, "--help"], {
 
 assert.equal(cli.status, 0, cli.stderr);
 assert.match(cli.stdout, /Execute a Clava script/);
+
+async function findEmittedTestFiles(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const nested = await Promise.all(
+    entries.map(async (entry) => {
+      const entryPath = path.join(directory, entry.name);
+      if (entry.isDirectory()) return findEmittedTestFiles(entryPath);
+      return /\.test\.(?:js|d\.ts)$/.test(entry.name) ? [entryPath] : [];
+    }),
+  );
+  return nested.flat();
+}
+
+assert.deepEqual(
+  await findEmittedTestFiles(fileURLToPath(new URL("../dist", import.meta.url))),
+  [],
+  "the npm package does not include emitted source tests",
+);
 
 console.log("Clava package runtime paths passed");
