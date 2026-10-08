@@ -71,6 +71,7 @@ deps/*/*/*
 **/gradle/*
 gradlew
 gradlew.bat
+**/clang-dumper/*
 
 # Idea IDEs
 **/.idea/misc.xml

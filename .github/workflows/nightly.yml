@@ -10,9 +10,9 @@ on:
   # on the branch tip report checks to the PR's Checks tab all the same.
   push:
 
-  # Daily at midnight
+  # Weekly on Mondays early morning
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '23 3 * * 1'
 
 permissions:
   checks: write
@@ -28,7 +28,7 @@ jobs:
     # On branch deletion GitHub reports the default branch's SHA; building
     # that event would mislead the branch resolver.
     if: github.event.deleted != true
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     outputs:
       lara_ref: ${{ env.lara_ref }}
@@ -138,7 +138,7 @@ jobs:
       matrix:
         #node-version: ['latest', '22.x', '20.x']
         node-version: ['25.x', '24.x']
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-24.04, windows-2022, macos-latest]
 
     runs-on: ${{ matrix.os }}
 
