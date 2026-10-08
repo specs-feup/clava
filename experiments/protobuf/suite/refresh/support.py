@@ -184,8 +184,11 @@ def _read_regular_file(root: Path, relative: str, label: str) -> bytes:
         directory_fd, filename = _open_directory_chain(root, parts)
         flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
         file_fd = os.open(filename, flags, dir_fd=directory_fd)
-        if not stat.S_ISREG(os.fstat(file_fd).st_mode):
+        metadata = os.fstat(file_fd)
+        if not stat.S_ISREG(metadata.st_mode):
             raise RuntimeError(f"{label} is not a regular file: {relative}")
+        if metadata.st_nlink != 1:
+            raise RuntimeError(f"{label} is hard-linked: {relative}")
         chunks = []
         while True:
             chunk = os.read(file_fd, 1024 * 1024)
@@ -207,10 +210,14 @@ def _write_regular_file(root: Path, relative: str, contents: bytes) -> None:
     directory_fd = file_fd = None
     try:
         directory_fd, filename = _open_directory_chain(root, parts)
-        flags = os.O_WRONLY | os.O_TRUNC | getattr(os, "O_NOFOLLOW", 0)
+        flags = os.O_WRONLY | getattr(os, "O_NOFOLLOW", 0)
         file_fd = os.open(filename, flags, dir_fd=directory_fd)
-        if not stat.S_ISREG(os.fstat(file_fd).st_mode):
+        metadata = os.fstat(file_fd)
+        if not stat.S_ISREG(metadata.st_mode):
             raise RuntimeError(f"JavaScript test destination is not a regular file: {relative}")
+        if metadata.st_nlink != 1:
+            raise RuntimeError(f"JavaScript test destination is hard-linked: {relative}")
+        os.ftruncate(file_fd, 0)
         view = memoryview(contents)
         while view:
             written = os.write(file_fd, view)

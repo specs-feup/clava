@@ -321,7 +321,15 @@ def validate_javascript_workload_provenance(updated_payload: Any) -> dict[str, A
         _fail("JavaScript workload provenance needs a results object")
     sources = updated_payload.get("sources")
     protobuf = sources.get("protobuf") if isinstance(sources, dict) else None
-    repositories = protobuf.get("repositories") if isinstance(protobuf, dict) else None
+    if not isinstance(protobuf, dict):
+        _fail("JavaScript workload provenance needs the Protobuf source manifest")
+    try:
+        baseline = _REFRESH_SUPPORT.load_cohort_baseline()
+    except (RuntimeError, KeyError, AttributeError) as error:
+        _fail(f"pinned JavaScript source manifest is invalid: {error}")
+    if protobuf.get("javascript_test_sources") != baseline["javascript_test_sources"]:
+        _fail("JavaScript source manifest differs from the complete frozen test-source hashes")
+    repositories = protobuf.get("repositories")
     clava = repositories.get("clava") if isinstance(repositories, dict) else None
     revision = clava.get("revision") if isinstance(clava, dict) else None
     try:

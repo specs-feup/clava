@@ -290,6 +290,28 @@ class RefreshWorkflowTests(unittest.TestCase):
                     canonical_clava,
                 )
 
+    def test_pinned_js_workload_rejects_hardlinked_snapshot_tests_before_writing(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            canonical_clava, snapshot_tests, _ = self._create_isolated_snapshot_worktree(root)
+            revision = REFRESH.support.git(snapshot_tests.parent, "rev-parse", "HEAD")
+            relative = "api/LegacyIntegrationTests - CXX.test.ts"
+            canonical_test = canonical_clava / "Clava-JS" / relative
+            snapshot_test = snapshot_tests / relative
+            canonical_before = canonical_test.read_bytes()
+            snapshot_test.unlink()
+            os.link(canonical_test, snapshot_test)
+            before = {name: (snapshot_tests / name).read_bytes()
+                      for name in REFRESH.COHORT_BASELINE["javascript_test_sources"]}
+
+            with self.assertRaisesRegex(RuntimeError, "hard-linked"):
+                REFRESH.support.stage_pinned_js_workload(
+                    snapshot_tests, revision, canonical_clava,
+                )
+
+            self.assertEqual(canonical_test.read_bytes(), canonical_before)
+            self.assertEqual({name: (snapshot_tests / name).read_bytes() for name in before}, before)
+
     def test_pinned_js_workload_validation_rejects_post_stage_corruption(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

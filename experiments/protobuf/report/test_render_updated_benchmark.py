@@ -100,6 +100,9 @@ def fixture_updated():
             },
             "native_repository": {"revision": f"{4:040x}"},
             "clang_ast_parser_source_tree_sha256": "a" * 64,
+            "javascript_test_sources": copy.deepcopy(
+                REPORT._REFRESH_SUPPORT.load_cohort_baseline()["javascript_test_sources"]
+            ),
             "javascript_workload_overlay": REPORT._REFRESH_SUPPORT.expected_js_workload_overlay(
                 clava_revision
             ),
@@ -205,6 +208,18 @@ class UpdatedReportTest(unittest.TestCase):
         del missing["sources"]["protobuf"]["javascript_workload_overlay"]
         with self.assertRaisesRegex(ValueError, "test workload provenance"):
             REPORT.render_report(fixture_prior(), missing)
+
+        missing_sources = fixture_updated()
+        del missing_sources["sources"]["protobuf"]["javascript_test_sources"]
+        with self.assertRaisesRegex(ValueError, "complete frozen test-source hashes"):
+            REPORT.render_report(fixture_prior(), missing_sources)
+
+        contradictory_sources = fixture_updated()
+        contradictory_sources["sources"]["protobuf"]["javascript_test_sources"][
+            "api/LegacyIntegrationTests - CXX.test.ts"
+        ] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "complete frozen test-source hashes"):
+            REPORT.render_report(fixture_prior(), contradictory_sources)
 
     def test_report_requires_pinned_vitest_config_loader(self):
         updated = fixture_updated()
