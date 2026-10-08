@@ -40,12 +40,14 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
+import java.nio.file.attribute.PosixFilePermission;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.EnumSet;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -363,6 +365,36 @@ public class ClangResourcesTest {
                         "test asset"));
         assertEquals(0, writes.get());
         assertEquals("cached", Files.readString(destination.toPath()));
+    }
+
+    @Test
+    public void cachedExecutablePreparationRepairsPermissionsWithoutExternalChmodOrSkippingDigest()
+            throws Exception {
+        assumeTrue(!SupportedPlatform.getCurrentPlatform().isWindows(),
+                "The chmod interception fixture requires a Unix executable");
+
+        var source = Files.writeString(tempFolder.resolve("tool-source"), "verified executable bytes");
+        var fakeBin = Files.createDirectories(tempFolder.resolve("fake-bin"));
+        var fakeChmod = Files.writeString(fakeBin.resolve("chmod"),
+                "#!/bin/sh\n"
+                        + "printf 'unexpected chmod\\n' >> \"$CLANG_RESOURCES_CHMOD_LOG\"\n"
+                        + "exit 0\n");
+        assertTrue(fakeChmod.toFile().setExecutable(true, false));
+
+        var childLog = tempFolder.resolve("executable-preparation.log");
+        var chmodLog = tempFolder.resolve("chmod-calls.log");
+        var result = tempFolder.resolve("executable-preparation-result.txt");
+        Process process = startExecutablePreparationProcess(source, tempFolder.resolve("child-cache"),
+                sha256(source), fakeBin, chmodLog, result, childLog);
+        try {
+            waitForProcess(process, childLog);
+        } finally {
+            stopProcess(process);
+        }
+
+        assertEquals(List.of("permissionsRepaired=true", "corruptionRejected=true"),
+                Files.readAllLines(result));
+        assertFalse(Files.exists(chmodLog), "Cached executable preparation must not launch chmod");
     }
 
     @Test
@@ -958,6 +990,28 @@ public class ClangResourcesTest {
                 .start();
     }
 
+    private Process startExecutablePreparationProcess(Path source, Path cacheFolder, String sha256, Path fakeBin,
+            Path chmodLog, Path result, Path log) throws IOException {
+        var javaExecutable = Path.of(System.getProperty("java.home"), "bin", "java");
+        var process = new ProcessBuilder(
+                javaExecutable.toString(),
+                "-cp",
+                System.getProperty("java.class.path"),
+                ExecutablePreparationProcess.class.getName(),
+                source.toAbsolutePath().toString(),
+                cacheFolder.toAbsolutePath().toString(),
+                sha256,
+                result.toAbsolutePath().toString())
+                .redirectErrorStream(true)
+                .redirectOutput(log.toFile());
+
+        var environment = process.environment();
+        var path = environment.getOrDefault("PATH", "");
+        environment.put("PATH", fakeBin.toAbsolutePath() + File.pathSeparator + path);
+        environment.put("CLANG_RESOURCES_CHMOD_LOG", chmodLog.toAbsolutePath().toString());
+        return process.start();
+    }
+
     private Process startMaintenanceProcess(Class<?> processClass, Path cacheFolder) throws IOException {
         var javaExecutable = Path.of(System.getProperty("java.home"), "bin",
                 SupportedPlatform.getCurrentPlatform().isWindows() ? "java.exe" : "java");
@@ -1004,6 +1058,56 @@ public class ClangResourcesTest {
             parser.set(CodeParser.DUMPER_FOLDER, new File(args[0]));
             var clangFiles = new ClangResources(parser).getClangFiles(LibcMode.SYSTEM);
             Files.writeString(Path.of(args[1]), clangFiles.clangExecutable().getAbsolutePath());
+        }
+    }
+
+    public static final class ExecutablePreparationProcess {
+
+        private ExecutablePreparationProcess() {
+        }
+
+        public static void main(String[] args) throws Exception {
+            var source = Path.of(args[0]);
+            var cacheFolder = Path.of(args[1]).toFile();
+            var asset = new ClangDumperManifestAsset("tool", "tool", "linux", "x64", 18, args[2]);
+            var assetResource = copyingResource(source, new AtomicInteger());
+            var resources = new ClangResources(newParser(cacheFolder));
+            var resourceFolder = cacheFolder.toPath().resolve("clang-dumper/releases/synthetic").toFile();
+
+            var executable = resources.prepareExecutable(asset, resourceFolder, assetResource);
+            var permissions = EnumSet.noneOf(PosixFilePermission.class);
+            permissions.addAll(Files.getPosixFilePermissions(executable.toPath()));
+            permissions.remove(PosixFilePermission.OWNER_EXECUTE);
+            permissions.remove(PosixFilePermission.GROUP_EXECUTE);
+            permissions.remove(PosixFilePermission.OTHERS_EXECUTE);
+            Files.setPosixFilePermissions(executable.toPath(), permissions);
+
+            var reusedExecutable = resources.prepareExecutable(asset, resourceFolder, assetResource);
+            var repairedPermissions = Files.getPosixFilePermissions(reusedExecutable.toPath());
+            boolean executableForAll = repairedPermissions.contains(PosixFilePermission.OWNER_EXECUTE)
+                    && repairedPermissions.contains(PosixFilePermission.GROUP_EXECUTE)
+                    && repairedPermissions.contains(PosixFilePermission.OTHERS_EXECUTE);
+
+            Files.writeString(reusedExecutable.toPath(), "corrupt bytes");
+            Files.setLastModifiedTime(reusedExecutable.toPath(),
+                    FileTime.from(Instant.now().plusSeconds(2)));
+            boolean corruptionRejected;
+            try {
+                resources.prepareExecutable(asset, resourceFolder, assetResource);
+                corruptionRejected = false;
+            } catch (RuntimeException e) {
+                corruptionRejected = e.getMessage().contains("does not match its release manifest");
+            }
+
+            Files.writeString(Path.of(args[3]),
+                    "permissionsRepaired=" + executableForAll + "\n"
+                            + "corruptionRejected=" + corruptionRejected + "\n");
+        }
+
+        private static CodeParser newParser(File cacheFolder) {
+            var parser = CodeParser.newInstance();
+            parser.set(CodeParser.DUMPER_FOLDER, cacheFolder);
+            return parser;
         }
     }
 

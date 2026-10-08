@@ -237,13 +237,16 @@ public class ClangResources {
     }
 
     private File prepareResources(ClangDumperManifest manifest, File resourceFolder) {
-        SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
-
         var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
         var asset = getCurrentAsset(manifest, executableKind);
+        return prepareExecutable(asset, resourceFolder, ClangAstWebResource.getAssetResource(asset));
+    }
+
+    File prepareExecutable(ClangDumperManifestAsset asset, File resourceFolder, FileResourceProvider assetResource) {
+        SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
+
         File executable = CacheFiles.installFile(getClangCacheRoot().toPath(),
-                new File(resourceFolder, asset.filename()),
-                ClangAstWebResource.getAssetResource(asset), asset.sha256(),
+                new File(resourceFolder, asset.filename()), assetResource, asset.sha256(),
                 "clang-dumper asset '" + asset.filename() + "'");
 
         if (!asset.sha256().equalsIgnoreCase(ExecutableDigest.sha256(executable))) {
@@ -254,8 +257,10 @@ public class ClangResources {
             unblockWindowsFile(executable);
         }
 
-        if (platform.isLinux() || platform.isMacOs()) {
-            SpecsSystem.runProcess(Arrays.asList("chmod", "+x", executable.getAbsolutePath()), false, true);
+        if ((platform.isLinux() || platform.isMacOs()) && !executable.canExecute()
+                && !executable.setExecutable(true, false)) {
+            throw new RuntimeException("Could not make cached clang-dumper executable runnable: '"
+                    + executable + "'");
         }
 
         return executable;
