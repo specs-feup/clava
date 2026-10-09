@@ -8,6 +8,7 @@ parser=argparse.ArgumentParser(description='Collect the pinned Protobuf-only run
 parser.add_argument('--snapshot',type=Path,required=True,help='isolated sibling-repository build snapshot')
 parser.add_argument('--output',type=Path,required=True,help='new, empty runtime evidence directory')
 parser.add_argument('--resource-cache',type=Path,required=True,help='verified consumer DUMPER_FOLDER cache')
+parser.add_argument('--quick',action='store_true',help='App phase only, direct and warm, one repeat (development check, not publishable)')
 args=parser.parse_args()
 ROOT=args.snapshot.expanduser().resolve()
 B=ROOT;C=ROOT/'clava';CL=C;P=CL/'experiments/protocol-comparison';RT=CL/'ClavaWeaver/build/install/ClavaWeaver'
@@ -362,7 +363,8 @@ def set_order(phase):
  record.setdefault('js_file_orders',{})[phase]=original_order
 save();ordinal=0
 try:
- phase_runners=[('app',app_run),('wall',wall_run)]
+ phase_runners=[('app',app_run)] if args.quick else [('app',app_run),('wall',wall_run)]
+ record['quick']=args.quick
  phase_seeds={}
  for phase,runfun in phase_runners:
   set_order(phase);seeds={}
@@ -379,11 +381,11 @@ try:
  for phase,runfun in phase_runners:
   set_order(phase);seeds=phase_seeds[phase]
   keys=list(stages)
-  for rnd in range(1,5):
+  for rnd in range(1,2 if args.quick else 5):
    off=(rnd-1)%len(keys);order=keys[off:]+keys[:off]
    for position,key in enumerate(order):
     stage=stages[key];modes=['direct','cold','warm'];off=(rnd-1+position)%3;modes=modes[off:]+modes[:off]
-    for ix,mode in enumerate(modes):
+    for ix,mode in enumerate(m for m in modes if not args.quick or m!='cold'):
      suites=['clava-js','java'] if (rnd+position+ix)%2==0 else ['java','clava-js']
      for suite in suites:
       if mode=='warm':
@@ -392,8 +394,9 @@ try:
        shutil.copytree(seeds[key,suite],cache)
       ordinal+=1;row=runfun(suite,mode,rnd,ordinal,True);record['observations'].append(row);save();print(json.dumps({k:row.get(k) for k in ['phase','stage','suite','mode','repeat','app_elapsed_ms','wall_s','valid']}),flush=True)
  expected={(phase,suite,mode,rnd) for phase in ('app','wall') for suite in ('clava-js','java') for mode in ('direct','cold','warm') for rnd in range(1,5)}
+ if args.quick: expected={(phase,suite,mode,1) for phase,suite,mode,rnd in expected if phase=='app' and mode!='cold'}
  actual={(row['phase'],row['suite'],row['mode'],row['repeat']) for row in record['observations']}
- if len(record['observations'])!=48 or actual!=expected or any(row.get('stage')!='protobuf' or not row.get('valid') for row in record['observations']):raise RuntimeError(f'final measurement matrix mismatch: rows={len(record["observations"])} missing={sorted(expected-actual)} extra={sorted(actual-expected)}')
+ if len(record['observations'])!=len(expected) or actual!=expected or any(row.get('stage')!='protobuf' or not row.get('valid') for row in record['observations']):raise RuntimeError(f'final measurement matrix mismatch: rows={len(record["observations"])} missing={sorted(expected-actual)} extra={sorted(actual-expected)}')
  record['completed_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();record['status']='complete';save()
 except Exception as e:
  record['status']='failed';record['error']=repr(e);save();raise

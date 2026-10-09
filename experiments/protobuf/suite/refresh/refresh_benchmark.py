@@ -5,7 +5,9 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import contextlib
 import fcntl
+import getpass
 import hashlib
 import importlib.util
 import json
@@ -32,6 +34,12 @@ REPORT_SCRIPT = PROTOBUF_ROOT / "report/render_updated_benchmark.py"
 FROZEN_CONTROLS = PROTOBUF_ROOT / "validation/evidence/benchmark-20261008/frozen-controls-20261007.json"
 DEFAULT_OUTPUT_BASE = Path.home() / ".cache/protobuf-production-validation/benchmark-refreshes"
 DEFAULT_LOCK = Path.home() / ".cache/protobuf-production-validation/protobuf-benchmark-refresh.lock"
+# Machine-local inputs verified for the RC8 release; override with the matching CLI options.
+DEFAULT_WORKSPACE = REFRESH_DIR.parents[4]
+DEFAULT_RELEASE_ASSETS = Path.home() / ".cache/protobuf-production-validation/build-final-20261008/clang-dumper/build"
+DEFAULT_RESOURCE_CACHE = (Path.home() / ".cache/protobuf-production-validation/release-rc8/consumer-validation/tmp"
+                          / f"clang_ast_exe_{getpass.getuser()}" / "clang-dumper")
+SNAPSHOT_REPOSITORIES = ("clava", "specs-java-libs", "lara-framework", "clang-dumper")
 EXPECTED_WORKLOAD = {
     "java_pinned_test_ids": 116,
     "js_tests": 164,
@@ -644,9 +652,9 @@ def _stream_command(command: list[str], log_path: Path) -> int:
         return process.wait()
 
 
-def collect(snapshot: Path, resource_cache: Path, output: Path | None = None,
-            prior_path: Path = FROZEN_CONTROLS, lock_path: Path = DEFAULT_LOCK,
-            command_runner: Callable[[list[str], Path], int] = _stream_command) -> Path:
+@contextlib.contextmanager
+def _exclusive_lock(lock_path: Path):
+    """Holds the host-wide benchmark lock; timed runs must never overlap."""
     lock_path = lock_path.expanduser().resolve()
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     with lock_path.open("a") as lock:
@@ -654,6 +662,13 @@ def collect(snapshot: Path, resource_cache: Path, output: Path | None = None,
             fcntl.flock(lock.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as error:
             raise RuntimeError(f"another Protobuf benchmark collection is active (lock {lock_path})") from error
+        yield
+
+
+def collect(snapshot: Path, resource_cache: Path, output: Path | None = None,
+            prior_path: Path = FROZEN_CONTROLS, lock_path: Path = DEFAULT_LOCK,
+            command_runner: Callable[[list[str], Path], int] = _stream_command) -> Path:
+    with _exclusive_lock(lock_path):
         snapshot_identity_path = snapshot.expanduser().resolve() / "snapshot-identity.json"
         if not snapshot_identity_path.is_file():
             raise ValueError("benchmark snapshot is missing snapshot-identity.json")
@@ -714,6 +729,75 @@ def collect(snapshot: Path, resource_cache: Path, output: Path | None = None,
             raise
 
 
+def prepare(workspace_root: Path = DEFAULT_WORKSPACE, release_assets_root: Path = DEFAULT_RELEASE_ASSETS,
+            output_root: Path | None = None, release_tag: str = "v18.1.8_6-rc8") -> Path:
+    from prepare_snapshot import prepare_snapshot
+    if output_root is None:
+        stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        output_root = DEFAULT_OUTPUT_BASE.parent / "snapshots" / f"protobuf-{stamp}-{uuid.uuid4().hex[:8]}"
+    return Path(prepare_snapshot(workspace_root, output_root, release_assets_root, release_tag)["snapshot"])
+
+
+def remove_snapshot(snapshot: Path, workspace_root: Path = DEFAULT_WORKSPACE) -> None:
+    """Detaches the snapshot's Git worktrees from their source checkouts, then deletes the folder."""
+    for name in SNAPSHOT_REPOSITORIES:
+        if (snapshot / name / ".git").exists():
+            subprocess.run(["git", "-C", str(workspace_root / name), "worktree", "remove", "--force",
+                            str(snapshot / name)], check=False, capture_output=True)
+    shutil.rmtree(snapshot, ignore_errors=True)
+
+
+def quick_summary(results: dict[str, Any], prior_path: Path = FROZEN_CONTROLS) -> str:
+    """Formats quick App times next to the frozen control medians (seconds, lower is faster)."""
+    controls: dict[tuple[str, str, str], list[float]] = {}
+    for row in load_json(prior_path)["app_plot_rows"]:
+        controls.setdefault((row["suite"], row["mode"], row["stage"]), []).append(row["app_elapsed_ms"])
+    stages = sorted({stage for _, _, stage in controls if stage != "protobuf"})
+    lines = [f"{'suite':10} {'mode':7} {'new':>8} " + " ".join(f"{stage:>13}" for stage in stages)]
+    for row in sorted(results["observations"], key=lambda row: (row["suite"], row["mode"])):
+        cells = []
+        for stage in stages:
+            values = sorted(controls.get((row["suite"], row["mode"], stage), []))
+            cells.append(f"{values[len(values) // 2] / 1000:13.2f}" if values else f"{'-':>13}")
+        lines.append(f"{row['suite']:10} {row['mode']:7} {row['app_elapsed_ms'] / 1000:8.2f} " + " ".join(cells))
+    return "\n".join(lines)
+
+
+def quick(workspace_root: Path = DEFAULT_WORKSPACE, release_assets_root: Path = DEFAULT_RELEASE_ASSETS,
+          resource_cache: Path = DEFAULT_RESOURCE_CACHE, lock_path: Path = DEFAULT_LOCK,
+          keep: bool = False) -> str:
+    """
+    Development check of the committed workspace: one App-time repeat per suite in direct and warm modes,
+    without wall, memory, rendering or publication. Takes minutes instead of the full matrix's half hour.
+    """
+    with _exclusive_lock(lock_path):
+        snapshot = prepare(workspace_root, release_assets_root)
+        run_dir = _new_run_directory(None)
+        try:
+            command = runtime_command(snapshot, run_dir / "runtime", resource_cache) + ["--quick"]
+            if _stream_command(command, run_dir / "runtime.stdout.log") != 0:
+                raise RuntimeError(f"quick runtime collection failed; see {run_dir / 'runtime.stdout.log'}")
+            summary = quick_summary(load_json(run_dir / "runtime/results.json"))
+            (run_dir / "summary.txt").write_text(summary + "\n", encoding="utf-8")
+            return summary
+        finally:
+            if not keep:
+                # Keep logs and results.json; drop ccache seeds and parser temp trees (gigabytes per run).
+                shutil.rmtree(run_dir / "runtime/app", ignore_errors=True)
+                remove_snapshot(snapshot, workspace_root)
+
+
+def run(workspace_root: Path = DEFAULT_WORKSPACE, release_assets_root: Path = DEFAULT_RELEASE_ASSETS,
+        resource_cache: Path = DEFAULT_RESOURCE_CACHE, draft_id: str | None = None) -> dict[str, Any]:
+    """Full refresh of the committed workspace: snapshot, collect, render and, given a draft, publish privately."""
+    snapshot = prepare(workspace_root, release_assets_root)
+    run_dir = collect(snapshot, resource_cache)
+    result: dict[str, Any] = {"run_dir": str(run_dir), "report_sha256": sha256_file(run_dir / "report.html")}
+    if draft_id is not None:
+        result["publication"] = publish_private(run_dir, draft_id, private=True)
+    return result
+
+
 def publish_private(run_dir: Path, draft_id: str, prior_path: Path = FROZEN_CONTROLS,
                     *, private: bool, dry_run: bool = False,
                     runner: Callable[..., Any] = subprocess.run) -> dict[str, Any]:
@@ -771,18 +855,23 @@ def publish_private(run_dir: Path, draft_id: str, prior_path: Path = FROZEN_CONT
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    prepare = subparsers.add_parser("prepare", help="create an isolated build snapshot")
-    prepare.add_argument("--workspace-root", type=Path, required=True)
-    prepare.add_argument("--release-assets-root", type=Path, required=True)
-    prepare.add_argument("--output-root", type=Path)
-    prepare.add_argument("--release-tag", default="v18.1.8_6-rc8")
-
+    run_parser = subparsers.add_parser("run", help="prepare, collect, render and optionally publish")
+    run_parser.add_argument("--draft-id", help="also update this private DraftLink after validation")
+    quick_parser = subparsers.add_parser("quick", help="minutes-long App-time check, never published")
+    quick_parser.add_argument("--keep", action="store_true", help="keep the snapshot and cache trees")
+    prepare_parser = subparsers.add_parser("prepare", help="create an isolated build snapshot")
+    prepare_parser.add_argument("--output-root", type=Path)
+    prepare_parser.add_argument("--release-tag", default="v18.1.8_6-rc8")
     collect_parser = subparsers.add_parser("collect", help="collect runtime and memory observations")
     collect_parser.add_argument("--snapshot", type=Path, required=True)
-    collect_parser.add_argument("--resource-cache", type=Path, required=True)
     collect_parser.add_argument("--output-root", type=Path)
     collect_parser.add_argument("--prior-evidence", type=Path, default=FROZEN_CONTROLS)
     collect_parser.add_argument("--lock-file", type=Path, default=DEFAULT_LOCK)
+    for sub in (run_parser, quick_parser, prepare_parser):
+        sub.add_argument("--workspace-root", type=Path, default=DEFAULT_WORKSPACE)
+        sub.add_argument("--release-assets-root", type=Path, default=DEFAULT_RELEASE_ASSETS)
+    for sub in (run_parser, quick_parser, collect_parser):
+        sub.add_argument("--resource-cache", type=Path, default=DEFAULT_RESOURCE_CACHE)
 
     render_parser = subparsers.add_parser("render", help="render a completed saved capture")
     render_parser.add_argument("--run-dir", type=Path, required=True)
@@ -800,14 +889,14 @@ def main(argv: list[str] | None = None) -> int:
 
     args = parser.parse_args(argv)
     try:
-        if args.command == "prepare":
-            from prepare_snapshot import prepare_snapshot
-            if args.output_root is None:
-                stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-                args.output_root = DEFAULT_OUTPUT_BASE.parent / "snapshots" / f"protobuf-{stamp}-{uuid.uuid4().hex[:8]}"
-            result = prepare_snapshot(args.workspace_root, args.output_root,
-                                      args.release_assets_root, args.release_tag)
-            print(json.dumps({"snapshot": result["snapshot"], "release_tag": result["published_release"]["tag"]}, indent=2))
+        if args.command == "run":
+            print(json.dumps(run(args.workspace_root, args.release_assets_root, args.resource_cache,
+                                 args.draft_id), indent=2))
+        elif args.command == "quick":
+            print(quick(args.workspace_root, args.release_assets_root, args.resource_cache, keep=args.keep))
+        elif args.command == "prepare":
+            snapshot = prepare(args.workspace_root, args.release_assets_root, args.output_root, args.release_tag)
+            print(json.dumps({"snapshot": str(snapshot)}, indent=2))
         elif args.command == "collect":
             run_dir = collect(args.snapshot, args.resource_cache, args.output_root,
                               args.prior_evidence, args.lock_file)

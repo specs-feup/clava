@@ -681,6 +681,19 @@ class RefreshWorkflowTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 REFRESH.validate_report_html(value)
 
+    def test_quick_summary_lists_new_app_time_beside_control_medians(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            prior = Path(temporary) / "controls.json"
+            write_json(prior, {"app_plot_rows": [
+                {"suite": "java", "mode": "warm", "stage": "ccache-text", "app_elapsed_ms": ms}
+                for ms in (16000.0, 15000.0, 17000.0)]})
+            summary = REFRESH.quick_summary({"observations": [
+                {"suite": "java", "mode": "warm", "app_elapsed_ms": 14500.0}]}, prior)
+
+        header, row = summary.splitlines()
+        self.assertEqual(["suite", "mode", "new", "ccache-text"], header.split())
+        self.assertEqual(["java", "warm", "14.50", "16.00"], row.split())
+
     def test_render_does_not_overwrite_existing_output(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             run_dir = completed_bundle(Path(temp))

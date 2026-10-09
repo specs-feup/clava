@@ -6,6 +6,24 @@ renders the existing report. Collection never publishes. `publish` is a
 separate command, requires `--private`, and reads the saved DraftLink back to
 verify the exact HTML bytes.
 
+## One-command use
+
+Both commands snapshot the committed state of the four sibling checkouts, so
+commit first. Defaults point at this machine's verified RC8 assets and
+resource cache; override them with `--release-assets-root` and
+`--resource-cache`.
+
+```sh
+# Full refresh (~35 min): 48-cell matrix, memory probes, validated report.
+# With --draft-id it also performs the private publish described below.
+python3 experiments/protobuf/suite/refresh/refresh_benchmark.py run --draft-id DRAFT_ID
+
+# Development check (~6 min): one App-time repeat of each suite in direct and
+# warm modes, printed beside the frozen control medians. Never rendered or
+# published; the snapshot and cache trees are deleted afterwards (--keep to retain).
+python3 experiments/protobuf/suite/refresh/refresh_benchmark.py quick
+```
+
 ## Prepare and collect
 
 Prepare a new snapshot from the four current sibling worktrees. The command
