@@ -73,11 +73,11 @@ public class ClangCcacheAdapterTest {
     public void commandUsesDumpAsThePrimaryOutput() {
         var dumperCommand = List.of(
                 "/tool", "-c", "/source.cpp", "-id=7", "-system-header-threshold=1",
-                "-o", "/output.dump", "-ast-dump-compression=zstd", "--", "-std=c++17");
+                "-o", "/output.dump", "--", "-std=c++17");
 
         assertEquals(List.of(
                 "ccache", "/tool", "-c", "/source.cpp", "-id=7", "-system-header-threshold=1",
-                "-o", "/output.dump", "-ast-dump-compression=zstd",
+                "-o", "/output.dump",
                 "-MD", "-MF", "/output.d", "--", "-std=c++17"),
                 ClangCcacheAdapter.command(dumperCommand, new File("/output.d")));
     }
@@ -93,7 +93,8 @@ public class ClangCcacheAdapterTest {
         assertEquals("true", environment.get("CCACHE_NOHASHDIR"));
         assertEquals("clang", environment.get("CCACHE_COMPILERTYPE"));
         assertEquals("true", environment.get("CCACHE_DEPEND"));
-        assertEquals("true", environment.get("CCACHE_NOCOMPRESS"));
+        assertEquals("true", environment.get("CCACHE_COMPRESS"));
+        assertFalse(environment.containsKey("CCACHE_NOCOMPRESS"));
     }
 
     @Test

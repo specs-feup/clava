@@ -123,9 +123,9 @@ final class ClangCcacheAdapter {
             if (baseDir != null) {
                 environment.put("CCACHE_BASEDIR", baseDir.getAbsolutePath());
             }
-            // clang-dumper already streams a compressed Zstandard frame. Recompressing
-            // it inside ccache roughly doubles miss latency without changing semantics.
-            environment.put("CCACHE_NOCOMPRESS", "true");
+            // Dumps are written raw and compressed by ccache itself, matching the FlatBuffers consumer.
+            environment.put("CCACHE_COMPRESS", "true");
+            environment.remove("CCACHE_NOCOMPRESS");
         }
     }
 }

@@ -64,9 +64,8 @@ The ccache wrapper treats trimmed, case-insensitive `1`, `true`, `yes`, and
 conflicting cache-enable flags. Null, empty, `false`, `0`, `no`, `off`, and
 unrecognized values follow the wrapper's enabled policy. Non-disabling values
 are removed from the ccache subprocess environment because ccache versions do
-not consistently accept the wrapper's broader false-value policy. Zstandard
-compression remains external to ccache, and `CCACHE_NOCOMPRESS` continues to
-control that compression layer.
+not consistently accept the wrapper's broader false-value policy. Dumps are
+written uncompressed and ccache compresses its stored copy (`CCACHE_COMPRESS`).
 
 ## Publishing a compatible dumper release
 

@@ -49,7 +49,6 @@ class ClangAstDumperTest {
         File workingFolder = dumper.getLastWorkingFolder();
         assertNotNull(workingFolder);
         assertFalse(new File(workingFolder, "clangDump.pb").exists());
-        assertFalse(new File(workingFolder, "clangDump.pb.zst").exists());
     }
 
     @Test

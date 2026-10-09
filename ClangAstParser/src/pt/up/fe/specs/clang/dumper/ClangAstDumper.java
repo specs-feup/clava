@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clang.dumper;
 
-import com.github.luben.zstd.ZstdInputStream;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.JOptionsUtils;
 import pt.up.fe.specs.clang.ClangAstKeys;
@@ -64,7 +63,6 @@ public class ClangAstDumper {
     }
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.pb";
-    private final static String COMPRESSED_CLANG_DUMP_FILENAME = "clangDump.pb.zst";
 
     /**
      * TODO: Not implemented yet
@@ -312,16 +310,12 @@ public class ClangAstDumper {
                     && !isOpenCL
                     && !SourceType.isHeader(sourceFile)
                     && ClangCcacheAdapter.isAvailable();
-            dumpFile = new File(lastWorkingFolder,
-                    useAstDumpCache ? COMPRESSED_CLANG_DUMP_FILENAME : CLANG_DUMP_FILENAME);
+            dumpFile = new File(lastWorkingFolder, CLANG_DUMP_FILENAME);
             File dependencyFile = new File(lastWorkingFolder, "clangDump.d");
             int separatorIndex = arguments.indexOf("--");
             if (separatorIndex >= 0) {
                 arguments.add(separatorIndex, "-o");
                 arguments.add(separatorIndex + 1, dumpFile.getAbsolutePath());
-                if (useAstDumpCache) {
-                    arguments.add(separatorIndex + 2, "-ast-dump-compression=zstd");
-                }
             } else {
                 arguments.add("-o");
                 arguments.add(dumpFile.getAbsolutePath());
@@ -376,8 +370,7 @@ public class ClangAstDumper {
             }
 
             String linesNotParsed = output.isError() ? output.getStdErr() : "";
-            try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
-                    InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {
+            try (InputStream dumpInput = Files.newInputStream(dumpFile.toPath())) {
                 parsedData = ProtoAstReader.read(dumpInput, config.get(ClavaNode.CONTEXT), generatedParseRoot, id);
             } catch (ProtobufAstParseException e) {
                 throw e;
@@ -561,9 +554,6 @@ public class ClangAstDumper {
         }
 
         File clangDumpFile = new File(lastWorkingFolder, CLANG_DUMP_FILENAME);
-        if (!clangDumpFile.isFile()) {
-            clangDumpFile = new File(lastWorkingFolder, COMPRESSED_CLANG_DUMP_FILENAME);
-        }
         if (!clangDumpFile.isFile()) {
             SpecsLogs.msgInfo("Clang dump file not found: '" + clangDumpFile + "'");
             return "";
