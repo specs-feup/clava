@@ -34,7 +34,7 @@ if not tool_path.is_file() or hashlib.sha256(tool_path.read_bytes()).hexdigest()
 java_gradle=(CL/'ClangAstParser/build.gradle').read_text()
 java_protoc=re.search(r"def protocVersion = '([^']+)'",java_gradle).group(1)
 java_runtime=re.search(r"def protobufVersion = '([^']+)'",java_gradle).group(1)
-ns='protobuf-v1-'+toolchain['protoc_version']+'-'+toolchain['protobuf_version']+'-'+java_protoc+'-'+java_runtime+'-'+protocol['descriptor_sha256']+'-'+protocol['schema_sha256']+'-'+tool_asset['sha256']
+ns='protobuf-v1-'+toolchain['protoc_version']+'-'+toolchain['protobuf_version']+'-'+java_protoc+'-'+java_runtime+'-'+protocol['descriptor_sha256']+'-'+protocol['schema_sha256']
 RESOURCE_CACHE_INPUT=args.resource_cache
 resource_input=RESOURCE_CACHE_INPUT.expanduser().resolve()
 resource_candidates=[resource_input,resource_input/'clang-dumper',resource_input.parent,resource_input.parent.parent]
