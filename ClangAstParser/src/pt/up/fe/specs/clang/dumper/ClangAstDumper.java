@@ -47,7 +47,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
@@ -66,7 +65,6 @@ public class ClangAstDumper {
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.pb";
     private final static String COMPRESSED_CLANG_DUMP_FILENAME = "clangDump.pb.zst";
-    private final static String STDERR_DUMP_FILENAME = "stderr.txt";
 
     /**
      * TODO: Not implemented yet
@@ -301,9 +299,6 @@ public class ClangAstDumper {
         ProcessOutput<String, String> output = null;
         File dumpFile = null;
         boolean useAstDumpCache = false;
-        long transportNanos = 0L;
-        long readNanos = 0L;
-        ProtoAstReader.Result wireResult = null;
 
         try {
 
@@ -336,7 +331,7 @@ public class ClangAstDumper {
             ClangCcacheAdapter.Invocation ccache = null;
             if (useAstDumpCache) {
                 ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), generatedParseRoot,
-                        clangExecutable, pt.up.fe.specs.clang.wire.ProtoAstReader.schemaHash(),
+                        pt.up.fe.specs.clang.wire.ProtoAstReader.schemaHash(),
                         pt.up.fe.specs.clang.wire.ProtoToolchain.NATIVE_PROTOC_VERSION + "-"
                                 + pt.up.fe.specs.clang.wire.ProtoToolchain.NATIVE_PROTOBUF_VERSION + "-"
                                 + pt.up.fe.specs.clang.wire.ProtoToolchain.JAVA_PROTOC_VERSION + "-"
@@ -355,9 +350,7 @@ public class ClangAstDumper {
                 ccache.configureEnvironment(processBuilder.environment());
             }
 
-            long transportStart = System.nanoTime();
             output = SpecsSystem.runProcess(processBuilder, SpecsIo::read, SpecsIo::read);
-            transportNanos = System.nanoTime() - transportStart;
 
             if (output.isError()) {
                 ClavaLog.debug("Dumper returned an error value: '" + output.getReturnValue() + "'");
@@ -383,32 +376,17 @@ public class ClangAstDumper {
             }
 
             String linesNotParsed = output.isError() ? output.getStdErr() : "";
-            long readStart = Boolean.getBoolean("clava.astWireMetrics") ? System.nanoTime() : 0L;
             try (InputStream fileInput = Files.newInputStream(dumpFile.toPath());
                     InputStream dumpInput = useAstDumpCache ? new ZstdInputStream(fileInput) : fileInput) {
-                wireResult = ProtoAstReader.read(dumpInput, config.get(ClavaNode.CONTEXT), generatedParseRoot, id);
+                parsedData = ProtoAstReader.read(dumpInput, config.get(ClavaNode.CONTEXT), generatedParseRoot, id);
             } catch (ProtobufAstParseException e) {
                 throw e;
             } catch (Exception e) {
                 throw new ProtobufAstParseException(
                         "Could not decode protobuf AST for '" + sourceFile.getAbsolutePath() + "'", e);
             }
-            if (readStart != 0L) {
-                readNanos = System.nanoTime() - readStart;
-            }
 
-            parsedData = wireResult.data();
-            // These are mutually exclusive transport boundaries. In bypass mode
-            // the process time is native execution; with ccache enabled it is
-            // the ccache invocation and cached-output restoration boundary.
-            boolean cacheRestored = useAstDumpCache && !isCcacheDisabled();
-            parsedData.set(ClangAstData.NATIVE_EXECUTION_NANOS, cacheRestored ? 0L : transportNanos);
-            parsedData.set(ClangAstData.CACHE_RESTORATION_NANOS, cacheRestored ? transportNanos : 0L);
-            parsedData.set(ClangAstData.PROTOBUF_METRICS, wireResult.metrics());
             if (SpecsSystem.isDebug()) {
-                SpecsIo.write(new File(lastWorkingFolder, STDERR_DUMP_FILENAME),
-                        "protobuf frames=" + wireResult.metrics().frames() + " bytes="
-                                + wireResult.metrics().encodedBytes() + "\n");
                 parsedData.set(ClangAstData.DEBUG, true);
             }
             parsedData.set(ClangAstData.LINES_NOT_PARSED, linesNotParsed);
@@ -421,70 +399,10 @@ public class ClangAstDumper {
 
         ClangAstParser clangStreamParser = new ClangAstParser(parsedData, SpecsSystem.isDebug(), config);
 
-        long astConstructionStart = System.nanoTime();
         TranslationUnit tUnit = clangStreamParser.parseTu(sourceFile);
-        long astConstructionNanos = System.nanoTime() - astConstructionStart;
-        parsedData.set(ClangAstData.AST_CONSTRUCTION_NANOS, astConstructionNanos);
-        boolean cacheRestored = useAstDumpCache && !isCcacheDisabled();
-        reportProtobufMetrics(dumpFile, useAstDumpCache, cacheRestored, transportNanos, readNanos, wireResult.metrics(),
-                astConstructionNanos);
-
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
 
         return parsedData;
-    }
-
-    /**
-     * Emits one machine-readable line per parsed translation unit when the
-     * experiment explicitly asks for metrics. The default path does no JSON
-     * formatting, heap probing, or clock reads beyond the existing timings.
-     */
-    private void reportProtobufMetrics(File dumpFile, boolean compressed, boolean cacheRestored, long transportNanos,
-            long readNanos, ProtoAstReader.Metrics wireMetrics, long astConstructionNanos) {
-        if (!Boolean.getBoolean("clava.astWireMetrics")) {
-            return;
-        }
-
-        double transportMillis = transportNanos / 1_000_000.0;
-        double nativeMillis = cacheRestored ? 0.0 : transportMillis;
-        double cacheMillis = cacheRestored ? transportMillis : 0.0;
-
-        String json = String.format(Locale.ROOT,
-                "{\"format\":\"protobuf\",\"native_ms\":%.3f,"
-                        + "\"cache_restore_ms\":%.3f,\"read_ms\":%.3f,\"decode_ms\":%.3f,"
-                        + "\"record_ms\":%.3f,\"reference_ms\":%.3f,"
-                        + "\"ast_ms\":%.3f,\"frames\":%d,\"records\":%d,"
-                        + "\"nodes\":%d,\"files\":%d,\"encoded_bytes\":%d,"
-                        + "\"dump_bytes\":%d,\"compressed\":%s,\"cached\":%s,"
-                        + "\"ccache_disabled\":%s}",
-                nativeMillis, cacheMillis, nanosToMillis(readNanos),
-                nanosToMillis(wireMetrics.protobufDecodeNanos()),
-                nanosToMillis(wireMetrics.recordConstructionNanos()),
-                nanosToMillis(wireMetrics.referenceResolutionNanos()),
-                nanosToMillis(astConstructionNanos), wireMetrics.frames(), wireMetrics.records(),
-                wireMetrics.nodes(), wireMetrics.files(), wireMetrics.encodedBytes(), dumpFile.length(),
-                compressed, cacheRestored, isCcacheDisabled());
-
-        // The normal Clava-JS test runner deliberately disables informational
-        // logging. Keep this opt-in measurement independent from that policy,
-        // while leaving the default production path silent.
-        System.err.println("PROTOBUF_METRIC " + json);
-    }
-
-    private static double nanosToMillis(long nanos) {
-        return nanos / 1_000_000.0;
-    }
-
-    private static boolean isCcacheDisabled() {
-        String value = System.getenv("CCACHE_DISABLE");
-        if (value == null) {
-            return false;
-        }
-
-        return switch (value.trim().toLowerCase(Locale.ROOT)) {
-            case "1", "true", "yes", "on" -> true;
-            default -> false;
-        };
     }
 
     private String validateSyntax(List<String> arguments, File sourceFile, String id) {

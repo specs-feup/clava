@@ -66,8 +66,11 @@ final class ClangCcacheAdapter {
         return false;
     }
 
-    static Invocation prepare(File dumperFolder, File baseDir, File executable, String schemaHash,
-            String toolchainIdentity) {
+    /**
+     * The namespace isolates decoder-visible identities (schema and Protobuf toolchain). The dumper executable itself
+     * is part of ccache's own compiler check, so it does not need to be hashed here.
+     */
+    static Invocation prepare(File dumperFolder, File baseDir, String schemaHash, String toolchainIdentity) {
         if (schemaHash == null || !schemaHash.matches("[0-9a-f]{64}")) {
             throw new IllegalArgumentException("Invalid Protobuf schema hash: " + schemaHash);
         }
@@ -75,8 +78,7 @@ final class ClangCcacheAdapter {
             throw new IllegalArgumentException("Invalid Protobuf toolchain identity: " + toolchainIdentity);
         }
         var cacheFolder = new File(new File(dumperFolder, CACHE_FOLDER_NAME),
-                "protobuf-v1-" + toolchainIdentity + "-" + schemaHash + "-"
-                        + pt.up.fe.specs.clang.ExecutableDigest.sha256(executable));
+                "protobuf-v1-" + toolchainIdentity + "-" + schemaHash);
         try {
             Files.createDirectories(cacheFolder.toPath());
         } catch (IOException e) {

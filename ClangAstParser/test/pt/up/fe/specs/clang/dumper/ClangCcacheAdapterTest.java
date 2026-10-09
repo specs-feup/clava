@@ -9,8 +9,6 @@ package pt.up.fe.specs.clang.dumper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.Path;
-import java.nio.file.Files;
-import java.io.IOException;
 
 import java.io.File;
 import java.util.HashMap;
@@ -27,23 +25,18 @@ public class ClangCcacheAdapterTest {
     Path tempFolder;
 
     @Test
-    public void namespacesIsolateSchemaToolchainAndExecutable() throws IOException {
-        File executable = Files.writeString(tempFolder.resolve("tool"), "first").toFile();
+    public void namespacesIsolateSchemaAndToolchain() {
         String schema = "a".repeat(64);
-        var first = ClangCcacheAdapter.prepare(tempFolder.toFile(), null, executable, schema, "28.3-4.28.3");
-        assertEquals(first.cacheFolder(), ClangCcacheAdapter.prepare(tempFolder.toFile(), null,
-                executable, schema, "28.3-4.28.3").cacheFolder());
-        assertNotEquals(first.cacheFolder(), ClangCcacheAdapter.prepare(tempFolder.toFile(), null,
-                executable, "b".repeat(64), "28.3-4.28.3").cacheFolder());
-        assertNotEquals(first.cacheFolder(), ClangCcacheAdapter.prepare(tempFolder.toFile(), null,
-                executable, schema, "28.3-4.29.0").cacheFolder());
-        Files.writeString(executable.toPath(), "replacement");
-        assertNotEquals(first.cacheFolder(), ClangCcacheAdapter.prepare(tempFolder.toFile(), null,
-                executable, schema, "28.3-4.28.3").cacheFolder());
-        assertThrows(IllegalArgumentException.class, () -> ClangCcacheAdapter.prepare(tempFolder.toFile(),
-                null, executable, "bad", "28.3"));
+        var first = ClangCcacheAdapter.prepare(tempFolder.toFile(), null, schema, "28.3-4.28.3");
+        assertEquals(first.cacheFolder(),
+                ClangCcacheAdapter.prepare(tempFolder.toFile(), null, schema, "28.3-4.28.3").cacheFolder());
+        assertNotEquals(first.cacheFolder(),
+                ClangCcacheAdapter.prepare(tempFolder.toFile(), null, "b".repeat(64), "28.3-4.28.3").cacheFolder());
+        assertNotEquals(first.cacheFolder(),
+                ClangCcacheAdapter.prepare(tempFolder.toFile(), null, schema, "28.3-4.29.0").cacheFolder());
+        assertThrows(IllegalArgumentException.class,
+                () -> ClangCcacheAdapter.prepare(tempFolder.toFile(), null, "bad", "28.3"));
     }
-
 
     @Test
     public void recognizesTruthyCcacheDisableValues() {

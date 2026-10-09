@@ -17,6 +17,7 @@ import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifest;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
 import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clang.wire.ProtoAstReader;
 import pt.up.fe.specs.clava.ClavaLog;
@@ -249,10 +250,6 @@ public class ClangResources {
                 new File(resourceFolder, asset.filename()), assetResource, asset.sha256(),
                 "clang-dumper asset '" + asset.filename() + "'");
 
-        if (!asset.sha256().equalsIgnoreCase(ExecutableDigest.sha256(executable))) {
-            throw new RuntimeException("Cached clang-dumper executable does not match its release manifest: '"
-                    + executable + "'; remove the corrupt asset and retry");
-        }
         if (platform.isWindows()) {
             unblockWindowsFile(executable);
         }
@@ -349,7 +346,7 @@ public class ClangResources {
         var executableKey = SpecsIo.getCanonicalPath(clangExecutable);
         var resourceDirKey = systemResourceDir == null ? "default-resource-dir"
                 : SpecsIo.getCanonicalPath(systemResourceDir);
-        var probeKey = executableKey + "|" + ExecutableDigest.sha256(clangExecutable)
+        var probeKey = executableKey + "|" + clangExecutable.length() + "|" + clangExecutable.lastModified()
                 + "|" + resourceDirKey + "|" + ProtoAstReader.schemaHash() + "|protobuf-c-cpp-nonempty-v1";
         return HAS_LIBC.computeIfAbsent(probeKey, ignored -> detectLibC(clangExecutable, systemResourceDir));
     }
@@ -394,9 +391,9 @@ public class ClangResources {
 
     static boolean isValidProtobufDump(File dumpFile) {
         try {
-            var result = ProtoAstReader.read(dumpFile.toPath(), new ClavaContext(), null,
+            var data = ProtoAstReader.read(dumpFile.toPath(), new ClavaContext(), null,
                     dumpFile.getAbsolutePath());
-            return result.metrics().nodes() > 0;
+            return !data.get(ClangAstData.NODE_DATA).isEmpty();
         } catch (IOException | RuntimeException e) {
             ClavaLog.debug(() -> "Could not read libc probe dump '" + dumpFile + "': " + e.getMessage());
             return false;

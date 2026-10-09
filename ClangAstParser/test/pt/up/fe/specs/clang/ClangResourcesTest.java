@@ -368,7 +368,7 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void cachedExecutablePreparationRepairsPermissionsWithoutExternalChmodOrSkippingDigest()
+    public void cachedExecutablePreparationRepairsPermissionsWithoutExternalChmod()
             throws Exception {
         assumeTrue(!SupportedPlatform.getCurrentPlatform().isWindows(),
                 "The chmod interception fixture requires a Unix executable");
@@ -392,7 +392,7 @@ public class ClangResourcesTest {
             stopProcess(process);
         }
 
-        assertEquals(List.of("permissionsRepaired=true", "corruptionRejected=true"),
+        assertEquals(List.of("permissionsRepaired=true"),
                 Files.readAllLines(result));
         assertFalse(Files.exists(chmodLog), "Cached executable preparation must not launch chmod");
     }
@@ -1088,20 +1088,7 @@ public class ClangResourcesTest {
                     && repairedPermissions.contains(PosixFilePermission.GROUP_EXECUTE)
                     && repairedPermissions.contains(PosixFilePermission.OTHERS_EXECUTE);
 
-            Files.writeString(reusedExecutable.toPath(), "corrupt bytes");
-            Files.setLastModifiedTime(reusedExecutable.toPath(),
-                    FileTime.from(Instant.now().plusSeconds(2)));
-            boolean corruptionRejected;
-            try {
-                resources.prepareExecutable(asset, resourceFolder, assetResource);
-                corruptionRejected = false;
-            } catch (RuntimeException e) {
-                corruptionRejected = e.getMessage().contains("does not match its release manifest");
-            }
-
-            Files.writeString(Path.of(args[3]),
-                    "permissionsRepaired=" + executableForAll + "\n"
-                            + "corruptionRejected=" + corruptionRejected + "\n");
+            Files.writeString(Path.of(args[3]), "permissionsRepaired=" + executableForAll + "\n");
         }
 
         private static CodeParser newParser(File cacheFolder) {

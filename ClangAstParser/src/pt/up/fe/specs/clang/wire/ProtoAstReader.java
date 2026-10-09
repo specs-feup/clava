@@ -6,7 +6,6 @@
 
 package pt.up.fe.specs.clang.wire;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import java.io.EOFException;
@@ -16,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -49,14 +47,6 @@ public final class ProtoAstReader {
     private ProtoAstReader() {
     }
 
-    public record Metrics(long frames, long encodedBytes, long protobufDecodeNanos,
-            long astConstructionNanos, long recordConstructionNanos,
-            long referenceResolutionNanos, long records, long nodes, long files) {
-    }
-
-    public record Result(ClangAstData data, Metrics metrics) {
-    }
-
     /** Returns the generated schema fingerprint used in the stream header. */
     public static String schemaHash() {
         return ProtoSchemaHash.VALUE;
@@ -66,8 +56,6 @@ public final class ProtoAstReader {
     static final class Files {
         private final String scope;
         private final List<String> paths = new ArrayList<>(List.of(""));
-        private final Set<Long> referencedDenseIds = new HashSet<>();
-        private long maxDenseId;
 
         Files(String scope) {
             this.scope = scope;
@@ -75,8 +63,6 @@ public final class ProtoAstReader {
 
         String id(long value) {
             if (value > 0) {
-                referencedDenseIds.add(value);
-                maxDenseId = Math.max(maxDenseId, value);
                 return "@" + value + "_" + scope;
             }
             return switch ((int) value) {
@@ -88,21 +74,6 @@ public final class ProtoAstReader {
                 case -6 -> "0_" + scope;
                 default -> throw new IllegalArgumentException("Invalid dense node reference " + value);
             };
-        }
-
-        void validateDenseIds(long count, Set<Long> definedDenseIds) {
-            if (count < 0 || count != maxDenseId || count != definedDenseIds.size()) {
-                throw new ProtocolException("End.ids does not describe the exact dense id set: " + count
-                        + " (largest=" + maxDenseId + ", defined=" + definedDenseIds.size() + ")");
-            }
-            if (!referencedDenseIds.equals(definedDenseIds)) {
-                Set<Long> missing = new HashSet<>(referencedDenseIds);
-                missing.removeAll(definedDenseIds);
-                Set<Long> unreferenced = new HashSet<>(definedDenseIds);
-                unreferenced.removeAll(referencedDenseIds);
-                throw new ProtocolException("Dense references do not match Node definitions: missing=" + missing
-                        + ", unreferenced=" + unreferenced);
-            }
         }
 
         String path(long value) {
@@ -137,13 +108,19 @@ public final class ProtoAstReader {
         }
     }
 
-    public static Result read(Path path, ClavaContext context, java.io.File parseRoot, String scope) throws IOException {
+    public static ClangAstData read(Path path, ClavaContext context, java.io.File parseRoot, String scope)
+            throws IOException {
         try (InputStream input = java.nio.file.Files.newInputStream(path)) {
             return read(input, context, parseRoot, scope);
         }
     }
 
-    public static Result read(InputStream input, ClavaContext context, java.io.File parseRoot, String scope) throws IOException {
+    /**
+     * Decodes one translation-unit stream into parser data. The stream must start with the magic and a compatible
+     * Header, and finish with End; nodes are applied as soon as both their Node and NodeClass records arrive.
+     */
+    public static ClangAstData read(InputStream input, ClavaContext context, java.io.File parseRoot, String scope)
+            throws IOException {
         if (scope == null || scope.isBlank()) {
             throw new IllegalArgumentException("A non-empty translation-unit scope is required");
         }
@@ -161,127 +138,134 @@ public final class ProtoAstReader {
 
         var nodeParser = new ClavaNodeParser(Clang_3_8.getClassesService());
         nodeParser.init(data);
-        Files files = new Files(scope);
-        Map<String, String> pendingClasses = new LinkedHashMap<>();
-        Map<String, String> nodeClasses = new HashMap<>();
-        Set<String> classesSeen = new HashSet<>();
-        Set<String> childrenSeen = new HashSet<>();
-        Set<String> nodeIdsSeen = new HashSet<>();
-        Set<Long> denseNodeIds = new HashSet<>();
-        MetricsAccumulator metrics = new MetricsAccumulator();
-        boolean[] headerSeen = { false };
-        boolean[] endSeen = { false };
-        long[] records = { 0 };
-        long[] nodes = { 0 };
-        End[] endRecord = { null };
-        long[] endFrameBytes = { -1 };
+        var reader = new StreamState(data, new Files(scope), nodeParser);
 
-        FramedProtobufReader frames = new FramedProtobufReader(input);
         try {
-            frames.read(encoded -> {
-                long decodeStart = System.nanoTime();
-                try {
-                    Envelope envelope = Envelope.parseFrom(encoded);
-                    metrics.protobufDecodeNanos += System.nanoTime() - decodeStart;
-                    return envelope;
-                } catch (InvalidProtocolBufferException e) {
-                    throw new ProtocolException("Malformed Envelope", e);
-                }
-            }, envelope -> {
-                long constructionStart = System.nanoTime();
-                if (endSeen[0]) {
-                    throw new ProtocolException("Record found after End");
-                }
-                switch (envelope.getPayloadCase()) {
-                    case HEADER -> readHeader(envelope.getHeader(), headerSeen[0]);
-                    case CHUNK -> {
-                        if (!headerSeen[0]) {
-                            throw new ProtocolException("Header must be the first Envelope");
-                        }
-                        if (envelope.getChunk().getRecordsCount() == 0) {
-                            throw new ProtocolException("Chunk must contain at least one Record");
-                        }
-                        for (Record record : envelope.getChunk().getRecordsList()) {
-                            readRecord(record, data, files, nodeParser, pendingClasses, nodeClasses,
-                                    classesSeen, childrenSeen, nodeIdsSeen, denseNodeIds, nodes);
-                            records[0]++;
-                        }
-                    }
-                    case END -> {
-                        if (!headerSeen[0]) {
-                            throw new ProtocolException("Header must be the first Envelope");
-                        }
-                        readEnd(envelope.getEnd(), records[0], nodes[0], files);
-                        endRecord[0] = envelope.getEnd();
-                        endFrameBytes[0] = varintSize(envelope.getSerializedSize()) + envelope.getSerializedSize();
-                        endSeen[0] = true;
-                    }
-                    case PAYLOAD_NOT_SET -> throw new ProtocolException("Envelope payload is required");
-                }
-                if (envelope.getPayloadCase() == Envelope.PayloadCase.HEADER) {
-                    headerSeen[0] = true;
-                }
-                long recordConstructionNanos = System.nanoTime() - constructionStart;
-                metrics.recordConstructionNanos += recordConstructionNanos;
-                metrics.astConstructionNanos += recordConstructionNanos;
-            });
+            new FramedProtobufReader(input).read(Envelope::parseFrom, reader::accept);
         } catch (ProtocolException e) {
             throw new IOException("Invalid protobuf AST stream: " + e.getMessage(), e);
         } catch (RuntimeException e) {
             throw new IOException("Invalid protobuf AST record: " + e.getMessage(), e);
         }
 
-        if (!headerSeen[0]) {
+        if (!reader.headerSeen) {
             throw new EOFException("Missing protobuf Header");
         }
-        if (!endSeen[0]) {
+        if (!reader.endSeen) {
             throw new EOFException("Missing protobuf End");
         }
-        if (!pendingClasses.isEmpty()) {
-            throw new IOException("Missing node payload for NodeClass records: " + pendingClasses.keySet());
-        }
-        if (endRecord[0] == null || endFrameBytes[0] < 0) {
-            throw new IOException("Missing protobuf End counters");
-        }
-        long expectedRawBytes = MAGIC.length + frames.encodedBytes() - endFrameBytes[0];
-        if (endRecord[0].getRawBytes() != expectedRawBytes) {
-            throw new IOException("End.raw_bytes mismatch: " + endRecord[0].getRawBytes() + "/" + expectedRawBytes);
+        if (!reader.pendingClasses.isEmpty()) {
+            throw new IOException("Missing node payload for NodeClass records: " + reader.pendingClasses.keySet());
         }
         try {
             validateTopLevelReferences(data);
-            files.validateDenseIds(endRecord[0].getIds(), denseNodeIds);
-            if (!classesSeen.equals(nodeIdsSeen)) {
-                Set<String> missing = new HashSet<>(nodeIdsSeen);
-                missing.removeAll(classesSeen);
-                Set<String> orphan = new HashSet<>(classesSeen);
-                orphan.removeAll(nodeIdsSeen);
-                throw new ProtocolException("NodeClass coverage does not match Nodes: missing=" + missing
-                        + ", orphan=" + orphan);
-            }
-            if (!childrenSeen.equals(nodeIdsSeen)) {
-                Set<String> missing = new HashSet<>(nodeIdsSeen);
-                missing.removeAll(childrenSeen);
-                Set<String> orphan = new HashSet<>(childrenSeen);
-                orphan.removeAll(nodeIdsSeen);
-                throw new ProtocolException("Children coverage does not match Nodes: missing=" + missing
-                        + ", orphan=" + orphan);
-            }
-        } catch (ProtocolException e) {
-            throw new IOException("Invalid protobuf AST references: " + e.getMessage(), e);
+            nodeParser.close(data);
+        } catch (RuntimeException e) {
+            throw new IOException("Could not resolve protobuf AST references: " + e.getMessage(), e);
+        }
+        return data;
+    }
+
+    /** Per-stream ordering state: Header first, End last, and NodeClass records waiting for their Node. */
+    private static final class StreamState {
+        private final ClangAstData data;
+        private final Files files;
+        private final ClavaNodeParser nodeParser;
+        private final Map<String, String> pendingClasses = new HashMap<>();
+        private boolean headerSeen;
+        private boolean endSeen;
+
+        StreamState(ClangAstData data, Files files, ClavaNodeParser nodeParser) {
+            this.data = data;
+            this.files = files;
+            this.nodeParser = nodeParser;
         }
 
-        try {
-            long resolveStart = System.nanoTime();
-            nodeParser.close(data);
-            long referenceResolutionNanos = System.nanoTime() - resolveStart;
-            metrics.referenceResolutionNanos += referenceResolutionNanos;
-            metrics.astConstructionNanos += referenceResolutionNanos;
-        } catch (RuntimeException e) {
-            throw new IOException("Could not resolve protobuf AST references", e);
+        void accept(Envelope envelope) {
+            if (endSeen) {
+                throw new ProtocolException("Record found after End");
+            }
+            if (!headerSeen && envelope.getPayloadCase() != Envelope.PayloadCase.HEADER) {
+                throw new ProtocolException("Header must be the first Envelope");
+            }
+            switch (envelope.getPayloadCase()) {
+                case HEADER -> {
+                    if (headerSeen) {
+                        throw new ProtocolException("Header must occur exactly once and first");
+                    }
+                    validateHeader(envelope.getHeader());
+                    headerSeen = true;
+                }
+                case CHUNK -> {
+                    if (envelope.getChunk().getRecordsCount() == 0) {
+                        throw new ProtocolException("Chunk must contain at least one Record");
+                    }
+                    for (Record record : envelope.getChunk().getRecordsList()) {
+                        readRecord(record);
+                    }
+                }
+                case END -> endSeen = true;
+                case PAYLOAD_NOT_SET -> throw new ProtocolException("Envelope payload is required");
+            }
         }
-        metrics.frames = frames.frameIndex();
-        metrics.encodedBytes = frames.encodedBytes();
-        return new Result(data, metrics.toMetrics(records[0], nodes[0], files.paths.size() - 1));
+
+        private void readRecord(Record record) {
+            switch (record.getRecordCase()) {
+                case FILE -> readFile(record.getFile(), data, files);
+                case NODE -> {
+                    Node node = record.getNode();
+                    if (!node.hasId() || node.getId() <= 0) {
+                        throw new ProtocolException("Node.id must be a positive dense id");
+                    }
+                    validateNodePayload(node, files);
+                    String id = files.id(node.getId());
+                    DataStore nodeData = ProtoNodeDataReader.read(node, data, files::id, files);
+                    if (data.get(ClangAstData.NODE_DATA).put(id, nodeData) != null) {
+                        throw new ProtocolException("Duplicated Node " + id);
+                    }
+                    flushClass(id);
+                }
+                case CHILDREN -> {
+                    Children children = record.getChildren();
+                    String id = files.id(required(children.hasNode(), children.getNode(), "Children.node"));
+                    List<String> ids = new ArrayList<>(children.getChildrenCount());
+                    for (long child : children.getChildrenList()) {
+                        ids.add(files.id(child));
+                    }
+                    if (data.get(ClangAstData.VISITED_CHILDREN).put(id, ids) != null) {
+                        throw new ProtocolException("Duplicated Children " + id);
+                    }
+                }
+                case NODE_CLASS -> {
+                    NodeClass nodeClass = record.getNodeClass();
+                    String id = files.id(required(nodeClass.hasNode(), nodeClass.getNode(), "NodeClass.node"));
+                    if (!nodeClass.hasClassName() || nodeClass.getClassName().isBlank()) {
+                        throw new ProtocolException("NodeClass.class_name is required for " + id);
+                    }
+                    if (pendingClasses.put(id, nodeClass.getClassName()) != null) {
+                        throw new ProtocolException("Duplicated NodeClass " + id);
+                    }
+                    flushClass(id);
+                }
+                case TOP_LEVEL -> readTopLevel(record.getTopLevel(), data, files);
+                case INCLUDE -> readInclude(record.getInclude(), data);
+                case PRAGMA -> readPragma(record.getPragma(), data);
+                case TRANSLATION_UNIT_FILE -> readTranslationUnitFile(record.getTranslationUnitFile(), data);
+                case COUNTER -> {
+                    // Informational producer counter; it carries no AST data.
+                }
+                case LANGUAGE -> readLanguage(record.getLanguage(), data);
+                case RECORD_NOT_SET -> throw new ProtocolException("Record payload is required");
+            }
+        }
+
+        private void flushClass(String id) {
+            String className = pendingClasses.get(id);
+            if (className != null && data.get(ClangAstData.NODE_DATA).containsKey(id)) {
+                nodeParser.applyRecord(id, className, data);
+                pendingClasses.remove(id);
+            }
+        }
     }
 
     private static void readMagic(InputStream input) throws IOException {
@@ -294,13 +278,6 @@ public final class ProtoAstReader {
                 throw new IOException("Invalid protobuf AST magic");
             }
         }
-    }
-
-    private static void readHeader(Header header, boolean alreadySeen) {
-        if (alreadySeen) {
-            throw new ProtocolException("Header must occur exactly once and first");
-        }
-        validateHeader(header);
     }
 
     /**
@@ -334,94 +311,11 @@ public final class ProtoAstReader {
         }
     }
 
-    private static void readRecord(Record record, ClangAstData data, Files files, ClavaNodeParser nodeParser,
-            Map<String, String> pendingClasses, Map<String, String> nodeClasses, Set<String> classesSeen,
-            Set<String> childrenSeen, Set<String> nodeIdsSeen, Set<Long> denseNodeIds, long[] nodes) {
-        switch (record.getRecordCase()) {
-            case FILE -> readFile(record.getFile(), data, files);
-            case NODE -> {
-                Node node = record.getNode();
-                if (!node.hasId() || node.getId() <= 0) {
-                    throw new ProtocolException("Node.id must be a positive dense id");
-                }
-                if (!node.hasClassName() || node.getClassName().isBlank()) {
-                    throw new ProtocolException("Node.class_name is required for id " + node.getId());
-                }
-                validateNodePayload(node, files);
-                String id = files.id(node.getId());
-                if (!nodeIdsSeen.add(id)) {
-                    throw new ProtocolException("Duplicated Node " + id);
-                }
-                if (!denseNodeIds.add(node.getId())) {
-                    throw new ProtocolException("Duplicated Node dense id " + node.getId());
-                }
-                checkNodeClass(id, node.getClassName(), nodeClasses);
-                DataStore nodeData = ProtoNodeDataReader.read(node, data, files::id, files);
-                data.get(ClangAstData.NODE_DATA).put(id, nodeData);
-                nodes[0]++;
-                flushClass(id, pendingClasses, nodeParser, data);
-            }
-            case CHILDREN -> {
-                Children children = record.getChildren();
-                String id = files.id(required(children.hasNode(), children.getNode(), "Children.node"));
-                if (!childrenSeen.add(id)) {
-                    throw new ProtocolException("Duplicated Children " + id);
-                }
-                List<String> ids = new ArrayList<>(children.getChildrenCount());
-                for (long child : children.getChildrenList()) {
-                    ids.add(files.id(child));
-                }
-                data.get(ClangAstData.VISITED_CHILDREN).put(id, ids);
-            }
-            case NODE_CLASS -> {
-                NodeClass nodeClass = record.getNodeClass();
-                String id = files.id(required(nodeClass.hasNode(), nodeClass.getNode(), "NodeClass.node"));
-                if (!nodeClass.hasClassName() || nodeClass.getClassName().isBlank()) {
-                    throw new ProtocolException("NodeClass.class_name is required for " + id);
-                }
-                if (classesSeen.add(id) == false) {
-                    throw new ProtocolException("Duplicated NodeClass " + id);
-                }
-                checkNodeClass(id, nodeClass.getClassName(), nodeClasses);
-                pendingClasses.put(id, nodeClass.getClassName());
-                flushClass(id, pendingClasses, nodeParser, data);
-            }
-            case TOP_LEVEL -> readTopLevel(record.getTopLevel(), data, files);
-            case INCLUDE -> readInclude(record.getInclude(), data);
-            case PRAGMA -> readPragma(record.getPragma(), data);
-            case TRANSLATION_UNIT_FILE -> readTranslationUnitFile(record.getTranslationUnitFile(), data);
-            case COUNTER -> {
-                if (!record.getCounter().hasValue()) {
-                    throw new ProtocolException("Counter.value is required");
-                }
-            }
-            case LANGUAGE -> readLanguage(record.getLanguage(), data);
-            case RECORD_NOT_SET -> throw new ProtocolException("Record payload is required");
-        }
-    }
-
     private static long required(boolean present, long value, String field) {
         if (!present) {
             throw new ProtocolException(field + " is required");
         }
         return value;
-    }
-
-    private static void flushClass(String id, Map<String, String> pendingClasses, ClavaNodeParser nodeParser,
-            ClangAstData data) {
-        String className = pendingClasses.get(id);
-        if (className != null && data.get(ClangAstData.NODE_DATA).containsKey(id)) {
-            nodeParser.applyRecord(id, className, data);
-            pendingClasses.remove(id);
-        }
-    }
-
-    private static void checkNodeClass(String id, String className, Map<String, String> nodeClasses) {
-        String previous = nodeClasses.putIfAbsent(id, className);
-        if (previous != null && !previous.equals(className)) {
-            throw new ProtocolException("NodeClass does not match Node for " + id + ": '" + previous + "'/'"
-                    + className + "'");
-        }
     }
 
     private static void validateNodePayload(Node node, Files files) {
@@ -586,17 +480,6 @@ public final class ProtoAstReader {
         };
     }
 
-    private static void readEnd(End end, long records, long nodes, Files files) {
-        if (!end.hasRecords() || !end.hasNodes() || !end.hasRawBytes() || !end.hasFiles() || !end.hasIds()) {
-            throw new ProtocolException("End is missing a required counter");
-        }
-        if (end.getRecords() != records || end.getNodes() != nodes || end.getFiles() != files.paths.size() - 1) {
-            throw new ProtocolException("End count mismatch: records=" + end.getRecords() + "/" + records
-                    + ", nodes=" + end.getNodes() + "/" + nodes + ", files=" + end.getFiles() + "/"
-                    + (files.paths.size() - 1));
-        }
-    }
-
     private static void validateTopLevelReferences(ClangAstData data) {
         Map<String, DataStore> nodeData = data.get(ClangAstData.NODE_DATA);
         for (Set<String> ids : List.of(data.get(ClangAstData.TOP_LEVEL_DECL_IDS),
@@ -607,14 +490,6 @@ public final class ProtoAstReader {
                 }
             }
         }
-    }
-
-    private static int varintSize(long value) {
-        int size = 1;
-        while ((value >>>= 7) != 0) {
-            size++;
-        }
-        return size;
     }
 
     private static void initialize(ClangAstData data) {
@@ -632,20 +507,6 @@ public final class ProtoAstReader {
     private static String cachePath(String path, ClangAstData data) {
         CachedItems<String, String> cached = data.get(ClangAstData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS);
         return cached.get(path);
-    }
-
-    private static final class MetricsAccumulator {
-        long frames;
-        long encodedBytes;
-        long protobufDecodeNanos;
-        long astConstructionNanos;
-        long recordConstructionNanos;
-        long referenceResolutionNanos;
-
-        Metrics toMetrics(long records, long nodes, long files) {
-            return new Metrics(frames, encodedBytes, protobufDecodeNanos, astConstructionNanos,
-                    recordConstructionNanos, referenceResolutionNanos, records, nodes, files);
-        }
     }
 
     private static final class ProtocolException extends RuntimeException {

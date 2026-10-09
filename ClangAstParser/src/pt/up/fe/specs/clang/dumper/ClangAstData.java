@@ -116,22 +116,6 @@ public class ClangAstData extends ADataClass<ClangAstData> {
      */
     public final static DataKey<Boolean> HAS_ERRORS = KeyFactory.bool("hasErrors");
 
-    /** Native process time for a cache-bypass dump, in nanoseconds. */
-    public final static DataKey<Long> NATIVE_EXECUTION_NANOS = KeyFactory.generic(
-            "clang_dumper_native_execution_nanos", 0L);
-
-    /** ccache process/output restoration time when AST dump caching is enabled. */
-    public final static DataKey<Long> CACHE_RESTORATION_NANOS = KeyFactory.generic(
-            "clang_dumper_cache_restoration_nanos", 0L);
-
-    /** Metrics from the eager protobuf decoder and existing AST data construction. */
-    public final static DataKey<pt.up.fe.specs.clang.wire.ProtoAstReader.Metrics> PROTOBUF_METRICS = KeyFactory.object(
-            "clang_dumper_protobuf_metrics", pt.up.fe.specs.clang.wire.ProtoAstReader.Metrics.class);
-
-    /** Time spent by the existing Clava AST builder after protobuf records are decoded. */
-    public final static DataKey<Long> AST_CONSTRUCTION_NANOS = KeyFactory.generic(
-            "clang_dumper_ast_construction_nanos", 0L);
-
     /**
      * The errors output
      */
