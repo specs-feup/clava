@@ -334,7 +334,7 @@ public class ClangAstDumper {
             ClangCcacheAdapter.Invocation ccache = null;
             if (useAstDumpCache) {
                 ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), generatedParseRoot,
-                        clangExecutable, pt.up.fe.specs.clang.wire.GeneratedNodes.SCHEMA_HASH);
+                        pt.up.fe.specs.clang.wire.GeneratedNodes.SCHEMA_HASH);
                 command = ClangCcacheAdapter.command(arguments, dependencyFile);
             }
 
@@ -400,7 +400,6 @@ public class ClangAstDumper {
             metric.put("wire_schema_hash", pt.up.fe.specs.clang.wire.GeneratedNodes.SCHEMA_HASH);
             metric.put("flatbuffers_version", pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION);
             metric.put("flatbuffers_commit", pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_COMMIT);
-            metric.put("dumper_sha256", ClangCcacheAdapter.sha256(clangExecutable));
             metric.put("source", sourceFile.getPath());
             metric.put("native_ms", nativeNanos / 1e6);
             metric.put("read_ms", readNanos / 1e6);

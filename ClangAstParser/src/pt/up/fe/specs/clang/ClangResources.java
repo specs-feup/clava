@@ -247,8 +247,11 @@ public class ClangResources {
             unblockWindowsFile(executable);
         }
 
-        if (platform.isLinux() || platform.isMacOs()) {
-            SpecsSystem.runProcess(Arrays.asList("chmod", "+x", executable.getAbsolutePath()), false, true);
+        // Repair permissions in-process; this runs on every parse, so it must not fork chmod.
+        if ((platform.isLinux() || platform.isMacOs()) && !executable.canExecute()
+                && !executable.setExecutable(true, false)) {
+            throw new RuntimeException("Could not make cached clang-dumper executable runnable: '"
+                    + executable + "'");
         }
 
         return executable;

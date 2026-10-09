@@ -16,7 +16,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import pt.up.fe.specs.clang.ExecutableDigest;
 import pt.up.fe.specs.util.SpecsLogs;
 
 /** Configures ccache to invoke clang-dumper directly in depend mode. */
@@ -60,17 +59,20 @@ final class ClangCcacheAdapter {
         return false;
     }
 
-    static Invocation prepare(File dumperFolder, File baseDir, File executable, String schemaHash) {
+    /**
+     * The namespace isolates the decoder-visible schema and FlatBuffers runtime. The dumper executable itself is
+     * part of ccache's own compiler check, so it does not need to be hashed here.
+     */
+    static Invocation prepare(File dumperFolder, File baseDir, String schemaHash) {
         if (!schemaHash.matches("[0-9a-f]{64}")) {
             throw new IllegalArgumentException("Invalid FlatBuffers schema hash: " + schemaHash);
         }
 
-        String executableHash = sha256(executable);
         var cacheFolder = new File(new File(dumperFolder, CACHE_FOLDER_NAME),
                 "flatbuffers-v" + pt.up.fe.specs.clang.wire.WireProtocol.SCHEMA_VERSION + "-"
                         + pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION + "-"
                         + pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_COMMIT + "-"
-                        + schemaHash + "-" + executableHash);
+                        + schemaHash);
         try {
             Files.createDirectories(cacheFolder.toPath());
         } catch (IOException e) {
@@ -78,10 +80,6 @@ final class ClangCcacheAdapter {
         }
 
         return new Invocation(cacheFolder, baseDir);
-    }
-
-    static String sha256(File file) {
-        return ExecutableDigest.sha256(file);
     }
 
     static List<String> command(List<String> dumperCommand, File dependencyFile) {
