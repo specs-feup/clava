@@ -47,8 +47,8 @@ import pt.up.fe.specs.util.utilities.CachedItems;
  *
  * <p>
  * The stream is a sequence of size-prefixed FlatBuffers {@code Block}s (file identifier {@code CLV2}), each holding
- * {@code Record}s. It starts with a {@code Header} carrying the schema hash and ends with {@code End}. A node becomes
- * a Clava node once both its {@code Node} payload and its {@code NodeClass} record have been read; references are
+ * {@code Record}s. It starts with a {@code Header} carrying the schema hash and ends with {@code End}. A {@code Node}
+ * record follows the records of all its children, so it becomes a Clava node as soon as it is read; references are
  * resolved after the last record. Nodes whose class Clava does not model are skipped, and only fail if a supported
  * node references them.
  */
@@ -99,9 +99,6 @@ public final class WireReader {
     private final WireSchema schema = WireSchema.get();
     private final Tu tu;
     private final ClavaNodeParser nodeParser = new ClavaNodeParser(Clang_3_8.getClassesService());
-    /** Node classes waiting for their payload, and payload ids waiting for their class record. */
-    private final Map<String, String> pendingClasses = new HashMap<>();
-    private final Set<String> pendingPayloads = new HashSet<>();
     /** Ids of emitted nodes whose class Clava does not model. */
     private final Set<String> unsupported = new HashSet<>();
     private boolean headerSeen, endSeen;
@@ -140,10 +137,6 @@ public final class WireReader {
         }
         if (!reader.headerSeen || !reader.endSeen) {
             throw new EOFException("Incomplete AST stream '" + dump + "': missing " + (reader.headerSeen ? "End" : "Header"));
-        }
-        if (!reader.pendingClasses.isEmpty() || !reader.pendingPayloads.isEmpty()) {
-            throw new IOException("Nodes without both payload and class records: "
-                    + (reader.pendingClasses.isEmpty() ? reader.pendingPayloads : reader.pendingClasses.keySet()));
         }
         try {
             reader.nodeParser.close(data);
@@ -219,26 +212,6 @@ public final class WireReader {
                 tu.paths().add(cachePath(ClangAstPathResolver.resolve(record.string("path"), data)));
             }
             case "Node" -> readNode(record);
-            case "Children" -> {
-                String id = ownerId(record.integer("node"));
-                var children = new ArrayList<String>(record.length("children"));
-                for (int i = 0; i < record.length("children"); i++) {
-                    children.add(tu.id(record.integerAt("children", i)));
-                }
-                if (!unsupported.contains(id) && data.get(ClangAstData.VISITED_CHILDREN).put(id, children) != null) {
-                    throw new IllegalArgumentException("Duplicated Children record for " + id);
-                }
-            }
-            case "NodeClass" -> {
-                String id = ownerId(record.integer("node"));
-                if (unsupported.contains(id)) {
-                    return;
-                }
-                if (pendingClasses.put(id, record.string("class_name")) != null) {
-                    throw new IllegalArgumentException("Duplicated NodeClass record for " + id);
-                }
-                build(id);
-            }
             case "TopLevel" -> {
                 String id = tu.id(record.integer("node"));
                 if (unsupported.contains(id)) {
@@ -262,9 +235,6 @@ public final class WireReader {
                     cachePath(ClangAstPathResolver.resolve(record.string("path"), data)));
             case "Language" -> data.get(ClangAstData.FILE_LANGUAGE_DATA)
                     .put(sourceFile(record.string("file")), language(record));
-            case "Counter" -> {
-                // Informational producer counter; it carries no AST data.
-            }
             case "End" -> endSeen = true;
             default -> throw new IllegalArgumentException("Unknown record " + record.spec);
         }
@@ -273,8 +243,7 @@ public final class WireReader {
     private void readNode(WireTable node) {
         String id = ownerId(node.integer("id"));
         String className = node.string("class_name");
-        if (data().get(ClangAstData.NODE_DATA).containsKey(id) || pendingPayloads.contains(id)
-                || unsupported.contains(id)) {
+        if (data().get(ClangAstData.NODE_DATA).containsKey(id) || unsupported.contains(id)) {
             throw new IllegalArgumentException("Duplicated Node record for " + id);
         }
         Class<? extends ClavaNode> nodeClass;
@@ -283,8 +252,6 @@ public final class WireReader {
         } catch (RuntimeException e) {
             // Clava has no class for this node; it stays unbuilt unless something requires it.
             unsupported.add(id);
-            pendingClasses.remove(id);
-            data().get(ClangAstData.VISITED_CHILDREN).remove(id);
             data().get(ClangAstData.TOP_LEVEL_DECL_IDS).remove(id);
             data().get(ClangAstData.TOP_LEVEL_TYPE_IDS).remove(id);
             data().get(ClangAstData.TOP_LEVEL_ATTR_IDS).remove(id);
@@ -298,18 +265,13 @@ public final class WireReader {
             throw new IllegalArgumentException("Node " + id + " of class " + className + " has a "
                     + payload.spec + " payload");
         }
-        data().get(ClangAstData.NODE_DATA).put(id, bindings.read(payload, nodeClass, id, tu));
-        pendingPayloads.add(id);
-        build(id);
-    }
-
-    /** Builds node {@code id} once both its payload and its class record have been read. */
-    private void build(String id) {
-        String className = pendingClasses.get(id);
-        if (className != null && pendingPayloads.remove(id)) {
-            pendingClasses.remove(id);
-            nodeParser.applyRecord(id, className, tu.data());
+        var children = new ArrayList<String>(node.length("children"));
+        for (int i = 0; i < node.length("children"); i++) {
+            children.add(tu.id(node.integerAt("children", i)));
         }
+        data().get(ClangAstData.VISITED_CHILDREN).put(id, children);
+        data().get(ClangAstData.NODE_DATA).put(id, bindings.read(payload, nodeClass, id, tu));
+        nodeParser.applyRecord(id, className, tu.data());
     }
 
     private String ownerId(long id) {

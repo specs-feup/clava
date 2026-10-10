@@ -77,7 +77,7 @@ final class TestStream {
     }
 
     int end() {
-        return record("End", table("End", "records", 0L, "nodes", 0L, "files", 0L, "ids", 0L));
+        return record("End", table("End"));
     }
 
     /** Finishes a size-prefixed {@code Block} of records and starts a new one. */

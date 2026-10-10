@@ -53,7 +53,7 @@ class WireReaderTest {
     @Test
     void skipsAnUnsupportedNodeThatNothingReferences() throws IOException {
         var data = read(stream.block(stream.header(), file(), node(17, "LifetimeExtendedTemporaryDecl"),
-                nodeClass(17, "LifetimeExtendedTemporaryDecl"), children(17), stream.end()));
+                stream.end()));
         assertTrue(data.getClavaNodes().getNodes().isEmpty());
         assertTrue(data.get(ClangAstData.VISITED_CHILDREN).isEmpty());
     }
@@ -61,17 +61,8 @@ class WireReaderTest {
     @Test
     void rejectsAReferenceToAnUnsupportedNode() {
         var failure = assertThrows(IOException.class, () -> read(stream.block(stream.header(), file(),
-                children(1, 17), node(1, "StaticAssertDecl"), nodeClass(1, "StaticAssertDecl"), children(17),
-                node(17, "LifetimeExtendedTemporaryDecl"), nodeClass(17, "LifetimeExtendedTemporaryDecl"),
-                stream.end())));
+                node(17, "LifetimeExtendedTemporaryDecl"), node(1, "StaticAssertDecl", 17), stream.end())));
         assertTrue(failure.getMessage().contains("resolve references"), failure.getMessage());
-    }
-
-    @Test
-    void rejectsANodeWithoutItsClassRecord() {
-        var failure = assertThrows(IOException.class,
-                () -> read(stream.block(stream.header(), file(), node(1, "Decl"), stream.end())));
-        assertTrue(failure.getMessage().contains("without both payload and class"), failure.getMessage());
     }
 
     @Test
@@ -98,7 +89,7 @@ class WireReaderTest {
         return stream.record("File", stream.table("File", "id", 1L, "path", "unsupported-node.cpp"));
     }
 
-    private int node(long id, String className) {
+    private int node(long id, String className, long... children) {
         int range = stream.table("Range", "file", 1L, "line", 1L, "column", 1L, "end_file", 0L, "end_line", 0L,
                 "end_column", 0L);
         int source = stream.table("SourceInfo", "expansion", new Ref(range), "is_macro", false,
@@ -107,16 +98,8 @@ class WireReaderTest {
         int payload = stream.table("DeclData", "base", new Ref(base), "is_implicit", false, "is_used", false,
                 "is_referenced", false, "is_invalid_decl", false, "is_module_private", false,
                 "attributes", new long[0]);
-        return stream.record("Node", stream.table("Node", "id", id, "class_name", className, "payload",
-                new Union("DeclData", payload)));
-    }
-
-    private int nodeClass(long id, String className) {
-        return stream.record("NodeClass", stream.table("NodeClass", "node", id, "class_name", className));
-    }
-
-    private int children(long id, long... children) {
-        return stream.record("Children", stream.table("Children", "node", id, "children", children));
+        return stream.record("Node", stream.table("Node", "id", id, "class_name", className, "children", children,
+                "payload", new Union("DeclData", payload)));
     }
 
     private ClangAstData read(byte[]... blocks) throws IOException {

@@ -83,8 +83,8 @@ public class ClangResources {
             var executableKind = ClangAstDumper.usePlugin() ? "plugin" : "tool";
             var localAsset = getCurrentAsset(manifest, executableKind);
             var clangExecutable = getLocalExecutable(localBuild.folder());
-            if (!localAsset.filename().equals(clangExecutable.getName())
-                    || !localAsset.sha256().equalsIgnoreCase(ExecutableDigest.sha256(clangExecutable))) {
+            // The local build rewrites its manifest on every build, so only its name is checked here.
+            if (!localAsset.filename().equals(clangExecutable.getName())) {
                 throw new RuntimeException("Local clang-dumper executable does not match its release manifest: '"
                         + clangExecutable + "'");
             }

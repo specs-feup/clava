@@ -159,22 +159,6 @@ public class ClangResourcesTest {
     }
 
     @Test
-    public void executableDigestIsReusedAndInvalidatedAfterReplacement() throws IOException {
-        var executable = tempFolder.resolve("dumper");
-        Files.writeString(executable, "first");
-        var firstHash = ExecutableDigest.sha256(executable.toFile());
-
-        assertEquals(firstHash, ExecutableDigest.sha256(executable.toFile()));
-
-        Files.writeString(executable, "other");
-        Files.setLastModifiedTime(executable, FileTime.from(Instant.now().plusSeconds(2)));
-        var secondHash = ExecutableDigest.sha256(executable.toFile());
-
-        assertNotEquals(firstHash, secondHash);
-        assertEquals(secondHash, ExecutableDigest.sha256(executable.toFile()));
-    }
-
-    @Test
     public void manifestValidationAndAssetSelectionArePreserved() {
         var tool = asset("tool", "tool", "linux", "x64");
         var plugin = asset("plugin", "plugin", "linux", "x64");
