@@ -16,8 +16,7 @@ package pt.up.fe.specs.clang;
 import com.google.gson.Gson;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.providers.WebResourceProvider;
-import pt.up.fe.specs.clang.wire.GeneratedNodes;
-import pt.up.fe.specs.clang.wire.WireProtocol;
+import pt.up.fe.specs.clang.wire.WireSchema;
 
 import java.io.File;
 import java.io.IOException;
@@ -156,8 +155,9 @@ public final class ClangAstWebResource {
     }
 
     public record ClangDumperManifest(int schema_version, List<ClangDumperManifestAsset> assets,
-            FlatbuffersToolchain flatbuffers, WireSchema wire_schema) {
+            WireSchemaInfo wire_schema) {
 
+        /** Accepts manifest version 2 whose wire schema is the one Clava reads ({@link WireSchema}). */
         public void validate() {
             if (schema_version != 2) {
                 throw new RuntimeException("Unsupported clang-dumper manifest schema version: " + schema_version);
@@ -167,25 +167,10 @@ public final class ClangAstWebResource {
                 throw new RuntimeException("Clang-dumper manifest does not contain assets");
             }
 
-            if (flatbuffers == null || !WireProtocol.FLATBUFFERS_VERSION.equals(flatbuffers.version())
-                    || !WireProtocol.FLATBUFFERS_COMMIT.equals(flatbuffers.commit())) {
-                throw new RuntimeException("Clang-dumper manifest uses an unsupported FlatBuffers toolchain: "
-                        + flatbuffers);
-            }
-
-            if (wire_schema == null || wire_schema.version() != 2
-                    || !"wire/v2/complete.fbs".equals(wire_schema.entrypoint())
-                    || !"clang-dumper-wire-schema-v2.zip".equals(wire_schema.asset())
-                    || !WireProtocol.FLATBUFFERS_VERSION.equals(wire_schema.flatbuffers_version())) {
-                throw new RuntimeException("Clang-dumper manifest has an unsupported wire schema contract: "
-                        + wire_schema);
-            }
-
-            requireSha256(wire_schema.sha256(), "wire schema");
-            requireSha256(wire_schema.asset_sha256(), "wire schema archive");
-            if (!GeneratedNodes.SCHEMA_HASH.equals(wire_schema.sha256())) {
-                throw new RuntimeException("Clang-dumper schema hash " + wire_schema.sha256()
-                        + " does not match Clava bindings " + GeneratedNodes.SCHEMA_HASH);
+            String expected = WireSchema.get().hash;
+            if (wire_schema == null || !expected.equals(wire_schema.sha256())) {
+                throw new RuntimeException("Clang-dumper wire schema " + (wire_schema == null ? null : wire_schema.sha256())
+                        + " does not match Clava's " + expected);
             }
         }
 
@@ -203,17 +188,7 @@ public final class ClangAstWebResource {
         }
     }
 
-    private static void requireSha256(String value, String kind) {
-        if (value == null || !value.matches("[0-9a-f]{64}")) {
-            throw new RuntimeException("Invalid SHA-256 for " + kind + ": " + value);
-        }
-    }
-
-    public record FlatbuffersToolchain(String version, String commit) {
-    }
-
-    public record WireSchema(int version, String entrypoint, String asset, String sha256, String asset_sha256,
-            String flatbuffers_version) {
+    public record WireSchemaInfo(String sha256) {
     }
 
     public record ClangDumperManifestAsset(String filename, String kind, String platform, String arch, int llvm_major,

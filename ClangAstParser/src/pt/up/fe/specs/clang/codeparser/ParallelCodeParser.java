@@ -254,7 +254,7 @@ public class ParallelCodeParser extends CodeParser {
         // original clang tree
         // new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
         new TreeTransformer(ClangAstParser.getPostParsingRules()).transform(app);
-        clangParserResults.forEach(pt.up.fe.specs.clang.wire.CompleteReader::releaseLookup);
+        clangParserResults.forEach(pt.up.fe.specs.clang.wire.WireReader::releaseLookup);
 
         // Add text elements (comments, pragmas) to the tree
         new TextParser(app.getContext()).addElements(app);

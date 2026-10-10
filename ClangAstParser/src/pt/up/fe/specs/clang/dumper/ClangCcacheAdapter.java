@@ -60,8 +60,8 @@ final class ClangCcacheAdapter {
     }
 
     /**
-     * The namespace isolates the decoder-visible schema and FlatBuffers runtime. The dumper executable itself is
-     * part of ccache's own compiler check, so it does not need to be hashed here.
+     * The namespace isolates the wire schema. The dumper executable itself is part of ccache's own compiler check,
+     * so it does not need to be hashed here.
      */
     static Invocation prepare(File dumperFolder, File baseDir, String schemaHash) {
         if (!schemaHash.matches("[0-9a-f]{64}")) {
@@ -69,10 +69,7 @@ final class ClangCcacheAdapter {
         }
 
         var cacheFolder = new File(new File(dumperFolder, CACHE_FOLDER_NAME),
-                "flatbuffers-v" + pt.up.fe.specs.clang.wire.WireProtocol.SCHEMA_VERSION + "-"
-                        + pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION + "-"
-                        + pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_COMMIT + "-"
-                        + schemaHash);
+                "flatbuffers-v2-" + schemaHash);
         try {
             Files.createDirectories(cacheFolder.toPath());
         } catch (IOException e) {

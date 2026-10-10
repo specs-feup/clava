@@ -303,8 +303,6 @@ public class ClangAstDumper {
             return null;
         }
 
-        long nativeNanos = 0, readStart = 0, dumpBytes = 0;
-        pt.up.fe.specs.clang.wire.CompleteReader.Result flatResult;
         ClangAstData parsedData = null;
 
         try {
@@ -334,7 +332,7 @@ public class ClangAstDumper {
             ClangCcacheAdapter.Invocation ccache = null;
             if (useAstDumpCache) {
                 ccache = ClangCcacheAdapter.prepare(parserConfig.get(CodeParser.DUMPER_FOLDER), generatedParseRoot,
-                        pt.up.fe.specs.clang.wire.GeneratedNodes.SCHEMA_HASH);
+                        pt.up.fe.specs.clang.wire.WireSchema.get().hash);
                 command = ClangCcacheAdapter.command(arguments, dependencyFile);
             }
 
@@ -348,9 +346,7 @@ public class ClangAstDumper {
                 ccache.configureEnvironment(processBuilder.environment());
             }
 
-            long nativeStart = System.nanoTime();
             var output = SpecsSystem.runProcess(processBuilder, SpecsIo::read, SpecsIo::read);
-            nativeNanos = System.nanoTime() - nativeStart;
 
             if (output.isError()) {
                 ClavaLog.debug("Dumper returned an error value: '" + output.getReturnValue() + "'");
@@ -375,41 +371,19 @@ public class ClangAstDumper {
                         + "'\nDiagnostics:\n" + output.getStdErr());
             }
 
-            dumpBytes = dumpFile.length();
-            readStart = System.nanoTime();
-            flatResult = pt.up.fe.specs.clang.wire.CompleteReader.read(dumpFile.toPath(),
+            parsedData = pt.up.fe.specs.clang.wire.WireReader.read(dumpFile.toPath(),
                     config.get(ClavaNode.CONTEXT), generatedParseRoot, id);
-            parsedData = flatResult.data();
             parsedData.set(ClangAstData.LINES_NOT_PARSED, output.getStdErr());
             parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
         } catch (Exception e) {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }
 
-        long readNanos = System.nanoTime() - readStart;
-        long tuStart = System.nanoTime();
         ClangAstParser clangStreamParser = new ClangAstParser(parsedData, SpecsSystem.isDebug(), config);
 
         TranslationUnit tUnit = clangStreamParser.parseTu(sourceFile);
 
         parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
-        if (Boolean.getBoolean("clava.astWireMetrics")) {
-            var metric = new java.util.LinkedHashMap<String, Object>();
-            metric.put("format", pt.up.fe.specs.clang.wire.WireProtocol.FORMAT);
-            metric.put("wire_schema_version", pt.up.fe.specs.clang.wire.WireProtocol.SCHEMA_VERSION);
-            metric.put("wire_schema_hash", pt.up.fe.specs.clang.wire.GeneratedNodes.SCHEMA_HASH);
-            metric.put("flatbuffers_version", pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION);
-            metric.put("flatbuffers_commit", pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_COMMIT);
-            metric.put("source", sourceFile.getPath());
-            metric.put("native_ms", nativeNanos / 1e6);
-            metric.put("read_ms", readNanos / 1e6);
-            metric.put("tu_ms", (System.nanoTime() - tuStart) / 1e6);
-            metric.put("dump_bytes", dumpBytes);
-            metric.put("nodes", parsedData.getClavaNodes().getNodes().size());
-            metric.put("materialized", flatResult.stats().materialized);
-            System.err.println("CLAVA_AST_METRIC " + new com.google.gson.Gson().toJson(metric));
-        }
-
         return parsedData;
     }
 

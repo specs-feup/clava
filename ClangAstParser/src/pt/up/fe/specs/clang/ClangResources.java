@@ -17,8 +17,9 @@ import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifest;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
 import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
-import pt.up.fe.specs.clang.wire.CompleteReader;
+import pt.up.fe.specs.clang.wire.WireReader;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsIo;
@@ -365,9 +366,9 @@ public class ClangResources {
 
     private static boolean hasValidFlatBuffersOutput(File dumpFile) {
         try {
-            var result = CompleteReader.read(dumpFile.toPath(), new ClavaContext(), null,
+            var data = WireReader.read(dumpFile.toPath(), new ClavaContext(), null,
                     dumpFile.getAbsolutePath());
-            return result.stats().nodes > 0;
+            return !data.get(ClangAstData.NODE_DATA).isEmpty();
         } catch (IOException | RuntimeException e) {
             ClavaLog.debug(() -> "Could not read libc probe dump '" + dumpFile + "': " + e.getMessage());
             return false;

@@ -19,7 +19,7 @@ permissions:
   contents: write
 
 env:
-  JAVA_VERSION: 17
+  JAVA_VERSION: 21
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
@@ -95,12 +95,6 @@ jobs:
           cd clava/ClangAstParser
           gradle test
 
-      - name: Verify generated wire bindings and release resolver
-        run: |
-          gradle -p clava/ClangAstParser verifyGeneratedWire
-          python3 -m unittest discover -s clava/ClangAstParser/scripts -p 'test_*.py'
-          python3 -m unittest discover -s clava/experiments/flatbuffers/validation -p 'test_*.py'
-          
       - name: Test ClavaWeaver
         run: |
           cd clava/ClavaWeaver

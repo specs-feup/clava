@@ -17,10 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifest;
 import pt.up.fe.specs.clang.ClangAstWebResource.ClangDumperManifestAsset;
-import pt.up.fe.specs.clang.ClangAstWebResource.FlatbuffersToolchain;
 import pt.up.fe.specs.clang.ClangAstWebResource.LocalBuild;
 import pt.up.fe.specs.clang.ClangAstWebResource.Release;
-import pt.up.fe.specs.clang.ClangAstWebResource.WireSchema;
+import pt.up.fe.specs.clang.ClangAstWebResource.WireSchemaInfo;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
@@ -187,13 +186,11 @@ public class ClangResourcesTest {
         assertEquals(HELLO_SHA256, tool.sha256());
         assertThrows(RuntimeException.class, () -> manifest.getAsset("windows", "x64", "tool"));
         assertThrows(RuntimeException.class, () -> new ClangDumperManifest(1, List.of(tool),
-                toolchain(), wireSchema()).validate());
+                wireSchema()).validate());
         assertThrows(RuntimeException.class, () -> manifest(List.of()).validate());
 
-        var mismatchedSchema = new WireSchema(2, "wire/v2/complete.fbs", "clang-dumper-wire-schema-v2.zip",
-                "0".repeat(64), HELLO_SHA256, pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION);
-        assertThrows(RuntimeException.class,
-                () -> new ClangDumperManifest(2, List.of(tool), toolchain(), mismatchedSchema).validate());
+        assertThrows(RuntimeException.class, () -> new ClangDumperManifest(2, List.of(tool),
+                new WireSchemaInfo("0".repeat(64))).validate());
     }
 
     @Test
@@ -751,18 +748,11 @@ public class ClangResourcesTest {
     }
 
     private static ClangDumperManifest manifest(List<ClangDumperManifestAsset> assets) {
-        return new ClangDumperManifest(2, assets, toolchain(), wireSchema());
+        return new ClangDumperManifest(2, assets, wireSchema());
     }
 
-    private static FlatbuffersToolchain toolchain() {
-        return new FlatbuffersToolchain(pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION,
-                pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_COMMIT);
-    }
-
-    private static WireSchema wireSchema() {
-        return new WireSchema(2, "wire/v2/complete.fbs", "clang-dumper-wire-schema-v2.zip",
-                pt.up.fe.specs.clang.wire.GeneratedNodes.SCHEMA_HASH, HELLO_SHA256,
-                pt.up.fe.specs.clang.wire.WireProtocol.FLATBUFFERS_VERSION);
+    private static WireSchemaInfo wireSchema() {
+        return new WireSchemaInfo(pt.up.fe.specs.clang.wire.WireSchema.get().hash);
     }
 
     private static FileResourceProvider copyingResource(Path source, AtomicInteger writes) {
