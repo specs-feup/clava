@@ -141,6 +141,41 @@ def fixture_release_manifest():
 
 
 class UpdatedReportTest(unittest.TestCase):
+    def test_comparison_uses_same_session_rows_and_only_historical_before_cache(self):
+        observations = []
+        for stage in REPORT.COMPARED_STAGES:
+            for suite in REPORT.SUITES:
+                for mode in REPORT.MODES:
+                    for repeat in REPORT.REPEATS:
+                        base = {"stage": stage, "suite": suite, "mode": mode, "repeat": repeat,
+                                "valid": True, "measured": True}
+                        observations.append({**base, "phase": "app", "app_elapsed_ms": 2000.0 + repeat,
+                                             "app_calls": 42, "syntax_only_calls": 0})
+                        counts = (116, 116, 0, 0) if suite == "java" else (164, 158, 0, 6)
+                        observations.append({**base, "phase": "wall", "wall_s": 30.0 + repeat,
+                                             "test_counts": dict(zip(("total_tests", "passed_tests",
+                                                                      "failed_tests", "skipped_tests"), counts))})
+        stage_identity = {"ref": "branch", "revision": "a" * 40, "selector": "v18.1.8_6-rc8"}
+        record = {
+            "status": "complete", "quick": False, "observations": observations,
+            "created_utc": "2026-10-10T00:00:00+00:00", "completed_utc": "2026-10-10T01:30:00+00:00",
+            "stages": {stage: {**stage_identity, "selector": "/home/user/clang-dumper-ccache/build"}
+                       if stage == "ccache-text" else stage_identity for stage in REPORT.COMPARED_STAGES},
+            "snapshot": {"shared": {"specs-java-libs": "b" * 40, "lara-framework": "c" * 40}},
+        }
+
+        page = REPORT.render_comparison(record, fixture_prior())
+
+        self.assertIn("Clava AST transport benchmark", page)
+        self.assertIn("local build (clang-dumper-ccache)", page)
+        self.assertNotIn("/home/", page)
+        rows = json.loads(page.split('<script type="application/json" id="csv-data">')[1].split("</script>")[0])
+        sources = {(row[2], row[7]) for row in rows[1:]}
+        self.assertEqual({("before-cache", "reused control")} | {
+            (stage, "same session") for stage in REPORT.COMPARED_STAGES}, sources)
+        with self.assertRaises(ValueError):
+            REPORT.render_comparison({**record, "quick": True}, fixture_prior())
+
     def test_replaces_only_protobuf_rows_and_keeps_control_rows_unchanged(self):
         prior = fixture_prior()
         updated = REPORT.validate_updated_manifest(fixture_updated())

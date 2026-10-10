@@ -6,6 +6,31 @@ renders the existing report. Collection never publishes. `publish` is a
 separate command, requires `--private`, and reads the saved DraftLink back to
 verify the exact HTML bytes.
 
+## Same-session three-way comparison
+
+`three_way.py` measures Text + ccache, Protobuf and FlatBuffers in one session, rotating stage, cache-mode
+and suite order each round. Each stage is a committed Clava ref with its own dumper release:
+
+| Stage | Clava ref | Dumper |
+|---|---|---|
+| Text + ccache | `text-ccache-baseline` (ast-protobuf repo) | local `clang-dumper-ccache` build |
+| Protobuf | `ast-protobuf` | `v18.1.8_6-rc8` |
+| FlatBuffers | `ast-flatbuffers` (ast-flatbuffers repo) | `v18.1.8_5-rc3` |
+
+All stages share the ast-protobuf workspace's specs-java-libs and lara-framework revisions and run the
+same pinned JavaScript test bytes. Java stages must parse the same files per App call; calls that
+re-parse a revision's own generated code may differ in content and are counted per observation.
+
+```sh
+# ~25 min: one App-time repeat per stage in direct and warm modes, printed as a table.
+python3 experiments/protobuf/suite/refresh/three_way.py run --quick
+# ~1.5 h: four rotated rounds of App and wall time; renders report.html and, with --draft-id,
+# privately updates and reads back the DraftLink.
+python3 experiments/protobuf/suite/refresh/three_way.py run --draft-id DRAFT_ID
+```
+
+Before cache stays the historical production baseline from the frozen controls.
+
 ## One-command use
 
 Both commands snapshot the committed state of the four sibling checkouts, so

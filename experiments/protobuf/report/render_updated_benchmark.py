@@ -519,7 +519,8 @@ def _javascript_workload_section(overlay: dict[str, Any]) -> str:
     )
 
 
-def _summary_table(app_rows: list[dict[str, Any]], wall_rows: list[dict[str, Any]]) -> str:
+def _summary_table(app_rows: list[dict[str, Any]], wall_rows: list[dict[str, Any]],
+                   fresh_label: str = "New session", reused_label: str = "Reused control") -> str:
     out = ['<table class="summary"><thead><tr><th>Suite</th><th>Cache state</th><th>Format</th>'
            '<th>App time, median (range)</th><th>Command wall time, median (range)</th>'
            '<th>Tests, total/pass/fail/skip</th><th>Source</th></tr></thead><tbody>']
@@ -549,7 +550,8 @@ def _summary_table(app_rows: list[dict[str, Any]], wall_rows: list[dict[str, Any
                         f"r{row['repeat']} {counts}"
                         for row, counts in zip(test_runs, per_repeat_counts)
                     )
-                source = "New session" if stage == "protobuf" else "Reused control"
+                fresh = any(row.get("reused") is False for row in test_runs)
+                source = fresh_label if fresh else reused_label
                 out.append(
                     f'<tr><th scope="row">{html.escape(SUITE_LABELS[suite])}</th>'
                     f'<td>{html.escape(MODE_LABELS[mode])}</td>'
@@ -588,7 +590,7 @@ def _wall_charts(wall_rows: list[dict[str, Any]]) -> str:
     original_validator = _WALL_CHARTS.is_valid_run
 
     def valid_run(row: dict[str, Any], suite: str) -> bool:
-        if row.get("source_session") == "updated-protobuf":
+        if row.get("reused") is False:
             return row.get("valid") is True and row.get("failed_tests") == 0
         return original_validator(row, suite)
 
@@ -606,7 +608,8 @@ def _wall_charts(wall_rows: list[dict[str, Any]]) -> str:
         _WALL_CHARTS.is_valid_run = original_validator
 
 
-def _csv_data(app_rows: list[dict[str, Any]], wall_rows: list[dict[str, Any]], updated: dict[str, Any]) -> list[list[Any]]:
+def _csv_data(app_rows: list[dict[str, Any]], wall_rows: list[dict[str, Any]], updated: dict[str, Any],
+              fresh_label: str = "updated Protobuf session") -> list[list[Any]]:
     rows: list[list[Any]] = [[
         "suite", "mode", "stage", "repeat", "metric", "value", "unit", "source",
         "measurement_date", "app_calls", "syntax_only_calls", "total_tests", "passed_tests",
@@ -619,10 +622,10 @@ def _csv_data(app_rows: list[dict[str, Any]], wall_rows: list[dict[str, Any]], u
         for row in sorted(source_rows, key=lambda item: (
                 SUITES.index(item["suite"]), MODES.index(item["mode"]),
                 STAGES.index(item["stage"]), item["repeat"])):
-            new_session = row.get("source_session") == "updated-protobuf"
+            new_session = row.get("reused") is False
             rows.append([
                 row["suite"], row["mode"], row["stage"], row["repeat"], metric,
-                row[metric], unit, "updated Protobuf session" if new_session else "reused control",
+                row[metric], unit, fresh_label if new_session else "reused control",
                 row.get("measurement_date", ""), row.get("app_calls", ""),
                 row.get("syntax_only_calls", ""), row.get("total_tests", ""),
                 row.get("passed_tests", ""), row.get("failed_tests", ""),
@@ -801,16 +804,145 @@ def render_report(
         provenance = validate_release_provenance(
             updated_payload, release_manifest, release_manifest_sha256
         )
-    csv_json = json.dumps(_csv_data(app_rows, wall_rows, updated), ensure_ascii=False)
-    csv_json = (csv_json.replace("<", "\\u003c").replace(">", "\\u003e")
-                .replace("&", "\\u0026").replace("\u2028", "\\u2028")
-                .replace("\u2029", "\\u2029"))
+    csv_json = _script_json(_csv_data(app_rows, wall_rows, updated))
+    return _page(
+        title="Clava Protobuf benchmark update",
+        lede="The charts replace the earlier Protobuf rows with a new four-repeat session. Text and FlatBuffers rows remain the frozen historical controls. The sessions have separate dates, so the page shows distributions and does not calculate cross-session round pairs or ratios.",
+        sources=_source_table(prior_app_rows, prior_wall_rows, updated),
+        app_charts=_app_charts(app_rows, updated),
+        wall_charts=_wall_charts(wall_rows),
+        summary_intro="Values are medians and observed min-to-max ranges across four repeats within each chart cell. The test-count column lists each distinct total/pass/fail/skip result in repeat order. The source column distinguishes the new Protobuf session from controls reused from earlier evidence. These values do not establish a matched per-repeat change across sessions.",
+        summary=_summary_table(app_rows, wall_rows),
+        sections=_memory_section(memory_payload)
+        + (_provenance_section(provenance) if provenance is not None else '')
+        + _javascript_workload_section(workload_overlay),
+        notes=_measurement_notes(updated, "Text and FlatBuffers measurements were reused from their earlier sessions."),
+        csv_json=csv_json,
+        csv_name="clava-protobuf-benchmark-rows.csv",
+    )
+
+
+COMPARED_STAGES = ("ccache-text", "protobuf", "flatbuffers")
+
+
+def comparison_rows(record: Any) -> dict[str, Any]:
+    """Normalizes a complete same-session three-way run into chart rows."""
+    if not isinstance(record, dict) or record.get("status") != "complete" or record.get("quick"):
+        _fail("comparison results must be a complete, non-quick run")
+    created = _utc(record.get("created_utc"), "created_utc")
+    completed = _utc(record.get("completed_utc"), "completed_utc")
+    app_rows: list[dict[str, Any]] = []
+    wall_rows: list[dict[str, Any]] = []
+    app_calls: dict[str, set[int]] = {suite: set() for suite in SUITES}
+    syntax_calls: dict[str, set[int]] = {suite: set() for suite in SUITES}
+    for row in record.get("observations", []):
+        if row.get("stage") not in COMPARED_STAGES or row.get("valid") is not True or row.get("measured") is not True:
+            _fail("comparison observations must be valid, measured Text, Protobuf or FlatBuffers rows")
+        normalized = {"suite": row["suite"], "stage": row["stage"], "mode": row["mode"], "repeat": row["repeat"],
+                      "measurement_date": created.date().isoformat(), "reused": False}
+        if row["phase"] == "app":
+            normalized["app_elapsed_ms"] = _finite_nonnegative(row["app_elapsed_ms"], "app_elapsed_ms")
+            normalized["app_calls"] = row["app_calls"]
+            normalized["syntax_only_calls"] = row["syntax_only_calls"]
+            app_calls[row["suite"]].add(row["app_calls"])
+            syntax_calls[row["suite"]].add(row["syntax_only_calls"])
+            app_rows.append(normalized)
+        else:
+            normalized["elapsed_s"] = _finite_nonnegative(row["wall_s"], "wall_s")
+            normalized.update({field: row["test_counts"][field] for field in
+                               ("total_tests", "passed_tests", "failed_tests", "skipped_tests")})
+            normalized.update({"valid": True, "measured": True, "return_code": 0})
+            wall_rows.append(normalized)
+    if any(len(values) != 1 for values in (*app_calls.values(), *syntax_calls.values())):
+        _fail("App and syntax-only call counts must be identical across stages and repeats")
+    return {"created_utc": created, "completed_utc": completed, "app_rows": app_rows, "wall_rows": wall_rows,
+            "app_calls_by_suite": {suite: next(iter(values)) for suite, values in app_calls.items()},
+            "syntax_calls_by_suite": {suite: next(iter(values)) for suite, values in syntax_calls.items()}}
+
+
+def _comparison_sources(record: dict[str, Any], session: dict[str, Any], historical_date: str) -> str:
+    rows = []
+    for key in COMPARED_STAGES:
+        stage = record["stages"][key]
+        rows.append(f'<tr><th scope="row">{html.escape(STAGE_LABELS[key])}</th>'
+                    f'<td><code>{html.escape(stage["revision"][:10])}</code> ({html.escape(stage["ref"])})</td>'
+                    f'<td><code>{html.escape(_public_selector(stage["selector"]))}</code></td>'
+                    f'<td>Same session</td></tr>')
+    rows.append(f'<tr><th scope="row">{html.escape(STAGE_LABELS["before-cache"])}</th>'
+                f'<td>Production master before ccache</td><td><code>v18.1.8_4</code></td>'
+                f'<td>Historical, {html.escape(historical_date)}</td></tr>')
+    shared = record["snapshot"]["shared"]
+    return ('<table class="sources"><thead><tr><th>Format</th><th>Clava revision</th><th>Dumper</th>'
+            '<th>Session</th></tr></thead><tbody>' + "".join(rows) + '</tbody></table>'
+            f'<p>Session created {html.escape(format_utc(session["created_utc"]))}, completed '
+            f'{html.escape(format_utc(session["completed_utc"]))}. Shared libraries: specs-java-libs '
+            f'<code>{html.escape(shared["specs-java-libs"][:10])}</code>, lara-framework '
+            f'<code>{html.escape(shared["lara-framework"][:10])}</code>.</p>')
+
+
+def _public_selector(selector: str) -> str:
+    # Local dumper builds are named by their checkout, never by an absolute path.
+    return selector if not selector.startswith("/") else "local build (" + Path(selector).parent.name + ")"
+
+
+def render_comparison(record: Any, prior: Any) -> str:
+    """Renders a same-session Text/Protobuf/FlatBuffers run beside the historical pre-cache baseline."""
+    session = comparison_rows(record)
+    prior_app = [row for row in _validate_prior_rows(prior, "app_plot_rows", "app_elapsed_ms")
+                 if row["stage"] == "before-cache"]
+    prior_wall = [row for row in _validate_prior_rows(prior, "wall_plot_rows", "elapsed_s")
+                  if row["stage"] == "before-cache"]
+    app_rows = prior_app + session["app_rows"]
+    wall_rows = prior_wall + session["wall_rows"]
+    _validate_combined(app_rows, "app_elapsed_ms")
+    _validate_combined(wall_rows, "elapsed_s")
+    historical_date = ", ".join(sorted({str(row.get("measurement_date")) for row in prior_app + prior_wall}))
+    csv_json = _script_json(_csv_data(app_rows, wall_rows, session, "same session"))
+    return _page(
+        title="Clava AST transport benchmark",
+        lede="Text + ccache, Protobuf and FlatBuffers measured in one session with rotated round order. "
+             "All three share the same specs-java-libs and lara-framework revisions, the same pinned Java and "
+             "JavaScript workloads, the same bundled headers and the same per-parse resource handling, so the AST "
+             "transport is the remaining difference. Before cache is the historical production baseline from an "
+             "earlier session.",
+        sources=_comparison_sources(record, session, historical_date),
+        app_charts=_app_charts(app_rows, session),
+        wall_charts=_wall_charts(wall_rows),
+        summary_intro="Medians and min-to-max ranges across four repeats. Text, Protobuf and FlatBuffers rows come "
+                      "from the same session; Before cache is historical.",
+        summary=_summary_table(app_rows, wall_rows, "Same session", "Historical"),
+        sections="",
+        notes=_measurement_notes(session, "Text + ccache uses a local clang-dumper build (no published release "
+                                          "supports its cache flags), so Clava selects system libc headers for it; "
+                                          "Protobuf and FlatBuffers use their published releases' identical bundled "
+                                          "headers. Protobuf and FlatBuffers dumps are compressed by ccache; Text "
+                                          "streams Zstandard from the dumper, which measured the same."),
+        csv_json=csv_json,
+        csv_name="clava-ast-transport-benchmark-rows.csv",
+    )
+
+
+def _script_json(value: Any) -> str:
+    """JSON safe to embed in a <script> element."""
+    text = json.dumps(value, ensure_ascii=False)
+    return (text.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
+            .replace("\u2028", "\\u2028").replace("\u2029", "\\u2029"))
+
+
+def _measurement_notes(updated: dict[str, Any], session_note: str) -> str:
+    return f'''<p>The App timer starts at the three-argument <code>ParallelCodeParser.parse</code> entry and stops after the final App is returned. It includes native parsing and protobuf or text reading, cross-file linking, postprocessing, parser-state release, and final TextParser/text transforms. Parser/context construction before entry, suite setup and assertions, printing, and syntax-only validation are excluded. Natural garbage collection is included, with no forced-GC policy override, coverage agents, or execution-info logging.</p>
+<p>The Java suite uses its original 116 test identities, one worker, and a 512 MiB heap. The Clava-JS suite retains 164 selected test identities, uses one Vitest worker with file parallelism and isolation disabled, and uses Vitest's runner config loader for generated configurations. It records the actual per-run test counts above. Its worker JVM used the default heap limit, observed at about 7.55 GiB. App timing covers {updated["app_calls_by_suite"]["java"]} Java and {updated["app_calls_by_suite"]["clava-js"]} Clava-JS timed calls. Syntax-only calls are excluded from App time ({updated["syntax_calls_by_suite"]["java"]} Java and {updated["syntax_calls_by_suite"]["clava-js"]} Clava-JS).</p>
+<p>Four repeats ran serially. Direct runs disabled ccache; cold runs began from isolated empty caches; warm runs restored an identical complete-suite cache seed before timing. Full-command wall measurements used a monotonic process timer and were collected separately from App-timing runs. Compilation and resource preparation finished before timing. {session_note}</p>'''
+
+
+def _page(*, title: str, lede: str, sources: str, app_charts: str, wall_charts: str, summary_intro: str,
+          summary: str, sections: str, notes: str, csv_json: str, csv_name: str) -> str:
     return f'''<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Clava Protobuf benchmark update</title>
+<title>{html.escape(title)}</title>
 <style>
 html {{ color-scheme:light; --report-page:#f7f9fc; --report-panel:#fff; --report-ink:#202a34; --report-muted:#56636e; --report-line:#d9e0e5; --report-grid:#e1e7ec; --report-surface:#fff; --report-accent:#6d45c0; --report-code:#5630a2; }}
 html.dark {{ color-scheme:dark; --report-page:#101722; --report-panel:#182231; --report-ink:#e8edf5; --report-muted:#a7b4c7; --report-line:#354357; --report-grid:#2b394c; --report-surface:#182231; --report-accent:#8d68df; --report-code:#d7c6ff; }}
@@ -845,34 +977,30 @@ summary {{ cursor:pointer; color:var(--report-ink); font-weight:650; }} code {{ 
 </head>
 <body>
 <header>
-<h1>Clava Protobuf benchmark update</h1>
-<p class="lede">The charts replace the earlier Protobuf rows with a new four-repeat session. Text and FlatBuffers rows remain the frozen historical controls. The sessions have separate dates, so the page shows distributions and does not calculate cross-session round pairs or ratios.</p>
-{_source_table(prior_app_rows, prior_wall_rows, updated)}
+<h1>{html.escape(title)}</h1>
+<p class="lede">{lede}</p>
+{sources}
 <p class="note">App elapsed time and full-command wall time are separate measurements. App time is summed over timed parser calls. Syntax-only calls are excluded from App time.</p>
 <button type="button" id="download-csv">Download chart rows as CSV</button>
 </header>
 <section>
 <h2>App construction time</h2>
 <p>Each dot is one of four suite repeats. The chart sums completed App-call durations for that repeat. Its timer covers parsing, protobuf or text decoding, cross-translation-unit linking, final transformations, and parser-state release. Parser/context setup before the timed method, assertions, output, and syntax-only calls are outside this timer. Natural garbage collection remains enabled.</p>
-<div class="panels">{_app_charts(app_rows, updated)}</div>
+<div class="panels">{app_charts}</div>
 </section>
 <section>
 <h2>Full-command wall time</h2>
 <p>Each candle covers four separate full-suite commands. A monotonic process timer measures each command wall span, separate from the App-call timer. Direct disables ccache; cold starts with an isolated empty cache; warm restores the same complete-suite cache seed before measurement. Java used one worker with a 512 MiB heap. Clava-JS used one Vitest worker, with file parallelism and isolation disabled; its generated configuration used Vitest's runner loader. Its default worker JVM heap limit was about 7.55 GiB. The sessions ran serially after compilation and resource setup.</p>
-<div class="panels">{_wall_charts(wall_rows)}</div>
+<div class="panels">{wall_charts}</div>
 </section>
 <section>
 <h2>Measurements</h2>
-<p>Values are medians and observed min-to-max ranges across four repeats within each chart cell. The test-count column lists each distinct total/pass/fail/skip result in repeat order. The source column distinguishes the new Protobuf session from controls reused from earlier evidence. These values do not establish a matched per-repeat change across sessions.</p>
-{_summary_table(app_rows, wall_rows)}
+<p>{summary_intro}</p>
+{summary}
 </section>
-{_memory_section(memory_payload)}
-{_provenance_section(provenance) if provenance is not None else ''}
-{_javascript_workload_section(workload_overlay)}
+{sections}
 <details><summary>Measurement notes</summary>
-<p>The App timer starts at the three-argument <code>ParallelCodeParser.parse</code> entry and stops after the final App is returned. It includes native parsing and protobuf or text reading, cross-file linking, postprocessing, parser-state release, and final TextParser/text transforms. Parser/context construction before entry, suite setup and assertions, printing, and syntax-only validation are excluded. Natural garbage collection is included, with no forced-GC policy override, coverage agents, or execution-info logging.</p>
-<p>The Java suite uses its original 116 test identities, one worker, and a 512 MiB heap. The Clava-JS suite retains 164 selected test identities, uses one Vitest worker with file parallelism and isolation disabled, and uses Vitest's runner config loader for generated configurations. It records the actual per-run test counts above. Its worker JVM used the default heap limit, observed at about 7.55 GiB. App timing covers {updated["app_calls_by_suite"]["java"]} Java and {updated["app_calls_by_suite"]["clava-js"]} Clava-JS timed calls. Syntax-only calls are excluded from App time ({updated["syntax_calls_by_suite"]["java"]} Java and {updated["syntax_calls_by_suite"]["clava-js"]} Clava-JS).</p>
-<p>Four repeats ran serially. Direct runs disabled ccache; cold runs began from isolated empty caches; warm runs restored an identical complete-suite cache seed before timing. Full-command wall measurements used a monotonic process timer and were collected separately from App-timing runs. GNU time peak RSS appears only in the optional memory diagnostic. Compilation and resource preparation finished before timing. Text and FlatBuffers measurements were reused from their earlier sessions.</p>
+{notes}
 </details>
 <script type="application/json" id="csv-data">{csv_json}</script>
 <script>
@@ -883,7 +1011,7 @@ document.getElementById('download-csv').addEventListener('click', () => {{
   const link = document.createElement('a');
   const url = URL.createObjectURL(new Blob([csv], {{type:'text/csv;charset=utf-8'}}));
   link.href = url;
-  link.download = 'clava-protobuf-benchmark-rows.csv';
+  link.download = {json.dumps(csv_name)};
   document.body.appendChild(link);
   link.click();
   link.remove();
