@@ -312,9 +312,9 @@ def build_overlay(
     source_path = _find_parser_source(Path(source_root))
     runtime_root, lib_dir = _runtime_layout(runtime_lib)
     original_class_major = _jar_class_major(lib_dir / "ClangAstParser.jar", PARSER_CLASS_ENTRY)
-    if original_class_major != 61:
+    if original_class_major not in (61, 65):
         raise ValueError(
-            f"expected Java 17 frozen parser class major 61, got {original_class_major}"
+            f"expected a Java 17 or 21 parser (class major 61 or 65), got {original_class_major}"
         )
     javac_target_release = original_class_major - 44
     output_root = Path(output_dir).resolve()
