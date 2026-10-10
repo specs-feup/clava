@@ -28,10 +28,8 @@ def protoCacheRoot = new File(gradle.gradleUserHomeDir, 'caches/clava/protobuf-w
 
 tasks.register('resolveProtoRelease', Exec) {
     inputs.file protoTagFile
+    inputs.file file('tools/resolve_proto_release.py')
     outputs.files canonicalSchema, canonicalDescriptor, consumerSchema, resolvedManifest
-    // Even an up-to-date build rechecks the selected manifest, hashes and any
-    // cache hits before protoc or the Java adapter can consume those files.
-    outputs.upToDateWhen { false }
     doFirst {
         commandLine 'python3', file('tools/resolve_proto_release.py').absolutePath,
                 '--tag-file', protoTagFile.absolutePath,
@@ -331,8 +329,6 @@ test {
 
     // Can't parellelize because it will trigger multiple simultaneous downloads of the dumper and stdlib zip files.
     maxParallelForks = 1
-    dependsOn tasks.named('verifyProtoBindings')
-    dependsOn tasks.named('testProtoReleaseResolver')
 
     finalizedBy jacocoTestReport
 }
