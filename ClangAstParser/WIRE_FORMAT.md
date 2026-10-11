@@ -4,8 +4,9 @@ clang-dumper writes each translation unit as a stream of size-prefixed FlatBuffe
 `CLV2`). The schema lives in clang-dumper (`wire/v2/*.fbs`). Clava reads the stream in
 `pt.up.fe.specs.clang.wire` without generated code:
 
-- `WireSchema` loads the schema's binary reflection from `resources/pt/up/fe/specs/clang/wire/ast-wire.bfbs`, with
-  the release's schema hash in `ast-wire.sha256`. Streams whose header carries another hash are rejected.
+- `WireSchema` loads the schema's binary reflection (`ast-wire.bfbs`) and the release's schema hash
+  (`ast-wire.sha256`). The `wireSchema` Gradle task fetches both for the dumper selected in
+  `clang-dumper-release.tag`. Streams whose header carries another hash are rejected.
 - `NodeBindings` maps each node payload table onto Clava node data by name: table `FooData` fills class `Foo`, and
   field `bar_baz` fills the public `DataKey BAR_BAZ` named `barBaz`. A `base` field continues with the parent
   payload table. The key's declared type picks the conversion (node reference, `Optional`, `List`, enum by
@@ -22,15 +23,7 @@ Scalars are declared `= null`, so absence is visible; reading an absent field fa
    candidate.
 2. In Clava, add or rename the `DataKey`s the new fields need (and compound handling in `Compounds` for new
    compound tables).
-3. Select the release in `clang-dumper-release.tag`, regenerate the schema resource from the release's schema
-   bundle, and store its hash:
-
-   ```sh
-   flatc --binary --schema -o /tmp/bfbs wire/v2/complete.fbs
-   cp /tmp/bfbs/complete.bfbs ClangAstParser/resources/pt/up/fe/specs/clang/wire/ast-wire.bfbs
-   # ast-wire.sha256: the release manifest's wire_schema.sha256
-   ```
-
+3. Select the release in `clang-dumper-release.tag`.
 4. Run `gradle -p ClangAstParser test`. `NodeBindingsTest` binds every payload table, so a missing or mistyped key
    fails there.
 

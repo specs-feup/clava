@@ -25,9 +25,7 @@ import com.google.flatbuffers.reflection.Schema;
  * generated Java classes. Tables, fields and enums are looked up by their schema names.
  *
  * <p>
- * To update it for a new dumper release, run {@code flatc --binary --schema -o <this package's resources>
- * wire/v2/complete.fbs} on the release's schema bundle, rename the output to {@code ast-wire.bfbs} and store the
- * release's schema hash in {@code ast-wire.sha256}.
+ * The {@code wireSchema} Gradle task fetches both resources for the dumper selected in {@code clang-dumper-release.tag}.
  */
 public final class WireSchema {
 
