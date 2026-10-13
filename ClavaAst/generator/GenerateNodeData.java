@@ -113,7 +113,7 @@ public final class GenerateNodeData {
         var binding = new StringBuilder("/* Generated. Do not edit. */\npackage pt.up.fe.specs.clava.data;\n");
         // Different AST families use the same short names. Emit each binding in its own package instead.
         binding.append("public final class GeneratedNodeFields {\n")
-                .append(" public record Binding(org.suikasoft.jOptions.Datakey.DataKey<?> key, Class<?> valueType, Class<?> elementType, boolean nullable) {}\n")
+                .append(" public record Binding(org.suikasoft.jOptions.Datakey.DataKey<?> key, Class<?> valueType, Class<?> elementType, boolean nullable, int layout, int index) {\n  public void write(NodeDataStore store, Object value) { store.setParsed(layout, index, value); }\n }\n")
                 .append(" public static Binding binding(String table, String field) { return switch(table) {\n");
         for (var node : nodes) {
             var object = schema.objectsByKey("astwire.v2." + node.table());
@@ -211,7 +211,8 @@ public final class GenerateNodeData {
                 if (element != null && element.contains("<")) throw new IllegalStateException("Unsupported nested field type " + key.type());
                 source.append("  case \"").append(field.name()).append("\" -> new Binding(").append(key.name())
                         .append(", ").append(raw).append(".class, ").append(element == null ? "null" : element + ".class")
-                        .append(", ").append(key.nullable()).append(");\n");
+                        .append(", ").append(key.nullable()).append(", ").append(nodes.indexOf(node)).append(", ")
+                        .append(node.parent()).append(".WireFields.FIELD_COUNT + ").append(node.keys().indexOf(key)).append(");\n");
             }
             source.append("  default -> throw new IllegalArgumentException(\"Unknown wire field ").append(node.table())
                     .append(".\" + field);\n }; }\n}\n");

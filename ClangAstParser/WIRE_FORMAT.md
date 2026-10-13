@@ -40,7 +40,8 @@ access and parser fixups reach the same storage. The parser and factories start 
 copy of every decoded field. Its backing store has slots only for unbound properties; the public definition still
 lists all fields so generic traversal and copying remain complete. Presence bits are updated by typed writes,
 so generic `hasValue` and traversal do not dispatch through field readers. Construction definitions and layouts
-are cached together, without allocating a captured cache function for every node. Generic reads and writes
+are cached together, without allocating a captured cache function for every node. Schema-bound scalar parser writes use generated layout/index bindings directly, and root metadata uses
+typed initialization. Deferred node references retain the generic fixup API. Generic reads and writes
 dispatch to the declaring layout's final accessor through a generated switch, bypassing virtual state methods
 and inherited payload switches. Root fields use final hand-written accessors. Copies allocate typed storage directly. Copy and deep-copy retain the existing per-key
 rules; explicitly shared node views share their field state. Root identity, context, source-location metadata,

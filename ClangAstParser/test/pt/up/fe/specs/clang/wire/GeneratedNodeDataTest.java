@@ -251,6 +251,18 @@ class GeneratedNodeDataTest {
         assertSame(custom, node.getLocation());
     }
 
+    @Test
+    void schemaBoundParserWritesReachTypedFieldsAndGenericPresence() {
+        var data = NodeDataStore.create(BuiltinType.class);
+        var binding = pt.up.fe.specs.clava.data.GeneratedNodeFields.binding("BuiltinTypeData", "kind_literal");
+        binding.write(data, "parsed");
+        var node = new BuiltinType(data, List.of());
+        assertEquals("parsed", node.getWireKindLiteral());
+        assertEquals("parsed", data.get(BuiltinType.KIND_LITERAL));
+        assertTrue(data.hasValue(BuiltinType.KIND_LITERAL));
+        assertThrows(NullPointerException.class, () -> binding.write(data, null));
+    }
+
     private DataStore store(Class<?> nodeClass) {
         return DataStore.newInstance(StoreDefinitions.fromInterface(nodeClass), true)
                 .set(ClavaNode.CONTEXT, context).set(ClavaNode.ID, "test");

@@ -102,10 +102,7 @@ final class NodeBindings {
     /** Builds the data of node {@code id}, whose emitted class is {@code nodeClass}. */
     DataStore read(WireTable payload, Class<? extends ClavaNode> nodeClass, String id, Tu tu) {
         var store = NodeDataStore.create(nodeClass);
-        store.set(ClavaNode.CONTEXT, tu.data().get(ClangAstData.CONTEXT));
-        store.set(ClavaNode.ID, id);
-        store.set(ClavaNode.IS_MACRO, false);
-        store.set(ClavaNode.IS_IN_SYSTEM_HEADER, false);
+        store.state(ClavaNode.WireFields.class).initializeParsed(tu.data().get(ClangAstData.CONTEXT), id);
         WireTable table = payload;
         for (var level : levels) {
             for (var setter : level.setters) {
@@ -137,11 +134,8 @@ final class NodeBindings {
         return (table, store, tu) -> {
             var source = table.table(field);
             var range = source.table(expansion);
-            if (range != null) {
-                store.set(ClavaNode.LOCATION, tu.range(range));
-            }
-            store.set(ClavaNode.IS_MACRO, source.bool(isMacro));
-            store.set(ClavaNode.IS_IN_SYSTEM_HEADER, source.bool(inSystemHeader));
+            ((NodeDataStore) store).state(ClavaNode.WireFields.class).setParsedSource(
+                    range == null ? null : tu.range(range), source.bool(isMacro), source.bool(inSystemHeader));
         };
     }
 
@@ -178,10 +172,10 @@ final class NodeBindings {
             var reader = reader(field, element);
             if (field.type() == BaseType.String) {
                 // Required strings are always present; an empty spelling means "no value".
-                return (t, store, tu) -> store.set(key,
+                return (t, store, tu) -> binding.write((NodeDataStore) store,
                         Optional.ofNullable((String) reader.read(t, tu)).filter(value -> !value.isEmpty()));
             }
-            return (t, store, tu) -> store.set(key,
+            return (t, store, tu) -> binding.write((NodeDataStore) store,
                     t.has(field) ? Optional.of(reader.read(t, tu)) : Optional.empty());
         }
         if (List.class.isAssignableFrom(raw)) {
@@ -203,11 +197,11 @@ final class NodeBindings {
                 for (int i = 0; i < length; i++) {
                     values.add(reader.read(t, i, tu));
                 }
-                store.set(key, values);
+                binding.write((NodeDataStore) store, values);
             };
         }
         var reader = reader(field, raw);
-        return (t, store, tu) -> store.set(key, reader.read(t, tu));
+        return (t, store, tu) -> binding.write((NodeDataStore) store, reader.read(t, tu));
     }
 
     private static Reader reader(FieldSpec field, Class<?> type) {

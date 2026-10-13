@@ -238,6 +238,13 @@ public final class NodeDataStore implements DataStore {
         else GeneratedNodeFields.write(slot.tag(), state(slot.group()), slot.field(), value);
     }
 
+    /** Schema-bound parser values already have a reviewed layout and converted Java type. */
+    public void setParsed(int layout, int index, Object value) {
+        Objects.requireNonNull(value, "Use remove() to clear a node field");
+        if (states != null) throw new IllegalStateException("Parser writes require unshared node storage");
+        GeneratedNodeFields.write(layout, primary, index, value);
+    }
+
     @Override
     public <T> T get(DataKey<T> key) {
         var slot = slot(key.getName());

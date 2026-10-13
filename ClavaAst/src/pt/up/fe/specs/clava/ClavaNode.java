@@ -145,6 +145,28 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         private String previousId;
         private ClavaNode origin;
 
+        public final void initializeParsed(ClavaContext context, String id) {
+            this.context = java.util.Objects.requireNonNull(context);
+            this.id = java.util.Objects.requireNonNull(id);
+            isMacro = false;
+            isInSystemHeader = false;
+            mark(0, context);
+            mark(1, id);
+            mark(3, isMacro);
+            mark(5, isInSystemHeader);
+        }
+
+        public final void setParsedSource(SourceRange location, boolean macro, boolean systemHeader) {
+            if (location != null) {
+                this.location = location;
+                mark(2, location);
+            }
+            isMacro = macro;
+            isInSystemHeader = systemHeader;
+            mark(3, isMacro);
+            mark(5, isInSystemHeader);
+        }
+
         @Override public Object read(int index) { return readRoot(index); }
 
         public final Object readRoot(int index) {
