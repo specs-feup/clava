@@ -129,6 +129,21 @@ class GeneratedNodeDataTest {
         assertEquals("updated", original.getWireKindLiteral());
     }
 
+    @Test
+    void compactParserStorageKeepsTheFullPublicDefinitionAndCopyRules() {
+        var data = NodeDataStore.create(BuiltinType.class);
+        data.set(ClavaNode.CONTEXT, context).set(ClavaNode.ID, "compact").set(BuiltinType.KIND, BuiltinKind.Int);
+        assertEquals(StoreDefinitions.fromInterface(BuiltinType.class).getKeys(), data.getStoreDefinition().getKeys());
+        assertTrue(data.getStoreDefinition().hasKey(BuiltinType.KIND.getName()));
+        var copy = data.copy();
+        assertEquals(BuiltinKind.Int, copy.get(BuiltinType.KIND));
+        assertEquals("compact", copy.get(ClavaNode.ID));
+        assertSame(context, copy.get(ClavaNode.CONTEXT));
+        var node = new BuiltinType(data, List.of());
+        assertEquals(BuiltinKind.Int, node.getWireKind());
+        assertTrue(node.getDataKeysWithValues().contains(BuiltinType.KIND));
+    }
+
     private DataStore store(Class<?> nodeClass) {
         return DataStore.newInstance(StoreDefinitions.fromInterface(nodeClass), true)
                 .set(ClavaNode.CONTEXT, context).set(ClavaNode.ID, "test");

@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
+import pt.up.fe.specs.clava.ClavaNode;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
@@ -37,6 +38,7 @@ public final class NodeDataStore implements DataStore {
 
     private record Slot(int group, int field, DataKey<?> key) {}
     private static final Map<Class<?>, Shape> SHAPES = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, StoreDefinition> EXTRA_DEFINITIONS = new ConcurrentHashMap<>();
     private static final Map<List<Layout<?>>, Shape> SHARED_SHAPES = new ConcurrentHashMap<>();
 
     private static final class Shape {
@@ -59,11 +61,15 @@ public final class NodeDataStore implements DataStore {
     }
 
     private final DataStore extra;
+    private StoreDefinition definition;
     private Shape shape;
     private Fields[] states;
     private boolean strict;
 
-    private NodeDataStore(DataStore extra) { this.extra = extra; }
+    private NodeDataStore(DataStore extra) {
+        this.extra = extra;
+        definition = extra.getStoreDefinitionTry().orElse(null);
+    }
 
     public static NodeDataStore adapt(DataStore store) {
         return store instanceof NodeDataStore node ? node : new NodeDataStore(store);
@@ -77,7 +83,12 @@ public final class NodeDataStore implements DataStore {
 
     /** Parser construction starts with empty storage, so no per-field migration is needed. */
     public static NodeDataStore create(Class<?> nodeClass) {
-        var node = new NodeDataStore(DataStore.newInstance(StoreDefinitions.fromInterface(nodeClass), true));
+        var full = StoreDefinitions.fromInterface(nodeClass);
+        var shape = SHAPES.computeIfAbsent(nodeClass, NodeDataStore::discover);
+        var unbound = EXTRA_DEFINITIONS.computeIfAbsent(nodeClass, ignored -> StoreDefinition.newInstance(
+                full.getName(), full.getKeys().stream().filter(key -> !shape.slots.containsKey(key.getName())).toList()));
+        var node = new NodeDataStore(DataStore.newInstance(unbound, true));
+        node.definition = full;
         node.attach(nodeClass, false);
         return node;
     }
@@ -145,6 +156,8 @@ public final class NodeDataStore implements DataStore {
 
     @Override
     public <T> T get(DataKey<T> key) {
+        // Root identity and context never belong to generated payload layouts.
+        if (key == ClavaNode.ID || key == ClavaNode.CONTEXT) return extra.get(key);
         var slot = slot(key.getName());
         if (slot == null) return extra.get(key);
         T value = key.getValueClass().cast(read(slot));
@@ -207,8 +220,11 @@ public final class NodeDataStore implements DataStore {
 
     @Override public void setStrict(boolean value) { strict = value; extra.setStrict(value); }
     @Override public String getName() { return extra.getName(); }
-    @Override public Optional<StoreDefinition> getStoreDefinitionTry() { return extra.getStoreDefinitionTry(); }
-    @Override public void setStoreDefinition(StoreDefinition definition) { extra.setStoreDefinition(definition); }
+    @Override public Optional<StoreDefinition> getStoreDefinitionTry() { return Optional.ofNullable(definition); }
+    @Override public void setStoreDefinition(StoreDefinition definition) {
+        extra.setStoreDefinition(definition);
+        this.definition = definition;
+    }
     @Override public boolean isClosed() { return extra.isClosed(); }
     @Override public String toString() { return toInlinedString(); }
 }
