@@ -296,6 +296,13 @@ final class ProtoNodeDataReader {
     }
 
     private Object convertCompound(Message value, DataKey<?> key) {
+        if (value instanceof pt.up.fe.specs.clang.wire.SourceLocation location) {
+            if (!location.hasFile() || !location.hasLine() || !location.hasColumn()) {
+                throw new IllegalArgumentException("SourceLocation requires file, line and column");
+            }
+            return new pt.up.fe.specs.clava.SourceLocation(files.path(location.getFile()),
+                    Math.toIntExact(location.getLine()), Math.toIntExact(location.getColumn()), false);
+        }
         if (value instanceof pt.up.fe.specs.clang.wire.TemplateArgument argument) {
             return templateArgument(argument);
         }
