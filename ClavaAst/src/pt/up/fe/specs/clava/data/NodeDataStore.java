@@ -65,9 +65,12 @@ public final class NodeDataStore implements DataStore {
         final List<Layout<?>> layouts;
         final Map<Class<?>, Integer> groups = new HashMap<>();
         final Map<String, Slot> slots = new LinkedHashMap<>();
+        final boolean singleState;
 
         Shape(List<Layout<?>> layouts) {
             this.layouts = List.copyOf(layouts);
+            var leaf = layouts.isEmpty() ? null : layouts.getLast().type();
+            singleState = leaf != null && layouts.stream().allMatch(layout -> layout.type().isAssignableFrom(leaf));
             for (int group = 0; group < layouts.size(); group++) {
                 var layout = layouts.get(group);
                 groups.put(layout.type(), group);
@@ -83,6 +86,7 @@ public final class NodeDataStore implements DataStore {
     private final DataStore extra;
     private StoreDefinition definition;
     private Shape shape;
+    private Fields primary;
     private Fields[] states;
     private boolean strict;
 
@@ -143,6 +147,13 @@ public final class NodeDataStore implements DataStore {
 
     private void attach(Shape target, boolean transferValues) {
         if (shape == target || shape != null && shape.layouts.containsAll(target.layouts)) return;
+        if (shape == null && target.singleState) {
+            primary = createState(target.layouts.getLast());
+            shape = target;
+            if (transferValues) migrate(null);
+            return;
+        }
+        var previousShape = shape;
         var next = target;
         if (shape != null) {
             var layouts = new ArrayList<>(shape.layouts);
@@ -156,7 +167,7 @@ public final class NodeDataStore implements DataStore {
             var layout = next.layouts.get(group);
             Integer previous = shape == null ? null : shape.groups.get(layout.type());
             if (previous != null) {
-                nextStates[group] = states[previous];
+                nextStates[group] = state(previous);
                 continue;
             }
             if (fresh == null || !layout.type().isInstance(fresh)) {
@@ -164,45 +175,67 @@ public final class NodeDataStore implements DataStore {
                 for (int candidate = next.layouts.size() - 1; candidate >= 0; candidate--) {
                     var leaf = next.layouts.get(candidate);
                     if (layout.type().isAssignableFrom(leaf.type())) {
-                        fresh = leaf.create().get();
+                        fresh = createState(leaf);
                         break;
                     }
                 }
             }
             nextStates[group] = fresh;
         }
-        if (transferValues) for (var entry : next.slots.entrySet()) {
-            if (shape != null && shape.slots.containsKey(entry.getKey())) continue;
+        shape = next;
+        states = nextStates;
+        primary = nextStates.length == 0 ? null : nextStates[0];
+        if (transferValues) migrate(previousShape);
+    }
+
+    private static Fields createState(Layout<?> layout) {
+        return layout.tag() < 0 ? layout.create().get() : GeneratedNodeFields.create(layout.tag());
+    }
+
+    private void migrate(Shape previousShape) {
+        for (var entry : shape.slots.entrySet()) {
+            if (previousShape != null && previousShape.slots.containsKey(entry.getKey())) continue;
             var slot = entry.getValue();
             if (extra.hasValue(slot.key())) {
-                nextStates[slot.group()].write(slot.field(), extra.get(entry.getKey()));
+                write(slot, extra.get(entry.getKey()));
                 extra.remove(slot.key());
             }
         }
-        shape = next;
-        states = nextStates;
     }
 
     /** Used by generated constructors to retain their own typed state, including explicit shared views. */
     public <T extends Fields> T state(Class<T> type) {
-        return type.cast(states[shape.groups.get(type)]);
+        return type.cast(states == null ? primary : states[shape.groups.get(type)]);
     }
+
+    private Fields state(int group) { return states == null ? primary : states[group]; }
 
     /** Direct generated access avoids generic field lookup while retaining default and custom-getter rules. */
     public <T> T readGenerated(DataKey<T> key, T value) {
         if (value == null) return get(key);
+        return applyGeneratedGetter(key, value);
+    }
+
+    /** Generated callers initialize the actual field directly, without generic lookup or dispatch. */
+    public <T> T defaultGenerated(DataKey<T> key) {
+        if (strict) throw new IllegalStateException("Missing node field " + key.getName());
+        if (!key.hasDefaultValue()) throw new IllegalStateException("No default for " + key.getName());
+        return key.getDefault().orElse(null);
+    }
+
+    public <T> T applyGeneratedGetter(DataKey<T> key, T value) {
         var getter = key.getCustomGetter();
         return getter.isPresent() ? getter.get().get(value, this) : value;
     }
 
     private Slot slot(String name) { return shape == null ? null : shape.slots.get(name); }
     private Object read(Slot slot) {
-        return slot.group() == 0 ? ((ClavaNode.WireFields) states[0]).readRoot(slot.field())
-                : GeneratedNodeFields.read(slot.tag(), states[slot.group()], slot.field());
+        return slot.group() == 0 ? ((ClavaNode.WireFields) primary).readRoot(slot.field())
+                : GeneratedNodeFields.read(slot.tag(), state(slot.group()), slot.field());
     }
     private void write(Slot slot, Object value) {
-        if (slot.group() == 0) ((ClavaNode.WireFields) states[0]).writeRoot(slot.field(), value);
-        else GeneratedNodeFields.write(slot.tag(), states[slot.group()], slot.field(), value);
+        if (slot.group() == 0) ((ClavaNode.WireFields) primary).writeRoot(slot.field(), value);
+        else GeneratedNodeFields.write(slot.tag(), state(slot.group()), slot.field(), value);
     }
 
     @Override
@@ -211,9 +244,7 @@ public final class NodeDataStore implements DataStore {
         if (slot == null) return extra.get(key);
         T value = key.getValueClass().cast(read(slot));
         if (value == null) {
-            if (strict) throw new IllegalStateException("Missing node field " + key.getName());
-            if (!key.hasDefaultValue()) throw new IllegalStateException("No default for " + key.getName());
-            value = key.getDefault().orElse(null);
+            value = defaultGenerated(key);
             write(slot, value);
         }
         var getter = key.getCustomGetter();
@@ -259,13 +290,13 @@ public final class NodeDataStore implements DataStore {
     @Override
     public <T> boolean hasValue(DataKey<T> key) {
         var slot = slot(key.getName());
-        return slot == null ? extra.hasValue(key) : states[slot.group()].has(slot.field());
+        return slot == null ? extra.hasValue(key) : state(slot.group()).has(slot.field());
     }
 
     @Override
     public Collection<String> getKeysWithValues() {
         var keys = new LinkedHashSet<>(extra.getKeysWithValues());
-        if (shape != null) shape.slots.forEach((name, slot) -> { if (states[slot.group()].has(slot.field())) keys.add(name); });
+        if (shape != null) shape.slots.forEach((name, slot) -> { if (state(slot.group()).has(slot.field())) keys.add(name); });
         return keys;
     }
 

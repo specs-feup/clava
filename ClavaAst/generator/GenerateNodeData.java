@@ -152,6 +152,9 @@ public final class GenerateNodeData {
                 source.append(" public static final DataKey<").append(key.type()).append("> ")
                         .append(key.name()).append(" = ").append(key.initializer()).append(";\n");
             }
+            for (var key : node.keys()) source.append(" private static final org.suikasoft.jOptions.Datakey.CustomGetter<")
+                    .append(key.type()).append("> ").append(key.name()).append("_GETTER = ").append(key.name())
+                    .append(".getCustomGetter().orElse(null);\n");
             source.append(" public record Values(")
                     .append(String.join(", ", node.keys().stream().map(key -> key.type() + " " + member(key)).toList()))
                     .append(") {}\n");
@@ -168,7 +171,7 @@ public final class GenerateNodeData {
             for (int i = 0; i < node.keys().size(); i++) source.append("   case ").append(node.parent()).append(".WireFields.FIELD_COUNT + ").append(i).append(" -> this.")
                     .append(member(node.keys().get(i))).append(" = (").append(node.keys().get(i).type()).append(") value;\n");
             source.append("   default -> throw new IllegalArgumentException(\"Unknown field index \" + index);\n  }\n  mark(index, value);\n }\n")
-                    .append(" }\n public static final NodeDataStore.Layout<WireFields> WIRE_LAYOUT = new NodeDataStore.Layout<>(WireFields.class, WireFields::new, java.util.List.of(")
+                    .append(" }\n public static final NodeDataStore.Layout<WireFields> WIRE_LAYOUT = new NodeDataStore.Layout<>(WireFields.class, null, java.util.List.of(")
                     .append(String.join(", ", node.keys().stream().map(Key::name).toList())).append("), ").append(node.parent()).append(".WireFields.FIELD_COUNT, ").append(nodes.indexOf(node)).append(");\n")
                     .append(" private final WireFields fields;\n")
                     .append(" protected ").append(node.className()).append("Base(DataStore data, java.util.Collection<? extends pt.up.fe.specs.clava.ClavaNode> children) {\n")
@@ -185,7 +188,12 @@ public final class GenerateNodeData {
             for (var key : node.keys()) {
                 var method = accessor(key);
                 source.append(" public final ").append(key.type()).append(" getWire").append(method)
-                        .append("() { return getNodeStorage().readGenerated(").append(key.name()).append(", fields.").append(member(key)).append("); }\n")
+                        .append("() {\n  if (fields.").append(member(key)).append(" == null) {\n")
+                        .append("   fields.").append(member(key)).append(" = getNodeStorage().defaultGenerated(").append(key.name()).append(");\n")
+                        .append("   fields.mark(").append(node.parent()).append(".WireFields.FIELD_COUNT + ").append(node.keys().indexOf(key))
+                        .append(", fields.").append(member(key)).append(");\n  }\n")
+                        .append("  return ").append(key.name()).append("_GETTER == null ? fields.").append(member(key))
+                        .append(" : ").append(key.name()).append("_GETTER.get(fields.").append(member(key)).append(", getNodeStorage());\n }\n")
                         .append(" public final ").append(node.className()).append(" setWire").append(method)
                         .append("(").append(key.type()).append(" value) { return (").append(node.className())
                         .append(") set(").append(key.name()).append(", value); }\n");
@@ -212,6 +220,10 @@ public final class GenerateNodeData {
         }
         binding.append("  default -> throw new IllegalArgumentException(\"No generated data binding for \" + table);\n }; }\n");
         // Generic access dispatches by the declaring layout, never by the concrete state's virtual read/write.
+        binding.append(" public static NodeDataStore.Fields create(int layout) { return switch(layout) {\n");
+        for (int i = 0; i < nodes.size(); i++) binding.append("  case ").append(i).append(" -> new ")
+                .append(nodes.get(i).qualified()).append("Base.WireFields();\n");
+        binding.append("  default -> throw new IllegalArgumentException(\"Unknown generated layout \" + layout);\n }; }\n");
         binding.append(" public static Object read(int layout, NodeDataStore.Fields state, int field) { return switch(layout) {\n");
         for (int i = 0; i < nodes.size(); i++) {
             var node = nodes.get(i);

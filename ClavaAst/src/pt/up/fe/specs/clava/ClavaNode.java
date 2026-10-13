@@ -31,6 +31,7 @@ import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.DataStore.GenericDataClass;
 import org.suikasoft.jOptions.DataStore.ListDataStore;
 import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.CustomGetter;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
@@ -125,6 +126,12 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     public final static DataKey<ClavaNode> ORIGIN = KeyFactory.object("origin", ClavaNode.class);
 
     /// DATAKEYS END
+
+    // DataKeys are immutable, so these hooks are fixed for the lifetime of each declared key.
+    private static final CustomGetter<ClavaContext> CONTEXT_GETTER = CONTEXT.getCustomGetter().orElse(null);
+    private static final CustomGetter<String> ID_GETTER = ID.getCustomGetter().orElse(null);
+    private static final CustomGetter<SourceRange> LOCATION_GETTER = LOCATION.getCustomGetter().orElse(null);
+    private static final CustomGetter<String> PREVIOUS_ID_GETTER = PREVIOUS_ID.getCustomGetter().orElse(null);
 
     /** Hand-written root fields share the same inherited state as generated payload fields. */
     public static class WireFields extends NodeDataStore.Fields {
@@ -262,7 +269,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public SourceRange getLocation() {
-        return dataI.readGenerated(LOCATION, wireFields.location);
+        return readLocation();
+    }
+
+    private SourceRange readLocation() {
+        if (wireFields.location == null) {
+            wireFields.location = dataI.defaultGenerated(LOCATION);
+            wireFields.mark(2, wireFields.location);
+        }
+        return LOCATION_GETTER == null ? wireFields.location : LOCATION_GETTER.get(wireFields.location, dataI);
     }
 
     public Optional<String> getExtendedId() {
@@ -270,7 +285,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public String getId() {
-        return dataI.readGenerated(ID, wireFields.id);
+        return readId();
+    }
+
+    private String readId() {
+        if (wireFields.id == null) {
+            wireFields.id = dataI.defaultGenerated(ID);
+            wireFields.mark(1, wireFields.id);
+        }
+        return ID_GETTER == null ? wireFields.id : ID_GETTER.get(wireFields.id, dataI);
     }
 
     /**
@@ -347,7 +370,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public Optional<SourceRange> getLocationTry() {
-        return Optional.of(getLocation());
+        return Optional.of(get(LOCATION));
     }
 
     protected void throwNoCodeGeneration() {
@@ -596,7 +619,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public ClavaFactory getFactory() {
-        return getContext().get(ClavaContext.FACTORY);
+        return readContext().get(ClavaContext.FACTORY);
     }
 
     /**
@@ -606,8 +629,20 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      * @return
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T get(DataKey<T> key) {
         try {
+            if (key == ID) return (T) readId();
+            if (key == LOCATION) return (T) readLocation();
+            if (key == CONTEXT) return (T) readContext();
+            if (key == PREVIOUS_ID) {
+                if (wireFields.previousId == null) {
+                    wireFields.previousId = dataI.defaultGenerated(PREVIOUS_ID);
+                    wireFields.mark(6, wireFields.previousId);
+                }
+                return (T) (PREVIOUS_ID_GETTER == null ? wireFields.previousId
+                        : PREVIOUS_ID_GETTER.get(wireFields.previousId, dataI));
+            }
             T value = dataI.get(key);
 
             // // Ignore ImplicitCasts
@@ -687,7 +722,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public ClavaContext getContext() {
-        return dataI.readGenerated(CONTEXT, wireFields.context);
+        return readContext();
+    }
+
+    private ClavaContext readContext() {
+        if (wireFields.context == null) {
+            wireFields.context = dataI.defaultGenerated(CONTEXT);
+            wireFields.mark(0, wireFields.context);
+        }
+        return CONTEXT_GETTER == null ? wireFields.context : CONTEXT_GETTER.get(wireFields.context, dataI);
     }
 
     /**

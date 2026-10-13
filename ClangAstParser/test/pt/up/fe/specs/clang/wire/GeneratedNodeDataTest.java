@@ -193,9 +193,9 @@ class GeneratedNodeDataTest {
             @Override public Object read(int index) { throw new AssertionError("Virtual read dispatch"); }
             @Override public void write(int index, Object value) { throw new AssertionError("Virtual write dispatch"); }
         };
-        var statesField = NodeDataStore.class.getDeclaredField("states");
-        statesField.setAccessible(true);
-        java.util.Arrays.fill((NodeDataStore.Fields[]) statesField.get(data), state);
+        var primaryField = NodeDataStore.class.getDeclaredField("primary");
+        primaryField.setAccessible(true);
+        primaryField.set(data, state);
         data.set(ClavaNode.ID, "direct-root");
         data.set(Type.TYPE_AS_STRING, "typed-parent");
         data.set(BuiltinType.KIND, BuiltinKind.Int);
@@ -214,6 +214,41 @@ class GeneratedNodeDataTest {
         node.setWireValue(java.math.BigInteger.ONE);
         node.set(IntegerLiteral.VALUE, java.math.BigInteger.TEN);
         assertFalse(node.hasValue(IntegerLiteral.VALUE));
+    }
+
+    @Test
+    void directDefaultsHonorStrictnessAndApplyCustomGettersExactlyOnce() {
+        var data = NodeDataStore.create(BuiltinType.class);
+        var node = new BuiltinType(data, List.of());
+        data.setStrict(true);
+        assertThrows(IllegalStateException.class, node::getWireKindLiteral);
+        assertThrows(IllegalStateException.class, node::getLocation);
+        assertFalse(data.hasValue(BuiltinType.KIND_LITERAL));
+        assertFalse(data.hasValue(ClavaNode.LOCATION));
+        data.setStrict(false);
+        var decorated = BuiltinType.KIND_LITERAL.setCustomGetter((value, store) -> "display:" + value);
+        assertEquals("", node.getWireKindLiteral());
+        assertEquals("display:", data.applyGeneratedGetter(decorated, node.getWireKindLiteral()));
+        assertEquals("display:", data.get(decorated));
+        assertEquals("display:", node.get(decorated));
+        assertEquals("", data.get(BuiltinType.KIND_LITERAL.getName()));
+        assertTrue(data.hasValue(BuiltinType.KIND_LITERAL));
+        assertSame(node.getLocation(), node.get(ClavaNode.LOCATION));
+        assertTrue(data.hasValue(ClavaNode.LOCATION));
+    }
+
+    @Test
+    void genericLocationKeepsStoredDataWhenBehaviorOverridesItsLocation() {
+        var data = store(BuiltinType.class);
+        var stored = pt.up.fe.specs.clava.SourceRange.invalidRange();
+        var custom = pt.up.fe.specs.clava.SourceRange.newCustomLocation("<override>");
+        data.set(ClavaNode.LOCATION, stored);
+        var node = new BuiltinType(data, List.of()) {
+            @Override public pt.up.fe.specs.clava.SourceRange getLocation() { return custom; }
+        };
+        assertSame(stored, node.get(ClavaNode.LOCATION));
+        assertSame(stored, node.getLocationTry().orElseThrow());
+        assertSame(custom, node.getLocation());
     }
 
     private DataStore store(Class<?> nodeClass) {

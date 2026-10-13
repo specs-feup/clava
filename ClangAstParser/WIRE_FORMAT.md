@@ -32,14 +32,17 @@ fields to behavior classes. Field documentation is carried into generated code.
 per behavior class. Generated states inherit their parent's fields, so a normal node allocates one typed state
 for its complete hierarchy, including the hand-written root fields. Explicit views of another hierarchy retain
 the original shared states and allocate only the added branch. There are no per-field callbacks or binding maps.
-Generated getters read those states directly, with the existing default and custom-getter rules. Generic key
-access and parser fixups reach the same storage. The parser starts with empty typed storage, avoiding a second
+Generated getters read those states directly and initialize defaults in the actual field without generic lookup.
+Custom hooks are cached from immutable keys, so ordinary reads do not inspect DataKey metadata. Strict mode and
+custom-getter rules are preserved. Normal nodes retain one state reference; arrays and group lookups are used
+only when explicit shared views add another branch. State construction uses a generated dense factory switch. Generic key
+access and parser fixups reach the same storage. The parser and factories start with empty typed storage, avoiding a second
 copy of every decoded field. Its backing store has slots only for unbound properties; the public definition still
 lists all fields so generic traversal and copying remain complete. Presence bits are updated by typed writes,
 so generic `hasValue` and traversal do not dispatch through field readers. Construction definitions and layouts
 are cached together, without allocating a captured cache function for every node. Generic reads and writes
 dispatch to the declaring layout's final accessor through a generated switch, bypassing virtual state methods
-and inherited payload switches. Root fields use final hand-written accessors. Copy and deep-copy retain the existing per-key
+and inherited payload switches. Root fields use final hand-written accessors. Copies allocate typed storage directly. Copy and deep-copy retain the existing per-key
 rules; explicitly shared node views share their field state. Root identity, context, source-location metadata,
 and Clava-only nodes remain hand-written. Root ID, location and context getters read the same typed state directly.
 
