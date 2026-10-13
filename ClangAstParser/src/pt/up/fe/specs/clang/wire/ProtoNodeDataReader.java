@@ -477,7 +477,11 @@ final class ProtoNodeDataReader {
     private ExplicitSpecifier explicitSpecifier(pt.up.fe.specs.clang.wire.ExplicitSpecifier value) {
         var result = new ExplicitSpecifier();
         result.set(ExplicitSpecifier.KIND, enumValue(ExplicitSpecKind.class, value.getKind()));
-        queueOptional(result, value.getExpr(), ExplicitSpecifier.EXPR);
+        if (value.hasExpr()) {
+            queueOptional(result, value.getExpr(), ExplicitSpecifier.EXPR);
+        } else {
+            result.set(ExplicitSpecifier.EXPR, Optional.empty());
+        }
         result.set(ExplicitSpecifier.IS_SPECIFIED, value.getIsSpecified());
         return result;
     }

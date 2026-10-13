@@ -17,11 +17,12 @@ STRUCTURAL_FIELDS = {
     "NodeData": {"source"},
     "AlignedAttrData": {"is_expression", "alignment"},
 }
-NESTED_OPTIONAL_MESSAGES = {
+NESTED_OPTIONAL_FIELDS = {
     ("SourceInfo", "expansion"),
     ("SourceInfo", "spelling"),
     ("TemplateExpansion", "template_name"),
     ("SubstitutedTemplateName", "replacement"),
+    ("ExplicitSpecifier", "expr"),
 }
 
 
@@ -406,7 +407,7 @@ def validate_body(message: descriptor_pb2.DescriptorProto, enums: dict[str, desc
 
         present = f"message.{has(field)}"
         if is_message(field):
-            optional = ((message.name, field.name) in NESTED_OPTIONAL_MESSAGES)
+            optional = ((message.name, field.name) in NESTED_OPTIONAL_FIELDS)
             if (message.name.endswith("Data") and field.name not in STRUCTURAL_FIELDS.get(message.name, set())
                     and node_class is not None):
                 key = field_key(node_class, field)
@@ -416,10 +417,12 @@ def validate_body(message: descriptor_pb2.DescriptorProto, enums: dict[str, desc
                 lines.append(f"if (!{present}) throw missing(\"{message.name}.{field.name}\", nodeClass);")
             lines.append(f"if ({present}) validate({access}, nodeClass);")
         else:
-            lines.append(f"if (!{present}) throw missing(\"{message.name}.{field.name}\", nodeClass);")
+            optional = (message.name, field.name) in NESTED_OPTIONAL_FIELDS
+            if not optional:
+                lines.append(f"if (!{present}) throw missing(\"{message.name}.{field.name}\", nodeClass);")
             if is_enum(field):
                 enum_type = short(field.type_name)
-                lines.append(f"if ({access} == {enum_type}.UNRECOGNIZED) "
+                lines.append(f"if ({present} && {access} == {enum_type}.UNRECOGNIZED) "
                              f"throw missing(\"{message.name}.{field.name} enum\", nodeClass);")
     return lines
 

@@ -40,7 +40,7 @@ public final class ProtoAstReader {
     private static final byte[] MAGIC = new byte[] { 'C', 'L', 'A', 'V', 'A', 'P', 'B', '1' };
     public static final String PROTOCOL_ID = "clava-ast-wire";
     public static final int PROTOCOL_MAJOR = 1;
-    public static final int PROTOCOL_MINOR = 3;
+    public static final int PROTOCOL_MINOR = 4;
     public static final String PRODUCER_VERSION = "clang-dumper-18";
     public static final int LLVM_MAJOR = 18;
 

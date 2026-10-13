@@ -18,10 +18,24 @@ import pt.up.fe.specs.clava.ast.expr.SourceLocExpr;
 import pt.up.fe.specs.clava.context.ClavaContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ProtoNodeDataReaderTest {
+
+    @Test
+    void acceptsAbsentOptionalExplicitSpecifierExpressionButRequiresItsKind() {
+        var explicitSpecifier = ExplicitSpecifier.newBuilder()
+                .setKind(ExplicitSpecKind.EXPLICITSPECKIND_RESOLVEDFALSE)
+                .setIsSpecified(false)
+                .build();
+
+        assertDoesNotThrow(() -> ProtoGeneratedBindings.validate(explicitSpecifier, "CXXConstructorDecl"));
+        assertThrows(IllegalArgumentException.class,
+                () -> ProtoGeneratedBindings.validate(explicitSpecifier.toBuilder().clearKind().build(),
+                        "CXXConstructorDecl"));
+    }
 
     @Test
     void mapsGeneratedNodeIntoTheExistingDataStore() {
