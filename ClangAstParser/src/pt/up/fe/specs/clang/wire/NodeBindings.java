@@ -15,8 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.storedefinition.StoreDefinition;
-import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
 
 import com.google.flatbuffers.reflection.BaseType;
 
@@ -42,7 +40,6 @@ import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 final class NodeBindings {
 
     private static final Map<TableSpec, NodeBindings> BINDINGS = new ConcurrentHashMap<>();
-    private static final Map<Class<?>, StoreDefinition> STORE_DEFINITIONS = new ConcurrentHashMap<>();
 
     /** Writes one field into the node data, possibly by queueing a reference for later resolution. */
     private interface Setter {
@@ -103,10 +100,8 @@ final class NodeBindings {
     }
 
     /** Builds the data of node {@code id}, whose emitted class is {@code nodeClass}. */
-    @SuppressWarnings("unchecked")
     DataStore read(WireTable payload, Class<? extends ClavaNode> nodeClass, String id, Tu tu) {
-        var store = NodeDataStore.adapt(DataStore.newInstance(STORE_DEFINITIONS.computeIfAbsent(nodeClass,
-                aClass -> StoreDefinitions.fromInterface((Class<ClavaNode>) aClass)), true));
+        var store = NodeDataStore.create(nodeClass);
         store.set(ClavaNode.CONTEXT, tu.data().get(ClangAstData.CONTEXT));
         store.set(ClavaNode.ID, id);
         store.set(ClavaNode.IS_MACRO, false);

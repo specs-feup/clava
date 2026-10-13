@@ -1,29 +1,66 @@
 /* Copyright 2026 SPeCS. Licensed under the Apache License, Version 2.0. */
 package pt.up.fe.specs.clava.data;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
+import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
 
 /**
- * A compatibility view over generated node fields. Unbound, Clava-only properties stay in the supplied store.
- * Parser fixups, generic visitors and factories use this same view, so there is only one value per property.
- * Sharing a view shares its generated state; copying uses DataStore's normal per-key copy functions.
+ * Generic access to generated node fields. Field layouts are immutable and shared between nodes. Each node
+ * keeps only its typed state objects; Clava-only properties remain in the supplied store. Parser fixups use
+ * this same view. Explicit shared views share states, and DataStore.copy retains the existing copy functions.
  */
 public final class NodeDataStore implements DataStore {
-    private record Field(Supplier<?> read, Consumer<Object> write) {}
+    /** Implemented by each generated base's typed state with small integer switches. */
+    public interface Fields {
+        Object read(int index);
+        void write(int index, Object value);
+    }
+
+    public record Layout<T extends Fields>(Class<T> type, Supplier<T> create, List<DataKey<?>> keys) {
+        public Layout { keys = List.copyOf(keys); }
+    }
+
+    private record Slot(int group, int field, DataKey<?> key) {}
+    private static final Map<Class<?>, Shape> SHAPES = new ConcurrentHashMap<>();
+    private static final Map<List<Layout<?>>, Shape> SHARED_SHAPES = new ConcurrentHashMap<>();
+
+    private static final class Shape {
+        final List<Layout<?>> layouts;
+        final Map<Class<?>, Integer> groups = new HashMap<>();
+        final Map<String, Slot> slots = new LinkedHashMap<>();
+
+        Shape(List<Layout<?>> layouts) {
+            this.layouts = List.copyOf(layouts);
+            for (int group = 0; group < layouts.size(); group++) {
+                var layout = layouts.get(group);
+                groups.put(layout.type(), group);
+                for (int field = 0; field < layout.keys().size(); field++) {
+                    var key = layout.keys().get(field);
+                    // Parent declarations own an already-bound name, matching shared DataStore semantics.
+                    slots.putIfAbsent(key.getName(), new Slot(group, field, key));
+                }
+            }
+        }
+    }
+
     private final DataStore extra;
-    private final Map<String, Field> fields = new HashMap<>();
-    private final Map<Class<?>, Object> states = new HashMap<>();
+    private Shape shape;
+    private Fields[] states;
     private boolean strict;
 
     private NodeDataStore(DataStore extra) { this.extra = extra; }
@@ -32,37 +69,93 @@ public final class NodeDataStore implements DataStore {
         return store instanceof NodeDataStore node ? node : new NodeDataStore(store);
     }
 
-    /** Each generated base owns a typed state, shared only when callers explicitly share node data. */
-    public <T> T state(Class<T> type, Supplier<T> create) {
-        return type.cast(states.computeIfAbsent(type, ignored -> create.get()));
+    public static NodeDataStore adapt(DataStore store, Class<?> nodeClass) {
+        var node = adapt(store);
+        node.attach(nodeClass);
+        return node;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> void bind(DataKey<T> key, Supplier<T> read, Consumer<T> write) {
-        if (fields.containsKey(key.getName())) {
-            throw new IllegalStateException("Duplicate generated field " + key.getName());
+    /** Parser construction starts with empty storage, so no per-field migration is needed. */
+    public static NodeDataStore create(Class<?> nodeClass) {
+        var node = new NodeDataStore(DataStore.newInstance(StoreDefinitions.fromInterface(nodeClass), true));
+        node.attach(nodeClass, false);
+        return node;
+    }
+
+    /** Discovers generated layouts once per behavior class, never once per node or per field access. */
+    private static Shape discover(Class<?> nodeClass) {
+        var layouts = new ArrayList<Layout<?>>();
+        for (Class<?> type = nodeClass; type != null; type = type.getSuperclass()) {
+            try {
+                layouts.add((Layout<?>) type.getDeclaredField("WIRE_LAYOUT").get(null));
+            } catch (NoSuchFieldException ignored) {
+                // Hand-written behavior and Clava-only node classes declare no layout.
+            } catch (IllegalAccessException e) {
+                throw new IllegalStateException("Cannot read generated layout for " + type, e);
+            }
         }
-        T value = extra.getTry(key).orElse(null);
-        write.accept(value);
-        extra.remove(key);
-        fields.put(key.getName(), new Field(read, raw -> write.accept((T) raw)));
+        Collections.reverse(layouts);
+        return new Shape(layouts);
     }
 
-    public boolean isBound(DataKey<?> key) { return fields.containsKey(key.getName()); }
+    private void attach(Class<?> nodeClass) { attach(nodeClass, true); }
+
+    private void attach(Class<?> nodeClass, boolean transferValues) {
+        var target = SHAPES.computeIfAbsent(nodeClass, NodeDataStore::discover);
+        if (shape == target || shape != null && shape.layouts.containsAll(target.layouts)) return;
+        var next = target;
+        if (shape != null) {
+            var layouts = new ArrayList<>(shape.layouts);
+            for (var layout : target.layouts) if (!layouts.contains(layout)) layouts.add(layout);
+            next = SHARED_SHAPES.computeIfAbsent(List.copyOf(layouts), Shape::new);
+        }
+        var nextStates = new Fields[next.layouts.size()];
+        for (int group = 0; group < nextStates.length; group++) {
+            var layout = next.layouts.get(group);
+            Integer previous = shape == null ? null : shape.groups.get(layout.type());
+            nextStates[group] = previous == null ? layout.create().get() : states[previous];
+        }
+        if (transferValues) for (var entry : next.slots.entrySet()) {
+            if (shape != null && shape.slots.containsKey(entry.getKey())) continue;
+            var slot = entry.getValue();
+            if (extra.hasValue(slot.key())) {
+                nextStates[slot.group()].write(slot.field(), extra.get(entry.getKey()));
+                extra.remove(slot.key());
+            }
+        }
+        shape = next;
+        states = nextStates;
+    }
+
+    /** Used by generated constructors to retain their own typed state, including explicit shared views. */
+    public <T extends Fields> T state(Class<T> type) {
+        return type.cast(states[shape.groups.get(type)]);
+    }
+
+    /** Direct generated access avoids generic field lookup while retaining default and custom-getter rules. */
+    public <T> T readGenerated(DataKey<T> key, T value) {
+        if (value == null) return get(key);
+        var getter = key.getCustomGetter();
+        return getter.isPresent() ? getter.get().get(value, this) : value;
+    }
+
+    private Slot slot(String name) { return shape == null ? null : shape.slots.get(name); }
+    private Object read(Slot slot) { return states[slot.group()].read(slot.field()); }
+    private void write(Slot slot, Object value) { states[slot.group()].write(slot.field(), value); }
 
     @Override
     public <T> T get(DataKey<T> key) {
-        var field = fields.get(key.getName());
-        if (field == null) return extra.get(key);
-        T value = key.getValueClass().cast(field.read().get());
+        var slot = slot(key.getName());
+        if (slot == null) return extra.get(key);
+        T value = key.getValueClass().cast(read(slot));
         if (value == null) {
             if (strict) throw new IllegalStateException("Missing node field " + key.getName());
             if (!key.hasDefaultValue()) throw new IllegalStateException("No default for " + key.getName());
             value = key.getDefault().orElse(null);
-            field.write().accept(value);
+            write(slot, value);
         }
-        T result = value;
-        return key.getCustomGetter().map(getter -> getter.get(result, this)).orElse(result);
+        var getter = key.getCustomGetter();
+        return getter.isPresent() ? getter.get().get(value, this) : value;
     }
 
     @Override
@@ -77,49 +170,45 @@ public final class NodeDataStore implements DataStore {
 
     @Override
     public Optional<Object> setRaw(String key, Object value) {
-        var field = fields.get(key);
-        if (field == null) return extra.setRaw(key, value);
-        var previous = Optional.ofNullable(field.read().get());
-        field.write().accept(value);
+        var slot = slot(key);
+        if (slot == null) return extra.setRaw(key, value);
+        var previous = Optional.ofNullable(read(slot));
+        write(slot, value);
         return previous;
     }
 
     @Override
     public Object get(String key) {
-        var field = fields.get(key);
-        return field == null ? extra.get(key) : field.read().get();
+        var slot = slot(key);
+        return slot == null ? extra.get(key) : read(slot);
     }
 
     @Override
     public <T> Optional<T> remove(DataKey<T> key) {
-        if (!isBound(key)) return extra.remove(key);
+        var slot = slot(key.getName());
+        if (slot == null) return extra.remove(key);
         var previous = getTry(key);
-        setRaw(key.getName(), null);
+        write(slot, null);
         return previous;
     }
 
     @Override
     public <T> boolean hasValue(DataKey<T> key) {
-        return isBound(key) ? fields.get(key.getName()).read().get() != null : extra.hasValue(key);
+        var slot = slot(key.getName());
+        return slot == null ? extra.hasValue(key) : read(slot) != null;
     }
 
     @Override
     public Collection<String> getKeysWithValues() {
         var keys = new LinkedHashSet<>(extra.getKeysWithValues());
-        fields.forEach((name, field) -> { if (field.read().get() != null) keys.add(name); });
+        if (shape != null) shape.slots.forEach((name, slot) -> { if (read(slot) != null) keys.add(name); });
         return keys;
     }
 
-    @Override
-    public void setStrict(boolean value) { strict = value; extra.setStrict(value); }
-    @Override
-    public String getName() { return extra.getName(); }
-    @Override
-    public Optional<StoreDefinition> getStoreDefinitionTry() { return extra.getStoreDefinitionTry(); }
-    @Override
-    public void setStoreDefinition(StoreDefinition definition) { extra.setStoreDefinition(definition); }
-    @Override
-    public boolean isClosed() { return extra.isClosed(); }
-    @Override
-    public String toString() { return toInlinedString(); }
+    @Override public void setStrict(boolean value) { strict = value; extra.setStrict(value); }
+    @Override public String getName() { return extra.getName(); }
+    @Override public Optional<StoreDefinition> getStoreDefinitionTry() { return extra.getStoreDefinitionTry(); }
+    @Override public void setStoreDefinition(StoreDefinition definition) { extra.setStoreDefinition(definition); }
+    @Override public boolean isClosed() { return extra.isClosed(); }
+    @Override public String toString() { return toInlinedString(); }
 }

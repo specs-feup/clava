@@ -28,8 +28,11 @@ nullable references, and Clava-only properties on these classes. The wire stores
 so it cannot supply those Java types. Update this contract rather than editing generated files or adding
 fields to behavior classes. Field documentation is carried into generated code.
 
-`NodeDataStore` is the compatibility view for generic operations. It routes existing key access and parser
-fixups to the same typed storage used by generated accessors. Copy and deep-copy retain the existing per-key
+`NodeDataStore` is the compatibility view for generic operations. Generated immutable field layouts are shared
+per behavior class; individual nodes keep their typed state objects without per-field callbacks or binding maps.
+Generated getters read those states directly, with the existing default and custom-getter rules. Generic key
+access and parser fixups reach the same storage. The parser starts with empty typed storage, avoiding a second
+copy of every decoded field. Copy and deep-copy retain the existing per-key
 rules; explicitly shared node views share their field state. Root identity, context, source-location metadata,
 and Clava-only nodes remain hand-written.
 

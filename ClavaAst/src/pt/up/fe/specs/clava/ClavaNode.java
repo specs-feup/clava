@@ -141,7 +141,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
                 || dataI instanceof NodeDataStore,
                 () -> "Expected ListDataStore, found  " + dataI.getClass());
 
-        this.dataI = NodeDataStore.adapt(dataI);
+        this.dataI = NodeDataStore.adapt(dataI, getClass());
         disableModification = false;
 
         // Set definition of DataStore

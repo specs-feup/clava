@@ -61,6 +61,19 @@ class GeneratedNodeDataTest {
     }
 
     @Test
+    void generatedFieldsNamedValueAndIndexAreNotShadowedByAdapterArguments() {
+        var literal = context.getFactory().integerLiteral(42);
+        assertEquals(java.math.BigInteger.valueOf(42), literal.getWireValue());
+        literal.set(IntegerLiteral.VALUE, java.math.BigInteger.valueOf(17));
+        assertEquals(java.math.BigInteger.valueOf(17), literal.getWireValue());
+        var parameter = new pt.up.fe.specs.clava.ast.type.TemplateTypeParmType(
+                store(pt.up.fe.specs.clava.ast.type.TemplateTypeParmType.class), List.of());
+        parameter.setWireIndex(3);
+        assertEquals(3, parameter.getWireIndex());
+        assertEquals(3, parameter.get(pt.up.fe.specs.clava.ast.type.TemplateTypeParmType.INDEX));
+    }
+
+    @Test
     void typedValueConstructorCreatesTheBehaviorSubclass() {
         var data = store(BuiltinType.class);
         var values = new pt.up.fe.specs.clava.ast.type.BuiltinTypeBase.Values(BuiltinKind.Int, "typed");
@@ -102,6 +115,18 @@ class GeneratedNodeDataTest {
         var deep = (PointerType) pointer.deepCopy();
         assertNotSame(pointer.getWirePointeeType(), deep.getWirePointeeType());
         assertEquals(pointer.getCode(), deep.getCode());
+    }
+
+    @Test
+    void viewsOfAnotherBehaviorClassKeepExistingTypedStateReferences() {
+        var original = context.getFactory().builtinType("int");
+        var sameClassView = original.newInstance(true, true, BuiltinType.class, new ArrayList<>());
+        var pointerView = original.newInstance(true, true, PointerType.class, new ArrayList<>());
+        pointerView.setWireTypeAsString("changed");
+        assertEquals("changed", original.getWireTypeAsString());
+        assertEquals("changed", sameClassView.getWireTypeAsString());
+        sameClassView.setWireKindLiteral("updated");
+        assertEquals("updated", original.getWireKindLiteral());
     }
 
     private DataStore store(Class<?> nodeClass) {
