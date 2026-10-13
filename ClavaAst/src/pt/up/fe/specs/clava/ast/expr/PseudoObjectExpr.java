@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -28,10 +26,13 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JoaoBispo
  *
  */
-public class PseudoObjectExpr extends Expr {
+public class PseudoObjectExpr extends PseudoObjectExprBase {
 
-	public static final DataKey<Integer> RESULT_EXPR_INDEX = KeyFactory.integer("resultExprIndex");
-	
+    public PseudoObjectExpr(DataStore data, java.util.Collection<? extends ClavaNode> children, PseudoObjectExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
+
     public PseudoObjectExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
@@ -39,18 +40,18 @@ public class PseudoObjectExpr extends Expr {
     public Expr getSyntaticForm() {
     	return getChild(Expr.class, 0);
     }
-    
+
     public Optional<Expr> getResultExpr() {
-    	var exprIndex = get(RESULT_EXPR_INDEX);
-    	
+        var exprIndex = getWireResultExprIndex();
+
     	if(exprIndex == -1) {
     		return Optional.empty();
     	}
-    	
+
     	return Optional.of(getChild(Expr.class, exprIndex+1));
-    	
+
     }
-    
+
     @Override
     public String getCode() {
     	return getSyntaticForm().getCode();
@@ -61,7 +62,7 @@ public class PseudoObjectExpr extends Expr {
 //        	System.out.println("CHILD "+i+": " + getChild(i).getCode());
 //    	}
 //    	
-//    	System.out.println("INDEX: " + get(RESULT_EXPR_INDEX));
+//    	System.out.println("INDEX: " + getWireResultExprIndex());
 //
 //    	return super.getCode();
     }

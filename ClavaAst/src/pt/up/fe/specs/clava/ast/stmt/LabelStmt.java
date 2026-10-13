@@ -13,8 +13,6 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -23,23 +21,25 @@ import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 import java.util.Collection;
 import java.util.Optional;
 
-public class LabelStmt extends Stmt {
-    /// DATAKEYS BEGIN
+public class LabelStmt extends LabelStmtBase {
 
-    public final static DataKey<LabelDecl> LABEL = KeyFactory.object("label", LabelDecl.class);
+    // Data declarations are generated from the wire schema in LabelStmtBase.
 
-    /// DATAKEYS END
+    public LabelStmt(DataStore data, Collection<? extends ClavaNode> children, LabelStmtBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public LabelStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public String getLabel() {
-        return get(LABEL).getDeclName();
+        return getWireLabel().getDeclName();
     }
 
     public LabelDecl getLabelDecl() {
-        return get(LABEL);
+        return getWireLabel();
     }
 
     public void setLabelDecl(LabelDecl labelDecl) {

@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.attr;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -25,19 +23,14 @@ import pt.up.fe.specs.clava.ast.attr.enums.AlignedAttrKind;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
 
-public abstract class AlignedAttr extends InheritableAttr {
+public abstract class AlignedAttr extends AlignedAttrBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in AlignedAttrBase.
 
-    public final static DataKey<String> SPELLING = KeyFactory.string("spelling");
-    public final static DataKey<AlignedAttrKind> ALIGNED_ATTR_KIND = KeyFactory
-            .enumeration("alignedAttrKind", AlignedAttrKind.class);
-
-    // These keys are for the derived classes
-    public final static DataKey<Optional<Expr>> EXPR = KeyFactory.optional("expr");
-    public final static DataKey<Type> TYPE = KeyFactory.object("type", Type.class);
-
-    /// DATAKEYS END
+    public AlignedAttr(DataStore data, Collection<? extends ClavaNode> children, AlignedAttrBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public AlignedAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -61,13 +54,13 @@ public abstract class AlignedAttr extends InheritableAttr {
     /*
     @Override
     public String getCode() {
-    
+
         String value = getValueCode()
                 .map(code -> " (" + code + ")")
                 .orElse("");
-    
+
         String alignedCode = "aligned" + value;
-    
+
         return getAttributeCode(alignedCode);
     }
     */

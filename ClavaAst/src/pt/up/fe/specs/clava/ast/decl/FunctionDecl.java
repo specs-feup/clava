@@ -13,8 +13,6 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -51,73 +49,14 @@ import java.util.stream.Collectors;
  *
  * @author JoaoBispo
  */
-public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
+public class FunctionDecl extends FunctionDeclBase implements NodeWithScope {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in FunctionDeclBase.
 
-    /**
-     * True if this is a (C++11) constexpr function or constexpr constructor.
-     */
-    public final static DataKey<Boolean> IS_CONSTEXPR = KeyFactory.bool("isConstexpr");
-
-    /**
-     * The kind of templated function.
-     */
-    public final static DataKey<TemplateKind> TEMPLATE_KIND = KeyFactory
-            .enumeration("templateKind", TemplateKind.class)
-            .setDefault(() -> TemplateKind.NON_TEMPLATE);
-
-    /**
-     * The storage class as written in the source.
-     */
-    public final static DataKey<StorageClass> STORAGE_CLASS = KeyFactory
-            .enumeration("storageClass", StorageClass.class)
-            .setDefault(() -> StorageClass.None);
-
-    /**
-     * True if the "inline" keyword was specified for this function.
-     */
-    public final static DataKey<Boolean> IS_INLINE_SPECIFIED = KeyFactory.bool("isInlineSpecified");
-
-    /**
-     * True if this function is explicitly marked as virtual.
-     */
-    public final static DataKey<Boolean> IS_VIRTUAL_AS_WRITTEN = KeyFactory.bool("isVirtualAsWritten");
-
-    /**
-     * True if this virtual function is pure, i.e. makes the containing class abstract.
-     */
-    public final static DataKey<Boolean> IS_PURE = KeyFactory.bool("isPure");
-
-    /**
-     * True if this function was deleted (via the C++0x "= delete" syntax).
-     */
-    public final static DataKey<Boolean> IS_DELETED = KeyFactory.bool("isDeleted");
-
-    /**
-     * True if this function is explicitly defaulted (via the C++0x "= default" syntax).
-     */
-    public final static DataKey<Boolean> IS_EXPLICITLY_DEFAULTED = KeyFactory.bool("isExplicitlyDefaulted");
-
-    // TODO: Change to FunctionDecl when refactoring is complete
-    public final static DataKey<Optional<Decl>> PREVIOUS_DECL = KeyFactory.optional("previousDecl");
-
-    // TODO: Change to FunctionDecl when refactoring is complete
-    public final static DataKey<Decl> CANONICAL_DECL = KeyFactory.object("canonicalDecl", Decl.class);
-
-    public final static DataKey<Optional<FunctionDecl>> PRIMARY_TEMPLATE_DECL = KeyFactory
-            .optional("primaryTemplateDecl");
-
-    /**
-     * Template arguments of this function, if any.
-     */
-    public final static DataKey<List<TemplateArgument>> TEMPLATE_ARGUMENTS = KeyFactory
-            .generic("templateArguments", (List<TemplateArgument>) new ArrayList<TemplateArgument>());
-
-    public static final DataKey<List<NamedDecl>> TEMPLATE_PARAMETERS = KeyFactory.list("templateParameters", NamedDecl.class);
-    public static final DataKey<List<Integer>> TEMPLATE_PARAMETER_LIST_SIZES = KeyFactory.list("templateParameterListSizes", Integer.class);
-
-    /// DATAKEYS END
+    public FunctionDecl(DataStore data, Collection<? extends ClavaNode> children, FunctionDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     // CHECK: Directly enconding information relative to the tree structure (e.g., how many parameter nodes)
     // prevents direct transformations in the tree (e.g., if we remove a parameter, the value needs to be updated)
@@ -178,7 +117,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     public boolean isInline() {
-        return get(IS_INLINE_SPECIFIED);
+        return getWireIsInlineSpecified();
     }
 
     /**
@@ -333,7 +272,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     public String getDeclarationId(boolean useReturnType) {
         List<String> codeElements = new ArrayList<>();
 
-        if (get(IS_INLINE_SPECIFIED)) {
+        if (getWireIsInlineSpecified()) {
             if (getAncestor(TranslationUnit.class).get(TranslationUnit.LANGUAGE).get(Language.GNU_INLINE)) {
                 codeElements.add("__inline__");
             } else {
@@ -342,12 +281,12 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
         }
 
-        if (get(IS_CONSTEXPR)) {
+        if (getWireIsConstexpr()) {
             codeElements.add("constexpr");
         }
 
-        if (get(STORAGE_CLASS) != StorageClass.None) {
-            codeElements.add(get(STORAGE_CLASS).getString());
+        if (getWireStorageClass() != StorageClass.None) {
+            codeElements.add(getWireStorageClass().getString());
         }
 
         if (useReturnType) {
@@ -371,10 +310,10 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     /** Template headers belonging to enclosing classes, before a member template header. */
     public String getEnclosingTemplateHeadersCode() {
-        List<NamedDecl> parameters = get(TEMPLATE_PARAMETERS);
+        List<NamedDecl> parameters = getWireTemplateParameters();
         StringBuilder code = new StringBuilder();
         int offset = 0;
-        for (int size : get(TEMPLATE_PARAMETER_LIST_SIZES)) {
+        for (int size : getWireTemplateParameterListSizes()) {
             if (size < 0 || size > parameters.size() - offset) {
                 throw new IllegalArgumentException("Invalid function template parameter list sizes");
             }
@@ -598,7 +537,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         builder.append(")");
 
         // If has static linkage, add the filename to the signature
-        if (get(STORAGE_CLASS) == StorageClass.Static) {
+        if (getWireStorageClass() == StorageClass.Static) {
             getAncestorTry(TranslationUnit.class)
                     .ifPresent(tu -> builder.append("[" + tu.getFilename() + "]"));
         }

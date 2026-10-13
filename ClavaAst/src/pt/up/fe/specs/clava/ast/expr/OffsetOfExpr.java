@@ -17,24 +17,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponent;
 import pt.up.fe.specs.clava.ast.type.Type;
 
-public class OffsetOfExpr extends Expr {
+public class OffsetOfExpr extends OffsetOfExprBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in OffsetOfExprBase.
 
-    public final static DataKey<Type> SOURCE_TYPE = KeyFactory.object("sourceType", Type.class);
-
-    public final static DataKey<List<OffsetOfComponent>> COMPONENTS = KeyFactory.generic("components",
-            new ArrayList<OffsetOfComponent>());
-
-    /// DATAKEYS END
+    public OffsetOfExpr(DataStore data, Collection<? extends ClavaNode> children, OffsetOfExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public OffsetOfExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -43,7 +39,7 @@ public class OffsetOfExpr extends Expr {
     @Override
     public String getCode() {
         String componentsCode = getComponentsCode();
-        return "offsetof(" + get(SOURCE_TYPE).getCode(this) + ", " + componentsCode + ")";
+        return "offsetof(" + getWireSourceType().getCode(this) + ", " + componentsCode + ")";
     }
 
     private String getComponentsCode() {
@@ -51,7 +47,7 @@ public class OffsetOfExpr extends Expr {
         StringBuilder code = new StringBuilder();
 
         boolean hasCode = false;
-        for (OffsetOfComponent component : get(COMPONENTS)) {
+        for (OffsetOfComponent component : getWireComponents()) {
             String componentCode = component.getCode();
 
             if (componentCode.isEmpty()) {

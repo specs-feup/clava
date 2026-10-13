@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
@@ -30,11 +28,14 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JoaoBispo
  *
  */
-public class CXXUnresolvedConstructExpr extends Expr {
+public class CXXUnresolvedConstructExpr extends CXXUnresolvedConstructExprBase {
 
-    /// DATAKEYS BEGIN
-    public static final DataKey<Boolean> IS_LIST_INITIALIZATION = KeyFactory.bool("isListInitialization");
-    /// DATAKEYS END
+    // Data declarations are generated from the wire schema in CXXUnresolvedConstructExprBase.
+
+    public CXXUnresolvedConstructExpr(DataStore data, Collection<? extends ClavaNode> children, CXXUnresolvedConstructExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXUnresolvedConstructExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -46,14 +47,14 @@ public class CXXUnresolvedConstructExpr extends Expr {
 
     @Override
     public String getCode() {
-        if (get(IS_LIST_INITIALIZATION)) {
+        if (getWireIsListInitialization()) {
             List<Expr> arguments = getArguments();
             if (arguments.size() != 1 || !(arguments.get(0) instanceof InitListExpr)) {
                 throw new IllegalArgumentException("List construction must contain one initializer list");
             }
-            return get(TYPE).get().getCode(this) + arguments.get(0).getCode();
+            return getWireType().get().getCode(this) + arguments.get(0).getCode();
         }
-        return get(TYPE).get().getCode(this) + "("
+        return getWireType().get().getCode(this) + "("
                 + getArguments().stream().map(ClavaNode::getCode).collect(Collectors.joining(", ")) + ")";
     }
 

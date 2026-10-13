@@ -21,7 +21,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -41,40 +40,14 @@ import pt.up.fe.specs.util.collections.SpecsList;
  * @author JoaoBispo
  *
  */
-public abstract class NamedDecl extends Decl {
+public abstract class NamedDecl extends NamedDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in NamedDeclBase.
 
-    public final static DataKey<String> QUALIFIED_PREFIX = KeyFactory.string("qualifiedPrefix");
-
-    public final static DataKey<String> DECL_NAME = KeyFactory.string("declName");
-
-    public final static DataKey<NameKind> NAME_KIND = KeyFactory.enumeration("nameKind", NameKind.class)
-            .setDefault(() -> NameKind.IDENTIFIER);
-
-    /**
-     * True if this declaration is a C++ class member.
-     */
-    public final static DataKey<Boolean> IS_CXX_CLASS_MEMBER = KeyFactory.bool("isCxxClassMember");
-
-    /**
-     * True if this declaration is an instance member of a C++ class.
-     */
-    public final static DataKey<Boolean> IS_CXX_INSTANCE_MEMBER = KeyFactory.bool("isCxxInstanceMember");
-
-    /**
-     * The linkage of the declaration from a semantic point of view.
-     * <p>
-     * Entities in anonymous namespaces are external (in c++98).
-     */
-    public final static DataKey<Linkage> LINKAGE = KeyFactory.enumeration("linkage", Linkage.class);
-
-    /**
-     * The visibility of this entity.
-     */
-    public final static DataKey<Visibility> VISIBILITY = KeyFactory.enumeration("visibility", Visibility.class);
-
-    /// DATAKEYS END
+    public NamedDecl(DataStore data, Collection<? extends ClavaNode> children, NamedDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public NamedDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -90,7 +63,7 @@ public abstract class NamedDecl extends Decl {
     }
 
     public String getDeclName() {
-        return get(DECL_NAME);
+        return getWireDeclName();
     }
 
     public void setDeclName(String declName) {
@@ -176,7 +149,7 @@ public abstract class NamedDecl extends Decl {
     public Optional<String> getNamespace() {
 
         // Qualified name has full name
-        String qualifiedName = get(QUALIFIED_PREFIX);
+        String qualifiedName = getWireQualifiedPrefix();
 
         if (qualifiedName.isEmpty()) {
             return Optional.empty();

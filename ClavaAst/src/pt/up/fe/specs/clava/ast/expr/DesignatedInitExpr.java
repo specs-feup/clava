@@ -16,21 +16,19 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.List;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.data.designator.Designator;
 
-public class DesignatedInitExpr extends Expr {
+public class DesignatedInitExpr extends DesignatedInitExprBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in DesignatedInitExprBase.
 
-    public static final DataKey<Boolean> USES_GNU_SYNTAX = KeyFactory.bool("usesGnuSyntax");
-    public static final DataKey<List<Designator>> DESIGNATORS = KeyFactory.list("designators", Designator.class);
-
-    /// DATAKEYS END
+    public DesignatedInitExpr(DataStore data, Collection<? extends ClavaNode> children, DesignatedInitExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public DesignatedInitExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -50,7 +48,7 @@ public class DesignatedInitExpr extends Expr {
         // Nodes for designators start at position 1
         int currentIndex = 1;
         // Write code for each designator
-        for (Designator designator : get(DESIGNATORS)) {
+        for (Designator designator : getWireDesignators()) {
 
             String designatorCode = designator
                     .getCode(children.subList(currentIndex, currentIndex + designator.getNumNodes()));
@@ -64,7 +62,7 @@ public class DesignatedInitExpr extends Expr {
         // Initialize value
         code.append(" = ").append(getInit().getCode());
 
-        // String designatorsCode = get(DESIGNATORS).stream()
+        // String designatorsCode = getWireDesignators().stream()
         // .map(designator -> designator.getCode(children))
         // .collect(Collectors.joining());
 
@@ -72,7 +70,7 @@ public class DesignatedInitExpr extends Expr {
 
         // System.out.println("CODE: " + code);
         // System.out.println("CHILDREN:" + toTree());
-        // System.out.println("DESIGNATORS: " + get(DESIGNATORS));
+        // System.out.println("DESIGNATORS: " + getWireDesignators());
         return code.toString();
 
         // return "/* NOT IMPLEMENTED */";

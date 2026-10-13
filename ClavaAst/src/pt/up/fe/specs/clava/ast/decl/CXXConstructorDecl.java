@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -40,37 +38,21 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
  * @author JoaoBispo
  *
  */
-public class CXXConstructorDecl extends CXXMethodDecl {
+public class CXXConstructorDecl extends CXXConstructorDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in CXXConstructorDeclBase.
 
-    public final static DataKey<List<CXXCtorInitializer>> CONSTRUCTOR_INITS = KeyFactory.generic("constructorInits",
-            (List<CXXCtorInitializer>) new ArrayList<CXXCtorInitializer>());
-
-    /**
-     * True if this constructor is a default constructor.
-     */
-    public final static DataKey<Boolean> IS_DEFAULT_CONSTRUCTOR = KeyFactory.bool("isDefaultConstructor");
-
-    /**
-     * True if this constructor was marked "explicit".
-     */
-    public final static DataKey<Boolean> IS_EXPLICIT = KeyFactory.bool("isExplicit");
-
-    /**
-     * DataClass with information about the 'explicit' keyword.
-     */
-    public final static DataKey<ExplicitSpecifier> EXPLICIT_SPECIFIER = KeyFactory.object("explicitSpecifier",
-            ExplicitSpecifier.class);
-
-    /// DATAKEYS END
+    public CXXConstructorDecl(DataStore data, Collection<? extends ClavaNode> children, CXXConstructorDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXConstructorDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public List<CXXCtorInitializer> getInitializers() {
-        return get(CONSTRUCTOR_INITS);
+        return getWireConstructorInits();
     }
 
     @Override

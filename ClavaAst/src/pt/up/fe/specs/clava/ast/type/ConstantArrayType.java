@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.type;
 import java.math.BigInteger;
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -37,14 +35,14 @@ import pt.up.fe.specs.util.SpecsMath;
  * @author JoaoBispo
  *
  */
-public class ConstantArrayType extends ArrayType {
+public class ConstantArrayType extends ConstantArrayTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in ConstantArrayTypeBase.
 
-    public final static DataKey<BigInteger> ARRAY_SIZE = KeyFactory
-            .object("arraySize", BigInteger.class);
-
-    /// DATAKEYS END
+    public ConstantArrayType(DataStore data, Collection<? extends ClavaNode> children, ConstantArrayTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public ConstantArrayType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -52,7 +50,7 @@ public class ConstantArrayType extends ArrayType {
 
     @Override
     public int getConstant() {
-        return get(ARRAY_SIZE).intValue();
+        return getWireArraySize().intValue();
     }
 
     public int getArraySize() {
@@ -80,7 +78,7 @@ public class ConstantArrayType extends ArrayType {
 
     @Override
     protected String getArrayCode() {
-        return get(ARRAY_SIZE).toString();
+        return getWireArraySize().toString();
     }
 
 }

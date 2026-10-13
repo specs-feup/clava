@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -28,13 +26,12 @@ import pt.up.fe.specs.clava.ast.type.Type;
  * @author JoaoBispo
  *
  */
-public abstract class ExplicitCastExpr extends CastExpr {
+public abstract class ExplicitCastExpr extends ExplicitCastExprBase {
 
-    /// DATAKEY BEGIN
-
-    public final static DataKey<Type> TYPE_AS_WRITTEN = KeyFactory.object("typeAsWritten", Type.class);
-
-    /// DATAKEY END
+    public ExplicitCastExpr(DataStore data, java.util.Collection<? extends ClavaNode> children, ExplicitCastExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public ExplicitCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

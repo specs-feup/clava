@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -36,26 +34,14 @@ import pt.up.fe.specs.clava.utils.Typable;
  * @author JoaoBispo
  *
  */
-public abstract class Expr extends ClavaNode implements Typable {
+public abstract class Expr extends ExprBase implements Typable {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in ExprBase.
 
-    // public final static DataKey<Type> TYPE = KeyFactory.object("type", Type.class);
-    public final static DataKey<Optional<Type>> TYPE = KeyFactory.optional("type");
-
-    public final static DataKey<ValueKind> VALUE_KIND = KeyFactory.enumeration("valueKind", ValueKind.class)
-            .setDefault(() -> ValueKind.getDefault());
-
-    public final static DataKey<ObjectKind> OBJECT_KIND = KeyFactory.enumeration("objectKind", ObjectKind.class)
-            .setDefault(() -> ObjectKind.ORDINARY);
-
-    public final static DataKey<ImplicitCastExpr> IMPLICIT_CAST = KeyFactory
-            .object("implicitCast", ImplicitCastExpr.class)
-            .setDefault(() -> null);
-
-    public final static DataKey<Boolean> IS_DEFAULT_ARGUMENT = KeyFactory.bool("isDefaultArgument");
-
-    /// DATAKEYS END
+    public Expr(DataStore data, Collection<? extends ClavaNode> children, ExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public Expr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -63,8 +49,8 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     @Override
     public Type getType() {
-        return get(TYPE).orElse(null);
-        // return get(TYPE);
+        return getWireType().orElse(null);
+        // return getWireType();
     }
 
     @Override
@@ -95,7 +81,7 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     public ValueKind getValueKind() {
-        return get(VALUE_KIND);
+        return getWireValueKind();
     }
 
     // /**
@@ -113,7 +99,7 @@ public abstract class Expr extends ClavaNode implements Typable {
         if (hasDataI()) {
             return super.toContentString();
         }
-    
+
         return ClavaNode.toContentString(super.toContentString(), "exprData: [" + exprData + "]");
         // return ClavaNode.toContentString(super.toContentString(), "types:" + getExprType().getCode() + ", valueKind:"
         // + getValueKind() + ", exprData: [" + exprData + "]");
@@ -153,7 +139,7 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     public Optional<ImplicitCastExpr> getImplicitCast() {
-        return Optional.ofNullable(get(IMPLICIT_CAST));
+        return Optional.ofNullable(getWireImplicitCast());
     }
 
     /**

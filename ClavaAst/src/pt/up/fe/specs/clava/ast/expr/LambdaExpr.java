@@ -18,8 +18,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -39,45 +37,21 @@ import pt.up.fe.specs.util.SpecsCollections;
  * @author JoaoBispo
  *
  */
-public class LambdaExpr extends Expr {
+public class LambdaExpr extends LambdaExprBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in LambdaExprBase.
 
-    public final static DataKey<Boolean> IS_GENERIC_LAMBDA = KeyFactory.bool("isGenericLambda");
-
-    public final static DataKey<Boolean> IS_MUTABLE = KeyFactory.bool("isMutable");
-
-    public final static DataKey<Boolean> HAS_EXPLICIT_PARAMETERS = KeyFactory.bool("hasExplicitParameters");
-
-    public final static DataKey<Boolean> HAS_EXPLICIT_RESULT_TYPE = KeyFactory.bool("hasExplicitResultType");
-
-    public final static DataKey<LambdaCaptureDefault> CAPTURE_DEFAULT = KeyFactory.enumeration("captureDefault",
-            LambdaCaptureDefault.class);
-
-    public final static DataKey<CXXRecordDecl> LAMBDA_CLASS = KeyFactory.object("lambdaClass", CXXRecordDecl.class);
-
-    public final static DataKey<List<LambdaCaptureKind>> CAPTURE_KINDS = KeyFactory.generic("captureKinds",
-            new ArrayList<LambdaCaptureKind>());
-
-    public final static DataKey<List<String>> INIT_CAPTURE_NAMES = KeyFactory.list("initCaptureNames", String.class);
-
-    public final static DataKey<List<InitializationStyle>> CAPTURE_INIT_STYLES = KeyFactory.generic("captureInitStyles",
-            new ArrayList<InitializationStyle>());
-
-    public final static DataKey<List<Boolean>> CAPTURE_PACK_EXPANSIONS = KeyFactory.generic("capturePackExpansions",
-            new ArrayList<Boolean>());
-
-    public final static DataKey<List<Boolean>> CAPTURE_IS_IMPLICIT = KeyFactory.generic("captureIsImplicit",
-            new ArrayList<Boolean>());
-
-    /// DATAKEYS END
+    public LambdaExpr(DataStore data, Collection<? extends ClavaNode> children, LambdaExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public LambdaExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public CXXRecordDecl getLambdaClass() {
-        return get(LAMBDA_CLASS);
+        return getWireLambdaClass();
     }
 
     public CompoundStmt getBody() {
@@ -112,11 +86,11 @@ public class LambdaExpr extends Expr {
 
         code.append(" ");
 
-        if (get(IS_MUTABLE)) {
+        if (getWireIsMutable()) {
             code.append("mutable ");
         }
 
-        if (get(HAS_EXPLICIT_RESULT_TYPE)) {
+        if (getWireHasExplicitResultType()) {
             code.append("-> ");
             code.append(operatorPar.getReturnType().getCode(this)).append(" ");
         }
@@ -134,15 +108,15 @@ public class LambdaExpr extends Expr {
         List<String> captureElements = new ArrayList<>();
 
         // Add default, if present
-        get(CAPTURE_DEFAULT).getCode().ifPresent(captureElements::add);
+        getWireCaptureDefault().getCode().ifPresent(captureElements::add);
 
         // Add captures, if present
         List<Expr> captureArgs = getCaptureArguments();
-        List<LambdaCaptureKind> captureKinds = get(CAPTURE_KINDS);
-        List<String> initCaptureNames = get(INIT_CAPTURE_NAMES);
-        List<InitializationStyle> captureInitStyles = get(CAPTURE_INIT_STYLES);
-        List<Boolean> capturePackExpansions = get(CAPTURE_PACK_EXPANSIONS);
-        List<Boolean> captureIsImplicit = get(CAPTURE_IS_IMPLICIT);
+        List<LambdaCaptureKind> captureKinds = getWireCaptureKinds();
+        List<String> initCaptureNames = getWireInitCaptureNames();
+        List<InitializationStyle> captureInitStyles = getWireCaptureInitStyles();
+        List<Boolean> capturePackExpansions = getWireCapturePackExpansions();
+        List<Boolean> captureIsImplicit = getWireCaptureIsImplicit();
         Preconditions.checkArgument(captureKinds.size() == captureArgs.size(),
                 "Expected one capture kind per initializer, got %s kinds and %s initializers",
                 captureKinds.size(), captureArgs.size());

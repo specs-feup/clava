@@ -15,19 +15,18 @@ package pt.up.fe.specs.clava.ast.attr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class OpenCLUnrollHintAttr extends InheritableAttr {
+public class OpenCLUnrollHintAttr extends OpenCLUnrollHintAttrBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in OpenCLUnrollHintAttrBase.
 
-    public final static DataKey<Integer> UNROLL_HINT = KeyFactory.integer("unrollHint");
-
-    /// DATAKEYS END
+    public OpenCLUnrollHintAttr(DataStore data, Collection<? extends ClavaNode> children, OpenCLUnrollHintAttrBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public OpenCLUnrollHintAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -35,7 +34,7 @@ public class OpenCLUnrollHintAttr extends InheritableAttr {
 
     @Override
     public String getArgumentsCode() {
-        return get(UNROLL_HINT).toString();
+        return getWireUnrollHint().toString();
     }
 
 }

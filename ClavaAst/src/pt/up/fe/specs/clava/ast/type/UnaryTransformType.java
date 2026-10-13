@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -29,33 +27,25 @@ import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
  * @author JoaoBispo
  *
  */
-public class UnaryTransformType extends Type {
+public class UnaryTransformType extends UnaryTransformTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in UnaryTransformTypeBase.
 
-    public final static DataKey<UnaryTransformTypeKind> KIND = KeyFactory
-            .enumeration("kind", UnaryTransformTypeKind.class);
-
-    /**
-     * The transformed type, when Clang has resolved it. Dependent unary
-     * transforms can have no underlying type while still having a base type.
-     */
-    public final static DataKey<Optional<Type>> UNDERLYING_TYPE = KeyFactory.optional("underlyingType");
-
-    public final static DataKey<Type> BASE_TYPE = KeyFactory.object("baseType", Type.class);
-
-    /// DATAKEYS END
+    public UnaryTransformType(DataStore data, Collection<? extends ClavaNode> children, UnaryTransformTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public UnaryTransformType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Type getBaseType() {
-        return get(BASE_TYPE);
+        return getWireBaseType();
     }
 
     public Optional<Type> getUnderlyingType() {
-        return get(UNDERLYING_TYPE);
+        return getWireUnderlyingType();
     }
 
 }

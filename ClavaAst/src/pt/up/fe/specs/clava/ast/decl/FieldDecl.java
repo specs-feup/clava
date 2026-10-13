@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.decl;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -31,13 +29,14 @@ import pt.up.fe.specs.clava.ast.expr.NullExpr;
  * @author JoaoBispo
  *
  */
-public class FieldDecl extends DeclaratorDecl {
+public class FieldDecl extends FieldDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in FieldDeclBase.
 
-    public final static DataKey<Boolean> IS_MUTABLE = KeyFactory.bool("isMutable");
-
-    /// DATAKEYS END
+    public FieldDecl(DataStore data, Collection<? extends ClavaNode> children, FieldDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public FieldDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -66,7 +65,7 @@ public class FieldDecl extends DeclaratorDecl {
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        if (get(IS_MUTABLE)) {
+        if (getWireIsMutable()) {
             code.append("mutable ");
         }
 

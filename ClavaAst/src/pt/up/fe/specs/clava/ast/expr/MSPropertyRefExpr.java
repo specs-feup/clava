@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -32,12 +30,12 @@ import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
  * @author jbispo
  *
  */
-public class MSPropertyRefExpr extends Expr {
+public class MSPropertyRefExpr extends MSPropertyRefExprBase {
 
-    public static final DataKey<Expr> BASE_EXPR = KeyFactory.object("baseExpr", Expr.class);
-    public static final DataKey<MSPropertyDecl> PROPERTY_DECL = KeyFactory.object("propertyDecl", MSPropertyDecl.class);
-    public static final DataKey<Boolean> IS_IMPLICIT_ACCESS = KeyFactory.bool("isImplicitAccess");
-    public static final DataKey<Boolean> IS_ARROW = KeyFactory.bool("isArrow");
+    public MSPropertyRefExpr(DataStore data, java.util.Collection<? extends ClavaNode> children, MSPropertyRefExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public MSPropertyRefExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -73,39 +71,39 @@ public class MSPropertyRefExpr extends Expr {
         return ((BinaryOperator) parent).getLhs() == this;
         /*
         ClavaNode currentNode = this;
-        
+
         // Go back until a statement is found, or there is no parent
         while (!(currentNode instanceof Stmt)) {
             var previousNode = currentNode;
             currentNode = previousNode.getParent();
-        
+
             // If current node is null, could not find assignment, assume false
             if (currentNode == null) {
                 return false;
             }
-        
+
             // If not a BinaryOperator, ignore
             if (!(currentNode instanceof BinaryOperator)) {
                 continue;
             }
-        
+
             var op = currentNode.get(BinaryOperator.OP);
-        
+
             // Ignore ops that are not assignment
             if (op != BinaryOperatorKind.Assign) {
                 continue;
             }
-        
+
             // Found assignment, check on which side of the assignment is the previous node
             return ((BinaryOperator) currentNode).getLhs() == previousNode;
         }
-        
+
         return false;
         */
     }
 
     public String getProperty() {
-        var property = get(PROPERTY_DECL);
+        var property = getWirePropertyDecl();
 
         if (property == null) {
             throw new RuntimeException("MSPropertyRefExpr does not have a MSPropertyDecl associated with it");
@@ -154,10 +152,10 @@ public class MSPropertyRefExpr extends Expr {
         // System.out.println("PARENT PARENT PARENT: " + getParent().getParent().getParent().getParent());
 
         // Not sure how to know if getter or setter should be use
-        // System.out.println("BASE EXPR: " + ((OpaqueValueExpr)get(BASE_EXPR)).getSourceExpr().getClass());
+        // System.out.println("BASE EXPR: " + ((OpaqueValueExpr)getWireBaseExpr()).getSourceExpr().getClass());
         // property.get(MSPropertyDecl.)
 
-        var separator = get(IS_ARROW) ? "->" : ".";
+        var separator = getWireIsArrow() ? "->" : ".";
 
         return getBase().getCode() + separator + processedProperty;
         // System.out.println("JAVA MSPROP: " + getId());

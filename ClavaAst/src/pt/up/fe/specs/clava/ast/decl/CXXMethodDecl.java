@@ -17,8 +17,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -38,56 +36,14 @@ import pt.up.fe.specs.util.SpecsCheck;
  * @author JoaoBispo
  *
  */
-public class CXXMethodDecl extends FunctionDecl {
+public class CXXMethodDecl extends CXXMethodDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in CXXMethodDeclBase.
 
-    // TODO: Change to Optional<CXXRecordDecl>, since it can be null
-    public final static DataKey<Decl> RECORD = KeyFactory.object("record", Decl.class);
-
-    public final static DataKey<List<CXXMethodDecl>> OVERRIDDEN_METHODS = KeyFactory.list("overriddenMethods",
-            CXXMethodDecl.class);
-
-    public final static DataKey<Boolean> IS_STATIC = KeyFactory.bool("isStatic");
-
-    public final static DataKey<Boolean> IS_INSTANCE = KeyFactory.bool("isInstance");
-
-    public final static DataKey<Boolean> IS_CONST = KeyFactory.bool("isConst");
-
-    public final static DataKey<Boolean> IS_VOLATILE = KeyFactory.bool("isVolatile");
-
-    public final static DataKey<Boolean> IS_VIRTUAL = KeyFactory.bool("isVirtual");
-
-    /**
-     * True if this is a copy-assignment operator, either declared implicitly or explicitly.
-     */
-    public final static DataKey<Boolean> IS_COPY_ASSIGNMENT_OPERATOR = KeyFactory.bool("isCopyAssignmentOperator");
-
-    /**
-     * 
-     */
-    public final static DataKey<Boolean> IS_MOVE_ASSIGNMENT_OPERATOR = KeyFactory.bool("isMoveAssignmentOperator");
-
-    /**
-     * Return the type of the 'this' pointer. Note that for the call operator of a lambda closure type, this returns the
-     * desugared 'this' type (a pointer to the closure type), not the captured 'this' type.
-     */
-    public final static DataKey<Optional<Type>> THIS_TYPE = KeyFactory.optional("thisType");
-
-    /**
-     * The type of the object pointed by 'this'.
-     */
-    public final static DataKey<Optional<Type>> THIS_OBJECT_TYPE = KeyFactory.optional("thisObjectType");
-
-    public final static DataKey<Boolean> HAS_INLINE_BODY = KeyFactory.bool("hasInlineBody");
-
-    /**
-     * True if this is a lambda closure type's static member function that is used for the result of the lambda's
-     * conversion to function pointer (for a lambda with no captures).
-     */
-    public final static DataKey<Boolean> IS_LAMBDA_STATIC_INVOKER = KeyFactory.bool("isLambdaStaticInvoker");
-
-    /// DATAKEYS END
+    public CXXMethodDecl(DataStore data, Collection<? extends ClavaNode> children, CXXMethodDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXMethodDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -132,7 +88,7 @@ public class CXXMethodDecl extends FunctionDecl {
 
     public String getCodeInitList() {
 
-        if (get(IS_EXPLICITLY_DEFAULTED)) {
+        if (getWireIsExplicitlyDefaulted()) {
             return " = default";
         }
 
@@ -145,15 +101,15 @@ public class CXXMethodDecl extends FunctionDecl {
         code.append(getTemplateHeadersCode());
 
         // if (getFunctionDeclData().getStorageClass() == StorageClass.STATIC) {
-        if (get(STORAGE_CLASS) != StorageClass.None) {
-            code.append(get(STORAGE_CLASS).getString()).append(" ");
+        if (getWireStorageClass() != StorageClass.None) {
+            code.append(getWireStorageClass().getString()).append(" ");
         }
 
-        if (get(IS_INLINE_SPECIFIED)) {
+        if (getWireIsInlineSpecified()) {
             code.append("inline ");
         }
 
-        if (get(IS_VIRTUAL)) {
+        if (getWireIsVirtual()) {
             code.append("virtual ");
             // throwNoCodeGeneration();
         }
@@ -183,7 +139,7 @@ public class CXXMethodDecl extends FunctionDecl {
 
             var record = getRecordDecl().orElse(null);
             if (record != null && record.getParent() instanceof ClassTemplateDecl template
-                    && template.getTemplateDecl() == record && !get(TEMPLATE_PARAMETER_LIST_SIZES).isEmpty()) {
+                    && template.getTemplateDecl() == record && !getWireTemplateParameterListSizes().isEmpty()) {
                 namespace = getPrimaryTemplateQualifier(record);
             }
             code.append(namespace);
@@ -196,7 +152,7 @@ public class CXXMethodDecl extends FunctionDecl {
         // code.append(getCodeExcept());
 
         // Make method declaration pure
-        if (get(IS_PURE) && get(IS_VIRTUAL_AS_WRITTEN)) {
+        if (getWireIsPure() && getWireIsVirtualAsWritten()) {
             code.append(" = 0");
         }
 
@@ -217,14 +173,14 @@ public class CXXMethodDecl extends FunctionDecl {
         for (CXXRecordDecl scope : scopes) {
             qualifier.append(scope.getDeclName());
             if (scope.getParent() instanceof ClassTemplateDecl template && template.getTemplateDecl() == scope) {
-                if (group >= get(TEMPLATE_PARAMETER_LIST_SIZES).size()) {
+                if (group >= getWireTemplateParameterListSizes().size()) {
                     throw new IllegalArgumentException("Missing enclosing class template parameter list");
                 }
-                int size = get(TEMPLATE_PARAMETER_LIST_SIZES).get(group++);
-                if (size != template.getNumTemplateParameters() || size > get(TEMPLATE_PARAMETERS).size() - offset) {
+                int size = getWireTemplateParameterListSizes().get(group++);
+                if (size != template.getNumTemplateParameters() || size > getWireTemplateParameters().size() - offset) {
                     throw new IllegalArgumentException("Class template parameters do not match method context");
                 }
-                String arguments = get(TEMPLATE_PARAMETERS).subList(offset, offset + size).stream()
+                String arguments = getWireTemplateParameters().subList(offset, offset + size).stream()
                         .map(CXXMethodDecl::getTemplateArgumentCode).collect(java.util.stream.Collectors.joining(", "));
                 qualifier.append("<").append(arguments).append(">");
                 offset += size;
@@ -233,12 +189,12 @@ public class CXXMethodDecl extends FunctionDecl {
                         .map(argument -> argument.getCode(this)).collect(java.util.stream.Collectors.joining(", "));
                 qualifier.append("<").append(arguments).append(">");
                 if (scope instanceof ClassTemplatePartialSpecializationDecl partial) {
-                    if (group >= get(TEMPLATE_PARAMETER_LIST_SIZES).size()) {
+                    if (group >= getWireTemplateParameterListSizes().size()) {
                         throw new IllegalArgumentException("Missing enclosing partial specialization parameter list");
                     }
-                    int size = get(TEMPLATE_PARAMETER_LIST_SIZES).get(group++);
+                    int size = getWireTemplateParameterListSizes().get(group++);
                     if (size != partial.get(ClassTemplatePartialSpecializationDecl.TEMPLATE_PARAMETERS).size()
-                            || size > get(TEMPLATE_PARAMETERS).size() - offset) {
+                            || size > getWireTemplateParameters().size() - offset) {
                         throw new IllegalArgumentException("Partial specialization parameters do not match method context");
                     }
                     offset += size;
@@ -262,7 +218,7 @@ public class CXXMethodDecl extends FunctionDecl {
      */
     public Optional<CXXRecordDecl> getRecordDecl() {
 
-        var record = get(RECORD);
+        var record = getWireRecord();
         if (record instanceof NullDecl) {
             return Optional.empty();
         }
@@ -326,7 +282,7 @@ public class CXXMethodDecl extends FunctionDecl {
     }
 
     public void removeRecord() {
-        var currentRecordDecl = get(RECORD);
+        var currentRecordDecl = getWireRecord();
 
         // Already removed
         if (currentRecordDecl instanceof NullDecl) {
@@ -352,7 +308,7 @@ public class CXXMethodDecl extends FunctionDecl {
 
     public String getQualifiedPrefixWithoutRecord() {
         var currentQualifiedPrefix = get(QUALIFIED_PREFIX);
-        var currentRecordDecl = get(RECORD);
+        var currentRecordDecl = getWireRecord();
 
         var currentRecordName = currentRecordDecl instanceof NullDecl ? ""
                 : ((NamedDecl) currentRecordDecl).getDeclName();

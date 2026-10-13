@@ -59,37 +59,15 @@ processResources {
     from('cuda-release.tag')
 }
 
-// Fetches the binary wire schema of the clang-dumper selected in clang-dumper-release.tag (a release tag or the
-// absolute path of a local build) and its schema hash from the release manifest. See WIRE_FORMAT.md.
-def wireSchemaDir = layout.buildDirectory.dir('generated/wire-schema')
-def wireSchema = tasks.register('wireSchema') {
-    def tagFile = file('clang-dumper-release.tag')
-    inputs.file(tagFile)
-    outputs.dir(wireSchemaDir)
-    // A local build can change without the tag changing.
-    outputs.upToDateWhen { !new File(tagFile.text.trim()).absolute }
-    doLast {
-        def tag = tagFile.text.trim()
-        def read = { String name ->
-            new File(tag).absolute ? new File(tag, name).bytes
-                    : URI.create("https://github.com/specs-feup/clang-dumper/releases/download/$tag/$name").toURL().bytes
-        }
-        def manifest = new groovy.json.JsonSlurper().parse(read('clang-dumper-release-manifest.json'))
-        def asset = manifest.assets.find { it.kind == 'wire-schema-bfbs' }
-        if (asset == null) {
-            throw new GradleException("clang-dumper '$tag' does not publish a binary wire schema")
-        }
-        def bfbs = read(asset.filename)
-        if (java.security.MessageDigest.getInstance('SHA-256').digest(bfbs).encodeHex().toString() != asset.sha256) {
-            throw new GradleException("Checksum mismatch for ${asset.filename} of clang-dumper '$tag'")
-        }
-        def out = wireSchemaDir.get().dir('pt/up/fe/specs/clang/wire').asFile
-        out.mkdirs()
-        new File(out, 'ast-wire.bfbs').bytes = bfbs
-        new File(out, 'ast-wire.sha256').text = manifest.wire_schema.sha256 + '\n'
-    }
-}
+// ClavaAst owns the schema used for generation and parsing, including in composite builds.
+def wireSchemaDir = file('../ClavaAst/build/generated/wire-schema')
+def wireSchema = tasks.register('wireSchema') { dependsOn gradle.includedBuild('ClavaAst').task(':wireSchema') }
 sourceSets.main.resources.srcDir(files(wireSchemaDir).builtBy(wireSchema))
+tasks.register('updateWireFields') { dependsOn gradle.includedBuild('ClavaAst').task(':updateWireFields') }
+tasks.register('verifyWireFields') { dependsOn gradle.includedBuild('ClavaAst').task(':verifyWireFields') }
+tasks.named('check') {
+    dependsOn tasks.named('verifyWireFields'), gradle.includedBuild('ClavaAst').task(':check')
+}
 
 // Test coverage configuration
 jacocoTestReport {

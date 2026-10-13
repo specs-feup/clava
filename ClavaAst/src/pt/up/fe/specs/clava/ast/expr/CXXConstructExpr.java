@@ -19,7 +19,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -38,34 +37,21 @@ import pt.up.fe.specs.util.collections.SpecsList;
  * @author JoaoBispo
  *
  */
-public class CXXConstructExpr extends Expr {
+public class CXXConstructExpr extends CXXConstructExprBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in CXXConstructExprBase.
 
-    public final static DataKey<Boolean> IS_ELIDABLE = KeyFactory.bool("isElidable");
-
-    public final static DataKey<Boolean> REQUIRES_ZERO_INITIALIZATION = KeyFactory.bool("requiresZeroInitialization");
-
-    public final static DataKey<Boolean> IS_LIST_INITIALIZATION = KeyFactory.bool("isListInitialization");
-
-    public final static DataKey<Boolean> IS_STD_LIST_INITIALIZATION = KeyFactory.bool("isStdListInitialization");
-
-    public final static DataKey<ConstructionKind> CONSTRUCTION_KIND = KeyFactory.enumeration("constructionKind",
-            ConstructionKind.class);
-
-    public final static DataKey<Boolean> IS_TEMPORARY_OBJECT = KeyFactory.bool("isTemporaryObject");
-
-    public final static DataKey<CXXConstructorDecl> CONSTRUCTOR_DECL = KeyFactory.object("constructorDecl",
-            CXXConstructorDecl.class);
-
-    /// DATAKEYS END
+    public CXXConstructExpr(DataStore data, Collection<? extends ClavaNode> children, CXXConstructExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXConstructExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public boolean isElidable() {
-        return get(IS_ELIDABLE);
+        return getWireIsElidable();
     }
 
     /**
@@ -117,7 +103,7 @@ public class CXXConstructExpr extends Expr {
     }
 
     public boolean isListInit() {
-        return get(IS_LIST_INITIALIZATION) || get(IS_STD_LIST_INITIALIZATION);
+        return getWireIsListInitialization() || getWireIsStdListInitialization();
     }
 
     /**
@@ -164,7 +150,7 @@ public class CXXConstructExpr extends Expr {
                 return "()";
             }
 
-            if (get(REQUIRES_ZERO_INITIALIZATION)) {
+            if (getWireRequiresZeroInitialization()) {
                 return "()";
             }
 
@@ -191,7 +177,7 @@ public class CXXConstructExpr extends Expr {
         SpecsList<DataKey<?>> list = super.getSignatureKeys().andAdd(IS_ELIDABLE);
 
         // If temporary constructor, add ID in order to "ignore" it during normalization
-        if (get(IS_TEMPORARY_OBJECT)) {
+        if (getWireIsTemporaryObject()) {
             list.add(ID);
         }
 
@@ -200,7 +186,7 @@ public class CXXConstructExpr extends Expr {
 
     @Override
     public Optional<Decl> getDecl() {
-        return Optional.of(get(CONSTRUCTOR_DECL));
+        return Optional.of(getWireConstructorDecl());
     }
 
 }

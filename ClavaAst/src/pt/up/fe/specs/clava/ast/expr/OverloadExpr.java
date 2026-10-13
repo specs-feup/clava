@@ -18,8 +18,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -34,45 +32,28 @@ import pt.up.fe.specs.clava.utils.Nameable;
  * @author JoaoBispo
  *
  */
-public abstract class OverloadExpr extends Expr implements Nameable {
+public abstract class OverloadExpr extends OverloadExprBase implements Nameable {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in OverloadExprBase.
 
-    /**
-     * The nested-name qualifier that precedes the name, or empty string if it has none.
-     */
-    public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
-
-    /**
-     * The looked up name.
-     */
-    public final static DataKey<String> NAME = KeyFactory.string("name");
-
-    /**
-     * The declarations in the unresolved set.
-     */
-    public final static DataKey<List<Decl>> UNRESOLVED_DECLS = KeyFactory
-            .generic("unresolvedDecls", (List<Decl>) new ArrayList<Decl>());
-
-    public final static DataKey<List<TemplateArgument>> TEMPLATE_ARGUMENTS = KeyFactory
-            .generic("templateArguments", (List<TemplateArgument>) new ArrayList<TemplateArgument>())
-            .setDefault(() -> new ArrayList<>());
-
-    /// DATAKEYS END
+    public OverloadExpr(DataStore data, Collection<? extends ClavaNode> children, OverloadExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public OverloadExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Optional<String> getQualifier() {
-        String qualifier = get(QUALIFIER);
+        String qualifier = getWireQualifier();
 
         return qualifier.isEmpty() ? Optional.empty() : Optional.of(qualifier);
     }
 
     @Override
     public String getName() {
-        return get(NAME);
+        return getWireName();
     }
 
     @Override
@@ -88,14 +69,14 @@ public abstract class OverloadExpr extends Expr implements Nameable {
         getQualifier().ifPresent(code::append);
 
         // Case operator
-        Optional<CXXOperator> operator = CXXOperator.parseTry(get(NAME));
+        Optional<CXXOperator> operator = CXXOperator.parseTry(getWireName());
         if (operator.isPresent()) {
             code.append(operator.get().getString());
         } else {
-            code.append(get(NAME));
+            code.append(getWireName());
         }
 
-        code.append(TemplateArgument.getCode(get(TEMPLATE_ARGUMENTS), this));
+        code.append(TemplateArgument.getCode(getWireTemplateArguments(), this));
 
         return code.toString();
     }

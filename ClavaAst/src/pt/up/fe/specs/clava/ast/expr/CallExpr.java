@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -40,13 +38,14 @@ import pt.up.fe.specs.util.SpecsCollections;
  * @author JoaoBispo
  *
  */
-public class CallExpr extends Expr {
+public class CallExpr extends CallExprBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in CallExprBase.
 
-    public final static DataKey<Optional<FunctionDecl>> DIRECT_CALLEE = KeyFactory.optional("directCallee");
-
-    /// DATAKEYS END
+    public CallExpr(DataStore data, Collection<? extends ClavaNode> children, CallExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CallExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -153,7 +152,7 @@ public class CallExpr extends Expr {
      * @return
      */
     public Optional<FunctionDecl> getFunctionDecl() {
-        return get(DIRECT_CALLEE)
+        return getWireDirectCallee()
                 // If FunctionDecl has a primary template decl (e.g., is a template specialization), return original
                 // template instead
                 .map(ClavaNodes::normalizeDecl)

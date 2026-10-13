@@ -17,8 +17,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -34,15 +32,14 @@ import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
  * @author JBispo
  *
  */
-public class SubstTemplateTypeParmType extends Type {
+public class SubstTemplateTypeParmType extends SubstTemplateTypeParmTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in SubstTemplateTypeParmTypeBase.
 
-    public static final DataKey<TemplateTypeParmDecl> REPLACED_PARAMETER = KeyFactory.object("replacedParameter", TemplateTypeParmDecl.class);
-
-    public static final DataKey<Type> REPLACEMENT_TYPE = KeyFactory.object("replacementType", Type.class);
-
-    /// DATAKEYS END
+    public SubstTemplateTypeParmType(DataStore data, Collection<? extends ClavaNode> children, SubstTemplateTypeParmTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public SubstTemplateTypeParmType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -50,7 +47,7 @@ public class SubstTemplateTypeParmType extends Type {
 
     @Override
     public List<Type> getTemplateArgumentTypes() {
-        return Arrays.asList(get(UNQUALIFIED_DESUGARED_TYPE).get());
+        return Arrays.asList(getWireUnqualifiedDesugaredType().get());
     }
 
 }

@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -28,21 +26,21 @@ import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
  * @author JoaoBispo
  *
  */
-public abstract class TypeWithKeyword extends Type {
+public abstract class TypeWithKeyword extends TypeWithKeywordBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in TypeWithKeywordBase.
 
-    public final static DataKey<ElaboratedTypeKeyword> ELABORATED_TYPE_KEYWORD = KeyFactory
-            .enumeration("elaboratedTypeKeyword", ElaboratedTypeKeyword.class);
-
-    /// DATAKEYS END
+    public TypeWithKeyword(DataStore data, Collection<? extends ClavaNode> children, TypeWithKeywordBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public TypeWithKeyword(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public ElaboratedTypeKeyword getKeyword() {
-        return get(ELABORATED_TYPE_KEYWORD);
+        return getWireElaboratedTypeKeyword();
     }
 
 }

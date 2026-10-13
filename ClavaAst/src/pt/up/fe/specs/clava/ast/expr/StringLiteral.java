@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -28,26 +26,12 @@ import pt.up.fe.specs.clava.utils.TextLiteralKind;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
-public class StringLiteral extends Literal {
+public class StringLiteral extends StringLiteralBase {
 
-    /// DATAKEY BEGIN
-
-    public final static DataKey<StringKind> STRING_KIND = KeyFactory.enumeration("stringKind", StringKind.class);
-
-    /**
-     * Number of characters of the string.
-     */
-    public final static DataKey<Long> LENGTH = KeyFactory.longInt("length");
-
-    /**
-     * Number of bytes per character.
-     */
-    public final static DataKey<Integer> CHAR_BYTE_WIDTH = KeyFactory.integer("charByteWidth");
-
-    public final static DataKey<List<Byte>> STRING_BYTES = KeyFactory.generic("stringBytes",
-            (List<Byte>) new ArrayList<Byte>());
-
-    /// DATAKEY END
+    public StringLiteral(DataStore data, java.util.Collection<? extends ClavaNode> children, StringLiteralBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public StringLiteral(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -57,7 +41,7 @@ public class StringLiteral extends Literal {
     public String getLiteral() {
         // Unevaluated strings can contain source-level details, such as adjacent tokens separated by a line break, that
         // are lost when using the evaluated byte payload. Keep Clang's validated source spelling.
-        if (get(STRING_KIND) == StringKind.UNEVALUATED) {
+        if (getWireStringKind() == StringKind.UNEVALUATED) {
             return super.getLiteral();
         }
 
@@ -66,11 +50,11 @@ public class StringLiteral extends Literal {
         // generated source code
         // Update End
         // Optimization: if not a raw string and is ASCII (most common case) can use stored literal
-        // if (get(STRING_KIND) == StringKind.ASCII && !isRawStringLiteral()) {
+        // if (getWireStringKind() == StringKind.ASCII && !isRawStringLiteral()) {
         // return super.getLiteral();
         // }
 
-        return get(STRING_KIND).getPrefix() + "\"" + getStringFromBytes() + "\"";
+        return getWireStringKind().getPrefix() + "\"" + getStringFromBytes() + "\"";
     }
 
     @Override
@@ -83,11 +67,11 @@ public class StringLiteral extends Literal {
     }
 
     private String getStringFromBytes() {
-        StringKind kind = get(STRING_KIND);
+        StringKind kind = getWireStringKind();
 
         // If UTF, just use String constructor from bytes
         if (kind.isUTF()) {
-            List<Byte> byteList = get(STRING_BYTES);
+            List<Byte> byteList = getWireStringBytes();
             byte[] bytes = new byte[byteList.size()];
             for (int i = 0; i < byteList.size(); i++) {
                 bytes[i] = byteList.get(i);
@@ -100,7 +84,7 @@ public class StringLiteral extends Literal {
         if (kind == StringKind.ORDINARY) {
             var literal = new StringBuilder();
 
-            for (var aByte : get(STRING_BYTES)) {
+            for (var aByte : getWireStringBytes()) {
                 literal.append(CText.toCString(aByte, TextLiteralKind.STRING));
             }
 
@@ -134,8 +118,8 @@ public class StringLiteral extends Literal {
     }
 
     private char[] getBytesAsCharArray() {
-        List<Byte> bytes = get(STRING_BYTES);
-        int numBytesPerChar = get(CHAR_BYTE_WIDTH);
+        List<Byte> bytes = getWireStringBytes();
+        int numBytesPerChar = getWireCharByteWidth();
         char[] chars = new char[bytes.size() / numBytesPerChar];
 
         for (int i = 0; i < bytes.size(); i += numBytesPerChar) {

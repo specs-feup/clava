@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.math.BigInteger;
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -28,13 +26,14 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JoaoBispo
  *
  */
-public class IntegerLiteral extends Literal {
+public class IntegerLiteral extends IntegerLiteralBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in IntegerLiteralBase.
 
-    public final static DataKey<BigInteger> VALUE = KeyFactory.bigInteger("value");
-
-    /// DATAKEYS END
+    public IntegerLiteral(DataStore data, Collection<? extends ClavaNode> children, IntegerLiteralBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     // private final String literal;
 
@@ -43,7 +42,7 @@ public class IntegerLiteral extends Literal {
     }
 
     public BigInteger getValue() {
-        return get(VALUE);
+        return getWireValue();
     }
 
 }

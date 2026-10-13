@@ -17,8 +17,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -29,12 +27,12 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JBispo
  *
  */
-public class GCCAsmStmt extends AsmStmt {
+public class GCCAsmStmt extends GCCAsmStmtBase {
 
-    public static final DataKey<String> ASM_STRING = KeyFactory.string("asmString");
-    public static final DataKey<Boolean> IS_INLINE = KeyFactory.bool("isInline");
-    public static final DataKey<Boolean> IS_GOTO = KeyFactory.bool("isGoto");
-    public static final DataKey<List<String>> LABELS = KeyFactory.list("labels", String.class);
+    public GCCAsmStmt(DataStore data, java.util.Collection<? extends ClavaNode> children, GCCAsmStmtBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public GCCAsmStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -46,37 +44,37 @@ public class GCCAsmStmt extends AsmStmt {
 
         code.append("__asm__");
 
-        if (get(IS_VOLATILE)) {
+        if (getWireIsVolatile()) {
             code.append(" __volatile__");
         }
 
-        if (Boolean.TRUE.equals(get(IS_INLINE))) {
+        if (Boolean.TRUE.equals(getWireIsInline())) {
             code.append(" __inline__");
         }
 
-        if (Boolean.TRUE.equals(get(IS_GOTO))) {
+        if (Boolean.TRUE.equals(getWireIsGoto())) {
             code.append(" goto");
         }
 
         code.append("(\"");
-        code.append(escapeStringLiteral(get(ASM_STRING)));
+        code.append(escapeStringLiteral(getWireAsmString()));
         code.append("\"");
 
         // Outputs
-        var outputs = get(OUTPUTS).stream().map(output -> output.getCode())
+        var outputs = getWireOutputs().stream().map(output -> output.getCode())
                 .collect(Collectors.joining(", "));
 
-        var inputs = get(INPUTS).stream().map(input -> input.getCode())
+        var inputs = getWireInputs().stream().map(input -> input.getCode())
                 .collect(Collectors.joining(", "));
 
-        var clobbers = get(CLOBBERS).stream()
+        var clobbers = getWireClobbers().stream()
                 .map(clobber -> "\"" + clobber + "\"")
                 .collect(Collectors.joining(", "));
 
-        var labels = String.join(", ", get(LABELS));
-        var hasLabels = Boolean.TRUE.equals(get(IS_GOTO)) || !labels.isEmpty();
+        var labels = String.join(", ", getWireLabels());
+        var hasLabels = Boolean.TRUE.equals(getWireIsGoto()) || !labels.isEmpty();
 
-        boolean hasExtendedSyntax = !Boolean.TRUE.equals(get(IS_SIMPLE))
+        boolean hasExtendedSyntax = !Boolean.TRUE.equals(getWireIsSimple())
                 || !outputs.isEmpty() || !inputs.isEmpty() || !clobbers.isEmpty() || hasLabels;
 
         if (hasExtendedSyntax) {

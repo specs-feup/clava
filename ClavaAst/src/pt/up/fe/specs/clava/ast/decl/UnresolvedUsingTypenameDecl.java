@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -27,11 +25,12 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JBispo
  *
  */
-public class UnresolvedUsingTypenameDecl extends TypeDecl {
+public class UnresolvedUsingTypenameDecl extends UnresolvedUsingTypenameDeclBase {
 
-    public static final DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
-
-    public static final DataKey<Boolean> IS_PACK_EXPANSION = KeyFactory.bool("isPackExpansion");
+    public UnresolvedUsingTypenameDecl(DataStore data, java.util.Collection<? extends ClavaNode> children, UnresolvedUsingTypenameDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public UnresolvedUsingTypenameDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -39,6 +38,6 @@ public class UnresolvedUsingTypenameDecl extends TypeDecl {
 
     @Override
     public String getCode() {
-        return "using typename " + get(QUALIFIER) + getDeclName() + (get(IS_PACK_EXPANSION) ? "..." : "") + ";";
+        return "using typename " + getWireQualifier() + getDeclName() + (getWireIsPackExpansion() ? "..." : "") + ";";
     }
 }

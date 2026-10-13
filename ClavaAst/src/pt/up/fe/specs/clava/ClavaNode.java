@@ -44,6 +44,7 @@ import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.data.NodeDataStore;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.NodeWithScope;
 import pt.up.fe.specs.clava.utils.NullNode;
@@ -136,10 +137,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     public ClavaNode(DataStore dataI, Collection<? extends ClavaNode> children) {
         super(children);
 
-        SpecsCheck.checkArgument(dataI instanceof ListDataStore,
+        SpecsCheck.checkArgument(dataI instanceof ListDataStore
+                || dataI instanceof NodeDataStore,
                 () -> "Expected ListDataStore, found  " + dataI.getClass());
 
-        this.dataI = dataI;
+        this.dataI = NodeDataStore.adapt(dataI);
         disableModification = false;
 
         // Set definition of DataStore

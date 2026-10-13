@@ -17,17 +17,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 
 /** Represents a Microsoft-style inline assembly statement. */
-public class MSAsmStmt extends AsmStmt {
+public class MSAsmStmt extends MSAsmStmtBase {
 
-    public static final DataKey<String> ASM_STRING = KeyFactory.string("asmString");
+    public MSAsmStmt(DataStore data, java.util.Collection<? extends ClavaNode> children, MSAsmStmtBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public MSAsmStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -40,7 +41,7 @@ public class MSAsmStmt extends AsmStmt {
         code.append("__asm");
         code.append("{");
 
-        String asmBody = stripCommonIndent(get(ASM_STRING));
+        String asmBody = stripCommonIndent(getWireAsmString());
         if (!asmBody.isEmpty()) {
             String formattedBody = asmBody.lines()
                     .map(line -> getTab() + line)

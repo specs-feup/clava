@@ -15,28 +15,26 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
-public class VariableArrayType extends ArrayType {
+public class VariableArrayType extends VariableArrayTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in VariableArrayTypeBase.
 
-    @pt.up.fe.specs.clava.NullableNodeReference
-    public final static DataKey<Expr> SIZE_EXPR = KeyFactory.object("sizeExpr", Expr.class);
-
-    /// DATAKEYS END
+    public VariableArrayType(DataStore data, Collection<? extends ClavaNode> children, VariableArrayTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public VariableArrayType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Expr getExpr() {
-        return get(SIZE_EXPR);
+        return getWireSizeExpr();
     }
 
     @Override

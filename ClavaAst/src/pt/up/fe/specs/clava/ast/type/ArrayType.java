@@ -20,35 +20,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 
-public abstract class ArrayType extends Type {
+public abstract class ArrayType extends ArrayTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in ArrayTypeBase.
 
-    public final static DataKey<ArraySizeModifier> ARRAY_SIZE_MODIFIER = KeyFactory
-            .enumeration("arraySizeModifier", ArraySizeModifier.class)
-            .setDefault(() -> ArraySizeModifier.Normal);
-
-    public final static DataKey<List<C99Qualifier>> INDEX_TYPE_QUALIFIERS = KeyFactory
-            .generic("indexTypeQualifiers", (List<C99Qualifier>) new ArrayList<C99Qualifier>())
-            .setDefault(() -> new ArrayList<>());
-
-    public final static DataKey<Type> ELEMENT_TYPE = KeyFactory.object("elementType", Type.class);
-
-    /// DATAKEYS END
+    public ArrayType(DataStore data, Collection<? extends ClavaNode> children, ArrayTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public ArrayType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Type getElementType() {
-        return get(ELEMENT_TYPE);
+        return getWireElementType();
     }
 
     public void setElementType(Type type) {
@@ -94,11 +86,11 @@ public abstract class ArrayType extends Type {
 
         Type elementType = getElementType();
 
-        String qualifierString = get(INDEX_TYPE_QUALIFIERS).stream()
+        String qualifierString = getWireIndexTypeQualifiers().stream()
                 .map(C99Qualifier::getCode)
                 .collect(Collectors.joining(" "));
 
-        String arraySizeType = get(ARRAY_SIZE_MODIFIER).getCode();
+        String arraySizeType = getWireArraySizeModifier().getCode();
 
         StringBuilder arrayContentCode = new StringBuilder(qualifierString);
         if (!qualifierString.isEmpty() && !arraySizeType.isEmpty()) {
@@ -137,19 +129,19 @@ public abstract class ArrayType extends Type {
 
     @Override
     public boolean isConst() {
-        return get(ELEMENT_TYPE).isConst();
+        return getWireElementType().isConst();
     }
 
     @Override
     public void removeConst() {
-        get(ELEMENT_TYPE).removeConst();
+        getWireElementType().removeConst();
     }
 
     @Override
     public Type asConst() {
         var typeCopy = copy();
 
-        typeCopy.set(ELEMENT_TYPE, get(ELEMENT_TYPE).asConst());
+        typeCopy.set(ELEMENT_TYPE, getWireElementType().asConst());
 
         return typeCopy;
     }

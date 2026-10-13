@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.decl;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -29,18 +27,14 @@ import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
  * @author JoaoBispo
  *
  */
-public class LinkageSpecDecl extends Decl {
+public class LinkageSpecDecl extends LinkageSpecDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in LinkageSpecDeclBase.
 
-    public final static DataKey<LanguageId> LINKAGE_TYPE = KeyFactory.enumeration("linkageType", LanguageId.class);
-
-    /**
-     * If true, uses #if/def guards when generating code,
-     */
-    public final static DataKey<Boolean> USE_GUARDS = KeyFactory.bool("useGuards");
-
-    /// DATAKEYS END
+    public LinkageSpecDecl(DataStore data, Collection<? extends ClavaNode> children, LinkageSpecDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public LinkageSpecDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -50,13 +44,13 @@ public class LinkageSpecDecl extends Decl {
     public String getCode() {
         StringBuilder builder = new StringBuilder();
 
-        var useGuards = get(USE_GUARDS);
+        var useGuards = getWireUseGuards();
 
         if (useGuards) {
             builder.append("#ifdef __cplusplus");
         }
 
-        builder.append(ln() + "extern \"" + get(LINKAGE_TYPE) + "\" {" + ln());
+        builder.append(ln() + "extern \"" + getWireLinkageType() + "\" {" + ln());
 
         if (useGuards) {
             builder.append("#endif");
@@ -80,7 +74,7 @@ public class LinkageSpecDecl extends Decl {
     }
 
     public LanguageId getLanguage() {
-        return get(LINKAGE_TYPE);
+        return getWireLinkageType();
     }
 
 }

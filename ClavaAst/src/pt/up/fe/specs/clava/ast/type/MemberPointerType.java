@@ -19,30 +19,29 @@ import java.util.Collection;
 import java.util.List;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class MemberPointerType extends Type {
+public class MemberPointerType extends MemberPointerTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in MemberPointerTypeBase.
 
-    public static final DataKey<Type> CLASS_TYPE = KeyFactory.object("classType", Type.class);
-    public static final DataKey<Type> POINTEE_TYPE = KeyFactory.object("pointeeType", Type.class);
-
-    /// DATAKEYS END
+    public MemberPointerType(DataStore data, Collection<? extends ClavaNode> children, MemberPointerTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public MemberPointerType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Type getClassType() {
-        return get(CLASS_TYPE);
+        return getWireClassType();
     }
 
     public Type getPointeeType() {
-        return get(POINTEE_TYPE);
+        return getWirePointeeType();
     }
 
     @Override

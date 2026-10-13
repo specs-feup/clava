@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -32,15 +30,14 @@ import pt.up.fe.specs.clava.ast.extra.data.Language;
  * @author JBispo
  *
  */
-public class TypeOfExprType extends Type {
+public class TypeOfExprType extends TypeOfExprTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in TypeOfExprTypeBase.
 
-    public final static DataKey<Boolean> IS_SUGARED = KeyFactory.bool("isSugared");
-
-    public final static DataKey<Expr> UNDERLYING_EXPR = KeyFactory.object("underlyingExpr", Expr.class);
-
-    /// DATAKEYS END
+    public TypeOfExprType(DataStore data, Collection<? extends ClavaNode> children, TypeOfExprTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public TypeOfExprType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -48,15 +45,15 @@ public class TypeOfExprType extends Type {
 
     @Override
     public Type desugar() {
-        if (get(IS_SUGARED)) {
-            return get(UNDERLYING_EXPR).getType();
+        if (getWireIsSugared()) {
+            return getWireUnderlyingExpr().getType();
         }
 
         return this;
     }
 
     public Expr getUnderlyingExpr() {
-        return get(UNDERLYING_EXPR);
+        return getWireUnderlyingExpr();
     }
 
     @Override

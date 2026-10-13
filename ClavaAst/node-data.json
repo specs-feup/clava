@@ -1,0 +1,1292 @@
+[
+  {
+    "table": "AccessSpecDeclData",
+    "className": "AccessSpecDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "Decl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.language.AccessSpecifier;"],
+    "keys": [
+      {"name": "ACCESS_SPECIFIER", "type": "AccessSpecifier", "initializer": "KeyFactory.enumeration(\"accessSpecifier\", AccessSpecifier.class)", "nullable": false, "wireField": "access_specifier"}
+    ]
+  },
+  {
+    "table": "AdjustedTypeData",
+    "className": "AdjustedType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "ORIGINAL_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"originalType\", Type.class)", "nullable": false, "wireField": "original_type"},
+      {"name": "ADJUSTED_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"adjustedType\", Type.class)", "nullable": false, "wireField": "adjusted_type"}
+    ]
+  },
+  {
+    "table": "AlignedAttrData",
+    "className": "AlignedAttr",
+    "packageName": "pt.up.fe.specs.clava.ast.attr",
+    "parent": "InheritableAttr",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.attr.enums.AlignedAttrKind;", "import pt.up.fe.specs.clava.ast.expr.Expr;", "import pt.up.fe.specs.clava.ast.type.Type;"],
+    "keys": [
+      {"name": "SPELLING", "type": "String", "initializer": "KeyFactory.string(\"spelling\")", "nullable": false, "wireField": "spelling"},
+      {"name": "ALIGNED_ATTR_KIND", "type": "AlignedAttrKind", "initializer": "KeyFactory .enumeration(\"alignedAttrKind\", AlignedAttrKind.class)", "nullable": false, "wireField": null},
+      {"name": "EXPR", "type": "Optional<Expr>", "initializer": "KeyFactory.optional(\"expr\")", "nullable": false, "wireField": null},
+      {"name": "TYPE", "type": "Type", "initializer": "KeyFactory.object(\"type\", Type.class)", "nullable": false, "wireField": null}
+    ]
+  },
+  {
+    "table": "ArrayTypeData",
+    "className": "ArrayType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;", "import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;"],
+    "keys": [
+      {"name": "ARRAY_SIZE_MODIFIER", "type": "ArraySizeModifier", "initializer": "KeyFactory .enumeration(\"arraySizeModifier\", ArraySizeModifier.class) .setDefault(() -> ArraySizeModifier.Normal)", "nullable": false, "wireField": "array_size_modifier"},
+      {"name": "INDEX_TYPE_QUALIFIERS", "type": "List<C99Qualifier>", "initializer": "KeyFactory .generic(\"indexTypeQualifiers\", (List<C99Qualifier>) new ArrayList<C99Qualifier>()) .setDefault(() -> new ArrayList<>())", "nullable": false, "wireField": "index_type_qualifiers"},
+      {"name": "ELEMENT_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"elementType\", Type.class)", "nullable": false, "wireField": "element_type"}
+    ]
+  },
+  {
+    "table": "AsmStmtData",
+    "className": "AsmStmt",
+    "packageName": "pt.up.fe.specs.clava.ast.stmt",
+    "parent": "Stmt",
+    "imports": ["import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.stmt.data.AsmInput;", "import pt.up.fe.specs.clava.ast.stmt.data.AsmOutput;"],
+    "keys": [
+      {"name": "IS_SIMPLE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isSimple\")", "nullable": false, "wireField": "is_simple"},
+      {"name": "IS_VOLATILE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isVolatile\")", "nullable": false, "wireField": "is_volatile"},
+      {"name": "CLOBBERS", "type": "List<String>", "initializer": "KeyFactory.list(\"clobbers\", String.class)", "nullable": false, "wireField": "clobbers"},
+      {"name": "OUTPUTS", "type": "List<AsmOutput>", "initializer": "KeyFactory.list(\"outputs\", AsmOutput.class)", "nullable": false, "wireField": "outputs"},
+      {"name": "INPUTS", "type": "List<AsmInput>", "initializer": "KeyFactory.list(\"inputs\", AsmInput.class)", "nullable": false, "wireField": "inputs"}
+    ]
+  },
+  {
+    "table": "AttributeData",
+    "className": "Attribute",
+    "packageName": "pt.up.fe.specs.clava.ast.attr",
+    "parent": "ClavaNode",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ClavaNode;", "import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;"],
+    "keys": [
+      {"name": "KIND", "type": "AttributeKind", "initializer": "KeyFactory.enumeration(\"kind\", AttributeKind.class)", "nullable": false, "wireField": "kind"},
+      {"name": "IS_IMPLICIT", "type": "Boolean", "initializer": "KeyFactory.bool(\"isImplicit\")", "nullable": false, "wireField": "is_implicit"},
+      {"name": "IS_INHERITED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isInherited\")", "nullable": false, "wireField": "is_inherited"},
+      {"name": "IS_LATE_PARSED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isLateParsed\")", "nullable": false, "wireField": "is_late_parsed"},
+      {"name": "IS_PACK_EXPANSION", "type": "Boolean", "initializer": "KeyFactory.bool(\"isPackExpansion\")", "nullable": false, "wireField": "is_pack_expansion"}
+    ]
+  },
+  {
+    "table": "AttributedStmtData",
+    "className": "AttributedStmt",
+    "packageName": "pt.up.fe.specs.clava.ast.stmt",
+    "parent": "Stmt",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.attr.Attribute;"],
+    "keys": [
+      {"name": "STMT_ATTRIBUTES", "type": "List<Attribute>", "initializer": "KeyFactory .generic(\"stmtAttributes\", new ArrayList<Attribute>())", "nullable": false, "wireField": "stmt_attributes"}
+    ]
+  },
+  {
+    "table": "AttributedTypeData",
+    "className": "AttributedType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "MODIFIED_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"modifiedType\", Type.class)", "nullable": false, "wireField": "modified_type"},
+      {"name": "EQUIVALENT_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"equivalentType\", Type.class)", "nullable": false, "wireField": "equivalent_type"}
+    ]
+  },
+  {
+    "table": "AutoTypeData",
+    "className": "AutoType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "DEDUCED_TYPE", "type": "Optional<Type>", "initializer": "KeyFactory.optional(\"deducedType\")", "nullable": false, "description": "The type deduced for this auto type, or empty if it's either not been deduced or was deduced to a dependent type.", "wireField": "deduced_type"}
+    ]
+  },
+  {
+    "table": "BinaryOperatorData",
+    "className": "BinaryOperator",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Operator",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;"],
+    "keys": [
+      {"name": "OP", "type": "BinaryOperatorKind", "initializer": "KeyFactory.enumeration(\"op\", BinaryOperatorKind.class)", "nullable": false, "wireField": "op"}
+    ]
+  },
+  {
+    "table": "BuiltinTypeData",
+    "className": "BuiltinType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;", "import pt.up.fe.specs.util.parsing.StringCodec;"],
+    "keys": [
+      {"name": "KIND", "type": "BuiltinKind", "initializer": "KeyFactory.enumeration(\"kind\", BuiltinKind.class) .setDecoder(StringCodec.newInstance(kind -> kind.getCode(), BuiltinKind::newInstance))", "nullable": false, "description": "The kind of the built-in.", "wireField": "kind"},
+      {"name": "KIND_LITERAL", "type": "String", "initializer": "KeyFactory.string(\"kindLiteral\")", "nullable": false, "description": "Optional, the literal code for this built-in type.", "wireField": "kind_literal"}
+    ]
+  },
+  {
+    "table": "CXXBoolLiteralExprData",
+    "className": "CXXBoolLiteralExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Literal",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "VALUE", "type": "Boolean", "initializer": "KeyFactory.bool(\"value\")", "nullable": false, "wireField": "value"}
+    ]
+  },
+  {
+    "table": "CXXConstructExprData",
+    "className": "CXXConstructExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;", "import pt.up.fe.specs.clava.ast.expr.enums.ConstructionKind;"],
+    "keys": [
+      {"name": "IS_ELIDABLE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isElidable\")", "nullable": false, "wireField": "is_elidable"},
+      {"name": "REQUIRES_ZERO_INITIALIZATION", "type": "Boolean", "initializer": "KeyFactory.bool(\"requiresZeroInitialization\")", "nullable": false, "wireField": "requires_zero_initialization"},
+      {"name": "IS_LIST_INITIALIZATION", "type": "Boolean", "initializer": "KeyFactory.bool(\"isListInitialization\")", "nullable": false, "wireField": "is_list_initialization"},
+      {"name": "IS_STD_LIST_INITIALIZATION", "type": "Boolean", "initializer": "KeyFactory.bool(\"isStdListInitialization\")", "nullable": false, "wireField": "is_std_list_initialization"},
+      {"name": "CONSTRUCTION_KIND", "type": "ConstructionKind", "initializer": "KeyFactory.enumeration(\"constructionKind\", ConstructionKind.class)", "nullable": false, "wireField": "construction_kind"},
+      {"name": "IS_TEMPORARY_OBJECT", "type": "Boolean", "initializer": "KeyFactory.bool(\"isTemporaryObject\")", "nullable": false, "wireField": "is_temporary_object"},
+      {"name": "CONSTRUCTOR_DECL", "type": "CXXConstructorDecl", "initializer": "KeyFactory.object(\"constructorDecl\", CXXConstructorDecl.class)", "nullable": false, "wireField": "constructor_decl"}
+    ]
+  },
+  {
+    "table": "CXXConstructorDeclData",
+    "className": "CXXConstructorDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "CXXMethodDecl",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.data.ExplicitSpecifier;", "import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;"],
+    "keys": [
+      {"name": "CONSTRUCTOR_INITS", "type": "List<CXXCtorInitializer>", "initializer": "KeyFactory.generic(\"constructorInits\", (List<CXXCtorInitializer>) new ArrayList<CXXCtorInitializer>())", "nullable": false, "wireField": "constructor_inits"},
+      {"name": "IS_DEFAULT_CONSTRUCTOR", "type": "Boolean", "initializer": "KeyFactory.bool(\"isDefaultConstructor\")", "nullable": false, "description": "True if this constructor is a default constructor.", "wireField": "is_default_constructor"},
+      {"name": "IS_EXPLICIT", "type": "Boolean", "initializer": "KeyFactory.bool(\"isExplicit\")", "nullable": false, "description": "True if this constructor was marked \"explicit\".", "wireField": "is_explicit"},
+      {"name": "EXPLICIT_SPECIFIER", "type": "ExplicitSpecifier", "initializer": "KeyFactory.object(\"explicitSpecifier\", ExplicitSpecifier.class)", "nullable": false, "description": "DataClass with information about the 'explicit' keyword.", "wireField": "explicit_specifier"}
+    ]
+  },
+  {
+    "table": "CXXConversionDeclData",
+    "className": "CXXConversionDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "CXXMethodDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.Type;"],
+    "keys": [
+      {"name": "IS_EXPLICIT", "type": "Boolean", "initializer": "KeyFactory.bool(\"isExplicit\")", "nullable": false, "description": "True if the declaration is already resolved to be explicit.", "wireField": "is_explicit"},
+      {"name": "IS_LAMBDA_TO_BLOCK_POINTER_CONVERSION", "type": "Boolean", "initializer": "KeyFactory .bool(\"isLambdaToBlockPointerConversion\")", "nullable": false, "description": "True if this conversion function is a conversion from a lambda closure type to a block pointer.", "wireField": "is_lambda_to_block_pointer_conversion"},
+      {"name": "CONVERSION_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"conversionType\", Type.class)", "nullable": false, "description": "The type that this conversion function is converting to.", "wireField": "conversion_type"}
+    ]
+  },
+  {
+    "table": "CXXDeleteExprData",
+    "className": "CXXDeleteExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "IS_GLOBAL", "type": "Boolean", "initializer": "KeyFactory.bool(\"isGlobal\")", "nullable": false, "wireField": "is_global"},
+      {"name": "IS_ARRAY", "type": "Boolean", "initializer": "KeyFactory.bool(\"isArray\")", "nullable": false, "wireField": "is_array"},
+      {"name": "IS_ARRAY_AS_WRITTEN", "type": "Boolean", "initializer": "KeyFactory.bool(\"isArrayAsWritten\")", "nullable": false, "wireField": "is_array_as_written"}
+    ]
+  },
+  {
+    "table": "CXXDependentScopeMemberExprData",
+    "className": "CXXDependentScopeMemberExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;"],
+    "keys": [
+      {"name": "IS_ARROW", "type": "Boolean", "initializer": "KeyFactory.bool(\"isArrow\")", "nullable": false, "wireField": "is_arrow"},
+      {"name": "MEMBER_NAME", "type": "String", "initializer": "KeyFactory.string(\"memberName\")", "nullable": false, "wireField": "member_name"},
+      {"name": "IS_IMPLICIT_ACCESS", "type": "Boolean", "initializer": "KeyFactory.bool(\"isImplicitAccess\")", "nullable": false, "wireField": "is_implicit_access"},
+      {"name": "QUALIFIER", "type": "String", "initializer": "KeyFactory.string(\"qualifier\")", "nullable": false, "wireField": "qualifier"},
+      {"name": "HAS_TEMPLATE_KEYWORD", "type": "Boolean", "initializer": "KeyFactory.bool(\"hasTemplateKeyword\")", "nullable": false, "wireField": "has_template_keyword"},
+      {"name": "TEMPLATE_ARGUMENTS", "type": "List<TemplateArgument>", "initializer": "KeyFactory .generic(\"templateArguments\", (List<TemplateArgument>) new ArrayList<TemplateArgument>()) .setDefault(() -> new ArrayList<>())", "nullable": false, "wireField": "template_arguments"}
+    ]
+  },
+  {
+    "table": "CXXMemberCallExprData",
+    "className": "CXXMemberCallExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "CallExpr",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;"],
+    "keys": [
+      {"name": "METHOD_DECL", "type": "Optional<CXXMethodDecl>", "initializer": "KeyFactory.optional(\"methodDecl\")", "nullable": false, "wireField": "method_decl"}
+    ]
+  },
+  {
+    "table": "CXXMethodDeclData",
+    "className": "CXXMethodDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "FunctionDecl",
+    "imports": ["import java.util.List;", "import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.Type;"],
+    "keys": [
+      {"name": "RECORD", "type": "Decl", "initializer": "KeyFactory.object(\"record\", Decl.class)", "nullable": false, "wireField": "record"},
+      {"name": "OVERRIDDEN_METHODS", "type": "List<CXXMethodDecl>", "initializer": "KeyFactory.list(\"overriddenMethods\", CXXMethodDecl.class)", "nullable": false, "wireField": "overridden_methods"},
+      {"name": "IS_STATIC", "type": "Boolean", "initializer": "KeyFactory.bool(\"isStatic\")", "nullable": false, "wireField": "is_static"},
+      {"name": "IS_INSTANCE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isInstance\")", "nullable": false, "wireField": "is_instance"},
+      {"name": "IS_CONST", "type": "Boolean", "initializer": "KeyFactory.bool(\"isConst\")", "nullable": false, "wireField": "is_const"},
+      {"name": "IS_VOLATILE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isVolatile\")", "nullable": false, "wireField": "is_volatile"},
+      {"name": "IS_VIRTUAL", "type": "Boolean", "initializer": "KeyFactory.bool(\"isVirtual\")", "nullable": false, "wireField": "is_virtual"},
+      {"name": "IS_COPY_ASSIGNMENT_OPERATOR", "type": "Boolean", "initializer": "KeyFactory.bool(\"isCopyAssignmentOperator\")", "nullable": false, "description": "True if this is a copy-assignment operator, either declared implicitly or explicitly.", "wireField": "is_copy_assignment_operator"},
+      {"name": "IS_MOVE_ASSIGNMENT_OPERATOR", "type": "Boolean", "initializer": "KeyFactory.bool(\"isMoveAssignmentOperator\")", "nullable": false, "description": "", "wireField": "is_move_assignment_operator"},
+      {"name": "THIS_TYPE", "type": "Optional<Type>", "initializer": "KeyFactory.optional(\"thisType\")", "nullable": false, "description": "Return the type of the 'this' pointer. Note that for the call operator of a lambda closure type, this returns the\ndesugared 'this' type (a pointer to the closure type), not the captured 'this' type.", "wireField": "this_type"},
+      {"name": "THIS_OBJECT_TYPE", "type": "Optional<Type>", "initializer": "KeyFactory.optional(\"thisObjectType\")", "nullable": false, "description": "The type of the object pointed by 'this'.", "wireField": "this_object_type"},
+      {"name": "HAS_INLINE_BODY", "type": "Boolean", "initializer": "KeyFactory.bool(\"hasInlineBody\")", "nullable": false, "wireField": "has_inline_body"},
+      {"name": "IS_LAMBDA_STATIC_INVOKER", "type": "Boolean", "initializer": "KeyFactory.bool(\"isLambdaStaticInvoker\")", "nullable": false, "description": "True if this is a lambda closure type's static member function that is used for the result of the lambda's\nconversion to function pointer (for a lambda with no captures).", "wireField": "is_lambda_static_invoker"}
+    ]
+  },
+  {
+    "table": "CXXNamedCastExprData",
+    "className": "CXXNamedCastExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "ExplicitCastExpr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "CAST_NAME", "type": "String", "initializer": "KeyFactory.string(\"castName\")", "nullable": false, "wireField": "cast_name"}
+    ]
+  },
+  {
+    "table": "CXXNewExprData",
+    "className": "CXXNewExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.FunctionDecl;", "import pt.up.fe.specs.clava.ast.expr.enums.NewInitStyle;"],
+    "keys": [
+      {"name": "IS_GLOBAL", "type": "Boolean", "initializer": "KeyFactory.bool(\"isGlobal\")", "nullable": false, "wireField": "is_global"},
+      {"name": "IS_ARRAY", "type": "Boolean", "initializer": "KeyFactory.bool(\"isArray\")", "nullable": false, "wireField": "is_array"},
+      {"name": "INITIALIZATION_PRESENT", "type": "Boolean", "initializer": "KeyFactory.bool(\"initializationPresent\")", "nullable": false, "wireField": "initialization_present"},
+      {"name": "INIT_STYLE", "type": "NewInitStyle", "initializer": "KeyFactory.enumeration(\"initStyle\", NewInitStyle.class)", "nullable": false, "wireField": "init_style"},
+      {"name": "INITIALIZER", "type": "Optional<Expr>", "initializer": "KeyFactory.optional(\"initializer\")", "nullable": false, "wireField": "initializer"},
+      {"name": "CONSTRUCT_EXPR", "type": "Optional<CXXConstructExpr>", "initializer": "KeyFactory.optional(\"constructExpr\")", "nullable": false, "wireField": "construct_expr"},
+      {"name": "ARRAY_SIZE", "type": "Optional<Expr>", "initializer": "KeyFactory.optional(\"arraySize\")", "nullable": false, "wireField": "array_size"},
+      {"name": "OPERATOR_NEW", "type": "Optional<FunctionDecl>", "initializer": "KeyFactory.optional(\"operatorNew\")", "nullable": false, "wireField": "operator_new"}
+    ]
+  },
+  {
+    "table": "CXXNoexceptExprData",
+    "className": "CXXNoexceptExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "VALUE", "type": "Boolean", "initializer": "KeyFactory.bool(\"value\")", "nullable": false, "wireField": "value"}
+    ]
+  },
+  {
+    "table": "CXXPseudoDestructorExprData",
+    "className": "CXXPseudoDestructorExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.Type;"],
+    "keys": [
+      {"name": "QUALIFIER", "type": "Optional<String>", "initializer": "KeyFactory.optional(\"qualifier\")", "nullable": false, "wireField": "qualifier"},
+      {"name": "IS_ARROW", "type": "Boolean", "initializer": "KeyFactory.bool(\"isArrow\")", "nullable": false, "wireField": "is_arrow"},
+      {"name": "DESTROYED_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"destroyedType\", Type.class)", "nullable": false, "wireField": "destroyed_type"}
+    ]
+  },
+  {
+    "table": "CXXRecordDeclData",
+    "className": "CXXRecordDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "RecordDecl",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.data.CXXBaseSpecifier;"],
+    "keys": [
+      {"name": "RECORD_BASES", "type": "List<CXXBaseSpecifier>", "initializer": "KeyFactory .generic(\"recordBases\", (List<CXXBaseSpecifier>) new ArrayList<CXXBaseSpecifier>())", "nullable": false, "description": "A list of the base specifiers of this CXXRecordDecl.", "wireField": "record_bases"},
+      {"name": "HAS_DEFINITION", "type": "Boolean", "initializer": "KeyFactory.bool(\"hasDefinition\")", "nullable": false, "wireField": null},
+      {"name": "RECORD_DEFINITION", "type": "Optional<CXXRecordDecl>", "initializer": "KeyFactory.optional(\"recordDefinition\")", "nullable": false, "wireField": "record_definition"}
+    ]
+  },
+  {
+    "table": "CXXTypeidExprData",
+    "className": "CXXTypeidExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ClavaNode;"],
+    "keys": [
+      {"name": "IS_TYPE_OPERAND", "type": "Boolean", "initializer": "KeyFactory.bool(\"isTypeOperand\")", "nullable": false, "wireField": "is_type_operand"},
+      {"name": "OPERAND", "type": "ClavaNode", "initializer": "KeyFactory.object(\"operand\", ClavaNode.class)", "nullable": false, "wireField": "operand"}
+    ]
+  },
+  {
+    "table": "CXXUnresolvedConstructExprData",
+    "className": "CXXUnresolvedConstructExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "IS_LIST_INITIALIZATION", "type": "Boolean", "initializer": "KeyFactory.bool(\"isListInitialization\")", "nullable": false, "wireField": "is_list_initialization"}
+    ]
+  },
+  {
+    "table": "CallExprData",
+    "className": "CallExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.FunctionDecl;"],
+    "keys": [
+      {"name": "DIRECT_CALLEE", "type": "Optional<FunctionDecl>", "initializer": "KeyFactory.optional(\"directCallee\")", "nullable": false, "wireField": "direct_callee"}
+    ]
+  },
+  {
+    "table": "CastExprData",
+    "className": "CastExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.language.CastKind;"],
+    "keys": [
+      {"name": "CAST_KIND", "type": "CastKind", "initializer": "KeyFactory.enumeration(\"castKind\", CastKind.class)", "nullable": false, "wireField": "cast_kind"}
+    ]
+  },
+  {
+    "table": "CharacterLiteralData",
+    "className": "CharacterLiteral",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Literal",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;"],
+    "keys": [
+      {"name": "VALUE", "type": "Long", "initializer": "KeyFactory.longInt(\"value\")", "nullable": false, "wireField": "value"},
+      {"name": "KIND", "type": "CharacterKind", "initializer": "KeyFactory.enumeration(\"kind\", CharacterKind.class)", "nullable": false, "wireField": "kind"}
+    ]
+  },
+  {
+    "table": "ClassTemplatePartialSpecializationDeclData",
+    "className": "ClassTemplatePartialSpecializationDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "ClassTemplateSpecializationDecl",
+    "imports": ["import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "TEMPLATE_PARAMETERS", "type": "List<NamedDecl>", "initializer": "KeyFactory.list(\"templateParameters\", NamedDecl.class)", "nullable": false, "wireField": "template_parameters"}
+    ]
+  },
+  {
+    "table": "ClassTemplateSpecializationDeclData",
+    "className": "ClassTemplateSpecializationDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "CXXRecordDecl",
+    "imports": ["import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;", "import pt.up.fe.specs.clava.ast.decl.enums.TemplateSpecializationKind;"],
+    "keys": [
+      {"name": "SPECIALIZED_TEMPLATE", "type": "ClassTemplateDecl", "initializer": "KeyFactory.object(\"specializedTemplate\", ClassTemplateDecl.class)", "nullable": false, "description": "The template that this specialization specializes.", "wireField": "specialized_template"},
+      {"name": "SPECIALIZATION_KIND", "type": "TemplateSpecializationKind", "initializer": "KeyFactory.enumeration( \"specializationKind\", TemplateSpecializationKind.class)", "nullable": false, "description": "The kind of specialization that this declaration represents.", "wireField": "specialization_kind"},
+      {"name": "TEMPLATE_ARGUMENTS", "type": "List<TemplateArgument>", "initializer": "KeyFactory.list(\"templateArguments\", TemplateArgument.class)", "nullable": false, "description": "The template arguments of the class template specialization.", "wireField": "template_arguments"}
+    ]
+  },
+  {
+    "table": "ComplexTypeData",
+    "className": "ComplexType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "ELEMENT_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"elementType\", Type.class)", "nullable": false, "description": "The element type.", "wireField": "element_type"}
+    ]
+  },
+  {
+    "table": "CompoundLiteralExprData",
+    "className": "CompoundLiteralExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Literal",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "IS_FILE_SCOPE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isFileScope\")", "nullable": false, "wireField": "is_file_scope"}
+    ]
+  },
+  {
+    "table": "ConstantArrayTypeData",
+    "className": "ConstantArrayType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "ArrayType",
+    "imports": ["import java.math.BigInteger;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "ARRAY_SIZE", "type": "BigInteger", "initializer": "KeyFactory .object(\"arraySize\", BigInteger.class)", "nullable": false, "wireField": "array_size"}
+    ]
+  },
+  {
+    "table": "DecayedTypeData",
+    "className": "DecayedType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "AdjustedType",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "DECAYED_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"decayedType\", Type.class)", "nullable": false, "wireField": "decayed_type"},
+      {"name": "POINTEE_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"pointeeType\", Type.class)", "nullable": false, "wireField": "pointee_type"}
+    ]
+  },
+  {
+    "table": "DeclData",
+    "className": "Decl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "ClavaNode",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ClavaNode;", "import pt.up.fe.specs.clava.ast.attr.Attribute;"],
+    "keys": [
+      {"name": "IS_IMPLICIT", "type": "Boolean", "initializer": "KeyFactory.bool(\"isImplicit\")", "nullable": false, "description": "True if the declaration was implicitly generated by the implementation. Otherwise, this declaration was written\nexplicitly in the source code.", "wireField": "is_implicit"},
+      {"name": "IS_USED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isUsed\")", "nullable": false, "description": "True if this declaration was used, and requires a definition.", "wireField": "is_used"},
+      {"name": "IS_REFERENCED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isReferenced\")", "nullable": false, "description": "True if any declaration of this entity was referenced.", "wireField": "is_referenced"},
+      {"name": "IS_INVALID_DECL", "type": "Boolean", "initializer": "KeyFactory.bool(\"isInvalidDecl\")", "nullable": false, "description": "True if the node has a semantic error.", "wireField": "is_invalid_decl"},
+      {"name": "IS_MODULE_PRIVATE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isModulePrivate\")", "nullable": false, "description": "True if this declaration was marked as being private to the module in which it was defined.", "wireField": "is_module_private"},
+      {"name": "ATTRIBUTES", "type": "List<Attribute>", "initializer": "KeyFactory .generic(\"attributes\", (List<Attribute>) new ArrayList<Attribute>()) .setDefault(() -> new ArrayList<>())", "nullable": false, "description": "A list of attributes associated with this Decl.", "wireField": "attributes"}
+    ]
+  },
+  {
+    "table": "DeclRefExprData",
+    "className": "DeclRefExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.ValueDecl;", "import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;"],
+    "keys": [
+      {"name": "QUALIFIER", "type": "String", "initializer": "KeyFactory.string(\"qualifier\")", "nullable": false, "description": "The nested-name qualifier that precedes the name, or empty string if it has\nnone.", "wireField": "qualifier"},
+      {"name": "TEMPLATE_ARGUMENTS", "type": "List<TemplateArgument>", "initializer": "KeyFactory .generic(\"templateArguments\", (List<TemplateArgument>) new ArrayList<TemplateArgument>()) .setDefault(() -> new ArrayList<>())", "nullable": false, "wireField": "template_arguments"},
+      {"name": "DECL", "type": "ValueDecl", "initializer": "KeyFactory.object(\"decl\", ValueDecl.class)", "nullable": false, "wireField": "decl"},
+      {"name": "CUSTOM_NAME", "type": "String", "initializer": "KeyFactory.string(\"customName\")", "nullable": false, "wireField": null}
+    ]
+  },
+  {
+    "table": "DecltypeTypeData",
+    "className": "DecltypeType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.expr.Expr;"],
+    "keys": [
+      {"name": "IS_SUGARED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isSugared\")", "nullable": false, "wireField": "is_sugared"},
+      {"name": "UNDERLYING_EXPR", "type": "Expr", "initializer": "KeyFactory.object(\"underlyingExpr\", Expr.class)", "nullable": false, "wireField": "underlying_expr"}
+    ]
+  },
+  {
+    "table": "DependentScopeDeclRefExprData",
+    "className": "DependentScopeDeclRefExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;"],
+    "keys": [
+      {"name": "DECL_NAME", "type": "String", "initializer": "KeyFactory.string(\"declName\")", "nullable": false, "description": "The name that this expression refers to.", "wireField": "decl_name"},
+      {"name": "QUALIFIER", "type": "String", "initializer": "KeyFactory.string(\"qualifier\")", "nullable": false, "description": "The nested-name qualifier that precedes the name, or empty string if it has none.", "wireField": "qualifier"},
+      {"name": "HAS_TEMPLATE_KEYWORD", "type": "Boolean", "initializer": "KeyFactory.bool(\"hasTemplateKeyword\")", "nullable": false, "description": "True if the name was preceded by the template keyword.", "wireField": "has_template_keyword"},
+      {"name": "TEMPLATE_ARGUMENTS", "type": "List<TemplateArgument>", "initializer": "KeyFactory .generic(\"templateArguments\", (List<TemplateArgument>) new ArrayList<TemplateArgument>()) .setDefault(() -> new ArrayList<>())", "nullable": false, "description": "The explicit template arguments of this lookup.", "wireField": "template_arguments"}
+    ]
+  },
+  {
+    "table": "DependentSizedArrayTypeData",
+    "className": "DependentSizedArrayType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "ArrayType",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.expr.Expr;"],
+    "keys": [
+      {"name": "SIZE_EXPR", "type": "Optional<Expr>", "initializer": "KeyFactory.optional(\"sizeExpr\")", "nullable": false, "wireField": "size_expr"}
+    ]
+  },
+  {
+    "table": "DesignatedInitExprData",
+    "className": "DesignatedInitExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.expr.data.designator.Designator;"],
+    "keys": [
+      {"name": "USES_GNU_SYNTAX", "type": "Boolean", "initializer": "KeyFactory.bool(\"usesGnuSyntax\")", "nullable": false, "wireField": "uses_gnu_syntax"},
+      {"name": "DESIGNATORS", "type": "List<Designator>", "initializer": "KeyFactory.list(\"designators\", Designator.class)", "nullable": false, "wireField": "designators"}
+    ]
+  },
+  {
+    "table": "ElaboratedTypeData",
+    "className": "ElaboratedType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "TypeWithKeyword",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "QUALIFIER", "type": "String", "initializer": "KeyFactory.string(\"qualifier\")", "nullable": false, "wireField": "qualifier"},
+      {"name": "NAMED_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"namedType\", Type.class)", "nullable": false, "wireField": "named_type"}
+    ]
+  },
+  {
+    "table": "EnumDeclData",
+    "className": "EnumDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "TagDecl",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;", "import pt.up.fe.specs.clava.ast.type.Type;"],
+    "keys": [
+      {"name": "ENUM_SCOPE_KIND", "type": "EnumScopeType", "initializer": "KeyFactory.enumeration(\"enumScopeKind\", EnumScopeType.class)", "nullable": false, "wireField": "enum_scope_kind"},
+      {"name": "INTEGER_TYPE", "type": "Optional<Type>", "initializer": "KeyFactory.optional(\"integerType\")", "nullable": false, "wireField": "integer_type"}
+    ]
+  },
+  {
+    "table": "ExplicitCastExprData",
+    "className": "ExplicitCastExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "CastExpr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.Type;"],
+    "keys": [
+      {"name": "TYPE_AS_WRITTEN", "type": "Type", "initializer": "KeyFactory.object(\"typeAsWritten\", Type.class)", "nullable": false, "wireField": "type_as_written"}
+    ]
+  },
+  {
+    "table": "ExprData",
+    "className": "Expr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "ClavaNode",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ClavaNode;", "import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;", "import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;", "import pt.up.fe.specs.clava.ast.type.Type;"],
+    "keys": [
+      {"name": "TYPE", "type": "Optional<Type>", "initializer": "KeyFactory.optional(\"type\")", "nullable": false, "wireField": "type"},
+      {"name": "VALUE_KIND", "type": "ValueKind", "initializer": "KeyFactory.enumeration(\"valueKind\", ValueKind.class) .setDefault(() -> ValueKind.getDefault())", "nullable": false, "wireField": "value_kind"},
+      {"name": "OBJECT_KIND", "type": "ObjectKind", "initializer": "KeyFactory.enumeration(\"objectKind\", ObjectKind.class) .setDefault(() -> ObjectKind.ORDINARY)", "nullable": false, "wireField": "object_kind"},
+      {"name": "IMPLICIT_CAST", "type": "ImplicitCastExpr", "initializer": "KeyFactory .object(\"implicitCast\", ImplicitCastExpr.class) .setDefault(() -> null)", "nullable": false, "wireField": null},
+      {"name": "IS_DEFAULT_ARGUMENT", "type": "Boolean", "initializer": "KeyFactory.bool(\"isDefaultArgument\")", "nullable": false, "wireField": "is_default_argument"}
+    ]
+  },
+  {
+    "table": "FieldDeclData",
+    "className": "FieldDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "DeclaratorDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "IS_MUTABLE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isMutable\")", "nullable": false, "wireField": "is_mutable"}
+    ]
+  },
+  {
+    "table": "FloatingLiteralData",
+    "className": "FloatingLiteral",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Literal",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "VALUE", "type": "Double", "initializer": "KeyFactory.double64(\"value\")", "nullable": false, "wireField": "value"}
+    ]
+  },
+  {
+    "table": "FormatAttrData",
+    "className": "FormatAttr",
+    "packageName": "pt.up.fe.specs.clava.ast.attr",
+    "parent": "InheritableAttr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.attr.enums.FormatAttrKind;"],
+    "keys": [
+      {"name": "TYPE", "type": "FormatAttrKind", "initializer": "KeyFactory.enumeration(\"type\", FormatAttrKind.class)", "nullable": false, "wireField": "type"},
+      {"name": "FORMAT_INDEX", "type": "Integer", "initializer": "KeyFactory.integer(\"formatIndex\")", "nullable": false, "wireField": "format_index"},
+      {"name": "FIRST_ARG", "type": "Integer", "initializer": "KeyFactory.integer(\"firstArg\")", "nullable": false, "wireField": "first_arg"}
+    ]
+  },
+  {
+    "table": "FunctionDeclData",
+    "className": "FunctionDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "DeclaratorDecl",
+    "imports": ["import java.util.*;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;", "import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;", "import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;"],
+    "keys": [
+      {"name": "IS_CONSTEXPR", "type": "Boolean", "initializer": "KeyFactory.bool(\"isConstexpr\")", "nullable": false, "description": "True if this is a (C++11) constexpr function or constexpr constructor.", "wireField": "is_constexpr"},
+      {"name": "TEMPLATE_KIND", "type": "TemplateKind", "initializer": "KeyFactory .enumeration(\"templateKind\", TemplateKind.class) .setDefault(() -> TemplateKind.NON_TEMPLATE)", "nullable": false, "description": "The kind of templated function.", "wireField": "template_kind"},
+      {"name": "STORAGE_CLASS", "type": "StorageClass", "initializer": "KeyFactory .enumeration(\"storageClass\", StorageClass.class) .setDefault(() -> StorageClass.None)", "nullable": false, "description": "The storage class as written in the source.", "wireField": "storage_class"},
+      {"name": "IS_INLINE_SPECIFIED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isInlineSpecified\")", "nullable": false, "description": "True if the \"inline\" keyword was specified for this function.", "wireField": "is_inline_specified"},
+      {"name": "IS_VIRTUAL_AS_WRITTEN", "type": "Boolean", "initializer": "KeyFactory.bool(\"isVirtualAsWritten\")", "nullable": false, "description": "True if this function is explicitly marked as virtual.", "wireField": "is_virtual_as_written"},
+      {"name": "IS_PURE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isPure\")", "nullable": false, "description": "True if this virtual function is pure, i.e. makes the containing class abstract.", "wireField": "is_pure"},
+      {"name": "IS_DELETED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isDeleted\")", "nullable": false, "description": "True if this function was deleted (via the C++0x \"= delete\" syntax).", "wireField": "is_deleted"},
+      {"name": "IS_EXPLICITLY_DEFAULTED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isExplicitlyDefaulted\")", "nullable": false, "description": "True if this function is explicitly defaulted (via the C++0x \"= default\" syntax).", "wireField": "is_explicitly_defaulted"},
+      {"name": "PREVIOUS_DECL", "type": "Optional<Decl>", "initializer": "KeyFactory.optional(\"previousDecl\")", "nullable": false, "wireField": "previous_decl"},
+      {"name": "CANONICAL_DECL", "type": "Decl", "initializer": "KeyFactory.object(\"canonicalDecl\", Decl.class)", "nullable": false, "wireField": "canonical_decl"},
+      {"name": "PRIMARY_TEMPLATE_DECL", "type": "Optional<FunctionDecl>", "initializer": "KeyFactory .optional(\"primaryTemplateDecl\")", "nullable": false, "wireField": "primary_template_decl"},
+      {"name": "TEMPLATE_ARGUMENTS", "type": "List<TemplateArgument>", "initializer": "KeyFactory .generic(\"templateArguments\", (List<TemplateArgument>) new ArrayList<TemplateArgument>())", "nullable": false, "description": "Template arguments of this function, if any.", "wireField": "template_arguments"},
+      {"name": "TEMPLATE_PARAMETERS", "type": "List<NamedDecl>", "initializer": "KeyFactory.list(\"templateParameters\", NamedDecl.class)", "nullable": false, "wireField": "template_parameters"},
+      {"name": "TEMPLATE_PARAMETER_LIST_SIZES", "type": "List<Integer>", "initializer": "KeyFactory.list(\"templateParameterListSizes\", Integer.class)", "nullable": false, "wireField": "template_parameter_list_sizes"}
+    ]
+  },
+  {
+    "table": "FunctionProtoTypeData",
+    "className": "FunctionProtoType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "FunctionType",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.data.ExceptionSpecification;", "import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;", "import pt.up.fe.specs.clava.language.ReferenceQualifier;"],
+    "keys": [
+      {"name": "NUM_PARAMETERS", "type": "Integer", "initializer": "KeyFactory.integer(\"numParameters\")", "nullable": false, "wireField": "num_parameters"},
+      {"name": "PARAMETERS_TYPES", "type": "List<Type>", "initializer": "KeyFactory.generic(\"parametersTypes\", new ArrayList<Type>())", "nullable": false, "wireField": "parameters_types"},
+      {"name": "HAS_TRAILING_RETURNS", "type": "Boolean", "initializer": "KeyFactory.bool(\"hasTrailingReturns\")", "nullable": false, "wireField": "has_trailing_returns"},
+      {"name": "IS_VARIADIC", "type": "Boolean", "initializer": "KeyFactory.bool(\"isVariadic\")", "nullable": false, "wireField": "is_variadic"},
+      {"name": "REFERENCE_QUALIFIER", "type": "ReferenceQualifier", "initializer": "KeyFactory .enumeration(\"referenceQualifier\", ReferenceQualifier.class) .setDefault(() -> ReferenceQualifier.None)", "nullable": false, "wireField": "reference_qualifier"},
+      {"name": "EXCEPTION_SPECIFICATION", "type": "ExceptionSpecification", "initializer": "KeyFactory .object(\"exceptionSpecification\", ExceptionSpecification.class) .setDefault(() -> ExceptionSpecificationType.None.newInstance())", "nullable": false, "wireField": "exception_specification"}
+    ]
+  },
+  {
+    "table": "FunctionTypeData",
+    "className": "FunctionType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;"],
+    "keys": [
+      {"name": "IS_CONST", "type": "Boolean", "initializer": "KeyFactory.bool(\"isConst\")", "nullable": false, "wireField": "is_const"},
+      {"name": "IS_VOLATILE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isVolatile\")", "nullable": false, "wireField": "is_volatile"},
+      {"name": "IS_RESTRICT", "type": "Boolean", "initializer": "KeyFactory.bool(\"isRestrict\")", "nullable": false, "wireField": "is_restrict"},
+      {"name": "NO_RETURN", "type": "Boolean", "initializer": "KeyFactory.bool(\"noReturn\")", "nullable": false, "description": "@deprecated No need to be stored in a field, can be calculated. Use FunctionType.hasNoReturn() instead", "wireField": "no_return"},
+      {"name": "PRODUCES_RESULT", "type": "Boolean", "initializer": "KeyFactory.bool(\"producesResult\")", "nullable": false, "wireField": "produces_result"},
+      {"name": "USES_REG_PARM", "type": "Boolean", "initializer": "KeyFactory.bool(\"usesRegParm\")", "nullable": false, "wireField": "uses_reg_parm"},
+      {"name": "REG_PARM", "type": "Long", "initializer": "KeyFactory.longInt(\"regParm\")", "nullable": false, "wireField": "reg_parm"},
+      {"name": "CALLING_CONVENTION", "type": "CallingConvention", "initializer": "KeyFactory.enumeration(\"callingConvention\", CallingConvention.class)", "nullable": false, "wireField": "calling_convention"},
+      {"name": "RETURN_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"returnType\", Type.class)", "nullable": false, "wireField": "return_type"}
+    ]
+  },
+  {
+    "table": "GCCAsmStmtData",
+    "className": "GCCAsmStmt",
+    "packageName": "pt.up.fe.specs.clava.ast.stmt",
+    "parent": "AsmStmt",
+    "imports": ["import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "ASM_STRING", "type": "String", "initializer": "KeyFactory.string(\"asmString\")", "nullable": false, "wireField": "asm_string"},
+      {"name": "IS_INLINE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isInline\")", "nullable": false, "wireField": "is_inline"},
+      {"name": "IS_GOTO", "type": "Boolean", "initializer": "KeyFactory.bool(\"isGoto\")", "nullable": false, "wireField": "is_goto"},
+      {"name": "LABELS", "type": "List<String>", "initializer": "KeyFactory.list(\"labels\", String.class)", "nullable": false, "wireField": "labels"}
+    ]
+  },
+  {
+    "table": "GotoStmtData",
+    "className": "GotoStmt",
+    "packageName": "pt.up.fe.specs.clava.ast.stmt",
+    "parent": "Stmt",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.LabelDecl;"],
+    "keys": [
+      {"name": "LABEL", "type": "LabelDecl", "initializer": "KeyFactory.object(\"label\", LabelDecl.class)", "nullable": false, "wireField": "label"}
+    ]
+  },
+  {
+    "table": "InitListExprData",
+    "className": "InitListExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.FieldDecl;"],
+    "keys": [
+      {"name": "ARRAY_FILLER", "type": "Optional<Expr>", "initializer": "KeyFactory.optional(\"arrayFiller\")", "nullable": false, "description": "OPTIONAL - If this initializer list initializes an array with more elements than there are initializers in the\nlist, specifies an expression to be used for value initialization of the rest of the elements.", "wireField": "array_filler"},
+      {"name": "INITIALIZED_FIELD_IN_UNION", "type": "FieldDecl", "initializer": "KeyFactory.object(\"initializedFieldInUnion\", FieldDecl.class)", "nullable": false, "wireField": null},
+      {"name": "IS_EXPLICIT", "type": "Boolean", "initializer": "KeyFactory.bool(\"isExplicit\")", "nullable": false, "wireField": "is_explicit"},
+      {"name": "IS_STRING_LITERAL_INIT", "type": "Boolean", "initializer": "KeyFactory.bool(\"isStringLiteralInit\")", "nullable": false, "wireField": "is_string_literal_init"},
+      {"name": "SYNTACTIC_FORM", "type": "Optional<InitListExpr>", "initializer": "KeyFactory.optional(\"syntacticForm\")", "nullable": false, "description": "Represents the initializer list as written by the user, which may contain C99 designated initializers\n(represented as DesignatedInitExprs), initializations of sub-object members without explicit braces, and so on.\nIf the syntactic and semantic forms are the same for this initializer, it returns empty.", "wireField": "syntactic_form"},
+      {"name": "SEMANTIC_FORM", "type": "Optional<InitListExpr>", "initializer": "KeyFactory.optional(\"semanticForm\")", "nullable": false, "wireField": "semantic_form"}
+    ]
+  },
+  {
+    "table": "IntegerLiteralData",
+    "className": "IntegerLiteral",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Literal",
+    "imports": ["import java.math.BigInteger;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "VALUE", "type": "BigInteger", "initializer": "KeyFactory.bigInteger(\"value\")", "nullable": false, "wireField": "value"}
+    ]
+  },
+  {
+    "table": "LabelStmtData",
+    "className": "LabelStmt",
+    "packageName": "pt.up.fe.specs.clava.ast.stmt",
+    "parent": "Stmt",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.LabelDecl;"],
+    "keys": [
+      {"name": "LABEL", "type": "LabelDecl", "initializer": "KeyFactory.object(\"label\", LabelDecl.class)", "nullable": false, "wireField": "label"}
+    ]
+  },
+  {
+    "table": "LambdaExprData",
+    "className": "LambdaExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;", "import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;", "import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureDefault;", "import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureKind;"],
+    "keys": [
+      {"name": "IS_GENERIC_LAMBDA", "type": "Boolean", "initializer": "KeyFactory.bool(\"isGenericLambda\")", "nullable": false, "wireField": "is_generic_lambda"},
+      {"name": "IS_MUTABLE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isMutable\")", "nullable": false, "wireField": "is_mutable"},
+      {"name": "HAS_EXPLICIT_PARAMETERS", "type": "Boolean", "initializer": "KeyFactory.bool(\"hasExplicitParameters\")", "nullable": false, "wireField": "has_explicit_parameters"},
+      {"name": "HAS_EXPLICIT_RESULT_TYPE", "type": "Boolean", "initializer": "KeyFactory.bool(\"hasExplicitResultType\")", "nullable": false, "wireField": "has_explicit_result_type"},
+      {"name": "CAPTURE_DEFAULT", "type": "LambdaCaptureDefault", "initializer": "KeyFactory.enumeration(\"captureDefault\", LambdaCaptureDefault.class)", "nullable": false, "wireField": "capture_default"},
+      {"name": "LAMBDA_CLASS", "type": "CXXRecordDecl", "initializer": "KeyFactory.object(\"lambdaClass\", CXXRecordDecl.class)", "nullable": false, "wireField": "lambda_class"},
+      {"name": "CAPTURE_KINDS", "type": "List<LambdaCaptureKind>", "initializer": "KeyFactory.generic(\"captureKinds\", new ArrayList<LambdaCaptureKind>())", "nullable": false, "wireField": "capture_kinds"},
+      {"name": "INIT_CAPTURE_NAMES", "type": "List<String>", "initializer": "KeyFactory.list(\"initCaptureNames\", String.class)", "nullable": false, "wireField": "init_capture_names"},
+      {"name": "CAPTURE_INIT_STYLES", "type": "List<InitializationStyle>", "initializer": "KeyFactory.generic(\"captureInitStyles\", new ArrayList<InitializationStyle>())", "nullable": false, "wireField": "capture_init_styles"},
+      {"name": "CAPTURE_PACK_EXPANSIONS", "type": "List<Boolean>", "initializer": "KeyFactory.generic(\"capturePackExpansions\", new ArrayList<Boolean>())", "nullable": false, "wireField": "capture_pack_expansions"},
+      {"name": "CAPTURE_IS_IMPLICIT", "type": "List<Boolean>", "initializer": "KeyFactory.generic(\"captureIsImplicit\", new ArrayList<Boolean>())", "nullable": false, "wireField": "capture_is_implicit"}
+    ]
+  },
+  {
+    "table": "LinkageSpecDeclData",
+    "className": "LinkageSpecDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "Decl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;"],
+    "keys": [
+      {"name": "LINKAGE_TYPE", "type": "LanguageId", "initializer": "KeyFactory.enumeration(\"linkageType\", LanguageId.class)", "nullable": false, "wireField": "linkage_type"},
+      {"name": "USE_GUARDS", "type": "Boolean", "initializer": "KeyFactory.bool(\"useGuards\")", "nullable": false, "description": "If true, uses #if/def guards when generating code,", "wireField": null}
+    ]
+  },
+  {
+    "table": "LiteralData",
+    "className": "Literal",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "SOURCE_LITERAL", "type": "String", "initializer": "KeyFactory.string(\"sourceLiteral\")", "nullable": false, "wireField": "source_literal"}
+    ]
+  },
+  {
+    "table": "MSAsmStmtData",
+    "className": "MSAsmStmt",
+    "packageName": "pt.up.fe.specs.clava.ast.stmt",
+    "parent": "AsmStmt",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "ASM_STRING", "type": "String", "initializer": "KeyFactory.string(\"asmString\")", "nullable": false, "wireField": "asm_string"}
+    ]
+  },
+  {
+    "table": "MSPropertyDeclData",
+    "className": "MSPropertyDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "DeclaratorDecl",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "GETTER_NAME", "type": "Optional<String>", "initializer": "KeyFactory.optional(\"getterName\")", "nullable": false, "wireField": "getter_name"},
+      {"name": "SETTER_NAME", "type": "Optional<String>", "initializer": "KeyFactory.optional(\"setterName\")", "nullable": false, "wireField": "setter_name"}
+    ]
+  },
+  {
+    "table": "MSPropertyRefExprData",
+    "className": "MSPropertyRefExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.MSPropertyDecl;"],
+    "keys": [
+      {"name": "BASE_EXPR", "type": "Expr", "initializer": "KeyFactory.object(\"baseExpr\", Expr.class)", "nullable": false, "wireField": "base_expr"},
+      {"name": "PROPERTY_DECL", "type": "MSPropertyDecl", "initializer": "KeyFactory.object(\"propertyDecl\", MSPropertyDecl.class)", "nullable": false, "wireField": "property_decl"},
+      {"name": "IS_IMPLICIT_ACCESS", "type": "Boolean", "initializer": "KeyFactory.bool(\"isImplicitAccess\")", "nullable": false, "wireField": "is_implicit_access"},
+      {"name": "IS_ARROW", "type": "Boolean", "initializer": "KeyFactory.bool(\"isArrow\")", "nullable": false, "wireField": "is_arrow"}
+    ]
+  },
+  {
+    "table": "MaterializeTemporaryExprData",
+    "className": "MaterializeTemporaryExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.Decl;"],
+    "keys": [
+      {"name": "EXTENDING_DECL", "type": "Optional<Decl>", "initializer": "KeyFactory.optional(\"extendingDecl\")", "nullable": false, "wireField": "extending_decl"}
+    ]
+  },
+  {
+    "table": "MemberExprData",
+    "className": "MemberExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.NamedDecl;", "import pt.up.fe.specs.clava.ast.decl.ValueDecl;", "import pt.up.fe.specs.clava.language.AccessSpecifier;"],
+    "keys": [
+      {"name": "MEMBER_NAME", "type": "String", "initializer": "KeyFactory.string(\"memberName\")", "nullable": false, "wireField": "member_name"},
+      {"name": "IS_ARROW", "type": "Boolean", "initializer": "KeyFactory.bool(\"isArrow\")", "nullable": false, "wireField": "is_arrow"},
+      {"name": "MEMBER_DECL", "type": "ValueDecl", "initializer": "KeyFactory.object(\"memberDecl\", ValueDecl.class)", "nullable": false, "wireField": "member_decl"},
+      {"name": "FOUND_DECL", "type": "NamedDecl", "initializer": "KeyFactory.object(\"foundDecl\", NamedDecl.class)", "nullable": false, "wireField": "found_decl"},
+      {"name": "FOUND_DECL_ACCESS_SPECIFIER", "type": "AccessSpecifier", "initializer": "KeyFactory .enumeration(\"foundDeclAccessSpecifier\", AccessSpecifier.class)", "nullable": false, "wireField": "found_decl_access_specifier"}
+    ]
+  },
+  {
+    "table": "MemberPointerTypeData",
+    "className": "MemberPointerType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "CLASS_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"classType\", Type.class)", "nullable": false, "wireField": "class_type"},
+      {"name": "POINTEE_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"pointeeType\", Type.class)", "nullable": false, "wireField": "pointee_type"}
+    ]
+  },
+  {
+    "table": "NamedDeclData",
+    "className": "NamedDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "Decl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.enums.Linkage;", "import pt.up.fe.specs.clava.ast.decl.enums.NameKind;", "import pt.up.fe.specs.clava.ast.decl.enums.Visibility;"],
+    "keys": [
+      {"name": "QUALIFIED_PREFIX", "type": "String", "initializer": "KeyFactory.string(\"qualifiedPrefix\")", "nullable": false, "wireField": "qualified_prefix"},
+      {"name": "DECL_NAME", "type": "String", "initializer": "KeyFactory.string(\"declName\")", "nullable": false, "wireField": "decl_name"},
+      {"name": "NAME_KIND", "type": "NameKind", "initializer": "KeyFactory.enumeration(\"nameKind\", NameKind.class) .setDefault(() -> NameKind.IDENTIFIER)", "nullable": false, "wireField": "name_kind"},
+      {"name": "IS_CXX_CLASS_MEMBER", "type": "Boolean", "initializer": "KeyFactory.bool(\"isCxxClassMember\")", "nullable": false, "description": "True if this declaration is a C++ class member.", "wireField": "is_cxx_class_member"},
+      {"name": "IS_CXX_INSTANCE_MEMBER", "type": "Boolean", "initializer": "KeyFactory.bool(\"isCxxInstanceMember\")", "nullable": false, "description": "True if this declaration is an instance member of a C++ class.", "wireField": "is_cxx_instance_member"},
+      {"name": "LINKAGE", "type": "Linkage", "initializer": "KeyFactory.enumeration(\"linkage\", Linkage.class)", "nullable": false, "description": "The linkage of the declaration from a semantic point of view.\n<p>\nEntities in anonymous namespaces are external (in c++98).", "wireField": "linkage"},
+      {"name": "VISIBILITY", "type": "Visibility", "initializer": "KeyFactory.enumeration(\"visibility\", Visibility.class)", "nullable": false, "description": "The visibility of this entity.", "wireField": "visibility"}
+    ]
+  },
+  {
+    "table": "NamespaceAliasDeclData",
+    "className": "NamespaceAliasDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "NamedDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "NESTED_PREFIX", "type": "String", "initializer": "KeyFactory.string(\"nestedPrefix\")", "nullable": false, "wireField": "nested_prefix"},
+      {"name": "ALIASED_NAMESPACE", "type": "NamespaceDecl", "initializer": "KeyFactory.object(\"aliasedNamespace\", NamespaceDecl.class)", "nullable": false, "wireField": "aliased_namespace"}
+    ]
+  },
+  {
+    "table": "NamespaceDeclData",
+    "className": "NamespaceDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "NamedDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "SOURCE_LITERAL", "type": "String", "initializer": "KeyFactory.string(\"sourceLiteral\")", "nullable": false, "wireField": "source_literal"}
+    ]
+  },
+  {
+    "table": "NonNullAttrData",
+    "className": "NonNullAttr",
+    "packageName": "pt.up.fe.specs.clava.ast.attr",
+    "parent": "InheritableAttr",
+    "imports": ["import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "ARGUMENTS", "type": "List<Integer>", "initializer": "KeyFactory.list(\"arguments\", Integer.class)", "nullable": false, "wireField": "arguments"}
+    ]
+  },
+  {
+    "table": "NonTypeTemplateParmDeclData",
+    "className": "NonTypeTemplateParmDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "DeclaratorDecl",
+    "imports": ["import java.util.List;", "import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.expr.Expr;", "import pt.up.fe.specs.clava.ast.type.Type;"],
+    "keys": [
+      {"name": "DEFAULT_ARGUMENT", "type": "Optional<Expr>", "initializer": "KeyFactory.optional(\"defaultArgument\")", "nullable": false, "description": "The default-argument expression, if any.", "wireField": "default_argument"},
+      {"name": "DEFAULT_ARGUMENT_WAS_INHERITED", "type": "Boolean", "initializer": "KeyFactory .bool(\"defaultArgumentWasInherited\")", "nullable": false, "description": "True if the default argument was inherited from a previous declaration of this template.", "wireField": "default_argument_was_inherited"},
+      {"name": "IS_PARAMETER_PACK", "type": "Boolean", "initializer": "KeyFactory.bool(\"isParameterPack\")", "nullable": false, "description": "True if this is a parameter pack.", "wireField": "is_parameter_pack"},
+      {"name": "IS_PACK_EXPANSION", "type": "Boolean", "initializer": "KeyFactory.bool(\"isPackExpansion\")", "nullable": false, "description": "True if this parameter pack is a pack expansion.", "wireField": "is_pack_expansion"},
+      {"name": "IS_EXPANDED_PARAMETER_PACK", "type": "Boolean", "initializer": "KeyFactory.bool(\"isExpandedParameterPack\")", "nullable": false, "description": "True if this parameter is a non-type template parameter pack that has a known list of different types at\ndifferent positions.", "wireField": "is_expanded_parameter_pack"},
+      {"name": "EXPANSION_TYPES", "type": "List<Type>", "initializer": "KeyFactory.list(\"expansionTypes\", Type.class)", "nullable": false, "description": "The expansion types in an expanded parameter pack.", "wireField": "expansion_types"}
+    ]
+  },
+  {
+    "table": "OffsetOfExprData",
+    "className": "OffsetOfExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponent;", "import pt.up.fe.specs.clava.ast.type.Type;"],
+    "keys": [
+      {"name": "SOURCE_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"sourceType\", Type.class)", "nullable": false, "wireField": "source_type"},
+      {"name": "COMPONENTS", "type": "List<OffsetOfComponent>", "initializer": "KeyFactory.generic(\"components\", new ArrayList<OffsetOfComponent>())", "nullable": false, "wireField": "components"}
+    ]
+  },
+  {
+    "table": "OpenCLUnrollHintAttrData",
+    "className": "OpenCLUnrollHintAttr",
+    "packageName": "pt.up.fe.specs.clava.ast.attr",
+    "parent": "InheritableAttr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "UNROLL_HINT", "type": "Integer", "initializer": "KeyFactory.integer(\"unrollHint\")", "nullable": false, "wireField": "unroll_hint"}
+    ]
+  },
+  {
+    "table": "OverloadExprData",
+    "className": "OverloadExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.Decl;", "import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;"],
+    "keys": [
+      {"name": "QUALIFIER", "type": "String", "initializer": "KeyFactory.string(\"qualifier\")", "nullable": false, "description": "The nested-name qualifier that precedes the name, or empty string if it has none.", "wireField": "qualifier"},
+      {"name": "NAME", "type": "String", "initializer": "KeyFactory.string(\"name\")", "nullable": false, "description": "The looked up name.", "wireField": "name"},
+      {"name": "UNRESOLVED_DECLS", "type": "List<Decl>", "initializer": "KeyFactory .generic(\"unresolvedDecls\", (List<Decl>) new ArrayList<Decl>())", "nullable": false, "description": "The declarations in the unresolved set.", "wireField": "unresolved_decls"},
+      {"name": "TEMPLATE_ARGUMENTS", "type": "List<TemplateArgument>", "initializer": "KeyFactory .generic(\"templateArguments\", (List<TemplateArgument>) new ArrayList<TemplateArgument>()) .setDefault(() -> new ArrayList<>())", "nullable": false, "wireField": "template_arguments"}
+    ]
+  },
+  {
+    "table": "PackExpansionTypeData",
+    "className": "PackExpansionType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "NUM_EXPANSIONS", "type": "Integer", "initializer": "KeyFactory.integer(\"numExpansions\")", "nullable": false, "wireField": "num_expansions"},
+      {"name": "PATTERN", "type": "Type", "initializer": "KeyFactory.object(\"pattern\", Type.class)", "nullable": false, "wireField": "pattern"}
+    ]
+  },
+  {
+    "table": "ParmVarDeclData",
+    "className": "ParmVarDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "VarDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "HAS_INHERITED_DEFAULT_ARG", "type": "Boolean", "initializer": "KeyFactory.bool(\"hasInheritedDefaultArg\")", "nullable": false, "wireField": "has_inherited_default_arg"}
+    ]
+  },
+  {
+    "table": "PointerTypeData",
+    "className": "PointerType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "POINTEE_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"pointeeType\", Type.class)", "nullable": false, "wireField": "pointee_type"}
+    ]
+  },
+  {
+    "table": "PredefinedExprData",
+    "className": "PredefinedExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.expr.enums.PredefinedIdType;"],
+    "keys": [
+      {"name": "PREDEFINED_TYPE", "type": "PredefinedIdType", "initializer": "KeyFactory.enumeration(\"predefinedType\", PredefinedIdType.class)", "nullable": false, "wireField": "predefined_type"}
+    ]
+  },
+  {
+    "table": "PseudoObjectExprData",
+    "className": "PseudoObjectExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "RESULT_EXPR_INDEX", "type": "Integer", "initializer": "KeyFactory.integer(\"resultExprIndex\")", "nullable": false, "wireField": "result_expr_index"}
+    ]
+  },
+  {
+    "table": "QualTypeData",
+    "className": "QualType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;", "import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;"],
+    "keys": [
+      {"name": "C99_QUALIFIERS", "type": "List<C99Qualifier>", "initializer": "KeyFactory .list(\"c99Qualifiers\", C99Qualifier.class)", "nullable": false, "wireField": "c99_qualifiers"},
+      {"name": "ADDRESS_SPACE_QUALIFIER", "type": "AddressSpaceQualifierV2", "initializer": "KeyFactory .enumeration(\"addressSpaceQualifier\", AddressSpaceQualifierV2.class)  .setDefault(() -> AddressSpaceQualifierV2.NONE)", "nullable": false, "wireField": "address_space_qualifier"},
+      {"name": "ADDRESS_SPACE", "type": "Long", "initializer": "KeyFactory.longInt(\"addressSpace\")  .setDefault(() -> -1l)", "nullable": false, "wireField": "address_space"},
+      {"name": "UNQUALIFIED_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"unqualifiedType\", Type.class)", "nullable": false, "wireField": "unqualified_type"}
+    ]
+  },
+  {
+    "table": "RecordDeclData",
+    "className": "RecordDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "TagDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "IS_ANONYMOUS", "type": "Boolean", "initializer": "KeyFactory.bool(\"isAnonymous\")", "nullable": false, "description": "True if this is an anonymous struct or union.\n\n<p>\nTo be an anonymous struct or union, it must have been declared without a name and there must be no objects of\nthis type declared.", "wireField": "is_anonymous"}
+    ]
+  },
+  {
+    "table": "ReferenceTypeData",
+    "className": "ReferenceType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "POINTEE_TYPE_AS_WRITTEN", "type": "Type", "initializer": "KeyFactory.object(\"pointeeTypeAsWritten\", Type.class)", "nullable": false, "wireField": "pointee_type_as_written"}
+    ]
+  },
+  {
+    "table": "SizeOfPackExprData",
+    "className": "SizeOfPackExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.NamedDecl;", "import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;"],
+    "keys": [
+      {"name": "IS_PARTIALLY_SUBSTITUTED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isPartiallySubstituted\")", "nullable": false, "wireField": "is_partially_substituted"},
+      {"name": "PACK", "type": "NamedDecl", "initializer": "KeyFactory.object(\"pack\", NamedDecl.class)", "nullable": false, "wireField": "pack"},
+      {"name": "PARTIAL_ARGUMENTS", "type": "List<TemplateArgument>", "initializer": "KeyFactory.generic(\"partialArguments\", new ArrayList<TemplateArgument>())", "nullable": false, "wireField": "partial_arguments"}
+    ]
+  },
+  {
+    "table": "StaticAssertDeclData",
+    "className": "StaticAssertDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "Decl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "IS_FAILED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isFailed\")", "nullable": false, "wireField": "is_failed"}
+    ]
+  },
+  {
+    "table": "StringLiteralData",
+    "className": "StringLiteral",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Literal",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.expr.enums.StringKind;"],
+    "keys": [
+      {"name": "STRING_KIND", "type": "StringKind", "initializer": "KeyFactory.enumeration(\"stringKind\", StringKind.class)", "nullable": false, "wireField": "string_kind"},
+      {"name": "LENGTH", "type": "Long", "initializer": "KeyFactory.longInt(\"length\")", "nullable": false, "description": "Number of characters of the string.", "wireField": "length"},
+      {"name": "CHAR_BYTE_WIDTH", "type": "Integer", "initializer": "KeyFactory.integer(\"charByteWidth\")", "nullable": false, "description": "Number of bytes per character.", "wireField": "char_byte_width"},
+      {"name": "STRING_BYTES", "type": "List<Byte>", "initializer": "KeyFactory.generic(\"stringBytes\", (List<Byte>) new ArrayList<Byte>())", "nullable": false, "wireField": "string_bytes"}
+    ]
+  },
+  {
+    "table": "SubstTemplateTypeParmTypeData",
+    "className": "SubstTemplateTypeParmType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;"],
+    "keys": [
+      {"name": "REPLACED_PARAMETER", "type": "TemplateTypeParmDecl", "initializer": "KeyFactory.object(\"replacedParameter\", TemplateTypeParmDecl.class)", "nullable": false, "wireField": "replaced_parameter"},
+      {"name": "REPLACEMENT_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"replacementType\", Type.class)", "nullable": false, "wireField": "replacement_type"}
+    ]
+  },
+  {
+    "table": "TagDeclData",
+    "className": "TagDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "TypeDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.language.TagKind;"],
+    "keys": [
+      {"name": "TAG_KIND", "type": "TagKind", "initializer": "KeyFactory.enumeration(\"tagKind\", TagKind.class)", "nullable": false, "description": "The kind of this tag (e.g., struct, union, class, enum...).", "wireField": "tag_kind"},
+      {"name": "IS_COMPLETE_DEFINITION", "type": "Boolean", "initializer": "KeyFactory.bool(\"isCompleteDefinition\")", "nullable": false, "description": "True if this decl has its body fully specified.", "wireField": "is_complete_definition"}
+    ]
+  },
+  {
+    "table": "TagTypeData",
+    "className": "TagType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.TagDecl;"],
+    "keys": [
+      {"name": "DECL", "type": "TagDecl", "initializer": "KeyFactory.object(\"decl\", TagDecl.class)", "nullable": false, "wireField": "decl"}
+    ]
+  },
+  {
+    "table": "TemplateDeclData",
+    "className": "TemplateDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "NamedDecl",
+    "imports": ["import java.util.List;", "import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "TEMPLATE_PARAMETERS", "type": "List<NamedDecl>", "initializer": "KeyFactory.list(\"templateParameters\", NamedDecl.class)", "nullable": false, "wireField": "template_parameters"},
+      {"name": "TEMPLATE_DECL", "type": "Optional<NamedDecl>", "initializer": "KeyFactory.optional(\"templateDecl\")", "nullable": false, "description": "The underlying, templated declaration.", "wireField": "template_decl"}
+    ]
+  },
+  {
+    "table": "TemplateSpecializationTypeData",
+    "className": "TemplateSpecializationType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import java.util.ArrayList;", "import java.util.List;", "import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.TemplateDecl;", "import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;"],
+    "keys": [
+      {"name": "IS_TYPE_ALIAS", "type": "Boolean", "initializer": "KeyFactory.bool(\"isTypeAlias\")", "nullable": false, "wireField": "is_type_alias"},
+      {"name": "ALIASED_TYPE", "type": "Optional<Type>", "initializer": "KeyFactory.optional(\"aliasedType\")", "nullable": false, "wireField": "aliased_type"},
+      {"name": "TEMPLATE_NAME", "type": "String", "initializer": "KeyFactory.string(\"templateName\")", "nullable": false, "wireField": "template_name"},
+      {"name": "TEMPLATE_DECL", "type": "Optional<TemplateDecl>", "initializer": "KeyFactory.optional(\"templateDecl\")", "nullable": false, "wireField": "template_decl"},
+      {"name": "TEMPLATE_ARGUMENTS", "type": "List<TemplateArgument>", "initializer": "KeyFactory .generic(\"templateArguments\", (List<TemplateArgument>) new ArrayList<TemplateArgument>())", "nullable": false, "wireField": "template_arguments"}
+    ]
+  },
+  {
+    "table": "TemplateTemplateParmDeclData",
+    "className": "TemplateTemplateParmDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "TemplateDecl",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;"],
+    "keys": [
+      {"name": "DEFAULT_ARGUMENT", "type": "Optional<TemplateArgument>", "initializer": "KeyFactory.optional(\"defaultArgument\")", "nullable": false, "description": "The default-argument expression, if any.", "wireField": "default_argument"},
+      {"name": "IS_PARAMETER_PACK", "type": "Boolean", "initializer": "KeyFactory.bool(\"isParameterPack\")", "nullable": false, "description": "True if this is a parameter pack.", "wireField": "is_parameter_pack"},
+      {"name": "IS_PACK_EXPANSION", "type": "Boolean", "initializer": "KeyFactory.bool(\"isPackExpansion\")", "nullable": false, "description": "True if this parameter pack is a pack expansion.", "wireField": "is_pack_expansion"},
+      {"name": "IS_EXPANDED_PARAMETER_PACK", "type": "Boolean", "initializer": "KeyFactory.bool(\"isExpandedParameterPack\")", "nullable": false, "description": "True if this parameter is a non-type template parameter pack that has a known list of different types at\ndifferent positions.", "wireField": "is_expanded_parameter_pack"}
+    ]
+  },
+  {
+    "table": "TemplateTypeParmDeclData",
+    "className": "TemplateTypeParmDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "TypeDecl",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.Type;", "import pt.up.fe.specs.clava.language.TemplateTypeParmKind;"],
+    "keys": [
+      {"name": "KIND", "type": "TemplateTypeParmKind", "initializer": "KeyFactory.enumeration(\"kind\", TemplateTypeParmKind.class)", "nullable": false, "wireField": "kind"},
+      {"name": "IS_PARAMETER_PACK", "type": "Boolean", "initializer": "KeyFactory.bool(\"isParameterPack\")", "nullable": false, "description": "True if this is a parameter pack.", "wireField": "is_parameter_pack"},
+      {"name": "DEFAULT_ARGUMENT", "type": "Optional<Type>", "initializer": "KeyFactory.optional(\"defaultArgument\")", "nullable": false, "wireField": "default_argument"}
+    ]
+  },
+  {
+    "table": "TemplateTypeParmTypeData",
+    "className": "TemplateTypeParmType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.Decl;"],
+    "keys": [
+      {"name": "DEPTH", "type": "Integer", "initializer": "KeyFactory.integer(\"depth\")", "nullable": false, "wireField": "depth"},
+      {"name": "INDEX", "type": "Integer", "initializer": "KeyFactory.integer(\"index\")", "nullable": false, "wireField": "index"},
+      {"name": "IS_PACKED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isPacked\")", "nullable": false, "wireField": "is_packed"},
+      {"name": "DECL", "type": "Optional<Decl>", "initializer": "KeyFactory.optional(\"decl\")", "nullable": false, "wireField": "decl"}
+    ]
+  },
+  {
+    "table": "TypeData",
+    "className": "Type",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "ClavaNode",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ClavaNode;", "import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;"],
+    "keys": [
+      {"name": "TYPE_AS_STRING", "type": "String", "initializer": "KeyFactory.string(\"typeAsString\")", "nullable": false, "wireField": "type_as_string"},
+      {"name": "TYPE_DEPENDENCY", "type": "TypeDependency", "initializer": "KeyFactory.enumeration(\"typeDependency\", TypeDependency.class)", "nullable": false, "wireField": "type_dependency"},
+      {"name": "IS_VARIABLY_MODIFIED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isVariablyModified\")", "nullable": false, "wireField": "is_variably_modified"},
+      {"name": "CONTAINS_UNEXPANDED_PARAMETER_PACK", "type": "Boolean", "initializer": "KeyFactory .bool(\"containsUnexpandedParameterPack\")", "nullable": false, "wireField": "contains_unexpanded_parameter_pack"},
+      {"name": "IS_FROM_AST", "type": "Boolean", "initializer": "KeyFactory.bool(\"isFromAst\")", "nullable": false, "wireField": "is_from_ast"},
+      {"name": "UNQUALIFIED_DESUGARED_TYPE", "type": "Optional<Type>", "initializer": "KeyFactory .optional(\"unqualifiedDesugaredType\")", "nullable": false, "wireField": "unqualified_desugared_type"}
+    ]
+  },
+  {
+    "table": "TypeDeclData",
+    "className": "TypeDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "NamedDecl",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.Type;"],
+    "keys": [
+      {"name": "TYPE_FOR_DECL", "type": "Optional<Type>", "initializer": "KeyFactory.optional(\"typeForDecl\")", "nullable": false, "description": "The type associated with this TypeDecl.", "wireField": "type_for_decl"}
+    ]
+  },
+  {
+    "table": "TypeOfExprTypeData",
+    "className": "TypeOfExprType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.expr.Expr;"],
+    "keys": [
+      {"name": "IS_SUGARED", "type": "Boolean", "initializer": "KeyFactory.bool(\"isSugared\")", "nullable": false, "wireField": "is_sugared"},
+      {"name": "UNDERLYING_EXPR", "type": "Expr", "initializer": "KeyFactory.object(\"underlyingExpr\", Expr.class)", "nullable": false, "wireField": "underlying_expr"}
+    ]
+  },
+  {
+    "table": "TypeWithKeywordData",
+    "className": "TypeWithKeyword",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;"],
+    "keys": [
+      {"name": "ELABORATED_TYPE_KEYWORD", "type": "ElaboratedTypeKeyword", "initializer": "KeyFactory .enumeration(\"elaboratedTypeKeyword\", ElaboratedTypeKeyword.class)", "nullable": false, "wireField": "elaborated_type_keyword"}
+    ]
+  },
+  {
+    "table": "TypedefNameDeclData",
+    "className": "TypedefNameDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "TypeDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.Type;"],
+    "keys": [
+      {"name": "UNDERLYING_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"underlyingType\", Type.class)", "nullable": false, "wireField": "underlying_type"}
+    ]
+  },
+  {
+    "table": "TypedefTypeData",
+    "className": "TypedefType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.TypedefNameDecl;"],
+    "keys": [
+      {"name": "DECL", "type": "TypedefNameDecl", "initializer": "KeyFactory.object(\"decl\", TypedefNameDecl.class)", "nullable": false, "wireField": "decl"}
+    ]
+  },
+  {
+    "table": "UnaryExprOrTypeTraitExprData",
+    "className": "UnaryExprOrTypeTraitExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Expr",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.Type;", "import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;"],
+    "keys": [
+      {"name": "KIND", "type": "UnaryExprOrTypeTrait", "initializer": "KeyFactory.enumeration(\"kind\", UnaryExprOrTypeTrait.class)", "nullable": false, "wireField": "kind"},
+      {"name": "IS_ARGUMENT_TYPE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isArgumentType\")", "nullable": false, "wireField": "is_argument_type"},
+      {"name": "ARG_TYPE", "type": "Optional<Type>", "initializer": "KeyFactory.optional(\"argType\")", "nullable": false, "wireField": "arg_type"},
+      {"name": "SOURCE_LITERAL", "type": "String", "initializer": "KeyFactory.string(\"sourceLiteral\")", "nullable": false, "wireField": "source_literal"}
+    ]
+  },
+  {
+    "table": "UnaryOperatorData",
+    "className": "UnaryOperator",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "Operator",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;", "import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;"],
+    "keys": [
+      {"name": "OP", "type": "UnaryOperatorKind", "initializer": "KeyFactory.enumeration(\"op\", UnaryOperatorKind.class)", "nullable": false, "wireField": "op"},
+      {"name": "POSITION", "type": "UnaryOperatorPosition", "initializer": "KeyFactory.enumeration(\"position\", UnaryOperatorPosition.class)", "nullable": false, "wireField": "position"}
+    ]
+  },
+  {
+    "table": "UnaryTransformTypeData",
+    "className": "UnaryTransformType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "Type",
+    "imports": ["import java.util.Optional;", "import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;"],
+    "keys": [
+      {"name": "KIND", "type": "UnaryTransformTypeKind", "initializer": "KeyFactory .enumeration(\"kind\", UnaryTransformTypeKind.class)", "nullable": false, "wireField": "kind"},
+      {"name": "UNDERLYING_TYPE", "type": "Optional<Type>", "initializer": "KeyFactory.optional(\"underlyingType\")", "nullable": false, "description": "The transformed type, when Clang has resolved it. Dependent unary\ntransforms can have no underlying type while still having a base type.", "wireField": "underlying_type"},
+      {"name": "BASE_TYPE", "type": "Type", "initializer": "KeyFactory.object(\"baseType\", Type.class)", "nullable": false, "wireField": "base_type"}
+    ]
+  },
+  {
+    "table": "UnresolvedLookupExprData",
+    "className": "UnresolvedLookupExpr",
+    "packageName": "pt.up.fe.specs.clava.ast.expr",
+    "parent": "OverloadExpr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "REQUIRES_ADL", "type": "Boolean", "initializer": "KeyFactory.bool(\"requiresAdl\")", "nullable": false, "description": "True if this declaration should be extended by argument-dependent lookup.", "wireField": "requires_adl"}
+    ]
+  },
+  {
+    "table": "UnresolvedUsingTypenameDeclData",
+    "className": "UnresolvedUsingTypenameDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "TypeDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "QUALIFIER", "type": "String", "initializer": "KeyFactory.string(\"qualifier\")", "nullable": false, "wireField": "qualifier"},
+      {"name": "IS_PACK_EXPANSION", "type": "Boolean", "initializer": "KeyFactory.bool(\"isPackExpansion\")", "nullable": false, "wireField": "is_pack_expansion"}
+    ]
+  },
+  {
+    "table": "UsingDeclData",
+    "className": "UsingDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "NamedDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.data.nestedname.NestedNameSpecifier;"],
+    "keys": [
+      {"name": "NESTED_NAME_SPECIFIER", "type": "NestedNameSpecifier", "initializer": "KeyFactory.object(\"nestedNameSpecifier\", NestedNameSpecifier.class)", "nullable": false, "wireField": "nested_name_specifier"}
+    ]
+  },
+  {
+    "table": "UsingDirectiveDeclData",
+    "className": "UsingDirectiveDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "NamedDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;"],
+    "keys": [
+      {"name": "QUALIFIER", "type": "String", "initializer": "KeyFactory.string(\"qualifier\")", "nullable": false, "wireField": "qualifier"},
+      {"name": "NAMESPACE", "type": "NamespaceDecl", "initializer": "KeyFactory.object(\"namespace\", NamespaceDecl.class)", "nullable": false, "wireField": "namespace"},
+      {"name": "NAMESPACE_AS_WRITTEN", "type": "NamedDecl", "initializer": "KeyFactory.object(\"namespaceAsWritten\", NamedDecl.class)", "nullable": false, "wireField": "namespace_as_written"}
+    ]
+  },
+  {
+    "table": "ValueDeclData",
+    "className": "ValueDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "NamedDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.type.Type;"],
+    "keys": [
+      {"name": "TYPE", "type": "Type", "initializer": "KeyFactory.object(\"type\", Type.class)", "nullable": false, "description": "The type associated with this ValueDecl.", "wireField": "type"},
+      {"name": "IS_WEAK", "type": "Boolean", "initializer": "KeyFactory.bool(\"isWeak\")", "nullable": false, "description": "True if this symbol is weakly-imported, or declared with the weak or weak-reference attribute.", "wireField": "is_weak"}
+    ]
+  },
+  {
+    "table": "VarDeclData",
+    "className": "VarDecl",
+    "packageName": "pt.up.fe.specs.clava.ast.decl",
+    "parent": "DeclaratorDecl",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;", "import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;", "import pt.up.fe.specs.clava.language.TLSKind;"],
+    "keys": [
+      {"name": "STORAGE_CLASS", "type": "StorageClass", "initializer": "KeyFactory .enumeration(\"storageClass\", StorageClass.class) .setDefault(() -> StorageClass.None)", "nullable": false, "description": "The storage class as written in the source.", "wireField": "storage_class"},
+      {"name": "TLS_KIND", "type": "TLSKind", "initializer": "KeyFactory .enumeration(\"tlsKind\", TLSKind.class) .setDefault(() -> TLSKind.NONE)", "nullable": false, "wireField": "tls_kind"},
+      {"name": "IS_NRVO_VARIABLE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isNrvoVariable\")", "nullable": false, "description": "True if this local variable can be used with the named return value optimization (NRVO).", "wireField": "is_nrvo_variable"},
+      {"name": "INIT_STYLE", "type": "InitializationStyle", "initializer": "KeyFactory .enumeration(\"initStyle\", InitializationStyle.class) .setDefault(() -> InitializationStyle.CINIT)", "nullable": false, "description": "The style of initialization for this declaration.\n\n<p>\nC-style initialization is \"int x = 1;\". Call-style initialization is a C++98 direct-initializer, e.g. \"int\nx(1);\". The Init expression will be the expression inside the parens or a \"ClassType(a,b,c)\" class constructor\nexpression for class types. List-style initialization is C++11 syntax, e.g. \"int x{1};\". Clients can distinguish\nbetween different forms of initialization by checking this value. In particular, \"int x = {1};\" is C-style, \"int\nx({1})\" is call-style, and \"int x{1};\" is list-style; the Init expression in all three cases is an InitListExpr.", "wireField": "init_style"},
+      {"name": "IS_CONSTEXPR", "type": "Boolean", "initializer": "KeyFactory.bool(\"isConstexpr\")", "nullable": false, "description": "True if this variable is (C++11) constexpr.", "wireField": "is_constexpr"},
+      {"name": "IS_STATIC_DATA_MEMBER", "type": "Boolean", "initializer": "KeyFactory.bool(\"isStaticDataMember\")", "nullable": false, "description": "True if this is a static data member.\n\n<p>\nThis will only be true in C++, and applies to, e.g., the variable 'x' in:<br>\n\n<pre>\n     struct S {\n     static int x;\n     };\n</pre>", "wireField": "is_static_data_member"},
+      {"name": "IS_OUT_OF_LINE", "type": "Boolean", "initializer": "KeyFactory.bool(\"isOutOfLine\")", "nullable": false, "description": "True if this is or was instantiated from an out-of-line definition of a static data member.", "wireField": "is_out_of_line"},
+      {"name": "HAS_GLOBAL_STORAGE", "type": "Boolean", "initializer": "KeyFactory.bool(\"hasGlobalStorage\")", "nullable": false, "description": "True if this variable does not have local storage.\n\n<p>\nThis includes all global variables as well as static variables declared within a function.", "wireField": "has_global_storage"}
+    ]
+  },
+  {
+    "table": "VariableArrayTypeData",
+    "className": "VariableArrayType",
+    "packageName": "pt.up.fe.specs.clava.ast.type",
+    "parent": "ArrayType",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.expr.Expr;"],
+    "keys": [
+      {"name": "SIZE_EXPR", "type": "Expr", "initializer": "KeyFactory.object(\"sizeExpr\", Expr.class)", "nullable": true, "wireField": "size_expr"}
+    ]
+  },
+  {
+    "table": "VisibilityAttrData",
+    "className": "VisibilityAttr",
+    "packageName": "pt.up.fe.specs.clava.ast.attr",
+    "parent": "InheritableAttr",
+    "imports": ["import org.suikasoft.jOptions.Datakey.DataKey;", "import org.suikasoft.jOptions.Datakey.KeyFactory;", "import org.suikasoft.jOptions.Interfaces.DataStore;", "import pt.up.fe.specs.clava.ast.attr.enums.VisibilityType;"],
+    "keys": [
+      {"name": "VISIBILITY_TYPE", "type": "VisibilityType", "initializer": "KeyFactory.enumeration(\"visibilityType\", VisibilityType.class)", "nullable": false, "wireField": "visibility_type"}
+    ]
+  }
+]

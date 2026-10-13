@@ -22,8 +22,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -38,37 +36,25 @@ import pt.up.fe.specs.clava.utils.Typable;
  * @author JoaoBispo
  *
  */
-public abstract class TagDecl extends TypeDecl {
+public abstract class TagDecl extends TagDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in TagDeclBase.
 
-    /**
-     * The kind of this tag (e.g., struct, union, class, enum...).
-     */
-    public final static DataKey<TagKind> TAG_KIND = KeyFactory.enumeration("tagKind", TagKind.class);
-
-    /**
-     * True if this decl has its body fully specified.
-     */
-    public final static DataKey<Boolean> IS_COMPLETE_DEFINITION = KeyFactory.bool("isCompleteDefinition");
-
-    /**
-     * True if the decl has the keyword 'typedef'.
-     */
-    // public final static DataKey<Boolean> HAS_TYPEDEF = KeyFactory.bool("hasTypedef");
-
-    /// DATAKEYS END
+    public TagDecl(DataStore data, Collection<? extends ClavaNode> children, TagDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public TagDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public TagKind getTagKind() {
-        return get(TAG_KIND);
+        return getWireTagKind();
     }
 
     public Boolean isCompleteDefinition() {
-        return get(IS_COMPLETE_DEFINITION);
+        return getWireIsCompleteDefinition();
     }
 
     /**

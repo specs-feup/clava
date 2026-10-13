@@ -6,9 +6,6 @@
 
 package pt.up.fe.specs.clang.wire;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +25,8 @@ import pt.up.fe.specs.clang.wire.WireReader.Tu;
 import pt.up.fe.specs.clang.wire.WireSchema.FieldSpec;
 import pt.up.fe.specs.clang.wire.WireSchema.TableSpec;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.NullableNodeReference;
+import pt.up.fe.specs.clava.data.GeneratedNodeFields;
+import pt.up.fe.specs.clava.data.NodeDataStore;
 import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedTypeAttr;
@@ -37,15 +35,9 @@ import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 
 /**
- * Binds node payload tables to Clava node data by naming convention: table {@code FooData} fills node class
- * {@code Foo}, and field {@code bar_baz} fills that class's public {@code DataKey BAR_BAZ} named {@code barBaz}. A
- * {@code base} field continues with the parent payload table. The DataKey's declared type selects the conversion:
- * node references, {@code Optional}, {@code List}, enums (by ordinal, with matching value names), scalars, and
- * compound values read by {@link Compounds}.
- *
- * <p>
- * Bindings are built once per table. A field without a matching key, or a key whose type does not fit the field,
- * fails when the table is bound; {@code NodeBindingsTest} binds every payload table.
+ * Reads payloads using the schema and compile-time generated Java field descriptors. The descriptors preserve
+ * the Java reference, optional and list types; conversions queue forward references into the node's shared
+ * data view. Source information and aligned attributes have explicit representation adapters.
  */
 final class NodeBindings {
 
@@ -113,8 +105,8 @@ final class NodeBindings {
     /** Builds the data of node {@code id}, whose emitted class is {@code nodeClass}. */
     @SuppressWarnings("unchecked")
     DataStore read(WireTable payload, Class<? extends ClavaNode> nodeClass, String id, Tu tu) {
-        var store = DataStore.newInstance(STORE_DEFINITIONS.computeIfAbsent(nodeClass,
-                aClass -> StoreDefinitions.fromInterface((Class<ClavaNode>) aClass)), true);
+        var store = NodeDataStore.adapt(DataStore.newInstance(STORE_DEFINITIONS.computeIfAbsent(nodeClass,
+                aClass -> StoreDefinitions.fromInterface((Class<ClavaNode>) aClass)), true));
         store.set(ClavaNode.CONTEXT, tu.data().get(ClangAstData.CONTEXT));
         store.set(ClavaNode.ID, id);
         store.set(ClavaNode.IS_MACRO, false);
@@ -172,34 +164,23 @@ final class NodeBindings {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private Setter setter(FieldSpec field) {
-        Field javaField;
-        DataKey key;
-        try {
-            javaField = payloadClass.getField(field.name().toUpperCase());
-            key = (DataKey) javaField.get(null);
-        } catch (ReflectiveOperationException e) {
-            throw bindError(field, "has no public DataKey " + field.name().toUpperCase() + " in " + payloadClass);
-        }
-        if (!key.getName().equals(camelCase(field.name()))) {
-            throw bindError(field, "expects DataKey name " + camelCase(field.name()) + ", got " + key.getName());
-        }
-        Type type = ((ParameterizedType) javaField.getGenericType()).getActualTypeArguments()[0];
-        Class<?> raw = rawClass(type);
-
+        var binding = GeneratedNodeFields.binding(field.owner().name, field.name());
+        DataKey key = binding.key();
+        Class<?> raw = binding.valueType();
         if (ClavaNode.class.isAssignableFrom(raw)) {
             requireType(field, BaseType.Long);
-            if (javaField.isAnnotationPresent(NullableNodeReference.class)) {
+            if (binding.nullable()) {
                 return (t, store, tu) -> tu.nodes().queueSetNullableNode(store, key, tu.id(t.integer(field)));
             }
             return (t, store, tu) -> tu.nodes().queueSetNode(store, key, tu.id(t.integer(field)));
         }
         if (raw == Optional.class) {
-            Type element = typeArgument(type);
-            if (ClavaNode.class.isAssignableFrom(rawClass(element))) {
+            Class<?> element = binding.elementType();
+            if (ClavaNode.class.isAssignableFrom(element)) {
                 requireType(field, BaseType.Long);
                 return (t, store, tu) -> tu.nodes().queueSetOptionalNode(store, key, tu.id(t.integer(field)));
             }
-            var reader = reader(field, rawClass(element));
+            var reader = reader(field, element);
             if (field.type() == BaseType.String) {
                 // Required strings are always present; an empty spelling means "no value".
                 return (t, store, tu) -> store.set(key,
@@ -210,7 +191,7 @@ final class NodeBindings {
         }
         if (List.class.isAssignableFrom(raw)) {
             requireType(field, BaseType.Vector);
-            Class<?> element = rawClass(typeArgument(type));
+            Class<?> element = binding.elementType();
             if (ClavaNode.class.isAssignableFrom(element)) {
                 return (t, store, tu) -> {
                     var ids = new ArrayList<String>(t.length(field));
@@ -292,23 +273,6 @@ final class NodeBindings {
         if (field.type() != type) {
             throw bindError(field, "must be a " + BaseType.name(type) + " field");
         }
-    }
-
-    private static Type typeArgument(Type type) {
-        return ((ParameterizedType) type).getActualTypeArguments()[0];
-    }
-
-    private static Class<?> rawClass(Type type) {
-        return (Class<?>) (type instanceof ParameterizedType parameterized ? parameterized.getRawType() : type);
-    }
-
-    private static String camelCase(String snakeCase) {
-        var out = new StringBuilder();
-        for (int i = 0; i < snakeCase.length(); i++) {
-            char c = snakeCase.charAt(i);
-            out.append(c == '_' && i + 1 < snakeCase.length() ? Character.toUpperCase(snakeCase.charAt(++i)) : c);
-        }
-        return out.toString();
     }
 
     private static IllegalStateException bindError(FieldSpec field, String message) {

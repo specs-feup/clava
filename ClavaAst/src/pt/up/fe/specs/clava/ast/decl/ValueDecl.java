@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.decl;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -32,21 +30,14 @@ import pt.up.fe.specs.util.collections.SpecsList;
  * @author JoaoBispo
  *
  */
-public abstract class ValueDecl extends NamedDecl implements Typable {
+public abstract class ValueDecl extends ValueDeclBase implements Typable {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in ValueDeclBase.
 
-    /**
-     * The type associated with this ValueDecl.
-     */
-    public final static DataKey<Type> TYPE = KeyFactory.object("type", Type.class);
-
-    /**
-     * True if this symbol is weakly-imported, or declared with the weak or weak-reference attribute.
-     */
-    public final static DataKey<Boolean> IS_WEAK = KeyFactory.bool("isWeak");
-
-    /// DATAKEYS END
+    public ValueDecl(DataStore data, Collection<? extends ClavaNode> children, ValueDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public ValueDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -54,7 +45,7 @@ public abstract class ValueDecl extends NamedDecl implements Typable {
 
     @Override
     public Type getType() {
-        return get(TYPE);
+        return getWireType();
     }
 
     @Override
@@ -80,7 +71,7 @@ public abstract class ValueDecl extends NamedDecl implements Typable {
         SpecsList<String> list = super.getSignatureCustomStrings();
 
         if (hasValue(TYPE)) {
-            list.andAdd(get(TYPE).get(Type.TYPE_AS_STRING));
+            list.andAdd(getWireType().get(Type.TYPE_AS_STRING));
         }
 
         return list;

@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
@@ -28,22 +27,14 @@ import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.util.parsing.StringCodec;
 
-public class BuiltinType extends Type {
+public class BuiltinType extends BuiltinTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in BuiltinTypeBase.
 
-    /**
-     * The kind of the built-in.
-     */
-    public final static DataKey<BuiltinKind> KIND = KeyFactory.enumeration("kind", BuiltinKind.class)
-            .setDecoder(StringCodec.newInstance(kind -> kind.getCode(), BuiltinKind::newInstance));
-
-    /**
-     * Optional, the literal code for this built-in type.
-     */
-    public final static DataKey<String> KIND_LITERAL = KeyFactory.string("kindLiteral");
-
-    /// DATAKEYS END
+    public BuiltinType(DataStore data, Collection<? extends ClavaNode> children, BuiltinTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public BuiltinType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -53,7 +44,7 @@ public class BuiltinType extends Type {
     public String getCode(ClavaNode sourceNode, String name) {
 
         // First, try kind code, then literal
-        String type = get(KIND).getCodeTry(sourceNode).orElse(get(KIND_LITERAL));
+        String type = getWireKind().getCodeTry(sourceNode).orElse(getWireKindLiteral());
 
         String varName = name == null ? "" : " " + name;
         return type + varName;

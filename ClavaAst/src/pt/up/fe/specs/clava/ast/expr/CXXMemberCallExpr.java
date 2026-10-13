@@ -18,8 +18,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -41,13 +39,14 @@ import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
  * @author JoaoBispo
  *
  */
-public class CXXMemberCallExpr extends CallExpr {
+public class CXXMemberCallExpr extends CXXMemberCallExprBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in CXXMemberCallExprBase.
 
-    public final static DataKey<Optional<CXXMethodDecl>> METHOD_DECL = KeyFactory.optional("methodDecl");
-
-    /// DATAKEYS END
+    public CXXMemberCallExpr(DataStore data, Collection<? extends ClavaNode> children, CXXMemberCallExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXMemberCallExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -144,7 +143,7 @@ public class CXXMemberCallExpr extends CallExpr {
 
     @Override
     public Optional<FunctionDecl> getFunctionDecl() {
-        return get(METHOD_DECL).map(method -> (FunctionDecl) method);
+        return getWireMethodDecl().map(method -> (FunctionDecl) method);
     }
 
     @Override
@@ -155,7 +154,7 @@ public class CXXMemberCallExpr extends CallExpr {
     @Override
     public String getCode() {
 
-        var methodDecl = get(METHOD_DECL);
+        var methodDecl = getWireMethodDecl();
 
         // Special case: simplifies generated code, only generates base code
         if (methodDecl.isPresent() && methodDecl.get() instanceof CXXConversionDecl) {

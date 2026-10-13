@@ -15,38 +15,34 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class NamespaceAliasDecl extends NamedDecl {
+public class NamespaceAliasDecl extends NamespaceAliasDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in NamespaceAliasDeclBase.
 
-    public final static DataKey<String> NESTED_PREFIX = KeyFactory.string("nestedPrefix");
-
-    public final static DataKey<NamespaceDecl> ALIASED_NAMESPACE = KeyFactory.object("aliasedNamespace",
-            NamespaceDecl.class);
-
-    /// DATAKEYS END
+    public NamespaceAliasDecl(DataStore data, Collection<? extends ClavaNode> children, NamespaceAliasDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public NamespaceAliasDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public NamespaceDecl getAliasedNamespace() {
-        return get(ALIASED_NAMESPACE);
+        return getWireAliasedNamespace();
     }
 
     @Override
     public String getCode() {
-        // System.out.println("DECL NAME:" + get(DECL_NAME));
+        // System.out.println("DECL NAME:" + getWireDeclName());
         // System.out.println("QUALIFIED NAME:" + get(QUALIFIED_NAME));
-        // System.out.println("aLIASED DECL NAME:" + get(ALIASED_NAMESPACE).get(DECL_NAME));
+        // System.out.println("aLIASED DECL NAME:" + getWireAliasedNamespace().get(DECL_NAME));
         // System.out.println("ID:" + get(PREVIOUS_ID));
-        // System.out.println("NESTED PREFIX:" + get(NESTED_PREFIX));
-        return "namespace " + get(DECL_NAME) + " = " + get(NESTED_PREFIX) + get(ALIASED_NAMESPACE).get(DECL_NAME);
+        // System.out.println("NESTED PREFIX:" + getWireNestedPrefix());
+        return "namespace " + getWireDeclName() + " = " + getWireNestedPrefix() + getWireAliasedNamespace().get(DECL_NAME);
     }
 }

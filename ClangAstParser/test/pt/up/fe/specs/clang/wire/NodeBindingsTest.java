@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class NodeBindingsTest {
 
-    /** Every node payload table must match its Clava class's DataKeys; this replaces build-time generation. */
+    /** Every generated descriptor must support the wire field's conversion, including enum value names. */
     @Test
     void bindsEveryNodePayloadTable() {
         var schema = WireSchema.get();

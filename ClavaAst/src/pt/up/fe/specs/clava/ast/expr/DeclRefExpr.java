@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -45,23 +44,14 @@ import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
  * @author JoaoBispo
  *
  */
-public class DeclRefExpr extends Expr implements Nameable {
+public class DeclRefExpr extends DeclRefExprBase implements Nameable {
+
+    public DeclRefExpr(DataStore data, java.util.Collection<? extends ClavaNode> children, DeclRefExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     // DATAKEY BEGIN
-
-    /**
-     * The nested-name qualifier that precedes the name, or empty string if it has
-     * none.
-     */
-    public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
-
-    public final static DataKey<List<TemplateArgument>> TEMPLATE_ARGUMENTS = KeyFactory
-            .generic("templateArguments", (List<TemplateArgument>) new ArrayList<TemplateArgument>())
-            .setDefault(() -> new ArrayList<>());
-
-    public final static DataKey<ValueDecl> DECL = KeyFactory.object("decl", ValueDecl.class);
-
-    public final static DataKey<String> CUSTOM_NAME = KeyFactory.string("customName");
 
     // DATAKEY END
 
@@ -80,9 +70,9 @@ public class DeclRefExpr extends Expr implements Nameable {
             return operator.get().getString();
         }
 
-        String refNameSuffix = TemplateArgument.getCode(get(TEMPLATE_ARGUMENTS), this);
+        String refNameSuffix = TemplateArgument.getCode(getWireTemplateArguments(), this);
 
-        String qualifier = get(QUALIFIER);
+        String qualifier = getWireQualifier();
         String refnamePrefix = qualifier == null ? "" : qualifier;
 
         // HACK:
@@ -96,7 +86,7 @@ public class DeclRefExpr extends Expr implements Nameable {
 
     public String getRefName() {
         if (hasValue(CUSTOM_NAME)) {
-            return get(CUSTOM_NAME);
+            return getWireCustomName();
         }
 
         return getDeclaration().get(ValueDecl.DECL_NAME);
@@ -111,7 +101,7 @@ public class DeclRefExpr extends Expr implements Nameable {
      * @return
      */
     public ValueDecl getDeclaration() {
-        return (ValueDecl) ClavaNodes.normalizeDecl(get(DECL));
+        return (ValueDecl) ClavaNodes.normalizeDecl(getWireDecl());
     }
 
     @Override

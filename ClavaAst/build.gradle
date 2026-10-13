@@ -33,3 +33,56 @@ sourceSets {
         }
     }
 }
+
+apply from: 'wire-schema.gradle'
+configurations { nodeDataGenerator }
+dependencies {
+    nodeDataGenerator 'com.google.flatbuffers:flatbuffers-java:25.2.10'
+    nodeDataGenerator 'com.google.code.gson:gson:2.12.1'
+}
+def generatorClasses = layout.buildDirectory.dir('generator-classes')
+def compileNodeDataGenerator = tasks.register('compileNodeDataGenerator', JavaCompile) {
+    source = fileTree('generator') { include '*.java' }
+    classpath = configurations.nodeDataGenerator
+    destinationDirectory = generatorClasses
+    options.release = 21
+}
+def schemaFile = wireSchemaDir.map { it.file('pt/up/fe/specs/clang/wire/ast-wire.bfbs') }
+def fieldsLock = file('../ClangAstParser/wire-fields.lock')
+def generatedData = layout.buildDirectory.dir('generated/sources/node-data')
+def generatorTask = { String name, String mode ->
+    tasks.register(name, JavaExec) {
+        dependsOn compileNodeDataGenerator, tasks.named('wireSchema')
+        classpath = files(generatorClasses) + configurations.nodeDataGenerator
+        mainClass = 'GenerateNodeData'
+        inputs.file(schemaFile)
+        inputs.file('node-data.json')
+        doFirst { args = [mode, schemaFile.get().asFile.path, file('node-data.json').path,
+                         mode == 'generate' ? generatedData.get().asFile.path : fieldsLock.path] }
+    }
+}
+def generateNodeData = generatorTask('generateNodeData', 'generate')
+generateNodeData.configure { outputs.dir(generatedData) }
+sourceSets.main.java.srcDir(files(generatedData).builtBy(generateNodeData))
+// These checks deliberately run on every build, including when generated sources are up to date.
+def warnWireFields = generatorTask('warnWireFields', 'warn')
+def verifyWireFields = generatorTask('verifyWireFields', 'verify')
+generatorTask('updateWireFields', 'update')
+tasks.named('compileJava') { dependsOn warnWireFields }
+tasks.named('check') { dependsOn verifyWireFields }
+
+sourceSets.test.java.srcDir 'test'
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.0'
+    testImplementation files(generatorClasses).builtBy(compileNodeDataGenerator)
+}
+configurations.testImplementation.extendsFrom(configurations.nodeDataGenerator)
+tasks.named('test') {
+    useJUnitPlatform()
+    dependsOn tasks.named('wireSchema')
+    inputs.file(schemaFile)
+    inputs.file('node-data.json')
+    systemProperty 'node.schema', schemaFile.get().asFile.path
+    systemProperty 'node.contract', file('node-data.json').path
+}

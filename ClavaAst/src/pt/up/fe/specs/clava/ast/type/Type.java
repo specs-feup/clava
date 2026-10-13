@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -45,29 +44,14 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
  * @author JoaoBispo
  *
  */
-public abstract class Type extends ClavaNode {
+public abstract class Type extends TypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in TypeBase.
 
-    public final static DataKey<String> TYPE_AS_STRING = KeyFactory.string("typeAsString");
-    // This is a static value, extracted from the original code. If it gets stale, the current policy is to
-    // remove it.
-    // .setDefault(null);
-
-    public final static DataKey<TypeDependency> TYPE_DEPENDENCY = KeyFactory.enumeration("typeDependency",
-            TypeDependency.class);
-
-    public final static DataKey<Boolean> IS_VARIABLY_MODIFIED = KeyFactory.bool("isVariablyModified");
-
-    public final static DataKey<Boolean> CONTAINS_UNEXPANDED_PARAMETER_PACK = KeyFactory
-            .bool("containsUnexpandedParameterPack");
-
-    public final static DataKey<Boolean> IS_FROM_AST = KeyFactory.bool("isFromAst");
-
-    public final static DataKey<Optional<Type>> UNQUALIFIED_DESUGARED_TYPE = KeyFactory
-            .optional("unqualifiedDesugaredType");
-
-    /// DATAKEYS END
+    public Type(DataStore data, Collection<? extends ClavaNode> children, TypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public Type(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -167,7 +151,7 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public String getBareType() {
-        return getData().get(TYPE_AS_STRING);
+        return getWireTypeAsString();
     }
 
     /**
@@ -310,11 +294,11 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public Type desugar() {
-        return get(UNQUALIFIED_DESUGARED_TYPE).orElse(this);
+        return getWireUnqualifiedDesugaredType().orElse(this);
     }
 
     public final Optional<Type> desugarTry() {
-        return get(UNQUALIFIED_DESUGARED_TYPE);
+        return getWireUnqualifiedDesugaredType();
     }
 
     public final List<Type> getDesugars() {

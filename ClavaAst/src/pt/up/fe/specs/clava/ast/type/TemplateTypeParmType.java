@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -29,16 +27,14 @@ import pt.up.fe.specs.clava.ast.decl.TemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeDecl;
 
-public class TemplateTypeParmType extends Type {
+public class TemplateTypeParmType extends TemplateTypeParmTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in TemplateTypeParmTypeBase.
 
-    public final static DataKey<Integer> DEPTH = KeyFactory.integer("depth");
-    public final static DataKey<Integer> INDEX = KeyFactory.integer("index");
-    public final static DataKey<Boolean> IS_PACKED = KeyFactory.bool("isPacked");
-    public final static DataKey<Optional<Decl>> DECL = KeyFactory.optional("decl");
-
-    /// DATAKEYS END
+    public TemplateTypeParmType(DataStore data, Collection<? extends ClavaNode> children, TemplateTypeParmTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public TemplateTypeParmType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -61,14 +57,14 @@ public class TemplateTypeParmType extends Type {
     }
 
     private Optional<String> getLinkedName() {
-        return get(DECL).filter(NamedDecl.class::isInstance)
+        return getWireDecl().filter(NamedDecl.class::isInstance)
                 .map(NamedDecl.class::cast)
                 .filter(NamedDecl::hasDeclName)
                 .map(NamedDecl::getDeclName);
     }
 
     private Optional<String> getVisibleTemplateParameterName(ClavaNode sourceNode) {
-        return getVisibleTemplateParameterName(sourceNode, get(DEPTH), get(INDEX));
+        return getVisibleTemplateParameterName(sourceNode, getWireDepth(), getWireIndex());
     }
 
     private static Optional<String> getVisibleTemplateParameterName(ClavaNode sourceNode, int depth, int index) {

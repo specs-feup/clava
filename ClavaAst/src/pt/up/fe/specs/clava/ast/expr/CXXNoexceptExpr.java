@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -27,9 +25,12 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JoaoBispo
  *
  */
-public class CXXNoexceptExpr extends Expr {
+public class CXXNoexceptExpr extends CXXNoexceptExprBase {
 
-    public static final DataKey<Boolean> VALUE = KeyFactory.bool("value");
+    public CXXNoexceptExpr(DataStore data, java.util.Collection<? extends ClavaNode> children, CXXNoexceptExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXNoexceptExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

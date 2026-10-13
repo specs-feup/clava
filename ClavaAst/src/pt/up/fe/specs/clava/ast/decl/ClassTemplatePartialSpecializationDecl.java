@@ -17,16 +17,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class ClassTemplatePartialSpecializationDecl extends ClassTemplateSpecializationDecl {
+public class ClassTemplatePartialSpecializationDecl extends ClassTemplatePartialSpecializationDeclBase {
 
-    public static final DataKey<List<NamedDecl>> TEMPLATE_PARAMETERS = KeyFactory.list("templateParameters",
-            NamedDecl.class);
+    public ClassTemplatePartialSpecializationDecl(DataStore data, java.util.Collection<? extends ClavaNode> children, ClassTemplatePartialSpecializationDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public ClassTemplatePartialSpecializationDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -34,10 +34,10 @@ public class ClassTemplatePartialSpecializationDecl extends ClassTemplateSpecial
 
     @Override
     public String getCode() {
-        String parameters = get(TEMPLATE_PARAMETERS).stream()
+        String parameters = getWireTemplateParameters().stream()
                 .map(ClavaNode::getCode)
                 .collect(Collectors.joining(", "));
-        String recordCode = super.getCode(get(RECORD_BASES), get(TEMPLATE_ARGUMENTS));
+        String recordCode = super.getCode(getWireRecordBases(), getWireTemplateArguments());
 
         return "template<" + parameters + ">\n" + recordCode;
     }

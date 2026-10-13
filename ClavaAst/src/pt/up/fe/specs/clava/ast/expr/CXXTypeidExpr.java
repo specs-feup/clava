@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -33,26 +31,25 @@ import pt.up.fe.specs.clava.ast.type.Type;
  * @author JoaoBispo
  *
  */
-public class CXXTypeidExpr extends Expr {
+public class CXXTypeidExpr extends CXXTypeidExprBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in CXXTypeidExprBase.
 
-    public final static DataKey<Boolean> IS_TYPE_OPERAND = KeyFactory.bool("isTypeOperand");
-
-    public final static DataKey<ClavaNode> OPERAND = KeyFactory.object("operand", ClavaNode.class);
-
-    /// DATAKEYS END
+    public CXXTypeidExpr(DataStore data, Collection<? extends ClavaNode> children, CXXTypeidExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXTypeidExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Optional<Expr> getOperandExpr() {
-        return get(IS_TYPE_OPERAND) ? Optional.empty() : Optional.of((Expr) get(OPERAND));
+        return getWireIsTypeOperand() ? Optional.empty() : Optional.of((Expr) getWireOperand());
     }
 
     public Optional<Type> getOperandType() {
-        return get(IS_TYPE_OPERAND) ? Optional.of((Type) get(OPERAND)) : Optional.empty();
+        return getWireIsTypeOperand() ? Optional.of((Type) getWireOperand()) : Optional.empty();
     }
 
     @Override
@@ -60,7 +57,7 @@ public class CXXTypeidExpr extends Expr {
         StringBuilder code = new StringBuilder();
 
         code.append("typeid(");
-        if (get(IS_TYPE_OPERAND)) {
+        if (getWireIsTypeOperand()) {
             code.append(getOperandType().get().getCode(this));
         } else {
             code.append(getOperandExpr().get().getCode());

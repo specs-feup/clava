@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.decl;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -33,20 +31,14 @@ import pt.up.fe.specs.clava.language.TemplateTypeParmKind;
  * @author JoaoBispo
  *
  */
-public class TemplateTypeParmDecl extends TypeDecl implements TemplateParameter {
+public class TemplateTypeParmDecl extends TemplateTypeParmDeclBase implements TemplateParameter {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in TemplateTypeParmDeclBase.
 
-    public final static DataKey<TemplateTypeParmKind> KIND = KeyFactory.enumeration("kind", TemplateTypeParmKind.class);
-
-    /**
-     * True if this is a parameter pack.
-     */
-    public final static DataKey<Boolean> IS_PARAMETER_PACK = KeyFactory.bool("isParameterPack");
-
-    public final static DataKey<Optional<Type>> DEFAULT_ARGUMENT = KeyFactory.optional("defaultArgument");
-
-    /// DATAKEYS END
+    public TemplateTypeParmDecl(DataStore data, Collection<? extends ClavaNode> children, TemplateTypeParmDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public TemplateTypeParmDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -56,18 +48,18 @@ public class TemplateTypeParmDecl extends TypeDecl implements TemplateParameter 
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        code.append(get(KIND).getString());
+        code.append(getWireKind().getString());
 
-        if (get(IS_PARAMETER_PACK)) {
+        if (getWireIsParameterPack()) {
             code.append("...");
-            Preconditions.checkArgument(!get(DEFAULT_ARGUMENT).isPresent());
+            Preconditions.checkArgument(!getWireDefaultArgument().isPresent());
         }
 
         if (hasDeclName()) {
             code.append(" ").append(getDeclName());
         }
 
-        get(DEFAULT_ARGUMENT).ifPresent(arg -> code.append(" = ").append(arg.getCode(this)));
+        getWireDefaultArgument().ifPresent(arg -> code.append(" = ").append(arg.getCode(this)));
 
         return code.toString();
     }

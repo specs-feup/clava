@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -27,13 +25,14 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JoaoBispo
  *
  */
-public abstract class Literal extends Expr {
+public abstract class Literal extends LiteralBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in LiteralBase.
 
-    public final static DataKey<String> SOURCE_LITERAL = KeyFactory.string("sourceLiteral");
-
-    /// DATAKEYS END
+    public Literal(DataStore data, Collection<? extends ClavaNode> children, LiteralBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public Literal(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -41,7 +40,7 @@ public abstract class Literal extends Expr {
 
     // public abstract String getLiteral();
     public String getLiteral() {
-        return get(SOURCE_LITERAL);
+        return getWireSourceLiteral();
     }
 
     @Override

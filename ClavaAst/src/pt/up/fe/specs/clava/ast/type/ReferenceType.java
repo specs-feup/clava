@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -27,20 +25,21 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JBispo
  *
  */
-public abstract class ReferenceType extends Type {
+public abstract class ReferenceType extends ReferenceTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in ReferenceTypeBase.
 
-    public final static DataKey<Type> POINTEE_TYPE_AS_WRITTEN = KeyFactory.object("pointeeTypeAsWritten", Type.class);
-
-    /// DATAKEYS END
+    public ReferenceType(DataStore data, Collection<? extends ClavaNode> children, ReferenceTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public ReferenceType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Type getReferencee() {
-        return get(POINTEE_TYPE_AS_WRITTEN);
+        return getWirePointeeTypeAsWritten();
     }
 
 }

@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -32,33 +30,12 @@ import pt.up.fe.specs.util.SpecsLogs;
  * @author JoaoBispo
  *
  */
-public class InitListExpr extends Expr {
+public class InitListExpr extends InitListExprBase {
 
-    /// DATAKEY BEGIN
-
-    /**
-     * OPTIONAL - If this initializer list initializes an array with more elements than there are initializers in the
-     * list, specifies an expression to be used for value initialization of the rest of the elements.
-     */
-    public final static DataKey<Optional<Expr>> ARRAY_FILLER = KeyFactory.optional("arrayFiller");
-
-    public final static DataKey<FieldDecl> INITIALIZED_FIELD_IN_UNION = KeyFactory.object("initializedFieldInUnion",
-            FieldDecl.class);
-
-    public final static DataKey<Boolean> IS_EXPLICIT = KeyFactory.bool("isExplicit");
-
-    public final static DataKey<Boolean> IS_STRING_LITERAL_INIT = KeyFactory.bool("isStringLiteralInit");
-
-    /**
-     * Represents the initializer list as written by the user, which may contain C99 designated initializers
-     * (represented as DesignatedInitExprs), initializations of sub-object members without explicit braces, and so on.
-     * If the syntactic and semantic forms are the same for this initializer, it returns empty.
-     */
-    public final static DataKey<Optional<InitListExpr>> SYNTACTIC_FORM = KeyFactory.optional("syntacticForm");
-
-    public final static DataKey<Optional<InitListExpr>> SEMANTIC_FORM = KeyFactory.optional("semanticForm");
-
-    /// DATAKEY END
+    public InitListExpr(DataStore data, java.util.Collection<? extends ClavaNode> children, InitListExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public InitListExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -69,13 +46,13 @@ public class InitListExpr extends Expr {
     }
 
     public boolean hasArrayFiller() {
-        return get(ARRAY_FILLER).isPresent();
+        return getWireArrayFiller().isPresent();
     }
 
     @Override
     public String getCode() {
 
-        InitListExpr syntaticForm = get(SYNTACTIC_FORM).orElse(null);
+        InitListExpr syntaticForm = getWireSyntacticForm().orElse(null);
         if (syntaticForm != null) {
             if (!syntaticForm.getId().equals(getId())) {
 
@@ -96,9 +73,9 @@ public class InitListExpr extends Expr {
                 .map(expr -> expr.getCode())
                 .collect(Collectors.joining(", "));
 
-        if (hasArrayFiller() && !get(IS_STRING_LITERAL_INIT)) {
+        if (hasArrayFiller() && !getWireIsStringLiteralInit()) {
 
-            String exprClassName = get(ARRAY_FILLER).get().getClass().getSimpleName();
+            String exprClassName = getWireArrayFiller().get().getClass().getSimpleName();
             switch (exprClassName) {
             case "ImplicitValueInitExpr":
                 list = list + ",";
@@ -109,7 +86,7 @@ public class InitListExpr extends Expr {
             }
         }
 
-        if (get(IS_EXPLICIT)) {
+        if (getWireIsExplicit()) {
             return "{" + list + "}";
         } else {
             return list;

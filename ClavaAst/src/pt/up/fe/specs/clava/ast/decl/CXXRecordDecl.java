@@ -24,8 +24,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -38,20 +36,14 @@ import pt.up.fe.specs.util.SpecsLogs;
  * @author jbispo
  *
  */
-public class CXXRecordDecl extends RecordDecl {
+public class CXXRecordDecl extends CXXRecordDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in CXXRecordDeclBase.
 
-    /**
-     * A list of the base specifiers of this CXXRecordDecl.
-     */
-    public final static DataKey<List<CXXBaseSpecifier>> RECORD_BASES = KeyFactory
-            .generic("recordBases", (List<CXXBaseSpecifier>) new ArrayList<CXXBaseSpecifier>());
-
-    public final static DataKey<Boolean> HAS_DEFINITION = KeyFactory.bool("hasDefinition");
-    public final static DataKey<Optional<CXXRecordDecl>> RECORD_DEFINITION = KeyFactory.optional("recordDefinition");
-
-    /// DATAKEYS END
+    public CXXRecordDecl(DataStore data, Collection<? extends ClavaNode> children, CXXRecordDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXRecordDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -61,12 +53,12 @@ public class CXXRecordDecl extends RecordDecl {
     public String getCode() {
         // String bases = getBasesCode();
 
-        return super.getCode(get(RECORD_BASES));
+        return super.getCode(getWireRecordBases());
     }
 
     // private String getBasesCode() {
     // // String bases = getRecordBases().stream()
-    // String bases = get(RECORD_BASES).stream()
+    // String bases = getWireRecordBases().stream()
     // .map(recordBase -> recordBase.getCode(this))
     // .collect(Collectors.joining(", "));
     //
@@ -131,7 +123,7 @@ public class CXXRecordDecl extends RecordDecl {
     }
 
     public List<CXXRecordDecl> getBases() {
-        return get(RECORD_BASES).stream()
+        return getWireRecordBases().stream()
                 .map(baseSpec -> baseSpec.getBaseDecl(this))
                 .filter(decl -> {
                     if (!(decl instanceof CXXRecordDecl)) {
@@ -281,16 +273,16 @@ public class CXXRecordDecl extends RecordDecl {
     private void addMethods(List<CXXMethodDecl> methods, Map<String, CXXMethodDecl> allMethods) {
         for (var method : methods) {
             var signature = method.getSignature();
-    
+
             if (allMethods.containsKey(signature)) {
                 SpecsLogs.debug(() -> "CXXRecordDecl.addMethods: skipping method, signature '" + signature
                         + "' already present");
                 continue;
             }
-    
+
             allMethods.put(signature, method);
         }
-    
+
     }
     */
     /**

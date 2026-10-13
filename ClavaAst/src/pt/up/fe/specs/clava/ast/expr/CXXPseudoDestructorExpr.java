@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -29,13 +27,12 @@ import pt.up.fe.specs.clava.ast.type.Type;
  * @author JoaoBispo
  *
  */
-public class CXXPseudoDestructorExpr extends Expr {
+public class CXXPseudoDestructorExpr extends CXXPseudoDestructorExprBase {
 
-    public static final DataKey<Optional<String>> QUALIFIER = KeyFactory.optional("qualifier");
-
-    public static final DataKey<Boolean> IS_ARROW = KeyFactory.bool("isArrow");
-
-    public static final DataKey<Type> DESTROYED_TYPE = KeyFactory.object("destroyedType", Type.class);
+    public CXXPseudoDestructorExpr(DataStore data, java.util.Collection<? extends ClavaNode> children, CXXPseudoDestructorExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXPseudoDestructorExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -50,10 +47,10 @@ public class CXXPseudoDestructorExpr extends Expr {
         StringBuilder code = new StringBuilder();
 
         code.append(getBase().getCode());
-        code.append(get(IS_ARROW) ? "->" : ".");
+        code.append(getWireIsArrow() ? "->" : ".");
 
-        var typeCode = get(DESTROYED_TYPE).getCode(this);
-        var qualifier = get(QUALIFIER).orElse("");
+        var typeCode = getWireDestroyedType().getCode(this);
+        var qualifier = getWireQualifier().orElse("");
         code.append(qualifier).append(typeCode).append("::~").append(typeCode);
 
         return code.toString();

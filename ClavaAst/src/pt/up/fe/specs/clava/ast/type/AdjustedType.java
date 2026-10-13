@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -29,22 +28,21 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JoaoBispo
  *
  */
-public abstract class AdjustedType extends Type {
+public abstract class AdjustedType extends AdjustedTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in AdjustedTypeBase.
 
-    public final static DataKey<Type> ORIGINAL_TYPE = KeyFactory.object("originalType", Type.class);
-
-    public final static DataKey<Type> ADJUSTED_TYPE = KeyFactory.object("adjustedType", Type.class);
-
-    /// DATAKEYS END
+    public AdjustedType(DataStore data, Collection<? extends ClavaNode> children, AdjustedTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public AdjustedType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Type getOriginalType() {
-        return get(ORIGINAL_TYPE);
+        return getWireOriginalType();
     }
 
     public void setOriginalType(Type originalType) {
@@ -52,7 +50,7 @@ public abstract class AdjustedType extends Type {
     }
 
     public Type getAdjustedType() {
-        return get(ADJUSTED_TYPE);
+        return getWireAdjustedType();
     }
 
     @Override
