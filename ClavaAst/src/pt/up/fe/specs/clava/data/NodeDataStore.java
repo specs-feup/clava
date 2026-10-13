@@ -2,6 +2,7 @@
 package pt.up.fe.specs.clava.data;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import pt.up.fe.specs.clava.ClavaNode;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
@@ -27,18 +27,37 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
  */
 public final class NodeDataStore implements DataStore {
     /** Implemented by each generated base's typed state with small integer switches. */
-    public interface Fields {
-        Object read(int index);
-        void write(int index, Object value);
+    public static class Fields {
+        private long present;
+        private BitSet extendedPresence;
+
+        public Object read(int index) { throw new IllegalArgumentException("Unknown field index " + index); }
+        public void write(int index, Object value) { throw new IllegalArgumentException("Unknown field index " + index); }
+
+        public final boolean has(int index) {
+            return index < Long.SIZE ? (present & (1L << index)) != 0
+                    : extendedPresence != null && extendedPresence.get(index - Long.SIZE);
+        }
+
+        public final void mark(int index, Object value) {
+            if (index < Long.SIZE) {
+                long bit = 1L << index;
+                present = value == null ? present & ~bit : present | bit;
+            } else if (value != null || extendedPresence != null) {
+                if (extendedPresence == null) extendedPresence = new BitSet();
+                extendedPresence.set(index - Long.SIZE, value != null);
+            }
+        }
     }
 
-    public record Layout<T extends Fields>(Class<T> type, Supplier<T> create, List<DataKey<?>> keys) {
+    public record Layout<T extends Fields>(Class<T> type, Supplier<T> create, List<DataKey<?>> keys, int offset) {
         public Layout { keys = List.copyOf(keys); }
     }
 
     private record Slot(int group, int field, DataKey<?> key) {}
     private static final Map<Class<?>, Shape> SHAPES = new ConcurrentHashMap<>();
-    private static final Map<Class<?>, StoreDefinition> EXTRA_DEFINITIONS = new ConcurrentHashMap<>();
+    private record Construction(Shape shape, StoreDefinition full, StoreDefinition extra) {}
+    private static final Map<Class<?>, Construction> CONSTRUCTIONS = new ConcurrentHashMap<>();
     private static final Map<List<Layout<?>>, Shape> SHARED_SHAPES = new ConcurrentHashMap<>();
 
     private static final class Shape {
@@ -54,7 +73,7 @@ public final class NodeDataStore implements DataStore {
                 for (int field = 0; field < layout.keys().size(); field++) {
                     var key = layout.keys().get(field);
                     // Parent declarations own an already-bound name, matching shared DataStore semantics.
-                    slots.putIfAbsent(key.getName(), new Slot(group, field, key));
+                    slots.putIfAbsent(key.getName(), new Slot(group, layout.offset() + field, key));
                 }
             }
         }
@@ -83,14 +102,19 @@ public final class NodeDataStore implements DataStore {
 
     /** Parser construction starts with empty storage, so no per-field migration is needed. */
     public static NodeDataStore create(Class<?> nodeClass) {
+        var construction = CONSTRUCTIONS.computeIfAbsent(nodeClass, NodeDataStore::construction);
+        var node = new NodeDataStore(DataStore.newInstance(construction.extra(), true));
+        node.definition = construction.full();
+        node.attach(construction.shape(), false);
+        return node;
+    }
+
+    private static Construction construction(Class<?> nodeClass) {
         var full = StoreDefinitions.fromInterface(nodeClass);
         var shape = SHAPES.computeIfAbsent(nodeClass, NodeDataStore::discover);
-        var unbound = EXTRA_DEFINITIONS.computeIfAbsent(nodeClass, ignored -> StoreDefinition.newInstance(
-                full.getName(), full.getKeys().stream().filter(key -> !shape.slots.containsKey(key.getName())).toList()));
-        var node = new NodeDataStore(DataStore.newInstance(unbound, true));
-        node.definition = full;
-        node.attach(nodeClass, false);
-        return node;
+        var unbound = StoreDefinition.newInstance(full.getName(),
+                full.getKeys().stream().filter(key -> !shape.slots.containsKey(key.getName())).toList());
+        return new Construction(shape, full, unbound);
     }
 
     /** Discovers generated layouts once per behavior class, never once per node or per field access. */
@@ -113,6 +137,10 @@ public final class NodeDataStore implements DataStore {
 
     private void attach(Class<?> nodeClass, boolean transferValues) {
         var target = SHAPES.computeIfAbsent(nodeClass, NodeDataStore::discover);
+        attach(target, transferValues);
+    }
+
+    private void attach(Shape target, boolean transferValues) {
         if (shape == target || shape != null && shape.layouts.containsAll(target.layouts)) return;
         var next = target;
         if (shape != null) {
@@ -121,10 +149,26 @@ public final class NodeDataStore implements DataStore {
             next = SHARED_SHAPES.computeIfAbsent(List.copyOf(layouts), Shape::new);
         }
         var nextStates = new Fields[next.layouts.size()];
+        // A normal node needs only its most derived state. Parent layouts refer to that same object.
+        Fields fresh = null;
         for (int group = 0; group < nextStates.length; group++) {
             var layout = next.layouts.get(group);
             Integer previous = shape == null ? null : shape.groups.get(layout.type());
-            nextStates[group] = previous == null ? layout.create().get() : states[previous];
+            if (previous != null) {
+                nextStates[group] = states[previous];
+                continue;
+            }
+            if (fresh == null || !layout.type().isInstance(fresh)) {
+                // Shared views can add another branch. Reuse old states, and allocate only the new branch.
+                for (int candidate = next.layouts.size() - 1; candidate >= 0; candidate--) {
+                    var leaf = next.layouts.get(candidate);
+                    if (layout.type().isAssignableFrom(leaf.type())) {
+                        fresh = leaf.create().get();
+                        break;
+                    }
+                }
+            }
+            nextStates[group] = fresh;
         }
         if (transferValues) for (var entry : next.slots.entrySet()) {
             if (shape != null && shape.slots.containsKey(entry.getKey())) continue;
@@ -156,8 +200,6 @@ public final class NodeDataStore implements DataStore {
 
     @Override
     public <T> T get(DataKey<T> key) {
-        // Root identity and context never belong to generated payload layouts.
-        if (key == ClavaNode.ID || key == ClavaNode.CONTEXT) return extra.get(key);
         var slot = slot(key.getName());
         if (slot == null) return extra.get(key);
         T value = key.getValueClass().cast(read(slot));
@@ -177,7 +219,9 @@ public final class NodeDataStore implements DataStore {
         if (key.verifyValueClass() && !key.getValueClass().isInstance(value)) {
             throw new IllegalArgumentException("Wrong value type for " + key.getName());
         }
-        setRaw(key.getName(), value);
+        var slot = slot(key.getName());
+        if (slot == null) extra.set(key, value);
+        else write(slot, value);
         return this;
     }
 
@@ -208,13 +252,13 @@ public final class NodeDataStore implements DataStore {
     @Override
     public <T> boolean hasValue(DataKey<T> key) {
         var slot = slot(key.getName());
-        return slot == null ? extra.hasValue(key) : read(slot) != null;
+        return slot == null ? extra.hasValue(key) : states[slot.group()].has(slot.field());
     }
 
     @Override
     public Collection<String> getKeysWithValues() {
         var keys = new LinkedHashSet<>(extra.getKeysWithValues());
-        if (shape != null) shape.slots.forEach((name, slot) -> { if (read(slot) != null) keys.add(name); });
+        if (shape != null) shape.slots.forEach((name, slot) -> { if (states[slot.group()].has(slot.field())) keys.add(name); });
         return keys;
     }
 

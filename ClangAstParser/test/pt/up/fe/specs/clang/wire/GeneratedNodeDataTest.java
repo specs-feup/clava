@@ -144,6 +144,54 @@ class GeneratedNodeDataTest {
         assertTrue(node.getDataKeysWithValues().contains(BuiltinType.KIND));
     }
 
+    @Test
+    void parentAndPayloadLayoutsUseOneStateAndPresenceTracksEveryAccessPath() {
+        var data = NodeDataStore.create(BuiltinType.class);
+        assertSame(data.state(ClavaNode.WireFields.class), data.state(Type.WireFields.class));
+        assertSame(data.state(Type.WireFields.class), data.state(BuiltinType.WireFields.class));
+        data.set(ClavaNode.ID, "one-state");
+        var node = new BuiltinType(data, List.of());
+        node.setWireKindLiteral("typed");
+        assertTrue(data.hasValue(BuiltinType.KIND_LITERAL));
+        assertEquals("typed", data.get(BuiltinType.KIND_LITERAL));
+        data.remove(BuiltinType.KIND_LITERAL);
+        assertFalse(data.hasValue(BuiltinType.KIND_LITERAL));
+        assertFalse(data.getKeysWithValues().contains(BuiltinType.KIND_LITERAL.getName()));
+        assertEquals("", node.getWireKindLiteral());
+        assertTrue(data.hasValue(BuiltinType.KIND_LITERAL));
+        node.setWireKindLiteral(null);
+        assertFalse(data.hasValue(BuiltinType.KIND_LITERAL));
+        var range = pt.up.fe.specs.clava.SourceRange.invalidRange();
+        data.set(ClavaNode.LOCATION, range);
+        assertSame(range, node.getLocation());
+        assertEquals("one-state", node.getId());
+    }
+
+    @Test
+    void presenceBeyondSixtyFourFieldsDoesNotAliasLowerFields() {
+        var fields = new NodeDataStore.Fields();
+        fields.mark(0, "low");
+        fields.mark(64, "high");
+        fields.mark(129, "higher");
+        fields.mark(64, null);
+        assertTrue(fields.has(0));
+        assertFalse(fields.has(64));
+        assertTrue(fields.has(129));
+        fields.mark(0, null);
+        assertFalse(fields.has(0));
+        assertTrue(fields.has(129));
+    }
+
+    @Test
+    void typedSettersRespectReadOnlyViews() {
+        var node = new IntegerLiteral(store(IntegerLiteral.class), List.of()) {
+            { setDisableModification(true); }
+        };
+        node.setWireValue(java.math.BigInteger.ONE);
+        node.set(IntegerLiteral.VALUE, java.math.BigInteger.TEN);
+        assertFalse(node.hasValue(IntegerLiteral.VALUE));
+    }
+
     private DataStore store(Class<?> nodeClass) {
         return DataStore.newInstance(StoreDefinitions.fromInterface(nodeClass), true)
                 .set(ClavaNode.CONTEXT, context).set(ClavaNode.ID, "test");

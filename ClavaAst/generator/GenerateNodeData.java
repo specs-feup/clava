@@ -155,35 +155,35 @@ public final class GenerateNodeData {
             source.append(" public record Values(")
                     .append(String.join(", ", node.keys().stream().map(key -> key.type() + " " + member(key)).toList()))
                     .append(") {}\n");
-            source.append(" private static final class Fields implements NodeDataStore.Fields {\n");
+            source.append(" public static class WireFields extends ").append(node.parent()).append(".WireFields {\n")
+                    .append("  public static final int FIELD_COUNT = ").append(node.parent()).append(".WireFields.FIELD_COUNT + ").append(node.keys().size()).append(";\n");
             for (var key : node.keys()) source.append("  ").append(key.type()).append(" ").append(member(key)).append(";\n");
             source.append("  public Object read(int index) { return switch(index) {\n");
-            for (int i = 0; i < node.keys().size(); i++) source.append("   case ").append(i)
+            for (int i = 0; i < node.keys().size(); i++) source.append("   case ").append(node.parent()).append(".WireFields.FIELD_COUNT + ").append(i)
                     .append(" -> this.").append(member(node.keys().get(i))).append(";\n");
-            source.append("   default -> throw new IllegalArgumentException(\"Unknown field index \" + index);\n  }; }\n")
+            source.append("   default -> super.read(index);\n  }; }\n")
                     .append("  @SuppressWarnings(\"unchecked\") public void write(int index, Object value) { switch(index) {\n");
-            for (int i = 0; i < node.keys().size(); i++) source.append("   case ").append(i).append(" -> this.")
+            for (int i = 0; i < node.keys().size(); i++) source.append("   case ").append(node.parent()).append(".WireFields.FIELD_COUNT + ").append(i).append(" -> this.")
                     .append(member(node.keys().get(i))).append(" = (").append(node.keys().get(i).type()).append(") value;\n");
-            source.append("   default -> throw new IllegalArgumentException(\"Unknown field index \" + index);\n  } }\n")
-                    .append(" }\n public static final NodeDataStore.Layout<Fields> WIRE_LAYOUT = new NodeDataStore.Layout<>(Fields.class, Fields::new, java.util.List.of(")
-                    .append(String.join(", ", node.keys().stream().map(Key::name).toList())).append("));\n")
-                    .append(" private final NodeDataStore storage;\n private final Fields fields;\n")
+            source.append("   default -> { super.write(index, value); return; }\n  }\n  mark(index, value);\n }\n")
+                    .append(" }\n public static final NodeDataStore.Layout<WireFields> WIRE_LAYOUT = new NodeDataStore.Layout<>(WireFields.class, WireFields::new, java.util.List.of(")
+                    .append(String.join(", ", node.keys().stream().map(Key::name).toList())).append("), ").append(node.parent()).append(".WireFields.FIELD_COUNT);\n")
+                    .append(" private final WireFields fields;\n")
                     .append(" protected ").append(node.className()).append("Base(DataStore data, java.util.Collection<? extends pt.up.fe.specs.clava.ClavaNode> children) {\n")
                     .append("  super(data, children);\n  var store = NodeDataStore.adapt(getData());\n")
-                    .append("  storage = store;\n  fields = store.state(Fields.class);\n");
+                    .append("  fields = store.state(WireFields.class);\n");
             source.append(" }\n")
                     .append(" protected ").append(node.className()).append("Base(DataStore data, java.util.Collection<? extends pt.up.fe.specs.clava.ClavaNode> children, Values values) {\n")
                     .append("  this(data, children);\n  setWireValues(values);\n }\n")
                     .append(" public final ").append(node.className()).append(" setWireValues(Values values) {\n")
                     .append("  java.util.Objects.requireNonNull(values);\n");
-            for (var key : node.keys()) source.append("  set(").append(key.name()).append(", values.")
+            for (var key : node.keys()) source.append("  setWire").append(accessor(key)).append("(values.")
                     .append(member(key)).append("());\n");
             source.append("  return (").append(node.className()).append(") this;\n }\n");
             for (var key : node.keys()) {
-                var method = camel(key.name().toLowerCase());
-                method = Character.toUpperCase(method.charAt(0)) + method.substring(1);
+                var method = accessor(key);
                 source.append(" public final ").append(key.type()).append(" getWire").append(method)
-                        .append("() { return storage.readGenerated(").append(key.name()).append(", fields.").append(member(key)).append("); }\n")
+                        .append("() { return getNodeStorage().readGenerated(").append(key.name()).append(", fields.").append(member(key)).append("); }\n")
                         .append(" public final ").append(node.className()).append(" setWire").append(method)
                         .append("(").append(key.type()).append(" value) { return (").append(node.className())
                         .append(") set(").append(key.name()).append(", value); }\n");
@@ -210,6 +210,11 @@ public final class GenerateNodeData {
         }
         binding.append("  default -> throw new IllegalArgumentException(\"No generated data binding for \" + table);\n }; }\n}\n");
         write(output, "pt.up.fe.specs.clava.data.GeneratedNodeFields", binding.toString());
+    }
+
+    private static String accessor(Key key) {
+        var method = camel(key.name().toLowerCase());
+        return Character.toUpperCase(method.charAt(0)) + method.substring(1);
     }
 
     private static void write(Path output, String qualified, String source) throws Exception {

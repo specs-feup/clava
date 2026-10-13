@@ -126,11 +126,59 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /// DATAKEYS END
 
+    /** Hand-written root fields share the same inherited state as generated payload fields. */
+    public static class WireFields extends NodeDataStore.Fields {
+        public static final int FIELD_COUNT = 8;
+        private ClavaContext context;
+        private String id;
+        private SourceRange location;
+        private Boolean isMacro;
+        private List<InlineComment> inlineComments;
+        private Boolean isInSystemHeader;
+        private String previousId;
+        private ClavaNode origin;
+
+        @Override public Object read(int index) {
+            return switch (index) {
+                case 0 -> context;
+                case 1 -> id;
+                case 2 -> location;
+                case 3 -> isMacro;
+                case 4 -> inlineComments;
+                case 5 -> isInSystemHeader;
+                case 6 -> previousId;
+                case 7 -> origin;
+                default -> super.read(index);
+            };
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override public void write(int index, Object value) {
+            switch (index) {
+                case 0 -> context = (ClavaContext) value;
+                case 1 -> id = (String) value;
+                case 2 -> location = (SourceRange) value;
+                case 3 -> isMacro = (Boolean) value;
+                case 4 -> inlineComments = (List<InlineComment>) value;
+                case 5 -> isInSystemHeader = (Boolean) value;
+                case 6 -> previousId = (String) value;
+                case 7 -> origin = (ClavaNode) value;
+                default -> { super.write(index, value); return; }
+            }
+            mark(index, value);
+        }
+    }
+
+    public static final NodeDataStore.Layout<WireFields> WIRE_LAYOUT = new NodeDataStore.Layout<>(
+            WireFields.class, WireFields::new,
+            List.of(CONTEXT, ID, LOCATION, IS_MACRO, INLINE_COMMENTS, IS_IN_SYSTEM_HEADER, PREVIOUS_ID, ORIGIN), 0);
+
     public static String toTree(Collection<? extends ClavaNode> nodes) {
         return nodes.stream().map(ClavaNode::toTree).collect(Collectors.joining("\n"));
     }
 
-    private final DataStore dataI;
+    private final NodeDataStore dataI;
+    private final WireFields wireFields;
     private final DataClass<ClavaNode> dataClass;
     private boolean disableModification;
 
@@ -142,6 +190,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
                 () -> "Expected ListDataStore, found  " + dataI.getClass());
 
         this.dataI = NodeDataStore.adapt(dataI, getClass());
+        this.wireFields = this.dataI.state(WireFields.class);
         disableModification = false;
 
         // Set definition of DataStore
@@ -153,6 +202,16 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     protected void setDisableModification(boolean disableModification) {
         this.disableModification = disableModification;
+    }
+
+    protected final NodeDataStore getNodeStorage() { return dataI; }
+
+    protected final boolean canModifyData() {
+        if (disableModification) {
+            SpecsLogs.warn("Could not perform set: this node is a view, modifications are disabled");
+            return false;
+        }
+        return true;
     }
 
     protected String getTab() {
@@ -199,7 +258,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public SourceRange getLocation() {
-        return get(LOCATION);
+        return dataI.readGenerated(LOCATION, wireFields.location);
     }
 
     public Optional<String> getExtendedId() {
@@ -207,7 +266,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public String getId() {
-        return get(ID);
+        return dataI.readGenerated(ID, wireFields.id);
     }
 
     /**
@@ -284,7 +343,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public Optional<SourceRange> getLocationTry() {
-        return Optional.of(get(LOCATION));
+        return Optional.of(getLocation());
     }
 
     protected void throwNoCodeGeneration() {
@@ -585,8 +644,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      */
     @Override
     public <T, E extends T> ClavaNode set(DataKey<T> key, E value) {
-        if (disableModification) {
-            SpecsLogs.warn("Could not perform set: this node is a view, modifications are disabled");
+        if (!canModifyData()) {
             return this;
         }
 

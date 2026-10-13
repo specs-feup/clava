@@ -51,7 +51,7 @@ def summarize(path: Path) -> dict:
         'checks': {'all_cells_valid': True, 'all_cache_gates_passed': True,
                    'source_content_differences': 0, 'java_tests': 116, 'java_app_calls': 216,
                    'js_tests': 164, 'js_passed': 158, 'js_skipped': 6, 'js_app_calls': 170},
-        'uncertainty': 'Ranges are observed minima and maxima, not confidence intervals. Four runs do not prove exact equivalence.',
+        'uncertainty': f'Ranges are observed minima and maxima, not confidence intervals. {repeats} runs do not prove exact equivalence.',
         'command_time': 'Full command time from App-instrumented runs, including process/Gradle startup and test work outside App.build.',
     }
 

@@ -27,6 +27,7 @@ def main() -> int:
     parser.add_argument('--repeats', type=int, default=4)
     parser.add_argument('--modes', nargs='+', choices=['direct', 'cold', 'warm'], default=['direct', 'warm'])
     parser.add_argument('--wall', action='store_true', help='Also measure separate commands without the App overlay.')
+    parser.add_argument('--profile', action='store_true', help='Record Java-worker JFR profiles; timings are diagnostic only.')
     parser.add_argument('--keep', action='store_true', help='Keep isolated snapshot worktrees and cache directories.')
     parser.add_argument('--output', type=Path)
     args = parser.parse_args()
@@ -66,12 +67,31 @@ def main() -> int:
         t.prepare(output)
         try:
             collector = t.Collector(output, quick=not args.wall)
+            if args.profile:
+                with collector.java_init.open('a') as init:
+                    init.write("""\ngradle.afterProject { project ->
+    if (project.name == 'ClangAstParser') {
+        project.tasks.named('test') {
+            def path = System.getenv('CLAVA_PROFILE_PATH')
+            if (path) jvmArgs '-XX:StartFlightRecording=settings=profile,dumponexit=true,filename=' + path
+        }
+    }
+}
+""")
+                base_environment = collector.app.base_environment
+                def profile_environment(stage, suite, mode, repeat, run_dir, *remaining, **kwargs):
+                    env = base_environment(stage, suite, mode, repeat, run_dir, *remaining, **kwargs)
+                    if suite == 'java':
+                        env['CLAVA_PROFILE_PATH'] = str(run_dir / 'worker.jfr')
+                    return env
+                collector.app.base_environment = profile_environment
+                collector.record['profiling'] = 'Java worker JFR profile enabled; timings are diagnostic, not final performance evidence.'
             collector.record['quick'] = args.repeats == 1 and not args.wall
             collector.record['methodology'] = ('Matched committed revisions, pinned 116-test Java and 164-test JS cohorts; '
                     'serial rounds rotate revision, cache mode and suite. App time includes AST parsing and processing; '
                     'builds, resource download and unmeasured direct/warm preflights occur before measurement.')
             collector.record['settings'] = {'repeats': args.repeats, 'modes': args.modes, 'wall': args.wall,
-                    'release': args.release, 'host': platform.node(), 'platform': platform.platform(),
+                    'release': args.release, 'profile': args.profile, 'host': platform.node(), 'platform': platform.platform(),
                     'cpu': Path('/proc/cpuinfo').read_text().split('model name')[1].split('\n')[0].strip(': \t'),
                     'java': subprocess.run(['java', '-version'], capture_output=True, text=True).stderr,
                     'node': subprocess.check_output(['node', '--version'], text=True).strip(),
