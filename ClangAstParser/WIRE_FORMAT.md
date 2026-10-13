@@ -32,7 +32,8 @@ fields to behavior classes. Field documentation is carried into generated code.
 per behavior class; individual nodes keep their typed state objects without per-field callbacks or binding maps.
 Generated getters read those states directly, with the existing default and custom-getter rules. Generic key
 access and parser fixups reach the same storage. The parser starts with empty typed storage, avoiding a second
-copy of every decoded field. Copy and deep-copy retain the existing per-key
+copy of every decoded field. Its backing store has slots only for unbound properties; the public definition still
+lists all fields so generic traversal and copying remain complete. Copy and deep-copy retain the existing per-key
 rules; explicitly shared node views share their field state. Root identity, context, source-location metadata,
 and Clava-only nodes remain hand-written.
 

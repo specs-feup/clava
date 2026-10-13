@@ -1,0 +1,315 @@
+{
+  "baseline": "aa0946736bf241d9bac27a1c8825fffd4df0b2ba",
+  "current": "b8f33466bf43cc3425f5b22c5f49f50d8b466e96",
+  "shared": {
+    "specs-java-libs": "ae7194a7b3e981913d40a4403acfc759808b6c3a",
+    "lara-framework": "b780d0b8ba0aac2670ad5aa98998883a2a4f8030"
+  },
+  "settings": {
+    "repeats": 4,
+    "modes": [
+      "direct",
+      "warm"
+    ],
+    "wall": false,
+    "release": "v18.1.8_7-rc4",
+    "host": "specs-A3",
+    "platform": "Linux-7.0.0-28-generic-x86_64-with-glibc2.43",
+    "cpu": "Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz",
+    "java": "openjdk version \"26.0.1\" 2026-04-21\nOpenJDK Runtime Environment (build 26.0.1+8-2-26.04.2-Ubuntu)\nOpenJDK 64-Bit Server VM (build 26.0.1+8-2-26.04.2-Ubuntu, mixed mode, sharing)\n",
+    "node": "v26.7.0",
+    "harness_sha256": "3dbc28c15b610f6e65c687dd5fd43b8184693fc33a6bb27ba16ac30d377233f7"
+  },
+  "created_utc": "2026-10-13T03:22:08.585426+00:00",
+  "completed_utc": "2026-10-13T03:43:37.952963+00:00",
+  "results_sha256": "5c79a0aa29a886b5df53d237242b664c1155904ca274670e1722ca35d18b76b8",
+  "raw_results": "/home/lmsousa/.cache/clava-data-bases-performance/20261013T032207Z/results.json",
+  "cells": [
+    {
+      "suite": "clava-js",
+      "mode": "direct",
+      "metrics": {
+        "app_s": {
+          "baseline": {
+            "samples": [
+              8.25336512,
+              7.898561215,
+              7.888461239000001,
+              7.950571394
+            ],
+            "median": 7.9245663045,
+            "min": 7.888461239000001,
+            "max": 8.25336512
+          },
+          "current": {
+            "samples": [
+              7.975517339,
+              7.976962388,
+              7.968983754,
+              7.959924995000001
+            ],
+            "median": 7.9722505465,
+            "min": 7.959924995000001,
+            "max": 7.976962388
+          },
+          "median_change_percent": 0.6017268348543103,
+          "paired_change_percent": [
+            -3.366478726679667,
+            0.9926006884786842,
+            1.020763271319658,
+            0.11764690280071655
+          ]
+        },
+        "instrumented_command_s": {
+          "baseline": {
+            "samples": [
+              34.20687470724806,
+              31.673727251123637,
+              32.2379036876373,
+              32.71326274611056
+            ],
+            "median": 32.47558321687393,
+            "min": 31.673727251123637,
+            "max": 34.20687470724806
+          },
+          "current": {
+            "samples": [
+              33.037905196193606,
+              33.124319788999856,
+              32.37403887696564,
+              32.91441099718213
+            ],
+            "median": 32.97615809668787,
+            "min": 32.37403887696564,
+            "max": 33.124319788999856
+          },
+          "median_change_percent": 1.5413884224066754,
+          "paired_change_percent": [
+            -3.4173525674555782,
+            4.57979740235579,
+            0.4222830077519779,
+            0.6148828768096193
+          ]
+        }
+      }
+    },
+    {
+      "suite": "clava-js",
+      "mode": "warm",
+      "metrics": {
+        "app_s": {
+          "baseline": {
+            "samples": [
+              4.778259264,
+              4.501059915,
+              4.467370623,
+              4.768102977000001
+            ],
+            "median": 4.634581446,
+            "min": 4.467370623,
+            "max": 4.778259264
+          },
+          "current": {
+            "samples": [
+              4.842341662,
+              4.6343977139999994,
+              4.635032588,
+              4.72832033
+            ],
+            "median": 4.681676459,
+            "min": 4.6343977139999994,
+            "max": 4.842341662
+          },
+          "median_change_percent": 1.016165398078095,
+          "paired_change_percent": [
+            1.3411243396272976,
+            2.9623644545509142,
+            3.7530345957150324,
+            -0.834349576590554
+          ]
+        },
+        "instrumented_command_s": {
+          "baseline": {
+            "samples": [
+              30.153633364941925,
+              29.282064107246697,
+              28.609702427871525,
+              30.375014906283468
+            ],
+            "median": 29.71784873609431,
+            "min": 28.609702427871525,
+            "max": 30.375014906283468
+          },
+          "current": {
+            "samples": [
+              30.429005150683224,
+              29.842811367940158,
+              29.58720919629559,
+              29.47575920401141
+            ],
+            "median": 29.715010282117873,
+            "min": 29.47575920401141,
+            "max": 30.429005150683224
+          },
+          "median_change_percent": -0.009551344047964427,
+          "paired_change_percent": [
+            0.9132292032888456,
+            1.9149854280753553,
+            3.416696733873681,
+            -2.9605111472259193
+          ]
+        }
+      }
+    },
+    {
+      "suite": "java",
+      "mode": "direct",
+      "metrics": {
+        "app_s": {
+          "baseline": {
+            "samples": [
+              22.150081767,
+              21.718794458,
+              21.843579348,
+              21.857486674
+            ],
+            "median": 21.850533011,
+            "min": 21.718794458,
+            "max": 22.150081767
+          },
+          "current": {
+            "samples": [
+              37.732701979999995,
+              21.968012929,
+              21.991336726,
+              22.093512818
+            ],
+            "median": 22.042424772,
+            "min": 21.968012929,
+            "max": 37.732701979999995
+          },
+          "median_change_percent": 0.8782017395337682,
+          "paired_change_percent": [
+            70.35017015700389,
+            1.1474783809107825,
+            0.6764339106060113,
+            1.0798411890638793
+          ]
+        },
+        "instrumented_command_s": {
+          "baseline": {
+            "samples": [
+              29.52439144300297,
+              28.281430639326572,
+              28.446410385426134,
+              28.592481134925038
+            ],
+            "median": 28.519445760175586,
+            "min": 28.281430639326572,
+            "max": 29.52439144300297
+          },
+          "current": {
+            "samples": [
+              45.81441033817828,
+              28.826441975310445,
+              28.89264169288799,
+              28.968477435875684
+            ],
+            "median": 28.930559564381838,
+            "min": 28.826441975310445,
+            "max": 45.81441033817828
+          },
+          "median_change_percent": 1.4415210157426417,
+          "paired_change_percent": [
+            55.17478294725666,
+            1.9270995973803773,
+            1.568673521248476,
+            1.3150180957586688
+          ]
+        }
+      }
+    },
+    {
+      "suite": "java",
+      "mode": "warm",
+      "metrics": {
+        "app_s": {
+          "baseline": {
+            "samples": [
+              12.082594506,
+              11.957332609000002,
+              12.004733158999999,
+              12.804024542999999
+            ],
+            "median": 12.043663832499998,
+            "min": 11.957332609000002,
+            "max": 12.804024542999999
+          },
+          "current": {
+            "samples": [
+              12.939768612,
+              12.393407096,
+              12.263675592,
+              12.429646854000001
+            ],
+            "median": 12.411526975000001,
+            "min": 12.263675592,
+            "max": 12.939768612
+          },
+          "median_change_percent": 3.0544122421228614,
+          "paired_change_percent": [
+            7.094288445866015,
+            3.646921109075585,
+            2.157002821890064,
+            -2.9239063682103827
+          ]
+        },
+        "instrumented_command_s": {
+          "baseline": {
+            "samples": [
+              18.875655503943563,
+              18.8147271447815,
+              18.717690878082067,
+              20.097397199831903
+            ],
+            "median": 18.84519132436253,
+            "min": 18.717690878082067,
+            "max": 20.097397199831903
+          },
+          "current": {
+            "samples": [
+              21.531051631085575,
+              19.368800005875528,
+              19.324238718952984,
+              19.334648680873215
+            ],
+            "median": 19.35172434337437,
+            "min": 19.324238718952984,
+            "max": 21.531051631085575
+          },
+          "median_change_percent": 2.687863499464771,
+          "paired_change_percent": [
+            14.067835294976838,
+            2.9448891649098696,
+            3.240505705653951,
+            -3.7952602089442067
+          ]
+        }
+      }
+    }
+  ],
+  "checks": {
+    "all_cells_valid": true,
+    "all_cache_gates_passed": true,
+    "source_content_differences": 0,
+    "java_tests": 116,
+    "java_app_calls": 216,
+    "js_tests": 164,
+    "js_passed": 158,
+    "js_skipped": 6,
+    "js_app_calls": 170
+  },
+  "uncertainty": "Ranges are observed minima and maxima, not confidence intervals. Four runs do not prove exact equivalence.",
+  "command_time": "Full command time from App-instrumented runs, including process/Gradle startup and test work outside App.build.",
+  "driver_sha256": "64339ebb62641dba2490f9e60a3df1e7aff49eb98e828cb91a4d212f0d0dde4e"
+}
