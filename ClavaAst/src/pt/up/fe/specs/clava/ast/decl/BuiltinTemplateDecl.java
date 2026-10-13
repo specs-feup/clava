@@ -15,14 +15,27 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.enums.BuiltinTemplateKind;
 
 public class BuiltinTemplateDecl extends TemplateDecl {
 
+    public static final DataKey<BuiltinTemplateKind> BUILTIN_KIND =
+            KeyFactory.enumeration("builtinKind", BuiltinTemplateKind.class);
+
     public BuiltinTemplateDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
+    }
+
+    @Override
+    public String getCode() {
+        // Clang's builtin template declarations have no source spelling. Their
+        // name, kind, and parameter declarations remain available as AST data.
+        return "";
     }
 
 }

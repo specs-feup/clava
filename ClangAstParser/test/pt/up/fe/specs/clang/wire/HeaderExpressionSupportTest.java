@@ -28,12 +28,20 @@ import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.dumper.ClangAstDumper;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.BuiltinTemplateDecl;
+import pt.up.fe.specs.clava.ast.decl.LifetimeExtendedTemporaryDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.UnresolvedUsingValueDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
+import pt.up.fe.specs.clava.ast.decl.enums.BuiltinTemplateKind;
+import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageDuration;
+import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXFoldExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXRewrittenBinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -187,6 +195,140 @@ class HeaderExpressionSupportTest {
     }
 
     @Test
+    void nativeHeaderNodesRoundTripWithFaithfulSyntaxAndReferences() throws Exception {
+        File tool = nativeTool();
+        assumeTrue(tool.isFile(), "set CLANG_DUMPER_TOOL to the native clang-dumper build/tool");
+
+        String sourceText = """
+                template <class T, T... Values> struct IntegerSequence {};
+                using SequenceThree = __make_integer_seq<IntegerSequence, int, 3>;
+                using PackedFloat = __type_pack_element<1, int, float>;
+                struct CompareLeft {
+                    int value;
+                };
+                struct CompareRight { int value; };
+                int operator<=>(CompareRight rhs, CompareLeft lhs) { return lhs.value - rhs.value; }
+                bool rewritten_less(CompareLeft lhs, CompareRight rhs) { return lhs < rhs; }
+                bool rewritten_greater(CompareLeft lhs, CompareRight rhs) { return lhs > rhs; }
+                struct Lifetime { int value; };
+                void lifetime_extension() {
+                    const Lifetime& extended = Lifetime{7};
+                    (void)extended;
+                }
+                """;
+        Path source = Files.writeString(tempFolder.resolve("header-nodes.cpp"), sourceText);
+        String canonicalSource = source.toFile().getCanonicalPath();
+        var dumper = new ClangAstDumper(false, tool, List.of(), null, new ParallelCodeParser());
+        var data = dumper.parse(source.toFile(), "42", Standard.CXX20, config());
+        var allNodes = data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream().toList();
+        var nodes = allNodes.stream()
+                .filter(node -> node.getLocation().isValid()
+                        && canonicalSource.equals(node.getLocation().getFilepath()))
+                .toList();
+
+        var builtins = allNodes.stream()
+                .filter(BuiltinTemplateDecl.class::isInstance)
+                .map(BuiltinTemplateDecl.class::cast)
+                .collect(java.util.stream.Collectors.toMap(
+                        builtin -> builtin.get(BuiltinTemplateDecl.DECL_NAME), builtin -> builtin));
+        assertEquals(2, builtins.size());
+        var makeIntegerSeq = builtins.get("__make_integer_seq");
+        var typePackElement = builtins.get("__type_pack_element");
+        assertTrue(makeIntegerSeq != null);
+        assertTrue(typePackElement != null);
+        assertEquals(BuiltinTemplateKind.MAKE_INTEGER_SEQ,
+                makeIntegerSeq.get(BuiltinTemplateDecl.BUILTIN_KIND));
+        assertEquals(BuiltinTemplateKind.TYPE_PACK_ELEMENT,
+                typePackElement.get(BuiltinTemplateDecl.BUILTIN_KIND));
+        assertEquals(Linkage.External, makeIntegerSeq.get(NamedDecl.LINKAGE));
+        assertEquals(Visibility.Default, makeIntegerSeq.get(NamedDecl.VISIBILITY));
+        assertTrue(makeIntegerSeq.get(BuiltinTemplateDecl.TEMPLATE_DECL).isEmpty(),
+                "Clang's builtin template has no underlying templated Decl");
+        assertTrue(typePackElement.get(BuiltinTemplateDecl.TEMPLATE_DECL).isEmpty(),
+                "Clang's builtin template has no underlying templated Decl");
+        assertTrue(makeIntegerSeq.getTemplateParameters().size() >= 3);
+        assertTrue(typePackElement.getTemplateParameters().size() >= 2);
+
+        var rewritten = nodes.stream()
+                .filter(CXXRewrittenBinaryOperator.class::isInstance)
+                .map(CXXRewrittenBinaryOperator.class::cast)
+                .sorted(Comparator.comparingInt(node -> node.getLocation().getStartLine()))
+                .toList();
+        assertEquals(2, rewritten.size());
+        List<String> expectedCode = List.of("lhs < rhs", "lhs > rhs");
+        List<pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind> expectedOps = List.of(
+                pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind.LT,
+                pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind.GT);
+        List<String> sourceLines = sourceText.lines().toList();
+        for (int index = 0; index < rewritten.size(); index++) {
+            var expression = rewritten.get(index);
+            assertEquals(expectedCode.get(index), expression.getCode());
+            assertEquals(expectedOps.get(index), expression.get(CXXRewrittenBinaryOperator.OP));
+            assertTrue(expression.get(CXXRewrittenBinaryOperator.SEMANTIC_FORM) != null);
+            assertTrue(expression.get(CXXRewrittenBinaryOperator.INNER_BIN_OP) != null);
+            assertSame(expression.get(CXXRewrittenBinaryOperator.SEMANTIC_FORM),
+                    nodes.stream().filter(node -> node.getId().equals(
+                            expression.get(CXXRewrittenBinaryOperator.SEMANTIC_FORM).getId()))
+                            .findFirst().orElseThrow());
+            assertTrue(expression.get(CXXRewrittenBinaryOperator.IS_REVERSED),
+                    "the only viable <=> candidate reverses operands");
+
+            String line = sourceLines.get(expression.getLocation().getStartLine() - 1);
+            int operatorColumn = line.indexOf(index == 0 ? "<" : ">", line.indexOf("return")) + 1;
+            var operatorLocation = expression.get(CXXRewrittenBinaryOperator.OPERATOR_LOCATION);
+            assertEquals(expression.getLocation().getStartLine(), operatorLocation.getLine());
+            assertEquals(operatorColumn, operatorLocation.getColumn());
+            assertEquals("lhs", expression.get(CXXRewrittenBinaryOperator.LHS).getCode());
+            assertEquals("rhs", expression.get(CXXRewrittenBinaryOperator.RHS).getCode());
+
+            String semanticCode = normalizeCode(
+                    expression.get(CXXRewrittenBinaryOperator.SEMANTIC_FORM).getCode());
+            if (index == 1) {
+                assertTrue(semanticCode.contains("rhs<=>lhs"),
+                        "the semantic rewrite should reverse operands while source code stays lhs > rhs: "
+                                + semanticCode);
+                assertFalse(normalizeCode(expression.getCode()).equals(semanticCode));
+            } else {
+                assertTrue(semanticCode.contains("rhs<=>lhs"),
+                        "the semantic rewrite should reverse operands while source code stays lhs < rhs: "
+                                + semanticCode);
+            }
+
+            Path generated = tempFolder.resolve("generated-rewritten-" + index + ".cpp");
+            Files.writeString(generated, sourceText + "\nbool generated_" + index
+                    + "(CompareLeft lhs, CompareRight rhs) { return " + expression.getCode() + "; }\n");
+            assertNull(dumper.validateSyntax(generated.toFile(), "44", Standard.CXX20, config()),
+                    "generated source expression should compile: " + expression.getCode());
+        }
+
+        var lifetimeDecls = nodes.stream()
+                .filter(LifetimeExtendedTemporaryDecl.class::isInstance)
+                .map(LifetimeExtendedTemporaryDecl.class::cast)
+                .toList();
+        assertEquals(1, lifetimeDecls.size());
+        var lifetimeDecl = lifetimeDecls.get(0);
+        assertEquals(StorageDuration.AUTOMATIC,
+                lifetimeDecl.get(LifetimeExtendedTemporaryDecl.STORAGE_DURATION));
+        var owner = lifetimeDecl.get(LifetimeExtendedTemporaryDecl.EXTENDING_DECL);
+        var temporary = lifetimeDecl.get(LifetimeExtendedTemporaryDecl.TEMPORARY_EXPR);
+        assertEquals("extended", owner.get(NamedDecl.DECL_NAME));
+        assertTrue(allNodes.stream().anyMatch(node -> node == owner), "extending declaration reference identity");
+        assertTrue(allNodes.stream().anyMatch(node -> node == temporary), "temporary expression reference identity");
+        assertEquals("", lifetimeDecl.getCode(), "the implicit link declaration has no standalone spelling");
+        var materializations = nodes.stream()
+                .filter(MaterializeTemporaryExpr.class::isInstance)
+                .map(MaterializeTemporaryExpr.class::cast)
+                .filter(materialize -> materialize.get(MaterializeTemporaryExpr.LIFETIME_EXTENDED_TEMPORARY_DECL)
+                        .map(decl -> decl == lifetimeDecl).orElse(false))
+                .toList();
+        assertEquals(1, materializations.size());
+        assertSame(owner, materializations.get(0).get(MaterializeTemporaryExpr.EXTENDING_DECL).orElseThrow());
+        assertEquals("Lifetime{7}", materializations.get(0).getCode());
+        assertTrue(lifetimeDecl.get(LifetimeExtendedTemporaryDecl.MANGLING_NUMBER) >= 0);
+        assertTrue(lifetimeDecl.getLocation().isValid());
+    }
+
+    @Test
     void readsUnresolvedUsingValueDeclTypeQualifierAndLocations() {
         var context = new ClavaContext();
         var files = files("/tmp/header-expression.hpp");
@@ -243,6 +385,92 @@ class HeaderExpressionSupportTest {
         IllegalArgumentException foldError = assertThrows(IllegalArgumentException.class,
                 () -> ProtoGeneratedBindings.validate(missingPattern, "CXXFoldExpr"));
         assertTrue(foldError.getMessage().contains("CXXFoldExprData.pattern"), foldError.getMessage());
+
+        var rewrittenBuilder = CXXRewrittenBinaryOperatorData.newBuilder()
+                .setBase(exprData(10))
+                .setOp(BinaryOperatorKind.BINARYOPERATORKIND_LT)
+                .setLhs(2)
+                .setRhs(2)
+                .setSemanticForm(3)
+                .setInnerBinOp(4)
+                .setIsReversed(false)
+                .setOperatorLocation(sourceLocation(1, 10, 15, false));
+        var completeRewritten = rewrittenBuilder.build();
+        List<java.util.function.Supplier<CXXRewrittenBinaryOperatorData>> missingRewrittenFields = List.of(
+                () -> completeRewritten.toBuilder().clearOp().build(),
+                () -> completeRewritten.toBuilder().clearLhs().build(),
+                () -> completeRewritten.toBuilder().clearRhs().build(),
+                () -> completeRewritten.toBuilder().clearSemanticForm().build(),
+                () -> completeRewritten.toBuilder().clearInnerBinOp().build(),
+                () -> completeRewritten.toBuilder().clearIsReversed().build(),
+                () -> completeRewritten.toBuilder().clearOperatorLocation().build());
+        List<String> rewrittenFields = List.of("op", "lhs", "rhs", "semantic_form", "inner_bin_op",
+                "is_reversed", "operator_location");
+        for (int index = 0; index < missingRewrittenFields.size(); index++) {
+            var missingField = missingRewrittenFields.get(index).get();
+            var expectedField = rewrittenFields.get(index);
+            IllegalArgumentException rewrittenError = assertThrows(IllegalArgumentException.class,
+                    () -> ProtoGeneratedBindings.validate(missingField,
+                            "CXXRewrittenBinaryOperator"));
+            assertTrue(rewrittenError.getMessage().contains("CXXRewrittenBinaryOperatorData."
+                    + expectedField), rewrittenError.getMessage());
+        }
+
+        var lifetimeBuilder = LifetimeExtendedTemporaryDeclData.newBuilder()
+                .setBase(declData(10))
+                .setExtendingDecl(2)
+                .setTemporaryExpr(3)
+                .setStorageDuration(pt.up.fe.specs.clang.wire.StorageDuration.STORAGEDURATION_AUTOMATIC)
+                .setManglingNumber(0);
+        var completeLifetime = lifetimeBuilder.build();
+        List<java.util.function.Supplier<LifetimeExtendedTemporaryDeclData>> missingLifetimeFields = List.of(
+                () -> completeLifetime.toBuilder().clearExtendingDecl().build(),
+                () -> completeLifetime.toBuilder().clearTemporaryExpr().build(),
+                () -> completeLifetime.toBuilder().clearStorageDuration().build(),
+                () -> completeLifetime.toBuilder().clearManglingNumber().build());
+        List<String> lifetimeFields = List.of("extending_decl", "temporary_expr", "storage_duration",
+                "mangling_number");
+        for (int index = 0; index < missingLifetimeFields.size(); index++) {
+            var missingField = missingLifetimeFields.get(index).get();
+            var expectedField = lifetimeFields.get(index);
+            IllegalArgumentException lifetimeError = assertThrows(IllegalArgumentException.class,
+                    () -> ProtoGeneratedBindings.validate(missingField,
+                            "LifetimeExtendedTemporaryDecl"));
+            assertTrue(lifetimeError.getMessage().contains("LifetimeExtendedTemporaryDeclData."
+                    + expectedField), lifetimeError.getMessage());
+        }
+
+        var completeBuiltin = BuiltinTemplateDeclData.newBuilder()
+                .setBase(TemplateDeclData.newBuilder().setBase(namedDeclData(10)))
+                .build();
+        IllegalArgumentException builtinError = assertThrows(IllegalArgumentException.class,
+                () -> ProtoGeneratedBindings.validate(completeBuiltin, "BuiltinTemplateDecl"));
+        assertTrue(builtinError.getMessage().contains("BuiltinTemplateDeclData.builtin_kind"),
+                builtinError.getMessage());
+    }
+
+    private static DeclData declData(int line) {
+        return DeclData.newBuilder()
+                .setBase(NodeData.newBuilder().setSource(sourceInfo(line)))
+                .setIsImplicit(true)
+                .setIsUsed(false)
+                .setIsReferenced(false)
+                .setIsInvalidDecl(false)
+                .setIsModulePrivate(false)
+                .build();
+    }
+
+    private static NamedDeclData namedDeclData(int line) {
+        return NamedDeclData.newBuilder()
+                .setBase(declData(line))
+                .setQualifiedPrefix("")
+                .setDeclName("builtin")
+                .setNameKind(NameKind.NAMEKIND_IDENTIFIER)
+                .setIsCxxClassMember(false)
+                .setIsCxxInstanceMember(false)
+                .setLinkage(pt.up.fe.specs.clang.wire.Linkage.LINKAGE_EXTERNAL)
+                .setVisibility(pt.up.fe.specs.clang.wire.Visibility.VISIBILITY_DEFAULT)
+                .build();
     }
 
     private static UnresolvedUsingValueDeclData.Builder unresolvedUsingData() {
@@ -261,8 +489,8 @@ class HeaderExpressionSupportTest {
                                 .setNameKind(NameKind.NAMEKIND_IDENTIFIER)
                                 .setIsCxxClassMember(true)
                                 .setIsCxxInstanceMember(false)
-                                .setLinkage(Linkage.LINKAGE_EXTERNAL)
-                                .setVisibility(Visibility.VISIBILITY_DEFAULT))
+                                .setLinkage(pt.up.fe.specs.clang.wire.Linkage.LINKAGE_EXTERNAL)
+                                .setVisibility(pt.up.fe.specs.clang.wire.Visibility.VISIBILITY_DEFAULT))
                         .setType(2)
                         .setIsWeak(false))
                 .setQualifier("ValueBase<T>::")

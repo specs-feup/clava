@@ -32,6 +32,9 @@ NESTED_OPTIONAL_FIELDS = {
     ("CXXFoldExprData", "init"),
     ("CXXFoldExprData", "callee"),
     ("CXXFoldExprData", "num_expansions"),
+    ("MaterializeTemporaryExprData", "extending_decl"),
+    ("MaterializeTemporaryExprData", "lifetime_extended_temporary_decl"),
+    ("TemplateDeclData", "template_decl"),
 }
 
 

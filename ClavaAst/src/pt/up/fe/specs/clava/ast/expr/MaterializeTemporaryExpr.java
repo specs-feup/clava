@@ -22,6 +22,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.LifetimeExtendedTemporaryDecl;
 import pt.up.fe.specs.util.collections.SpecsList;
 
 /**
@@ -40,6 +41,9 @@ public class MaterializeTemporaryExpr extends Expr {
     /// DATAKEYS BEGIN
 
     public final static DataKey<Optional<Decl>> EXTENDING_DECL = KeyFactory.optional("extendingDecl");
+
+    public final static DataKey<Optional<LifetimeExtendedTemporaryDecl>> LIFETIME_EXTENDED_TEMPORARY_DECL =
+            KeyFactory.optional("lifetimeExtendedTemporaryDecl");
 
     /// DATAKEYS END
 
