@@ -19,8 +19,13 @@ import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.BuiltinBitCastExpr;
+import pt.up.fe.specs.clava.ast.expr.SourceLocExpr;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.language.CastKind;
+import pt.up.fe.specs.clava.language.SourceLocIdentKind;
 import pt.up.fe.specs.clava.language.Standard;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -84,6 +89,80 @@ class ClangAstDumperTest {
             var record = method.getRecordDecl().orElseThrow();
             assertEquals(record.getId(), method.get(CXXMethodDecl.RECORD).getId());
         }
+    }
+
+    @Test
+    void builtinBitCastRoundTripsItsTypedPayloadAndSourceForm() throws Exception {
+        File tool = nativeTool();
+        assumeTrue(tool.isFile(), "clang-dumper build/tool is required for this integration test");
+        Path source = Files.writeString(tempFolder.resolve("builtin-bit-cast.cpp"),
+                "struct Repr { unsigned char bytes[4]; };\n"
+                        + "float bitcast(Repr value) { return __builtin_bit_cast(float, value); }\n");
+
+        var data = newDumper(tool).parse(source.toFile(), "42", Standard.CXX20, config());
+        var casts = data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream()
+                .filter(BuiltinBitCastExpr.class::isInstance)
+                .map(BuiltinBitCastExpr.class::cast)
+                .toList();
+
+        assertEquals(1, casts.size());
+        var cast = casts.get(0);
+        assertEquals(CastKind.LValueToRValueBitCast, cast.getCastKind());
+        assertEquals("float", cast.get(BuiltinBitCastExpr.TYPE_AS_WRITTEN).getCode(cast));
+        assertEquals("__builtin_bit_cast(float, value)", cast.getCode());
+        assertEquals(source.toFile().getCanonicalPath(), cast.getLocation().getFilepath());
+        assertEquals(2, cast.getLocation().getStartLine());
+        assertEquals(36, cast.getLocation().getStartCol());
+        assertEquals(67, cast.getLocation().getEndCol());
+    }
+
+    @Test
+    void sourceLocationBuiltinRoundTripsKindParentAndSourceForm() throws Exception {
+        File tool = nativeTool();
+        assumeTrue(tool.isFile(), "clang-dumper build/tool is required for this integration test");
+        String sourceText = "int currentLine() {\n  return __builtin_LINE();\n}\n";
+        Path source = Files.writeString(tempFolder.resolve("source-loc-expr.cpp"), sourceText);
+
+        var data = newDumper(tool).parse(source.toFile(), "42", Standard.CXX20, config());
+        var expressions = data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream()
+                .filter(SourceLocExpr.class::isInstance)
+                .map(SourceLocExpr.class::cast)
+                .toList();
+
+        assertEquals(1, expressions.size());
+        var expression = expressions.get(0);
+        assertEquals(SourceLocIdentKind.Line, expression.get(SourceLocExpr.IDENT_KIND));
+        assertEquals("__builtin_LINE()", expression.getCode());
+        assertEquals("currentLine", ((FunctionDecl) expression.getParentContext().orElseThrow()).getDeclName());
+        assertEquals(source.toFile().getCanonicalPath(), expression.getLocation().getFilepath());
+        assertEquals(2, expression.getLocation().getStartLine());
+        int lineStart = sourceText.indexOf('\n') + 1;
+        int builtinStart = sourceText.indexOf("__builtin_LINE");
+        int builtinEnd = sourceText.indexOf(')', builtinStart);
+        assertEquals(builtinStart - lineStart + 1, expression.getLocation().getStartCol());
+        assertEquals(builtinEnd - lineStart + 1, expression.getLocation().getEndCol());
+    }
+
+    @Test
+    void sourceLocationBuiltinAtGlobalScopeRoundTripsWithoutDeclarationParent() throws Exception {
+        File tool = nativeTool();
+        assumeTrue(tool.isFile(), "clang-dumper build/tool is required for this integration test");
+        Path source = Files.writeString(tempFolder.resolve("global-source-loc-expr.cpp"),
+                "int globalLine = __builtin_LINE();\n");
+
+        var data = newDumper(tool).parse(source.toFile(), "42", Standard.CXX20, config());
+        var expressions = data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream()
+                .filter(SourceLocExpr.class::isInstance)
+                .map(SourceLocExpr.class::cast)
+                .toList();
+
+        assertEquals(1, expressions.size());
+        var expression = expressions.get(0);
+        assertEquals(SourceLocIdentKind.Line, expression.get(SourceLocExpr.IDENT_KIND));
+        assertTrue(expression.getParentContext().isEmpty());
+        assertEquals("__builtin_LINE()", expression.getCode());
+        assertEquals(source.toFile().getCanonicalPath(), expression.getLocation().getFilepath());
+        assertEquals(1, expression.getLocation().getStartLine());
     }
 
     private static ClangAstDumper newDumper(File tool) {
