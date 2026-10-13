@@ -14,15 +14,46 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
+import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.SourceLocation;
+import pt.up.fe.specs.clava.SourceRange;
 
 public class UnresolvedUsingValueDecl extends ValueDecl {
 
+    public static final DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
+
+    public static final DataKey<Boolean> IS_PACK_EXPANSION = KeyFactory.bool("isPackExpansion");
+
+    public static final DataKey<Optional<SourceRange>> QUALIFIER_SOURCE_RANGE =
+            KeyFactory.optional("qualifierSourceRange");
+
+    public static final DataKey<Optional<SourceLocation>> USING_LOCATION = KeyFactory.optional("usingLocation");
+
+    public static final DataKey<Optional<SourceLocation>> ELLIPSIS_LOCATION = KeyFactory.optional("ellipsisLocation");
+
+    public static final DataKey<Optional<SourceLocation>> NAME_LOCATION = KeyFactory.optional("nameLocation");
+
     public UnresolvedUsingValueDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
+    }
+
+    @Override
+    public String getCode() {
+        StringBuilder code = new StringBuilder();
+        if (get(USING_LOCATION).filter(SourceLocation::isValid).isPresent()) {
+            code.append("using ");
+        }
+        code.append(get(QUALIFIER)).append(getDeclName());
+        if (get(IS_PACK_EXPANSION)) {
+            code.append("...");
+        }
+        return code.append(';').toString();
     }
 
 }

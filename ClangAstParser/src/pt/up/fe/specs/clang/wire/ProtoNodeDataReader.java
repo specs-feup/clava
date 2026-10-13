@@ -301,7 +301,11 @@ final class ProtoNodeDataReader {
                 throw new IllegalArgumentException("SourceLocation requires file, line and column");
             }
             return new pt.up.fe.specs.clava.SourceLocation(files.path(location.getFile()),
-                    Math.toIntExact(location.getLine()), Math.toIntExact(location.getColumn()), false);
+                    Math.toIntExact(location.getLine()), Math.toIntExact(location.getColumn()),
+                    location.hasIsMacro() && location.getIsMacro());
+        }
+        if (value instanceof pt.up.fe.specs.clang.wire.Range range) {
+            return files.range(range);
         }
         if (value instanceof pt.up.fe.specs.clang.wire.TemplateArgument argument) {
             return templateArgument(argument);

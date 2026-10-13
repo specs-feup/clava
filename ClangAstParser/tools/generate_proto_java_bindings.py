@@ -17,12 +17,21 @@ STRUCTURAL_FIELDS = {
     "NodeData": {"source"},
     "AlignedAttrData": {"is_expression", "alignment"},
 }
+MESSAGE_TYPE_ALIASES = {
+    "Range": "SourceRange",
+}
 NESTED_OPTIONAL_FIELDS = {
+    ("SourceLocation", "is_macro"),
     ("SourceInfo", "expansion"),
     ("SourceInfo", "spelling"),
     ("TemplateExpansion", "template_name"),
     ("SubstitutedTemplateName", "replacement"),
     ("ExplicitSpecifier", "expr"),
+    ("CXXFoldExprData", "lhs"),
+    ("CXXFoldExprData", "rhs"),
+    ("CXXFoldExprData", "init"),
+    ("CXXFoldExprData", "callee"),
+    ("CXXFoldExprData", "num_expansions"),
 }
 
 
@@ -178,9 +187,10 @@ def validate_field_type(field: descriptor_pb2.FieldDescriptorProto, key: dict,
         raise ValueError(f"@NullableNodeReference is only valid for a direct protobuf node reference: {where}")
 
     if is_message(field):
-        if value.get("kind") != "object" or short(value.get("raw_class", "")) != short(field.type_name):
+        expected_class = MESSAGE_TYPE_ALIASES.get(short(field.type_name), short(field.type_name))
+        if value.get("kind") != "object" or short(value.get("raw_class", "")) != expected_class:
             raise ValueError(f"Protobuf compound/DataKey generic type mismatch for {where}: "
-                             f"{field.type_name} vs {value.get('generic_type')}")
+                             f"{expected_class} vs {value.get('generic_type')}")
         return ("compound_list" if is_list else "compound"), value
 
     if is_enum(field):
