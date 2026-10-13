@@ -136,12 +136,16 @@ class GeneratedNodeDataTest {
         assertEquals(StoreDefinitions.fromInterface(BuiltinType.class).getKeys(), data.getStoreDefinition().getKeys());
         assertTrue(data.getStoreDefinition().hasKey(BuiltinType.KIND.getName()));
         var copy = data.copy();
+        assertInstanceOf(NodeDataStore.class, copy);
+        assertNotSame(data.state(BuiltinType.WireFields.class),
+                ((NodeDataStore) copy).state(BuiltinType.WireFields.class));
         assertEquals(BuiltinKind.Int, copy.get(BuiltinType.KIND));
         assertEquals("compact", copy.get(ClavaNode.ID));
         assertSame(context, copy.get(ClavaNode.CONTEXT));
         var node = new BuiltinType(data, List.of());
         assertEquals(BuiltinKind.Int, node.getWireKind());
         assertTrue(node.getDataKeysWithValues().contains(BuiltinType.KIND));
+        assertInstanceOf(NodeDataStore.class, context.getFactory().newDataStore(BuiltinType.class));
     }
 
     @Test
@@ -180,6 +184,26 @@ class GeneratedNodeDataTest {
         fields.mark(0, null);
         assertFalse(fields.has(0));
         assertTrue(fields.has(129));
+    }
+
+    @Test
+    void genericAccessUsesTheDeclaringLayoutWithoutVirtualStateDispatch() throws Exception {
+        var data = NodeDataStore.create(BuiltinType.class);
+        var state = new BuiltinType.WireFields() {
+            @Override public Object read(int index) { throw new AssertionError("Virtual read dispatch"); }
+            @Override public void write(int index, Object value) { throw new AssertionError("Virtual write dispatch"); }
+        };
+        var statesField = NodeDataStore.class.getDeclaredField("states");
+        statesField.setAccessible(true);
+        java.util.Arrays.fill((NodeDataStore.Fields[]) statesField.get(data), state);
+        data.set(ClavaNode.ID, "direct-root");
+        data.set(Type.TYPE_AS_STRING, "typed-parent");
+        data.set(BuiltinType.KIND, BuiltinKind.Int);
+        assertEquals("direct-root", data.get(ClavaNode.ID));
+        assertEquals("typed-parent", data.get(Type.TYPE_AS_STRING));
+        assertEquals(BuiltinKind.Int, data.get(BuiltinType.KIND));
+        assertTrue(data.hasValue(BuiltinType.KIND));
+        assertTrue(data.getKeysWithValues().contains(Type.TYPE_AS_STRING.getName()));
     }
 
     @Test

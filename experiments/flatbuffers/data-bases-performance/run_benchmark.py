@@ -25,20 +25,22 @@ def main() -> int:
     parser.add_argument('--release', default='v18.1.8_7-rc4')
     parser.add_argument('--resource-seed', type=Path, required=True, help='Verified clang-dumper cache with releases/ and includes/.')
     parser.add_argument('--repeats', type=int, default=4)
+    parser.add_argument('--suites', nargs='+', choices=['clava-js', 'java'], default=['clava-js', 'java'])
     parser.add_argument('--modes', nargs='+', choices=['direct', 'cold', 'warm'], default=['direct', 'warm'])
     parser.add_argument('--wall', action='store_true', help='Also measure separate commands without the App overlay.')
     parser.add_argument('--profile', action='store_true', help='Record Java-worker JFR profiles; timings are diagnostic only.')
     parser.add_argument('--keep', action='store_true', help='Keep isolated snapshot worktrees and cache directories.')
     parser.add_argument('--output', type=Path)
     args = parser.parse_args()
-    if args.repeats < 1 or len(set(args.modes)) != len(args.modes):
-        parser.error('Use a positive repeat count and unique cache modes.')
+    if args.repeats < 1 or len(set(args.modes)) != len(args.modes) or len(set(args.suites)) != len(args.suites):
+        parser.error('Use a positive repeat count and unique suites/cache modes.')
     workspace = args.workspace.resolve()
     harness_workspace = (args.harness_workspace or workspace.parent / 'ast-protobuf').resolve()
     harness = harness_workspace / 'clava/experiments/protobuf/suite/refresh'
     sys.path.insert(0, str(harness))
     import three_way as t
     t.WORKSPACE = workspace
+    t.SUITES = tuple(args.suites)
     # Nested node_modules directories are optional in npm's hoisted workspace layout.
     original_link = t._link_node_modules
     def link(source, destination, old_root, new_root):
@@ -90,7 +92,7 @@ def main() -> int:
             collector.record['methodology'] = ('Matched committed revisions, pinned 116-test Java and 164-test JS cohorts; '
                     'serial rounds rotate revision, cache mode and suite. App time includes AST parsing and processing; '
                     'builds, resource download and unmeasured direct/warm preflights occur before measurement.')
-            collector.record['settings'] = {'repeats': args.repeats, 'modes': args.modes, 'wall': args.wall,
+            collector.record['settings'] = {'repeats': args.repeats, 'suites': args.suites, 'modes': args.modes, 'wall': args.wall,
                     'release': args.release, 'profile': args.profile, 'host': platform.node(), 'platform': platform.platform(),
                     'cpu': Path('/proc/cpuinfo').read_text().split('model name')[1].split('\n')[0].strip(': \t'),
                     'java': subprocess.run(['java', '-version'], capture_output=True, text=True).stderr,

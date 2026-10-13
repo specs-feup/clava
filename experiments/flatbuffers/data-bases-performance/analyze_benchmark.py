@@ -13,8 +13,9 @@ def summarize(path: Path) -> dict:
     if record.get('status') != 'complete':
         raise ValueError('Only a complete run can be summarized.')
     repeats = record['settings']['repeats']
+    suites = record['settings'].get('suites', ['clava-js', 'java'])
     expected = collections.Counter((stage, suite, mode, repeat)
-        for stage in ['baseline', 'current'] for suite in ['clava-js', 'java']
+        for stage in ['baseline', 'current'] for suite in suites
         for mode in record['settings']['modes'] for repeat in range(1, repeats + 1))
     rows = [r for r in record['observations'] if r['phase'] == 'app']
     if collections.Counter((r['stage'], r['suite'], r['mode'], r['repeat']) for r in rows) != expected:
@@ -24,7 +25,7 @@ def summarize(path: Path) -> dict:
     if any(r['calls_with_different_content'] != 0 for r in rows):
         raise ValueError('These revisions parsed different source contents.')
     cells = []
-    for suite in ['clava-js', 'java']:
+    for suite in suites:
         for mode in record['settings']['modes']:
             cell = {'suite': suite, 'mode': mode, 'metrics': {}}
             selected = [r for r in rows if (r['suite'], r['mode']) == (suite, mode)]
@@ -41,6 +42,12 @@ def summarize(path: Path) -> dict:
                     for a, b in zip(stats['baseline']['samples'], stats['current']['samples'])]
                 cell['metrics'][metric] = stats
             cells.append(cell)
+    checks = {'all_cells_valid': True, 'all_cache_gates_passed': True,
+              'source_content_differences': 0, 'measured_suites': suites}
+    if 'java' in suites:
+        checks.update(java_tests=116, java_app_calls=216)
+    if 'clava-js' in suites:
+        checks.update(js_tests=164, js_passed=158, js_skipped=6, js_app_calls=170)
     return {
         'baseline': record['snapshot']['stages']['baseline']['revision'],
         'current': record['snapshot']['stages']['current']['revision'],
@@ -48,9 +55,7 @@ def summarize(path: Path) -> dict:
         'created_utc': record['created_utc'], 'completed_utc': record['completed_utc'],
         'results_sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
         'raw_results': str(path.resolve()), 'cells': cells,
-        'checks': {'all_cells_valid': True, 'all_cache_gates_passed': True,
-                   'source_content_differences': 0, 'java_tests': 116, 'java_app_calls': 216,
-                   'js_tests': 164, 'js_passed': 158, 'js_skipped': 6, 'js_app_calls': 170},
+        'checks': checks,
         'uncertainty': f'Ranges are observed minima and maxima, not confidence intervals. {repeats} runs do not prove exact equivalence.',
         'command_time': 'Full command time from App-instrumented runs, including process/Gradle startup and test work outside App.build.',
     }

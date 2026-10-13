@@ -138,7 +138,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         private String previousId;
         private ClavaNode origin;
 
-        @Override public Object read(int index) {
+        @Override public Object read(int index) { return readRoot(index); }
+
+        public final Object readRoot(int index) {
             return switch (index) {
                 case 0 -> context;
                 case 1 -> id;
@@ -152,8 +154,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
             };
         }
 
+        @Override public void write(int index, Object value) { writeRoot(index, value); }
+
         @SuppressWarnings("unchecked")
-        @Override public void write(int index, Object value) {
+        public final void writeRoot(int index, Object value) {
             switch (index) {
                 case 0 -> context = (ClavaContext) value;
                 case 1 -> id = (String) value;
@@ -171,7 +175,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     public static final NodeDataStore.Layout<WireFields> WIRE_LAYOUT = new NodeDataStore.Layout<>(
             WireFields.class, WireFields::new,
-            List.of(CONTEXT, ID, LOCATION, IS_MACRO, INLINE_COMMENTS, IS_IN_SYSTEM_HEADER, PREVIOUS_ID, ORIGIN), 0);
+            List.of(CONTEXT, ID, LOCATION, IS_MACRO, INLINE_COMMENTS, IS_IN_SYSTEM_HEADER, PREVIOUS_ID, ORIGIN), 0, -1);
 
     public static String toTree(Collection<? extends ClavaNode> nodes) {
         return nodes.stream().map(ClavaNode::toTree).collect(Collectors.joining("\n"));
@@ -592,7 +596,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public ClavaFactory getFactory() {
-        return get(CONTEXT).get(ClavaContext.FACTORY);
+        return getContext().get(ClavaContext.FACTORY);
     }
 
     /**
@@ -683,7 +687,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public ClavaContext getContext() {
-        return get(CONTEXT);
+        return dataI.readGenerated(CONTEXT, wireFields.context);
     }
 
     /**

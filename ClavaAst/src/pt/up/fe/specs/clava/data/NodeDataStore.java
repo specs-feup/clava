@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
+import pt.up.fe.specs.clava.ClavaNode;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
@@ -50,11 +51,11 @@ public final class NodeDataStore implements DataStore {
         }
     }
 
-    public record Layout<T extends Fields>(Class<T> type, Supplier<T> create, List<DataKey<?>> keys, int offset) {
+    public record Layout<T extends Fields>(Class<T> type, Supplier<T> create, List<DataKey<?>> keys, int offset, int tag) {
         public Layout { keys = List.copyOf(keys); }
     }
 
-    private record Slot(int group, int field, DataKey<?> key) {}
+    private record Slot(int group, int field, int tag, DataKey<?> key) {}
     private static final Map<Class<?>, Shape> SHAPES = new ConcurrentHashMap<>();
     private record Construction(Shape shape, StoreDefinition full, StoreDefinition extra) {}
     private static final Map<Class<?>, Construction> CONSTRUCTIONS = new ConcurrentHashMap<>();
@@ -73,7 +74,7 @@ public final class NodeDataStore implements DataStore {
                 for (int field = 0; field < layout.keys().size(); field++) {
                     var key = layout.keys().get(field);
                     // Parent declarations own an already-bound name, matching shared DataStore semantics.
-                    slots.putIfAbsent(key.getName(), new Slot(group, layout.offset() + field, key));
+                    slots.putIfAbsent(key.getName(), new Slot(group, layout.offset() + field, layout.tag(), key));
                 }
             }
         }
@@ -195,8 +196,14 @@ public final class NodeDataStore implements DataStore {
     }
 
     private Slot slot(String name) { return shape == null ? null : shape.slots.get(name); }
-    private Object read(Slot slot) { return states[slot.group()].read(slot.field()); }
-    private void write(Slot slot, Object value) { states[slot.group()].write(slot.field(), value); }
+    private Object read(Slot slot) {
+        return slot.group() == 0 ? ((ClavaNode.WireFields) states[0]).readRoot(slot.field())
+                : GeneratedNodeFields.read(slot.tag(), states[slot.group()], slot.field());
+    }
+    private void write(Slot slot, Object value) {
+        if (slot.group() == 0) ((ClavaNode.WireFields) states[0]).writeRoot(slot.field(), value);
+        else GeneratedNodeFields.write(slot.tag(), states[slot.group()], slot.field(), value);
+    }
 
     @Override
     public <T> T get(DataKey<T> key) {
@@ -260,6 +267,18 @@ public final class NodeDataStore implements DataStore {
         var keys = new LinkedHashSet<>(extra.getKeysWithValues());
         if (shape != null) shape.slots.forEach((name, slot) -> { if (states[slot.group()].has(slot.field())) keys.add(name); });
         return keys;
+    }
+
+    @Override
+    public DataStore copy() {
+        if (shape == null || definition == null) return DataStore.super.copy();
+        var copy = new NodeDataStore(DataStore.newInstance(extra.getStoreDefinition(), extra.isClosed()));
+        copy.definition = definition;
+        copy.attach(shape, false);
+        for (var key : definition.getKeys()) {
+            if (hasValue(key)) copy.setRaw(key.getName(), key.copyRaw(get(key.getName())));
+        }
+        return copy;
     }
 
     @Override public void setStrict(boolean value) { strict = value; extra.setStrict(value); }
