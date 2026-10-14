@@ -6,6 +6,7 @@
 <title>Generated node data performance</title>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <style>
+html { background:transparent; }
 body { font-family:var(--font-sans); color:var(--foreground); margin:0; background:transparent; }
 #node-data-performance { width:100%; }
 h2,h3 { font-weight:500; margin:0 0 8px; }
@@ -13,7 +14,8 @@ h2 { font-size:18px; }
 h3 { font-size:14px; }
 p { margin:0 0 14px; font-size:14px; }
 .legend { display:flex; flex-wrap:wrap; gap:16px; margin:12px 0; font-size:14px; }
-.legend span { display:flex; gap:7px; align-items:center; }
+.legend button { display:flex; gap:7px; align-items:center; border:0; padding:0; background:transparent; color:var(--foreground); font:inherit; }
+.legend button[aria-pressed="false"] { opacity:0.5; }
 .swatch { display:inline-block; width:9px; height:9px; }
 .before { background:var(--chart-1); }
 .after { background:var(--chart-2); border-radius:50%; }
@@ -40,11 +42,14 @@ th { font-weight:500; }
 <h2>Generated node data performance</h2>
 <p id="subtitle"></p>
 <div class="legend" aria-label="Series">
-<span><i class="swatch before" aria-hidden="true"></i>Parent commit</span>
-<span><i class="swatch after" aria-hidden="true"></i>Generated bases, after fixes</span>
+<button type="button" data-series-toggle="baseline" aria-pressed="true"><i class="swatch before" aria-hidden="true"></i>Parent commit</button>
+<button type="button" data-series-toggle="current" aria-pressed="true"><i class="swatch after" aria-hidden="true"></i>After investigation</button>
 </div>
 <div class="panels" id="panels"></div>
-<p class="note">Each panel shows its own seconds scale. Points are individual runs; lines pair the same round. Thick marks show medians. Positive changes mean slower.</p>
+<p class="note">Each panel shows its own seconds scale. Points are individual runs; lines pair the same round. Thick marks show medians. Positive changes mean slower. Four runs do not prove equivalence.</p>
+<h3>Construction allocation · bytes per node</h3>
+<div id="allocation-table"></div>
+<p class="note">Empty-node construction probe. Steady allocation rounds; excludes App processing and process memory.</p>
 <details>
 <summary>Run samples and controls</summary>
 <div id="sample-table"></div>
@@ -56,8 +61,9 @@ th { font-weight:500; }
 const benchmark = __BENCHMARK_DATA__;
 const root = document.getElementById('node-data-performance');
 const tip = root.querySelector('#tip');
+const visibleSeries = {baseline:true,current:true};
 const format = d3.format('.2f');
-const pct = x => (x >= 0 ? '+' : '') + x.toFixed(1) + '%';
+const pct = x => Math.abs(x)<0.05 ? '0.0%' : (x >= 0 ? '+' : '') + x.toFixed(1) + '%';
 root.querySelector('#subtitle').textContent = `${benchmark.settings.repeats} matched repeats · App time in seconds · lower is better`;
 const labels = { 'clava-js':'JS', java:'Java' };
 function draw(cell, container) {
@@ -85,16 +91,17 @@ function draw(cell, container) {
     .attr('y',height-5).attr('text-anchor','middle').text('Consumer revision');
   const offset = i => (i-(benchmark.settings.repeats-1)/2)*8;
   stats.baseline.samples.forEach((v,i)=> {
-    svg.append('line').attr('x1',x('baseline')+offset(i)).attr('x2',x('current')+offset(i))
+    svg.append('line').attr('data-pair','').attr('visibility',visibleSeries.baseline && visibleSeries.current ? 'visible':'hidden').attr('x1',x('baseline')+offset(i)).attr('x2',x('current')+offset(i))
       .attr('y1',y(v)).attr('y2',y(stats.current.samples[i])).attr('stroke','var(--border)').attr('stroke-width',1);
   });
   for (const [stage,color] of [['baseline','var(--chart-1)'],['current','var(--chart-2)']]) {
     stats[stage].samples.forEach((v,i)=> {
       const cx=x(stage)+offset(i),cy=y(v);
-      if(stage==='baseline') svg.append('rect').attr('x',cx-3).attr('y',cy-3).attr('width',6).attr('height',6).attr('fill',color);
-      else svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',3.5).attr('fill',color);
-      svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',16).attr('fill','transparent').attr('data-chart-hit','')
-       .on('pointermove',event=> {
+      const marks=svg.append('g').attr('data-series',stage).attr('visibility',visibleSeries[stage]?'visible':'hidden');
+      if(stage==='baseline') marks.append('rect').attr('x',cx-3).attr('y',cy-3).attr('width',6).attr('height',6).attr('fill',color);
+      else marks.append('circle').attr('cx',cx).attr('cy',cy).attr('r',3.5).attr('fill',color);
+      marks.append('circle').attr('cx',cx).attr('cy',cy).attr('r',matchMedia('(pointer:coarse)').matches?22:16).attr('fill','transparent').attr('data-chart-hit','')
+       .on('pointerdown pointermove',event=> {
           const bounds=root.getBoundingClientRect();
           tip.textContent=`${stage==='baseline'?'Parent':'After fixes'} · round ${i+1}: ${format(v)} s`;
           tip.hidden=false;
@@ -103,10 +110,17 @@ function draw(cell, container) {
           tip.style.top=(event.clientY-bounds.top+12)+'px';
        }).on('pointerleave',()=>{tip.hidden=true;});
     });
-    svg.append('line').attr('x1',x(stage)-24).attr('x2',x(stage)+24).attr('y1',y(stats[stage].median)).attr('y2',y(stats[stage].median))
+    svg.append('line').attr('data-series',stage).attr('visibility',visibleSeries[stage]?'visible':'hidden').attr('x1',x(stage)-24).attr('x2',x(stage)+24).attr('y1',y(stats[stage].median)).attr('y2',y(stats[stage].median))
       .attr('stroke',color).attr('stroke-width',3);
   }
 }
+root.querySelectorAll('[data-series-toggle]').forEach(button=>button.addEventListener('click',()=> {
+ const stage=button.dataset.seriesToggle; visibleSeries[stage]=!visibleSeries[stage];
+ button.setAttribute('aria-pressed',String(visibleSeries[stage]));
+ root.querySelectorAll(`[data-series="${stage}"]`).forEach(mark=>mark.setAttribute('visibility',visibleSeries[stage]?'visible':'hidden'));
+ root.querySelectorAll('[data-pair]').forEach(mark=>mark.setAttribute('visibility',visibleSeries.baseline&&visibleSeries.current?'visible':'hidden'));
+ tip.hidden=true;
+}));
 benchmark.cells.forEach(cell=> {
  const section=document.createElement('section'); section.className='panel';
  const title=document.createElement('h3'); title.textContent=`${labels[cell.suite]} · ${cell.mode==='warm'?'Warm cache':'Direct'}`;
@@ -119,6 +133,17 @@ benchmark.cells.forEach(cell=> {
  root.querySelector('#panels').append(section);
  new ResizeObserver(()=>draw(cell,plot)).observe(plot); draw(cell,plot);
 });
+const allocation = __ALLOCATION_DATA__;
+const allocationTable=document.createElement('table');
+allocationTable.innerHTML='<thead><tr><th>Node class</th><th>Parent</th><th>After fixes</th><th>Change</th></tr></thead><tbody></tbody>';
+for(const item of allocation) {
+ const row=document.createElement('tr');
+ for(const value of [item.node,item.baseline,item.current,pct(100*(item.current/item.baseline-1))]) {
+  const td=document.createElement('td');td.textContent=value;row.append(td);
+ }
+ allocationTable.querySelector('tbody').append(row);
+}
+root.querySelector('#allocation-table').append(allocationTable);
 const table=document.createElement('table');
 table.innerHTML='<thead><tr><th>Workload</th><th>Parent samples (s)</th><th>After samples (s)</th></tr></thead><tbody></tbody>';
 for(const cell of benchmark.cells) {
@@ -129,7 +154,7 @@ for(const cell of benchmark.cells) {
  table.querySelector('tbody').append(row);
 }
 root.querySelector('#sample-table').append(table);
-root.querySelector('#controls').textContent = `Parent ${benchmark.baseline.slice(0,9)} · after ${benchmark.current.slice(0,9)} · ${benchmark.settings.release}. Same dependency revisions, frozen tests and source contents; all cache/workload gates passed. Java: 116 tests, 216 App calls, 512 MiB heap. JS: 158 passed, 6 skipped, 170 App calls. Ranges are observed variation, not confidence intervals. Historical thread figures used a different release/dependency snapshot and are not the control here.`;
+root.querySelector('#controls').textContent = `Parent ${benchmark.baseline.slice(0,9)} · after ${benchmark.current.slice(0,9)} · ${benchmark.settings.release}. Same dependency revisions, frozen tests and source contents; all cache/workload gates passed. Parser defaults initialized before workers in both revisions to prevent a shared configuration race. Java: 116 tests, 216 App calls, 512 MiB heap. JS: 158 passed, 6 skipped, 170 App calls. Ranges are observed variation, not confidence intervals. Historical thread figures used a different release/dependency snapshot and are not the control here.`;
 root.style.position='relative';
 console.log('Chart ready:',benchmark.cells.length,'workloads;',benchmark.settings.repeats,'repeats; all samples shown');
 </script>
