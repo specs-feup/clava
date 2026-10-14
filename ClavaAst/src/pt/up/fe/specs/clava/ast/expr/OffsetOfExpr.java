@@ -50,18 +50,20 @@ public class OffsetOfExpr extends Expr {
 
         StringBuilder code = new StringBuilder();
 
-        boolean isFirst = true;
+        boolean hasCode = false;
         for (OffsetOfComponent component : get(COMPONENTS)) {
+            String componentCode = component.getCode();
 
-            if (component.isField() && !isFirst) {
+            if (componentCode.isEmpty()) {
+                continue;
+            }
+
+            if (component.isField() && hasCode) {
                 code.append(".");
             }
 
-            code.append(component.getCode());
-
-            if (isFirst) {
-                isFirst = false;
-            }
+            code.append(componentCode);
+            hasCode = true;
         }
         return code.toString();
     }

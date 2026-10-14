@@ -28,9 +28,8 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.AExpressionUseEnum;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
+import pt.up.fe.specs.clava.weaver.enums.ExpressionUse;
 
 public class CxxAttributes {
 
@@ -164,7 +163,7 @@ public class CxxAttributes {
         // Get current region
         Optional<? extends ClavaNode> currentRegionTry = getCurrentRegion(node);
         if (!currentRegionTry.isPresent()) {
-            // ClavaLog.info("Join point '" + getJoinPointType() + "' does not support parentRegion");
+            // ClavaLog.info("Join point '" + joinPointType() + "' does not support parentRegion");
             return Optional.empty();
         }
 
@@ -187,14 +186,14 @@ public class CxxAttributes {
         // return CxxJoinpoints.create(getCurrentRegion(currentRegion.getParent()), this);
     }
 
-    public static String convertUse(ExprUse use) {
+    public static ExpressionUse convertUse(ExprUse use) {
         switch (use) {
         case READ:
-            return AExpressionUseEnum.READ.getName();
+            return ExpressionUse.READ;
         case WRITE:
-            return AExpressionUseEnum.WRITE.getName();
+            return ExpressionUse.WRITE;
         case READWRITE:
-            return AExpressionUseEnum.READWRITE.getName();
+            return ExpressionUse.READWRITE;
         default:
             throw new RuntimeException("Case not defined:" + use);
         }
@@ -206,19 +205,19 @@ public class CxxAttributes {
      * @param value
      * @return
      */
-    public static Object toLara(Object value) {
+    public static Object toLara(Object value, CxxWeaver weaver) {
         // Special cases
 
         // If Clava node, convert to join point
         if (value instanceof ClavaNode) {
-            return CxxJoinpoints.create((ClavaNode) value);
+            return CxxJoinpoints.create((ClavaNode) value, weaver);
         }
 
         // If DataClass, wrap around special version that converts nodes into join points
         if (value instanceof DataClass) {
             // System.out.println("ASDADASD");
             var dataClass = (DataClass<?>) value;
-            return new CxxWeaverDataClass(dataClass);
+            return new CxxWeaverDataClass(weaver, dataClass);
         }
 
         // If a List, apply adapt over all elements of the list
@@ -227,7 +226,7 @@ public class CxxAttributes {
             var newValue = new ArrayList<Object>(valueList.size());
 
             for (var valueElement : valueList) {
-                newValue.add(toLara(valueElement));
+                newValue.add(toLara(valueElement, weaver));
             }
 
             return newValue;
@@ -246,18 +245,17 @@ public class CxxAttributes {
         // Special cases
 
         // If join point , convert to Clava node
-        if (value instanceof AJoinPoint) {
-            return ((ACxxWeaverJoinPoint) value).getNode();
+        if (value instanceof AJoinpoint jp) {
+            return jp.getNodeImpl();
         }
 
         // If CxxWeaverDataClass, unwrap to conventional DataClass
-        if (value instanceof CxxWeaverDataClass) {
-            return ((CxxWeaverDataClass) value).getOriginalData();
+        if (value instanceof CxxWeaverDataClass weaverDataClass) {
+            return weaverDataClass.getOriginalData();
         }
 
         // If a List, apply adapt over all elements of the list
-        if (value instanceof List) {
-            var valueList = (List<?>) value;
+        if (value instanceof List valueList) {
             var newValue = new ArrayList<Object>(valueList.size());
 
             for (var valueElement : valueList) {

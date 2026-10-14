@@ -1,0 +1,271 @@
+622296 execve("/usr/bin/java", ["java", "-cp", "/tmp:/home/lmsousa/.cache/protob"..., "ProtobufResourceProbe", "/home/lmsousa/.cache/protobuf-pr"..., "10"], 0x7fff62ea1020 /* 71 vars */) = 0
+622297 --- SIGSEGV {si_signo=SIGSEGV, si_code=SEGV_MAPERR, si_addr=NULL} ---
+622304 +++ exited with 0 +++
+622306 +++ exited with 0 +++
+622305 +++ exited with 0 +++
+622297 --- SIGSEGV {si_signo=SIGSEGV, si_code=SEGV_ACCERR, si_addr=0x75bab20e8000} ---
+622318 +++ exited with 0 +++
+622321 execve("/usr/lib/jvm/java-26-openjdk-amd64/lib/jspawnhelper", ["/usr/lib/jvm/java-26-openjdk-amd"..., "26.0.1+8-2-26.04.2-Ubuntu", "84:85:87"], 0x7ffe8505e090 /* 71 vars */) = 0
+622321 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/home/lmsousa/.local/share/vite-plus/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/home/lmsousa/.codex/tmp/arg0/codex-arg0XCF3zJ/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/home/linuxbrew/.linuxbrew/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/home/linuxbrew/.linuxbrew/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/home/lmsousa/.local/share/pnpm/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/home/lmsousa/.nvm/versions/node/v26.7.0/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/home/lmsousa/.sdkman/candidates/gradle/current/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/home/lmsousa/Android/Sdk/platform-tools/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/home/lmsousa/Android/Sdk/cmdline-tools/latest/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/usr/local/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/usr/local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/usr/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622321 execve("/usr/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffe8775f0f8 /* 71 vars */) = 0
+622321 +++ exited with 0 +++
+622297 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=622321, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+622324 +++ exited with 0 +++
+622323 +++ exited with 0 +++
+622325 execve("/usr/lib/jvm/java-26-openjdk-amd64/lib/jspawnhelper", ["/usr/lib/jvm/java-26-openjdk-amd"..., "26.0.1+8-2-26.04.2-Ubuntu", "101:102:104"], 0x7ffe8505e090 /* 71 vars */) = 0
+622325 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/home/lmsousa/.local/share/vite-plus/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/home/lmsousa/.codex/tmp/arg0/codex-arg0XCF3zJ/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/home/linuxbrew/.linuxbrew/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/home/linuxbrew/.linuxbrew/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/home/lmsousa/.local/share/pnpm/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/home/lmsousa/.nvm/versions/node/v26.7.0/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/home/lmsousa/.sdkman/candidates/gradle/current/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/home/lmsousa/Android/Sdk/platform-tools/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/home/lmsousa/Android/Sdk/cmdline-tools/latest/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/usr/local/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/usr/local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/usr/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622325 execve("/usr/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffdd154fda8 /* 71 vars */) = 0
+622325 +++ exited with 0 +++
+622297 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=622325, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+622327 +++ exited with 0 +++
+622326 +++ exited with 0 +++
+622328 execve("/usr/lib/jvm/java-26-openjdk-amd64/lib/jspawnhelper", ["/usr/lib/jvm/java-26-openjdk-amd"..., "26.0.1+8-2-26.04.2-Ubuntu", "101:102:104"], 0x7ffe8505e090 /* 71 vars */) = 0
+622328 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/home/lmsousa/.local/share/vite-plus/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/home/lmsousa/.codex/tmp/arg0/codex-arg0XCF3zJ/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/home/linuxbrew/.linuxbrew/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/home/linuxbrew/.linuxbrew/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/home/lmsousa/.local/share/pnpm/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/home/lmsousa/.nvm/versions/node/v26.7.0/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/home/lmsousa/.sdkman/candidates/gradle/current/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/home/lmsousa/Android/Sdk/platform-tools/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/home/lmsousa/Android/Sdk/cmdline-tools/latest/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/usr/local/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/usr/local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/usr/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622328 execve("/usr/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffca061ef58 /* 71 vars */) = 0
+622328 +++ exited with 0 +++
+622330 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=622328, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+622329 +++ exited with 0 +++
+622330 +++ exited with 0 +++
+622331 execve("/usr/lib/jvm/java-26-openjdk-amd64/lib/jspawnhelper", ["/usr/lib/jvm/java-26-openjdk-amd"..., "26.0.1+8-2-26.04.2-Ubuntu", "101:102:104"], 0x7ffe8505e090 /* 71 vars */) = 0
+622331 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/home/lmsousa/.local/share/vite-plus/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/home/lmsousa/.codex/tmp/arg0/codex-arg0XCF3zJ/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/home/linuxbrew/.linuxbrew/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/home/linuxbrew/.linuxbrew/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/home/lmsousa/.local/share/pnpm/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/home/lmsousa/.nvm/versions/node/v26.7.0/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/home/lmsousa/.sdkman/candidates/gradle/current/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/home/lmsousa/Android/Sdk/platform-tools/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/home/lmsousa/Android/Sdk/cmdline-tools/latest/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/usr/local/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/usr/local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/usr/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622331 execve("/usr/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffcc3e158f8 /* 71 vars */) = 0
+622331 +++ exited with 0 +++
+622297 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=622331, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+622332 +++ exited with 0 +++
+622333 +++ exited with 0 +++
+622334 execve("/usr/lib/jvm/java-26-openjdk-amd64/lib/jspawnhelper", ["/usr/lib/jvm/java-26-openjdk-amd"..., "26.0.1+8-2-26.04.2-Ubuntu", "101:102:104"], 0x7ffe8505e090 /* 71 vars */) = 0
+622334 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/home/lmsousa/.local/share/vite-plus/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/home/lmsousa/.codex/tmp/arg0/codex-arg0XCF3zJ/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/home/linuxbrew/.linuxbrew/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/home/linuxbrew/.linuxbrew/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/home/lmsousa/.local/share/pnpm/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/home/lmsousa/.nvm/versions/node/v26.7.0/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/home/lmsousa/.sdkman/candidates/gradle/current/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/home/lmsousa/Android/Sdk/platform-tools/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/home/lmsousa/Android/Sdk/cmdline-tools/latest/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/usr/local/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/usr/local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/usr/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622334 execve("/usr/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffc3cd59018 /* 71 vars */) = 0
+622334 +++ exited with 0 +++
+622336 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=622334, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+622336 +++ exited with 0 +++
+622335 +++ exited with 0 +++
+622337 execve("/usr/lib/jvm/java-26-openjdk-amd64/lib/jspawnhelper", ["/usr/lib/jvm/java-26-openjdk-amd"..., "26.0.1+8-2-26.04.2-Ubuntu", "101:102:104"], 0x7ffe8505e090 /* 71 vars */) = 0
+622337 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/home/lmsousa/.local/share/vite-plus/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/home/lmsousa/.codex/tmp/arg0/codex-arg0XCF3zJ/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/home/linuxbrew/.linuxbrew/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/home/linuxbrew/.linuxbrew/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/home/lmsousa/.local/share/pnpm/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/home/lmsousa/.nvm/versions/node/v26.7.0/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/home/lmsousa/.sdkman/candidates/gradle/current/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/home/lmsousa/Android/Sdk/platform-tools/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/home/lmsousa/Android/Sdk/cmdline-tools/latest/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/usr/local/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/usr/local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/usr/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622337 execve("/usr/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff3cf24a18 /* 71 vars */) = 0
+622337 +++ exited with 0 +++
+622339 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=622337, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+622338 +++ exited with 0 +++
+622339 +++ exited with 0 +++
+622340 execve("/usr/lib/jvm/java-26-openjdk-amd64/lib/jspawnhelper", ["/usr/lib/jvm/java-26-openjdk-amd"..., "26.0.1+8-2-26.04.2-Ubuntu", "101:102:104"], 0x7ffe8505e090 /* 71 vars */) = 0
+622340 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/home/lmsousa/.local/share/vite-plus/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/home/lmsousa/.codex/tmp/arg0/codex-arg0XCF3zJ/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/home/linuxbrew/.linuxbrew/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/home/linuxbrew/.linuxbrew/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/home/lmsousa/.local/share/pnpm/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/home/lmsousa/.nvm/versions/node/v26.7.0/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/home/lmsousa/.sdkman/candidates/gradle/current/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/home/lmsousa/Android/Sdk/platform-tools/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/home/lmsousa/Android/Sdk/cmdline-tools/latest/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/usr/local/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/usr/local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/usr/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622340 execve("/usr/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff761e0578 /* 71 vars */) = 0
+622340 +++ exited with 0 +++
+622342 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=622340, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+622341 +++ exited with 0 +++
+622342 +++ exited with 0 +++
+622343 execve("/usr/lib/jvm/java-26-openjdk-amd64/lib/jspawnhelper", ["/usr/lib/jvm/java-26-openjdk-amd"..., "26.0.1+8-2-26.04.2-Ubuntu", "101:102:104"], 0x7ffe8505e090 /* 71 vars */) = 0
+622343 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/home/lmsousa/.local/share/vite-plus/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/home/lmsousa/.codex/tmp/arg0/codex-arg0XCF3zJ/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/home/linuxbrew/.linuxbrew/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/home/linuxbrew/.linuxbrew/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/home/lmsousa/.local/share/pnpm/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/home/lmsousa/.nvm/versions/node/v26.7.0/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/home/lmsousa/.sdkman/candidates/gradle/current/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/home/lmsousa/Android/Sdk/platform-tools/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/home/lmsousa/Android/Sdk/cmdline-tools/latest/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/usr/local/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/usr/local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/usr/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622343 execve("/usr/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffef45f9208 /* 71 vars */) = 0
+622343 +++ exited with 0 +++
+622345 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=622343, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+622344 +++ exited with 0 +++
+622345 +++ exited with 0 +++
+622346 execve("/usr/lib/jvm/java-26-openjdk-amd64/lib/jspawnhelper", ["/usr/lib/jvm/java-26-openjdk-amd"..., "26.0.1+8-2-26.04.2-Ubuntu", "101:102:104"], 0x7ffe8505e090 /* 71 vars */) = 0
+622346 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/home/lmsousa/.local/share/vite-plus/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/home/lmsousa/.codex/tmp/arg0/codex-arg0XCF3zJ/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/home/linuxbrew/.linuxbrew/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/home/linuxbrew/.linuxbrew/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/home/lmsousa/.local/share/pnpm/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/home/lmsousa/.nvm/versions/node/v26.7.0/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/home/lmsousa/.sdkman/candidates/gradle/current/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/home/lmsousa/Android/Sdk/platform-tools/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/home/lmsousa/Android/Sdk/cmdline-tools/latest/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/usr/local/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/usr/local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/usr/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622346 execve("/usr/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffebe699708 /* 71 vars */) = 0
+622346 +++ exited with 0 +++
+622348 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=622346, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+622348 +++ exited with 0 +++
+622347 +++ exited with 0 +++
+622349 execve("/usr/lib/jvm/java-26-openjdk-amd64/lib/jspawnhelper", ["/usr/lib/jvm/java-26-openjdk-amd"..., "26.0.1+8-2-26.04.2-Ubuntu", "101:102:104"], 0x7ffe8505e090 /* 71 vars */) = 0
+622349 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/home/lmsousa/.local/share/vite-plus/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/home/lmsousa/.codex/tmp/arg0/codex-arg0XCF3zJ/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/home/linuxbrew/.linuxbrew/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/home/linuxbrew/.linuxbrew/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/home/lmsousa/.local/share/pnpm/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/home/lmsousa/.nvm/versions/node/v26.7.0/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/home/lmsousa/.sdkman/candidates/gradle/current/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/home/lmsousa/Android/Sdk/platform-tools/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/home/lmsousa/Android/Sdk/cmdline-tools/latest/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/usr/local/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/usr/local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/usr/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622349 execve("/usr/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7fff1b66e5d8 /* 71 vars */) = 0
+622349 +++ exited with 0 +++
+622351 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=622349, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+622350 +++ exited with 0 +++
+622351 +++ exited with 0 +++
+622352 execve("/usr/lib/jvm/java-26-openjdk-amd64/lib/jspawnhelper", ["/usr/lib/jvm/java-26-openjdk-amd"..., "26.0.1+8-2-26.04.2-Ubuntu", "101:102:104"], 0x7ffe8505e090 /* 71 vars */) = 0
+622352 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/home/lmsousa/.local/share/vite-plus/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/home/lmsousa/.codex/tmp/arg0/codex-arg0XCF3zJ/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/home/lmsousa/.codex/packages/standalone/releases/0.161.0-x86_64-unknown-linux-musl/codex-path/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/home/lmsousa/.local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/home/linuxbrew/.linuxbrew/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/home/linuxbrew/.linuxbrew/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/home/lmsousa/.local/share/pnpm/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/home/lmsousa/.nvm/versions/node/v26.7.0/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/home/lmsousa/.sdkman/candidates/gradle/current/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/home/lmsousa/Android/Sdk/platform-tools/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/home/lmsousa/Android/Sdk/cmdline-tools/latest/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/usr/local/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/usr/local/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/usr/sbin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = -1 ENOENT (No such file or directory)
+622352 execve("/usr/bin/chmod", ["chmod", "+x", "/home/lmsousa/.cache/protobuf-pr"...], 0x7ffda683c7f8 /* 71 vars */) = 0
+622352 +++ exited with 0 +++
+622297 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=622352, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+622353 +++ exited with 0 +++
+622354 +++ exited with 0 +++
+622307 +++ exited with 0 +++
+622301 +++ exited with 0 +++
+622303 +++ exited with 0 +++
+622299 +++ exited with 0 +++
+622308 +++ exited with 0 +++
+622297 +++ exited with 0 +++
+622314 +++ exited with 0 +++
+622316 +++ exited with 0 +++
+622298 +++ exited with 0 +++
+622317 +++ exited with 0 +++
+622315 +++ exited with 0 +++
+622311 +++ exited with 0 +++
+622302 +++ exited with 0 +++
+622322 +++ exited with 0 +++
+622312 +++ exited with 0 +++
+622310 +++ exited with 0 +++
+622319 +++ exited with 0 +++
+622313 +++ exited with 0 +++
+622300 +++ exited with 0 +++
+622320 +++ exited with 0 +++
+622309 +++ exited with 0 +++
+622296 +++ exited with 0 +++

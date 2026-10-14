@@ -13,10 +13,10 @@
 
 package pt.up.fe.specs.clava.weaver.pragmas;
 
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 
 public interface ClavaDirective {
 
-    public void apply(AJoinPoint jp);
+    public void apply(AJoinpoint<?> jp);
 
 }

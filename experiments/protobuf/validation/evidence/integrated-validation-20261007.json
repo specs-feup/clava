@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-07",
+  "producer_runtime_revision": "ab358d0c57e249e3a50f524a7a2541113f2e0c82",
+  "tool_sha256": "876522bb24b04574e68ec2f789e9a6f088346c26ac82d49421e161d56b550ef1",
+  "consumer_runtime_revision": "8d170561330b562a846e22b89e101b2962db6640",
+  "notes": [
+    "Coverage capture retains the original harness commit field; the executable hash identifies the rebuilt ab358d0 producer.",
+    "CI, documentation and Python helper descendants do not modify measured producer C++ sources.",
+    "Local paths in raw evidence identify retained source, generated output and diagnostic artifacts.",
+    "All 1062 producer cases passed; consumer failures remain failures."
+  ],
+  "files": {
+    "native-corpus-20261007-summary.json": "0051e7f23c08465466e393ca92a28282ca7548735381344d515a1b220dc1151a",
+    "native-corpus-20261007-results.json": "57ceda7a81e4b42a3aa6f98dab1edfd9989d6eeea5a9914b44e782148ca3f6c0",
+    "native-handler-coverage-876522bb24b0.json": "69ca1267e705c05ac5de79c5153d7569f599c834d061189332cd674865eb4259",
+    "consumer-corpus-20261007-summary.json": "f2946e824fc984661f00a74df7ee4e029de3a3dc288d2956d6d5f8f7e46808a6",
+    "consumer-generated-syntax-20261007.json": "ba267384f626d4904409b5f3675bd0087131a34a7c3a1a116b98201980ad4528",
+    "consumer-generated-syntax-20261007-cases.jsonl": "1b989bbcf30aa6be6f4b865bdf331428d8fe841b2ed019db4cb645d13edb0f86",
+    "memory-nas-20261007.json": "be7127bda9868d5cc7e86d8fe000d966159831b1af3a58ecf570e95ce83c28a9",
+    "memory-templates-20261007.json": "af3e515f6a7ad611f454a070ba2724ad78d430f996b53bf15728250eddc9c2c2",
+    "clava-js-full-suite-20261007.json": "c69f48e72f834bbe09a7e945a0064349ea63b6dac1da5ff1b98aeac7810e7314",
+    "cross-tu-20261007.log": "843b3d6f8e568af4ab73ece8faf9bfd0c9a76b8723959c3ebe88d4f3d7e3eb5c"
+  }
+}

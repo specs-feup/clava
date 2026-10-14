@@ -287,6 +287,13 @@ public class CxxTest {
         new CxxTester("strings.cpp").test();
     }
 
+    @Test
+    public void testUnevaluatedStrings() {
+        new CxxTester("unevaluated_strings.cpp")
+                .addFlags("-std=c++26")
+                .test();
+    }
+
     // -Xclang-ast-dump-nostdinc-nocudalib-nocudainc--cuda-gpu-arch=sm_30
     // "--cuda-device-only"
 

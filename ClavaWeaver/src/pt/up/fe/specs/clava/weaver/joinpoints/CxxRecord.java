@@ -15,64 +15,62 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.util.stream.Collectors;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ARecord;
 
-public class CxxRecord extends ARecord {
+public class CxxRecord<Self extends CxxRecord<Self>> extends ARecord<Self> {
 
-    private final RecordDecl recordDecl;
-
-    public CxxRecord(RecordDecl recordDecl) {
-        super(new CxxNamedDecl(recordDecl));
-        this.recordDecl = recordDecl;
+    public CxxRecord(RecordDecl recordDecl, CxxWeaver weaver) {
+        super(recordDecl, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return recordDecl;
+    public RecordDecl getNodeImpl() {
+        return (RecordDecl) super.getNodeImpl();
     }
 
     @Override
-    public AField[] getFieldsArrayImpl() {
-        return recordDecl.getFields().stream()
-                .map(field -> CxxJoinpoints.create(field, AField.class))
-                .collect(Collectors.toList()).toArray(new AField[0]);
+    public AField<?>[] getFieldsImpl() {
+        return this.getNodeImpl().getFields().stream()
+                .map(field -> CxxJoinpoints.create(field,
+                        getWeaverEngine(), AField.class))
+                .collect(Collectors.toList()).toArray(AField<?>[]::new);
     }
 
     @Override
     public String getNameImpl() {
-        return recordDecl.getDeclName();
+        return this.getNodeImpl().getDeclName();
     }
 
     @Override
     public String getKindImpl() {
-        return recordDecl.getTagKind().getCode();
+        return this.getNodeImpl().getTagKind().getCode();
     }
 
     @Override
-    public AFunction[] getFunctionsArrayImpl() {
-        return recordDecl.getFunctions().stream()
-                .map(function -> (AFunction) CxxJoinpoints.create(function))
-                .toArray(size -> new AFunction[size]);
+    public AFunction<?>[] getFunctionsImpl() {
+        return this.getNodeImpl().getFunctions().stream()
+                .map(function -> CxxJoinpoints.create(function, getWeaverEngine(), AFunction.class))
+                .toArray(AFunction<?>[]::new);
     }
 
     @Override
-    public void addFieldImpl(AField field) {
-        recordDecl.addField((FieldDecl) field.getNode());
+    public void addFieldImpl(AField<?> field) {
+        this.getNodeImpl().addField((FieldDecl) field.getNodeImpl());
     }
 
     @Override
-    public Boolean getIsImplementationImpl() {
-        return recordDecl.isCompleteDefinition();
+    public boolean getIsImplementationImpl() {
+        return this.getNodeImpl().isCompleteDefinition();
     }
 
     @Override
-    public Boolean getIsPrototypeImpl() {
-        return !recordDecl.isCompleteDefinition();
+    public boolean getIsPrototypeImpl() {
+        return !this.getNodeImpl().isCompleteDefinition();
     }
 }

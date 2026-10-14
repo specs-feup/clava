@@ -13,21 +13,18 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.ImplicitValueInitExpr;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AImplicitValue;
 
-public class CxxImplicitValue extends AImplicitValue {
+public class CxxImplicitValue<Self extends CxxImplicitValue<Self>> extends AImplicitValue<Self> {
 
-    private final ImplicitValueInitExpr implicitValue;
-
-    public CxxImplicitValue(ImplicitValueInitExpr implicitValue) {
-        super(new CxxExpression(implicitValue));
-        this.implicitValue = implicitValue;
+    public CxxImplicitValue(ImplicitValueInitExpr implicitValue, CxxWeaver weaver) {
+        super(implicitValue, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return implicitValue;
+    public ImplicitValueInitExpr getNodeImpl() {
+        return (ImplicitValueInitExpr) super.getNodeImpl();
     }
 }

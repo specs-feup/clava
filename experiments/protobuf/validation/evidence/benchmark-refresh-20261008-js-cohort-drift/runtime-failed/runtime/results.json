@@ -1,0 +1,217 @@
+{
+  "created_utc": "2026-10-08T18:33:58.601871+00:00",
+  "status": "preparing",
+  "java_selection": {
+    "base_init_script_sha256": "e24492dd362758c9d2fe52883cb275674260171da0b6cbe0a69ed5ab62ec76fd",
+    "run_init_script": "/home/lmsousa/.cache/protobuf-production-validation/benchmark-refreshes/protobuf-20261008T183358Z-078a8462/runtime/java-suite.init.gradle",
+    "run_init_script_sha256": "c1b31010f8d7b70e2f926579efe13e88937b62df2cb6c1e06d557f402d6ca5cd",
+    "excluded_added_class": "pt.up.fe.specs.clang.dumper.ClangFrameworkSearchTest",
+    "excluded_test_ids": [
+      "pt.up.fe.specs.clang.dumper.ClangFrameworkSearchTest#automaticClangSearchSkipsWrongVersionsAndKeepsExplicitOverride()",
+      "pt.up.fe.specs.clang.dumper.ClangFrameworkSearchTest#bundledFrameworkAndOtherIncludeRootsKeepTheirOwnFlags()",
+      "pt.up.fe.specs.clang.dumper.ClangFrameworkSearchTest#clang18FindsHeadersThroughGeneratedFrameworkArguments()"
+    ]
+  },
+  "methodology": "Protobuf only; four serial rounds of App and separate uninstrumented commands; Text and FlatBuffers controls remain frozen and are not rerun",
+  "sources": {},
+  "runtime_jars": {},
+  "native_sha256": {},
+  "overlay_provenance": {},
+  "frontend_fixtures": {},
+  "observations": [],
+  "preflight": [],
+  "seeds": [],
+  "resource_staging": [],
+  "config_patch": "SHOW_EXEC_INFO default false in the isolated benchmark build, matching the diagnostics-off timing policy",
+  "cache_policy": {
+    "direct": "CCACHE_DISABLE=true with wrapper-invocation probe",
+    "enabled": "one run-owned cache namespace per schema/toolchain/executable identity",
+    "compression": "CCACHE_NOCOMPRESS=true"
+  },
+  "wall_policy": "separate suite commands have no App metrics path or parser overlay classpath",
+  "driver_sha256": "f7733b8794e88e10667a8c5745db080492fd96ff52011e76f676cd71cdb1e701",
+  "selected_release": {
+    "tag": "v18.1.8_6-rc8",
+    "manifest_sha256": "9ed7487eff35ef0cdbcd3628fb7a9f429005b4e14a6fa4070db50ba14d0c8ecc",
+    "manifest_path": "/home/lmsousa/.cache/protobuf-production-validation/snapshots/protobuf-20261008T183350Z-7a09834e/clang-dumper/build/clang-dumper-release-manifest.json",
+    "asset_sha256": {
+      "clang-dumper-ast-wire.pb": "9b54021feb180f0e031d084ca1d463d3df00a80862476940e2cc73917f584238",
+      "clang-dumper-ast-wire.proto": "723b6d44d97399a81ffd7d97759b45f79ca4eee2683f867f30d0c08facd4c44a",
+      "clang-dumper-linux-x64": "ce467a8355c389c45024490e1ee67930737db090d8e5b236db82ecf1f69c9d27"
+    },
+    "tool_asset": "clang-dumper-linux-x64",
+    "cache_namespace": "protobuf-v1-28.3-28.3-4.28.3-4.28.3-9b54021feb180f0e031d084ca1d463d3df00a80862476940e2cc73917f584238-723b6d44d97399a81ffd7d97759b45f79ca4eee2683f867f30d0c08facd4c44a-ce467a8355c389c45024490e1ee67930737db090d8e5b236db82ecf1f69c9d27"
+  },
+  "verified_resource_seed": {
+    "root": "/home/lmsousa/.cache/protobuf-production-validation/release-rc8/consumer-validation/tmp/clang_ast_exe_lmsousa/clang-dumper",
+    "manifest_sha256": "9ed7487eff35ef0cdbcd3628fb7a9f429005b4e14a6fa4070db50ba14d0c8ecc",
+    "tool_sha256": "ce467a8355c389c45024490e1ee67930737db090d8e5b236db82ecf1f69c9d27",
+    "tree_sha256": "a23f954a9b6f25eed44bcc8159ae2bee7848850887a009a848b7154e77bb3582"
+  },
+  "workload_contract": {
+    "java_pinned_test_ids": 116,
+    "js_tests": 164,
+    "js_passed": 158,
+    "js_skipped": 6,
+    "java_app_calls": 216,
+    "js_app_calls": 170,
+    "js_syntax_only_calls": 130,
+    "repeats": 4,
+    "workers": 1,
+    "java_max_heap_mib": 512,
+    "js_file_parallelism": false,
+    "stages": [
+      "protobuf"
+    ],
+    "js_isolation": false
+  },
+  "runtime_tree_sha256": {
+    "clava_js_dist": "f6f854f7d5ea8a18c0158f611dfda5e60bb7dd0a85491b3c125ebba61eb698f4",
+    "lara_js_dist": "4f8d83b639a9358c552281db17abab131f106475dab1449ea78a7d805c0d3131"
+  },
+  "cohort_baseline_sha256": "b1036cab6f893d0a00361f193b7435ac16259b8ab1c2853ee97e9cf746bd52b9",
+  "cohort_baseline_results_sha256": "3926f010b7b27eb0c02607e12dcbffedcc86fda62ec1b12d3e26a6242ae043eb",
+  "js_runtime_exports": {
+    "specifiers": {
+      "lara_config": "@specs-feup/lara/vitest/weaverVitestConfig.ts",
+      "lara_environment": "@specs-feup/lara/vitest/weaverEnvironment.ts",
+      "clava_config": "@specs-feup/clava/code/WeaverConfiguration.ts",
+      "clava_joinpoints": "@specs-feup/clava/api/Joinpoints.ts",
+      "clava_side_effects": "@specs-feup/clava/code/sideEffects.ts"
+    },
+    "resolved_urls": {
+      "lara_config": "file:///home/lmsousa/.cache/protobuf-production-validation/snapshots/protobuf-20261008T183350Z-7a09834e/lara-framework/Lara-JS/dist/vitest/weaverVitestConfig.js",
+      "lara_environment": "file:///home/lmsousa/.cache/protobuf-production-validation/snapshots/protobuf-20261008T183350Z-7a09834e/lara-framework/Lara-JS/dist/vitest/weaverEnvironment.js",
+      "clava_config": "file:///home/lmsousa/.cache/protobuf-production-validation/snapshots/protobuf-20261008T183350Z-7a09834e/clava/Clava-JS/dist/code/WeaverConfiguration.js",
+      "clava_joinpoints": "file:///home/lmsousa/.cache/protobuf-production-validation/snapshots/protobuf-20261008T183350Z-7a09834e/clava/Clava-JS/dist/api/Joinpoints.js",
+      "clava_side_effects": "file:///home/lmsousa/.cache/protobuf-production-validation/snapshots/protobuf-20261008T183350Z-7a09834e/clava/Clava-JS/dist/code/sideEffects.js"
+    },
+    "vitest_node_url": "file:///home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/node_modules/vitest/dist/node.js"
+  },
+  "js_vitest_defaults": {
+    "isolate": false,
+    "fileParallelism": false,
+    "maxWorkers": 1,
+    "source_sha256": "f3a029d8d9c2aabd6fa9fff4ae9d236e9aa33fb713366fdfecd21847136b7d02",
+    "emitted_sha256": "67845a633a7b6edca456b5aa116278b56b9747bfc856ca54aad7c9433b2adcb3"
+  },
+  "resolved_consumer_manifest": {
+    "path": "/home/lmsousa/.cache/protobuf-production-validation/snapshots/protobuf-20261008T183350Z-7a09834e/clava/ClangAstParser/build/generated/proto-release/main/resolved-manifest.json",
+    "sha256": "dede799d0f41435f359c249c64cc0856a7d57ce165fd0768d20940af83ba30f6",
+    "content": {
+      "descriptor_sha256": "9b54021feb180f0e031d084ca1d463d3df00a80862476940e2cc73917f584238",
+      "generic_payload_contracts": {
+        "attributes": {
+          "class_name_pattern": "<closed AttributeKind enum value>Attr",
+          "payload": "AttributeData"
+        },
+        "openmp": {
+          "class_names": [
+            "OMPAtomicDirective",
+            "OMPBarrierDirective",
+            "OMPCancelDirective",
+            "OMPCancellationPointDirective",
+            "OMPCanonicalLoop",
+            "OMPCriticalDirective",
+            "OMPDepobjDirective",
+            "OMPDispatchDirective",
+            "OMPDistributeDirective",
+            "OMPDistributeParallelForDirective",
+            "OMPDistributeParallelForSimdDirective",
+            "OMPDistributeSimdDirective",
+            "OMPErrorDirective",
+            "OMPFlushDirective",
+            "OMPForDirective",
+            "OMPForSimdDirective",
+            "OMPGenericLoopDirective",
+            "OMPInteropDirective",
+            "OMPMaskedDirective",
+            "OMPMaskedTaskLoopDirective",
+            "OMPMaskedTaskLoopSimdDirective",
+            "OMPMasterDirective",
+            "OMPMasterTaskLoopDirective",
+            "OMPMasterTaskLoopSimdDirective",
+            "OMPMetaDirective",
+            "OMPOrderedDirective",
+            "OMPParallelDirective",
+            "OMPParallelForDirective",
+            "OMPParallelForSimdDirective",
+            "OMPParallelGenericLoopDirective",
+            "OMPParallelMaskedDirective",
+            "OMPParallelMaskedTaskLoopDirective",
+            "OMPParallelMaskedTaskLoopSimdDirective",
+            "OMPParallelMasterDirective",
+            "OMPParallelMasterTaskLoopDirective",
+            "OMPParallelMasterTaskLoopSimdDirective",
+            "OMPParallelSectionsDirective",
+            "OMPScanDirective",
+            "OMPScopeDirective",
+            "OMPSectionDirective",
+            "OMPSectionsDirective",
+            "OMPSimdDirective",
+            "OMPSingleDirective",
+            "OMPTargetDataDirective",
+            "OMPTargetDirective",
+            "OMPTargetEnterDataDirective",
+            "OMPTargetExitDataDirective",
+            "OMPTargetParallelDirective",
+            "OMPTargetParallelForDirective",
+            "OMPTargetParallelForSimdDirective",
+            "OMPTargetParallelGenericLoopDirective",
+            "OMPTargetSimdDirective",
+            "OMPTargetTeamsDirective",
+            "OMPTargetTeamsDistributeDirective",
+            "OMPTargetTeamsDistributeParallelForDirective",
+            "OMPTargetTeamsDistributeParallelForSimdDirective",
+            "OMPTargetTeamsDistributeSimdDirective",
+            "OMPTargetTeamsGenericLoopDirective",
+            "OMPTargetUpdateDirective",
+            "OMPTaskDirective",
+            "OMPTaskLoopDirective",
+            "OMPTaskLoopSimdDirective",
+            "OMPTaskgroupDirective",
+            "OMPTaskwaitDirective",
+            "OMPTaskyieldDirective",
+            "OMPTeamsDirective",
+            "OMPTeamsDistributeDirective",
+            "OMPTeamsDistributeParallelForDirective",
+            "OMPTeamsDistributeParallelForSimdDirective",
+            "OMPTeamsDistributeSimdDirective",
+            "OMPTeamsGenericLoopDirective",
+            "OMPTileDirective",
+            "OMPUnrollDirective"
+          ],
+          "payload": "StmtData"
+        }
+      },
+      "java_protobuf_version": "4.28.3",
+      "java_protoc_version": "4.28.3",
+      "llvm_major": 18,
+      "local": false,
+      "minimum_java_protoc_version": "4.28.3",
+      "minimum_java_runtime_version": "4.28.3",
+      "native_protobuf_version": "28.3",
+      "native_protoc_version": "28.3",
+      "producer_version": "clang-dumper-18",
+      "protocol_major": 1,
+      "protocol_minor": 1,
+      "schema_sha256": "723b6d44d97399a81ffd7d97759b45f79ca4eee2683f867f30d0c08facd4c44a",
+      "selected": "v18.1.8_6-rc8",
+      "semantic_contract": "clava-ast-wire-v1"
+    }
+  },
+  "build_environment": {
+    "java": "openjdk version \"26.0.1\" 2026-04-21\nOpenJDK Runtime Environment (build 26.0.1+8-2-26.04.2-Ubuntu)\nOpenJDK 64-Bit Server VM (build 26.0.1+8-2-26.04.2-Ubuntu, mixed mode, sharing)",
+    "node": "v26.7.0",
+    "npm": "11.19.0",
+    "ccache_nocompress": "true"
+  },
+  "preparation": {
+    "npm_builds": "passed",
+    "installDist": "passed",
+    "testClasses": "passed",
+    "ValidationProbe_javac": "passed",
+    "ValidationProbe_classes": "/home/lmsousa/.cache/protobuf-production-validation/snapshots/protobuf-20261008T183350Z-7a09834e/clava/ClangAstParser/build/protobuf-validation-classes",
+    "release_assets_from_published_tag": "v18.1.8_6-rc8"
+  }
+}

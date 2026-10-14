@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.events.data.ActionEvent;
 
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFile;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 
@@ -47,17 +47,17 @@ public class ModifiedFilesGear extends AGear {
         }
 
         // System.out.println("ACTION THAT CHANGES AST:" + data.getActionName());
-        // All join points are AJoinPoint instances
-        AJoinPoint jp = (AJoinPoint) data.getJoinPoint();
+        // All join points are AJoinpoint instances
+        AJoinpoint<?> jp = (AJoinpoint<?>) data.getJoinPoint();
 
         // If join point 'program', automatically mark all files as modified
         if (jp instanceof CxxProgram) {
-            ((CxxProgram) jp).getNode().getFiles().stream().forEach(modifiedFiles::add);
+            ((CxxProgram<?>) jp).getNodeImpl().getFiles().stream().forEach(modifiedFiles::add);
             return;
         }
 
         // Store file of this join point
-        CxxFile fileJp = (CxxFile) jp.getAncestorImpl("file");
+        CxxFile<?> fileJp = (CxxFile<?>) jp.getGetAncestorImpl("file");
         if (fileJp == null) {
             return;
         }

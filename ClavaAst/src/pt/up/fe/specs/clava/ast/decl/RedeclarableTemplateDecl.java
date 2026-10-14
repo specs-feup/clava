@@ -42,6 +42,9 @@ public class RedeclarableTemplateDecl extends TemplateDecl implements TemplatePa
 
         StringBuilder code = new StringBuilder();
 
+        if (getTemplateDecl() instanceof FunctionDecl function) {
+            code.append(function.getEnclosingTemplateHeadersCode());
+        }
         code.append("template <");
 
         String parameterList = getTemplateParameters().stream()

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "runtime_results_sha256": "299c51fdc0990443ee05c349e4f4c7542ad57ba41121ffec136eaf5eaf408e80",
+  "original_capture_field": {
+    "path": "build_environment.ccache_nocompress",
+    "value": "true",
+    "meaning": "launcher environment passed to Java; not the effective ccache subprocess policy"
+  },
+  "effective_ccache_policy": {
+    "direct_mode": "ccache disabled",
+    "cache_enabled_modes": {
+      "CCACHE_COMPRESS": "true",
+      "CCACHE_NOCOMPRESS": "removed by ClangCcacheAdapter"
+    },
+    "source_file": "ClangAstParser/src/pt/up/fe/specs/clang/dumper/ClangCcacheAdapter.java",
+    "source_clava_revision": "8bdb6532078d2c246a23522f925a1ec80d2c81ca",
+    "source_file_sha256": "e6f48b8ca52ea62caea6ef203c51bbd720e380434866c40194fcafaabf382686"
+  },
+  "native_revisions": {
+    "source_workspace_checkout": "ec4d80e9c73766df32355cd5380f9d4414443102",
+    "selected_release_repository": "e874debc111ec105fa5d1efa17ecd97300613178",
+    "selected_release_tag": "v18.1.8_6-rc8",
+    "selected_executable_sha256": "ce467a8355c389c45024490e1ee67930737db090d8e5b236db82ecf1f69c9d27"
+  },
+  "timed_observations_changed": false,
+  "memory_observations_changed": false
+}

@@ -16,9 +16,11 @@ package pt.up.fe.specs.clava.ast.decl.data.templates;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
+import pt.up.fe.specs.clava.ast.decl.data.templates.template.DependentTemplate;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.QualifiedTemplate;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.SubstTemplateTemplateParm;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.Template;
+import pt.up.fe.specs.clava.ast.decl.data.templates.template.UsingTemplate;
 import pt.up.fe.specs.clava.ast.type.enums.TemplateNameKind;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
@@ -52,6 +54,10 @@ public abstract class TemplateArgumentTemplate extends TemplateArgument {
             return new QualifiedTemplate();
         case SubstTemplateTemplateParm:
             return new SubstTemplateTemplateParm();
+        case UsingTemplate:
+            return new UsingTemplate();
+        case DependentTemplate:
+            return new DependentTemplate();
         default:
             throw new NotImplementedException(nameKind);
         }

@@ -1,0 +1,10 @@
+Using local clang-dumper build: /home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clang-dumper/build/tool
+Found 2 source files
+Parsing '/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/experiments/protobuf/validation/fixtures/cross-tu/caller.cpp' (1/2)
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.thoughtworks.xstream.converters.reflection.SunUnsafeReflectionProvider (file:/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClavaWeaver/build/install/ClavaWeaver/lib/xstream-1.4.21.jar)
+WARNING: Please consider reporting this to the maintainers of class com.thoughtworks.xstream.converters.reflection.SunUnsafeReflectionProvider
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+Parsing '/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/experiments/protobuf/validation/fixtures/cross-tu/provider.cpp' (2/2)
+--- AST parsing report ---
+CLAVA_VALIDATION {"translation_units":2,"caller":"caller.cpp","provider":"provider.cpp","linked_function":"service","target_is_provider_definition":true,"case":"cross-translation-unit-reference"}

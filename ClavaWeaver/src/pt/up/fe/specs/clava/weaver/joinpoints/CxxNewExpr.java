@@ -13,22 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANewExpr;
 
-public class CxxNewExpr extends ANewExpr {
+public class CxxNewExpr<Self extends CxxNewExpr<Self>> extends ANewExpr<Self> {
 
-    private final CXXNewExpr newExpr;
-
-    public CxxNewExpr(CXXNewExpr newExpr) {
-        super(new CxxExpression(newExpr));
-        this.newExpr = newExpr;
+    public CxxNewExpr(CXXNewExpr newExpr, CxxWeaver weaver) {
+        super(newExpr, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return newExpr;
+    public CXXNewExpr getNodeImpl() {
+        return (CXXNewExpr) super.getNodeImpl();
     }
 
 }

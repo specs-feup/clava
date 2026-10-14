@@ -71,6 +71,11 @@ public class Language extends ADataClass<Language> {
     public static final DataKey<Boolean> C_PLUS_PLUS_23 = KeyFactory.bool("c++23");
 
     /**
+     * True if is a C++26 variant (or later).
+     */
+    public static final DataKey<Boolean> C_PLUS_PLUS_26 = KeyFactory.bool("c++26");
+
+    /**
      * True if supports digraphs.
      */
     public static final DataKey<Boolean> HAS_DIGRAPHS = KeyFactory.bool("hasDigraphs");

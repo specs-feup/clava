@@ -1,20 +1,14 @@
 # This workflow will build a the whole project every day at midnight
 # It will build the Java part and the JS part
 # Every push to a branch will trigger the build
-# Every pull request will trigger the build
 
 name: nightly
 
 on:
-  pull_request:
-    branches:
-      - master
-      - staging
-
+  # No pull_request trigger: GitHub refuses to build the merge ref for
+  # conflicted PRs, which would suppress the CI signal entirely. Push runs
+  # on the branch tip report checks to the PR's Checks tab all the same.
   push:
-    branches:
-      - master
-      - staging
 
   # Weekly on Mondays early morning
   schedule:
@@ -27,20 +21,18 @@ permissions:
 env:
   JAVA_VERSION: 17
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  # Setting default branch to staging assuming PRs will be done against the staging versions of the repository
-  # main versions will just receive what comes from the staging
-  DEFAULT_BRANCH: ${{ github.base_ref || 'staging' }}
-  #SPECS_JAVA_LIBS_BRANCH: ${{ 'master' }}
-  #LARA_FRAMEWORK_BRANCH: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   build-java:
     name: Build Java
+    # On branch deletion GitHub reports the default branch's SHA; building
+    # that event would mislead the branch resolver.
+    if: github.event.deleted != true
     runs-on: ubuntu-24.04
-    
+
     outputs:
-      branch-exists-lara-framework: ${{ steps.Branch-lara-framework.outputs.value }}
-      branch-exists-specs-java-libs: ${{ steps.Branch-specs-java-libs.outputs.value }}
+      lara_ref: ${{ env.lara_ref }}
+      specs_ref: ${{ env.specs_ref }}
 
     steps:
       - name: Setup Java
@@ -56,39 +48,51 @@ jobs:
           dependency-graph: generate-and-submit
 
       - name: Checkout Clava
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: clava
+          fetch-depth: 0
 
-      - name: Check if branch exists on lara-framework
-        id: Branch-lara-framework
-        run: echo "value=$(git ls-remote --heads https://github.com/specs-feup/lara-framework.git refs/heads/${{ env.BRANCH_NAME }} | wc -l)" >> $GITHUB_OUTPUT
-
-      - name: Check if branch exists on specs-java-libs
-        id: Branch-specs-java-libs
-        run: echo "value=$(git ls-remote --heads https://github.com/specs-feup/specs-java-libs.git refs/heads/${{ env.BRANCH_NAME }} | wc -l)" >> $GITHUB_OUTPUT
+      - name: Determine repository refs
+        uses: specs-feup/branch-resolver@v1
+        with:
+          source-directory: clava
+          dependencies: |
+            lara specs-feup/lara-framework
+            specs specs-feup/specs-java-libs
 
       - name: Echo checks
         run: |
-          echo "Branch-lara-framework: ${{ steps.Branch-lara-framework.outputs.value }}"
-          echo "Branch-specs-java-libs: ${{ steps.Branch-specs-java-libs.outputs.value }}"
-          echo "Branch name: ${{ env.BRANCH_NAME }}"
-          echo "Default branch: ${{ env.DEFAULT_BRANCH }}"
-          echo "Branch base_ref: ${{ github.base_ref }}"          
+          echo "Weaver branch: ${{ env.BRANCH_NAME }}"
+          echo "Lara framework branch: ${{ env.lara_branch }}"
+          echo "Lara framework commit: ${{ env.lara_ref }}"
+          echo "Lara framework default: ${{ env.lara_default }}"
+          echo "Specs-java-libs branch: ${{ env.specs_branch }}"
+          echo "Specs-java-libs commit: ${{ env.specs_ref }}"
+          echo "Specs-java-libs default: ${{ env.specs_default }}"
 
       - name: Checkout lara-framework
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          ref: ${{ steps.Branch-lara-framework.outputs.value == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ env.lara_ref }}
 
       - name: Checkout specs-java-libs
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: specs-feup/specs-java-libs
           path: specs-java-libs
-          ref: ${{ steps.Branch-specs-java-libs.outputs.value == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ env.specs_ref }}
+
+      - name: Setup Python descriptor tooling
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install Protobuf descriptor parser
+        working-directory: clava/ClangAstParser
+        run: python -m pip install -r tools/requirements.txt
 
       - name: Build with Gradle
         run: |
@@ -99,6 +103,11 @@ jobs:
         run: |
           cd clava/ClangAstParser
           gradle test
+
+      - name: Verify Protobuf consumer bindings
+        run: |
+          cd clava/ClangAstParser
+          gradle verifyProtoBindings
           
       - name: Test ClavaWeaver
         run: |
@@ -128,10 +137,8 @@ jobs:
       fail-fast: false
       matrix:
         #node-version: ['latest', '22.x', '20.x']
-        node-version: ['22.x']
-        # For some reason, Clava is not working on Linux on a runner. 
-        # This has been solved in Lara 4.0, disabling until then
-        os: [windows-2022, macos-latest, ubuntu-24.04]
+        node-version: ['25.x', '24.x']
+        os: [ubuntu-24.04, windows-2022, macos-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -158,20 +165,20 @@ jobs:
           echo 'export PATH="$(brew --prefix gcc)/bin:$PATH"' >> $GITHUB_ENV
 
       - name: Checkout Clava
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: clava
 
       - name: Checkout lara-framework
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          ref: ${{ needs.build-java.outputs.branch-exists-lara-framework == '1' && env.BRANCH_NAME || env.DEFAULT_BRANCH }}
+          ref: ${{ needs.build-java.outputs.lara_ref }}
 
       - name: Setup js workspace
         run: |
-          echo '{ "name": "SPeCS Workspace", "type": "module", "workspaces": [ "clava/Clava-JS", "lara-framework/Lara-JS" ] }' > package.json
+          echo '{ "name": "SPeCS Workspace", "type": "module", "workspaces": [ "clava/Clava-JS", "lara-framework/Lara-JS" ], "overrides": { "node-gyp": "^12.1.0" } }' > package.json
           npm install
 
       - name: Build Lara-JS
@@ -195,27 +202,16 @@ jobs:
           cd clava/Clava-JS
           npm run test
 
-      # Only on ubuntu-latest
-      #- name: Publish JS
-      #  if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
-      #  run: | 
-      #      cd clava/Clava-JS
-      #      npm whoami
-      #      echo "Attempt to publish while running on ${{ matrix.os }} and Node.js ${{matrix.node-version}}"
-      #      if [[ "${{ github.event_name }}" == "push" ]]; then
-      #          if [ "${{ github.ref }}" == "refs/heads/staging" ]; then
-      #              echo "Publishing from staging, creating timestamped prerelease and updating tag 'staging'"
-      #              TIMESTAMP=$(date +"%Y%m%d%H%M")
-      #              npm version prerelease --preid="$TIMESTAMP"
-      #              npm publish --tag staging --access public
-      #          elif [ "${{ github.ref }}" == "refs/heads/master" ]; then
-      #              echo "Publishing from main, assumes version was changed before publishing"
-      #              npm publish
-      #          else
-      #              echo "Not master or staging branches, not publishing even if it is a push event"
-      #          fi
-      #      else
-      #          echo "Not a push event, skipping publish."
-      #      fi
-      #  env:
-      #    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # Only on ubuntu-24.04
+      - name: Publish JS
+        if: github.event_name == 'push' && github.ref == 'refs/heads/staging' && matrix.os == 'ubuntu-24.04' && matrix.node-version == '25.x'
+        run: | 
+            cd clava/Clava-JS
+            npm whoami
+            echo "Attempt to publish while running on ${{ matrix.os }} and Node.js ${{matrix.node-version}}"
+            echo "Publishing from staging, creating timestamped prerelease and updating tag 'staging'"
+            TIMESTAMP=$(date +"%Y%m%d%H%M")
+            npm version prerelease --preid="$TIMESTAMP"
+            npm publish --tag staging --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

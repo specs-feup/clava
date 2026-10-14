@@ -1,0 +1,9 @@
+comparison,scope,phase,pair,phase_delta_s,median_delta_s,valid,validation_gate
+Outside JUnit · PB − Text,Timeline · two isolated-cold pairs · n=2,wall_minus_junit_residual_s,1,0.545603,0.534910,true,116/116 passed; JaCoCo worker OFF; no explicit GC; report tasks skipped
+Outside JUnit · PB − Text,Timeline · two isolated-cold pairs · n=2,wall_minus_junit_residual_s,2,0.524218,0.534910,true,116/116 passed; JaCoCo worker OFF; no explicit GC; report tasks skipped
+Project config · PB − Text,Timeline · same isolated-cold pairs · n=2,project_configuration_s,1,0.533000,0.485000,true,116/116 passed; JaCoCo worker OFF; no explicit GC; report tasks skipped
+Project config · PB − Text,Timeline · same isolated-cold pairs · n=2,project_configuration_s,2,0.437000,0.485000,true,116/116 passed; JaCoCo worker OFF; no explicit GC; report tasks skipped
+Build integration · original − disabled,Combined plugin + generation wiring · n=4,project_configuration_s,1,0.415274,0.403782,true,valid; exit 0; tasks dry-run skipped; no worker; no Test actions; runtime inputs preserved
+Build integration · original − disabled,Combined plugin + generation wiring · n=4,project_configuration_s,2,0.392289,0.403782,true,valid; exit 0; tasks dry-run skipped; no worker; no Test actions; runtime inputs preserved
+Build integration · original − disabled,Combined plugin + generation wiring · n=4,project_configuration_s,3,0.385324,0.403782,true,valid; exit 0; tasks dry-run skipped; no worker; no Test actions; runtime inputs preserved
+Build integration · original − disabled,Combined plugin + generation wiring · n=4,project_configuration_s,4,0.497136,0.403782,true,valid; exit 0; tasks dry-run skipped; no worker; no Test actions; runtime inputs preserved

@@ -1,0 +1,55 @@
+{
+  "capture_id": "protobuf-20261008T183358Z-078a8462",
+  "capture_status": "failed_preflight",
+  "timed_runtime_observations": 0,
+  "failure": "JavaScript test source files differ from the frozen 164-test cohort",
+  "changed_js_test_source": {
+    "path": "Clava-JS/api/LegacyIntegrationTests - CXX.test.ts",
+    "frozen_sha256": "30d43ecd12d9ce790a5e57e8cbae456407d4358c86b6e336570da146e26f1735",
+    "current_sha256": "36b2e023ccbef4e118bc2e9fdcf958c8f6bff789f3b545affe7545de8afb34fa"
+  },
+  "implementation_revision": "9ba93842fbdc176d3833ccf124208e9b18398879",
+  "release": {
+    "tag": "v18.1.8_6-rc8",
+    "manifest_sha256": "9ed7487eff35ef0cdbcd3628fb7a9f429005b4e14a6fa4070db50ba14d0c8ecc",
+    "native_tool_commit": "e874debc111ec105fa5d1efa17ecd97300613178",
+    "verified_assets": {
+      "clang-dumper-release-manifest.json": "9ed7487eff35ef0cdbcd3628fb7a9f429005b4e14a6fa4070db50ba14d0c8ecc",
+      "clang-dumper-linux-x64": "ce467a8355c389c45024490e1ee67930737db090d8e5b236db82ecf1f69c9d27",
+      "clang-dumper-ast-wire.proto": "723b6d44d97399a81ffd7d97759b45f79ca4eee2683f867f30d0c08facd4c44a",
+      "clang-dumper-ast-wire.pb": "9b54021feb180f0e031d084ca1d463d3df00a80862476940e2cc73917f584238"
+    }
+  },
+  "runtime_driver_sha256": "f7733b8794e88e10667a8c5745db080492fd96ff52011e76f676cd71cdb1e701",
+  "memory_capture": {
+    "status": "complete",
+    "observations": 6,
+    "parse_cycles": 120,
+    "driver_sha256": "aca2e9249c23db993673b2e64de0939a9a016c141fb4a94819d118feacfa08f0",
+    "created_utc": "2026-10-08T18:36:19.073183+00:00",
+    "completed_utc": "2026-10-08T18:39:18.440138+00:00"
+  },
+  "draftlink_updated": false,
+  "note": "Runtime cohort mismatch was not accepted or retimed; separate memory data is diagnostic and is not paired with or published alongside the older runtime capture.",
+  "runtime_environment": {
+    "java": "26.0.1",
+    "node": "v26.7.0",
+    "npm": "11.19.0"
+  },
+  "memory_summary": {
+    "nas-lu": {
+      "jvm_repeats": 3,
+      "cycles_per_jvm": 20,
+      "median_gnu_max_rss_kib": 736052,
+      "median_of_jvm_median_live_heap_bytes": 43456192.0,
+      "median_of_jvm_median_retained_heap_bytes": 16533916.0
+    },
+    "templates": {
+      "jvm_repeats": 3,
+      "cycles_per_jvm": 20,
+      "median_gnu_max_rss_kib": 273008,
+      "median_of_jvm_median_live_heap_bytes": 17798948.0,
+      "median_of_jvm_median_retained_heap_bytes": 16859236.0
+    }
+  }
+}

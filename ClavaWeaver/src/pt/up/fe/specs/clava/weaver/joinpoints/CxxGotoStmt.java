@@ -13,36 +13,32 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 import pt.up.fe.specs.clava.ast.stmt.GotoStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AGotoStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALabelDecl;
 
-public class CxxGotoStmt extends AGotoStmt {
+public class CxxGotoStmt<Self extends CxxGotoStmt<Self>> extends AGotoStmt<Self> {
 
-    private final GotoStmt gotoStmt;
-
-    public CxxGotoStmt(GotoStmt gotoStmt) {
-        super(new CxxStatement(gotoStmt));
-
-        this.gotoStmt = gotoStmt;
+    public CxxGotoStmt(GotoStmt gotoStmt, CxxWeaver weaver) {
+        super(gotoStmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return gotoStmt;
+    public GotoStmt getNodeImpl() {
+        return (GotoStmt) super.getNodeImpl();
     }
 
     @Override
-    public void setLabelImpl(ALabelDecl label) {
-        gotoStmt.setLabel((LabelDecl) label.getNode());
+    public void setLabelImpl(ALabelDecl<?> label) {
+        this.getNodeImpl().setLabel((LabelDecl) label.getNodeImpl());
     }
 
     @Override
-    public ALabelDecl getLabelImpl() {
-        return CxxJoinpoints.create(gotoStmt.getLabel(), ALabelDecl.class);
+    public ALabelDecl<?> getLabelImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getLabel(), getWeaverEngine(), ALabelDecl.class);
     }
 
 }

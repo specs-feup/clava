@@ -27,8 +27,6 @@ import java.util.List;
 
 public interface ClangAstKeys {
 
-    DataKey<String> CLANGAST_VERSION = KeyFactory.string("clangast_version", "");
-
     /**
      * What libc/libcxx mode should be used.
      */
@@ -55,7 +53,6 @@ public interface ClangAstKeys {
     static DataStore toDataStore(List<String> flags) {
         DataStore config = DataStore.newInstance(ClavaOptions.STORE_DEFINITION, false);
         final String stdPrefix = "-std=";
-        final String clangAstDumperPrefix = "-clang-dumper=";
         final String cilkFlag = "-fcilkplus";
 
         // Search options
@@ -75,13 +72,6 @@ public interface ClangAstKeys {
 
                 config.set(ClavaOptions.STANDARD, standard);
 
-                continue;
-            }
-
-            // If ClangAstDumper version, parse option
-            if (flag.startsWith(clangAstDumperPrefix)) {
-                String version = flag.substring(clangAstDumperPrefix.length());
-                config.set(ClangAstKeys.CLANGAST_VERSION, version);
                 continue;
             }
 

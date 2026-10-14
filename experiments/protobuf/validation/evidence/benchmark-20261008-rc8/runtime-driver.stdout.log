@@ -1,0 +1,52 @@
+{"preflight": "app", "stage": "protobuf", "suite": "clava-js", "valid": true}
+{"preflight": "app", "stage": "protobuf", "suite": "java", "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "java", "mode": "direct", "repeat": 1, "app_elapsed_ms": 27879.429616, "wall_s": 35.76962484791875, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "clava-js", "mode": "direct", "repeat": 1, "app_elapsed_ms": 10904.845981, "wall_s": 35.86822061985731, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "clava-js", "mode": "cold", "repeat": 1, "app_elapsed_ms": 11472.3994, "wall_s": 35.83632912999019, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "java", "mode": "cold", "repeat": 1, "app_elapsed_ms": 28654.215328000002, "wall_s": 36.78711687494069, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "java", "mode": "warm", "repeat": 1, "app_elapsed_ms": 17410.982805, "wall_s": 25.2671871969942, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "clava-js", "mode": "warm", "repeat": 1, "app_elapsed_ms": 7572.537661, "wall_s": 31.74205359397456, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "clava-js", "mode": "cold", "repeat": 2, "app_elapsed_ms": 11499.566492, "wall_s": 36.00249532493763, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "java", "mode": "cold", "repeat": 2, "app_elapsed_ms": 28708.370495, "wall_s": 36.56460766401142, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "java", "mode": "warm", "repeat": 2, "app_elapsed_ms": 17316.262231, "wall_s": 25.12683326099068, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "clava-js", "mode": "warm", "repeat": 2, "app_elapsed_ms": 7452.574716, "wall_s": 31.600271187955514, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "clava-js", "mode": "direct", "repeat": 2, "app_elapsed_ms": 10946.173818, "wall_s": 35.87807310302742, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "java", "mode": "direct", "repeat": 2, "app_elapsed_ms": 27764.640631, "wall_s": 35.57724774512462, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "java", "mode": "warm", "repeat": 3, "app_elapsed_ms": 17689.533418, "wall_s": 25.357713491190225, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "clava-js", "mode": "warm", "repeat": 3, "app_elapsed_ms": 7689.136729, "wall_s": 32.09982106485404, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "clava-js", "mode": "direct", "repeat": 3, "app_elapsed_ms": 10978.880881000001, "wall_s": 35.16892229905352, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "java", "mode": "direct", "repeat": 3, "app_elapsed_ms": 27647.76048, "wall_s": 35.90871854289435, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "java", "mode": "cold", "repeat": 3, "app_elapsed_ms": 29020.630834, "wall_s": 36.92891753418371, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "clava-js", "mode": "cold", "repeat": 3, "app_elapsed_ms": 11479.372962, "wall_s": 35.71621045307256, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "clava-js", "mode": "direct", "repeat": 4, "app_elapsed_ms": 10954.994986, "wall_s": 35.60294194496237, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "java", "mode": "direct", "repeat": 4, "app_elapsed_ms": 27555.567351, "wall_s": 35.60562587995082, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "java", "mode": "cold", "repeat": 4, "app_elapsed_ms": 28520.226182, "wall_s": 36.44804878789, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "clava-js", "mode": "cold", "repeat": 4, "app_elapsed_ms": 11493.756942, "wall_s": 35.44133637286723, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "clava-js", "mode": "warm", "repeat": 4, "app_elapsed_ms": 7483.950356, "wall_s": 32.00304676615633, "valid": true}
+{"phase": "app", "stage": "protobuf", "suite": "java", "mode": "warm", "repeat": 4, "app_elapsed_ms": 17305.291855, "wall_s": 25.26632489496842, "valid": true}
+{"preflight": "wall", "stage": "protobuf", "suite": "clava-js", "valid": true}
+{"preflight": "wall", "stage": "protobuf", "suite": "java", "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "java", "mode": "direct", "repeat": 1, "app_elapsed_ms": null, "wall_s": 35.335774428909644, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "clava-js", "mode": "direct", "repeat": 1, "app_elapsed_ms": null, "wall_s": 35.18202504515648, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "clava-js", "mode": "cold", "repeat": 1, "app_elapsed_ms": null, "wall_s": 35.39477516897023, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "java", "mode": "cold", "repeat": 1, "app_elapsed_ms": null, "wall_s": 36.43146434100345, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "java", "mode": "warm", "repeat": 1, "app_elapsed_ms": null, "wall_s": 25.086117895087227, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "clava-js", "mode": "warm", "repeat": 1, "app_elapsed_ms": null, "wall_s": 31.58136696787551, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "clava-js", "mode": "cold", "repeat": 2, "app_elapsed_ms": null, "wall_s": 35.747150087030604, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "java", "mode": "cold", "repeat": 2, "app_elapsed_ms": null, "wall_s": 36.435219652950764, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "java", "mode": "warm", "repeat": 2, "app_elapsed_ms": null, "wall_s": 25.03525350894779, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "clava-js", "mode": "warm", "repeat": 2, "app_elapsed_ms": null, "wall_s": 31.650529091944918, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "clava-js", "mode": "direct", "repeat": 2, "app_elapsed_ms": null, "wall_s": 35.167360255960375, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "java", "mode": "direct", "repeat": 2, "app_elapsed_ms": null, "wall_s": 35.192819519899786, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "java", "mode": "warm", "repeat": 3, "app_elapsed_ms": null, "wall_s": 25.256637211190537, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "clava-js", "mode": "warm", "repeat": 3, "app_elapsed_ms": null, "wall_s": 31.344301383942366, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "clava-js", "mode": "direct", "repeat": 3, "app_elapsed_ms": null, "wall_s": 35.24874507100321, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "java", "mode": "direct", "repeat": 3, "app_elapsed_ms": null, "wall_s": 35.19525700714439, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "java", "mode": "cold", "repeat": 3, "app_elapsed_ms": null, "wall_s": 36.335361051838845, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "clava-js", "mode": "cold", "repeat": 3, "app_elapsed_ms": null, "wall_s": 36.45135102584027, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "clava-js", "mode": "direct", "repeat": 4, "app_elapsed_ms": null, "wall_s": 34.98820087313652, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "java", "mode": "direct", "repeat": 4, "app_elapsed_ms": null, "wall_s": 35.571702397894114, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "java", "mode": "cold", "repeat": 4, "app_elapsed_ms": null, "wall_s": 36.28007336705923, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "clava-js", "mode": "cold", "repeat": 4, "app_elapsed_ms": null, "wall_s": 35.7645740469452, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "clava-js", "mode": "warm", "repeat": 4, "app_elapsed_ms": null, "wall_s": 32.437731192912906, "valid": true}
+{"phase": "wall", "stage": "protobuf", "suite": "java", "mode": "warm", "repeat": 4, "app_elapsed_ms": null, "wall_s": 25.13534464710392, "valid": true}

@@ -1,0 +1,161 @@
+#!/usr/bin/env python3
+"""Replay the forty-cell Clava-JS OFF-instrumentation measurement matrix.
+
+Run from experiments/protocol-comparison after the JS-only preflight passed:
+  python3 results/matched-fast-20261002-r1/preparation/run_js_off_measurements.py
+
+Calls the validated run_deadline_matrix.run_one primitive without Java, JFR,
+or GC instrumentation. Each warm row restores the same frozen cache seed.
+"""
+
+from __future__ import annotations
+
+import datetime as dt
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+RESULT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(RESULT_ROOT.parents[1]))
+
+import run_comparison as comparison
+import run_deadline_matrix as matrix_runner
+import run_java_jacoco_agent_control as java_control
+
+
+OUTPUT_ROOT = RESULT_ROOT / "js-r2"
+plan_path = OUTPUT_ROOT / "plan.json"
+results_path = OUTPUT_ROOT / "results.json"
+plan = json.loads(plan_path.read_text())
+payload = json.loads(results_path.read_text())
+identity = payload["identity_preflight"]
+results = payload["results"]
+if plan.get("preflight_status") != "passed" or plan.get("suites") != ["clava-js"]:
+    raise RuntimeError("JS measurement requires a passed JS-only preflight")
+if len(results) != 10 or not all(row.get("valid") and row.get("fast_syntax") for row in results):
+    raise RuntimeError("JS preflight must contain ten valid fast-syntax cells")
+if identity.get("passed") is not True:
+    raise RuntimeError("JS test identity and fixture preflight did not pass")
+
+stage_metadata = plan["stages"]
+stage_config = []
+for key in ("before-cache", "ccache-text", "protobuf", "flatbuffers"):
+    saved = stage_metadata[key]
+    stage_config.append({
+        "key": key,
+        "label": saved["label"],
+        "root": Path(saved["root"]),
+        "dumper": Path(saved["dumper"]),
+        "native_root": Path(saved["native_root"]),
+        "dumper_revision": saved["dumper_revision"],
+        "wire": saved["wire"],
+        "cache": saved["cache"],
+        "clava_revision": saved["clava_revision"],
+    })
+
+specs_root = Path(stage_metadata["before-cache"]["java_build_dependencies"]["specs_java_libs"]["root"])
+lara_root = Path(stage_metadata["before-cache"]["java_build_dependencies"]["lara_framework"]["root"])
+os.environ["SPECS_JAVA_LIBS_HOME"] = str(specs_root)
+os.environ["LARA_FRAMEWORK_HOME"] = str(lara_root)
+matrix_runner.SPECS_ROOT = specs_root
+matrix_runner.LARA_ROOT = lara_root
+comparison.STAGES = tuple(dict(stage) for stage in stage_config)
+matrix_runner.STAGES = tuple(dict(stage) for stage in stage_config)
+matrix_runner.SUITES = ("clava-js",)
+matrix_runner.EXPECTED = {
+    "clava-js": {"total_tests": 164, "passed_tests": 158, "failed_tests": 0, "skipped_tests": 6},
+}
+matrix_runner.OUTPUT_ROOT = OUTPUT_ROOT
+matrix_runner.BASELINE_BINARY_SHA256 = stage_metadata["before-cache"]["dumper_sha256"]
+matrix_runner.plan_stage_metadata = [stage_metadata[key] for key in ("before-cache", "ccache-text", "protobuf", "flatbuffers")]
+
+cold_seed_counts = {}
+for key in ("ccache-text", "protobuf", "flatbuffers"):
+    seeds = [row for row in results if row["stage"] == key and row["mode"] == "cold"]
+    if len(seeds) != 1:
+        raise RuntimeError(f"expected one JS cold preflight outcome for {key}")
+    seed = seeds[0]
+    cold_seed_counts[key] = (
+        seed["cacheable_calls"], seed["cache_hits"], seed["cache_misses"],
+        seed["cache_validation"].get("uncacheable_calls", 0),
+    )
+    if cold_seed_counts[key] != (166, 16, 150, 0):
+        raise RuntimeError(f"unexpected frozen JS cold outcome for {key}: {cold_seed_counts[key]}")
+
+def restore_warm_seed(stage: dict) -> None:
+    target = (
+        OUTPUT_ROOT / "warm/cache/clava-js" / stage["key"]
+        / "@specs-feup/clava" / comparison.cache_namespace(stage)
+    )
+    seed = OUTPUT_ROOT / "warm-cache-seed" / stage["key"]
+    if target.exists():
+        shutil.rmtree(target)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(seed, target)
+    if java_control.cache_manifest(seed) != java_control.cache_manifest(target):
+        raise RuntimeError(f"warm JS cache restore differs from the frozen seed for {stage['key']}")
+    reset = subprocess.run(
+        ["ccache", "--zero-stats"],
+        env={**os.environ, "CCACHE_DIR": str(target), "LC_ALL": "C"},
+        text=True, capture_output=True, check=False,
+    )
+    if reset.returncode != 0:
+        raise RuntimeError(f"ccache stats reset failed for {stage['key']}: {reset.stderr.strip()}")
+
+
+for round_number in range(1, 5):
+    round_rows = []
+    for mode, stage in matrix_runner.stage_mode_schedule(round_number):
+        if mode == "warm":
+            restore_warm_seed(stage)
+        row = matrix_runner.run_one(
+            "clava-js", mode, stage, True, round_number, results, plan, identity,
+            plan["fixture_fingerprints"], None,
+        )
+        row["fast_syntax"] = True
+        observed_cache = (
+            int(row.get("cacheable_calls", 0)), int(row.get("cache_hits", 0)),
+            int(row.get("cache_misses", 0)), int(row.get("cache_validation", {}).get("uncacheable_calls", 0)),
+        )
+        if mode == "direct":
+            expected_cache = (0, 0, 0, 0)
+        elif mode == "cold":
+            expected_cache = cold_seed_counts[stage["key"]]
+        else:
+            expected_cache = (166, 166, 0, 0)
+        if observed_cache != expected_cache:
+            row["valid"] = False
+            row["cache_gate_expected"] = expected_cache
+            row["cache_gate_observed"] = observed_cache
+        matrix_runner.checkpoint(results, plan, identity)
+        round_rows.append(row)
+        if not row["valid"]:
+            plan["all_measurements_valid"] = False
+            plan["measurement_gate_failure"] = row["cell_id"]
+            matrix_runner.checkpoint(results, plan, identity)
+            raise RuntimeError(f"invalid measured JS cell; timing excluded: {row['cell_id']} ({row['run_dir']})")
+        comparison.assert_heads_unchanged(stage_config)
+    print(json.dumps({
+        "round_complete": round_number,
+        "rows": len(round_rows),
+        "valid": all(row["valid"] for row in round_rows),
+        "tests": sum(row["total_tests"] for row in round_rows),
+        "failed": sum(row["failed_tests"] for row in round_rows),
+        "cells": [row["cell_id"] for row in round_rows],
+    }), flush=True)
+
+if len([row for row in results if row.get("measured") is True]) != 40:
+    raise RuntimeError("JS primary matrix does not contain exactly forty measured rows")
+plan["all_measurements_valid"] = True
+plan["measurement_completed_at"] = dt.datetime.now(dt.timezone.utc).isoformat()
+matrix_runner.checkpoint(results, plan, identity)
+plan_path.write_text(json.dumps(plan, indent=2) + "\n")
+print(json.dumps({
+    "js_matrix_complete": True,
+    "measured_rows": 40,
+    "preflight_rows": 10,
+    "output_root": str(OUTPUT_ROOT),
+}), flush=True)

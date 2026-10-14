@@ -13,30 +13,26 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABreak;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 
-public class CxxBreak extends ABreak {
+public class CxxBreak<Self extends CxxBreak<Self>> extends ABreak<Self> {
 
-    private final BreakStmt breakStmt;
-
-    public CxxBreak(BreakStmt breakStmt) {
-        super(new CxxStatement(breakStmt));
-
-        this.breakStmt = breakStmt;
+    public CxxBreak(BreakStmt breakStmt, CxxWeaver weaver) {
+        super(breakStmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return breakStmt;
+    public BreakStmt getNodeImpl() {
+        return (BreakStmt) super.getNodeImpl();
     }
 
     @Override
-    public AStatement getEnclosingStmtImpl() {
-        return CxxJoinpoints.create(breakStmt.getEnclosingStmt(), AStatement.class);
+    public AStatement<?> getEnclosingStmtImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getEnclosingStmt(), getWeaverEngine(), AStatement.class);
     }
 
 }

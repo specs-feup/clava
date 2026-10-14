@@ -1,0 +1,436 @@
+#!/usr/bin/env python3
+"""Audit and enrich split manifests without changing measured outcomes.
+
+Run from experiments/protocol-comparison:
+  python3 results/matched-fast-20261002-r1/preparation/enrich_matched_manifests.py
+
+Inputs stay untouched. Enriched analyzer inputs and the derivation audit are
+written to results/matched-fast-20261002-r1/enriched/.
+"""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import importlib.util
+import json
+from pathlib import Path
+import subprocess
+import sys
+import zipfile
+
+RESULT_ROOT = Path(__file__).resolve().parents[1]
+PC_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(PC_ROOT))
+
+import run_comparison as comparison
+import run_deadline_matrix as matrix
+import run_java_jacoco_agent_control as control
+
+ANALYZER_PATH = PC_ROOT / "analysis" / "analyze_deadline.py"
+SUITE_EXPECTATIONS = {
+    "clava-js": {"total": 164, "passed": 158, "failed": 0, "skipped": 6},
+    "java": {"total": 116, "passed": 116, "failed": 0, "skipped": 0},
+}
+STAGE_KEYS = ("before-cache", "ccache-text", "protobuf", "flatbuffers")
+MEASUREMENT_FIELDS = (
+    "elapsed_s", "driver_elapsed_s", "junit_aggregate_s", "gradle_non_test_elapsed_s",
+    "user_s", "sys_s", "max_rss_kb", "total_tests", "passed_tests", "failed_tests",
+    "skipped_tests", "cacheable_calls", "cache_hits", "cache_misses", "actual_test_executor_args",
+    "native_binary_path", "native_binary_sha256", "test_identity", "test_identity_sha256",
+)
+ENRICHED_ROW_FIELDS = {"specsutils_revision", "specsutils_jar_sha256", "fixture_fingerprint_sha256"}
+PB_DIRECT_COMPRESSION = {
+    "payload_format": "Protobuf",
+    "payload_compressed": False,
+    "ccache_enabled": False,
+    "ccache_internal_compression": False,
+    "basis": (
+        "protobuf producer writes binary output through -o; direct mode bypasses AST_DUMP_CACHE, "
+        "so no zstd wrapper is applied"
+    ),
+}
+SHARED_EXPERIMENT = "matched original-suite fast-syntax protocol/cache matrix"
+SHARED_TIMING_BOUNDARY = {
+    "headline": (
+        "GNU time elapsed_s for one full test command (npm exec/vitest for Clava-JS; Gradle test for Java), "
+        "including launcher/Gradle overhead but excluding runtime build and test-class compilation"
+    ),
+    "java_test_only": (
+        "sum of JUnit XML testcase durations (junit_aggregate_s); gradle_non_test_elapsed_s is elapsed_s "
+        "minus this aggregate, clamped at zero"
+    ),
+}
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def canonical_sha256(value: object) -> str:
+    encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def read_manifest(path: Path, suite: str) -> dict:
+    manifest = json.loads(path.read_text())
+    if manifest.get("schema_version") != 1:
+        raise RuntimeError(f"{path}: expected schema_version 1")
+    plan = manifest["plan"]
+    if plan.get("suites") != [suite] or plan.get("expected_tests") != SUITE_EXPECTATIONS:
+        raise RuntimeError(f"{path}: split suite selection or global test-count contract is unexpected")
+    if plan.get("preflight_status") != "passed" or plan.get("all_measurements_valid") is not True:
+        raise RuntimeError(f"{path}: preflight or measured matrix is not fully valid")
+    rows = manifest.get("results")
+    if not isinstance(rows, list) or len(rows) != 50:
+        raise RuntimeError(f"{path}: expected ten preflight and forty measured rows")
+    if any(row.get("suite") != suite or row.get("valid") is not True for row in rows):
+        raise RuntimeError(f"{path}: suite or row validity does not match the frozen contract")
+    if any(row.get("fast_syntax") is not True for row in rows):
+        raise RuntimeError(f"{path}: a row is missing fast-syntax provenance")
+    if sum(row.get("measured") is True for row in rows) != 40:
+        raise RuntimeError(f"{path}: expected exactly forty measured rows")
+    return manifest
+
+
+def source_verification(stage: dict) -> dict:
+    clava = Path(stage["root"]) / "clava"
+    native = Path(stage["native_root"])
+    runtime = clava / "Clava-JS" / "java-binaries"
+    parser_jar = runtime / "lib" / "ClangAstParser.jar"
+    binary = Path(stage["dumper"])
+    checks = {
+        "clava_head": control.git(clava, "rev-parse", "HEAD"),
+        "native_head": control.git(native, "rev-parse", "HEAD"),
+        "clava_diff_sha256": control.diff_sha256(clava),
+        "native_diff_sha256": control.diff_sha256(native),
+        "native_binary_sha256": sha256_file(binary),
+        "parser_jar_sha256": sha256_file(parser_jar),
+        "runtime_manifest": comparison.runtime_manifest(runtime),
+    }
+    expected = {
+        "clava_head": stage["clava_revision"],
+        "native_head": stage["native_revision"],
+        "clava_diff_sha256": stage["clava_patch_sha256"],
+        "native_diff_sha256": stage["native_source_diff_sha256"],
+        "native_binary_sha256": stage["native_binary_sha256"],
+        "parser_jar_sha256": stage["parser_jar_sha256"],
+        "runtime_manifest": stage["runtime_manifest"],
+    }
+    if checks != expected:
+        raise RuntimeError(f"{stage['key']}: current source/runtime/artifact identity differs from frozen stage")
+    if (checks["runtime_manifest"]["sha256"] != stage["runtime_manifest_sha256"]
+            or checks["runtime_manifest"]["jar_count"] != stage["runtime_manifest"]["jar_count"]):
+        raise RuntimeError(f"{stage['key']}: runtime-manifest summary differs")
+    return {
+        "clava_head": checks["clava_head"],
+        "clava_diff_sha256": checks["clava_diff_sha256"],
+        "native_head": checks["native_head"],
+        "native_diff_sha256": checks["native_diff_sha256"],
+        "native_binary_path": str(binary),
+        "native_binary_sha256": checks["native_binary_sha256"],
+        "parser_jar_sha256": checks["parser_jar_sha256"],
+        "runtime_manifest": checks["runtime_manifest"],
+    }
+
+
+def verify_protobuf_output_policy(stage: dict) -> dict:
+    clava_root = Path(stage["root"]) / "clava"
+    native_root = Path(stage["native_root"])
+    sources = {
+        "java_dumper": clava_root / "ClangAstParser/src/pt/up/fe/specs/clang/dumper/ClangAstDumper.java",
+        "java_reader": clava_root / "ClangAstParser/src/pt/up/fe/specs/clang/wire/ProtoAstReader.java",
+        "native_tool": native_root / "src/tool.cpp",
+        "native_stream": native_root / "src/Clava/ProtoStream.cpp",
+    }
+    text = {key: path.read_text() for key, path in sources.items()}
+    markers = {
+        "java_dumper": ("arguments.add(separatorIndex, \"-o\");", "ProtoAstReader.read(dumpInput"),
+        "java_reader": ("Envelope.parseFrom(encoded)",),
+        "native_tool": ("-o <path> is required for standalone protobuf output",),
+        "native_stream": ("SerializeToString(&payload)",),
+    }
+    for key, expected in markers.items():
+        if any(marker not in text[key] for marker in expected):
+            raise RuntimeError(f"protobuf direct-mode source evidence changed: {sources[key]}")
+    return {
+        key: {"path": str(path), "sha256": sha256_file(path), "verified_markers": list(markers[key])}
+        for key, path in sources.items()
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--java-input", type=Path, default=RESULT_ROOT / "java-r1/results.json")
+    parser.add_argument("--js-input", type=Path, default=RESULT_ROOT / "js-r2/results.json")
+    parser.add_argument("--output-dir", type=Path, default=RESULT_ROOT / "enriched-final-verified")
+    args = parser.parse_args()
+    java_path, js_path = args.java_input.resolve(), args.js_input.resolve()
+    output_dir = args.output_dir.resolve()
+    if output_dir.exists():
+        raise SystemExit(f"refusing to overwrite enrichment output: {output_dir}")
+
+    java = read_manifest(java_path, "java")
+    js = read_manifest(js_path, "clava-js")
+    canonical_stages = java["plan"]["stages"]
+    if tuple(canonical_stages) != STAGE_KEYS or set(js["plan"]["stages"]) != set(STAGE_KEYS):
+        raise RuntimeError("stage order/coverage differs from the frozen four-stage matrix")
+
+    stage_audit = {}
+    for key in STAGE_KEYS:
+        canonical = canonical_stages[key]
+        other = js["plan"]["stages"][key]
+        for field in ("clava_revision", "clava_patch_sha256", "native_revision", "native_binary_sha256",
+                      "parser_jar_sha256", "runtime_manifest_sha256"):
+            if canonical.get(field) != other.get(field):
+                raise RuntimeError(f"{key}: Java and JS manifests disagree on actual {field}")
+        dependency = other["java_build_dependencies"]["specs_java_libs"]
+        if (canonical["specsutils_revision"] != dependency["revision"]
+                or canonical["specsutils_jar_sha256"] != dependency["specsutils_jar_sha256"]):
+            raise RuntimeError(f"{key}: Java and JS manifests disagree on SpecsUtils source/artifact")
+        if canonical["java_build_dependencies"]["lara_framework"] != other["java_build_dependencies"]["lara_framework"]:
+            raise RuntimeError(f"{key}: Java and JS manifests disagree on Lara source")
+        stage_audit[key] = source_verification(canonical)
+
+    stages_for_fingerprints = [
+        {"key": key, "root": canonical_stages[key]["root"]} for key in STAGE_KEYS
+    ]
+    actual_fingerprints = matrix.fixture_maps(stages_for_fingerprints)
+    for name, manifest in (("java", java), ("clava-js", js)):
+        if manifest["plan"]["fixture_fingerprints"] != actual_fingerprints:
+            raise RuntimeError(f"{name}: fixture/resource/source hashes changed since preflight")
+    if java["plan"]["fixture_fingerprints"] != js["plan"]["fixture_fingerprints"]:
+        raise RuntimeError("suite plans have different global fixture fingerprints")
+
+    spec = importlib.util.spec_from_file_location("analyze_deadline", ANALYZER_PATH)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load analyzer: {ANALYZER_PATH}")
+    analyzer = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(analyzer)
+    outputs = []
+    inputs = [("java", java_path, java), ("clava-js", js_path, js)]
+    normalization_notes = []
+    compression_changes = []
+    row_enrichments = []
+    js_runtime_bindings = []
+
+    for suite, source_path, original in inputs:
+        enriched = copy.deepcopy(original)
+        plan = enriched["plan"]
+        plan["experiment"] = SHARED_EXPERIMENT
+        plan["timing_boundary"] = copy.deepcopy(SHARED_TIMING_BOUNDARY)
+        # The Java manifest has the complete native/build provenance. Use it as
+        # the canonical stage map only after all JS actual producer/runtime hashes
+        # and dependency HEAD/JAR hashes have matched it above.
+        plan["stages"] = copy.deepcopy(canonical_stages)
+        for key in STAGE_KEYS:
+            old = original["plan"]["stages"][key]
+            new = canonical_stages[key]
+            if old != new:
+                old_fixed = old.get("java_build_dependencies", {}).get("fixed_revision")
+                new_fixed = new.get("java_build_dependencies", {}).get("fixed_revision")
+                normalization_notes.append({
+                    "suite": suite,
+                    "stage": key,
+                    "original_helper_fixed_revision": old_fixed,
+                    "canonical_helper_fixed_revision": new_fixed,
+                    "note": "helper expected-target metadata only; actual dependency HEAD/JAR hashes were verified equal",
+                })
+
+        fixture_digests = {
+            key: analyzer.expected_fixture_digest(plan, key) for key in STAGE_KEYS
+        }
+        for row in enriched["results"]:
+            key = row["stage"]
+            stage = canonical_stages[key]
+            for field, expected in (
+                ("clava_revision", stage["clava_revision"]),
+                ("clava_patch_sha256", stage["clava_patch_sha256"]),
+                ("native_revision", stage["native_revision"]),
+                ("native_binary_sha256", stage["native_binary_sha256"]),
+                ("parser_jar_sha256", stage["parser_jar_sha256"]),
+                ("runtime_manifest_sha256", stage["runtime_manifest_sha256"]),
+                ("native_build_provenance_sha256", stage["native_build_provenance_sha256"]),
+                ("native_schema_sha256", stage["native_schema_sha256"]),
+            ):
+                if row.get(field) != expected:
+                    raise RuntimeError(f"{suite}/{row['cell_id']}: row provenance differs for {field}")
+            if (row.get("specsutils_runtime_jar_sha256") != stage["specsutils_jar_sha256"]
+                    or row.get("specsutils_jar_sha256", stage["specsutils_jar_sha256"])
+                    != stage["specsutils_jar_sha256"]):
+                raise RuntimeError(f"{suite}/{row['cell_id']}: SpecsUtils runtime artifact hash differs")
+            if suite == "clava-js":
+                runtime_jar = Path(row["run_dir"]) / "java-binaries/lib/ClangAstParser.jar"
+                runtime_jar_hash = sha256_file(runtime_jar)
+                if runtime_jar_hash != row.get("runtime_parser_jar_sha256"):
+                    raise RuntimeError(f"{suite}/{row['cell_id']}: per-run parser JAR hash differs")
+                with zipfile.ZipFile(runtime_jar) as jar:
+                    native_tag = jar.read("clang-dumper-release.tag").decode().strip()
+                expected_native_directory = str(Path(stage["dumper"]).resolve().parent)
+                if str(Path(native_tag).resolve()) != expected_native_directory:
+                    raise RuntimeError(f"{suite}/{row['cell_id']}: per-run parser JAR is bound to another producer")
+                js_runtime_bindings.append({
+                    "cell_id": row["cell_id"],
+                    "run_dir_relative": row["run_dir_relative"],
+                    "runtime_parser_jar_sha256": runtime_jar_hash,
+                    "native_tag_directory": native_tag,
+                    "expected_native_binary_path": stage["dumper"],
+                })
+            if (row.get("native_binary_path") != stage["dumper"]
+                    or row.get("native_binary_matches_expected") is not True):
+                raise RuntimeError(f"{suite}/{row['cell_id']}: actual producer path was not verified")
+
+            derived = {
+                "specsutils_revision": stage["specsutils_revision"],
+                "specsutils_jar_sha256": stage["specsutils_jar_sha256"],
+                "fixture_fingerprint_sha256": fixture_digests[key],
+            }
+            added = []
+            for field, value in derived.items():
+                if field in row:
+                    if row[field] != value:
+                        raise RuntimeError(f"{suite}/{row['cell_id']}: existing {field} contradicts audited plan")
+                else:
+                    row[field] = value
+                    added.append(field)
+            if added:
+                row_enrichments.append({"suite": suite, "cell_id": row["cell_id"], "added_fields": added})
+
+            if key == "protobuf" and row["mode"] == "direct":
+                before = copy.deepcopy(row["compression"])
+                if before != PB_DIRECT_COMPRESSION:
+                    row["compression"] = copy.deepcopy(PB_DIRECT_COMPRESSION)
+                    compression_changes.append({
+                        "suite": suite, "cell_id": row["cell_id"],
+                        "before": before, "after": copy.deepcopy(PB_DIRECT_COMPRESSION),
+                    })
+        before_policy = copy.deepcopy(plan["compression_policy"]["protobuf"]["direct"])
+        if before_policy != PB_DIRECT_COMPRESSION:
+            plan["compression_policy"]["protobuf"]["direct"] = copy.deepcopy(PB_DIRECT_COMPRESSION)
+            compression_changes.append({
+                "suite": suite, "cell_id": "plan/compression_policy/protobuf/direct",
+                "before": before_policy, "after": copy.deepcopy(PB_DIRECT_COMPRESSION),
+            })
+        outputs.append((suite, source_path, enriched))
+
+    if len([item for item in compression_changes if item["cell_id"].startswith("plan/")]) != 2:
+        raise RuntimeError("expected one stale Protobuf Direct policy record in each input plan")
+    if sum(item["suite"] == "java" and item["cell_id"].startswith("java/direct/protobuf/")
+           for item in compression_changes) != 5:
+        raise RuntimeError("expected five corrected Java Protobuf Direct attempt records")
+    if sum(item["suite"] == "clava-js" and item["cell_id"].startswith("clava-js/direct/protobuf/")
+           for item in compression_changes) != 5:
+        raise RuntimeError("expected five corrected JS Protobuf Direct attempt records")
+
+    protocol_evidence = verify_protobuf_output_policy(canonical_stages["protobuf"])
+
+    # Existing measured values, test identities, actual argv, and producer path
+    # hashes must remain exactly unchanged by this provenance-only transformation.
+    for (suite, source_path, original), (_, _, enriched) in zip(inputs, outputs):
+        for old, new in zip(original["results"], enriched["results"]):
+            if any(old.get(field) != new.get(field) for field in MEASUREMENT_FIELDS):
+                raise RuntimeError(f"{suite}/{old['cell_id']}: measured value or actual invocation changed")
+            for field, value in old.items():
+                if field not in {"compression", *ENRICHED_ROW_FIELDS} and new.get(field) != value:
+                    raise RuntimeError(f"{suite}/{old['cell_id']}: non-enrichment row field changed: {field}")
+
+    out_paths = [output_dir / "java-results.json", output_dir / "js-results.json"]
+    analyzed = analyzer.analyze_cohort(out_paths, [outputs[0][2], outputs[1][2]])
+    output_dir.mkdir(parents=True)
+    output_hashes = {}
+    input_hashes = {}
+    result_array_hashes = {}
+    for (suite, source_path, enriched), destination in zip(outputs, out_paths):
+        destination.write_text(json.dumps(enriched, indent=2) + "\n")
+        output_hashes[suite] = sha256_file(destination)
+        input_hashes[suite] = sha256_file(source_path)
+        result_array_hashes[suite] = canonical_sha256(enriched["results"])
+
+    audit = {
+        "schema_version": 1,
+        "inputs_preserved": {suite: str(path) for suite, path, _ in inputs},
+        "input_manifest_sha256": input_hashes,
+        "earlier_selected_suite_plan_manifest_sha256": {
+            "java": "fca3e2404158f82c93812c0c5e88a7dea93ff7b7d30ff7ca423e80a27bf67d03",
+            "clava-js": "1ff4c0925934ca90fe463cd753cf5eb33d1a24d2b2722c0f6cbd832de8d1467a",
+            "note": "pre-existing manifest bytes before approved full expected_tests plan-contract enrichment",
+        },
+        "inputs_not_overwritten": True,
+        "enriched_manifest_sha256": output_hashes,
+        "enriched_results_array_sha256": result_array_hashes,
+        "global_fixture_fingerprint": {
+            "categories": sorted(actual_fingerprints),
+            "stage_file_counts": {
+                category: {stage: len(files) for stage, files in stage_map.items()}
+                for category, stage_map in actual_fingerprints.items()
+            },
+            "digest": "SHA256(canonical JSON of all three category->stage->relative-file-SHA maps, per stage)",
+            "per_stage_sha256": {
+                key: analyzer.expected_fixture_digest(java["plan"], key) for key in STAGE_KEYS
+            },
+        },
+        "shared_plan_metadata": {
+            "experiment": SHARED_EXPERIMENT,
+            "timing_boundary": SHARED_TIMING_BOUNDARY,
+        },
+        "source_runtime_artifact_audit": stage_audit,
+        "js_per_run_runtime_bindings": js_runtime_bindings,
+        "canonical_stage_source": "Java manifest stage map; actual JS producer/runtime/dependency identities matched before normalization",
+        "helper_fixed_revision_normalizations": normalization_notes,
+        "protobuf_direct_source_verification": protocol_evidence,
+        "protobuf_direct_compression_corrections": compression_changes,
+        "row_provenance_fields_added": row_enrichments,
+        "measured_values_preserved": list(MEASUREMENT_FIELDS),
+        "combined_analyzer": {
+            "status": "passed",
+            "summary_count": len(analyzed.get("summaries", [])),
+            "comparison_count": len(analyzed.get("comparisons", [])),
+            "paired_comparison_count": len(analyzed.get("comparisons", [])),
+            "paired_delta_count": sum(len(item.get("pairs", [])) for item in analyzed.get("comparisons", [])),
+        },
+    }
+    audit_path = output_dir / "enrichment-audit.json"
+    audit_path.write_text(json.dumps(audit, indent=2) + "\n")
+    print(json.dumps({
+        "output_dir": str(output_dir),
+        "enriched_manifest_sha256": output_hashes,
+        "audit_sha256": sha256_file(audit_path),
+        "combined_analyzer": audit["combined_analyzer"],
+        "protobuf_direct_corrections": len(compression_changes),
+        "provenance_rows_enriched": len(row_enrichments),
+    }, sort_keys=True))
+    return 0
+
+
+def verify_protobuf_output_policy(stage: dict) -> dict:
+    clava_root = Path(stage["root"]) / "clava"
+    native_root = Path(stage["native_root"])
+    sources = {
+        "java_dumper": clava_root / "ClangAstParser/src/pt/up/fe/specs/clang/dumper/ClangAstDumper.java",
+        "java_reader": clava_root / "ClangAstParser/src/pt/up/fe/specs/clang/wire/ProtoAstReader.java",
+        "native_tool": native_root / "src/tool.cpp",
+        "native_stream": native_root / "src/Clava/ProtoStream.cpp",
+    }
+    text = {key: path.read_text() for key, path in sources.items()}
+    markers = {
+        "java_dumper": ("arguments.add(separatorIndex, \"-o\");", "ProtoAstReader.read(dumpInput"),
+        "java_reader": ("Envelope.parseFrom(encoded)",),
+        "native_tool": ("-o <path> is required for standalone protobuf output",),
+        "native_stream": ("SerializeToString(&payload)",),
+    }
+    for key, expected in markers.items():
+        if any(marker not in text[key] for marker in expected):
+            raise RuntimeError(f"protobuf direct-mode source evidence changed: {sources[key]}")
+    return {
+        key: {"path": str(path), "sha256": sha256_file(path), "verified_markers": list(markers[key])}
+        for key, path in sources.items()
+    }
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -14,6 +14,8 @@
 package pt.up.fe.specs.clang.parser;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,6 +31,7 @@ import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -38,10 +41,9 @@ import pt.up.fe.specs.util.providers.ResourceProvider;
 public abstract class AClangAstTester {
 
     private static final boolean CLEAN_CLANG_FILES = !SpecsSystem.isDebug();
-    private static final String OUTPUT_FOLDERNAME_PREFIX = "temp-clang-ast-";
-    
-    // Each test instance gets a unique output folder to avoid race conditions in parallel execution
-    private final String outputFoldername;
+    private File outputFolder;
+    private File inputRoot;
+    private List<File> inputFiles;
 
     private final Collection<ResourceProvider> resources;
     private List<String> compilerOptions;
@@ -88,9 +90,6 @@ public abstract class AClangAstTester {
         this.resources = resources;
         this.compilerOptions = new ArrayList<>(compilerOptions);
         
-        // Create unique output folder for this test instance to avoid parallel test conflicts
-        this.outputFoldername = OUTPUT_FOLDERNAME_PREFIX + System.nanoTime() + "-" + Thread.currentThread().getId();
-
         codeParser = CodeParser.newInstance();
         // Set strict mode
         // ClangAstParser.strictMode(true);
@@ -158,8 +157,6 @@ public abstract class AClangAstTester {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            // Clean up this test instance's folder after test completes
-            // Safe even in parallel execution since each instance has a unique folder
             try {
                 cleanupInstance();
             } catch (Exception e) {
@@ -173,24 +170,55 @@ public abstract class AClangAstTester {
     public void setUp() throws Exception {
         SpecsSystem.programStandardInit();
 
-        // Copy resources under test to this test's unique output folder
-        File outputFolder = SpecsIo.mkdir(outputFoldername);
-        for (ResourceProvider resource : resources) {
-            File copiedFile = SpecsIo.resourceCopy(resource.getResource(), outputFolder, false, true);
-            assertTrue(copiedFile.isFile(), "Could not copy resource '" + resource + "'");
+        outputFolder = Files.createTempDirectory("temp-clang-ast-").toFile();
+        inputFiles = resources.stream()
+                .map(resource -> TestResourceResolver.resolve(resource.getResource()))
+                .collect(Collectors.toList());
+
+        if (inputFiles.isEmpty()) {
+            throw new IllegalStateException("Parser test has no input resources");
         }
 
+        inputRoot = commonParent(inputFiles);
+        if (inputRoot == null) {
+            throw new IllegalStateException("Parser test input resources do not share a filesystem parent: "
+                    + inputFiles);
+        }
     }
 
-    /**
-     * Cleans up this test instance's unique output folder.
-     * Safe to call from @AfterEach even when tests run in parallel.
-     */
     public void cleanupInstance() throws Exception {
         if (CLEAN_CLANG_FILES) {
-            File outputFolder = new File(outputFoldername);
             SpecsIo.deleteFolder(outputFolder);
         }
+    }
+
+    List<File> getInputFiles() {
+        return inputFiles;
+    }
+
+    File getInputRoot() {
+        return inputRoot;
+    }
+
+    File getOutputFolder() {
+        return outputFolder;
+    }
+
+    private static File commonParent(List<File> files) {
+        Path commonParent = files.get(0).toPath().toAbsolutePath().normalize().getParent();
+
+        for (int i = 1; i < files.size(); i++) {
+            Path filePath = files.get(i).toPath().toAbsolutePath().normalize();
+            while (commonParent != null && !filePath.startsWith(commonParent)) {
+                commonParent = commonParent.getParent();
+            }
+
+            if (commonParent == null) {
+                return null;
+            }
+        }
+
+        return commonParent == null ? null : commonParent.toFile();
     }
 
     public void testProper() {
@@ -198,12 +226,12 @@ public abstract class AClangAstTester {
         // Enable parallel parsing
         codeParser.set(ParallelCodeParser.PARALLEL_PARSING);
 
-        File workFolder = new File(outputFoldername);
-
         // Parse files
-        App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
+        codeParser.set(CodeParser.GENERATED_PARSE_ROOT, inputRoot);
+        App clavaAst = codeParser.parse(inputFiles, compilerOptions);
 
-        clavaAst.write(SpecsIo.mkdir(outputFoldername + "/outputFirst"));
+        File firstOutputFolder = SpecsIo.mkdir(new File(outputFolder, "outputFirst"));
+        clavaAst.write(firstOutputFolder);
         if (onePass) {
             return;
         }
@@ -215,21 +243,34 @@ public abstract class AClangAstTester {
 
 
         // Parse output again, check if files are the same
-        File firstOutputFolder = new File(outputFoldername + "/outputFirst");
-
+        testCodeParser.set(CodeParser.GENERATED_PARSE_ROOT, firstOutputFolder);
         App testClavaAst = testCodeParser.parse(Arrays.asList(firstOutputFolder), compilerOptions);
 
-        testClavaAst.write(SpecsIo.mkdir(outputFoldername + "/outputSecond"));
+        File secondOutputFolder = SpecsIo.mkdir(new File(outputFolder, "outputSecond"));
+        testClavaAst.write(secondOutputFolder);
         // System.out.println("STOREDEF CACHE:\n" + StoreDefinitions.getStoreDefinitionsCache().getAnalytics());
 
         // Test if files from first and second are the same
-        Map<String, File> outputFiles1 = SpecsIo.getFiles(new File(outputFoldername + "/outputFirst"))
+        Map<String, File> outputFiles1 = SpecsIo.getFiles(firstOutputFolder)
                 .stream()
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
 
-        Map<String, File> outputFiles2 = SpecsIo.getFiles(new File(outputFoldername + "/outputSecond"))
+        Map<String, File> outputFiles2 = SpecsIo.getFiles(secondOutputFolder)
                 .stream()
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
+
+        for (ResourceProvider resource : resources) {
+            if (SourceType.getType(resource.getFilename()) == SourceType.OUT_OF_SOURCE) {
+                continue;
+            }
+
+            assertNotNull(outputFiles1.get(resource.getFilename()),
+                    "First parse produced no output for input '" + resource.getResource()
+                            + "'; inspect the parser diagnostics above");
+            assertNotNull(outputFiles2.get(resource.getFilename()),
+                    "Reparse produced no output for input '" + resource.getResource()
+                            + "'; inspect the parser diagnostics above");
+        }
 
         for (String name : outputFiles1.keySet()) {
 

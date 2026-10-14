@@ -1,0 +1,24 @@
+{
+  "app": [
+    "api/LegacyIntegrationTests - C.test.ts",
+    "api/LegacyIntegrationTests - CXX.test.ts",
+    "api/LegacyIntegrationTests - Issues.test.ts",
+    "api/Query.test.ts",
+    "api/Issues.test.ts",
+    "api/clava/ClavaJoinPoints.test.ts",
+    "code/Sandbox.test.ts",
+    "code/ClangPlugin/ClangPlugin.test.ts",
+    "api/clava/analysis/AnalyserResult.test.ts"
+  ],
+  "wall": [
+    "api/LegacyIntegrationTests - C.test.ts",
+    "api/LegacyIntegrationTests - CXX.test.ts",
+    "api/LegacyIntegrationTests - Issues.test.ts",
+    "api/Query.test.ts",
+    "api/Issues.test.ts",
+    "api/clava/ClavaJoinPoints.test.ts",
+    "code/ClangPlugin/ClangPlugin.test.ts",
+    "code/Sandbox.test.ts",
+    "api/clava/analysis/AnalyserResult.test.ts"
+  ]
+}

@@ -1,8 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../api"
-  },
-  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"],
-  "references": [{ "path": "../src-code" }]
-}

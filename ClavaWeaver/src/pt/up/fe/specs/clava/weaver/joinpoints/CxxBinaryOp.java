@@ -16,59 +16,57 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.Arrays;
 import java.util.List;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 
-public class CxxBinaryOp extends ABinaryOp {
+public class CxxBinaryOp<Self extends CxxBinaryOp<Self>> extends ABinaryOp<Self> {
 
-    private final BinaryOperator op;
-
-    public CxxBinaryOp(BinaryOperator op) {
-        super(new CxxOp(op));
-
-        this.op = op;
+    public CxxBinaryOp(BinaryOperator op, CxxWeaver weaver) {
+        super(op, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return op;
+    public BinaryOperator getNodeImpl() {
+        return (BinaryOperator) super.getNodeImpl();
     }
 
     @Override
-    public AExpression getLeftImpl() {
-        List<? extends AExpression> left = Arrays.asList((AExpression) CxxJoinpoints.create(op.getLhs()));
+    public AExpression<?> getLeftImpl() {
+        List<? extends AExpression<?>> left = Arrays.asList((AExpression<?>) CxxJoinpoints.create(this.getNodeImpl().getLhs(),
+                getWeaverEngine()));
         return left.isEmpty() ? null : left.get(0);
     }
 
     @Override
-    public AExpression getRightImpl() {
-        List<? extends AExpression> right = Arrays.asList((AExpression) CxxJoinpoints.create(op.getRhs()));
+    public AExpression<?> getRightImpl() {
+        List<? extends AExpression<?>> right = Arrays.asList((AExpression<?>) CxxJoinpoints.create(this.getNodeImpl().getRhs(),
+                getWeaverEngine()));
         return right.isEmpty() ? null : right.get(0);
     }
 
     @Override
-    public Boolean getIsAssignmentImpl() {
-        return op.getOp() == BinaryOperatorKind.Assign || op instanceof CompoundAssignOperator;
+    public boolean getIsAssignmentImpl() {
+        return this.getNodeImpl().getOp() == BinaryOperatorKind.Assign || this.getNodeImpl() instanceof CompoundAssignOperator;
     }
 
     @Override
-    public Boolean getIsBitwiseImpl() {
-        return op.getOp().isBitwise();
+    public boolean getIsBitwiseImpl() {
+        return this.getNodeImpl().getOp().isBitwise();
     }
 
     @Override
-    public void setLeftImpl(AExpression left) {
-        op.setLhs((Expr) left.getNode());
+    public void setLeftImpl(AExpression<?> left) {
+        this.getNodeImpl().setLhs((Expr) left.getNodeImpl());
     }
 
     @Override
-    public void setRightImpl(AExpression right) {
-        op.setRhs((Expr) right.getNode());
+    public void setRightImpl(AExpression<?> right) {
+        this.getNodeImpl().setRhs((Expr) right.getNodeImpl());
     }
 }

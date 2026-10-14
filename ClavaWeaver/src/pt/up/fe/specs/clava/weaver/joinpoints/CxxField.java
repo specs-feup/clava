@@ -13,22 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField;
 
-public class CxxField extends AField {
+public class CxxField<Self extends CxxField<Self>> extends AField<Self> {
 
-    private final FieldDecl field;
-
-    public CxxField(FieldDecl field) {
-        super(new CxxDeclarator(field));
-        this.field = field;
+    public CxxField(FieldDecl field, CxxWeaver weaver) {
+        super(field, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return field;
+    public FieldDecl getNodeImpl() {
+        return (FieldDecl) super.getNodeImpl();
     }
 
 }

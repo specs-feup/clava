@@ -13,44 +13,37 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AElaboratedType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.util.SpecsStrings;
 
-public class CxxElaboratedType extends AElaboratedType {
+public class CxxElaboratedType<Self extends CxxElaboratedType<Self>> extends AElaboratedType<Self> {
 
-    private final ElaboratedType elaboratedType;
-
-    public CxxElaboratedType(ElaboratedType elaboratedType) {
-        super(new CxxType(elaboratedType));
-
-        this.elaboratedType = elaboratedType;
+    public CxxElaboratedType(ElaboratedType elaboratedType, CxxWeaver weaver) {
+        super(elaboratedType, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return elaboratedType;
+    public ElaboratedType getNodeImpl() {
+        return (ElaboratedType) super.getNodeImpl();
     }
 
     @Override
     public String getQualifierImpl() {
-        return SpecsStrings.nullIfEmpty(elaboratedType.getQualifier());
-        // String qualifier = elaboratedType.get(ElaboratedType.QUALIFIER);
-        //
-        // return qualifier.isEmpty() ? null : qualifier;
+        return SpecsStrings.nullIfEmpty(this.getNodeImpl().getQualifier());
     }
 
     @Override
     public String getKeywordImpl() {
-        return SpecsStrings.nullIfEmpty(elaboratedType.getKeyword().getCode());
+        return SpecsStrings.nullIfEmpty(this.getNodeImpl().getKeyword().getCode());
     }
 
     @Override
-    public AType getNamedTypeImpl() {
-        return CxxJoinpoints.create(elaboratedType.get(ElaboratedType.NAMED_TYPE), AType.class);
+    public AType<?> getNamedTypeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().get(ElaboratedType.NAMED_TYPE), getWeaverEngine(), AType.class);
     }
 
 }

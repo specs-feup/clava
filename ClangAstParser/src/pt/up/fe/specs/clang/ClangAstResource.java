@@ -20,12 +20,9 @@ import pt.up.fe.specs.util.providers.ResourceProvider;
  *
  */
 public enum ClangAstResource implements ResourceProvider {
-    // BUILTIN_INCLUDES_3_8(ClangAstWebResource.BUILTIN_INCLUDES_3_8),
-
     TEST_INCLUDES_C("test_includes.c"),
     TEST_INCLUDES_CPP("test_includes.cpp");
 
-    // private final WebResourceProvider webResource;
     private final String resource;
 
     private static final String basePackage = "clangast/";
@@ -35,24 +32,10 @@ public enum ClangAstResource implements ResourceProvider {
      */
     private ClangAstResource(String resource) {
         this.resource = basePackage + resource;
-        // this.webResource = null;
     }
 
-    // private ClangAstResource(WebResourceProvider webResource) {
-    // this.resource = null;
-    // this.webResource = webResource;
-    // }
-
-    /* (non-Javadoc)
-     * @see org.suikasoft.SharedLibrary.Interfaces.ResourceProvider#getResource()
-     */
     @Override
     public String getResource() {
         return resource;
-        // if (resource != null) {
-        // return resource;
-        // }
-
-        // return webResource.getResourceUrl();
     }
 }

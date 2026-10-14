@@ -33,7 +33,32 @@ public class CXXFunctionalCastExpr extends CastExpr {
 
     @Override
     public String getCode() {
-        return getTypeCode() + "(" + getSubExpr().getCode() + ")";
+        String subExprCode = getSubExpr().getCode();
+        if (hasExplicitInitList(getSubExpr())) {
+            return getTypeCode() + subExprCode;
+        }
+
+        return getTypeCode() + "(" + subExprCode + ")";
+    }
+
+    private static boolean hasExplicitInitList(Expr expr) {
+        while (true) {
+            if (expr instanceof InitListExpr) {
+                return expr.get(InitListExpr.IS_EXPLICIT);
+            }
+
+            if (expr instanceof CXXBindTemporaryExpr bindTemporary) {
+                expr = bindTemporary.getSubExpr();
+            } else if (expr instanceof MaterializeTemporaryExpr materializeTemporary) {
+                expr = materializeTemporary.getTemporaryExpr();
+            } else if (expr instanceof ImplicitCastExpr implicitCast) {
+                expr = implicitCast.getSubExpr();
+            } else if (expr instanceof FullExpr fullExpr) {
+                expr = fullExpr.getSubExpr();
+            } else {
+                return false;
+            }
+        }
     }
 
 }

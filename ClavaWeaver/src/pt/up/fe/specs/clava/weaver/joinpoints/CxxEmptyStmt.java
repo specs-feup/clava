@@ -13,22 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.EmptyStmt;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEmptyStmt;
 
-public class CxxEmptyStmt extends AEmptyStmt {
+public class CxxEmptyStmt<Self extends CxxEmptyStmt<Self>> extends AEmptyStmt<Self> {
 
-    private final EmptyStmt emptyStmt;
-
-    public CxxEmptyStmt(EmptyStmt emptyStmt) {
-        super(new CxxStatement(emptyStmt));
-        this.emptyStmt = emptyStmt;
+    public CxxEmptyStmt(EmptyStmt emptyStmt, CxxWeaver weaver) {
+        super(emptyStmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return emptyStmt;
+    public EmptyStmt getNodeImpl() {
+        return (EmptyStmt) super.getNodeImpl();
     }
 
 }

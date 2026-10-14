@@ -1,0 +1,259 @@
+import groovy.json.JsonOutput
+import org.gradle.api.execution.TaskExecutionListener
+import org.gradle.api.tasks.TaskState
+import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.TestDescriptor
+import org.gradle.api.tasks.testing.TestListener
+import org.gradle.api.tasks.testing.TestResult
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+
+def timelinePath = System.getenv('DEADLINE_JAVA_TIMELINE_PATH')
+if (!timelinePath) {
+    throw new GradleException('DEADLINE_JAVA_TIMELINE_PATH is required')
+}
+
+def timelineFile = new File(timelinePath)
+timelineFile.parentFile.mkdirs()
+def timelineWriter = new BufferedWriter(new FileWriter(timelineFile, true))
+def timelineLock = new Object()
+def timelineStartNs = System.nanoTime()
+def emitTimelineEvent = { eventName, attributes = [:] ->
+    long monotonicNs = System.nanoTime()
+    def event = [
+        source: 'gradle',
+        event: eventName,
+        elapsed_ns: monotonicNs - timelineStartNs,
+        monotonic_ns: monotonicNs,
+        epoch_ns: System.currentTimeMillis() * 1000000L,
+    ]
+    event.putAll(attributes)
+    synchronized (timelineLock) {
+        timelineWriter.write(JsonOutput.toJson(event))
+        timelineWriter.newLine()
+        timelineWriter.flush()
+    }
+}
+
+emitTimelineEvent('init_script_loaded')
+gradle.settingsEvaluated { settings ->
+    long initElapsedNs = System.nanoTime() - timelineStartNs
+    emitTimelineEvent('settings_evaluated', [
+        root_name: settings.rootProject.name,
+        init_elapsed_ns: initElapsedNs,
+        init_epoch_ns: System.currentTimeMillis() * 1000000L - initElapsedNs,
+    ])
+}
+gradle.projectsLoaded { currentGradle ->
+    emitTimelineEvent('projects_loaded', [root_name: currentGradle.rootProject.name])
+}
+gradle.beforeProject { project ->
+    emitTimelineEvent('project_configuration_started', [
+        root_name: project.rootProject.name,
+        project: project.path,
+    ])
+}
+gradle.afterProject { project, state ->
+    emitTimelineEvent('project_configuration_finished', [
+        root_name: project.rootProject.name,
+        project: project.path,
+        failed: state.failure != null,
+    ])
+}
+gradle.projectsEvaluated { currentGradle ->
+    emitTimelineEvent('projects_evaluated', [root_name: currentGradle.rootProject.name])
+}
+gradle.taskGraph.whenReady { graph ->
+    emitTimelineEvent('task_graph_ready', [
+        root_name: gradle.rootProject.name,
+        task_count: graph.allTasks.size(),
+        task_paths: graph.allTasks.collect { it.path },
+    ])
+}
+
+gradle.addListener(new TaskExecutionListener() {
+    @Override
+    void beforeExecute(org.gradle.api.Task task) {
+        emitTimelineEvent('task_before_execute', [
+            root_name: task.project.rootProject.name,
+            task: task.path,
+            project: task.project.path,
+        ])
+    }
+
+    @Override
+    void afterExecute(org.gradle.api.Task task, TaskState state) {
+        emitTimelineEvent('task_after_execute', [
+            root_name: task.project.rootProject.name,
+            task: task.path,
+            project: task.project.path,
+            skipped: state.skipped,
+            skip_message: state.skipMessage,
+            failure: state.failure == null ? null : state.failure.class.name,
+        ])
+    }
+})
+
+gradle.buildFinished { result ->
+    emitTimelineEvent('build_finished', [
+        root_name: gradle.rootProject.name,
+        failed: result.failure != null,
+        failure: result.failure == null ? null : result.failure.class.name,
+    ])
+    synchronized (timelineLock) {
+        timelineWriter.close()
+    }
+}
+
+gradle.afterProject { project ->
+    if (project.name == 'ClangAstParser') {
+        project.tasks.named('test', Test) { testTask ->
+            def agentMode = System.getenv('DEADLINE_JACOCO_AGENT')
+            def diagnosticDir = System.getenv('DEADLINE_JAVA_DIAGNOSTIC_DIR')
+            if (agentMode != 'off') {
+                throw new GradleException('timeline run requires DEADLINE_JACOCO_AGENT=off')
+            }
+            if (!diagnosticDir) {
+                throw new GradleException('DEADLINE_JAVA_DIAGNOSTIC_DIR is required')
+            }
+            def jacoco = testTask.extensions.findByType(JacocoTaskExtension)
+            if (jacoco == null) {
+                throw new GradleException('the test task has no JaCoCo extension')
+            }
+            jacoco.enabled = false
+            def diagnosticRoot = new File(diagnosticDir)
+            jacoco.destinationFile = new File(diagnosticRoot, 'jacoco.exec')
+            testTask.reports.junitXml.outputLocation.set(
+                project.layout.dir(project.provider { new File(diagnosticRoot, 'junit-xml') })
+            )
+            testTask.binaryResultsDirectory.set(
+                project.layout.dir(project.provider { new File(diagnosticRoot, 'binary-results') })
+            )
+
+            def suiteStarts = Collections.synchronizedMap([:])
+            def classLeafDurations = Collections.synchronizedMap([:])
+            def summedLeafDurationMs = [value: 0L]
+            def leafCount = [value: 0]
+            def suiteType = { TestDescriptor descriptor ->
+                if (descriptor.parent == null) {
+                    return 'root_suite'
+                }
+                return descriptor.className == null ? null : 'class_suite'
+            }
+            def suiteKey = { TestDescriptor descriptor ->
+                "${descriptor.className ?: ''}|${descriptor.name}"
+            }
+            def resultFields = { TestResult testResult ->
+                long resultStartTime = testResult.startTime
+                long resultEndTime = testResult.endTime
+                [
+                    result_start_epoch_ms: resultStartTime,
+                    result_end_epoch_ms: resultEndTime,
+                    result_duration_ms: Math.max(0L, resultEndTime - resultStartTime),
+                    test_count: testResult.testCount,
+                    successful_test_count: testResult.successfulTestCount,
+                    failed_test_count: testResult.failedTestCount,
+                    skipped_test_count: testResult.skippedTestCount,
+                    result_type: testResult.resultType.toString(),
+                ]
+            }
+
+            testTask.addTestListener(new TestListener() {
+                @Override
+                void beforeSuite(TestDescriptor descriptor) {
+                    def kind = suiteType(descriptor)
+                    if (kind == null) {
+                        return
+                    }
+                    suiteStarts[suiteKey(descriptor)] = System.nanoTime()
+                    emitTimelineEvent("${kind}_before", [
+                        root_name: project.rootProject.name,
+                        suite_name: descriptor.name,
+                        class_name: descriptor.className,
+                        parent_name: descriptor.parent?.name,
+                    ])
+                }
+
+                @Override
+                void afterSuite(TestDescriptor descriptor, TestResult result) {
+                    def kind = suiteType(descriptor)
+                    if (kind == null) {
+                        return
+                    }
+                    long callbackDurationNs = 0L
+                    def started = suiteStarts.remove(suiteKey(descriptor))
+                    if (started != null) {
+                        callbackDurationNs = System.nanoTime() - (long) started
+                    }
+                    def fields = [
+                        root_name: project.rootProject.name,
+                        suite_name: descriptor.name,
+                        class_name: descriptor.className,
+                        parent_name: descriptor.parent?.name,
+                        callback_duration_ns: callbackDurationNs,
+                    ]
+                    fields.putAll(resultFields(result))
+                    if (kind == 'root_suite') {
+                        synchronized (summedLeafDurationMs) {
+                            fields['summed_leaf_duration_ms'] = summedLeafDurationMs.value
+                            fields['leaf_test_count'] = leafCount.value
+                        }
+                    } else {
+                        synchronized (classLeafDurations) {
+                            fields['class_summed_leaf_duration_ms'] =
+                                classLeafDurations.remove(descriptor.className) ?: 0L
+                        }
+                    }
+                    emitTimelineEvent("${kind}_after", fields)
+                }
+
+                @Override
+                void beforeTest(TestDescriptor descriptor) {
+                    // Per-leaf timing is recorded from TestResult in afterTest.
+                }
+
+                @Override
+                void afterTest(TestDescriptor descriptor, TestResult result) {
+                    long leafDurationMs = Math.max(0L, result.endTime - result.startTime)
+                    synchronized (summedLeafDurationMs) {
+                        summedLeafDurationMs.value += leafDurationMs
+                        leafCount.value += 1
+                    }
+                    if (descriptor.className != null) {
+                        synchronized (classLeafDurations) {
+                            classLeafDurations[descriptor.className] =
+                                (classLeafDurations[descriptor.className] ?: 0L) + leafDurationMs
+                        }
+                    }
+                }
+            })
+
+            testTask.doFirst {
+                def workerArgs = testTask.allJvmArgs
+                def agentArgs = workerArgs.findAll { it.startsWith('-javaagent:') }
+                def workerRecord = [
+                    requested_agent: agentMode,
+                    jacoco_enabled: jacoco.enabled,
+                    max_heap_size: testTask.maxHeapSize,
+                    jvm_args: workerArgs,
+                    javaagent_args: agentArgs,
+                ]
+                diagnosticRoot.mkdirs()
+                new File(diagnosticRoot, 'worker-configuration.json').text =
+                    JsonOutput.prettyPrint(JsonOutput.toJson(workerRecord)) + '\n'
+                logger.lifecycle('DEADLINE_TEST_WORKER ' + JsonOutput.toJson(workerRecord))
+                emitTimelineEvent('test_task_do_first', [
+                    root_name: project.rootProject.name,
+                    test_task: testTask.path,
+                    worker_agent_count: agentArgs.size(),
+                    max_heap_size: testTask.maxHeapSize,
+                ])
+            }
+            testTask.doLast {
+                emitTimelineEvent('test_task_do_last', [
+                    root_name: project.rootProject.name,
+                    test_task: testTask.path,
+                ])
+            }
+        }
+    }
+}

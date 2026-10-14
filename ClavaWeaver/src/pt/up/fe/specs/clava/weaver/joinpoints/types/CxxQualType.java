@@ -13,34 +13,30 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AQualType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
-public class CxxQualType extends AQualType {
+public class CxxQualType<Self extends CxxQualType<Self>> extends AQualType<Self> {
 
-    private final QualType qualType;
-
-    public CxxQualType(QualType qualType) {
-        super(new CxxType(qualType));
-
-        this.qualType = qualType;
+    public CxxQualType(QualType qualType, CxxWeaver weaver) {
+        super(qualType, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return qualType;
+    public QualType getNodeImpl() {
+        return (QualType) super.getNodeImpl();
     }
 
     @Override
-    public String[] getQualifiersArrayImpl() {
-        return qualType.getQualifierStrings().toArray(new String[0]);
+    public String[] getQualifiersImpl() {
+        return this.getNodeImpl().getQualifierStrings().toArray(new String[0]);
     }
 
     @Override
-    public AType getUnqualifiedTypeImpl() {
-        return CxxJoinpoints.create(qualType.getUnqualifiedType(), AType.class);
+    public AType<?> getUnqualifiedTypeImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().getUnqualifiedType(), getWeaverEngine(), AType.class);
     }
 }

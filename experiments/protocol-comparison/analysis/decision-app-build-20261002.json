@@ -1,0 +1,64 @@
+{
+  "measurement_date": "2 October 2026",
+  "headline_policy": "uninstrumented",
+  "validation_policy": "syntax-only",
+  "primary_timing": "app-build",
+  "recommendation": "Performance-first choice for these combined workloads: ccache + eager FlatBuffers. It beats Protobuf in both suites. Keep Text if Clava-JS dominates or avoiding migration is more important than the Java gain.",
+  "cohort_note": "80 measured suite runs · four rotated rounds · 15,440 completed App calls. Original file groupings, shared contexts and generated-code reparses are preserved. Gradle setup does not contribute to the headline timings.",
+  "reasons": [
+    {
+      "title": "Cache reuse is the biggest gain",
+      "text": "With Text, warm caching reduces App-building time by 41.1% on Clava-JS and 37.4% on Java versus the same implementation with caching disabled. All four pairs improve in both suites."
+    },
+    {
+      "title": "FlatBuffers beats Protobuf on App building",
+      "text": "FlatBuffers takes 5.5–6.4% less time on Clava-JS and 4.1–6.5% less on Java, depending on cache state. It wins all 24 paired comparisons. This ranking excludes Gradle and test assertions."
+    },
+    {
+      "title": "Text versus FlatBuffers depends on workload",
+      "text": "When warm, FlatBuffers takes 7.8% longer than Text on Clava-JS but 9.5% less time on Java. Adding both suite workloads gives 21.84s versus Text’s 23.11s: a paired 5.6% improvement, in all four rounds. That combined ranking uses this test mix, not your production traffic."
+    }
+  ],
+  "discrepancy": [
+    {
+      "title": "App time is not test-command time",
+      "text": "The headline measures C/C++ inputs through the parsed, linked App. It excludes startup, syntax-only checks, assertions, code generation and display. Whole-command timings below are a different measurement; work outside App building can dilute or offset its gains."
+    },
+    {
+      "title": "Protobuf’s Java gain is inside App building",
+      "text": "With a warm cache, Protobuf is 2.8% faster than Text on Java App building, but 15.4% slower on Clava-JS. Both directions repeat in all four rounds. No forced GC or heap-utilisation logging runs inside these timers: this measured workload difference is not their artifact."
+    },
+    {
+      "title": "The binary choice no longer depends on Gradle",
+      "text": "FlatBuffers beats Protobuf in the timed App-building work for both suites and every cache state. A separate Gradle control measured about 0.40 seconds of Protobuf setup overhead; none of that time is included here. These data establish the implemented-pipeline ranking, not a causal claim about a particular decoder function."
+    }
+  ],
+  "tradeoffs": [
+    {
+      "title": "Text · least migration work",
+      "text": "Keep the existing reader/writer without another schema toolchain. Hand-maintained record order and conversion still need care. It has the best Clava-JS App-building results in every cache state."
+    },
+    {
+      "title": "FlatBuffers · performance-first binary choice",
+      "text": "Generated accessors and offset-based builders require more care than ordinary message objects. This implementation eagerly builds Clava AST objects; it is not a zero-copy AST. It wins Java and beats Protobuf on both suites."
+    },
+    {
+      "title": "Protobuf · easier message API",
+      "text": "Generated Java messages and builders offer a familiar typed API and a widely visible ecosystem. That coding-model advantage is real, but Protobuf loses to FlatBuffers on all measured App-building comparisons here."
+    },
+    {
+      "title": "ccache · keep it independently of format",
+      "text": "Its benefit requires repeated inputs. Cold runs include cache miss/write costs; warm hits were verified rather than assumed. Keep dependency invalidation and temporary-path normalization for generated code."
+    }
+  ],
+  "method": "Four rotated rounds, 80 serial measured suite invocations, using the frozen matched-fast stages. Java: 116 tests pass and 216 completed App calls per invocation. Clava-JS: 158 pass, six skip, 170 completed App calls; 130 syntax-only calls execute normally but are excluded from App timers. An isolated parser-class overlay starts the timer at entry to the three-argument ParallelCodeParser.parse method and stops after final App transformations, before heap logging and display. Parser-instance/context construction before entry is excluded. No forced GC or coverage agent; natural GC during parsing counts. Java worker heap is 512 MiB. Original fixtures, options, file groupings, context sharing and generated reparses are preserved. Each plotted repeat sums the completed-App intervals; it is not process wall time. The suites execute parser calls sequentially, retaining native parallelism inside each call. Cold starts empty; each warm invocation restores its separately seeded stage/suite snapshot. Bypass makes no ccache calls. Payload compression remains the implemented policy: native Zstd for cached Text/Protobuf, ccache compression for FlatBuffers, uncompressed bypass. Native binaries are Release -O3 on LLVM 18.1.8. Source hashes, test identities, cache counters, overlays, runtime JARs and native binaries were checked. Percentages are medians of paired same-round percentages. Preflight and include-audit timings are not pooled.",
+  "limitations": "These are implemented-branch comparisons, not a same-revision three-format build or a universal format ranking. The before-cache reference is 70c30bdb8 with the common harness and fast syntax-validation backports. It reads a live text stream; the cache implementations consume completed output even in bypass. Therefore its gap versus cached Text is not solely ccache-wrapper overhead. Four rounds on one host show descriptive spread, not confidence intervals. Workload-specific Text/FlatBuffers differences do not identify a decoder-level cause. This is performance evidence, not release-readiness certification. The separately dated whole-suite command matrix and Gradle/syntax controls remain supplementary evidence with their own timing boundaries.",
+  "evidence": [
+    {"title": "App-building measurements and reproducibility notes", "url": "https://github.com/specs-feup/clava/blob/ast-protobuf/experiments/protocol-comparison/analysis/decision-app-build-20261002.md"},
+    {"title": "App-building harness and workload contract", "url": "https://github.com/specs-feup/clava/blob/ast-protobuf/experiments/protocol-comparison/app-build/README.md"},
+    {"title": "Supplementary whole-suite command matrix", "url": "https://github.com/specs-feup/clava/blob/ast-protobuf/experiments/protocol-comparison/analysis/decision-matched-fast-20261002.md"},
+    {"title": "Separately measured syntax-validation and Gradle controls", "url": "https://github.com/specs-feup/clava/blob/ast-protobuf/experiments/protocol-comparison/analysis/decision-evidence-20261001.md"},
+    {"title": "Protobuf generated Java message API", "url": "https://protobuf.dev/getting-started/javatutorial/"},
+    {"title": "FlatBuffers generated accessors and offset-based construction", "url": "https://flatbuffers.dev/tutorial/"}
+  ]
+}

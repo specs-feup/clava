@@ -1,0 +1,56 @@
+diff --git a/src/tool.cpp b/src/tool.cpp
+index 0e5f115..310fa4b 100644
+--- a/src/tool.cpp
++++ b/src/tool.cpp
+@@ -1,4 +1,5 @@
+ #include <clang/Tooling/CommonOptionsParser.h>
++#include <clang/Frontend/FrontendActions.h>
+ #include <clang/Tooling/Tooling.h>
+ 
+ #include "Clang/ClangAst.h"
+@@ -11,6 +12,10 @@ static llvm::cl::OptionCategory MyToolCategory("my-tool options");
+ static llvm::cl::opt<int> UserIdOption("id", llvm::cl::cat(MyToolCategory));
+ static llvm::cl::opt<int> UserSystemHeaderThresholdOption(
+         "system-header-threshold", llvm::cl::cat(MyToolCategory));
++static llvm::cl::opt<bool> SyntaxCheckOnlyOption(
++        "syntax-check-only",
++        llvm::cl::desc("Validate syntax without producing an AST dump"),
++        llvm::cl::cat(MyToolCategory));
+ 
+ 
+ int main(int argc, const char *argv[]) {
+@@ -43,13 +48,29 @@ int main(int argc, const char *argv[]) {
+   clang::tooling::ClangTool Tool((*OptionsParser).getCompilations(),
+                                  (*OptionsParser).getSourcePathList());
+ 
+-  DumpResources::init(UserIdOption.getValue(),
+-                      UserSystemHeaderThresholdOption.getValue());
++  if (SyntaxCheckOnlyOption && (*OptionsParser).getSourcePathList().size() != 1) {
++    llvm::errs() << "-syntax-check-only requires exactly one source file\n";
++    return 1;
++  }
++
++  if (!SyntaxCheckOnlyOption) {
++    DumpResources::init(UserIdOption.getValue(),
++                        UserSystemHeaderThresholdOption.getValue());
++  }
+ 
+-  int returnValue =
+-      Tool.run(clang::tooling::newFrontendActionFactory<DumpAstAction>().get());
++  int returnValue;
++  if (SyntaxCheckOnlyOption) {
++    auto ActionFactory =
++        clang::tooling::newFrontendActionFactory<clang::SyntaxOnlyAction>();
++    returnValue = Tool.run(ActionFactory.get());
++  } else {
++    returnValue =
++        Tool.run(clang::tooling::newFrontendActionFactory<DumpAstAction>().get());
++  }
+ 
+-  DumpResources::finish();
++  if (!SyntaxCheckOnlyOption) {
++    DumpResources::finish();
++  }
+ 
+   return returnValue;
+ }

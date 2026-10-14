@@ -13,36 +13,32 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVariableArrayType;
 
-public class CxxVariableArrayType extends AVariableArrayType {
+public class CxxVariableArrayType<Self extends CxxVariableArrayType<Self>> extends AVariableArrayType<Self> {
 
-    private final VariableArrayType arrayType;
-
-    public CxxVariableArrayType(VariableArrayType arrayType) {
-        super(new CxxArrayType(arrayType));
-
-        this.arrayType = arrayType;
+    public CxxVariableArrayType(VariableArrayType arrayType, CxxWeaver weaver) {
+        super(arrayType, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return arrayType;
+    public VariableArrayType getNodeImpl() {
+        return (VariableArrayType) super.getNodeImpl();
     }
 
     @Override
-    public AExpression getSizeExprImpl() {
-        return (AExpression) CxxJoinpoints.create(arrayType.get(VariableArrayType.SIZE_EXPR));
+    public AExpression<?> getSizeExprImpl() {
+        return CxxJoinpoints.create(this.getNodeImpl().get(VariableArrayType.SIZE_EXPR), getWeaverEngine(), AExpression.class);
     }
 
     @Override
-    public void setSizeExprImpl(AExpression sizeExpr) {
-        arrayType.set(VariableArrayType.SIZE_EXPR, (Expr) sizeExpr.getNode());
+    public void setSizeExprImpl(AExpression<?> sizeExpr) {
+        this.getNodeImpl().set(VariableArrayType.SIZE_EXPR, (Expr) sizeExpr.getNodeImpl());
     }
 
 }

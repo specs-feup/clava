@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clava Scripting"
+  short_description: "Write and edit Clava/Lara scripts"
+  default_prompt: "Use $clava-scripting to draft a Clava TypeScript script that queries joinpoints and applies a transformation."

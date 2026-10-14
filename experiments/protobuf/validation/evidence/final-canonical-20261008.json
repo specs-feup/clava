@@ -1,0 +1,145 @@
+{
+  "date": "2026-10-08",
+  "purpose": "Final canonical consumer validation using the existing local Protobuf producer",
+  "source_revisions": {
+    "clava_parser_check": "a0d13c3fc67f27dc634f5282546943b259a190e8",
+    "clava_javascript_suite": "d7eaf1e1b42d79f8e0390b8c237de0f53eb07367",
+    "lara_javascript_suite": "73c5b955ab5484a3fd3199f9e2da7580758c5683",
+    "specs_java_libs": "76fe6b1586bdc6bdb7f6501f30ce238891757b1b",
+    "clang_ast_parser_unchanged_from_check_to_final_clava": true
+  },
+  "runtime": {
+    "gradle": "9.6.1",
+    "java": "26.0.1",
+    "node": "26.7.0",
+    "npm": "11.19.0",
+    "vitest": "4.1.11"
+  },
+  "preserved_inputs": {
+    "producer_tool_sha256": "876522bb24b04574e68ec2f789e9a6f088346c26ac82d49421e161d56b550ef1",
+    "user_release_selector_sha256_before_and_after": "f12c778b73c3fe0efcf2d5cd02c114953d8a03b64a8fc78b6ee32f84c5b99a1d",
+    "llvm18_openmp_header_sha256": "9ef85ad278e06954e97326ca6c515aa91f86f05cd54608a531a136a571174bd6",
+    "lara_engine_worktree_patch_sha256_before_and_after": "276ead7d821b322df07b70c0b7b1e85383fb30754aaa548522ec6b10c34de477"
+  },
+  "checks": {
+    "clang_ast_parser": {
+      "command": "gradle --no-daemon --console=plain clean check",
+      "result": "passed",
+      "junit": {
+        "total": 250,
+        "passed": 247,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 3
+      },
+      "release_only_skips": [
+        "pt.up.fe.specs.clang.ClangResourcesTest#sameJvmInstancesReuseReleaseFilesAndPrepareIncludesOnlyForBuiltinLibc()",
+        "pt.up.fe.specs.clang.ClangResourcesTest#releasedDumperAutoLibcProbeProducesValidProtobuf()",
+        "pt.up.fe.specs.clang.ClangResourcesTest#releaseResourcesCanBeInitializedBySeparateJvms()"
+      ],
+      "additional_checks": {
+        "testProtoReleaseResolver": "10 passed",
+        "verifyProtoBindings": "passed",
+        "jacocoTestCoverageVerification": "passed"
+      }
+    },
+    "clava_weaver_install_dist": {
+      "result": "passed"
+    },
+    "clava_javascript": {
+      "command": "npm run test",
+      "result": "passed",
+      "vitest": {
+        "files_passed": 9,
+        "files_failed": 0,
+        "tests_total": 164,
+        "tests_passed": 162,
+        "tests_failed": 0,
+        "tests_skipped": 2
+      }
+    },
+    "lara_javascript": {
+      "command": "npm run test",
+      "result": "passed",
+      "vitest": {
+        "files_passed": 12,
+        "files_failed": 0,
+        "tests_total": 55,
+        "tests_passed": 54,
+        "tests_failed": 0,
+        "tests_expected_fail": 1
+      }
+    },
+    "package_runtime_smokes": {
+      "clava": "passed: clean emitted build with no generated test copies",
+      "lara": "passed: packed shared Vitest environment imported and a test booted"
+    }
+  },
+  "pre_fix_runs": [
+    {
+      "suite": "clava_javascript_package_discovery",
+      "result": "failed before test discovery",
+      "summary": "Vitest could not load the emitted shared environment; no tests ran.",
+      "raw_log": "clava-js-test-first.log",
+      "raw_log_sha256": "0b9da9cc6ab408a65940de47bb7d4eadf4b246b9605548e35e208cdc7f083a89"
+    },
+    {
+      "suite": "clava_javascript_module_identity",
+      "result": "failed before package-export correction",
+      "tests": {
+        "total": 164,
+        "passed": 160,
+        "failed": 2,
+        "skipped": 2
+      },
+      "failing_tests": [
+        "Issue168",
+        "Issue-AIQ-1"
+      ],
+      "summary": "Both tests expected loop-decomposition/for-loop output. Both passed in the October 7 baseline and in the final source suite after tests used the emitted package exports.",
+      "raw_log": "clava-js-final-test.log",
+      "raw_log_sha256": "1aeddc3085af3f28982c1b0b81e812f7725a78a6937f8166f9ff839328ee5599"
+    },
+    {
+      "suite": "lara_javascript_stale_emission_attempt",
+      "result": "not a valid source-suite result",
+      "tests": {
+        "total": 110,
+        "passed": 87,
+        "unexpected_failures": 21,
+        "expected_failures": 2
+      },
+      "summary": "The initial run discovered stale emitted test copies. The final clean package build excludes tests from emission and the source suite ran once.",
+      "raw_log": "lara-js-test.log",
+      "raw_log_sha256": "3ad8d240a9dd90a28a5e1e35769954b355bfa0eb2d691e1b59aecfbcce68b35e"
+    }
+  ],
+  "prior_clava_baseline": {
+    "date": "2026-10-07",
+    "source_revision": "8d170561330b562a846e22b89e101b2962db6640",
+    "tests": {
+      "total": 164,
+      "passed": 162,
+      "failed": 0,
+      "pending": 2
+    },
+    "issue168": "passed",
+    "issue_aiq_1": "passed",
+    "results_sha256": "c69f48e72f834bbe09a7e945a0064349ea63b6dac1da5ff1b98aeac7810e7314"
+  },
+  "raw_archive": {
+    "archive_id": "final-canonical-20261008",
+    "sha256_manifest": "02cd8841c1a75bb0208d64ea37721e110030dcec3e7609de6ef6a1aac72e4013",
+    "junit_xml_reports": {
+      "count": 42,
+      "set_sha256": "232818b8a28876e114844931b20119623a6d71e8d75a940facccd6844f335910"
+    },
+    "final_logs": {
+      "clangastparser_check_sha256": "f14b391e4aeee7635f7de5823c31c62a227580d5019256860122f10be2a40761",
+      "clavaweaver_install_dist_sha256": "cbbe1c8fdaf366180da44d986e6baebbb336735ebe6bcbfbd8f8865f13e966a1",
+      "clava_javascript_sha256": "551b2a0a9071d432e5ef8b749f7b670bf96ff8b31de16d6e6b6c6d8e827201a9",
+      "lara_javascript_sha256": "7e5c86b199bdb132b493288391b3dfeb28e934010da78b6a42eb5ae1335d20ff",
+      "jacoco_xml_sha256": "cd76a0df525b9b17c822adeb1fa1bf4c92d3928ae286ecf2096dafd564561acf"
+    }
+  }
+}

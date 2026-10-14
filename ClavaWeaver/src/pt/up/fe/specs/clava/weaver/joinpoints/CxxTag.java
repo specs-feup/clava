@@ -13,38 +13,37 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
+import org.lara.interpreter.weaver.interf.enums.InsertPosition;
+
 import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.Insert;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinpoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
 
-public class CxxTag extends ATag {
+public class CxxTag<Self extends CxxTag<Self>> extends ATag<Self> {
 
-    private final LaraTagPragma tag;
-
-    public CxxTag(LaraTagPragma reference) {
-        super(new CxxPragma(reference));
-        tag = reference;
+    public CxxTag(LaraTagPragma reference, CxxWeaver weaver) {
+        super(reference, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return tag;
+    public LaraTagPragma getNodeImpl() {
+        return (LaraTagPragma) super.getNodeImpl();
     }
 
     @Override
     public String getIdImpl() {
-        return tag.getTagId();
+        return this.getNodeImpl().getTagId();
     }
 
     @Override
-    public AJoinPoint[] insertImpl(String position, String code) {
+    public AJoinpoint<?>[] insertImpl(InsertPosition position, String code) {
 
-        Insert insert = Insert.getHelper().fromValue(position);
+        Insert insert = Insert.getHelper().fromValue(position.getDisplay());
         if (insert == Insert.AFTER) {
 
-            return (AJoinPoint[]) getTargetImpl().insertImpl(position, code);
+            return (AJoinpoint<?>[]) getTargetImpl().insertImpl(position, code);
         } else {
             return super.insertImpl(position, code);
         }

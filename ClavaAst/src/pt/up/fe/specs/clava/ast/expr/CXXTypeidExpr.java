@@ -37,7 +37,7 @@ public class CXXTypeidExpr extends Expr {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Boolean> IS_TYPE_OPERAND = KeyFactory.bool("typeOperand");
+    public final static DataKey<Boolean> IS_TYPE_OPERAND = KeyFactory.bool("isTypeOperand");
 
     public final static DataKey<ClavaNode> OPERAND = KeyFactory.object("operand", ClavaNode.class);
 

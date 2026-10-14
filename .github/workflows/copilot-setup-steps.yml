@@ -7,6 +7,7 @@ name: "Copilot Setup Steps"
 on:
   workflow_dispatch:
   push:
+    branches: [master, staging]
     paths:
       - .github/workflows/copilot-setup-steps.yml
   pull_request:
@@ -14,7 +15,7 @@ on:
       - .github/workflows/copilot-setup-steps.yml
 
 env:
-  CLAVA_BRANCH: ${{ github.head_ref || github.ref_name }}
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   # The job MUST be called `copilot-setup-steps`
@@ -41,69 +42,45 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: current
-          dependency-graph: generate-and-submit
 
       - name: Checkout clava
         uses: actions/checkout@v6
         with:
           path: clava
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Determine repository refs
-        id: repo-refs
-        shell: bash
-        env:
-          BRANCH_NAME: ${{ env.CLAVA_BRANCH }}
-        run: |
-          set -euo pipefail
-
-          determine_ref() {
-            local prefix=$1
-            local repo=$2
-            local url="https://github.com/${repo}.git"
-
-            local default_branch
-            default_branch=$(git ls-remote --symref "$url" HEAD | awk '/^ref:/ {print $2}' | sed 's@refs/heads/@@')
-            echo "${prefix}_default=${default_branch}" >> "$GITHUB_OUTPUT"
-            echo "Default branch for ${repo} is '${default_branch}'"
-
-            if git ls-remote --heads "$url" "refs/heads/${BRANCH_NAME}" >/dev/null; then
-              echo "${prefix}_match=true" >> "$GITHUB_OUTPUT"
-              echo "${prefix}_ref=${BRANCH_NAME}" >> "$GITHUB_OUTPUT"
-              echo "Branch '${BRANCH_NAME}' exists in ${repo}"
-            else
-              echo "${prefix}_match=false" >> "$GITHUB_OUTPUT"
-              echo "${prefix}_ref=${default_branch}" >> "$GITHUB_OUTPUT"
-              echo "Branch '${BRANCH_NAME}' not found in ${repo}. Falling back to '${default_branch}'."
-            fi
-          }
-
-          determine_ref "lara" "specs-feup/lara-framework"
-          determine_ref "specs" "specs-feup/specs-java-libs"
+        uses: specs-feup/branch-resolver@v1
+        with:
+          source-directory: clava
+          dependencies: |
+            lara specs-feup/lara-framework
+            specs specs-feup/specs-java-libs
 
       - name: Echo checks
         run: |
-          echo "Clava branch: ${{ env.CLAVA_BRANCH }}"
-          echo "Matching branch found (lara-framework): ${{ steps.repo-refs.outputs.lara_match }}"
-          echo "Matching branch found (specs-java-libs): ${{ steps.repo-refs.outputs.specs_match }}"
-          echo "Lara framework ref: ${{ steps.repo-refs.outputs.lara_ref }}"
-          echo "Specs-java-libs ref: ${{ steps.repo-refs.outputs.specs_ref }}"
-          echo "Lara framework default fallback: ${{ steps.repo-refs.outputs.lara_default }}"
-          echo "Specs-java-libs default fallback: ${{ steps.repo-refs.outputs.specs_default }}"
-          echo "Pull request base_ref (if any): ${{ github.base_ref }}"
+          echo "Weaver branch: ${{ env.BRANCH_NAME }}"
+          echo "Lara framework branch: ${{ env.lara_branch }}"
+          echo "Lara framework commit: ${{ env.lara_ref }}"
+          echo "Lara framework default: ${{ env.lara_default }}"
+          echo "Specs-java-libs branch: ${{ env.specs_branch }}"
+          echo "Specs-java-libs commit: ${{ env.specs_ref }}"
+          echo "Specs-java-libs default: ${{ env.specs_default }}"
 
       - name: Checkout lara-framework
         uses: actions/checkout@v6
         with:
           repository: specs-feup/lara-framework
           path: lara-framework
-          ref: ${{ steps.repo-refs.outputs.lara_ref }}
+          ref: ${{ env.lara_ref }}
 
       - name: Checkout specs-java-libs
         uses: actions/checkout@v6
         with:
           repository: specs-feup/specs-java-libs
           path: specs-java-libs
-          ref: ${{ steps.repo-refs.outputs.specs_ref }}
+          ref: ${{ env.specs_ref }}
 
       - name: Build Weaver
         run: |

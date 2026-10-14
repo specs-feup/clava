@@ -13,24 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.cilk;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.cilk.CilkSpawn;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkSpawn;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxCall;
 
-public class CxxCilkSpawn extends ACilkSpawn {
+public class CxxCilkSpawn<Self extends CxxCilkSpawn<Self>> extends ACilkSpawn<Self> {
 
-    private final CilkSpawn spawnCall;
-
-    public CxxCilkSpawn(CilkSpawn spawnCall) {
-        super(new CxxCall(spawnCall));
-
-        this.spawnCall = spawnCall;
+    public CxxCilkSpawn(CilkSpawn spawnCall, CxxWeaver weaver) {
+        super(spawnCall, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return spawnCall;
+    public CilkSpawn getNodeImpl() {
+        return (CilkSpawn) super.getNodeImpl();
     }
 
 }

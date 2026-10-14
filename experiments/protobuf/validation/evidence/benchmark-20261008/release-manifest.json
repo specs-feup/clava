@@ -1,0 +1,141 @@
+{
+  "assets": [
+    {
+      "arch": "any",
+      "filename": "clang-dumper-ast-wire.proto",
+      "kind": "protocol",
+      "llvm_major": 18,
+      "platform": "any",
+      "sha256": "723b6d44d97399a81ffd7d97759b45f79ca4eee2683f867f30d0c08facd4c44a"
+    },
+    {
+      "arch": "any",
+      "filename": "clang-dumper-ast-wire.pb",
+      "kind": "protocol",
+      "llvm_major": 18,
+      "platform": "any",
+      "sha256": "9b54021feb180f0e031d084ca1d463d3df00a80862476940e2cc73917f584238"
+    },
+    {
+      "arch": "x64",
+      "filename": "tool",
+      "kind": "tool",
+      "llvm_major": 18,
+      "platform": "linux",
+      "sha256": "876522bb24b04574e68ec2f789e9a6f088346c26ac82d49421e161d56b550ef1"
+    },
+    {
+      "arch": "x64",
+      "filename": "libplugin.so",
+      "kind": "plugin",
+      "llvm_major": 18,
+      "platform": "linux",
+      "sha256": "d6d438694083f80d8cab4568f3254d963d5a837093372d10a12fbea626ce786e"
+    }
+  ],
+  "compatibility": {
+    "minimum_java_protoc_version": "4.28.3",
+    "minimum_java_runtime_version": "4.28.3"
+  },
+  "generic_payload_contracts": {
+    "attributes": {
+      "class_name_pattern": "<closed AttributeKind enum value>Attr",
+      "payload": "AttributeData"
+    },
+    "openmp": {
+      "class_names": [
+        "OMPAtomicDirective",
+        "OMPBarrierDirective",
+        "OMPCancelDirective",
+        "OMPCancellationPointDirective",
+        "OMPCanonicalLoop",
+        "OMPCriticalDirective",
+        "OMPDepobjDirective",
+        "OMPDispatchDirective",
+        "OMPDistributeDirective",
+        "OMPDistributeParallelForDirective",
+        "OMPDistributeParallelForSimdDirective",
+        "OMPDistributeSimdDirective",
+        "OMPErrorDirective",
+        "OMPFlushDirective",
+        "OMPForDirective",
+        "OMPForSimdDirective",
+        "OMPGenericLoopDirective",
+        "OMPInteropDirective",
+        "OMPMaskedDirective",
+        "OMPMaskedTaskLoopDirective",
+        "OMPMaskedTaskLoopSimdDirective",
+        "OMPMasterDirective",
+        "OMPMasterTaskLoopDirective",
+        "OMPMasterTaskLoopSimdDirective",
+        "OMPMetaDirective",
+        "OMPOrderedDirective",
+        "OMPParallelDirective",
+        "OMPParallelForDirective",
+        "OMPParallelForSimdDirective",
+        "OMPParallelGenericLoopDirective",
+        "OMPParallelMaskedDirective",
+        "OMPParallelMaskedTaskLoopDirective",
+        "OMPParallelMaskedTaskLoopSimdDirective",
+        "OMPParallelMasterDirective",
+        "OMPParallelMasterTaskLoopDirective",
+        "OMPParallelMasterTaskLoopSimdDirective",
+        "OMPParallelSectionsDirective",
+        "OMPScanDirective",
+        "OMPScopeDirective",
+        "OMPSectionDirective",
+        "OMPSectionsDirective",
+        "OMPSimdDirective",
+        "OMPSingleDirective",
+        "OMPTargetDataDirective",
+        "OMPTargetDirective",
+        "OMPTargetEnterDataDirective",
+        "OMPTargetExitDataDirective",
+        "OMPTargetParallelDirective",
+        "OMPTargetParallelForDirective",
+        "OMPTargetParallelForSimdDirective",
+        "OMPTargetParallelGenericLoopDirective",
+        "OMPTargetSimdDirective",
+        "OMPTargetTeamsDirective",
+        "OMPTargetTeamsDistributeDirective",
+        "OMPTargetTeamsDistributeParallelForDirective",
+        "OMPTargetTeamsDistributeParallelForSimdDirective",
+        "OMPTargetTeamsDistributeSimdDirective",
+        "OMPTargetTeamsGenericLoopDirective",
+        "OMPTargetUpdateDirective",
+        "OMPTaskDirective",
+        "OMPTaskLoopDirective",
+        "OMPTaskLoopSimdDirective",
+        "OMPTaskgroupDirective",
+        "OMPTaskwaitDirective",
+        "OMPTaskyieldDirective",
+        "OMPTeamsDirective",
+        "OMPTeamsDistributeDirective",
+        "OMPTeamsDistributeParallelForDirective",
+        "OMPTeamsDistributeParallelForSimdDirective",
+        "OMPTeamsDistributeSimdDirective",
+        "OMPTeamsGenericLoopDirective",
+        "OMPTileDirective",
+        "OMPUnrollDirective"
+      ],
+      "payload": "StmtData"
+    }
+  },
+  "protocol": {
+    "descriptor_sha256": "9b54021feb180f0e031d084ca1d463d3df00a80862476940e2cc73917f584238",
+    "framing": "CLAVAPB1 plus protobuf varint-delimited Envelope(Chunk)",
+    "id": "clava-ast-wire",
+    "llvm_major": 18,
+    "major": 1,
+    "max_record_bytes": 67108864,
+    "minor": 1,
+    "producer_version": "clang-dumper-18",
+    "schema_sha256": "723b6d44d97399a81ffd7d97759b45f79ca4eee2683f867f30d0c08facd4c44a",
+    "semantic_contract": "clava-ast-wire-v1"
+  },
+  "schema_version": 1,
+  "toolchain": {
+    "protobuf_version": "28.3",
+    "protoc_version": "28.3"
+  }
+}

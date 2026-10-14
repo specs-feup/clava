@@ -1,0 +1,60 @@
+{
+  "baseline_results_sha256": "3926f010b7b27eb0c02607e12dcbffedcc86fda62ec1b12d3e26a6242ae043eb",
+  "baseline_source": "accepted Protobuf-only capture benchmark-20261008-rc8",
+  "js_file_orders_sha256": "c15c573b534ad291ebc94fcebbd0568c56def4cc78760ed951fa0da1dbfc335b",
+  "suites": {
+    "clava-js": {
+      "app_calls": 170,
+      "context_pattern_sha256": "01e1de4f94c51f3c20e38224a2a867b1493336a31e8ab749c181a365bf532272",
+      "source_count": 191,
+      "syntax_only_calls": 130,
+      "test_counts": {
+        "failed_tests": 0,
+        "failure_names": [],
+        "passed_tests": 158,
+        "skipped_tests": 6,
+        "total_tests": 164
+      },
+      "test_identity_sha256": "a8c373bc492b9e4391a399a2ff332abfc2fb54645e3e60dab44095fbd7ff0973"
+    },
+    "java": {
+      "app_calls": 216,
+      "context_pattern_sha256": "d2e30c3370bd610474b6c25c38565763df571afdaf2ba736ae507a15632309dd",
+      "source_count": 247,
+      "syntax_only_calls": 0,
+      "test_counts": {
+        "failed_tests": 0,
+        "failure_names": [],
+        "junit_aggregate_s": 28.862000000000002,
+        "passed_tests": 116,
+        "skipped_tests": 0,
+        "total_tests": 116
+      },
+      "test_identity_sha256": "92c0eba1096f71eadbe8ff808eb6243d3745f45e06b1c13a65e789cd4a7263d5"
+    }
+  },
+  "java_selected_test_sources": {
+    "pt/up/fe/specs/clang/parser/scripts/ConcreteClassesScript.java": "d2854e33e91f983d1a230c9165976ebc7a4c875812df76fcf1f64e377ccb64a6",
+    "pt/up/fe/specs/clang/parser/tests/CBenchTest.java": "a04a6001853c988d81e233510a8a84f4613c7fc120f0f800e4aead6508916af9",
+    "pt/up/fe/specs/clang/parser/tests/CTest.java": "14639c1a05e0799a3d733eb8452f49358d047b725bcaaa2659e5aa0cfa989a96",
+    "pt/up/fe/specs/clang/parser/tests/CxxBenchTest.java": "bfbb4dee2787225ae4512434463176ef43e2228ce68e171f7c70cb18f857739e",
+    "pt/up/fe/specs/clang/parser/tests/CxxIssuesTest.java": "59d700fbde5ba8aa412f43209666c0a641026c10d4cd5c3daf140272fb1d0ba5",
+    "pt/up/fe/specs/clang/parser/tests/CxxTest.java": "f0761afae5ec82fde4242bffee5299e3b4a70948150f4c8b0f017aa976568785",
+    "pt/up/fe/specs/clang/parser/tests/InitializationStyleTest.java": "0a4569cec0572805c834e3ae2b6defaab6a2d62b2e433f5970cb4ce752e2e8a4",
+    "pt/up/fe/specs/clang/parser/tests/SourceLocationsTest.java": "cb522353b83bdd629c2069647044c5ed3f1dd1bdf584f8308c81bec563222a5b",
+    "pt/up/fe/specs/clang/parser/tests/UnaryTransformTypeTest.java": "a72a6da42e8be2c325888748fcf3b907e2e539745aa0af8a1c04f7d685d1c81f",
+    "pt/up/fe/specs/clang/parsers/ClavaNodesTest.java": "9113eacb3c1daeb5849e93b7658920744110c7e942750d198e87da38c39e8b13"
+  },
+  "java_fixture_manifest_sha256": "2f68319d1eb498da5b17d8c107cbc47696d7d9e37c04fcb8dab621d52e2ad5b1",
+  "javascript_test_sources": {
+    "api/Issues.test.ts": "16f821575eee5755454ae3b5b24d76205a525fdc95569fc6babc6aa758eae9a6",
+    "api/LegacyIntegrationTests - C.test.ts": "e00c6c805129f58d11589df8622a4f16dd89b898360e26e81d81bd1a83b5dab3",
+    "api/LegacyIntegrationTests - CXX.test.ts": "30d43ecd12d9ce790a5e57e8cbae456407d4358c86b6e336570da146e26f1735",
+    "api/LegacyIntegrationTests - Issues.test.ts": "339dba95ad22a444a573227aa042adbdfc13e2625e946e999fa2b95bf20dba26",
+    "api/Query.test.ts": "b2c76ac20d61e95cf93af56dfe7450a70f73adab166616d8614331aee160f24b",
+    "api/clava/ClavaJoinPoints.test.ts": "a047eb52d81fe5ad3bd82f7b801a37b22ebdef34446ffff5885368a3b5aa69b3",
+    "api/clava/analysis/AnalyserResult.test.ts": "2c536374c90c17d48542c17282f4abd2c82031589c2372bf5a75b044ab567e66",
+    "code/ClangPlugin/ClangPlugin.test.ts": "7c17fac48c1c9fd0e7f65bc10faf4e701b7be21008eff8bcffa3eb8d8db970fc",
+    "code/Sandbox.test.ts": "0d60880d1a1a00dc84979f61e86336c97daa2ffddadb47b2cb45159c47daae20"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "measurement_date": "2 October 2026",
+  "headline_policy": "uninstrumented",
+  "validation_policy": "syntax-only",
+  "recommendation": "Keep ccache and Text as the default. If moving to a binary format, choose eager FlatBuffers over Protobuf.",
+  "cohort_note": "80 fresh suite runs: four rounds, both suites, every cache state. All stages use syntax-only validation. The before-cache reference is 70c30bdb8 with that narrow change backported, plus the common test-harness corrections; it is not the untouched historical binary.",
+  "reasons": [
+    {
+      "title": "Caching pays off on repeated inputs",
+      "text": "With Text, warm caching cuts whole-command time by 10.3% on Clava-JS and 29.7% on Java versus bypass. Every pair improves. Cold misses cost 1.4% and 2.5%, respectively, on the same implementation."
+    },
+    {
+      "title": "No across-the-board reason to migrate Text",
+      "text": "Text wins warm Clava-JS: Protobuf is 3.1% slower and FlatBuffers 3.8% slower, in all four pairs. FlatBuffers wins Java: 6.0% faster than Text when warm. Keep the simpler existing option unless that Java improvement justifies migration."
+    },
+    {
+      "title": "FlatBuffers is the performance-first binary choice",
+      "text": "Against Protobuf, FlatBuffers is 4.4–6.2% faster on Java across cache states, winning all 12 pairs. Neither binary consistently wins Clava-JS: each cache state contains wins in both directions. That is no evidence of a repeatable Protobuf integration-suite advantage."
+    }
+  ],
+  "discrepancy": [
+    {
+      "title": "Syntax checking no longer favors one format",
+      "text": "Checking whether generated C/C++ compiles now skips AST serialization in every implementation. A separate four-pair Text control established that skipping discarded AST output saved about 1.03 seconds per JS suite command. In this fresh, uniformly fast cohort, Protobuf does not beat Text on warm JS."
+    },
+    {
+      "title": "A Java command measures more than its test bodies",
+      "text": "On warm Java, Protobuf's test bodies beat Text by 0.33–0.67 seconds in every pair. Work outside those timers increases by 0.37–0.78 seconds, cancelling that gain: whole-command changes straddle zero. A separate controlled Gradle experiment isolated about 0.40 seconds of Protobuf setup cost to its plugin/generation integration—not AST parsing."
+    },
+    {
+      "title": "What the evidence settles—and what it does not",
+      "text": "The claimed Protobuf JS gain alongside a Java whole-suite regression does not survive this matched rerun. FlatBuffers' Java advantage is present inside test bodies as well as the whole command. Text versus FlatBuffers still has a workload-specific trade-off; these timings do not assign that trade-off to a particular decoder or linking function."
+    }
+  ],
+  "tradeoffs": [
+    {
+      "title": "Text · lowest migration burden",
+      "text": "Keep the existing reader/writer and avoid another schema toolchain. Hand-maintained record order and conversion remain a maintenance obligation. Best warm JS result here; not best Java."
+    },
+    {
+      "title": "FlatBuffers · fastest tested binary option",
+      "text": "Generated accessors and offset-based builders need more care than ordinary message objects. This experiment eagerly builds Clava AST objects: it is not a zero-copy Clava AST. Choose it when the measured Java gain matters enough."
+    },
+    {
+      "title": "Protobuf · attractive coding model, not a speed win",
+      "text": "Generated Java messages/builders provide a familiar typed API. Its public repository has about 72k stars versus FlatBuffers' 27k (2 October): a visibility proxy, not proof of usage or maintenance quality. That ecosystem advantage does not overturn these performance results."
+    },
+    {
+      "title": "ccache · independent of the wire-format decision",
+      "text": "Keep dependency invalidation and temporary-path normalization for generated code. Benefit depends on repeated inputs; a cold first run is slightly slower. Cache hits were verified, not assumed from the mode name."
+    }
+  ],
+  "method": "Four rotated rounds per stage/mode/suite, preceded by ten untimed preflight commands per suite. Original grouped workloads and cross-translation-unit linking retained; no added fixture relocation, Java filesystem fixtures parsed in place, generated-code reparses retained. Java: 116/116 pass, 512 MiB worker, verified no coverage agent; Clava-JS: 158 pass, six skip. Heap diagnostics are disabled; no explicit-GC flags or profiling instrumentation were added. All producer binaries were Release -O3 on LLVM 18.1.8. Cached Text/Protobuf payloads use native Zstd without additional ccache compression; FlatBuffers uses ccache compression of raw buffers. Bypass payloads are uncompressed. Runtime JARs, producer binaries, source revisions, fixture fingerprints and test identities were checked. Cold starts empty; intra-command JS reuse produces 16 hits/150 misses. Warm yields JS 166 hits/zero misses and Java 207 hits/one miss. Bypass invokes no ccache. Percentages are medians of same-round percentage changes, not ratios of medians. The headline CSV contains exactly the 80 accepted fresh timings.",
+  "limitations": "These compare implemented branches, not wire formats alone or a same-revision three-format build. Before-cache versus Exploration includes implementation differences beyond executing ccache; the Java bypass stage gap must not be called ccache-wrapper overhead, since bypass makes zero cache calls. Four rounds on one machine do not prove equivalence or predict every production workload. Java test-body time is the sum of JUnit timers; the remainder is not exclusively Gradle configuration. The two causal controls mentioned above are separately dated supplementary evidence, not pooled into the fresh candles. Historical isolated-file replay measurements remain preserved separately and are not this grouped suite workload. This is a performance/adoption recommendation, not a release-readiness certification.",
+  "evidence": [
+    {"title": "Matched measurements, implementation changes and run recipe", "url": "https://github.com/specs-feup/clava/blob/ast-protobuf/experiments/protocol-comparison/analysis/decision-matched-fast-20261002.md"},
+    {"title": "Separately dated syntax-validation and Gradle causal controls", "url": "https://github.com/specs-feup/clava/blob/ast-protobuf/experiments/protocol-comparison/analysis/decision-evidence-20261001.md"},
+    {"title": "Protobuf: generated Java message API", "url": "https://protobuf.dev/getting-started/javatutorial/"},
+    {"title": "FlatBuffers: generated accessors and offset-based construction", "url": "https://flatbuffers.dev/tutorial/"},
+    {"title": "Protobuf public repository", "url": "https://github.com/protocolbuffers/protobuf"},
+    {"title": "FlatBuffers public repository", "url": "https://github.com/google/flatbuffers"}
+  ]
+}

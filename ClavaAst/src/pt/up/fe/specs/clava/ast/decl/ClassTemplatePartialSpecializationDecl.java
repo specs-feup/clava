@@ -14,15 +14,32 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
 public class ClassTemplatePartialSpecializationDecl extends ClassTemplateSpecializationDecl {
 
+    public static final DataKey<List<NamedDecl>> TEMPLATE_PARAMETERS = KeyFactory.list("templateParameters",
+            NamedDecl.class);
+
     public ClassTemplatePartialSpecializationDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
+    }
+
+    @Override
+    public String getCode() {
+        String parameters = get(TEMPLATE_PARAMETERS).stream()
+                .map(ClavaNode::getCode)
+                .collect(Collectors.joining(", "));
+        String recordCode = super.getCode(get(RECORD_BASES), get(TEMPLATE_ARGUMENTS));
+
+        return "template<" + parameters + ">\n" + recordCode;
     }
 
 }

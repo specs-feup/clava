@@ -1,0 +1,187 @@
+#!/usr/bin/env python3
+"""Prepare the JS-only preflight and warm-cache seeds for the matched matrix.
+
+Run from experiments/protocol-comparison after Java's preflight/measurement:
+  python3 results/matched-fast-20261002-r1/preparation/run_js_preflight.py
+
+Uses the existing run_deadline_matrix.run_one primitive, restricted to the
+ten Clava-JS direct/cold/warm preflight cells. No Java, JFR, or measurement
+cells are invoked here.
+"""
+
+from __future__ import annotations
+
+import copy
+import datetime as dt
+import json
+import os
+from pathlib import Path
+import shutil
+import sys
+
+RESULT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(RESULT_ROOT.parents[1]))
+
+import run_comparison as comparison
+import run_deadline_matrix as matrix_runner
+import run_java_jacoco_agent_control as java_control
+
+
+JAVA_PLAN_PATH = RESULT_ROOT / "java-r1/plan.json"
+OUTPUT_ROOT = RESULT_ROOT / "js-r2"
+STAGE_KEYS = ("before-cache", "ccache-text", "protobuf", "flatbuffers")
+
+if OUTPUT_ROOT.exists():
+    raise RuntimeError(f"refusing to reuse JS preflight output directory: {OUTPUT_ROOT}")
+
+java_plan = json.loads(JAVA_PLAN_PATH.read_text())
+stage_rows = java_plan["stages"]
+stage_config = []
+for key in STAGE_KEYS:
+    saved = stage_rows[key]
+    stage_config.append({
+        "key": key,
+        "label": saved["label"],
+        "root": Path(saved["root"]),
+        "dumper": Path(saved["dumper"]),
+        "native_root": Path(saved["native_root"]),
+        "dumper_revision": saved["dumper_revision"],
+        "wire": saved["wire"],
+        "cache": saved["cache"],
+    })
+
+specs_root = Path(stage_rows["before-cache"]["java_build_dependencies"]["specs_java_libs"]["root"])
+lara_root = Path(stage_rows["before-cache"]["java_build_dependencies"]["lara_framework"]["root"])
+os.environ["SPECS_JAVA_LIBS_HOME"] = str(specs_root)
+os.environ["LARA_FRAMEWORK_HOME"] = str(lara_root)
+comparison.FIXED_SPECSUTILS_REVISION = matrix_runner.FIXED_SPECSUTILS_REVISION
+comparison.STAGES = tuple(dict(stage) for stage in stage_config)
+matrix_runner.DEADLINE_ROOT = RESULT_ROOT
+matrix_runner.SHARED_ROOT = specs_root.parent
+matrix_runner.SPECS_ROOT = specs_root
+matrix_runner.LARA_ROOT = lara_root
+matrix_runner.PREPARATION_MANIFEST = RESULT_ROOT / "preparation.json"
+matrix_runner.STAGE_CONFIG = tuple(stage_config)
+matrix_runner.BASELINE_BINARY_SHA256 = stage_rows["before-cache"]["dumper_sha256"]
+matrix_runner.SUITES = ("clava-js",)
+matrix_runner.EXPECTED = {
+    "clava-js": {"total_tests": 164, "passed_tests": 158, "failed_tests": 0, "skipped_tests": 6},
+}
+matrix_runner.OUTPUT_ROOT = OUTPUT_ROOT
+
+current_stages = comparison.validate_stages(set(STAGE_KEYS))
+for stage in current_stages:
+    frozen = stage_rows[stage["key"]]
+    stage["dumper_revision"] = frozen["dumper_revision"]
+    stage["dumper_sha256"] = frozen["dumper_sha256"]
+    stage["native_binary_sha256"] = frozen["native_binary_sha256"]
+    stage["native_revision"] = frozen["dumper_revision"]
+    stage["native_build"] = frozen["native_build"]
+    stage["native_build_provenance_sha256"] = frozen["native_build_provenance_sha256"]
+    stage["parser_jar_sha256"] = frozen["parser_jar_sha256"]
+    stage["runtime_manifest_sha256"] = frozen["runtime_manifest_sha256"]
+    stage["specsutils_runtime_jar_sha256"] = frozen["runtime_specsutils"]["jar_sha256"]
+    stage["clava_patch_sha256"] = frozen["clava_patch_sha256"]
+    stage["fast_syntax"] = True
+matrix_runner.plan_stage_metadata = current_stages
+
+fingerprints = matrix_runner.fixture_maps(current_stages)
+fixture_gate = matrix_runner.fixture_comparison(fingerprints)
+gc_gate = matrix_runner.static_gc_gate(current_stages)
+bridge_overlay = matrix_runner.lara_bridge_overlay_identity()
+
+plan = {
+    "experiment": "matched original-suite fast-syntax protocol/cache matrix",
+    "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+    "host_lock_approval": "parent granted exclusive matrix CPU on 2026-10-02",
+    "host_lock_status": "exclusive-matrix-runner",
+    "repeat_count": 4,
+    "lara_js_bridge_overlay": bridge_overlay,
+    "warmup_count": 1,
+    "suites": ["clava-js"],
+    "expected_tests": {"clava-js": {"total": 164, "passed": 158, "failed": 0, "skipped": 6}},
+    "cells": [
+        {"suite": "clava-js", "mode": mode, "stage": key, "warmup_count": 1, "repeat_count": 4}
+        for key in STAGE_KEYS for mode in (("direct", "cold", "warm") if key != "before-cache" else ("direct",))
+    ],
+    "cache_states": {
+        "direct": list(STAGE_KEYS),
+        "cold": list(STAGE_KEYS[1:]),
+        "warm": list(STAGE_KEYS[1:]),
+    },
+    "timing_boundary": {
+        "headline": "GNU time elapsed_s for one full Vitest command including npm launcher overhead; excludes runtime build and test-class compilation",
+    },
+    "stages": {stage["key"]: stage for stage in current_stages},
+    "fixture_fingerprints": fingerprints,
+    "fixture_identity_gate": fixture_gate,
+    "show_exec_info_gc_gate": gc_gate,
+    "fast_syntax_policy": {"all_stages": True, "suite": "clava-js"},
+    "compression_policy": {
+        stage["key"]: {
+            mode: matrix_runner.compression_record(stage, mode)
+            for mode in (("direct", "cold", "warm") if stage["cache"] else ("direct",))
+        }
+        for stage in current_stages
+    },
+    "all_measurements_valid": False,
+    "output_root": str(OUTPUT_ROOT),
+    "preflight_status": "running",
+}
+identity = {
+    "passed": bool(fixture_gate["passed"] and gc_gate["passed"]),
+    "fixture_gate_passed": fixture_gate["passed"],
+    "show_exec_info_gc_gate_passed": gc_gate["passed"],
+    "mismatches": list(fixture_gate["mismatches"]),
+    "warmup_test_identities": {},
+    "reference_test_ids": {},
+    "gc_requests_by_stage": {},
+}
+results = []
+OUTPUT_ROOT.mkdir(parents=True)
+matrix_runner.checkpoint(results, plan, identity)
+if not fixture_gate["passed"] or not gc_gate["passed"]:
+    raise RuntimeError("JS fixture or static GC gate failed before suite execution")
+
+for mode, stage in matrix_runner.stage_mode_schedule(0):
+    row = matrix_runner.run_one(
+        "clava-js", mode, stage, False, None, results, plan, identity, fingerprints, None
+    )
+    row["fast_syntax"] = True
+    matrix_runner.checkpoint(results, plan, identity)
+    if not row["valid"]:
+        plan["preflight_status"] = "failed"
+        matrix_runner.checkpoint(results, plan, identity)
+        raise RuntimeError(f"invalid JS preflight cell; stopping before further runs: {row['cell_id']}")
+
+matrix_runner.set_reference_identities(identity, results)
+seed_rows = []
+for key in STAGE_KEYS[1:]:
+    warm_row = next(row for row in results if row["stage"] == key and row["mode"] == "warm")
+    source = Path(warm_row["cache_validation"]["cache_dir"])
+    seed = OUTPUT_ROOT / "warm-cache-seed" / key
+    seed.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(source, seed)
+    if java_control.cache_manifest(source) != java_control.cache_manifest(seed):
+        raise RuntimeError(f"warm cache seed copy differs for {key}")
+    seed_rows.append({"stage": key, "source": str(source), "seed": str(seed), "files": len(java_control.cache_manifest(seed))})
+
+identity["warm_cache_seed_gate_passed"] = len(seed_rows) == 3
+identity["warm_cache_seeds"] = seed_rows
+identity["passed"] = identity["passed"] and len(results) == 10 and all(row["valid"] for row in results)
+plan["preflight_status"] = "passed" if identity["passed"] else "failed"
+plan["preflight_completed_at"] = dt.datetime.now(dt.timezone.utc).isoformat()
+plan["all_measurements_valid"] = False
+matrix_runner.checkpoint(results, plan, identity)
+(OUTPUT_ROOT / "plan.json").write_text(json.dumps(plan, indent=2) + "\n")
+if not identity["passed"]:
+    raise RuntimeError("JS warmup identity/cache seed preflight failed")
+comparison.assert_heads_unchanged(current_stages)
+print(json.dumps({
+    "js_preflight_passed": True,
+    "rows": len(results),
+    "valid": sum(bool(row["valid"]) for row in results),
+    "total_tests_per_cell": 164,
+    "warm_cache_seeds": seed_rows,
+    "output_root": str(OUTPUT_ROOT),
+}), flush=True)

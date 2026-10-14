@@ -18,11 +18,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
@@ -30,64 +30,63 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.util.SpecsCollections;
 
-public class CxxIf extends AIf {
+public class CxxIf<Self extends CxxIf<Self>> extends AIf<Self> {
 
-    private final IfStmt ifStmt;
-
-    public CxxIf(IfStmt ifStmt) {
-        super(new CxxStatement(ifStmt));
-        this.ifStmt = ifStmt;
+    public CxxIf(IfStmt ifStmt, CxxWeaver weaver) {
+        super(ifStmt, weaver);
     }
 
     @Override
-    public ClavaNode getNode() {
-        return ifStmt;
+    public IfStmt getNodeImpl() {
+        return (IfStmt) super.getNodeImpl();
     }
 
     @Override
-    public AExpression getCondImpl() {
-        List<? extends AExpression> list = Collections.emptyList();
+    public AExpression<?> getCondImpl() {
+        List<AExpression<?>> list = Collections.emptyList();
 
-        if ((ifStmt.getCondition() instanceof Expr)) {
-            list = Arrays.asList(CxxJoinpoints.create(ifStmt.getCondition(), AExpression.class));
+        if ((this.getNodeImpl().getCondition() instanceof Expr)) {
+            list = Arrays.asList(CxxJoinpoints.create(this.getNodeImpl().getCondition(), getWeaverEngine(), AExpression.class));
         }
 
         return SpecsCollections.orElseNull(list);
     }
 
     @Override
-    public AVardecl getCondDeclImpl() {
-        return SpecsCollections.orElseNull(SpecsCollections.toList(ifStmt.getDeclCondition()
-                .map(varDecl -> CxxJoinpoints.create(varDecl, AVardecl.class))));
+    public AVardecl<?> getCondDeclImpl() {
+        return SpecsCollections.orElseNull(SpecsCollections.toList(this.getNodeImpl().getDeclCondition()
+                .map(varDecl -> CxxJoinpoints.create(varDecl, getWeaverEngine(), AVardecl.class))));
     }
 
     @Override
-    public AScope getThenImpl() {
+    public AScope<?> getThenImpl() {
         return SpecsCollections.orElseNull(
-                ifStmt.getThen().map(then -> Arrays.asList(CxxJoinpoints.create(then, AScope.class)))
+                this.getNodeImpl().getThen().map(then -> Arrays.asList(CxxJoinpoints.create(then,
+                        getWeaverEngine(), AScope.class)))
                         .orElse(Collections.emptyList()));
     }
 
     @Override
-    public AScope getElseImpl() {
-        return SpecsCollections.orElseNull(SpecsCollections.toStream(ifStmt.getElse())
-                .map(stmt -> CxxJoinpoints.create(stmt, AScope.class))
+    public AScope<?> getElseImpl() {
+        return SpecsCollections.orElseNull(SpecsCollections.toStream(this.getNodeImpl().getElse())
+                .map(stmt -> CxxJoinpoints.create(stmt,
+                        getWeaverEngine(), AScope.class))
                 .collect(Collectors.toList()));
     }
 
     @Override
-    public void setCondImpl(AExpression cond) {
-        ifStmt.setCondition((Expr) cond.getNode());
+    public void setCondImpl(AExpression<?> cond) {
+        this.getNodeImpl().setCondition((Expr) cond.getNodeImpl());
     }
 
     @Override
-    public void setThenImpl(AStatement then) {
-        ifStmt.setThen((Stmt) then.getNode());
+    public void setThenImpl(AStatement<?> then) {
+        this.getNodeImpl().setThen((Stmt) then.getNodeImpl());
     }
 
     @Override
-    public void setElseImpl(AStatement _else) {
-        ifStmt.setElse((Stmt) _else.getNode());
+    public void setElseImpl(AStatement<?> _else) {
+        this.getNodeImpl().setElse((Stmt) _else.getNodeImpl());
     }
 
 }

@@ -1,0 +1,1537 @@
+{
+  "created_utc": "2026-10-07T21:55:34.331905+00:00",
+  "source": "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClangAstParser/test-resources/cxx/templates.cpp",
+  "source_sha256": "b78d4a848806942649ac0127b657f7c60b679ea52e0b1bfa5f60b6fa5f328460",
+  "input": null,
+  "input_sha256": null,
+  "repeats": 3,
+  "retained_heap_contract": "production command emits phase used_bytes after explicit GC",
+  "peak_rss_contract": "GNU time max_rss_kb",
+  "observations": [
+    {
+      "repeat": 1,
+      "return_code": 0,
+      "wall_s": 17.414049597922713,
+      "gnu_time": {
+        "elapsed_s": 17.41,
+        "user_s": 20.85,
+        "sys_s": 1.22,
+        "max_rss_kb": 273100,
+        "exit_status": 0
+      },
+      "heap_phases": [
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16771544,
+          "live_heap_bytes": 17313552,
+          "repeat": 1,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 260362240,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16697024,
+          "live_heap_bytes": 17453456,
+          "repeat": 2,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 267046912,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16700584,
+          "live_heap_bytes": 17457112,
+          "repeat": 3,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 270442496,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16712784,
+          "live_heap_bytes": 17469312,
+          "repeat": 4,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 270811136,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16713432,
+          "live_heap_bytes": 17469960,
+          "repeat": 5,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 272347136,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16715600,
+          "live_heap_bytes": 17472128,
+          "repeat": 6,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 275808256,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16717096,
+          "live_heap_bytes": 17473624,
+          "repeat": 7,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 276996096,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16718120,
+          "live_heap_bytes": 17474648,
+          "repeat": 8,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 277135360,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16719288,
+          "live_heap_bytes": 17475816,
+          "repeat": 9,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 277266432,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16719992,
+          "live_heap_bytes": 17476520,
+          "repeat": 10,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 277471232,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16721216,
+          "live_heap_bytes": 17477744,
+          "repeat": 11,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 277618688,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16723768,
+          "live_heap_bytes": 17480208,
+          "repeat": 12,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 277921792,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16724448,
+          "live_heap_bytes": 17480976,
+          "repeat": 13,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 278122496,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16724680,
+          "live_heap_bytes": 17481208,
+          "repeat": 14,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 278278144,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16725472,
+          "live_heap_bytes": 17482000,
+          "repeat": 15,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 278355968,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16725976,
+          "live_heap_bytes": 17482504,
+          "repeat": 16,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 278429696,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16726136,
+          "live_heap_bytes": 17482664,
+          "repeat": 17,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 278454272,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16727424,
+          "live_heap_bytes": 17483952,
+          "repeat": 18,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 278605824,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16728464,
+          "live_heap_bytes": 17484992,
+          "repeat": 19,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 278724608,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16728464,
+          "live_heap_bytes": 17484992,
+          "repeat": 20,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/time.txt"
+          },
+          "jvm_peak_rss_bytes": 278814720,
+          "app_collected": true
+        }
+      ],
+      "command": [
+        "/tmp/run-protobuf-validation-memory.py",
+        "--source",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClangAstParser/test-resources/cxx/templates.cpp",
+        "--work",
+        "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1",
+        "--standard",
+        "c++17",
+        "--runtime",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClavaWeaver/build/install/ClavaWeaver",
+        "--classes",
+        "/tmp/protobuf-validation-probe-final-classes"
+      ],
+      "log": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-1/probe.log"
+    },
+    {
+      "repeat": 2,
+      "return_code": 0,
+      "wall_s": 17.338058437919244,
+      "gnu_time": {
+        "elapsed_s": 17.33,
+        "user_s": 20.65,
+        "sys_s": 1.29,
+        "max_rss_kb": 280492,
+        "exit_status": 0
+      },
+      "heap_phases": [
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16635240,
+          "live_heap_bytes": 17391248,
+          "repeat": 1,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 264388608,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16659056,
+          "live_heap_bytes": 17415584,
+          "repeat": 2,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 278679552,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16662088,
+          "live_heap_bytes": 17418616,
+          "repeat": 3,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 279240704,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16666592,
+          "live_heap_bytes": 17423120,
+          "repeat": 4,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 279896064,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16667264,
+          "live_heap_bytes": 17423792,
+          "repeat": 5,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 280199168,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16676992,
+          "live_heap_bytes": 17433520,
+          "repeat": 6,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 280690688,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16678464,
+          "live_heap_bytes": 17434992,
+          "repeat": 7,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 281690112,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16678984,
+          "live_heap_bytes": 17435512,
+          "repeat": 8,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 282923008,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16680008,
+          "live_heap_bytes": 17436536,
+          "repeat": 9,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 283107328,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16680760,
+          "live_heap_bytes": 17437288,
+          "repeat": 10,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 283336704,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16681984,
+          "live_heap_bytes": 17438512,
+          "repeat": 11,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 283766784,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16684648,
+          "live_heap_bytes": 17441176,
+          "repeat": 12,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 284618752,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16685480,
+          "live_heap_bytes": 17442008,
+          "repeat": 13,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 284860416,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16685712,
+          "live_heap_bytes": 17442240,
+          "repeat": 14,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 284991488,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16686504,
+          "live_heap_bytes": 17443032,
+          "repeat": 15,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 285085696,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16686856,
+          "live_heap_bytes": 17443384,
+          "repeat": 16,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 285196288,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16687016,
+          "live_heap_bytes": 17443544,
+          "repeat": 17,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 285249536,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16688136,
+          "live_heap_bytes": 17444664,
+          "repeat": 18,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 286580736,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16688576,
+          "live_heap_bytes": 17445104,
+          "repeat": 19,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 286740480,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16688576,
+          "live_heap_bytes": 17445104,
+          "repeat": 20,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/time.txt"
+          },
+          "jvm_peak_rss_bytes": 286797824,
+          "app_collected": true
+        }
+      ],
+      "command": [
+        "/tmp/run-protobuf-validation-memory.py",
+        "--source",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClangAstParser/test-resources/cxx/templates.cpp",
+        "--work",
+        "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2",
+        "--standard",
+        "c++17",
+        "--runtime",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClavaWeaver/build/install/ClavaWeaver",
+        "--classes",
+        "/tmp/protobuf-validation-probe-final-classes"
+      ],
+      "log": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-2/probe.log"
+    },
+    {
+      "repeat": 3,
+      "return_code": 0,
+      "wall_s": 17.332750579807907,
+      "gnu_time": {
+        "elapsed_s": 17.33,
+        "user_s": 20.64,
+        "sys_s": 1.24,
+        "max_rss_kb": 281584,
+        "exit_status": 0
+      },
+      "heap_phases": [
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16779616,
+          "live_heap_bytes": 17405088,
+          "repeat": 1,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 242188288,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16807624,
+          "live_heap_bytes": 17564056,
+          "repeat": 2,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 264998912,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16810968,
+          "live_heap_bytes": 17567496,
+          "repeat": 3,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 272744448,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16823736,
+          "live_heap_bytes": 17580264,
+          "repeat": 4,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 273072128,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16824592,
+          "live_heap_bytes": 17581120,
+          "repeat": 5,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 273473536,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16826008,
+          "live_heap_bytes": 17582536,
+          "repeat": 6,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 273715200,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16827416,
+          "live_heap_bytes": 17583944,
+          "repeat": 7,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 273997824,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16828472,
+          "live_heap_bytes": 17585000,
+          "repeat": 8,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 275345408,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16829840,
+          "live_heap_bytes": 17586368,
+          "repeat": 9,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 275918848,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16830544,
+          "live_heap_bytes": 17587072,
+          "repeat": 10,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 276156416,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16831768,
+          "live_heap_bytes": 17588296,
+          "repeat": 11,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 276283392,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16834320,
+          "live_heap_bytes": 17590848,
+          "repeat": 12,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 276451328,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16835152,
+          "live_heap_bytes": 17591680,
+          "repeat": 13,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 276647936,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16835384,
+          "live_heap_bytes": 17591912,
+          "repeat": 14,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 276754432,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16836176,
+          "live_heap_bytes": 17592704,
+          "repeat": 15,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 276885504,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16836528,
+          "live_heap_bytes": 17593056,
+          "repeat": 16,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 276955136,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16836688,
+          "live_heap_bytes": 17593216,
+          "repeat": 17,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 276992000,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16837976,
+          "live_heap_bytes": 17594504,
+          "repeat": 18,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 287633408,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16838416,
+          "live_heap_bytes": 17594944,
+          "repeat": 19,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 287739904,
+          "app_collected": true
+        },
+        {
+          "phase": "parse_released",
+          "dumper_resource_root": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/resources",
+          "leftover_clang_temp_folders": 0,
+          "open_parser_files": 0,
+          "unexpected_open_parser_fd_targets": {},
+          "mapped_paths_under_work": 0,
+          "observed_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "nodes": 250,
+          "retained_heap_bytes": 16838416,
+          "live_heap_bytes": 17594944,
+          "repeat": 20,
+          "observer_open_parser_fd_targets": {
+            "1": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "2": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log",
+            "3": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/time.txt"
+          },
+          "jvm_peak_rss_bytes": 287797248,
+          "app_collected": true
+        }
+      ],
+      "command": [
+        "/tmp/run-protobuf-validation-memory.py",
+        "--source",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClangAstParser/test-resources/cxx/templates.cpp",
+        "--work",
+        "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3",
+        "--standard",
+        "c++17",
+        "--runtime",
+        "/home/lmsousa/Documents/Projects/SPeCS/ast-protobuf/clava/ClavaWeaver/build/install/ClavaWeaver",
+        "--classes",
+        "/tmp/protobuf-validation-probe-final-classes"
+      ],
+      "log": "/home/lmsousa/.cache/protobuf-production-validation/memory-templates-20261007-verified-observer/repeat-3/probe.log"
+    }
+  ],
+  "failed": []
+}
