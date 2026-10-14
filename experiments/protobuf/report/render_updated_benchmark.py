@@ -342,7 +342,7 @@ def validate_javascript_workload_provenance(updated_payload: Any) -> dict[str, A
 
 
 def validate_release_provenance(
-    updated_payload: Any, manifest: Any, manifest_sha256: str
+    updated_payload: Any, manifest: Any, manifest_sha256: str, snapshot_identity: Any = None
 ) -> dict[str, Any]:
     """Validate the safe runtime and wire metadata against the captured manifest."""
     if not isinstance(updated_payload, dict) or not isinstance(manifest, dict):
@@ -418,7 +418,6 @@ def validate_release_provenance(
         "clava": "Clava",
         "specs-java-libs": "specs-java-libs",
         "lara-framework": "Lara framework",
-        "clang-dumper": "clang-dumper",
     }
     revisions = {}
     for name, label in repository_labels.items():
@@ -430,12 +429,30 @@ def validate_release_provenance(
             _fail(f"{name} source revision must be a full commit id")
         revisions[label] = revision
     native_repository = protobuf.get("native_repository")
-    if not isinstance(native_repository, dict) or native_repository.get("revision") != revisions["clang-dumper"]:
-        _fail("native source revision disagrees with the clang-dumper revision")
+    release_source_revision = protobuf.get("repositories", {}).get("clang-dumper", {}).get("revision")
+    if (not isinstance(native_repository, dict)
+            or native_repository.get("revision") != release_source_revision
+            or not isinstance(release_source_revision, str)
+            or not re.fullmatch(r"[0-9a-f]{40}", release_source_revision)):
+        _fail("native release source revision disagrees with the selected release checkout")
+
+    source_checkout_revision = None
+    if snapshot_identity is not None:
+        if not isinstance(snapshot_identity, dict):
+            _fail("snapshot identity must be an object")
+        source_checkout_revision = snapshot_identity.get("sources", {}).get("clang-dumper", {}).get("revision")
+        if (not isinstance(source_checkout_revision, str)
+                or not re.fullmatch(r"[0-9a-f]{40}", source_checkout_revision)):
+            _fail("snapshot identity is missing the clang-dumper source checkout revision")
+        published_release = snapshot_identity.get("published_release", {})
+        if published_release.get("native_repository_revision") != release_source_revision:
+            _fail("snapshot identity native release revision differs from the selected release checkout")
     workload_overlay = validate_javascript_workload_provenance(updated_payload)
 
     return {
         "revisions": revisions,
+        "clang_dumper_source_checkout_revision": source_checkout_revision,
+        "native_release_source_revision": release_source_revision,
         "protocol_id": "clava-ast-wire",
         "protocol_version": f"{major}.{minor}",
         "schema_sha256": schema_sha,
@@ -456,6 +473,17 @@ def _provenance_section(provenance: dict[str, Any]) -> str:
             f'<tr><th scope="row">{html.escape(label)} source</th>'
             f'<td><code>{html.escape(revision)}</code></td><td>Repository revision</td></tr>'
         )
+    if provenance.get("clang_dumper_source_checkout_revision"):
+        rows.append(
+            '<tr><th scope="row">clang-dumper source checkout</th>'
+            f'<td><code>{html.escape(provenance["clang_dumper_source_checkout_revision"])}</code></td>'
+            '<td>Snapshot source repository revision</td></tr>'
+        )
+    rows.append(
+        '<tr><th scope="row">Selected native release source</th>'
+        f'<td><code>{html.escape(provenance["native_release_source_revision"])}</code></td>'
+        '<td>Repository revision used for the published release</td></tr>'
+    )
     rows.extend([
         '<tr><th scope="row">Clava parser source snapshot</th>'
         f'<td><code>{html.escape(provenance["clava_source_tree_sha256"])}</code></td>'
@@ -471,11 +499,20 @@ def _provenance_section(provenance: dict[str, Any]) -> str:
         f'<tr><th scope="row">Release manifest</th><td><code>{html.escape(provenance["manifest_sha256"])}</code></td>'
         '<td>Manifest SHA-256</td></tr>',
     ])
+    if provenance.get("clang_dumper_source_checkout_revision"):
+        source_note = (
+            "The clang-dumper source checkout and the repository revision for the selected published "
+            "native release are separate identities."
+        )
+    else:
+        source_note = (
+            "The snapshot source checkout revision was not supplied; the table records the repository "
+            "revision used for the selected published native release."
+        )
     return (
         '<details><summary>Runtime source and wire provenance</summary>'
-        '<p>These identifiers come from the measured source snapshot and the release manifest '
-        'whose hash is recorded with the results. The manifest schema and descriptor hashes '
-        'and native tool hash are checked against that measurement record.</p>'
+        f'<p>{html.escape(source_note)} The executable, schema, and descriptor are checked '
+        'against the selected release manifest recorded with the measurements.</p>'
         '<table class="sources"><thead><tr><th>Component</th><th>Identifier</th><th>Meaning</th></tr></thead>'
         f'<tbody>{"".join(rows)}</tbody></table></details>'
     )
@@ -793,6 +830,7 @@ def render_report(
     memory_payload: Any = None,
     release_manifest: Any = None,
     release_manifest_sha256: str | None = None,
+    snapshot_identity: Any = None,
 ) -> str:
     updated = validate_updated_manifest(updated_payload)
     workload_overlay = validate_javascript_workload_provenance(updated_payload)
@@ -804,7 +842,7 @@ def render_report(
         if release_manifest is None or release_manifest_sha256 is None:
             _fail("release manifest JSON and its SHA-256 must be supplied together")
         provenance = validate_release_provenance(
-            updated_payload, release_manifest, release_manifest_sha256
+            updated_payload, release_manifest, release_manifest_sha256, snapshot_identity
         )
     csv_json = _script_json(_csv_data(app_rows, wall_rows, updated))
     return _page(
@@ -818,7 +856,13 @@ def render_report(
         sections=_memory_section(memory_payload)
         + (_provenance_section(provenance) if provenance is not None else '')
         + _javascript_workload_section(workload_overlay),
-        notes=_measurement_notes(updated, "Text and FlatBuffers measurements were reused from their earlier sessions."),
+        notes=_measurement_notes(
+            updated,
+            "Text and FlatBuffers measurements were reused from their earlier sessions. "
+            "The runtime launcher passes CCACHE_NOCOMPRESS=true to Java. For this "
+            "Protobuf capture, ClangCcacheAdapter sets CCACHE_COMPRESS=true and removes "
+            "CCACHE_NOCOMPRESS in cache-enabled modes; direct mode disables ccache.",
+        ),
         csv_json=csv_json,
         csv_name="clava-protobuf-benchmark-rows.csv",
     )
@@ -838,21 +882,45 @@ def comparison_rows(record: Any) -> dict[str, Any]:
     app_calls: dict[str, set[int]] = {suite: set() for suite in SUITES}
     syntax_calls: dict[str, set[int]] = {suite: set() for suite in SUITES}
     for row in record.get("observations", []):
+        if (row.get("suite") not in SUITES or row.get("mode") not in MODES
+                or type(row.get("repeat")) is not int or row["repeat"] not in REPEATS
+                or row.get("phase") not in ("app", "wall")):
+            _fail("comparison observation has an unknown phase, suite, mode, or repeat")
         if row.get("stage") not in COMPARED_STAGES or row.get("valid") is not True or row.get("measured") is not True:
             _fail("comparison observations must be valid, measured Text, Protobuf or FlatBuffers rows")
+        if type(row.get("return_code")) is not int or row["return_code"] != 0:
+            _fail("comparison observations must have a zero process return code")
+        cache_validation = row.get("cache_validation")
+        if not isinstance(cache_validation, dict) or cache_validation.get("passed") is not True:
+            _fail("comparison observations must pass cache validation")
         normalized = {"suite": row["suite"], "stage": row["stage"], "mode": row["mode"], "repeat": row["repeat"],
                       "measurement_date": created.date().isoformat(), "reused": False}
         if row["phase"] == "app":
             normalized["app_elapsed_ms"] = _finite_nonnegative(row["app_elapsed_ms"], "app_elapsed_ms")
-            normalized["app_calls"] = row["app_calls"]
-            normalized["syntax_only_calls"] = row["syntax_only_calls"]
+            normalized["app_calls"] = _nonnegative_integer(row["app_calls"], "app_calls")
+            normalized["syntax_only_calls"] = _nonnegative_integer(
+                row["syntax_only_calls"], "syntax_only_calls"
+            )
+            if normalized["app_calls"] == 0:
+                _fail("comparison App calls must be positive")
             app_calls[row["suite"]].add(row["app_calls"])
             syntax_calls[row["suite"]].add(row["syntax_only_calls"])
             app_rows.append(normalized)
         else:
             normalized["elapsed_s"] = _finite_nonnegative(row["wall_s"], "wall_s")
-            normalized.update({field: row["test_counts"][field] for field in
-                               ("total_tests", "passed_tests", "failed_tests", "skipped_tests")})
+            test_counts = row.get("test_counts")
+            if not isinstance(test_counts, dict):
+                _fail("comparison wall observations need nested test counts")
+            counts = {
+                field: _nonnegative_integer(test_counts.get(field), f"test_counts.{field}")
+                for field in ("total_tests", "passed_tests", "failed_tests", "skipped_tests")
+            }
+            if counts["total_tests"] != sum(counts[field] for field in
+                                             ("passed_tests", "failed_tests", "skipped_tests")):
+                _fail("comparison wall test counts do not add up")
+            if counts["failed_tests"]:
+                _fail("comparison wall observations cannot contain failed tests")
+            normalized.update(counts)
             normalized.update({"valid": True, "measured": True, "return_code": 0})
             wall_rows.append(normalized)
     if any(len(values) != 1 for values in (*app_calls.values(), *syntax_calls.values())):
@@ -906,9 +974,10 @@ def render_comparison(record: Any, prior: Any) -> str:
         title="Clava AST transport benchmark",
         lede="Text + ccache, Protobuf and FlatBuffers measured in one session with rotated round order. "
              "All three share the same specs-java-libs and lara-framework revisions, the same pinned Java and "
-             "JavaScript workloads, the same bundled headers and the same per-parse resource handling, so the AST "
-             "transport is the remaining difference. Before cache is the historical production baseline from an "
-             "earlier session.",
+             "JavaScript workloads, and the same per-parse resource handling. Their Clava revisions, native "
+             "releases, header sources, and compression settings differ, so this compares complete stage "
+             "configurations rather than isolating AST transport alone. Before cache is the historical production "
+             "baseline from an earlier session.",
         sources=_comparison_sources(record, session, historical_date),
         app_charts=_app_charts(app_rows, session),
         wall_charts=_wall_charts(wall_rows),
@@ -919,10 +988,10 @@ def render_comparison(record: Any, prior: Any) -> str:
         ),
         sections="",
         notes=_measurement_notes(session, "Text + ccache uses a local clang-dumper build (no published release "
-                                          "supports its cache flags), so Clava selects system libc headers for it; "
-                                          "Protobuf and FlatBuffers use their published releases' identical bundled "
-                                          "headers. Protobuf and FlatBuffers dumps are compressed by ccache; Text "
-                                          "streams Zstandard from the dumper, which measured the same."),
+                                          "supports its cache flags), so Clava selects system libc headers for it. "
+                                          "Protobuf and FlatBuffers use headers bundled with their respective "
+                                          "published releases. Header sources and compression settings differ by "
+                                          "stage, so the results represent end-to-end configurations."),
         csv_json=csv_json,
         csv_name="clava-ast-transport-benchmark-rows.csv",
     )
@@ -1045,6 +1114,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--updated-results", type=Path, required=True)
     parser.add_argument("--release-manifest", type=Path,
                         help="matched native release manifest for source and wire hashes")
+    parser.add_argument("--snapshot-identity", type=Path,
+                        help="snapshot identity with source checkout and selected release revisions")
     parser.add_argument("--memory", action="append", type=_parse_memory_spec,
                         metavar="LABEL=PATH", help="add a separate memory probe, repeat twice")
     parser.add_argument("--output", type=Path, required=True)
@@ -1059,8 +1130,9 @@ def main(argv: list[str] | None = None) -> int:
             manifest_bytes = args.release_manifest.read_bytes()
             release_manifest = json.loads(manifest_bytes)
             release_manifest_sha256 = hashlib.sha256(manifest_bytes).hexdigest()
+        snapshot_identity = _load_json(args.snapshot_identity) if args.snapshot_identity is not None else None
         rendered = render_report(
-            prior, updated, memory, release_manifest, release_manifest_sha256
+            prior, updated, memory, release_manifest, release_manifest_sha256, snapshot_identity
         )
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(rendered, encoding="utf-8")

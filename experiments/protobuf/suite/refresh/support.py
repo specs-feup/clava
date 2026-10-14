@@ -51,6 +51,29 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def ccache_policy_provenance(adapter_source: Path) -> dict[str, Any]:
+    """Describe launcher and effective ccache settings from the selected Java adapter."""
+    source = adapter_source.read_text(encoding="utf-8")
+    required = (
+        'environment.put("CCACHE_COMPRESS", "true");',
+        'environment.remove("CCACHE_NOCOMPRESS");',
+    )
+    if any(statement not in source for statement in required):
+        raise RuntimeError("ClangCcacheAdapter no longer enforces the recorded compression policy")
+    return {
+        "launcher_environment": {"CCACHE_NOCOMPRESS": "true"},
+        "effective_policy": {
+            "direct_mode": "ccache disabled",
+            "cache_enabled_modes": {
+                "CCACHE_COMPRESS": "true",
+                "CCACHE_NOCOMPRESS": "removed by adapter",
+            },
+        },
+        "policy_source": "ClangAstParser/src/pt/up/fe/specs/clang/dumper/ClangCcacheAdapter.java",
+        "policy_source_sha256": sha256_file(adapter_source),
+    }
+
+
 def digest(value: Any) -> str:
     encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
     return hashlib.sha256(encoded).hexdigest()

@@ -159,7 +159,8 @@ record['runtime_tree_sha256']={'clava_js_dist':tree_sha256(CL/'Clava-JS/dist'),'
 resolved_manifest_path=CL/'ClangAstParser/build/generated/proto-release/main/resolved-manifest.json'
 record['resolved_consumer_manifest']={'path':str(resolved_manifest_path),'sha256':a.sha256_file(resolved_manifest_path),'content':json.loads(resolved_manifest_path.read_text())}
 java_version=subprocess.run(['java','-version'],capture_output=True,text=True,check=True)
-record['build_environment']={'java':(java_version.stdout+java_version.stderr).strip(),'node':subprocess.run(['node','--version'],capture_output=True,text=True,check=True).stdout.strip(),'npm':subprocess.run(['npm','--version'],capture_output=True,text=True,check=True).stdout.strip(),'ccache_nocompress':'true'}
+ccache_adapter=CL/'ClangAstParser/src/pt/up/fe/specs/clang/dumper/ClangCcacheAdapter.java'
+record['build_environment']={'java':(java_version.stdout+java_version.stderr).strip(),'node':subprocess.run(['node','--version'],capture_output=True,text=True,check=True).stdout.strip(),'npm':subprocess.run(['npm','--version'],capture_output=True,text=True,check=True).stdout.strip(),'ccache':support.ccache_policy_provenance(ccache_adapter)}
 record['preparation']={'npm_builds':'passed','installDist':'passed','testClasses':'passed','ValidationProbe_javac':'passed','ValidationProbe_classes':str(probe_classes),'release_assets_from_published_tag':RELEASE_TAG}
 save()
 for key,root in roots.items():

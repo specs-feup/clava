@@ -141,29 +141,41 @@ def fixture_release_manifest():
     }
 
 
+def fixture_comparison():
+    observations = []
+    for stage in REPORT.COMPARED_STAGES:
+        for suite in REPORT.SUITES:
+            for mode in REPORT.MODES:
+                for repeat in REPORT.REPEATS:
+                    base = {
+                        "stage": stage, "suite": suite, "mode": mode, "repeat": repeat,
+                        "valid": True, "measured": True, "return_code": 0,
+                        "cache_validation": {"passed": True},
+                    }
+                    observations.append({
+                        **base, "phase": "app", "app_elapsed_ms": 2000.0 + repeat,
+                        "app_calls": 42, "syntax_only_calls": 0,
+                    })
+                    counts = (116, 116, 0, 0) if suite == "java" else (164, 158, 0, 6)
+                    observations.append({
+                        **base, "phase": "wall", "wall_s": 30.0 + repeat,
+                        "test_counts": dict(zip(("total_tests", "passed_tests", "failed_tests",
+                                                 "skipped_tests"), counts)),
+                    })
+    stage_identity = {"ref": "branch", "revision": "a" * 40, "selector": "v18.1.8_6-rc8"}
+    return {
+        "status": "complete", "quick": False, "observations": observations,
+        "created_utc": "2026-10-10T00:00:00+00:00", "completed_utc": "2026-10-10T01:30:00+00:00",
+        "stages": {stage: {**stage_identity, "selector": "/home/user/clang-dumper-ccache/build"}
+                   if stage == "ccache-text" else stage_identity
+                   for stage in REPORT.COMPARED_STAGES},
+        "snapshot": {"shared": {"specs-java-libs": "b" * 40, "lara-framework": "c" * 40}},
+    }
+
+
 class UpdatedReportTest(unittest.TestCase):
     def test_comparison_uses_same_session_rows_and_only_historical_before_cache(self):
-        observations = []
-        for stage in REPORT.COMPARED_STAGES:
-            for suite in REPORT.SUITES:
-                for mode in REPORT.MODES:
-                    for repeat in REPORT.REPEATS:
-                        base = {"stage": stage, "suite": suite, "mode": mode, "repeat": repeat,
-                                "valid": True, "measured": True}
-                        observations.append({**base, "phase": "app", "app_elapsed_ms": 2000.0 + repeat,
-                                             "app_calls": 42, "syntax_only_calls": 0})
-                        counts = (116, 116, 0, 0) if suite == "java" else (164, 158, 0, 6)
-                        observations.append({**base, "phase": "wall", "wall_s": 30.0 + repeat,
-                                             "test_counts": dict(zip(("total_tests", "passed_tests",
-                                                                      "failed_tests", "skipped_tests"), counts))})
-        stage_identity = {"ref": "branch", "revision": "a" * 40, "selector": "v18.1.8_6-rc8"}
-        record = {
-            "status": "complete", "quick": False, "observations": observations,
-            "created_utc": "2026-10-10T00:00:00+00:00", "completed_utc": "2026-10-10T01:30:00+00:00",
-            "stages": {stage: {**stage_identity, "selector": "/home/user/clang-dumper-ccache/build"}
-                       if stage == "ccache-text" else stage_identity for stage in REPORT.COMPARED_STAGES},
-            "snapshot": {"shared": {"specs-java-libs": "b" * 40, "lara-framework": "c" * 40}},
-        }
+        record = fixture_comparison()
 
         page = REPORT.render_comparison(record, fixture_prior())
 
@@ -178,8 +190,34 @@ class UpdatedReportTest(unittest.TestCase):
         summary_rows = re.findall(r'<tr><th scope="row">.*?</tr>', summary)
         self.assertEqual(18, sum('<td>Same session</td>' in row for row in summary_rows))
         self.assertEqual(2, sum('<td>Historical</td>' in row for row in summary_rows))
+        self.assertIn("Header sources and compression settings differ by stage", page)
+        self.assertNotIn("the same bundled headers", page)
+        self.assertNotIn("transport is the remaining difference", page)
         with self.assertRaises(ValueError):
             REPORT.render_comparison({**record, "quick": True}, fixture_prior())
+
+    def test_comparison_rejects_nonzero_return_code(self):
+        record = fixture_comparison()
+        failing = next(row for row in record["observations"]
+                       if row["phase"] == "wall" and row["suite"] == "java")
+        failing["return_code"] = 1
+        failing["test_counts"].update({"passed_tests": 115, "failed_tests": 1})
+        failing["cache_validation"] = {"passed": False}
+        with self.assertRaisesRegex(ValueError, "zero process return code"):
+            REPORT.render_comparison(record, fixture_prior())
+
+    def test_comparison_rejects_failed_tests_and_cache_validation(self):
+        failed_tests = fixture_comparison()
+        failing = next(row for row in failed_tests["observations"]
+                       if row["phase"] == "wall" and row["suite"] == "java")
+        failing["test_counts"].update({"passed_tests": 115, "failed_tests": 1})
+        with self.assertRaisesRegex(ValueError, "cannot contain failed tests"):
+            REPORT.render_comparison(failed_tests, fixture_prior())
+
+        failed_cache = fixture_comparison()
+        next(row for row in failed_cache["observations"] if row["phase"] == "app")["cache_validation"]["passed"] = False
+        with self.assertRaisesRegex(ValueError, "pass cache validation"):
+            REPORT.render_comparison(failed_cache, fixture_prior())
 
     def test_replaces_only_protobuf_rows_and_keeps_control_rows_unchanged(self):
         prior = fixture_prior()
@@ -264,6 +302,8 @@ class UpdatedReportTest(unittest.TestCase):
         self.assertIn("All cache sections share one non-zero time axis", html)
         self.assertIn("updated Protobuf session", html)
         self.assertIn("JavaScript test workload provenance", html)
+        self.assertIn("The runtime launcher passes CCACHE_NOCOMPRESS=true to Java", html)
+        self.assertIn("ClangCcacheAdapter sets CCACHE_COMPRESS=true", html)
         self.assertIn("Vitest's runner config loader", html)
         self.assertIn("9b588d48ae36b0bfe60eb4fe7748e0116083005f", html)
         self.assertNotIn("paired percentage", html.lower())
@@ -318,7 +358,6 @@ class UpdatedReportTest(unittest.TestCase):
         self.assertIn("a" * 64, report)
         self.assertNotIn("/home/", report)
         self.assertNotIn("file://", report)
-
         with self.assertRaisesRegex(ValueError, "does not match the selected measurement release"):
             REPORT.render_report(fixture_prior(), updated, release_manifest=manifest,
                                  release_manifest_sha256="d" * 64)
@@ -331,6 +370,30 @@ class UpdatedReportTest(unittest.TestCase):
         ).hexdigest()
         with self.assertRaisesRegex(ValueError, "schema hash does not match"):
             REPORT.validate_release_provenance(updated, mismatch, hashlib.sha256(mismatch_bytes).hexdigest())
+
+    def test_release_provenance_distinguishes_source_checkout_from_release_repository(self):
+        updated = fixture_updated()
+        manifest = fixture_release_manifest()
+        manifest_bytes = json.dumps(manifest, separators=(",", ":")).encode()
+        manifest_sha = hashlib.sha256(manifest_bytes).hexdigest()
+        updated["sources"]["protobuf"]["selected_release"]["manifest_sha256"] = manifest_sha
+        snapshot_identity = {
+            "sources": {"clang-dumper": {"revision": "e" * 40}},
+            "published_release": {"native_repository_revision": f"{4:040x}"},
+        }
+
+        page = REPORT.render_report(
+            fixture_prior(), updated, release_manifest=manifest,
+            release_manifest_sha256=manifest_sha, snapshot_identity=snapshot_identity,
+        )
+
+        self.assertIn(f"clang-dumper source checkout</th><td><code>{'e' * 40}", page)
+        self.assertIn(f"Selected native release source</th><td><code>{f'{4:040x}'}", page)
+        self.assertNotIn(f"clang-dumper source</th><td><code>{f'{4:040x}'}", page)
+        inconsistent = copy.deepcopy(snapshot_identity)
+        inconsistent["published_release"]["native_repository_revision"] = "f" * 40
+        with self.assertRaisesRegex(ValueError, "differs from the selected release checkout"):
+            REPORT.validate_release_provenance(updated, manifest, manifest_sha, inconsistent)
 
     def test_release_provenance_rejects_unknown_javascript_test_source_hashes(self):
         updated = fixture_updated()

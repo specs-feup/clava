@@ -538,8 +538,13 @@ def validate_run_bundle(run_dir: Path, prior_path: Path = FROZEN_CONTROLS,
     runtime = load_json(runtime_path)
     if runtime.get("status") != "complete":
         raise ValueError("runtime capture is incomplete")
-    if runtime.get("driver_sha256") != sha256_file(REFRESH_DIR / "collect_runtime.py"):
-        raise ValueError("runtime driver hash does not match this checked-in workflow")
+    runtime_driver_sha = runtime.get("driver_sha256")
+    archived_runtime_driver = run_dir / "runtime-driver.py"
+    status_driver_sha = status.get("runtime_driver_sha256")
+    if (not isinstance(runtime_driver_sha, str) or runtime_driver_sha != status_driver_sha
+            or not archived_runtime_driver.is_file()
+            or sha256_file(archived_runtime_driver) != runtime_driver_sha):
+        raise ValueError("runtime driver hash does not match its archived source and collection status")
     validate_runtime_contract(runtime)
     if (snapshot_identity.get("isolated_overlays", {}).get("javascript_workload")
             != runtime.get("sources", {}).get("protobuf", {}).get("javascript_workload_overlay")):
@@ -565,7 +570,9 @@ def validate_run_bundle(run_dir: Path, prior_path: Path = FROZEN_CONTROLS,
     manifest_sha = hashlib.sha256(manifest_bytes).hexdigest()
     if status.get("release_manifest_sha256") != manifest_sha:
         raise ValueError("copied release manifest hash differs from collection status")
-    provenance = REPORT.validate_release_provenance(runtime, manifest, manifest_sha)
+    provenance = REPORT.validate_release_provenance(
+        runtime, manifest, manifest_sha, snapshot_identity
+    )
 
     memory = load_json(memory_path)
     if memory.get("status") != "complete":
@@ -586,6 +593,7 @@ def validate_run_bundle(run_dir: Path, prior_path: Path = FROZEN_CONTROLS,
         "memory": memory,
         "manifest": manifest,
         "manifest_sha256": manifest_sha,
+        "snapshot_identity": snapshot_identity,
         "memory_inputs": memory_inputs,
         "controls_sha256": controls,
         "provenance": provenance,
@@ -602,7 +610,7 @@ def render_run(run_dir: Path, output: Path | None = None,
                                  allow_collecting_status=allow_collecting_status)
     html = REPORT.render_report(
         bundle["prior"], bundle["runtime"], bundle["memory_inputs"],
-        bundle["manifest"], bundle["manifest_sha256"],
+        bundle["manifest"], bundle["manifest_sha256"], bundle["snapshot_identity"],
     )
     validate_report_html(html)
     destination = (output or (run_dir / "report.html")).expanduser().resolve()
@@ -692,8 +700,11 @@ def collect(snapshot: Path, resource_cache: Path, output: Path | None = None,
             "release_tag": release_tag,
         }
         _write_json(run_dir / "status.json", status)
-        shutil.copy2(snapshot_identity_path, run_dir / "snapshot-identity.json")
         try:
+            shutil.copy2(snapshot_identity_path, run_dir / "snapshot-identity.json")
+            shutil.copy2(REFRESH_DIR / "collect_runtime.py", run_dir / "runtime-driver.py")
+            if sha256_file(run_dir / "runtime-driver.py") != status["runtime_driver_sha256"]:
+                raise RuntimeError("archived runtime collector changed while collection was being prepared")
             runtime_out.parent.mkdir(parents=True, exist_ok=True)
             runtime_code = command_runner(runtime_command(snapshot, runtime_out, resource_cache),
                                           run_dir / "runtime.stdout.log")

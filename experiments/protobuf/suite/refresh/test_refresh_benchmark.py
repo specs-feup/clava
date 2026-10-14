@@ -121,7 +121,7 @@ def completed_bundle(root: Path) -> Path:
         "sources": {
             name: {"revision": repositories[name]["revision"]}
             for name in ("clava", "specs-java-libs", "lara-framework")
-        },
+        } | {"clang-dumper": {"revision": "e" * 40}},
         "published_release": {
             "tag": runtime["selected_release"]["tag"],
             "native_repository_revision": repositories["clang-dumper"]["revision"],
@@ -140,6 +140,7 @@ def completed_bundle(root: Path) -> Path:
         "release_tag": runtime["selected_release"]["tag"],
         "release_manifest_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest(),
     })
+    shutil.copy2(REFRESH.REFRESH_DIR / "collect_runtime.py", run_dir / "runtime-driver.py")
     return run_dir
 
 
@@ -172,6 +173,25 @@ MEMORY = load_memory_module()
 class RefreshWorkflowTests(unittest.TestCase):
     def test_refresh_cli_disables_source_tree_bytecode_writes(self) -> None:
         self.assertTrue(sys.dont_write_bytecode)
+
+    def test_ccache_provenance_separates_launcher_and_effective_policy(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            adapter = Path(temporary) / "ClangCcacheAdapter.java"
+            adapter.write_text(
+                'environment.put("CCACHE_COMPRESS", "true");\n'
+                'environment.remove("CCACHE_NOCOMPRESS");\n',
+                encoding="utf-8",
+            )
+            policy = REFRESH.support.ccache_policy_provenance(adapter)
+            self.assertEqual({"CCACHE_NOCOMPRESS": "true"}, policy["launcher_environment"])
+            self.assertEqual("true", policy["effective_policy"]["cache_enabled_modes"]["CCACHE_COMPRESS"])
+            self.assertEqual(
+                "removed by adapter",
+                policy["effective_policy"]["cache_enabled_modes"]["CCACHE_NOCOMPRESS"],
+            )
+            adapter.write_text('environment.put("CCACHE_COMPRESS", "false");\n', encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "no longer enforces"):
+                REFRESH.support.ccache_policy_provenance(adapter)
 
     def _copy_current_js_workload(self, target: Path) -> dict[str, bytes]:
         baseline = REFRESH.COHORT_BASELINE["javascript_test_sources"]
@@ -420,6 +440,13 @@ class RefreshWorkflowTests(unittest.TestCase):
             runtime["native_sha256"]["protobuf"] = "0" * 64
             write_json(results_path, runtime)
             with self.assertRaisesRegex(ValueError, "measured native tool"):
+                REFRESH.validate_run_bundle(run_dir)
+
+    def test_archived_runtime_driver_must_match_captured_hash(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            run_dir = completed_bundle(Path(temp))
+            (run_dir / "runtime-driver.py").write_text("different collector bytes\n")
+            with self.assertRaisesRegex(ValueError, "archived source"):
                 REFRESH.validate_run_bundle(run_dir)
 
     def test_runtime_selected_test_source_hashes_are_required(self) -> None:
