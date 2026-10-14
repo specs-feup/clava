@@ -53,6 +53,7 @@ def summarize(path: Path) -> dict:
         'current': record['snapshot']['stages']['current']['revision'],
         'shared': record['snapshot']['shared'], 'settings': record['settings'],
         'created_utc': record['created_utc'], 'completed_utc': record['completed_utc'],
+        'parser_defaults_control': record.get('parser_defaults_control'),
         'results_sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
         'raw_results': str(path.resolve()), 'cells': cells,
         'checks': checks,

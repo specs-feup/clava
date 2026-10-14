@@ -134,6 +134,7 @@ public class ParallelCodeParser extends CodeParser {
             numThreads = Runtime.getRuntime().availableProcessors();
         }
 
+        initializeParallelDefaults();
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
         List<Future<ClangAstData>> futureTUnits = new ArrayList<>();
@@ -354,6 +355,16 @@ public class ParallelCodeParser extends CodeParser {
 
         // TODO Auto-generated method stub
         // return null;
+    }
+
+    void initializeParallelDefaults() {
+        // Default reads populate the parser's map. Complete those writes before workers share it.
+        // GENERATED_PARSE_ROOT uses presence to opt in, so leave it absent unless explicitly set.
+        for (var key : getStoreDefinitionTry().orElseThrow().getKeys()) {
+            if (key != GENERATED_PARSE_ROOT && key.hasDefaultValue() && !hasValue(key)) {
+                get(key);
+            }
+        }
     }
 
     private ClangAstData parseSource(File sourceFile, String id, Standard standard, DataStore options,

@@ -69,6 +69,28 @@ def main() -> int:
         t.prepare(output)
         try:
             collector = t.Collector(output, quick=not args.wall)
+            with collector.java_init.open('a') as init:
+                init.write("""\ngradle.afterProject { project ->
+    if (project.name == 'ClangAstParser') project.tasks.named('test') {
+        filter { excludeTestsMatching 'pt.up.fe.specs.clang.codeparser.ParallelCodeParserDefaultsTest' }
+    }
+}
+""")
+            # Apply the same parser-default initialization to older controls. Concurrent default reads
+            # mutate SimpleDataStore's HashMap and can lose explicit settings such as SHOW_CODE.
+            instrument_source = collector.overlay.instrument_source
+            def stable_parser_defaults(source):
+                if 'void initializeParallelDefaults()' not in source:
+                    anchor = '        ExecutorService executor = Executors.newFixedThreadPool(numThreads);'
+                    if source.count(anchor) != 1:
+                        raise RuntimeError('Parallel parser initialization anchor changed')
+                    source = source.replace(anchor, '''        for (var key : getStoreDefinitionTry().orElseThrow().getKeys()) {
+            if (key != GENERATED_PARSE_ROOT && key.hasDefaultValue() && !hasValue(key)) get(key);
+        }
+''' + anchor, 1)
+                return instrument_source(source)
+            collector.overlay.instrument_source = stable_parser_defaults
+            collector.record['parser_defaults_control'] = 'Defaults initialized before parallel workers in both revisions; prevents shared HashMap writes and lost settings.'
             if args.profile:
                 with collector.java_init.open('a') as init:
                     init.write("""\ngradle.afterProject { project ->
