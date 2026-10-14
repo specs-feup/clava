@@ -97,8 +97,8 @@
     "native_repository_revision": "e874debc111ec105fa5d1efa17ecd97300613178",
     "tag": "v18.1.8_6-rc8"
   },
-  "report_renderer_clava_revision": "6e0ecdd54e39523a17acafe23b764adebb632b08",
-  "report_sha256": "c32eb630ee039881c87cf97b58082e4c3cf58c3b75b169211a993743cda4a592",
+  "report_renderer_clava_revision": "0ad0eddbd",
+  "report_sha256": "3526c438598b1791ae65642428e634797eb41fe45e1202ef04c8476b13f0779a",
   "runtime_driver_sha256": "fe025d40fd0b2ea8c2786b9e7e4c8b82d52edd62f3393fc01a0434d1cec6f285",
   "runtime_observations": {
     "app": 24,
@@ -204,5 +204,6 @@
     "clava": "8bdb6532078d2c246a23522f925a1ec80d2c81ca",
     "lara-framework": "73c5b955ab5484a3fd3199f9e2da7580758c5683",
     "specs-java-libs": "76fe6b1586bdc6bdb7f6501f30ce238891757b1b"
-  }
+  },
+  "report_rerendered_utc": "2026-10-14T04:40:01Z"
 }

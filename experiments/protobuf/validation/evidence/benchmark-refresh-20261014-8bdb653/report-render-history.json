@@ -1,11 +1,14 @@
 {
-  "current_renderer_clava_revision": "6e0ecdd54e39523a17acafe23b764adebb632b08",
+  "current_renderer_clava_revision": "0ad0eddbd",
   "current_report_file": "report.html",
-  "current_report_sha256": "c32eb630ee039881c87cf97b58082e4c3cf58c3b75b169211a993743cda4a592",
+  "current_report_sha256": "3526c438598b1791ae65642428e634797eb41fe45e1202ef04c8476b13f0779a",
   "kind": "report-only-rerender",
   "original_renderer_clava_revision": "8bdb6532078d2c246a23522f925a1ec80d2c81ca",
   "original_report_file": "report-superseded-before-label-fix.html",
   "original_report_sha256": "7033396c8db9a29e6f41eef7d447714d4d652af6f87451bf74a9dfcce5c2f345",
-  "reason": "Corrected historical source labels; runtime, memory, and control observations were not changed.",
-  "rerendered_utc": "2026-10-14T04:16:54Z"
+  "reason": "Separated source checkout and selected release revisions; clarified effective ccache policy; corrected three-way validation and header/compression claims. Timing, memory, and control observations were not changed.",
+  "rerendered_utc": "2026-10-14T04:40:01Z",
+  "previous_current_report_file": "report-superseded-before-provenance-fix.html",
+  "previous_current_report_sha256": "c32eb630ee039881c87cf97b58082e4c3cf58c3b75b169211a993743cda4a592",
+  "previous_renderer_clava_revision": "6e0ecdd54e39523a17acafe23b764adebb632b08"
 }
