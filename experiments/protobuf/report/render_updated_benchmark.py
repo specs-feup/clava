@@ -520,7 +520,8 @@ def _javascript_workload_section(overlay: dict[str, Any]) -> str:
 
 
 def _summary_table(app_rows: list[dict[str, Any]], wall_rows: list[dict[str, Any]],
-                   fresh_label: str = "New session", reused_label: str = "Reused control") -> str:
+                   fresh_label: str = "New session", reused_label: str = "Reused control",
+                   fresh_stages: tuple[str, ...] = ("protobuf",)) -> str:
     out = ['<table class="summary"><thead><tr><th>Suite</th><th>Cache state</th><th>Format</th>'
            '<th>App time, median (range)</th><th>Command wall time, median (range)</th>'
            '<th>Tests, total/pass/fail/skip</th><th>Source</th></tr></thead><tbody>']
@@ -550,7 +551,7 @@ def _summary_table(app_rows: list[dict[str, Any]], wall_rows: list[dict[str, Any
                         f"r{row['repeat']} {counts}"
                         for row, counts in zip(test_runs, per_repeat_counts)
                     )
-                fresh = any(row.get("reused") is False for row in test_runs)
+                fresh = stage in fresh_stages
                 source = fresh_label if fresh else reused_label
                 out.append(
                     f'<tr><th scope="row">{html.escape(SUITE_LABELS[suite])}</th>'
@@ -609,7 +610,8 @@ def _wall_charts(wall_rows: list[dict[str, Any]]) -> str:
 
 
 def _csv_data(app_rows: list[dict[str, Any]], wall_rows: list[dict[str, Any]], updated: dict[str, Any],
-              fresh_label: str = "updated Protobuf session") -> list[list[Any]]:
+              fresh_label: str = "updated Protobuf session",
+              fresh_stages: tuple[str, ...] = ("protobuf",)) -> list[list[Any]]:
     rows: list[list[Any]] = [[
         "suite", "mode", "stage", "repeat", "metric", "value", "unit", "source",
         "measurement_date", "app_calls", "syntax_only_calls", "total_tests", "passed_tests",
@@ -622,7 +624,7 @@ def _csv_data(app_rows: list[dict[str, Any]], wall_rows: list[dict[str, Any]], u
         for row in sorted(source_rows, key=lambda item: (
                 SUITES.index(item["suite"]), MODES.index(item["mode"]),
                 STAGES.index(item["stage"]), item["repeat"])):
-            new_session = row.get("reused") is False
+            new_session = row["stage"] in fresh_stages
             rows.append([
                 row["suite"], row["mode"], row["stage"], row["repeat"], metric,
                 row[metric], unit, fresh_label if new_session else "reused control",
@@ -897,7 +899,9 @@ def render_comparison(record: Any, prior: Any) -> str:
     _validate_combined(app_rows, "app_elapsed_ms")
     _validate_combined(wall_rows, "elapsed_s")
     historical_date = ", ".join(sorted({str(row.get("measurement_date")) for row in prior_app + prior_wall}))
-    csv_json = _script_json(_csv_data(app_rows, wall_rows, session, "same session"))
+    csv_json = _script_json(_csv_data(
+        app_rows, wall_rows, session, "same session", fresh_stages=COMPARED_STAGES
+    ))
     return _page(
         title="Clava AST transport benchmark",
         lede="Text + ccache, Protobuf and FlatBuffers measured in one session with rotated round order. "
@@ -910,7 +914,9 @@ def render_comparison(record: Any, prior: Any) -> str:
         wall_charts=_wall_charts(wall_rows),
         summary_intro="Medians and min-to-max ranges across four repeats. Text, Protobuf and FlatBuffers rows come "
                       "from the same session; Before cache is historical.",
-        summary=_summary_table(app_rows, wall_rows, "Same session", "Historical"),
+        summary=_summary_table(
+            app_rows, wall_rows, "Same session", "Historical", fresh_stages=COMPARED_STAGES
+        ),
         sections="",
         notes=_measurement_notes(session, "Text + ccache uses a local clang-dumper build (no published release "
                                           "supports its cache flags), so Clava selects system libc headers for it; "

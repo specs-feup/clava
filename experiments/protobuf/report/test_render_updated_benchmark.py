@@ -7,6 +7,7 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
+import re
 import unittest
 
 
@@ -173,6 +174,10 @@ class UpdatedReportTest(unittest.TestCase):
         sources = {(row[2], row[7]) for row in rows[1:]}
         self.assertEqual({("before-cache", "reused control")} | {
             (stage, "same session") for stage in REPORT.COMPARED_STAGES}, sources)
+        summary = page.split('<table class="summary">', 1)[1].split("</table>", 1)[0]
+        summary_rows = re.findall(r'<tr><th scope="row">.*?</tr>', summary)
+        self.assertEqual(18, sum('<td>Same session</td>' in row for row in summary_rows))
+        self.assertEqual(2, sum('<td>Historical</td>' in row for row in summary_rows))
         with self.assertRaises(ValueError):
             REPORT.render_comparison({**record, "quick": True}, fixture_prior())
 
@@ -206,6 +211,34 @@ class UpdatedReportTest(unittest.TestCase):
         current = next(row for row in rows[1:] if row[2] == "protobuf")
         self.assertEqual("", reused[created_index])
         self.assertEqual("2026-10-07 12:00:00 UTC", current[created_index])
+
+    def test_protobuf_report_does_not_relabel_historically_fresh_controls(self):
+        prior = fixture_prior()
+        for rows in (prior["app_plot_rows"], prior["wall_plot_rows"]):
+            for row in rows:
+                if row["stage"] in {"ccache-text", "flatbuffers"}:
+                    row["reused"] = False
+
+        page = REPORT.render_report(prior, fixture_updated())
+        summary = page.split('<table class="summary">', 1)[1].split("</table>", 1)[0]
+        summary_rows = re.findall(r'<tr><th scope="row">.*?</tr>', summary)
+        new_session_rows = [row for row in summary_rows if "<td>New session</td>" in row]
+        self.assertEqual(6, len(new_session_rows))
+        self.assertTrue(all("<td>Protobuf</td>" in row for row in new_session_rows))
+        self.assertTrue(all(
+            "<td>Reused control</td>" in row
+            for row in summary_rows if "<td>Protobuf</td>" not in row
+        ))
+
+        csv_rows = json.loads(page.split(
+            '<script type="application/json" id="csv-data">'
+        )[1].split("</script>")[0])
+        sources_by_stage = {}
+        for row in csv_rows[1:]:
+            sources_by_stage.setdefault(row[2], set()).add(row[7])
+        self.assertEqual({"updated Protobuf session"}, sources_by_stage["protobuf"])
+        for stage in {"before-cache", "ccache-text", "flatbuffers"}:
+            self.assertEqual({"reused control"}, sources_by_stage[stage])
 
     def test_standalone_report_has_dark_theme_sources_and_csv_export(self):
         html = REPORT.render_report(fixture_prior(), fixture_updated())
