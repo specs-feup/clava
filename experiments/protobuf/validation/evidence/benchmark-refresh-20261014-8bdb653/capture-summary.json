@@ -1,0 +1,208 @@
+{
+  "capture_status": "complete",
+  "completed_utc": "2026-10-14T04:10:17.114820+00:00",
+  "controls": "Frozen Text and FlatBuffers observations reused; neither transport was rerun.",
+  "controls_sha256": {
+    "app": "b362a162ff50aff2bbecab7e823559ec1a42b69d58458d8da6d25f28bfa6ee6c",
+    "wall": "feb951ab10962424d60349fa06cda19b9fe8afb8f55219ab459c7bfba136edee"
+  },
+  "created_utc": "2026-10-14T03:35:43.470330+00:00",
+  "javascript_workload": {
+    "baseline_sha256": "b1036cab6f893d0a00361f193b7435ac16259b8ab1c2853ee97e9cf746bd52b9",
+    "current_source_revision": "8bdb6532078d2c246a23522f925a1ec80d2c81ca",
+    "file_count": 9,
+    "frozen_source_revision": "9b588d48ae36b0bfe60eb4fe7748e0116083005f",
+    "overlay": {
+      "applied_to": "isolated snapshot Clava-JS test tree",
+      "current_source_revision": "8bdb6532078d2c246a23522f925a1ec80d2c81ca",
+      "file_count": 9,
+      "files": {
+        "api/Issues.test.ts": {
+          "frozen_sha256": "16f821575eee5755454ae3b5b24d76205a525fdc95569fc6babc6aa758eae9a6",
+          "original_current_sha256": "16f821575eee5755454ae3b5b24d76205a525fdc95569fc6babc6aa758eae9a6",
+          "staged_sha256": "16f821575eee5755454ae3b5b24d76205a525fdc95569fc6babc6aa758eae9a6"
+        },
+        "api/LegacyIntegrationTests - C.test.ts": {
+          "frozen_sha256": "e00c6c805129f58d11589df8622a4f16dd89b898360e26e81d81bd1a83b5dab3",
+          "original_current_sha256": "e00c6c805129f58d11589df8622a4f16dd89b898360e26e81d81bd1a83b5dab3",
+          "staged_sha256": "e00c6c805129f58d11589df8622a4f16dd89b898360e26e81d81bd1a83b5dab3"
+        },
+        "api/LegacyIntegrationTests - CXX.test.ts": {
+          "frozen_sha256": "30d43ecd12d9ce790a5e57e8cbae456407d4358c86b6e336570da146e26f1735",
+          "original_current_sha256": "36b2e023ccbef4e118bc2e9fdcf958c8f6bff789f3b545affe7545de8afb34fa",
+          "staged_sha256": "30d43ecd12d9ce790a5e57e8cbae456407d4358c86b6e336570da146e26f1735"
+        },
+        "api/LegacyIntegrationTests - Issues.test.ts": {
+          "frozen_sha256": "339dba95ad22a444a573227aa042adbdfc13e2625e946e999fa2b95bf20dba26",
+          "original_current_sha256": "339dba95ad22a444a573227aa042adbdfc13e2625e946e999fa2b95bf20dba26",
+          "staged_sha256": "339dba95ad22a444a573227aa042adbdfc13e2625e946e999fa2b95bf20dba26"
+        },
+        "api/Query.test.ts": {
+          "frozen_sha256": "b2c76ac20d61e95cf93af56dfe7450a70f73adab166616d8614331aee160f24b",
+          "original_current_sha256": "b2c76ac20d61e95cf93af56dfe7450a70f73adab166616d8614331aee160f24b",
+          "staged_sha256": "b2c76ac20d61e95cf93af56dfe7450a70f73adab166616d8614331aee160f24b"
+        },
+        "api/clava/ClavaJoinPoints.test.ts": {
+          "frozen_sha256": "a047eb52d81fe5ad3bd82f7b801a37b22ebdef34446ffff5885368a3b5aa69b3",
+          "original_current_sha256": "a047eb52d81fe5ad3bd82f7b801a37b22ebdef34446ffff5885368a3b5aa69b3",
+          "staged_sha256": "a047eb52d81fe5ad3bd82f7b801a37b22ebdef34446ffff5885368a3b5aa69b3"
+        },
+        "api/clava/analysis/AnalyserResult.test.ts": {
+          "frozen_sha256": "2c536374c90c17d48542c17282f4abd2c82031589c2372bf5a75b044ab567e66",
+          "original_current_sha256": "2c536374c90c17d48542c17282f4abd2c82031589c2372bf5a75b044ab567e66",
+          "staged_sha256": "2c536374c90c17d48542c17282f4abd2c82031589c2372bf5a75b044ab567e66"
+        },
+        "code/ClangPlugin/ClangPlugin.test.ts": {
+          "frozen_sha256": "7c17fac48c1c9fd0e7f65bc10faf4e701b7be21008eff8bcffa3eb8d8db970fc",
+          "original_current_sha256": "7c17fac48c1c9fd0e7f65bc10faf4e701b7be21008eff8bcffa3eb8d8db970fc",
+          "staged_sha256": "7c17fac48c1c9fd0e7f65bc10faf4e701b7be21008eff8bcffa3eb8d8db970fc"
+        },
+        "code/Sandbox.test.ts": {
+          "frozen_sha256": "0d60880d1a1a00dc84979f61e86336c97daa2ffddadb47b2cb45159c47daae20",
+          "original_current_sha256": "0d60880d1a1a00dc84979f61e86336c97daa2ffddadb47b2cb45159c47daae20",
+          "staged_sha256": "0d60880d1a1a00dc84979f61e86336c97daa2ffddadb47b2cb45159c47daae20"
+        }
+      },
+      "frozen_source_revision": "9b588d48ae36b0bfe60eb4fe7748e0116083005f",
+      "policy_sha256": "1b0daec3d4d5edf5e5976f984951042125e4c4638af3a134a5df2e60126624cd",
+      "staged_manifest_sha256": "c075eb82767387f468910f3c38076109b1702a6adb33036ef1731ed02edffde1"
+    },
+    "selected_sources": {
+      "api/Issues.test.ts": "16f821575eee5755454ae3b5b24d76205a525fdc95569fc6babc6aa758eae9a6",
+      "api/LegacyIntegrationTests - C.test.ts": "e00c6c805129f58d11589df8622a4f16dd89b898360e26e81d81bd1a83b5dab3",
+      "api/LegacyIntegrationTests - CXX.test.ts": "30d43ecd12d9ce790a5e57e8cbae456407d4358c86b6e336570da146e26f1735",
+      "api/LegacyIntegrationTests - Issues.test.ts": "339dba95ad22a444a573227aa042adbdfc13e2625e946e999fa2b95bf20dba26",
+      "api/Query.test.ts": "b2c76ac20d61e95cf93af56dfe7450a70f73adab166616d8614331aee160f24b",
+      "api/clava/ClavaJoinPoints.test.ts": "a047eb52d81fe5ad3bd82f7b801a37b22ebdef34446ffff5885368a3b5aa69b3",
+      "api/clava/analysis/AnalyserResult.test.ts": "2c536374c90c17d48542c17282f4abd2c82031589c2372bf5a75b044ab567e66",
+      "code/ClangPlugin/ClangPlugin.test.ts": "7c17fac48c1c9fd0e7f65bc10faf4e701b7be21008eff8bcffa3eb8d8db970fc",
+      "code/Sandbox.test.ts": "0d60880d1a1a00dc84979f61e86336c97daa2ffddadb47b2cb45159c47daae20"
+    },
+    "staged_manifest_sha256": "c075eb82767387f468910f3c38076109b1702a6adb33036ef1731ed02edffde1"
+  },
+  "memory_diagnostic": {
+    "cycles_per_jvm": 20,
+    "fresh_jvms": 6,
+    "origin": "fresh",
+    "total_cycles": 120,
+    "workloads": [
+      "nas-lu",
+      "templates"
+    ]
+  },
+  "memory_driver_sha256": "f762d6786768fa32dfed89fc2044e18b098dacf54b442b79047a55cacde4fbc8",
+  "release": {
+    "linux_x64_tool_sha256": "ce467a8355c389c45024490e1ee67930737db090d8e5b236db82ecf1f69c9d27",
+    "manifest_sha256": "9ed7487eff35ef0cdbcd3628fb7a9f429005b4e14a6fa4070db50ba14d0c8ecc",
+    "native_repository_revision": "e874debc111ec105fa5d1efa17ecd97300613178",
+    "tag": "v18.1.8_6-rc8"
+  },
+  "report_renderer_clava_revision": "6e0ecdd54e39523a17acafe23b764adebb632b08",
+  "report_sha256": "c32eb630ee039881c87cf97b58082e4c3cf58c3b75b169211a993743cda4a592",
+  "runtime_driver_sha256": "fe025d40fd0b2ea8c2786b9e7e4c8b82d52edd62f3393fc01a0434d1cec6f285",
+  "runtime_observations": {
+    "app": 24,
+    "app_medians": [
+      {
+        "median": 25074.170748999997,
+        "mode": "direct",
+        "repeats": 4,
+        "suite": "java",
+        "unit": "ms"
+      },
+      {
+        "median": 26088.556372,
+        "mode": "cold",
+        "repeats": 4,
+        "suite": "java",
+        "unit": "ms"
+      },
+      {
+        "median": 14850.367352,
+        "mode": "warm",
+        "repeats": 4,
+        "suite": "java",
+        "unit": "ms"
+      },
+      {
+        "median": 8858.898901,
+        "mode": "direct",
+        "repeats": 4,
+        "suite": "clava-js",
+        "unit": "ms"
+      },
+      {
+        "median": 9387.375625,
+        "mode": "cold",
+        "repeats": 4,
+        "suite": "clava-js",
+        "unit": "ms"
+      },
+      {
+        "median": 5360.9490245,
+        "mode": "warm",
+        "repeats": 4,
+        "suite": "clava-js",
+        "unit": "ms"
+      }
+    ],
+    "java_tests": 116,
+    "javascript_tests": {
+      "passed": 158,
+      "skipped": 6,
+      "total": 164
+    },
+    "total": 48,
+    "wall": 24,
+    "wall_medians": [
+      {
+        "median": 32.28616336570121,
+        "mode": "direct",
+        "repeats": 4,
+        "suite": "java",
+        "unit": "s"
+      },
+      {
+        "median": 33.31265707244165,
+        "mode": "cold",
+        "repeats": 4,
+        "suite": "java",
+        "unit": "s"
+      },
+      {
+        "median": 21.74163829581812,
+        "mode": "warm",
+        "repeats": 4,
+        "suite": "java",
+        "unit": "s"
+      },
+      {
+        "median": 33.09461654885672,
+        "mode": "direct",
+        "repeats": 4,
+        "suite": "clava-js",
+        "unit": "s"
+      },
+      {
+        "median": 33.824606116395444,
+        "mode": "cold",
+        "repeats": 4,
+        "suite": "clava-js",
+        "unit": "s"
+      },
+      {
+        "median": 29.766514418413863,
+        "mode": "warm",
+        "repeats": 4,
+        "suite": "clava-js",
+        "unit": "s"
+      }
+    ]
+  },
+  "source_revisions": {
+    "clang-dumper": "e874debc111ec105fa5d1efa17ecd97300613178",
+    "clava": "8bdb6532078d2c246a23522f925a1ec80d2c81ca",
+    "lara-framework": "73c5b955ab5484a3fd3199f9e2da7580758c5683",
+    "specs-java-libs": "76fe6b1586bdc6bdb7f6501f30ce238891757b1b"
+  }
+}

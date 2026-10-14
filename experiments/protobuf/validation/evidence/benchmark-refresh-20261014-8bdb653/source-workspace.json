@@ -1,0 +1,15 @@
+{
+  "canonical_checkout_state": "User-owned release selector, Lara source edit, and unrelated untracked outputs were left untouched.",
+  "clava_current_production_sources_built_from": "8bdb6532078d2c246a23522f925a1ec80d2c81ca",
+  "clava_untracked_bytecode": "Excluded from the detached source worktree; canonical file left untouched.",
+  "lara_app_capture_overlay_sha256": "276ead7d821b322df07b70c0b7b1e85383fb30754aaa548522ec6b10c34de477",
+  "method": "Temporary detached worktrees from committed repository revisions.",
+  "native_untracked_raw_outputs": "Excluded from detached worktree; canonical outputs left untouched.",
+  "source_revisions": {
+    "clang-dumper": "e874debc111ec105fa5d1efa17ecd97300613178",
+    "clava": "8bdb6532078d2c246a23522f925a1ec80d2c81ca",
+    "lara-framework": "73c5b955ab5484a3fd3199f9e2da7580758c5683",
+    "specs-java-libs": "76fe6b1586bdc6bdb7f6501f30ce238891757b1b"
+  },
+  "workload_overlay": "Pinned test fixture bytes staged only in the isolated benchmark snapshot; current production sources remained at the current Clava revision."
+}

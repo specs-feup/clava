@@ -1,0 +1,115 @@
+{
+  "created_utc": "2026-10-14T03:35:43.469799+00:00",
+  "snapshot": "/home/lmsousa/.cache/protobuf-production-validation/snapshots/protobuf-20261014T033541Z-c6fd5c4e",
+  "sources": {
+    "clava": {
+      "root": "/home/lmsousa/.cache/protobuf-production-validation/source-workspaces/protobuf-20261014-8bdb653-105fad0e/clava",
+      "revision": "8bdb6532078d2c246a23522f925a1ec80d2c81ca",
+      "status": []
+    },
+    "specs-java-libs": {
+      "root": "/home/lmsousa/.cache/protobuf-production-validation/source-workspaces/protobuf-20261014-8bdb653-105fad0e/specs-java-libs",
+      "revision": "76fe6b1586bdc6bdb7f6501f30ce238891757b1b",
+      "status": []
+    },
+    "lara-framework": {
+      "root": "/home/lmsousa/.cache/protobuf-production-validation/source-workspaces/protobuf-20261014-8bdb653-105fad0e/lara-framework",
+      "revision": "73c5b955ab5484a3fd3199f9e2da7580758c5683",
+      "status": [
+        "M LARAI/src/org/lara/interpreter/weaver/LaraWeaverEngine.java"
+      ]
+    },
+    "clang-dumper": {
+      "root": "/home/lmsousa/.cache/protobuf-production-validation/source-workspaces/protobuf-20261014-8bdb653-105fad0e/clang-dumper",
+      "revision": "ec4d80e9c73766df32355cd5380f9d4414443102",
+      "status": []
+    }
+  },
+  "isolated_overlays": {
+    "release_selector": {
+      "committed_value": "v18.1.8_6-rc8",
+      "selected_value": "v18.1.8_6-rc8",
+      "snapshot_sha256": "0e884f7adf13b17f4e9df39dfd1696e087e5f6d10b53fa6699ed04f4325e75ec"
+    },
+    "show_exec_info_default_false": {
+      "source_sha256": "bb74d984370ecf21080e78f72f036eac5a5de78d6a89ade61b4b51ef785f2442",
+      "snapshot_sha256": "aa547d3f03c72d220cb71159ee7ca641126a800ada3e97e6e9e458e41502f636"
+    },
+    "lara_app_capture": {
+      "sha256": "276ead7d821b322df07b70c0b7b1e85383fb30754aaa548522ec6b10c34de477",
+      "copied_from_working_tree": true
+    },
+    "javascript_workload": {
+      "applied_to": "isolated snapshot Clava-JS test tree",
+      "frozen_source_revision": "9b588d48ae36b0bfe60eb4fe7748e0116083005f",
+      "current_source_revision": "8bdb6532078d2c246a23522f925a1ec80d2c81ca",
+      "policy_sha256": "1b0daec3d4d5edf5e5976f984951042125e4c4638af3a134a5df2e60126624cd",
+      "file_count": 9,
+      "staged_manifest_sha256": "c075eb82767387f468910f3c38076109b1702a6adb33036ef1731ed02edffde1",
+      "files": {
+        "api/Issues.test.ts": {
+          "original_current_sha256": "16f821575eee5755454ae3b5b24d76205a525fdc95569fc6babc6aa758eae9a6",
+          "frozen_sha256": "16f821575eee5755454ae3b5b24d76205a525fdc95569fc6babc6aa758eae9a6",
+          "staged_sha256": "16f821575eee5755454ae3b5b24d76205a525fdc95569fc6babc6aa758eae9a6"
+        },
+        "api/LegacyIntegrationTests - C.test.ts": {
+          "original_current_sha256": "e00c6c805129f58d11589df8622a4f16dd89b898360e26e81d81bd1a83b5dab3",
+          "frozen_sha256": "e00c6c805129f58d11589df8622a4f16dd89b898360e26e81d81bd1a83b5dab3",
+          "staged_sha256": "e00c6c805129f58d11589df8622a4f16dd89b898360e26e81d81bd1a83b5dab3"
+        },
+        "api/LegacyIntegrationTests - CXX.test.ts": {
+          "original_current_sha256": "36b2e023ccbef4e118bc2e9fdcf958c8f6bff789f3b545affe7545de8afb34fa",
+          "frozen_sha256": "30d43ecd12d9ce790a5e57e8cbae456407d4358c86b6e336570da146e26f1735",
+          "staged_sha256": "30d43ecd12d9ce790a5e57e8cbae456407d4358c86b6e336570da146e26f1735"
+        },
+        "api/LegacyIntegrationTests - Issues.test.ts": {
+          "original_current_sha256": "339dba95ad22a444a573227aa042adbdfc13e2625e946e999fa2b95bf20dba26",
+          "frozen_sha256": "339dba95ad22a444a573227aa042adbdfc13e2625e946e999fa2b95bf20dba26",
+          "staged_sha256": "339dba95ad22a444a573227aa042adbdfc13e2625e946e999fa2b95bf20dba26"
+        },
+        "api/Query.test.ts": {
+          "original_current_sha256": "b2c76ac20d61e95cf93af56dfe7450a70f73adab166616d8614331aee160f24b",
+          "frozen_sha256": "b2c76ac20d61e95cf93af56dfe7450a70f73adab166616d8614331aee160f24b",
+          "staged_sha256": "b2c76ac20d61e95cf93af56dfe7450a70f73adab166616d8614331aee160f24b"
+        },
+        "api/clava/ClavaJoinPoints.test.ts": {
+          "original_current_sha256": "a047eb52d81fe5ad3bd82f7b801a37b22ebdef34446ffff5885368a3b5aa69b3",
+          "frozen_sha256": "a047eb52d81fe5ad3bd82f7b801a37b22ebdef34446ffff5885368a3b5aa69b3",
+          "staged_sha256": "a047eb52d81fe5ad3bd82f7b801a37b22ebdef34446ffff5885368a3b5aa69b3"
+        },
+        "api/clava/analysis/AnalyserResult.test.ts": {
+          "original_current_sha256": "2c536374c90c17d48542c17282f4abd2c82031589c2372bf5a75b044ab567e66",
+          "frozen_sha256": "2c536374c90c17d48542c17282f4abd2c82031589c2372bf5a75b044ab567e66",
+          "staged_sha256": "2c536374c90c17d48542c17282f4abd2c82031589c2372bf5a75b044ab567e66"
+        },
+        "code/ClangPlugin/ClangPlugin.test.ts": {
+          "original_current_sha256": "7c17fac48c1c9fd0e7f65bc10faf4e701b7be21008eff8bcffa3eb8d8db970fc",
+          "frozen_sha256": "7c17fac48c1c9fd0e7f65bc10faf4e701b7be21008eff8bcffa3eb8d8db970fc",
+          "staged_sha256": "7c17fac48c1c9fd0e7f65bc10faf4e701b7be21008eff8bcffa3eb8d8db970fc"
+        },
+        "code/Sandbox.test.ts": {
+          "original_current_sha256": "0d60880d1a1a00dc84979f61e86336c97daa2ffddadb47b2cb45159c47daae20",
+          "frozen_sha256": "0d60880d1a1a00dc84979f61e86336c97daa2ffddadb47b2cb45159c47daae20",
+          "staged_sha256": "0d60880d1a1a00dc84979f61e86336c97daa2ffddadb47b2cb45159c47daae20"
+        }
+      }
+    }
+  },
+  "published_release": {
+    "tag": "v18.1.8_6-rc8",
+    "manifest_sha256": "9ed7487eff35ef0cdbcd3628fb7a9f429005b4e14a6fa4070db50ba14d0c8ecc",
+    "native_repository_revision": "e874debc111ec105fa5d1efa17ecd97300613178",
+    "asset_sha256": {
+      "clang-dumper-ast-wire.pb": "9b54021feb180f0e031d084ca1d463d3df00a80862476940e2cc73917f584238",
+      "clang-dumper-ast-wire.proto": "723b6d44d97399a81ffd7d97759b45f79ca4eee2683f867f30d0c08facd4c44a",
+      "clang-dumper-linux-x64": "ce467a8355c389c45024490e1ee67930737db090d8e5b236db82ecf1f69c9d27"
+    }
+  },
+  "dependencies": {
+    "workspace_manifest_sha256": "c2eaeeb21a2783db0578e658d81b72af41de373d54ca7768bd3ebba8c4884e02",
+    "node_modules_source": "/home/lmsousa/.cache/protobuf-production-validation/source-workspaces/protobuf-20261014-8bdb653-105fad0e/node_modules",
+    "local_workspace_packages_retargeted": true,
+    "clava_js_node_modules_source": "/home/lmsousa/.cache/protobuf-production-validation/source-workspaces/protobuf-20261014-8bdb653-105fad0e/clava/Clava-JS/node_modules",
+    "lara_js_node_modules_source": "/home/lmsousa/.cache/protobuf-production-validation/source-workspaces/protobuf-20261014-8bdb653-105fad0e/lara-framework/Lara-JS/node_modules"
+  }
+}
