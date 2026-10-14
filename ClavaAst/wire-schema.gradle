@@ -1,0 +1,27 @@
+// Shared by ClavaAst generation and ClangAstParser packaging. The AST build owns the downloaded resource.
+def wireSchemaDir = layout.buildDirectory.dir('generated/wire-schema')
+ext.wireSchemaDir = wireSchemaDir
+tasks.register('wireSchema') {
+    def tagFile = file('../ClangAstParser/clang-dumper-release.tag')
+    inputs.file(tagFile)
+    outputs.dir(wireSchemaDir)
+    outputs.upToDateWhen { !new File(tagFile.text.trim()).absolute }
+    doLast {
+        def tag = tagFile.text.trim()
+        def read = { String name ->
+            new File(tag).absolute ? new File(tag, name).bytes
+                    : URI.create("https://github.com/specs-feup/clang-dumper/releases/download/$tag/$name").toURL().bytes
+        }
+        def manifest = new groovy.json.JsonSlurper().parse(read('clang-dumper-release-manifest.json'))
+        def asset = manifest.assets.find { it.kind == 'wire-schema-bfbs' }
+        if (asset == null) throw new GradleException("clang-dumper '$tag' does not publish a binary wire schema")
+        def bfbs = read(asset.filename)
+        if (java.security.MessageDigest.getInstance('SHA-256').digest(bfbs).encodeHex().toString() != asset.sha256) {
+            throw new GradleException("Checksum mismatch for ${asset.filename} of clang-dumper '$tag'")
+        }
+        def out = wireSchemaDir.get().dir('pt/up/fe/specs/clang/wire').asFile
+        out.mkdirs()
+        new File(out, 'ast-wire.bfbs').bytes = bfbs
+        new File(out, 'ast-wire.sha256').text = manifest.wire_schema.sha256 + '\n'
+    }
+}

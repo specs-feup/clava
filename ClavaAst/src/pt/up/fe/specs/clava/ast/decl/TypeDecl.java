@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.decl;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
@@ -35,16 +33,14 @@ import pt.up.fe.specs.util.SpecsCheck;
  * @author JoaoBispo
  *
  */
-public abstract class TypeDecl extends NamedDecl implements Typable {
+public abstract class TypeDecl extends TypeDeclBase implements Typable {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in TypeDeclBase.
 
-    /**
-     * The type associated with this TypeDecl.
-     */
-    public final static DataKey<Optional<Type>> TYPE_FOR_DECL = KeyFactory.optional("type_for_decl");
-
-    /// DATAKEYS END
+    public TypeDecl(DataStore data, Collection<? extends ClavaNode> children, TypeDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public TypeDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -57,7 +53,7 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
 
     @Override
     public Type getType() {
-        return get(TYPE_FOR_DECL).orElse(getFactory().nullType());
+        return getWireTypeForDecl().orElse(getFactory().nullType());
     }
 
     @Override
@@ -86,7 +82,7 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
         // Each TypeDecl appears to have a corresponding Type node that is linked to this decl
         // If the Decl is copied, the type must be copied too and linked
         // TypeForDecl type is linked to this Decl, also copy the type and replace the Decl
-        var type = get(TYPE_FOR_DECL);
+        var type = getWireTypeForDecl();
         // System.out.println("TYPE FOR DECL: " + type);
         if (type.isPresent()) {
             // System.out.println("TYPE: " + this.getCode());

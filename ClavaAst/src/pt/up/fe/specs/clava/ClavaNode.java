@@ -31,6 +31,7 @@ import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.DataStore.GenericDataClass;
 import org.suikasoft.jOptions.DataStore.ListDataStore;
 import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.CustomGetter;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
@@ -44,6 +45,7 @@ import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.data.NodeDataStore;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.NodeWithScope;
 import pt.up.fe.specs.clava.utils.NullNode;
@@ -125,21 +127,103 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     /// DATAKEYS END
 
+    // DataKeys are immutable, so these hooks are fixed for the lifetime of each declared key.
+    private static final CustomGetter<ClavaContext> CONTEXT_GETTER = CONTEXT.getCustomGetter().orElse(null);
+    private static final CustomGetter<String> ID_GETTER = ID.getCustomGetter().orElse(null);
+    private static final CustomGetter<SourceRange> LOCATION_GETTER = LOCATION.getCustomGetter().orElse(null);
+    private static final CustomGetter<String> PREVIOUS_ID_GETTER = PREVIOUS_ID.getCustomGetter().orElse(null);
+
+    /** Hand-written root fields share the same inherited state as generated payload fields. */
+    public static class WireFields extends NodeDataStore.Fields {
+        public static final int FIELD_COUNT = 8;
+        private ClavaContext context;
+        private String id;
+        private SourceRange location;
+        private Boolean isMacro;
+        private List<InlineComment> inlineComments;
+        private Boolean isInSystemHeader;
+        private String previousId;
+        private ClavaNode origin;
+
+        public final void initializeParsed(ClavaContext context, String id) {
+            this.context = java.util.Objects.requireNonNull(context);
+            this.id = java.util.Objects.requireNonNull(id);
+            isMacro = false;
+            isInSystemHeader = false;
+            mark(0, context);
+            mark(1, id);
+            mark(3, isMacro);
+            mark(5, isInSystemHeader);
+        }
+
+        public final void setParsedSource(SourceRange location, boolean macro, boolean systemHeader) {
+            if (location != null) {
+                this.location = location;
+                mark(2, location);
+            }
+            isMacro = macro;
+            isInSystemHeader = systemHeader;
+            mark(3, isMacro);
+            mark(5, isInSystemHeader);
+        }
+
+        @Override public Object read(int index) { return readRoot(index); }
+
+        public final Object readRoot(int index) {
+            return switch (index) {
+                case 0 -> context;
+                case 1 -> id;
+                case 2 -> location;
+                case 3 -> isMacro;
+                case 4 -> inlineComments;
+                case 5 -> isInSystemHeader;
+                case 6 -> previousId;
+                case 7 -> origin;
+                default -> super.read(index);
+            };
+        }
+
+        @Override public void write(int index, Object value) { writeRoot(index, value); }
+
+        @SuppressWarnings("unchecked")
+        public final void writeRoot(int index, Object value) {
+            switch (index) {
+                case 0 -> context = (ClavaContext) value;
+                case 1 -> id = (String) value;
+                case 2 -> location = (SourceRange) value;
+                case 3 -> isMacro = (Boolean) value;
+                case 4 -> inlineComments = (List<InlineComment>) value;
+                case 5 -> isInSystemHeader = (Boolean) value;
+                case 6 -> previousId = (String) value;
+                case 7 -> origin = (ClavaNode) value;
+                default -> { super.write(index, value); return; }
+            }
+            mark(index, value);
+        }
+    }
+
+    public static final NodeDataStore.Layout<WireFields> WIRE_LAYOUT = new NodeDataStore.Layout<>(
+            WireFields.class, WireFields::new,
+            List.of(CONTEXT, ID, LOCATION, IS_MACRO, INLINE_COMMENTS, IS_IN_SYSTEM_HEADER, PREVIOUS_ID, ORIGIN), 0, -1);
+
     public static String toTree(Collection<? extends ClavaNode> nodes) {
         return nodes.stream().map(ClavaNode::toTree).collect(Collectors.joining("\n"));
     }
 
-    private final DataStore dataI;
+    private final NodeDataStore dataI;
+    private final WireFields wireFields;
     private final DataClass<ClavaNode> dataClass;
     private boolean disableModification;
 
     public ClavaNode(DataStore dataI, Collection<? extends ClavaNode> children) {
         super(children);
 
-        SpecsCheck.checkArgument(dataI instanceof ListDataStore,
+        SpecsCheck.checkArgument(dataI instanceof ListDataStore
+                || dataI instanceof NodeDataStore,
                 () -> "Expected ListDataStore, found  " + dataI.getClass());
 
-        this.dataI = dataI;
+        this.dataI = NodeDataStore.adapt(dataI, getClass());
+        this.wireFields = this.dataI.state(WireFields.class);
         disableModification = false;
 
         // Set definition of DataStore
@@ -151,6 +235,16 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     protected void setDisableModification(boolean disableModification) {
         this.disableModification = disableModification;
+    }
+
+    protected final NodeDataStore getNodeStorage() { return dataI; }
+
+    protected final boolean canModifyData() {
+        if (disableModification) {
+            SpecsLogs.warn("Could not perform set: this node is a view, modifications are disabled");
+            return false;
+        }
+        return true;
     }
 
     protected String getTab() {
@@ -197,7 +291,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public SourceRange getLocation() {
-        return get(LOCATION);
+        return readLocation();
+    }
+
+    private SourceRange readLocation() {
+        if (wireFields.location == null) {
+            wireFields.location = dataI.defaultGenerated(LOCATION);
+            wireFields.mark(2, wireFields.location);
+        }
+        return LOCATION_GETTER == null ? wireFields.location : LOCATION_GETTER.get(wireFields.location, dataI);
     }
 
     public Optional<String> getExtendedId() {
@@ -205,7 +307,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public String getId() {
-        return get(ID);
+        return readId();
+    }
+
+    private String readId() {
+        if (wireFields.id == null) {
+            wireFields.id = dataI.defaultGenerated(ID);
+            wireFields.mark(1, wireFields.id);
+        }
+        return ID_GETTER == null ? wireFields.id : ID_GETTER.get(wireFields.id, dataI);
     }
 
     /**
@@ -531,7 +641,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public ClavaFactory getFactory() {
-        return get(CONTEXT).get(ClavaContext.FACTORY);
+        return readContext().get(ClavaContext.FACTORY);
     }
 
     /**
@@ -541,8 +651,20 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      * @return
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T get(DataKey<T> key) {
         try {
+            if (key == ID) return (T) readId();
+            if (key == LOCATION) return (T) readLocation();
+            if (key == CONTEXT) return (T) readContext();
+            if (key == PREVIOUS_ID) {
+                if (wireFields.previousId == null) {
+                    wireFields.previousId = dataI.defaultGenerated(PREVIOUS_ID);
+                    wireFields.mark(6, wireFields.previousId);
+                }
+                return (T) (PREVIOUS_ID_GETTER == null ? wireFields.previousId
+                        : PREVIOUS_ID_GETTER.get(wireFields.previousId, dataI));
+            }
             T value = dataI.get(key);
 
             // // Ignore ImplicitCasts
@@ -583,8 +705,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      */
     @Override
     public <T, E extends T> ClavaNode set(DataKey<T> key, E value) {
-        if (disableModification) {
-            SpecsLogs.warn("Could not perform set: this node is a view, modifications are disabled");
+        if (!canModifyData()) {
             return this;
         }
 
@@ -623,7 +744,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public ClavaContext getContext() {
-        return get(CONTEXT);
+        return readContext();
+    }
+
+    private ClavaContext readContext() {
+        if (wireFields.context == null) {
+            wireFields.context = dataI.defaultGenerated(CONTEXT);
+            wireFields.mark(0, wireFields.context);
+        }
+        return CONTEXT_GETTER == null ? wireFields.context : CONTEXT_GETTER.get(wireFields.context, dataI);
     }
 
     /**

@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -28,20 +26,21 @@ import pt.up.fe.specs.clava.language.AccessSpecifier;
  * @author JBispo
  *
  */
-public class AccessSpecDecl extends Decl {
-    /// DATAKEYS BEGIN
+public class AccessSpecDecl extends AccessSpecDeclBase {
 
-    public final static DataKey<AccessSpecifier> ACCESS_SPECIFIER = KeyFactory.enumeration("accessSpecifier",
-            AccessSpecifier.class);
+    // Data declarations are generated from the wire schema in AccessSpecDeclBase.
 
-    /// DATAKEYS END
+    public AccessSpecDecl(DataStore data, Collection<? extends ClavaNode> children, AccessSpecDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public AccessSpecDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public AccessSpecifier getAccessSpecifier() {
-        return get(ACCESS_SPECIFIER);
+        return getWireAccessSpecifier();
     }
 
     @Override

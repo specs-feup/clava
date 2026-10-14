@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -31,25 +29,24 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JoaoBispo
  *
  */
-public class AttributedType extends Type {
+public class AttributedType extends AttributedTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in AttributedTypeBase.
 
-    public final static DataKey<Type> MODIFIED_TYPE = KeyFactory.object("modifiedType", Type.class);
-
-    public final static DataKey<Type> EQUIVALENT_TYPE = KeyFactory.object("equivalentType", Type.class);
-
-    /// DATAKEYS END
+    public AttributedType(DataStore data, Collection<? extends ClavaNode> children, AttributedTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public AttributedType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Type getModifiedType() {
-        return get(MODIFIED_TYPE);
+        return getWireModifiedType();
     }
 
     public Type getEquivalentType() {
-        return get(EQUIVALENT_TYPE);
+        return getWireEquivalentType();
     }
 }

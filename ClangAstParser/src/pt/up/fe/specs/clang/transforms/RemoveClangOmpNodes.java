@@ -14,7 +14,11 @@
 package pt.up.fe.specs.clang.transforms;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.ast.omp.clang.AClangOMP;
+import pt.up.fe.specs.clava.ast.stmt.CapturedStmt;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.transform.SimplePreClavaRule;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
@@ -34,10 +38,36 @@ public class RemoveClangOmpNodes implements SimplePreClavaRule {
         }
 
         for (ClavaNode child : node.getChildren()) {
+            if (isEmptyImplicitBody((AClangOMP) node, child)) {
+                continue;
+            }
+
             queue.moveBefore(node, child);
         }
 
         queue.delete(node);
+    }
+
+    private boolean isEmptyImplicitBody(AClangOMP directive, ClavaNode child) {
+        SourceLocation directiveStart = directive.getLocation().getStart();
+        if (child instanceof CapturedStmt) {
+            Stmt capturedStatement = ((CapturedStmt) child).getCapturedStatement();
+            return isEmptyImplicitCompound(capturedStatement, directiveStart);
+        }
+
+        return isEmptyImplicitCompound(child, directiveStart);
+    }
+
+    private boolean isEmptyImplicitCompound(ClavaNode node, SourceLocation directiveStart) {
+        if (!(node instanceof CompoundStmt) || node.hasChildren()) {
+            return false;
+        }
+
+        // Clang's standalone directives carry an empty captured placeholder at the pragma
+        // location. Empty source bodies, including macro expansions, have a different anchor.
+        SourceLocation start = node.getLocation().getStart();
+        SourceLocation end = node.getLocation().getEnd();
+        return start.equals(end) && start.equals(directiveStart) && !start.isMacro();
     }
 
 }

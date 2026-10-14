@@ -15,21 +15,19 @@ package pt.up.fe.specs.clava.ast.attr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.enums.FormatAttrKind;
 
-public class FormatAttr extends InheritableAttr {
-    /// DATAKEYS BEGIN
+public class FormatAttr extends FormatAttrBase {
 
-    public final static DataKey<FormatAttrKind> TYPE = KeyFactory.enumeration("type", FormatAttrKind.class);
-    public final static DataKey<Integer> FORMAT_INDEX = KeyFactory.integer("formatIndex");
-    public final static DataKey<Integer> FIRST_ARG = KeyFactory.integer("firstArg");
+    // Data declarations are generated from the wire schema in FormatAttrBase.
 
-    /// DATAKEYS END
+    public FormatAttr(DataStore data, Collection<? extends ClavaNode> children, FormatAttrBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public FormatAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -37,14 +35,14 @@ public class FormatAttr extends InheritableAttr {
 
     @Override
     public String getArgumentsCode() {
-        return get(TYPE) + ", " + get(FORMAT_INDEX) + ", " + get(FIRST_ARG);
+        return getWireType() + ", " + getWireFormatIndex() + ", " + getWireFirstArg();
     }
 
     // @Override
     // public String getCode() {
-    // // System.out.println("TYPE:" + get(TYPE));
-    // // return getAttributeCode("__format__(__" + get(TYPE) + "__, " + get(FORMAT_INDEX) + ", " + get(FIRST_ARG) +
+    // // System.out.println("TYPE:" + getWireType());
+    // // return getAttributeCode("__format__(__" + getWireType() + "__, " + getWireFormatIndex() + ", " + getWireFirstArg() +
     // // ")");
-    // return getAttributeCode("__format__(" + get(TYPE) + ", " + get(FORMAT_INDEX) + ", " + get(FIRST_ARG) + ")");
+    // return getAttributeCode("__format__(" + getWireType() + ", " + getWireFormatIndex() + ", " + getWireFirstArg() + ")");
     // }
 }

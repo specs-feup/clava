@@ -15,22 +15,19 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
-public class DecltypeType extends Type {
+public class DecltypeType extends DecltypeTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in DecltypeTypeBase.
 
-    public final static DataKey<Boolean> IS_SUGARED = KeyFactory.bool("isSugared");
-
-    public final static DataKey<Expr> UNDERLYING_EXPR = KeyFactory.object("underlyingExpr", Expr.class);
-
-    /// DATAKEYS END
+    public DecltypeType(DataStore data, Collection<? extends ClavaNode> children, DecltypeTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public DecltypeType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -42,8 +39,8 @@ public class DecltypeType extends Type {
 
     @Override
     public Type desugar() {
-        if (get(IS_SUGARED)) {
-            return get(UNDERLYING_EXPR).getType();
+        if (getWireIsSugared()) {
+            return getWireUnderlyingExpr().getType();
         }
 
         return this;

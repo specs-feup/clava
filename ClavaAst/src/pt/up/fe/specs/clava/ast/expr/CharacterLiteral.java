@@ -15,34 +15,32 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.util.SpecsStrings;
 
-public class CharacterLiteral extends Literal {
+public class CharacterLiteral extends CharacterLiteralBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in CharacterLiteralBase.
 
-    public final static DataKey<Long> VALUE = KeyFactory.longInt("value");
-    public final static DataKey<CharacterKind> KIND = KeyFactory.enumeration("kind", CharacterKind.class);
-
-    /// DATAKEYS END
+    public CharacterLiteral(DataStore data, Collection<? extends ClavaNode> children, CharacterLiteralBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CharacterLiteral(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public long getCharValue() {
-        return get(VALUE);
+        return getWireValue();
     }
 
     @Override
     public String getCode() {
-        String sourceLiteral = get(SOURCE_LITERAL);
+        String sourceLiteral = getWireSourceLiteral();
 
         // If source literal starts with ', then just return
         if (sourceLiteral.startsWith("'")) {
@@ -57,7 +55,7 @@ public class CharacterLiteral extends Literal {
     }
 
     private String getCodeFromUnicode(String sourceLiteralPrefix) {
-        String hexString = SpecsStrings.toHexString(get(VALUE), 8).substring("0x".length());
+        String hexString = SpecsStrings.toHexString(getWireValue(), 8).substring("0x".length());
         return sourceLiteralPrefix + "'\\U" + hexString + "'";
     }
 

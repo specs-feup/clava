@@ -15,20 +15,19 @@ package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 
-public class GotoStmt extends Stmt {
+public class GotoStmt extends GotoStmtBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in GotoStmtBase.
 
-    public final static DataKey<LabelDecl> LABEL = KeyFactory.object("label", LabelDecl.class);
-
-    /// DATAKEYS END
+    public GotoStmt(DataStore data, Collection<? extends ClavaNode> children, GotoStmtBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public GotoStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -39,7 +38,7 @@ public class GotoStmt extends Stmt {
     }
 
     public LabelDecl getLabel() {
-        return get(LABEL);
+        return getWireLabel();
     }
 
     public void setLabel(LabelDecl labelDecl) {

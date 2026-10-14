@@ -1,0 +1,24 @@
+// Keep the protocol-comparison parser workload fixed at 116 tests. New wire,
+// dumper, and harness regression tests run in the full ClangAstParser suite.
+gradle.afterProject { project ->
+    if (project.name == 'ClangAstParser') {
+        project.tasks.named('test') {
+            outputs.upToDateWhen { false }
+            filter {
+                excludeTestsMatching 'pt.up.fe.specs.clang.ClangResourcesTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.CudaResourcesTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.parser.tests.CxxCudaTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.parser.tests.GeneratedParseRootTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.parser.AClangAstTesterResourceTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangCcacheAdapterTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangAstDumperSyntax*Test'
+                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.CXXConversionDeclTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangAstDumperTest'
+                excludeTestsMatching 'pt.up.fe.specs.clang.wire.*'
+            }
+        }
+
+        project.tasks.named('jacocoTestReport') { onlyIf { false } }
+        project.tasks.named('jacocoTestCoverageVerification') { onlyIf { false } }
+    }
+}

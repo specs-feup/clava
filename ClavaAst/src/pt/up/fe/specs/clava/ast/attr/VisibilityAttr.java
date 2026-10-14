@@ -15,17 +15,17 @@ package pt.up.fe.specs.clava.ast.attr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.enums.VisibilityType;
 
-public class VisibilityAttr extends InheritableAttr {
+public class VisibilityAttr extends VisibilityAttrBase {
 
-    public static final DataKey<VisibilityType> VISIBILITY_TYPE = KeyFactory.enumeration("visibilityType",
-            VisibilityType.class);
+    public VisibilityAttr(DataStore data, java.util.Collection<? extends ClavaNode> children, VisibilityAttrBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public VisibilityAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -33,7 +33,7 @@ public class VisibilityAttr extends InheritableAttr {
 
     @Override
     public String getArgumentsCode() {
-        return get(VISIBILITY_TYPE).getCode();
+        return getWireVisibilityType().getCode();
     }
 
 }

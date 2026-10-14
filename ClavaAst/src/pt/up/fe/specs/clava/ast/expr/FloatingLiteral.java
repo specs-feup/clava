@@ -15,20 +15,19 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.util.SpecsStrings;
 
-public class FloatingLiteral extends Literal {
+public class FloatingLiteral extends FloatingLiteralBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in FloatingLiteralBase.
 
-    public final static DataKey<Double> VALUE = KeyFactory.double64("value");
-
-    /// DATAKEYS END
+    public FloatingLiteral(DataStore data, Collection<? extends ClavaNode> children, FloatingLiteralBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     private static final double ERROR_THRESHOLD = 1e-6;
 
@@ -54,7 +53,7 @@ public class FloatingLiteral extends Literal {
         }
 
         // Because of the parsing problems, approximate value is "closer" to the truth than literal
-        double approximateValue = get(VALUE);
+        double approximateValue = getWireValue();
 
         // If approximate value is zero, return literal
         if (approximateValue == 0.0) {

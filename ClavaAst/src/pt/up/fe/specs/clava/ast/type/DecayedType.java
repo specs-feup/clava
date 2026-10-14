@@ -15,21 +15,18 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class DecayedType extends AdjustedType {
+public class DecayedType extends DecayedTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in DecayedTypeBase.
 
-    public final static DataKey<Type> DECAYED_TYPE = KeyFactory.object("decayedType", Type.class);
-
-    public final static DataKey<Type> POINTEE_TYPE = KeyFactory.object("pointeeType", Type.class);
-
-    /// DATAKEYS END
+    public DecayedType(DataStore data, Collection<? extends ClavaNode> children, DecayedTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public DecayedType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

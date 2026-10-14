@@ -124,9 +124,6 @@ public class ParallelCodeParser extends CodeParser {
         ClavaLog.info("Found " + sources.size() + " source files");
         // ClavaLog.debug(() -> "[ParallelCodeParser] Files to parse:" + sources);
 
-        File parsingFolder = SpecsIo.getTempFolder("clava_parsing_" + UUID.randomUUID().toString());
-        ClavaLog.debug(() -> "Parsing using folder '" + parsingFolder + "'");
-
         // AtomicInteger currentSourceFileIndex = new AtomicInteger(0);
         ParallelProgressCounter counter = new ParallelProgressCounter(sources.size());
 
@@ -137,6 +134,7 @@ public class ParallelCodeParser extends CodeParser {
             numThreads = Runtime.getRuntime().availableProcessors();
         }
 
+        initializeParallelDefaults();
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
         List<Future<ClangAstData>> futureTUnits = new ArrayList<>();
@@ -146,7 +144,7 @@ public class ParallelCodeParser extends CodeParser {
 
             Future<ClangAstData> tUnit = executor
                     .submit(() -> parseSource(source, id, standard, options, clangDump,
-                            counter, parsingFolder, clangFiles, syntaxErrors));
+                            counter, clangFiles, syntaxErrors));
 
             futureTUnits.add(tUnit);
 
@@ -176,17 +174,6 @@ public class ParallelCodeParser extends CodeParser {
 
         }
 
-        // List<ClangParserData> clangParserResults = futureTUnits.stream()
-        // .map(future -> getParserData(future))
-        // .filter(parser -> parser != null)
-        // .collect(Collectors.toList());
-        // for (var data : clangParserResults) {
-        // System.out.println("CLANG PARSER NODES:\n" + data.get(ClangParserData.CLAVA_NODES).getNodes());
-        // }
-
-        // Delete temporary folder
-        SpecsIo.deleteFolder(parsingFolder);
-
         // No AST was decoded, just report syntax validation errors
         if (syntaxOnly) {
             List<String> validationErrors = new ArrayList<>(syntaxErrors);
@@ -196,6 +183,7 @@ public class ParallelCodeParser extends CodeParser {
 
             return null;
         }
+
 
         // List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
         // .map(sourceFile -> parseSource(new File(sourceFile), standard, options, clangDump,
@@ -267,6 +255,7 @@ public class ParallelCodeParser extends CodeParser {
         // original clang tree
         // new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
         new TreeTransformer(ClangAstParser.getPostParsingRules()).transform(app);
+        clangParserResults.forEach(pt.up.fe.specs.clang.wire.WireReader::releaseLookup);
 
         // Add text elements (comments, pragmas) to the tree
         new TextParser(app.getContext()).addElements(app);
@@ -312,15 +301,6 @@ public class ParallelCodeParser extends CodeParser {
         return app;
 
     }
-
-    // private ClangParserData getParserData(Future<ClangParserData> future) {
-    // try {
-    // return SpecsSystem.get(future);
-    // } catch (Exception e) {
-    // ClavaLog.info(e.getMessage());
-    // return null;
-    // }
-    // }
 
     //
     // private <T> Stream<T> getSourceFileStream(Collection<T> sourceFiles) {
@@ -377,8 +357,18 @@ public class ParallelCodeParser extends CodeParser {
         // return null;
     }
 
+    void initializeParallelDefaults() {
+        // Default reads populate the parser's map. Complete those writes before workers share it.
+        // GENERATED_PARSE_ROOT uses presence to opt in, so leave it absent unless explicitly set.
+        for (var key : getStoreDefinitionTry().orElseThrow().getKeys()) {
+            if (key != GENERATED_PARSE_ROOT && key.hasDefaultValue() && !hasValue(key)) {
+                get(key);
+            }
+        }
+    }
+
     private ClangAstData parseSource(File sourceFile, String id, Standard standard, DataStore options,
-                                     ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
+                                     ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter,
                                      ClangFiles clangFiles, ConcurrentLinkedQueue<String> syntaxErrors) {
 
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
@@ -392,44 +382,34 @@ public class ParallelCodeParser extends CodeParser {
 
         ClangAstDumper clangParser = new ClangAstDumper(streamConsoleOutput, clangFiles.clangExecutable(),
                 clangFiles.builtinIncludes(), clangFiles.systemResourceDir(), this)
-                .setBaseFolder(parsingFolder)
                 .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
 
         // .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         counter.print(sourceFile);
 
-        // Run the same clang invocation, discard dumper output
-        if (get(SYNTAX_ONLY)) {
-            String error = clangParser.validateSyntax(sourceFile, id, standard, options);
-            if (error != null) {
-                syntaxErrors.add(error);
+        try {
+            // Run the same clang invocation, discard dumper output.
+            if (get(SYNTAX_ONLY)) {
+                String error = clangParser.validateSyntax(sourceFile, id, standard, options);
+                if (error != null) {
+                    syntaxErrors.add(error);
+                }
+                return null;
             }
 
-            return null;
-        }
+            ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
 
-        ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
+            if (get(SHOW_CLANG_DUMP)) {
+                clangDump.add(clangParser.getClangDump());
+            }
 
-        if (get(SHOW_CLANG_DUMP)) {
-            // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
-            // SpecsLogs.msgInfo(clangParser.getClangDump());
-            clangDump.add(clangParser.getClangDump());
-        }
-
-        if (get(CLEAN)) {
-            // if (clangParser.getLastWorkingFolder() == null) {
-            // workingFolders.add(clangParser.getLastWorkingFolder());
-            // }
-            if (clangParser.getLastWorkingFolder() == null) {
-                SpecsLogs.msgInfo("No working folder found for source file '" + sourceFile + "'");
-            } else {
+            return clangParserData;
+        } finally {
+            if (get(CLEAN) && clangParser.getLastWorkingFolder() != null) {
                 SpecsIo.deleteFolder(clangParser.getLastWorkingFolder());
             }
-
         }
-
-        return clangParserData;
     }
 
     /*

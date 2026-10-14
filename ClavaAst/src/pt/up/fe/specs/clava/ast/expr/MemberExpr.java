@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -37,29 +36,21 @@ import pt.up.fe.specs.util.collections.SpecsList;
  * @author JoaoBispo
  *
  */
-public class MemberExpr extends Expr {
+public class MemberExpr extends MemberExprBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in MemberExprBase.
 
-    public final static DataKey<String> MEMBER_NAME = KeyFactory.string("memberName");
-
-    public final static DataKey<Boolean> IS_ARROW = KeyFactory.bool("isArrow");
-
-    public final static DataKey<ValueDecl> MEMBER_DECL = KeyFactory.object("memberDecl", ValueDecl.class);
-
-    public final static DataKey<NamedDecl> FOUND_DECL = KeyFactory.object("foundDecl", NamedDecl.class);
-
-    public final static DataKey<AccessSpecifier> FOUND_DECL_ACCESS_SPECIFIER = KeyFactory
-            .enumeration("foundDeclAccessSpecifier", AccessSpecifier.class);
-
-    /// DATAKEYS END
+    public MemberExpr(DataStore data, Collection<? extends ClavaNode> children, MemberExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public MemberExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public String getMemberName() {
-        return get(MEMBER_NAME);
+        return getWireMemberName();
     }
 
     public void setMemberName(String memberName) {
@@ -67,7 +58,7 @@ public class MemberExpr extends Expr {
     }
 
     public boolean isArrow() {
-        return get(IS_ARROW);
+        return getWireIsArrow();
     }
 
     public Expr getBase() {
@@ -75,7 +66,7 @@ public class MemberExpr extends Expr {
     }
 
     public ValueDecl getMemberDecl() {
-        return get(MEMBER_DECL);
+        return getWireMemberDecl();
     }
 
     @Override

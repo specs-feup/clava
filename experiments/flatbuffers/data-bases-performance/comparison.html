@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Generated node data performance</title>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<style>
+html { background:transparent; }
+body { font-family:var(--font-sans); color:var(--foreground); margin:0; background:transparent; }
+#node-data-performance { width:100%; }
+h2,h3 { font-weight:500; margin:0 0 8px; }
+h2 { font-size:18px; }
+h3 { font-size:14px; }
+p { margin:0 0 14px; font-size:14px; }
+.legend { display:flex; flex-wrap:wrap; gap:16px; margin:12px 0; font-size:14px; }
+.legend button { display:flex; gap:7px; align-items:center; border:0; padding:0; background:transparent; color:var(--foreground); font:inherit; }
+.legend button[aria-pressed="false"] { opacity:0.5; }
+.swatch { display:inline-block; width:9px; height:9px; }
+.before { background:var(--chart-1); }
+.after { background:var(--chart-2); border-radius:50%; }
+.panels { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 16px; }
+.panel { min-width:0; }
+.panel svg { display:block; width:100%; height:220px; }
+.panel svg text { fill:var(--foreground); font-size:12px; }
+.panel svg .domain,.panel svg .tick line { stroke:var(--border); }
+.medians { font-size:14px; font-variant-numeric:tabular-nums; margin:8px 0 0; }
+.delta { font-weight:500; }
+.note { color:var(--muted-foreground); font-size:12px; margin-top:16px; }
+details { margin-top:16px; font-size:14px; }
+summary { cursor:default; }
+table { width:100%; border-collapse:collapse; margin-top:12px; font-size:12px; font-variant-numeric:tabular-nums; }
+th,td { text-align:left; padding:8px 4px; border-bottom:1px solid var(--border); overflow-wrap:anywhere; }
+th { font-weight:500; }
+.controls { margin-top:12px; font-size:12px; color:var(--muted-foreground); overflow-wrap:anywhere; }
+.tooltip { position:absolute; pointer-events:none; padding:8px 10px; background:var(--popover); color:var(--popover-foreground); border-radius:var(--radius); font-size:12px; max-width:180px; }
+@media(max-width:540px) { .panels { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<main id="node-data-performance">
+<h2>Generated node data performance</h2>
+<p id="subtitle"></p>
+<div class="legend" aria-label="Series">
+<button type="button" data-series-toggle="baseline" aria-pressed="true"><i class="swatch before" aria-hidden="true"></i>Parent commit</button>
+<button type="button" data-series-toggle="current" aria-pressed="true"><i class="swatch after" aria-hidden="true"></i>After investigation</button>
+</div>
+<div class="panels" id="panels"></div>
+<p class="note">Each panel shows its own seconds scale. Points are individual runs; lines pair the same round. Thick marks show medians. Positive changes mean slower. Four runs do not prove equivalence.</p>
+<h3>Construction allocation · bytes per node</h3>
+<div id="allocation-table"></div>
+<p class="note">Empty-node construction probe. Steady allocation rounds; excludes App processing and process memory.</p>
+<details>
+<summary>Run samples and controls</summary>
+<div id="sample-table"></div>
+<div class="controls" id="controls"></div>
+</details>
+<div class="tooltip" role="tooltip" id="tip" hidden></div>
+</main>
+<script>
+const benchmark = {"baseline": "aa0946736bf241d9bac27a1c8825fffd4df0b2ba", "current": "9182af4caad5c28d46009ac0d5c9e61266cfc874", "shared": {"specs-java-libs": "ae7194a7b3e981913d40a4403acfc759808b6c3a", "lara-framework": "b780d0b8ba0aac2670ad5aa98998883a2a4f8030"}, "settings": {"repeats": 4, "suites": ["clava-js", "java"], "modes": ["direct", "warm"], "wall": false, "release": "v18.1.8_7-rc4", "profile": false, "host": "specs-A3", "platform": "Linux-7.0.0-28-generic-x86_64-with-glibc2.43", "cpu": "Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz", "java": "openjdk version \"26.0.1\" 2026-04-21\nOpenJDK Runtime Environment (build 26.0.1+8-2-26.04.2-Ubuntu)\nOpenJDK 64-Bit Server VM (build 26.0.1+8-2-26.04.2-Ubuntu, mixed mode, sharing)\n", "node": "v26.7.0", "harness_sha256": "028aa0d22616d63d395d92afa542d14c66407660df13bb4a4ba68c7d835e5fe7"}, "created_utc": "2026-10-14T15:25:20.360578+00:00", "completed_utc": "2026-10-14T15:44:49.321385+00:00", "parser_defaults_control": "Defaults initialized before parallel workers in both revisions; prevents shared HashMap writes and lost settings.", "results_sha256": "57736c6bbb672eacf97199b4fab7b4dd82778d3565c1298dd574fe7bd1f4d715", "raw_results": "stable-defaults-results.json", "cells": [{"suite": "clava-js", "mode": "direct", "metrics": {"app_s": {"baseline": {"samples": [7.768237747, 7.7800787840000005, 7.825089834, 7.894725225], "median": 7.802584309, "min": 7.768237747, "max": 7.894725225}, "current": {"samples": [7.873921790000001, 7.935903988, 7.997515968, 8.043966385], "median": 7.966709978, "min": 7.873921790000001, "max": 8.043966385}, "median_change_percent": 2.1034783156484105, "paired_change_percent": [1.3604635496746287, 2.0028743708927266, 2.203503571943788, 1.8903908083767185]}, "instrumented_command_s": {"baseline": {"samples": [32.58942838571966, 32.70415526209399, 32.998231975361705, 32.26218495704234], "median": 32.646791823906824, "min": 32.26218495704234, "max": 32.998231975361705}, "current": {"samples": [32.611053148284554, 32.41093307035044, 32.344637074973434, 32.631876811850816], "median": 32.510993109317496, "min": 32.344637074973434, "max": 32.631876811850816}, "median_change_percent": -0.4159634285715086, "paired_change_percent": [0.06635514532182807, -0.8965900185882947, -1.9806967260436292, 1.1458983801026834]}}}, {"suite": "clava-js", "mode": "warm", "metrics": {"app_s": {"baseline": {"samples": [4.46980776, 4.4776520600000005, 4.492435979, 4.488961002], "median": 4.483306531, "min": 4.46980776, "max": 4.492435979}, "current": {"samples": [4.557830721999999, 4.573330502, 4.589425873, 4.598563102], "median": 4.5813781875, "min": 4.557830721999999, "max": 4.598563102}, "median_change_percent": 2.1874849694501153, "paired_change_percent": [1.9692784729515855, 2.1367993921349804, 2.158959959660667, 2.4415917169066104]}, "instrumented_command_s": {"baseline": {"samples": [28.50542861269787, 28.947245873045176, 28.862425095867366, 28.878098309971392], "median": 28.87026170291938, "min": 28.50542861269787, "max": 28.947245873045176}, "current": {"samples": [29.148156676907092, 29.010339815169573, 29.402551203034818, 28.97745192889124], "median": 29.079248246038333, "min": 28.97745192889124, "max": 29.402551203034818}, "median_change_percent": 0.7238817066137715, "paired_change_percent": [2.254756709474348, 0.21796181371143142, 1.87138158132385, 0.34404488084156526]}}}, {"suite": "java", "mode": "direct", "metrics": {"app_s": {"baseline": {"samples": [21.626125684999998, 21.555480323, 21.794876258, 21.671528848], "median": 21.6488272665, "min": 21.555480323, "max": 21.794876258}, "current": {"samples": [21.593082002, 21.659402099999998, 21.536166421, 21.728988505], "median": 21.626242051, "min": 21.536166421, "max": 21.728988505}, "median_change_percent": -0.10432535315643143, "paired_change_percent": [-0.15279520465802943, 0.4821130192543599, -1.187021361981977, 0.2651389175309715]}, "instrumented_command_s": {"baseline": {"samples": [28.15186058729887, 28.21247555175796, 28.500676529016346, 28.40526219084859], "median": 28.308868871303275, "min": 28.15186058729887, "max": 28.500676529016346}, "current": {"samples": [28.43647675961256, 28.42190501606092, 28.416964770294726, 28.622409428935498], "median": 28.42919088783674, "min": 28.416964770294726, "max": 28.622409428935498}, "median_change_percent": 0.42503293607549786, "paired_change_percent": [1.0110030611692356, 0.7423292717391838, -0.29371849695004615, 0.764461305190367]}}}, {"suite": "java", "mode": "warm", "metrics": {"app_s": {"baseline": {"samples": [12.031998762999999, 11.983293647, 11.921156679, 12.154459951000002], "median": 12.007646205, "min": 11.921156679, "max": 12.154459951000002}, "current": {"samples": [12.008554823, 11.970296332, 12.038798456, 12.000532515000002], "median": 12.004543669, "min": 11.970296332, "max": 12.038798456}, "median_change_percent": -0.025838003110956187, "paired_change_percent": [-0.1948465958298784, -0.10846195864735453, 0.9868319003577541, -1.2664276045217138]}, "instrumented_command_s": {"baseline": {"samples": [18.669953738339245, 18.41772508993745, 18.50856602517888, 18.833845492452383], "median": 18.589259881759062, "min": 18.41772508993745, "max": 18.833845492452383}, "current": {"samples": [19.05815760511905, 18.714299242943525, 19.050264546182007, 18.973386424127966], "median": 19.011825485154986, "min": 18.714299242943525, "max": 19.05815760511905}, "median_change_percent": 2.273170669966107, "paired_change_percent": [2.07929742205315, 1.6102648484427107, 2.9267449475351315, 0.740905152543081]}}}], "checks": {"all_cells_valid": true, "all_cache_gates_passed": true, "source_content_differences": 0, "measured_suites": ["clava-js", "java"], "java_tests": 116, "java_app_calls": 216, "js_tests": 164, "js_passed": 158, "js_skipped": 6, "js_app_calls": 170, "normalized_workload_fingerprints_match_across_revisions": true}, "uncertainty": "Ranges are observed minima and maxima, not confidence intervals. 4 runs do not prove exact equivalence.", "command_time": "Full command time from App-instrumented runs, including process/Gradle startup and test work outside App.build."};
+const root = document.getElementById('node-data-performance');
+const tip = root.querySelector('#tip');
+const visibleSeries = {baseline:true,current:true};
+const format = d3.format('.2f');
+const pct = x => Math.abs(x)<0.05 ? '0.0%' : (x >= 0 ? '+' : '') + x.toFixed(1) + '%';
+root.querySelector('#subtitle').textContent = `${benchmark.settings.repeats} matched repeats · App time in seconds · lower is better`;
+const labels = { 'clava-js':'JS', java:'Java' };
+function draw(cell, container) {
+  const width = container.getBoundingClientRect().width;
+  const height = 220;
+  const margin = {top:14, right:18, bottom:54, left:64};
+  const stats = cell.metrics.app_s;
+  const values = [...stats.baseline.samples, ...stats.current.samples];
+  const ext = d3.extent(values);
+  const pad = Math.max((ext[1]-ext[0])*0.16, ext[1]*0.025);
+  const y = d3.scaleLinear().domain([Math.max(0,ext[0]-pad),ext[1]+pad]).nice().range([height-margin.bottom,margin.top]);
+  const x = d3.scalePoint().domain(['baseline','current']).range([margin.left+28,width-margin.right-28]);
+  const svg = d3.select(container).select('svg').attr('viewBox',`0 0 ${width} ${height}`).attr('role','img');
+  svg.selectAll('*').remove();
+  svg.append('title').text(`${labels[cell.suite]} ${cell.mode}: median ${format(stats.baseline.median)} to ${format(stats.current.median)} seconds, ${pct(stats.median_change_percent)}. All ${benchmark.settings.repeats} samples retained.`);
+  svg.append('rect').attr('data-chart-frame','').attr('x',margin.left).attr('y',margin.top)
+    .attr('width',width-margin.left-margin.right).attr('height',height-margin.bottom-margin.top)
+    .attr('fill','none').attr('stroke','var(--border)');
+  svg.append('g').attr('transform',`translate(${margin.left},0)`).call(d3.axisLeft(y).ticks(4).tickFormat(d3.format('.1f')));
+  svg.append('g').attr('transform',`translate(0,${height-margin.bottom})`)
+    .call(d3.axisBottom(x).tickFormat(s=>s==='baseline'?'Parent':'After fixes').tickSize(0).tickPadding(10));
+  svg.append('text').attr('class','axis-title').attr('data-axis','y')
+    .attr('transform',`translate(14,${(margin.top+height-margin.bottom)/2}) rotate(-90)`).attr('text-anchor','middle').text('App time (s)');
+  svg.append('text').attr('class','axis-title').attr('data-axis','x').attr('x',(margin.left+width-margin.right)/2)
+    .attr('y',height-5).attr('text-anchor','middle').text('Consumer revision');
+  const offset = i => (i-(benchmark.settings.repeats-1)/2)*8;
+  stats.baseline.samples.forEach((v,i)=> {
+    svg.append('line').attr('data-pair','').attr('visibility',visibleSeries.baseline && visibleSeries.current ? 'visible':'hidden').attr('x1',x('baseline')+offset(i)).attr('x2',x('current')+offset(i))
+      .attr('y1',y(v)).attr('y2',y(stats.current.samples[i])).attr('stroke','var(--border)').attr('stroke-width',1);
+  });
+  for (const [stage,color] of [['baseline','var(--chart-1)'],['current','var(--chart-2)']]) {
+    stats[stage].samples.forEach((v,i)=> {
+      const cx=x(stage)+offset(i),cy=y(v);
+      const marks=svg.append('g').attr('data-series',stage).attr('visibility',visibleSeries[stage]?'visible':'hidden');
+      if(stage==='baseline') marks.append('rect').attr('x',cx-3).attr('y',cy-3).attr('width',6).attr('height',6).attr('fill',color);
+      else marks.append('circle').attr('cx',cx).attr('cy',cy).attr('r',3.5).attr('fill',color);
+      marks.append('circle').attr('cx',cx).attr('cy',cy).attr('r',matchMedia('(pointer:coarse)').matches?22:16).attr('fill','transparent').attr('data-chart-hit','')
+       .on('pointerdown pointermove',event=> {
+          const bounds=root.getBoundingClientRect();
+          tip.textContent=`${stage==='baseline'?'Parent':'After fixes'} · round ${i+1}: ${format(v)} s`;
+          tip.hidden=false;
+          const maxLeft=bounds.width-210;
+          tip.style.left=Math.max(0,Math.min(event.clientX-bounds.left+12,maxLeft))+'px';
+          tip.style.top=(event.clientY-bounds.top+12)+'px';
+       }).on('pointerleave',()=>{tip.hidden=true;});
+    });
+    svg.append('line').attr('data-series',stage).attr('visibility',visibleSeries[stage]?'visible':'hidden').attr('x1',x(stage)-24).attr('x2',x(stage)+24).attr('y1',y(stats[stage].median)).attr('y2',y(stats[stage].median))
+      .attr('stroke',color).attr('stroke-width',3);
+  }
+}
+root.querySelectorAll('[data-series-toggle]').forEach(button=>button.addEventListener('click',()=> {
+ const stage=button.dataset.seriesToggle; visibleSeries[stage]=!visibleSeries[stage];
+ button.setAttribute('aria-pressed',String(visibleSeries[stage]));
+ root.querySelectorAll(`[data-series="${stage}"]`).forEach(mark=>mark.setAttribute('visibility',visibleSeries[stage]?'visible':'hidden'));
+ root.querySelectorAll('[data-pair]').forEach(mark=>mark.setAttribute('visibility',visibleSeries.baseline&&visibleSeries.current?'visible':'hidden'));
+ tip.hidden=true;
+}));
+benchmark.cells.forEach(cell=> {
+ const section=document.createElement('section'); section.className='panel';
+ const title=document.createElement('h3'); title.textContent=`${labels[cell.suite]} · ${cell.mode==='warm'?'Warm cache':'Direct'}`;
+ section.append(title);
+ const plot=document.createElement('div'); plot.innerHTML='<svg></svg>'; section.append(plot);
+ const stats=cell.metrics.app_s;
+ const text=document.createElement('p'); text.className='medians';
+ text.textContent=`${format(stats.baseline.median)} → ${format(stats.current.median)} s · median `;
+ const delta=document.createElement('span'); delta.className='delta'; delta.textContent=pct(stats.median_change_percent); text.append(delta); section.append(text);
+ root.querySelector('#panels').append(section);
+ new ResizeObserver(()=>draw(cell,plot)).observe(plot); draw(cell,plot);
+});
+const allocation = [{"node": "BuiltinType", "baseline": 864, "current": 688}, {"node": "VarDecl", "baseline": 1160, "current": 784}];
+const allocationTable=document.createElement('table');
+allocationTable.innerHTML='<thead><tr><th>Node class</th><th>Parent</th><th>After fixes</th><th>Change</th></tr></thead><tbody></tbody>';
+for(const item of allocation) {
+ const row=document.createElement('tr');
+ for(const value of [item.node,item.baseline,item.current,pct(100*(item.current/item.baseline-1))]) {
+  const td=document.createElement('td');td.textContent=value;row.append(td);
+ }
+ allocationTable.querySelector('tbody').append(row);
+}
+root.querySelector('#allocation-table').append(allocationTable);
+const table=document.createElement('table');
+table.innerHTML='<thead><tr><th>Workload</th><th>Parent samples (s)</th><th>After samples (s)</th></tr></thead><tbody></tbody>';
+for(const cell of benchmark.cells) {
+ const row=document.createElement('tr');
+ for(const value of [`${labels[cell.suite]} ${cell.mode}`,cell.metrics.app_s.baseline.samples.map(format).join(', '),cell.metrics.app_s.current.samples.map(format).join(', ')]) {
+  const td=document.createElement('td'); td.textContent=value; row.append(td);
+ }
+ table.querySelector('tbody').append(row);
+}
+root.querySelector('#sample-table').append(table);
+root.querySelector('#controls').textContent = `Parent ${benchmark.baseline.slice(0,9)} · after ${benchmark.current.slice(0,9)} · ${benchmark.settings.release}. Same dependency revisions, frozen tests and source contents; all cache/workload gates passed. Parser defaults initialized before workers in both revisions to prevent a shared configuration race. Java: 116 tests, 216 App calls, 512 MiB heap. JS: 158 passed, 6 skipped, 170 App calls. Ranges are observed variation, not confidence intervals. Historical thread figures used a different release/dependency snapshot and are not the control here.`;
+root.style.position='relative';
+console.log('Chart ready:',benchmark.cells.length,'workloads;',benchmark.settings.repeats,'repeats; all samples shown');
+</script>
+</body>
+</html>

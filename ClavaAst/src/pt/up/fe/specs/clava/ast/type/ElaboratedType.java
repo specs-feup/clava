@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -34,15 +32,14 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JoaoBispo
  *
  */
-public class ElaboratedType extends TypeWithKeyword {
+public class ElaboratedType extends ElaboratedTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in ElaboratedTypeBase.
 
-    public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
-
-    public final static DataKey<Type> NAMED_TYPE = KeyFactory.object("namedType", Type.class);
-
-    /// DATAKEYS END
+    public ElaboratedType(DataStore data, Collection<? extends ClavaNode> children, ElaboratedTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public ElaboratedType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -54,7 +51,7 @@ public class ElaboratedType extends TypeWithKeyword {
     }
 
     public Type getNamedType() {
-        return get(NAMED_TYPE);
+        return getWireNamedType();
     }
 
     public void setNamedType(Type namedType) {
@@ -80,7 +77,7 @@ public class ElaboratedType extends TypeWithKeyword {
      * @return
      */
     public String getQualifier() {
-        String qualifier = get(QUALIFIER);
+        String qualifier = getWireQualifier();
         if (!hasUpdatedTemplateArgTypes()) {
             return qualifier;
         }

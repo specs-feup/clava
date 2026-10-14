@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -30,13 +28,12 @@ import pt.up.fe.specs.clava.language.CastKind;
  * @author JoaoBispo
  *
  */
-public abstract class CastExpr extends Expr {
+public abstract class CastExpr extends CastExprBase {
 
-    /// DATAKEY BEGIN
-
-    public final static DataKey<CastKind> CAST_KIND = KeyFactory.enumeration("castKind", CastKind.class);
-
-    /// DATAKEY END
+    public CastExpr(DataStore data, java.util.Collection<? extends ClavaNode> children, CastExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CastExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -48,7 +45,7 @@ public abstract class CastExpr extends Expr {
     }
 
     public CastKind getCastKind() {
-        return get(CAST_KIND);
+        return getWireCastKind();
     }
 
     public Expr getSubExpr() {

@@ -17,11 +17,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -37,25 +37,14 @@ import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
  * @author JoaoBispo
  *
  */
-public class QualType extends Type {
+public class QualType extends QualTypeBase {
+
+    public QualType(DataStore data, java.util.Collection<? extends ClavaNode> children, QualTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     /// DATAKEYs BEGIN
-
-    public final static DataKey<List<C99Qualifier>> C99_QUALIFIERS = KeyFactory
-            .list("c99Qualifiers", C99Qualifier.class);
-
-    public final static DataKey<AddressSpaceQualifierV2> ADDRESS_SPACE_QUALIFIER = KeyFactory
-            .enumeration("addressSpaceQualifier", AddressSpaceQualifierV2.class)
-            // HACK: not sure what value should be
-            .setDefault(() -> AddressSpaceQualifierV2.NONE);
-
-    public final static DataKey<Long> ADDRESS_SPACE = KeyFactory.longInt("addressSpace")
-            // HACK: not sure what value should be
-            .setDefault(() -> -1l);
-
-    public final static DataKey<Type> UNQUALIFIED_TYPE = KeyFactory.object("unqualifiedType", Type.class);
-
-    /// DATAKEYS END
 
     public QualType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -63,6 +52,27 @@ public class QualType extends Type {
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
+        if (getUnqualifiedType() instanceof ArrayType array) {
+            // Array qualifiers apply to its elements, before the array declarator.
+            ArrayType qualifiedArray = (ArrayType) array.copy();
+            QualType qualifiedElement = (QualType) copy();
+            Type element = array.getElementType();
+            if (element instanceof QualType elementQualifiers) {
+                var qualifiers = new LinkedHashSet<>(elementQualifiers.get(C99_QUALIFIERS));
+                qualifiers.addAll(getWireC99Qualifiers());
+                qualifiedElement.set(C99_QUALIFIERS, new ArrayList<>(qualifiers));
+                qualifiedElement.set(UNQUALIFIED_TYPE, elementQualifiers.getUnqualifiedType());
+                if (getWireAddressSpaceQualifier() == AddressSpaceQualifierV2.NONE) {
+                    qualifiedElement.set(ADDRESS_SPACE_QUALIFIER, elementQualifiers.get(ADDRESS_SPACE_QUALIFIER));
+                    qualifiedElement.set(ADDRESS_SPACE, elementQualifiers.get(ADDRESS_SPACE));
+                }
+            } else {
+                qualifiedElement.set(UNQUALIFIED_TYPE, element);
+            }
+            qualifiedArray.set(ArrayType.ELEMENT_TYPE, qualifiedElement);
+            return qualifiedArray.getCode(sourceNode, name);
+        }
+
         String type = getUnqualifiedType().getCode(sourceNode, name);
 
         // If not a top-level qualifier, has to be put after the type, but before the name
@@ -85,7 +95,7 @@ public class QualType extends Type {
     }
 
     private String getCode(String type, String name, ClavaNode sourceNode) {
-        String addressQualifier = get(ADDRESS_SPACE_QUALIFIER).getCode(get(ADDRESS_SPACE));
+        String addressQualifier = getWireAddressSpaceQualifier().getCode(getWireAddressSpace());
 
         if (!addressQualifier.isEmpty()) {
             addressQualifier += " ";
@@ -123,18 +133,18 @@ public class QualType extends Type {
     }
 
     public String getQualifiersCode() {
-        return get(C99_QUALIFIERS).stream()
+        return getWireC99Qualifiers().stream()
                 .map(C99Qualifier::getCode)
                 .collect(Collectors.joining(" "));
     }
 
     public Type getUnqualifiedType() {
-        return get(UNQUALIFIED_TYPE);
+        return getWireUnqualifiedType();
     }
 
     @Override
     public boolean isConst() {
-        if (get(C99_QUALIFIERS).contains(C99Qualifier.CONST)) {
+        if (getWireC99Qualifiers().contains(C99Qualifier.CONST)) {
             return true;
         }
 
@@ -150,7 +160,7 @@ public class QualType extends Type {
             return typeCopy;
         }
 
-        var qualifiers = new HashSet<>(get(C99_QUALIFIERS));
+        var qualifiers = new HashSet<>(getWireC99Qualifiers());
         qualifiers.add(C99Qualifier.CONST);
 
         typeCopy.set(C99_QUALIFIERS, new ArrayList<>(qualifiers));
@@ -179,7 +189,7 @@ public class QualType extends Type {
     private List<String> getQualifiersPrivate() {
         List<String> qualifiers = new ArrayList<>();
 
-        qualifiers.addAll(getData().get(C99_QUALIFIERS).stream()
+        qualifiers.addAll(getWireC99Qualifiers().stream()
                 .map(C99Qualifier::getCode)
                 .collect(Collectors.toList()));
 

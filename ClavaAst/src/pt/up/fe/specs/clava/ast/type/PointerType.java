@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -29,13 +28,14 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JBispo
  *
  */
-public class PointerType extends Type {
+public class PointerType extends PointerTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in PointerTypeBase.
 
-    public final static DataKey<Type> POINTEE_TYPE = KeyFactory.object("pointeeType", Type.class);
-
-    /// DATAKEYS END
+    public PointerType(DataStore data, Collection<? extends ClavaNode> children, PointerTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public PointerType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -50,7 +50,7 @@ public class PointerType extends Type {
 
     @Override
     public Type getPointeeType() {
-        return get(POINTEE_TYPE);
+        return getWirePointeeType();
     }
 
     public static boolean isPointerToParenType(Type type) {

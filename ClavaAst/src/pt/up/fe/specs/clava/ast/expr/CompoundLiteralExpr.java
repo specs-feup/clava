@@ -15,19 +15,16 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class CompoundLiteralExpr extends Literal {
+public class CompoundLiteralExpr extends CompoundLiteralExprBase {
 
-    /// DATAKEY BEGIN
-
-    public final static DataKey<Boolean> IS_FILE_SCOPE = KeyFactory.bool("isFileScope");
-
-    /// DATAKEY END
+    public CompoundLiteralExpr(DataStore data, java.util.Collection<? extends ClavaNode> children, CompoundLiteralExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CompoundLiteralExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

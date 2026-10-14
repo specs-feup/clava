@@ -15,20 +15,17 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.util.SpecsLogs;
 
-public class CXXDeleteExpr extends Expr {
+public class CXXDeleteExpr extends CXXDeleteExprBase {
 
-    /// DATAKEYS BEGIN
-
-    public final static DataKey<Boolean> IS_GLOBAL = KeyFactory.bool("isGlobal");
-    public final static DataKey<Boolean> IS_ARRAY = KeyFactory.bool("isArray");
-    public final static DataKey<Boolean> IS_ARRAY_AS_WRITTEN = KeyFactory.bool("isArrayAsWritten");
+    public CXXDeleteExpr(DataStore data, java.util.Collection<? extends ClavaNode> children, CXXDeleteExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXDeleteExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -42,12 +39,12 @@ public class CXXDeleteExpr extends Expr {
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        if (get(IS_GLOBAL)) {
+        if (getWireIsGlobal()) {
             SpecsLogs.warn("Code generation not implemented yet when global is true");
         }
 
         code.append("delete");
-        if (get(IS_ARRAY_AS_WRITTEN)) {
+        if (getWireIsArrayAsWritten()) {
             code.append("[]");
         }
 

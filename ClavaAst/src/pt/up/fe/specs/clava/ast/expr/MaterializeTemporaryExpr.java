@@ -17,7 +17,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -35,13 +34,14 @@ import pt.up.fe.specs.util.collections.SpecsList;
  * @author JoaoBispo
  *
  */
-public class MaterializeTemporaryExpr extends Expr {
+public class MaterializeTemporaryExpr extends MaterializeTemporaryExprBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in MaterializeTemporaryExprBase.
 
-    public final static DataKey<Optional<Decl>> EXTENDING_DECL = KeyFactory.optional("extendingDecl");
-
-    /// DATAKEYS END
+    public MaterializeTemporaryExpr(DataStore data, Collection<? extends ClavaNode> children, MaterializeTemporaryExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public MaterializeTemporaryExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

@@ -25,7 +25,7 @@ static void print_current_time() {
    /*Copy struct tm value*/
    char buf[64];
    /*strftime() usage*/
-   if(strftime(buf, sizeof((buf)), "%Y-%m-%d %H:%M:%S", &copy) == 0) {
+   if(strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &copy) == 0) {
       puts("strftime() produced empty string");
    }
    else {

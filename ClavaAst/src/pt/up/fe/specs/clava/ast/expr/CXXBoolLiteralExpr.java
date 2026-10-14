@@ -15,20 +15,18 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-// public class CXXBoolLiteralExpr extends Expr {
-public class CXXBoolLiteralExpr extends Literal {
+public class CXXBoolLiteralExpr extends CXXBoolLiteralExprBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in CXXBoolLiteralExprBase.
 
-    public static final DataKey<Boolean> VALUE = KeyFactory.bool("value");
-
-    /// DATAKEYS END
+    public CXXBoolLiteralExpr(DataStore data, Collection<? extends ClavaNode> children, CXXBoolLiteralExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXBoolLiteralExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -36,7 +34,7 @@ public class CXXBoolLiteralExpr extends Literal {
 
     @Override
     public String getCode() {
-        return Boolean.toString(get(VALUE));
+        return Boolean.toString(getWireValue());
     }
 
 }

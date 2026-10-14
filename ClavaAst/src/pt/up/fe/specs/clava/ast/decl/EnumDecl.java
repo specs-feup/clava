@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -38,16 +36,14 @@ import pt.up.fe.specs.util.providers.StringProvider;
  * @author JoaoBispo
  *
  */
-public class EnumDecl extends TagDecl {
+public class EnumDecl extends EnumDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in EnumDeclBase.
 
-    public final static DataKey<EnumScopeType> ENUM_SCOPE_KIND = KeyFactory.enumeration("enumScopeKind",
-            EnumScopeType.class);
-
-    public final static DataKey<Optional<Type>> INTEGER_TYPE = KeyFactory.optional("integerType");
-
-    /// DATAKEYS END
+    public EnumDecl(DataStore data, Collection<? extends ClavaNode> children, EnumDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     private final static Set<String> DEFAULT_TYPES = new HashSet<>(Arrays.asList("int", "unsigned int"));
 
@@ -60,7 +56,7 @@ public class EnumDecl extends TagDecl {
     }
 
     public Type getIntegerType() {
-        return get(INTEGER_TYPE).orElse(getContext().getFactory().builtinType("int"));
+        return getWireIntegerType().orElse(getContext().getFactory().builtinType("int"));
     }
 
     @Override
@@ -79,7 +75,7 @@ public class EnumDecl extends TagDecl {
 
         builder.append("enum ");
 
-        switch (get(ENUM_SCOPE_KIND)) {
+        switch (getWireEnumScopeKind()) {
         case CLASS:
             builder.append("class ");
             break;

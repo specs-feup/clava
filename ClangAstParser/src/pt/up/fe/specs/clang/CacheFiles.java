@@ -335,7 +335,7 @@ final class CacheFiles {
         }
     }
 
-    private static String calculateSha256(File file) {
+    static String calculateSha256(File file) {
         try {
             var digest = MessageDigest.getInstance("SHA-256");
             try (var inputStream = new DigestInputStream(Files.newInputStream(file.toPath()), digest)) {

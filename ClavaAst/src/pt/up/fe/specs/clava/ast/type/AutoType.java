@@ -16,29 +16,25 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class AutoType extends Type {
+public class AutoType extends AutoTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in AutoTypeBase.
 
-    /**
-     * The type deduced for this auto type, or empty if it's either not been deduced or was deduced to a dependent type.
-     */
-    public final static DataKey<Optional<Type>> DEDUCED_TYPE = KeyFactory.optional("deducedType");
-
-    /// DATAKEYS END
+    public AutoType(DataStore data, Collection<? extends ClavaNode> children, AutoTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public AutoType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Optional<Type> getDeducedType() {
-        return get(DEDUCED_TYPE);
+        return getWireDeducedType();
     }
 
     public void setDeducedType(Type deducedType) {

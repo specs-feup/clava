@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -27,18 +25,14 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JoaoBispo
  *
  */
-public class UsingDirectiveDecl extends NamedDecl {
+public class UsingDirectiveDecl extends UsingDirectiveDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in UsingDirectiveDeclBase.
 
-    public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
-
-    public final static DataKey<NamespaceDecl> NAMESPACE = KeyFactory.object("namespace", NamespaceDecl.class);
-
-    public final static DataKey<NamedDecl> NAMESPACE_AS_WRITTEN = KeyFactory.object("namespaceAsWritten",
-            NamedDecl.class);
-
-    /// DATAKEYS END
+    public UsingDirectiveDecl(DataStore data, Collection<? extends ClavaNode> children, UsingDirectiveDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public UsingDirectiveDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -46,6 +40,6 @@ public class UsingDirectiveDecl extends NamedDecl {
 
     @Override
     public String getCode() {
-        return get(QUALIFIER);
+        return getWireQualifier();
     }
 }

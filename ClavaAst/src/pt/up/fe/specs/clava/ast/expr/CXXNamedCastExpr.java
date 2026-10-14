@@ -15,21 +15,18 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
 
-public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
+public abstract class CXXNamedCastExpr extends CXXNamedCastExprBase {
 
-    /// DATAKEY BEGIN
-
-    public final static DataKey<String> CAST_NAME = KeyFactory.string("castName");
-
-    /// DATAKEY END
+    public CXXNamedCastExpr(DataStore data, java.util.Collection<? extends ClavaNode> children, CXXNamedCastExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXNamedCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -42,11 +39,11 @@ public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
         // HACK: To deal with _Bool in C++ files while it is not properly addressed
         // ExplicitCast has the attribute 'typeAsWritten', which should be used here instead of getType()
 
-        var typeAsWritten = get(TYPE_AS_WRITTEN);
+        var typeAsWritten = getWireTypeAsWritten();
         String typeCode = typeAsWritten.getCode(this);
 
         // String typeCode = typeAsWritten != null ? typeAsWritten.getCode(this)
-        // : get(TYPE).map(Type::getCode)
+        // : getWireType().map(Type::getCode)
         // .orElseThrow(() -> new RuntimeException("Both TYPE and TYPE_AS_WRITTEN are null"));
 
         if (typeCode.equals("_Bool") && getAncestorTry(TranslationUnit.class)
@@ -60,7 +57,7 @@ public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
         // System.out.println("TYPE CODE:" + typeCode);
         // System.out.println("TYPE AS WRITTEN:" + cxxNamedCastExprdata.getTypeAsWritten());
         // code.append(cxxNamedCastExprdata.getCastName());
-        code.append(get(CAST_NAME));
+        code.append(getWireCastName());
 
         // code.append("<").append(cxxNamedCastExprdata.getTypeAsWritten()).append(">");
         code.append("<").append(typeCode).append(">");

@@ -19,8 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -34,21 +32,14 @@ import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
  * @author JoaoBispo
  *
  */
-public class RecordDecl extends TagDecl {
+public class RecordDecl extends RecordDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in RecordDeclBase.
 
-    /**
-     * True if this is an anonymous struct or union.
-     * 
-     * <p>
-     * To be an anonymous struct or union, it must have been declared without a name and there must be no objects of
-     * this type declared.
-     * 
-     */
-    public final static DataKey<Boolean> IS_ANONYMOUS = KeyFactory.bool("isAnonymous");
-
-    /// DATAKEYS END
+    public RecordDecl(DataStore data, Collection<? extends ClavaNode> children, RecordDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public RecordDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -85,7 +76,7 @@ public class RecordDecl extends TagDecl {
         code.append(getTagKind().getCode());
 
         // Add attributes
-        String preAttributesCode = get(ATTRIBUTES).stream()
+        String preAttributesCode = getWireAttributes().stream()
                 .filter(attr -> !attr.isPostAttr())
                 .map(Attribute::getCode)
                 .collect(Collectors.joining(" "));
@@ -115,12 +106,12 @@ public class RecordDecl extends TagDecl {
         }
 
         // if (recordDeclData.isCompleteDefinition()) {
-        if (get(IS_COMPLETE_DEFINITION)) {
+        if (getWireIsCompleteDefinition()) {
             code.append(getDefinitionCode());
         }
 
         // String postAttributesCode = recordDeclData.getAttributes().stream()
-        String postAttributesCode = get(ATTRIBUTES).stream()
+        String postAttributesCode = getWireAttributes().stream()
                 .filter(attr -> attr.isPostAttr())
                 .map(Attribute::getCode)
                 .collect(Collectors.joining(" "));

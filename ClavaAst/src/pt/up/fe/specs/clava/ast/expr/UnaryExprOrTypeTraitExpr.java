@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
@@ -33,29 +31,25 @@ import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
  * @author JoaoBispo
  *
  */
-public class UnaryExprOrTypeTraitExpr extends Expr {
-    /// DATAKEYS BEGIN
+public class UnaryExprOrTypeTraitExpr extends UnaryExprOrTypeTraitExprBase {
 
-    public final static DataKey<UnaryExprOrTypeTrait> KIND = KeyFactory.enumeration("kind", UnaryExprOrTypeTrait.class);
+    // Data declarations are generated from the wire schema in UnaryExprOrTypeTraitExprBase.
 
-    public final static DataKey<Boolean> IS_ARGUMENT_TYPE = KeyFactory.bool("isArgumentType");
-
-    public final static DataKey<Optional<Type>> ARG_TYPE = KeyFactory.optional("argType");
-
-    public final static DataKey<String> SOURCE_LITERAL = KeyFactory.string("sourceLiteral");
-
-    /// DATAKEYS END
+    public UnaryExprOrTypeTraitExpr(DataStore data, Collection<? extends ClavaNode> children, UnaryExprOrTypeTraitExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public UnaryExprOrTypeTraitExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public UnaryExprOrTypeTrait getUettKind() {
-        return get(KIND);
+        return getWireKind();
     }
 
     public Optional<Type> getArgumentType() {
-        return get(ARG_TYPE);
+        return getWireArgType();
     }
 
     public Expr getArgumentExpression() {
@@ -63,11 +57,11 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
     }
 
     public boolean hasArgumentExpression() {
-        return !get(IS_ARGUMENT_TYPE);
+        return !getWireIsArgumentType();
     }
 
     public boolean hasTypeExpression() {
-        return get(IS_ARGUMENT_TYPE);
+        return getWireIsArgumentType();
     }
 
     @Override
@@ -79,14 +73,18 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
         default:
             ClavaLog.debug(() -> "UnaryExprOrTypeTraitExpr.getCode(): Not implemented yet for kind '" + getUettKind()
                     + "', using 'sourceLiteral'");
-            return get(SOURCE_LITERAL);
+            return getWireSourceLiteral();
         }
 
     }
 
     private String getExpressionCode() {
         if (hasArgumentExpression()) {
-            return getArgumentExpression().getCode();
+            Expr argument = getArgumentExpression();
+            // The sizeof printer supplies the operand's outer parentheses.
+            return argument instanceof ParenExpr parenthesized
+                    ? parenthesized.getSubExpr().getCode()
+                    : argument.getCode();
         }
 
         if (hasTypeExpression()) {

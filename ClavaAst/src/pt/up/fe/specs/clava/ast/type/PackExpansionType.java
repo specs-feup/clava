@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -36,22 +34,21 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JoaoBispo
  *
  */
-public class PackExpansionType extends Type {
+public class PackExpansionType extends PackExpansionTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in PackExpansionTypeBase.
 
-    public final static DataKey<Integer> NUM_EXPANSIONS = KeyFactory.integer("numExpansions");
-
-    public final static DataKey<Type> PATTERN = KeyFactory.object("pattern", Type.class);
-
-    /// DATAKEYS END
+    public PackExpansionType(DataStore data, Collection<? extends ClavaNode> children, PackExpansionTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public PackExpansionType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Optional<Type> getPattern() {
-        return Optional.of(get(PATTERN));
+        return Optional.of(getWirePattern());
     }
 
     @Override

@@ -2,7 +2,7 @@ inline static long long gettick() {
    unsigned int a, d;
    __asm__ __volatile__("rdtsc"
       :"=a" (a), "=d" (d));
-   __asm__("movl $$$$10, %eax;movl $$$$20, %ebx;addl %ebx, %eax;");
+   __asm__("movl $10, %eax;movl $20, %ebx;addl %ebx, %eax;");
 
    int a___d0, a___d1;
    __asm__ __volatile__("cld; rep; stosq"

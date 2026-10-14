@@ -21,8 +21,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -36,16 +34,14 @@ import pt.up.fe.specs.util.lazy.Lazy;
  * @author JoaoBispo
  *
  */
-public class UnaryOperator extends Operator {
+public class UnaryOperator extends UnaryOperatorBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in UnaryOperatorBase.
 
-    public final static DataKey<UnaryOperatorKind> OP = KeyFactory.enumeration("op", UnaryOperatorKind.class);
-
-    public final static DataKey<UnaryOperatorPosition> POSITION = KeyFactory.enumeration("position",
-            UnaryOperatorPosition.class);
-
-    /// DATAKEYS END
+    public UnaryOperator(DataStore data, Collection<? extends ClavaNode> children, UnaryOperatorBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     // Hardcoding kind names, in order to avoid breaking code that depends on these names when changing Clang
     // version
@@ -129,10 +125,10 @@ public class UnaryOperator extends Operator {
 
         // Get code of child
         builder.append(getSubExpr().getCode());
-        UnaryOperatorKind opcode = get(OP);
+        UnaryOperatorKind opcode = getWireOp();
         String code = opcode.getCode();
 
-        switch (get(POSITION)) {
+        switch (getWirePosition()) {
         case PREFIX:
             if (opcode.requiresSpace()) {
                 code += " ";
@@ -154,7 +150,7 @@ public class UnaryOperator extends Operator {
     }
 
     public UnaryOperatorKind getOp() {
-        return get(OP);
+        return getWireOp();
     }
 
     public Expr getSubExpr() {

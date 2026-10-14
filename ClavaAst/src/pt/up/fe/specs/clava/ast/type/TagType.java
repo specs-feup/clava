@@ -15,28 +15,27 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.language.TagKind;
 
-public abstract class TagType extends Type {
+public abstract class TagType extends TagTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in TagTypeBase.
 
-    public final static DataKey<TagDecl> DECL = KeyFactory.object("decl", TagDecl.class);
-
-    /// DATAKEYS END
+    public TagType(DataStore data, Collection<? extends ClavaNode> children, TagTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public TagType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public TagDecl getDecl() {
-        return get(DECL);
+        return getWireDecl();
     }
 
     public TagKind getTagKind() {

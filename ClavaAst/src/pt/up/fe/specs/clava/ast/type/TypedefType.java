@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -30,13 +28,14 @@ import pt.up.fe.specs.clava.ast.decl.ValueDecl;
  * @author jbispo
  *
  */
-public class TypedefType extends Type {
+public class TypedefType extends TypedefTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in TypedefTypeBase.
 
-    public final static DataKey<TypedefNameDecl> DECL = KeyFactory.object("decl", TypedefNameDecl.class);
-
-    /// DATAKEYS END
+    public TypedefType(DataStore data, Collection<? extends ClavaNode> children, TypedefTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public TypedefType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -44,11 +43,11 @@ public class TypedefType extends Type {
 
     @Override
     public Type desugar() {
-        return get(DECL).getUnderlyingType();
+        return getWireDecl().getUnderlyingType();
     }
 
     public Type getTypeClass() {
-        Decl decl = get(DECL);
+        Decl decl = getWireDecl();
 
         if (!(decl instanceof ValueDecl)) {
             return null;
@@ -60,7 +59,7 @@ public class TypedefType extends Type {
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
 
-        String type = get(DECL).getTypelessCode();
+        String type = getWireDecl().getTypelessCode();
 
         return name == null ? type : type + " " + name;
     }

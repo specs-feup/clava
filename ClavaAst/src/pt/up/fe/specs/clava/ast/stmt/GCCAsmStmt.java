@@ -14,10 +14,9 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -28,9 +27,12 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JBispo
  *
  */
-public class GCCAsmStmt extends AsmStmt {
+public class GCCAsmStmt extends GCCAsmStmtBase {
 
-    public static final DataKey<String> ASM_STRING = KeyFactory.string("asmString");
+    public GCCAsmStmt(DataStore data, java.util.Collection<? extends ClavaNode> children, GCCAsmStmtBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public GCCAsmStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -42,41 +44,84 @@ public class GCCAsmStmt extends AsmStmt {
 
         code.append("__asm__");
 
-        if (get(IS_VOLATILE)) {
+        if (getWireIsVolatile()) {
             code.append(" __volatile__");
         }
 
+        if (Boolean.TRUE.equals(getWireIsInline())) {
+            code.append(" __inline__");
+        }
+
+        if (Boolean.TRUE.equals(getWireIsGoto())) {
+            code.append(" goto");
+        }
+
         code.append("(\"");
-        code.append(get(ASM_STRING));
+        code.append(escapeStringLiteral(getWireAsmString()));
         code.append("\"");
 
         // Outputs
-        var outputs = get(OUTPUTS).stream().map(output -> output.getCode())
+        var outputs = getWireOutputs().stream().map(output -> output.getCode())
                 .collect(Collectors.joining(", "));
 
-        if (!outputs.isEmpty()) {
-            code.append("\n   :").append(outputs);
-        }
-
-        // Inputs
-        var inputs = get(INPUTS).stream().map(input -> input.getCode())
+        var inputs = getWireInputs().stream().map(input -> input.getCode())
                 .collect(Collectors.joining(", "));
 
-        if (!inputs.isEmpty()) {
-            code.append("\n   :").append(inputs);
-        }
-
-        // Cobblers
-        var cobblers = get(CLOBBERS).stream()
+        var clobbers = getWireClobbers().stream()
                 .map(clobber -> "\"" + clobber + "\"")
                 .collect(Collectors.joining(", "));
 
-        if (!cobblers.isEmpty()) {
-            code.append("\n   :").append(cobblers);
+        var labels = String.join(", ", getWireLabels());
+        var hasLabels = Boolean.TRUE.equals(getWireIsGoto()) || !labels.isEmpty();
+
+        boolean hasExtendedSyntax = !Boolean.TRUE.equals(getWireIsSimple())
+                || !outputs.isEmpty() || !inputs.isEmpty() || !clobbers.isEmpty() || hasLabels;
+
+        if (hasExtendedSyntax) {
+            code.append("\n   :").append(outputs);
+        }
+
+        if (!inputs.isEmpty() || !clobbers.isEmpty() || hasLabels) {
+            code.append("\n   :").append(inputs);
+        }
+
+        if (!clobbers.isEmpty() || hasLabels) {
+            code.append("\n   :").append(clobbers);
+        }
+
+        if (hasLabels) {
+            code.append("\n   :").append(labels);
         }
 
         code.append(");");
 
         return code.toString();
+    }
+
+    private static String escapeStringLiteral(String value) {
+        var escaped = new StringBuilder(value.length());
+        for (int index = 0; index < value.length(); index++) {
+            char character = value.charAt(index);
+            switch (character) {
+                case '\\' -> escaped.append("\\\\");
+                case '"' -> escaped.append("\\\"");
+                case '\n' -> escaped.append("\\n");
+                case '\r' -> escaped.append("\\r");
+                case '\t' -> escaped.append("\\t");
+                default -> {
+                    if (character < 0x20 || character == 0x7f) {
+                        // A fixed three-digit escape cannot absorb a following
+                        // octal digit, unlike a variable-width hexadecimal escape.
+                        escaped.append('\\')
+                                .append((char) ('0' + ((character >>> 6) & 0x7)))
+                                .append((char) ('0' + ((character >>> 3) & 0x7)))
+                                .append((char) ('0' + (character & 0x7)));
+                    } else {
+                        escaped.append(character);
+                    }
+                }
+            }
+        }
+        return escaped.toString();
     }
 }

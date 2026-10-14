@@ -1,0 +1,1976 @@
+astwire.v2.AccessSpecDeclData.access_specifier Int:astwire.v2.AccessSpecifier slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AccessSpecDeclData.base Obj:astwire.v2.DeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AccessSpecifier.NONE=3
+astwire.v2.AccessSpecifier.PRIVATE=2
+astwire.v2.AccessSpecifier.PROTECTED=1
+astwire.v2.AccessSpecifier.PUBLIC=0
+astwire.v2.AddressSpaceQualifierV2.CONSTANT=3
+astwire.v2.AddressSpaceQualifierV2.CUDA_CONSTANT=7
+astwire.v2.AddressSpaceQualifierV2.CUDA_DEVICE=8
+astwire.v2.AddressSpaceQualifierV2.CUDA_SHARED=9
+astwire.v2.AddressSpaceQualifierV2.DEFAULT=5
+astwire.v2.AddressSpaceQualifierV2.GENERIC=4
+astwire.v2.AddressSpaceQualifierV2.GLOBAL=1
+astwire.v2.AddressSpaceQualifierV2.LOCAL=2
+astwire.v2.AddressSpaceQualifierV2.NONE=0
+astwire.v2.AddressSpaceQualifierV2.PRIVATE=6
+astwire.v2.AdjustedTypeData.adjusted_type Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AdjustedTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AdjustedTypeData.original_type Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AlignedAttrData.alignment Long slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AlignedAttrData.base Obj:astwire.v2.AttributeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AlignedAttrData.is_expression Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AlignedAttrData.spelling String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AnyMemberInitializer.any_member_decl Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ArrayDesignator.index Int slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ArrayInitLoopExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ArrayRangeDesignator.index Int slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ArraySizeModifier.Normal=0
+astwire.v2.ArraySizeModifier.Star=2
+astwire.v2.ArraySizeModifier.Static=1
+astwire.v2.ArrayTypeData.array_size_modifier Int:astwire.v2.ArraySizeModifier slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ArrayTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ArrayTypeData.element_type Long slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ArrayTypeData.index_type_qualifiers Vector<Int>:astwire.v2.C99Qualifier slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AsmInput.constraint String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AsmInput.expr Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AsmOutput.constraint String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AsmOutput.expr Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AsmOutput.is_plus_constraint Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AsmStmtData.base Obj:astwire.v2.StmtData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AsmStmtData.clobbers Vector<String> slot=3 offset=10 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AsmStmtData.inputs Vector<Obj>:astwire.v2.AsmInput slot=5 offset=14 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AsmStmtData.is_simple Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AsmStmtData.is_volatile Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AsmStmtData.outputs Vector<Obj>:astwire.v2.AsmOutput slot=4 offset=12 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AttributeData.base Obj:astwire.v2.ClavaNodeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AttributeData.is_implicit Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AttributeData.is_inherited Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AttributeData.is_late_parsed Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AttributeData.is_pack_expansion Bool slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AttributeData.kind Int:astwire.v2.AttributeKind slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AttributeKind.AArch64SVEPcs=43
+astwire.v2.AttributeKind.AArch64VectorPcs=44
+astwire.v2.AttributeKind.AMDGPUFlatWorkGroupSize=82
+astwire.v2.AttributeKind.AMDGPUKernelCall=45
+astwire.v2.AttributeKind.AMDGPUNumSGPR=83
+astwire.v2.AttributeKind.AMDGPUNumVGPR=84
+astwire.v2.AttributeKind.AMDGPUWavesPerEU=85
+astwire.v2.AttributeKind.ARMInterrupt=86
+astwire.v2.AttributeKind.AVRInterrupt=87
+astwire.v2.AttributeKind.AVRSignal=88
+astwire.v2.AttributeKind.AbiTag=365
+astwire.v2.AttributeKind.AcquireCapability=89
+astwire.v2.AttributeKind.AcquireHandle=46
+astwire.v2.AttributeKind.AcquiredAfter=90
+astwire.v2.AttributeKind.AcquiredBefore=91
+astwire.v2.AttributeKind.AddressSpace=0
+astwire.v2.AttributeKind.Alias=366
+astwire.v2.AttributeKind.AlignMac68k=92
+astwire.v2.AttributeKind.AlignNatural=93
+astwire.v2.AttributeKind.AlignValue=367
+astwire.v2.AttributeKind.Aligned=94
+astwire.v2.AttributeKind.AllocAlign=95
+astwire.v2.AttributeKind.AllocSize=96
+astwire.v2.AttributeKind.AlwaysDestroy=97
+astwire.v2.AttributeKind.AlwaysInline=39
+astwire.v2.AttributeKind.AnalyzerNoReturn=98
+astwire.v2.AttributeKind.Annotate=71
+astwire.v2.AttributeKind.AnnotateType=1
+astwire.v2.AttributeKind.AnyX86Interrupt=99
+astwire.v2.AttributeKind.AnyX86NoCallerSavedRegisters=100
+astwire.v2.AttributeKind.AnyX86NoCfCheck=47
+astwire.v2.AttributeKind.ArcWeakrefUnavailable=101
+astwire.v2.AttributeKind.ArgumentWithTypeTag=102
+astwire.v2.AttributeKind.ArmBuiltinAlias=103
+astwire.v2.AttributeKind.ArmIn=2
+astwire.v2.AttributeKind.ArmInOut=3
+astwire.v2.AttributeKind.ArmLocallyStreaming=104
+astwire.v2.AttributeKind.ArmMveStrictPolymorphism=4
+astwire.v2.AttributeKind.ArmNew=105
+astwire.v2.AttributeKind.ArmOut=5
+astwire.v2.AttributeKind.ArmPreserves=6
+astwire.v2.AttributeKind.ArmStreaming=7
+astwire.v2.AttributeKind.ArmStreamingCompatible=8
+astwire.v2.AttributeKind.Artificial=106
+astwire.v2.AttributeKind.AsmLabel=107
+astwire.v2.AttributeKind.AssertCapability=108
+astwire.v2.AttributeKind.AssertExclusiveLock=109
+astwire.v2.AttributeKind.AssertSharedLock=110
+astwire.v2.AttributeKind.AssumeAligned=111
+astwire.v2.AttributeKind.Assumption=112
+astwire.v2.AttributeKind.Availability=113
+astwire.v2.AttributeKind.AvailableOnlyInDefaultEvalMethod=114
+astwire.v2.AttributeKind.BPFPreserveAccessIndex=115
+astwire.v2.AttributeKind.BPFPreserveStaticOffset=116
+astwire.v2.AttributeKind.BTFDeclTag=117
+astwire.v2.AttributeKind.BTFTypeTag=9
+astwire.v2.AttributeKind.Blocks=118
+astwire.v2.AttributeKind.Builtin=119
+astwire.v2.AttributeKind.BuiltinAlias=368
+astwire.v2.AttributeKind.C11NoReturn=120
+astwire.v2.AttributeKind.CDecl=48
+astwire.v2.AttributeKind.CFAuditedTransfer=121
+astwire.v2.AttributeKind.CFConsumed=72
+astwire.v2.AttributeKind.CFGuard=122
+astwire.v2.AttributeKind.CFICanonicalJumpTable=123
+astwire.v2.AttributeKind.CFReturnsNotRetained=124
+astwire.v2.AttributeKind.CFReturnsRetained=125
+astwire.v2.AttributeKind.CFUnknownTransfer=126
+astwire.v2.AttributeKind.CPUDispatch=127
+astwire.v2.AttributeKind.CPUSpecific=128
+astwire.v2.AttributeKind.CUDAConstant=129
+astwire.v2.AttributeKind.CUDADevice=130
+astwire.v2.AttributeKind.CUDADeviceBuiltinSurfaceType=131
+astwire.v2.AttributeKind.CUDADeviceBuiltinTextureType=132
+astwire.v2.AttributeKind.CUDAGlobal=133
+astwire.v2.AttributeKind.CUDAHost=134
+astwire.v2.AttributeKind.CUDAInvalidTarget=135
+astwire.v2.AttributeKind.CUDALaunchBounds=136
+astwire.v2.AttributeKind.CUDAShared=137
+astwire.v2.AttributeKind.CXX11NoReturn=138
+astwire.v2.AttributeKind.CallableWhen=139
+astwire.v2.AttributeKind.Callback=140
+astwire.v2.AttributeKind.CalledOnce=369
+astwire.v2.AttributeKind.Capability=141
+astwire.v2.AttributeKind.CapturedRecord=142
+astwire.v2.AttributeKind.CarriesDependency=73
+astwire.v2.AttributeKind.Cleanup=143
+astwire.v2.AttributeKind.CmseNSCall=10
+astwire.v2.AttributeKind.CmseNSEntry=144
+astwire.v2.AttributeKind.CodeAlign=33
+astwire.v2.AttributeKind.CodeModel=145
+astwire.v2.AttributeKind.CodeSeg=146
+astwire.v2.AttributeKind.Cold=147
+astwire.v2.AttributeKind.Common=148
+astwire.v2.AttributeKind.Const=149
+astwire.v2.AttributeKind.ConstInit=150
+astwire.v2.AttributeKind.Constructor=151
+astwire.v2.AttributeKind.Consumable=152
+astwire.v2.AttributeKind.ConsumableAutoCast=153
+astwire.v2.AttributeKind.ConsumableSetOnRead=154
+astwire.v2.AttributeKind.Convergent=155
+astwire.v2.AttributeKind.CoroDisableLifetimeBound=156
+astwire.v2.AttributeKind.CoroLifetimeBound=157
+astwire.v2.AttributeKind.CoroOnlyDestroyWhenComplete=158
+astwire.v2.AttributeKind.CoroReturnType=159
+astwire.v2.AttributeKind.CoroWrapper=160
+astwire.v2.AttributeKind.CountedBy=161
+astwire.v2.AttributeKind.DLLExport=162
+astwire.v2.AttributeKind.DLLExportStaticLocal=163
+astwire.v2.AttributeKind.DLLImport=164
+astwire.v2.AttributeKind.DLLImportStaticLocal=165
+astwire.v2.AttributeKind.Deprecated=166
+astwire.v2.AttributeKind.Destructor=167
+astwire.v2.AttributeKind.DiagnoseAsBuiltin=168
+astwire.v2.AttributeKind.DiagnoseIf=169
+astwire.v2.AttributeKind.DisableSanitizerInstrumentation=170
+astwire.v2.AttributeKind.DisableTailCalls=171
+astwire.v2.AttributeKind.EmptyBases=172
+astwire.v2.AttributeKind.EnableIf=173
+astwire.v2.AttributeKind.EnforceTCB=174
+astwire.v2.AttributeKind.EnforceTCBLeaf=175
+astwire.v2.AttributeKind.EnumExtensibility=176
+astwire.v2.AttributeKind.Error=177
+astwire.v2.AttributeKind.ExcludeFromExplicitInstantiation=178
+astwire.v2.AttributeKind.ExclusiveTrylockFunction=179
+astwire.v2.AttributeKind.ExternalSourceSymbol=180
+astwire.v2.AttributeKind.FallThrough=34
+astwire.v2.AttributeKind.FastCall=49
+astwire.v2.AttributeKind.Final=181
+astwire.v2.AttributeKind.FirstAttr=396
+astwire.v2.AttributeKind.FirstDeclOrStmtAttr=402
+astwire.v2.AttributeKind.FirstDeclOrTypeAttr=406
+astwire.v2.AttributeKind.FirstHLSLAnnotationAttr=412
+astwire.v2.AttributeKind.FirstInheritableAttr=404
+astwire.v2.AttributeKind.FirstInheritableParamAttr=408
+astwire.v2.AttributeKind.FirstParameterABIAttr=410
+astwire.v2.AttributeKind.FirstStmtAttr=400
+astwire.v2.AttributeKind.FirstTypeAttr=398
+astwire.v2.AttributeKind.FlagEnum=182
+astwire.v2.AttributeKind.Flatten=183
+astwire.v2.AttributeKind.Format=184
+astwire.v2.AttributeKind.FormatArg=185
+astwire.v2.AttributeKind.FunctionReturnThunks=186
+astwire.v2.AttributeKind.GNUInline=187
+astwire.v2.AttributeKind.GuardedBy=188
+astwire.v2.AttributeKind.GuardedVar=189
+astwire.v2.AttributeKind.HIPManaged=190
+astwire.v2.AttributeKind.HLSLGroupSharedAddressSpace=11
+astwire.v2.AttributeKind.HLSLNumThreads=191
+astwire.v2.AttributeKind.HLSLParamModifier=12
+astwire.v2.AttributeKind.HLSLResource=192
+astwire.v2.AttributeKind.HLSLResourceBinding=193
+astwire.v2.AttributeKind.HLSLSV_DispatchThreadID=80
+astwire.v2.AttributeKind.HLSLSV_GroupIndex=81
+astwire.v2.AttributeKind.HLSLShader=194
+astwire.v2.AttributeKind.Hot=195
+astwire.v2.AttributeKind.IBAction=196
+astwire.v2.AttributeKind.IBOutlet=197
+astwire.v2.AttributeKind.IBOutletCollection=198
+astwire.v2.AttributeKind.IFunc=370
+astwire.v2.AttributeKind.InitPriority=199
+astwire.v2.AttributeKind.InitSeg=371
+astwire.v2.AttributeKind.IntelOclBicc=50
+astwire.v2.AttributeKind.InternalLinkage=200
+astwire.v2.AttributeKind.LTOVisibilityPublic=201
+astwire.v2.AttributeKind.LastAttr=397
+astwire.v2.AttributeKind.LastDeclOrStmtAttr=403
+astwire.v2.AttributeKind.LastDeclOrTypeAttr=407
+astwire.v2.AttributeKind.LastHLSLAnnotationAttr=413
+astwire.v2.AttributeKind.LastInheritableAttr=405
+astwire.v2.AttributeKind.LastInheritableParamAttr=409
+astwire.v2.AttributeKind.LastParameterABIAttr=411
+astwire.v2.AttributeKind.LastStmtAttr=401
+astwire.v2.AttributeKind.LastTypeAttr=399
+astwire.v2.AttributeKind.LayoutVersion=202
+astwire.v2.AttributeKind.Leaf=203
+astwire.v2.AttributeKind.LifetimeBound=51
+astwire.v2.AttributeKind.Likely=35
+astwire.v2.AttributeKind.LoaderUninitialized=372
+astwire.v2.AttributeKind.LockReturned=204
+astwire.v2.AttributeKind.LocksExcluded=205
+astwire.v2.AttributeKind.LoopHint=373
+astwire.v2.AttributeKind.M68kInterrupt=206
+astwire.v2.AttributeKind.M68kRTD=52
+astwire.v2.AttributeKind.MIGServerRoutine=207
+astwire.v2.AttributeKind.MSABI=53
+astwire.v2.AttributeKind.MSAllocator=208
+astwire.v2.AttributeKind.MSConstexpr=209
+astwire.v2.AttributeKind.MSInheritance=210
+astwire.v2.AttributeKind.MSNoVTable=211
+astwire.v2.AttributeKind.MSP430Interrupt=212
+astwire.v2.AttributeKind.MSStruct=213
+astwire.v2.AttributeKind.MSVtorDisp=214
+astwire.v2.AttributeKind.MaxFieldAlignment=215
+astwire.v2.AttributeKind.MayAlias=216
+astwire.v2.AttributeKind.MaybeUndef=217
+astwire.v2.AttributeKind.MicroMips=218
+astwire.v2.AttributeKind.MinSize=219
+astwire.v2.AttributeKind.MinVectorWidth=220
+astwire.v2.AttributeKind.Mips16=221
+astwire.v2.AttributeKind.MipsInterrupt=222
+astwire.v2.AttributeKind.MipsLongCall=223
+astwire.v2.AttributeKind.MipsShortCall=224
+astwire.v2.AttributeKind.Mode=374
+astwire.v2.AttributeKind.MustTail=36
+astwire.v2.AttributeKind.NSConsumed=74
+astwire.v2.AttributeKind.NSConsumesSelf=225
+astwire.v2.AttributeKind.NSErrorDomain=226
+astwire.v2.AttributeKind.NSReturnsAutoreleased=227
+astwire.v2.AttributeKind.NSReturnsNotRetained=228
+astwire.v2.AttributeKind.NSReturnsRetained=54
+astwire.v2.AttributeKind.NVPTXKernel=229
+astwire.v2.AttributeKind.Naked=230
+astwire.v2.AttributeKind.NoAlias=231
+astwire.v2.AttributeKind.NoBuiltin=375
+astwire.v2.AttributeKind.NoCommon=232
+astwire.v2.AttributeKind.NoDebug=233
+astwire.v2.AttributeKind.NoDeref=13
+astwire.v2.AttributeKind.NoDestroy=234
+astwire.v2.AttributeKind.NoDuplicate=235
+astwire.v2.AttributeKind.NoEscape=376
+astwire.v2.AttributeKind.NoInline=40
+astwire.v2.AttributeKind.NoInstrumentFunction=236
+astwire.v2.AttributeKind.NoMerge=41
+astwire.v2.AttributeKind.NoMicroMips=237
+astwire.v2.AttributeKind.NoMips16=238
+astwire.v2.AttributeKind.NoProfileFunction=239
+astwire.v2.AttributeKind.NoRandomizeLayout=240
+astwire.v2.AttributeKind.NoReturn=241
+astwire.v2.AttributeKind.NoSanitize=242
+astwire.v2.AttributeKind.NoSpeculativeLoadHardening=243
+astwire.v2.AttributeKind.NoSplitStack=244
+astwire.v2.AttributeKind.NoStackProtector=245
+astwire.v2.AttributeKind.NoThreadSafetyAnalysis=246
+astwire.v2.AttributeKind.NoThrow=247
+astwire.v2.AttributeKind.NoUniqueAddress=248
+astwire.v2.AttributeKind.NoUwtable=249
+astwire.v2.AttributeKind.NonNull=75
+astwire.v2.AttributeKind.NotTailCalled=250
+astwire.v2.AttributeKind.OMPAllocateDecl=251
+astwire.v2.AttributeKind.OMPCaptureKind=377
+astwire.v2.AttributeKind.OMPCaptureNoInit=252
+astwire.v2.AttributeKind.OMPDeclareSimdDecl=378
+astwire.v2.AttributeKind.OMPDeclareTargetDecl=253
+astwire.v2.AttributeKind.OMPDeclareVariant=254
+astwire.v2.AttributeKind.OMPReferencedVar=379
+astwire.v2.AttributeKind.OMPThreadPrivateDecl=255
+astwire.v2.AttributeKind.OSConsumed=76
+astwire.v2.AttributeKind.OSConsumesThis=256
+astwire.v2.AttributeKind.OSReturnsNotRetained=257
+astwire.v2.AttributeKind.OSReturnsRetained=258
+astwire.v2.AttributeKind.OSReturnsRetainedOnNonZero=259
+astwire.v2.AttributeKind.OSReturnsRetainedOnZero=260
+astwire.v2.AttributeKind.ObjCBoxable=380
+astwire.v2.AttributeKind.ObjCBridge=261
+astwire.v2.AttributeKind.ObjCBridgeMutable=262
+astwire.v2.AttributeKind.ObjCBridgeRelated=263
+astwire.v2.AttributeKind.ObjCClassStub=381
+astwire.v2.AttributeKind.ObjCDesignatedInitializer=382
+astwire.v2.AttributeKind.ObjCDirect=383
+astwire.v2.AttributeKind.ObjCDirectMembers=384
+astwire.v2.AttributeKind.ObjCException=264
+astwire.v2.AttributeKind.ObjCExplicitProtocolImpl=265
+astwire.v2.AttributeKind.ObjCExternallyRetained=266
+astwire.v2.AttributeKind.ObjCGC=14
+astwire.v2.AttributeKind.ObjCIndependentClass=267
+astwire.v2.AttributeKind.ObjCInertUnsafeUnretained=15
+astwire.v2.AttributeKind.ObjCKindOf=16
+astwire.v2.AttributeKind.ObjCMethodFamily=268
+astwire.v2.AttributeKind.ObjCNSObject=269
+astwire.v2.AttributeKind.ObjCNonLazyClass=385
+astwire.v2.AttributeKind.ObjCNonRuntimeProtocol=386
+astwire.v2.AttributeKind.ObjCOwnership=55
+astwire.v2.AttributeKind.ObjCPreciseLifetime=270
+astwire.v2.AttributeKind.ObjCRequiresPropertyDefs=271
+astwire.v2.AttributeKind.ObjCRequiresSuper=272
+astwire.v2.AttributeKind.ObjCReturnsInnerPointer=273
+astwire.v2.AttributeKind.ObjCRootClass=274
+astwire.v2.AttributeKind.ObjCRuntimeName=387
+astwire.v2.AttributeKind.ObjCRuntimeVisible=388
+astwire.v2.AttributeKind.ObjCSubclassingRestricted=275
+astwire.v2.AttributeKind.OpenCLAccess=389
+astwire.v2.AttributeKind.OpenCLConstantAddressSpace=17
+astwire.v2.AttributeKind.OpenCLGenericAddressSpace=18
+astwire.v2.AttributeKind.OpenCLGlobalAddressSpace=19
+astwire.v2.AttributeKind.OpenCLGlobalDeviceAddressSpace=20
+astwire.v2.AttributeKind.OpenCLGlobalHostAddressSpace=21
+astwire.v2.AttributeKind.OpenCLIntelReqdSubGroupSize=276
+astwire.v2.AttributeKind.OpenCLKernel=277
+astwire.v2.AttributeKind.OpenCLLocalAddressSpace=22
+astwire.v2.AttributeKind.OpenCLPrivateAddressSpace=23
+astwire.v2.AttributeKind.OpenCLUnrollHint=37
+astwire.v2.AttributeKind.OptimizeNone=278
+astwire.v2.AttributeKind.Overloadable=390
+astwire.v2.AttributeKind.Override=279
+astwire.v2.AttributeKind.Owner=280
+astwire.v2.AttributeKind.Ownership=281
+astwire.v2.AttributeKind.Packed=282
+astwire.v2.AttributeKind.ParamTypestate=283
+astwire.v2.AttributeKind.Pascal=56
+astwire.v2.AttributeKind.PassObjectSize=77
+astwire.v2.AttributeKind.PatchableFunctionEntry=284
+astwire.v2.AttributeKind.Pcs=57
+astwire.v2.AttributeKind.Pointer=285
+astwire.v2.AttributeKind.PragmaClangBSSSection=286
+astwire.v2.AttributeKind.PragmaClangDataSection=287
+astwire.v2.AttributeKind.PragmaClangRelroSection=288
+astwire.v2.AttributeKind.PragmaClangRodataSection=289
+astwire.v2.AttributeKind.PragmaClangTextSection=290
+astwire.v2.AttributeKind.PreferredName=291
+astwire.v2.AttributeKind.PreferredType=292
+astwire.v2.AttributeKind.PreserveAll=58
+astwire.v2.AttributeKind.PreserveMost=59
+astwire.v2.AttributeKind.PtGuardedBy=293
+astwire.v2.AttributeKind.PtGuardedVar=294
+astwire.v2.AttributeKind.Ptr32=24
+astwire.v2.AttributeKind.Ptr64=25
+astwire.v2.AttributeKind.Pure=295
+astwire.v2.AttributeKind.RISCVInterrupt=296
+astwire.v2.AttributeKind.RandomizeLayout=297
+astwire.v2.AttributeKind.ReadOnlyPlacement=298
+astwire.v2.AttributeKind.RegCall=60
+astwire.v2.AttributeKind.Reinitializes=299
+astwire.v2.AttributeKind.ReleaseCapability=300
+astwire.v2.AttributeKind.ReleaseHandle=78
+astwire.v2.AttributeKind.RenderScriptKernel=391
+astwire.v2.AttributeKind.ReqdWorkGroupSize=301
+astwire.v2.AttributeKind.RequiresCapability=302
+astwire.v2.AttributeKind.Restrict=303
+astwire.v2.AttributeKind.Retain=304
+astwire.v2.AttributeKind.ReturnTypestate=305
+astwire.v2.AttributeKind.ReturnsNonNull=306
+astwire.v2.AttributeKind.ReturnsTwice=307
+astwire.v2.AttributeKind.SPtr=26
+astwire.v2.AttributeKind.SYCLKernel=308
+astwire.v2.AttributeKind.SYCLSpecialClass=309
+astwire.v2.AttributeKind.ScopedLockable=310
+astwire.v2.AttributeKind.Section=311
+astwire.v2.AttributeKind.SelectAny=312
+astwire.v2.AttributeKind.Sentinel=313
+astwire.v2.AttributeKind.SetTypestate=314
+astwire.v2.AttributeKind.SharedTrylockFunction=315
+astwire.v2.AttributeKind.SpeculativeLoadHardening=316
+astwire.v2.AttributeKind.StandaloneDebug=317
+astwire.v2.AttributeKind.StdCall=61
+astwire.v2.AttributeKind.StrictFP=318
+astwire.v2.AttributeKind.StrictGuardStackCheck=319
+astwire.v2.AttributeKind.Suppress=42
+astwire.v2.AttributeKind.SwiftAsync=320
+astwire.v2.AttributeKind.SwiftAsyncCall=62
+astwire.v2.AttributeKind.SwiftAsyncContext=67
+astwire.v2.AttributeKind.SwiftAsyncError=321
+astwire.v2.AttributeKind.SwiftAsyncName=322
+astwire.v2.AttributeKind.SwiftAttr=323
+astwire.v2.AttributeKind.SwiftBridge=324
+astwire.v2.AttributeKind.SwiftBridgedTypedef=325
+astwire.v2.AttributeKind.SwiftCall=63
+astwire.v2.AttributeKind.SwiftContext=68
+astwire.v2.AttributeKind.SwiftError=326
+astwire.v2.AttributeKind.SwiftErrorResult=69
+astwire.v2.AttributeKind.SwiftImportAsNonGeneric=327
+astwire.v2.AttributeKind.SwiftImportPropertyAsAccessors=328
+astwire.v2.AttributeKind.SwiftIndirectResult=70
+astwire.v2.AttributeKind.SwiftName=329
+astwire.v2.AttributeKind.SwiftNewType=330
+astwire.v2.AttributeKind.SwiftObjCMembers=392
+astwire.v2.AttributeKind.SwiftPrivate=331
+astwire.v2.AttributeKind.SwiftVersionedAddition=393
+astwire.v2.AttributeKind.SwiftVersionedRemoval=394
+astwire.v2.AttributeKind.SysVABI=64
+astwire.v2.AttributeKind.TLSModel=332
+astwire.v2.AttributeKind.Target=333
+astwire.v2.AttributeKind.TargetClones=334
+astwire.v2.AttributeKind.TargetVersion=335
+astwire.v2.AttributeKind.TestTypestate=336
+astwire.v2.AttributeKind.ThisCall=65
+astwire.v2.AttributeKind.Thread=395
+astwire.v2.AttributeKind.TransparentUnion=337
+astwire.v2.AttributeKind.TrivialABI=338
+astwire.v2.AttributeKind.TryAcquireCapability=339
+astwire.v2.AttributeKind.TypeNonNull=27
+astwire.v2.AttributeKind.TypeNullUnspecified=28
+astwire.v2.AttributeKind.TypeNullable=29
+astwire.v2.AttributeKind.TypeNullableResult=30
+astwire.v2.AttributeKind.TypeTagForDatatype=340
+astwire.v2.AttributeKind.TypeVisibility=341
+astwire.v2.AttributeKind.UPtr=31
+astwire.v2.AttributeKind.Unavailable=342
+astwire.v2.AttributeKind.Uninitialized=343
+astwire.v2.AttributeKind.Unlikely=38
+astwire.v2.AttributeKind.UnsafeBufferUsage=344
+astwire.v2.AttributeKind.Unused=345
+astwire.v2.AttributeKind.UseHandle=79
+astwire.v2.AttributeKind.Used=346
+astwire.v2.AttributeKind.UsingIfExists=347
+astwire.v2.AttributeKind.Uuid=348
+astwire.v2.AttributeKind.VecReturn=349
+astwire.v2.AttributeKind.VecTypeHint=350
+astwire.v2.AttributeKind.VectorCall=66
+astwire.v2.AttributeKind.Visibility=351
+astwire.v2.AttributeKind.WarnUnused=352
+astwire.v2.AttributeKind.WarnUnusedResult=353
+astwire.v2.AttributeKind.Weak=354
+astwire.v2.AttributeKind.WeakImport=355
+astwire.v2.AttributeKind.WeakRef=356
+astwire.v2.AttributeKind.WebAssemblyExportName=357
+astwire.v2.AttributeKind.WebAssemblyFuncref=32
+astwire.v2.AttributeKind.WebAssemblyImportModule=358
+astwire.v2.AttributeKind.WebAssemblyImportName=359
+astwire.v2.AttributeKind.WorkGroupSizeHint=360
+astwire.v2.AttributeKind.X86ForceAlignArgPointer=361
+astwire.v2.AttributeKind.XRayInstrument=362
+astwire.v2.AttributeKind.XRayLogArgs=363
+astwire.v2.AttributeKind.ZeroCallUsedRegs=364
+astwire.v2.AttributedStmtData.base Obj:astwire.v2.StmtData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AttributedStmtData.stmt_attributes Vector<Long> slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AttributedTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AttributedTypeData.equivalent_type Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AttributedTypeData.modified_type Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AutoTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.AutoTypeData.deduced_type Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.BaseInitializer.base_class Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.BinaryOperatorData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.BinaryOperatorData.op Int:astwire.v2.BinaryOperatorKind slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.BinaryOperatorKind.Add=5
+astwire.v2.BinaryOperatorKind.AddAssign=25
+astwire.v2.BinaryOperatorKind.And=16
+astwire.v2.BinaryOperatorKind.AndAssign=29
+astwire.v2.BinaryOperatorKind.Assign=21
+astwire.v2.BinaryOperatorKind.Cmp=9
+astwire.v2.BinaryOperatorKind.Comma=32
+astwire.v2.BinaryOperatorKind.Div=3
+astwire.v2.BinaryOperatorKind.DivAssign=23
+astwire.v2.BinaryOperatorKind.EQ=14
+astwire.v2.BinaryOperatorKind.GE=13
+astwire.v2.BinaryOperatorKind.GT=11
+astwire.v2.BinaryOperatorKind.LAnd=19
+astwire.v2.BinaryOperatorKind.LE=12
+astwire.v2.BinaryOperatorKind.LOr=20
+astwire.v2.BinaryOperatorKind.LT=10
+astwire.v2.BinaryOperatorKind.Mul=2
+astwire.v2.BinaryOperatorKind.MulAssign=22
+astwire.v2.BinaryOperatorKind.NE=15
+astwire.v2.BinaryOperatorKind.Or=18
+astwire.v2.BinaryOperatorKind.OrAssign=31
+astwire.v2.BinaryOperatorKind.PtrMemD=0
+astwire.v2.BinaryOperatorKind.PtrMemI=1
+astwire.v2.BinaryOperatorKind.Rem=4
+astwire.v2.BinaryOperatorKind.RemAssign=24
+astwire.v2.BinaryOperatorKind.Shl=7
+astwire.v2.BinaryOperatorKind.ShlAssign=27
+astwire.v2.BinaryOperatorKind.Shr=8
+astwire.v2.BinaryOperatorKind.ShrAssign=28
+astwire.v2.BinaryOperatorKind.Sub=6
+astwire.v2.BinaryOperatorKind.SubAssign=26
+astwire.v2.BinaryOperatorKind.Xor=17
+astwire.v2.BinaryOperatorKind.XorAssign=30
+astwire.v2.Block.records Vector<Obj>:astwire.v2.Record slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.BuiltinKind.ARCUnbridgedCast=233
+astwire.v2.BuiltinKind.Accum=187
+astwire.v2.BuiltinKind.BFloat16=215
+astwire.v2.BuiltinKind.Bool=166
+astwire.v2.BuiltinKind.BoundMember=229
+astwire.v2.BuiltinKind.BuiltinFn=232
+astwire.v2.BuiltinKind.Char16=171
+astwire.v2.BuiltinKind.Char32=172
+astwire.v2.BuiltinKind.Char8=170
+astwire.v2.BuiltinKind.Char_S=178
+astwire.v2.BuiltinKind.Char_U=167
+astwire.v2.BuiltinKind.Dependent=227
+astwire.v2.BuiltinKind.Double=212
+astwire.v2.BuiltinKind.Float128=216
+astwire.v2.BuiltinKind.Float16=214
+astwire.v2.BuiltinKind.Float=211
+astwire.v2.BuiltinKind.Fract=193
+astwire.v2.BuiltinKind.Half=210
+astwire.v2.BuiltinKind.Ibm128=217
+astwire.v2.BuiltinKind.IncompleteMatrixIdx=234
+astwire.v2.BuiltinKind.Int128=185
+astwire.v2.BuiltinKind.Int=182
+astwire.v2.BuiltinKind.Long=183
+astwire.v2.BuiltinKind.LongAccum=188
+astwire.v2.BuiltinKind.LongDouble=213
+astwire.v2.BuiltinKind.LongFract=194
+astwire.v2.BuiltinKind.LongLong=184
+astwire.v2.BuiltinKind.NullPtr=218
+astwire.v2.BuiltinKind.OCLClkEvent=224
+astwire.v2.BuiltinKind.OCLEvent=223
+astwire.v2.BuiltinKind.OCLImage1dArrayRO=1
+astwire.v2.BuiltinKind.OCLImage1dArrayRW=25
+astwire.v2.BuiltinKind.OCLImage1dArrayWO=13
+astwire.v2.BuiltinKind.OCLImage1dBufferRO=2
+astwire.v2.BuiltinKind.OCLImage1dBufferRW=26
+astwire.v2.BuiltinKind.OCLImage1dBufferWO=14
+astwire.v2.BuiltinKind.OCLImage1dRO=0
+astwire.v2.BuiltinKind.OCLImage1dRW=24
+astwire.v2.BuiltinKind.OCLImage1dWO=12
+astwire.v2.BuiltinKind.OCLImage2dArrayDepthRO=6
+astwire.v2.BuiltinKind.OCLImage2dArrayDepthRW=30
+astwire.v2.BuiltinKind.OCLImage2dArrayDepthWO=18
+astwire.v2.BuiltinKind.OCLImage2dArrayMSAADepthRO=10
+astwire.v2.BuiltinKind.OCLImage2dArrayMSAADepthRW=34
+astwire.v2.BuiltinKind.OCLImage2dArrayMSAADepthWO=22
+astwire.v2.BuiltinKind.OCLImage2dArrayMSAARO=8
+astwire.v2.BuiltinKind.OCLImage2dArrayMSAARW=32
+astwire.v2.BuiltinKind.OCLImage2dArrayMSAAWO=20
+astwire.v2.BuiltinKind.OCLImage2dArrayRO=4
+astwire.v2.BuiltinKind.OCLImage2dArrayRW=28
+astwire.v2.BuiltinKind.OCLImage2dArrayWO=16
+astwire.v2.BuiltinKind.OCLImage2dDepthRO=5
+astwire.v2.BuiltinKind.OCLImage2dDepthRW=29
+astwire.v2.BuiltinKind.OCLImage2dDepthWO=17
+astwire.v2.BuiltinKind.OCLImage2dMSAADepthRO=9
+astwire.v2.BuiltinKind.OCLImage2dMSAADepthRW=33
+astwire.v2.BuiltinKind.OCLImage2dMSAADepthWO=21
+astwire.v2.BuiltinKind.OCLImage2dMSAARO=7
+astwire.v2.BuiltinKind.OCLImage2dMSAARW=31
+astwire.v2.BuiltinKind.OCLImage2dMSAAWO=19
+astwire.v2.BuiltinKind.OCLImage2dRO=3
+astwire.v2.BuiltinKind.OCLImage2dRW=27
+astwire.v2.BuiltinKind.OCLImage2dWO=15
+astwire.v2.BuiltinKind.OCLImage3dRO=11
+astwire.v2.BuiltinKind.OCLImage3dRW=35
+astwire.v2.BuiltinKind.OCLImage3dWO=23
+astwire.v2.BuiltinKind.OCLIntelSubgroupAVCImeDualRefStreamin=47
+astwire.v2.BuiltinKind.OCLIntelSubgroupAVCImePayload=37
+astwire.v2.BuiltinKind.OCLIntelSubgroupAVCImeResult=41
+astwire.v2.BuiltinKind.OCLIntelSubgroupAVCImeResultDualRefStreamout=45
+astwire.v2.BuiltinKind.OCLIntelSubgroupAVCImeResultSingleRefStreamout=44
+astwire.v2.BuiltinKind.OCLIntelSubgroupAVCImeSingleRefStreamin=46
+astwire.v2.BuiltinKind.OCLIntelSubgroupAVCMcePayload=36
+astwire.v2.BuiltinKind.OCLIntelSubgroupAVCMceResult=40
+astwire.v2.BuiltinKind.OCLIntelSubgroupAVCRefPayload=38
+astwire.v2.BuiltinKind.OCLIntelSubgroupAVCRefResult=42
+astwire.v2.BuiltinKind.OCLIntelSubgroupAVCSicPayload=39
+astwire.v2.BuiltinKind.OCLIntelSubgroupAVCSicResult=43
+astwire.v2.BuiltinKind.OCLQueue=225
+astwire.v2.BuiltinKind.OCLReserveID=226
+astwire.v2.BuiltinKind.OCLSampler=222
+astwire.v2.BuiltinKind.OMPArraySection=235
+astwire.v2.BuiltinKind.OMPArrayShaping=236
+astwire.v2.BuiltinKind.OMPIterator=237
+astwire.v2.BuiltinKind.ObjCClass=220
+astwire.v2.BuiltinKind.ObjCId=219
+astwire.v2.BuiltinKind.ObjCSel=221
+astwire.v2.BuiltinKind.Overload=228
+astwire.v2.BuiltinKind.PseudoObject=230
+astwire.v2.BuiltinKind.RvvBool16=162
+astwire.v2.BuiltinKind.RvvBool1=158
+astwire.v2.BuiltinKind.RvvBool2=159
+astwire.v2.BuiltinKind.RvvBool32=163
+astwire.v2.BuiltinKind.RvvBool4=160
+astwire.v2.BuiltinKind.RvvBool64=164
+astwire.v2.BuiltinKind.RvvBool8=161
+astwire.v2.BuiltinKind.RvvFloat16m1=145
+astwire.v2.BuiltinKind.RvvFloat16m2=146
+astwire.v2.BuiltinKind.RvvFloat16m4=147
+astwire.v2.BuiltinKind.RvvFloat16m8=148
+astwire.v2.BuiltinKind.RvvFloat16mf2=144
+astwire.v2.BuiltinKind.RvvFloat16mf4=143
+astwire.v2.BuiltinKind.RvvFloat32m1=150
+astwire.v2.BuiltinKind.RvvFloat32m2=151
+astwire.v2.BuiltinKind.RvvFloat32m4=152
+astwire.v2.BuiltinKind.RvvFloat32m8=153
+astwire.v2.BuiltinKind.RvvFloat32mf2=149
+astwire.v2.BuiltinKind.RvvFloat64m1=154
+astwire.v2.BuiltinKind.RvvFloat64m2=155
+astwire.v2.BuiltinKind.RvvFloat64m4=156
+astwire.v2.BuiltinKind.RvvFloat64m8=157
+astwire.v2.BuiltinKind.RvvInt16m1=115
+astwire.v2.BuiltinKind.RvvInt16m2=116
+astwire.v2.BuiltinKind.RvvInt16m4=117
+astwire.v2.BuiltinKind.RvvInt16m8=118
+astwire.v2.BuiltinKind.RvvInt16mf2=114
+astwire.v2.BuiltinKind.RvvInt16mf4=113
+astwire.v2.BuiltinKind.RvvInt32m1=126
+astwire.v2.BuiltinKind.RvvInt32m2=127
+astwire.v2.BuiltinKind.RvvInt32m4=128
+astwire.v2.BuiltinKind.RvvInt32m8=129
+astwire.v2.BuiltinKind.RvvInt32mf2=125
+astwire.v2.BuiltinKind.RvvInt64m1=135
+astwire.v2.BuiltinKind.RvvInt64m2=136
+astwire.v2.BuiltinKind.RvvInt64m4=137
+astwire.v2.BuiltinKind.RvvInt64m8=138
+astwire.v2.BuiltinKind.RvvInt8m1=102
+astwire.v2.BuiltinKind.RvvInt8m2=103
+astwire.v2.BuiltinKind.RvvInt8m4=104
+astwire.v2.BuiltinKind.RvvInt8m8=105
+astwire.v2.BuiltinKind.RvvInt8mf2=101
+astwire.v2.BuiltinKind.RvvInt8mf4=100
+astwire.v2.BuiltinKind.RvvInt8mf8=99
+astwire.v2.BuiltinKind.RvvUint16m1=121
+astwire.v2.BuiltinKind.RvvUint16m2=122
+astwire.v2.BuiltinKind.RvvUint16m4=123
+astwire.v2.BuiltinKind.RvvUint16m8=124
+astwire.v2.BuiltinKind.RvvUint16mf2=120
+astwire.v2.BuiltinKind.RvvUint16mf4=119
+astwire.v2.BuiltinKind.RvvUint32m1=131
+astwire.v2.BuiltinKind.RvvUint32m2=132
+astwire.v2.BuiltinKind.RvvUint32m4=133
+astwire.v2.BuiltinKind.RvvUint32m8=134
+astwire.v2.BuiltinKind.RvvUint32mf2=130
+astwire.v2.BuiltinKind.RvvUint64m1=139
+astwire.v2.BuiltinKind.RvvUint64m2=140
+astwire.v2.BuiltinKind.RvvUint64m4=141
+astwire.v2.BuiltinKind.RvvUint64m8=142
+astwire.v2.BuiltinKind.RvvUint8m1=109
+astwire.v2.BuiltinKind.RvvUint8m2=110
+astwire.v2.BuiltinKind.RvvUint8m4=111
+astwire.v2.BuiltinKind.RvvUint8m8=112
+astwire.v2.BuiltinKind.RvvUint8mf2=108
+astwire.v2.BuiltinKind.RvvUint8mf4=107
+astwire.v2.BuiltinKind.RvvUint8mf8=106
+astwire.v2.BuiltinKind.SChar=179
+astwire.v2.BuiltinKind.SatAccum=199
+astwire.v2.BuiltinKind.SatFract=205
+astwire.v2.BuiltinKind.SatLongAccum=200
+astwire.v2.BuiltinKind.SatLongFract=206
+astwire.v2.BuiltinKind.SatShortAccum=198
+astwire.v2.BuiltinKind.SatShortFract=204
+astwire.v2.BuiltinKind.SatUAccum=202
+astwire.v2.BuiltinKind.SatUFract=208
+astwire.v2.BuiltinKind.SatULongAccum=203
+astwire.v2.BuiltinKind.SatULongFract=209
+astwire.v2.BuiltinKind.SatUShortAccum=201
+astwire.v2.BuiltinKind.SatUShortFract=207
+astwire.v2.BuiltinKind.Short=181
+astwire.v2.BuiltinKind.ShortAccum=186
+astwire.v2.BuiltinKind.ShortFract=192
+astwire.v2.BuiltinKind.SveBFloat16=59
+astwire.v2.BuiltinKind.SveBFloat16x2=71
+astwire.v2.BuiltinKind.SveBFloat16x3=83
+astwire.v2.BuiltinKind.SveBFloat16x4=95
+astwire.v2.BuiltinKind.SveBool=96
+astwire.v2.BuiltinKind.SveFloat16=56
+astwire.v2.BuiltinKind.SveFloat16x2=68
+astwire.v2.BuiltinKind.SveFloat16x3=80
+astwire.v2.BuiltinKind.SveFloat16x4=92
+astwire.v2.BuiltinKind.SveFloat32=57
+astwire.v2.BuiltinKind.SveFloat32x2=69
+astwire.v2.BuiltinKind.SveFloat32x3=81
+astwire.v2.BuiltinKind.SveFloat32x4=93
+astwire.v2.BuiltinKind.SveFloat64=58
+astwire.v2.BuiltinKind.SveFloat64x2=70
+astwire.v2.BuiltinKind.SveFloat64x3=82
+astwire.v2.BuiltinKind.SveFloat64x4=94
+astwire.v2.BuiltinKind.SveInt16=49
+astwire.v2.BuiltinKind.SveInt16x2=61
+astwire.v2.BuiltinKind.SveInt16x3=73
+astwire.v2.BuiltinKind.SveInt16x4=85
+astwire.v2.BuiltinKind.SveInt32=50
+astwire.v2.BuiltinKind.SveInt32x2=62
+astwire.v2.BuiltinKind.SveInt32x3=74
+astwire.v2.BuiltinKind.SveInt32x4=86
+astwire.v2.BuiltinKind.SveInt64=51
+astwire.v2.BuiltinKind.SveInt64x2=63
+astwire.v2.BuiltinKind.SveInt64x3=75
+astwire.v2.BuiltinKind.SveInt64x4=87
+astwire.v2.BuiltinKind.SveInt8=48
+astwire.v2.BuiltinKind.SveInt8x2=60
+astwire.v2.BuiltinKind.SveInt8x3=72
+astwire.v2.BuiltinKind.SveInt8x4=84
+astwire.v2.BuiltinKind.SveUint16=53
+astwire.v2.BuiltinKind.SveUint16x2=65
+astwire.v2.BuiltinKind.SveUint16x3=77
+astwire.v2.BuiltinKind.SveUint16x4=89
+astwire.v2.BuiltinKind.SveUint32=54
+astwire.v2.BuiltinKind.SveUint32x2=66
+astwire.v2.BuiltinKind.SveUint32x3=78
+astwire.v2.BuiltinKind.SveUint32x4=90
+astwire.v2.BuiltinKind.SveUint64=55
+astwire.v2.BuiltinKind.SveUint64x2=67
+astwire.v2.BuiltinKind.SveUint64x3=79
+astwire.v2.BuiltinKind.SveUint64x4=91
+astwire.v2.BuiltinKind.SveUint8=52
+astwire.v2.BuiltinKind.SveUint8x2=64
+astwire.v2.BuiltinKind.SveUint8x3=76
+astwire.v2.BuiltinKind.SveUint8x4=88
+astwire.v2.BuiltinKind.UAccum=190
+astwire.v2.BuiltinKind.UChar=168
+astwire.v2.BuiltinKind.UFract=196
+astwire.v2.BuiltinKind.UInt128=177
+astwire.v2.BuiltinKind.UInt=174
+astwire.v2.BuiltinKind.ULong=175
+astwire.v2.BuiltinKind.ULongAccum=191
+astwire.v2.BuiltinKind.ULongFract=197
+astwire.v2.BuiltinKind.ULongLong=176
+astwire.v2.BuiltinKind.UShort=173
+astwire.v2.BuiltinKind.UShortAccum=189
+astwire.v2.BuiltinKind.UShortFract=195
+astwire.v2.BuiltinKind.UnknownAny=231
+astwire.v2.BuiltinKind.VectorPair=98
+astwire.v2.BuiltinKind.VectorQuad=97
+astwire.v2.BuiltinKind.Void=165
+astwire.v2.BuiltinKind.WChar_S=180
+astwire.v2.BuiltinKind.WChar_U=169
+astwire.v2.BuiltinTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.BuiltinTypeData.kind Int:astwire.v2.BuiltinKind slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.BuiltinTypeData.kind_literal String slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.C99Qualifier.CONST=0
+astwire.v2.C99Qualifier.RESTRICT=1
+astwire.v2.C99Qualifier.RESTRICT_C99=2
+astwire.v2.C99Qualifier.VOLATILE=3
+astwire.v2.CXXBaseSpecifier.access_specifier_as_written Int:astwire.v2.AccessSpecifier slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXBaseSpecifier.access_specifier_semantic Int:astwire.v2.AccessSpecifier slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXBaseSpecifier.is_pack_expansion Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXBaseSpecifier.is_virtual Bool slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXBaseSpecifier.type Long slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXBoolLiteralExprData.base Obj:astwire.v2.LiteralData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXBoolLiteralExprData.value Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructExprData.construction_kind Int:astwire.v2.ConstructionKind slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructExprData.constructor_decl Long slot=7 offset=18 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructExprData.is_elidable Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructExprData.is_list_initialization Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructExprData.is_std_list_initialization Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructExprData.is_temporary_object Bool slot=6 offset=16 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructExprData.requires_zero_initialization Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructorDeclData.base Obj:astwire.v2.CXXMethodDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructorDeclData.constructor_inits Vector<Obj>:astwire.v2.CXXCtorInitializer slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructorDeclData.explicit_specifier Obj:astwire.v2.ExplicitSpecifier slot=4 offset=12 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructorDeclData.is_default_constructor Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConstructorDeclData.is_explicit Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConversionDeclData.base Obj:astwire.v2.CXXMethodDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConversionDeclData.conversion_type Long slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConversionDeclData.is_explicit Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXConversionDeclData.is_lambda_to_block_pointer_conversion Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXCtorInitializer.init_expr Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXCtorInitializer.is_in_class_member_initializer Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXCtorInitializer.is_written Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXCtorInitializer.target Union:astwire.v2.InitializerTarget slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXCtorInitializer.target_type UType:astwire.v2.InitializerTarget slot=0 offset=4 optional=false required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXDeleteExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXDeleteExprData.is_array Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXDeleteExprData.is_array_as_written Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXDeleteExprData.is_global Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXDependentScopeMemberExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXDependentScopeMemberExprData.has_template_keyword Bool slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXDependentScopeMemberExprData.is_arrow Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXDependentScopeMemberExprData.is_implicit_access Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXDependentScopeMemberExprData.member_name String slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXDependentScopeMemberExprData.qualifier String slot=4 offset=12 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXDependentScopeMemberExprData.template_arguments Vector<Obj>:astwire.v2.TemplateArgument slot=6 offset=16 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMemberCallExprData.base Obj:astwire.v2.CallExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMemberCallExprData.method_decl Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.base Obj:astwire.v2.FunctionDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.has_inline_body Bool slot=12 offset=28 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.is_const Bool slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.is_copy_assignment_operator Bool slot=8 offset=20 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.is_instance Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.is_lambda_static_invoker Bool slot=13 offset=30 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.is_move_assignment_operator Bool slot=9 offset=22 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.is_static Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.is_virtual Bool slot=7 offset=18 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.is_volatile Bool slot=6 offset=16 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.overridden_methods Vector<Long> slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.record Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.this_object_type Long slot=11 offset=26 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXMethodDeclData.this_type Long slot=10 offset=24 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNamedCastExprData.base Obj:astwire.v2.ExplicitCastExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNamedCastExprData.cast_name String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNewExprData.array_size Long slot=7 offset=18 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNewExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNewExprData.construct_expr Long slot=6 offset=16 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNewExprData.init_style Int:astwire.v2.NewInitStyle slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNewExprData.initialization_present Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNewExprData.initializer Long slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNewExprData.is_array Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNewExprData.is_global Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNewExprData.operator_new Long slot=8 offset=20 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNoexceptExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXNoexceptExprData.value Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXPseudoDestructorExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXPseudoDestructorExprData.destroyed_type Long slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXPseudoDestructorExprData.is_arrow Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXPseudoDestructorExprData.qualifier String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXRecordDeclData.base Obj:astwire.v2.RecordDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXRecordDeclData.record_bases Vector<Obj>:astwire.v2.CXXBaseSpecifier slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXRecordDeclData.record_definition Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXTemporaryObjectExprData.base Obj:astwire.v2.CXXConstructExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXTypeidExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXTypeidExprData.is_type_operand Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXTypeidExprData.operand Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXUnresolvedConstructExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CXXUnresolvedConstructExprData.is_list_initialization Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CallExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CallExprData.direct_callee Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CallingConvention.AAPCS=9
+astwire.v2.CallingConvention.AAPCS_VFP=10
+astwire.v2.CallingConvention.AArch64SVEPCS=19
+astwire.v2.CallingConvention.AArch64VectorCall=18
+astwire.v2.CallingConvention.AMDGPUKernelCall=20
+astwire.v2.CallingConvention.C=0
+astwire.v2.CallingConvention.IntelOclBicc=11
+astwire.v2.CallingConvention.M68kRTD=21
+astwire.v2.CallingConvention.OpenCLKernel=13
+astwire.v2.CallingConvention.PreserveAll=17
+astwire.v2.CallingConvention.PreserveMost=16
+astwire.v2.CallingConvention.SpirFunction=12
+astwire.v2.CallingConvention.Swift=14
+astwire.v2.CallingConvention.SwiftAsync=15
+astwire.v2.CallingConvention.Win64=6
+astwire.v2.CallingConvention.X86FastCall=2
+astwire.v2.CallingConvention.X86Pascal=5
+astwire.v2.CallingConvention.X86RegCall=8
+astwire.v2.CallingConvention.X86StdCall=1
+astwire.v2.CallingConvention.X86ThisCall=3
+astwire.v2.CallingConvention.X86VectorCall=4
+astwire.v2.CallingConvention.X86_64SysV=7
+astwire.v2.CastExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CastExprData.cast_kind Int:astwire.v2.CastKind slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CastKind.ARCConsumeObject=55
+astwire.v2.CastKind.ARCExtendBlockObject=57
+astwire.v2.CastKind.ARCProduceObject=54
+astwire.v2.CastKind.ARCReclaimReturnedObject=56
+astwire.v2.CastKind.AddressSpaceConversion=63
+astwire.v2.CastKind.AnyPointerToBlockPointerCast=42
+astwire.v2.CastKind.ArrayToPointerDecay=11
+astwire.v2.CastKind.AtomicToNonAtomic=58
+astwire.v2.CastKind.BaseToDerived=6
+astwire.v2.CastKind.BaseToDerivedMemberPointer=15
+astwire.v2.CastKind.BitCast=1
+astwire.v2.CastKind.BlockPointerToObjCPointerCast=41
+astwire.v2.CastKind.BooleanToSignedIntegral=38
+astwire.v2.CastKind.BuiltinFnToFnPtr=61
+astwire.v2.CastKind.CPointerToObjCPointerCast=40
+astwire.v2.CastKind.ConstructorConversion=20
+astwire.v2.CastKind.CopyAndAutoreleaseBlockObject=60
+astwire.v2.CastKind.Dependent=0
+astwire.v2.CastKind.DerivedToBase=7
+astwire.v2.CastKind.DerivedToBaseMemberPointer=16
+astwire.v2.CastKind.Dynamic=9
+astwire.v2.CastKind.FixedPointCast=32
+astwire.v2.CastKind.FixedPointToBoolean=35
+astwire.v2.CastKind.FixedPointToFloating=31
+astwire.v2.CastKind.FixedPointToIntegral=33
+astwire.v2.CastKind.FloatingCast=39
+astwire.v2.CastKind.FloatingComplexCast=47
+astwire.v2.CastKind.FloatingComplexToBoolean=46
+astwire.v2.CastKind.FloatingComplexToIntegralComplex=48
+astwire.v2.CastKind.FloatingComplexToReal=45
+astwire.v2.CastKind.FloatingRealToComplex=44
+astwire.v2.CastKind.FloatingToBoolean=37
+astwire.v2.CastKind.FloatingToFixedPoint=30
+astwire.v2.CastKind.FloatingToIntegral=36
+astwire.v2.CastKind.FunctionToPointerDecay=12
+astwire.v2.CastKind.IntToOCLSampler=64
+astwire.v2.CastKind.IntegralCast=27
+astwire.v2.CastKind.IntegralComplexCast=52
+astwire.v2.CastKind.IntegralComplexToBoolean=51
+astwire.v2.CastKind.IntegralComplexToFloatingComplex=53
+astwire.v2.CastKind.IntegralComplexToReal=50
+astwire.v2.CastKind.IntegralRealToComplex=49
+astwire.v2.CastKind.IntegralToBoolean=28
+astwire.v2.CastKind.IntegralToFixedPoint=34
+astwire.v2.CastKind.IntegralToFloating=29
+astwire.v2.CastKind.IntegralToPointer=21
+astwire.v2.CastKind.LValueBitCast=2
+astwire.v2.CastKind.LValueToRValue=4
+astwire.v2.CastKind.LValueToRValueBitCast=3
+astwire.v2.CastKind.MatrixCast=25
+astwire.v2.CastKind.MemberPointerToBoolean=17
+astwire.v2.CastKind.NoOp=5
+astwire.v2.CastKind.NonAtomicToAtomic=59
+astwire.v2.CastKind.NullToMemberPointer=14
+astwire.v2.CastKind.NullToPointer=13
+astwire.v2.CastKind.ObjCObjectLValueCast=43
+astwire.v2.CastKind.PointerToBoolean=23
+astwire.v2.CastKind.PointerToIntegral=22
+astwire.v2.CastKind.ReinterpretMemberPointer=18
+astwire.v2.CastKind.ToUnion=10
+astwire.v2.CastKind.ToVoid=24
+astwire.v2.CastKind.UncheckedDerivedToBase=8
+astwire.v2.CastKind.UserDefinedConversion=19
+astwire.v2.CastKind.VectorSplat=26
+astwire.v2.CastKind.ZeroToOCLOpaqueType=62
+astwire.v2.CharacterKind.ASCII=0
+astwire.v2.CharacterKind.UTF16=3
+astwire.v2.CharacterKind.UTF32=4
+astwire.v2.CharacterKind.UTF8=2
+astwire.v2.CharacterKind.WIDE=1
+astwire.v2.CharacterLiteralData.base Obj:astwire.v2.LiteralData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CharacterLiteralData.kind Int:astwire.v2.CharacterKind slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CharacterLiteralData.value Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ClassTemplatePartialSpecializationDeclData.base Obj:astwire.v2.ClassTemplateSpecializationDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ClassTemplatePartialSpecializationDeclData.template_parameters Vector<Long> slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ClassTemplateSpecializationDeclData.base Obj:astwire.v2.CXXRecordDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ClassTemplateSpecializationDeclData.specialization_kind Int:astwire.v2.TemplateSpecializationKind slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ClassTemplateSpecializationDeclData.specialized_template Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ClassTemplateSpecializationDeclData.template_arguments Vector<Obj>:astwire.v2.TemplateArgument slot=3 offset=10 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ClavaNodeData.source Obj:astwire.v2.SourceInfo slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ComplexTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ComplexTypeData.element_type Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CompoundLiteralExprData.base Obj:astwire.v2.LiteralData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.CompoundLiteralExprData.is_file_scope Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ComputedExceptionDetails.noexcept_expr Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ConstantArrayTypeData.array_size String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ConstantArrayTypeData.base Obj:astwire.v2.ArrayTypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ConstructionKind.Complete=0
+astwire.v2.ConstructionKind.Delegating=3
+astwire.v2.ConstructionKind.NonVirtualBase=1
+astwire.v2.ConstructionKind.VirtualBase=2
+astwire.v2.DecayedTypeData.base Obj:astwire.v2.AdjustedTypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DecayedTypeData.decayed_type Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DecayedTypeData.pointee_type Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DeclData.attributes Vector<Long> slot=6 offset=16 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DeclData.base Obj:astwire.v2.ClavaNodeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DeclData.is_implicit Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DeclData.is_invalid_decl Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DeclData.is_module_private Bool slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DeclData.is_referenced Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DeclData.is_used Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DeclPayload.AccessSpecDeclData=23 astwire.v2.AccessSpecDeclData
+astwire.v2.DeclPayload.CXXConstructorDeclData=11 astwire.v2.CXXConstructorDeclData
+astwire.v2.DeclPayload.CXXConversionDeclData=12 astwire.v2.CXXConversionDeclData
+astwire.v2.DeclPayload.CXXMethodDeclData=10 astwire.v2.CXXMethodDeclData
+astwire.v2.DeclPayload.CXXRecordDeclData=19 astwire.v2.CXXRecordDeclData
+astwire.v2.DeclPayload.ClassTemplateSpecializationDeclData=20 astwire.v2.ClassTemplateSpecializationDeclData
+astwire.v2.DeclPayload.DeclData=1 astwire.v2.DeclData
+astwire.v2.DeclPayload.DeclaratorDeclData=7 astwire.v2.DeclaratorDeclData
+astwire.v2.DeclPayload.EnumDeclData=18 astwire.v2.EnumDeclData
+astwire.v2.DeclPayload.FieldDeclData=13 astwire.v2.FieldDeclData
+astwire.v2.DeclPayload.FunctionDeclData=9 astwire.v2.FunctionDeclData
+astwire.v2.DeclPayload.LinkageSpecDeclData=28 astwire.v2.LinkageSpecDeclData
+astwire.v2.DeclPayload.MSPropertyDeclData=31 astwire.v2.MSPropertyDeclData
+astwire.v2.DeclPayload.NONE=0
+astwire.v2.DeclPayload.NamedDeclData=2 astwire.v2.NamedDeclData
+astwire.v2.DeclPayload.NamespaceAliasDeclData=27 astwire.v2.NamespaceAliasDeclData
+astwire.v2.DeclPayload.NamespaceDeclData=26 astwire.v2.NamespaceDeclData
+astwire.v2.DeclPayload.NonTypeTemplateParmDeclData=21 astwire.v2.NonTypeTemplateParmDeclData
+astwire.v2.DeclPayload.ParmVarDeclData=14 astwire.v2.ParmVarDeclData
+astwire.v2.DeclPayload.RecordDeclData=5 astwire.v2.RecordDeclData
+astwire.v2.DeclPayload.StaticAssertDeclData=29 astwire.v2.StaticAssertDeclData
+astwire.v2.DeclPayload.TagDeclData=4 astwire.v2.TagDeclData
+astwire.v2.DeclPayload.TemplateDeclData=8 astwire.v2.TemplateDeclData
+astwire.v2.DeclPayload.TemplateTemplateParmDeclData=30 astwire.v2.TemplateTemplateParmDeclData
+astwire.v2.DeclPayload.TemplateTypeParmDeclData=16 astwire.v2.TemplateTypeParmDeclData
+astwire.v2.DeclPayload.TypeDeclData=3 astwire.v2.TypeDeclData
+astwire.v2.DeclPayload.TypedefNameDeclData=22 astwire.v2.TypedefNameDeclData
+astwire.v2.DeclPayload.UnresolvedUsingTypenameDeclData=17 astwire.v2.UnresolvedUsingTypenameDeclData
+astwire.v2.DeclPayload.UsingDeclData=24 astwire.v2.UsingDeclData
+astwire.v2.DeclPayload.UsingDirectiveDeclData=25 astwire.v2.UsingDirectiveDeclData
+astwire.v2.DeclPayload.ValueDeclData=6 astwire.v2.ValueDeclData
+astwire.v2.DeclPayload.VarDeclData=15 astwire.v2.VarDeclData
+astwire.v2.DeclRefExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DeclRefExprData.decl Long slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DeclRefExprData.qualifier String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DeclRefExprData.template_arguments Vector<Obj>:astwire.v2.TemplateArgument slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DeclaratorDeclData.base Obj:astwire.v2.ValueDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DecltypeTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DecltypeTypeData.is_sugared Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DecltypeTypeData.underlying_expr Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DelegatingInitializer.delegated_type Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DependentScopeDeclRefExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DependentScopeDeclRefExprData.decl_name String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DependentScopeDeclRefExprData.has_template_keyword Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DependentScopeDeclRefExprData.qualifier String slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DependentScopeDeclRefExprData.template_arguments Vector<Obj>:astwire.v2.TemplateArgument slot=4 offset=12 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DependentSizedArrayTypeData.base Obj:astwire.v2.ArrayTypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DependentSizedArrayTypeData.size_expr Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DependentTemplateName.name String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DependentTemplateName.qualifier String slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DesignatedInitExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DesignatedInitExprData.designators Vector<Obj>:astwire.v2.Designator slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DesignatedInitExprData.uses_gnu_syntax Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Designator.value Union:astwire.v2.DesignatorValue slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Designator.value_type UType:astwire.v2.DesignatorValue slot=0 offset=4 optional=false required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.DesignatorValue.ArrayDesignator=2 astwire.v2.ArrayDesignator
+astwire.v2.DesignatorValue.ArrayRangeDesignator=3 astwire.v2.ArrayRangeDesignator
+astwire.v2.DesignatorValue.FieldDesignator=1 astwire.v2.FieldDesignator
+astwire.v2.DesignatorValue.NONE=0
+astwire.v2.DirectTemplateName.template_decl Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ElaboratedTypeData.base Obj:astwire.v2.TypeWithKeywordData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ElaboratedTypeData.named_type Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ElaboratedTypeData.qualifier String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ElaboratedTypeKeyword.Class=3
+astwire.v2.ElaboratedTypeKeyword.Enum=4
+astwire.v2.ElaboratedTypeKeyword.Interface=1
+astwire.v2.ElaboratedTypeKeyword.None=6
+astwire.v2.ElaboratedTypeKeyword.Struct=0
+astwire.v2.ElaboratedTypeKeyword.Typename=5
+astwire.v2.ElaboratedTypeKeyword.Union=2
+astwire.v2.EnumDeclData.base Obj:astwire.v2.TagDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.EnumDeclData.enum_scope_kind Int:astwire.v2.EnumScopeType slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.EnumDeclData.integer_type Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.EnumScopeType.CLASS=0
+astwire.v2.EnumScopeType.NO_SCOPE=2
+astwire.v2.EnumScopeType.STRUCT=1
+astwire.v2.ExceptionDetails.ComputedExceptionDetails=2 astwire.v2.ComputedExceptionDetails
+astwire.v2.ExceptionDetails.NONE=0
+astwire.v2.ExceptionDetails.NoExceptionDetails=1 astwire.v2.NoExceptionDetails
+astwire.v2.ExceptionDetails.UnevaluatedExceptionDetails=3 astwire.v2.UnevaluatedExceptionDetails
+astwire.v2.ExceptionDetails.UninstantiatedExceptionDetails=4 astwire.v2.UninstantiatedExceptionDetails
+astwire.v2.ExceptionSpecification.details Union:astwire.v2.ExceptionDetails slot=3 offset=10 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExceptionSpecification.details_type UType:astwire.v2.ExceptionDetails slot=2 offset=8 optional=false required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExceptionSpecification.exception_types Vector<Long> slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExceptionSpecification.kind Int:astwire.v2.ExceptionSpecificationType slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExceptionSpecificationType.BasicNoexcept=5
+astwire.v2.ExceptionSpecificationType.DependentNoexcept=6
+astwire.v2.ExceptionSpecificationType.Dynamic=2
+astwire.v2.ExceptionSpecificationType.DynamicNone=1
+astwire.v2.ExceptionSpecificationType.MSAny=3
+astwire.v2.ExceptionSpecificationType.NoThrow=4
+astwire.v2.ExceptionSpecificationType.NoexceptFalse=7
+astwire.v2.ExceptionSpecificationType.NoexceptTrue=8
+astwire.v2.ExceptionSpecificationType.None=0
+astwire.v2.ExceptionSpecificationType.Unevaluated=9
+astwire.v2.ExceptionSpecificationType.Uninstantiated=10
+astwire.v2.ExceptionSpecificationType.Unparsed=11
+astwire.v2.ExplicitCastExprData.base Obj:astwire.v2.CastExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExplicitCastExprData.type_as_written Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExplicitSpecKind.ResolvedFalse=0
+astwire.v2.ExplicitSpecKind.ResolvedTrue=1
+astwire.v2.ExplicitSpecKind.Unresolved=2
+astwire.v2.ExplicitSpecifier.expr Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExplicitSpecifier.is_specified Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExplicitSpecifier.kind Int:astwire.v2.ExplicitSpecKind slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExprData.base Obj:astwire.v2.StmtData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExprData.is_default_argument Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExprData.object_kind Int:astwire.v2.ObjectKind slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExprData.type Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ExprData.value_kind Int:astwire.v2.ValueKind slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FieldDeclData.base Obj:astwire.v2.DeclaratorDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FieldDeclData.is_mutable Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FieldDesignator.field_name String slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.File.id UInt slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.File.path String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FloatingLiteralData.base Obj:astwire.v2.LiteralData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FloatingLiteralData.value Double slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FormatAttrData.base Obj:astwire.v2.AttributeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FormatAttrData.first_arg Int slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FormatAttrData.format_index Int slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FormatAttrData.type Int:astwire.v2.FormatAttrKind slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FormatAttrKind.NSString=10
+astwire.v2.FormatAttrKind.gnu_printf=3
+astwire.v2.FormatAttrKind.gnu_scanf=4
+astwire.v2.FormatAttrKind.gnu_strftime=5
+astwire.v2.FormatAttrKind.ms_printf=7
+astwire.v2.FormatAttrKind.ms_scanf=8
+astwire.v2.FormatAttrKind.ms_strftime=9
+astwire.v2.FormatAttrKind.printf=0
+astwire.v2.FormatAttrKind.scanf=1
+astwire.v2.FormatAttrKind.strfmon=6
+astwire.v2.FormatAttrKind.strftime=2
+astwire.v2.FunctionDeclData.base Obj:astwire.v2.DeclaratorDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.canonical_decl Long slot=10 offset=24 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.is_constexpr Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.is_deleted Bool slot=7 offset=18 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.is_explicitly_defaulted Bool slot=8 offset=20 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.is_inline_specified Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.is_pure Bool slot=6 offset=16 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.is_virtual_as_written Bool slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.previous_decl Long slot=9 offset=22 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.primary_template_decl Long slot=11 offset=26 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.storage_class Int:astwire.v2.StorageClass slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.template_arguments Vector<Obj>:astwire.v2.TemplateArgument slot=12 offset=28 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.template_kind Int:astwire.v2.TemplateKind slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.template_parameter_list_sizes Vector<Int> slot=14 offset=32 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionDeclData.template_parameters Vector<Long> slot=13 offset=30 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionProtoTypeData.base Obj:astwire.v2.FunctionTypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionProtoTypeData.exception_specification Obj:astwire.v2.ExceptionSpecification slot=6 offset=16 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionProtoTypeData.has_trailing_returns Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionProtoTypeData.is_variadic Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionProtoTypeData.num_parameters Int slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionProtoTypeData.parameters_types Vector<Long> slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionProtoTypeData.reference_qualifier Int:astwire.v2.ReferenceQualifier slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionTypeData.calling_convention Int:astwire.v2.CallingConvention slot=8 offset=20 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionTypeData.is_const Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionTypeData.is_restrict Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionTypeData.is_volatile Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionTypeData.no_return Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionTypeData.produces_result Bool slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionTypeData.reg_parm Long slot=7 offset=18 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionTypeData.return_type Long slot=9 offset=22 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.FunctionTypeData.uses_reg_parm Bool slot=6 offset=16 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.GCCAsmStmtData.asm_string String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.GCCAsmStmtData.base Obj:astwire.v2.AsmStmtData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.GCCAsmStmtData.is_goto Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.GCCAsmStmtData.is_inline Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.GCCAsmStmtData.labels Vector<String> slot=3 offset=10 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.GotoStmtData.base Obj:astwire.v2.StmtData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.GotoStmtData.label Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Header.schema_hash String slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Include.angled Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Include.line UInt slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Include.name String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Include.source String slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.InitListExprData.array_filler Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.InitListExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.InitListExprData.is_explicit Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.InitListExprData.is_string_literal_init Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.InitListExprData.semantic_form Long slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.InitListExprData.syntactic_form Long slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.InitializationStyle.CALL_INIT=1
+astwire.v2.InitializationStyle.CINIT=0
+astwire.v2.InitializationStyle.LIST_INIT=2
+astwire.v2.InitializationStyle.ParenListInit=3
+astwire.v2.InitializerTarget.AnyMemberInitializer=1 astwire.v2.AnyMemberInitializer
+astwire.v2.InitializerTarget.BaseInitializer=2 astwire.v2.BaseInitializer
+astwire.v2.InitializerTarget.DelegatingInitializer=3 astwire.v2.DelegatingInitializer
+astwire.v2.InitializerTarget.NONE=0
+astwire.v2.IntegerLiteralData.base Obj:astwire.v2.LiteralData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.IntegerLiteralData.value String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LabelStmtData.base Obj:astwire.v2.StmtData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LabelStmtData.label Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LambdaCaptureDefault.ByCopy=1
+astwire.v2.LambdaCaptureDefault.ByRef=2
+astwire.v2.LambdaCaptureDefault.None=0
+astwire.v2.LambdaCaptureKind.ByCopy=2
+astwire.v2.LambdaCaptureKind.ByRef=3
+astwire.v2.LambdaCaptureKind.StarThis=1
+astwire.v2.LambdaCaptureKind.This=0
+astwire.v2.LambdaCaptureKind.VLAType=4
+astwire.v2.LambdaExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LambdaExprData.capture_default Int:astwire.v2.LambdaCaptureDefault slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LambdaExprData.capture_init_styles Vector<Int>:astwire.v2.InitializationStyle slot=9 offset=22 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LambdaExprData.capture_is_implicit Vector<Bool> slot=11 offset=26 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LambdaExprData.capture_kinds Vector<Int>:astwire.v2.LambdaCaptureKind slot=7 offset=18 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LambdaExprData.capture_pack_expansions Vector<Bool> slot=10 offset=24 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LambdaExprData.has_explicit_parameters Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LambdaExprData.has_explicit_result_type Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LambdaExprData.init_capture_names Vector<String> slot=8 offset=20 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LambdaExprData.is_generic_lambda Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LambdaExprData.is_mutable Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LambdaExprData.lambda_class Long slot=6 offset=16 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.bool_width UInt slot=26 offset=56 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.c11 Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.c99 Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.c_plus_plus Bool slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.c_plus_plus_11 Bool slot=6 offset=16 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.c_plus_plus_14 Bool slot=7 offset=18 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.c_plus_plus_17 Bool slot=8 offset=20 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.c_plus_plus_20 Bool slot=9 offset=22 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.c_plus_plus_23 Bool slot=10 offset=24 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.c_plus_plus_26 Bool slot=11 offset=26 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.char_width UInt slot=22 offset=48 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.cuda Bool slot=18 offset=40 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.double_width UInt slot=24 offset=52 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.file String slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.float_width UInt slot=23 offset=50 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.gnu_inline Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.has_bool Bool slot=19 offset=42 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.has_digraphs Bool slot=12 offset=28 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.has_half Bool slot=20 offset=44 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.has_wchar Bool slot=21 offset=46 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.hex_floats Bool slot=14 offset=32 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.int_width UInt slot=28 offset=60 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.is_gnu Bool slot=13 offset=30 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.line_comment Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.long_double_width UInt slot=25 offset=54 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.long_long_width UInt slot=30 offset=64 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.long_width UInt slot=29 offset=62 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.native_half_type Bool slot=17 offset=38 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.open_cl Bool slot=15 offset=34 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.open_cl_version UInt slot=16 offset=36 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Language.short_width UInt slot=27 offset=58 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LanguageId.C=0
+astwire.v2.LanguageId.CXX=1
+astwire.v2.Linkage.External=6
+astwire.v2.Linkage.Internal=2
+astwire.v2.Linkage.Invalid=0
+astwire.v2.Linkage.Module=5
+astwire.v2.Linkage.None=1
+astwire.v2.Linkage.UniqueExternal=3
+astwire.v2.Linkage.VisibleNone=4
+astwire.v2.LinkageSpecDeclData.base Obj:astwire.v2.DeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LinkageSpecDeclData.linkage_type Int:astwire.v2.LanguageId slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LiteralData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.LiteralData.source_literal String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MSAsmStmtData.asm_string String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MSAsmStmtData.base Obj:astwire.v2.AsmStmtData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MSPropertyDeclData.base Obj:astwire.v2.DeclaratorDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MSPropertyDeclData.getter_name String slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MSPropertyDeclData.setter_name String slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MSPropertyRefExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MSPropertyRefExprData.base_expr Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MSPropertyRefExprData.is_arrow Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MSPropertyRefExprData.is_implicit_access Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MSPropertyRefExprData.property_decl Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MaterializeTemporaryExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MaterializeTemporaryExprData.extending_decl Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MemberExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MemberExprData.found_decl Long slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MemberExprData.found_decl_access_specifier Int:astwire.v2.AccessSpecifier slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MemberExprData.is_arrow Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MemberExprData.member_decl Long slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MemberExprData.member_name String slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MemberPointerTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MemberPointerTypeData.class_type Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.MemberPointerTypeData.pointee_type Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NameKind.CXX_CONSTRUCTOR_NAME=4
+astwire.v2.NameKind.CXX_CONVERSION_FUNCTION_NAME=6
+astwire.v2.NameKind.CXX_DEDUCTION_GUIDE_NAME=7
+astwire.v2.NameKind.CXX_DESTRUCTOR_NAME=5
+astwire.v2.NameKind.CXX_LITERAL_OPERATOR_NAME=9
+astwire.v2.NameKind.CXX_OPERATOR_NAME=8
+astwire.v2.NameKind.CXX_USING_DIRECTIVE=10
+astwire.v2.NameKind.IDENTIFIER=0
+astwire.v2.NameKind.OBJ_C_MULTI_ARG_SELECTOR=3
+astwire.v2.NameKind.OBJ_C_ONE_ARG_SELECTOR=2
+astwire.v2.NameKind.OBJ_C_ZERO_ARG_SELECTOR=1
+astwire.v2.NamedDeclData.base Obj:astwire.v2.DeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamedDeclData.decl_name String slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamedDeclData.is_cxx_class_member Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamedDeclData.is_cxx_instance_member Bool slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamedDeclData.linkage Int:astwire.v2.Linkage slot=6 offset=16 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamedDeclData.name_kind Int:astwire.v2.NameKind slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamedDeclData.qualified_prefix String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamedDeclData.visibility Int:astwire.v2.Visibility slot=7 offset=18 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamespaceAliasDeclData.aliased_namespace Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamespaceAliasDeclData.base Obj:astwire.v2.NamedDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamespaceAliasDeclData.nested_prefix String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamespaceAliasSpecifier.namespace_alias Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamespaceDeclData.base Obj:astwire.v2.NamedDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamespaceDeclData.source_literal String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NamespaceSpecifier.namespace_decl Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NestedNameSpecifier.value Union:astwire.v2.NestedNameValue slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NestedNameSpecifier.value_type UType:astwire.v2.NestedNameValue slot=0 offset=4 optional=false required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NestedNameValue.GlobalSpecifier=5 astwire.v2.GlobalSpecifier
+astwire.v2.NestedNameValue.NONE=0
+astwire.v2.NestedNameValue.NamespaceAliasSpecifier=2 astwire.v2.NamespaceAliasSpecifier
+astwire.v2.NestedNameValue.NamespaceSpecifier=1 astwire.v2.NamespaceSpecifier
+astwire.v2.NestedNameValue.SuperSpecifier=6 astwire.v2.SuperSpecifier
+astwire.v2.NestedNameValue.TypeSpecifier=3 astwire.v2.TypeSpecifier
+astwire.v2.NestedNameValue.TypeWithTemplateSpecifier=4 astwire.v2.TypeWithTemplateSpecifier
+astwire.v2.NewInitStyle.CALL_INIT=1
+astwire.v2.NewInitStyle.LIST_INIT=2
+astwire.v2.NewInitStyle.NO_INIT=0
+astwire.v2.Node.children Vector<Long> slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Node.class_name String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Node.id Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Node.payload Union:astwire.v2.NodePayload slot=4 offset=12 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Node.payload_type UType:astwire.v2.NodePayload slot=3 offset=10 optional=false required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NodePayload.AccessSpecDeclData=23 astwire.v2.AccessSpecDeclData
+astwire.v2.NodePayload.AdjustedTypeData=50 astwire.v2.AdjustedTypeData
+astwire.v2.NodePayload.AlignedAttrData=110 astwire.v2.AlignedAttrData
+astwire.v2.NodePayload.ArrayInitLoopExprData=95 astwire.v2.ArrayInitLoopExprData
+astwire.v2.NodePayload.ArrayTypeData=40 astwire.v2.ArrayTypeData
+astwire.v2.NodePayload.AsmStmtData=106 astwire.v2.AsmStmtData
+astwire.v2.NodePayload.AttributeData=109 astwire.v2.AttributeData
+astwire.v2.NodePayload.AttributedStmtData=105 astwire.v2.AttributedStmtData
+astwire.v2.NodePayload.AttributedTypeData=58 astwire.v2.AttributedTypeData
+astwire.v2.NodePayload.AutoTypeData=53 astwire.v2.AutoTypeData
+astwire.v2.NodePayload.BinaryOperatorData=78 astwire.v2.BinaryOperatorData
+astwire.v2.NodePayload.BuiltinTypeData=35 astwire.v2.BuiltinTypeData
+astwire.v2.NodePayload.CXXBoolLiteralExprData=69 astwire.v2.CXXBoolLiteralExprData
+astwire.v2.NodePayload.CXXConstructExprData=74 astwire.v2.CXXConstructExprData
+astwire.v2.NodePayload.CXXConstructorDeclData=11 astwire.v2.CXXConstructorDeclData
+astwire.v2.NodePayload.CXXConversionDeclData=12 astwire.v2.CXXConversionDeclData
+astwire.v2.NodePayload.CXXDeleteExprData=90 astwire.v2.CXXDeleteExprData
+astwire.v2.NodePayload.CXXDependentScopeMemberExprData=86 astwire.v2.CXXDependentScopeMemberExprData
+astwire.v2.NodePayload.CXXMemberCallExprData=82 astwire.v2.CXXMemberCallExprData
+astwire.v2.NodePayload.CXXMethodDeclData=10 astwire.v2.CXXMethodDeclData
+astwire.v2.NodePayload.CXXNamedCastExprData=85 astwire.v2.CXXNamedCastExprData
+astwire.v2.NodePayload.CXXNewExprData=89 astwire.v2.CXXNewExprData
+astwire.v2.NodePayload.CXXNoexceptExprData=98 astwire.v2.CXXNoexceptExprData
+astwire.v2.NodePayload.CXXPseudoDestructorExprData=99 astwire.v2.CXXPseudoDestructorExprData
+astwire.v2.NodePayload.CXXRecordDeclData=19 astwire.v2.CXXRecordDeclData
+astwire.v2.NodePayload.CXXTemporaryObjectExprData=75 astwire.v2.CXXTemporaryObjectExprData
+astwire.v2.NodePayload.CXXTypeidExprData=83 astwire.v2.CXXTypeidExprData
+astwire.v2.NodePayload.CXXUnresolvedConstructExprData=62 astwire.v2.CXXUnresolvedConstructExprData
+astwire.v2.NodePayload.CallExprData=81 astwire.v2.CallExprData
+astwire.v2.NodePayload.CastExprData=63 astwire.v2.CastExprData
+astwire.v2.NodePayload.CharacterLiteralData=65 astwire.v2.CharacterLiteralData
+astwire.v2.NodePayload.ClassTemplatePartialSpecializationDeclData=32 astwire.v2.ClassTemplatePartialSpecializationDeclData
+astwire.v2.NodePayload.ClassTemplateSpecializationDeclData=20 astwire.v2.ClassTemplateSpecializationDeclData
+astwire.v2.NodePayload.ComplexTypeData=60 astwire.v2.ComplexTypeData
+astwire.v2.NodePayload.CompoundLiteralExprData=70 astwire.v2.CompoundLiteralExprData
+astwire.v2.NodePayload.ConstantArrayTypeData=41 astwire.v2.ConstantArrayTypeData
+astwire.v2.NodePayload.DecayedTypeData=51 astwire.v2.DecayedTypeData
+astwire.v2.NodePayload.DeclData=1 astwire.v2.DeclData
+astwire.v2.NodePayload.DeclRefExprData=72 astwire.v2.DeclRefExprData
+astwire.v2.NodePayload.DeclaratorDeclData=7 astwire.v2.DeclaratorDeclData
+astwire.v2.NodePayload.DecltypeTypeData=52 astwire.v2.DecltypeTypeData
+astwire.v2.NodePayload.DependentScopeDeclRefExprData=97 astwire.v2.DependentScopeDeclRefExprData
+astwire.v2.NodePayload.DependentSizedArrayTypeData=43 astwire.v2.DependentSizedArrayTypeData
+astwire.v2.NodePayload.DesignatedInitExprData=96 astwire.v2.DesignatedInitExprData
+astwire.v2.NodePayload.ElaboratedTypeData=46 astwire.v2.ElaboratedTypeData
+astwire.v2.NodePayload.EnumDeclData=18 astwire.v2.EnumDeclData
+astwire.v2.NodePayload.ExplicitCastExprData=84 astwire.v2.ExplicitCastExprData
+astwire.v2.NodePayload.ExprData=61 astwire.v2.ExprData
+astwire.v2.NodePayload.FieldDeclData=13 astwire.v2.FieldDeclData
+astwire.v2.NodePayload.FloatingLiteralData=67 astwire.v2.FloatingLiteralData
+astwire.v2.NodePayload.FormatAttrData=112 astwire.v2.FormatAttrData
+astwire.v2.NodePayload.FunctionDeclData=9 astwire.v2.FunctionDeclData
+astwire.v2.NodePayload.FunctionProtoTypeData=39 astwire.v2.FunctionProtoTypeData
+astwire.v2.NodePayload.FunctionTypeData=38 astwire.v2.FunctionTypeData
+astwire.v2.NodePayload.GCCAsmStmtData=107 astwire.v2.GCCAsmStmtData
+astwire.v2.NodePayload.GotoStmtData=104 astwire.v2.GotoStmtData
+astwire.v2.NodePayload.InitListExprData=71 astwire.v2.InitListExprData
+astwire.v2.NodePayload.IntegerLiteralData=66 astwire.v2.IntegerLiteralData
+astwire.v2.NodePayload.LabelStmtData=103 astwire.v2.LabelStmtData
+astwire.v2.NodePayload.LambdaExprData=92 astwire.v2.LambdaExprData
+astwire.v2.NodePayload.LinkageSpecDeclData=28 astwire.v2.LinkageSpecDeclData
+astwire.v2.NodePayload.LiteralData=64 astwire.v2.LiteralData
+astwire.v2.NodePayload.MSAsmStmtData=108 astwire.v2.MSAsmStmtData
+astwire.v2.NodePayload.MSPropertyDeclData=31 astwire.v2.MSPropertyDeclData
+astwire.v2.NodePayload.MSPropertyRefExprData=101 astwire.v2.MSPropertyRefExprData
+astwire.v2.NodePayload.MaterializeTemporaryExprData=77 astwire.v2.MaterializeTemporaryExprData
+astwire.v2.NodePayload.MemberExprData=76 astwire.v2.MemberExprData
+astwire.v2.NodePayload.MemberPointerTypeData=37 astwire.v2.MemberPointerTypeData
+astwire.v2.NodePayload.NONE=0
+astwire.v2.NodePayload.NamedDeclData=2 astwire.v2.NamedDeclData
+astwire.v2.NodePayload.NamespaceAliasDeclData=27 astwire.v2.NamespaceAliasDeclData
+astwire.v2.NodePayload.NamespaceDeclData=26 astwire.v2.NamespaceDeclData
+astwire.v2.NodePayload.NonNullAttrData=113 astwire.v2.NonNullAttrData
+astwire.v2.NodePayload.NonTypeTemplateParmDeclData=21 astwire.v2.NonTypeTemplateParmDeclData
+astwire.v2.NodePayload.OffsetOfExprData=91 astwire.v2.OffsetOfExprData
+astwire.v2.NodePayload.OpenCLUnrollHintAttrData=111 astwire.v2.OpenCLUnrollHintAttrData
+astwire.v2.NodePayload.OverloadExprData=73 astwire.v2.OverloadExprData
+astwire.v2.NodePayload.PackExpansionTypeData=56 astwire.v2.PackExpansionTypeData
+astwire.v2.NodePayload.ParmVarDeclData=14 astwire.v2.ParmVarDeclData
+astwire.v2.NodePayload.PointerTypeData=36 astwire.v2.PointerTypeData
+astwire.v2.NodePayload.PredefinedExprData=93 astwire.v2.PredefinedExprData
+astwire.v2.NodePayload.PseudoObjectExprData=100 astwire.v2.PseudoObjectExprData
+astwire.v2.NodePayload.QualTypeData=34 astwire.v2.QualTypeData
+astwire.v2.NodePayload.RecordDeclData=5 astwire.v2.RecordDeclData
+astwire.v2.NodePayload.ReferenceTypeData=54 astwire.v2.ReferenceTypeData
+astwire.v2.NodePayload.SizeOfPackExprData=94 astwire.v2.SizeOfPackExprData
+astwire.v2.NodePayload.StaticAssertDeclData=29 astwire.v2.StaticAssertDeclData
+astwire.v2.NodePayload.StmtData=102 astwire.v2.StmtData
+astwire.v2.NodePayload.StringLiteralData=68 astwire.v2.StringLiteralData
+astwire.v2.NodePayload.SubstTemplateTypeParmTypeData=59 astwire.v2.SubstTemplateTypeParmTypeData
+astwire.v2.NodePayload.TagDeclData=4 astwire.v2.TagDeclData
+astwire.v2.NodePayload.TagTypeData=44 astwire.v2.TagTypeData
+astwire.v2.NodePayload.TemplateDeclData=8 astwire.v2.TemplateDeclData
+astwire.v2.NodePayload.TemplateSpecializationTypeData=48 astwire.v2.TemplateSpecializationTypeData
+astwire.v2.NodePayload.TemplateTemplateParmDeclData=30 astwire.v2.TemplateTemplateParmDeclData
+astwire.v2.NodePayload.TemplateTypeParmDeclData=16 astwire.v2.TemplateTypeParmDeclData
+astwire.v2.NodePayload.TemplateTypeParmTypeData=47 astwire.v2.TemplateTypeParmTypeData
+astwire.v2.NodePayload.TypeData=33 astwire.v2.TypeData
+astwire.v2.NodePayload.TypeDeclData=3 astwire.v2.TypeDeclData
+astwire.v2.NodePayload.TypeOfExprTypeData=55 astwire.v2.TypeOfExprTypeData
+astwire.v2.NodePayload.TypeWithKeywordData=45 astwire.v2.TypeWithKeywordData
+astwire.v2.NodePayload.TypedefNameDeclData=22 astwire.v2.TypedefNameDeclData
+astwire.v2.NodePayload.TypedefTypeData=49 astwire.v2.TypedefTypeData
+astwire.v2.NodePayload.UnaryExprOrTypeTraitExprData=88 astwire.v2.UnaryExprOrTypeTraitExprData
+astwire.v2.NodePayload.UnaryOperatorData=87 astwire.v2.UnaryOperatorData
+astwire.v2.NodePayload.UnaryTransformTypeData=57 astwire.v2.UnaryTransformTypeData
+astwire.v2.NodePayload.UnresolvedLookupExprData=80 astwire.v2.UnresolvedLookupExprData
+astwire.v2.NodePayload.UnresolvedMemberExprData=79 astwire.v2.UnresolvedMemberExprData
+astwire.v2.NodePayload.UnresolvedUsingTypenameDeclData=17 astwire.v2.UnresolvedUsingTypenameDeclData
+astwire.v2.NodePayload.UsingDeclData=24 astwire.v2.UsingDeclData
+astwire.v2.NodePayload.UsingDirectiveDeclData=25 astwire.v2.UsingDirectiveDeclData
+astwire.v2.NodePayload.ValueDeclData=6 astwire.v2.ValueDeclData
+astwire.v2.NodePayload.VarDeclData=15 astwire.v2.VarDeclData
+astwire.v2.NodePayload.VariableArrayTypeData=42 astwire.v2.VariableArrayTypeData
+astwire.v2.NodePayload.VisibilityAttrData=114 astwire.v2.VisibilityAttrData
+astwire.v2.NonNullAttrData.arguments Vector<Int> slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NonNullAttrData.base Obj:astwire.v2.AttributeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NonTypeTemplateParmDeclData.base Obj:astwire.v2.DeclaratorDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NonTypeTemplateParmDeclData.default_argument Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NonTypeTemplateParmDeclData.default_argument_was_inherited Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NonTypeTemplateParmDeclData.expansion_types Vector<Long> slot=6 offset=16 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NonTypeTemplateParmDeclData.is_expanded_parameter_pack Bool slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NonTypeTemplateParmDeclData.is_pack_expansion Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.NonTypeTemplateParmDeclData.is_parameter_pack Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ObjectKind.BIT_FIELD=1
+astwire.v2.ObjectKind.MATRIX_COMPONENT=5
+astwire.v2.ObjectKind.OBJ_C_PROPERTY=2
+astwire.v2.ObjectKind.OBJ_C_SUBSCRIPT=3
+astwire.v2.ObjectKind.ORDINARY=0
+astwire.v2.ObjectKind.VECTOR_COMPONENT=4
+astwire.v2.OffsetArray.expr Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OffsetBase.type Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OffsetField.field_name String slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OffsetIdentifier.field_name String slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OffsetOfComponent.value Union:astwire.v2.OffsetValue slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OffsetOfComponent.value_type UType:astwire.v2.OffsetValue slot=0 offset=4 optional=false required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OffsetOfExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OffsetOfExprData.components Vector<Obj>:astwire.v2.OffsetOfComponent slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OffsetOfExprData.source_type Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OffsetValue.NONE=0
+astwire.v2.OffsetValue.OffsetArray=1 astwire.v2.OffsetArray
+astwire.v2.OffsetValue.OffsetBase=4 astwire.v2.OffsetBase
+astwire.v2.OffsetValue.OffsetField=2 astwire.v2.OffsetField
+astwire.v2.OffsetValue.OffsetIdentifier=3 astwire.v2.OffsetIdentifier
+astwire.v2.OpenCLUnrollHintAttrData.base Obj:astwire.v2.AttributeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OpenCLUnrollHintAttrData.unroll_hint Int slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OverloadExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OverloadExprData.name String slot=2 offset=8 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OverloadExprData.qualifier String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OverloadExprData.template_arguments Vector<Obj>:astwire.v2.TemplateArgument slot=4 offset=12 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.OverloadExprData.unresolved_decls Vector<Long> slot=3 offset=10 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.PackExpansionTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.PackExpansionTypeData.num_expansions Int slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.PackExpansionTypeData.pattern Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ParmVarDeclData.base Obj:astwire.v2.VarDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ParmVarDeclData.has_inherited_default_arg Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.PointerTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.PointerTypeData.pointee_type Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Pragma.column UInt slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Pragma.line UInt slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Pragma.source String slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.PredefinedExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.PredefinedExprData.predefined_type Int:astwire.v2.PredefinedIdType slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.PredefinedIdType.Func=0
+astwire.v2.PredefinedIdType.FuncDName=3
+astwire.v2.PredefinedIdType.FuncSig=4
+astwire.v2.PredefinedIdType.Function=1
+astwire.v2.PredefinedIdType.LFuncSig=5
+astwire.v2.PredefinedIdType.LFunction=2
+astwire.v2.PredefinedIdType.PrettyFunction=6
+astwire.v2.PredefinedIdType.PrettyFunctionNoVirtual=7
+astwire.v2.PseudoObjectExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.PseudoObjectExprData.result_expr_index Int slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.QualTypeData.address_space Long slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.QualTypeData.address_space_qualifier Int:astwire.v2.AddressSpaceQualifierV2 slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.QualTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.QualTypeData.c99_qualifiers Vector<Int>:astwire.v2.C99Qualifier slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.QualTypeData.unqualified_type Long slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.QualifiedTemplateName.has_template_keyword Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.QualifiedTemplateName.qualifier String slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.QualifiedTemplateName.template_decl Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Range.column UInt slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Range.end_column UInt slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Range.end_file UInt slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Range.end_line UInt slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Range.file UInt slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Range.line UInt slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Record.payload Union:astwire.v2.RecordPayload slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Record.payload_type UType:astwire.v2.RecordPayload slot=0 offset=4 optional=false required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.RecordDeclData.base Obj:astwire.v2.TagDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.RecordDeclData.is_anonymous Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.RecordPayload.End=9 astwire.v2.End
+astwire.v2.RecordPayload.File=2 astwire.v2.File
+astwire.v2.RecordPayload.Header=1 astwire.v2.Header
+astwire.v2.RecordPayload.Include=5 astwire.v2.Include
+astwire.v2.RecordPayload.Language=8 astwire.v2.Language
+astwire.v2.RecordPayload.NONE=0
+astwire.v2.RecordPayload.Node=3 astwire.v2.Node
+astwire.v2.RecordPayload.Pragma=6 astwire.v2.Pragma
+astwire.v2.RecordPayload.TopLevel=4 astwire.v2.TopLevel
+astwire.v2.RecordPayload.TranslationUnitFile=7 astwire.v2.TranslationUnitFile
+astwire.v2.ReferenceQualifier.LValue=0
+astwire.v2.ReferenceQualifier.None=2
+astwire.v2.ReferenceQualifier.RValue=1
+astwire.v2.ReferenceTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ReferenceTypeData.pointee_type_as_written Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SizeOfPackExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SizeOfPackExprData.is_partially_substituted Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SizeOfPackExprData.pack Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SizeOfPackExprData.partial_arguments Vector<Obj>:astwire.v2.TemplateArgument slot=3 offset=10 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SourceInfo.expansion Obj:astwire.v2.Range slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SourceInfo.is_in_system_header Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SourceInfo.is_macro Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SourceInfo.spelling Obj:astwire.v2.Range slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.StaticAssertDeclData.base Obj:astwire.v2.DeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.StaticAssertDeclData.is_failed Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.StmtData.base Obj:astwire.v2.ClavaNodeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.StorageClass.Auto=4
+astwire.v2.StorageClass.Extern=1
+astwire.v2.StorageClass.None=0
+astwire.v2.StorageClass.PrivateExtern=3
+astwire.v2.StorageClass.Register=5
+astwire.v2.StorageClass.Static=2
+astwire.v2.StringKind.ORDINARY=0
+astwire.v2.StringKind.UNEVALUATED=5
+astwire.v2.StringKind.UTF16=3
+astwire.v2.StringKind.UTF32=4
+astwire.v2.StringKind.UTF8=2
+astwire.v2.StringKind.WIDE=1
+astwire.v2.StringLiteralData.base Obj:astwire.v2.LiteralData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.StringLiteralData.char_byte_width Int slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.StringLiteralData.length Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.StringLiteralData.string_bytes Vector<UByte> slot=4 offset=12 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.StringLiteralData.string_kind Int:astwire.v2.StringKind slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SubstTemplateTypeParmTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SubstTemplateTypeParmTypeData.replaced_parameter Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SubstTemplateTypeParmTypeData.replacement_type Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SubstitutedTemplateName.parameter Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SubstitutedTemplateName.replacement Obj:astwire.v2.TemplateName slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.SuperSpecifier.super_decl Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TLSKind.DYNAMIC=2
+astwire.v2.TLSKind.NONE=0
+astwire.v2.TLSKind.STATIC=1
+astwire.v2.TagDeclData.base Obj:astwire.v2.TypeDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TagDeclData.is_complete_definition Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TagDeclData.tag_kind Int:astwire.v2.TagKind slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TagKind.CLASS=3
+astwire.v2.TagKind.ENUM=4
+astwire.v2.TagKind.INTERFACE=1
+astwire.v2.TagKind.NO_KIND=5
+astwire.v2.TagKind.STRUCT=0
+astwire.v2.TagKind.UNION=2
+astwire.v2.TagTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TagTypeData.decl Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateArgument.value Union:astwire.v2.TemplateValue slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateArgument.value_type UType:astwire.v2.TemplateValue slot=0 offset=4 optional=false required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateDeclData.base Obj:astwire.v2.NamedDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateDeclData.template_decl Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateDeclData.template_parameters Vector<Long> slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateDeclaration.decl Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateExpansion.num_expansions UInt slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[wire_optional=0]
+astwire.v2.TemplateExpansion.template_name Obj:astwire.v2.TemplateName slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateExpression.expr Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateIntegral.integral String slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateKind.DEPENDENT_FUNCTION_TEMPLATE_SPECIALIZATION=4
+astwire.v2.TemplateKind.FUNCTION_TEMPLATE=1
+astwire.v2.TemplateKind.FUNCTION_TEMPLATE_SPECIALIZATION=3
+astwire.v2.TemplateKind.MEMBER_SPECIALIZATION=2
+astwire.v2.TemplateKind.NON_TEMPLATE=0
+astwire.v2.TemplateName.value Union:astwire.v2.TemplateNameValue slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateName.value_type UType:astwire.v2.TemplateNameValue slot=0 offset=4 optional=false required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateNameValue.DependentTemplateName=5 astwire.v2.DependentTemplateName
+astwire.v2.TemplateNameValue.DirectTemplateName=1 astwire.v2.DirectTemplateName
+astwire.v2.TemplateNameValue.NONE=0
+astwire.v2.TemplateNameValue.QualifiedTemplateName=2 astwire.v2.QualifiedTemplateName
+astwire.v2.TemplateNameValue.SubstitutedTemplateName=3 astwire.v2.SubstitutedTemplateName
+astwire.v2.TemplateNameValue.UsingTemplateName=4 astwire.v2.UsingTemplateName
+astwire.v2.TemplateNullPtr.type Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplatePack.arguments Vector<Obj>:astwire.v2.TemplateArgument slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateSpecializationKind.ExplicitInstantiationDeclaration=3
+astwire.v2.TemplateSpecializationKind.ExplicitInstantiationDefinition=4
+astwire.v2.TemplateSpecializationKind.ExplicitSpecialization=2
+astwire.v2.TemplateSpecializationKind.ImplicitInstantiation=1
+astwire.v2.TemplateSpecializationKind.Undeclared=0
+astwire.v2.TemplateSpecializationTypeData.aliased_type Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateSpecializationTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateSpecializationTypeData.is_type_alias Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateSpecializationTypeData.template_arguments Vector<Obj>:astwire.v2.TemplateArgument slot=5 offset=14 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateSpecializationTypeData.template_decl Long slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateSpecializationTypeData.template_name String slot=3 offset=10 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateStructuralValue.type Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTemplateParmDeclData.base Obj:astwire.v2.TemplateDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTemplateParmDeclData.default_argument Obj:astwire.v2.TemplateArgument slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTemplateParmDeclData.is_expanded_parameter_pack Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTemplateParmDeclData.is_pack_expansion Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTemplateParmDeclData.is_parameter_pack Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateType.type Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTypeParmDeclData.base Obj:astwire.v2.TypeDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTypeParmDeclData.default_argument Long slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTypeParmDeclData.is_parameter_pack Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTypeParmDeclData.kind Int:astwire.v2.TemplateTypeParmKind slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTypeParmKind.CLASS=1
+astwire.v2.TemplateTypeParmKind.TYPENAME=0
+astwire.v2.TemplateTypeParmTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTypeParmTypeData.decl Long slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTypeParmTypeData.depth Int slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTypeParmTypeData.index Int slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateTypeParmTypeData.is_packed Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TemplateValue.NONE=0
+astwire.v2.TemplateValue.TemplateDeclaration=1 astwire.v2.TemplateDeclaration
+astwire.v2.TemplateValue.TemplateExpansion=8 astwire.v2.TemplateExpansion
+astwire.v2.TemplateValue.TemplateExpression=4 astwire.v2.TemplateExpression
+astwire.v2.TemplateValue.TemplateIntegral=6 astwire.v2.TemplateIntegral
+astwire.v2.TemplateValue.TemplateName=7 astwire.v2.TemplateName
+astwire.v2.TemplateValue.TemplateNullPtr=2 astwire.v2.TemplateNullPtr
+astwire.v2.TemplateValue.TemplatePack=5 astwire.v2.TemplatePack
+astwire.v2.TemplateValue.TemplateStructuralValue=9 astwire.v2.TemplateStructuralValue
+astwire.v2.TemplateValue.TemplateType=3 astwire.v2.TemplateType
+astwire.v2.TopLevel.kind UByte:astwire.v2.TopLevelKind slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TopLevel.node Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TopLevelKind.Attr=2
+astwire.v2.TopLevelKind.Decl=0
+astwire.v2.TopLevelKind.Type=1
+astwire.v2.TranslationUnitFile.id Int slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TranslationUnitFile.path String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeData.contains_unexpanded_parameter_pack Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeData.is_from_ast Bool slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeData.is_variably_modified Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeData.type_as_string String slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeData.type_dependency Int:astwire.v2.TypeDependency slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeData.unqualified_desugared_type Long slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeDeclData.base Obj:astwire.v2.NamedDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeDeclData.type_for_decl Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeDependency.DEPENDENT=0
+astwire.v2.TypeDependency.INSTANTIATION_DEPENDENT=1
+astwire.v2.TypeDependency.NONE=2
+astwire.v2.TypeOfExprTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeOfExprTypeData.is_sugared Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeOfExprTypeData.underlying_expr Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypePayload.AdjustedTypeData=18 astwire.v2.AdjustedTypeData
+astwire.v2.TypePayload.ArrayTypeData=8 astwire.v2.ArrayTypeData
+astwire.v2.TypePayload.AttributedTypeData=26 astwire.v2.AttributedTypeData
+astwire.v2.TypePayload.AutoTypeData=21 astwire.v2.AutoTypeData
+astwire.v2.TypePayload.BuiltinTypeData=3 astwire.v2.BuiltinTypeData
+astwire.v2.TypePayload.ComplexTypeData=28 astwire.v2.ComplexTypeData
+astwire.v2.TypePayload.ConstantArrayTypeData=9 astwire.v2.ConstantArrayTypeData
+astwire.v2.TypePayload.DecayedTypeData=19 astwire.v2.DecayedTypeData
+astwire.v2.TypePayload.DecltypeTypeData=20 astwire.v2.DecltypeTypeData
+astwire.v2.TypePayload.DependentSizedArrayTypeData=11 astwire.v2.DependentSizedArrayTypeData
+astwire.v2.TypePayload.ElaboratedTypeData=14 astwire.v2.ElaboratedTypeData
+astwire.v2.TypePayload.FunctionProtoTypeData=7 astwire.v2.FunctionProtoTypeData
+astwire.v2.TypePayload.FunctionTypeData=6 astwire.v2.FunctionTypeData
+astwire.v2.TypePayload.MemberPointerTypeData=5 astwire.v2.MemberPointerTypeData
+astwire.v2.TypePayload.NONE=0
+astwire.v2.TypePayload.PackExpansionTypeData=24 astwire.v2.PackExpansionTypeData
+astwire.v2.TypePayload.PointerTypeData=4 astwire.v2.PointerTypeData
+astwire.v2.TypePayload.QualTypeData=2 astwire.v2.QualTypeData
+astwire.v2.TypePayload.ReferenceTypeData=22 astwire.v2.ReferenceTypeData
+astwire.v2.TypePayload.SubstTemplateTypeParmTypeData=27 astwire.v2.SubstTemplateTypeParmTypeData
+astwire.v2.TypePayload.TagTypeData=12 astwire.v2.TagTypeData
+astwire.v2.TypePayload.TemplateSpecializationTypeData=16 astwire.v2.TemplateSpecializationTypeData
+astwire.v2.TypePayload.TemplateTypeParmTypeData=15 astwire.v2.TemplateTypeParmTypeData
+astwire.v2.TypePayload.TypeData=1 astwire.v2.TypeData
+astwire.v2.TypePayload.TypeOfExprTypeData=23 astwire.v2.TypeOfExprTypeData
+astwire.v2.TypePayload.TypeWithKeywordData=13 astwire.v2.TypeWithKeywordData
+astwire.v2.TypePayload.TypedefTypeData=17 astwire.v2.TypedefTypeData
+astwire.v2.TypePayload.UnaryTransformTypeData=25 astwire.v2.UnaryTransformTypeData
+astwire.v2.TypePayload.VariableArrayTypeData=10 astwire.v2.VariableArrayTypeData
+astwire.v2.TypeSpecifier.type Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeWithKeywordData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeWithKeywordData.elaborated_type_keyword Int:astwire.v2.ElaboratedTypeKeyword slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypeWithTemplateSpecifier.type Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypedefNameDeclData.base Obj:astwire.v2.TypeDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypedefNameDeclData.underlying_type Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypedefTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.TypedefTypeData.decl Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryExprOrTypeTrait.AlignOf=1
+astwire.v2.UnaryExprOrTypeTrait.OpenMPRequiredSimdAlign=4
+astwire.v2.UnaryExprOrTypeTrait.PreferredAlignOf=2
+astwire.v2.UnaryExprOrTypeTrait.SizeOf=0
+astwire.v2.UnaryExprOrTypeTrait.VecStep=3
+astwire.v2.UnaryExprOrTypeTraitExprData.arg_type Long slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryExprOrTypeTraitExprData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryExprOrTypeTraitExprData.is_argument_type Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryExprOrTypeTraitExprData.kind Int:astwire.v2.UnaryExprOrTypeTrait slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryExprOrTypeTraitExprData.source_literal String slot=4 offset=12 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryOperatorData.base Obj:astwire.v2.ExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryOperatorData.op Int:astwire.v2.UnaryOperatorKind slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryOperatorData.position Int:astwire.v2.UnaryOperatorPosition slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryOperatorKind.AddrOf=4
+astwire.v2.UnaryOperatorKind.Coawait=13
+astwire.v2.UnaryOperatorKind.Deref=5
+astwire.v2.UnaryOperatorKind.Extension=12
+astwire.v2.UnaryOperatorKind.Imag=11
+astwire.v2.UnaryOperatorKind.LNot=9
+astwire.v2.UnaryOperatorKind.Minus=7
+astwire.v2.UnaryOperatorKind.Not=8
+astwire.v2.UnaryOperatorKind.Plus=6
+astwire.v2.UnaryOperatorKind.PostDec=1
+astwire.v2.UnaryOperatorKind.PostInc=0
+astwire.v2.UnaryOperatorKind.PreDec=3
+astwire.v2.UnaryOperatorKind.PreInc=2
+astwire.v2.UnaryOperatorKind.Real=10
+astwire.v2.UnaryOperatorPosition.POSTFIX=1
+astwire.v2.UnaryOperatorPosition.PREFIX=0
+astwire.v2.UnaryTransformTypeData.base Obj:astwire.v2.TypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryTransformTypeData.base_type Long slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryTransformTypeData.kind Int:astwire.v2.UnaryTransformTypeKind slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryTransformTypeData.underlying_type Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnaryTransformTypeKind.AddLvalueReference=0
+astwire.v2.UnaryTransformTypeKind.AddPointer=1
+astwire.v2.UnaryTransformTypeKind.AddRvalueReference=2
+astwire.v2.UnaryTransformTypeKind.Decay=3
+astwire.v2.UnaryTransformTypeKind.EnumUnderlyingType=15
+astwire.v2.UnaryTransformTypeKind.MakeSigned=4
+astwire.v2.UnaryTransformTypeKind.MakeUnsigned=5
+astwire.v2.UnaryTransformTypeKind.RemoveAllExtents=6
+astwire.v2.UnaryTransformTypeKind.RemoveCV=8
+astwire.v2.UnaryTransformTypeKind.RemoveCVRef=9
+astwire.v2.UnaryTransformTypeKind.RemoveConst=7
+astwire.v2.UnaryTransformTypeKind.RemoveExtent=10
+astwire.v2.UnaryTransformTypeKind.RemovePointer=11
+astwire.v2.UnaryTransformTypeKind.RemoveReference=12
+astwire.v2.UnaryTransformTypeKind.RemoveRestrict=13
+astwire.v2.UnaryTransformTypeKind.RemoveVolatile=14
+astwire.v2.UnevaluatedExceptionDetails.source_decl Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UninstantiatedExceptionDetails.source_decl Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UninstantiatedExceptionDetails.source_template Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnresolvedLookupExprData.base Obj:astwire.v2.OverloadExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnresolvedLookupExprData.requires_adl Bool slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnresolvedMemberExprData.base Obj:astwire.v2.OverloadExprData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnresolvedUsingTypenameDeclData.base Obj:astwire.v2.TypeDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnresolvedUsingTypenameDeclData.is_pack_expansion Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UnresolvedUsingTypenameDeclData.qualifier String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UsingDeclData.base Obj:astwire.v2.NamedDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UsingDeclData.nested_name_specifier Obj:astwire.v2.NestedNameSpecifier slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UsingDirectiveDeclData.base Obj:astwire.v2.NamedDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UsingDirectiveDeclData.namespace Long slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UsingDirectiveDeclData.namespace_as_written Long slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UsingDirectiveDeclData.qualifier String slot=1 offset=6 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.UsingTemplateName.using_shadow_decl Long slot=0 offset=4 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ValueDeclData.base Obj:astwire.v2.NamedDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ValueDeclData.is_weak Bool slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ValueDeclData.type Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.ValueKind.L_VALUE=1
+astwire.v2.ValueKind.R_VALUE=0
+astwire.v2.ValueKind.X_VALUE=2
+astwire.v2.VarDeclData.base Obj:astwire.v2.ValueDeclData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.VarDeclData.has_global_storage Bool slot=8 offset=20 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.VarDeclData.init_style Int:astwire.v2.InitializationStyle slot=4 offset=12 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.VarDeclData.is_constexpr Bool slot=5 offset=14 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.VarDeclData.is_nrvo_variable Bool slot=3 offset=10 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.VarDeclData.is_out_of_line Bool slot=7 offset=18 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.VarDeclData.is_static_data_member Bool slot=6 offset=16 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.VarDeclData.storage_class Int:astwire.v2.StorageClass slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.VarDeclData.tls_kind Int:astwire.v2.TLSKind slot=2 offset=8 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.VariableArrayTypeData.base Obj:astwire.v2.ArrayTypeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.VariableArrayTypeData.size_expr Long slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.Visibility.Default=2
+astwire.v2.Visibility.Hidden=0
+astwire.v2.Visibility.Protected=1
+astwire.v2.VisibilityAttrData.base Obj:astwire.v2.AttributeData slot=0 offset=4 optional=false required=true deprecated=false default=0/0.0 attributes=[]
+astwire.v2.VisibilityAttrData.visibility_type Int:astwire.v2.VisibilityType slot=1 offset=6 optional=true required=false deprecated=false default=0/0.0 attributes=[]
+astwire.v2.VisibilityType.Default=0
+astwire.v2.VisibilityType.Hidden=1
+astwire.v2.VisibilityType.Protected=2
+enum astwire.v2.AccessSpecifier Int:astwire.v2.AccessSpecifier union=false
+enum astwire.v2.AddressSpaceQualifierV2 Int:astwire.v2.AddressSpaceQualifierV2 union=false
+enum astwire.v2.ArraySizeModifier Int:astwire.v2.ArraySizeModifier union=false
+enum astwire.v2.AttributeKind Int:astwire.v2.AttributeKind union=false
+enum astwire.v2.BinaryOperatorKind Int:astwire.v2.BinaryOperatorKind union=false
+enum astwire.v2.BuiltinKind Int:astwire.v2.BuiltinKind union=false
+enum astwire.v2.C99Qualifier Int:astwire.v2.C99Qualifier union=false
+enum astwire.v2.CallingConvention Int:astwire.v2.CallingConvention union=false
+enum astwire.v2.CastKind Int:astwire.v2.CastKind union=false
+enum astwire.v2.CharacterKind Int:astwire.v2.CharacterKind union=false
+enum astwire.v2.ConstructionKind Int:astwire.v2.ConstructionKind union=false
+enum astwire.v2.DeclPayload UType:astwire.v2.DeclPayload union=true
+enum astwire.v2.DesignatorValue UType:astwire.v2.DesignatorValue union=true
+enum astwire.v2.ElaboratedTypeKeyword Int:astwire.v2.ElaboratedTypeKeyword union=false
+enum astwire.v2.EnumScopeType Int:astwire.v2.EnumScopeType union=false
+enum astwire.v2.ExceptionDetails UType:astwire.v2.ExceptionDetails union=true
+enum astwire.v2.ExceptionSpecificationType Int:astwire.v2.ExceptionSpecificationType union=false
+enum astwire.v2.ExplicitSpecKind Int:astwire.v2.ExplicitSpecKind union=false
+enum astwire.v2.FormatAttrKind Int:astwire.v2.FormatAttrKind union=false
+enum astwire.v2.InitializationStyle Int:astwire.v2.InitializationStyle union=false
+enum astwire.v2.InitializerTarget UType:astwire.v2.InitializerTarget union=true
+enum astwire.v2.LambdaCaptureDefault Int:astwire.v2.LambdaCaptureDefault union=false
+enum astwire.v2.LambdaCaptureKind Int:astwire.v2.LambdaCaptureKind union=false
+enum astwire.v2.LanguageId Int:astwire.v2.LanguageId union=false
+enum astwire.v2.Linkage Int:astwire.v2.Linkage union=false
+enum astwire.v2.NameKind Int:astwire.v2.NameKind union=false
+enum astwire.v2.NestedNameValue UType:astwire.v2.NestedNameValue union=true
+enum astwire.v2.NewInitStyle Int:astwire.v2.NewInitStyle union=false
+enum astwire.v2.NodePayload UType:astwire.v2.NodePayload union=true
+enum astwire.v2.ObjectKind Int:astwire.v2.ObjectKind union=false
+enum astwire.v2.OffsetValue UType:astwire.v2.OffsetValue union=true
+enum astwire.v2.PredefinedIdType Int:astwire.v2.PredefinedIdType union=false
+enum astwire.v2.RecordPayload UType:astwire.v2.RecordPayload union=true
+enum astwire.v2.ReferenceQualifier Int:astwire.v2.ReferenceQualifier union=false
+enum astwire.v2.StorageClass Int:astwire.v2.StorageClass union=false
+enum astwire.v2.StringKind Int:astwire.v2.StringKind union=false
+enum astwire.v2.TLSKind Int:astwire.v2.TLSKind union=false
+enum astwire.v2.TagKind Int:astwire.v2.TagKind union=false
+enum astwire.v2.TemplateKind Int:astwire.v2.TemplateKind union=false
+enum astwire.v2.TemplateNameValue UType:astwire.v2.TemplateNameValue union=true
+enum astwire.v2.TemplateSpecializationKind Int:astwire.v2.TemplateSpecializationKind union=false
+enum astwire.v2.TemplateTypeParmKind Int:astwire.v2.TemplateTypeParmKind union=false
+enum astwire.v2.TemplateValue UType:astwire.v2.TemplateValue union=true
+enum astwire.v2.TopLevelKind UByte:astwire.v2.TopLevelKind union=false
+enum astwire.v2.TypeDependency Int:astwire.v2.TypeDependency union=false
+enum astwire.v2.TypePayload UType:astwire.v2.TypePayload union=true
+enum astwire.v2.UnaryExprOrTypeTrait Int:astwire.v2.UnaryExprOrTypeTrait union=false
+enum astwire.v2.UnaryOperatorKind Int:astwire.v2.UnaryOperatorKind union=false
+enum astwire.v2.UnaryOperatorPosition Int:astwire.v2.UnaryOperatorPosition union=false
+enum astwire.v2.UnaryTransformTypeKind Int:astwire.v2.UnaryTransformTypeKind union=false
+enum astwire.v2.ValueKind Int:astwire.v2.ValueKind union=false
+enum astwire.v2.Visibility Int:astwire.v2.Visibility union=false
+enum astwire.v2.VisibilityType Int:astwire.v2.VisibilityType union=false
+table astwire.v2.AccessSpecDeclData struct=false
+table astwire.v2.AdjustedTypeData struct=false
+table astwire.v2.AlignedAttrData struct=false
+table astwire.v2.AnyMemberInitializer struct=false
+table astwire.v2.ArrayDesignator struct=false
+table astwire.v2.ArrayInitLoopExprData struct=false
+table astwire.v2.ArrayRangeDesignator struct=false
+table astwire.v2.ArrayTypeData struct=false
+table astwire.v2.AsmInput struct=false
+table astwire.v2.AsmOutput struct=false
+table astwire.v2.AsmStmtData struct=false
+table astwire.v2.AttributeData struct=false
+table astwire.v2.AttributedStmtData struct=false
+table astwire.v2.AttributedTypeData struct=false
+table astwire.v2.AutoTypeData struct=false
+table astwire.v2.BaseInitializer struct=false
+table astwire.v2.BinaryOperatorData struct=false
+table astwire.v2.Block struct=false
+table astwire.v2.BuiltinTypeData struct=false
+table astwire.v2.CXXBaseSpecifier struct=false
+table astwire.v2.CXXBoolLiteralExprData struct=false
+table astwire.v2.CXXConstructExprData struct=false
+table astwire.v2.CXXConstructorDeclData struct=false
+table astwire.v2.CXXConversionDeclData struct=false
+table astwire.v2.CXXCtorInitializer struct=false
+table astwire.v2.CXXDeleteExprData struct=false
+table astwire.v2.CXXDependentScopeMemberExprData struct=false
+table astwire.v2.CXXMemberCallExprData struct=false
+table astwire.v2.CXXMethodDeclData struct=false
+table astwire.v2.CXXNamedCastExprData struct=false
+table astwire.v2.CXXNewExprData struct=false
+table astwire.v2.CXXNoexceptExprData struct=false
+table astwire.v2.CXXPseudoDestructorExprData struct=false
+table astwire.v2.CXXRecordDeclData struct=false
+table astwire.v2.CXXTemporaryObjectExprData struct=false
+table astwire.v2.CXXTypeidExprData struct=false
+table astwire.v2.CXXUnresolvedConstructExprData struct=false
+table astwire.v2.CallExprData struct=false
+table astwire.v2.CastExprData struct=false
+table astwire.v2.CharacterLiteralData struct=false
+table astwire.v2.ClassTemplatePartialSpecializationDeclData struct=false
+table astwire.v2.ClassTemplateSpecializationDeclData struct=false
+table astwire.v2.ClavaNodeData struct=false
+table astwire.v2.ComplexTypeData struct=false
+table astwire.v2.CompoundLiteralExprData struct=false
+table astwire.v2.ComputedExceptionDetails struct=false
+table astwire.v2.ConstantArrayTypeData struct=false
+table astwire.v2.DecayedTypeData struct=false
+table astwire.v2.DeclData struct=false
+table astwire.v2.DeclRefExprData struct=false
+table astwire.v2.DeclaratorDeclData struct=false
+table astwire.v2.DecltypeTypeData struct=false
+table astwire.v2.DelegatingInitializer struct=false
+table astwire.v2.DependentScopeDeclRefExprData struct=false
+table astwire.v2.DependentSizedArrayTypeData struct=false
+table astwire.v2.DependentTemplateName struct=false
+table astwire.v2.DesignatedInitExprData struct=false
+table astwire.v2.Designator struct=false
+table astwire.v2.DirectTemplateName struct=false
+table astwire.v2.ElaboratedTypeData struct=false
+table astwire.v2.End struct=false
+table astwire.v2.EnumDeclData struct=false
+table astwire.v2.ExceptionSpecification struct=false
+table astwire.v2.ExplicitCastExprData struct=false
+table astwire.v2.ExplicitSpecifier struct=false
+table astwire.v2.ExprData struct=false
+table astwire.v2.FieldDeclData struct=false
+table astwire.v2.FieldDesignator struct=false
+table astwire.v2.File struct=false
+table astwire.v2.FloatingLiteralData struct=false
+table astwire.v2.FormatAttrData struct=false
+table astwire.v2.FunctionDeclData struct=false
+table astwire.v2.FunctionProtoTypeData struct=false
+table astwire.v2.FunctionTypeData struct=false
+table astwire.v2.GCCAsmStmtData struct=false
+table astwire.v2.GlobalSpecifier struct=false
+table astwire.v2.GotoStmtData struct=false
+table astwire.v2.Header struct=false
+table astwire.v2.Include struct=false
+table astwire.v2.InitListExprData struct=false
+table astwire.v2.IntegerLiteralData struct=false
+table astwire.v2.LabelStmtData struct=false
+table astwire.v2.LambdaExprData struct=false
+table astwire.v2.Language struct=false
+table astwire.v2.LinkageSpecDeclData struct=false
+table astwire.v2.LiteralData struct=false
+table astwire.v2.MSAsmStmtData struct=false
+table astwire.v2.MSPropertyDeclData struct=false
+table astwire.v2.MSPropertyRefExprData struct=false
+table astwire.v2.MaterializeTemporaryExprData struct=false
+table astwire.v2.MemberExprData struct=false
+table astwire.v2.MemberPointerTypeData struct=false
+table astwire.v2.NamedDeclData struct=false
+table astwire.v2.NamespaceAliasDeclData struct=false
+table astwire.v2.NamespaceAliasSpecifier struct=false
+table astwire.v2.NamespaceDeclData struct=false
+table astwire.v2.NamespaceSpecifier struct=false
+table astwire.v2.NestedNameSpecifier struct=false
+table astwire.v2.NoExceptionDetails struct=false
+table astwire.v2.Node struct=false
+table astwire.v2.NonNullAttrData struct=false
+table astwire.v2.NonTypeTemplateParmDeclData struct=false
+table astwire.v2.OffsetArray struct=false
+table astwire.v2.OffsetBase struct=false
+table astwire.v2.OffsetField struct=false
+table astwire.v2.OffsetIdentifier struct=false
+table astwire.v2.OffsetOfComponent struct=false
+table astwire.v2.OffsetOfExprData struct=false
+table astwire.v2.OpenCLUnrollHintAttrData struct=false
+table astwire.v2.OverloadExprData struct=false
+table astwire.v2.PackExpansionTypeData struct=false
+table astwire.v2.ParmVarDeclData struct=false
+table astwire.v2.PointerTypeData struct=false
+table astwire.v2.Pragma struct=false
+table astwire.v2.PredefinedExprData struct=false
+table astwire.v2.PseudoObjectExprData struct=false
+table astwire.v2.QualTypeData struct=false
+table astwire.v2.QualifiedTemplateName struct=false
+table astwire.v2.Range struct=false
+table astwire.v2.Record struct=false
+table astwire.v2.RecordDeclData struct=false
+table astwire.v2.ReferenceTypeData struct=false
+table astwire.v2.SizeOfPackExprData struct=false
+table astwire.v2.SourceInfo struct=false
+table astwire.v2.StaticAssertDeclData struct=false
+table astwire.v2.StmtData struct=false
+table astwire.v2.StringLiteralData struct=false
+table astwire.v2.SubstTemplateTypeParmTypeData struct=false
+table astwire.v2.SubstitutedTemplateName struct=false
+table astwire.v2.SuperSpecifier struct=false
+table astwire.v2.TagDeclData struct=false
+table astwire.v2.TagTypeData struct=false
+table astwire.v2.TemplateArgument struct=false
+table astwire.v2.TemplateDeclData struct=false
+table astwire.v2.TemplateDeclaration struct=false
+table astwire.v2.TemplateExpansion struct=false
+table astwire.v2.TemplateExpression struct=false
+table astwire.v2.TemplateIntegral struct=false
+table astwire.v2.TemplateName struct=false
+table astwire.v2.TemplateNullPtr struct=false
+table astwire.v2.TemplatePack struct=false
+table astwire.v2.TemplateSpecializationTypeData struct=false
+table astwire.v2.TemplateStructuralValue struct=false
+table astwire.v2.TemplateTemplateParmDeclData struct=false
+table astwire.v2.TemplateType struct=false
+table astwire.v2.TemplateTypeParmDeclData struct=false
+table astwire.v2.TemplateTypeParmTypeData struct=false
+table astwire.v2.TopLevel struct=false
+table astwire.v2.TranslationUnitFile struct=false
+table astwire.v2.TypeData struct=false
+table astwire.v2.TypeDeclData struct=false
+table astwire.v2.TypeOfExprTypeData struct=false
+table astwire.v2.TypeSpecifier struct=false
+table astwire.v2.TypeWithKeywordData struct=false
+table astwire.v2.TypeWithTemplateSpecifier struct=false
+table astwire.v2.TypedefNameDeclData struct=false
+table astwire.v2.TypedefTypeData struct=false
+table astwire.v2.UnaryExprOrTypeTraitExprData struct=false
+table astwire.v2.UnaryOperatorData struct=false
+table astwire.v2.UnaryTransformTypeData struct=false
+table astwire.v2.UnevaluatedExceptionDetails struct=false
+table astwire.v2.UninstantiatedExceptionDetails struct=false
+table astwire.v2.UnresolvedLookupExprData struct=false
+table astwire.v2.UnresolvedMemberExprData struct=false
+table astwire.v2.UnresolvedUsingTypenameDeclData struct=false
+table astwire.v2.UsingDeclData struct=false
+table astwire.v2.UsingDirectiveDeclData struct=false
+table astwire.v2.UsingTemplateName struct=false
+table astwire.v2.ValueDeclData struct=false
+table astwire.v2.VarDeclData struct=false
+table astwire.v2.VariableArrayTypeData struct=false
+table astwire.v2.VisibilityAttrData struct=false

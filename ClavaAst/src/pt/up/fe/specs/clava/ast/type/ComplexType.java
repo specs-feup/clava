@@ -15,22 +15,18 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class ComplexType extends Type {
+public class ComplexType extends ComplexTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in ComplexTypeBase.
 
-    /**
-     * The element type.
-     */
-    public final static DataKey<Type> ELEMENT_TYPE = KeyFactory.object("elementType", Type.class);
-
-    /// DATAKEYS END
+    public ComplexType(DataStore data, Collection<? extends ClavaNode> children, ComplexTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public ComplexType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

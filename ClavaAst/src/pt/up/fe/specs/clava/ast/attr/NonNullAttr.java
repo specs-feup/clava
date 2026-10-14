@@ -17,18 +17,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class NonNullAttr extends InheritableAttr {
-    /// DATAKEYS BEGIN
+public class NonNullAttr extends NonNullAttrBase {
 
-    public final static DataKey<List<Integer>> ARGUMENTS = KeyFactory.list("arguments", Integer.class);
+    // Data declarations are generated from the wire schema in NonNullAttrBase.
 
-    /// DATAKEYS END
+    public NonNullAttr(DataStore data, Collection<? extends ClavaNode> children, NonNullAttrBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public NonNullAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -36,7 +36,7 @@ public class NonNullAttr extends InheritableAttr {
 
     @Override
     public String getArgumentsCode() {
-        return get(ARGUMENTS).stream()
+        return getWireArguments().stream()
                 .map(integer -> integer.toString())
                 .collect(Collectors.joining(", "));
     }

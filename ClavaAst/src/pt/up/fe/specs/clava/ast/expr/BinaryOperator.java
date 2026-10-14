@@ -23,8 +23,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -38,13 +36,14 @@ import pt.up.fe.specs.util.lazy.Lazy;
  * @author JoaoBispo
  *
  */
-public class BinaryOperator extends Operator {
+public class BinaryOperator extends BinaryOperatorBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in BinaryOperatorBase.
 
-    public final static DataKey<BinaryOperatorKind> OP = KeyFactory.enumeration("op", BinaryOperatorKind.class);
-
-    /// DATAKEYS END
+    public BinaryOperator(DataStore data, Collection<? extends ClavaNode> children, BinaryOperatorBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     // Hardcoding kind names, in order to avoid breaking code that depends on these names when changing Clang
     // version
@@ -164,12 +163,12 @@ public class BinaryOperator extends Operator {
     }
 
     public BinaryOperatorKind getOp() {
-        return get(OP);
+        return getWireOp();
     }
 
     @Override
     public String getCode() {
-        var addSpaces = !NO_SPACES.contains(get(OP));
+        var addSpaces = !NO_SPACES.contains(getWireOp());
         StringBuilder opCode = new StringBuilder();
 
         opCode.append(getLhs().getCode());
@@ -178,7 +177,7 @@ public class BinaryOperator extends Operator {
             opCode.append(" ");
         }
 
-        opCode.append(get(OP).getOpString());
+        opCode.append(getWireOp().getOpString());
 
         if (addSpaces) {
             opCode.append(" ");

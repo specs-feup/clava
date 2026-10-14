@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -33,31 +31,25 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
  * @author João Bispo
  *
  */
-public class CXXNewExpr extends Expr {
+public class CXXNewExpr extends CXXNewExprBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in CXXNewExprBase.
 
-    public final static DataKey<Boolean> IS_GLOBAL = KeyFactory.bool("isGlobalNew");
-    public final static DataKey<Boolean> IS_ARRAY = KeyFactory.bool("isArray");
-    public final static DataKey<Boolean> HAS_INITIALIZER = KeyFactory.bool("hasInitializer");
-    public final static DataKey<NewInitStyle> INIT_STYLE = KeyFactory.enumeration("initStyle", NewInitStyle.class);
-    public final static DataKey<Optional<Expr>> INITIALIZER = KeyFactory.optional("initializer");
-    public final static DataKey<Optional<CXXConstructExpr>> CONSTRUCT_EXPR = KeyFactory.optional("constructExpr");
-    public final static DataKey<Optional<Expr>> ARRAY_SIZE = KeyFactory.optional("arraySize");
-    public final static DataKey<Optional<FunctionDecl>> OPERATOR_NEW = KeyFactory.optional("operatorNew");
-
-    /// DATAKEYS ENDs
+    public CXXNewExpr(DataStore data, Collection<? extends ClavaNode> children, CXXNewExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public CXXNewExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Optional<CXXConstructExpr> getConstructorExpr() {
-        return get(CONSTRUCT_EXPR);
+        return getWireConstructExpr();
     }
 
     public Optional<Expr> getArrayExpr() {
-        return get(ARRAY_SIZE);
+        return getWireArraySize();
     }
 
     @Override
@@ -66,7 +58,7 @@ public class CXXNewExpr extends Expr {
 
         code.append("new ");
 
-        boolean hasNothrow = get(OPERATOR_NEW).flatMap(fdecl -> SpecsCollections.lastTry(fdecl.getParameters()))
+        boolean hasNothrow = getWireOperatorNew().flatMap(fdecl -> SpecsCollections.lastTry(fdecl.getParameters()))
                 .filter(param -> param.getCode().startsWith("std::nothrow_"))
                 .isPresent();
 
@@ -101,19 +93,19 @@ public class CXXNewExpr extends Expr {
 
             code.append(exprType.getCode(this));
 
-            switch (get(INIT_STYLE)) {
+            switch (getWireInitStyle()) {
             case NO_INIT:
                 // Do nothing
                 break;
             case CALL_INIT:
-                code.append("(").append(get(INITIALIZER).get().getCode()).append(")");
+                code.append("(").append(getWireInitializer().get().getCode()).append(")");
                 break;
             case LIST_INIT:
                 // TODO: This code generation is not yet verified
-                code.append(get(INITIALIZER).get().getCode());
+                code.append(getWireInitializer().get().getCode());
                 break;
             default:
-                throw new NotImplementedException(get(INIT_STYLE));
+                throw new NotImplementedException(getWireInitStyle());
             }
 
             getArrayExpr().ifPresent(arrayExpr -> code.append("[").append(arrayExpr.getCode()).append("]"));

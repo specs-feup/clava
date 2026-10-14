@@ -17,8 +17,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -26,43 +24,14 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.TemplateParameter;
 import pt.up.fe.specs.clava.ast.type.Type;
 
-public class NonTypeTemplateParmDecl extends DeclaratorDecl implements TemplateParameter {
+public class NonTypeTemplateParmDecl extends NonTypeTemplateParmDeclBase implements TemplateParameter {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in NonTypeTemplateParmDeclBase.
 
-    /**
-     * The default-argument expression, if any.
-     */
-    public final static DataKey<Optional<Expr>> DEFAULT_ARGUMENT = KeyFactory.optional("defaultArgument");
-
-    /**
-     * True if the default argument was inherited from a previous declaration of this template.
-     */
-    public final static DataKey<Boolean> DEFAULT_ARGUMENT_WAS_INHERITED = KeyFactory
-            .bool("defaultArgumentWasInherited");
-
-    /**
-     * True if this is a parameter pack.
-     */
-    public final static DataKey<Boolean> IS_PARAMETER_PACK = KeyFactory.bool("isParameterPack");
-
-    /**
-     * True if this parameter pack is a pack expansion.
-     */
-    public final static DataKey<Boolean> IS_PACK_EXPANSION = KeyFactory.bool("isPackExpansion");
-
-    /**
-     * True if this parameter is a non-type template parameter pack that has a known list of different types at
-     * different positions.
-     */
-    public final static DataKey<Boolean> IS_EXPANDED_PARAMETER_PACK = KeyFactory.bool("isExpandedParameterPack");
-
-    /**
-     * The expansion types in an expanded parameter pack.
-     */
-    public final static DataKey<List<Type>> EXPANSION_TYPES = KeyFactory.list("expansionTypes", Type.class);
-
-    /// DATAKEYS END
+    public NonTypeTemplateParmDecl(DataStore data, Collection<? extends ClavaNode> children, NonTypeTemplateParmDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public NonTypeTemplateParmDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -80,7 +49,7 @@ public class NonTypeTemplateParmDecl extends DeclaratorDecl implements TemplateP
             code.append(getTypeCode(declName));
         }
 
-        get(DEFAULT_ARGUMENT).ifPresent(expr -> code.append(" = ").append(expr.getCode()));
+        getWireDefaultArgument().ifPresent(expr -> code.append(" = ").append(expr.getCode()));
 
         return code.toString();
 

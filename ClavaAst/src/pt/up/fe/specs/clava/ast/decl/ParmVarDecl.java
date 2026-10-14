@@ -15,19 +15,18 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class ParmVarDecl extends VarDecl {
+public class ParmVarDecl extends ParmVarDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in ParmVarDeclBase.
 
-    public final static DataKey<Boolean> HAS_INHERITED_DEFAULT_ARG = KeyFactory.bool("hasInheritedDefaultArg");
-
-    /// DATAKEYS END
+    public ParmVarDecl(DataStore data, Collection<? extends ClavaNode> children, ParmVarDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public ParmVarDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -43,7 +42,7 @@ public class ParmVarDecl extends VarDecl {
 
     @Override
     public String getInitializationCode() {
-        if (get(HAS_INHERITED_DEFAULT_ARG)) {
+        if (getWireHasInheritedDefaultArg()) {
             return "";
         }
 

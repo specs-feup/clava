@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -47,6 +48,25 @@ public class FriendDecl extends Decl {
         if (friendNode instanceof NullNode) {
             ClavaLog.warning(this, "FriendDecl not yet implemented for this case");
             return "friend";
+        }
+
+        FunctionDecl function = friendNode instanceof FunctionDecl direct ? direct
+                : friendNode instanceof FunctionTemplateDecl template
+                        && template.getTemplateDecl() instanceof FunctionDecl wrapped ? wrapped : null;
+        if (function != null && !function.get(FunctionDecl.TEMPLATE_PARAMETER_LIST_SIZES).isEmpty()) {
+            // Clang cannot resolve these dependent friend owners and reports their methods
+            // in the lexical record. Preserve the declaration source instead of inventing
+            // an owner from that incomplete AST. Edits inside this declaration are not printed.
+            String source = getLocation().getSource().orElseThrow(() -> new IllegalStateException(
+                    "Dependent friend member templates require their original declaration source"));
+            if (source.contains("R\"") || source.contains("\\\n") || source.contains("\\\r")) {
+                throw new UnsupportedOperationException(
+                        "Raw strings and line continuations in dependent friend member declarations require a structured printer");
+            }
+            String prefix = friendNode instanceof FunctionTemplateDecl
+                    ? function.getEnclosingTemplateHeadersCode() : "";
+            String declaration = source.lines().map(String::stripLeading).collect(Collectors.joining(ln())).strip();
+            return prefix + declaration + (declaration.endsWith(";") ? "" : ";");
         }
 
         String friendCode = friendNode.getCode();

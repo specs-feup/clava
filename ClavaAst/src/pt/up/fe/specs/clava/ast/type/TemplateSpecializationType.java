@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -54,22 +52,14 @@ import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
  * @author JBispo
  *
  */
-public class TemplateSpecializationType extends Type {
+public class TemplateSpecializationType extends TemplateSpecializationTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in TemplateSpecializationTypeBase.
 
-    public final static DataKey<Boolean> IS_TYPE_ALIAS = KeyFactory.bool("isTypeAlias");
-
-    public final static DataKey<Optional<Type>> ALIASED_TYPE = KeyFactory.optional("aliasedType");
-
-    public final static DataKey<String> TEMPLATE_NAME = KeyFactory.string("templateName");
-
-    public final static DataKey<Optional<TemplateDecl>> TEMPLATE_DECL = KeyFactory.optional("templateDecl");
-
-    public final static DataKey<List<TemplateArgument>> TEMPLATE_ARGUMENTS = KeyFactory
-            .generic("templateArguments", (List<TemplateArgument>) new ArrayList<TemplateArgument>());
-
-    /// DATAKEYS END
+    public TemplateSpecializationType(DataStore data, Collection<? extends ClavaNode> children, TemplateSpecializationTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     private boolean hasUpdatedArgumentTypes;
 
@@ -80,19 +70,19 @@ public class TemplateSpecializationType extends Type {
     }
 
     public String getTemplateName() {
-        return get(TEMPLATE_NAME);
+        return getWireTemplateName();
     }
 
     @Override
     public List<String> getTemplateArgumentStrings(ClavaNode sourceNode) {
-        return get(TEMPLATE_ARGUMENTS).stream()
+        return getWireTemplateArguments().stream()
                 .map(arg -> arg.getCode(sourceNode))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Type> getTemplateArgumentTypes() {
-        return get(TEMPLATE_ARGUMENTS).stream()
+        return getWireTemplateArguments().stream()
                 .filter(TemplateArgumentType.class::isInstance)
                 .map(argType -> argType.get(TemplateArgumentType.TYPE))
                 .collect(Collectors.toList());
@@ -104,7 +94,7 @@ public class TemplateSpecializationType extends Type {
     }
 
     public void setTemplateArgument(int index, TemplateArgument templateArgument) {
-        List<TemplateArgument> templateArgs = get(TEMPLATE_ARGUMENTS);
+        List<TemplateArgument> templateArgs = getWireTemplateArguments();
 
         int argsNumber = templateArgs.size();
         Preconditions.checkArgument(index < argsNumber, "Tried to set template argument type at index '" + index
@@ -123,12 +113,12 @@ public class TemplateSpecializationType extends Type {
     }
 
     public TemplateArgument getTemplateArgument(int index) {
-        return get(TEMPLATE_ARGUMENTS).get(index);
+        return getWireTemplateArguments().get(index);
     }
 
     @Override
     public List<TemplateArgument> getTemplateArguments() {
-        return get(TEMPLATE_ARGUMENTS);
+        return getWireTemplateArguments();
     }
 
     public <T extends TemplateArgument> List<T> getTemplateArguments(Class<T> templateArgumentClass) {

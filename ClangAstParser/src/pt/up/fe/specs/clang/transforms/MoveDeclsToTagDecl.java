@@ -21,6 +21,8 @@ import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.ast.type.TagType;
+import pt.up.fe.specs.clava.ast.type.QualType;
+import java.util.List;
 import pt.up.fe.specs.clava.transform.SimplePreClavaRule;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
@@ -111,6 +113,11 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
         return tagType.get(TagType.DECL);
     }
 
+    private static List<String> getQualifiers(NamedDecl declaration) {
+        var type = ((Typable) declaration).getType();
+        return type instanceof QualType qualified ? qualified.getQualifierStrings() : List.of();
+    }
+
     private boolean isTagDeclDirectlyAbove(NamedDecl decl, TagDecl tagDecl) {
         var leftNodes = decl.getLeftSiblings();
 
@@ -136,6 +143,10 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
 
                 var siblingTagDecl = getTagDecl((NamedDecl) currentSibling);
                 if (siblingTagDecl != null && tagDecl.equals(siblingTagDecl)) {
+                    if (decl instanceof TypedefDecl && !getQualifiers(decl).equals(
+                            getQualifiers(currentSiblingNamedDecl.get()))) {
+                        return false;
+                    }
                     continue;
                 }
             }

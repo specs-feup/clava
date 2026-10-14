@@ -17,8 +17,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -33,34 +31,14 @@ import pt.up.fe.specs.util.SpecsCheck;
  * @author JoaoBispo
  *
  */
-public abstract class FunctionType extends Type {
+public abstract class FunctionType extends FunctionTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in FunctionTypeBase.
 
-    public final static DataKey<Boolean> IS_CONST = KeyFactory.bool("isConst");
-
-    public final static DataKey<Boolean> IS_VOLATILE = KeyFactory.bool("isVolatile");
-
-    public final static DataKey<Boolean> IS_RESTRICT = KeyFactory.bool("isRestrict");
-
-    /**
-     * @deprecated No need to be stored in a field, can be calculated. Use FunctionType.hasNoReturn() instead
-     */
-    @Deprecated
-    public final static DataKey<Boolean> NO_RETURN = KeyFactory.bool("noReturn");
-
-    public final static DataKey<Boolean> PRODUCES_RESULT = KeyFactory.bool("producesResult");
-
-    public final static DataKey<Boolean> HAS_REG_PARM = KeyFactory.bool("hasRegParm");
-
-    public final static DataKey<Long> REG_PARM = KeyFactory.longInt("regParm");
-
-    public final static DataKey<CallingConvention> CALLING_CONVENTION = KeyFactory.enumeration("callingConvention",
-            CallingConvention.class);
-
-    public final static DataKey<Type> RETURN_TYPE = KeyFactory.object("returnType", Type.class);
-
-    /// DATAKEYS END
+    public FunctionType(DataStore data, Collection<? extends ClavaNode> children, FunctionTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     /**
      * FunctionType fields
@@ -72,7 +50,7 @@ public abstract class FunctionType extends Type {
 
     public Type getReturnType() {
 
-        Type returnType = get(RETURN_TYPE);
+        Type returnType = getWireReturnType();
 
         SpecsCheck.checkArgument(!(returnType instanceof NullNode),
                 () -> "Just to confirm if this can be null. It if can, change to Optional");
@@ -88,7 +66,7 @@ public abstract class FunctionType extends Type {
 
     @Override
     public boolean isConst() {
-        return get(IS_CONST);
+        return getWireIsConst();
     }
 
     @Override

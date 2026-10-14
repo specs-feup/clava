@@ -16,27 +16,26 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
-public class DependentSizedArrayType extends ArrayType {
+public class DependentSizedArrayType extends DependentSizedArrayTypeBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in DependentSizedArrayTypeBase.
 
-    public final static DataKey<Optional<Expr>> SIZE_EXPR = KeyFactory.optional("sizeExpr");
-
-    /// DATAKEYS END
+    public DependentSizedArrayType(DataStore data, Collection<? extends ClavaNode> children, DependentSizedArrayTypeBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public DependentSizedArrayType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public Optional<Expr> getSizeExpr() {
-        return get(SIZE_EXPR);
+        return getWireSizeExpr();
     }
 
     @Override

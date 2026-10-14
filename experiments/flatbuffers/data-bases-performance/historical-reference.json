@@ -1,0 +1,62 @@
+{
+  "thread": "09397f39-9444-4e00-9775-2b351db24f46",
+  "position": 1216,
+  "snapshot": {
+    "created_utc": "2026-10-10T10:10:41.353726+00:00",
+    "shared": {
+      "specs-java-libs": "76fe6b1586bdc6bdb7f6501f30ce238891757b1b",
+      "lara-framework": "73c5b955ab5484a3fd3199f9e2da7580758c5683"
+    },
+    "stages": {
+      "fb-before": {
+        "repository": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava",
+        "ref": "ast-flatbuffers",
+        "revision": "9fa0c0fedc9370d099876c1bc13aff63a02477e0",
+        "selector": "v18.1.8_5-rc3",
+        "wire": "flat-eager"
+      },
+      "fb-after": {
+        "repository": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava",
+        "ref": "ast-flatbuffers-next",
+        "revision": "44079327e134d9216d55c8261b7c9cb890d3e872",
+        "selector": "v18.1.8_7-rc3",
+        "wire": "flat-eager"
+      }
+    }
+  },
+  "observations": [
+    {
+      "stage": "fb-after",
+      "suite": "clava-js",
+      "mode": "warm",
+      "repeat": 1,
+      "app_elapsed_ms": 4439.855447,
+      "wall_s": 27.90767582412809
+    },
+    {
+      "stage": "fb-after",
+      "suite": "java",
+      "mode": "warm",
+      "repeat": 1,
+      "app_elapsed_ms": 11959.618514,
+      "wall_s": 18.509270790033042
+    },
+    {
+      "stage": "fb-after",
+      "suite": "java",
+      "mode": "direct",
+      "repeat": 1,
+      "app_elapsed_ms": 21404.020265,
+      "wall_s": 27.924060348886997
+    },
+    {
+      "stage": "fb-after",
+      "suite": "clava-js",
+      "mode": "direct",
+      "repeat": 1,
+      "app_elapsed_ms": 7646.572967,
+      "wall_s": 30.856242321897298
+    }
+  ],
+  "purpose": "Historical thread reference only; not a same-session control."
+}

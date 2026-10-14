@@ -3,7 +3,7 @@ class ATemplatedKlass {
    
    
    public:
-   ATemplatedKlass<T>() {
+   ATemplatedKlass() {
    }
    
    // a reference operator

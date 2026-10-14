@@ -7,8 +7,8 @@ plugins {
 java {
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 // Repositories providers
@@ -23,6 +23,8 @@ dependencies {
     implementation ":SpecsUtils"
 
     implementation 'com.google.code.gson:gson:2.12.1'
+    // Reads the AST wire stream through the schema's binary reflection (see the wireSchema task).
+    implementation 'com.google.flatbuffers:flatbuffers-java:25.2.10'
     implementation 'com.google.guava:guava:33.4.0-jre'
     implementation 'org.apache.commons:commons-compress:1.27.1'
     implementation 'org.tukaani:xz:1.9'
@@ -55,6 +57,16 @@ sourceSets {
 processResources {
     from('clang-dumper-release.tag')
     from('cuda-release.tag')
+}
+
+// ClavaAst owns the schema used for generation and parsing, including in composite builds.
+def wireSchemaDir = file('../ClavaAst/build/generated/wire-schema')
+def wireSchema = tasks.register('wireSchema') { dependsOn gradle.includedBuild('ClavaAst').task(':wireSchema') }
+sourceSets.main.resources.srcDir(files(wireSchemaDir).builtBy(wireSchema))
+tasks.register('updateWireFields') { dependsOn gradle.includedBuild('ClavaAst').task(':updateWireFields') }
+tasks.register('verifyWireFields') { dependsOn gradle.includedBuild('ClavaAst').task(':verifyWireFields') }
+tasks.named('check') {
+    dependsOn tasks.named('verifyWireFields'), gradle.includedBuild('ClavaAst').task(':check')
 }
 
 // Test coverage configuration

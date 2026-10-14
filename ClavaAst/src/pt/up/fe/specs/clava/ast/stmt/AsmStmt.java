@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.ast.stmt;
 import java.util.Collection;
 import java.util.List;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -30,13 +28,12 @@ import pt.up.fe.specs.clava.ast.stmt.data.AsmOutput;
  * @author JBispo
  *
  */
-public abstract class AsmStmt extends Stmt {
+public abstract class AsmStmt extends AsmStmtBase {
 
-    public static final DataKey<Boolean> IS_SIMPLE = KeyFactory.bool("isSimple");
-    public static final DataKey<Boolean> IS_VOLATILE = KeyFactory.bool("isVolatile");
-    public static final DataKey<List<String>> CLOBBERS = KeyFactory.list("clobbers", String.class);
-    public static final DataKey<List<AsmOutput>> OUTPUTS = KeyFactory.list("outputs", AsmOutput.class);
-    public static final DataKey<List<AsmInput>> INPUTS = KeyFactory.list("inputs", AsmInput.class);
+    public AsmStmt(DataStore data, java.util.Collection<? extends ClavaNode> children, AsmStmtBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public AsmStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

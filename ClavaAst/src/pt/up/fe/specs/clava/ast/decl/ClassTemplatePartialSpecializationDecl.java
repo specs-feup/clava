@@ -14,15 +14,32 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class ClassTemplatePartialSpecializationDecl extends ClassTemplateSpecializationDecl {
+public class ClassTemplatePartialSpecializationDecl extends ClassTemplatePartialSpecializationDeclBase {
+
+    public ClassTemplatePartialSpecializationDecl(DataStore data, java.util.Collection<? extends ClavaNode> children, ClassTemplatePartialSpecializationDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public ClassTemplatePartialSpecializationDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
+    }
+
+    @Override
+    public String getCode() {
+        String parameters = getWireTemplateParameters().stream()
+                .map(ClavaNode::getCode)
+                .collect(Collectors.joining(", "));
+        String recordCode = super.getCode(getWireRecordBases(), getWireTemplateArguments());
+
+        return "template<" + parameters + ">\n" + recordCode;
     }
 
 }

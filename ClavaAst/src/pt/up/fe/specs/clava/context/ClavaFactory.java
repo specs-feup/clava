@@ -14,7 +14,7 @@
 package pt.up.fe.specs.clava.context;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
+import pt.up.fe.specs.clava.data.NodeDataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.SourceRange;
@@ -112,7 +112,7 @@ public class ClavaFactory {
         // Get the correct prefix for the given class
         String idPrefix = PREFIX_MAP.get(nodeClass);
 
-        DataStore data = DataStore.newInstance(StoreDefinitions.fromInterface(nodeClass), true);
+        DataStore data = NodeDataStore.create(nodeClass);
 
         // Add base node, if present
         if (baseData != null) {
@@ -414,7 +414,8 @@ public class ClavaFactory {
 
     public CStyleCastExpr cStyleCastExpr(Type type, Expr expr) {
         DataStore data = newDataStore(CStyleCastExpr.class)
-                .put(Expr.TYPE, Optional.of(type));
+                .put(Expr.TYPE, Optional.of(type))
+                .put(ExplicitCastExpr.TYPE_AS_WRITTEN, type);
 
         data.set(CastExpr.CAST_KIND, CastKind.NoOp);
 

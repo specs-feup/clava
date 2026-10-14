@@ -1,0 +1,556 @@
+{
+  "purpose": "Diagnostic intervention, not a replacement production benchmark or the earlier App-construction metric",
+  "intervention": "Add -XX:+DisableExplicitGC to all three 512 MiB Java test workers; leave heap diagnostic code and structural verification enabled",
+  "raw_results_sha256": "8b07e3967b604fe03d4f9e7e849cf5f6f3e4aff3998984de406a6ba1e043e69a",
+  "source_report": "suite/results/java-runtime-gc-diagnostic-20261006/results.json",
+  "init_script": "import groovy.json.JsonOutput\nimport org.gradle.api.tasks.testing.Test\nimport org.gradle.testing.jacoco.plugins.JacocoTaskExtension\n\ngradle.afterProject { project ->\n    if (project.name == 'ClangAstParser') {\n        def testTask = project.tasks.named('test', Test)\n        def jacoco = testTask.get().extensions.findByType(JacocoTaskExtension)\n        if (jacoco == null) {\n            throw new GradleException('ClangAstParser test task has no JaCoCo extension')\n        }\n        jacoco.enabled = false\n\n        def emitClasspath = {\n            testTask.get().testClassesDirs.files.each { directory ->\n                project.logger.lifecycle('JAVA_RUNTIME_MATRIX_TEST_CLASSES\\t' + directory.canonicalPath)\n            }\n            testTask.get().classpath.files.each { entry ->\n                project.logger.lifecycle('JAVA_RUNTIME_MATRIX_TEST_CLASSPATH\\t' + entry.canonicalPath)\n            }\n        }\n\n        testTask.configure { task ->\n            outputs.upToDateWhen { false }\n            maxParallelForks = 1\n            maxHeapSize = '512m'\n            jvmArgs('-XX:+DisableExplicitGC')\n            filter {\n                excludeTestsMatching 'pt.up.fe.specs.clang.ClangResourcesTest'\n                excludeTestsMatching 'pt.up.fe.specs.clang.CudaResourcesTest'\n                excludeTestsMatching 'pt.up.fe.specs.clang.parser.tests.CxxCudaTest'\n                excludeTestsMatching 'pt.up.fe.specs.clang.parser.tests.GeneratedParseRootTest'\n                excludeTestsMatching 'pt.up.fe.specs.clang.parser.AClangAstTesterResourceTest'\n                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangCcacheAdapterTest'\n                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangAstDumperSyntax*Test'\n                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.CXXConversionDeclTest'\n                excludeTestsMatching 'pt.up.fe.specs.clang.dumper.ClangAstDumperTest'\n                excludeTestsMatching 'pt.up.fe.specs.clang.wire.*'\n            }\n\n            def outputRoot = new File(System.getenv('JAVA_RUNTIME_MATRIX_RUN_DIR')\n                    ?: new File(project.buildDir, 'java-runtime-matrix-preflight').absolutePath)\n            jvmArgs(\"-Djava.io.tmpdir=${new File(outputRoot, 'tmp').absolutePath}\")\n            reports.junitXml.outputLocation.set(\n                    project.layout.dir(project.provider { new File(outputRoot, 'junit-xml') }))\n            reports.html.outputLocation.set(\n                    project.layout.dir(project.provider { new File(outputRoot, 'html') }))\n            binaryResultsDirectory.set(\n                    project.layout.dir(project.provider { new File(outputRoot, 'binary-results') }))\n\n            doFirst {\n                emitClasspath()\n                def worker = [\n                    max_heap_size: task.maxHeapSize,\n                    max_parallel_forks: task.maxParallelForks,\n                    jacoco_enabled: jacoco.enabled,\n                    jvm_args: task.allJvmArgs,\n                ]\n                project.logger.lifecycle('JAVA_RUNTIME_MATRIX_WORKER\\t' + JsonOutput.toJson(worker))\n            }\n        }\n\n        project.tasks.named('jacocoTestReport') { onlyIf { false } }\n        project.tasks.named('jacocoTestCoverageVerification') { onlyIf { false } }\n\n        project.tasks.register('printJavaRuntimeMatrixTestClasspath') {\n            doLast {\n                emitClasspath()\n                def worker = [\n                    max_heap_size: testTask.get().maxHeapSize,\n                    max_parallel_forks: testTask.get().maxParallelForks,\n                    jacoco_enabled: jacoco.enabled,\n                    jvm_args: testTask.get().allJvmArgs,\n                ]\n                project.logger.lifecycle('JAVA_RUNTIME_MATRIX_WORKER\\t' + JsonOutput.toJson(worker))\n            }\n        }\n    }\n}\n",
+  "diagnostic_driver": "import importlib.util\nfrom pathlib import Path\np=Path('/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/run_java_runtime_comparison.py')\nspec=importlib.util.spec_from_file_location('matrix',p); m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m)\ntemp=Path('/tmp/flatbuffers-gc-diagnostic'); temp.mkdir(exist_ok=True)\ns=(p.parent/'java-suite.init.gradle').read_text().replace(\"maxHeapSize = '512m'\", \"maxHeapSize = '512m'\\n            jvmArgs('-XX:+DisableExplicitGC')\")\n(temp/'java-suite.init.gradle').write_text(s)\nm.SCRIPT_ROOT=temp\nraise SystemExit(m.main())\n",
+  "inputs": {
+    "runner": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/run_java_runtime_comparison.py",
+    "runner_sha256": "5f7249321750decdea41fb03f07ca2bdd76fafb7ab49a61788080303822392b6",
+    "init_script": "/tmp/flatbuffers-gc-diagnostic/java-suite.init.gradle",
+    "init_script_sha256": "b8ef9763cef13cf79c356e198818b0a4a6e2060f89889c46ea8859c95dbd2903",
+    "checkout_arguments": {
+      "eager": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/eager-release-build/clava",
+      "text": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-build/clava",
+      "protobuf": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/protobuf-build/clava"
+    },
+    "no_ccache_path": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/java-runtime-gc-diagnostic-20261006/path-without-ccache",
+    "cache_state": {
+      "CCACHE_DISABLE": "true",
+      "ccache_resolves_from_PATH": false
+    },
+    "jvm_environment": {
+      "JAVA_TOOL_OPTIONS": "",
+      "_JAVA_OPTIONS": "",
+      "JDK_JAVA_OPTIONS": "",
+      "JAVA_OPTS": "",
+      "GRADLE_OPTS": ""
+    },
+    "java_runtime": {
+      "java_binary": "/usr/lib/jvm/java-26-openjdk-amd64/bin/java",
+      "java.version": "26.0.1",
+      "java.io.tmpdir": "/tmp",
+      "user.name": "lmsousa"
+    },
+    "runtime_resource_cache": {
+      "source_root": "/tmp/clang_ast_exe_lmsousa/clang-dumper",
+      "cache_tree_sha256": "adb67c2213128eee4e6869a122965282628e0269776c4c194c554f3634eb6822",
+      "cache_file_count": 41620,
+      "release_root": "/tmp/clang_ast_exe_lmsousa/clang-dumper/releases/v18.1.8_5-rc3",
+      "release_manifest_sha256": "bc0732dc5b1f68c198a05be7357c9802beec42261661ba19af9fa462adc2120b",
+      "native_tool_path": "/tmp/clang_ast_exe_lmsousa/clang-dumper/releases/v18.1.8_5-rc3/clang-dumper-linux-x64",
+      "native_tool_sha256": "2349d4ec4ad0926249ad6db2d665c7ec3fc253bf3d241e035c1e428c977249e0",
+      "wire_schema_sha256": "a2487d2af712f5c0fe6a0860fbacedc0e4a7824bc3b81a3a515c70a3459a3869",
+      "flatbuffers": {
+        "commit": "7e163021e59cca4f8e1e35a7c828b5c6b7915953",
+        "version": "25.12.19"
+      }
+    },
+    "expected_test_count": 116,
+    "max_gradle_workers": 1,
+    "pinned_test_ids_file": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/java-runtime-test-ids.json",
+    "pinned_test_ids_file_sha256": "67741eb11b38882b68c51b7e496e9cb82cd9ed9bf4539168208ea111e23681ff",
+    "pinned_test_identity_sha256": "92c0eba1096f71eadbe8ff808eb6243d3745f45e06b1c13a65e789cd4a7263d5",
+    "test_selection": "java-suite.init.gradle fixed exclusion list; no selection arguments accepted",
+    "timing_boundary": {
+      "test_only": "sum of JUnit XML testcase time attributes for the 116 selected parser tests",
+      "gradle_wall": "monotonic elapsed time around one Gradle test process; includes Gradle configuration and test-worker startup",
+      "preflight": "testClasses compilation and classpath fingerprinting run before all measured observations",
+      "resource_cache": "verified parser resources are symlinked into the run-local JVM temp root before Gradle test timing; no release download or cache staging is included"
+    },
+    "default_local_options": {
+      "sha256": "523ac13f7cbe689708b9474d9173db3b07f3dfaaad7e8a08c34ff30297fdf671",
+      "per_stage": {
+        "text": "523ac13f7cbe689708b9474d9173db3b07f3dfaaad7e8a08c34ff30297fdf671",
+        "protobuf": "523ac13f7cbe689708b9474d9173db3b07f3dfaaad7e8a08c34ff30297fdf671",
+        "eager": "523ac13f7cbe689708b9474d9173db3b07f3dfaaad7e8a08c34ff30297fdf671"
+      }
+    }
+  },
+  "stage_inputs": {
+    "eager": {
+      "stage": "eager",
+      "checkout": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/eager-release-build/clava",
+      "repositories": {
+        "clava": {
+          "root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/eager-release-build/clava",
+          "revision": "f03eb45d8baf7ce9a41dee18d681db3455790746",
+          "dirty": false,
+          "status": [],
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "untracked_files": {},
+          "untracked_manifest_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "specs-java-libs": {
+          "root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/eager-release-build/specs-java-libs",
+          "revision": "fd41aceb8336d2b5e026abb2deee1a514a778be5",
+          "dirty": false,
+          "status": [],
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "untracked_files": {},
+          "untracked_manifest_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "lara-framework": {
+          "root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/eager-release-build/lara-framework",
+          "revision": "b780d0b8ba0aac2670ad5aa98998883a2a4f8030",
+          "dirty": false,
+          "status": [],
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "untracked_files": {},
+          "untracked_manifest_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "clang-dumper": null
+      },
+      "clang_ast_parser_source_tree_sha256": "70c00625c37a57d1717fd244cd1dda8ffaec464a244ec9c8b4f0b74cfba38a99",
+      "clang_ast_parser_test_tree_sha256": "32f6ec5063b759a4598d865ad5ac0c2d7b3756afb2bb1c1fd4e99bc232a5e57d",
+      "fixture_manifest_sha256": "df843e18eb2e8224d8a2ba07147957ecf1d24a8c4e949f971b0f0fb5213c5881",
+      "issue15_assembly_line": "__asm__(\"movl $10, %eax;movl $20, %ebx;addl %ebx, %eax;\");",
+      "selected_release": {
+        "tag": "v18.1.8_5-rc3",
+        "tag_file_sha256": "95e25f281cc75e69a488e685ecdd6fee1f577ba32be3f8117fa5cd572e985ab8",
+        "tag_file": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/eager-release-build/clava/ClangAstParser/clang-dumper-release.tag",
+        "kind": "published_release_tag"
+      }
+    },
+    "text": {
+      "stage": "text",
+      "checkout": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-build/clava",
+      "repositories": {
+        "clava": {
+          "root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-build/clava",
+          "revision": "01c6b739e5606af12734a3a21c63a45ce5dd5e67",
+          "dirty": true,
+          "status": [
+            "M ClangAstParser/clang-dumper-release.tag"
+          ],
+          "patch_sha256": "7fa9d27c0716f9a025166c04482829d8f9615ddd22de75a5a7e24fdc05d7b10f",
+          "untracked_files": {},
+          "untracked_manifest_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "specs-java-libs": {
+          "root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-build/specs-java-libs",
+          "revision": "ead48b7154b846058ef6cdd8c553849b987d9884",
+          "dirty": false,
+          "status": [],
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "untracked_files": {},
+          "untracked_manifest_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "lara-framework": {
+          "root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-build/lara-framework",
+          "revision": "b780d0b8ba0aac2670ad5aa98998883a2a4f8030",
+          "dirty": false,
+          "status": [],
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "untracked_files": {},
+          "untracked_manifest_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "clang-dumper": {
+          "root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-build/clang-dumper",
+          "revision": "0a27378395b2f10d232cbd0f7b167e5e588f95b8",
+          "dirty": false,
+          "status": [],
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "untracked_files": {},
+          "untracked_manifest_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        }
+      },
+      "clang_ast_parser_source_tree_sha256": "84178af23bba162965ec106ea11dcf6827efd9ba70df1b095777f7c68cc308b1",
+      "clang_ast_parser_test_tree_sha256": "5843f15db6a876154f13ae4b555fdd169e3871aaf934c8b82883fa42de3ff3b7",
+      "fixture_manifest_sha256": "3a57b98539e212b68e0e8e732c72dea01f7b5ea3c3c7d34ea1a51a4f5217b2e6",
+      "issue15_assembly_line": "__asm__(\"movl $$$$10, %eax;movl $$$$20, %ebx;addl %ebx, %eax;\");",
+      "selected_release": {
+        "tag": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-build/clang-dumper/build",
+        "tag_file_sha256": "4cc90b563eda2ad197acc560b4209df33e7549954e19d3dbe9c51ca6c4a5f67a",
+        "tag_file": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-build/clava/ClangAstParser/clang-dumper-release.tag",
+        "kind": "legacy_local_build_without_manifest",
+        "release_root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-build/clang-dumper/build",
+        "manifest_available": false,
+        "tool_path": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-build/clang-dumper/build/tool",
+        "tool_sha256": "3f019caf6fd1e3366a44819bca4d6ae465e303c858349350e608b16624002422"
+      }
+    },
+    "protobuf": {
+      "stage": "protobuf",
+      "checkout": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/protobuf-build/clava",
+      "repositories": {
+        "clava": {
+          "root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/protobuf-build/clava",
+          "revision": "ff5e58afa96a07b18a3d2bd2e40a00a59bb28442",
+          "dirty": true,
+          "status": [
+            "M ClangAstParser/clang-dumper-release.tag"
+          ],
+          "patch_sha256": "5e7d8b057d7467d9afdc257604fff1ccd9ba44e6ebb90332f105e55760dd0355",
+          "untracked_files": {},
+          "untracked_manifest_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "specs-java-libs": {
+          "root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/protobuf-build/specs-java-libs",
+          "revision": "19c8e3e4c81dbc77a89d77cd7ab2bc8bfc3844fa",
+          "dirty": false,
+          "status": [],
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "untracked_files": {},
+          "untracked_manifest_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "lara-framework": {
+          "root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/protobuf-build/lara-framework",
+          "revision": "b780d0b8ba0aac2670ad5aa98998883a2a4f8030",
+          "dirty": false,
+          "status": [],
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "untracked_files": {},
+          "untracked_manifest_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "clang-dumper": {
+          "root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/protobuf-build/clang-dumper",
+          "revision": "ab9d0238bd9c27eb9f156fd19967d16025137a37",
+          "dirty": false,
+          "status": [],
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "untracked_files": {},
+          "untracked_manifest_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        }
+      },
+      "clang_ast_parser_source_tree_sha256": "bf86cc8027949f16d3092b15dcb9a2ad28573270bb4f1b317ab6cd4afda74b98",
+      "clang_ast_parser_test_tree_sha256": "69b4e541468665817a432f0efc0c82c6f5a68b545bc2085b555dbe3032e9d81f",
+      "fixture_manifest_sha256": "3a57b98539e212b68e0e8e732c72dea01f7b5ea3c3c7d34ea1a51a4f5217b2e6",
+      "issue15_assembly_line": "__asm__(\"movl $$$$10, %eax;movl $$$$20, %ebx;addl %ebx, %eax;\");",
+      "selected_release": {
+        "tag": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/protobuf-build/clang-dumper/build",
+        "tag_file_sha256": "35ef6aa25e4e16dfdf9af80fe04d45d7ebcab38f69051b9d696c3c45478d02d5",
+        "tag_file": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/protobuf-build/clava/ClangAstParser/clang-dumper-release.tag",
+        "kind": "legacy_local_build_without_manifest",
+        "release_root": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/protobuf-build/clang-dumper/build",
+        "manifest_available": false,
+        "tool_path": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/protobuf-build/clang-dumper/build/tool",
+        "tool_sha256": "000cf29d94488802f865390e07ae3904d05e9569baf528c9d99c3d913ef937cc"
+      }
+    }
+  },
+  "summary": {
+    "observations_per_stage": 3,
+    "test_only_metric": "sum of JUnit testcase duration attributes, seconds",
+    "test_only_median_s": {
+      "text": 26.352,
+      "protobuf": 25.839,
+      "eager": 27.59
+    },
+    "paired_eager_minus_control_test_only_s": {
+      "text": [
+        0.9220000000000006,
+        1.3150000000000013,
+        1.2240000000000002
+      ],
+      "protobuf": [
+        1.658999999999999,
+        1.8220000000000027,
+        1.7860000000000014
+      ]
+    },
+    "gradle_wall_is_reported_separately": true,
+    "frozen_test_identity_sha256": "92c0eba1096f71eadbe8ff808eb6243d3745f45e06b1c13a65e789cd4a7263d5",
+    "wall_performance_claim": null
+  },
+  "results": [
+    {
+      "ordinal": 1,
+      "round": 1,
+      "stage": "text",
+      "valid": true,
+      "validation_errors": [],
+      "test_counts": {
+        "total": 116,
+        "passed": 116,
+        "failed": 0,
+        "skipped": 0
+      },
+      "test_identity_sha256": "92c0eba1096f71eadbe8ff808eb6243d3745f45e06b1c13a65e789cd4a7263d5",
+      "testcase_duration_s": 26.668,
+      "gradle_wall_s": 32.261969924904406,
+      "worker": {
+        "max_heap_size": "512m",
+        "max_parallel_forks": 1,
+        "jacoco_enabled": false,
+        "jvm_args": [
+          "-XX:+DisableExplicitGC",
+          "-Xmx512m",
+          "-Dfile.encoding=UTF-8",
+          "-Djava.io.tmpdir=/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/java-runtime-gc-diagnostic-20261006/runs/01-round-1-text/tmp",
+          "-Duser.country",
+          "-Duser.language=en",
+          "-Duser.variant",
+          "-ea"
+        ]
+      },
+      "test_classpath_sha256": "99a30e05fe206c6137fffcc4d9b49b7b4018fcd0103420fcd85990af0a56efa4",
+      "source_signature_sha256": "4ada3d1edc965063a872e68d418da6a5f65d3bf1ad94a79eaf703855889bfaf9"
+    },
+    {
+      "ordinal": 2,
+      "round": 1,
+      "stage": "protobuf",
+      "valid": true,
+      "validation_errors": [],
+      "test_counts": {
+        "total": 116,
+        "passed": 116,
+        "failed": 0,
+        "skipped": 0
+      },
+      "test_identity_sha256": "92c0eba1096f71eadbe8ff808eb6243d3745f45e06b1c13a65e789cd4a7263d5",
+      "testcase_duration_s": 25.931,
+      "gradle_wall_s": 32.007139057153836,
+      "worker": {
+        "max_heap_size": "512m",
+        "max_parallel_forks": 1,
+        "jacoco_enabled": false,
+        "jvm_args": [
+          "-XX:+DisableExplicitGC",
+          "-Xmx512m",
+          "-Dfile.encoding=UTF-8",
+          "-Djava.io.tmpdir=/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/java-runtime-gc-diagnostic-20261006/runs/02-round-1-protobuf/tmp",
+          "-Duser.country",
+          "-Duser.language=en",
+          "-Duser.variant",
+          "-ea"
+        ]
+      },
+      "test_classpath_sha256": "5eac0e9e893ad0f319fb4731c371899fcbe8f9367ae7c1e4b464f76f8c7c3fde",
+      "source_signature_sha256": "32ed14df4060c234064c3dedfe2e6768e637caee636970b6a91033b6497301be"
+    },
+    {
+      "ordinal": 3,
+      "round": 1,
+      "stage": "eager",
+      "valid": true,
+      "validation_errors": [],
+      "test_counts": {
+        "total": 116,
+        "passed": 116,
+        "failed": 0,
+        "skipped": 0
+      },
+      "test_identity_sha256": "92c0eba1096f71eadbe8ff808eb6243d3745f45e06b1c13a65e789cd4a7263d5",
+      "testcase_duration_s": 27.59,
+      "gradle_wall_s": 33.31522764498368,
+      "worker": {
+        "max_heap_size": "512m",
+        "max_parallel_forks": 1,
+        "jacoco_enabled": false,
+        "jvm_args": [
+          "-XX:+DisableExplicitGC",
+          "-Xmx512m",
+          "-Dfile.encoding=UTF-8",
+          "-Djava.io.tmpdir=/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/java-runtime-gc-diagnostic-20261006/runs/03-round-1-eager/tmp",
+          "-Duser.country",
+          "-Duser.language=en",
+          "-Duser.variant",
+          "-ea"
+        ]
+      },
+      "test_classpath_sha256": "4aab6c7a69a4d295a2f02680840253bd8a62d60b2ff6a4bd7afa929e65bb1342",
+      "source_signature_sha256": "9660b8f7e93d0055e1d01b947f53f9988031c89b590cc556eae4ba9f8ac48af2"
+    },
+    {
+      "ordinal": 4,
+      "round": 2,
+      "stage": "protobuf",
+      "valid": true,
+      "validation_errors": [],
+      "test_counts": {
+        "total": 116,
+        "passed": 116,
+        "failed": 0,
+        "skipped": 0
+      },
+      "test_identity_sha256": "92c0eba1096f71eadbe8ff808eb6243d3745f45e06b1c13a65e789cd4a7263d5",
+      "testcase_duration_s": 25.839,
+      "gradle_wall_s": 31.916479628067464,
+      "worker": {
+        "max_heap_size": "512m",
+        "max_parallel_forks": 1,
+        "jacoco_enabled": false,
+        "jvm_args": [
+          "-XX:+DisableExplicitGC",
+          "-Xmx512m",
+          "-Dfile.encoding=UTF-8",
+          "-Djava.io.tmpdir=/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/java-runtime-gc-diagnostic-20261006/runs/04-round-2-protobuf/tmp",
+          "-Duser.country",
+          "-Duser.language=en",
+          "-Duser.variant",
+          "-ea"
+        ]
+      },
+      "test_classpath_sha256": "5eac0e9e893ad0f319fb4731c371899fcbe8f9367ae7c1e4b464f76f8c7c3fde",
+      "source_signature_sha256": "32ed14df4060c234064c3dedfe2e6768e637caee636970b6a91033b6497301be"
+    },
+    {
+      "ordinal": 5,
+      "round": 2,
+      "stage": "eager",
+      "valid": true,
+      "validation_errors": [],
+      "test_counts": {
+        "total": 116,
+        "passed": 116,
+        "failed": 0,
+        "skipped": 0
+      },
+      "test_identity_sha256": "92c0eba1096f71eadbe8ff808eb6243d3745f45e06b1c13a65e789cd4a7263d5",
+      "testcase_duration_s": 27.661,
+      "gradle_wall_s": 33.41016200603917,
+      "worker": {
+        "max_heap_size": "512m",
+        "max_parallel_forks": 1,
+        "jacoco_enabled": false,
+        "jvm_args": [
+          "-XX:+DisableExplicitGC",
+          "-Xmx512m",
+          "-Dfile.encoding=UTF-8",
+          "-Djava.io.tmpdir=/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/java-runtime-gc-diagnostic-20261006/runs/05-round-2-eager/tmp",
+          "-Duser.country",
+          "-Duser.language=en",
+          "-Duser.variant",
+          "-ea"
+        ]
+      },
+      "test_classpath_sha256": "4aab6c7a69a4d295a2f02680840253bd8a62d60b2ff6a4bd7afa929e65bb1342",
+      "source_signature_sha256": "9660b8f7e93d0055e1d01b947f53f9988031c89b590cc556eae4ba9f8ac48af2"
+    },
+    {
+      "ordinal": 6,
+      "round": 2,
+      "stage": "text",
+      "valid": true,
+      "validation_errors": [],
+      "test_counts": {
+        "total": 116,
+        "passed": 116,
+        "failed": 0,
+        "skipped": 0
+      },
+      "test_identity_sha256": "92c0eba1096f71eadbe8ff808eb6243d3745f45e06b1c13a65e789cd4a7263d5",
+      "testcase_duration_s": 26.346,
+      "gradle_wall_s": 32.05071373586543,
+      "worker": {
+        "max_heap_size": "512m",
+        "max_parallel_forks": 1,
+        "jacoco_enabled": false,
+        "jvm_args": [
+          "-XX:+DisableExplicitGC",
+          "-Xmx512m",
+          "-Dfile.encoding=UTF-8",
+          "-Djava.io.tmpdir=/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/java-runtime-gc-diagnostic-20261006/runs/06-round-2-text/tmp",
+          "-Duser.country",
+          "-Duser.language=en",
+          "-Duser.variant",
+          "-ea"
+        ]
+      },
+      "test_classpath_sha256": "99a30e05fe206c6137fffcc4d9b49b7b4018fcd0103420fcd85990af0a56efa4",
+      "source_signature_sha256": "4ada3d1edc965063a872e68d418da6a5f65d3bf1ad94a79eaf703855889bfaf9"
+    },
+    {
+      "ordinal": 7,
+      "round": 3,
+      "stage": "eager",
+      "valid": true,
+      "validation_errors": [],
+      "test_counts": {
+        "total": 116,
+        "passed": 116,
+        "failed": 0,
+        "skipped": 0
+      },
+      "test_identity_sha256": "92c0eba1096f71eadbe8ff808eb6243d3745f45e06b1c13a65e789cd4a7263d5",
+      "testcase_duration_s": 27.576,
+      "gradle_wall_s": 33.311625215923414,
+      "worker": {
+        "max_heap_size": "512m",
+        "max_parallel_forks": 1,
+        "jacoco_enabled": false,
+        "jvm_args": [
+          "-XX:+DisableExplicitGC",
+          "-Xmx512m",
+          "-Dfile.encoding=UTF-8",
+          "-Djava.io.tmpdir=/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/java-runtime-gc-diagnostic-20261006/runs/07-round-3-eager/tmp",
+          "-Duser.country",
+          "-Duser.language=en",
+          "-Duser.variant",
+          "-ea"
+        ]
+      },
+      "test_classpath_sha256": "4aab6c7a69a4d295a2f02680840253bd8a62d60b2ff6a4bd7afa929e65bb1342",
+      "source_signature_sha256": "9660b8f7e93d0055e1d01b947f53f9988031c89b590cc556eae4ba9f8ac48af2"
+    },
+    {
+      "ordinal": 8,
+      "round": 3,
+      "stage": "text",
+      "valid": true,
+      "validation_errors": [],
+      "test_counts": {
+        "total": 116,
+        "passed": 116,
+        "failed": 0,
+        "skipped": 0
+      },
+      "test_identity_sha256": "92c0eba1096f71eadbe8ff808eb6243d3745f45e06b1c13a65e789cd4a7263d5",
+      "testcase_duration_s": 26.352,
+      "gradle_wall_s": 32.04088054015301,
+      "worker": {
+        "max_heap_size": "512m",
+        "max_parallel_forks": 1,
+        "jacoco_enabled": false,
+        "jvm_args": [
+          "-XX:+DisableExplicitGC",
+          "-Xmx512m",
+          "-Dfile.encoding=UTF-8",
+          "-Djava.io.tmpdir=/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/java-runtime-gc-diagnostic-20261006/runs/08-round-3-text/tmp",
+          "-Duser.country",
+          "-Duser.language=en",
+          "-Duser.variant",
+          "-ea"
+        ]
+      },
+      "test_classpath_sha256": "99a30e05fe206c6137fffcc4d9b49b7b4018fcd0103420fcd85990af0a56efa4",
+      "source_signature_sha256": "4ada3d1edc965063a872e68d418da6a5f65d3bf1ad94a79eaf703855889bfaf9"
+    },
+    {
+      "ordinal": 9,
+      "round": 3,
+      "stage": "protobuf",
+      "valid": true,
+      "validation_errors": [],
+      "test_counts": {
+        "total": 116,
+        "passed": 116,
+        "failed": 0,
+        "skipped": 0
+      },
+      "test_identity_sha256": "92c0eba1096f71eadbe8ff808eb6243d3745f45e06b1c13a65e789cd4a7263d5",
+      "testcase_duration_s": 25.79,
+      "gradle_wall_s": 31.944613996194676,
+      "worker": {
+        "max_heap_size": "512m",
+        "max_parallel_forks": 1,
+        "jacoco_enabled": false,
+        "jvm_args": [
+          "-XX:+DisableExplicitGC",
+          "-Xmx512m",
+          "-Dfile.encoding=UTF-8",
+          "-Djava.io.tmpdir=/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clava/experiments/flatbuffers/suite/results/java-runtime-gc-diagnostic-20261006/runs/09-round-3-protobuf/tmp",
+          "-Duser.country",
+          "-Duser.language=en",
+          "-Duser.variant",
+          "-ea"
+        ]
+      },
+      "test_classpath_sha256": "5eac0e9e893ad0f319fb4731c371899fcbe8f9367ae7c1e4b464f76f8c7c3fde",
+      "source_signature_sha256": "32ed14df4060c234064c3dedfe2e6768e637caee636970b6a91033b6497301be"
+    }
+  ]
+}

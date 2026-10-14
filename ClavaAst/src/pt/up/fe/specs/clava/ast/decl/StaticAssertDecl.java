@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -29,17 +27,14 @@ import pt.up.fe.specs.clava.ast.expr.StringLiteral;
  * @author JoaoBispo
  *
  */
-public class StaticAssertDecl extends Decl {
+public class StaticAssertDecl extends StaticAssertDeclBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in StaticAssertDeclBase.
 
-    // public final static DataKey<Expr> ASSERT_EXPR = KeyFactory.object("assertExpr", Expr.class);
-
-    // public final static DataKey<String> MESSAGE = KeyFactory.string("message");
-
-    public final static DataKey<Boolean> IS_FAILED = KeyFactory.bool("isFailed");
-
-    /// DATAKEYS END
+    public StaticAssertDecl(DataStore data, Collection<? extends ClavaNode> children, StaticAssertDeclBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public StaticAssertDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -31,37 +29,33 @@ import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
  * @author JoaoBispo
  *
  */
-public class SizeOfPackExpr extends Expr {
+public class SizeOfPackExpr extends SizeOfPackExprBase {
 
-    /// DATAKEYS BEGIN
+    // Data declarations are generated from the wire schema in SizeOfPackExprBase.
 
-    public final static DataKey<Boolean> IS_PARTIALLY_SUBSTITUTED = KeyFactory.bool("isPartiallySubstituted");
-
-    public final static DataKey<NamedDecl> PACK = KeyFactory.object("pack", NamedDecl.class);
-
-    public final static DataKey<List<TemplateArgument>> PARTIAL_ARGUMENTS = KeyFactory.generic("partialArguments",
-            new ArrayList<TemplateArgument>());
-
-    /// DATAKEYS END
+    public SizeOfPackExpr(DataStore data, Collection<? extends ClavaNode> children, SizeOfPackExprBase.Values values) {
+        this(data, children);
+        setWireValues(values);
+    }
 
     public SizeOfPackExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     public NamedDecl getPack() {
-        return get(PACK);
+        return getWirePack();
     }
 
     public boolean isPartiallySubstituted() {
-        return get(IS_PARTIALLY_SUBSTITUTED);
+        return getWireIsPartiallySubstituted();
     }
 
     public List<TemplateArgument> getPartialArguments() {
-        return get(PARTIAL_ARGUMENTS);
+        return getWirePartialArguments();
     }
 
     @Override
     public String getCode() {
-        return "sizeof...(" + get(PACK).get(NamedDecl.DECL_NAME) + ")";
+        return "sizeof...(" + getWirePack().get(NamedDecl.DECL_NAME) + ")";
     }
 }
