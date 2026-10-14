@@ -877,6 +877,7 @@ def comparison_rows(record: Any) -> dict[str, Any]:
         _fail("comparison results must be a complete, non-quick run")
     created = _utc(record.get("created_utc"), "created_utc")
     completed = _utc(record.get("completed_utc"), "completed_utc")
+    cohort = _REFRESH_SUPPORT.load_cohort_baseline()
     app_rows: list[dict[str, Any]] = []
     wall_rows: list[dict[str, Any]] = []
     app_calls: dict[str, set[int]] = {suite: set() for suite in SUITES}
@@ -893,6 +894,8 @@ def comparison_rows(record: Any) -> dict[str, Any]:
         cache_validation = row.get("cache_validation")
         if not isinstance(cache_validation, dict) or cache_validation.get("passed") is not True:
             _fail("comparison observations must pass cache validation")
+        test_counts = _comparison_test_counts(row, suite=row["suite"], phase=row["phase"],
+                                              expected=cohort["suites"][row["suite"]]["test_counts"])
         normalized = {"suite": row["suite"], "stage": row["stage"], "mode": row["mode"], "repeat": row["repeat"],
                       "measurement_date": created.date().isoformat(), "reused": False}
         if row["phase"] == "app":
@@ -908,19 +911,7 @@ def comparison_rows(record: Any) -> dict[str, Any]:
             app_rows.append(normalized)
         else:
             normalized["elapsed_s"] = _finite_nonnegative(row["wall_s"], "wall_s")
-            test_counts = row.get("test_counts")
-            if not isinstance(test_counts, dict):
-                _fail("comparison wall observations need nested test counts")
-            counts = {
-                field: _nonnegative_integer(test_counts.get(field), f"test_counts.{field}")
-                for field in ("total_tests", "passed_tests", "failed_tests", "skipped_tests")
-            }
-            if counts["total_tests"] != sum(counts[field] for field in
-                                             ("passed_tests", "failed_tests", "skipped_tests")):
-                _fail("comparison wall test counts do not add up")
-            if counts["failed_tests"]:
-                _fail("comparison wall observations cannot contain failed tests")
-            normalized.update(counts)
+            normalized.update(test_counts)
             normalized.update({"valid": True, "measured": True, "return_code": 0})
             wall_rows.append(normalized)
     if any(len(values) != 1 for values in (*app_calls.values(), *syntax_calls.values())):
@@ -928,6 +919,25 @@ def comparison_rows(record: Any) -> dict[str, Any]:
     return {"created_utc": created, "completed_utc": completed, "app_rows": app_rows, "wall_rows": wall_rows,
             "app_calls_by_suite": {suite: next(iter(values)) for suite, values in app_calls.items()},
             "syntax_calls_by_suite": {suite: next(iter(values)) for suite, values in syntax_calls.items()}}
+
+
+def _comparison_test_counts(row: dict[str, Any], suite: str, phase: str,
+                            expected: dict[str, Any]) -> dict[str, int]:
+    test_counts = row.get("test_counts")
+    if not isinstance(test_counts, dict):
+        _fail(f"comparison {phase} observations need nested test counts")
+    counts = {
+        field: _nonnegative_integer(test_counts.get(field), f"test_counts.{field}")
+        for field in ("total_tests", "passed_tests", "failed_tests", "skipped_tests")
+    }
+    if counts["total_tests"] != sum(counts[field] for field in
+                                    ("passed_tests", "failed_tests", "skipped_tests")):
+        _fail(f"comparison {phase} test counts do not add up")
+    if counts["failed_tests"] or test_counts.get("failure_names", []) != []:
+        _fail(f"comparison {phase} observations cannot contain failed tests")
+    if any(counts[field] != expected[field] for field in counts):
+        _fail(f"comparison {phase} {suite} test counts differ from the pinned cohort")
+    return counts
 
 
 def _comparison_sources(record: dict[str, Any], session: dict[str, Any], historical_date: str) -> str:

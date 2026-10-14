@@ -155,6 +155,13 @@ def fixture_comparison():
                     observations.append({
                         **base, "phase": "app", "app_elapsed_ms": 2000.0 + repeat,
                         "app_calls": 42, "syntax_only_calls": 0,
+                        "test_counts": {
+                            "total_tests": 116, "passed_tests": 116,
+                            "failed_tests": 0, "skipped_tests": 0, "failure_names": [],
+                        } if suite == "java" else {
+                            "total_tests": 164, "passed_tests": 158,
+                            "failed_tests": 0, "skipped_tests": 6, "failure_names": [],
+                        },
                     })
                     counts = (116, 116, 0, 0) if suite == "java" else (164, 158, 0, 6)
                     observations.append({
@@ -218,6 +225,14 @@ class UpdatedReportTest(unittest.TestCase):
         next(row for row in failed_cache["observations"] if row["phase"] == "app")["cache_validation"]["passed"] = False
         with self.assertRaisesRegex(ValueError, "pass cache validation"):
             REPORT.render_comparison(failed_cache, fixture_prior())
+
+    def test_comparison_rejects_failed_app_tests(self):
+        record = fixture_comparison()
+        failing = next(row for row in record["observations"]
+                       if row["phase"] == "app" and row["suite"] == "java")
+        failing["test_counts"].update({"passed_tests": 115, "failed_tests": 1})
+        with self.assertRaisesRegex(ValueError, "app observations cannot contain failed tests"):
+            REPORT.render_comparison(record, fixture_prior())
 
     def test_replaces_only_protobuf_rows_and_keeps_control_rows_unchanged(self):
         prior = fixture_prior()

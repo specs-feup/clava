@@ -2,10 +2,11 @@
 """
 Same-session Text + ccache, Protobuf and FlatBuffers benchmark.
 
-Each stage is a committed Clava revision with its own clang-dumper release. All stages share one
-specs-java-libs and lara-framework revision and run the same pinned Java and JavaScript workloads, so
-only the AST transport differs. Rounds rotate stage, cache-mode and suite order as in the original
-protocol comparison.
+Each stage is a committed Clava revision with its own clang-dumper release. The stages share one
+specs-java-libs and lara-framework revision and run the same pinned Java and JavaScript workloads, but
+Clava revisions, native releases, header sources and cache-compression settings can differ. Results
+therefore do not isolate AST transport alone. Rounds rotate stage, cache-mode and suite order as in the
+original protocol comparison.
 
     three_way.py run [--quick] [--draft-id ID]
 
