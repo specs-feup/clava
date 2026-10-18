@@ -2,6 +2,8 @@
 
 2026-10-19. All decisions below are pending. This branch adds tests and experiment tooling; it changes no production algorithms. Approving a finding means accepting the proposed behavior as a requirement for a later fix. Dismissing one means keeping the existing behavior or narrowing the supported contract. Neither decision requires accepting a particular refactor.
 
+The inline checklist source is `experiments/cross-tu/findings-review.html`. It includes every finding's example and evidence, with mutually exclusive Fix, Investigate, and Dismiss checkboxes. Nothing is preselected. Send the generated decision text through chat to request work; checkbox state alone does not approve a change. When direct chat submission is unavailable, the checklist offers copying the text for pasting into chat.
+
 ## Workspace and reproduction
 
 Workspace: `/home/lmsousa/Documents/Projects/SPeCS/cross-tu-experiments`. Each nested repository has its own `cross-tu-experiments` worktree and branch, created from the corresponding checkout in `ast-flatbuffers`, without substituting `master` or `staging`:

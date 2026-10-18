@@ -1,0 +1,337 @@
+<style>
+  #cross-tu-review { color: var(--foreground); font-family: var(--font-sans); }
+  #cross-tu-review .review-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 12px; }
+  #cross-tu-review .review-count { margin-right: auto; font-weight: 500; }
+  #cross-tu-review .review-help { color: var(--muted-foreground); margin: 8px 0 16px; }
+  #cross-tu-review .review-finding { padding: 14px 0; border-top: 1px solid var(--border); }
+  #cross-tu-review .review-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: start; }
+  #cross-tu-review .review-title { font-weight: 500; overflow-wrap: anywhere; }
+  #cross-tu-review .review-id { color: var(--muted-foreground); margin-right: 8px; }
+  #cross-tu-review .review-evidence { color: var(--muted-foreground); margin-top: 5px; }
+  #cross-tu-review .review-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  #cross-tu-review .review-action-slot { display: flex; align-items: center; min-height: 28px; }
+  #cross-tu-review details { margin-top: 8px; }
+  #cross-tu-review summary { color: var(--muted-foreground); }
+  #cross-tu-review .review-detail { padding: 4px 0 0 14px; max-width: 100%; }
+  #cross-tu-review .review-detail p { overflow-wrap: anywhere; }
+  #cross-tu-review pre { white-space: pre-wrap; overflow-wrap: anywhere; background: var(--code-background, var(--muted)); color: var(--code-foreground, var(--foreground)); padding: 16px; border-radius: var(--radius); }
+  #cross-tu-review .review-footer { border-top: 1px solid var(--border); padding-top: 12px; }
+  #cross-tu-review textarea { box-sizing: border-box; width: 100%; }
+  #cross-tu-review .review-status { margin-top: 10px; }
+  @media (max-width: 580px) {
+    #cross-tu-review .review-heading { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    #cross-tu-review .review-action-slot { min-height: 44px; }
+    #cross-tu-review .review-detail { padding-left: 0; }
+  }
+</style>
+<section id="cross-tu-review" aria-label="Cross-TU findings and requested actions">
+  <div class="review-toolbar">
+    <span class="review-count" aria-live="polite">0 of 14 decided</span>
+    <button class="btn btn-primary" type="button" data-submit disabled>Copy decisions</button>
+  </div>
+  <p class="review-help">Fix: implement and test. Investigate: gather evidence first. Dismiss: record and leave unchanged. Unchecked findings stay undecided.</p>
+  <p class="review-help" data-delivery></p>
+  <div data-findings></div>
+  <div class="review-footer">
+    <div class="review-toolbar">
+      <span data-bottom-count>0 actions selected</span>
+      <button class="btn btn-primary" type="button" data-submit disabled>Copy decisions</button>
+    </div>
+    <details data-decision-text>
+      <summary class="cursor-interaction">Decision text</summary>
+      <label class="form-label" for="cross-tu-decision-text">Your selected actions</label>
+      <textarea class="form-control" id="cross-tu-decision-text" rows="8" readonly></textarea>
+    </details>
+    <div class="review-status" role="status" aria-live="polite"></div>
+  </div>
+</section>
+<script type="application/json" id="cross-tu-review-data">
+[
+  {
+    "id": "CTU01",
+    "title": "free functions from different namespaces are connected",
+    "body": "Severity: high. Reproduced with native dumps in all four execution modes. Probe: `CTU01_freeFunctionsRespectNamespaces`.\n\n```cpp\n// a.cpp\nnamespace A { int run(); }\nint use() { return A::run(); }\n\n// b.cpp\nnamespace B { int run() { return 2; } }\n```\n\nExpected: `A::run` has no implementation in this project. Observed: its `getImplementation()` returns `B::run`. A consumer following that link can inspect or edit an unrelated function.\n\n`FunctionDecl.getSignature()` uses the unqualified name and parameter types. Both functions become `run()`, and `DeclarationsCache` uses that string as its key. Method-specific qualification does not protect free functions.\n\nProposed behavior: include the complete semantic scope in free-function identity. Preserve typedef/parameter normalization, and distinguish namespace identity from how a name is printed at its current location. Test both missing and present matching definitions, plus namespace aliases, when implementing the fix.",
+    "evidence": "High \u00b7 Native source project \u00b7 4 execution modes",
+    "proposal": "include the complete semantic scope in free-function identity. Preserve typedef/parameter normalization, and distinguish namespace identity from how a name is printed at its current location. Test both missing and present matching definitions, plus namespace aliases, when implementing the fix."
+  },
+  {
+    "id": "CTU02",
+    "title": "static functions in identically named files are connected",
+    "body": "Severity: high. Reproduced with native dumps in all four modes. Probe: `CTU02_staticFunctionsRespectFullTuPaths`.\n\n```cpp\n// left/unit.cpp\nstatic int helper() { return 1; }\nint left() { return helper(); }\n\n// right/unit.cpp\nstatic int helper() { return 2; }\nint right() { return helper(); }\n```\n\nExpected: each call resolves to the definition in its own translation unit. Observed: both definitions have the key `helper()[unit.cpp]`; one TU's call resolves to the other TU's definition. Reversing the actual TU order changes which definition enters the cache first.\n\nThe static-function discriminator uses `TranslationUnit.getFilename()`, which loses the directory. Static functions in differently named files pass the control test.\n\nProposed behavior: use full TU identity for internal-linkage free functions. Do not apply this rule merely because a member function is declared `static`; static members have different linkage semantics. Preserve the passing static-member control test.",
+    "evidence": "High \u00b7 Native source project \u00b7 4 execution modes",
+    "proposal": "use full TU identity for internal-linkage free functions. Do not apply this rule merely because a member function is declared `static`; static members have different linkage semantics. Preserve the passing static-member control test."
+  },
+  {
+    "id": "CTU03",
+    "title": "an anonymous-namespace project loses its translation units during parsing",
+    "body": "Severity: high. Reproduced through the parser in all four modes. Probe: `CTU03_anonymousNamespaceProjectRemainsParseable`. Cross-TU linkage semantics remain untested for this example because parsing fails first.\n\n```cpp\n// a.cpp\nnamespace { int helper() { return 1; } }\nint a() { return helper(); }\n\n// b.cpp\nnamespace { int helper() { return 2; } }\nint b() { return helper(); }\n```\n\nExpected: two translation units, each containing a TU-local helper and a call to it. Observed: the parser logs an unresolved top-level node ID, such as `Could not find ClavaNode with id '@1_1'`, then returns an application with zero TUs. The fixture's TU-count assertion detects the loss.\n\nThe failure reaches `ClangAstParser.parseTu()` while resolving `TOP_LEVEL_DECL_IDS` against the decoded node registry. `ParallelCodeParser` catches the per-file exception and ignores the file. The exact producer/reader mismatch has not been localized; the symptom does not establish which side omitted the node. The C++ source is valid, independently checked with the host compiler.\n\nProposed behavior: first make this project survive the existing transport and parser path. Then require anonymous-namespace functions to remain TU-local. Also decide whether silently dropping every input after internal parser failures should be permitted. Fixing native traversal or wire production would expand this branch's implementation scope and should be reviewed separately.",
+    "evidence": "High \u00b7 Parser failure \u00b7 4 execution modes",
+    "proposal": "first make this project survive the existing transport and parser path. Then require anonymous-namespace functions to remain TU-local. Also decide whether silently dropping every input after internal parser failures should be permitted. Fixing native traversal or wire production would expand this branch's implementation scope and should be reviewed separately."
+  },
+  {
+    "id": "CTU04",
+    "title": "lvalue and rvalue method overloads share a definition",
+    "body": "Severity: high. Reproduced with native dumps in all four modes. Probe: `CTU04_refQualifiedMethodsStaySeparate`.\n\n```cpp\n// api.hpp\nstruct R { int get() \u0026; int get() \u0026\u0026; };\n\n// use.cpp\n#include \"api.hpp\"\nint use(R \u0026r) { return r.get() + static_cast\u003cR\u0026\u0026\u003e(r).get(); }\n\n// impl.cpp\n#include \"api.hpp\"\nint R::get() \u0026 { return 1; }\nint R::get() \u0026\u0026 { return 2; }\n```\n\nExpected: the two calls resolve to different definitions. Observed: both `CallExpr.getDefinition()` results are the same object. The lvalue/rvalue distinction is lost by the cache key, despite being retained in the parsed function type.\n\n`CXXMethodDecl.getSignature()` adds class/namespace information and const qualification, but not the member-function ref qualifier. The first colliding implementation wins.\n\nProposed behavior: include the ref qualifier in method identity. Preserve an explicit distinction between no ref qualifier, `\u0026`, and `\u0026\u0026`. The fix must not infer it from a call's value category or generated source text.",
+    "evidence": "High \u00b7 Native source project \u00b7 4 execution modes",
+    "proposal": "include the ref qualifier in method identity. Preserve an explicit distinction between no ref qualifier, `\u0026`, and `\u0026\u0026`. The fix must not infer it from a call's value category or generated source text."
+  },
+  {
+    "id": "CTU05",
+    "title": "volatile and non-volatile method overloads share a definition",
+    "body": "Severity: high. Reproduced with native dumps in all four modes. Probe: `CTU05_volatileQualifiedMethodsStaySeparate`.\n\n```cpp\n// api.hpp\nstruct R { int get(); int get() volatile; };\n\n// use.cpp\n#include \"api.hpp\"\nint use(R \u0026r, volatile R \u0026v) { return r.get() + v.get(); }\n\n// impl.cpp\n#include \"api.hpp\"\nint R::get() { return 1; }\nint R::get() volatile { return 2; }\n```\n\nExpected: two different definition objects. Observed: both calls resolve to one definition. Transformations using the lookup can select the wrong overload.\n\n`CXXMethodDecl.getSignature()` handles const but omits volatile qualification. Const/non-const overloads pass the control test; the omission is specific to incomplete method identity.\n\nProposed behavior: include all overload-relevant member-function cv/ref qualifiers as structured fields. Treat this independently from qualifiers on return types and parameter types.",
+    "evidence": "High \u00b7 Native source project \u00b7 4 execution modes",
+    "proposal": "include all overload-relevant member-function cv/ref qualifiers as structured fields. Treat this independently from qualifiers on return types and parameter types."
+  },
+  {
+    "id": "CTU06",
+    "title": "variadic and fixed-arity overloads are connected",
+    "body": "Severity: high. Reproduced with native dumps in all four modes. Probe: `CTU06_variadicOverloadsStaySeparate`.\n\n```cpp\n// a.cpp\nint choose(int);\nint use() { return choose(1); }\n\n// b.cpp\nint choose(int, ...) { return 2; }\n```\n\nExpected: the fixed-arity `choose(int)` has no implementation in this project. Observed: its implementation is the different variadic function from `b.cpp`.\n\n`FunctionDecl.getSignature()` enumerates declared parameters but omits the function type's variadic flag. Both functions therefore produce the same cache key.\n\nProposed behavior: include variadicness in function identity. Keep this separate from default arguments, which do not create a distinct overload identity.",
+    "evidence": "High \u00b7 Native source project \u00b7 4 execution modes",
+    "proposal": "include variadicness in function identity. Keep this separate from default arguments, which do not create a distinct overload identity."
+  },
+  {
+    "id": "CTU07",
+    "title": "records from different namespaces are connected",
+    "body": "Severity: high. Reproduced with native dumps in all four modes. Probe: `CTU07_recordsRespectNamespaces`.\n\n```cpp\n// a.cpp\nnamespace A { struct Item; }\nA::Item *p;\n\n// b.cpp\nnamespace B { struct Item { int value; }; }\n```\n\nExpected: `A::Item` remains incomplete. Observed: `A::Item.getDefinition()` returns the complete `B::Item`. This can expose fields or bases belonging to a different type.\n\n`DeclarationsCache.getTagKey()` returns only the unqualified declaration name, `Item`. The complete definition in `B` occupies the key queried by `A`.\n\nProposed behavior: give tag lookup a scoped identity. Include enclosing records and TU identity where required by linkage. Template specialization identity needs a separate audit before treating name qualification as a complete solution.",
+    "evidence": "High \u00b7 Native source project \u00b7 4 execution modes",
+    "proposal": "give tag lookup a scoped identity. Include enclosing records and TU identity where required by linkage. Template specialization identity needs a separate audit before treating name qualification as a complete solution."
+  },
+  {
+    "id": "CTU08",
+    "title": "global variables from different namespaces are connected",
+    "body": "Severity: high. Reproduced with native dumps in all four modes. Probe: `CTU08_globalsRespectNamespaces`.\n\n```cpp\n// a.cpp\nnamespace A { extern int value; }\nint use() { return A::value; }\n\n// b.cpp\nnamespace B { int value = 2; }\n```\n\nExpected: `A::value.getDefinition()` returns null, because no definition of that variable was provided. Observed: it returns `B::value`.\n\n`DeclarationsCache.getVarDeclKey()` uses only `DECL_NAME`, ignoring namespace scope. Ordinary external globals in the global namespace pass their control test.\n\nProposed behavior: include semantic scope and linkage in variable identity. A variable's spelling or type alone cannot determine whether two declarations denote the same entity.",
+    "evidence": "High \u00b7 Native source project \u00b7 4 execution modes",
+    "proposal": "include semantic scope and linkage in variable identity. A variable's spelling or type alone cannot determine whether two declarations denote the same entity."
+  },
+  {
+    "id": "CTU10",
+    "title": "an initialized extern variable is not recognized as a definition",
+    "body": "Severity: medium. Reproduced with native dumps in all four modes. Probe: `CTU10_externWithInitializerIsADefinition`.\n\n```cpp\n// a.cpp\nextern int value;\nint use() { return value; }\n\n// b.cpp\nextern int value = 2;\n```\n\nExpected: the declaration in `a.cpp` resolves to the initialized definition in `b.cpp`. Observed: lookup returns null. `extern` with an initializer is a definition, although the compiler may warn about that spelling.\n\n`DeclarationsCache.processVarDecl()` treats any storage class other than `None` as not being a definition. It therefore excludes the initialized `Extern` declaration. `VarDecl.getDefinition()` also sends an initialized extern declaration through the external-lookup path.\n\nProposed behavior: classify definitions using declaration semantics, including an initializer, rather than storage class alone. Include C tentative definitions, thread-local variables, and static data members in the later classification audit; this reproduction establishes only the initialized-extern case.",
+    "evidence": "Medium \u00b7 Native source project \u00b7 4 execution modes",
+    "proposal": "classify definitions using declaration semantics, including an initializer, rather than storage class alone. Include C tentative definitions, thread-local variables, and static data members in the later classification audit; this reproduction establishes only the initialized-extern case."
+  },
+  {
+    "id": "CTU11",
+    "title": "an internal const variable supplies an unrelated external definition",
+    "body": "Severity: high. Reproduced with native dumps in all four modes. Probe: `CTU11_internalConstDoesNotDefineAnExternalGlobal`.\n\n```cpp\n// a.cpp\nextern const int value;\nint use() { return value; }\n\n// b.cpp\nconst int value = 2;\n```\n\nExpected: the external `value` in `a.cpp` remains unresolved. The namespace-scope const definition in `b.cpp` has internal linkage in this C++ example. Observed: lookup returns that internal variable as the external definition.\n\nThe variable cache uses the bare name and a storage-class check. Internal linkage is not limited to the `static` storage-class spelling, so that check cannot protect this case. This example is deliberately C++; C has different rules for namespace/file-scope const objects.\n\nProposed behavior: use actual linkage information and distinguish TU-local variables from external entities. Do not implement a language-independent rule that all const globals are internal.",
+    "evidence": "High \u00b7 Native source project \u00b7 4 execution modes",
+    "proposal": "use actual linkage information and distinguish TU-local variables from external entities. Do not implement a language-independent rule that all const globals are internal."
+  },
+  {
+    "id": "CTU13",
+    "title": "normalization confuses distinct files with the same basename",
+    "body": "Severity: high. Deterministically reproduced in a constructed parser graph. Probe: `CTU13_normalizationDistinguishesFullSourcePaths`. A complete native-source reproduction has not been established.\n\nConsider these distinct headers, each defining its own TU-local variable:\n\n```cpp\n// left/common.hpp, line 1\nstatic int value;\n\n// right/common.hpp, line 1\nstatic int value;\n```\n\nThe graph reproduction contains a tree candidate for the left variable and a detached reference target for the right variable. Both have matching node kinds, names, storage classes, types, and coordinates. A holder's node-valued field initially points to the right variable.\n\nExpected: that field stays attached to the right variable because no matching tree candidate exists. Observed: `TUnitProcessor` redirects it to the left variable.\n\n`SourceLocation.toString()` keeps only the basename, and normalization embeds that display string in the signature. Both source ranges become the same `common.hpp:line:column` text. If both definitions happen to be indexed, ambiguity handling may prevent a redirect; the tested graph has only one indexed candidate, which exposes the unsafe match.\n\nProposed behavior: key source identity by full normalized paths or explicit source-file IDs. Keep the short basename representation for diagnostics. This is a matching-rule change and should have explicit tests for shared headers and genuinely distinct files.",
+    "evidence": "High \u00b7 Constructed graph; native project reproduction pending",
+    "proposal": "key source identity by full normalized paths or explicit source-file IDs. Keep the short basename representation for diagnostics. This is a matching-rule change and should have explicit tests for shared headers and genuinely distinct files."
+  },
+  {
+    "id": "CTU14",
+    "title": "rewriting a reference invalidates a previously indexed signature",
+    "body": "Severity: medium. Deterministically reproduced with real `VarDecl` and `DeclRefExpr` objects in a constructed parser graph. Probe: `CTU14_rewritingAReferenceDoesNotInvalidateItsLookupKey`. The frequency in native projects is not measured.\n\nExample graph, where `D0` and `D1` represent the same declaration location, and `R0` and `R1` represent the same reference location:\n\n```text\nD0: declaration in the AST tree\nD1: detached declaration copy with a different parser ID\nR0: reference in the AST tree, DECL -\u003e D1\nR1: detached reference copy,     DECL -\u003e D1\nowner.DIRECT -\u003e R1\n```\n\nInitially, `R0` and `R1` have equal signatures. Indexing stores the signature for `R0`, including the ID of `D1`. The first node registry then rewrites `R1.DECL` to `D0`. The next registry tries to normalize `owner.DIRECT`, which still points to `R1`.\n\nExpected: the owner's reference resolves to tree node `R0`. Observed: `R1` now has a different signature because its `DECL` field contains `D0`'s ID, so lookup misses the key indexed earlier. The owner keeps the detached reference. The test explicitly controls the registry order rather than relying on hash-map iteration.\n\n`TUnitProcessor` indexes keys before rewriting fields, then recomputes keys against mutable objects while rewriting. A node-valued signature component can therefore change during the pass.\n\nProposed behavior: define one consistent identity snapshot for indexing and all lookups, or resolve references in a phase that cannot change the keys used by later lookups. A lazy cache alone is insufficient if a node's first key calculation occurs after it was mutated. Do not add a permanent AST-node cache without an invalidation contract.",
+    "evidence": "Medium \u00b7 Constructed graph; native project reproduction pending",
+    "proposal": "define one consistent identity snapshot for indexing and all lookups, or resolve references in a phase that cannot change the keys used by later lookups. A lazy cache alone is insufficient if a node's first key calculation occurs after it was mutated. Do not add a permanent AST-node cache without an invalidation contract."
+  },
+  {
+    "id": "CTU15",
+    "title": "ambiguity handling eagerly renders full node data",
+    "body": "Severity: performance/maintainability concern. Deterministically reproduced by instrumenting node content rendering. Probe: `CTU15_ambiguityHandlingDoesNotEagerlyRenderFullNodeData`. No speedup or share of total parse time is claimed.\n\nExample: two parsed occurrences produce the same signature. `addNode()` removes that signature from the candidate map and records it as ambiguous. While doing so, it concatenates the old node and appends the new node into `collisionReport`.\n\nExpected proposed behavior: retain a bounded, compact collision record and render full node data only when diagnostic output is requested. Observed: an instrumented collision invokes full `toContentString()` twice even when no caller requests a report. The report string is retained for the processor's lifetime.\n\nThis finding is narrower than the original discussion's subtree-printing explanation. In this checkout, `ClavaNode.toString()` formats its DataStore contents. Its formatter uses short strings for referenced nodes; it does not recursively print the child tree. Likewise, node-valued signature fields already use `StringProvider.getString()`.\n\nProposed behavior: make detailed diagnostics lazy and bounded while preserving ambiguity rejection. Retain counts and a small sample of source identities if those are useful. Verify the change with allocation profiling before attributing a particular fraction of issue #270 to it.",
+    "evidence": "Performance \u00b7 Rendering counter; speedup unmeasured",
+    "proposal": "make detailed diagnostics lazy and bounded while preserving ambiguity rejection. Retain counts and a small sample of source identities if those are useful. Verify the change with allocation profiling before attributing a particular fraction of issue #270 to it."
+  },
+  {
+    "id": "CTU16",
+    "title": "generated extern globals do not resolve like parsed extern globals",
+    "body": "Severity: medium. Reproduced by parsing a two-TU application and then using its real `GlobalManager` API, in all four modes. Probe: `CTU16_generatedGlobalReferencesFindTheirDefinition`.\n\nStart with these valid source files:\n\n```cpp\n// a.cpp\nint a() { return 1; }\n\n// b.cpp\nint b() { return 2; }\n```\n\nThen request a shared global in each TU through the API used by the file joinpoint's `addGlobal` action:\n\n```text\ndefinition  = app.globalManager.addGlobal(firstTU,  \"shared\", intType, integerLiteral(7))\ndeclaration = app.globalManager.addGlobal(secondTU, \"shared\", intType, integerLiteral(7))\napp.clearCache()\ndeclaration.getDefinition()\n```\n\nThe manager emits the equivalent of `int shared = 7;` in the first TU and `extern int shared;` in the second.\n\nExpected: the extern declaration's definition is the initialized variable in the first TU. Observed: `getDefinition()` returns the extern declaration itself. Clearing the application cache does not correct it.\n\n`GlobalManager.addGlobal()` creates variables through the factory but does not mark them with `HAS_GLOBAL_STORAGE`. `VarDecl.getDefinition()` treats a variable without that flag as local and immediately returns it. `DeclarationsCache` also excludes such nodes from its global-variable index.\n\nProposed behavior: generated global declarations must carry the same required storage/linkage metadata as parsed globals. Audit the creation API, rather than teaching every lookup consumer to guess global storage from ancestry. Preserve the passing controls for one initializer, later extern declarations, independent names, and independent applications.",
+    "evidence": "Medium \u00b7 Parsed project + generation API \u00b7 4 execution modes",
+    "proposal": "generated global declarations must carry the same required storage/linkage metadata as parsed globals. Audit the creation API, rather than teaching every lookup consumer to guess global storage from ancestry. Preserve the passing controls for one initializer, later extern declarations, independent names, and independent applications."
+  }
+]
+</script>
+<script>
+(() => {
+  'use strict';
+  const root = document.getElementById('cross-tu-review');
+  const findings = JSON.parse(document.getElementById('cross-tu-review-data').textContent);
+  const actions = ['Fix', 'Investigate', 'Dismiss'];
+  const choices = Object.create(null);
+  const controls = new Map();
+  const detailElements = new Map();
+  const storageKey = 'clava-cross-tu-review-e0cb44f2b-v1';
+  const status = root.querySelector('[role="status"]');
+  const decisionText = root.querySelector('textarea');
+
+  function inlineText(parent, value) {
+    value.split(/(`[^`]+`)/g).forEach(part => {
+      if (part.startsWith('`') && part.endsWith('`')) {
+        const code = document.createElement('code');
+        code.textContent = part.slice(1, -1);
+        parent.append(code);
+      } else { parent.append(document.createTextNode(part)); }
+    });
+  }
+
+  function explanation(parent, markdown) {
+    let paragraph = [], code = [], inCode = false;
+    function flushParagraph() {
+      if (!paragraph.length) return;
+      const p = document.createElement('p');
+      inlineText(p, paragraph.join(' '));
+      parent.append(p);
+      paragraph = [];
+    }
+    function flushCode() {
+      const pre = document.createElement('pre');
+      const content = document.createElement('code');
+      content.textContent = code.join('\n');
+      pre.append(content); parent.append(pre); code = [];
+    }
+    markdown.split('\n').forEach(line => {
+      if (line.startsWith('```')) {
+        if (inCode) flushCode(); else flushParagraph();
+        inCode = !inCode;
+      } else if (inCode) code.push(line);
+      else if (!line.trim()) flushParagraph();
+      else paragraph.push(line);
+    });
+    flushParagraph();
+    if (inCode) flushCode();
+  }
+
+  for (const finding of findings) {
+    const article = document.createElement('article');
+    article.className = 'review-finding';
+    const heading = document.createElement('div');
+    heading.className = 'review-heading';
+    const description = document.createElement('div');
+    const title = document.createElement('div');
+    title.className = 'review-title';
+    const id = document.createElement('span'); id.className = 'review-id'; id.textContent = finding.id;
+    title.append(id, document.createTextNode(finding.title));
+    const evidence = document.createElement('div'); evidence.className = 'review-evidence text-small';
+    evidence.textContent = finding.evidence;
+    description.append(title, evidence);
+    const actionGroup = document.createElement('div');
+    actionGroup.className = 'review-actions';
+    actionGroup.setAttribute('role', 'group');
+    actionGroup.setAttribute('aria-label', finding.id + ' requested action');
+    const rowControls = [];
+    for (const action of actions) {
+      const slot = document.createElement('div'); slot.className = 'review-action-slot';
+      const label = document.createElement('label'); label.className = 'form-check review-native-label';
+      const checkbox = document.createElement('input');
+      checkbox.className = 'form-check-input'; checkbox.type = 'checkbox';
+      checkbox.id = finding.id + '-' + action.toLowerCase();
+      checkbox.setAttribute('aria-label', action + ' ' + finding.id);
+      const text = document.createElement('span'); text.className = 'form-check-label'; text.textContent = action;
+      label.append(checkbox, text); slot.append(label); actionGroup.append(slot);
+      checkbox.addEventListener('change', () => {
+        if (checkbox.checked) choices[finding.id] = action;
+        else delete choices[finding.id];
+        status.textContent = '';
+        update(); persist();
+      });
+      rowControls.push({action, checkbox});
+    }
+    controls.set(finding.id, rowControls);
+    heading.append(description, actionGroup);
+    const details = document.createElement('details');
+    const summary = document.createElement('summary'); summary.className = 'cursor-interaction';
+    summary.textContent = 'Example, evidence, and proposed change';
+    const content = document.createElement('div'); content.className = 'review-detail';
+    explanation(content, finding.body);
+    details.append(summary, content);
+    summary.addEventListener('click', () => setTimeout(persist, 0));
+    detailElements.set(finding.id, details);
+    article.append(heading, details); root.querySelector('[data-findings]').append(article);
+  }
+
+  function selected() { return findings.filter(finding => choices[finding.id]); }
+  function prompt() {
+    const selection = selected();
+    if (!selection.length) return '';
+    return 'Apply these explicit cross-TU review decisions in /home/lmsousa/Documents/Projects/SPeCS/cross-tu-experiments. '
+      + 'Use clava/docs/cross-tu-review.md at baseline e0cb44f2b for the examples and proposed behavior.\n\n'
+      + selection.map(finding => choices[finding.id] + ' ' + finding.id + ': ' + finding.title + '\n'
+        + 'Proposed scope: ' + finding.proposal).join('\n\n')
+      + '\n\nFix means implement the selected correction and regression tests. Investigate means gather evidence and update the review document without applying a production fix. '
+      + 'Dismiss means record the dismissal and leave production behavior unchanged. Leave every unselected finding undecided. '
+      + 'Keep performance and maintainability as priorities, preserve unrelated work, and commit completed changes.';
+  }
+
+  function update() {
+    const count = selected().length;
+    for (const finding of findings) {
+      for (const {action, checkbox} of controls.get(finding.id)) checkbox.checked = choices[finding.id] === action;
+    }
+    root.querySelector('.review-count').textContent = count + ' of ' + findings.length + ' decided';
+    root.querySelector('[data-bottom-count]').textContent = count + ' action' + (count === 1 ? '' : 's') + ' selected';
+    decisionText.value = prompt();
+    const canSend = typeof window.openai?.sendFollowUpMessage === 'function';
+    root.querySelectorAll('[data-submit]').forEach(button => {
+      button.disabled = count === 0;
+      button.textContent = canSend ? 'Send decisions' : 'Copy decisions';
+    });
+    root.querySelector('[data-delivery]').textContent = canSend
+      ? 'Selections take effect only when you send your decisions.'
+      : 'Copy your decisions, then paste them into chat to send them. Checking boxes alone does not send a request.';
+  }
+
+  function snapshot() {
+    return {
+      modelContent: {review: storageKey, decisions: selected().map(finding => ({id: finding.id, action: choices[finding.id]}))},
+      privateContent: {expanded: findings.filter(finding => detailElements.get(finding.id).open).map(finding => finding.id)}
+    };
+  }
+  function persist() {
+    const state = snapshot();
+    try { localStorage.setItem(storageKey, JSON.stringify(state)); } catch (_) { /* Storage may be unavailable in a sandbox. */ }
+    try {
+      if (typeof window.openai?.setWidgetState === 'function') {
+        Promise.resolve(window.openai.setWidgetState(state)).catch(() => {});
+      }
+    } catch (_) { /* Checkboxes remain usable without host persistence. */ }
+  }
+  function restore(state) {
+    const content = state?.modelContent;
+    if (content?.review !== storageKey || !Array.isArray(content.decisions)) return;
+    Object.keys(choices).forEach(id => delete choices[id]);
+    for (const choice of content.decisions) {
+      if (controls.has(choice.id) && actions.includes(choice.action)) choices[choice.id] = choice.action;
+    }
+    const expanded = state.privateContent?.expanded;
+    if (Array.isArray(expanded)) for (const [id, details] of detailElements) details.open = expanded.includes(id);
+  }
+
+  try {
+    const hostState = window.openai?.widgetState;
+    restore(hostState?.modelContent?.review === storageKey ? hostState : JSON.parse(localStorage.getItem(storageKey) || 'null'));
+  } catch (_) { /* Default to no decisions. */ }
+  window.addEventListener('openai:set_globals', event => {
+    const state = event.detail?.globals?.widgetState;
+    if (state) { restore(state); update(); }
+  });
+
+  async function deliver() {
+    const text = prompt();
+    if (!text) return;
+    if (typeof window.openai?.sendFollowUpMessage === 'function') {
+      try {
+        await window.openai.sendFollowUpMessage({prompt: text, title: 'Apply selected cross-TU decisions'});
+        status.textContent = 'Decision request submitted to chat.';
+        return;
+      } catch (_) { status.textContent = 'The request was not sent. Copy the decision text and paste it into chat.'; }
+    }
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(text);
+      status.textContent = 'Copied. Paste into chat to send your decisions.';
+    } catch (_) {
+      root.querySelector('[data-decision-text]').open = true;
+      decisionText.focus(); decisionText.select();
+      status.textContent = 'Select and copy the decision text below, then paste it into chat. Nothing has been sent.';
+    }
+  }
+  root.querySelectorAll('[data-submit]').forEach(button => button.addEventListener('click', deliver));
+  update();
+})();
+</script>
