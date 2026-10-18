@@ -1,0 +1,26 @@
+{
+  "created_utc": "2026-10-04T04:06:19.293990+00:00",
+  "baseline_candidates": 5000,
+  "baseline_clean_cases": 1062,
+  "cases_run": 1062,
+  "limit": null,
+  "bucket_counts": {
+    "CLEAN": 1062
+  },
+  "producer_regressions": 0,
+  "elapsed_s": 12.654288829071447,
+  "corpus": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/llvm-project/clang/test",
+  "corpus_revision": "3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff",
+  "baseline_results": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/text-corpus-5000/results.json",
+  "baseline_results_sha256": "779715468c024cec84016d673c2abfd2e78bdd2d0098575226f119f98206cae0",
+  "tool": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/rc3-release-run-37174515778/release-assets/clang-dumper-linux-x64",
+  "tool_sha256": "2349d4ec4ad0926249ad6db2d665c7ec3fc253bf3d241e035c1e428c977249e0",
+  "verifier": "/home/lmsousa/Documents/Projects/SPeCS/ast-flatbuffers/clang-dumper/build/verify_flatbuffers",
+  "verifier_sha256": "b66ab43b89e941dbe04e65c4d9962128457ffa32f8149ef93ce855c4b5182db8",
+  "clang_resource_dir": "/usr/lib/llvm-18/lib/clang/18",
+  "jobs": 2,
+  "results": "/home/lmsousa/.cache/ast-flatbuffers-release-validation/eager-rc3-published-native-corpus/results.json",
+  "pass": true,
+  "classification": "A regression is any baseline CLEAN input not producing a non-empty stream that verify_flatbuffers accepts.",
+  "timing_boundary": "Per-case wall time covers dumper process only; total includes executor startup and scheduling."
+}

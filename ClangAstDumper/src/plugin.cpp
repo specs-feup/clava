@@ -30,4 +30,4 @@ public:
 
 // Register the plugin with Clang
 const static FrontendPluginRegistry::Add<Plugin>
-    DumpAst("DumpAst", "Dumps the AST information to feed ClangStreamParserV2");
+    DumpAst("DumpAst", "Dumps the AST information for Clava");

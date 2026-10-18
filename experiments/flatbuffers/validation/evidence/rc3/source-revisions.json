@@ -1,0 +1,10 @@
+{
+  "clava": "f03eb45d8baf7ce9a41dee18d681db3455790746",
+  "specs-java-libs": "fd41aceb8336d2b5e026abb2deee1a514a778be5",
+  "lara-framework": "b780d0b8ba0aac2670ad5aa98998883a2a4f8030",
+  "clang-dumper": "158080298c6043fd6bc3ee7037a74874fd76567c",
+  "release_tag": "v18.1.8_5-rc3",
+  "native_tool_sha256": "2349d4ec4ad0926249ad6db2d665c7ec3fc253bf3d241e035c1e428c977249e0",
+  "wire_schema_sha256": "a2487d2af712f5c0fe6a0860fbacedc0e4a7824bc3b81a3a515c70a3459a3869",
+  "artifact_build_run": "https://github.com/specs-feup/clang-dumper/actions/runs/37174515778"
+}

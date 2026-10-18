@@ -27,7 +27,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
-import pt.up.fe.specs.clang.parsers.VisitingChildrenCheck;
 import pt.up.fe.specs.clang.parsers.util.PragmasLocations;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -68,6 +67,12 @@ public class ClangAstData extends ADataClass<ClangAstData> {
             "clang_parser_stream_id_to_filename_map",
             new HashMap<String, String>());
 
+    /**
+     * Root used to resolve relative paths emitted by a generated-source dump.
+     * Null means that the dump uses the normal process working directory.
+     */
+    public final static DataKey<File> PARSE_ROOT = KeyFactory.folder("parseRoot");
+
     public final static DataKey<List<Include>> INCLUDES = KeyFactory.generic("clang_parser_stream_includes",
             new ArrayList<>());
 
@@ -91,19 +96,6 @@ public class ClangAstData extends ADataClass<ClangAstData> {
     // (Map<String, ClangNode>) new HashMap<String, ClangNode>());
 
     public final static DataKey<String> LINES_NOT_PARSED = KeyFactory.string("clang_dumper_parser_warnings");
-
-    public final static DataKey<Set<String>> NODES_CURRENTLY_BEING_PARSED = KeyFactory
-            .generic("nodesCurrentlyBeingParsed", (Set<String>) new HashSet<String>());
-
-    public final static DataKey<List<String>> CURRENT_NODE_VISIT_CHAIN = KeyFactory
-            .generic("currentNodeVisitChain", (List<String>) new ArrayList<String>());
-
-    public final static DataKey<VisitingChildrenCheck> VISITING_CHILDREN = KeyFactory
-            .object("visitingChildren", VisitingChildrenCheck.class);
-
-    public final static DataKey<Map<String, String>> SKIPPED_NODES_MAP = KeyFactory.generic(
-            "skippedNodesMap",
-            new HashMap<>());
 
     public final static DataKey<PragmasLocations> PRAGMAS_LOCATIONS = KeyFactory.object("pragmasLocations",
             PragmasLocations.class);
@@ -130,10 +122,6 @@ public class ClangAstData extends ADataClass<ClangAstData> {
     // public final static DataKey<String> ERROR_OUTPUT = KeyFactory.string("errorOutput");
 
     /// DATAKEYS END
-
-    // public ClangParserData() {
-    // set(NODES_CURRENTLY_BEING_PARSED, new HashSet<>());
-    // }
 
     /**
      * Helper method.

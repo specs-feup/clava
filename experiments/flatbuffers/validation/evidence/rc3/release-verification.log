@@ -1,0 +1,193 @@
+OK  release tag is v18.1.8_5-rc3
+OK  GitHub release is marked prerelease
+OK  GitHub release is published, not draft
+INFO release target_commitish='master'
+OK  GitHub tag ref names the expected RC tag
+OK  GitHub tag ref points to an annotated tag object
+OK  GitHub annotated tag object names the expected RC tag
+OK  GitHub annotated tag dereferences to source SHA 158080298c6043fd6bc3ee7037a74874fd76567c
+OK  Actions run id is 37174515778
+OK  Actions run branch/tag is v18.1.8_5-rc3
+OK  Actions run source SHA matches expected commit
+OK  Actions tag run completed
+OK  Actions tag run succeeded
+OK  local tag resolves to source SHA 158080298c6043fd6bc3ee7037a74874fd76567c
+OK  checkout FlatBuffers version pin is 25.12.19
+OK  checkout FlatBuffers source commit pin matches expected commit
+OK  configured FlatBuffers runtime source checkout matches expected commit
+OK  configured flatc compiler reports version 25.12.19
+OK  GitHub release has exactly 19 assets
+OK  GitHub release includes its manifest
+OK  downloaded release-assets file set exactly matches GitHub release
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-generated-enums.zip
+OK  downloaded clang-dumper-generated-enums.zip matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-linux-arm64
+OK  downloaded clang-dumper-linux-arm64 matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-linux-arm64-includes.zip
+OK  downloaded clang-dumper-linux-arm64-includes.zip matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-linux-arm64-plugin.so
+OK  downloaded clang-dumper-linux-arm64-plugin.so matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-linux-x64
+OK  downloaded clang-dumper-linux-x64 matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-linux-x64-includes.zip
+OK  downloaded clang-dumper-linux-x64-includes.zip matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-linux-x64-plugin.so
+OK  downloaded clang-dumper-linux-x64-plugin.so matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-macos-arm64
+OK  downloaded clang-dumper-macos-arm64 matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-macos-arm64-includes.zip
+OK  downloaded clang-dumper-macos-arm64-includes.zip matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-macos-arm64-plugin.so
+OK  downloaded clang-dumper-macos-arm64-plugin.so matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-macos-x64
+OK  downloaded clang-dumper-macos-x64 matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-macos-x64-includes.zip
+OK  downloaded clang-dumper-macos-x64-includes.zip matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-macos-x64-plugin.so
+OK  downloaded clang-dumper-macos-x64-plugin.so matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-release-manifest.json
+OK  downloaded clang-dumper-release-manifest.json matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-windows-arm64-includes.zip
+OK  downloaded clang-dumper-windows-arm64-includes.zip matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-windows-arm64.exe
+OK  downloaded clang-dumper-windows-arm64.exe matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-windows-x86_64-includes.zip
+OK  downloaded clang-dumper-windows-x86_64-includes.zip matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-windows-x86_64.exe
+OK  downloaded clang-dumper-windows-x86_64.exe matches GitHub asset digest
+OK  GitHub digest is a SHA-256 hex value for clang-dumper-wire-schema-v2.zip
+OK  downloaded clang-dumper-wire-schema-v2.zip matches GitHub asset digest
+OK  release manifest lists exactly 18 assets
+OK  manifest asset filename set exactly matches the 18 non-manifest GitHub assets
+OK  downloaded clang-dumper-generated-enums.zip matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-generated-enums.zip
+OK  manifest platform for clang-dumper-generated-enums.zip is any
+OK  manifest architecture for clang-dumper-generated-enums.zip is any
+OK  manifest kind for clang-dumper-generated-enums.zip is generated-enums
+OK  manifest LLVM major for clang-dumper-generated-enums.zip matches checkout pin
+OK  downloaded clang-dumper-linux-arm64 matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-linux-arm64
+OK  manifest platform for clang-dumper-linux-arm64 is linux
+OK  manifest architecture for clang-dumper-linux-arm64 is arm64
+OK  manifest kind for clang-dumper-linux-arm64 is tool
+OK  manifest LLVM major for clang-dumper-linux-arm64 matches checkout pin
+OK  downloaded clang-dumper-linux-arm64-includes.zip matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-linux-arm64-includes.zip
+OK  manifest platform for clang-dumper-linux-arm64-includes.zip is linux
+OK  manifest architecture for clang-dumper-linux-arm64-includes.zip is arm64
+OK  manifest kind for clang-dumper-linux-arm64-includes.zip is includes
+OK  manifest LLVM major for clang-dumper-linux-arm64-includes.zip matches checkout pin
+OK  downloaded clang-dumper-linux-arm64-plugin.so matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-linux-arm64-plugin.so
+OK  manifest platform for clang-dumper-linux-arm64-plugin.so is linux
+OK  manifest architecture for clang-dumper-linux-arm64-plugin.so is arm64
+OK  manifest kind for clang-dumper-linux-arm64-plugin.so is plugin
+OK  manifest LLVM major for clang-dumper-linux-arm64-plugin.so matches checkout pin
+OK  downloaded clang-dumper-linux-x64 matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-linux-x64
+OK  manifest platform for clang-dumper-linux-x64 is linux
+OK  manifest architecture for clang-dumper-linux-x64 is x64
+OK  manifest kind for clang-dumper-linux-x64 is tool
+OK  manifest LLVM major for clang-dumper-linux-x64 matches checkout pin
+OK  downloaded clang-dumper-linux-x64-includes.zip matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-linux-x64-includes.zip
+OK  manifest platform for clang-dumper-linux-x64-includes.zip is linux
+OK  manifest architecture for clang-dumper-linux-x64-includes.zip is x64
+OK  manifest kind for clang-dumper-linux-x64-includes.zip is includes
+OK  manifest LLVM major for clang-dumper-linux-x64-includes.zip matches checkout pin
+OK  downloaded clang-dumper-linux-x64-plugin.so matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-linux-x64-plugin.so
+OK  manifest platform for clang-dumper-linux-x64-plugin.so is linux
+OK  manifest architecture for clang-dumper-linux-x64-plugin.so is x64
+OK  manifest kind for clang-dumper-linux-x64-plugin.so is plugin
+OK  manifest LLVM major for clang-dumper-linux-x64-plugin.so matches checkout pin
+OK  downloaded clang-dumper-macos-arm64 matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-macos-arm64
+OK  manifest platform for clang-dumper-macos-arm64 is macos
+OK  manifest architecture for clang-dumper-macos-arm64 is arm64
+OK  manifest kind for clang-dumper-macos-arm64 is tool
+OK  manifest LLVM major for clang-dumper-macos-arm64 matches checkout pin
+OK  downloaded clang-dumper-macos-arm64-includes.zip matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-macos-arm64-includes.zip
+OK  manifest platform for clang-dumper-macos-arm64-includes.zip is macos
+OK  manifest architecture for clang-dumper-macos-arm64-includes.zip is arm64
+OK  manifest kind for clang-dumper-macos-arm64-includes.zip is includes
+OK  manifest LLVM major for clang-dumper-macos-arm64-includes.zip matches checkout pin
+OK  downloaded clang-dumper-macos-arm64-plugin.so matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-macos-arm64-plugin.so
+OK  manifest platform for clang-dumper-macos-arm64-plugin.so is macos
+OK  manifest architecture for clang-dumper-macos-arm64-plugin.so is arm64
+OK  manifest kind for clang-dumper-macos-arm64-plugin.so is plugin
+OK  manifest LLVM major for clang-dumper-macos-arm64-plugin.so matches checkout pin
+OK  downloaded clang-dumper-macos-x64 matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-macos-x64
+OK  manifest platform for clang-dumper-macos-x64 is macos
+OK  manifest architecture for clang-dumper-macos-x64 is x64
+OK  manifest kind for clang-dumper-macos-x64 is tool
+OK  manifest LLVM major for clang-dumper-macos-x64 matches checkout pin
+OK  downloaded clang-dumper-macos-x64-includes.zip matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-macos-x64-includes.zip
+OK  manifest platform for clang-dumper-macos-x64-includes.zip is macos
+OK  manifest architecture for clang-dumper-macos-x64-includes.zip is x64
+OK  manifest kind for clang-dumper-macos-x64-includes.zip is includes
+OK  manifest LLVM major for clang-dumper-macos-x64-includes.zip matches checkout pin
+OK  downloaded clang-dumper-macos-x64-plugin.so matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-macos-x64-plugin.so
+OK  manifest platform for clang-dumper-macos-x64-plugin.so is macos
+OK  manifest architecture for clang-dumper-macos-x64-plugin.so is x64
+OK  manifest kind for clang-dumper-macos-x64-plugin.so is plugin
+OK  manifest LLVM major for clang-dumper-macos-x64-plugin.so matches checkout pin
+OK  downloaded clang-dumper-windows-arm64-includes.zip matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-windows-arm64-includes.zip
+OK  manifest platform for clang-dumper-windows-arm64-includes.zip is windows
+OK  manifest architecture for clang-dumper-windows-arm64-includes.zip is arm64
+OK  manifest kind for clang-dumper-windows-arm64-includes.zip is includes
+OK  manifest LLVM major for clang-dumper-windows-arm64-includes.zip matches checkout pin
+OK  downloaded clang-dumper-windows-arm64.exe matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-windows-arm64.exe
+OK  manifest platform for clang-dumper-windows-arm64.exe is windows
+OK  manifest architecture for clang-dumper-windows-arm64.exe is arm64
+OK  manifest kind for clang-dumper-windows-arm64.exe is tool
+OK  manifest LLVM major for clang-dumper-windows-arm64.exe matches checkout pin
+OK  downloaded clang-dumper-windows-x86_64-includes.zip matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-windows-x86_64-includes.zip
+OK  manifest platform for clang-dumper-windows-x86_64-includes.zip is windows
+OK  manifest architecture for clang-dumper-windows-x86_64-includes.zip is x86_64
+OK  manifest kind for clang-dumper-windows-x86_64-includes.zip is includes
+OK  manifest LLVM major for clang-dumper-windows-x86_64-includes.zip matches checkout pin
+OK  downloaded clang-dumper-windows-x86_64.exe matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-windows-x86_64.exe
+OK  manifest platform for clang-dumper-windows-x86_64.exe is windows
+OK  manifest architecture for clang-dumper-windows-x86_64.exe is x86_64
+OK  manifest kind for clang-dumper-windows-x86_64.exe is tool
+OK  manifest LLVM major for clang-dumper-windows-x86_64.exe matches checkout pin
+OK  downloaded clang-dumper-wire-schema-v2.zip matches manifest SHA-256
+OK  packaging recognizes asset name clang-dumper-wire-schema-v2.zip
+OK  manifest platform for clang-dumper-wire-schema-v2.zip is any
+OK  manifest architecture for clang-dumper-wire-schema-v2.zip is any
+OK  manifest kind for clang-dumper-wire-schema-v2.zip is wire-schema
+OK  manifest LLVM major for clang-dumper-wire-schema-v2.zip matches checkout pin
+OK  manifest schema_version is 2
+OK  manifest FlatBuffers version is 25.12.19
+OK  manifest FlatBuffers source commit matches expected commit
+OK  wire schema version is 2
+OK  wire schema entrypoint is wire/v2/complete.fbs
+OK  wire schema asset is clang-dumper-wire-schema-v2.zip
+OK  wire schema compiler/runtime version is 25.12.19
+OK  manifest canonical wire-schema hash matches checkout
+OK  manifest schema archive SHA-256 matches downloaded schema archive
+OK  schema archive contains exactly the sorted checkout schema files
+OK  schema archive content matches checkout: wire/v2/attributes.fbs
+OK  schema archive content matches checkout: wire/v2/common.fbs
+OK  schema archive content matches checkout: wire/v2/complete.fbs
+OK  schema archive content matches checkout: wire/v2/decls.fbs
+OK  schema archive content matches checkout: wire/v2/enums.fbs
+OK  schema archive content matches checkout: wire/v2/expressions.fbs
+OK  schema archive content matches checkout: wire/v2/records.fbs
+OK  schema archive content matches checkout: wire/v2/statements.fbs
+OK  schema archive content matches checkout: wire/v2/types.fbs
+OK  same-run CI Linux x64 tool exists: /home/lmsousa/.cache/ast-flatbuffers-release-validation/rc3-release-run-37174515778/ci-linux-x64-tool/clang-dumper-linux-x64
+OK  same-run CI Linux x64 tool matches expected SHA-256
+OK  release Linux x64 executable matches same-run CI executable
+
+All RC3 release checks passed.

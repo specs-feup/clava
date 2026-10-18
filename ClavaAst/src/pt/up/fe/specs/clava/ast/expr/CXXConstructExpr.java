@@ -48,7 +48,7 @@ public class CXXConstructExpr extends Expr {
 
     public final static DataKey<Boolean> IS_LIST_INITIALIZATION = KeyFactory.bool("isListInitialization");
 
-    public final static DataKey<Boolean> IS_STD_LIST_INITIALIZATION = KeyFactory.bool("isStdInitListInitialization");
+    public final static DataKey<Boolean> IS_STD_LIST_INITIALIZATION = KeyFactory.bool("isStdListInitialization");
 
     public final static DataKey<ConstructionKind> CONSTRUCTION_KIND = KeyFactory.enumeration("constructionKind",
             ConstructionKind.class);

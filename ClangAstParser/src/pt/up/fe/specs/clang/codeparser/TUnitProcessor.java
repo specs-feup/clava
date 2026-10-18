@@ -103,10 +103,6 @@ public class TUnitProcessor {
 
         // Iterate over all ClavaNodes and replace fields that have ClavaNodes
 
-        // parsingData.stream()
-        // .flatMap(data -> data.get(ClangParserData.CLAVA_NODES).getNodes().values().stream())
-        // .forEach(node -> System.out.println("NODE: " + node.getClass()));
-
         parsingData.stream()
                 .flatMap(data -> data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream())
                 .forEach(node -> replaceFields(node));

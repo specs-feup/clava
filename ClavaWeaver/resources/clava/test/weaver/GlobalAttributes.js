@@ -7,8 +7,8 @@ for (const $vardecl of Query.search("function", "main").search(
     console.log("- Testing keys, setValue, getValue -");
     const $type = $vardecl.type;
     console.log("type keys: " + $type.keys);
-    console.log("type builtin kind: " + $type.getValue("builtinKind"));
-    $vardecl.type = $type.copy().setValue("builtinKind", "float");
+    console.log("type builtin kind: " + $type.getValue("kind"));
+    $vardecl.type = $type.copy().setValue("kind", "float");
     console.log("Changed vardecl: " + $vardecl.code);
 }
 

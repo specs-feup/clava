@@ -51,7 +51,7 @@ public abstract class FunctionType extends Type {
 
     public final static DataKey<Boolean> PRODUCES_RESULT = KeyFactory.bool("producesResult");
 
-    public final static DataKey<Boolean> HAS_REG_PARM = KeyFactory.bool("hasRegParm");
+    public final static DataKey<Boolean> USES_REG_PARM = KeyFactory.bool("usesRegParm");
 
     public final static DataKey<Long> REG_PARM = KeyFactory.longInt("regParm");
 

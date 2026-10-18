@@ -26,7 +26,7 @@ public class Attribute extends ClavaNode {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<AttributeKind> KIND = KeyFactory.enumeration("attributeKind", AttributeKind.class);
+    public final static DataKey<AttributeKind> KIND = KeyFactory.enumeration("kind", AttributeKind.class);
 
     public final static DataKey<Boolean> IS_IMPLICIT = KeyFactory.bool("isImplicit");
 

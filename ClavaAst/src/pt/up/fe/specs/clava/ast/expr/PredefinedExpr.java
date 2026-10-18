@@ -33,7 +33,7 @@ public class PredefinedExpr extends Expr {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<PredefinedIdType> PREDEFINED_TYPE = KeyFactory.enumeration("PREDEFINED_TYPE",
+    public final static DataKey<PredefinedIdType> PREDEFINED_TYPE = KeyFactory.enumeration("predefinedType",
             PredefinedIdType.class);
 
     /// DATAKEYS END

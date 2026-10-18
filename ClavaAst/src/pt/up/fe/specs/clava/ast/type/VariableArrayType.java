@@ -26,6 +26,7 @@ public class VariableArrayType extends ArrayType {
 
     /// DATAKEYS BEGIN
 
+    @pt.up.fe.specs.clava.NullableNodeReference
     public final static DataKey<Expr> SIZE_EXPR = KeyFactory.object("sizeExpr", Expr.class);
 
     /// DATAKEYS END

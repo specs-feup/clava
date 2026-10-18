@@ -100,6 +100,7 @@ public interface CxxWeaverOption {
             .startSection("Parsing Options")
             .addKey(CodeParser.CUDA_GPU_ARCH)
             .addKey(CodeParser.CUDA_PATH)
+            .addKey(CodeParser.AST_DUMP_CACHE)
             .addKey(ParallelCodeParser.PARALLEL_PARSING)
             .addKey(ParallelCodeParser.PARSING_NUM_THREADS)
             .addKey(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS)

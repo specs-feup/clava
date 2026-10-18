@@ -35,7 +35,7 @@ public class BuiltinType extends Type {
     /**
      * The kind of the built-in.
      */
-    public final static DataKey<BuiltinKind> KIND = KeyFactory.enumeration("builtinKind", BuiltinKind.class)
+    public final static DataKey<BuiltinKind> KIND = KeyFactory.enumeration("kind", BuiltinKind.class)
             .setDecoder(StringCodec.newInstance(kind -> kind.getCode(), BuiltinKind::newInstance));
 
     /**
