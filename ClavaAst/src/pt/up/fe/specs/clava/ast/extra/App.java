@@ -262,6 +262,10 @@ public class App extends ClavaNode {
         return getDeclarationsCache().getFunctionImplementation(function);
     }
 
+    public pt.up.fe.specs.clava.utils.DefinitionResolution<FunctionDecl> getFunctionDefinitionResolution(FunctionDecl function) {
+        return getDeclarationsCache().getFunctionResolution(function);
+    }
+
     public List<CXXRecordDecl> getCxxRecordDeclarations(CXXRecordDecl record) {
         return SpecsCollections.castUnchecked(getDeclarationsCache().getTagPrototypes(record), CXXRecordDecl.class);
 

@@ -239,16 +239,10 @@ public class VarDecl extends DeclaratorDecl {
             return this;
         }
 
-        switch (get(VarDecl.STORAGE_CLASS)) {
-            // Is global and storageClass is 'none', this is the global definition
-            case None:
-                return this;
-            case Extern:
-                return getApp().getGlobalVarDefinition(this).orElse(null);
-            default:
-                SpecsLogs.warn("Case not contemplated yet: " + get(VarDecl.STORAGE_CLASS));
-                return this;
-        }
+        if (pt.up.fe.specs.clava.utils.DeclarationIdentity.isGlobalDefinition(this)) return this;
+        // Block statics still denote themselves; block extern declarations resolve through the application.
+        if (getAncestorTry(FunctionDecl.class).isPresent() && get(STORAGE_CLASS) != StorageClass.Extern) return this;
+        return getApp().getGlobalVarDefinition(this).orElse(null);
 
     }
 

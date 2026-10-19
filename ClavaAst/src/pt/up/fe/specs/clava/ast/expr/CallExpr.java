@@ -154,8 +154,7 @@ public class CallExpr extends Expr {
      */
     public Optional<FunctionDecl> getFunctionDecl() {
         return get(DIRECT_CALLEE)
-                // If FunctionDecl has a primary template decl (e.g., is a template specialization), return original
-                // template instead
+                // Expose the generic source template for implicit instantiations; preserve written specializations
                 .map(ClavaNodes::normalizeDecl)
                 .map(FunctionDecl.class::cast);
     }

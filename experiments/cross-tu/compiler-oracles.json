@@ -1,0 +1,144 @@
+{
+  "CTU06": [
+    {
+      "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+      "individual_translation_units": [
+        {
+          "arguments": [
+            "-std=c++20",
+            "-c",
+            "<fixture>/declaration.cpp",
+            "-o",
+            "<fixture>/declaration.o"
+          ],
+          "exit_code": 0,
+          "diagnostics": ""
+        },
+        {
+          "arguments": [
+            "-std=c++20",
+            "-c",
+            "<fixture>/variadic.cpp",
+            "-o",
+            "<fixture>/variadic.o"
+          ],
+          "exit_code": 0,
+          "diagnostics": ""
+        },
+        {
+          "arguments": [
+            "-std=c++20",
+            "-c",
+            "<fixture>/main.cpp",
+            "-o",
+            "<fixture>/main.o"
+          ],
+          "exit_code": 0,
+          "diagnostics": ""
+        }
+      ],
+      "missing_fixed_arity_definition": {
+        "arguments": [
+          "<fixture>/declaration.o",
+          "<fixture>/variadic.o",
+          "<fixture>/main.o",
+          "-o",
+          "<fixture>/negative"
+        ],
+        "exit_code": 1,
+        "diagnostics": "/usr/bin/x86_64-linux-gnu-ld.bfd: <fixture>/declaration.o: in function `use()':\ndeclaration.cpp:(.text+0xa): undefined reference to `choose(int)'\nclang++: error: linker command failed with exit code 1 (use -v to see invocation)"
+      },
+      "matching_definition_control": {
+        "arguments": [
+          "-std=c++20",
+          "<fixture>/declaration.cpp",
+          "<fixture>/matching.cpp",
+          "<fixture>/main.cpp",
+          "-o",
+          "<fixture>/positive"
+        ],
+        "exit_code": 0,
+        "diagnostics": ""
+      },
+      "both_overloads_visible": {
+        "arguments": [
+          "-std=c++20",
+          "-fsyntax-only",
+          "<fixture>/ambiguous.cpp"
+        ],
+        "exit_code": 1,
+        "diagnostics": "<fixture>/ambiguous.cpp:1:56: error: call to 'choose' is ambiguous\n    1 | int choose(int); int choose(int,...); int use(){return choose(1);}\n      |                                                        ^~~~~~\n<fixture>/ambiguous.cpp:1:5: note: candidate function\n    1 | int choose(int); int choose(int,...); int use(){return choose(1);}\n      |     ^\n<fixture>/ambiguous.cpp:1:22: note: candidate function\n    1 | int choose(int); int choose(int,...); int use(){return choose(1);}\n      |                      ^\n1 error generated."
+      }
+    },
+    {
+      "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+      "individual_translation_units": [
+        {
+          "arguments": [
+            "-std=c++20",
+            "-c",
+            "<fixture>/declaration.cpp",
+            "-o",
+            "<fixture>/declaration.o"
+          ],
+          "exit_code": 0,
+          "diagnostics": ""
+        },
+        {
+          "arguments": [
+            "-std=c++20",
+            "-c",
+            "<fixture>/variadic.cpp",
+            "-o",
+            "<fixture>/variadic.o"
+          ],
+          "exit_code": 0,
+          "diagnostics": ""
+        },
+        {
+          "arguments": [
+            "-std=c++20",
+            "-c",
+            "<fixture>/main.cpp",
+            "-o",
+            "<fixture>/main.o"
+          ],
+          "exit_code": 0,
+          "diagnostics": ""
+        }
+      ],
+      "missing_fixed_arity_definition": {
+        "arguments": [
+          "<fixture>/declaration.o",
+          "<fixture>/variadic.o",
+          "<fixture>/main.o",
+          "-o",
+          "<fixture>/negative"
+        ],
+        "exit_code": 1,
+        "diagnostics": "/usr/bin/x86_64-linux-gnu-ld.bfd: <fixture>/declaration.o: in function `use()':\ndeclaration.cpp:(.text+0xe): undefined reference to `choose(int)'\ncollect2: error: ld returned 1 exit status"
+      },
+      "matching_definition_control": {
+        "arguments": [
+          "-std=c++20",
+          "<fixture>/declaration.cpp",
+          "<fixture>/matching.cpp",
+          "<fixture>/main.cpp",
+          "-o",
+          "<fixture>/positive"
+        ],
+        "exit_code": 0,
+        "diagnostics": ""
+      },
+      "both_overloads_visible": {
+        "arguments": [
+          "-std=c++20",
+          "-fsyntax-only",
+          "<fixture>/ambiguous.cpp"
+        ],
+        "exit_code": 1,
+        "diagnostics": "<fixture>/ambiguous.cpp: In function \u2018int use()\u2019:\n<fixture>/ambiguous.cpp:1:62: error: call of overloaded \u2018choose(int)\u2019 is ambiguous\n    1 | int choose(int); int choose(int,...); int use(){return choose(1);}\n      |                                                        ~~~~~~^~~\n<fixture>/ambiguous.cpp:1:62: note: there are 2 candidates\n<fixture>/ambiguous.cpp:1:5: note: candidate 1: \u2018int choose(int)\u2019\n    1 | int choose(int); int choose(int,...); int use(){return choose(1);}\n      |     ^~~~~~\n<fixture>/ambiguous.cpp:1:22: note: candidate 2: \u2018int choose(int, ...)\u2019\n    1 | int choose(int); int choose(int,...); int use(){return choose(1);}\n      |                      ^~~~~~"
+      }
+    }
+  ]
+}

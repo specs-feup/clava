@@ -1,8 +1,8 @@
 # Cross-TU experiments and findings for review
 
-2026-10-19. All decisions below are pending. This branch adds tests and experiment tooling; it changes no production algorithms. Approving a finding means accepting the proposed behavior as a requirement for a later fix. Dismissing one means keeping the existing behavior or narrowing the supported contract. Neither decision requires accepting a particular refactor.
+2026-10-19. Update: the user approved CTU01/02/04/05/06/07/08/10/11/13/14/15/16, now implemented as ordinary regressions. CTU03 is confirmed upstream as clang-dumper issue #58. See `cross-tu-implementation.md` for the current contract/validation and `cross-tu-followups.md` for additional findings. The detailed observations below describe the original baseline. Approving a finding means accepting the proposed behavior as a requirement for a later fix. Dismissing one means keeping the existing behavior or narrowing the supported contract. Neither decision requires accepting a particular refactor.
 
-The inline checklist source is `experiments/cross-tu/findings-review.html`. It includes every finding's example and evidence, with mutually exclusive Fix, Investigate, and Dismiss checkboxes. Nothing is preselected. Send the generated decision text through chat to request work; checkbox state alone does not approve a change. When direct chat submission is unavailable, the checklist offers copying the text for pasting into chat.
+The inline checklist source is `experiments/cross-tu/findings-review.html`. It retains the original findings with their completed outcomes and includes the four additional findings from `cross-tu-followups.md`. Only undecided findings have mutually exclusive Fix, Investigate, and Dismiss checkboxes. Nothing is preselected. Send the generated decision text through chat to request work; checkbox state alone does not approve a change. When direct chat submission is unavailable, the checklist offers copying the text for pasting into chat.
 
 ## Workspace and reproduction
 
@@ -23,13 +23,13 @@ Run from this workspace's `clava/ClangAstParser`:
 gradle -I ../experiments/cross-tu/tests.init.gradle test \
   --tests 'pt.up.fe.specs.clang.crosstu.*RegressionTest'
 
-# Desired-behavior probes. A nonzero exit is EXPECTED on the starting implementation.
+# Remaining desired-behavior probes (CTU03/18/19/20). A nonzero exit is EXPECTED.
 gradle -I ../experiments/cross-tu/tests.init.gradle test \
   --tests 'pt.up.fe.specs.clang.crosstu.*ReviewTest' -PcrossTuReview=true
 
-# One finding only; replace CTU04 with the ID under review.
+# One approved finding only; replace CTU04 with the desired regression ID.
 gradle -I ../experiments/cross-tu/tests.init.gradle test \
-  --tests '*ReviewTest.CTU04*' -PcrossTuReview=true
+  --tests '*ApprovedRegressionTest.CTU04*'
 
 # Entire parser suite, with native resources isolated from the shared /tmp cache.
 gradle -I ../experiments/cross-tu/tests.init.gradle test \
@@ -38,7 +38,7 @@ gradle -I ../experiments/cross-tu/tests.init.gradle test \
 
 Run `npm test` and `npm run build` from `clava/Clava-JS` for the joinpoint/action suite and TypeScript check. The new action tests are in `api/CrossTu.test.ts`.
 
-JUnit XML and HTML are under `ClangAstParser/build/test-results/<run>` and `ClangAstParser/build/reports/tests/<run>`, respectively. Default run names are `cross-tu-regression` and `cross-tu-review`. The experiment init script disables JaCoCo instrumentation and the repository's aggregate coverage threshold for these runs. It does not disable any tests or modify production build settings. Review classes require the explicit system property supplied by `-PcrossTuReview=true`; ordinary test runs skip them until decisions are made.
+JUnit XML and HTML are under `ClangAstParser/build/test-results/<run>` and `ClangAstParser/build/reports/tests/<run>`, respectively. Default run names are `cross-tu-regression` and `cross-tu-review`. The experiment init script disables JaCoCo instrumentation and the repository's aggregate coverage threshold for these runs. It does not disable any tests or modify production build settings. Review classes require the explicit system property supplied by `-PcrossTuReview=true`; ordinary test runs skip the remaining unresolved review probes.
 
 ## What the tests establish
 
@@ -80,7 +80,7 @@ Expected: `A::run` has no implementation in this project. Observed: its `getImpl
 
 Proposed behavior: include the complete semantic scope in free-function identity. Preserve typedef/parameter normalization, and distinguish namespace identity from how a name is printed at its current location. Test both missing and present matching definitions, plus namespace aliases, when implementing the fix.
 
-Decision: [ ] Approve finding and desired behavior. [ ] Dismiss. Notes:
+Decision: approved and implemented; see the implementation report.
 
 ## CTU02: static functions in identically named files are connected
 
@@ -102,7 +102,7 @@ The static-function discriminator uses `TranslationUnit.getFilename()`, which lo
 
 Proposed behavior: use full TU identity for internal-linkage free functions. Do not apply this rule merely because a member function is declared `static`; static members have different linkage semantics. Preserve the passing static-member control test.
 
-Decision: [ ] Approve finding and desired behavior. [ ] Dismiss. Notes:
+Decision: approved and implemented; see the implementation report.
 
 ## CTU03: an anonymous-namespace project loses its translation units during parsing
 
@@ -120,11 +120,11 @@ int b() { return helper(); }
 
 Expected: two translation units, each containing a TU-local helper and a call to it. Observed: the parser logs an unresolved top-level node ID, such as `Could not find ClavaNode with id '@1_1'`, then returns an application with zero TUs. The fixture's TU-count assertion detects the loss.
 
-The failure reaches `ClangAstParser.parseTu()` while resolving `TOP_LEVEL_DECL_IDS` against the decoded node registry. `ParallelCodeParser` catches the per-file exception and ignores the file. The exact producer/reader mismatch has not been localized; the symptom does not establish which side omitted the node. The C++ source is valid, independently checked with the host compiler.
+The failure reaches `ClangAstParser.parseTu()` while resolving `TOP_LEVEL_DECL_IDS` against the decoded node registry. `ParallelCodeParser` catches the per-file exception and ignores the file. The subsequent investigation localized the native defect: an implicit UsingDirectiveDecl ID is emitted as top-level without a Node record. See `experiments/cross-tu/ctu03-investigation.md` and https://github.com/specs-feup/clang-dumper/issues/58. The C++ source is valid, independently checked with the host compiler.
 
 Proposed behavior: first make this project survive the existing transport and parser path. Then require anonymous-namespace functions to remain TU-local. Also decide whether silently dropping every input after internal parser failures should be permitted. Fixing native traversal or wire production would expand this branch's implementation scope and should be reviewed separately.
 
-Decision: [ ] Approve investigation/fix of the parsing failure. [ ] Dismiss. Notes:
+Decision: investigation approved and complete; native issue #58 filed. No native production change in this branch.
 
 ## CTU04: lvalue and rvalue method overloads share a definition
 
@@ -150,7 +150,7 @@ Expected: the two calls resolve to different definitions. Observed: both `CallEx
 
 Proposed behavior: include the ref qualifier in method identity. Preserve an explicit distinction between no ref qualifier, `&`, and `&&`. The fix must not infer it from a call's value category or generated source text.
 
-Decision: [ ] Approve finding and desired behavior. [ ] Dismiss. Notes:
+Decision: approved and implemented; see the implementation report.
 
 ## CTU05: volatile and non-volatile method overloads share a definition
 
@@ -176,7 +176,7 @@ Expected: two different definition objects. Observed: both calls resolve to one 
 
 Proposed behavior: include all overload-relevant member-function cv/ref qualifiers as structured fields. Treat this independently from qualifiers on return types and parameter types.
 
-Decision: [ ] Approve finding and desired behavior. [ ] Dismiss. Notes:
+Decision: approved and implemented; see the implementation report.
 
 ## CTU06: variadic and fixed-arity overloads are connected
 
@@ -191,13 +191,15 @@ int use() { return choose(1); }
 int choose(int, ...) { return 2; }
 ```
 
+Compiler oracle: Clang 21.1.8 and GCC 15.2 compile the separate files, but linking a complete executable fails on unresolved `choose(int)`. Making both overloads visible at the call causes compile-time ambiguity. See `experiments/cross-tu/compiler-oracles.json`.
+
 Expected: the fixed-arity `choose(int)` has no implementation in this project. Observed: its implementation is the different variadic function from `b.cpp`.
 
 `FunctionDecl.getSignature()` enumerates declared parameters but omits the function type's variadic flag. Both functions therefore produce the same cache key.
 
 Proposed behavior: include variadicness in function identity. Keep this separate from default arguments, which do not create a distinct overload identity.
 
-Decision: [ ] Approve finding and desired behavior. [ ] Dismiss. Notes:
+Decision: approved and implemented; see the implementation report.
 
 ## CTU07: records from different namespaces are connected
 
@@ -218,7 +220,7 @@ Expected: `A::Item` remains incomplete. Observed: `A::Item.getDefinition()` retu
 
 Proposed behavior: give tag lookup a scoped identity. Include enclosing records and TU identity where required by linkage. Template specialization identity needs a separate audit before treating name qualification as a complete solution.
 
-Decision: [ ] Approve finding and desired behavior. [ ] Dismiss. Notes:
+Decision: approved and implemented; see the implementation report.
 
 ## CTU08: global variables from different namespaces are connected
 
@@ -239,7 +241,7 @@ Expected: `A::value.getDefinition()` returns null, because no definition of that
 
 Proposed behavior: include semantic scope and linkage in variable identity. A variable's spelling or type alone cannot determine whether two declarations denote the same entity.
 
-Decision: [ ] Approve finding and desired behavior. [ ] Dismiss. Notes:
+Decision: approved and implemented; see the implementation report.
 
 ## CTU10: an initialized extern variable is not recognized as a definition
 
@@ -260,7 +262,7 @@ Expected: the declaration in `a.cpp` resolves to the initialized definition in `
 
 Proposed behavior: classify definitions using declaration semantics, including an initializer, rather than storage class alone. Include C tentative definitions, thread-local variables, and static data members in the later classification audit; this reproduction establishes only the initialized-extern case.
 
-Decision: [ ] Approve finding and desired behavior. [ ] Dismiss. Notes:
+Decision: approved and implemented; see the implementation report.
 
 ## CTU11: an internal const variable supplies an unrelated external definition
 
@@ -281,7 +283,7 @@ The variable cache uses the bare name and a storage-class check. Internal linkag
 
 Proposed behavior: use actual linkage information and distinguish TU-local variables from external entities. Do not implement a language-independent rule that all const globals are internal.
 
-Decision: [ ] Approve finding and desired behavior. [ ] Dismiss. Notes:
+Decision: approved and implemented; see the implementation report.
 
 ## CTU13: normalization confuses distinct files with the same basename
 
@@ -305,7 +307,7 @@ Expected: that field stays attached to the right variable because no matching tr
 
 Proposed behavior: key source identity by full normalized paths or explicit source-file IDs. Keep the short basename representation for diagnostics. This is a matching-rule change and should have explicit tests for shared headers and genuinely distinct files.
 
-Decision: [ ] Approve finding and desired behavior. [ ] Dismiss. Notes:
+Decision: approved and implemented; see the implementation report.
 
 ## CTU14: rewriting a reference invalidates a previously indexed signature
 
@@ -329,7 +331,7 @@ Expected: the owner's reference resolves to tree node `R0`. Observed: `R1` now h
 
 Proposed behavior: define one consistent identity snapshot for indexing and all lookups, or resolve references in a phase that cannot change the keys used by later lookups. A lazy cache alone is insufficient if a node's first key calculation occurs after it was mutated. Do not add a permanent AST-node cache without an invalidation contract.
 
-Decision: [ ] Approve finding and desired behavior. [ ] Dismiss. Notes:
+Decision: approved and implemented; see the implementation report.
 
 ## CTU15: ambiguity handling eagerly renders full node data
 
@@ -343,7 +345,7 @@ This finding is narrower than the original discussion's subtree-printing explana
 
 Proposed behavior: make detailed diagnostics lazy and bounded while preserving ambiguity rejection. Retain counts and a small sample of source identities if those are useful. Verify the change with allocation profiling before attributing a particular fraction of issue #270 to it.
 
-Decision: [ ] Approve the diagnostic change. [ ] Dismiss. Notes:
+Decision: approved and implemented; zero eager node-content rendering is verified by regression.
 
 ## CTU16: generated extern globals do not resolve like parsed extern globals
 
@@ -376,7 +378,7 @@ Expected: the extern declaration's definition is the initialized variable in the
 
 Proposed behavior: generated global declarations must carry the same required storage/linkage metadata as parsed globals. Audit the creation API, rather than teaching every lookup consumer to guess global storage from ancestry. Preserve the passing controls for one initializer, later extern declarations, independent names, and independent applications.
 
-Decision: [ ] Approve finding and desired behavior. [ ] Dismiss. Notes:
+Decision: approved and implemented; see the implementation report.
 
 ## Suspicions that did not reproduce
 
@@ -390,6 +392,6 @@ The anonymous-namespace case is not dismissed: an earlier version of its test pa
 
 The test suite is a baseline for refactoring, not proof of full C++ entity identity. Explicit function specializations, class-template specialization identity, constrained overloads, mixed compile configurations, virtual runtime dispatch, symlink/case-sensitive source identity, modules, full cache invalidation for every editing action, and mutation of shared header occurrences still need dedicated investigations. Primary function templates, static call lookup for inherited methods, and selected edit actions are covered; they do not establish those broader contracts.
 
-No behavior-changing fixes were applied. Review CTU01, CTU02, CTU04-08, CTU10-11, and CTU16 as declaration/definition-identity work; CTU13-14 as parser-normalization work; CTU15 as a diagnostic cost change; and CTU03 as a parser/transport investigation. These groups can be approved independently.
+The initial baseline applied no behavior-changing fixes. The subsequently approved declaration identity, normalization, diagnostic, and generated-global corrections are now implemented; `cross-tu-implementation.md` describes their shared design and final validation. CTU03 was confirmed in the producer and filed upstream. Additional findings CTU17-20 remain for review in `cross-tu-followups.md`.
 
 Validation results and any environment failures are recorded in `experiments/cross-tu/results.json`. Raw JUnit reports remain under `build`, so they can be regenerated without committing temporary paths and large diagnostic dumps.

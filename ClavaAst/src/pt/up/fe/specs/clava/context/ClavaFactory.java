@@ -548,6 +548,7 @@ public class ClavaFactory {
     public FunctionDecl functionDecl(String declName, Type type) {
         DataStore data = newDataStore(FunctionDecl.class)
                 .put(NamedDecl.DECL_NAME, declName)
+                .put(NamedDecl.LINKAGE, pt.up.fe.specs.clava.ast.decl.enums.Linkage.External)
                 .put(ValueDecl.TYPE, type);
 
         return new FunctionDecl(data, Collections.emptyList());

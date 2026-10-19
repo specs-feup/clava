@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,174 +24,121 @@ import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.collections.MultiMap;
+import pt.up.fe.specs.clava.utils.DeclarationIdentity.FunctionKey;
+import pt.up.fe.specs.clava.utils.DeclarationIdentity.TagKey;
+import pt.up.fe.specs.clava.utils.DeclarationIdentity.VariableKey;
 
-/**
- * Stores mappings between decl names and the corresponding declarations and definitions.
- * 
- * <p>
- * Currently supports caching of FunctionDecl and TagDecl.
- * 
- * @author Joao Bispo
- *
- */
+/** One immutable index generation. App.clearCache() invalidates both declaration and type identities after edits. */
 public class DeclarationsCache {
-
-    private final MultiMap<String, FunctionDecl> functionPrototypes;
-    private final Map<String, FunctionDecl> functionImplementations;
-    private final MultiMap<String, TagDecl> tagPrototypes;
-    private final Map<String, TagDecl> tagImplementations;
-    private final Map<String, VarDecl> globalVarDefinitions;
+    private final DeclarationIdentity identity;
+    private final Map<FunctionKey, List<FunctionDecl>> functionPrototypes = new HashMap<>();
+    private final Definitions<FunctionKey, FunctionDecl> functionImplementations = new Definitions<>();
+    private final Map<TagKey, List<TagDecl>> tagPrototypes = new HashMap<>();
+    private final Definitions<TagKey, TagDecl> tagImplementations = new Definitions<>();
+    private final Definitions<VariableKey, VarDecl> globalVarDefinitions = new Definitions<>();
 
     public DeclarationsCache(App app) {
-        functionPrototypes = new MultiMap<>();
-        functionImplementations = new HashMap<>();
-        tagPrototypes = new MultiMap<>();
-        tagImplementations = new HashMap<>();
-        globalVarDefinitions = new HashMap<>();
-
-        // Build maps
-        app.getDescendantsStream()
-                .forEach(node -> processNode(node));
-
+        identity = new DeclarationIdentity(app);
+        app.getDescendantsStream().forEach(this::processNode);
     }
 
     public List<FunctionDecl> getFunctionPrototypes(FunctionDecl function) {
-        return getFunctionPrototypes(getFunctionKey(function));
-    }
-
-    private List<FunctionDecl> getFunctionPrototypes(String signature) {
-        return functionPrototypes.get(signature);
+        return List.copyOf(functionPrototypes.getOrDefault(identity.function(function), List.of()));
     }
 
     public Optional<FunctionDecl> getFunctionImplementation(FunctionDecl function) {
-        return getFunctionImplementation(getFunctionKey(function));
+        var source = (FunctionDecl) ClavaNodes.normalizeDecl(function);
+        return functionImplementations.get(identity.function(source))
+                .filter(definition -> identity.compatibleFunctions(source, definition));
     }
 
-    private Optional<FunctionDecl> getFunctionImplementation(String signature) {
-        return Optional.ofNullable(functionImplementations.get(signature));
+    public DefinitionResolution<FunctionDecl> getFunctionResolution(FunctionDecl function) {
+        var source = (FunctionDecl) ClavaNodes.normalizeDecl(function);
+        var result = functionImplementations.resolution(identity.function(source));
+        if (result.kind() == DefinitionResolution.Kind.UNIQUE
+                && !identity.compatibleFunctions(source, result.candidates().get(0)))
+            return new DefinitionResolution<>(DefinitionResolution.Kind.MISSING, List.of());
+        return result;
     }
 
-    public List<TagDecl> getTagPrototypes(TagDecl tagDecl) {
-        return getTagPrototypes(getTagKey(tagDecl));
+    public List<TagDecl> getTagPrototypes(TagDecl tag) {
+        return List.copyOf(tagPrototypes.getOrDefault(identity.tag(tag), List.of()));
     }
 
-    private List<TagDecl> getTagPrototypes(String signature) {
-        return tagPrototypes.get(signature);
+    public Optional<TagDecl> getTagImplementation(TagDecl tag) {
+        return tagImplementations.get(identity.tag(tag));
     }
 
-    public Optional<TagDecl> getTagImplementation(TagDecl tagDecl) {
-        return getTagImplementation(getTagKey(tagDecl));
+    public Optional<VarDecl> getGlobalVarDefinition(VarDecl variable) {
+        return globalVarDefinitions.get(identity.variable(variable))
+                .filter(definition -> identity.compatibleVariableTypes(variable.getType(), definition.getType()));
     }
 
-    private Optional<TagDecl> getTagImplementation(String signature) {
-        return Optional.ofNullable(tagImplementations.get(signature));
-    }
-
-    public Optional<VarDecl> getGlobalVarDefinition(VarDecl varDecl) {
-        return Optional.ofNullable(globalVarDefinitions.get(getVarDeclKey(varDecl)));
-    }
+    /** Diagnostic compatibility only. Semantic lookups use structured keys. */
+    public String getFunctionKey(FunctionDecl function) { return function.getSignature(); }
+    /** Diagnostic compatibility only. Semantic lookups use structured keys. */
+    public String getTagKey(TagDecl tag) { return identity.tag(tag).name().toString(); }
 
     private void processNode(ClavaNode node) {
+        if (node instanceof FunctionDecl function) {
+            var normalized = (FunctionDecl) ClavaNodes.normalizeDecl(function);
+            var originalKey = identity.function(function);
+            var normalizedKey = identity.function(normalized);
 
-        // Check if function
-        if (node instanceof FunctionDecl) {
-            processFunction((FunctionDecl) node);
-            return;
-        }
-
-        // Check if tag
-        if (node instanceof TagDecl) {
-            processTag((TagDecl) node);
-            return;
-        }
-
-        if (node instanceof VarDecl) {
-            processVarDecl((VarDecl) node);
-            return;
-        }
-
-        // Nothing to do
-
-    }
-
-    private void processVarDecl(VarDecl varDecl) {
-        // Only globals
-        if (!varDecl.get(VarDecl.HAS_GLOBAL_STORAGE)) {
-            return;
-        }
-
-        var key = getVarDeclKey(varDecl);
-
-        // If not none, is not the definition
-        if (varDecl.get(VarDecl.STORAGE_CLASS) != StorageClass.None) {
-            return;
-        }
-
-        addImplementation(key, varDecl, globalVarDefinitions);
-    }
-
-    private String getVarDeclKey(VarDecl varDecl) {
-        return varDecl.get(VarDecl.DECL_NAME);
-    }
-
-    private void processTag(TagDecl tagDecl) {
-        var signature = getTagKey(tagDecl);
-        var isCompleteDefinition = tagDecl.isCompleteDefinition();
-
-        // Store decl in appropriate map
-        if (isCompleteDefinition) {
-            addImplementation(signature, tagDecl, tagImplementations);
-        } else {
-            tagPrototypes.put(signature, tagDecl);
-        }
-
-    }
-
-    private <T extends ClavaNode> void addImplementation(String key, T node, Map<String, T> cache) {
-        var previousValue = cache.put(key, node);
-
-        // There should be only one
-        if (previousValue != null) {
-            SpecsLogs.info("Found more than one implementation for node " + node.getClass().getSimpleName() + " '" + key
-                    + "', returning the first occurence:\n"
-                    + "1 -> " + previousValue.getLocation() + "\n"
-                    + "2 -> " + node.getLocation());
-
-            // Setting to previous value, this way we avoid asking if the map contains the value
-            // and the more common path does not have that overhead
-            cache.put(key, previousValue);
+            // Keep the specialization's semantic identity, but also index its primary declaration so
+            // calls normalized to the source template can find the generic definition. Repeatedly indexing
+            // the primary node is harmless: Definitions and addPrototype deduplicate the same AST node.
+            if (normalized.hasBody()) {
+                functionImplementations.add(originalKey, normalized);
+                if (!originalKey.equals(normalizedKey)) functionImplementations.add(normalizedKey, normalized);
+            } else {
+                addPrototype(functionPrototypes, originalKey, normalized);
+                if (!originalKey.equals(normalizedKey)) addPrototype(functionPrototypes, normalizedKey, normalized);
+            }
+        } else if (node instanceof TagDecl tag) {
+            var key = identity.tag(tag);
+            if (tag.isCompleteDefinition()) tagImplementations.add(key, tag);
+            else addPrototype(tagPrototypes, key, tag);
+        } else if (node instanceof VarDecl variable && DeclarationIdentity.isGlobalDefinition(variable)) {
+            globalVarDefinitions.add(identity.variable(variable), variable);
         }
     }
 
-    public String getFunctionKey(FunctionDecl function) {
-        return function.getSignature();
+    private static <K, T> void addPrototype(Map<K, List<T>> index, K key, T node) {
+        var values = index.computeIfAbsent(key, ignored -> new ArrayList<>());
+        if (values.stream().noneMatch(value -> value == node)) values.add(node);
     }
 
-    public String getTagKey(TagDecl tagDecl) {
-        return tagDecl.getDeclName();
-    }
+    /** Conflicting definition occurrences never acquire a winner based on traversal order. */
+    private static final class Definitions<K, T extends ClavaNode> {
+        private final Map<K, T> unique = new HashMap<>();
+        private final Map<K, List<T>> ambiguous = new HashMap<>();
 
-    private void processFunction(FunctionDecl function) {
+        void add(K key, T node) {
+            if (ambiguous.containsKey(key)) return;
+            var previous = unique.putIfAbsent(key, node);
+            if (previous == null || previous == node) return;
+            if (previous.getClass() == node.getClass() && previous.getLocation().isValid()
+                    && previous.getLocation().equals(node.getLocation())) {
+                // Repeated inclusion of one physical definition is not a second definition to edit.
+                String first = DeclarationIdentity.origin(previous);
+                String second = DeclarationIdentity.origin(node);
+                if (first != null && second != null && second.compareTo(first) < 0) unique.put(key, node);
+                return;
+            }
+            unique.remove(key);
+            ambiguous.put(key, List.of(previous, node));
+        }
 
-        // Check hasBody flag
-        var hasBody = function.hasBody();
+        Optional<T> get(K key) { return Optional.ofNullable(unique.get(key)); }
 
-        // Get signature
-        var signature = getFunctionKey(function);
-
-        // Normalize function decl
-        var normalizedFunction = (FunctionDecl) ClavaNodes.normalizeDecl(function);
-
-        // Store decl in appropriate map
-        if (hasBody) {
-            addImplementation(signature, normalizedFunction, functionImplementations);
-        } else {
-            functionPrototypes.put(signature, normalizedFunction);
+        DefinitionResolution<T> resolution(K key) {
+            var conflicts = ambiguous.get(key);
+            if (conflicts != null) return new DefinitionResolution<>(DefinitionResolution.Kind.AMBIGUOUS, conflicts);
+            var node = unique.get(key);
+            return node == null ? new DefinitionResolution<>(DefinitionResolution.Kind.MISSING, List.of())
+                    : new DefinitionResolution<>(DefinitionResolution.Kind.UNIQUE, List.of(node));
         }
     }
-
 }

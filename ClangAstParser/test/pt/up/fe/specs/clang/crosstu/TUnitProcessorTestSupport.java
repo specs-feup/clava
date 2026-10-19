@@ -13,7 +13,9 @@ import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 
@@ -33,6 +35,7 @@ abstract class TUnitProcessorTestSupport {
     VarDecl variable(String name, String path, int line) {
         var variable = factory.varDecl(name, factory.builtinType("int"));
         variable.set(ClavaNode.LOCATION, new SourceRange(path, line, 1, line, 8));
+        variable.set(NamedDecl.LINKAGE, Linkage.External);
         return variable;
     }
 

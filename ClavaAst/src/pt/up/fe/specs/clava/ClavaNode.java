@@ -85,6 +85,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      */
     public final static DataKey<String> ID = KeyFactory.string("id");
 
+    /** Parser-owned TU provenance, including detached nodes originating in included headers. */
+    public static final DataKey<Optional<String>> ORIGINATING_TRANSLATION_UNIT =
+            KeyFactory.optional("originatingTranslationUnit");
+
     /**
      * Location of this node. Might not be available (e.g., type nodes).
      */

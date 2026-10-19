@@ -6,32 +6,32 @@
     "lara-framework": "b780d0b8ba0aac2670ad5aa98998883a2a4f8030",
     "clava": "aa0946736bf241d9bac27a1c8825fffd4df0b2ba"
   },
-  "production_algorithm_changes": false,
+  "production_algorithm_changes": true,
   "java": {
-    "cross-tu-regression": {
-      "tests": 110,
+    "identity-expanded": {
+      "tests": 294,
       "failures": 0,
       "errors": 0,
       "skipped": 0,
-      "passed": 110
+      "passed": 294
     },
-    "parser-full-isolated": {
-      "tests": 333,
+    "parser-fixed-full": {
+      "tests": 507,
       "failures": 0,
       "errors": 0,
-      "skipped": 14,
-      "passed": 319
+      "skipped": 4,
+      "passed": 503
     },
-    "cross-tu-review": {
-      "tests": 47,
-      "failures": 47,
+    "remaining-review": {
+      "tests": 16,
+      "failures": 16,
       "errors": 0,
       "skipped": 0,
       "passed": 0
     }
   },
   "review_run_expected_to_fail": true,
-  "full_java_skips": "The 14 pending-review methods are opt-in; all other parser tests passed, including CUDA.",
+  "full_java_skips": "Four opt-in review methods: CTU03, CTU18, CTU19 (synthetic post-mutation), CTU20. All ordinary parser tests passed.",
   "javascript": {
     "full_suite": {
       "tests": 168,
@@ -41,79 +41,219 @@
     },
     "new_cross_tu_tests": 4,
     "typescript_build": "passed",
-    "new_test_file_lint": "passed"
+    "new_test_file_lint": "passed at baseline; no TypeScript source changes in implementation task"
   },
   "environment_note": "An initial parser run hit six invalid shared CUDA cache failures. The complete isolated-cache rerun passed. No shared cache deletion or repair was performed.",
   "findings": {
     "CTU01": {
       "cases": 4,
-      "assertion_failures": 4,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 4,
+      "assertion_failures": 0
     },
     "CTU02": {
       "cases": 4,
-      "assertion_failures": 4,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 4,
+      "assertion_failures": 0
     },
     "CTU03": {
       "cases": 4,
-      "assertion_failures": 4,
-      "status": "pending review"
+      "status": "confirmed upstream; clang-dumper issue #58 filed",
+      "baseline_assertion_failures": 4
     },
     "CTU04": {
       "cases": 4,
-      "assertion_failures": 4,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 4,
+      "assertion_failures": 0
     },
     "CTU05": {
       "cases": 4,
-      "assertion_failures": 4,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 4,
+      "assertion_failures": 0
     },
     "CTU06": {
       "cases": 4,
-      "assertion_failures": 4,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 4,
+      "assertion_failures": 0
     },
     "CTU07": {
       "cases": 4,
-      "assertion_failures": 4,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 4,
+      "assertion_failures": 0
     },
     "CTU08": {
       "cases": 4,
-      "assertion_failures": 4,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 4,
+      "assertion_failures": 0
     },
     "CTU10": {
       "cases": 4,
-      "assertion_failures": 4,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 4,
+      "assertion_failures": 0
     },
     "CTU11": {
       "cases": 4,
-      "assertion_failures": 4,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 4,
+      "assertion_failures": 0
     },
     "CTU13": {
       "cases": 1,
-      "assertion_failures": 1,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 1,
+      "assertion_failures": 0
     },
     "CTU14": {
       "cases": 1,
-      "assertion_failures": 1,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 1,
+      "assertion_failures": 0
     },
     "CTU15": {
       "cases": 1,
-      "assertion_failures": 1,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 1,
+      "assertion_failures": 0
     },
     "CTU16": {
       "cases": 4,
-      "assertion_failures": 4,
-      "status": "pending review"
+      "status": "approved and fixed; ordinary regression",
+      "baseline_assertion_failures": 4,
+      "assertion_failures": 0
+    },
+    "CTU17": {
+      "status": "additional finding awaiting decision",
+      "scope": "see docs/cross-tu-followups.md"
+    },
+    "CTU18": {
+      "status": "additional finding awaiting decision",
+      "scope": "see docs/cross-tu-followups.md"
+    },
+    "CTU19": {
+      "status": "additional finding awaiting decision",
+      "scope": "synthetic post-mutation cache limitation"
+    },
+    "CTU20": {
+      "status": "additional finding awaiting decision",
+      "scope": "see docs/cross-tu-followups.md"
     }
-  }
+  },
+  "baseline_validation": {
+    "java": {
+      "cross-tu-regression": {
+        "tests": 110,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 110
+      },
+      "parser-full-isolated": {
+        "tests": 333,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 14,
+        "passed": 319
+      },
+      "cross-tu-review": {
+        "tests": 47,
+        "failures": 47,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 0
+      }
+    },
+    "javascript": {
+      "full_suite": {
+        "tests": 168,
+        "passed": 166,
+        "skipped": 2,
+        "failures": 0
+      },
+      "new_cross_tu_tests": 4,
+      "typescript_build": "passed",
+      "new_test_file_lint": "passed"
+    },
+    "findings": {
+      "CTU01": {
+        "cases": 4,
+        "assertion_failures": 4,
+        "status": "pending review"
+      },
+      "CTU02": {
+        "cases": 4,
+        "assertion_failures": 4,
+        "status": "pending review"
+      },
+      "CTU03": {
+        "cases": 4,
+        "assertion_failures": 4,
+        "status": "pending review"
+      },
+      "CTU04": {
+        "cases": 4,
+        "assertion_failures": 4,
+        "status": "pending review"
+      },
+      "CTU05": {
+        "cases": 4,
+        "assertion_failures": 4,
+        "status": "pending review"
+      },
+      "CTU06": {
+        "cases": 4,
+        "assertion_failures": 4,
+        "status": "pending review"
+      },
+      "CTU07": {
+        "cases": 4,
+        "assertion_failures": 4,
+        "status": "pending review"
+      },
+      "CTU08": {
+        "cases": 4,
+        "assertion_failures": 4,
+        "status": "pending review"
+      },
+      "CTU10": {
+        "cases": 4,
+        "assertion_failures": 4,
+        "status": "pending review"
+      },
+      "CTU11": {
+        "cases": 4,
+        "assertion_failures": 4,
+        "status": "pending review"
+      },
+      "CTU13": {
+        "cases": 1,
+        "assertion_failures": 1,
+        "status": "pending review"
+      },
+      "CTU14": {
+        "cases": 1,
+        "assertion_failures": 1,
+        "status": "pending review"
+      },
+      "CTU15": {
+        "cases": 1,
+        "assertion_failures": 1,
+        "status": "pending review"
+      },
+      "CTU16": {
+        "cases": 4,
+        "assertion_failures": 4,
+        "status": "pending review"
+      }
+    },
+    "review_run_expected_to_fail": true,
+    "full_java_skips": "The 14 pending-review methods are opt-in; all other parser tests passed, including CUDA."
+  },
+  "compiler_oracle": "Clang 21.1.8 and GCC 15.2: individual CTU06 files compile; missing fixed-arity definition fails linking; fixed definition links and runs; both visible overloads produce compile-time ambiguity."
 }

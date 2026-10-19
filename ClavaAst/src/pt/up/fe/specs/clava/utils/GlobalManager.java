@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -42,13 +44,19 @@ public class GlobalManager {
 
         VarDecl varDecl = tunit.getFactory().varDecl(name, type);
         varDecl.set(VarDecl.IS_USED, true);
+        varDecl.set(VarDecl.HAS_GLOBAL_STORAGE, true);
+        varDecl.set(NamedDecl.LINKAGE, Linkage.External);
         if (initExpr != null) {
             varDecl.setInit(initExpr);
+            // A shared const object needs explicit external linkage in C++.
+            if (type.isConst()) varDecl.set(VarDecl.STORAGE_CLASS, StorageClass.Extern);
         } else {
             varDecl.set(VarDecl.STORAGE_CLASS, StorageClass.Extern);
         }
 
         tunit.addDeclaration(varDecl);
+
+        if (!tunit.getContext().isStackEmpty()) tunit.getApp().clearCache();
 
         return varDecl;
     }

@@ -111,13 +111,11 @@ public class CXXRecordDecl extends RecordDecl {
             }
         }
 
-        var methodSig = methodDeclaration.getSignature();
+        var identities = new pt.up.fe.specs.clava.utils.DeclarationIdentity();
+        var methodKey = identities.function(methodDeclaration);
 
         boolean hasDeclaration = getMethods().stream()
-                .map(CXXMethodDecl::getSignature)
-                .filter(signature -> signature.equals(methodSig))
-                .findFirst()
-                .isPresent();
+                .anyMatch(candidate -> identities.function(candidate).equals(methodKey));
 
         if (!hasDeclaration) {
             // Add method
