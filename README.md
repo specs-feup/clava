@@ -94,14 +94,14 @@ This is a non-exhaustive list of Clava documentation, usage examples and feature
 
 Library | Description | Installation
 ---|---|---
-[clava-code-transforms](github.com/specs-feup/clava-code-transforms) | A set of advanced code transformations for Clava (function outlining and voidification, array and struct flattening, constant folding and propagation, loop static iteration annotation) | `npm i @specs-feup/clava-code-transforms@latest`
-[clava-misra](github.com/specs-feup/clava-misra) | Automatic detection and correction of C code patterns that violate the MISRA-C:2012 coding standard | `npm i @specs-feup/clava-misra@latest`
-[clava-visualization](github.com/specs-feup/clava-visualization)  | Renders an interactive web view of the program's AST, in a breakpoint-like fashion | `npm i @specs-feup/clava-visualization@latest`
-[clava-vitis-integration](github.com/specs-feup/clava-vitis-integration) | Integration with Vitis HLS, allowing for the automated synthesis and place-and-route of selected functions, and the programatic insertion and configurations of HLS directives | `npm i @specs-feup/clava-vitis-integration@latest`
-[extended-task-graph](github.com/specs-feup/extended-task-graph) | Generates an Extended Task Graph (ETG) representation of an application, with flexible granularity changes through task merging and splitting |`npm i @specs-feup/extended-task-graph@latest`
-[flow](github.com/specs-feup/flow) | Control-flow, Data-flow, static-call, and other graphs | `npm i @specs-feup/flow@latest`
-[hoopa](github.com/specs-feup/hoopa) | Hoopa (<u>Ho</u>listic <u>o</u>ptimization and <u>p</u>artitioning <u>a</u>lgorithms) is a collection of HW/SW partitioning policies and algorithms that can partition and optimize an application for a CPU-FPGA system | `npm i @specs-feup/hoopa@latest`
-[onnx-flow](github.com/specs-feup/onnx-flow)  | Converts an ONNX graph into a data-flow graph (DFG), decomposing its high-level operations into low-level operations and performing a set of optimizations | `npm i @specs-feup/onnx-flow@latest`
+[clava-code-transforms](https://github.com/specs-feup/clava-code-transforms) | A set of advanced code transformations for Clava (function outlining and voidification, array and struct flattening, constant folding and propagation, loop static iteration annotation) | `npm i @specs-feup/clava-code-transforms@latest`
+[clava-misra](https://github.com/specs-feup/clava-misra) | Automatic detection and correction of C code patterns that violate the MISRA-C:2012 coding standard | `npm i @specs-feup/clava-misra@latest`
+[clava-visualization](https://github.com/specs-feup/clava-visualization)  | Renders an interactive web view of the program's AST, in a breakpoint-like fashion | `npm i @specs-feup/clava-visualization@latest`
+[clava-vitis-integration](https://github.com/specs-feup/clava-vitis-integration) | Integration with Vitis HLS, allowing for the automated synthesis and place-and-route of selected functions, and the programatic insertion and configurations of HLS directives | `npm i @specs-feup/clava-vitis-integration@latest`
+[extended-task-graph](https://github.com/specs-feup/extended-task-graph) | Generates an Extended Task Graph (ETG) representation of an application, with flexible granularity changes through task merging and splitting |`npm i @specs-feup/extended-task-graph@latest`
+[flow](https://github.com/specs-feup/flow) | Control-flow, Data-flow, static-call, and other graphs | `npm i @specs-feup/flow@latest`
+[hoopa](https://github.com/specs-feup/hoopa) | Hoopa (<u>Ho</u>listic <u>o</u>ptimization and <u>p</u>artitioning <u>a</u>lgorithms) is a collection of HW/SW partitioning policies and algorithms that can partition and optimize an application for a CPU-FPGA system | `npm i @specs-feup/hoopa@latest`
+[onnx-flow](https://github.com/specs-feup/onnx-flow)  | Converts an ONNX graph into a data-flow graph (DFG), decomposing its high-level operations into low-level operations and performing a set of optimizations | `npm i @specs-feup/onnx-flow@latest`
 
 ## Troubleshooting
 
