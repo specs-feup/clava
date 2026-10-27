@@ -18,6 +18,7 @@ import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryOp;
 
@@ -25,8 +26,8 @@ public class CxxUnaryOp extends AUnaryOp {
 
     private final UnaryOperator unaryOp;
 
-    public CxxUnaryOp(UnaryOperator unaryOp) {
-        super(new CxxOp(unaryOp));
+    public CxxUnaryOp(UnaryOperator unaryOp, CxxWeaver weaver) {
+        super(new CxxOp(unaryOp, weaver), weaver);
         this.unaryOp = unaryOp;
     }
 
@@ -37,7 +38,7 @@ public class CxxUnaryOp extends AUnaryOp {
 
     @Override
     public AExpression getOperandImpl() {
-        return CxxJoinpoints.create(ClavaNodes.normalize(unaryOp.getSubExpr()), AExpression.class);
+        return CxxJoinpoints.create(ClavaNodes.normalize(unaryOp.getSubExpr()), getWeaverEngine(), AExpression.class);
     }
 
     @Override

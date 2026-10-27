@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Operator;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOp;
 
 public class CxxOp extends AOp {
 
     private final Operator op;
 
-    public CxxOp(Operator op) {
-        super(new CxxExpression(op));
+    public CxxOp(Operator op, CxxWeaver weaver) {
+        super(new CxxExpression(op, weaver), weaver);
 
         this.op = op;
     }

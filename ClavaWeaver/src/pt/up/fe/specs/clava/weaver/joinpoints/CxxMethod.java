@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
@@ -24,8 +25,8 @@ public class CxxMethod extends AMethod {
 
     private final CXXMethodDecl method;
 
-    public CxxMethod(CXXMethodDecl method) {
-        super(new CxxFunction(method));
+    public CxxMethod(CXXMethodDecl method, CxxWeaver weaver) {
+        super(new CxxFunction(method, weaver), weaver);
 
         this.method = method;
     }
@@ -37,7 +38,7 @@ public class CxxMethod extends AMethod {
 
     @Override
     public AClass getRecordImpl() {
-        return method.getRecordDecl().map(record -> (AClass) CxxJoinpoints.create(record)).orElse(null);
+        return method.getRecordDecl().map(record -> CxxJoinpoints.create(record, getWeaverEngine(), AClass.class)).orElse(null);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class CxxMethod extends AMethod {
      */
     @Override
     public AType getTypeImpl() {
-        return CxxJoinpoints.create(method.getReturnType(), AType.class);
+        return CxxJoinpoints.create(method.getReturnType(), getWeaverEngine(), AType.class);
     }
 
     @Override

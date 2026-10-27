@@ -2,9 +2,8 @@ import Io from "@specs-feup/lara/api/lara/Io.js";
 import BenchmarkInstance from "@specs-feup/lara/api/lara/benchmark/BenchmarkInstance.js";
 import { JavaClasses } from "@specs-feup/lara/api/lara/util/JavaTypes.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
-import Weaver from "@specs-feup/lara/api/weaver/Weaver.js";
 import Clava from "../..//clava/Clava.js";
-import { Joinpoint, Pragma, Program } from "../../Joinpoints.js";
+import { Pragma } from "../../Joinpoints.js";
 import CMaker from "../../clava/cmake/CMaker.js";
 import ClavaJoinPoints from "../../clava/ClavaJoinPoints.js";
 
@@ -100,14 +99,7 @@ export default abstract class ClavaBenchmarkInstance extends BenchmarkInstance {
   }
 
   protected loadCached(astFile: JavaClasses.File) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    console.log(`Loading cached AST from file ${astFile.getAbsolutePath()}...`);
-
-    // Load saved AST
-    const $app = Weaver.deserialize(Io.readFile(astFile)) as Program;
-
-    // Push loaded AST
-    Clava.pushAst($app);
+    throw new Error("ClavaBenchmarkInstance.loadCached: Not implemented");
   }
 
   /**

@@ -26,6 +26,7 @@ import pt.up.fe.specs.clava.ast.omp.clauses.OmpReductionClause.ReductionKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpScheduleClause.ScheduleKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpScheduleClause.ScheduleModifier;
 import pt.up.fe.specs.clava.parsing.omp.OmpParser;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOmp;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
@@ -34,8 +35,8 @@ public class CxxOmp extends AOmp {
 
     private OmpPragma ompPragma;
 
-    public CxxOmp(OmpPragma ompPragma) {
-        super(new CxxPragma(ompPragma));
+    public CxxOmp(OmpPragma ompPragma, CxxWeaver weaver) {
+        super(new CxxPragma(ompPragma, weaver), weaver);
 
         this.ompPragma = ompPragma;
     }
@@ -307,6 +308,6 @@ public class CxxOmp extends AOmp {
         this.ompPragma = newOmpPragma;
 
         // Update parent join point
-        this.aPragma = new CxxPragma(ompPragma);
+        this.aPragma = new CxxPragma(ompPragma, getWeaverEngine());
     }
 }

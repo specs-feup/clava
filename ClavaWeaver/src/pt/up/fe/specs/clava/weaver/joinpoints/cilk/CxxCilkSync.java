@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints.cilk;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.cilk.CilkSync;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkSync;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxStatement;
 
@@ -22,8 +23,8 @@ public class CxxCilkSync extends ACilkSync {
 
     private final CilkSync cilkSync;
 
-    public CxxCilkSync(CilkSync cilkSync) {
-        super(new CxxStatement(cilkSync));
+    public CxxCilkSync(CilkSync cilkSync, CxxWeaver weaver) {
+        super(new CxxStatement(cilkSync, weaver), weaver);
         this.cilkSync = cilkSync;
     }
 

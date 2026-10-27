@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
 
 public class CxxStruct extends AStruct {
 
     private final RecordDecl recordDecl;
 
-    public CxxStruct(RecordDecl recordDecl) {
-        super(new CxxRecord(recordDecl));
+    public CxxStruct(RecordDecl recordDecl, CxxWeaver weaver) {
+        super(new CxxRecord(recordDecl, weaver), weaver);
         this.recordDecl = recordDecl;
     }
 

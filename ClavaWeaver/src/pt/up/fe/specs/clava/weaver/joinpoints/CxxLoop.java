@@ -56,8 +56,8 @@ public class CxxLoop extends ALoop {
 
     private final LoopStmt loop;
 
-    public CxxLoop(LoopStmt loop) {
-        super(new CxxStatement(loop));
+    public CxxLoop(LoopStmt loop, CxxWeaver weaver) {
+        super(new CxxStatement(loop, weaver), weaver);
 
         this.loop = loop;
     }
@@ -125,7 +125,7 @@ public class CxxLoop extends ALoop {
                     + loop.getLocation());
         }
 
-        return CxxJoinpoints.create(controlVars.get(0), AVarref.class);
+        return CxxJoinpoints.create(controlVars.get(0), getWeaverEngine(), AVarref.class);
 
     }
 
@@ -149,7 +149,7 @@ public class CxxLoop extends ALoop {
             return null;
         }
 
-        return CxxJoinpoints.create(ClavaNodes.toStmt(condition), AStatement.class);
+        return CxxJoinpoints.create(ClavaNodes.toStmt(condition), getWeaverEngine(), AStatement.class);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class CxxLoop extends ALoop {
 
         }
 
-        return CxxJoinpoints.create(inc, AStatement.class);
+        return CxxJoinpoints.create(inc, getWeaverEngine(), AStatement.class);
     }
 
     @Override
@@ -219,10 +219,10 @@ public class CxxLoop extends ALoop {
 
             // WhileStmt whileStmt = ClavaNodeFactory.whileStmt(loop.getInfo(), ((ForStmt) loop).getCond().orElse(null),
             // loop.getBody());
-            Stmt cond = ((ForStmt) loop).getCond().orElse(CxxWeaver.getFactory().nullStmt());
-            WhileStmt whileStmt = CxxWeaver.getFactory().whileStmt(cond, loop.getBody());
+            Stmt cond = ((ForStmt) loop).getCond().orElse(getWeaverEngine().getFactory().nullStmt());
+            WhileStmt whileStmt = getWeaverEngine().getFactory().whileStmt(cond, loop.getBody());
 
-            replaceWith(CxxJoinpoints.create(whileStmt));
+            replaceWith(CxxJoinpoints.create(whileStmt, getWeaverEngine()));
 
             return;
         }
@@ -249,9 +249,9 @@ public class CxxLoop extends ALoop {
             return; // TODO: warn user?
         }
 
-        Type intType = CxxWeaver.getFactory().builtinType(BuiltinKind.Int);
+        Type intType = getWeaverEngine().getFactory().builtinType(BuiltinKind.Int);
 
-        ((ForStmt) loop).setInitValue(CxxWeaver.getFactory().literalExpr(initCode, intType));
+        ((ForStmt) loop).setInitValue(getWeaverEngine().getFactory().literalExpr(initCode, intType));
     }
 
     @Override
@@ -260,9 +260,9 @@ public class CxxLoop extends ALoop {
             return; // TODO: warn user?
         }
 
-        Type intType = CxxWeaver.getFactory().builtinType(BuiltinKind.Int);
+        Type intType = getWeaverEngine().getFactory().builtinType(BuiltinKind.Int);
 
-        ((ForStmt) loop).setConditionValue(CxxWeaver.getFactory().literalExpr(value, intType));
+        ((ForStmt) loop).setConditionValue(getWeaverEngine().getFactory().literalExpr(value, intType));
     }
 
     @Override
@@ -481,7 +481,7 @@ public class CxxLoop extends ALoop {
     @Override
     public AStatement tileImpl(String blockSize, AStatement reference, Boolean useTernary) {
 
-        LoopTiling loopTiling = new LoopTiling(CxxWeaver.getContex());
+        LoopTiling loopTiling = new LoopTiling(getWeaverEngine().getContex());
 
         boolean success = loopTiling.apply(loop, (Stmt) reference.getNode(),
                 blockSize.toString(), useTernary);
@@ -494,7 +494,7 @@ public class CxxLoop extends ALoop {
             return reference;
         }
 
-        return CxxJoinpoints.create(loopTiling.getLastReferenceStmt(), AStatement.class);
+        return CxxJoinpoints.create(loopTiling.getLastReferenceStmt(), getWeaverEngine(), AStatement.class);
 
     }
 
@@ -512,7 +512,8 @@ public class CxxLoop extends ALoop {
         }
 
         return ((ForStmt) loop).getIterationsExpr()
-                .map(expr -> CxxJoinpoints.create(expr, AExpression.class))
+                .map(expr -> CxxJoinpoints.create(expr,
+                        getWeaverEngine(), AExpression.class))
                 .orElse(null);
     }
 
@@ -541,14 +542,16 @@ public class CxxLoop extends ALoop {
 
         if (loop instanceof ForStmt) {
             return ((ForStmt) loop).getInit()
-                    .map(init -> CxxJoinpoints.create(init, AStatement.class))
+                    .map(init -> CxxJoinpoints.create(init,
+                            getWeaverEngine(), AStatement.class))
                     .orElse(null);
         }
 
         // If range stmt, return begin
         if (loop instanceof CXXForRangeStmt) {
             return ((CXXForRangeStmt) loop).getBegin()
-                    .map(init -> CxxJoinpoints.create(init, AStatement.class))
+                    .map(init -> CxxJoinpoints.create(init,
+                            getWeaverEngine(), AStatement.class))
                     .orElse(null);
         }
 
@@ -558,7 +561,7 @@ public class CxxLoop extends ALoop {
 
     @Override
     public AScope getBodyImpl() {
-        return (AScope) CxxJoinpoints.create(loop.getBody());
+        return CxxJoinpoints.create(loop.getBody(), getWeaverEngine(), AScope.class);
     }
 
     @Override

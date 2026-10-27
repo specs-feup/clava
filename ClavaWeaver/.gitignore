@@ -2,6 +2,7 @@ cxx_weaver_output/
 AutoParStats-default.json
 
 src/**/abstracts/
+!src/**/abstracts/ACxxWeaverJoinPoint.java
 src/**/exceptions/CxxWeaverException.java
 src/**/enums/
 *.dotty

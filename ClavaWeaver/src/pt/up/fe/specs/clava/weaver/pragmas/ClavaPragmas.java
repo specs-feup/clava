@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
@@ -33,13 +34,13 @@ public class ClavaPragmas {
         CLAVA_DIRECTIVES_MAP = new HashMap<>();
     }
 
-    public static void processClavaPragmas(App app) {
+    public static void processClavaPragmas(App app, CxxWeaver weaver) {
         app.getDescendants(Pragma.class).stream()
                 .filter(pragma -> pragma.getName().toLowerCase().equals("clava"))
-                .forEach(ClavaPragmas::processClavaPragma);
+                .forEach(pragma -> processClavaPragma(pragma, weaver));
     }
 
-    private static void processClavaPragma(Pragma clavaPragma) {
+    private static void processClavaPragma(Pragma clavaPragma, CxxWeaver weaver) {
 
         Optional<ClavaDirective> clavaDirective = getDirective(clavaPragma);
         if (clavaDirective.isPresent()) {
@@ -50,7 +51,7 @@ public class ClavaPragmas {
                 return;
             }
 
-            ACxxWeaverJoinPoint jp = CxxJoinpoints.create(targetNode.get());
+            ACxxWeaverJoinPoint jp = CxxJoinpoints.create(targetNode.get(), weaver);
             clavaDirective.ifPresent(directive -> directive.apply(jp));
             return;
         }

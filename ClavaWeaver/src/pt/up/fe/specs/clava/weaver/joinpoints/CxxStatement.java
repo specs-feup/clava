@@ -18,6 +18,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
@@ -26,7 +27,8 @@ public class CxxStatement extends AStatement {
 
     private final Stmt stmt;
 
-    public CxxStatement(Stmt stmt) {
+    public CxxStatement(Stmt stmt, CxxWeaver weaver) {
+        super(weaver);
         this.stmt = stmt;
     }
 
@@ -43,7 +45,7 @@ public class CxxStatement extends AStatement {
         NodeInsertUtils.replace(stmt, newStmt);
 
         // Return a statement joinpoint
-        return CxxJoinpoints.create(newStmt);
+        return CxxJoinpoints.create(newStmt, getWeaverEngine());
     }
 
     @Override

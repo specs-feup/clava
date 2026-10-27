@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParenExpr;
 
@@ -23,8 +24,8 @@ public class CxxParenExpr extends AParenExpr {
 
     private final ParenExpr parenExpr;
 
-    public CxxParenExpr(ParenExpr parenExpr) {
-        super(new CxxExpression(parenExpr));
+    public CxxParenExpr(ParenExpr parenExpr, CxxWeaver weaver) {
+        super(new CxxExpression(parenExpr, weaver), weaver);
         this.parenExpr = parenExpr;
     }
 
@@ -35,6 +36,6 @@ public class CxxParenExpr extends AParenExpr {
 
     @Override
     public AExpression getSubExprImpl() {
-        return CxxJoinpoints.create(parenExpr.getSubExpr(), AExpression.class);
+        return CxxJoinpoints.create(parenExpr.getSubExpr(), getWeaverEngine(), AExpression.class);
     }
 }

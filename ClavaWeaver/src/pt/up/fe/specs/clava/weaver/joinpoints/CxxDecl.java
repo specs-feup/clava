@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AAttribute;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 
@@ -22,7 +23,8 @@ public class CxxDecl extends ADecl {
 
     private final Decl decl;
 
-    public CxxDecl(Decl decl) {
+    public CxxDecl(Decl decl, CxxWeaver weaver) {
+        super(weaver);
         this.decl = decl;
     }
 
@@ -34,7 +36,7 @@ public class CxxDecl extends ADecl {
     @Override
     public AAttribute[] getAttrsArrayImpl() {
         return decl.get(Decl.ATTRIBUTES).stream()
-                .map(attr -> new CxxAttribute(attr))
+                .map(attr -> new CxxAttribute(attr, getWeaverEngine()))
                 .toArray(size -> new AAttribute[size]);
     }
 

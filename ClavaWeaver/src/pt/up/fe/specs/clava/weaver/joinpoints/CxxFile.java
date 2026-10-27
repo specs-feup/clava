@@ -45,7 +45,8 @@ public class CxxFile extends AFile {
 
     private final TranslationUnit tunit;
 
-    public CxxFile(TranslationUnit tunit) {
+    public CxxFile(TranslationUnit tunit, CxxWeaver weaver) {
+        super(weaver);
         this.tunit = tunit;
     }
 
@@ -98,9 +99,9 @@ public class CxxFile extends AFile {
 
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
-        var tentativeNode = CxxWeaver.getSnippetParser().parseStmt(code);
+        var tentativeNode = getWeaverEngine().getSnippetParser().parseStmt(code);
         ClavaNode nodeToInsert = tentativeNode instanceof WrapperStmt ? tentativeNode.getChild(0)
-                : CxxWeaver.getFactory().literalDecl(code);
+                : getWeaverEngine().getFactory().literalDecl(code);
 
         return CxxActions.insertAsChild(position, getNode(), nodeToInsert, getWeaverEngine());
     }
@@ -206,11 +207,11 @@ public class CxxFile extends AFile {
         }
 
         Type typeNode = (Type) type.getNode();
-        LiteralExpr literalExpr = CxxWeaver.getFactory().literalExpr(initValue, typeNode);
+        LiteralExpr literalExpr = getWeaverEngine().getFactory().literalExpr(initValue, typeNode);
 
         VarDecl global = tunit.getApp().getGlobalManager().addGlobal(tunit, name, typeNode, literalExpr);
 
-        return CxxJoinpoints.create(global, AVardecl.class);
+        return CxxJoinpoints.create(global, getWeaverEngine(), AVardecl.class);
     }
 
     @Override
@@ -225,7 +226,7 @@ public class CxxFile extends AFile {
 
     @Override
     public void insertBeginImpl(String code) {
-        insertBeginImpl(AstFactory.declLiteral(code));
+        insertBeginImpl(AstFactory.declLiteral(getWeaverEngine(),code));
     }
 
     @Override
@@ -240,12 +241,12 @@ public class CxxFile extends AFile {
 
     @Override
     public void insertEndImpl(String code) {
-        insertEndImpl(AstFactory.declLiteral(code));
+        insertEndImpl(AstFactory.declLiteral(getWeaverEngine(), code));
     }
 
     @Override
     public AJoinPoint addFunctionImpl(String name) {
-        CxxFunction function = AstFactory.functionVoid(name);
+        CxxFunction function = AstFactory.functionVoid(getWeaverEngine(), name);
 
         // Add function to the tree
         tunit.addChild(function.getNode());
@@ -279,7 +280,7 @@ public class CxxFile extends AFile {
 
     @Override
     public AInclude[] getIncludesArrayImpl() {
-        return CxxSelects.select(AInclude.class, tunit.getChildren(), false, IncludeDecl.class).toArray(size -> new AInclude[size]);
+        return CxxSelects.select(getWeaverEngine(), AInclude.class, tunit.getChildren(), false, IncludeDecl.class).toArray(size -> new AInclude[size]);
     }
 
     @Override
@@ -306,7 +307,7 @@ public class CxxFile extends AFile {
     public AFile rebuildImpl() {
         TranslationUnit rebuiltTunit = getWeaverEngine().rebuildFile(tunit);
 
-        AFile rebuiltFile = CxxJoinpoints.create(rebuiltTunit, AFile.class);
+        AFile rebuiltFile = CxxJoinpoints.create(rebuiltTunit, getWeaverEngine(), AFile.class);
         replaceWith(rebuiltFile);
         return rebuiltFile;
     }
@@ -317,7 +318,7 @@ public class CxxFile extends AFile {
             return rebuildImpl();
         } catch (Exception e) {
             System.out.println("EXCEPTION: " + e);
-            return new CxxClavaException(e);
+            return new CxxClavaException(e, getWeaverEngine());
         }
     }
 

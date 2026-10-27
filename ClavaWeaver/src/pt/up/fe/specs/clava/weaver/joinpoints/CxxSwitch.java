@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACase;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ASwitch;
@@ -24,8 +25,8 @@ public class CxxSwitch extends ASwitch {
 
     private final SwitchStmt switchStmt;
 
-    public CxxSwitch(SwitchStmt switchStmt) {
-        super(new CxxStatement(switchStmt));
+    public CxxSwitch(SwitchStmt switchStmt, CxxWeaver weaver) {
+        super(new CxxStatement(switchStmt, weaver), weaver);
         this.switchStmt = switchStmt;
     }
 
@@ -42,18 +43,19 @@ public class CxxSwitch extends ASwitch {
     @Override
     public ACase getGetDefaultCaseImpl() {
         return switchStmt.getDefaultCase()
-                .map(node -> CxxJoinpoints.create(node, ACase.class))
+                .map(node -> CxxJoinpoints.create(node,
+                        getWeaverEngine(), ACase.class))
                 .orElse(null);
     }
 
     @Override
     public ACase[] getCasesArrayImpl() {
-        return CxxJoinpoints.create(switchStmt.getCases(), ACase.class);
+        return CxxJoinpoints.create(switchStmt.getCases(), getWeaverEngine(), ACase.class);
     }
 
     @Override
     public AExpression getConditionImpl() {
-        return CxxJoinpoints.create(switchStmt.getCond(), AExpression.class);
+        return CxxJoinpoints.create(switchStmt.getCond(), getWeaverEngine(), AExpression.class);
     }
 
 }

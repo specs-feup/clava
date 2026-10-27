@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
 
 public class CxxTypedefDecl extends ATypedefDecl {
 
     private final TypedefDecl typedefDecl;
 
-    public CxxTypedefDecl(TypedefDecl typedefDecl) {
-        super(new CxxTypedefNameDecl(typedefDecl));
+    public CxxTypedefDecl(TypedefDecl typedefDecl, CxxWeaver weaver) {
+        super(new CxxTypedefNameDecl(typedefDecl, weaver), weaver);
         this.typedefDecl = typedefDecl;
     }
 

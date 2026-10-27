@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.Insert;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
@@ -23,8 +24,8 @@ public class CxxTag extends ATag {
 
     private final LaraTagPragma tag;
 
-    public CxxTag(LaraTagPragma reference) {
-        super(new CxxPragma(reference));
+    public CxxTag(LaraTagPragma reference, CxxWeaver weaver) {
+        super(new CxxPragma(reference, weaver), weaver);
         tag = reference;
     }
 

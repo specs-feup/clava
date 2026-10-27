@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.ParenType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParenType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
@@ -24,8 +25,8 @@ public class CxxParenType extends AParenType {
 
     private final ParenType parenType;
 
-    public CxxParenType(ParenType parenType) {
-        super(new CxxType(parenType));
+    public CxxParenType(ParenType parenType, CxxWeaver weaver) {
+        super(new CxxType(parenType, weaver), weaver);
 
         this.parenType = parenType;
     }
@@ -37,7 +38,7 @@ public class CxxParenType extends AParenType {
 
     @Override
     public AType getInnerTypeImpl() {
-        return CxxJoinpoints.create(parenType.getInnerType(), AType.class);
+        return CxxJoinpoints.create(parenType.getInnerType(), getWeaverEngine(), AType.class);
     }
 
     @Override

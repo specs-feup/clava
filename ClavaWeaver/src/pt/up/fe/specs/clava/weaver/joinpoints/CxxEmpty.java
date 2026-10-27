@@ -14,13 +14,15 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEmpty;
 
 public class CxxEmpty extends AEmpty {
 
     private final ClavaNode emptyNode;
 
-    public CxxEmpty(ClavaNode emptyNode) {
+    public CxxEmpty(ClavaNode emptyNode, CxxWeaver weaver) {
+        super(weaver);
         this.emptyNode = emptyNode;
     }
 

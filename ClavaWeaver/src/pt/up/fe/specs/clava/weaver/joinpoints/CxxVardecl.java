@@ -27,8 +27,8 @@ public class CxxVardecl extends AVardecl {
 
     private final VarDecl varDecl;
 
-    public CxxVardecl(VarDecl varDecl) {
-        super(new CxxDeclarator(varDecl));
+    public CxxVardecl(VarDecl varDecl, CxxWeaver weaver) {
+        super(new CxxDeclarator(varDecl, weaver), weaver);
 
         this.varDecl = varDecl;
     }
@@ -45,7 +45,7 @@ public class CxxVardecl extends AVardecl {
 
     @Override
     public AExpression getInitImpl() {
-        return varDecl.getInit().map(init -> (AExpression) CxxJoinpoints.create(init)).orElse(null);
+        return varDecl.getInit().map(init -> (AExpression) CxxJoinpoints.create(init, getWeaverEngine())).orElse(null);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class CxxVardecl extends AVardecl {
             removeInitImpl(true);
         }
 
-        varDecl.setInit(CxxWeaver.getFactory().literalExpr(init, varDecl.getType()));
+        varDecl.setInit(getWeaverEngine().getFactory().literalExpr(init, varDecl.getType()));
     }
 
     @Override
@@ -99,7 +99,7 @@ public class CxxVardecl extends AVardecl {
 
     @Override
     public AVardecl getDefinitionImpl() {
-        return CxxJoinpoints.create(varDecl.getDefinition(), AVardecl.class);
+        return CxxJoinpoints.create(varDecl.getDefinition(), getWeaverEngine(), AVardecl.class);
     }
 
     // @Override
@@ -109,7 +109,7 @@ public class CxxVardecl extends AVardecl {
 
     @Override
     public AVarref varrefImpl() {
-        return AstFactory.varref(CxxJoinpoints.create(varDecl, AVardecl.class));
+        return AstFactory.varref(getWeaverEngine(), CxxJoinpoints.create(varDecl, getWeaverEngine(), AVardecl.class));
     }
 
 }

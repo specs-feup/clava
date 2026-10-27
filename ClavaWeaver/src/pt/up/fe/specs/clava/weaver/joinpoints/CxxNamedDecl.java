@@ -21,14 +21,15 @@ import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.TagKind;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANamedDecl;
 
 public class CxxNamedDecl extends ANamedDecl {
 
     private final NamedDecl namedDecl;
 
-    public CxxNamedDecl(NamedDecl namedDecl) {
-        super(new CxxDecl(namedDecl));
+    public CxxNamedDecl(NamedDecl namedDecl, CxxWeaver weaver) {
+        super(new CxxDecl(namedDecl, weaver), weaver);
 
         this.namedDecl = namedDecl;
     }

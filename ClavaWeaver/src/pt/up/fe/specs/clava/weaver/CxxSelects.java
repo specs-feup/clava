@@ -19,8 +19,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.lara.interpreter.weaver.interf.WeaverEngine;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
@@ -70,18 +68,18 @@ public class CxxSelects {
      * @param filter
      * @return
      */
-    public static <T extends ACxxWeaverJoinPoint> List<? extends T> select(Class<T> targetJoinpoint,
+    public static <T extends ACxxWeaverJoinPoint> List<? extends T> select(CxxWeaver weaver, Class<T> targetJoinpoint,
             List<? extends ClavaNode> directChildren, boolean selectDescendents, Predicate<? super ClavaNode> filter) {
 
         return selectPrivate(targetJoinpoint, directChildren, selectDescendents, filter,
-                node -> CxxJoinpoints.create(node, targetJoinpoint));
+                node -> CxxJoinpoints.create(node, weaver, targetJoinpoint));
 
     }
 
-    public static <T extends ACxxWeaverJoinPoint> List<? extends T> select(Class<T> targetJoinpoint,
+    public static <T extends ACxxWeaverJoinPoint> List<? extends T> select(CxxWeaver weaver, Class<T> targetJoinpoint,
             List<? extends ClavaNode> directChildren, boolean selectDescendents, Class<? extends ClavaNode> filter) {
 
-        return select(targetJoinpoint, directChildren, selectDescendents, filter::isInstance);
+        return select(weaver, targetJoinpoint, directChildren, selectDescendents, filter::isInstance);
     }
 
     public static boolean stmtFilter(ClavaNode node) {
@@ -114,12 +112,12 @@ public class CxxSelects {
     // }
 
     public static AJoinPoint[] selectedNodesToJps(Stream<? extends ClavaNode> selectedNodes,
-            WeaverEngine weaverEngine) {
+            CxxWeaver weaverEngine) {
         return selectedNodesToJps(selectedNodes, jp -> true, weaverEngine);
     }
 
     public static AJoinPoint[] selectedNodesToJps(Stream<? extends ClavaNode> selectedNodes,
-            Predicate<AJoinPoint> filter, WeaverEngine weaverEngine) {
+            Predicate<AJoinPoint> filter, CxxWeaver weaverEngine) {
 
         return selectedNodesToJpsStream(selectedNodes, filter, weaverEngine)
                 .collect(Collectors.toList())
@@ -128,18 +126,18 @@ public class CxxSelects {
     }
 
     public static Stream<AJoinPoint> selectedNodesToJpsStream(Stream<? extends ClavaNode> selectedNodes,
-            WeaverEngine weaverEngine) {
+            CxxWeaver weaverEngine) {
 
         return selectedNodesToJpsStream(selectedNodes, jp -> true, weaverEngine);
     }
 
     public static Stream<AJoinPoint> selectedNodesToJpsStream(Stream<? extends ClavaNode> selectedNodes,
-            Predicate<AJoinPoint> filter, WeaverEngine weaverEngine) {
+            Predicate<AJoinPoint> filter, CxxWeaver weaverEngine) {
 
         var selectedJps = selectedNodes
                 // Ignore null nodes
                 .filter(sibling -> !(sibling instanceof NullNode))
-                .map(CxxJoinpoints::create)
+                .map(node -> CxxJoinpoints.create(node, weaverEngine))
                 // Filter null nodes
                 .filter(jp -> jp != null)
                 // Default filter

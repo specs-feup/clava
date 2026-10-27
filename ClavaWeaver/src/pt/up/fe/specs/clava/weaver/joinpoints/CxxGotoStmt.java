@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 import pt.up.fe.specs.clava.ast.stmt.GotoStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AGotoStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALabelDecl;
 
@@ -24,8 +25,8 @@ public class CxxGotoStmt extends AGotoStmt {
 
     private final GotoStmt gotoStmt;
 
-    public CxxGotoStmt(GotoStmt gotoStmt) {
-        super(new CxxStatement(gotoStmt));
+    public CxxGotoStmt(GotoStmt gotoStmt, CxxWeaver weaver) {
+        super(new CxxStatement(gotoStmt, weaver), weaver);
 
         this.gotoStmt = gotoStmt;
     }
@@ -42,7 +43,7 @@ public class CxxGotoStmt extends AGotoStmt {
 
     @Override
     public ALabelDecl getLabelImpl() {
-        return CxxJoinpoints.create(gotoStmt.getLabel(), ALabelDecl.class);
+        return CxxJoinpoints.create(gotoStmt.getLabel(), getWeaverEngine(), ALabelDecl.class);
     }
 
 }

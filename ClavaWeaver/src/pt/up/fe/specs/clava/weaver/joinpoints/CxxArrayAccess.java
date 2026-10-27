@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.utils.Nameable;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AArrayAccess;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
@@ -27,8 +28,8 @@ public class CxxArrayAccess extends AArrayAccess {
 
     private final ArraySubscriptExpr arraySub;
 
-    public CxxArrayAccess(ArraySubscriptExpr arraySub) {
-        super(new CxxExpression(arraySub));
+    public CxxArrayAccess(ArraySubscriptExpr arraySub, CxxWeaver weaver) {
+        super(new CxxExpression(arraySub, weaver), weaver);
         this.arraySub = arraySub;
     }
 
@@ -39,13 +40,13 @@ public class CxxArrayAccess extends AArrayAccess {
 
     @Override
     public AExpression getArrayVarImpl() {
-        return (AExpression) CxxJoinpoints.create(arraySub.getArrayExpr());
+        return CxxJoinpoints.create(arraySub.getArrayExpr(), getWeaverEngine(), AExpression.class);
     }
 
     @Override
     public AExpression[] getSubscriptArrayImpl() {
         return arraySub.getSubscripts().stream()
-                .map(expr -> (AExpression) CxxJoinpoints.create(expr))
+                .map(expr -> CxxJoinpoints.create(expr, getWeaverEngine(), AExpression.class))
                 .toArray(length -> new AExpression[length]);
     }
 
@@ -69,7 +70,7 @@ public class CxxArrayAccess extends AArrayAccess {
     @Override
     public AArrayAccess getParentAccessImpl() {
         return arraySub.getParentAccess()
-                .map(parentAccess -> CxxJoinpoints.create(parentAccess, AArrayAccess.class))
+                .map(parentAccess -> CxxJoinpoints.create(parentAccess, getWeaverEngine(), AArrayAccess.class))
                 .orElse(null);
     }
 

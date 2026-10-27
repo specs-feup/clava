@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 
@@ -24,7 +25,8 @@ public class CxxPragma extends APragma {
 
     private Pragma pragma;
 
-    public CxxPragma(Pragma pragma) {
+    public CxxPragma(Pragma pragma, CxxWeaver weaver) {
+        super(weaver);
         this.pragma = pragma;
     }
 
@@ -40,7 +42,8 @@ public class CxxPragma extends APragma {
 
     @Override
     public AJoinPoint getTargetImpl() {
-        return pragma.getTarget().map(target -> CxxJoinpoints.create(target, AJoinPoint.class)).orElse(null);
+        return pragma.getTarget().map(target -> CxxJoinpoints.create(target,
+                getWeaverEngine(), AJoinPoint.class)).orElse(null);
     }
 
     @Override

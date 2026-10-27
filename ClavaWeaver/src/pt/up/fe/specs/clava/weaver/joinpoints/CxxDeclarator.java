@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeclarator;
 
 public class CxxDeclarator extends ADeclarator {
 
     private final DeclaratorDecl declaratorDecl;
 
-    public CxxDeclarator(DeclaratorDecl declaratorDecl) {
-        super(new CxxNamedDecl(declaratorDecl));
+    public CxxDeclarator(DeclaratorDecl declaratorDecl, CxxWeaver weaver) {
+        super(new CxxNamedDecl(declaratorDecl, weaver), weaver);
 
         this.declaratorDecl = declaratorDecl;
     }

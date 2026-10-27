@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess;
@@ -25,8 +26,8 @@ public class CxxMemberAccess extends AMemberAccess {
 
     private final MemberExpr memberExpr;
 
-    public CxxMemberAccess(MemberExpr memberExpr) {
-        super(new CxxExpression(memberExpr));
+    public CxxMemberAccess(MemberExpr memberExpr, CxxWeaver weaver) {
+        super(new CxxExpression(memberExpr, weaver), weaver);
         this.memberExpr = memberExpr;
     }
 
@@ -37,7 +38,7 @@ public class CxxMemberAccess extends AMemberAccess {
 
     @Override
     public AExpression getBaseImpl() {
-        return CxxJoinpoints.create(ClavaNodes.normalize(memberExpr.getBase()), AExpression.class);
+        return CxxJoinpoints.create(ClavaNodes.normalize(memberExpr.getBase()), getWeaverEngine(), AExpression.class);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class CxxMemberAccess extends AMemberAccess {
     @Override
     public AExpression[] getMemberChainArrayImpl() {
         return memberExpr.getExprChain().stream()
-                .map(member -> (AExpression) CxxJoinpoints.create(member))
+                .map(member -> CxxJoinpoints.create(member, getWeaverEngine(), AExpression.class))
                 .toArray(size -> new AExpression[size]);
     }
 
@@ -59,7 +60,7 @@ public class CxxMemberAccess extends AMemberAccess {
 
     @Override
     public ADecl getDeclImpl() {
-        return CxxJoinpoints.create(memberExpr.get(MemberExpr.MEMBER_DECL), ADecl.class);
+        return CxxJoinpoints.create(memberExpr.get(MemberExpr.MEMBER_DECL), getWeaverEngine(), ADecl.class);
     }
 
     @Override

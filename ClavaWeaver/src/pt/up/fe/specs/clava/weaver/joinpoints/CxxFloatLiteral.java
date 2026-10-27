@@ -15,14 +15,15 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFloatLiteral;
 
 public class CxxFloatLiteral extends AFloatLiteral {
 
     private final FloatingLiteral literal;
 
-    public CxxFloatLiteral(FloatingLiteral literal) {
-        super(new CxxLiteral(literal));
+    public CxxFloatLiteral(FloatingLiteral literal, CxxWeaver weaver) {
+        super(new CxxLiteral(literal, weaver), weaver);
 
         this.literal = literal;
     }
