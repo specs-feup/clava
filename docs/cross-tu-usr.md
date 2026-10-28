@@ -2,6 +2,34 @@
 
 This experiment uses an unpublished local clang-dumper build. No release tag or asset is published, and `clang-dumper-release.tag` remains unchanged. The release selected by that file does not implement this new contract. Use the local-build property below; an older schema fails explicitly rather than silently reverting parsed declarations to name-based matching.
 
+## Decisions that were not agreed
+
+The first implementation mixed technical limits with externally visible behavior choices. That was a mistake:
+passing the regression suite did not establish agreement on these choices. The performance work preserves the
+current behavior while these decisions are resolved.
+
+1. **Repeated header definitions.** The implementation reports multiple occurrences as `AMBIGUOUS`, even for
+   ordinary inline functions. This narrows existing definition lookup. The open question is whether a query should
+   return its own TU's compiler-selected occurrence and expose project conflicts through a separate diagnostic.
+2. **Shared-source edits.** Entity-wide edits currently follow semantic entity identity. A static header function
+   is a different entity in every TU, so that does not synchronize one physical header edit across its contexts.
+   The open question is whether source-level actions must coordinate every occurrence of the edited source.
+3. **Generated-to-parsed binding.** Generated declarations currently occupy a separate domain. Automatic matching
+   to a parsed entity was disabled without first auditing the existing generation workflows. The required API
+   support and an explicit binding mechanism still need to be settled; this is an implementation gap, not an
+   inherent limitation of USRs.
+
+Two other items are unfinished implementation work, not decisions the user should have to make:
+
+- Preserve integral template argument type/width in the transport and generated source. The existing loss can
+  change `template<auto>` code on a round trip even though USRs distinguish the parsed entities.
+- Replace the remaining Java compatibility/mutation model as stronger compiler facts become available. Its
+  supported subset must remain explicit; a missing implementation is not a new language rule.
+
+The local-only build, compiler identity workarounds, cache namespace, and explicit decoder errors are implementation
+facts. USRs also cannot provide final executable membership/linker selection or rerun C++ semantic analysis after
+arbitrary edits. Those facts do not justify silently restricting ordinary lookup or supported transformations.
+
 ## Build and run
 
 From the workspace root, with LLVM 18 development libraries installed:
@@ -41,7 +69,7 @@ The analysis group is the App's current set of TUs. Removing a TU and clearing t
 
 Raw USRs are useful compiler data, but not an infallible equivalence oracle. Native-source regressions establish three relevant LLVM 18 behaviors:
 
-- Function USRs can distinguish top-level parameter cv even when the declarations denote the same function. The producer normalizes parameter types through Clang's signature-parameter API for the compatibility type USR. Non-template function lookup also maintains an explicit compiler-linkage-name alias index.
+- Function USRs can distinguish top-level parameter cv even when the declarations denote the same function. The producer normalizes parameter types through Clang's signature-parameter API for the compatibility type USR. Non-template function lookup uses a compiler-linkage-name alias as its index key.
 - Function USRs omit a noexcept distinction inside function-pointer overload parameters. The compiler linkage name disambiguates those overloads.
 - Namespace spelling can remain in C-language-linkage USRs across TUs. C-linkage functions and variables therefore use the compiler's linkage name within the appropriate entity family and TU domain.
 
@@ -58,7 +86,7 @@ Function, tag, and global-variable resolution exposes immutable candidate lists 
 - `INCOMPATIBLE`: an entity bucket contains definitions incompatible with the query.
 - `STALE`: identity-relevant edits invalidated compiler metadata.
 
-Optional lookup adapters return a value only for `UNIQUE`. A parsed function with a body cannot conceal ambiguity or stale metadata by returning itself as a fallback. Same-location header definitions remain separate and ambiguous, including apparently identical inline definitions. Establishing safe equivalence across preprocessing configurations is future work; equal USRs and source coordinates do not prove the ODR. This conservative choice also means an identical inline definition included by multiple TUs does not currently produce a unique project-wide definition.
+Optional lookup adapters return a value only for `UNIQUE`. A parsed function with a body cannot conceal ambiguity or stale metadata by returning itself as a fallback. Same-location header definitions remain separate and ambiguous, including apparently identical inline definitions. Establishing safe equivalence across preprocessing configurations is future work; equal USRs and source coordinates do not prove the ODR. This is the current implementation's unresolved lookup policy, not an agreed product requirement; see the decisions above.
 
 Repeated C tentative definitions within one TU can yield to that TU's full definition. Tentative definitions across TUs remain ambiguous; this is not an implementation of platform common-symbol/linker policies.
 
@@ -74,20 +102,37 @@ The joinpoint rename adapter also updates record/global occurrences together. Cl
 
 Factory-created declarations use a separate identity domain. They cannot acquire a parsed entity identity by matching its spelling. Explicit binding of independently generated declarations to existing parsed entities remains future work. Arbitrary edits still do not rerun overload resolution, template instantiation, or name lookup. The mutation guard uses the existing supported type model, not a complete C++ semantic invalidation engine; direct mutation outside that model is not a compiler-validity guarantee. A physical shared-header edit can affect several distinct TU-local entities. Entity-wide editing does not itself synchronize those separate entities or refresh all dependent expressions.
 
+## Validation cost
+
+Unchanged lookups reuse captured semantic baselines. Local node mutation stamps cover normal setters and tree
+operations; separate observations cover exposed mutable lists, exception specifications, and TU language data.
+A changed dependency triggers the full semantic comparison. Equivalent edits refresh the observations; changes
+to identity-relevant state still produce `STALE`. Shared-data views share their mutation counter, while ordinary
+copies retain independent counters. Tracking starts when a node is observed, so unobserved statement trees and
+parser construction do not allocate counters.
+
+The parser captures compiler declarations as a read-only batch, sharing immutable type baselines and dependency
+observations across occurrences. This sharing ends with capture; validation after an edit collects fresh state.
+The index caches compiler keys and sorted definition candidates, checks candidate state before reuse, and leaves
+factory-created declaration keys dynamic. None of these caches stores a cross-TU definition in a native dump.
+
 ## Caching and tests
 
 Schema changes select a new schema-hash cache namespace. Reader node-ID scopes are assigned after loading a dump; a TU's numeric position in the App is no longer sent as a changing native argument. Adding or reordering another TU therefore does not invalidate an unchanged dump solely because its position changed.
 
 The tests use actual source projects, both TU orders and serial/parallel parsing. They assert every requested TU survives parsing. New coverage includes raw USR transport, exact reference ownership, included declarations, all conflict candidates, failed metadata, stale edits, C linkage, noexcept overloads, top-level cv, typed integral template identities, explicit specializations, compiler-checked code generation/reparsing, tentative globals, and removal of TU-owned definitions.
 
-The ccache tests check real hit counters and resolved results for warm dumps, mixed cached/fresh dumps, changed shared headers, compile-flag changes, TU addition/removal, and relocation of TU-local entities. They do not reset shared cache statistics or delete shared installations. Native corpus validation runs the standalone and plugin producers against the same wire verifier.
+The ccache tests check real hit counters and resolved results for warm dumps, mixed cached/fresh dumps, changed shared headers, compile-flag changes, TU addition/removal, and relocation of TU-local entities. Warm-lookup regressions also exercise nested type edits, in-place parameter/qualifier lists, mutable exception/language data, raw child lists, shared views, independent copies, equivalent edits followed by real changes, metadata failure, and changed TU provenance. They do not reset shared cache statistics or delete shared installations. Native corpus validation runs the standalone and plugin producers against the same wire verifier.
 
 ## Validation of this implementation
 
 The native implementation is committed locally as `b29bf01` in clang-dumper. The standalone and plugin corpus
-runs each pass 153 cases, with 7 platform/requirement skips. Clava's full parser run passes 629 tests, with
-7 existing conditional/review skips; all 129 newly added cases run and pass. The ClavaWeaver distribution builds
-against the local schema, and TypeScript compilation passes.
+runs each pass 153 cases, with 7 platform/requirement skips. These native counts come from the initial USR
+implementation; the Java-only optimization does not change the producer.
+
+Clava's optimized full parser run passes 645 tests, with 7 existing conditional/review skips. This includes 16
+additional warm-lookup validation cases. The ClavaWeaver distribution builds against the local schema, and
+TypeScript compilation passes.
 
 The JavaScript integration run passes 165 tests with 3 skips when selecting
 `--testNamePattern='^(?!.*OmpThreadsExplore)'`. Two skips already exist; the third explicitly excludes the

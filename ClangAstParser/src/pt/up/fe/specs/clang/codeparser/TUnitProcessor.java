@@ -66,6 +66,7 @@ public class TUnitProcessor {
                 .collect(Collectors.toList());
 
         assignTranslationUnitOrigins(tUnits);
+        var compilerDeclarations = new ArrayList<NamedDecl>();
         for (int i = 0; i < tUnits.size(); i++) {
             var included = new ArrayList<NamedDecl>();
             for (var node : parsingData.get(i).get(ClangAstData.CLAVA_NODES).getNodes().values()) {
@@ -77,12 +78,13 @@ public class TUnitProcessor {
                     if (!Set.of("none", "declaration", "definition", "tentative")
                             .contains(declaration.get(NamedDecl.USR_DEFINITION_KIND)))
                         throw new IllegalArgumentException("Unknown compiler definition kind for node " + declaration.getId());
-                    CompilerEntityIdentity.capture(declaration);
+                    compilerDeclarations.add(declaration);
                     if (declaration.getAncestorTry(TranslationUnit.class).isEmpty()) included.add(declaration);
                 }
             }
             tUnits.get(i).set(TranslationUnit.INCLUDED_DECLARATIONS, List.copyOf(included));
         }
+        CompilerEntityIdentity.captureAll(compilerDeclarations);
         // Native references already resolve through the dump-local node registry. Rewriting them
         // by source coordinates would destroy TU ownership, particularly for macro-configured headers.
         // Cross-TU entity lookup belongs exclusively to DeclarationsCache.

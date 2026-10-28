@@ -35,11 +35,24 @@ public final class CompilerEntityIdentity {
 
     public static void capture(NamedDecl declaration) {
         if (declaration.get(NamedDecl.USR_SOURCE_STATE).isEmpty())
-            declaration.set(NamedDecl.USR_SOURCE_STATE, Optional.of(sourceState(declaration)));
+            declaration.set(NamedDecl.USR_SOURCE_STATE, Optional.of(new CompilerIdentityState(declaration, sourceState(declaration))));
+    }
+
+    /** Capture a read-only parser batch, sharing immutable type baselines and observations across occurrences. */
+    public static void captureAll(java.util.Collection<? extends NamedDecl> declarations) {
+        var identity = new DeclarationIdentity();
+        var types = new java.util.IdentityHashMap<pt.up.fe.specs.clava.ast.type.Type,
+                CompilerIdentityState.Observation[]>();
+        for (var declaration : declarations) {
+            if (declaration.get(NamedDecl.USR_SOURCE_STATE).isEmpty())
+                declaration.set(NamedDecl.USR_SOURCE_STATE,
+                        Optional.of(new CompilerIdentityState(declaration, sourceState(declaration, identity), types)));
+        }
     }
 
     public static boolean isCurrent(NamedDecl declaration) {
-        return declaration.get(NamedDecl.USR_SOURCE_STATE).map(state -> state.equals(sourceState(declaration)))
+        return declaration.get(NamedDecl.USR_SOURCE_STATE).map(state -> state instanceof CompilerIdentityState snapshot
+                ? snapshot.isCurrent(declaration) : state.equals(sourceState(declaration)))
                 .orElse(false);
     }
 
@@ -47,11 +60,12 @@ public final class CompilerEntityIdentity {
 
     public static void captureEdit(NamedDecl declaration, Object entity) {
         declaration.set(NamedDecl.EDITED_ENTITY, Optional.of(entity));
-        declaration.set(NamedDecl.EDITED_ENTITY_STATE, Optional.of(sourceState(declaration)));
+        declaration.set(NamedDecl.EDITED_ENTITY_STATE, Optional.of(new CompilerIdentityState(declaration, sourceState(declaration))));
     }
 
     public static boolean isEditCurrent(NamedDecl declaration) {
-        return declaration.get(NamedDecl.EDITED_ENTITY_STATE).map(state -> state.equals(sourceState(declaration)))
+        return declaration.get(NamedDecl.EDITED_ENTITY_STATE).map(state -> state instanceof CompilerIdentityState snapshot
+                ? snapshot.isCurrent(declaration) : state.equals(sourceState(declaration)))
                 .orElse(false);
     }
 
@@ -66,8 +80,11 @@ public final class CompilerEntityIdentity {
 
     // This is a mutation guard, not a cross-TU matching key. It deliberately retains the existing
     // conservative type model for generated nodes and rejects parsed edits requiring new compiler analysis.
-    private static Object sourceState(NamedDecl declaration) {
-        var identity = new DeclarationIdentity();
+    static Object sourceState(NamedDecl declaration) {
+        return sourceState(declaration, new DeclarationIdentity());
+    }
+
+    private static Object sourceState(NamedDecl declaration, DeclarationIdentity identity) {
         if (declaration instanceof FunctionDecl function)
             return List.of(identity.function(function), identity.type(function.getType()), function.hasBody(),
                     function.get(FunctionDecl.STORAGE_CLASS), function.get(FunctionDecl.IS_EXPLICIT_TEMPLATE_SPECIALIZATION));

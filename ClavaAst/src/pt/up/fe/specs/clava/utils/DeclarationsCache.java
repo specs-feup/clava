@@ -15,7 +15,18 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 public class DeclarationsCache {
     private final DeclarationIdentity generatedIdentity;
     private final Map<Object, List<FunctionDecl>> functions = new HashMap<>();
-    private final Map<Object, List<FunctionDecl>> functionLinkageAliases = new HashMap<>();
+    private record FunctionLinkageAlias(String name, String translationUnit) {}
+    private record CachedKey(long version, Object value) {}
+    private record CachedDefinitions(long[] versions, List<? extends NamedDecl> definitions) {
+        boolean matches(List<? extends NamedDecl> occurrences) {
+            if (versions.length != occurrences.size()) return false;
+            for (int i = 0; i < versions.length; i++)
+                if (versions[i] != occurrences.get(i).getIdentityMutationVersion()) return false;
+            return true;
+        }
+    }
+    private final IdentityHashMap<NamedDecl, CachedKey> keys = new IdentityHashMap<>();
+    private final IdentityHashMap<List<?>, CachedDefinitions> definitions = new IdentityHashMap<>();
     private final Map<Object, List<TagDecl>> tags = new HashMap<>();
     private final Map<Object, List<VarDecl>> variables = new HashMap<>();
     private final Set<NamedDecl> indexed = Collections.newSetFromMap(new IdentityHashMap<>());
@@ -28,24 +39,38 @@ public class DeclarationsCache {
     }
 
     private Object key(NamedDecl declaration) {
-        if (declaration.get(NamedDecl.EDITED_ENTITY).isPresent()) return declaration.get(NamedDecl.EDITED_ENTITY).get();
-        if (declaration.hasValue(NamedDecl.USR)) return CompilerEntityIdentity.key(declaration).orElse(null);
-        // Factory-created ASTs have no compiler facts. Never match these keys to parsed entities.
+        if (declaration.hasValue(NamedDecl.USR) || declaration.get(NamedDecl.EDITED_ENTITY).isPresent()) {
+            long version = declaration.getIdentityMutationVersion();
+            var previous = keys.get(declaration);
+            if (previous != null && previous.version() == version) return previous.value();
+            Object key = compilerKey(declaration);
+            keys.put(declaration, new CachedKey(version, key));
+            return key;
+        }
+        // Factory-created ASTs retain their existing, generation-scoped identity rules.
         if (declaration instanceof FunctionDecl function) return generatedIdentity.function(function);
         if (declaration instanceof TagDecl tag) return generatedIdentity.tag(tag);
         if (declaration instanceof VarDecl variable) return generatedIdentity.variable(variable);
         return null;
     }
 
+    private Object compilerKey(NamedDecl declaration) {
+        if (declaration.get(NamedDecl.EDITED_ENTITY).isPresent()) return declaration.get(NamedDecl.EDITED_ENTITY).get();
+        var key = CompilerEntityIdentity.key(declaration).orElse(null);
+        if (key == null) return null;
+        // This is the same LLVM 18 alias used before, stored once rather than rebuilding two indexes
+        // and allocating several identical compiler keys on each query.
+        if (declaration instanceof FunctionDecl function
+                && function.get(FunctionDecl.TEMPLATE_KIND) == pt.up.fe.specs.clava.ast.decl.enums.TemplateKind.NON_TEMPLATE
+                && !key.linkageName().isEmpty()) return new FunctionLinkageAlias(key.linkageName(), key.translationUnit());
+        return key;
+    }
+
     private void add(NamedDecl declaration) {
         if (!indexed.add(declaration)) return;
         Object key = key(declaration);
         if (key == null) return;
-        if (declaration instanceof FunctionDecl function) {
-            add(functions, key, function);
-            Object alias = linkageAlias(function);
-            if (alias != null) add(functionLinkageAliases, alias, function);
-        }
+        if (declaration instanceof FunctionDecl function) add(functions, key, function);
         else if (declaration instanceof TagDecl tag) add(tags, key, tag);
         else if (declaration instanceof VarDecl variable) add(variables, key, variable);
     }
@@ -54,18 +79,8 @@ public class DeclarationsCache {
         map.computeIfAbsent(key, ignored -> new ArrayList<>()).add(node);
     }
 
-    private Object linkageAlias(FunctionDecl function) {
-        if (function.get(NamedDecl.EDITED_ENTITY).isPresent() || !function.hasValue(NamedDecl.USR) || CompilerEntityIdentity.key(function).isEmpty()
-                || function.get(FunctionDecl.TEMPLATE_KIND) != pt.up.fe.specs.clava.ast.decl.enums.TemplateKind.NON_TEMPLATE
-                || function.get(NamedDecl.USR_LINKAGE_NAME).isEmpty()) return null;
-        var key = CompilerEntityIdentity.key(function).orElseThrow();
-        return List.of(key.family(), key.linkageName(), key.translationUnit());
-    }
-
     private List<FunctionDecl> functionOccurrences(FunctionDecl function) {
-        var alias = linkageAlias(function);
-        return alias == null ? functions.getOrDefault(key(function), List.of())
-                : functionLinkageAliases.getOrDefault(alias, List.of());
+        return functions.getOrDefault(key(function), List.of());
     }
 
     private boolean current(NamedDecl declaration) {
@@ -88,10 +103,7 @@ public class DeclarationsCache {
         if (!current(first) || !current(second)) return false;
         Object left = key(first), right = key(second);
         if (left == null || right == null) return false;
-        boolean same = left.equals(right);
-        Object alias = linkageAlias(first);
-        if (!same && alias != null) same = alias.equals(linkageAlias(second));
-        return same && compatibleType(first, second) && generatedIdentity.compatibleFunctions(first, second);
+        return left.equals(right) && compatibleType(first, second) && generatedIdentity.compatibleFunctions(first, second);
     }
 
     public List<FunctionDecl> getFunctionPrototypes(FunctionDecl function) {
@@ -169,9 +181,7 @@ public class DeclarationsCache {
         // The bucket's identity was frozen when indexed. Never serve stale entries from a live cache.
         if (all.stream().anyMatch(candidate -> !current(candidate)))
             return result(DefinitionResolution.Kind.STALE, List.of());
-        var candidates = all.stream().filter(definition).sorted(Comparator
-                .comparing((T node) -> Objects.toString(DeclarationIdentity.origin(node), ""))
-                .thenComparing(node -> node.getLocation().toString()).thenComparing(ClavaNode::getId)).toList();
+        var candidates = candidates(all, definition);
         if (candidates.isEmpty()) return result(DefinitionResolution.Kind.MISSING, List.of());
         if (candidates.stream().anyMatch(candidate -> !compatible.test(query, candidate)))
             return result(DefinitionResolution.Kind.INCOMPATIBLE, candidates);
@@ -186,6 +196,20 @@ public class DeclarationsCache {
         // Equal source coordinates or USRs are not proof that two definition occurrences are equivalent.
         return result(candidates.size() == 1 ? DefinitionResolution.Kind.UNIQUE
                 : DefinitionResolution.Kind.AMBIGUOUS, candidates);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends NamedDecl> List<T> candidates(List<T> occurrences, java.util.function.Predicate<T> definition) {
+        if (occurrences.isEmpty()) return List.of();
+        var cached = definitions.get(occurrences);
+        if (cached != null && cached.matches(occurrences)) return (List<T>) cached.definitions();
+        var candidates = occurrences.stream().filter(definition).sorted(Comparator
+                .comparing((T node) -> Objects.toString(DeclarationIdentity.origin(node), ""))
+                .thenComparing(node -> node.getLocation().toString()).thenComparing(ClavaNode::getId)).toList();
+        long[] versions = new long[occurrences.size()];
+        for (int i = 0; i < versions.length; i++) versions[i] = occurrences.get(i).getIdentityMutationVersion();
+        definitions.put(occurrences, new CachedDefinitions(versions, candidates));
+        return candidates;
     }
 
     private static <T> DefinitionResolution<T> result(DefinitionResolution.Kind kind, List<T> nodes) {
