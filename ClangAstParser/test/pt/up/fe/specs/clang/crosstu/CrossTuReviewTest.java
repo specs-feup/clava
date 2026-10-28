@@ -13,7 +13,7 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 
-/** Desired semantics, deliberately opt-in until the findings in docs/cross-tu-review.md are decided. */
+/** Historical desired-behavior probes, deliberately opt-in; ordinary USR regressions define current semantics. */
 @Tag("cross-tu-review")
 @EnabledIfSystemProperty(named = "clava.crossTuReview", matches = "true")
 class CrossTuReviewTest extends CrossTuTestSupport {
